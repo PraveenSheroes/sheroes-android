@@ -25,7 +25,7 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new FooterViewHolder(view, viewInterface);
         }
-    }, DRAWER_ITEMS(R.layout.drawer_item) {
+    }, DRAWER_ITEMS(R.layout.drawer_item_list) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new DrawerViewHolder(view, viewInterface);

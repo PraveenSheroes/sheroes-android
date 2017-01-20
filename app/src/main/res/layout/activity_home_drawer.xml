@@ -44,7 +44,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_centerVertical="true"
-            android:background="@drawable/ic_no_connection"
+            android:background="@drawable/ic_bookmark_active"
             android:visibility="gone" />
     </RelativeLayout>
 </LinearLayout>
