@@ -1,0 +1,52 @@
+<resources>
+    <string name="ID_APP_NAME">SHEROES</string>
+    <string name="ID_ROBOTO_REGULAR">sans-serif</string>
+    <string name="ID_ROBOTO_LIGHT">sans-serif-light</string>
+    <string name="ID_ROBOTO_CONDENSED">sans-serif-condensed</string>
+    <string name="ID_ROBOTO_MEDIUM">sans-serif-medium</string>
+    <string name="ID_ROBOTO_BOLD">sans-serif-bold</string>
+    <!--text names in SHEROES-->
+    <string name="IDS_STR_NETWORK_TIME_OUT_TITLE">Connectivity Failure</string>
+    <string name="IDS_STR_NETWORK_TIME_OUT_DESCRIPTION">Looks like our servers have taken off on a vacation. Why don\'t you search again in some time? They\'ll be back and working pronto..</string>
+    <string name="IDS_STR_TRY_AGAIN_TEXT">Try again</string>
+    <!-- Strings related to login -->
+    <string name="ID_PROMPT_EMAIL">Email</string>
+    <string name="ID_PROMPT_PASSWORD">Password</string>
+    <string name="ID_ACTION_LOG_IN_SHORT">Login</string>
+    <string name="ID_ERROR_INVALID_EMAIL">This email address is invalid</string>
+    <string name="ID_ERROR_INVALID_PASSWORD">This password is too short</string>
+    <string name="ID_ERROR_FIELD_REQUIRED">This field is required</string>
+    <!--String related in home page-->
+
+    <string name="ID_NAVIGATION_DRAWER_OPEN">Open navigation drawer</string>
+    <string name="ID_NAVIGATION_DRAWER_CLOSE">Close navigation drawer</string>
+    <string name="title_activity_home_search">HomeSearchActivity</string>
+    <string name="ID_ARTICLE_TEXT">Working women have it hard enough – managing a 9 to 6 job along with family, friends, and the demand of staying fit and healthy is the last thing on the agenda. We all look for a job that gives us more than just a good salary – flexible working hours, innovation driven environment, medical insurance, the list is long.
+
+But what if the place you work for gives you free benefits that help you stay fit? Yeah… you heard that right – a job that looks after you! At work!
+
+Today’s companies need to attract and retain the best and they are upping their game to give employees a great workplace focused on professional AND personal development.
+
+Let’s check out the Top 5 companies that believe in much more than just hard work!</string>
+
+    <!--String related to facebook integration-->
+    <string name="app_id">994271980664614</string>
+    <!--Fragment classes-->
+    <string name="ID_ALL">ALL</string>
+    <string name="ID_COMMUNITIES">COMMUNITIES</string>
+    <string name="ID_ARTICLES">ARTICLES</string>
+    <string name="ID_JOBS">JOBS</string>
+    <string name="ID_FEATURED">FEATURED</string>
+    <string name="ID_MY_COMMUNITIES">MY COMMUNITIES</string>
+    <string name="ID_SEARCH_COMINUITIES">Search</string>
+    <string name="ID_FEED">Feed</string>
+    <string name="ID_COMMUNITIY">Community</string>
+    <string name="ID_SEARCH_ARTICLES">Search Articles</string>
+    <string name="ID_DASHBOARD"> Working women have it hard enough – managing a 9 to 6 job along with family, friends, and the demand…View More</string>
+    <string name="ID_TRENDING">TRENDING</string>
+    <string name="ID_CHOOSE_CATEGORY">CHOOSE CATEGORY</string>
+    <string name="ID_DONE">DONE</string>
+    <string name="ID_CANCEL">CANCEL</string>
+    <string name="ID_GROUP">Group</string>
+    <string name="ID_VIEW_MORE">View More</string>
+</resources>

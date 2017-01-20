@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="appliedlife.pvtltd.SHEROES">
+
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+
+    <application
+        android:name="appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/appicon"
+        android:label="@string/ID_APP_NAME"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <meta-cityListDatas
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/app_id" />
+
+        <meta-cityListDatas
+            android:name="io.fabric.ApiKey"
+            android:value="07aa242372597565df80681a25002e6e25e6ef0e" />
+
+        <activity
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.HomeActivity"
+            android:windowSoftInputMode="stateHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+
+        <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.LoginActivity">
+
+        </activity>
+
+
+        <activity
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.HomeSearchActivity"
+            android:parentActivityName="appliedlife.pvtltd.SHEROES.views.activities.HomeActivity"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.DetailActivity"
+            android:parentActivityName="appliedlife.pvtltd.SHEROES.views.activities.HomeActivity"
+            android:theme="@style/AppTheme" />
+    </application>
+
+</manifest>

@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <!-- Dimensions Core values. -->
+    <dimen name="dp_size_3">3dp</dimen>
+    <dimen name="dp_size_4">4dp</dimen>
+    <dimen name="dp_size_21">21dp</dimen>
+    <dimen name="dp_size_23">23dp</dimen>
+    <dimen name="dp_size_25">25dp</dimen>
+    <dimen name="dp_size_48">48dp</dimen>
+    <dimen name="dp_size_50">50dp</dimen>
+    <dimen name="dp_size_46">46dp</dimen>
+    <dimen name="dp_size_98">98dp</dimen>
+    <dimen name="dp_size_89">89dp</dimen>
+    <dimen name="dp_size_65">65dp</dimen>
+    <dimen name="dp_size_74">74dp</dimen>
+    <dimen name="dp_size_54">54dp</dimen>
+    <dimen name="dp_size_14">14dp</dimen>
+    <dimen name="dp_size_15">15dp</dimen>
+    <dimen name="dp_size_20">20dp</dimen>
+    <dimen name="dp_size_31">31dp</dimen>
+    <dimen name="dp_size_30">30dp</dimen>
+    <dimen name="dp_size_35">35dp</dimen>
+    <dimen name="dp_size_10">10dp</dimen>
+    <dimen name="dp_size_16">16dp</dimen>
+    <dimen name="dp_size_5">5dp</dimen>
+    <dimen name="dp_size_8">8dp</dimen>
+    <dimen name="dp_size_2">2dp</dimen>
+    <dimen name="dp_size_1">1dp</dimen>
+    <dimen name="dp_size_18">18dp</dimen>
+    <dimen name="dp_size_11">11dp</dimen>
+    <dimen name="dp_size_12">12dp</dimen>
+    <dimen name="dp_size_13">13dp</dimen>
+    <dimen name="dp_size_38">38dp</dimen>
+    <dimen name="dp_size_233">233dp</dimen>
+    <dimen name="dp_size_160">160dp</dimen>
+    <dimen name="dp_size_266">266dp</dimen>
+
+    <!--Text sizes for SHEROES-->
+    <dimen name="sp_size_16">16sp</dimen>
+    <dimen name="sp_size_15">15sp</dimen>
+    <dimen name="sp_size_14">14sp</dimen>
+    <dimen name="sp_size_12">12sp</dimen>
+    <dimen name="sp_size_13">13sp</dimen>
+    <dimen name="sp_size_10">10sp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+<!--material spinner-->
+    <dimen name="ms__padding_top">12dp</dimen>
+    <dimen name="ms__item_height">48dp</dimen>
+    <dimen name="ms__popup_padding_left">24dp</dimen>
+    <dimen name="ms__popup_padding_top">12dp</dimen>
+</resources>

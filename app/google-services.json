@@ -1,0 +1,38 @@
+{
+  "project_info": {
+    "project_number": "409228886131",
+    "project_id": "sheroes-app-143509"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:409228886131:android:814e402ae95b5f94",
+        "android_client_info": {
+          "package_name": "appliedlife.pvtltd.SHEROES"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBb6FQ0snY-RF9QjGV_RdGSgpWtclRMSvk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 2,
+          "analytics_property": {
+            "tracking_id": "UA-43289318-2"
+          }
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

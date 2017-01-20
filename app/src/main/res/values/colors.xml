@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="white">#ffffff</color>
+    <color name="grey8">#fafafa</color>
+    <color name="grey2">#b7b7b7</color>
+    <color name="red">#d50000</color>
+    <color name="dashboard_text">#323940</color>
+    <color name="detail_page_text">#4a4a4a</color>
+    <color name="dashboard_fed_text">#757e87</color>
+    <color name="noConnection">#2f2f2f</color>
+    <color name="black">#de000000</color>
+    <color name="shadow">#3b99fc</color>
+    <color name="searchbox_text_color">#9b9b9b</color>
+    <!-- Text color of the search box hint text  -->
+    <color name="searchbox_hint_text_color">#1c2024</color>
+    <color name="searchbox_icon_tint">#a4a4a4</color>
+    <color name="dashboard_label">#f1403c</color>
+    <color name="footer_icon_text">#f2403c</color>
+    <color name="search_tab_text"> #3949ab</color>
+    <color name="search_box">#273691</color>
+    <color name="search_box_text">#aeb7ee</color>
+    <color name="search_tab_unselected_text">#bec5cc</color>
+    <color name="search_shortcut_icon_color">#f8f8f8</color>
+    <color name="default_color_expanded">#F0F0F0</color>
+    <color name="fully_transparent">#00000000</color>
+</resources>

@@ -1,0 +1,60 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/grey8"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/tv_no_connection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+        android:gravity="center"
+        android:paddingBottom="@dimen/dp_size_10"
+        android:paddingTop="@dimen/dp_size_15"
+        android:text="@string/IDS_STR_NETWORK_TIME_OUT_TITLE"
+        android:textColor="@color/noConnection"
+        android:textSize="14sp" />
+
+    <ImageView
+        android:id="@+id/imv_no_connection_img"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_no_connection"
+        android:src="@drawable/ic_no_connection" />
+
+
+    <TextView
+        android:id="@+id/tv_no_conn_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imv_no_connection_img"
+        android:layout_marginTop="@dimen/dp_size_5"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:gravity="center"
+        android:paddingLeft="@dimen/dp_size_31"
+        android:paddingRight="@dimen/dp_size_30"
+        android:text="@string/IDS_STR_NETWORK_TIME_OUT_DESCRIPTION"
+        android:textColor="@color/grey2"
+        android:textSize="@dimen/sp_size_14"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv_try_again"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+        android:gravity="center"
+        android:paddingBottom="@dimen/dp_size_16"
+        android:paddingTop="@dimen/dp_size_15"
+        android:text="@string/IDS_STR_TRY_AGAIN_TEXT"
+        android:textAllCaps="true"
+        android:textColor="@color/red"
+        android:textSize="14sp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+
+</RelativeLayout>

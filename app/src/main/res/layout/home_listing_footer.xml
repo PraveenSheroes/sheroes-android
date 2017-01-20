@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fl_home_footer_list"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_marginTop="@dimen/dp_size_20"
+        android:orientation="horizontal"
+        android:background="@drawable/rectangle_grey_round_corner"
+        android:weightSum="1">
+
+        <TextView
+            android:id="@+id/tv_home"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight=".5"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:gravity="bottom|center_horizontal"
+            android:text="@string/ID_FEED"
+            android:drawableTop="@drawable/ic_home_selected_icon"
+            android:textAllCaps="true"
+            android:textColor="@color/footer_icon_text"
+            android:textSize="@dimen/sp_size_12" />
+        <TextView
+            android:id="@+id/tv_communities"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight=".5"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:gravity="bottom|center_horizontal"
+            android:text="@string/ID_COMMUNITIY"
+            android:textAllCaps="true"
+            android:drawableTop="@drawable/ic_community_unselected_icon"
+            android:textColor="@color/footer_icon_text"
+            android:textSize="@dimen/sp_size_12" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/iv_footer_button_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_size_30"
+        android:background="@drawable/ic_footer_button_icon"
+        android:layout_gravity="center_horizontal|center"/>
+</FrameLayout>
+
