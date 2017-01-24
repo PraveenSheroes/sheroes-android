@@ -49,4 +49,9 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_CANCEL">CANCEL</string>
     <string name="ID_GROUP">Group</string>
     <string name="ID_VIEW_MORE">View More</string>
+    <string name="ID_JOIN">Join</string>
+    <string name="ID_REPLIES">REPLIES</string>
+    <string name="ID_OPEN_BRACKET">(</string>
+    <string name="ID_CLOSE_BRACKET">)</string>
+
 </resources>

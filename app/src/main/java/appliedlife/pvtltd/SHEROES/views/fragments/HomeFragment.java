@@ -24,7 +24,7 @@ import appliedlife.pvtltd.SHEROES.MockService;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.home.CityListData;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
@@ -118,14 +118,14 @@ public class HomeFragment extends BaseFragment implements HomeView {
                 ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
             }
         });
-        mHomePresenter.getCityList(MockService.makeCityRequest());
+        mHomePresenter.getFeedFromPresenter(MockService.makeCityRequest());
         swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 // Refresh items
                 LogUtils.info("swipe", "*****************end called");
-                mPullRefreshList.setPullToRefresh(true);
-                mHomePresenter.getCityList(MockService.makeCityRequest());
+              //  mPullRefreshList.setPullToRefresh(true);
+             //   mHomePresenter.getFeedFromPresenter(MockService.makeCityRequest());
             }
         });
         return view;
@@ -148,13 +148,13 @@ public class HomeFragment extends BaseFragment implements HomeView {
     }
 
     @Override
-    public void getCityListSuccess(List<CityListData> currentListResponse) {
-        if(StringUtil.isNotEmptyCollection(currentListResponse)) {
-            mPullRefreshList.allListData(currentListResponse);
-            mAdapter.setSheroesGenericListData(mPullRefreshList.getCityListDatas());
+    public void getCityListSuccess(List<ListOfFeed> listOfFeeds) {
+        if(StringUtil.isNotEmptyCollection(listOfFeeds)) {
+            mPullRefreshList.allListData(listOfFeeds);
+            mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
             mAdapter.notifyDataSetChanged();
             if(!mPullRefreshList.isPullToRefresh()) {
-                mLayoutManager.scrollToPositionWithOffset(mPullRefreshList.getCityListDatas().size() - currentListResponse.size(), 0);
+                mLayoutManager.scrollToPositionWithOffset(mPullRefreshList.getFeedResponses().size() - listOfFeeds.size(), 0);
             }
             else
             {

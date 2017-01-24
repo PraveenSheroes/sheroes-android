@@ -7,20 +7,42 @@ import android.view.ViewGroup;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
-import appliedlife.pvtltd.SHEROES.models.entities.home.CityListData;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentsList;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
 import appliedlife.pvtltd.SHEROES.models.entities.home.DrawerItems;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
-import appliedlife.pvtltd.SHEROES.models.entities.home.SheroesListDataItem;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.FeatResponse;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 
 public enum HolderMapping {
-    COLLECTIONS(R.layout.dashboard_list_item) {
+
+    FEED_COMMUNITY_POST(R.layout.feed_comunity_user_post_normal) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new CollectionHolder(view, viewInterface);
+            return new FeedCommunityPostHolder(view, viewInterface);
         }
-    }, FOOTER(R.layout.home_footer) {
+    },
+    FEED_COMMUNITY(R.layout.feed_community_normal_card) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new FeedCommunityHolder(view, viewInterface);
+        }
+    },
+    FEED_JOB(R.layout.feed_job_normal_card) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new FeedJobHolder(view, viewInterface);
+        }
+    },
+    FEED_ARTICLE(R.layout.feed_article_card_normal) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new FeedArticleHolder(view, viewInterface);
+        }
+    },
+    FOOTER(R.layout.home_footer) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new FooterViewHolder(view, viewInterface);
@@ -50,6 +72,12 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new FeatureHolder(view, viewInterface);
         }
+    }
+    , COMMENT(R.layout.all_comments_list_layout) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new CommentHolder(view, viewInterface);
+        }
     };
     public Object object;
     public int layout;
@@ -69,13 +97,25 @@ public enum HolderMapping {
         return layout;
     }
 
-    public static int getOrdinal(SheroesListDataItem item, int totalCount) {
-        if (item instanceof CityListData) {
-            String id = ((CityListData) item).getId();
-            if (id.equalsIgnoreCase(String.valueOf(totalCount))) {
-                return FOOTER.ordinal();
-            } else {
-                return COLLECTIONS.ordinal();
+    public static int getOrdinal(BaseResponse item, int totalCount) {
+        int returnView=FEED_JOB.ordinal();
+        if (item instanceof ListOfFeed) {
+            String id = ((ListOfFeed) item).getType();
+            switch (id)
+            {
+                case AppConstants.FEED_ARTICLE:
+                    returnView= FEED_ARTICLE.ordinal();
+                    break;
+                case AppConstants.FEED_COMMUNITY:
+                    returnView= FEED_COMMUNITY.ordinal();
+                    break;
+                case AppConstants.FEED_JOB:
+                    returnView=FEED_JOB.ordinal();
+                    break;
+                case AppConstants.FEED_COMMUNITY_POST:
+                    returnView=FEED_COMMUNITY_POST.ordinal();
+                    break;
+
             }
         } else if (item instanceof HomeSpinnerItem) {
             String id = ((HomeSpinnerItem) item).getId();
@@ -88,10 +128,14 @@ public enum HolderMapping {
             return DRAWER_ITEMS.ordinal();
         } else if (item instanceof ArticleRequest) {
             return SEARCH_MODULE.ordinal();
-        }else if (item instanceof FeatResponse) {
+        } else if (item instanceof FeatResponse) {
             return FEATURE.ordinal();
         }
-        return COLLECTIONS.ordinal();
+        else if (item instanceof CommentsList) {
+            return COMMENT.ordinal();
+
+        }
+      return returnView;
     }
 
 

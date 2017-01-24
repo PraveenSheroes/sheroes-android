@@ -25,11 +25,11 @@
         android:label="@string/ID_APP_NAME"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <meta-cityListDatas
+        <meta-feedResponses
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/app_id" />
 
-        <meta-cityListDatas
+        <meta-feedResponses
             android:name="io.fabric.ApiKey"
             android:value="07aa242372597565df80681a25002e6e25e6ef0e" />
 

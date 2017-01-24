@@ -7,6 +7,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.home.DrawerItems;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import butterknife.ButterKnife;
 
 /**
@@ -14,6 +16,7 @@ import butterknife.ButterKnife;
  */
 
 public class DrawerViewHolder extends BaseViewHolder<DrawerItems> {
+    private final String TAG = LogUtils.makeLogTag(DrawerViewHolder.class);
     BaseHolderInterface viewInterface;
     private DrawerItems dataItem;
     private int position;
@@ -37,7 +40,14 @@ public class DrawerViewHolder extends BaseViewHolder<DrawerItems> {
     }
     @Override
     public void onClick(View view) {
-        viewInterface.handleOnClick(this.dataItem, view);
+        viewInterface.handleOnClick(dataItem, view);
+        int id = view.getId();
+        switch (id) {
+         //   case R.id.iv_dashboard:
+          //      break;
+            default:
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
+        }
     }
 
 }

@@ -26,4 +26,10 @@ public class AppConstants {
     public static final String HOME_SPINNER_FRAGMENT = "spinner_fragment";
     public static final String ANDROID_VIEW_PAGER = "android:switcher:";
     public static final String COLON = ":";
+    public static final String FEED_COMMUNITY = "communtiy";
+    public static final String FEED_JOB = "job";
+    public static final String FEED_ARTICLE= "article";
+    public static final String FEED_COMMUNITY_POST= "community_post";
+    public static final String FEED_DETAIL_FOR_CARDS= "detail_page";
+    public static final String FRAGMENT_FLAG_CHECK = "is_fragment_open";
 }

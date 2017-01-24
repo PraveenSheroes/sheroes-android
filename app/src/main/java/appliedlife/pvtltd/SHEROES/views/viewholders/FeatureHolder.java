@@ -13,6 +13,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.FeatResponse;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -21,6 +23,7 @@ import butterknife.ButterKnife;
  */
 
 public class FeatureHolder extends BaseViewHolder<FeatResponse> {
+    private final String TAG = LogUtils.makeLogTag(FeatureHolder.class);
     @Bind(R.id.iv_dashboard)
     ImageView background;
     @Bind(R.id.tv_description)
@@ -75,7 +78,13 @@ public class FeatureHolder extends BaseViewHolder<FeatResponse> {
 
     @Override
     public void onClick(View view) {
-
+        int id = view.getId();
+        switch (id) {
+        //    case R.id.iv_dashboard:
+        //        break;
+            default:
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
+        }
     }
 
 }

@@ -15,7 +15,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.home.SheroesListDataItem;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.AllSearchFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
@@ -65,12 +65,12 @@ public class HomeSearchActivity extends BaseActivity implements BaseHolderInterf
     }
 
     @Override
-    public void handleOnClick(SheroesListDataItem sheroesListDataItem, View view) {
+    public void handleOnClick(BaseResponse baseResponse, View view) {
 
     }
 
     @Override
-    public void setListData(SheroesListDataItem data, boolean flag) {
+    public void setListData(BaseResponse data, boolean flag) {
     }
 
 

@@ -9,14 +9,20 @@ import appliedlife.pvtltd.SHEROES.views.activities.HomeSearchActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.LoginActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.AllSearchFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeSpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LoginFragment;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CollectionHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.CommentHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeatureHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.FeedArticleHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.FeedCommunityHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.FeedCommunityPostHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.FeedJobHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FooterViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HomeSpinnerFooterHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HomeSpinnerSelectorHolder;
@@ -45,6 +51,7 @@ public interface SheroesAppComponent {
     void inject(ArticlesFragment articlesFragment);
     void inject(JobsFragment jobsFragment);
     void inject(AllSearchFragment allSearchFragment);
+    void inject(CommentReactionFragment commentReactionFragment);
     void inject(CollectionHolder collectionHolder);
     void inject(FooterViewHolder footerViewHolder);
     void inject(DrawerViewHolder drawerViewHolder);
@@ -52,4 +59,10 @@ public interface SheroesAppComponent {
     void inject(HomeSpinnerFooterHolder homeSpinnerFooterHolder);
     void inject(SearchModuleHolder searchModuleHolder);
     void inject(FeatureHolder featureHolder);
+    void inject(FeedCommunityPostHolder feedCommunityPostHolder);
+    void inject(FeedCommunityHolder feedCommunityHolder);
+    void inject(FeedJobHolder feedJobHolder);
+    void inject(FeedArticleHolder feedArticleHolder);
+    void inject(CommentHolder commentHolder);
+
 }

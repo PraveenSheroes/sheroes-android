@@ -8,7 +8,8 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.HomeModel;
-import appliedlife.pvtltd.SHEROES.models.entities.home.CityListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItemResponse;
 import appliedlife.pvtltd.SHEROES.preferences.Token;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -50,13 +51,13 @@ public class HomePresenter extends BasePresenter<HomeView>  {
     }
 
 
-    public void getCityList(CityListResponse cityListResponse) {
+    public void getFeedFromPresenter(ListOfFeed listOfFeed) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showNwError();
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = mHomeModel.getCityList(cityListResponse).subscribe(new Subscriber<CityListResponse>() {
+        Subscription subscription = mHomeModel.getFeedFromModel(listOfFeed).subscribe(new Subscriber<FeedResponse>() {
             @Override
             public void onCompleted() {
                 getMvpView().stopProgressBar();
@@ -69,9 +70,9 @@ public class HomePresenter extends BasePresenter<HomeView>  {
             }
 
             @Override
-            public void onNext(CityListResponse cityListResponse) {
+            public void onNext(FeedResponse feedResponse) {
                 getMvpView().stopProgressBar();
-                getMvpView().getCityListSuccess(cityListResponse.getData());
+                getMvpView().getCityListSuccess(feedResponse.getListOfFeed());
             }
         });
         registerSubscription(subscription);

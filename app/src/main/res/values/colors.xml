@@ -26,4 +26,8 @@
     <color name="search_shortcut_icon_color">#f8f8f8</color>
     <color name="default_color_expanded">#F0F0F0</color>
     <color name="fully_transparent">#00000000</color>
+    <color name="background">#f0f1f3</color>
+    <color name="feed_article_label">#323840</color>
+    <color name="feed_article_comment">#777f8a</color>
+    <color name="feed_job_card_new">#50e3c2</color>
 </resources>

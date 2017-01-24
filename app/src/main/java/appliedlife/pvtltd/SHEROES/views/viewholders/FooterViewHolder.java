@@ -6,12 +6,15 @@ import android.view.View;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.home.CityListData;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import butterknife.ButterKnife;
 
-public class FooterViewHolder extends BaseViewHolder<CityListData> {
+public class FooterViewHolder extends BaseViewHolder<ListOfFeed> {
+    private final String TAG = LogUtils.makeLogTag(FooterViewHolder.class);
     BaseHolderInterface viewInterface;
-    private CityListData dataItem;
+    private ListOfFeed dataItem;
     private int position;
 
     public FooterViewHolder(View itemView, BaseHolderInterface baseHolderInterface) {
@@ -22,7 +25,7 @@ public class FooterViewHolder extends BaseViewHolder<CityListData> {
     }
 
     @Override
-    public void bindData(CityListData item, Context context, int position) {
+    public void bindData(ListOfFeed item, Context context, int position) {
         this.dataItem = item;
         itemView.setOnClickListener(this);
     }
@@ -33,7 +36,14 @@ public class FooterViewHolder extends BaseViewHolder<CityListData> {
     }
     @Override
     public void onClick(View view) {
-        viewInterface.handleOnClick(this.dataItem, view);
+        viewInterface.handleOnClick(dataItem, view);
+        int id = view.getId();
+        switch (id) {
+         //   case R.id.iv_dashboard:
+         //       break;
+            default:
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
+        }
     }
 
 }

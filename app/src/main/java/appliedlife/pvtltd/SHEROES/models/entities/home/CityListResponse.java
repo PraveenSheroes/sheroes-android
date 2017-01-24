@@ -6,11 +6,13 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
+import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
+
 public class CityListResponse {
 
     @SerializedName("data")
     @Expose
-    private List<CityListData> data = new ArrayList<CityListData>();
+    private List<ListOfFeed> data = new ArrayList<ListOfFeed>();
     @SerializedName("message")
     @Expose
     private String message;
@@ -23,7 +25,7 @@ public class CityListResponse {
      * @return
      * The data
      */
-    public List<CityListData> getData() {
+    public List<ListOfFeed> getData() {
         return data;
     }
 
@@ -32,7 +34,7 @@ public class CityListResponse {
      * @param data
      * The data
      */
-    public void setData(List<CityListData> data) {
+    public void setData(List<ListOfFeed> data) {
         this.data = data;
     }
 

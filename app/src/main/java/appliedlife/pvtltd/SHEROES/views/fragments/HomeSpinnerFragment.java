@@ -17,7 +17,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.home.CityListData;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -78,7 +78,7 @@ public class HomeSpinnerFragment extends BaseFragment implements HomeView {
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mAdapter);
         checkForSpinnerItemSelection();
-       // mSearchModPresenter.getSpinnerListFromPresenter();
+       // mCommentReactionPresenter.getSpinnerListFromPresenter();
 
         return view;
     }
@@ -93,7 +93,7 @@ public class HomeSpinnerFragment extends BaseFragment implements HomeView {
      }
 
     @Override
-    public void getCityListSuccess(List<CityListData> data) {
+    public void getCityListSuccess(List<ListOfFeed> data) {
 
     }
 

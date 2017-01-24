@@ -1,7 +1,9 @@
 package appliedlife.pvtltd.SHEROES.models.entities.home;
 
 
-public class Collections extends SheroesListDataItem
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+
+public class Collections extends BaseResponse
 {
 
     private long id;

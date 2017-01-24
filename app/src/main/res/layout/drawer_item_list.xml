@@ -9,21 +9,8 @@
         android:textColor="@color/black"
         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
         android:textSize="@dimen/sp_size_13"
-        android:paddingLeft="@dimen/dp_size_10"
-        android:paddingTop="@dimen/dp_size_20"
-        android:drawablePadding="@dimen/dp_size_10"
+        android:text="@string/ID_ARTICLES"
+        android:padding="@dimen/dp_size_15"
+        android:drawablePadding="@dimen/dp_size_15"
         android:drawableLeft="@drawable/ic_search_group_icon"/>
-
-    <TextView
-        android:id="@+id/tv_search_list_label_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:text="@string/ID_COMMUNITIY"
-        android:paddingLeft="@dimen/dp_size_38"
-        android:layout_below="@+id/tv_search_list_header_text"
-        android:fontFamily="@string/ID_ROBOTO_REGULAR"
-        android:layout_alignParentLeft="true"
-        android:textSize="@dimen/sp_size_12"
-        android:layout_alignParentStart="true"/>
 </RelativeLayout>

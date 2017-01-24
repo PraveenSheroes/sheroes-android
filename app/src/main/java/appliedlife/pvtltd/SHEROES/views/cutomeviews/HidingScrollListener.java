@@ -3,7 +3,6 @@ package appliedlife.pvtltd.SHEROES.views.cutomeviews;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import appliedlife.pvtltd.SHEROES.MockService;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 
@@ -69,11 +68,7 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
         int lastVisibleItem = mManager.findLastVisibleItemPosition();
 
         if (!loading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
-            // End has been reached
-            // Do something
-
-            // End has been reached
-            mHomePresenter.getCityList(MockService.makeCityRequest());
+        //    mHomePresenter.getFeedFromPresenter(MockService.makeCityRequest());
             LogUtils.info("swipe", "*****************on last scrolling");
             loading = true;
         }

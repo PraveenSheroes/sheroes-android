@@ -27,22 +27,24 @@ import com.bumptech.glide.request.target.SimpleTarget;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
-import appliedlife.pvtltd.SHEROES.models.entities.home.CityListData;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 
 
 public class DetailActivity extends BaseActivity {
+    private final String TAG = LogUtils.makeLogTag(DetailActivity.class);
     private static final String EXTRA_IMAGE = "extraImage";
     private static final String DECRIPTION = "desc";
     private static final String HEADER = "header";
     private static final String TIME = "time";
     private CollapsingToolbarLayout collapsingToolbarLayout;
     ImageView ivArticleDetail;
-    public static void navigate(AppCompatActivity activity, View transitionImage, CityListData cityListData) {
+    public static void navigate(AppCompatActivity activity, View transitionImage, ListOfFeed  listOfFeed) {
         Intent intent = new Intent(activity, DetailActivity.class);
-        intent.putExtra(EXTRA_IMAGE, cityListData.getBackground());
-        intent.putExtra(DECRIPTION, cityListData.getDescription());
-        intent.putExtra(HEADER, cityListData.getHeader());
-        intent.putExtra(TIME, cityListData.getTime());
+        intent.putExtra(EXTRA_IMAGE, listOfFeed.getImageUrl());
+        intent.putExtra(DECRIPTION, listOfFeed.getDescription());
+        intent.putExtra(HEADER, listOfFeed.getTitle());
+        intent.putExtra(TIME, listOfFeed.getCreatedDate());
         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, transitionImage, EXTRA_IMAGE);
         ActivityCompat.startActivity(activity, intent, options.toBundle());
     }

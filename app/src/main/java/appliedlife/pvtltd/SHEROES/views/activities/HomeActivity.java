@@ -8,6 +8,7 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,17 +29,18 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.home.CityListData;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
 import appliedlife.pvtltd.SHEROES.models.entities.home.DrawerItems;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
-import appliedlife.pvtltd.SHEROES.models.entities.home.SheroesListDataItem;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
+import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeSpinnerFragment;
@@ -45,7 +48,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class HomeActivity extends BaseActivity implements HomeFragment.HomeActivityIntractionListner, BaseHolderInterface, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener {
+public class HomeActivity extends BaseActivity implements HomeFragment.HomeActivityIntractionListner, BaseHolderInterface, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener,CommentReactionFragment.HomeActivityIntractionListner {
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
     private static final String SPINNER_FRAGMENT = "spinnerFragment";
     @Bind(R.id.cl_main_layout)
@@ -80,6 +83,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
     private List<HomeSpinnerItem> mHomeSpinnerItemList = new ArrayList<>();
     private HomeSpinnerFragment mHomeSpinnerFragment;
     private FragmentOpen mFragmentOpen;
+    private CustiomActionBarToggle mCustiomActionBarToggle;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -97,9 +101,9 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
     public void renderHomeFragmentView() {
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
-        CustiomActionBarToggle toggle = new CustiomActionBarToggle(this, mDrawer, mToolbar, R.string.ID_NAVIGATION_DRAWER_OPEN, R.string.ID_NAVIGATION_DRAWER_CLOSE, this);
-        mDrawer.addDrawerListener(toggle);
-        toggle.syncState();
+        mCustiomActionBarToggle = new CustiomActionBarToggle(this, mDrawer, mToolbar, R.string.ID_NAVIGATION_DRAWER_OPEN, R.string.ID_NAVIGATION_DRAWER_CLOSE, this);
+        mDrawer.addDrawerListener(mCustiomActionBarToggle);
+        mCustiomActionBarToggle.syncState();
         mNavigationView.setNavigationItemSelectedListener(this);
         mFragmentOpen = new FragmentOpen();
         mFragmentOpen.setOpen(false);
@@ -115,27 +119,88 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
     }
 
     @Override
+    public void onDialogDissmiss(FragmentOpen isFragmentOpen) {
+        mFragmentOpen=isFragmentOpen;
+        onBackPressed();
+    }
+
+    @Override
     public void startActivityFromHolder(Intent intent) {
 
     }
 
     @Override
-    public void handleOnClick(SheroesListDataItem sheroesListDataItem, View view) {
-        if (sheroesListDataItem instanceof CityListData) {
-            CityListData cityListData = (CityListData) sheroesListDataItem;
-            DetailActivity.navigate(this, view, cityListData);
-        } else if (sheroesListDataItem instanceof HomeSpinnerItem) {
-            String spinnerHeaderName = ((HomeSpinnerItem) sheroesListDataItem).getName();
+    public void handleOnClick(BaseResponse baseResponse, View view) {
+        if (baseResponse instanceof ListOfFeed) {
+            ListOfFeed listOfFeed = (ListOfFeed) baseResponse;
+            String getNameByTag = (String) view.getTag();
+            feedCardsHandled(getNameByTag, view, listOfFeed);
+
+        } else if (baseResponse instanceof HomeSpinnerItem) {
+            String spinnerHeaderName = ((HomeSpinnerItem) baseResponse).getName();
             if (StringUtil.isNotNullOrEmptyString(spinnerHeaderName)) {
                 mTvSpinnerIcon.setText(spinnerHeaderName);
-                mFragmentOpen.setOpen(false);
+                mFragmentOpen.setOpen(true);
             }
-            getSupportFragmentManager().popBackStack();
+          onBackPressed();
+        } else if (baseResponse instanceof DrawerItems) {
+            String drawerItem = ((DrawerItems) baseResponse).getId();
+            if (StringUtil.isNotNullOrEmptyString(drawerItem) && drawerItem.equalsIgnoreCase("2")) {
+                if (mDrawer.isDrawerOpen(GravityCompat.START)) {
+                    mDrawer.closeDrawer(GravityCompat.START);
+                }
+              /*  mFragmentOpen.setOpen(true);
+                onBackPressed();
+                mTvSpinnerIcon.setVisibility(View.VISIBLE);
+                CommunitiesFragment communitiesFragment = new CommunitiesFragment();
+                Bundle bundle = new Bundle();
+                communitiesFragment.setArguments(bundle);
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
+                        .replace(R.id.fl_fragment_container, communitiesFragment, SPINNER_FRAGMENT).addToBackStack(null).commitAllowingStateLoss();
+         */
+            }
+
+        }
+    }
+
+    private void feedCardsHandled(String nameOfCard, View view, ListOfFeed listOfFeed) {
+        switch (nameOfCard) {
+            case AppConstants.FEED_ARTICLE:
+                CommentReactionFragment   commentReactionFragmentForArticle= new CommentReactionFragment();
+                Bundle  bundleArticle = new Bundle();
+                bundleArticle.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK,mFragmentOpen);
+                commentReactionFragmentForArticle.setArguments(bundleArticle);
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
+                        .replace(R.id.fl_feed_comments, commentReactionFragmentForArticle, SPINNER_FRAGMENT).addToBackStack(null).commitAllowingStateLoss();
+
+                break;
+            case AppConstants.FEED_COMMUNITY:
+                CommentReactionFragment  commentReactionFragmentForCommunity= new CommentReactionFragment();
+                Bundle  bundleCommunity = new Bundle();
+                bundleCommunity.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK,mFragmentOpen);
+                commentReactionFragmentForCommunity.setArguments(bundleCommunity);
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
+                        .replace(R.id.fl_feed_comments, commentReactionFragmentForCommunity, SPINNER_FRAGMENT).addToBackStack(null).commitAllowingStateLoss();
+
+                break;
+            case AppConstants.FEED_COMMUNITY_POST:
+                CommentReactionFragment  commentReactionFragmentForCommunityPost= new CommentReactionFragment();
+                Bundle  bundleCommunityPost = new Bundle();
+                bundleCommunityPost.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK,mFragmentOpen);
+                commentReactionFragmentForCommunityPost.setArguments(bundleCommunityPost);
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
+                        .replace(R.id.fl_feed_comments, commentReactionFragmentForCommunityPost, SPINNER_FRAGMENT).addToBackStack(null).commitAllowingStateLoss();
+                break;
+            case AppConstants.FEED_DETAIL_FOR_CARDS:
+                DetailActivity.navigate(this, view, listOfFeed);
+                break;
+            default:
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + nameOfCard);
         }
     }
 
     @Override
-    public void setListData(SheroesListDataItem data, boolean isCheked) {
+    public void setListData(BaseResponse data, boolean isCheked) {
         List<HomeSpinnerItem> localList = new ArrayList<>();
         if (StringUtil.isNotEmptyCollection(mHomeSpinnerItemList)) {
             HomeSpinnerItem passedHomeItem = (HomeSpinnerItem) data;
@@ -160,12 +225,12 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
 
     @Override
     public void onDrawerOpened() {
-        //   Toast.makeText(this, "-----Drawer opened----", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "-----Drawer opened----", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onDrawerClosed() {
-        //  Toast.makeText(this, "-----Drawer closed----", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "-----Drawer closed----", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -180,11 +245,12 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mAdapter);
         List<DrawerItems> tokens = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
-            DrawerItems token = new DrawerItems();
-            token.setName("abcd");
-            tokens.add(token);
-        }
+        DrawerItems token = new DrawerItems();
+        token.setId("1");
+        DrawerItems token1 = new DrawerItems();
+        token1.setId("2");
+        tokens.add(token);
+        tokens.add(token1);
         mAdapter.setSheroesGenericListData(tokens);
     }
 
@@ -196,7 +262,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
         Bundle bundle = new Bundle();
         homeFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
-                .replace(R.id.fl_fragment_container, homeFragment, SPINNER_FRAGMENT).addToBackStack(null).commitAllowingStateLoss();
+                .replace(R.id.fl_feed_full_view, homeFragment, SPINNER_FRAGMENT).addToBackStack(null).commitAllowingStateLoss();
 
     }
 
@@ -230,7 +296,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
             mFragmentOpen.setOpen(true);
         } else {
             mFragmentOpen.setOpen(false);
-            getSupportFragmentManager().popBackStack();
+            onBackPressed();
         }
     }
 
@@ -242,7 +308,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
         mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.footer_icon_text));
         mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_unselected_icon), null, null);
         mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_selected_icon), null, null);
-        mTvSpinnerIcon.setVisibility(View.VISIBLE);
+        mTvSpinnerIcon.setVisibility(View.GONE);
         initHomeViewPagerAndTabs();
     }
 
@@ -267,6 +333,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
     public void onBackPressed() {
         if (mFragmentOpen.isOpen()) {
             getSupportFragmentManager().popBackStack();
+            mFragmentOpen.setOpen(false);
         } else {
             super.onBackPressed();
         }

@@ -13,7 +13,7 @@ import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
-import appliedlife.pvtltd.SHEROES.models.entities.home.SheroesListDataItem;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleRequest;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HolderMapping;
 /**
@@ -25,7 +25,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.HolderMapping;
  * Title: Generic Recycler adapter for every list view.
  * List respose will be bind with generic adapter.
  */
-public class GenericRecyclerViewAdapter<T extends SheroesListDataItem> extends RecyclerView.Adapter<BaseViewHolder>implements Filterable {
+public class GenericRecyclerViewAdapter<T extends BaseResponse> extends RecyclerView.Adapter<BaseViewHolder>implements Filterable {
 
     Context context;
     List<T> mSheroesGenericListData = new ArrayList<>();
@@ -72,7 +72,7 @@ public class GenericRecyclerViewAdapter<T extends SheroesListDataItem> extends R
 
     @Override
     public int getItemViewType(int position) {
-        SheroesListDataItem var = filterListData.get(position);
+        BaseResponse var = filterListData.get(position);
         return HolderMapping.getOrdinal(var,filterListData.size());
     }
 

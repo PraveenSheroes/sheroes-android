@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/iv_first_landscape"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_size_260"
+        android:layout_marginLeft="@dimen/dp_size_1"
+        android:scaleType="fitXY" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp_size_1"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/iv_second_image_landscape"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_size_1"
+            android:layout_weight=".33" />
+
+        <ImageView
+            android:id="@+id/iv_third_image_landscape"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_size_1"
+            android:layout_weight=".33" />
+
+        <ImageView
+            android:id="@+id/iv_fourth_image_landscape"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_size_1"
+            android:layout_weight=".33"
+
+            />
+    </LinearLayout>
+</LinearLayout>

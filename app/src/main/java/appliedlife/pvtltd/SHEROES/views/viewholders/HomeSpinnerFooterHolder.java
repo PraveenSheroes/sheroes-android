@@ -11,7 +11,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
-import appliedlife.pvtltd.SHEROES.models.entities.home.SheroesListDataItem;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -60,10 +60,10 @@ public class HomeSpinnerFooterHolder extends BaseViewHolder<HomeSpinnerItem>  {
         switch (id) {
             case R.id.tv_done:
                 if(viewInterface!=null&&StringUtil.isNotEmptyCollection(viewInterface.getListData())) {
-                    List<SheroesListDataItem> mHomeSpinnerItemList = viewInterface.getListData();
+                    List<BaseResponse> mHomeSpinnerItemList = viewInterface.getListData();
                     if (StringUtil.isNotEmptyCollection(mHomeSpinnerItemList)) {
-                        SheroesListDataItem sheroesListDataItem = getAllSelectedData(mHomeSpinnerItemList);
-                        viewInterface.handleOnClick(sheroesListDataItem, tvDone);
+                        BaseResponse baseResponse = getAllSelectedData(mHomeSpinnerItemList);
+                        viewInterface.handleOnClick(baseResponse, tvDone);
                     }
                 }
                 break;
@@ -75,13 +75,13 @@ public class HomeSpinnerFooterHolder extends BaseViewHolder<HomeSpinnerItem>  {
         }
     }
 
-    private HomeSpinnerItem getAllSelectedData(List<SheroesListDataItem> homeSpinnerItemList) {
+    private HomeSpinnerItem getAllSelectedData(List<BaseResponse> homeSpinnerItemList) {
         String addAllText=AppConstants.EMPTY_STRING;
         HomeSpinnerItem homeSpinnerItem=new HomeSpinnerItem();
 
-        for(SheroesListDataItem sheroesListDataItem:homeSpinnerItemList)
+        for(BaseResponse baseResponse :homeSpinnerItemList)
         {
-            homeSpinnerItem=((HomeSpinnerItem)sheroesListDataItem);
+            homeSpinnerItem=((HomeSpinnerItem) baseResponse);
             if(homeSpinnerItem.isChecked())
             {
                 addAllText +=homeSpinnerItem.getName()+AppConstants.COMMA;

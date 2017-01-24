@@ -3,11 +3,13 @@ package appliedlife.pvtltd.SHEROES.models.entities.home;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+
 /**
  * Created by Praveen_Singh on 05-01-2017.
  */
 
-public class DrawerItems extends SheroesListDataItem {
+public class DrawerItems extends BaseResponse {
 
     @SerializedName("id")
     @Expose

@@ -8,7 +8,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
-import appliedlife.pvtltd.SHEROES.models.entities.home.CityListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItemResponse;
 import appliedlife.pvtltd.SHEROES.preferences.SessionUser;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -36,12 +37,12 @@ public class HomeModel {
         this.sheroesAppServiceApi = sheroesAppServiceApi;
         this.gson= gson;
     }
-    public Observable<CityListResponse>getCityList(CityListResponse cityListResponse){
-        return sheroesAppServiceApi.getCityList(cityListResponse)
-                .map(new Func1<CityListResponse, CityListResponse>() {
+    public Observable<FeedResponse> getFeedFromModel(ListOfFeed listOfFeed){
+        return sheroesAppServiceApi.getFeedFromApi(listOfFeed)
+                .map(new Func1<FeedResponse, FeedResponse>() {
                     @Override
-                    public CityListResponse call(CityListResponse cityListResponse) {
-                        return cityListResponse;
+                    public FeedResponse call(FeedResponse feedResponse) {
+                        return feedResponse;
                     }
                 })
                 .subscribeOn(Schedulers.io())

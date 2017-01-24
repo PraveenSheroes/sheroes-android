@@ -1,7 +1,10 @@
 package appliedlife.pvtltd.SHEROES.basecomponents;
 
 
-import appliedlife.pvtltd.SHEROES.models.entities.home.CityListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItemResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -24,8 +27,8 @@ import rx.Observable;
 public interface SheroesAppServiceApi {
 
     //@GET("v1/city")
-    @POST("v2/587fb6d22700006b0af0dd84")
-    Observable<CityListResponse> getCityList(@Body CityListResponse cityListResponse );
+    @POST("v2/588604790f0000cd37ff6684")
+    Observable<FeedResponse> getFeedFromApi(@Body ListOfFeed listOfFeed );
 
     @GET("v2/587877da0f0000231d0d49b1")
     Observable<HomeSpinnerItemResponse> getHomeSpinnerList();
@@ -41,4 +44,6 @@ public interface SheroesAppServiceApi {
     Observable<ArticleListResponse> getOnlyJobList(@Body ArticleRequest articleRequest );
     @POST("v2/587fc963270000010df0ddac")
     Observable<Feature> getFeature(@Body Feature articleRequest );
+    @POST("v2/58871aaf100000e51b25e15e")
+    Observable<CommentResponse> getCommentFromApi(@Body CommentRequest commentRequest );
 }

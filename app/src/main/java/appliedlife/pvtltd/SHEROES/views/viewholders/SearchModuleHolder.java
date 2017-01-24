@@ -9,6 +9,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleRequest;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -18,6 +20,7 @@ import butterknife.ButterKnife;
  */
 
 public class SearchModuleHolder extends BaseViewHolder<ArticleRequest> {
+    private final String TAG = LogUtils.makeLogTag(SearchModuleHolder.class);
     @Bind(R.id.tv_search_list_header_text)
     TextView mTvHeaderText;
     @Bind(R.id.tv_search_list_label_text)
@@ -56,6 +59,13 @@ public class SearchModuleHolder extends BaseViewHolder<ArticleRequest> {
     @Override
     public void onClick(View view) {
         viewInterface.handleOnClick(this.dataItem,view);
+        int id = view.getId();
+        switch (id) {
+          //  case R.id.iv_dashboard:
+          //      break;
+            default:
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
+        }
     }
 
 }

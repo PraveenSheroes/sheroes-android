@@ -16,12 +16,15 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.home.CityListData;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class CollectionHolder extends BaseViewHolder<CityListData> {
+public class CollectionHolder extends BaseViewHolder<ListOfFeed> {
+    private final String TAG = LogUtils.makeLogTag(CollectionHolder.class);
     @Bind(R.id.iv_dashboard)
     ImageView background;
     @Bind(R.id.tv_description)
@@ -33,11 +36,11 @@ public class CollectionHolder extends BaseViewHolder<CityListData> {
     @Bind(R.id.tv_dashboard_time)
     TextView tvTime;
     @Bind(R.id.iv_dashboard_icon)
-    ImageView ivIcon;
+    CircleImageView ivIcon;
     @Bind(R.id.tv_views)
     TextView tvViews;
     BaseHolderInterface viewInterface;
-    private CityListData dataItem;
+    private ListOfFeed dataItem;
     private int position;
     private static final String LEFT_HTML_TAG_FOR_COLOR = "<b><font color='#3b99fc'>";
     private static final String RIGHT_HTML_TAG_FOR_COLOR = "</font></b>";
@@ -50,9 +53,8 @@ public class CollectionHolder extends BaseViewHolder<CityListData> {
     }
 
     @Override
-    public void bindData(CityListData item, Context context, int position) {
+    public void bindData(ListOfFeed item, final Context context, int position) {
         this.dataItem = item;
-        // itemView.setOnClickListener(this);
         String str = item.getDescription();
         if (str.length() > 80) {
             str = str.substring(0, 88);
@@ -66,20 +68,18 @@ public class CollectionHolder extends BaseViewHolder<CityListData> {
         background.setOnClickListener(this);
 
         tvDashboardTitle.setText(item.getName());
-        tvTime.setText(item.getTime());
-        tvHeader.setText(item.getHeader());
+        tvTime.setText(item.getCreatedDate());
+        tvHeader.setText(item.getTitle());
 
-        String images = dataItem.getBackground();
-        Glide.with(context)
-                .load(images)
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .skipMemoryCache(true)
-                .into(ivIcon);
+        String images = dataItem.getImageUrl();
+        ivIcon.setCircularImage(true);
+        ivIcon.bindImage(images);
         Glide.with(context)
                 .load(images)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .skipMemoryCache(true)
                 .into(background);
+
     }
 
     @Override
@@ -91,10 +91,15 @@ public class CollectionHolder extends BaseViewHolder<CityListData> {
     @Override
     public void onClick(View view) {
         HashMap<String, Object> map = new HashMap<String, Object>();
-        //   map.put("collection name",dataItem.getTitle());
         map.put("collection id", dataItem.getId());
-//    map.put("collection type",dataItem.getType());
         viewInterface.handleOnClick(this.dataItem, view);
+        int id = view.getId();
+        switch (id) {
+            case R.id.iv_dashboard:
+                break;
+            default:
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
+        }
     }
 
 }

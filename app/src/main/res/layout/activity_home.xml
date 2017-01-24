@@ -9,6 +9,12 @@
     tools:openDrawer="start">
 
     <include layout="@layout/activity_home_dashboard" />
+    <include
+        android:id="@+id/fl_feed_comments"
+        layout="@layout/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"

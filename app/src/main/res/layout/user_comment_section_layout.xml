@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/li_user_comment"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_size_1"
+        android:background="@color/search_tab_unselected_text"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/dp_size_10"
+        android:weightSum="1">
+
+        <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
+            android:id="@+id/iv_user_comment_profile_pic"
+            android:layout_width="@dimen/dp_size_27"
+            android:layout_height="@dimen/dp_size_27"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_footer_button_icon" />
+
+        <EditText
+            android:id="@+id/et_user_comment_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".95"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:hint="@string/ID_ERROR_FIELD_REQUIRED"
+            android:padding="@dimen/dp_size_10"
+            android:textSize="@dimen/sp_size_12"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_post_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_post_comment"
+            android:padding="@dimen/dp_size_10" />
+    </LinearLayout>
+</LinearLayout>
