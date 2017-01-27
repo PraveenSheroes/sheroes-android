@@ -15,9 +15,52 @@
         android:textSize="@dimen/sp_size_24"
         android:textColor="@color/searchbox_hint_text_color"
       />
+    <FrameLayout
+        android:id="@+id/fl_comment_reaction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_size_10"
+        android:layout_gravity="right">
+
+        <TextView
+            android:id="@+id/tv_reaction_type1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_emoji1" />
+
+        <TextView
+            android:id="@+id/tv_reaction_type2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_emoji2"
+            android:paddingLeft="@dimen/dp_size_15" />
+
+        <TextView
+            android:id="@+id/tv_total_replies"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:gravity="right"
+            android:textColor="@color/feed_article_comment"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:textSize="@dimen/sp_size_11"
+            android:rotation="@integer/int_value_270"
+            android:drawableRight="@drawable/ic_spinner_icon" />
+
+        <TextView
+            android:id="@+id/tv_reaction_type3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_emoji3"
+            android:drawablePadding="@dimen/dp_size_30"
+            android:paddingLeft="@dimen/dp_size_30"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:textColor="@color/feed_article_comment"
+            android:textSize="@dimen/sp_size_11"
+            android:text="@string/ID_REACTION" />
+    </FrameLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_size_1"
         android:background="@color/search_tab_unselected_text"/>
-
 </LinearLayout>

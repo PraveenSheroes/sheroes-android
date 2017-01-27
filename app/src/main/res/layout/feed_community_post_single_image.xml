@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <ImageView
-        android:id="@+id/iv_cominity_post_single"
+        android:id="@+id/iv_feed_community_post_single"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_size_160"
+        android:layout_height="wrap_content"
         android:scaleType="fitXY" />
 </LinearLayout>

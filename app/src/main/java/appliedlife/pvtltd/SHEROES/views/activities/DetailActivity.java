@@ -41,10 +41,10 @@ public class DetailActivity extends BaseActivity {
     ImageView ivArticleDetail;
     public static void navigate(AppCompatActivity activity, View transitionImage, ListOfFeed  listOfFeed) {
         Intent intent = new Intent(activity, DetailActivity.class);
-        intent.putExtra(EXTRA_IMAGE, listOfFeed.getImageUrl());
-        intent.putExtra(DECRIPTION, listOfFeed.getDescription());
-        intent.putExtra(HEADER, listOfFeed.getTitle());
-        intent.putExtra(TIME, listOfFeed.getCreatedDate());
+      //  intent.putExtra(EXTRA_IMAGE, listOfFeed.getImageUrl());
+      //  intent.putExtra(DECRIPTION, listOfFeed.getDescription());
+      //  intent.putExtra(HEADER, listOfFeed.getTitle());
+      //  intent.putExtra(TIME, listOfFeed.getCreatedDate());
         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, transitionImage, EXTRA_IMAGE);
         ActivityCompat.startActivity(activity, intent, options.toBundle());
     }

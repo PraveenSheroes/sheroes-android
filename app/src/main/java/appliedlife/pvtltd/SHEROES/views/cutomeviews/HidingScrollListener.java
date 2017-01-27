@@ -33,9 +33,8 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
     @Override
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
-
         int firstVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
-
+        dismissReactions();
         if (firstVisibleItem == 0) {
             if(!mControlsVisible) {
                 onShow();
@@ -77,4 +76,5 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
 
     public abstract void onHide();
     public abstract void onShow();
+    public abstract void dismissReactions();
 }

@@ -63,6 +63,7 @@ public class HomeFragment extends BaseFragment implements HomeView {
     private LinearLayoutManager mLayoutManager;
     private HomeActivityIntractionListner mHomeActivityIntractionListner;
     private SwipPullRefreshList mPullRefreshList;
+
     public static HomeFragment createInstance(int itemsCount) {
         HomeFragment partThreeFragment = new HomeFragment();
         // Bundle bundle = new Bundle();
@@ -89,14 +90,14 @@ public class HomeFragment extends BaseFragment implements HomeView {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         Fabric.with(getActivity(), new Crashlytics());
-     //   forceCrash();
+        //   forceCrash();
         // TODO: Move this to where you establish a user session
         logUser();
 
         //  GoogleAnalyticsTracing.screenNameTracking(getActivity(),SCREEN_NAME);
 
         ButterKnife.bind(this, view);
-        mPullRefreshList=new SwipPullRefreshList();
+        mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
         mHomePresenter.attachView(this);
         mLayoutManager = new LinearLayoutManager(getContext());
@@ -117,6 +118,28 @@ public class HomeFragment extends BaseFragment implements HomeView {
                 //   setCustomAnimation(((HomeActivity)getActivity()).mFlHomeFooterList);
                 ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
             }
+
+            @Override
+            public void dismissReactions() {
+                if (null != ((HomeActivity) getActivity()).mArticlePopUp) {
+                    ((HomeActivity) getActivity()).mArticlePopUp.setVisibility(View.GONE);
+                    Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_out);
+                    ((HomeActivity) getActivity()).mArticlePopUp.clearAnimation();
+                    animation.setFillAfter(false);
+                }
+                if (null != ((HomeActivity) getActivity()).mCommunityPopUp) {
+                    ((HomeActivity) getActivity()).mCommunityPopUp.setVisibility(View.GONE);
+                    Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_out);
+                    ((HomeActivity) getActivity()).mCommunityPopUp.clearAnimation();
+                    animation.setFillAfter(false);
+                }
+                if (null != ((HomeActivity) getActivity()).mCommunityPostPopUp) {
+                    ((HomeActivity) getActivity()).mCommunityPostPopUp.setVisibility(View.GONE);
+                    Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_out);
+                    ((HomeActivity) getActivity()).mCommunityPostPopUp.clearAnimation();
+                    animation.setFillAfter(false);
+                }
+            }
         });
         mHomePresenter.getFeedFromPresenter(MockService.makeCityRequest());
         swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -124,8 +147,8 @@ public class HomeFragment extends BaseFragment implements HomeView {
             public void onRefresh() {
                 // Refresh items
                 LogUtils.info("swipe", "*****************end called");
-              //  mPullRefreshList.setPullToRefresh(true);
-             //   mHomePresenter.getFeedFromPresenter(MockService.makeCityRequest());
+                //  mPullRefreshList.setPullToRefresh(true);
+                //   mHomePresenter.getFeedFromPresenter(MockService.makeCityRequest());
             }
         });
         return view;
@@ -138,6 +161,7 @@ public class HomeFragment extends BaseFragment implements HomeView {
         Crashlytics.setUserEmail("ajit@sheroies.in");
         Crashlytics.setUserName("Test User");
     }
+
     public void forceCrash() {
         throw new RuntimeException(AppConstants.APP_CRASHED);
     }
@@ -149,16 +173,14 @@ public class HomeFragment extends BaseFragment implements HomeView {
 
     @Override
     public void getCityListSuccess(List<ListOfFeed> listOfFeeds) {
-        if(StringUtil.isNotEmptyCollection(listOfFeeds)) {
+        if (StringUtil.isNotEmptyCollection(listOfFeeds)) {
             mPullRefreshList.allListData(listOfFeeds);
             mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
             mAdapter.notifyDataSetChanged();
-            if(!mPullRefreshList.isPullToRefresh()) {
+            if (!mPullRefreshList.isPullToRefresh()) {
                 mLayoutManager.scrollToPositionWithOffset(mPullRefreshList.getFeedResponses().size() - listOfFeeds.size(), 0);
-            }
-            else
-            {
-                mLayoutManager.scrollToPositionWithOffset(0,0);
+            } else {
+                mLayoutManager.scrollToPositionWithOffset(0, 0);
             }
             swipeView.setRefreshing(false);
         }

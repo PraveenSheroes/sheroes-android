@@ -30,4 +30,5 @@
     <color name="feed_article_label">#323840</color>
     <color name="feed_article_comment">#777f8a</color>
     <color name="feed_job_card_new">#50e3c2</color>
+    <color name="feed_conversation">#878e98</color>
 </resources>

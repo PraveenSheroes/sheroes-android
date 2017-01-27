@@ -9,7 +9,18 @@ import android.os.Parcelable;
 
 public class FragmentOpen implements Parcelable {
     boolean isOpen;
-    boolean drawerOpen;
+    boolean reactionList;
+    boolean commentList;
+    boolean feedOpen;
+    boolean communityOpen;
+
+    public FragmentOpen(boolean isOpen, boolean reactionList, boolean commentList, boolean feedOpen, boolean communityOpen) {
+        this.isOpen = isOpen;
+        this.reactionList = reactionList;
+        this.commentList = commentList;
+        this.feedOpen = feedOpen;
+        this.communityOpen = communityOpen;
+    }
 
     public boolean isOpen() {
         return isOpen;
@@ -17,6 +28,38 @@ public class FragmentOpen implements Parcelable {
 
     public void setOpen(boolean open) {
         isOpen = open;
+    }
+
+    public boolean isReactionList() {
+        return reactionList;
+    }
+
+    public void setReactionList(boolean reactionList) {
+        this.reactionList = reactionList;
+    }
+
+    public boolean isCommentList() {
+        return commentList;
+    }
+
+    public void setCommentList(boolean commentList) {
+        this.commentList = commentList;
+    }
+
+    public boolean isFeedOpen() {
+        return feedOpen;
+    }
+
+    public void setFeedOpen(boolean feedOpen) {
+        this.feedOpen = feedOpen;
+    }
+
+    public boolean isCommunityOpen() {
+        return communityOpen;
+    }
+
+    public void setCommunityOpen(boolean communityOpen) {
+        this.communityOpen = communityOpen;
     }
 
     @Override
@@ -27,18 +70,21 @@ public class FragmentOpen implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeByte(this.isOpen ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.drawerOpen ? (byte) 1 : (byte) 0);
-    }
-
-    public FragmentOpen() {
+        dest.writeByte(this.reactionList ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.commentList ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.feedOpen ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.communityOpen ? (byte) 1 : (byte) 0);
     }
 
     protected FragmentOpen(Parcel in) {
         this.isOpen = in.readByte() != 0;
-        this.drawerOpen = in.readByte() != 0;
+        this.reactionList = in.readByte() != 0;
+        this.commentList = in.readByte() != 0;
+        this.feedOpen = in.readByte() != 0;
+        this.communityOpen = in.readByte() != 0;
     }
 
-    public static final Parcelable.Creator<FragmentOpen> CREATOR = new Parcelable.Creator<FragmentOpen>() {
+    public static final Creator<FragmentOpen> CREATOR = new Creator<FragmentOpen>() {
         @Override
         public FragmentOpen createFromParcel(Parcel source) {
             return new FragmentOpen(source);

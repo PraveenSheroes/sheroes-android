@@ -27,7 +27,7 @@ import rx.Observable;
 public interface SheroesAppServiceApi {
 
     //@GET("v1/city")
-    @POST("v2/588604790f0000cd37ff6684")
+    @POST("v2/588b0544300000e216fa8cfb")
     Observable<FeedResponse> getFeedFromApi(@Body ListOfFeed listOfFeed );
 
     @GET("v2/587877da0f0000231d0d49b1")
@@ -44,6 +44,8 @@ public interface SheroesAppServiceApi {
     Observable<ArticleListResponse> getOnlyJobList(@Body ArticleRequest articleRequest );
     @POST("v2/587fc963270000010df0ddac")
     Observable<Feature> getFeature(@Body Feature articleRequest );
-    @POST("v2/58871aaf100000e51b25e15e")
+    @POST("v2/588748de100000e11f25e1ec")
     Observable<CommentResponse> getCommentFromApi(@Body CommentRequest commentRequest );
+    @POST("v2/588748de100000e11f25e1ec")
+    Observable<CommentResponse> getReactionFromApi(@Body CommentRequest commentRequest );
 }

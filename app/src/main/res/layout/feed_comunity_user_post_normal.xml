@@ -3,215 +3,250 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardElevation="@dimen/dp_size_2"
-    app:cardUseCompatPadding="true">
+    android:layout_marginBottom="@dimen/dp_size_5"
+    app:cardElevation="@dimen/dp_size_2">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:orientation="vertical"
-        android:paddingRight="@dimen/dp_size_1">
+        android:baselineAligned="false"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:orientation="horizontal"
+            android:padding="@dimen/dp_size_8"
             android:weightSum="1">
 
             <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
-                android:id="@+id/iv_community_post_icon"
-                android:layout_width="@dimen/dp_size_50"
-                android:layout_height="@dimen/dp_size_50"
+                android:id="@+id/iv_feed_community_post_circle_icon"
+                android:layout_width="@dimen/feed_profile_icon_size"
+                android:layout_height="@dimen/feed_profile_icon_size"
+                android:layout_margin="@dimen/dp_size_10"
                 android:src="@drawable/ic_footer_button_icon" />
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="@dimen/dp_size_10">
 
                 <TextView
-                    android:id="@+id/tv_dashboard_title"
+                    android:id="@+id/tv_feed_community_post_card_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-                    android:text="@string/ID_ERROR_FIELD_REQUIRED"
-                    android:textColor="@color/dashboard_text"
+                    android:fontFamily="@string/ID_ROBOTO_BOLD"
+                    android:text="Testing walfare sociaty India for "
+                    android:textColor="@color/feed_article_label"
                     android:textSize="@dimen/sp_size_14"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/tv_dashboard_time"
+                    android:id="@+id/tv_feed_community_post_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:text="5 hrs ago"
+                    android:text="Local group"
                     android:textColor="@color/feed_article_label"
                     android:textSize="@dimen/sp_size_12" />
             </LinearLayout>
 
             <ImageView
-                android:id="@+id/iv_dashboard_menu"
+                android:id="@+id/iv_feed_community_post_menu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_size_20"
+                android:layout_marginRight="@dimen/dp_size_5"
                 android:background="@drawable/ic_search_group_icon" />
 
         </LinearLayout>
 
 
         <TextView
-            android:id="@+id/tv_post_text"
+            android:id="@+id/tv_feed_community_post_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/dp_size_10"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:lineSpacingExtra="@dimen/dp_size_5"
             android:lines="2"
+            android:padding="@dimen/dp_size_13"
             android:text="@string/ID_DASHBOARD"
             android:textColor="@color/feed_article_label"
             android:textSize="@dimen/sp_size_13" />
 
-        <LinearLayout
-            android:id="@+id/li_feed_community_user_post_images"
+
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:orientation="vertical" />
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/li_feed_community_user_post_images"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical" />
+
+            <include
+                android:id="@+id/li_feed_community_user_post_emoji_pop_up"
+                layout="@layout/emoji_reaction_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|bottom"
+                android:visibility="gone"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        </FrameLayout>
 
         <LinearLayout
-            android:id="@+id/li_user_reactions"
+            android:id="@+id/li_feed_community_post_user_reactions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="@dimen/dp_size_20"
+            android:padding="@dimen/dp_size_14"
             android:weightSum="1">
 
             <TextView
-                android:id="@+id/tv_user_reaction"
+                android:id="@+id/tv_feed_community_post_user_reaction"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight=".2"
+                android:layout_weight=".28"
                 android:drawableLeft="@drawable/ic_heart_in_active" />
 
             <TextView
-                android:id="@+id/tv_user_comment"
+                android:id="@+id/tv_feed_community_post_user_comment"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight=".2"
-                android:drawableLeft="@drawable/ic_heart_active" />
+                android:layout_weight=".16"
+                android:drawableLeft="@drawable/ic_comment_icon" />
 
             <TextView
-                android:id="@+id/tv_user_bookmark"
+                android:id="@+id/tv_feed_community_post_user_bookmark"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight=".3"
                 android:drawableRight="@drawable/ic_bookmark_active" />
 
             <TextView
-                android:id="@+id/tv_user_menu"
+                android:id="@+id/tv_feed_community_post_user_menu"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight=".3"
+                android:layout_weight=".25"
                 android:drawableRight="@drawable/ic_menu_dashboard" />
 
         </LinearLayout>
 
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_size_1"
+            android:background="@color/search_tab_unselected_text" />
+
         <FrameLayout
+            android:id="@+id/fl_feed_community_post_no_reaction_comments"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/dp_size_10"
-            android:layout_gravity="right">
+            android:layout_gravity="right"
+            android:padding="@dimen/dp_size_14">
 
             <TextView
-                android:id="@+id/tv_reaction_type1"
+                android:id="@+id/tv_feed_community_post_reaction1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_emoji1" />
 
             <TextView
-                android:id="@+id/tv_reaction_type2"
+                android:id="@+id/tv_feed_community_post_reaction2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_size_12"
                 android:drawableLeft="@drawable/ic_emoji2"
-                android:paddingLeft="@dimen/dp_size_15" />
+                />
 
             <TextView
-                android:id="@+id/tv_reaction_type3"
+                android:id="@+id/tv_feed_community_post_reaction3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_size_25"
                 android:drawableLeft="@drawable/ic_emoji3"
-                android:drawablePadding="@dimen/dp_size_30"
-                android:paddingLeft="@dimen/dp_size_30"
-                android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                android:textColor="@color/feed_article_comment"
-                android:textSize="@dimen/sp_size_11"
-                android:text="53 reactions" />
-
+               />
             <TextView
-                android:id="@+id/tv_total_replies"
+                android:id="@+id/tv_feed_community_post_total_reactions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:layout_gravity="center"
+                android:text="53 reactions"
+                android:textColor="@color/feed_article_comment"
+                android:textSize="@dimen/sp_size_11"/>
+            <TextView
+                android:id="@+id/tv_feed_community_post_total_replies"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:gravity="right"
-                android:textColor="@color/feed_article_comment"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                android:textSize="@dimen/sp_size_11"
-                android:text="8 replies" />
+                android:gravity="right"
+                android:text="8 replies"
+                android:textColor="@color/feed_article_comment"
+                android:textSize="@dimen/sp_size_11" />
         </FrameLayout>
 
         <LinearLayout
-            android:id="@+id/li_user_comments"
+            android:id="@+id/li_feed_community_post_user_comments"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="@dimen/dp_size_10"
+            android:padding="@dimen/dp_size_14"
             android:weightSum="1">
 
             <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
-                android:id="@+id/iv_user_pic"
+                android:id="@+id/iv_feed_community_post_user_pic"
                 android:layout_width="@dimen/dp_size_27"
-                android:layout_height="@dimen/dp_size_27"
+                android:layout_height="@dimen/dp_size_28"
                 android:src="@drawable/ic_footer_button_icon" />
 
             <TextView
-                android:id="@+id/tv_user_comment_post"
+                android:id="@+id/tv_feed_community_post_user_comment_post"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                android:padding="@dimen/dp_size_5"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dp_size_10"
+                android:drawableRight="@drawable/ic_menu_dashboard"
+                android:fontFamily="@string/ID_ROBOTO_BOLD"
+                android:lineSpacingExtra="@dimen/dp_size_3"
                 android:text="@string/IDS_STR_NETWORK_TIME_OUT_DESCRIPTION"
+                android:textColor="@color/feed_conversation"
                 android:textSize="@dimen/sp_size_12"
                 android:textStyle="bold" />
         </LinearLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_size_1"
-            android:background="@color/search_tab_unselected_text"/>
+
         <LinearLayout
             android:id="@+id/li_feed_community_post_join_conversation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/dp_size_2"
+            android:background="@drawable/rectangle_comment_background"
             android:orientation="horizontal"
-            android:padding="@dimen/dp_size_10"
+            android:padding="@dimen/dp_size_14"
             android:weightSum="1">
 
             <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
-                android:id="@+id/iv_register_user_pic"
+                android:id="@+id/iv_feed_community_post_register_user_pic"
                 android:layout_width="@dimen/dp_size_27"
-                android:layout_height="@dimen/dp_size_27"
+                android:layout_height="@dimen/dp_size_28"
                 android:src="@drawable/ic_footer_button_icon" />
 
             <TextView
-                android:id="@+id/tv_register_user_comment"
+                android:id="@+id/tv_feed_community_post_register_user_comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dp_size_10"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                android:padding="@dimen/dp_size_5"
-                android:text="@string/ID_ERROR_INVALID_EMAIL"
+                android:text="@string/ID_JOIN_CONVERSATION"
+                android:textColor="@color/feed_conversation"
                 android:textSize="@dimen/sp_size_12"
                 android:textStyle="bold" />
         </LinearLayout>

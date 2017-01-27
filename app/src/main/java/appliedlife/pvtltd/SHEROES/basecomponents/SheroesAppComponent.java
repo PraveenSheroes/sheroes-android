@@ -26,6 +26,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.FeedJobHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FooterViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HomeSpinnerFooterHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HomeSpinnerSelectorHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.ReactionHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.SearchModuleHolder;
 import dagger.Component;
 
@@ -64,5 +65,5 @@ public interface SheroesAppComponent {
     void inject(FeedJobHolder feedJobHolder);
     void inject(FeedArticleHolder feedArticleHolder);
     void inject(CommentHolder commentHolder);
-
+    void inject(ReactionHolder reactionHolder);
 }

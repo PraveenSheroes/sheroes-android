@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/li_reaction"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/dp_size_10"
+        android:weightSum="1">
+
+        <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
+            android:id="@+id/iv_reaction_profile_pic"
+            android:layout_width="@dimen/dp_size_27"
+            android:layout_height="@dimen/dp_size_27"
+            android:src="@drawable/ic_footer_button_icon" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight=".9"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                android:paddingLeft="@dimen/dp_size_10"
+                android:text="@string/ID_ERROR_INVALID_EMAIL"
+                android:textColor="@color/detail_page_text"
+                android:textSize="@dimen/sp_size_13"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_user_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:paddingLeft="@dimen/dp_size_10"
+                android:text="@string/ID_ERROR_INVALID_EMAIL"
+                android:textColor="@color/searchbox_text_color"
+                android:textSize="@dimen/sp_size_12"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+        <TextView
+            android:id="@+id/tv_user_reaction_emoji"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_emoji3"
+            android:layout_gravity="center|right"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:textColor="@color/feed_article_comment"
+            android:textSize="@dimen/sp_size_11" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_size_1"
+        android:layout_marginLeft="@dimen/dp_size_10"
+        android:layout_marginRight="@dimen/dp_size_10"
+        android:background="@color/searchbox_text_color" />
+
+</LinearLayout>

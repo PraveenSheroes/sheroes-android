@@ -15,6 +15,9 @@ public class CommentResponse extends BaseResponse{
     @SerializedName("listOfComment")
     @Expose
     private List<CommentsList> listOfComment = null;
+    @SerializedName("listOfReaction")
+    @Expose
+    private List<ReactionList> listOfReaction = null;
 
 
     public List<CommentsList> getListOfComment() {
@@ -23,5 +26,13 @@ public class CommentResponse extends BaseResponse{
 
     public void setListOfComment(List<CommentsList> listOfComment) {
         this.listOfComment = listOfComment;
+    }
+
+    public List<ReactionList> getListOfReaction() {
+        return listOfReaction;
+    }
+
+    public void setListOfReaction(List<ReactionList> listOfReaction) {
+        this.listOfReaction = listOfReaction;
     }
 }

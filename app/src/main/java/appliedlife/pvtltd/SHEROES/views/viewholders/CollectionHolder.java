@@ -25,6 +25,8 @@ import butterknife.ButterKnife;
 
 public class CollectionHolder extends BaseViewHolder<ListOfFeed> {
     private final String TAG = LogUtils.makeLogTag(CollectionHolder.class);
+    private static final String LEFT_HTML_TAG_FOR_COLOR = "<b><font color='#3b99fc'>";
+    private static final String RIGHT_HTML_TAG_FOR_COLOR = "</font></b>";
     @Bind(R.id.iv_dashboard)
     ImageView background;
     @Bind(R.id.tv_description)
@@ -42,8 +44,7 @@ public class CollectionHolder extends BaseViewHolder<ListOfFeed> {
     BaseHolderInterface viewInterface;
     private ListOfFeed dataItem;
     private int position;
-    private static final String LEFT_HTML_TAG_FOR_COLOR = "<b><font color='#3b99fc'>";
-    private static final String RIGHT_HTML_TAG_FOR_COLOR = "</font></b>";
+
 
     public CollectionHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
@@ -67,11 +68,11 @@ public class CollectionHolder extends BaseViewHolder<ListOfFeed> {
         }
         background.setOnClickListener(this);
 
-        tvDashboardTitle.setText(item.getName());
-        tvTime.setText(item.getCreatedDate());
-        tvHeader.setText(item.getTitle());
+      //  tvDashboardTitle.setText(item.getName());
+       // tvTime.setText(item.getCreatedDate());
+      //  tvHeader.setText(item.getTitle());
 
-        String images = dataItem.getImageUrl();
+        String images = dataItem.getFeedCircleIconUrl();
         ivIcon.setCircularImage(true);
         ivIcon.bindImage(images);
         Glide.with(context)

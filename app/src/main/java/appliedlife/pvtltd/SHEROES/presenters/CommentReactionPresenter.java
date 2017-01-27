@@ -71,6 +71,32 @@ public class CommentReactionPresenter extends BasePresenter<AllCommentReactionVi
         });
         registerSubscription(subscription);
     }
+    public void getAllReactionListFromPresenter(CommentRequest commentRequest) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showNwError();
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = mCommentReactionModel.getAllReactionListFromModel(commentRequest).subscribe(new Subscriber<CommentResponse>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+            @Override
+            public void onError(Throwable e) {
+                getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
+                getMvpView().showNwError();
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onNext(CommentResponse commentResponse) {
+                getMvpView().stopProgressBar();
+                getMvpView().getAllReactions(commentResponse.getListOfReaction());
+            }
+        });
+        registerSubscription(subscription);
+    }
     public void onStop() {
         detachView();
     }

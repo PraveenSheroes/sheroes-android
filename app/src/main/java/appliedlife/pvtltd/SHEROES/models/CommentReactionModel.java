@@ -40,5 +40,16 @@ public class CommentReactionModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+    public Observable<CommentResponse> getAllReactionListFromModel(CommentRequest commentRequest){
+        return sheroesAppServiceApi.getReactionFromApi(commentRequest)
+                .map(new Func1<CommentResponse, CommentResponse>() {
+                    @Override
+                    public CommentResponse call(CommentResponse commentResponse) {
+                        return commentResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
     }
 

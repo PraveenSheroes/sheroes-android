@@ -50,8 +50,17 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_GROUP">Group</string>
     <string name="ID_VIEW_MORE">View More</string>
     <string name="ID_JOIN">Join</string>
-    <string name="ID_REPLIES">REPLIES</string>
+    <string name="ID_REPLIES">Replies</string>
+    <string name="ID_REPLY">Reply</string>
     <string name="ID_OPEN_BRACKET">(</string>
     <string name="ID_CLOSE_BRACKET">)</string>
+    <string name="ID_REACTION">Reaction</string>
+    <string name="ID_APPLIED">APPLIED</string>
+    <string name="ID_VIEWS">Views</string>
+    <string name="ID_JOIN_CONVERSATION">Join the conversation</string>
+    <string name="ID_WISHTLE">Whistle</string>
+    <string name="ID_LIKE">Like</string>
+    <string name="ID_FACE_PALM">Face Palm</string>
+    <string name="ID_XOXO">Xoxo</string>
 
 </resources>

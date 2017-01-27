@@ -9,6 +9,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentsList;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.ReactionList;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
 import appliedlife.pvtltd.SHEROES.models.entities.home.DrawerItems;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
@@ -72,11 +73,15 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new FeatureHolder(view, viewInterface);
         }
-    }
-    , COMMENT(R.layout.all_comments_list_layout) {
+    }, COMMENT(R.layout.all_comments_list_layout) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new CommentHolder(view, viewInterface);
+        }
+    }, REACTION(R.layout.all_reaction_list_layout) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new ReactionHolder(view, viewInterface);
         }
     };
     public Object object;
@@ -98,22 +103,21 @@ public enum HolderMapping {
     }
 
     public static int getOrdinal(BaseResponse item, int totalCount) {
-        int returnView=FEED_JOB.ordinal();
+        int returnView = FEED_JOB.ordinal();
         if (item instanceof ListOfFeed) {
-            String id = ((ListOfFeed) item).getType();
-            switch (id)
-            {
+            String feedType = ((ListOfFeed) item).getFeedType();
+            switch (feedType) {
                 case AppConstants.FEED_ARTICLE:
-                    returnView= FEED_ARTICLE.ordinal();
+                    returnView = FEED_ARTICLE.ordinal();
                     break;
                 case AppConstants.FEED_COMMUNITY:
-                    returnView= FEED_COMMUNITY.ordinal();
+                    returnView = FEED_COMMUNITY.ordinal();
                     break;
                 case AppConstants.FEED_JOB:
-                    returnView=FEED_JOB.ordinal();
+                    returnView = FEED_JOB.ordinal();
                     break;
                 case AppConstants.FEED_COMMUNITY_POST:
-                    returnView=FEED_COMMUNITY_POST.ordinal();
+                    returnView = FEED_COMMUNITY_POST.ordinal();
                     break;
 
             }
@@ -130,12 +134,14 @@ public enum HolderMapping {
             return SEARCH_MODULE.ordinal();
         } else if (item instanceof FeatResponse) {
             return FEATURE.ordinal();
-        }
-        else if (item instanceof CommentsList) {
+        } else if (item instanceof CommentsList) {
             return COMMENT.ordinal();
 
+        } else if (item instanceof ReactionList) {
+            return REACTION.ordinal();
+
         }
-      return returnView;
+        return returnView;
     }
 
 

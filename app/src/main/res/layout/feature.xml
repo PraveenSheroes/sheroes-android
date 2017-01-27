@@ -25,8 +25,8 @@
 
             <ImageView
                 android:id="@+id/iv_dashboard_icon"
-                android:layout_width="@dimen/dp_size_50"
-                android:layout_height="@dimen/dp_size_50"
+                android:layout_width="@dimen/feed_profile_icon_size"
+                android:layout_height="@dimen/feed_profile_icon_size"
                 android:visibility="invisible"
                 android:background="@drawable/ic_footer_button_icon" />
 

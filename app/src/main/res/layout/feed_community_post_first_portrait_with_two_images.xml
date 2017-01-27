@@ -7,7 +7,7 @@
     android:weightSum="1">
 
     <ImageView
-        android:id="@+id/iv_feed_community_post_first_portrait"
+        android:id="@+id/iv_feed_community_post_first_portrait_side_two_image"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight=".5"
@@ -17,30 +17,24 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight=".5"
+        android:layout_marginLeft="@dimen/dp_size_3"
         android:orientation="vertical"
         android:weightSum="1">
 
         <ImageView
-            android:id="@+id/iv_feed_community_post_second_portrait"
+            android:id="@+id/iv_feed_community_post_second_portrait_side_two_image"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight=".33"
+            android:layout_weight=".5"
             android:scaleType="fitXY"/>
 
         <ImageView
-            android:id="@+id/iv_feed_community_post_third_portrait"
+            android:id="@+id/iv_feed_community_post_third_portrait_side_two_image"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/dp_size_1"
-            android:layout_weight=".33"
-            android:scaleType="fitXY"/>
+            android:scaleType="fitXY"
+            android:layout_weight=".5" />
 
-        <ImageView
-            android:id="@+id/iv_feed_community_post_fourth_portrait"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="@dimen/dp_size_1"
-            android:layout_weight=".33"
-            android:scaleType="fitXY"/>
     </LinearLayout>
 </LinearLayout>

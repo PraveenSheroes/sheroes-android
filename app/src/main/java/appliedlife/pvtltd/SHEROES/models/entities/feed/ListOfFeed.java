@@ -1,87 +1,78 @@
+
 package appliedlife.pvtltd.SHEROES.models.entities.feed;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 
-/**
- * Created by Praveen_Singh on 23-01-2017.
- */
-
 public class ListOfFeed extends BaseResponse {
+
     @SerializedName("id")
     @Expose
     private String id;
-    @SerializedName("name")
+    @SerializedName("userId")
     @Expose
-    private String name;
-    @SerializedName("type")
+    private String userId;
+    @SerializedName("groupName")
     @Expose
-    private String type;
+    private String groupName;
+    @SerializedName("isViewedByUser")
+    @Expose
+    private Boolean isViewedByUser;
+    @SerializedName("jobDetail")
+    @Expose
+    private JobDetail jobDetail;
+    @SerializedName("feedTitle")
+    @Expose
+    private String feedTitle;
+    @SerializedName("feedType")
+    @Expose
+    private String feedType;
+    @SerializedName("createdDateTime")
+    @Expose
+    private String createdDateTime;
     @SerializedName("tags")
     @Expose
     private String tags;
+    @SerializedName("feedHeadline")
+    @Expose
+    private String feedHeadline;
     @SerializedName("description")
     @Expose
     private String description;
-    @SerializedName("noOfLikes")
+    @SerializedName("noOfReactions")
     @Expose
-    private int noOfLikes;
+    private int noOfReactions;
+    @SerializedName("typeOfReaction")
+    @Expose
+    private List<TypeOfReaction> typeOfReaction = null;
+    @SerializedName("userReaction")
+    @Expose
+    private String userReaction;
     @SerializedName("noOfComments")
     @Expose
     private int noOfComments;
-    @SerializedName("createdDate")
+    @SerializedName("recentComment")
     @Expose
-    private String createdDate;
-    @SerializedName("imageUrl")
+    private RecentComment recentComment;
+    @SerializedName("totalCoverImages")
     @Expose
-    private String imageUrl;
+    private List<TotalCoverImage> totalCoverImages = null;
+    @SerializedName("feedCircleIconUrl")
+    @Expose
+    private String feedCircleIconUrl;
     @SerializedName("postedBy")
     @Expose
     private String postedBy;
-    @SerializedName("title")
-    @Expose
-    private String title;
     @SerializedName("bookmarked")
     @Expose
-    private boolean bookmarked;
+    private Boolean bookmarked;
     @SerializedName("hashtags")
     @Expose
     private String hashtags;
-    @SerializedName("ifNew")
-    @Expose
-    private boolean ifNew;
-    @SerializedName("location")
-    @Expose
-    private String location;
-    @SerializedName("skillsRequired")
-    @Expose
-    private String skillsRequired;
-    @SerializedName("ifApplied")
-    @Expose
-    private boolean ifApplied;
-    @SerializedName("jobType")
-    @Expose
-    private String jobType;
-    @SerializedName("opportunityType")
-    @Expose
-    private String opportunityType;
-    @SerializedName("ifViewed")
-    @Expose
-    private boolean ifViewed;
-    @SerializedName("ifOpen")
-    @Expose
-    private boolean ifOpen;
-    @SerializedName("coverUrl")
-    @Expose
-    private String coverUrl;
-    @SerializedName("communityType")
-    @Expose
-    private String communityType;
-    @SerializedName("owner")
-    @Expose
-    private String owner;
     @SerializedName("articleLinkUrl")
     @Expose
     private String articleLinkUrl;
@@ -97,20 +88,52 @@ public class ListOfFeed extends BaseResponse {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public String getType() {
-        return type;
+    public Boolean getIsViewedByUser() {
+        return isViewedByUser;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setIsViewedByUser(Boolean isViewedByUser) {
+        this.isViewedByUser = isViewedByUser;
+    }
+
+    public JobDetail getJobDetail() {
+        return jobDetail;
+    }
+
+    public void setJobDetail(JobDetail jobDetail) {
+        this.jobDetail = jobDetail;
+    }
+
+    public String getFeedTitle() {
+        return feedTitle;
+    }
+
+    public void setFeedTitle(String feedTitle) {
+        this.feedTitle = feedTitle;
+    }
+
+    public String getFeedType() {
+        return feedType;
+    }
+
+    public void setFeedType(String feedType) {
+        this.feedType = feedType;
+    }
+
+    public String getCreatedDateTime() {
+        return createdDateTime;
+    }
+
+    public void setCreatedDateTime(String createdDateTime) {
+        this.createdDateTime = createdDateTime;
     }
 
     public String getTags() {
@@ -121,6 +144,14 @@ public class ListOfFeed extends BaseResponse {
         this.tags = tags;
     }
 
+    public String getFeedHeadline() {
+        return feedHeadline;
+    }
+
+    public void setFeedHeadline(String feedHeadline) {
+        this.feedHeadline = feedHeadline;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -129,12 +160,28 @@ public class ListOfFeed extends BaseResponse {
         this.description = description;
     }
 
-    public int getNoOfLikes() {
-        return noOfLikes;
+    public int getNoOfReactions() {
+        return noOfReactions;
     }
 
-    public void setNoOfLikes(int noOfLikes) {
-        this.noOfLikes = noOfLikes;
+    public void setNoOfReactions(int noOfReactions) {
+        this.noOfReactions = noOfReactions;
+    }
+
+    public List<TypeOfReaction> getTypeOfReaction() {
+        return typeOfReaction;
+    }
+
+    public void setTypeOfReaction(List<TypeOfReaction> typeOfReaction) {
+        this.typeOfReaction = typeOfReaction;
+    }
+
+    public String getUserReaction() {
+        return userReaction;
+    }
+
+    public void setUserReaction(String userReaction) {
+        this.userReaction = userReaction;
     }
 
     public int getNoOfComments() {
@@ -145,20 +192,29 @@ public class ListOfFeed extends BaseResponse {
         this.noOfComments = noOfComments;
     }
 
-    public String getCreatedDate() {
-        return createdDate;
+    public RecentComment getRecentComment() {
+        return recentComment;
     }
 
-    public void setCreatedDate(String createdDate) {
-        this.createdDate = createdDate;
+    public void setRecentComment(RecentComment recentComment) {
+        this.recentComment = recentComment;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+
+    public List<TotalCoverImage> getTotalCoverImages() {
+        return totalCoverImages;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setTotalCoverImages(List<TotalCoverImage> totalCoverImages) {
+        this.totalCoverImages = totalCoverImages;
+    }
+
+    public String getFeedCircleIconUrl() {
+        return feedCircleIconUrl;
+    }
+
+    public void setFeedCircleIconUrl(String feedCircleIconUrl) {
+        this.feedCircleIconUrl = feedCircleIconUrl;
     }
 
     public String getPostedBy() {
@@ -169,19 +225,11 @@ public class ListOfFeed extends BaseResponse {
         this.postedBy = postedBy;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public boolean getBookmarked() {
+    public Boolean getBookmarked() {
         return bookmarked;
     }
 
-    public void setBookmarked(boolean bookmarked) {
+    public void setBookmarked(Boolean bookmarked) {
         this.bookmarked = bookmarked;
     }
 
@@ -191,94 +239,6 @@ public class ListOfFeed extends BaseResponse {
 
     public void setHashtags(String hashtags) {
         this.hashtags = hashtags;
-    }
-
-    public boolean getIfNew() {
-        return ifNew;
-    }
-
-    public void setIfNew(boolean ifNew) {
-        this.ifNew = ifNew;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String getSkillsRequired() {
-        return skillsRequired;
-    }
-
-    public void setSkillsRequired(String skillsRequired) {
-        this.skillsRequired = skillsRequired;
-    }
-
-    public boolean getIfApplied() {
-        return ifApplied;
-    }
-
-    public void setIfApplied(boolean ifApplied) {
-        this.ifApplied = ifApplied;
-    }
-
-    public String getJobType() {
-        return jobType;
-    }
-
-    public void setJobType(String jobType) {
-        this.jobType = jobType;
-    }
-
-    public String getOpportunityType() {
-        return opportunityType;
-    }
-
-    public void setOpportunityType(String opportunityType) {
-        this.opportunityType = opportunityType;
-    }
-
-    public boolean getIfViewed() {
-        return ifViewed;
-    }
-
-    public void setIfViewed(boolean ifViewed) {
-        this.ifViewed = ifViewed;
-    }
-
-    public boolean getIfOpen() {
-        return ifOpen;
-    }
-
-    public void setIfOpen(boolean ifOpen) {
-        this.ifOpen = ifOpen;
-    }
-
-    public String getCoverUrl() {
-        return coverUrl;
-    }
-
-    public void setCoverUrl(String coverUrl) {
-        this.coverUrl = coverUrl;
-    }
-
-    public String getCommunityType() {
-        return communityType;
-    }
-
-    public void setCommunityType(String communityType) {
-        this.communityType = communityType;
-    }
-
-    public String getOwner() {
-        return owner;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
     }
 
     public String getArticleLinkUrl() {
@@ -295,5 +255,21 @@ public class ListOfFeed extends BaseResponse {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
+
+    public Boolean getViewedByUser() {
+        return isViewedByUser;
+    }
+
+    public void setViewedByUser(Boolean viewedByUser) {
+        isViewedByUser = viewedByUser;
     }
 }

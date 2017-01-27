@@ -7,11 +7,14 @@
     <dimen name="dp_size_23">23dp</dimen>
     <dimen name="dp_size_25">25dp</dimen>
     <dimen name="dp_size_27">27dp</dimen>
+    <dimen name="dp_size_28">28dp</dimen>
     <dimen name="dp_size_48">48dp</dimen>
-    <dimen name="dp_size_50">50dp</dimen>
     <dimen name="dp_size_46">46dp</dimen>
     <dimen name="dp_size_98">98dp</dimen>
     <dimen name="dp_size_89">89dp</dimen>
+    <dimen name="dp_size_90">90dp</dimen>
+    <dimen name="dp_size_85">85dp</dimen>
+    <dimen name="dp_size_80">80dp</dimen>
     <dimen name="dp_size_65">65dp</dimen>
     <dimen name="dp_size_74">74dp</dimen>
     <dimen name="dp_size_54">54dp</dimen>
@@ -23,7 +26,9 @@
     <dimen name="dp_size_35">35dp</dimen>
     <dimen name="dp_size_10">10dp</dimen>
     <dimen name="dp_size_16">16dp</dimen>
+    <dimen name="dp_size_0.5">0.5dp</dimen>
     <dimen name="dp_size_5">5dp</dimen>
+    <dimen name="dp_size_50">50dp</dimen>
     <dimen name="dp_size_8">8dp</dimen>
     <dimen name="dp_size_2">2dp</dimen>
     <dimen name="dp_size_minus_22">-22dp</dimen>
@@ -53,6 +58,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="feed_profile_icon_size">50dp</dimen>
 <!--material spinner-->
     <dimen name="ms__padding_top">12dp</dimen>
     <dimen name="ms__item_height">48dp</dimen>
