@@ -26,6 +26,7 @@ public class AppConstants {
     public static final String HOME_SPINNER_FRAGMENT = "spinner_fragment";
     public static final String ANDROID_VIEW_PAGER = "android:switcher:";
     public static final String COLON = ":";
+    public static final String DOTS = "...";
     public static final String S="s";
     public static final String FEED_COMMUNITY = "community";
     public static final String FEED_JOB = "job";
@@ -34,4 +35,10 @@ public class AppConstants {
     public static final String FRAGMENT_FLAG_CHECK = "is_fragment_open";
     public static final String NO_REACTION="no_reaction";
     public static final String HEART_REACTION="heart";
+    public static final String HOME_FRAGMENT="home";
+    public static final String FEATURE_FRAGMENT="feature";
+    public static final String MY_COMMUNITIES_FRAGMENT="my_communities";
+    public static final String ARTICLE_FRAGMENT="article";
+    public static final int WORD_COUNT = 92;
+    public static final int WORD_LENGTH = 80;
 }

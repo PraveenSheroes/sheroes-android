@@ -34,6 +34,8 @@ public class FeedCommunityHolder extends BaseViewHolder<ListOfFeed> implements V
     private final String TAG = LogUtils.makeLogTag(FeedCommunityHolder.class);
     private static final String LEFT_HTML_TAG_FOR_COLOR = "<b><font color='#323940'>";
     private static final String RIGHT_HTML_TAG_FOR_COLOR = "</font></b>";
+    private static final String LEFT_HTML_VEIW_TAG_FOR_COLOR = "<font color='#50e3c2'>";
+    private static final String RIGHT_HTML_VIEW_TAG_FOR_COLOR = "</font>";
     @Bind(R.id.li_feed_community_images)
     LinearLayout liFeedCommunityImages;
     @Bind(R.id.li_feed_community_join_conversation)
@@ -116,7 +118,16 @@ public class FeedCommunityHolder extends BaseViewHolder<ListOfFeed> implements V
         }
 
         if (StringUtil.isNotNullOrEmptyString(dataItem.getDescription())) {
-            tvFeedCommunityText.setText(dataItem.getDescription());
+            String description=dataItem.getDescription();
+            if (description.length() > AppConstants.WORD_LENGTH) {
+                description = description.substring(0,AppConstants.WORD_COUNT);
+            }
+            String changeDate = LEFT_HTML_VEIW_TAG_FOR_COLOR + context.getString(R.string.ID_VIEW_MORE) + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
+            if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                tvFeedCommunityText.setText(Html.fromHtml(description+AppConstants.DOTS+ AppConstants.SPACE + changeDate, 0)); // for 24 api and more
+            } else {
+                tvFeedCommunityText.setText(Html.fromHtml(description +AppConstants.DOTS+ AppConstants.SPACE + changeDate));// or for older api
+            }
         }
         if (dataItem.getUserReaction().equalsIgnoreCase(AppConstants.HEART_REACTION)) {
             tvFeedCommunityUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);

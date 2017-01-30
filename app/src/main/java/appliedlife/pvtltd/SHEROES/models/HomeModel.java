@@ -11,6 +11,10 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItemResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.CommunitiesResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.Feature;
 import appliedlife.pvtltd.SHEROES.preferences.SessionUser;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import rx.Observable;
@@ -54,6 +58,28 @@ public class HomeModel {
                     @Override
                     public HomeSpinnerItemResponse call(HomeSpinnerItemResponse homeSpinnerItemResponse) {
                         return homeSpinnerItemResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+    public Observable<ArticleListResponse> getHomeModelArticleList(ArticleCardResponse articleCardResponse){
+        return sheroesAppServiceApi.getAricleList(articleCardResponse)
+                .map(new Func1<ArticleListResponse, ArticleListResponse>() {
+                    @Override
+                    public ArticleListResponse call(ArticleListResponse articleListResponse) {
+                        return articleListResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+    public Observable<CommunitiesResponse> getHomeModelCommnutiesList(Feature feature){
+        return sheroesAppServiceApi.getAllCommunities(feature)
+                .map(new Func1<CommunitiesResponse, CommunitiesResponse>() {
+                    @Override
+                    public CommunitiesResponse call(CommunitiesResponse communitiesResponse1) {
+                        return communitiesResponse1;
                     }
                 })
                 .subscribeOn(Schedulers.io())

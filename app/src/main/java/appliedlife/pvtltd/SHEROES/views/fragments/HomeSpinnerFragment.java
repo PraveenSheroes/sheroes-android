@@ -19,6 +19,9 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
+import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.Feature;
+import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.MyCommunities;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -93,14 +96,24 @@ public class HomeSpinnerFragment extends BaseFragment implements HomeView {
      }
 
     @Override
-    public void getCityListSuccess(List<ListOfFeed> data) {
+    public void getFeedListSuccess(List<ListOfFeed> data) {
 
     }
 
     @Override
     public void getHomeSpinnerListSuccess(List<HomeSpinnerItem> data) {
-       // mAdapter.setSheroesGenericListData(MockService.makeSpinnerListRequest());
+      //  mAdapter.setSheroesGenericListData(MockService.makeSpinnerListRequest());
       //  mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void getArticleListSuccess(List<ArticleCardResponse> data) {
+
+    }
+
+    @Override
+    public void getAllCommunitiesSuccess(List<MyCommunities> myCommunities, List<Feature> features) {
+
     }
 
     @Override

@@ -52,7 +52,7 @@
             android:id="@+id/tv_user_reaction_emoji"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_emoji3"
+            android:drawableLeft="@drawable/ic_emoji3_whistel"
             android:layout_gravity="center|right"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:textColor="@color/feed_article_comment"

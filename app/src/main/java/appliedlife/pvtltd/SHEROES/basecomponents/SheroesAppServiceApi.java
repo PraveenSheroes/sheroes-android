@@ -9,7 +9,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItemResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleListResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.CommunitiesResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.Feature;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -36,16 +37,19 @@ public interface SheroesAppServiceApi {
     @POST("auth/signin")
     Observable<LoginResponse> getLoginAuthToken(@Body LoginRequest loginRequest);
 
-    @POST("v2/587fb45c270000490af0dd7a")
-    Observable<ArticleListResponse> getAricleList(@Body ArticleRequest articleRequest );
-    @POST("v2/587fc963270000010df0ddac")
-    Observable<ArticleListResponse> getOnlyAricleList(@Body ArticleRequest articleRequest );
-    @POST("v2/587fb49c2700004f0af0dd7c")
-    Observable<ArticleListResponse> getOnlyJobList(@Body ArticleRequest articleRequest );
+    @POST("v2/588eef663f00007412dde331")
+    Observable<ArticleListResponse> getAricleList(@Body ArticleCardResponse articleCardResponse);
+    @POST("v2/588eef663f00007412dde331")
+    Observable<ArticleListResponse> getOnlyArticleList(@Body ArticleCardResponse articleCardResponse);
+    @POST("v2/588eef663f00007412dde331")
+    Observable<ArticleListResponse> getOnlyJobList(@Body ArticleCardResponse articleCardResponse);
     @POST("v2/587fc963270000010df0ddac")
     Observable<Feature> getFeature(@Body Feature articleRequest );
     @POST("v2/588748de100000e11f25e1ec")
     Observable<CommentResponse> getCommentFromApi(@Body CommentRequest commentRequest );
     @POST("v2/588748de100000e11f25e1ec")
     Observable<CommentResponse> getReactionFromApi(@Body CommentRequest commentRequest );
+
+    @POST("v2/588f43133f0000d81adde412")
+    Observable<CommunitiesResponse> getAllCommunities(@Body Feature feature );
 }

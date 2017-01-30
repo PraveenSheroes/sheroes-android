@@ -6,28 +6,26 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
-import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
-
 /**
  * Created by Praveen_Singh on 18-01-2017.
  */
 
-public class SwipPullRefreshList {
+public class SwipPullRefreshList<T extends Object>  {
     @SerializedName("feedResponses")
     @Expose
-    private List<ListOfFeed> feedResponses = new ArrayList<ListOfFeed>();
+    private List<T> feedResponses = new ArrayList<>();
     @SerializedName("isPullToRefresh")
     @Expose
     private boolean isPullToRefresh;
-    public List<ListOfFeed> getFeedResponses() {
+    public List<T> getFeedResponses() {
         return feedResponses;
     }
 
-    public void setFeedResponses(List<ListOfFeed> feedResponses) {
+    public void setFeedResponses(List<T> feedResponses) {
         this.feedResponses = feedResponses;
     }
 
-    public void allListData(List<ListOfFeed> feedResponses) {
+    public void allListData(List<T> feedResponses) {
         this.feedResponses.addAll(feedResponses);
     }
 

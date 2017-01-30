@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -49,6 +50,8 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
     TextView mTvUserCommentHeaderText;
     @Bind(R.id.fl_comment_reaction)
     FrameLayout mFlCommentReaction;
+    @Bind(R.id.li_user_comment)
+    LinearLayout liUserComment;
     private FragmentOpen mFragmentOpen;
     private String mSearchDataName = AppConstants.EMPTY_STRING;
     private GenericRecyclerViewAdapter mAdapter;
@@ -84,6 +87,7 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
         else  if(mFragmentOpen.isReactionList())
         {
             mFlCommentReaction.setVisibility(View.GONE);
+            liUserComment.setVisibility(View.GONE);
             mCommentReactionPresenter.getAllReactionListFromPresenter(new CommentRequest());
         }
 

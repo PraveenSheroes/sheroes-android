@@ -8,24 +8,26 @@ import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 
 import java.io.File;
 import java.io.IOException;
 
 import javax.inject.Singleton;
 
+import appliedlife.pvtltd.SHEROES.BuildConfig;
+import appliedlife.pvtltd.SHEROES.database.YipStaySqliteOpenHelper;
+import appliedlife.pvtltd.SHEROES.preferences.GsonPreferenceAdapter;
+import appliedlife.pvtltd.SHEROES.preferences.SessionUser;
+import appliedlife.pvtltd.SHEROES.preferences.Token;
+import appliedlife.pvtltd.SHEROES.utils.AnnotationExclusionStrategy;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.Cache;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import appliedlife.pvtltd.SHEROES.BuildConfig;
-import appliedlife.pvtltd.SHEROES.preferences.GsonPreferenceAdapter;
-import appliedlife.pvtltd.SHEROES.preferences.SessionUser;
-import appliedlife.pvtltd.SHEROES.preferences.Token;
-import appliedlife.pvtltd.SHEROES.utils.AnnotationExclusionStrategy;
-import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -145,5 +147,12 @@ public class SheroesAppModule {
     public SheroesAppServiceApi providesApiService(Retrofit retrofit) {
         return retrofit.create(SheroesAppServiceApi.class);
     }
+
+    @Singleton
+    @Provides
+    public StorIOSQLite getStorIOSQLite(YipStaySqliteOpenHelper openHelper) {
+        return YipStaySqliteOpenHelper.getStorIOSQLite(openHelper);
+    }
+
 }
 

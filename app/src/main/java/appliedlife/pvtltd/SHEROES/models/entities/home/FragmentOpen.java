@@ -12,13 +12,16 @@ public class FragmentOpen implements Parcelable {
     boolean reactionList;
     boolean commentList;
     boolean feedOpen;
+    boolean articleFragment;
     boolean communityOpen;
 
-    public FragmentOpen(boolean isOpen, boolean reactionList, boolean commentList, boolean feedOpen, boolean communityOpen) {
+
+    public FragmentOpen(boolean isOpen, boolean reactionList, boolean commentList, boolean feedOpen, boolean articleFragment, boolean communityOpen) {
         this.isOpen = isOpen;
         this.reactionList = reactionList;
         this.commentList = commentList;
         this.feedOpen = feedOpen;
+        this.articleFragment = articleFragment;
         this.communityOpen = communityOpen;
     }
 
@@ -54,6 +57,14 @@ public class FragmentOpen implements Parcelable {
         this.feedOpen = feedOpen;
     }
 
+    public boolean isArticleFragment() {
+        return articleFragment;
+    }
+
+    public void setArticleFragment(boolean articleFragment) {
+        this.articleFragment = articleFragment;
+    }
+
     public boolean isCommunityOpen() {
         return communityOpen;
     }
@@ -73,6 +84,7 @@ public class FragmentOpen implements Parcelable {
         dest.writeByte(this.reactionList ? (byte) 1 : (byte) 0);
         dest.writeByte(this.commentList ? (byte) 1 : (byte) 0);
         dest.writeByte(this.feedOpen ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.articleFragment ? (byte) 1 : (byte) 0);
         dest.writeByte(this.communityOpen ? (byte) 1 : (byte) 0);
     }
 
@@ -81,6 +93,7 @@ public class FragmentOpen implements Parcelable {
         this.reactionList = in.readByte() != 0;
         this.commentList = in.readByte() != 0;
         this.feedOpen = in.readByte() != 0;
+        this.articleFragment = in.readByte() != 0;
         this.communityOpen = in.readByte() != 0;
     }
 

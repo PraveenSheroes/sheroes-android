@@ -11,6 +11,10 @@ import appliedlife.pvtltd.SHEROES.models.HomeModel;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItemResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.CommunitiesResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.Feature;
 import appliedlife.pvtltd.SHEROES.preferences.Token;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -72,7 +76,7 @@ public class HomePresenter extends BasePresenter<HomeView>  {
             @Override
             public void onNext(FeedResponse feedResponse) {
                 getMvpView().stopProgressBar();
-                getMvpView().getCityListSuccess(feedResponse.getListOfFeed());
+                getMvpView().getFeedListSuccess(feedResponse.getListOfFeed());
             }
         });
         registerSubscription(subscription);
@@ -103,7 +107,58 @@ public class HomePresenter extends BasePresenter<HomeView>  {
         });
         registerSubscription(subscription);
     }
+    public void getHomePresenterArticleList(ArticleCardResponse articleCardResponse) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showNwError();
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = mHomeModel.getHomeModelArticleList(articleCardResponse).subscribe(new Subscriber<ArticleListResponse>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+            @Override
+            public void onError(Throwable e) {
+                getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
+                getMvpView().showNwError();
+                getMvpView().stopProgressBar();
+            }
 
+            @Override
+            public void onNext(ArticleListResponse articleListResponse) {
+                getMvpView().stopProgressBar();
+                getMvpView().getArticleListSuccess(articleListResponse.getArticleCardResponses());
+            }
+        });
+        registerSubscription(subscription);
+    }
+    public void getHomePresenterCommunitiesList(Feature feature) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showNwError();
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = mHomeModel.getHomeModelCommnutiesList(feature).subscribe(new Subscriber<CommunitiesResponse>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+            @Override
+            public void onError(Throwable e) {
+                getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
+                getMvpView().showNwError();
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onNext(CommunitiesResponse communitiesResponse) {
+                getMvpView().stopProgressBar();
+                getMvpView().getAllCommunitiesSuccess(communitiesResponse.getMyCommunitiesCardResponses(),communitiesResponse.getFeatureCardResponses());
+            }
+        });
+        registerSubscription(subscription);
+    }
     public void onStop() {
         detachView();
     }

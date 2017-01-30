@@ -12,68 +12,29 @@ import java.util.List;
 
 public class ArticleListResponse {
 
-    @SerializedName("data")
+    @SerializedName("count")
     @Expose
-    private List<ArticleRequest> data = new ArrayList<ArticleRequest>();
-    @SerializedName("message")
+    private int count;
+    @SerializedName("articleCardResponses")
     @Expose
-    private String message;
-    @SerializedName("status")
-    @Expose
-    private int status;
+    private List<ArticleCardResponse> articleCardResponses = new ArrayList<ArticleCardResponse>();
 
-    /**`
-     *
-     * @return
-     * The data
-     */
-    public List<ArticleRequest> getData() {
-        return data;
+
+    public int getCount() {
+        return count;
     }
 
-    /**
-     *
-     * @param data
-     * The data
-     */
-    public void setData(List<ArticleRequest> data) {
-        this.data = data;
+    public void setCount(int count) {
+        this.count = count;
     }
 
-    /**
-     *
-     * @return
-     * The message
-     */
-    public String getMessage() {
-        return message;
+    public List<ArticleCardResponse> getArticleCardResponses() {
+        return articleCardResponses;
     }
 
-    /**
-     *
-     * @param message
-     * The message
-     */
-    public void setMessage(String message) {
-        this.message = message;
+    public void setArticleCardResponses(List<ArticleCardResponse> articleCardResponses) {
+        this.articleCardResponses = articleCardResponses;
     }
 
-    /**
-     *
-     * @return
-     * The status
-     */
-    public int getStatus() {
-        return status;
-    }
-
-    /**
-     *
-     * @param status
-     * The status
-     */
-    public void setStatus(int status) {
-        this.status = status;
-    }
 
 }

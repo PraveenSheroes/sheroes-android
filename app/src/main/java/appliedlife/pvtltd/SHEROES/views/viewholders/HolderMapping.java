@@ -13,8 +13,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.ReactionList;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
 import appliedlife.pvtltd.SHEROES.models.entities.home.DrawerItems;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.FeatResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.Feature;
+import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.MyCommunities;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 
 public enum HolderMapping {
@@ -68,10 +69,15 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new SearchModuleHolder(view, viewInterface);
         }
-    }, FEATURE(R.layout.feature) {
+    }, FEATURE_CARD(R.layout.featured_card_item) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new FeatureHolder(view, viewInterface);
+            return new FeatureCardHolder(view, viewInterface);
+        }
+    }, MY_COMMUNITIES_CARD(R.layout.my_communities_card_item) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new MyCommunitiesCardHolder(view, viewInterface);
         }
     }, COMMENT(R.layout.all_comments_list_layout) {
         @Override
@@ -82,6 +88,11 @@ public enum HolderMapping {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new ReactionHolder(view, viewInterface);
+        }
+    }, ARTICLE_CARD_HOLDER(R.layout.article_card_list_item) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new ArticleCardHolder(view, viewInterface);
         }
     };
     public Object object;
@@ -119,7 +130,7 @@ public enum HolderMapping {
                 case AppConstants.FEED_COMMUNITY_POST:
                     returnView = FEED_COMMUNITY_POST.ordinal();
                     break;
-
+                default:
             }
         } else if (item instanceof HomeSpinnerItem) {
             String id = ((HomeSpinnerItem) item).getId();
@@ -130,10 +141,13 @@ public enum HolderMapping {
             }
         } else if (item instanceof DrawerItems) {
             return DRAWER_ITEMS.ordinal();
-        } else if (item instanceof ArticleRequest) {
-            return SEARCH_MODULE.ordinal();
-        } else if (item instanceof FeatResponse) {
-            return FEATURE.ordinal();
+        } else if (item instanceof ArticleCardResponse) {
+            // return SEARCH_MODULE.ordinal();
+            return ARTICLE_CARD_HOLDER.ordinal();
+        } else if (item instanceof MyCommunities) {
+            return MY_COMMUNITIES_CARD.ordinal();
+        } else if (item instanceof Feature) {
+            return FEATURE_CARD.ordinal();
         } else if (item instanceof CommentsList) {
             return COMMENT.ordinal();
 

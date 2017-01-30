@@ -26,13 +26,13 @@
             android:id="@+id/tv_reaction_type1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_emoji1" />
+            android:drawableLeft="@drawable/ic_emoji_xo_xo" />
 
         <TextView
             android:id="@+id/tv_reaction_type2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_emoji2"
+            android:drawableLeft="@drawable/ic_emoji2_with_you"
             android:paddingLeft="@dimen/dp_size_15" />
 
         <TextView
@@ -51,7 +51,7 @@
             android:id="@+id/tv_reaction_type3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_emoji3"
+            android:drawableLeft="@drawable/ic_emoji3_whistel"
             android:drawablePadding="@dimen/dp_size_30"
             android:paddingLeft="@dimen/dp_size_30"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"

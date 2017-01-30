@@ -41,7 +41,7 @@ repositories {
     mavenCentral()
     maven { url 'https://maven.fabric.io/public' }
 }
-
+final STORIO_VERSION = "1.8.0"
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -68,6 +68,10 @@ dependencies {
     compile 'com.google.dagger:dagger:2.2'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.android.support:support-v4:25.1.0'
+    compile "com.pushtorefresh.storio:sqlite:$STORIO_VERSION"
+    compile "com.pushtorefresh.storio:sqlite-annotations:$STORIO_VERSION"
+    apt "com.pushtorefresh.storio:sqlite-annotations-processor:$STORIO_VERSION"
+
     testCompile 'junit:junit:4.12'
     apt 'com.google.dagger:dagger-compiler:2.2'
     provided 'org.glassfish:javax.annotation:10.0-b28'

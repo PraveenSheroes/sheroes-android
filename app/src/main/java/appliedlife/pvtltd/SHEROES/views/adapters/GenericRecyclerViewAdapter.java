@@ -14,7 +14,7 @@ import java.util.List;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HolderMapping;
 /**
  * Created by Praveen Singh on 29/12/2016.
@@ -127,8 +127,8 @@ public class GenericRecyclerViewAdapter<T extends BaseResponse> extends Recycler
         List<T>  results = new ArrayList<>();
 
         for (T item : mSheroesGenericListData) {
-            ArticleRequest articleRequest= (ArticleRequest)item;
-            if (articleRequest.getName().toLowerCase().contains(constraint)) {
+            ArticleCardResponse articleCardResponse = (ArticleCardResponse)item;
+            if (articleCardResponse.getArticleTitle().toLowerCase().contains(constraint)) {
                 results.add(item);
             }
         }

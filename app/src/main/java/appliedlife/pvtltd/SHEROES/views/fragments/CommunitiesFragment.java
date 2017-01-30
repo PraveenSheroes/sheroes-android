@@ -18,8 +18,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.FeatResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.Feature;
 import appliedlife.pvtltd.SHEROES.presenters.SearchModulePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -76,17 +75,10 @@ public class CommunitiesFragment extends BaseFragment implements SearchModuleVie
         return view;
     }
 
-    @Override
-    public void getArticleListSuccess(List<ArticleRequest> data) {
-
-    }
 
     @Override
-    public void getSuccess(List<FeatResponse> data) {
-        if(mAdapter!=null) {
-            mAdapter.setSheroesGenericListData(data);
-            mAdapter.notifyDataSetChanged();
-        }
+    public void getFeedListSuccess(List<ListOfFeed> data) {
+
     }
 
     @Override

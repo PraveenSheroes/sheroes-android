@@ -20,13 +20,15 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import appliedlife.pvtltd.SHEROES.MockService;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
+import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.Feature;
+import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.MyCommunities;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -50,7 +52,6 @@ import io.fabric.sdk.android.Fabric;
  */
 public class HomeFragment extends BaseFragment implements HomeView {
     private final String TAG = LogUtils.makeLogTag(HomeFragment.class);
-    private final String SCREEN_NAME = "Home Screen";
     @Inject
     HomePresenter mHomePresenter;
     @Bind(R.id.rv_home_list)
@@ -106,7 +107,7 @@ public class HomeFragment extends BaseFragment implements HomeView {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
 
-        mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager) {
+        mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager,AppConstants.HOME_FRAGMENT) {
             @Override
             public void onHide() {
                 // setCustomAnimation(((HomeActivity)getActivity()).mFlHomeFooterList);
@@ -141,14 +142,14 @@ public class HomeFragment extends BaseFragment implements HomeView {
                 }
             }
         });
-        mHomePresenter.getFeedFromPresenter(MockService.makeCityRequest());
+        mHomePresenter.getFeedFromPresenter(new ListOfFeed());
         swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 // Refresh items
                 LogUtils.info("swipe", "*****************end called");
-                //  mPullRefreshList.setPullToRefresh(true);
-                //   mHomePresenter.getFeedFromPresenter(MockService.makeCityRequest());
+                  mPullRefreshList.setPullToRefresh(true);
+                   mHomePresenter.getFeedFromPresenter(new ListOfFeed());
             }
         });
         return view;
@@ -172,7 +173,7 @@ public class HomeFragment extends BaseFragment implements HomeView {
     }
 
     @Override
-    public void getCityListSuccess(List<ListOfFeed> listOfFeeds) {
+    public void getFeedListSuccess(List<ListOfFeed> listOfFeeds) {
         if (StringUtil.isNotEmptyCollection(listOfFeeds)) {
             mPullRefreshList.allListData(listOfFeeds);
             mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
@@ -188,6 +189,16 @@ public class HomeFragment extends BaseFragment implements HomeView {
 
     @Override
     public void getHomeSpinnerListSuccess(List<HomeSpinnerItem> data) {
+
+    }
+
+    @Override
+    public void getArticleListSuccess(List<ArticleCardResponse> data) {
+
+    }
+
+    @Override
+    public void getAllCommunitiesSuccess(List<MyCommunities> myCommunities, List<Feature> features) {
 
     }
 

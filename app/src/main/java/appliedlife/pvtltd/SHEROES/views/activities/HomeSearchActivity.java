@@ -20,7 +20,6 @@ import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.AllSearchFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.JobsFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -54,7 +53,6 @@ public class HomeSearchActivity extends BaseActivity implements BaseHolderInterf
         mViewPagerAdapter.addFragment(AllSearchFragment.createInstance(20), getString(R.string.ID_ALL));
       //  mViewPagerAdapter.addFragment(CommunitiesFragment.createInstance(20), getString(R.string.ID_COMMUNITIES));
         mViewPagerAdapter.addFragment(ArticlesFragment.createInstance(4), getString(R.string.ID_ARTICLES));
-        mViewPagerAdapter.addFragment(JobsFragment.createInstance(4), getString(R.string.ID_JOBS));
         mViewPager.setAdapter(mViewPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
         mViewPager.addOnPageChangeListener(this);
@@ -100,10 +98,6 @@ public class HomeSearchActivity extends BaseActivity implements BaseHolderInterf
         else if(mViewPagerAdapter.getActiveFragment(mViewPager,position)instanceof CommunitiesFragment)
         {
            // Toast.makeText(this, "-----Community fragment----", Toast.LENGTH_SHORT).show();
-        }
-        else if(mViewPagerAdapter.getActiveFragment(mViewPager,position)instanceof JobsFragment)
-        {
-           // Toast.makeText(this, "-----Job fragment----", Toast.LENGTH_SHORT).show();
         }
 
     }

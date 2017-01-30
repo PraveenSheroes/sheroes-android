@@ -18,22 +18,21 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:padding="@dimen/dp_size_8"
+            android:layout_margin="@dimen/dp_size_12"
             android:weightSum="1">
 
             <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
                 android:id="@+id/iv_feed_community_post_circle_icon"
                 android:layout_width="@dimen/feed_profile_icon_size"
                 android:layout_height="@dimen/feed_profile_icon_size"
-                android:layout_margin="@dimen/dp_size_10"
                 android:src="@drawable/ic_footer_button_icon" />
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical"
-                android:padding="@dimen/dp_size_10">
+                android:layout_marginLeft="@dimen/dp_size_12"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/tv_feed_community_post_card_title"
@@ -51,6 +50,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:text="Local group"
+                    android:layout_marginTop="@dimen/dp_size_3"
                     android:textColor="@color/feed_article_label"
                     android:textSize="@dimen/sp_size_12" />
             </LinearLayout>
@@ -71,8 +71,9 @@
             android:layout_height="wrap_content"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:lineSpacingExtra="@dimen/dp_size_5"
-            android:lines="2"
-            android:padding="@dimen/dp_size_13"
+            android:layout_marginLeft="@dimen/dp_size_12"
+            android:layout_marginRight="@dimen/dp_size_12"
+            android:lines="@integer/int_value_for_line_2"
             android:text="@string/ID_DASHBOARD"
             android:textColor="@color/feed_article_label"
             android:textSize="@dimen/sp_size_13" />
@@ -80,7 +81,8 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_size_13">
 
             <LinearLayout
                 android:id="@+id/li_feed_community_user_post_images"
@@ -98,13 +100,21 @@
                 android:visibility="gone"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" />
         </FrameLayout>
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_size_0.5"
+            android:layout_marginLeft="@dimen/dp_size_12"
+            android:layout_marginRight="@dimen/dp_size_12"
+            android:layout_marginTop="@dimen/dp_size_12"
+            android:background="@color/search_tab_unselected_text" />
         <LinearLayout
             android:id="@+id/li_feed_community_post_user_reactions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="@dimen/dp_size_14"
+            android:layout_marginLeft="@dimen/dp_size_12"
+            android:layout_marginRight="@dimen/dp_size_12"
+            android:layout_marginTop="@dimen/dp_size_12"
             android:weightSum="1">
 
             <TextView
@@ -138,9 +148,13 @@
         </LinearLayout>
 
 
+
         <View
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_size_1"
+            android:layout_height="@dimen/dp_size_0.5"
+            android:layout_marginLeft="@dimen/dp_size_12"
+            android:layout_marginRight="@dimen/dp_size_12"
+            android:layout_marginTop="@dimen/dp_size_12"
             android:background="@color/search_tab_unselected_text" />
 
         <FrameLayout
@@ -148,20 +162,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:padding="@dimen/dp_size_14">
+            android:layout_marginLeft="@dimen/dp_size_12"
+            android:layout_marginTop="@dimen/dp_size_15"
+            android:layout_marginRight="@dimen/dp_size_12">
 
             <TextView
                 android:id="@+id/tv_feed_community_post_reaction1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_emoji1" />
+                android:drawableLeft="@drawable/ic_emoji_xo_xo" />
 
             <TextView
                 android:id="@+id/tv_feed_community_post_reaction2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_size_12"
-                android:drawableLeft="@drawable/ic_emoji2"
+                android:drawableLeft="@drawable/ic_emoji2_with_you"
                 />
 
             <TextView
@@ -169,7 +185,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_size_25"
-                android:drawableLeft="@drawable/ic_emoji3"
+                android:drawableLeft="@drawable/ic_emoji3_whistel"
                />
             <TextView
                 android:id="@+id/tv_feed_community_post_total_reactions"
@@ -177,7 +193,8 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:layout_gravity="center"
-                android:text="53 reactions"
+                android:text="reactions"
+                android:layout_marginRight="@dimen/dp_size_84"
                 android:textColor="@color/feed_article_comment"
                 android:textSize="@dimen/sp_size_11"/>
             <TextView
@@ -197,7 +214,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="@dimen/dp_size_14"
+            android:layout_marginLeft="@dimen/dp_size_12"
+            android:layout_marginRight="@dimen/dp_size_12"
+            android:layout_marginTop="@dimen/dp_size_20"
             android:weightSum="1">
 
             <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
@@ -217,8 +236,7 @@
                 android:lineSpacingExtra="@dimen/dp_size_3"
                 android:text="@string/IDS_STR_NETWORK_TIME_OUT_DESCRIPTION"
                 android:textColor="@color/feed_conversation"
-                android:textSize="@dimen/sp_size_12"
-                android:textStyle="bold" />
+                android:textSize="@dimen/sp_size_12" />
         </LinearLayout>
 
         <LinearLayout
@@ -226,16 +244,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="@dimen/dp_size_2"
+            android:layout_margin="@dimen/dp_size_12"
             android:background="@drawable/rectangle_comment_background"
             android:orientation="horizontal"
-            android:padding="@dimen/dp_size_14"
             android:weightSum="1">
 
             <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
                 android:id="@+id/iv_feed_community_post_register_user_pic"
                 android:layout_width="@dimen/dp_size_27"
                 android:layout_height="@dimen/dp_size_28"
+                android:layout_margin="@dimen/dp_size_8"
                 android:src="@drawable/ic_footer_button_icon" />
 
             <TextView
@@ -247,8 +265,7 @@
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:text="@string/ID_JOIN_CONVERSATION"
                 android:textColor="@color/feed_conversation"
-                android:textSize="@dimen/sp_size_12"
-                android:textStyle="bold" />
+                android:textSize="@dimen/sp_size_12" />
         </LinearLayout>
     </LinearLayout>
 </android.support.v7.widget.CardView>

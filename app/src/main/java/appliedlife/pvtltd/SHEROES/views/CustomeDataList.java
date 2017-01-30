@@ -1,23 +1,47 @@
-package appliedlife.pvtltd.SHEROES;
+package appliedlife.pvtltd.SHEROES.views;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
+import appliedlife.pvtltd.SHEROES.models.entities.home.DrawerItems;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 
 /**
- * Created by Praveen_Singh on 13-01-2017.
+ * Created by Praveen_Singh on 30-01-2017.
  */
 
-public class MockService {
-    //TODO:: Mock service request
-    public static ListOfFeed makeCityRequest()
+public class CustomeDataList {
+    //TODO:: Remove static content
+    public static List<DrawerItems> makeDrawerItemList()
     {
-        ListOfFeed listOfFeed=new ListOfFeed();
-        return  listOfFeed;
+        List<DrawerItems> drawerItemsList = new ArrayList<>();
+        DrawerItems firstDrawerItem = new DrawerItems();
+        firstDrawerItem.setId(1);
+        firstDrawerItem.setName("Profile");
+        firstDrawerItem.setIconName("ic_profile");
+        DrawerItems secondDrawerItem = new DrawerItems();
+        secondDrawerItem.setId(2);
+        secondDrawerItem.setName("Article");
+        secondDrawerItem.setIconName("ic_article");
+        DrawerItems thirdDrawerItem = new DrawerItems();
+        thirdDrawerItem.setId(3);
+        thirdDrawerItem.setName("Jobs");
+        thirdDrawerItem.setIconName("ic_job");
+        DrawerItems fourthDrawerItem = new DrawerItems();
+        fourthDrawerItem.setId(4);
+        fourthDrawerItem.setName("Bookmarks");
+        fourthDrawerItem.setIconName("ic_bookmark");
+        DrawerItems fifthDrawerItem = new DrawerItems();
+        fifthDrawerItem.setId(5);
+        fifthDrawerItem.setName("Settings");
+        fifthDrawerItem.setIconName("ic_setting");
+        drawerItemsList.add(firstDrawerItem);
+        drawerItemsList.add(secondDrawerItem);
+        drawerItemsList.add(thirdDrawerItem);
+        drawerItemsList.add(fourthDrawerItem);
+        drawerItemsList.add(fifthDrawerItem);
+        return  drawerItemsList;
     }
-
     public static List<HomeSpinnerItem> makeSpinnerListRequest()
     {
         List<HomeSpinnerItem> homeSpinnerItems=new ArrayList<>();
@@ -29,7 +53,7 @@ public class MockService {
 
         HomeSpinnerItem homeSpinnerItem2=new HomeSpinnerItem();
         homeSpinnerItem2.setId("2");
-        homeSpinnerItem2.setName("Comminties ");
+        homeSpinnerItem2.setName("Communities ");
         homeSpinnerItem2.setDescription("This second mock city discription");
         homeSpinnerItem2.setChecked(false);
 
@@ -41,7 +65,7 @@ public class MockService {
 
         HomeSpinnerItem homeSpinnerItem4=new HomeSpinnerItem();
         homeSpinnerItem4.setId("4");
-        homeSpinnerItem4.setName("Feeds");
+        homeSpinnerItem4.setName("Feed");
         homeSpinnerItem4.setDescription("This fourth mock city discription");
         homeSpinnerItem4.setChecked(false);
 
@@ -53,13 +77,13 @@ public class MockService {
 
         HomeSpinnerItem homeSpinnerItem6=new HomeSpinnerItem();
         homeSpinnerItem6.setId("6");
-        homeSpinnerItem6.setName("Process");
+        homeSpinnerItem6.setName("Profile");
         homeSpinnerItem6.setDescription("This six mock city discription");
         homeSpinnerItem6.setChecked(false);
 
         HomeSpinnerItem homeSpinnerItem7=new HomeSpinnerItem();
         homeSpinnerItem7.setId("7");
-        homeSpinnerItem7.setName("All ");
+        homeSpinnerItem7.setName("Featured ");
         homeSpinnerItem7.setDescription("This seven mock city discription");
         homeSpinnerItem7.setChecked(false);
 

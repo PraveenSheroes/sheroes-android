@@ -3,7 +3,11 @@ package appliedlife.pvtltd.SHEROES.views.cutomeviews;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
+import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.Feature;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 
 /*
@@ -12,7 +16,7 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 * to your list. @see pl.michalz.hideonscrollexample.adapter.partone.RecyclerAdapter
 * */
 public abstract class HidingScrollListener extends RecyclerView.OnScrollListener {
-
+    private final String TAG = LogUtils.makeLogTag(HidingScrollListener.class);
     private static final int HIDE_THRESHOLD = 20;
     private int mScrolledDistance = 0;
     private boolean mControlsVisible = true;
@@ -23,10 +27,12 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
     private boolean loading = true;
     private int visibleThreshold = 2;
     int firstVisibleItem, visibleItemCount, totalItemCount;
-    public HidingScrollListener(HomePresenter homePresenter, RecyclerView recyclerView, LinearLayoutManager manager) {
+    private String mCallFromFragment;
+    public HidingScrollListener(HomePresenter homePresenter, RecyclerView recyclerView, LinearLayoutManager manager,String callFromFragment) {
         mHomePresenter=homePresenter;
         mRecyclerView=recyclerView;
         mManager=manager;
+        this.mCallFromFragment=callFromFragment;
     }
 
 
@@ -67,7 +73,24 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
         int lastVisibleItem = mManager.findLastVisibleItemPosition();
 
         if (!loading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
-        //    mHomePresenter.getFeedFromPresenter(MockService.makeCityRequest());
+
+            switch (mCallFromFragment)
+            {
+                case AppConstants.ARTICLE_FRAGMENT:
+                    mHomePresenter.getHomePresenterArticleList(new ArticleCardResponse());
+                    break;
+                case AppConstants.FEATURE_FRAGMENT:
+                    mHomePresenter.getHomePresenterCommunitiesList(new Feature());
+                    break;
+                case AppConstants.MY_COMMUNITIES_FRAGMENT:
+                    mHomePresenter.getHomePresenterCommunitiesList(new Feature());
+                    break;
+                case AppConstants.HOME_FRAGMENT:
+                    mHomePresenter.getFeedFromPresenter(new ListOfFeed());
+                    break;
+                default:LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + mCallFromFragment);
+            }
+
             LogUtils.info("swipe", "*****************on last scrolling");
             loading = true;
         }

@@ -32,6 +32,7 @@
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:hint="@string/ID_ERROR_FIELD_REQUIRED"
             android:padding="@dimen/dp_size_10"
+            android:background="@android:color/transparent"
             android:textSize="@dimen/sp_size_12"
             android:textStyle="bold" />
 

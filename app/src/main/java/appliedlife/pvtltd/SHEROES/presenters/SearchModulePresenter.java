@@ -7,8 +7,8 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.SearchModel;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleListResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.Feature;
 import appliedlife.pvtltd.SHEROES.preferences.Token;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -50,13 +50,16 @@ public class SearchModulePresenter extends BasePresenter<SearchModuleView> {
     }
 
 
-    public void getSearchPresenterArticleList(ArticleRequest articleRequest) {
+
+
+
+    public void getFeedFromPresenter(ListOfFeed listOfFeed) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showNwError();
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = mSearchModel.getSearchModelArticleList(articleRequest).subscribe(new Subscriber<ArticleListResponse>() {
+        Subscription subscription = mSearchModel.getFeedFromModel(listOfFeed).subscribe(new Subscriber<FeedResponse>() {
             @Override
             public void onCompleted() {
                 getMvpView().stopProgressBar();
@@ -69,65 +72,16 @@ public class SearchModulePresenter extends BasePresenter<SearchModuleView> {
             }
 
             @Override
-            public void onNext(ArticleListResponse articleListResponse) {
+            public void onNext(FeedResponse feedResponse) {
                 getMvpView().stopProgressBar();
-                getMvpView().getArticleListSuccess(articleListResponse.getData());
+                getMvpView().getFeedListSuccess(feedResponse.getListOfFeed());
             }
         });
         registerSubscription(subscription);
     }
-    public void getSearchPresenterOnlyArticleList(ArticleRequest articleRequest) {
-        if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showNwError();
-            return;
-        }
-        getMvpView().startProgressBar();
-        Subscription subscription = mSearchModel.getSearchModelOnlyArticleList(articleRequest).subscribe(new Subscriber<ArticleListResponse>() {
-            @Override
-            public void onCompleted() {
-                getMvpView().stopProgressBar();
-            }
-            @Override
-            public void onError(Throwable e) {
-                getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
-                getMvpView().showNwError();
-                getMvpView().stopProgressBar();
-            }
 
-            @Override
-            public void onNext(ArticleListResponse articleListResponse) {
-                getMvpView().stopProgressBar();
-                getMvpView().getArticleListSuccess(articleListResponse.getData());
-            }
-        });
-        registerSubscription(subscription);
-    }
-    public void getSearchPresenterOnlyJobList(ArticleRequest articleRequest) {
-        if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showNwError();
-            return;
-        }
-        getMvpView().startProgressBar();
-        Subscription subscription = mSearchModel.getSearchModelOnluJobList(articleRequest).subscribe(new Subscriber<ArticleListResponse>() {
-            @Override
-            public void onCompleted() {
-                getMvpView().stopProgressBar();
-            }
-            @Override
-            public void onError(Throwable e) {
-                getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
-                getMvpView().showNwError();
-                getMvpView().stopProgressBar();
-            }
 
-            @Override
-            public void onNext(ArticleListResponse articleListResponse) {
-                getMvpView().stopProgressBar();
-                getMvpView().getArticleListSuccess(articleListResponse.getData());
-            }
-        });
-        registerSubscription(subscription);
-    }
+
     public void getFeature(Feature articleRequest) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showNwError();
@@ -149,7 +103,6 @@ public class SearchModulePresenter extends BasePresenter<SearchModuleView> {
             @Override
             public void onNext(Feature articleListResponse) {
                 getMvpView().stopProgressBar();
-                getMvpView().getSuccess(articleListResponse.getData());
             }
         });
         registerSubscription(subscription);
