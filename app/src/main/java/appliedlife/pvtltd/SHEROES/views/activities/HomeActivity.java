@@ -402,7 +402,10 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
 
     @OnClick(R.id.iv_footer_button_icon)
     public void commingOnClick() {
-        Snackbar.make(mCLMainLayout, "Comming soon", Snackbar.LENGTH_SHORT).show();
+       Snackbar.make(mCLMainLayout, "Comming soon", Snackbar.LENGTH_SHORT).show();
+       /* Intent intent=new Intent(getApplicationContext(),CreateCommunityActivity.class);
+        startActivityFromHolder(intent);
+        finish();*/
     }
 
     private void openArticleFragment() {

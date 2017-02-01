@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Change Community Privacy"
+        android:textStyle="bold"
+        android:textSize="@dimen/sp_size_14"
+        android:paddingTop="30dp"
+        android:layout_gravity="center_horizontal"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="The following changes will take place:"
+        android:textSize="@dimen/sp_size_13"
+        android:textStyle="bold"
+        android:paddingTop="22.8dp"
+        android:paddingLeft="41dp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="• All members will remain members of the close community. "
+        android:paddingTop="5.7dp"
+        android:paddingRight="42.5dp"
+        android:paddingLeft="41dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="• Posts and notifications will be hidden from the members who have not joined the community. "
+        android:paddingRight="42.5dp"
+        android:paddingLeft="41dp"
+      />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/tvcancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:paddingTop="25.3dp"
+        android:paddingBottom="23.2dp"
+        android:textSize="@dimen/sp_size_12"
+        android:textColor="#3949ab"
+        android:text="CANCEL"/>
+    <TextView
+        android:id="@+id/tv_continue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/tvcancel"
+        android:paddingLeft="24dp"
+        android:paddingTop="25.3dp"
+        android:paddingBottom="23.2dp"
+        android:textSize="@dimen/sp_size_12"
+        android:textColor="#3949ab"
+        android:text="CONTINUE"/>
+    </RelativeLayout>
+</LinearLayout>

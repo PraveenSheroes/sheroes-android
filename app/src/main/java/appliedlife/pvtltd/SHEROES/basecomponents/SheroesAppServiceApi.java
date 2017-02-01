@@ -3,6 +3,7 @@ package appliedlife.pvtltd.SHEROES.basecomponents;
 
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItemResponse;
@@ -33,6 +34,9 @@ public interface SheroesAppServiceApi {
 
     @GET("v2/587877da0f0000231d0d49b1")
     Observable<HomeSpinnerItemResponse> getHomeSpinnerList();
+
+    @GET("/v2/587fb45c270000490af0dd7a")
+    Observable<CommunityListResponse> getCommunityList();
 
     @POST("auth/signin")
     Observable<LoginResponse> getLoginAuthToken(@Body LoginRequest loginRequest);

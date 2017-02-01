@@ -3,19 +3,26 @@ package appliedlife.pvtltd.SHEROES.basecomponents;
 
 import javax.inject.Singleton;
 
+import appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.DetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeSearchActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.LoginActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.ShareCommunityActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.AllSearchFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.CreateCommunityFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.CreateCommunityPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeSpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LoginFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunitiesFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.SelectCommunityFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ShareCommunityFragment;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CommentHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
@@ -30,6 +37,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.HomeSpinnerSelectorHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MyCommunitiesCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ReactionHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.SearchModuleHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.SelectDilogHolder;
 import dagger.Component;
 
 /**
@@ -70,5 +78,12 @@ public interface SheroesAppComponent {
     void inject(CommentHolder commentHolder);
     void inject(ReactionHolder reactionHolder);
     void inject(MyCommunitiesCardHolder myCommunitiesCardHolder);
-
+    void inject(CreateCommunityFragment createCommunityFragment);
+    void inject(CreateCommunityActivity createCommunityActivity);
+    void inject(CreateCommunityPostActivity createCommunityPostActivity);
+    void inject(CreateCommunityPostFragment createCommunityPostFragment);
+    void inject(SelectCommunityFragment selectCommunityFragment);
+    void inject(ShareCommunityActivity shareCommunityActivity);
+    void inject(ShareCommunityFragment shareCommunityFragment);
+    void inject(SelectDilogHolder selectDilogHolder);
 }

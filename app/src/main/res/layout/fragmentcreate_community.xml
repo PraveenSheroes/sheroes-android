@@ -1,0 +1,268 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center_horizontal"
+    tools:context="appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityActivity"
+    android:baselineAligned="false">
+
+    <RelativeLayout
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/r1"
+        android:layout_marginTop="@dimen/dp_size_18"
+        android:layout_marginLeft="@dimen/dp_size_25"
+        >
+
+
+        <TextView
+            android:id="@+id/tv_create_community_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CREATE COMMUNITY"
+            android:fontFamily="@string/ID_ROBOTO_LIGHT"
+            android:textColor="@color/text_color_about"
+            android:textSize="@dimen/sp_size_24"
+            />
+
+
+        <FrameLayout
+            android:id="@+id/iv_create_community_cross"
+            android:layout_width="@dimen/dp_size_38"
+            android:layout_height="@dimen/dp_size_38"
+            android:paddingTop="@dimen/dp_size_10"
+
+            android:layout_alignParentRight="true"
+
+            android:layout_centerVertical="true">
+            <TextView
+                android:layout_width="@dimen/dp_size_14"
+                android:layout_height="@dimen/dp_size_14"
+                android:background="@drawable/ic_cross"
+                />
+        </FrameLayout>
+
+    </RelativeLayout>
+
+    <!-- Login progress -->
+    <ProgressBar
+        android:id="@+id/pb_community_progress_bar"
+        android:layout_width="37dp"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+    <ScrollView
+        android:id="@+id/scroll_fragment_layout"
+        android:layout_width="match_parent"
+        android:isScrollContainer="false"
+        android:layout_below="@+id/r1"
+        android:layout_height="match_parent">
+<LinearLayout
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical"
+    >
+        <FrameLayout
+            android:id="@+id/fl_cover_container_frame"
+            android:layout_width="match_parent"
+            android:layout_height="162dp"
+            >
+            <ImageView
+                android:id="@+id/iv_create_community_cover_img"
+                android:layout_width="fill_parent"
+                android:layout_height="132dp"
+                android:scaleType="fitXY"
+
+                android:background="@drawable/com_facebook_profile_picture_blank_portrait"/>
+            <TextView
+                android:id="@+id/tv_create_community_cover_img_upload"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="UPLOAD COVER"
+                android:layout_gravity="end|bottom"
+                android:layout_marginRight="@dimen/dp_size_5"
+                android:padding="@dimen/dp_size_5"
+                android:alpha="0.8"
+                android:layout_marginTop="@dimen/dp_size_10"
+                android:background="@drawable/rectangle_trans"
+                android:textColor="@color/white"
+                android:textSize="10sp"
+                android:layout_marginBottom="@dimen/dp_size_35"
+                 />
+
+
+
+            <ImageView
+                android:id="@+id/iv_create_community_logo"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center_horizontal|bottom"
+                android:background="@drawable/rectangle_shap"
+                android:scaleType="fitXY"
+
+                android:drawableLeft="@drawable/camera_ico"
+                android:adjustViewBounds="false" />
+        </FrameLayout>
+    <TextView
+        android:id="@+id/tv_create_community_logo_upload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_size_5"
+        android:alpha="0.8"
+        android:layout_marginTop="@dimen/dp_size_5"
+        android:background="@drawable/rectangle_trans"
+        android:textColor="@color/white"
+        android:textSize="10sp"
+        android:text="UPLOAD LOGO"
+        android:gravity="center_horizontal" />
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp_size_15">
+        <EditText
+            android:id="@+id/et_create_community_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/ID_COMMUNITY_NAME"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:imeOptions="actionUnspecified"
+            android:background="@drawable/edittext_style"
+
+            android:textSize="@dimen/sp_size_12"
+            android:inputType="text"
+            android:maxLines="1" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <!--<appliedlife.pvtltd.SHEROES.views.cutomeviews.materialspinner.MaterialSpinner
+        android:id="@+id/spinner"
+        app:ms_dropdown_max_height="350dp"
+        app:ms_dropdown_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_size_15"
+        android:layout_marginLeft="@dimen/dp_size_15"
+        android:layout_marginRight="@dimen/dp_size_15"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>-->
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/dp_size_30"
+        android:layout_marginLeft="@dimen/dp_size_15"
+        android:layout_marginRight="@dimen/dp_size_15">
+
+        <EditText
+            android:id="@+id/et_create_community_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/COMMUNITY_TYPE"
+            android:background="@drawable/edittext_style"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:imeOptions="actionUnspecified"
+            android:focusable="false"
+
+            android:inputType="text"
+            android:drawableRight="@drawable/drop_down_shap"
+            android:textSize="@dimen/sp_size_12"
+            android:maxLines="1" />
+
+    </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/dp_size_30"
+        android:layout_marginLeft="@dimen/dp_size_15"
+        android:layout_marginRight="@dimen/dp_size_15">
+
+        <EditText
+            android:id="@+id/et_create_community_tags"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/ID_TAGS"
+            android:background="@drawable/edittext_style"
+            android:imeOptions="actionUnspecified"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:inputType="text"
+            android:textSize="@dimen/sp_size_12"
+            android:maxLines="1" />
+
+    </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/dp_size_30"
+        android:layout_marginLeft="@dimen/dp_size_15"
+        android:layout_marginRight="@dimen/dp_size_15">
+
+        <EditText
+            android:id="@+id/et_create_community_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/ID_DESCRIPTION"
+            android:background="@drawable/edittext_style"
+            android:imeOptions="actionUnspecified"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:inputType="text"
+            android:textSize="@dimen/sp_size_12"
+            android:maxLines="1" />
+
+    </android.support.design.widget.TextInputLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="@dimen/dp_size_30"
+        android:layout_marginBottom="@dimen/dp_size_80"
+
+        android:layout_marginLeft="@dimen/dp_size_15"
+        android:layout_marginRight="@dimen/dp_size_15">
+    <CheckBox
+        android:id="@+id/cb_create_community_open_check"
+        android:button="@drawable/customecheckbox"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="@dimen/dp_size_10"
+        android:text="OPEN "
+        android:textSize="@dimen/sp_size_14"
+        android:paddingLeft="@dimen/dp_size_10"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+         />
+
+    <CheckBox
+        android:id="@+id/cb_create_community_close_check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CLOSE "
+        android:checked="false"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:textSize="@dimen/sp_size_14"
+        android:button="@drawable/customecheckbox"
+        android:paddingLeft="@dimen/dp_size_10"
+        android:layout_marginLeft="@dimen/dp_size_25"
+        android:layout_toRightOf="@+id/cb_create_community_open_check"
+
+        />
+    </RelativeLayout>
+
+</LinearLayout>
+    </ScrollView>
+   <TextView
+       android:id="@+id/tv_create_community_submit"
+       android:layout_width="match_parent"
+       android:layout_height="@dimen/dp_size_48"
+       android:text="CREATE"
+       android:layout_alignParentBottom="true"
+       android:textColor="@color/white"
+       android:layout_marginTop="@dimen/dp_size_30"
+       android:paddingTop="@dimen/dp_size_10"
+       android:paddingBottom="@dimen/dp_size_10"
+       android:gravity="center"
+       android:textSize="@dimen/sp_size_12"
+       android:background="@drawable/rect_btn"
+       />
+</RelativeLayout>

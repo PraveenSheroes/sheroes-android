@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+   >
+<LinearLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    >
+
+    <include layout="@layout/community_header"/>
+
+        <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
+            android:id="@+id/iv_community_post_icon"
+            android:layout_width="60dp"
+            android:layout_gravity="center"
+            android:layout_height="60dp"
+            android:layout_marginTop="@dimen/dp_size_45"
+
+            android:background="@drawable/ripple_button"
+            android:src="@drawable/ic_post_icon" />
+
+
+
+
+        <TextView
+            android:id="@+id/txt_choose_community_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/ID_CHOOSE_COMMUNITY"
+            android:drawableRight="@drawable/drop_down_shap"
+            android:paddingLeft="@dimen/dp_size_45"
+            android:layout_marginRight="@dimen/dp_size_38"
+            android:layout_marginTop="@dimen/dp_size_25"
+
+            android:gravity="center"
+            android:textSize="@dimen/sp_size_12"
+            android:maxLines="1" />
+
+
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:id="@+id/text1"
+        android:layout_height="@dimen/dp_size_1"
+        android:layout_marginRight="@dimen/dp_size_38"
+        android:layout_marginTop="@dimen/dp_size_30"
+        android:layout_marginLeft="@dimen/dp_size_38"
+        android:background="@color/line_color"/>
+    <LinearLayout
+        android:id="@+id/l2"
+        android:layout_below="@+id/r1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginTop="53dp">
+        <HorizontalScrollView
+            android:id="@+id/hor_scroll_for_community_post_images"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            >
+            <LinearLayout
+                android:id="@+id/lnr_image_container"
+                android:orientation="horizontal"
+                android:layout_marginRight="@dimen/dp_size_20"
+
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+
+                />
+        </HorizontalScrollView>
+        <FrameLayout
+            android:id="@+id/camera_frame_iv_camera_btn_for_post_images"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rectangle_shap">
+        <ImageView
+            android:id="@+id/iv_camera_btn_for_post_images"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+
+            android:background="@drawable/ic_camera_icon_with_rectangle"
+
+            />
+        </FrameLayout>
+    </LinearLayout>
+    <TextView
+        android:id="@+id/tv_add_more_community_post_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/dp_size_15"
+        android:layout_gravity="right"
+        android:layout_marginRight="@dimen/dp_size_38"
+        android:visibility="gone"
+        android:layout_marginLeft="@dimen/dp_size_38"
+        android:text="@string/ID_ADDMORE"/>
+
+
+        <EditText
+            android:id="@+id/et_share_community_post_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/ID_SHARE"
+            android:background="@drawable/edit_text_create_community_style"
+            android:windowSoftInputMode="stateHidden"
+            android:layout_marginTop="@dimen/dp_size_45"
+            android:layout_marginRight="@dimen/dp_size_38"
+            android:layout_marginLeft="@dimen/dp_size_38"
+            android:imeOptions="actionUnspecified"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:inputType="text"
+
+            android:textSize="@dimen/sp_size_12"
+            android:maxLines="1" />
+
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dp_size_1"
+        android:layout_marginTop="@dimen/dp_size_12"
+        android:layout_marginRight="@dimen/dp_size_38"
+        android:layout_marginLeft="@dimen/dp_size_38"
+        android:background="@color/line_color" />
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_size_25"
+        android:layout_marginRight="@dimen/dp_size_38"
+        android:layout_marginLeft="@dimen/dp_size_38"
+        android:text="@string/ID_POST"
+        android:textStyle="bold"
+        android:textColor="@color/text_color_close"
+        android:textSize="@dimen/sp_size_12"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:layout_marginTop= "@dimen/dp_size_30"
+        android:weightSum="3">
+
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/ripple_button">
+
+            <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
+                android:id="@+id/iv_community_user"
+                android:layout_width="@dimen/dp_size_35"
+                android:layout_height="@dimen/dp_size_35"
+                android:layout_weight="1"
+                />
+
+        </FrameLayout>
+
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/ripple_button"
+            android:layout_marginLeft="@dimen/dp_size_77"
+            android:layout_marginRight="@dimen/dp_size_77">
+            <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
+                android:id="@+id/iv_community_owner"
+                android:layout_width="@dimen/dp_size_35"
+                android:layout_height="@dimen/dp_size_35"
+                android:layout_weight="1"
+                />
+        </FrameLayout>
+
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/ripple_button">
+
+            <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
+                android:id="@+id/iv_community_anonymous"
+                android:layout_width="@dimen/dp_size_35"
+                android:layout_height="@dimen/dp_size_35"
+                android:layout_weight="1"
+                />
+
+        </FrameLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:layout_marginTop= "@dimen/dp_size_10"
+        android:weightSum="3">
+
+        <TextView
+            android:id="@+id/tv_community_poster_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/searchbox_text_color"
+            android:layout_weight="1"
+            android:text="Name     "
+            android:textSize="@dimen/sp_size_12"
+            />
+
+        <TextView
+            android:id="@+id/tv_community_owner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ID_COMMUNITIES"
+            android:textSize="@dimen/sp_size_12"
+            android:layout_marginLeft="@dimen/dp_size_30"
+            android:layout_marginRight="@dimen/dp_size_30"
+            android:textColor="@color/searchbox_text_color"
+            android:layout_weight="1"
+            />
+
+        <TextView
+            android:id="@+id/tv_community_anonymous"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sp_size_12"
+            android:layout_weight="1"
+            android:text="Anonymous"
+            android:textColor="@color/searchbox_text_color"
+            />
+
+    </LinearLayout>
+<TextView
+    android:id="@+id/tv_community_post_submit"
+    android:gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:layout_marginTop="@dimen/dp_size_25"
+    android:layout_marginLeft="@dimen/dp_size_45"
+    android:layout_marginRight="@dimen/dp_size_45"
+    android:layout_marginBottom="@dimen/dp_size_20"
+    android:background="@drawable/rectangle_btn"
+    android:textColor="#FFFFFF"
+    android:text="Post As Deepika"/>
+</LinearLayout>
+
+</ScrollView>

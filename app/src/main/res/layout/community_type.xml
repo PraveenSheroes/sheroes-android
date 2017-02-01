@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="6dip" >
+    <TextView
+        android:id="@+id/tv_communiy_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/COMMUNITY_TYPE"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:textSize="@dimen/sp_size_14"
+        android:paddingTop="@dimen/dp_size_15"
+        android:gravity="center"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:background="@color/white"
+        />
+    <ListView
+        android:id="@+id/lv_community_type_listview"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerInParent="true"
+        android:layout_below="@+id/tv_communiy_type"
+        android:layout_marginRight="@dimen/dp_size_10"
+        android:layout_marginTop="@dimen/dp_size_38"
+        android:layout_marginLeft="@dimen/dp_size_10"
+        android:layout_alignParentTop="true" />
+
+    <TextView
+        android:id="@+id/tv_community_type_submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lv_community_type_listview"
+        android:layout_centerHorizontal="true"
+        android:text="DONE" />
+
+
+</RelativeLayout>

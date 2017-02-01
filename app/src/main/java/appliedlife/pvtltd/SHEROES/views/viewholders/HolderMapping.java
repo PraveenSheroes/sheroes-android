@@ -10,6 +10,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentsList;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.ReactionList;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityList;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
 import appliedlife.pvtltd.SHEROES.models.entities.home.DrawerItems;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
@@ -94,7 +95,13 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new ArticleCardHolder(view, viewInterface);
         }
-    };
+    },
+    SELECTDILOG(R.layout.list_of_community) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new SelectDilogHolder(view, viewInterface);
+        }
+    },;
     public Object object;
     public int layout;
 
@@ -154,6 +161,10 @@ public enum HolderMapping {
         } else if (item instanceof ReactionList) {
             return REACTION.ordinal();
 
+        }
+        else if(item instanceof CommunityList)
+        {
+            return SELECTDILOG.ordinal();
         }
         return returnView;
     }
