@@ -70,6 +70,127 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_SETTING">Settings</string>
 
 
+    <!--string set  through priyanka-->
+
+    <!--text related setting_dashboard page-->
+    <string name="ID_SETTINGS">SETTINGS</string>
+    <string name="ID_FEEDBACK">FEEDBACK</string>
+    <string name="ID_FEEDS">FEEDS</string>
+    <string name="ID_COMMUNITES">COMMUNITY</string>
+    <string name="ID_PREFERENCES">PREFERENCES</string>
+    <string name="ID_ABOUT">ABOUT</string>
+    <string name="ID_TERMS_AND_CONDITIONS">TERMS AND CONDITIONS</string>
+    <string name="ID_LOGOUT">LOGOUT</string>
+
+    <!--string setting_feedback page-->
+    <string name="ID_THOUGHTS">THOUGHTS?</string>
+    <string name="ID_COMMENT">It is a really nice app. Must try atleast once, if needed.</string>
+    <string name="ID_BUTTON">BUTTON</string>
+    <string name="ID_TYING_MESSAGE">We are actively trying to improve SHEROES to better cater to your needs. Tap a star to rate. Leave us a note too, if you can!</string>
+
+    <!-- String related to preferences_dashboard page-->
+
+    <string name="ID_BASICDETAILS">BASIC DETAILS</string>
+    <string name="ID_EDUCATIONDETAILS">EDUCATION DETAILS</string>
+    <string name="ID_WORKEXPERIENCEDETAILS">WORK EXPERIENCE DETAILS</string>
+    <string name="ID_DEACTIVEACCOUNT">DEACTIVE ACCOUNT</string>
+
+
+    <!--string related to setting_deactive account page-->
+    <string name="ID_DEACTIVE_TEXT">Account Deactivated</string>
+    <string name="ID_DEACTIVE_TEXT1"> We are sorry to see you go.</string>
+    <string name="ID_ERROR_REASION"> Your message is too short.</string>
+    <string name="ID_CLOSE">CLOSE</string>
+    <string name="ID_TEXT_OPTIONAL">Tap to leave a comment (optional)</string>
+
+    <!--string related to setting_about page-->
+
+    <string name="ID_ABOUT_TEXT">Every woman who makes a choice and makes it work for her is a SHERO.
+
+    SHEROES - a career destination for women professionals, committed to career success and individual work-life fit.
+
+    SHEROES welcomes women professional across levels, stages and sectors to pro-actively access the largest OpportunityScape for women.
+
+    There is a diverse and large range of opportunities to pick from - these include opportunities with women friendly employers, flex friendly formats, mompreneur programs, partnership programs and more.
+
+    The SHEROES Community gets access to career resources, information and community sharing. SHEROES Mentors engage actively to help women attain career success on their own terms.
+
+    SHEROES is committed to enhancing the quality and quantity of opportunities for women and investing in women</string>
+
+    <!--string related to setting_terms_and_condition page-->
+    <string name="ID_TERMS_AND_COND">You are requested to read this Terms and Conditions carefully. By using this website www.sheroes.in or ordering or purchasing any product or service from this website you agree to accept and be bound by all the terms and conditions of this agreement.
+
+The Terms of Service Agreement (the ‘Agreement’) will govern all users/visitors or any person (hereinafter may also be referred to as “Users”) who use, register or visit or access this website (www.sheroes.in) (the “site”)or use any type of service from Applied Life Private Limited (hereinafter may also be referred to as “SHEROES”)and its affiliates. Applied Life Private Limited, a company incorporated under the Companies Act, 1956 shall also be hereinafter referred to as “SHEROES”
+
+By accessing and using the site , or any other services of SHEROES, you agree to be governed by the terms and conditions of this agreement as well as any other specific terms / rules/ policies/ guidelines prevailing or posted on the site. These Terms will apply to any new services or features introduced on the Site. Please refer to our Privacy Policy to check on the practices related to collection, use and storage of user information. All the materials contained in the website are provided for informational purposes only and shall not be construed as a license, an advisory, fiduciary or professional relationship between you and Applied Life.
+
+You shall abide by the Terms and Conditions set forth below in this agreement. You will be bound and constitute to accept by these terms and conditions on accessing or using any service from Applied Life Private Limited. Applied Life Private Limited reserves the right to change or revise the terms and conditions of this Agreement from time to time on this website. The changes or revisions and shall be effective after the date of revision. Your use of the website or any services after changes or revision will constitute as your acceptance to the changes terms and conditions set forth in the agreement. This agreement does not alter any other agreement that you might have undertaken with Applied Life Private Limited in written for any other products and services.
+
+Our website www.sheroes.in offers services for certain products and services. By placing an order or purchasing the products or services through our website you provide your unconditional agreement and consent to the terms and conditions of this agreement.</string>
+    <!-- String related to setting_preferences_basicdetails page-->
+
+    <string name="ID_DATE_OF_BIRTH">DIRTH OF BIRTH</string>
+    <string name="ID_DATE_VIEW">12 SEP 1991</string>
+    <string name="ID_HOMETOWN">HOMETOWN</string>
+    <string name="ID_LOCATION">CHANDIGARH, PUNJAB, INDIA</string>
+    <string name="ID_STATUS">RELATIONSHP STATUS</string>
+    <string name="ID_SVIEW">SINGLE</string>
+    <string name="ID_CHILDRENDIRTH">NUMBER OF CHILDREN</string>
+    <string name="ID_CVIEW">02</string>
+
+    <!-- String related to setting_education details  page-->
+    <string name="ID_GRADES_PERCENTAGE">GRADES/PERCENTAGE</string>
+    <string name="ID_ADD_VALUE">Added in the education details</string>
+    <string name="ID_SHEROES_CONDITION">You are requested to read this Terms and Conditions carefully. By using this website www.sheroes.in or ordering or purchasing any product or service from this website you agree to accept and be bound by all the terms and conditions of this agreement.
+
+The Terms of Service Agreement (the ‘Agreement’) will govern all users/visitors or any person (hereinafter may also be referred to as “Users”) who use, register or visit or access this website (www.sheroes.in) (the “site”)or use any type of service from Applied Life Private Limited (hereinafter may also be referred to as “SHEROES”)and its affiliates. Applied Life Private Limited, a company incorporated under the Companies Act, 1956 shall also be hereinafter referred to as “SHEROES”
+
+By accessing and using the site , or any other services of SHEROES, you agree to be governed by the terms and conditions of this agreement as well as any other specific terms / rules/ policies/ guidelines prevailing or posted on the site. These Terms will apply to any new services or features introduced on the Site. Please refer to our Privacy Policy to check on the practices related to collection, use and storage of user information. All the materials contained in the website are provided for informational purposes only and shall not be construed as a license, an advisory, fiduciary or professional relationship between you and Applied Life.
+
+You shall abide by the Terms and Conditions set forth below in this agreement. You will be bound and constitute to accept by these terms and conditions on accessing or using any service from Applied Life Private Limited. Applied Life Private Limited reserves the right to change or revise the terms and conditions of this Agreement from time to time on this website. The changes or revisions and shall be effective after the date of revision. Your use of the website or any services after changes or revision will constitute as your acceptance to the changes terms and conditions set forth in the agreement. This agreement does not alter any other agreement that you might have undertaken with Applied Life Private Limited in written for any other products and services.
+
+Our website www.sheroes.in offers services for certain products and services. By placing an order or purchasing the products or services through our website you provide your unconditional agreement and consent to the terms and conditions of this agreement.</string>
+   <!--String related to spinnar of setting-->
+    <string-array name="spinner_iteams">
+
+        <item>ID_ONLYME</item>
+        <item>ID_PUBLIC</item>
+
+      </string-array>
+
+    <!--text colors of deactive_custom dialog page-->
+
+    <color name="text_color_dialog">#1d2832</color>
+    <color name="text_color_close">#3949ab</color>
+
+
+    <!-- String related to setting_preference_work_experience  page-->
+
+    <string name="ID_PORTFOLIO_LINK">PORTFOLIO LINK</string>
+    <string name="ID_PORTFOLIOS">All your freelancing portfolios</string>
+    <string name="ID_UPLOADED_IMAGES">UPLOADED IMAGES</string>
+    <string name="ID_ADD_SECTION"> Added to your business/freelancing section.</string>
+
+    <!--String related setting_preferences_deactiveaccount page -->
+
+    <string name="ID_DEACTIVATE">Why do you want to deactivate</string>
+    <string name="ID_NOTFINDTEXT">I don’t find SHEROES useful</string>
+    <string name="ID_SPAMMED">I feel spammed</string>
+    <string name="ID_PRIVACY">I have privacy issues</string>
+    <string name="ID_OTHER">Other</string>
+    <string name="ID_WRITE_RESON">Write reason</string>
+
+
+    <!-- String related to setting_feedback page-->
+
+    <string name="ID_THANK_YOU">THANK YOU</string>
+    <string name="ID_FOLLOW_US">FOLLOW US</string>
+    <string name="ID_SUBMIT">SUBMIT</string>
+
+
+
+
+
     <string name="ID_COMMUNITY_NAME">COMMUNITY NAME</string>
     <string name="ID_CHOOSE_COMMUNITY">CHOOSE COMMUNITY</string>
     <string name="ID_SHARE_COMMUNITY">SHARE</string>

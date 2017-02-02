@@ -1,33 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-   android:id="@+id/rl_search_box"
+    android:id="@+id/rl_search_box"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
-    <TextView
-        android:id="@+id/tv_search_box"
+
+
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/rectangle_search_bar"
+        android:layout_centerVertical="true"
+        android:padding="@dimen/dp_size_10"
+        android:layout_gravity="center|left"
+        android:background="@drawable/ic_nav_setting"/>
+
+
+
+    <TextView
+        android:id="@+id/tv_setting_headline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:fontFamily="@string/ID_ROBOTO_REGULAR"
-        android:text="@string/ID_SEARCH_ARTICLES"
+        android:text="@string/ID_SETTINGS"
         android:padding="@dimen/dp_size_12"
         android:drawablePadding="@dimen/dp_size_12"
-        android:drawableLeft="@drawable/ic_search_box_icon"
+        android:layout_centerHorizontal="true"
         android:layerType="software"
-        android:textColor="@color/search_box_text"
-        android:textSize="@dimen/sp_size_12"
-        android:layout_marginRight="@dimen/dp_size_30"
-        android:layout_toLeftOf="@+id/iv_home_search_icon"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-       <TextView
-           android:id="@+id/TV_setting"
-           android:visibility="gone"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:gravity="center_horizontal"/>
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_size_19"
+        />
 
     <ImageView
         android:id="@+id/iv_home_search_icon"
@@ -41,10 +42,5 @@
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
-
-
-
-
-
 
 </RelativeLayout>

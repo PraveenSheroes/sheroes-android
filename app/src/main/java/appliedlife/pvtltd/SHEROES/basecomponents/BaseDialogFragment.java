@@ -2,9 +2,11 @@ package appliedlife.pvtltd.SHEROES.basecomponents;
 
 import android.app.DialogFragment;
 import android.app.FragmentManager;
+import android.os.Bundle;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.views.fragments.PreferencesDeactiveAccountDialogFragment;
 
 
 /**
@@ -37,6 +39,26 @@ public class BaseDialogFragment extends DialogFragment {
     public void show(FragmentManager manager, String tag) {
         manager.beginTransaction().add(this, tag).commitAllowingStateLoss();
     }
+
+
+    protected DialogFragment showDeactiveDilog(boolean finishParentOnBackOrTryagain)
+    {
+        PreferencesDeactiveAccountDialogFragment fragment = (PreferencesDeactiveAccountDialogFragment) getActivity().getFragmentManager().findFragmentByTag("");
+        if (fragment == null)
+        {
+            fragment = new PreferencesDeactiveAccountDialogFragment();
+            Bundle b = new Bundle();
+            b.putBoolean(BaseDialogFragment.DISMISS_PARENT_ON_OK_OR_BACK, finishParentOnBackOrTryagain);
+            fragment.setArguments(b);
+        }
+        if (!fragment.isVisible() && !fragment.isAdded())
+        {
+            show(getActivity().getFragmentManager(), "");
+
+        }
+        return fragment;
+    }
+
 
     @Override
     public void dismiss() {

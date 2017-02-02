@@ -8,21 +8,25 @@ import android.os.Parcelable;
  */
 
 public class FragmentOpen implements Parcelable {
+
     boolean isOpen;
     boolean reactionList;
     boolean commentList;
     boolean feedOpen;
     boolean articleFragment;
     boolean communityOpen;
+    boolean settingFragment;
 
 
-    public FragmentOpen(boolean isOpen, boolean reactionList, boolean commentList, boolean feedOpen, boolean articleFragment, boolean communityOpen) {
+    public FragmentOpen(boolean isOpen, boolean reactionList, boolean commentList, boolean feedOpen, boolean articleFragment,boolean settingFragment, boolean communityOpen) {
         this.isOpen = isOpen;
         this.reactionList = reactionList;
         this.commentList = commentList;
         this.feedOpen = feedOpen;
         this.articleFragment = articleFragment;
         this.communityOpen = communityOpen;
+        this.settingFragment=settingFragment;
+
     }
 
     public boolean isOpen() {
@@ -58,11 +62,20 @@ public class FragmentOpen implements Parcelable {
     }
 
     public boolean isArticleFragment() {
+
         return articleFragment;
     }
 
     public void setArticleFragment(boolean articleFragment) {
+
+
         this.articleFragment = articleFragment;
+    }
+
+    public void setSettingFragment(boolean settingFragment) {
+
+
+        this.settingFragment = settingFragment;
     }
 
     public boolean isCommunityOpen() {

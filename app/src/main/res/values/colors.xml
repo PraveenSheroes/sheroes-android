@@ -34,9 +34,30 @@
     <color name="feed_job_card_new">#50e3c2</color>
     <color name="feed_conversation">#878e98</color>
 
+    <!--colors set through priyanka-->
+
+    <!--text colors of setting_feedback page-->
+    <color name="text_color">#545b61</color>
+    <color name="line_color">#a8c0c9d0</color>
+    <color name="text_color_follow">#4a4a4a</color>
+    <color name="background_color">#fcffffff</color>
+    <color name="skip_textcolor">#68545b61</color>
+    <color name="button_color">#8a8d9e</color>
+    <color name="back_ground_color">#e8ecef</color>
+    <!--text colors of setting about page-->
     <color name="text_color_about">#1c2024</color>
-    <color name="line_color">#a8c0c9</color>
-    <color name="text_color_close">#3949ab</color>
+    <!--text colors of setting header-->
+    <color name="text_color_setting_header">#7983c8</color>
+    <!--text colors of setting_preferences_basicdetails_page-->
+    <color name="text_color_setting_preference_basicdetails">#757e87</color>
+
+    <!--text colors of setting_preferences_deactiveaccount page-->
+    <color name="setting_errormessage_backgroung">#ea2e11</color>
+    <color name="text_color_contactdetails_page">#292f3c</color>
+
+
+
+     <color name="text_color_close">#3949ab</color>
 
     <color name="com_post_share_textcolor">#323940</color>
     <color name="com_share_post_text_color">#1e2226</color>

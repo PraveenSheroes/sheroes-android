@@ -9,6 +9,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.DetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeSearchActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.LoginActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.SettingPreferencesActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ShareCommunityActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.AllSearchFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
@@ -21,6 +22,15 @@ import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeSpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LoginFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunitiesFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.SettingAboutFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.SettingFeedbackFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.SettingFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.SettingPreferencesDeactiveAccountFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.SettingPreferencesEducationDetailsFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.SettingPreferencesWorkExperienceFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.SettingPreferencsFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.SettingTermsAndConditionFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.SettingPreferencesBasicDetailsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SelectCommunityFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareCommunityFragment;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleCardHolder;
@@ -78,6 +88,23 @@ public interface SheroesAppComponent {
     void inject(CommentHolder commentHolder);
     void inject(ReactionHolder reactionHolder);
     void inject(MyCommunitiesCardHolder myCommunitiesCardHolder);
+    void inject(SettingFragment settingFragment);
+    void inject(SettingFeedbackFragment settingFeedbackFragment);
+    void inject(SettingPreferencsFragment settingPreferencsFragment);
+    void inject(SettingAboutFragment settingAboutFragment);
+    void inject(SettingTermsAndConditionFragment settingTermsAndConditionFragment);
+    void inject(SettingPreferencesBasicDetailsFragment setting_preferences_basicDetailsFragment);
+    void inject(SettingPreferencesActivity settingPreferencesActivity);
+    void inject(SettingPreferencesEducationDetailsFragment settingPreferencesEducationDetailsFragment);
+    void inject(SettingPreferencesWorkExperienceFragment settingPreferencesWorkExperienceFragment);
+    void inject(SettingPreferencesDeactiveAccountFragment settingPreferencesDeactiveAccountFragment);
+
+
+
+
+
+
+
     void inject(CreateCommunityFragment createCommunityFragment);
     void inject(CreateCommunityActivity createCommunityActivity);
     void inject(CreateCommunityPostActivity createCommunityPostActivity);

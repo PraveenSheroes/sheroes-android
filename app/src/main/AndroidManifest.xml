@@ -47,6 +47,12 @@
         <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.LoginActivity">
 
         </activity>
+
+        <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.SettingPreferencesActivity"/>
+
+
+
+
         <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -65,6 +71,7 @@
             android:parentActivityName="appliedlife.pvtltd.SHEROES.views.activities.HomeActivity"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
+
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.DetailActivity"
             android:parentActivityName="appliedlife.pvtltd.SHEROES.views.activities.HomeActivity"

@@ -38,6 +38,8 @@ import butterknife.ButterKnife;
 /**
  * Created by Praveen_Singh on 09-01-2017.
  */
+
+
 public class ArticlesFragment extends BaseFragment implements HomeView {
     private final String TAG = LogUtils.makeLogTag(ArticlesFragment.class);
     private final String SCREEN_NAME = "Home Screen";
@@ -54,10 +56,16 @@ public class ArticlesFragment extends BaseFragment implements HomeView {
     private HomeActivityIntractionListner mHomeActivityIntractionListner;
     private SwipPullRefreshList mPullRefreshList;
 
+
+
     public static ArticlesFragment createInstance(int itemsCount) {
+
         ArticlesFragment articlesFragment = new ArticlesFragment();
+
         return articlesFragment;
     }
+
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -70,8 +78,8 @@ public class ArticlesFragment extends BaseFragment implements HomeView {
         }
     }
 
-    @Nullable
-    @Override
+     @Nullable
+     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_home, container, false);

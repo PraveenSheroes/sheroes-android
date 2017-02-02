@@ -7,4 +7,5 @@
     tools:context="appliedlife.pvtltd.SHEROES.views.activities.LoginActivity">
 
     <include layout="@layout/fragment_container" />
+
 </LinearLayout>
