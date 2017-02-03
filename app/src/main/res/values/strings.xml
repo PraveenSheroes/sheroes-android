@@ -212,8 +212,7 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_DESCRIPTION">DESCRIPTION</string>
     <string name="ID_CREATEPOST">CREATE A POST</string>
     <string name="ID_COMMUNITITES_NAME">Ranigarh Women’s Empowerment and Development Group</string>
-    <string name="ID_SHARE_LINK">https://sheroes.com/community/ranigarh-women’s-empowerment-
-and-development-group/Mjc0MA==</string>
+    <string name="ID_SHARE_LINK">https://sheroes.com/community/ranigarh-women’s-empowerment-and-development-group/Mjc0MA==</string>
     <string name="ID_COMM_SHARE_EMAIL_LINK">SHARE COMMUNITY LINK ON EMAIL</string>
     <string name="ID_EMAIL_HINT_TEXT">Enter Email id</string>
     <string name="ID_SAHRE_TEXT">SHARE</string>

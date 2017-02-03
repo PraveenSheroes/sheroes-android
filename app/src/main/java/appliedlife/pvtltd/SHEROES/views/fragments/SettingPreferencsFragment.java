@@ -12,7 +12,6 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.views.activities.SettingPreferencesActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SettingView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -40,14 +39,10 @@ public class SettingPreferencsFragment extends BaseFragment  implements SettingV
     public void onAttach(Context context){
 
         super.onAttach(context);
-    }
-
-    public SettingPreferencsFragment(SettingPreferencesActivity settingPreferencesActivity) {
-
         try {
-            if(settingPreferencesActivity instanceof settingPreferencesCallBack)
+            if(getActivity() instanceof settingPreferencesCallBack)
             {
-                msettingPreferencesCallBack=(settingPreferencesCallBack)settingPreferencesActivity;
+                msettingPreferencesCallBack=(settingPreferencesCallBack)getActivity();
             }
         }
         catch (Exception e)
@@ -55,7 +50,6 @@ public class SettingPreferencsFragment extends BaseFragment  implements SettingV
 
 
         }
-
     }
 
     @Override

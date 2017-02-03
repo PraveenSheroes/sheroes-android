@@ -36,7 +36,11 @@
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.HomeActivity"
             android:windowSoftInputMode="stateHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name="com.facebook.FacebookActivity"
@@ -54,11 +58,6 @@
 
 
         <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityPostActivity">
 

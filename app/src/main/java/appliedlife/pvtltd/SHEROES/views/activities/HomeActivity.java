@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
@@ -65,7 +64,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class HomeActivity extends BaseActivity implements HomeFragment.HomeActivityIntractionListner,SettingView,BaseHolderInterface, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, CommentReactionFragment.HomeActivityIntractionListner, View.OnTouchListener, View.OnClickListener {
+public class HomeActivity extends BaseActivity implements HomeFragment.HomeActivityIntractionListner, SettingView, BaseHolderInterface, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, CommentReactionFragment.HomeActivityIntractionListner, View.OnTouchListener, View.OnClickListener {
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
     private static final String SPINNER_FRAGMENT = "spinnerFragment";
     @Bind(R.id.iv_drawer_profile_circle_icon)
@@ -97,7 +96,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
     @Bind(R.id.tv_search_box)
     TextView mTvSearchBox;
     @Bind(R.id.tv_setting)
-    TextView mTV_setting;
+    TextView mTvSetting;
     @Bind(R.id.tv_home)
     TextView mTvHome;
     @Bind(R.id.tv_communities)
@@ -116,6 +115,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
     private CustiomActionBarToggle mCustiomActionBarToggle;
     public View mArticlePopUp, mCommunityPopUp, mCommunityPostPopUp;
     private Dialog mCouponCodeDialogView;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,13 +136,13 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
         mDrawer.addDrawerListener(mCustiomActionBarToggle);
         ivDrawerProfileCircleIcon.setCircularImage(true);
         //TODO: this data to be removed
-        String profile="https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAhNAAAAJDYwZWIyZTg5LWFmOTItNGIwYS05YjQ5LTM2YTRkNGQ2M2JlNw.jpg";
+        String profile = "https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAhNAAAAJDYwZWIyZTg5LWFmOTItNGIwYS05YjQ5LTM2YTRkNGQ2M2JlNw.jpg";
         ivDrawerProfileCircleIcon.bindImage(profile);
         mTvUserName.setText("Praveen Singh");
         mTvUserLocation.setText("Delhi, India");
         mCustiomActionBarToggle.syncState();
         mNavigationView.setNavigationItemSelectedListener(this);
-        mFragmentOpen = new FragmentOpen(false, false, false, false, false, false,false);
+        mFragmentOpen = new FragmentOpen(false, false, false, false, false, false, false,false);
         initHomeViewPagerAndTabs();
         mHomeSpinnerItemList = CustomeDataList.makeSpinnerListRequest();
         Glide.with(this)
@@ -153,6 +153,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
         //  HomeSpinnerFragment frag = new HomeSpinnerFragment();
         //  callFirstFragment(R.id.fl_fragment_container, frag);
     }
+
     @Override
     public void onErrorOccurence() {
         showNetworkTimeoutDoalog(true);
@@ -194,8 +195,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
                 default:
                     LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + drawerItem);
             }
-        }else if (baseResponse instanceof CommunitySuggestion)
-        {
+        } else if (baseResponse instanceof CommunitySuggestion) {
 
         }
     }
@@ -292,10 +292,10 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
     }
 
     public void menuClick() {
-            mCouponCodeDialogView = new Dialog(this);
-            mCouponCodeDialogView.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            mCouponCodeDialogView.show();
-            mCouponCodeDialogView.setContentView(R.layout.menu_option_layout);
+        mCouponCodeDialogView = new Dialog(this);
+        mCouponCodeDialogView.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mCouponCodeDialogView.show();
+        mCouponCodeDialogView.setContentView(R.layout.menu_option_layout);
 
     }
 
@@ -347,7 +347,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
 
     @Override
     public void onDrawerOpened() {
-        if(!mFragmentOpen.isImageBlur()) {
+        if (!mFragmentOpen.isImageBlur()) {
             Blurry.with(HomeActivity.this)
                     .radius(25)
                     .sampling(2)
@@ -378,7 +378,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
     }
 
     private void initHomeViewPagerAndTabs() {
-        String search = getString(R.string.ID_SEARCH)+AppConstants.FEED_ARTICLE+AppConstants.S + AppConstants.COMMA + AppConstants.FEED_COMMUNITY + AppConstants.COMMA + AppConstants.FEED_JOB;
+        String search = getString(R.string.ID_SEARCH) + AppConstants.FEED_ARTICLE + AppConstants.S + AppConstants.COMMA + AppConstants.FEED_COMMUNITY + AppConstants.COMMA + AppConstants.FEED_JOB;
         mTvSearchBox.setText(search);
         mFragmentOpen.setFeedOpen(true);
         mTabLayout.setVisibility(View.GONE);
@@ -407,7 +407,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
     public void searchButtonClick() {
         Intent intent = new Intent(this, HomeSearchActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putParcelable(AppConstants.ALL_SEARCH,mFragmentOpen);
+        bundle.putParcelable(AppConstants.ALL_SEARCH, mFragmentOpen);
         intent.putExtras(bundle);
         startActivity(intent);
         overridePendingTransition(R.anim.fade_in_dialog, R.anim.fade_out_dialog);
@@ -447,13 +447,13 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
         mTabLayout.setVisibility(View.GONE);
         mTvCommunities.setText(AppConstants.EMPTY_STRING);
         mTvHome.setText(getString(R.string.ID_FEED));
-        String search = getString(R.string.ID_SEARCH)+AppConstants.FEED_ARTICLE+AppConstants.S+ AppConstants.COMMA + AppConstants.FEED_COMMUNITY + AppConstants.COMMA + AppConstants.FEED_JOB;
+        String search = getString(R.string.ID_SEARCH) + AppConstants.FEED_ARTICLE + AppConstants.S + AppConstants.COMMA + AppConstants.FEED_COMMUNITY + AppConstants.COMMA + AppConstants.FEED_JOB;
         mTvSearchBox.setText(search);
     }
 
     @OnClick(R.id.tv_communities)
     public void communityOnClick() {
-        String search = getString(R.string.ID_SEARCH)+getString(R.string.ID_COMMUNITIES);
+        String search = getString(R.string.ID_SEARCH) + AppConstants.SPACE + getString(R.string.ID_COMMUNITIES);
         mTvSearchBox.setText(search);
         if (mFragmentOpen.isArticleFragment()) {
             onBackPressed();
@@ -473,10 +473,9 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
 
     @OnClick(R.id.iv_footer_button_icon)
     public void commingOnClick() {
-       Snackbar.make(mCLMainLayout, "Comming soon", Snackbar.LENGTH_SHORT).show();
-       /* Intent intent=new Intent(getApplicationContext(),CreateCommunityActivity.class);
-        startActivityFromHolder(intent);
-        finish();*/
+        // Snackbar.make(mCLMainLayout, "Comming soon", Snackbar.LENGTH_SHORT).show();
+        Intent intent = new Intent(getApplicationContext(), CreateCommunityActivity.class);
+        startActivity(intent);
     }
 
 
@@ -500,24 +499,23 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
     }
 
 
-
     private void openSettingFragment() {
 
-        mFragmentOpen.setArticleFragment(true);
+        mFragmentOpen.setSettingFragment(true);
         mViewPager.setVisibility(View.GONE);
         mTabLayout.setVisibility(View.GONE);
         flFeedFullView.setVisibility(View.GONE);
         mTvSpinnerIcon.setVisibility(View.GONE);
         mTvHome.setText(AppConstants.EMPTY_STRING);
         mTvSearchBox.setVisibility(View.GONE);
-        mTV_setting.setVisibility(View.VISIBLE);
-        mTV_setting.setText(R.string.ID_SETTINGS);
+        mTvSetting.setVisibility(View.VISIBLE);
+        mTvSetting.setText(R.string.ID_SETTINGS);
 
 
         mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_unselected_icon), null, null);
         mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_unselected_icon), null, null);
         mTvCommunities.setText(AppConstants.EMPTY_STRING);
-        SettingFragment articlesFragment = new SettingFragment(this);
+        SettingFragment articlesFragment = new SettingFragment();
         Bundle bundle = new Bundle();
         articlesFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
@@ -573,10 +571,30 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
                 mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.footer_icon_text));
             }
             mFragmentOpen.setArticleFragment(false);
+
+
+        } else if (mFragmentOpen.isSettingFragment()) {
+            getSupportFragmentManager().popBackStack();
+            if (mFragmentOpen.isFeedOpen()) {
+                flFeedFullView.setVisibility(View.VISIBLE);
+                mTvHome.setText(getString(R.string.ID_FEED));
+                mTvSpinnerIcon.setVisibility(View.GONE);
+                mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_selected_icon), null, null);
+                mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.footer_icon_text));
+            } else {
+                mViewPager.setVisibility(View.VISIBLE);
+                mTabLayout.setVisibility(View.VISIBLE);
+                mTvSpinnerIcon.setVisibility(View.GONE);
+                mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_selected_icon), null, null);
+                mTvCommunities.setText(getString(R.string.ID_COMMUNITIY));
+                mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.footer_icon_text));
+            }
+            mTvSearchBox.setVisibility(View.VISIBLE);
+            mTvSetting.setVisibility(View.GONE);
             mFragmentOpen.setSettingFragment(false);
 
-
-        } else {
+        } else
+        {
             finish();
         }
     }
@@ -734,7 +752,6 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
     }
 
 
-
     @Override
     public void showNwError() {
 
@@ -743,8 +760,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
     @Override
     public void backListener(int id) {
 
-        switch(id)
-        {
+        switch (id) {
             case R.id.id_setting_feedback:
                 SettingFeedbackFragment articlesFragment = new SettingFeedbackFragment();
                 getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
@@ -756,7 +772,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
                 break;
             case R.id.id_setting_terms_and_condition:
 
-                SettingTermsAndConditionFragment settingTermsAndConditionFragment  = new SettingTermsAndConditionFragment();
+                SettingTermsAndConditionFragment settingTermsAndConditionFragment = new SettingTermsAndConditionFragment();
                 getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
                         .replace(R.id.fl_feed_comments, settingTermsAndConditionFragment).addToBackStack(null).commitAllowingStateLoss();
                 break;

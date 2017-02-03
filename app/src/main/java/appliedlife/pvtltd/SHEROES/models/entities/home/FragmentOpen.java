@@ -18,16 +18,14 @@ public class FragmentOpen implements Parcelable {
     boolean settingFragment;
     boolean isImageBlur;
 
-
-    public FragmentOpen(boolean isOpen, boolean reactionList, boolean commentList, boolean feedOpen, boolean articleFragment,boolean settingFragment, boolean communityOpen) {
+    public FragmentOpen(boolean isOpen, boolean reactionList, boolean commentList, boolean feedOpen, boolean articleFragment, boolean communityOpen, boolean settingFragment, boolean isImageBlur) {
         this.isOpen = isOpen;
         this.reactionList = reactionList;
         this.commentList = commentList;
         this.feedOpen = feedOpen;
         this.articleFragment = articleFragment;
         this.communityOpen = communityOpen;
-        this.settingFragment=settingFragment;
-
+        this.settingFragment = settingFragment;
         this.isImageBlur = isImageBlur;
     }
 
@@ -65,20 +63,11 @@ public class FragmentOpen implements Parcelable {
     }
 
     public boolean isArticleFragment() {
-
         return articleFragment;
     }
 
     public void setArticleFragment(boolean articleFragment) {
-
-
         this.articleFragment = articleFragment;
-    }
-
-    public void setSettingFragment(boolean settingFragment) {
-
-
-        this.settingFragment = settingFragment;
     }
 
     public boolean isCommunityOpen() {
@@ -87,6 +76,14 @@ public class FragmentOpen implements Parcelable {
 
     public void setCommunityOpen(boolean communityOpen) {
         this.communityOpen = communityOpen;
+    }
+
+    public boolean isSettingFragment() {
+        return settingFragment;
+    }
+
+    public void setSettingFragment(boolean settingFragment) {
+        this.settingFragment = settingFragment;
     }
 
     public boolean isImageBlur() {
@@ -110,6 +107,7 @@ public class FragmentOpen implements Parcelable {
         dest.writeByte(this.feedOpen ? (byte) 1 : (byte) 0);
         dest.writeByte(this.articleFragment ? (byte) 1 : (byte) 0);
         dest.writeByte(this.communityOpen ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.settingFragment ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isImageBlur ? (byte) 1 : (byte) 0);
     }
 
@@ -120,6 +118,7 @@ public class FragmentOpen implements Parcelable {
         this.feedOpen = in.readByte() != 0;
         this.articleFragment = in.readByte() != 0;
         this.communityOpen = in.readByte() != 0;
+        this.settingFragment = in.readByte() != 0;
         this.isImageBlur = in.readByte() != 0;
     }
 

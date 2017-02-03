@@ -136,7 +136,7 @@
             android:background="@drawable/white_circle"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:textColor="@color/or_text_color"
+            android:textColor="@color/search_tab_text"
             android:textSize="@dimen/dp_size_12"
             android:textStyle="bold"
             android:gravity="center"

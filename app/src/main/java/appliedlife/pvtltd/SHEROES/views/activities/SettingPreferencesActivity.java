@@ -1,6 +1,5 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -9,7 +8,6 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.views.fragments.SettingFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SettingPreferencesBasicDetailsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SettingPreferencesDeactiveAccountFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SettingPreferencesEducationDetailsFragment;
@@ -50,7 +48,7 @@ public class SettingPreferencesActivity extends BaseActivity implements SettingP
         ButterKnife.bind(this);
         mtv_setting_tittle.setText(R.string.ID_PREFERENCES);
         mtv_setting_tittle1.setText(R.string.ID_SETTINGS);
-        SettingPreferencsFragment frag = new SettingPreferencsFragment(this);
+        SettingPreferencsFragment frag = new SettingPreferencsFragment();
         callFirstFragment(R.id.fl_fragment_container, frag);
     }
 
@@ -97,7 +95,7 @@ public class SettingPreferencesActivity extends BaseActivity implements SettingP
 
     @OnClick(R.id.iv_back_setting)
     public void onbacklick() {
-
+        getFragmentManager().popBackStack();
         finish();
     }
 

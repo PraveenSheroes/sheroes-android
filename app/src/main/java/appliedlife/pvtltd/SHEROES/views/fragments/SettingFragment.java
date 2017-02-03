@@ -12,7 +12,6 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SettingView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -39,25 +38,22 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 
 
     @Override
-    public void onAttach(Context context){
+    public void onAttach(Context context) {
 
 
         super.onAttach(context);
-
-    }
-
-    public SettingFragment(HomeActivity homeActivity) {
         try {
-            if (homeActivity instanceof SettingView) {
-                msettingFragmentCallBack = (SettingView) homeActivity;
+            if (getActivity() instanceof SettingView) {
+                msettingFragmentCallBack = (SettingView) getActivity();
             }
 
         } catch (Exception e) {
         }
 
 
-
     }
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -80,11 +76,9 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
         msettingFragmentCallBack.backListener(id);
 
 
-
     }
 
-    public interface settingFragmentCallBack
-    {
+    public interface settingFragmentCallBack {
         void callBackSettingActivity(int id);
     }
 
