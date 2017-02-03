@@ -20,7 +20,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
+import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ListOfSearch;
 import appliedlife.pvtltd.SHEROES.presenters.SearchModulePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -75,16 +75,18 @@ public class AllSearchFragment extends BaseFragment implements SearchModuleView 
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mAdapter);
-        mSearchModPresenter.getFeedFromPresenter(new ListOfFeed());
+        mSearchModPresenter.getFeedFromPresenter(new ListOfSearch());
         return view;
     }
+
     @Override
-    public void getFeedListSuccess(List<ListOfFeed> listOfFeeds) {
+    public void getSearchListSuccess(List<ListOfSearch> listOfSearches) {
         if(mAdapter!=null) {
-            mAdapter.setSheroesGenericListData(listOfFeeds);
+            mAdapter.setSheroesGenericListData(listOfSearches);
             mAdapter.notifyDataSetChanged();
         }
     }
+
     @Override
     public void showNwError() {
         mHomeSearchActivityIntractionListner.onErrorOccurence();

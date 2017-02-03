@@ -33,6 +33,9 @@
     <color name="feed_article_comment">#777f8a</color>
     <color name="feed_job_card_new">#50e3c2</color>
     <color name="feed_conversation">#878e98</color>
+    <color name="requested_btn">#5d6d7d</color>
+    <color name="suggested_text">#666666</color>
+    <color name="suggested_card_text">#333333</color>
 
     <!--colors set through priyanka-->
 

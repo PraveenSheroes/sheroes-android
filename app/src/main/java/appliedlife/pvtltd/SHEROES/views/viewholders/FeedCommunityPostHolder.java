@@ -38,6 +38,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<ListOfFeed> implemen
     private static final String RIGHT_HTML_TAG_FOR_COLOR = "</font></b>";
     private static final String LEFT_HTML_VEIW_TAG_FOR_COLOR = "<font color='#50e3c2'>";
     private static final String RIGHT_HTML_VIEW_TAG_FOR_COLOR = "</font>";
+    private static final String LEFT_HTML_COMMUNITY_TITLE_FOR_COLOR = "<b><font color='#f2403c'>";
+    private static final String RIGHT_HTML_COMMUNITY_TITLE_FOR_COLOR = "</font></b>";
     @Bind(R.id.li_feed_community_user_post_images)
     LinearLayout liFeedCommunityUserPostImages;
     @Bind(R.id.li_feed_community_post_join_conversation)
@@ -122,7 +124,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<ListOfFeed> implemen
                         if (StringUtil.isNotEmptyCollection(coverImageList) && StringUtil.isNotNullOrEmptyString(coverImageList.get(0).getFeedDetailImageUrl()) && StringUtil.isNotNullOrEmptyString(coverImageList.get(1).getFeedDetailImageUrl())) {
                             twoImagesSetting(context, coverImageList.get(0).getFeedDetailImageUrl(), coverImageList.get(1).getFeedDetailImageUrl());
                         }
-
                         break;
                     case 3:
                         liFeedCommunityUserPostImages.removeAllViews();
@@ -161,8 +162,20 @@ public class FeedCommunityPostHolder extends BaseViewHolder<ListOfFeed> implemen
     }
 
     private void allTextViewStringOperations(Context context) {
-        if (StringUtil.isNotNullOrEmptyString(dataItem.getFeedTitle())) {
-            tvFeedCommunityPostCardTitle.setText(dataItem.getFeedTitle());
+        if (StringUtil.isNotNullOrEmptyString(dataItem.getFeedTitle())&&StringUtil.isNotNullOrEmptyString(dataItem.getFeedHeadline())) {
+
+            String feedTitle = dataItem.getFeedTitle();
+            String feedCommunityName = dataItem.getFeedHeadline();
+            if (feedTitle.length() > AppConstants.WORD_LENGTH) {
+                feedTitle = feedTitle.substring(0, AppConstants.WORD_COUNT);
+            }
+            String coloredFeedCommunityName = LEFT_HTML_COMMUNITY_TITLE_FOR_COLOR + feedCommunityName+ RIGHT_HTML_COMMUNITY_TITLE_FOR_COLOR;
+            if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                tvFeedCommunityPostCardTitle.setText(Html.fromHtml(feedTitle+AppConstants.SPACE +coloredFeedCommunityName)); // for 24 api and more
+            } else {
+                tvFeedCommunityPostCardTitle.setText(Html.fromHtml(feedTitle+AppConstants.SPACE +coloredFeedCommunityName));// or for older api
+            }
+
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getCreatedDateTime())) {
             tvFeedCommunityPostTime.setText(dataItem.getCreatedDateTime());
@@ -173,11 +186,11 @@ public class FeedCommunityPostHolder extends BaseViewHolder<ListOfFeed> implemen
             if (description.length() > AppConstants.WORD_LENGTH) {
                 description = description.substring(0, AppConstants.WORD_COUNT);
             }
-            String changeDate = LEFT_HTML_VEIW_TAG_FOR_COLOR + context.getString(R.string.ID_VIEW_MORE) + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
+            String viewMore = LEFT_HTML_VEIW_TAG_FOR_COLOR + context.getString(R.string.ID_VIEW_MORE) + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                tvFeedCommunityPostText.setText(Html.fromHtml(description + AppConstants.DOTS + AppConstants.SPACE + changeDate, 0)); // for 24 api and more
+                tvFeedCommunityPostText.setText(Html.fromHtml(description + AppConstants.DOTS + AppConstants.SPACE + viewMore, 0)); // for 24 api and more
             } else {
-                tvFeedCommunityPostText.setText(Html.fromHtml(description + AppConstants.DOTS + AppConstants.SPACE + changeDate));// or for older api
+                tvFeedCommunityPostText.setText(Html.fromHtml(description + AppConstants.DOTS + AppConstants.SPACE + viewMore));// or for older api
             }
         }
         if (dataItem.getUserReaction().equalsIgnoreCase(AppConstants.HEART_REACTION)) {
@@ -400,16 +413,24 @@ public class FeedCommunityPostHolder extends BaseViewHolder<ListOfFeed> implemen
                 if (dataItem.getUserReaction().equalsIgnoreCase(AppConstants.HEART_REACTION)) {
                     tvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
                     dataItem.setUserReaction(AppConstants.NO_REACTION);
+                    liFeedCommunityUserPostEmojiPopUp.setVisibility(View.GONE);
                 } else {
                     tvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
                     dataItem.setUserReaction(AppConstants.HEART_REACTION);
+                    liFeedCommunityUserPostEmojiPopUp.setVisibility(View.GONE);
                 }
                 break;
             case R.id.tv_feed_community_post_user_comment:
                 viewInterface.handleOnClick(dataItem, tvFeedCommunityPostUserComment);
                 break;
             case R.id.tv_feed_community_post_user_bookmark:
-                viewInterface.handleOnClick(dataItem, tvFeedCommunityPostUserBookmark);
+                if (dataItem.getBookmarked()) {
+                    tvFeedCommunityPostUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_bookmark_in_active, 0);
+                    dataItem.setBookmarked(false);
+                } else {
+                    tvFeedCommunityPostUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_bookmark_active, 0);
+                    dataItem.setBookmarked(true);
+                }
                 break;
             case R.id.tv_feed_community_post_user_menu:
                 viewInterface.handleOnClick(dataItem, tvFeedCommunityPostUserMenu);

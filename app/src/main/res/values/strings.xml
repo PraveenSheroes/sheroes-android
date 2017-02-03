@@ -32,30 +32,28 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <!--String related to facebook integration-->
     <string name="app_id">994271980664614</string>
     <!--Fragment classes-->
-    <string name="ID_ALL">ALL</string>
-    <string name="ID_COMMUNITIES">COMMUNITIES</string>
-    <string name="ID_ARTICLES">ARTICLES</string>
-    <string name="ID_JOBS">JOBS</string>
-    <string name="ID_FEATURED">FEATURED</string>
-    <string name="ID_MY_COMMUNITIES">MY COMMUNITIES</string>
-    <string name="ID_SEARCH_COMINUITIES">Search</string>
+    <string name="ID_ALL">All</string>
+    <string name="ID_COMMUNITIES">Communities</string>
+    <string name="ID_JOBS">Jobs</string>
+    <string name="ID_FEATURED">Featured</string>
+    <string name="ID_MY_COMMUNITIES">My Communities</string>
     <string name="ID_FEED">Feed</string>
     <string name="ID_COMMUNITIY">Community</string>
-    <string name="ID_SEARCH_ARTICLES">Search Articles</string>
+    <string name="ID_SEARCH">Search</string>
     <string name="ID_DASHBOARD"> Working women have it hard enough – managing a 9 to 6 job along with family, friends, and the demand…View More</string>
-    <string name="ID_TRENDING">TRENDING</string>
-    <string name="ID_CHOOSE_CATEGORY">CHOOSE CATEGORY</string>
-    <string name="ID_DONE">DONE</string>
-    <string name="ID_CANCEL">CANCEL</string>
-    <string name="ID_GROUP">Group</string>
+    <string name="ID_TRENDING">Trending</string>
+    <string name="ID_CHOOSE_CATEGORY">Choose Category</string>
+    <string name="ID_DONE">Done</string>
+    <string name="ID_CANCEL">Cancel</string>
     <string name="ID_VIEW_MORE">View More</string>
     <string name="ID_JOIN">Join</string>
+    <string name="ID_JOINED">Joined</string>
     <string name="ID_REPLIES">Replies</string>
     <string name="ID_REPLY">Reply</string>
     <string name="ID_OPEN_BRACKET">(</string>
     <string name="ID_CLOSE_BRACKET">)</string>
     <string name="ID_REACTION">Reaction</string>
-    <string name="ID_APPLIED">APPLIED</string>
+    <string name="ID_APPLIED">Applied</string>
     <string name="ID_VIEWS">Views</string>
     <string name="ID_JOIN_CONVERSATION">Join the conversation...</string>
     <string name="ID_WISHTLE">Whistle</string>
@@ -65,9 +63,23 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_MORE_FROM_LIFE">More From Life</string>
     <string name="ID_PROFILE">Profile</string>
     <string name="ID_ARTICLE">Article</string>
-    <string name="ID_JOB">Jobs</string>
     <string name="ID_BOOKMARK">Bookmarks</string>
     <string name="ID_SETTING">Settings</string>
+    <string name="ID_POST">Post as:</string>
+    <string name="ID_MEMBERS">Members</string>
+    <string name="ID_INVITE">Invite</string>
+    <string name="ID_TOTAL_IMAGES">4+</string>
+    <string name="ID_SHARE">Share</string>
+    <string name="ID_EDIT">Edit</string>
+    <string name="ID_DELETE">Delete</string>
+    <string name="ID_REPORT">Report as spam</string>
+    <string name="ID_SUGGESTED">Suggested communities</string>
+    <string name="ID_GROUP">Group</string>
+    <string name="ID_SEE_MORE">See more like this</string>
+    <string name="ID_ANONYMOUS">Anonymous</string>
+    <string name="ID_OWNER">Owner</string>
+    <string name="ID_LESS">Less</string>
+    <string name="ID_RECENT">Recent</string>
 
 
     <!--string set  through priyanka-->
@@ -199,7 +211,6 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_TAGS">TAGS</string>
     <string name="ID_DESCRIPTION">DESCRIPTION</string>
     <string name="ID_CREATEPOST">CREATE A POST</string>
-    <string name="ID_SHARE">Share with your community..</string>
     <string name="ID_COMMUNITITES_NAME">Ranigarh Women’s Empowerment and Development Group</string>
     <string name="ID_SHARE_LINK">https://sheroes.com/community/ranigarh-women’s-empowerment-
 and-development-group/Mjc0MA==</string>
@@ -210,7 +221,6 @@ and-development-group/Mjc0MA==</string>
 
     <string name="COMMUNITY_TYPE">COMMUNITY TYPE</string>
     <string name="ID_ADDMORE">Add More Image</string>
-    <string name="ID_POST">POST AS</string>
 
 
     <string-array name="name">

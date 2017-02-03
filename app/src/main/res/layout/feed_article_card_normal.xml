@@ -30,8 +30,8 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_marginLeft="@dimen/dp_size_12"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <TextView
@@ -85,7 +85,6 @@
             android:layout_marginTop="@dimen/dp_size_12"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:lineSpacingExtra="@dimen/dp_size_3"
-            android:lines="@integer/int_value_for_line_2"
             android:text="@string/ID_DASHBOARD"
             android:textColor="@color/feed_article_label"
             android:textSize="@dimen/sp_size_13" />
@@ -115,39 +114,39 @@
         <LinearLayout
             android:id="@+id/li_feed_article_user_reactions"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginLeft="@dimen/dp_size_12"
+            android:layout_height="@dimen/dp_size_35"
+            android:layout_marginLeft="@dimen/dp_size_16"
             android:layout_marginRight="@dimen/dp_size_12"
-            android:layout_marginTop="@dimen/dp_size_30"
+            android:layout_marginTop="@dimen/dp_size_20"
+            android:orientation="horizontal"
             android:weightSum="1">
 
             <TextView
                 android:id="@+id/tv_feed_article_user_reaction"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight=".28"
                 android:drawableLeft="@drawable/ic_heart_in_active" />
 
             <TextView
                 android:id="@+id/tv_feed_article_user_comment"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight=".16"
+                android:layout_height="match_parent"
+                android:layout_weight=".26"
                 android:drawableLeft="@drawable/ic_comment_icon" />
 
             <TextView
                 android:id="@+id/tv_feed_article_user_bookmark"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight=".3"
+                android:layout_height="match_parent"
+                android:layout_weight=".23"
                 android:drawableRight="@drawable/ic_bookmark_in_active" />
 
             <TextView
                 android:id="@+id/tv_feed_article_user_menu"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight=".25"
+                android:layout_height="match_parent"
+                android:layout_weight=".23"
                 android:drawableRight="@drawable/ic_menu_dashboard" />
 
         </LinearLayout>
@@ -160,14 +159,15 @@
             android:layout_marginTop="@dimen/dp_size_15"
             android:background="@color/search_tab_unselected_text" />
 
+
         <FrameLayout
             android:id="@+id/fl_feed_article_no_reaction_comments"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:layout_marginLeft="@dimen/dp_size_12"
-            android:layout_marginTop="@dimen/dp_size_15"
-            android:layout_marginRight="@dimen/dp_size_12">
+            android:layout_marginRight="@dimen/dp_size_12"
+            android:layout_marginTop="@dimen/dp_size_15">
 
             <TextView
                 android:id="@+id/tv_feed_article_reaction1"
@@ -177,7 +177,7 @@
 
             <TextView
                 android:id="@+id/tv_feed_article_reaction2"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_size_12"
                 android:drawableLeft="@drawable/ic_emoji2_with_you" />
@@ -194,9 +194,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:gravity="center"
                 android:layout_marginRight="@dimen/dp_size_84"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:gravity="center"
                 android:text="@string/ID_REACTION"
                 android:textColor="@color/feed_article_comment"
                 android:textSize="@dimen/sp_size_11" />
@@ -206,9 +206,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
+                android:layout_marginLeft="@dimen/dp_size_15"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:gravity="right"
-                android:layout_marginLeft="@dimen/dp_size_15"
                 android:text="@string/ID_REPLIES"
                 android:textColor="@color/feed_article_comment"
                 android:textSize="@dimen/sp_size_11" />
@@ -219,10 +219,10 @@
             android:id="@+id/li_feed_article_user_comments"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginLeft="@dimen/dp_size_12"
             android:layout_marginRight="@dimen/dp_size_12"
             android:layout_marginTop="@dimen/dp_size_20"
+            android:orientation="horizontal"
             android:weightSum="1">
 
             <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
@@ -249,8 +249,8 @@
             android:id="@+id/li_feed_article_join_conversation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/rectangle_comment_background"
             android:layout_margin="@dimen/dp_size_12"
+            android:background="@drawable/rectangle_comment_background"
             android:weightSum="1">
 
             <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView

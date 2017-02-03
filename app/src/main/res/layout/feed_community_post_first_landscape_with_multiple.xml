@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_size_1"
             android:layout_weight=".33"
-            android:scaleType="fitXY"/>
+            android:scaleType="fitXY" />
 
         <ImageView
             android:id="@+id/iv_feed_community_post_third_image_landscape"
@@ -33,15 +33,28 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_size_2"
             android:layout_weight=".33"
-            android:scaleType="fitXY"/>
+            android:scaleType="fitXY" />
 
-        <ImageView
-            android:id="@+id/iv_feed_community_post_fourth_image_landscape"
+        <FrameLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_size_2"
-            android:layout_weight=".33"
-            android:scaleType="fitXY"
-            />
+            android:layout_weight=".33">
+
+            <ImageView
+                android:id="@+id/iv_feed_community_post_fourth_image_landscape"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY" />
+            <TextView
+                android:id="@+id/tv_feed_community_post_landscape_total_images"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/ID_TOTAL_IMAGES"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:textSize="@dimen/sp_size_35"
+                android:background="@drawable/ic_reaction_strip_background"/>
+        </FrameLayout>
     </LinearLayout>
 </LinearLayout>

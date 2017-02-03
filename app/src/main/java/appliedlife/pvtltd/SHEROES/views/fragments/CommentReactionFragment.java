@@ -52,6 +52,8 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
     FrameLayout mFlCommentReaction;
     @Bind(R.id.li_user_comment)
     LinearLayout liUserComment;
+    @Bind(R.id.tv_user_comment_close)
+    TextView mTvUserCommentClose;
     private FragmentOpen mFragmentOpen;
     private String mSearchDataName = AppConstants.EMPTY_STRING;
     private GenericRecyclerViewAdapter mAdapter;
@@ -168,7 +170,7 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
         void onDialogDissmiss(FragmentOpen isFragmentOpen);
         void onClickReactionList(FragmentOpen isFragmentOpen);
     }
-    @OnClick(R.id.tv_user_comment_header_text)
+    @OnClick(R.id.tv_user_comment_close)
     public void dismissCommentDialog()
     {
             mHomeActivityIntractionListner.onDialogDissmiss(mFragmentOpen);

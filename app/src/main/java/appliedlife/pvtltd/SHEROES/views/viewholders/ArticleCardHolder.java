@@ -46,6 +46,8 @@ public class ArticleCardHolder extends BaseViewHolder<ArticleCardResponse> {
     TextView tvArticleDescriptionText;
     @Bind(R.id.tv_article_tag)
     TextView tvArticleTag;
+    @Bind(R.id.tv_article_join)
+    TextView tvArticleJoin;
     BaseHolderInterface viewInterface;
     private ArticleCardResponse dataItem;
 

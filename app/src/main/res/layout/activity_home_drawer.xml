@@ -1,50 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dp_size_233"
-    android:background="@color/shadow"
-    android:gravity="bottom"
+    android:layout_height="@dimen/dp_size_250"
+    android:background="@drawable/ic_reaction_strip_background"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <ImageView
+        android:id="@+id/iv_side_drawer_profile_blur_background"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="24dp"
-        android:layout_weight="3">
+        android:layout_height="match_parent"
+        android:contentDescription="@null"
+        android:scaleType="fitXY" />
 
-        <ImageView
-            android:id="@+id/nav_header_logo"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:layout_centerVertical="true" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/dp_size_20"
+        android:orientation="vertical">
+
+        <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
+            android:id="@+id/iv_drawer_profile_circle_icon"
+            android:layout_width="@dimen/drawer_profile_icon_size"
+            android:layout_height="@dimen/drawer_profile_icon_size"
+            android:layout_gravity="center" />
 
         <TextView
-            android:id="@+id/nav_header_title"
-            android:layout_width="match_parent"
+            android:id="@+id/tv_user_name"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/nav_header_logo"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="4dp"
-            android:layout_toRightOf="@id/nav_header_logo"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/dp_size_25"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:text="@string/ID_APP_NAME"
             android:textColor="@color/white"
-            android:textSize="24sp"
-            tools:fontPath="fonts/SourceSansPro-Semibold.otf" />
-    </RelativeLayout>
+            android:textSize="@dimen/dp_size_14" />
 
-    <RelativeLayout
-        android:id="@+id/nav_profile_parent"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="18dp"
-        android:layout_weight="2">
-
-        <ImageView
-            android:id="@+id/iv_profile_image"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_centerVertical="true"
-            android:background="@drawable/ic_bookmark_active"
-            android:visibility="gone" />
-    </RelativeLayout>
-</LinearLayout>
+        <TextView
+            android:id="@+id/tv_user_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/dp_size_10"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:text="@string/ID_APP_NAME"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dp_size_12" />
+    </LinearLayout>
+</FrameLayout>

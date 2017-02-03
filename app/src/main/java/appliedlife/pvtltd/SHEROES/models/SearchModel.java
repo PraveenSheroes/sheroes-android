@@ -6,11 +6,11 @@ import com.google.gson.Gson;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.Feature;
+import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ListOfSearch;
+import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.SearchResponse;
 import appliedlife.pvtltd.SHEROES.preferences.SessionUser;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import rx.Observable;
@@ -35,12 +35,12 @@ public class SearchModel {
         this.sheroesAppServiceApi = sheroesAppServiceApi;
         this.gson= gson;
     }
-    public Observable<FeedResponse> getFeedFromModel(ListOfFeed listOfFeed){
-        return sheroesAppServiceApi.getFeedFromApi(listOfFeed)
-                .map(new Func1<FeedResponse, FeedResponse>() {
+    public Observable<SearchResponse> getSearchFromModel(ListOfSearch listOfSearch){
+        return sheroesAppServiceApi.getSearchResponseFromApi(listOfSearch)
+                .map(new Func1<SearchResponse, SearchResponse>() {
                     @Override
-                    public FeedResponse call(FeedResponse feedResponse) {
-                        return feedResponse;
+                    public SearchResponse call(SearchResponse searchResponse) {
+                        return searchResponse;
                     }
                 })
                 .subscribeOn(Schedulers.io())

@@ -73,7 +73,7 @@
             android:windowSoftInputMode="stateHidden" />
 
         <activity
-            android:name="appliedlife.pvtltd.SHEROES.views.activities.DetailActivity"
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity"
             android:parentActivityName="appliedlife.pvtltd.SHEROES.views.activities.HomeActivity"
             android:theme="@style/AppTheme" />
     </application>

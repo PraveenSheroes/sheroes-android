@@ -16,6 +16,7 @@ public class FragmentOpen implements Parcelable {
     boolean articleFragment;
     boolean communityOpen;
     boolean settingFragment;
+    boolean isImageBlur;
 
 
     public FragmentOpen(boolean isOpen, boolean reactionList, boolean commentList, boolean feedOpen, boolean articleFragment,boolean settingFragment, boolean communityOpen) {
@@ -27,7 +28,9 @@ public class FragmentOpen implements Parcelable {
         this.communityOpen = communityOpen;
         this.settingFragment=settingFragment;
 
+        this.isImageBlur = isImageBlur;
     }
+
 
     public boolean isOpen() {
         return isOpen;
@@ -86,6 +89,14 @@ public class FragmentOpen implements Parcelable {
         this.communityOpen = communityOpen;
     }
 
+    public boolean isImageBlur() {
+        return isImageBlur;
+    }
+
+    public void setImageBlur(boolean imageBlur) {
+        isImageBlur = imageBlur;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -99,6 +110,7 @@ public class FragmentOpen implements Parcelable {
         dest.writeByte(this.feedOpen ? (byte) 1 : (byte) 0);
         dest.writeByte(this.articleFragment ? (byte) 1 : (byte) 0);
         dest.writeByte(this.communityOpen ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isImageBlur ? (byte) 1 : (byte) 0);
     }
 
     protected FragmentOpen(Parcel in) {
@@ -108,6 +120,7 @@ public class FragmentOpen implements Parcelable {
         this.feedOpen = in.readByte() != 0;
         this.articleFragment = in.readByte() != 0;
         this.communityOpen = in.readByte() != 0;
+        this.isImageBlur = in.readByte() != 0;
     }
 
     public static final Creator<FragmentOpen> CREATOR = new Creator<FragmentOpen>() {

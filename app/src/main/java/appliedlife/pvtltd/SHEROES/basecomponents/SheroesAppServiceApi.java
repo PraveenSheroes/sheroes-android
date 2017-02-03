@@ -13,6 +13,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleListRespon
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.CommunitiesResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.Feature;
+import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ListOfSearch;
+import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.SearchResponse;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
@@ -31,7 +33,8 @@ public interface SheroesAppServiceApi {
     //@GET("v1/city")
     @POST("v2/588b0544300000e216fa8cfb")
     Observable<FeedResponse> getFeedFromApi(@Body ListOfFeed listOfFeed );
-
+    @POST("v2/58940613260000a11200a97f")
+    Observable<SearchResponse> getSearchResponseFromApi(@Body ListOfSearch listOfSearch );
     @GET("v2/587877da0f0000231d0d49b1")
     Observable<HomeSpinnerItemResponse> getHomeSpinnerList();
 

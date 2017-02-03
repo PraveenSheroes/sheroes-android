@@ -10,7 +10,6 @@
         android:layout_height="wrap_content"
         android:background="@drawable/rectangle_search_bar"
         android:fontFamily="@string/ID_ROBOTO_REGULAR"
-        android:text="@string/ID_SEARCH_ARTICLES"
         android:padding="@dimen/dp_size_12"
         android:drawablePadding="@dimen/dp_size_12"
         android:drawableLeft="@drawable/ic_search_box_icon"
@@ -23,7 +22,7 @@
         android:layout_alignParentStart="true" />
 
        <TextView
-           android:id="@+id/TV_setting"
+           android:id="@+id/tv_setting"
            android:visibility="gone"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"

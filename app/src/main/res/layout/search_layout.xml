@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/fully_transparent"
-        android:hint="@string/ID_SEARCH_COMINUITIES"
+        android:hint="@string/ID_SEARCH"
         android:textColorHint="@color/searchbox_hint_text_color"
         android:textColor="@color/searchbox_hint_text_color"
         android:inputType="text"

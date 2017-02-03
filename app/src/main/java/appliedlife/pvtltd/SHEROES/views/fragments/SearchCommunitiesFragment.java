@@ -3,9 +3,10 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +19,11 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.Feature;
+import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ListOfSearch;
 import appliedlife.pvtltd.SHEROES.presenters.SearchModulePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.HomeSearchActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SearchModuleView;
 import butterknife.Bind;
@@ -31,8 +31,8 @@ import butterknife.ButterKnife;
 /**
  * Created by Praveen_Singh on 09-01-2017.
  */
-public class CommunitiesFragment extends BaseFragment implements SearchModuleView {
-    private final String TAG = LogUtils.makeLogTag(CommunitiesFragment.class);
+public class SearchCommunitiesFragment extends BaseFragment implements SearchModuleView {
+    private final String TAG = LogUtils.makeLogTag(SearchCommunitiesFragment.class);
     @Inject
     SearchModulePresenter mSearchModPresenter;
     @Bind(R.id.rv_search_list)
@@ -43,9 +43,9 @@ public class CommunitiesFragment extends BaseFragment implements SearchModuleVie
     private GenericRecyclerViewAdapter mAdapter;
     private HomeSearchActivityIntractionListner mHomeSearchActivityIntractionListner;
 
-    public static CommunitiesFragment createInstance(int itemsCount) {
-        CommunitiesFragment communitiesFragment = new CommunitiesFragment();
-        return communitiesFragment;
+    public static SearchCommunitiesFragment createInstance(int itemsCount) {
+        SearchCommunitiesFragment searchCommunitiesFragment = new SearchCommunitiesFragment();
+        return searchCommunitiesFragment;
     }
 
     @Override
@@ -55,10 +55,11 @@ public class CommunitiesFragment extends BaseFragment implements SearchModuleVie
             if (getActivity() instanceof HomeSearchActivityIntractionListner) {
                 mHomeSearchActivityIntractionListner = (HomeSearchActivityIntractionListner) getActivity();
             }
-        } catch (Fragment.InstantiationException exception) {
+        } catch (InstantiationException exception) {
             LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
         }
     }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -66,19 +67,22 @@ public class CommunitiesFragment extends BaseFragment implements SearchModuleVie
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         ButterKnife.bind(this, view);
         mSearchModPresenter.attachView(this);
+        editTextWatcher();
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mAdapter = new GenericRecyclerViewAdapter(getContext(), (HomeActivity) getActivity());
+        mAdapter = new GenericRecyclerViewAdapter(getContext(), (HomeSearchActivity) getActivity());
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mAdapter);
-        mSearchModPresenter.getFeature(new Feature());
+        mSearchModPresenter.getFeedFromPresenter(new ListOfSearch());
         return view;
     }
 
-
     @Override
-    public void getFeedListSuccess(List<ListOfFeed> data) {
-
+    public void getSearchListSuccess(List<ListOfSearch> listOfSearches) {
+        if(mAdapter!=null) {
+            mAdapter.setSheroesGenericListData(listOfSearches);
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -130,7 +134,41 @@ public class CommunitiesFragment extends BaseFragment implements SearchModuleVie
         super.onResume();
     }
 
+    /**
+     * When user type city name it works for each character.
+     */
+    protected void editTextWatcher() {
+        ((HomeSearchActivity) getActivity()).mSearchEditText.addTextChangedListener(dataSearchTextWatcher());
+        ((HomeSearchActivity) getActivity()).mSearchEditText.setFocusableInTouchMode(true);
+        ((HomeSearchActivity) getActivity()).mSearchEditText.requestFocus();
+    }
 
+    /**
+     * Text watcher workes on every character change and make hit for server accordingly.
+     */
+    private TextWatcher dataSearchTextWatcher() {
+
+        return new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable inputSearch) {
+                /**As soon as user starts typing take the scroll to top **/
+                mSearchDataName = inputSearch.toString();
+                if (!((HomeSearchActivity) getActivity()).mIsDestroyed) {
+                    mAdapter.getFilter().filter(mSearchDataName);
+                }
+            }
+        };
+    }
 
     public interface HomeSearchActivityIntractionListner {
         void onErrorOccurence();

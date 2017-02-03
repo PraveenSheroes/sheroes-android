@@ -1,5 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -17,12 +18,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +36,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.communities.CommunitySuggestion;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
 import appliedlife.pvtltd.SHEROES.models.entities.home.DrawerItems;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
@@ -42,6 +47,8 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.CustomeDataList;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.Blurry;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
@@ -61,6 +68,12 @@ import butterknife.OnClick;
 public class HomeActivity extends BaseActivity implements HomeFragment.HomeActivityIntractionListner,SettingView,BaseHolderInterface, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, CommentReactionFragment.HomeActivityIntractionListner, View.OnTouchListener, View.OnClickListener {
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
     private static final String SPINNER_FRAGMENT = "spinnerFragment";
+    @Bind(R.id.iv_drawer_profile_circle_icon)
+    CircleImageView ivDrawerProfileCircleIcon;
+    @Bind(R.id.tv_user_name)
+    TextView mTvUserName;
+    @Bind(R.id.tv_user_location)
+    TextView mTvUserLocation;
     @Bind(R.id.cl_main_layout)
     View mCLMainLayout;
     @Bind(R.id.home_toolbar)
@@ -73,7 +86,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
     RecyclerView mRecyclerView;
     @Bind(R.id.home_view_pager)
     ViewPager mViewPager;
-    @Bind(R.id.home_tab_layout)
+    @Bind(R.id.tv_join_view)
     TabLayout mTabLayout;
     @Bind(R.id.fl_home_footer_list)
     public FrameLayout mFlHomeFooterList;
@@ -83,7 +96,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
     ImageView mIvFooterButtonIcon;
     @Bind(R.id.tv_search_box)
     TextView mTvSearchBox;
-    @Bind(R.id.TV_setting)
+    @Bind(R.id.tv_setting)
     TextView mTV_setting;
     @Bind(R.id.tv_home)
     TextView mTvHome;
@@ -93,14 +106,16 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
     public TextView mTvSpinnerIcon;
     @Bind(R.id.fl_feed_full_view)
     public FrameLayout flFeedFullView;
-    TextView mTvFeedArticleUserReaction,mTvFeedCommunityUserReaction,mTvFeedCommunityPostUserReaction;
+    @Bind(R.id.iv_side_drawer_profile_blur_background)
+    ImageView mIvSideDrawerProfileBlurBackground;
+    TextView mTvFeedArticleUserReaction, mTvFeedCommunityUserReaction, mTvFeedCommunityPostUserReaction;
     GenericRecyclerViewAdapter mAdapter;
     private List<HomeSpinnerItem> mHomeSpinnerItemList = new ArrayList<>();
     private HomeSpinnerFragment mHomeSpinnerFragment;
     private FragmentOpen mFragmentOpen;
     private CustiomActionBarToggle mCustiomActionBarToggle;
     public View mArticlePopUp, mCommunityPopUp, mCommunityPostPopUp;
-
+    private Dialog mCouponCodeDialogView;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,15 +134,25 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
         ButterKnife.bind(this);
         mCustiomActionBarToggle = new CustiomActionBarToggle(this, mDrawer, mToolbar, R.string.ID_NAVIGATION_DRAWER_OPEN, R.string.ID_NAVIGATION_DRAWER_CLOSE, this);
         mDrawer.addDrawerListener(mCustiomActionBarToggle);
+        ivDrawerProfileCircleIcon.setCircularImage(true);
+        //TODO: this data to be removed
+        String profile="https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAhNAAAAJDYwZWIyZTg5LWFmOTItNGIwYS05YjQ5LTM2YTRkNGQ2M2JlNw.jpg";
+        ivDrawerProfileCircleIcon.bindImage(profile);
+        mTvUserName.setText("Praveen Singh");
+        mTvUserLocation.setText("Delhi, India");
         mCustiomActionBarToggle.syncState();
         mNavigationView.setNavigationItemSelectedListener(this);
         mFragmentOpen = new FragmentOpen(false, false, false, false, false, false,false);
         initHomeViewPagerAndTabs();
         mHomeSpinnerItemList = CustomeDataList.makeSpinnerListRequest();
+        Glide.with(this)
+                .load(profile)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .skipMemoryCache(true)
+                .into(mIvSideDrawerProfileBlurBackground);
         //  HomeSpinnerFragment frag = new HomeSpinnerFragment();
         //  callFirstFragment(R.id.fl_fragment_container, frag);
     }
-
     @Override
     public void onErrorOccurence() {
         showNetworkTimeoutDoalog(true);
@@ -153,24 +178,26 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
             onBackPressed();
         } else if (baseResponse instanceof DrawerItems) {
             int drawerItem = ((DrawerItems) baseResponse).getId();
-                if (mDrawer.isDrawerOpen(GravityCompat.START)) {
-                    mDrawer.closeDrawer(GravityCompat.START);
-                }
-                switch (drawerItem)
-                {
-                    case 1:
-                        break;
-                    case 2:
-                        openArticleFragment();
-                        break;
-                    case 5:
-                        openSettingFragment();
-
-
-                        break;
-                    default: LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + drawerItem);
-                }
+            if (mDrawer.isDrawerOpen(GravityCompat.START)) {
+                mDrawer.closeDrawer(GravityCompat.START);
             }
+            switch (drawerItem) {
+                case 1:
+                    break;
+                case 2:
+                    openArticleFragment();
+
+                    break;
+                case 5:
+                    openSettingFragment();
+
+                default:
+                    LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + drawerItem);
+            }
+        }else if (baseResponse instanceof CommunitySuggestion)
+        {
+
+        }
     }
 
 
@@ -187,7 +214,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
                 openCommentReactionFragment();
                 break;
             case R.id.tv_feed_article_user_reaction:
-                mTvFeedArticleUserReaction=(TextView) findViewById(R.id.tv_feed_article_user_reaction);
+                mTvFeedArticleUserReaction = (TextView) findViewById(R.id.tv_feed_article_user_reaction);
                 mArticlePopUp = findViewById(R.id.li_feed_article_card_emoji_pop_up);
                 TextView tvArticleReaction1 = (TextView) mArticlePopUp.findViewById(R.id.tv_reaction1);
                 TextView tvArticleReaction2 = (TextView) mArticlePopUp.findViewById(R.id.tv_reaction2);
@@ -202,7 +229,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
                 showUserReactionOption(mArticlePopUp);
                 break;
             case R.id.tv_feed_community_user_reaction:
-                mTvFeedCommunityUserReaction=(TextView) findViewById(R.id.tv_feed_community_user_reaction);
+                mTvFeedCommunityUserReaction = (TextView) findViewById(R.id.tv_feed_community_user_reaction);
                 mCommunityPopUp = findViewById(R.id.li_feed_community_emoji_pop_up);
                 TextView tvCommunityReaction1 = (TextView) mCommunityPopUp.findViewById(R.id.tv_reaction1);
                 TextView tvCommunityReaction2 = (TextView) mCommunityPopUp.findViewById(R.id.tv_reaction2);
@@ -218,7 +245,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
 
                 break;
             case R.id.tv_feed_community_post_user_reaction:
-                mTvFeedCommunityPostUserReaction=(TextView) findViewById(R.id.tv_feed_community_post_user_reaction);
+                mTvFeedCommunityPostUserReaction = (TextView) findViewById(R.id.tv_feed_community_post_user_reaction);
                 mCommunityPostPopUp = findViewById(R.id.li_feed_community_user_post_emoji_pop_up);
                 TextView tvCommunityPostReaction1 = (TextView) mCommunityPostPopUp.findViewById(R.id.tv_reaction1);
                 TextView tvCommunityPostReaction2 = (TextView) mCommunityPostPopUp.findViewById(R.id.tv_reaction2);
@@ -242,17 +269,34 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
                 openCommentReactionFragment();
                 break;
             case R.id.li_feed_article_images:
-                DetailActivity.navigate(this, view, listOfFeed);
+                CommunitiesDetailActivity.navigate(this, view, listOfFeed);
                 break;
             case R.id.li_feed_community_images:
-                DetailActivity.navigate(this, view, listOfFeed);
+                CommunitiesDetailActivity.navigate(this, view, listOfFeed);
                 break;
             case R.id.li_feed_community_user_post_images:
-                DetailActivity.navigate(this, view, listOfFeed);
+                CommunitiesDetailActivity.navigate(this, view, listOfFeed);
+                break;
+            case R.id.tv_feed_article_user_menu:
+                menuClick();
+                break;
+            case R.id.tv_feed_community_post_user_menu:
+                menuClick();
+                break;
+            case R.id.tv_feed_community_user_menu:
+                menuClick();
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
         }
+    }
+
+    public void menuClick() {
+            mCouponCodeDialogView = new Dialog(this);
+            mCouponCodeDialogView.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            mCouponCodeDialogView.show();
+            mCouponCodeDialogView.setContentView(R.layout.menu_option_layout);
+
     }
 
     private void openCommentReactionFragment() {
@@ -303,12 +347,19 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
 
     @Override
     public void onDrawerOpened() {
-        Toast.makeText(this, "-----Drawer opened----", Toast.LENGTH_SHORT).show();
+        if(!mFragmentOpen.isImageBlur()) {
+            Blurry.with(HomeActivity.this)
+                    .radius(25)
+                    .sampling(2)
+                    .async()
+                    .capture(mIvSideDrawerProfileBlurBackground)
+                    .into(mIvSideDrawerProfileBlurBackground);
+            mFragmentOpen.setImageBlur(true);
+        }
     }
 
     @Override
     public void onDrawerClosed() {
-        Toast.makeText(this, "-----Drawer closed----", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -327,7 +378,8 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
     }
 
     private void initHomeViewPagerAndTabs() {
-      //  mTvSearchBox.setText();
+        String search = getString(R.string.ID_SEARCH)+AppConstants.FEED_ARTICLE+AppConstants.S + AppConstants.COMMA + AppConstants.FEED_COMMUNITY + AppConstants.COMMA + AppConstants.FEED_JOB;
+        mTvSearchBox.setText(search);
         mFragmentOpen.setFeedOpen(true);
         mTabLayout.setVisibility(View.GONE);
         mTvCommunities.setText(AppConstants.EMPTY_STRING);
@@ -353,10 +405,13 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
 
     @OnClick(R.id.rl_search_box)
     public void searchButtonClick() {
-     /*   Intent intent = new Intent(this, HomeSearchActivity.class);
+        Intent intent = new Intent(this, HomeSearchActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(AppConstants.ALL_SEARCH,mFragmentOpen);
+        intent.putExtras(bundle);
         startActivity(intent);
-        overridePendingTransition(R.anim.fade_in_dialog, R.anim.fade_out_dialog);*/
-        Snackbar.make(mCLMainLayout, "Work in progress", Snackbar.LENGTH_SHORT).show();
+        overridePendingTransition(R.anim.fade_in_dialog, R.anim.fade_out_dialog);
+        //Snackbar.make(mCLMainLayout, "Work in progress", Snackbar.LENGTH_SHORT).show();
     }
 
     @OnClick(R.id.tv_spinner_icon)
@@ -392,10 +447,14 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
         mTabLayout.setVisibility(View.GONE);
         mTvCommunities.setText(AppConstants.EMPTY_STRING);
         mTvHome.setText(getString(R.string.ID_FEED));
+        String search = getString(R.string.ID_SEARCH)+AppConstants.FEED_ARTICLE+AppConstants.S+ AppConstants.COMMA + AppConstants.FEED_COMMUNITY + AppConstants.COMMA + AppConstants.FEED_JOB;
+        mTvSearchBox.setText(search);
     }
 
     @OnClick(R.id.tv_communities)
     public void communityOnClick() {
+        String search = getString(R.string.ID_SEARCH)+getString(R.string.ID_COMMUNITIES);
+        mTvSearchBox.setText(search);
         if (mFragmentOpen.isArticleFragment()) {
             onBackPressed();
             mFragmentOpen.setArticleFragment(false);
@@ -499,15 +558,13 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
             mFragmentOpen.setCommentList(true);
         } else if (mFragmentOpen.isArticleFragment()) {
             getSupportFragmentManager().popBackStack();
-            if(mFragmentOpen.isFeedOpen())
-            {
+            if (mFragmentOpen.isFeedOpen()) {
                 flFeedFullView.setVisibility(View.VISIBLE);
                 mTvHome.setText(getString(R.string.ID_FEED));
                 mTvSpinnerIcon.setVisibility(View.GONE);
                 mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_selected_icon), null, null);
                 mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.footer_icon_text));
-            }
-            else {
+            } else {
                 mViewPager.setVisibility(View.VISIBLE);
                 mTabLayout.setVisibility(View.VISIBLE);
                 mTvSpinnerIcon.setVisibility(View.GONE);
@@ -579,25 +636,22 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
         switch (id) {
 
             case R.id.tv_reaction1:
-                if(null!=mTvFeedArticleUserReaction)
-                {
-                    mTvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji3_whistel),null, null, null);
+                if (null != mTvFeedArticleUserReaction) {
+                    mTvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji3_whistel), null, null, null);
                     if (null != mArticlePopUp) {
                         mArticlePopUp.setVisibility(View.GONE);
                         dismissUserReactionOption(mArticlePopUp);
                     }
                 }
-                if(null!=mTvFeedCommunityUserReaction)
-                {
-                    mTvFeedCommunityUserReaction.setCompoundDrawablesWithIntrinsicBounds( ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji3_whistel),null ,null, null);
+                if (null != mTvFeedCommunityUserReaction) {
+                    mTvFeedCommunityUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji3_whistel), null, null, null);
                     if (null != mCommunityPopUp) {
                         mCommunityPopUp.setVisibility(View.GONE);
                         dismissUserReactionOption(mCommunityPopUp);
                     }
                 }
-                if(null!=mTvFeedCommunityPostUserReaction)
-                {
-                    mTvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds( ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji3_whistel),null, null, null);
+                if (null != mTvFeedCommunityPostUserReaction) {
+                    mTvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji3_whistel), null, null, null);
                     if (null != mCommunityPostPopUp) {
                         mCommunityPostPopUp.setVisibility(View.GONE);
                         dismissUserReactionOption(mCommunityPostPopUp);
@@ -606,25 +660,22 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
 
                 break;
             case R.id.tv_reaction2:
-                if(null!=mTvFeedArticleUserReaction)
-                {
-                    mTvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji_xo_xo),null,null,null);
+                if (null != mTvFeedArticleUserReaction) {
+                    mTvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji_xo_xo), null, null, null);
                     if (null != mArticlePopUp) {
                         mArticlePopUp.setVisibility(View.GONE);
                         dismissUserReactionOption(mArticlePopUp);
                     }
                 }
-                if(null!=mTvFeedCommunityUserReaction)
-                {
-                    mTvFeedCommunityUserReaction.setCompoundDrawablesWithIntrinsicBounds( ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji_xo_xo),null,null,null);
+                if (null != mTvFeedCommunityUserReaction) {
+                    mTvFeedCommunityUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji_xo_xo), null, null, null);
                     if (null != mCommunityPopUp) {
                         mCommunityPopUp.setVisibility(View.GONE);
                         dismissUserReactionOption(mCommunityPopUp);
                     }
                 }
-                if(null!=mTvFeedCommunityPostUserReaction)
-                {
-                    mTvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds( ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji_xo_xo),null,null,null);
+                if (null != mTvFeedCommunityPostUserReaction) {
+                    mTvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji_xo_xo), null, null, null);
                     if (null != mCommunityPostPopUp) {
                         mCommunityPostPopUp.setVisibility(View.GONE);
                         dismissUserReactionOption(mCommunityPostPopUp);
@@ -632,24 +683,22 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
                 }
                 break;
             case R.id.tv_reaction3:
-                if(null!=mTvFeedArticleUserReaction)
-                {
-                    mTvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji2_with_you), null, null,null);
+                if (null != mTvFeedArticleUserReaction) {
+                    mTvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji2_with_you), null, null, null);
                     if (null != mArticlePopUp) {
                         mArticlePopUp.setVisibility(View.GONE);
                         dismissUserReactionOption(mArticlePopUp);
                     }
                 }
-                if(null!=mTvFeedCommunityUserReaction)
-                {
-                    mTvFeedCommunityUserReaction.setCompoundDrawablesWithIntrinsicBounds( ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji2_with_you), null, null,null);
+                if (null != mTvFeedCommunityUserReaction) {
+                    mTvFeedCommunityUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji2_with_you), null, null, null);
                     if (null != mCommunityPopUp) {
                         mCommunityPopUp.setVisibility(View.GONE);
                         dismissUserReactionOption(mCommunityPopUp);
-                    } }
-                if(null!=mTvFeedCommunityPostUserReaction)
-                {
-                    mTvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji2_with_you), null, null,null);
+                    }
+                }
+                if (null != mTvFeedCommunityPostUserReaction) {
+                    mTvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji2_with_you), null, null, null);
                     if (null != mCommunityPostPopUp) {
                         mCommunityPostPopUp.setVisibility(View.GONE);
                         dismissUserReactionOption(mCommunityPostPopUp);
@@ -657,25 +706,22 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
                 }
                 break;
             case R.id.tv_reaction4:
-                if(null!=mTvFeedArticleUserReaction)
-                {
-                    mTvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds( ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji4_face_palm), null, null,null);
+                if (null != mTvFeedArticleUserReaction) {
+                    mTvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji4_face_palm), null, null, null);
                     if (null != mArticlePopUp) {
                         mArticlePopUp.setVisibility(View.GONE);
                         dismissUserReactionOption(mArticlePopUp);
                     }
                 }
-                if(null!=mTvFeedCommunityUserReaction)
-                {
-                    mTvFeedCommunityUserReaction.setCompoundDrawablesWithIntrinsicBounds( ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji4_face_palm), null, null,null);
+                if (null != mTvFeedCommunityUserReaction) {
+                    mTvFeedCommunityUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji4_face_palm), null, null, null);
                     if (null != mCommunityPopUp) {
                         mCommunityPopUp.setVisibility(View.GONE);
                         dismissUserReactionOption(mCommunityPopUp);
                     }
                 }
-                if(null!=mTvFeedCommunityPostUserReaction)
-                {
-                    mTvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds( ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji4_face_palm), null, null,null);
+                if (null != mTvFeedCommunityPostUserReaction) {
+                    mTvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji4_face_palm), null, null, null);
                     if (null != mCommunityPostPopUp) {
                         mCommunityPostPopUp.setVisibility(View.GONE);
                         dismissUserReactionOption(mCommunityPostPopUp);

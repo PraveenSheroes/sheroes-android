@@ -16,10 +16,15 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.AllSearchFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.SearchArticleFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.SearchCommunitiesFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.SearchJobFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.SearchRecentFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -35,10 +40,15 @@ public class HomeSearchActivity extends BaseActivity implements BaseHolderInterf
     @Bind(R.id.et_search_edit_text)
     public EditText mSearchEditText;
     private ViewPagerAdapter mViewPagerAdapter;
+    private FragmentOpen mFragmenOpen;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
+        if(null!=getIntent()&&null!=getIntent().getExtras())
+        {
+            mFragmenOpen=getIntent().getParcelableExtra(AppConstants.ALL_SEARCH);
+        }
         renderSearchFragmentView();
     }
     public void renderSearchFragmentView() {
@@ -50,9 +60,21 @@ public class HomeSearchActivity extends BaseActivity implements BaseHolderInterf
     }
     private void initHomeViewPagerAndTabs() {
         mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        mViewPagerAdapter.addFragment(AllSearchFragment.createInstance(20), getString(R.string.ID_ALL));
-      //  mViewPagerAdapter.addFragment(CommunitiesFragment.createInstance(20), getString(R.string.ID_COMMUNITIES));
-        mViewPagerAdapter.addFragment(ArticlesFragment.createInstance(4), getString(R.string.ID_ARTICLES));
+        if(mFragmenOpen.isFeedOpen()) {
+            String search =  getString(R.string.ID_SEARCH)+AppConstants.FEED_ARTICLE+AppConstants.S + AppConstants.COMMA + AppConstants.FEED_COMMUNITY + AppConstants.COMMA + AppConstants.FEED_JOB;
+            mSearchEditText.setHint(search);
+            mViewPagerAdapter.addFragment(AllSearchFragment.createInstance(20), getString(R.string.ID_ALL));
+            mViewPagerAdapter.addFragment(SearchRecentFragment.createInstance(20), getString(R.string.ID_RECENT));
+            mViewPagerAdapter.addFragment(SearchArticleFragment.createInstance(20), getString(R.string.ID_ARTICLE) + AppConstants.S);
+            mViewPagerAdapter.addFragment(SearchCommunitiesFragment.createInstance(20), getString(R.string.ID_COMMUNITIES));
+            mViewPagerAdapter.addFragment(SearchJobFragment.createInstance(20), getString(R.string.ID_JOBS));
+        }
+        else
+        {
+            mSearchEditText.setHint(getString(R.string.ID_SEARCH)+AppConstants.SPACE+getString(R.string.ID_COMMUNITIES));
+            mTabLayout.setVisibility(View.GONE);
+            mViewPagerAdapter.addFragment(SearchCommunitiesFragment.createInstance(20), getString(R.string.ID_COMMUNITIES));
+        }
         mViewPager.setAdapter(mViewPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
         mViewPager.addOnPageChangeListener(this);
@@ -95,7 +117,7 @@ public class HomeSearchActivity extends BaseActivity implements BaseHolderInterf
         {
            // Toast.makeText(this, "-----Article fragment----", Toast.LENGTH_SHORT).show();
         }
-        else if(mViewPagerAdapter.getActiveFragment(mViewPager,position)instanceof CommunitiesFragment)
+        else if(mViewPagerAdapter.getActiveFragment(mViewPager,position)instanceof SearchCommunitiesFragment)
         {
            // Toast.makeText(this, "-----Community fragment----", Toast.LENGTH_SHORT).show();
         }

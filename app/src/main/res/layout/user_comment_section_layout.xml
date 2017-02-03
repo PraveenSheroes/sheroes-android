@@ -3,18 +3,20 @@
     android:id="@+id/li_user_comment"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_size_1"
-        android:background="@color/search_tab_unselected_text"/>
+        android:background="@color/search_tab_unselected_text" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp_size_12"
+        android:background="@drawable/rectangle_comment_background"
         android:orientation="horizontal"
-        android:padding="@dimen/dp_size_10"
         android:weightSum="1">
 
         <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
@@ -22,17 +24,19 @@
             android:layout_width="@dimen/dp_size_27"
             android:layout_height="@dimen/dp_size_27"
             android:layout_gravity="center"
+            android:layout_margin="@dimen/dp_size_8"
             android:src="@drawable/ic_footer_button_icon" />
 
         <EditText
             android:id="@+id/et_user_comment_description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/dp_size_8"
             android:layout_weight=".95"
+            android:background="@android:color/transparent"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:hint="@string/ID_ERROR_FIELD_REQUIRED"
-            android:padding="@dimen/dp_size_10"
-            android:background="@android:color/transparent"
             android:textSize="@dimen/sp_size_12"
             android:textStyle="bold" />
 
@@ -40,7 +44,55 @@
             android:id="@+id/tv_post_comment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_post_comment"
-            android:padding="@dimen/dp_size_10" />
+            android:layout_gravity="center"
+            android:drawableLeft="@drawable/ic_post_comment" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/li_user_comment_post_type_selection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_size_13"
+        android:layout_marginRight="@dimen/dp_size_13"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_post_as_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:text="@string/ID_POST"
+            android:textColor="@color/detail_page_text"
+            android:textSize="@dimen/sp_size_12" />
+
+        <TextView
+            android:id="@+id/tv_user_name_for_post"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_size_25"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:text="@string/ID_ANONYMOUS"
+            android:textColor="@color/searchbox_text_color"
+            android:textSize="@dimen/sp_size_12" />
+
+        <TextView
+            android:id="@+id/tv_owner_post"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_size_20"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:text="@string/ID_OWNER"
+            android:textColor="@color/searchbox_text_color"
+            android:textSize="@dimen/sp_size_12" />
+
+        <TextView
+            android:id="@+id/tv_anonymous_post"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_size_20"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:text="@string/ID_ANONYMOUS"
+            android:textColor="@color/searchbox_text_color"
+            android:textSize="@dimen/sp_size_12" />
     </LinearLayout>
 </LinearLayout>

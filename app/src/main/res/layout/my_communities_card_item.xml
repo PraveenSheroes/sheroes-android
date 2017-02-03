@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
+        android:layout_marginBottom="@dimen/dp_size_12"
         android:orientation="vertical">
 
         <LinearLayout
@@ -57,6 +58,9 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:text="Local group"
+                    android:drawableRight="@drawable/ic_lock"
+                    android:drawablePadding="@dimen/dp_size_5"
+                    android:layout_marginTop="@dimen/dp_size_3"
                     android:textColor="@color/footer_icon_text"
                     android:textSize="@dimen/sp_size_12" />
             </LinearLayout>
@@ -70,6 +74,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:lineSpacingExtra="@dimen/dp_size_3"
+            android:layout_marginTop="@dimen/dp_size_12"
             android:layout_marginLeft="@dimen/dp_size_12"
             android:layout_marginRight="@dimen/dp_size_12"
             android:lines="@integer/int_value_for_line_2"
@@ -78,34 +83,34 @@
             android:textSize="@dimen/sp_size_13" />
 
         <LinearLayout
-            android:id="@+id/li_featured_community_tags"
+            android:id="@+id/li_feature_tags"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:weightSum="@integer/int_value_for_line_1"
             android:layout_marginLeft="@dimen/dp_size_12"
             android:layout_marginRight="@dimen/dp_size_12"
-            android:layout_marginTop="@dimen/dp_size_12"
-            android:weightSum="1">
+            android:layout_marginTop="@dimen/dp_size_15">
 
             <TextView
                 android:id="@+id/tv_community_tag_lable"
                 android:layout_width="0dp"
+                android:layout_weight=".8"
                 android:layout_height="wrap_content"
-                android:layout_weight=".78"
                 android:text="Tags: Health,Education"
                 android:textColor="@color/feed_article_label"
                 android:textSize="@dimen/sp_size_12" />
 
             <TextView
                 android:id="@+id/tv_community_join"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_size_35"
                 android:layout_weight=".2"
-                android:background="@drawable/rectangle_feed_commnity_join"
+                android:background="@drawable/rectangle_community_invite"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:gravity="center"
-                android:text="@string/ID_JOIN"
-                android:textColor="@color/footer_icon_text"
+                android:text="@string/ID_INVITE"
+                android:textColor="@color/white"
                 android:textSize="@dimen/sp_size_12" />
 
         </LinearLayout>

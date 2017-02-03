@@ -54,10 +54,11 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
     private MyCommunitiesFragment.HomeActivityIntractionListner mHomeActivityIntractionListner;
     private SwipPullRefreshList mPullRefreshList;
 
-    public static MyCommunitiesFragment createInstance(int itemsCount) {
-        MyCommunitiesFragment myCommunitiesFragment = new MyCommunitiesFragment();
-        return myCommunitiesFragment;
+    public static FeaturedFragment createInstance(int itemsCount) {
+        FeaturedFragment featuredFragment = new FeaturedFragment();
+        return featuredFragment;
     }
+
 
     @Override
     public void onAttach(Context context) {
@@ -132,6 +133,9 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
     @Override
     public void getAllCommunitiesSuccess(List<MyCommunities> myCommunitiesList, List<Feature> featureList) {
         if (StringUtil.isNotEmptyCollection(featureList)) {
+            Feature feature=new Feature();
+            feature.setId("1");
+            featureList.add(2,feature);
             mPullRefreshList.allListData(featureList);
             mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
             mAdapter.notifyDataSetChanged();

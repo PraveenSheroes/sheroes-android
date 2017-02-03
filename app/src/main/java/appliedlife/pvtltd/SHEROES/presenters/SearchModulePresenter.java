@@ -7,9 +7,9 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.SearchModel;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.Feature;
+import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ListOfSearch;
+import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.SearchResponse;
 import appliedlife.pvtltd.SHEROES.preferences.Token;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -53,13 +53,13 @@ public class SearchModulePresenter extends BasePresenter<SearchModuleView> {
 
 
 
-    public void getFeedFromPresenter(ListOfFeed listOfFeed) {
+    public void getFeedFromPresenter(ListOfSearch listOfFeed) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showNwError();
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = mSearchModel.getFeedFromModel(listOfFeed).subscribe(new Subscriber<FeedResponse>() {
+        Subscription subscription = mSearchModel.getSearchFromModel(listOfFeed).subscribe(new Subscriber<SearchResponse>() {
             @Override
             public void onCompleted() {
                 getMvpView().stopProgressBar();
@@ -72,9 +72,9 @@ public class SearchModulePresenter extends BasePresenter<SearchModuleView> {
             }
 
             @Override
-            public void onNext(FeedResponse feedResponse) {
+            public void onNext(SearchResponse searchResponse) {
                 getMvpView().stopProgressBar();
-                getMvpView().getFeedListSuccess(feedResponse.getListOfFeed());
+                getMvpView().getSearchListSuccess(searchResponse.getListOfFeed());
             }
         });
         registerSubscription(subscription);

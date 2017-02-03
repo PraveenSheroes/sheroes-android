@@ -39,6 +39,8 @@ public class AppConstants {
     public static final String FEATURE_FRAGMENT="feature";
     public static final String MY_COMMUNITIES_FRAGMENT="my_communities";
     public static final String ARTICLE_FRAGMENT="article";
+    public static final String MY_COMMUNITIES_HEADER= "community_header";
+    public static final String ALL_SEARCH= "search";
     public static final int WORD_COUNT = 92;
     public static final int WORD_LENGTH = 80;
 }

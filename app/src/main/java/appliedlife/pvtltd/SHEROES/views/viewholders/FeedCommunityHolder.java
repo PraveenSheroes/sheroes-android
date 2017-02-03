@@ -225,18 +225,26 @@ public class FeedCommunityHolder extends BaseViewHolder<ListOfFeed> implements V
                 if(dataItem.getUserReaction().equalsIgnoreCase(AppConstants.HEART_REACTION)) {
                     tvFeedCommunityUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
                     dataItem.setUserReaction(AppConstants.NO_REACTION);
+                    liFeedCommunityEmojiPopUp.setVisibility(View.GONE);
                 }
                 else
                 {
                     tvFeedCommunityUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
                     dataItem.setUserReaction(AppConstants.HEART_REACTION);
+                    liFeedCommunityEmojiPopUp.setVisibility(View.GONE);
                 }
                 break;
             case R.id.tv_feed_community_user_comment:
                 viewInterface.handleOnClick(dataItem, tvFeedCommunityUserComment);
                 break;
             case R.id.tv_feed_community_user_bookmark:
-                viewInterface.handleOnClick(dataItem, tvFeedCommunityUserBookmark);
+                if (dataItem.getBookmarked()) {
+                    tvFeedCommunityUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_bookmark_in_active, 0);
+                    dataItem.setBookmarked(false);
+                } else {
+                    tvFeedCommunityUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_bookmark_active, 0);
+                    dataItem.setBookmarked(true);
+                }
                 break;
             case R.id.tv_feed_community_user_menu:
                 viewInterface.handleOnClick(dataItem, tvFeedCommunityUserMenu);

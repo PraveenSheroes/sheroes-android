@@ -8,7 +8,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ListOfSearch;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -19,14 +19,14 @@ import butterknife.ButterKnife;
  * Created by Praveen_Singh on 18-01-2017.
  */
 
-public class SearchModuleHolder extends BaseViewHolder<ArticleCardResponse> {
+public class SearchModuleHolder extends BaseViewHolder<ListOfSearch> {
     private final String TAG = LogUtils.makeLogTag(SearchModuleHolder.class);
     @Bind(R.id.tv_search_list_header_text)
     TextView mTvHeaderText;
     @Bind(R.id.tv_search_list_label_text)
     TextView mTvLabelText;
     BaseHolderInterface viewInterface;
-    private ArticleCardResponse dataItem;
+    private ListOfSearch dataItem;
     private int position;
 
 
@@ -38,16 +38,31 @@ public class SearchModuleHolder extends BaseViewHolder<ArticleCardResponse> {
     }
 
     @Override
-    public void bindData(ArticleCardResponse item, Context context, int position) {
+    public void bindData(ListOfSearch item, Context context, int position) {
         this.dataItem = item;
-        if(StringUtil.isNotNullOrEmptyString(item.getArticleTitle())) {
-            if(item.getDescription().equalsIgnoreCase("Connect"))
+        if(StringUtil.isNotNullOrEmptyString(item.getFeedType())) {
+            switch (item.getFeedType())
             {
-                mTvHeaderText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search_proffesion_icon,0,0,0);
+                case AppConstants.FEED_ARTICLE:
+                    mTvHeaderText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_feed_article_top_left,0,0,0);
+                    break;
+                case AppConstants.FEED_COMMUNITY:
+                    mTvHeaderText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search_group_icon,0,0,0);
+                    break;
+                case AppConstants.FEED_COMMUNITY_POST:
+                    mTvHeaderText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search_group_icon,0,0,0);
+                    break;
+                case AppConstants.FEED_JOB:
+                    mTvHeaderText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search_proffesion_icon,0,0,0);
+                    break;
+                default:
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + item.getFeedType());
             }
-            mTvHeaderText.setText(item.getArticleTitle());
-            mTvLabelText.setText(item.getDescription());
+
         }
+            mTvHeaderText.setText(item.getFeedTitle());
+            mTvLabelText.setText(item.getGroupName());
+
     }
 
     @Override

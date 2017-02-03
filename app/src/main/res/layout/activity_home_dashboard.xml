@@ -25,13 +25,13 @@
         </android.support.v7.widget.Toolbar>
 
         <android.support.design.widget.TabLayout
-            android:id="@+id/home_tab_layout"
+            android:id="@+id/tv_join_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
-            app:tabIndicatorColor="@color/search_tab_text"
+            app:tabIndicatorColor="@color/footer_icon_text"
             app:tabIndicatorHeight="0dp"
-            app:tabSelectedTextColor="@color/search_tab_text"
+            app:tabSelectedTextColor="@color/footer_icon_text"
             app:tabTextColor="@color/search_tab_unselected_text">
 
         </android.support.design.widget.TabLayout>

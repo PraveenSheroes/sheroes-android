@@ -44,9 +44,14 @@
     <dimen name="dp_size_105">105dp</dimen>
     <dimen name="dp_size_233">233dp</dimen>
     <dimen name="dp_size_160">160dp</dimen>
+    <dimen name="dp_size_170">170dp</dimen>
+    <dimen name="dp_size_175">175dp</dimen>
     <dimen name="dp_size_180">180dp</dimen>
+    <dimen name="dp_size_200">200dp</dimen>
     <dimen name="dp_size_260">260dp</dimen>
+    <dimen name="dp_size_250">250dp</dimen>
     <dimen name="dp_size_266">266dp</dimen>
+    <dimen name="dp_size_185">185dp</dimen>
 
     <!--Text sizes for SHEROES-->
     <dimen name="sp_size_16">16sp</dimen>
@@ -59,11 +64,13 @@
     <dimen name="sp_size_13">13sp</dimen>
     <dimen name="sp_size_10">10sp</dimen>
     <dimen name="sp_size_24">24sp</dimen>
+    <dimen name="sp_size_35">35sp</dimen>
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="feed_profile_icon_size">50dp</dimen>
+    <dimen name="drawer_profile_icon_size">100dp</dimen>
 <!--material spinner-->
     <dimen name="ms__padding_top">24dp</dimen>
     <dimen name="ms__padding_left">12dp</dimen>

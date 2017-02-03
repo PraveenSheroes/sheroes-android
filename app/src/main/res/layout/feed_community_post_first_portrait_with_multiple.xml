@@ -35,12 +35,27 @@
             android:layout_weight=".33"
             android:scaleType="fitXY"/>
 
-        <ImageView
-            android:id="@+id/iv_feed_community_post_fourth_portrait"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/dp_size_1"
             android:layout_weight=".33"
-            android:scaleType="fitXY"/>
+            android:scaleType="fitXY">
+
+            <ImageView
+                android:id="@+id/iv_feed_community_post_fourth_portrait"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY" />
+            <TextView
+                android:id="@+id/tv_feed_community_post_portrait_total_images"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/ID_TOTAL_IMAGES"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:textSize="@dimen/sp_size_35"
+                android:background="@drawable/ic_reaction_strip_background"/>
+        </FrameLayout>
     </LinearLayout>
 </LinearLayout>

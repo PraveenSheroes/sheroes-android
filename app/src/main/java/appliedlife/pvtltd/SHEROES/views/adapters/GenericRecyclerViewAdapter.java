@@ -14,8 +14,9 @@ import java.util.List;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ListOfSearch;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HolderMapping;
+
 /**
  * Created by Praveen Singh on 29/12/2016.
  *
@@ -25,7 +26,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.HolderMapping;
  * Title: Generic Recycler adapter for every list view.
  * List respose will be bind with generic adapter.
  */
-public class GenericRecyclerViewAdapter<T extends BaseResponse> extends RecyclerView.Adapter<BaseViewHolder>implements Filterable {
+public class GenericRecyclerViewAdapter<T extends BaseResponse> extends RecyclerView.Adapter<BaseViewHolder> implements Filterable {
 
     Context context;
     List<T> mSheroesGenericListData = new ArrayList<>();
@@ -39,7 +40,7 @@ public class GenericRecyclerViewAdapter<T extends BaseResponse> extends Recycler
 
     public void setSheroesGenericListData(List<T> mSheroesGenericListData) {
         this.mSheroesGenericListData = mSheroesGenericListData;
-        this.filterListData=mSheroesGenericListData;
+        this.filterListData = mSheroesGenericListData;
     }
 
     public void addAllDataForList(List<T> data) {
@@ -67,13 +68,13 @@ public class GenericRecyclerViewAdapter<T extends BaseResponse> extends Recycler
 
     @Override
     public void onBindViewHolder(BaseViewHolder holder, int position) {
+
         holder.bindData(filterListData.get(position), context, position);
     }
 
     @Override
     public int getItemViewType(int position) {
-        BaseResponse var = filterListData.get(position);
-        return HolderMapping.getOrdinal(var,filterListData.size());
+        return HolderMapping.getOrdinal(filterListData.get(position), filterListData.size());
     }
 
     @Override
@@ -104,13 +105,13 @@ public class GenericRecyclerViewAdapter<T extends BaseResponse> extends Recycler
             @SuppressWarnings("unchecked")
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
-                filterListData = ( List<T> ) results.values;
+                filterListData = (List<T>) results.values;
                 GenericRecyclerViewAdapter.this.notifyDataSetChanged();
             }
 
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
-                List<T>  filteredResults = null;
+                List<T> filteredResults = null;
                 if (constraint.length() == 0) {
                     filteredResults = mSheroesGenericListData;
                 } else {
@@ -123,12 +124,12 @@ public class GenericRecyclerViewAdapter<T extends BaseResponse> extends Recycler
         };
     }
 
-    protected  List<T>  getFilteredResults(String constraint) {
-        List<T>  results = new ArrayList<>();
+    protected List<T> getFilteredResults(String constraint) {
+        List<T> results = new ArrayList<>();
 
         for (T item : mSheroesGenericListData) {
-            ArticleCardResponse articleCardResponse = (ArticleCardResponse)item;
-            if (articleCardResponse.getArticleTitle().toLowerCase().contains(constraint)) {
+            ListOfSearch listOfSearch = (ListOfSearch) item;
+            if (listOfSearch.getFeedTitle().toLowerCase().contains(constraint)) {
                 results.add(item);
             }
         }

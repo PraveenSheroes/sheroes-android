@@ -23,7 +23,7 @@
             android:id="@+id/search_tab_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_size_20"
+            android:layout_marginLeft="@dimen/dp_size_12"
             app:tabIndicatorColor="@color/search_tab_text"
             app:tabIndicatorHeight="@dimen/dp_size_5"
             app:tabSelectedTextColor="@color/search_tab_text"

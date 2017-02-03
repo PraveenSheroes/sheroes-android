@@ -40,6 +40,7 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
         int firstVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+
         dismissReactions();
         if (firstVisibleItem == 0) {
             if(!mControlsVisible) {
@@ -91,7 +92,6 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                 default:LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + mCallFromFragment);
             }
 
-            LogUtils.info("swipe", "*****************on last scrolling");
             loading = true;
         }
 
