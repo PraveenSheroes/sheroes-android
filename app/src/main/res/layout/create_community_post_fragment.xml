@@ -78,7 +78,7 @@
                 />
         </HorizontalScrollView>
         <FrameLayout
-            android:id="@+id/camera_frame_iv_camera_btn_for_post_images"
+            android:id="@+id/fl_camera_btn_for_post_images"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/rectangle_shap">

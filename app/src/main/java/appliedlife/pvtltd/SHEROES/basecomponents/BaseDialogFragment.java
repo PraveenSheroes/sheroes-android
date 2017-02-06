@@ -41,23 +41,7 @@ public class BaseDialogFragment extends DialogFragment {
     }
 
 
-    protected DialogFragment showDeactiveDilog(boolean finishParentOnBackOrTryagain)
-    {
-        PreferencesDeactiveAccountDialogFragment fragment = (PreferencesDeactiveAccountDialogFragment) getActivity().getFragmentManager().findFragmentByTag("");
-        if (fragment == null)
-        {
-            fragment = new PreferencesDeactiveAccountDialogFragment();
-            Bundle b = new Bundle();
-            b.putBoolean(BaseDialogFragment.DISMISS_PARENT_ON_OK_OR_BACK, finishParentOnBackOrTryagain);
-            fragment.setArguments(b);
-        }
-        if (!fragment.isVisible() && !fragment.isAdded())
-        {
-            show(getActivity().getFragmentManager(), "");
 
-        }
-        return fragment;
-    }
 
 
     @Override

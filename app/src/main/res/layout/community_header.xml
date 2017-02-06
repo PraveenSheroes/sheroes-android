@@ -5,11 +5,12 @@
     android:id="@+id/r1"
     android:layout_marginTop="@dimen/dp_size_18"
     android:layout_marginLeft="@dimen/dp_size_25"
+    android:layout_marginRight="@dimen/dp_size_20"
     >
 
 
     <TextView
-        android:id="@+id/community_title"
+        android:id="@+id/tv_community_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@string/ID_ROBOTO_LIGHT"
@@ -18,18 +19,19 @@
         />
 
 
-    <FrameLayout
-        android:id="@+id/iv_close_community"
-        android:layout_width="@dimen/dp_size_38"
-        android:layout_height="@dimen/dp_size_38"
+    <TextView
+        android:id="@+id/tv_close_community"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_cross"
+        android:paddingTop="@dimen/dp_size_2"
+        android:paddingLeft="10dp"
+        android:paddingRight="@dimen/dp_size_10"
+        android:paddingBottom="@dimen/dp_size_2"
         android:layout_alignParentRight="true"
-        android:paddingTop="@dimen/dp_size_10"
-        android:layout_centerVertical="true">
-        <ImageView
-            android:layout_width="@dimen/dp_size_14"
-            android:layout_height="@dimen/dp_size_14"
-            android:background="@drawable/ic_cross"
-            />
-    </FrameLayout>
+
+        android:layout_centerVertical="true"
+        />
 
 </RelativeLayout>

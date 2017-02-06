@@ -61,6 +61,7 @@ public class SettingPreferencesEducationDetailsFragment extends BaseFragment {
 
                 Intent i = new Intent(getActivity(), SettingPreferencesActivity.class);
                 startActivity(i);
+                getActivity().finish();
             }
         });
 

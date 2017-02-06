@@ -100,7 +100,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
+<include
+    android:id="@+id/about_community_container"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    layout="@layout/fragment_container"
+    />
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_communities_detail"
         android:layout_width="wrap_content"

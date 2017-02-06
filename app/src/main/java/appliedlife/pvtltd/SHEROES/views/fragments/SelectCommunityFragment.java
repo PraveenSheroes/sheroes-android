@@ -20,6 +20,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityList;
+import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerList;
 import appliedlife.pvtltd.SHEROES.presenters.CommunityListPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -77,6 +78,11 @@ public class SelectCommunityFragment extends DialogFragment implements Community
     public void getityCommunityListSuccess(List<CommunityList> data) {
         mAdapter.setSheroesGenericListData(data);
         mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void getOwnerListSuccess(List<OwnerList> data) {
+
     }
 
     @Override

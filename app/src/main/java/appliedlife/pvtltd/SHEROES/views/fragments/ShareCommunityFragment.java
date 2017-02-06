@@ -34,12 +34,12 @@ public class ShareCommunityFragment extends BaseFragment implements CreateCommun
 
     private ShareCommunityActivityIntractionListner mShareCommunityIntractionListner;
     private final String TAG = LogUtils.makeLogTag(ShareCommunityFragment.class);
-    @Bind(R.id.iv_close_community)
-    FrameLayout miv_close_community;
-    @Bind(R.id.btn_share_via_social_media)
-    TextView btn_share_via_social_media;
-    @Bind(R.id.community_title)
-    TextView mcreate_community_post;
+    @Bind(R.id.tv_close_community)
+    TextView mTvCloseCommunity;
+    @Bind(R.id.tv_share_via_social_media)
+    TextView mTvShareviasocialmedia;
+    @Bind(R.id.tv_community_title)
+    TextView mTvCreatecommunitypost;
 
     public ShareCommunityFragment() {
 
@@ -67,12 +67,12 @@ public class ShareCommunityFragment extends BaseFragment implements CreateCommun
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.community_share_fragment, container, false);
         ButterKnife.bind(this, view);
-        mcreate_community_post.setText(R.string.ID_SHARE_COMMUNITY);
+        mTvCreatecommunitypost.setText(R.string.ID_SHARE_COMMUNITY);
         Fabric.with(getActivity(), new Crashlytics());
 
         return view;
     }
-    @OnClick(R.id.btn_share_via_social_media)
+    @OnClick(R.id.tv_share_via_social_media)
     public void socialShareFunction()
     {
         Intent intent = new Intent(Intent.ACTION_SEND);
@@ -83,7 +83,7 @@ public class ShareCommunityFragment extends BaseFragment implements CreateCommun
     }
     @Override
     public void onResume() {
-        Log.e("DEBUG", "onResume of LoginFragment");
+        LogUtils.info("DEBUG", "onResume of LoginFragment");
         super.onResume();
 
     }
@@ -91,13 +91,13 @@ public class ShareCommunityFragment extends BaseFragment implements CreateCommun
 
     @Override
     public void onPause() {
-        Log.e("DEBUG", "OnPause of loginFragment");
+        LogUtils.info("DEBUG", "OnPause of loginFragment");
         super.onPause();
     }
     @Override
     public void onStop()
     {
-        Log.e("DEBUG", "OnPause of loginFragment");
+        LogUtils.info("DEBUG", "OnPause of loginFragment");
         super.onStop();
     }
   /*  @OnClick(R.id.txt_community_type)
@@ -108,7 +108,7 @@ public class ShareCommunityFragment extends BaseFragment implements CreateCommun
     }*/
 
 
-    @OnClick(R.id.iv_close_community)
+    @OnClick(R.id.tv_close_community)
     public void onCloseClick()
     {
         mShareCommunityIntractionListner.onClose();
@@ -162,7 +162,7 @@ public class ShareCommunityFragment extends BaseFragment implements CreateCommun
 
     @Override
     public void onFinishEditDialog(String inputText) {
-        Log.e("value",inputText);
+        LogUtils.info("value",inputText);
     }
 
     public interface CreateCommunityActivityPostIntractionListner {

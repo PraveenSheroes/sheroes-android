@@ -66,7 +66,7 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment {
     int flag=0;
 
 
-    public SettingPreferencesDeactiveAccountFragment.SettingPreferences_DeactiveAccounActivitytLisIntractionListener settingPreferences_deactiveAccounActivitytLisIntractionListener;
+    public SettingPreferences_DeactiveAccounActivitytLisIntractionListener settingPreferences_deactiveAccounActivitytLisIntractionListener;
 
 
 
@@ -95,6 +95,8 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment {
 
                 Intent i = new Intent(getActivity(), SettingPreferencesActivity.class);
                 startActivity(i);
+                getActivity().finish();
+
             }
         });
         return view;
@@ -106,8 +108,8 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment {
 
     public void ondeactive_buttonclick() {
 
-        Intent i = new Intent(getActivity(), SettingPreferencesDeactiveAccountFragment.class);
-        startActivity(i);
+        PreferencesDeactiveAccountDialogFragment newFragment = new PreferencesDeactiveAccountDialogFragment(this);
+        newFragment.show(getActivity().getFragmentManager(), "dialog");
 
     }
 

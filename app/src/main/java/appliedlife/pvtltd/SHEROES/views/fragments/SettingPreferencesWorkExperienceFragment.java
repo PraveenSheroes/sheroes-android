@@ -72,6 +72,8 @@ public class SettingPreferencesWorkExperienceFragment extends BaseFragment {
 
                 Intent i = new Intent(getActivity(), SettingPreferencesActivity.class);
                 startActivity(i);
+                getActivity().finish();
+
             }
         });
 

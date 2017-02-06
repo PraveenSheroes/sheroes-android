@@ -147,7 +147,7 @@
     </RelativeLayout>
 
     <TextView
-        android:id="@+id/btn_share_via_social_media"
+        android:id="@+id/tv_share_via_social_media"
         android:layout_width="fill_parent"
         android:layout_height="50dp"
         android:background="@drawable/communities_post_background"

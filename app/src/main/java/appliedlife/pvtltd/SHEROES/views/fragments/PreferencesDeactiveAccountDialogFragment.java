@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.app.Dialog;
+import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -11,6 +12,8 @@ import android.view.ViewGroup;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -20,12 +23,23 @@ import butterknife.OnClick;
 
 public class PreferencesDeactiveAccountDialogFragment extends BaseDialogFragment {
     private boolean finishParent;
+    private NewCloseListener mHomeActivityIntractionListner;
+    private final String TAG = LogUtils.makeLogTag(SettingPreferencesDeactiveAccountFragment.class);
+
+    PreferencesDeactiveAccountDialogFragment(SettingPreferencesDeactiveAccountFragment context) {
+        try {
+            if (context instanceof NewCloseListener) {
+                mHomeActivityIntractionListner = (NewCloseListener)context;
+            }
+        } catch (Fragment.InstantiationException exception) {
+            LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
+        }
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_deactive_accountdialog, container, false);
         ButterKnife.bind(this, view);
-        finishParent = getArguments().getBoolean(DISMISS_PARENT_ON_OK_OR_BACK, false);
         setCancelable(true);
         return view;
     }
@@ -42,7 +56,11 @@ public class PreferencesDeactiveAccountDialogFragment extends BaseDialogFragment
     }
 
 
-
+@OnClick(R.id.dialogButtoncancle)
+public void onBack()
+{
+    getDialog().cancel();
+}
 
 
     @Override
@@ -57,5 +75,8 @@ public class PreferencesDeactiveAccountDialogFragment extends BaseDialogFragment
             }
         };
     }
-
+    public interface NewCloseListener {
+        void onErrorOccurence();
+        void onClose();
+    }
 }

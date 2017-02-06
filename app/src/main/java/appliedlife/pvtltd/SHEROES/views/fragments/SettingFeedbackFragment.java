@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -20,6 +22,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.views.activities.Feedback_ThankyouActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SettingView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -50,6 +53,8 @@ public class SettingFeedbackFragment extends BaseFragment implements SettingView
     TextView mtv_setting_tittle;
     settingFragmentCallBack msettingFragmentCallBack;
     SettingView settingViewlistener;
+    @Bind(R.id.preferences_deactiveaccount_button)
+    Button mpreferences_deactiveaccount_button;
 
     @Override
     public void onAttach(Context context){
@@ -81,6 +86,8 @@ public class SettingFeedbackFragment extends BaseFragment implements SettingView
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
+                    mpreferences_deactiveaccount_button.setBackgroundColor(Color.RED);
+
                     float touchPositionX = event.getX();
                     float width = Mdialog_ratingbar.getWidth();
                     float starsf = (touchPositionX / width) * 5.0f;
@@ -105,7 +112,12 @@ public class SettingFeedbackFragment extends BaseFragment implements SettingView
             }});
         return view;
     }
-
+    @OnClick(R.id.preferences_deactiveaccount_button)
+    public void onSubmitPress()
+    {
+        Intent intent=new Intent(getActivity(), Feedback_ThankyouActivity.class);
+        startActivity(intent);
+    }
     @OnClick(R.id.iv_back_setting)
 
     public void onBackClick()

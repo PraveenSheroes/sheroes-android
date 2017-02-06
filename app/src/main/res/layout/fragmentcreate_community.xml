@@ -14,6 +14,7 @@
         android:id="@+id/r1"
         android:layout_marginTop="@dimen/dp_size_18"
         android:layout_marginLeft="@dimen/dp_size_25"
+        android:layout_marginRight="@dimen/dp_size_20"
         >
 
 
@@ -28,21 +29,20 @@
             />
 
 
-        <FrameLayout
-            android:id="@+id/iv_create_community_cross"
-            android:layout_width="@dimen/dp_size_38"
-            android:layout_height="@dimen/dp_size_38"
-            android:paddingTop="@dimen/dp_size_10"
-
-            android:layout_alignParentRight="true"
-
-            android:layout_centerVertical="true">
             <TextView
-                android:layout_width="@dimen/dp_size_14"
-                android:layout_height="@dimen/dp_size_14"
+                android:id="@+id/iv_create_community_cross"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:background="@drawable/ic_cross"
+                android:paddingTop="@dimen/dp_size_2"
+                android:paddingLeft="10dp"
+                android:paddingRight="@dimen/dp_size_10"
+                android:paddingBottom="@dimen/dp_size_2"
+                android:layout_alignParentRight="true"
+
+                android:layout_centerVertical="true"
                 />
-        </FrameLayout>
 
     </RelativeLayout>
 

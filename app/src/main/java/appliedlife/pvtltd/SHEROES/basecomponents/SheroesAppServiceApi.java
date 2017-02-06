@@ -4,6 +4,8 @@ package appliedlife.pvtltd.SHEROES.basecomponents;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.MemberListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItemResponse;
@@ -40,6 +42,14 @@ public interface SheroesAppServiceApi {
 
     @GET("/v2/587fb45c270000490af0dd7a")
     Observable<CommunityListResponse> getCommunityList();
+
+
+    @GET("/v2/587fb45c270000490af0dd7a")
+    Observable<OwnerListResponse> getOwnerList();
+
+    @GET("/v2/587fb45c270000490af0dd7a")
+    Observable<MemberListResponse> getMemberList();
+
 
     @POST("auth/signin")
     Observable<LoginResponse> getLoginAuthToken(@Body LoginRequest loginRequest);

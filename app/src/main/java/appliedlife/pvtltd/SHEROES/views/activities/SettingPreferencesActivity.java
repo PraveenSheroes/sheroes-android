@@ -24,7 +24,7 @@ import butterknife.OnClick;
 
 public class SettingPreferencesActivity extends BaseActivity implements SettingPreferencsFragment.settingPreferencesCallBack {
 
-
+int mid;
     private final String TAG = LogUtils.makeLogTag(SettingPreferencesActivity.class);
 
     @Bind(R.id.tv_setting_tittle)
@@ -55,14 +55,14 @@ public class SettingPreferencesActivity extends BaseActivity implements SettingP
 
     @Override
     public void callBackSettingPreferenceActivity(int id) {
-
+        mid=id;
         switch (id){
 
 
             case R.id.id_setting_preferences_basicdetails:
                 setContentView(R.layout.activity_setting_dashboard_for_header_nav);
                 ButterKnife.bind(this);
-                SettingPreferencesBasicDetailsFragment frag = new SettingPreferencesBasicDetailsFragment(mtv_setting_tittle,mtv_setting_tittle1,miv_back_setting);
+                SettingPreferencesBasicDetailsFragment frag = new SettingPreferencesBasicDetailsFragment();
                 callFirstFragment(R.id.fl_fragment_container, frag);
                 break;
 
@@ -96,6 +96,10 @@ public class SettingPreferencesActivity extends BaseActivity implements SettingP
     @OnClick(R.id.iv_back_setting)
     public void onbacklick() {
         getFragmentManager().popBackStack();
+        if(mid>0)
+        {
+            getFragmentManager().popBackStack();
+        }
         finish();
     }
 

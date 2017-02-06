@@ -12,6 +12,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentsList;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.ReactionList;
 import appliedlife.pvtltd.SHEROES.models.entities.communities.CommunitySuggestion;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityList;
+import appliedlife.pvtltd.SHEROES.models.entities.community.MembersList;
+import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerList;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
 import appliedlife.pvtltd.SHEROES.models.entities.home.DrawerItems;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
@@ -114,12 +116,25 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new SuggestedCardHolder(view, viewInterface);
         }
-    }, COMMUNITY_SUGGESTED_BY_HOLDER(R.layout.community_suggested_by_layout) {
+    }, OWNERLIST(R.layout.owner_list) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new OwnerListHolder(view, viewInterface);
+        }
+    } ,
+    MEMBERLIST(R.layout.member_list) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new MemberHolder(view, viewInterface);
+        }
+    }
+    , COMMUNITY_SUGGESTED_BY_HOLDER(R.layout.community_suggested_by_layout) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new CommunitySggestedByHolder(view, viewInterface);
         }
-    };
+    }
+    ;
     public Object object;
     public int layout;
 
@@ -190,6 +205,14 @@ public enum HolderMapping {
                 return REACTION.ordinal();
 
         }
+        else if(item instanceof OwnerList)
+            {
+                return OWNERLIST.ordinal();
+            }
+            else if(item instanceof MembersList)
+            {
+                return MEMBERLIST.ordinal();
+            }
         else if(item instanceof CommunityList)
         {
             return SELECTDILOG.ordinal();
@@ -201,6 +224,7 @@ public enum HolderMapping {
 
             }
         }
+
         return returnView;
     }
 

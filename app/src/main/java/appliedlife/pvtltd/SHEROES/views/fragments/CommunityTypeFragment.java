@@ -18,6 +18,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityList;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityType;
+import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerList;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.adapters.CommunityTypeAdapter;
@@ -117,6 +118,11 @@ public class CommunityTypeFragment extends BaseDialogFragment implements Communi
 
     @Override
     public void getityCommunityListSuccess(List<CommunityList> data) {
+
+    }
+
+    @Override
+    public void getOwnerListSuccess(List<OwnerList> data) {
 
     }
 

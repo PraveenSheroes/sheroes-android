@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <TextView
+        android:id="@+id/tv_user_comment_header_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@string/ID_ROBOTO_LIGHT"
+        android:padding="@dimen/dp_size_30"
+        android:drawablePadding="@dimen/dp_size_20"
+        android:text="@string/ID_MEMBERS"
+        android:textSize="@dimen/sp_size_24"
+        android:textColor="@color/searchbox_hint_text_color"
+        />
+    <FrameLayout
+        android:id="@+id/fmCommunityMembersClose"
+        android:layout_width="@dimen/dp_size_38"
+        android:layout_height="@dimen/dp_size_38"
+        android:paddingTop="@dimen/dp_size_10"
+        android:layout_marginEnd="@dimen/dp_size_25"
+        android:layout_marginRight="@dimen/dp_size_20"
+        android:layout_marginTop="@dimen/dp_size_20"
+
+        android:layout_alignParentRight="true"
+
+        android:layout_gravity="right">
+    <TextView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/ic_cross"
+        />
+    </FrameLayout>
+
+</RelativeLayout>

@@ -64,40 +64,40 @@ import io.fabric.sdk.android.Fabric;
 public class CreateCommunityFragment extends BaseFragment implements CreateCommunityView,ChangeCommunityPrivacyDialogFragment.CloseListener,CommunityTypeFragment.MyDialogFragmentListener {
 
     @Bind(R.id.cb_create_community_open_check)
-    CheckBox mopen_community;
+    CheckBox mCbopen_community;
 
     @Bind(R.id.cb_create_community_close_check)
-    CheckBox mclose_community;
+    CheckBox mCbclose_community;
 
     @Bind(R.id.tv_create_community_cover_img_upload)
-    TextView mbtn_community_cover_img;
+    TextView mTv_community_cover_img;
 
     @Bind(R.id.tv_create_community_logo_upload)
-    TextView mbtn_community_logo_img;
+    TextView mTv_community_logo_img;
 
     @Bind(R.id.iv_create_community_cover_img)
-    ImageView mimg_cover;
+    ImageView mIv_cover;
 
     @Bind(R.id.iv_create_community_logo)
-    ImageView mimagelogo;
+    ImageView mIvlogo;
 
     @Bind(R.id.tv_create_community_submit)
-    TextView mbtn_create;
+    TextView mTv_create;
 
     @Bind(R.id.iv_create_community_cross)
-    FrameLayout miv_btn_cross;
+    TextView mIv_btn_cross;
 
     @Bind(R.id.et_create_community_type)
-    EditText met_community_type;
+    EditText mEt_community_type;
 
-    private final String TAG = LogUtils.makeLogTag(CreateCommunityFragment.class);
+    private final String mTAG = LogUtils.makeLogTag(CreateCommunityFragment.class);
     private CreateCommunityActivityIntractionListner mCreatecommunityIntractionListner;
-    private int mimage_type=0;
+    private int mImage_type=0;
 
     private static final int mCAMERA_CODE = 101, mGALLERY_CODE = 201, mCROPING_CODE = 301;
     private Uri mImageCaptureUri;
-    private File moutPutFile = null;
-    private File moutPutFile1 = null;
+    private File mOutPutFile = null;
+    private File mOutPutFile1 = null;
 
 
     public static CreateCommunityFragment createInstance(int itemsCount) {
@@ -113,7 +113,7 @@ public class CreateCommunityFragment extends BaseFragment implements CreateCommu
                 mCreatecommunityIntractionListner = (CreateCommunityActivityIntractionListner) getActivity();
             }
         } catch (InstantiationException exception) {
-            LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
+            LogUtils.error(mTAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + mTAG + AppConstants.SPACE + exception.getMessage());
         }
     }
 
@@ -123,8 +123,8 @@ public class CreateCommunityFragment extends BaseFragment implements CreateCommu
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragmentcreate_community, container, false);
         ButterKnife.bind(this, view);
-        moutPutFile = new File(Environment.getExternalStorageDirectory(), "temp.jpg");
-        moutPutFile1 = new File(Environment.getExternalStorageDirectory(), "temp1.jpg");
+        mOutPutFile = new File(Environment.getExternalStorageDirectory(), "temp.jpg");
+        mOutPutFile1 = new File(Environment.getExternalStorageDirectory(), "temp1.jpg");
         getActivity().setRequestedOrientation(
                 ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         getExternalStoragePermission();
@@ -140,14 +140,14 @@ public class CreateCommunityFragment extends BaseFragment implements CreateCommu
     @OnClick(R.id.tv_create_community_logo_upload)
     public void  btnChangeLogo()
     {
-        mimage_type=1;
+        mImage_type=1;
      checkStoragePermission();
         selectImageOption();
     }
 
     @OnClick(R.id.tv_create_community_cover_img_upload)
     public void btnChangeCover() {
-        mimage_type=2;
+        mImage_type=2;
       checkCameraPermission();
         selectImageOption();
     }
@@ -161,20 +161,20 @@ public class CreateCommunityFragment extends BaseFragment implements CreateCommu
     {
         if (Build.VERSION.SDK_INT >= 23) {
             if (getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                Log.e("testing", "Permission is granted");
+                LogUtils.info("testing", "Permission is granted");
 
             } else {
                 ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-                Log.e("testing", "Permission is revoked");
+                LogUtils.info("testing", "Permission is revoked");
 
 
             }
             if (getActivity().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                Log.e("testing", "Permission is granted");
+                LogUtils.info("testing", "Permission is granted");
 
             } else {
                 ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
-                Log.e("testing", "Permission is revoked");
+                LogUtils.info("testing", "Permission is revoked");
 
             }
         }
@@ -185,24 +185,24 @@ public class CreateCommunityFragment extends BaseFragment implements CreateCommu
         if (Build.VERSION.SDK_INT >= 23)
         {
             if (getActivity().checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                Log.e("testing", "Permission is granted");
+                LogUtils.info("testing", "Permission is granted");
 
             } else {
                 ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, 1);
-                Log.e("testing", "Permission is revoked");
+                LogUtils.info("testing", "Permission is revoked");
 
             }
 
         } else { //permission is automatically granted on sdk<23 upon installation
-            Log.e("testing", "Permission is already granted");
+            LogUtils.info("testing", "Permission is already granted");
 
         }
         checkStoragePermission();
     }
     @OnClick(R.id.cb_create_community_open_check)
     public void OnOpenCheckClick() {
-        mclose_community.setChecked(false);
-        if(mopen_community.isChecked())
+        mCbclose_community.setChecked(false);
+        if(mCbopen_community.isChecked())
         {
             ChangeCommunityPrivacyDialogFragment newFragment = new ChangeCommunityPrivacyDialogFragment(this);
             newFragment.show(getActivity().getFragmentManager(), "dialog");
@@ -212,8 +212,8 @@ public class CreateCommunityFragment extends BaseFragment implements CreateCommu
 
     @OnClick(R.id.cb_create_community_close_check)
     public void OnCloseCheckClick() {
-        mopen_community.setChecked(false);
-        if(mclose_community.isChecked())
+        mCbopen_community.setChecked(false);
+        if(mCbclose_community.isChecked())
         {
             ChangeCommunityPrivacyDialogFragment newFragment = new ChangeCommunityPrivacyDialogFragment(this);
             newFragment.show(getActivity().getFragmentManager(), "dialog");
@@ -288,7 +288,7 @@ public class CreateCommunityFragment extends BaseFragment implements CreateCommu
 
     @Override
     public void onAddFriendSubmit(String communitynm, String image) {
-        met_community_type.setText(communitynm);
+        mEt_community_type.setText(communitynm);
 
     }
 
@@ -360,22 +360,20 @@ private void selectImageOption() {
         } else if (requestCode == mCROPING_CODE) {
 
             try {
-                if (moutPutFile.exists()) {
-                    Bitmap photo = decodeFile(moutPutFile);
+                if (mOutPutFile.exists()) {
+                    Bitmap photo = decodeFile(mOutPutFile);
                     //  btn_profile_pic.setImageBitmap(photo);//**********************set image on imageview
                     // profilepic.setImageBitmap(photo);
                     // profile.setImageBitmap(photo);//**********************set image on imageview
-                    if(mimage_type==2)
-                        mimg_cover.setImageBitmap(photo);
+                    if(mImage_type==2)
+                        mIv_cover.setImageBitmap(photo);
                     else
-                        mimagelogo.setImageBitmap(photo);
+                        mIvlogo.setImageBitmap(photo);
                     byte[] buffer = new byte[4096];
 
 
                     buffer = getBytesFromBitmap(photo);
-                    // encImage = Base64.encodeToString(buffer, Base64.DEFAULT);
-                    //   Log.e("str", encImage);
-                    //  saveImage();
+
                 } else {
                     Toast.makeText(getActivity(), "Error while save image", Toast.LENGTH_SHORT).show();
                 }
@@ -396,17 +394,16 @@ private void selectImageOption() {
         int size = list.size();
         if (size == 0) {
             try {
-                Bitmap photo = decodeFile(moutPutFile1);
+                Bitmap photo = decodeFile(mOutPutFile1);
                 //  btn_profile_pic.setImageBitmap(photo);
                 // profilepic.setImageBitmap(photo);
                 // profile.setImageBitmap(photo);
-                if(mimage_type==2)
-               mimg_cover.setImageBitmap(photo);
+                if(mImage_type==2)
+               mIv_cover.setImageBitmap(photo);
                 else
-                mimagelogo.setImageBitmap(photo);
-                // encImage = Base64.encodeToString(buffer, Base64.DEFAULT);
-                // Log.e("str", encImage);
-                //  saveImage();
+                mIvlogo.setImageBitmap(photo);
+
+
             }
             catch(Exception e){}
 /*
@@ -425,7 +422,7 @@ private void selectImageOption() {
             //intent.putExtra("return-data", true);
 
             //Create output file here
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(moutPutFile));
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mOutPutFile));
 
             if (size >= 1) {
                 Intent i = new Intent(intent);
@@ -441,10 +438,10 @@ private void selectImageOption() {
                 // btn_profile_pic.setImageBitmap(bmp);//**********************set image on imageview
                 // profile.setImageBitmap(bmp);//**********************set image on imageview
                 // profilepic.setImageBitmap(bmp);
-                if(mimage_type==2)
-                    mimg_cover.setImageBitmap(bmp);
+                if(mImage_type==2)
+                    mIv_cover.setImageBitmap(bmp);
                 else
-                    mimagelogo.setImageBitmap(bmp);
+                    mIvlogo.setImageBitmap(bmp);
                 //  imageView.setImageBitmap(bmp);
             }
 
@@ -486,24 +483,24 @@ private void selectImageOption() {
         if (Build.VERSION.SDK_INT >= 23)
         {
             if (getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                Log.e("testing", "Permission is granted");
+                LogUtils.info("testing", "Permission is granted");
 
             } else {
                 ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE} , 1);
-                Log.e("testing", "Permission is revoked");
+                LogUtils.info("testing", "Permission is revoked");
 
 
             }
             if (getActivity().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                Log.e("testing", "Permission is granted");
+                LogUtils.info("testing", "Permission is granted");
 
             } else {
                 ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
-                Log.e("testing", "Permission is revoked");
+                LogUtils.info("testing", "Permission is revoked");
 
             }
         } else { //permission is automatically granted on sdk<23 upon installation
-            Log.e("testing", "Permission is already granted");
+            LogUtils.info("testing", "Permission is already granted");
 
         }
 

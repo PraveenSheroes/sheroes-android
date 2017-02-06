@@ -4,6 +4,7 @@ import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseMvpView;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityList;
+import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerList;
 
 /**
  * Created by SHEROES-TECH on 31-01-2017.
@@ -11,5 +12,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityList;
 
 public interface CommunityView extends BaseMvpView {
     void getityCommunityListSuccess(List<CommunityList> data);
+    void getOwnerListSuccess(List<OwnerList> data);
     void showNwError();
 }
