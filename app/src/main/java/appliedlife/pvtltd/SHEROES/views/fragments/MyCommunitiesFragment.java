@@ -18,6 +18,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.database.dbentities.MasterData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
@@ -142,6 +143,11 @@ public class MyCommunitiesFragment  extends BaseFragment implements HomeView {
             }
             swipeView.setRefreshing(false);
         }
+    }
+
+    @Override
+    public void getDB(List<MasterData> masterDatas) {
+
     }
 
     @Override

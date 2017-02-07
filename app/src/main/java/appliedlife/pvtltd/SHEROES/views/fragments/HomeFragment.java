@@ -23,6 +23,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.database.dbentities.MasterData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
@@ -37,7 +38,6 @@ import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SettingView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import io.fabric.sdk.android.Fabric;
@@ -101,6 +101,9 @@ public class HomeFragment extends BaseFragment implements HomeView {
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
         mHomePresenter.attachView(this);
+
+        mHomePresenter.saveMasterDataTypes();
+
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new GenericRecyclerViewAdapter(getContext(), (HomeActivity) getActivity());
@@ -200,6 +203,14 @@ public class HomeFragment extends BaseFragment implements HomeView {
     @Override
     public void getAllCommunitiesSuccess(List<MyCommunities> myCommunities, List<Feature> features) {
 
+    }
+
+    @Override
+    public void getDB(List<MasterData> masterDatas) {
+        for(MasterData master:masterDatas) {
+            LogUtils.info("db", "*********************List master******" +master);
+        }
+        mHomePresenter.fetchMasterDataTypes();
     }
 
     @Override

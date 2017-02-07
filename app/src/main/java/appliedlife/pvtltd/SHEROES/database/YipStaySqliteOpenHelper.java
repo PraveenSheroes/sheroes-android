@@ -9,10 +9,12 @@ import com.pushtorefresh.storio.sqlite.impl.DefaultStorIOSQLite;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.database.dbentities.Property;
-import appliedlife.pvtltd.SHEROES.database.dbtables.PropertyTable;
+import appliedlife.pvtltd.SHEROES.database.dbentities.MasterData;
+import appliedlife.pvtltd.SHEROES.database.dbentities.User;
+import appliedlife.pvtltd.SHEROES.database.dbtables.MasterDataTable;
 
-import static appliedlife.pvtltd.SHEROES.database.dbtables.PropertyTable.getHotelTypeMapping;
+import static appliedlife.pvtltd.SHEROES.database.dbtables.MasterDataTable.getAllTypeMapping;
+import static appliedlife.pvtltd.SHEROES.database.dbtables.UserTable.getUserTypeMapping;
 
 
 public class YipStaySqliteOpenHelper extends SQLiteOpenHelper {
@@ -27,13 +29,14 @@ public class YipStaySqliteOpenHelper extends SQLiteOpenHelper {
   public static StorIOSQLite getStorIOSQLite(SQLiteOpenHelper sqliteOpenHelper) {
     return DefaultStorIOSQLite.builder()
         .sqliteOpenHelper(sqliteOpenHelper)
-        .addTypeMapping(Property.class, getHotelTypeMapping())
+            .addTypeMapping(MasterData.class, getAllTypeMapping())
+        .addTypeMapping(User.class, getUserTypeMapping())
         .build();
   }
 
   @Override
   public void onCreate(SQLiteDatabase db) {
-    db.execSQL(PropertyTable.getCreateQuery());
+    db.execSQL(MasterDataTable.getCreateQuery());
   }
 
   @Override

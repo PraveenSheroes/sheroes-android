@@ -225,13 +225,12 @@ public class FeedCommunityHolder extends BaseViewHolder<ListOfFeed> implements V
                 if(dataItem.getUserReaction().equalsIgnoreCase(AppConstants.HEART_REACTION)) {
                     tvFeedCommunityUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
                     dataItem.setUserReaction(AppConstants.NO_REACTION);
-                    liFeedCommunityEmojiPopUp.setVisibility(View.GONE);
+                 //   liFeedCommunityEmojiPopUp.setVisibility(View.GONE);
                 }
                 else
                 {
                     tvFeedCommunityUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
                     dataItem.setUserReaction(AppConstants.HEART_REACTION);
-                    liFeedCommunityEmojiPopUp.setVisibility(View.GONE);
                 }
                 break;
             case R.id.tv_feed_community_user_comment:

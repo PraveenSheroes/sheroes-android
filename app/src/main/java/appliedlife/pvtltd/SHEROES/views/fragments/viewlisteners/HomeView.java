@@ -4,6 +4,7 @@ package appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseMvpView;
+import appliedlife.pvtltd.SHEROES.database.dbentities.MasterData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
@@ -15,5 +16,6 @@ public interface HomeView extends BaseMvpView {
     void getHomeSpinnerListSuccess(List<HomeSpinnerItem> data);
     void getArticleListSuccess(List<ArticleCardResponse> data);
     void getAllCommunitiesSuccess(List<MyCommunities> myCommunities,List<Feature> features);
+    void getDB(List<MasterData> masterDatas);
     void showNwError();
 }

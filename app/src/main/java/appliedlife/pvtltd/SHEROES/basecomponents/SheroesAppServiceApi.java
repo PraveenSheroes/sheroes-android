@@ -1,6 +1,10 @@
 package appliedlife.pvtltd.SHEROES.basecomponents;
 
 
+import java.util.List;
+
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.Response;
+import appliedlife.pvtltd.SHEROES.database.dbentities.MasterData;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityListResponse;
@@ -11,8 +15,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItemResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.CommunitiesResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.Feature;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ListOfSearch;
@@ -69,4 +73,7 @@ public interface SheroesAppServiceApi {
 
     @POST("v2/588f43133f0000d81adde412")
     Observable<CommunitiesResponse> getAllCommunities(@Body Feature feature );
+
+    @GET("v2/589874931100000e07038a52")
+    Observable<Response<List<MasterData>>> getMasterData();
 }
