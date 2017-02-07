@@ -162,18 +162,18 @@ public class FeedCommunityPostHolder extends BaseViewHolder<ListOfFeed> implemen
     }
 
     private void allTextViewStringOperations(Context context) {
-        if (StringUtil.isNotNullOrEmptyString(dataItem.getFeedTitle())&&StringUtil.isNotNullOrEmptyString(dataItem.getFeedHeadline())) {
+        if (StringUtil.isNotNullOrEmptyString(dataItem.getFeedTitle()) && StringUtil.isNotNullOrEmptyString(dataItem.getFeedHeadline())) {
 
             String feedTitle = dataItem.getFeedTitle();
             String feedCommunityName = dataItem.getFeedHeadline();
             if (feedTitle.length() > AppConstants.WORD_LENGTH) {
                 feedTitle = feedTitle.substring(0, AppConstants.WORD_COUNT);
             }
-            String coloredFeedCommunityName = LEFT_HTML_COMMUNITY_TITLE_FOR_COLOR + feedCommunityName+ RIGHT_HTML_COMMUNITY_TITLE_FOR_COLOR;
+            String coloredFeedCommunityName = LEFT_HTML_COMMUNITY_TITLE_FOR_COLOR + feedCommunityName + RIGHT_HTML_COMMUNITY_TITLE_FOR_COLOR;
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                tvFeedCommunityPostCardTitle.setText(Html.fromHtml(feedTitle+AppConstants.SPACE +coloredFeedCommunityName)); // for 24 api and more
+                tvFeedCommunityPostCardTitle.setText(Html.fromHtml(feedTitle + AppConstants.SPACE + coloredFeedCommunityName)); // for 24 api and more
             } else {
-                tvFeedCommunityPostCardTitle.setText(Html.fromHtml(feedTitle+AppConstants.SPACE +coloredFeedCommunityName));// or for older api
+                tvFeedCommunityPostCardTitle.setText(Html.fromHtml(feedTitle + AppConstants.SPACE + coloredFeedCommunityName));// or for older api
             }
 
         }
@@ -274,12 +274,14 @@ public class FeedCommunityPostHolder extends BaseViewHolder<ListOfFeed> implemen
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View child = layoutInflater.inflate(R.layout.feed_community_post_two_images, null);
         ImageView ivFirstLandscape = (ImageView) child.findViewById(R.id.iv_feed_community_post_first);
+        ivFirstLandscape.setOnClickListener(this);
         Glide.with(context)
                 .load(firstImage)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .skipMemoryCache(true)
                 .into(ivFirstLandscape);
         ImageView ivSecond = (ImageView) child.findViewById(R.id.iv_feed_comunity_post_second);
+        ivSecond.setOnClickListener(this);
         Glide.with(context)
                 .load(secondImage)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
@@ -292,24 +294,28 @@ public class FeedCommunityPostHolder extends BaseViewHolder<ListOfFeed> implemen
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View child = layoutInflater.inflate(R.layout.feed_community_post_first_portrait_with_multiple, null);
         ImageView ivFirstLandscape = (ImageView) child.findViewById(R.id.iv_feed_community_post_first_portrait);
+        ivFirstLandscape.setOnClickListener(this);
         Glide.with(context)
                 .load(firstImage)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .skipMemoryCache(true)
                 .into(ivFirstLandscape);
         ImageView ivSecond = (ImageView) child.findViewById(R.id.iv_feed_community_post_second_portrait);
+        ivSecond.setOnClickListener(this);
         Glide.with(context)
                 .load(secondImage)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .skipMemoryCache(true)
                 .into(ivSecond);
         ImageView ivThird = (ImageView) child.findViewById(R.id.iv_feed_community_post_third_portrait);
+        ivThird.setOnClickListener(this);
         Glide.with(context)
                 .load(thirdImage)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .skipMemoryCache(true)
                 .into(ivThird);
         ImageView ivFourth = (ImageView) child.findViewById(R.id.iv_feed_community_post_fourth_portrait);
+        ivFourth.setOnClickListener(this);
         Glide.with(context)
                 .load(fourthImage)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
@@ -322,18 +328,21 @@ public class FeedCommunityPostHolder extends BaseViewHolder<ListOfFeed> implemen
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View child = layoutInflater.inflate(R.layout.feed_community_post_first_portrait_with_two_images, null);
         ImageView ivFirstLandscape = (ImageView) child.findViewById(R.id.iv_feed_community_post_first_portrait_side_two_image);
+        ivFirstLandscape.setOnClickListener(this);
         Glide.with(context)
                 .load(firstImage)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .skipMemoryCache(true)
                 .into(ivFirstLandscape);
         ImageView ivSecond = (ImageView) child.findViewById(R.id.iv_feed_community_post_second_portrait_side_two_image);
+        ivSecond.setOnClickListener(this);
         Glide.with(context)
                 .load(secondImage)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .skipMemoryCache(true)
                 .into(ivSecond);
         ImageView ivThird = (ImageView) child.findViewById(R.id.iv_feed_community_post_third_portrait_side_two_image);
+        ivThird.setOnClickListener(this);
         Glide.with(context)
                 .load(thirdImage)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
@@ -347,18 +356,21 @@ public class FeedCommunityPostHolder extends BaseViewHolder<ListOfFeed> implemen
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View child = layoutInflater.inflate(R.layout.feed_community_post_first_landscape_with_two_images, null);
         ImageView ivFirstLandscape = (ImageView) child.findViewById(R.id.iv_feed_community_post_first_landscape_with_two_images);
+        ivFirstLandscape.setOnClickListener(this);
         Glide.with(context)
                 .load(firstImage)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .skipMemoryCache(true)
                 .into(ivFirstLandscape);
         ImageView ivSecond = (ImageView) child.findViewById(R.id.iv_feed_community_post_second_image_landscape_with_two_images);
+        ivSecond.setOnClickListener(this);
         Glide.with(context)
                 .load(secondImage)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .skipMemoryCache(true)
                 .into(ivSecond);
         ImageView ivThird = (ImageView) child.findViewById(R.id.iv_feed_community_post_third_image_landscape_with_two_images);
+        ivThird.setOnClickListener(this);
         Glide.with(context)
                 .load(thirdImage)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
@@ -373,24 +385,28 @@ public class FeedCommunityPostHolder extends BaseViewHolder<ListOfFeed> implemen
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View child = layoutInflater.inflate(R.layout.feed_community_post_first_landscape_with_multiple, null);
         ImageView ivFirstLandscape = (ImageView) child.findViewById(R.id.iv_feed_community_post_first_landscape);
+        ivFirstLandscape.setOnClickListener(this);
         Glide.with(context)
                 .load(firstImage)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .skipMemoryCache(true)
                 .into(ivFirstLandscape);
         ImageView ivSecond = (ImageView) child.findViewById(R.id.iv_feed_community_post_second_image_landscape);
+        ivSecond.setOnClickListener(this);
         Glide.with(context)
                 .load(secondImage)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .skipMemoryCache(true)
                 .into(ivSecond);
         ImageView ivThird = (ImageView) child.findViewById(R.id.iv_feed_community_post_third_image_landscape);
+        ivThird.setOnClickListener(this);
         Glide.with(context)
                 .load(thirdImage)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .skipMemoryCache(true)
                 .into(ivThird);
         ImageView ivFourth = (ImageView) child.findViewById(R.id.iv_feed_community_post_fourth_image_landscape);
+        ivFourth.setOnClickListener(this);
         Glide.with(context)
                 .load(fourthImage)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
@@ -413,11 +429,15 @@ public class FeedCommunityPostHolder extends BaseViewHolder<ListOfFeed> implemen
                 if (dataItem.getUserReaction().equalsIgnoreCase(AppConstants.HEART_REACTION)) {
                     tvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
                     dataItem.setUserReaction(AppConstants.NO_REACTION);
-                    liFeedCommunityUserPostEmojiPopUp.setVisibility(View.GONE);
+                    if (liFeedCommunityUserPostEmojiPopUp.getVisibility() == View.VISIBLE) {
+                        viewInterface.handleOnClick(dataItem, tvFeedCommunityPostUserReaction);
+                    }
                 } else {
                     tvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
                     dataItem.setUserReaction(AppConstants.HEART_REACTION);
-                    liFeedCommunityUserPostEmojiPopUp.setVisibility(View.GONE);
+                    if (liFeedCommunityUserPostEmojiPopUp.getVisibility() == View.VISIBLE) {
+                        viewInterface.handleOnClick(dataItem, tvFeedCommunityPostUserReaction);
+                    }
                 }
                 break;
             case R.id.tv_feed_community_post_user_comment:
@@ -425,15 +445,79 @@ public class FeedCommunityPostHolder extends BaseViewHolder<ListOfFeed> implemen
                 break;
             case R.id.tv_feed_community_post_user_bookmark:
                 if (dataItem.getBookmarked()) {
-                    tvFeedCommunityPostUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_bookmark_in_active, 0);
+                    tvFeedCommunityPostUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_in_active, 0);
                     dataItem.setBookmarked(false);
                 } else {
-                    tvFeedCommunityPostUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_bookmark_active, 0);
+                    tvFeedCommunityPostUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_active, 0);
                     dataItem.setBookmarked(true);
                 }
                 break;
             case R.id.tv_feed_community_post_user_menu:
                 viewInterface.handleOnClick(dataItem, tvFeedCommunityPostUserMenu);
+                break;
+            case R.id.iv_feed_community_post_first:
+                LogUtils.info("img", "**********Image first******");
+                viewInterface.dataOperationOnClick(dataItem);
+                break;
+            case R.id.iv_feed_comunity_post_second:
+                LogUtils.info("img", "**********Image seocnd******");
+                viewInterface.dataOperationOnClick(dataItem);
+                break;
+            case R.id.iv_feed_community_post_first_portrait:
+                LogUtils.info("img", "**********Image iv_feed_community_post_first_portrait******");
+                viewInterface.dataOperationOnClick(dataItem);
+                break;
+            case R.id.iv_feed_community_post_second_portrait:
+                LogUtils.info("img", "**********Image iv_feed_community_post_second_portrait******");
+                viewInterface.dataOperationOnClick(dataItem);
+                break;
+            case R.id.iv_feed_community_post_third_portrait:
+                LogUtils.info("img", "**********Image iv_feed_community_post_third_portrait******");
+                viewInterface.dataOperationOnClick(dataItem);
+                break;
+            case R.id.iv_feed_community_post_fourth_portrait:
+                LogUtils.info("img", "**********Image iv_feed_community_post_first_portrait******");
+                viewInterface.dataOperationOnClick(dataItem);
+                break;
+            case R.id.iv_feed_community_post_first_portrait_side_two_image:
+                LogUtils.info("img", "**********Image iv_feed_community_post_first_portrait_side_two_image******");
+                viewInterface.dataOperationOnClick(dataItem);
+                break;
+            case R.id.iv_feed_community_post_second_portrait_side_two_image:
+                LogUtils.info("img", "**********Image iv_feed_community_post_second_portrait_side_two_image******");
+                viewInterface.dataOperationOnClick(dataItem);
+                break;
+            case R.id.iv_feed_community_post_third_portrait_side_two_image:
+                LogUtils.info("img", "**********Image iv_feed_community_post_second_portrait_side_two_image******");
+                viewInterface.dataOperationOnClick(dataItem);
+                break;
+            case R.id.iv_feed_community_post_first_landscape_with_two_images:
+                LogUtils.info("img", "**********Image iv_feed_community_post_first_landscape_with_two_images******");
+                viewInterface.dataOperationOnClick(dataItem);
+                break;
+            case R.id.iv_feed_community_post_second_image_landscape_with_two_images:
+                LogUtils.info("img", "**********Image iv_feed_community_post_second_image_landscape_with_two_images******");
+                viewInterface.dataOperationOnClick(dataItem);
+                break;
+            case R.id.iv_feed_community_post_third_image_landscape_with_two_images:
+                LogUtils.info("img", "**********Image iv_feed_community_post_second_image_landscape_with_two_images******");
+                viewInterface.dataOperationOnClick(dataItem);
+                break;
+            case R.id.iv_feed_community_post_first_landscape:
+                LogUtils.info("img", "**********Image iv_feed_community_post_first_landscape******");
+                viewInterface.dataOperationOnClick(dataItem);
+                break;
+            case R.id.iv_feed_community_post_second_image_landscape:
+                LogUtils.info("img", "**********Image iv_feed_community_post_second_image_landscape******");
+                viewInterface.dataOperationOnClick(dataItem);
+                break;
+            case R.id.iv_feed_community_post_third_image_landscape:
+                LogUtils.info("img", "**********Image iv_feed_community_post_third_image_landscape******");
+                viewInterface.dataOperationOnClick(dataItem);
+                break;
+            case R.id.iv_feed_community_post_fourth_image_landscape:
+                LogUtils.info("img", "**********Image iv_feed_community_post_fourth_image_landscape******");
+                viewInterface.dataOperationOnClick(dataItem);
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);

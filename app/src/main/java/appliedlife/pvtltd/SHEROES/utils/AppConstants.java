@@ -43,4 +43,6 @@ public class AppConstants {
     public static final String ALL_SEARCH= "search";
     public static final int WORD_COUNT = 92;
     public static final int WORD_LENGTH = 80;
+    public static final String IMAGE_FULL_VIEW = "image_view";
+    public static final String BACK_SLASH="/";
 }

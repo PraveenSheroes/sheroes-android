@@ -44,6 +44,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.CustomeDataList;
+import appliedlife.pvtltd.SHEROES.views.adapters.ImageFullViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.Blurry;
@@ -54,6 +55,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeSpinnerFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ImageFullViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunitiesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SettingAboutFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SettingFeedbackFragment;
@@ -64,7 +66,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class HomeActivity extends BaseActivity implements HomeFragment.HomeActivityIntractionListner, SettingView, BaseHolderInterface, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, CommentReactionFragment.HomeActivityIntractionListner, View.OnTouchListener, View.OnClickListener {
+public class HomeActivity extends BaseActivity implements HomeFragment.HomeActivityIntractionListner, SettingView, BaseHolderInterface, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, CommentReactionFragment.HomeActivityIntractionListner, View.OnTouchListener, View.OnClickListener, ImageFullViewAdapter.HomeActivityIntraction {
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
     private static final String SPINNER_FRAGMENT = "spinnerFragment";
     @Bind(R.id.iv_drawer_profile_circle_icon)
@@ -142,7 +144,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
         mTvUserLocation.setText("Delhi, India");
         mCustiomActionBarToggle.syncState();
         mNavigationView.setNavigationItemSelectedListener(this);
-        mFragmentOpen = new FragmentOpen(false, false, false, false, false, false, false,false);
+        mFragmentOpen = new FragmentOpen(false, false, false, false, false, false, false, false);
         initHomeViewPagerAndTabs();
         mHomeSpinnerItemList = CustomeDataList.makeSpinnerListRequest();
         Glide.with(this)
@@ -200,6 +202,14 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
         }
     }
 
+    @Override
+    public void dataOperationOnClick(BaseResponse baseResponse) {
+        if (baseResponse instanceof ListOfFeed) {
+            ListOfFeed listOfFeed = (ListOfFeed) baseResponse;
+            openImageFullViewFragment(listOfFeed);
+        }
+    }
+
 
     private void feedCardsHandled(View view, ListOfFeed listOfFeed) {
         int id = view.getId();
@@ -214,50 +224,71 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
                 openCommentReactionFragment();
                 break;
             case R.id.tv_feed_article_user_reaction:
-                mTvFeedArticleUserReaction = (TextView) findViewById(R.id.tv_feed_article_user_reaction);
                 mArticlePopUp = findViewById(R.id.li_feed_article_card_emoji_pop_up);
-                TextView tvArticleReaction1 = (TextView) mArticlePopUp.findViewById(R.id.tv_reaction1);
-                TextView tvArticleReaction2 = (TextView) mArticlePopUp.findViewById(R.id.tv_reaction2);
-                TextView tvArticleReaction3 = (TextView) mArticlePopUp.findViewById(R.id.tv_reaction3);
-                TextView tvArticleReaction4 = (TextView) mArticlePopUp.findViewById(R.id.tv_reaction4);
-                mArticlePopUp.setOnTouchListener(this);
-                tvArticleReaction1.setOnClickListener(this);
-                tvArticleReaction2.setOnClickListener(this);
-                tvArticleReaction3.setOnClickListener(this);
-                tvArticleReaction4.setOnClickListener(this);
-                mArticlePopUp.setVisibility(View.VISIBLE);
-                showUserReactionOption(mArticlePopUp);
+                if (mArticlePopUp.getVisibility() == View.VISIBLE) {
+                    mArticlePopUp.setVisibility(View.GONE);
+                    dismissUserReactionOption(mArticlePopUp);
+                } else {
+                    mTvFeedArticleUserReaction = (TextView) findViewById(R.id.tv_feed_article_user_reaction);
+                    TextView tvArticleReaction = (TextView) mArticlePopUp.findViewById(R.id.tv_reaction);
+                    TextView tvArticleReaction1 = (TextView) mArticlePopUp.findViewById(R.id.tv_reaction1);
+                    TextView tvArticleReaction2 = (TextView) mArticlePopUp.findViewById(R.id.tv_reaction2);
+                    TextView tvArticleReaction3 = (TextView) mArticlePopUp.findViewById(R.id.tv_reaction3);
+                    TextView tvArticleReaction4 = (TextView) mArticlePopUp.findViewById(R.id.tv_reaction4);
+                    mArticlePopUp.setOnTouchListener(this);
+                    tvArticleReaction.setOnClickListener(this);
+                    tvArticleReaction1.setOnClickListener(this);
+                    tvArticleReaction2.setOnClickListener(this);
+                    tvArticleReaction3.setOnClickListener(this);
+                    tvArticleReaction4.setOnClickListener(this);
+                    mArticlePopUp.setVisibility(View.VISIBLE);
+                    showUserReactionOption(mArticlePopUp);
+                }
                 break;
             case R.id.tv_feed_community_user_reaction:
-                mTvFeedCommunityUserReaction = (TextView) findViewById(R.id.tv_feed_community_user_reaction);
                 mCommunityPopUp = findViewById(R.id.li_feed_community_emoji_pop_up);
-                TextView tvCommunityReaction1 = (TextView) mCommunityPopUp.findViewById(R.id.tv_reaction1);
-                TextView tvCommunityReaction2 = (TextView) mCommunityPopUp.findViewById(R.id.tv_reaction2);
-                TextView tvCommunityReaction3 = (TextView) mCommunityPopUp.findViewById(R.id.tv_reaction3);
-                TextView tvCommunityReaction4 = (TextView) mCommunityPopUp.findViewById(R.id.tv_reaction4);
-                mCommunityPopUp.setOnTouchListener(this);
-                tvCommunityReaction1.setOnClickListener(this);
-                tvCommunityReaction2.setOnClickListener(this);
-                tvCommunityReaction3.setOnClickListener(this);
-                tvCommunityReaction4.setOnClickListener(this);
-                mCommunityPopUp.setVisibility(View.VISIBLE);
-                showUserReactionOption(mCommunityPopUp);
-
+                if (mCommunityPopUp.getVisibility() == View.VISIBLE) {
+                    mCommunityPopUp.setVisibility(View.GONE);
+                    dismissUserReactionOption(mCommunityPopUp);
+                } else {
+                    mTvFeedCommunityUserReaction = (TextView) findViewById(R.id.tv_feed_community_user_reaction);
+                    TextView tvCommunityReaction = (TextView) mCommunityPopUp.findViewById(R.id.tv_reaction);
+                    TextView tvCommunityReaction1 = (TextView) mCommunityPopUp.findViewById(R.id.tv_reaction1);
+                    TextView tvCommunityReaction2 = (TextView) mCommunityPopUp.findViewById(R.id.tv_reaction2);
+                    TextView tvCommunityReaction3 = (TextView) mCommunityPopUp.findViewById(R.id.tv_reaction3);
+                    TextView tvCommunityReaction4 = (TextView) mCommunityPopUp.findViewById(R.id.tv_reaction4);
+                    mCommunityPopUp.setOnTouchListener(this);
+                    tvCommunityReaction.setOnClickListener(this);
+                    tvCommunityReaction1.setOnClickListener(this);
+                    tvCommunityReaction2.setOnClickListener(this);
+                    tvCommunityReaction3.setOnClickListener(this);
+                    tvCommunityReaction4.setOnClickListener(this);
+                    mCommunityPopUp.setVisibility(View.VISIBLE);
+                    showUserReactionOption(mCommunityPopUp);
+                }
                 break;
             case R.id.tv_feed_community_post_user_reaction:
-                mTvFeedCommunityPostUserReaction = (TextView) findViewById(R.id.tv_feed_community_post_user_reaction);
                 mCommunityPostPopUp = findViewById(R.id.li_feed_community_user_post_emoji_pop_up);
-                TextView tvCommunityPostReaction1 = (TextView) mCommunityPostPopUp.findViewById(R.id.tv_reaction1);
-                TextView tvCommunityPostReaction2 = (TextView) mCommunityPostPopUp.findViewById(R.id.tv_reaction2);
-                TextView tvCommunityPostReaction3 = (TextView) mCommunityPostPopUp.findViewById(R.id.tv_reaction3);
-                TextView tvCommunityPostReaction4 = (TextView) mCommunityPostPopUp.findViewById(R.id.tv_reaction4);
-                mCommunityPostPopUp.setOnTouchListener(this);
-                tvCommunityPostReaction1.setOnClickListener(this);
-                tvCommunityPostReaction2.setOnClickListener(this);
-                tvCommunityPostReaction3.setOnClickListener(this);
-                tvCommunityPostReaction4.setOnClickListener(this);
-                mCommunityPostPopUp.setVisibility(View.VISIBLE);
-                showUserReactionOption(mCommunityPostPopUp);
+                if (mCommunityPostPopUp.getVisibility() == View.VISIBLE) {
+                    mCommunityPostPopUp.setVisibility(View.GONE);
+                    dismissUserReactionOption(mCommunityPostPopUp);
+                } else {
+                    mTvFeedCommunityPostUserReaction = (TextView) findViewById(R.id.tv_feed_community_post_user_reaction);
+                    mCommunityPostPopUp = findViewById(R.id.li_feed_community_user_post_emoji_pop_up);
+                    TextView tvCommunityPostReaction = (TextView) mCommunityPostPopUp.findViewById(R.id.tv_reaction);
+                    TextView tvCommunityPostReaction1 = (TextView) mCommunityPostPopUp.findViewById(R.id.tv_reaction1);
+                    TextView tvCommunityPostReaction2 = (TextView) mCommunityPostPopUp.findViewById(R.id.tv_reaction2);
+                    TextView tvCommunityPostReaction3 = (TextView) mCommunityPostPopUp.findViewById(R.id.tv_reaction3);
+                    TextView tvCommunityPostReaction4 = (TextView) mCommunityPostPopUp.findViewById(R.id.tv_reaction4);
+                    mCommunityPostPopUp.setOnTouchListener(this);
+                    tvCommunityPostReaction.setOnClickListener(this);
+                    tvCommunityPostReaction1.setOnClickListener(this);
+                    tvCommunityPostReaction2.setOnClickListener(this);
+                    tvCommunityPostReaction3.setOnClickListener(this);
+                    tvCommunityPostReaction4.setOnClickListener(this);
+                    mCommunityPostPopUp.setVisibility(View.VISIBLE);
+                    showUserReactionOption(mCommunityPostPopUp);
+                }
                 break;
             case R.id.tv_feed_article_user_comment:
                 openCommentReactionFragment();
@@ -298,7 +329,17 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
         mCouponCodeDialogView.setContentView(R.layout.menu_option_layout);
 
     }
+    private void openImageFullViewFragment(ListOfFeed listOfFeed ) {
+        ImageFullViewFragment imageFullViewFragment = new ImageFullViewFragment();
+        Bundle bundle = new Bundle();
+        mFragmentOpen.setCommentList(true);
+        bundle.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, mFragmentOpen);
+        bundle.putParcelable(AppConstants.IMAGE_FULL_VIEW,listOfFeed);
+        imageFullViewFragment.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.bottom_to_top_slide_reverse_anim)
+                .replace(R.id.fl_feed_comments, imageFullViewFragment, SPINNER_FRAGMENT).addToBackStack(null).commitAllowingStateLoss();
 
+    }
     private void openCommentReactionFragment() {
         CommentReactionFragment commentReactionFragmentForArticle = new CommentReactionFragment();
         Bundle bundleArticle = new Bundle();
@@ -593,8 +634,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
             mTvSetting.setVisibility(View.GONE);
             mFragmentOpen.setSettingFragment(false);
 
-        } else
-        {
+        } else {
             finish();
         }
     }
@@ -652,10 +692,33 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
     public void onClick(View view) {
         int id = view.getId();
         switch (id) {
+            case R.id.tv_reaction:
+                if (null != mTvFeedArticleUserReaction) {
+                    mTvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_heart_emoji), null, null, null);
+                    if (null != mArticlePopUp) {
+                        mArticlePopUp.setVisibility(View.GONE);
+                        dismissUserReactionOption(mArticlePopUp);
+                    }
+                }
+                if (null != mTvFeedCommunityUserReaction) {
+                    mTvFeedCommunityUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_heart_active), null, null, null);
+                    if (null != mCommunityPopUp) {
+                        mCommunityPopUp.setVisibility(View.GONE);
+                        dismissUserReactionOption(mCommunityPopUp);
+                    }
+                }
+                if (null != mTvFeedCommunityPostUserReaction) {
+                    mTvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_heart_active), null, null, null);
+                    if (null != mCommunityPostPopUp) {
+                        mCommunityPostPopUp.setVisibility(View.GONE);
+                        dismissUserReactionOption(mCommunityPostPopUp);
+                    }
+                }
 
+                break;
             case R.id.tv_reaction1:
                 if (null != mTvFeedArticleUserReaction) {
-                    mTvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji3_whistel), null, null, null);
+                    mTvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_heart_active), null, null, null);
                     if (null != mArticlePopUp) {
                         mArticlePopUp.setVisibility(View.GONE);
                         dismissUserReactionOption(mArticlePopUp);

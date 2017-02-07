@@ -86,6 +86,10 @@ public class CreateCommunityPostActivity extends BaseActivity implements CreateC
 
     }
 
+    @Override
+    public void dataOperationOnClick(BaseResponse baseResponse) {
+
+    }
 
 
     @Override

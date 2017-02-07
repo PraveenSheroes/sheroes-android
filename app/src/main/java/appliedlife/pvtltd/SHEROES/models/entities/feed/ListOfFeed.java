@@ -1,14 +1,18 @@
 
 package appliedlife.pvtltd.SHEROES.models.entities.feed;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 
-public class ListOfFeed extends BaseResponse {
+public class ListOfFeed extends BaseResponse implements Parcelable {
 
     @SerializedName("id")
     @Expose
@@ -272,4 +276,79 @@ public class ListOfFeed extends BaseResponse {
     public void setViewedByUser(Boolean viewedByUser) {
         isViewedByUser = viewedByUser;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.id);
+        dest.writeString(this.userId);
+        dest.writeString(this.groupName);
+        dest.writeValue(this.isViewedByUser);
+        dest.writeParcelable(this.jobDetail, flags);
+        dest.writeString(this.feedTitle);
+        dest.writeString(this.feedType);
+        dest.writeString(this.createdDateTime);
+        dest.writeString(this.tags);
+        dest.writeString(this.feedHeadline);
+        dest.writeString(this.description);
+        dest.writeInt(this.noOfReactions);
+        dest.writeList(this.typeOfReaction);
+        dest.writeString(this.userReaction);
+        dest.writeInt(this.noOfComments);
+        dest.writeParcelable(this.recentComment, flags);
+        dest.writeList(this.totalCoverImages);
+        dest.writeString(this.feedCircleIconUrl);
+        dest.writeString(this.postedBy);
+        dest.writeValue(this.bookmarked);
+        dest.writeString(this.hashtags);
+        dest.writeString(this.articleLinkUrl);
+        dest.writeString(this.author);
+    }
+
+    public ListOfFeed() {
+    }
+
+    protected ListOfFeed(Parcel in) {
+        this.id = in.readString();
+        this.userId = in.readString();
+        this.groupName = in.readString();
+        this.isViewedByUser = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.jobDetail = in.readParcelable(JobDetail.class.getClassLoader());
+        this.feedTitle = in.readString();
+        this.feedType = in.readString();
+        this.createdDateTime = in.readString();
+        this.tags = in.readString();
+        this.feedHeadline = in.readString();
+        this.description = in.readString();
+        this.noOfReactions = in.readInt();
+        this.typeOfReaction = new ArrayList<TypeOfReaction>();
+        in.readList(this.typeOfReaction, TypeOfReaction.class.getClassLoader());
+        this.userReaction = in.readString();
+        this.noOfComments = in.readInt();
+        this.recentComment = in.readParcelable(RecentComment.class.getClassLoader());
+        this.totalCoverImages = new ArrayList<TotalCoverImage>();
+        in.readList(this.totalCoverImages, TotalCoverImage.class.getClassLoader());
+        this.feedCircleIconUrl = in.readString();
+        this.postedBy = in.readString();
+        this.bookmarked = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.hashtags = in.readString();
+        this.articleLinkUrl = in.readString();
+        this.author = in.readString();
+    }
+
+    public static final Parcelable.Creator<ListOfFeed> CREATOR = new Parcelable.Creator<ListOfFeed>() {
+        @Override
+        public ListOfFeed createFromParcel(Parcel source) {
+            return new ListOfFeed(source);
+        }
+
+        @Override
+        public ListOfFeed[] newArray(int size) {
+            return new ListOfFeed[size];
+        }
+    };
 }

@@ -53,6 +53,7 @@
     <dimen name="dp_size_250">250dp</dimen>
     <dimen name="dp_size_266">266dp</dimen>
     <dimen name="dp_size_185">185dp</dimen>
+    <dimen name="dp_size_350">350dp</dimen>
 
     <!--Text sizes for SHEROES-->
     <dimen name="sp_size_16">16sp</dimen>

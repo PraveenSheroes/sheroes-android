@@ -14,7 +14,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_size_2"
         android:layout_weight="1"
         android:orientation="horizontal">
@@ -44,7 +44,7 @@
             <ImageView
                 android:id="@+id/iv_feed_community_post_fourth_image_landscape"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:scaleType="fitXY" />
             <TextView
                 android:id="@+id/tv_feed_community_post_landscape_total_images"

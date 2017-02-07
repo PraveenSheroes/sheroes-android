@@ -159,6 +159,11 @@ public class CommunitiesDetailActivity extends BaseActivity implements AllMember
     }
 
     @Override
+    public void dataOperationOnClick(BaseResponse baseResponse) {
+
+    }
+
+    @Override
     public void setListData(BaseResponse data, boolean flag) {
 
     }

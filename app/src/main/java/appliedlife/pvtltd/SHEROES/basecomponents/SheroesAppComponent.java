@@ -25,6 +25,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.CreateCommunityPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeSpinnerFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ImageFullViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LoginFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunitiesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SearchArticleFragment;
@@ -89,6 +90,8 @@ public interface SheroesAppComponent {
     void inject(FeaturedFragment featuredFragment);
     void inject(MyCommunitiesFragment myCommunitiesFragment);
     void inject(CommunitiesDetailFragment communitiesDetailFragment);
+    void inject(ImageFullViewFragment imageFullViewFragment);
+
     void inject(ArticleCardHolder articleCardHolder);
     void inject(FooterViewHolder footerViewHolder);
     void inject(DrawerViewHolder drawerViewHolder);

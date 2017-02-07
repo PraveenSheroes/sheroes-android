@@ -85,6 +85,7 @@ public class FeedArticleHolder extends BaseViewHolder<ListOfFeed> implements Vie
     private ListOfFeed dataItem;
     String mViewMore, mLess;
 
+
     public FeedArticleHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
@@ -104,6 +105,7 @@ public class FeedArticleHolder extends BaseViewHolder<ListOfFeed> implements Vie
         liFeedArticleImages.setOnClickListener(this);
         tvFeedArticleUserMenu.setOnClickListener(this);
         tvFeedArticleHeaderLebel.setOnClickListener(this);
+        tvFeedArticleUserBookmark.setOnClickListener(this);
         tvFeedArticleHeaderLebel.setTag(mViewMore);
         liFeedArticleImages.removeAllViews();
         liFeedArticleImages.removeAllViewsInLayout();
@@ -222,11 +224,15 @@ public class FeedArticleHolder extends BaseViewHolder<ListOfFeed> implements Vie
                 if (dataItem.getUserReaction().equalsIgnoreCase(AppConstants.HEART_REACTION)) {
                     tvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
                     dataItem.setUserReaction(AppConstants.NO_REACTION);
-                    liFeedArticlCardEmojiPopUp.setVisibility(View.GONE);
+                    if(liFeedArticlCardEmojiPopUp.getVisibility()==View.VISIBLE) {
+                        viewInterface.handleOnClick(dataItem, tvFeedArticleUserReaction);
+                    }
                 } else {
                     tvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
                     dataItem.setUserReaction(AppConstants.HEART_REACTION);
-                    liFeedArticlCardEmojiPopUp.setVisibility(View.GONE);
+                    if(liFeedArticlCardEmojiPopUp.getVisibility()==View.VISIBLE) {
+                        viewInterface.handleOnClick(dataItem, tvFeedArticleUserReaction);
+                    }
                 }
                 break;
             case R.id.li_feed_article_join_conversation:

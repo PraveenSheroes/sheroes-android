@@ -102,7 +102,7 @@ public class HomeFragment extends BaseFragment implements HomeView {
         mPullRefreshList.setPullToRefresh(false);
         mHomePresenter.attachView(this);
 
-        mHomePresenter.saveMasterDataTypes();
+      //  mHomePresenter.saveMasterDataTypes();
 
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);

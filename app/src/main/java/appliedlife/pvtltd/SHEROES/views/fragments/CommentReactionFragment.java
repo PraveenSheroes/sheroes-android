@@ -75,7 +75,9 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_comment, container, false);
         ButterKnife.bind(this, view);
-        mFragmentOpen= getArguments().getParcelable(AppConstants.FRAGMENT_FLAG_CHECK);
+        if(null!=getArguments()) {
+            mFragmentOpen = getArguments().getParcelable(AppConstants.FRAGMENT_FLAG_CHECK);
+        }
         mCommentReactionPresenter.attachView(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new GenericRecyclerViewAdapter(getContext(), (HomeActivity) getActivity());

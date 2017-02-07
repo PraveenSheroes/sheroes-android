@@ -78,7 +78,7 @@
             android:drawableLeft="@drawable/ic_emoji3_whistel" />
 
         <TextView
-            android:id="@+id/tv_reaction"
+            android:id="@+id/tv_reaction_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/dp_size_74"

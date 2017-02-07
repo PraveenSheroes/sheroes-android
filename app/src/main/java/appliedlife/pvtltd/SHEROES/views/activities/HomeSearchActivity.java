@@ -90,6 +90,11 @@ public class HomeSearchActivity extends BaseActivity implements BaseHolderInterf
     }
 
     @Override
+    public void dataOperationOnClick(BaseResponse baseResponse) {
+
+    }
+
+    @Override
     public void setListData(BaseResponse data, boolean flag) {
     }
 

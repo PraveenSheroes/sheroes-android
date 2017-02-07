@@ -89,6 +89,10 @@ public class ShareCommunityActivity extends BaseActivity implements ShareCommuni
 
     }
 
+    @Override
+    public void dataOperationOnClick(BaseResponse baseResponse) {
+
+    }
 
 
     @Override
