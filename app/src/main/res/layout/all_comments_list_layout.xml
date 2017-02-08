@@ -32,7 +32,7 @@
     </LinearLayout>
     <View
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_size_1"
+        android:layout_height="@dimen/dp_size_0.5"
         android:layout_marginLeft="@dimen/dp_size_10"
         android:layout_marginRight="@dimen/dp_size_10"
         android:background="@color/searchbox_text_color" />

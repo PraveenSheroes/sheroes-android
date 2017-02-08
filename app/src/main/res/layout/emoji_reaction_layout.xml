@@ -14,8 +14,13 @@
         android:text="@string/ID_LOVE"
         android:textColor="@color/white"
         android:textSize="@dimen/sp_size_12"
+        android:gravity="center"
+        android:layout_gravity="center"
         android:drawablePadding="@dimen/dp_size_10"
-        android:padding="@dimen/dp_size_13"
+        android:paddingLeft="@dimen/dp_size_28"
+        android:paddingTop="@dimen/dp_size_12"
+        android:paddingRight="@dimen/dp_size_14"
+        android:paddingBottom="@dimen/dp_size_15"
         />
     <TextView
         android:id="@+id/tv_reaction1"
@@ -26,8 +31,13 @@
         android:text="@string/ID_WISHTLE"
         android:textColor="@color/white"
         android:textSize="@dimen/sp_size_12"
+        android:gravity="center"
+        android:layout_gravity="center"
         android:drawablePadding="@dimen/dp_size_10"
-        android:padding="@dimen/dp_size_13"
+        android:paddingLeft="@dimen/dp_size_14"
+        android:paddingTop="@dimen/dp_size_12"
+        android:paddingRight="@dimen/dp_size_14"
+        android:paddingBottom="@dimen/dp_size_15"
         />
 
     <TextView
@@ -39,8 +49,13 @@
         android:text="@string/ID_XOXO"
         android:textSize="@dimen/sp_size_12"
         android:textColor="@color/white"
+        android:gravity="center"
+        android:layout_gravity="center"
         android:drawablePadding="@dimen/dp_size_10"
-        android:padding="@dimen/dp_size_16"/>
+        android:paddingLeft="@dimen/dp_size_14"
+        android:paddingTop="@dimen/dp_size_12"
+        android:paddingRight="@dimen/dp_size_14"
+        android:paddingBottom="@dimen/dp_size_15"/>
 
 
     <TextView
@@ -52,8 +67,13 @@
         android:text="@string/ID_LIKE"
         android:textSize="@dimen/sp_size_12"
         android:textColor="@color/white"
+        android:gravity="center"
+        android:layout_gravity="center"
         android:drawablePadding="@dimen/dp_size_10"
-        android:padding="@dimen/dp_size_16"/>
+        android:paddingLeft="@dimen/dp_size_15"
+        android:paddingTop="@dimen/dp_size_12"
+        android:paddingRight="@dimen/dp_size_15"
+        android:paddingBottom="@dimen/dp_size_15"/>
     <TextView
         android:id="@+id/tv_reaction4"
         android:layout_width="wrap_content"
@@ -63,7 +83,12 @@
         android:text="@string/ID_FACE_PALM"
         android:textSize="@dimen/sp_size_12"
         android:textColor="@color/white"
+        android:gravity="center"
+        android:layout_gravity="center"
         android:drawablePadding="@dimen/dp_size_10"
-        android:padding="@dimen/dp_size_13"/>
+        android:paddingLeft="@dimen/dp_size_12"
+        android:paddingTop="@dimen/dp_size_12"
+        android:paddingRight="@dimen/dp_size_12"
+        android:paddingBottom="@dimen/dp_size_15"/>
 
 </LinearLayout>

@@ -53,25 +53,25 @@ public class CustomeDataList {
 
         HomeSpinnerItem homeSpinnerItem2=new HomeSpinnerItem();
         homeSpinnerItem2.setId("2");
-        homeSpinnerItem2.setName("Communities ");
+        homeSpinnerItem2.setName("Relationship ");
         homeSpinnerItem2.setDescription("This second mock city discription");
         homeSpinnerItem2.setChecked(false);
 
         HomeSpinnerItem homeSpinnerItem3=new HomeSpinnerItem();
         homeSpinnerItem3.setId("3");
-        homeSpinnerItem3.setName("Article");
+        homeSpinnerItem3.setName("Meet The Sheroes");
         homeSpinnerItem3.setDescription("This third mock city discription");
         homeSpinnerItem3.setChecked(false);
 
         HomeSpinnerItem homeSpinnerItem4=new HomeSpinnerItem();
         homeSpinnerItem4.setId("4");
-        homeSpinnerItem4.setName("Feed");
+        homeSpinnerItem4.setName("story of the day");
         homeSpinnerItem4.setDescription("This fourth mock city discription");
         homeSpinnerItem4.setChecked(false);
 
         HomeSpinnerItem homeSpinnerItem5=new HomeSpinnerItem();
         homeSpinnerItem5.setId("5");
-        homeSpinnerItem5.setName("Job");
+        homeSpinnerItem5.setName("womens of the day");
         homeSpinnerItem5.setDescription("This fifth mock city discription");
         homeSpinnerItem5.setChecked(false);
 

@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.TextView;
 
@@ -31,7 +32,7 @@ public class HomeSpinnerFooterHolder extends BaseViewHolder<HomeSpinnerItem>  {
     BaseHolderInterface viewInterface;
     private HomeSpinnerItem dataItem;
     private int position;
-
+    Context mContext;
 
     public HomeSpinnerFooterHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
@@ -42,6 +43,7 @@ public class HomeSpinnerFooterHolder extends BaseViewHolder<HomeSpinnerItem>  {
 
     @Override
     public void bindData(HomeSpinnerItem item, Context context, int position) {
+        mContext=context;
         this.dataItem = item;
         tvDone.setOnClickListener(this);
         tvCancel.setOnClickListener(this);
@@ -60,6 +62,7 @@ public class HomeSpinnerFooterHolder extends BaseViewHolder<HomeSpinnerItem>  {
         switch (id) {
             case R.id.tv_done:
                 if(viewInterface!=null&&StringUtil.isNotEmptyCollection(viewInterface.getListData())) {
+                    tvDone.setTextColor(ContextCompat.getColor(mContext, R.color.blue));
                     List<BaseResponse> mHomeSpinnerItemList = viewInterface.getListData();
                     if (StringUtil.isNotEmptyCollection(mHomeSpinnerItemList)) {
                         BaseResponse baseResponse = getAllSelectedData(mHomeSpinnerItemList);
@@ -68,6 +71,7 @@ public class HomeSpinnerFooterHolder extends BaseViewHolder<HomeSpinnerItem>  {
                 }
                 break;
             case R.id.tv_cancel:
+                tvCancel.setTextColor(ContextCompat.getColor(mContext, R.color.blue));
                 viewInterface.handleOnClick(dataItem,tvCancel);
                 break;
             default:

@@ -18,6 +18,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
 import appliedlife.pvtltd.SHEROES.models.entities.home.DrawerItems;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleDetailPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.Feature;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ListOfSearch;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.MyCommunities;
@@ -121,20 +122,23 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new OwnerListHolder(view, viewInterface);
         }
-    } ,
+    },
     MEMBERLIST(R.layout.member_list) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new MemberHolder(view, viewInterface);
         }
-    }
-    , COMMUNITY_SUGGESTED_BY_HOLDER(R.layout.community_suggested_by_layout) {
+    }, COMMUNITY_SUGGESTED_BY_HOLDER(R.layout.community_suggested_by_layout) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new CommunitySggestedByHolder(view, viewInterface);
         }
-    }
-    ;
+    }, ARTICLE_DETAIL_HOLDER(R.layout.article_detail_page_reaction_holder) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new ArticleDetailHolder(view, viewInterface);
+        }
+    };
     public Object object;
     public int layout;
 
@@ -204,23 +208,21 @@ public enum HolderMapping {
             } else if (item instanceof ReactionList) {
                 return REACTION.ordinal();
 
-        }
-        else if(item instanceof OwnerList)
-            {
+            } else if (item instanceof OwnerList) {
                 return OWNERLIST.ordinal();
-            }
-            else if(item instanceof MembersList)
-            {
+            } else if (item instanceof MembersList) {
                 return MEMBERLIST.ordinal();
-            }
-        else if(item instanceof CommunityList)
-        {
-            return SELECTDILOG.ordinal();
+            } else if (item instanceof CommunityList) {
+                return SELECTDILOG.ordinal();
             } else if (item instanceof CommunitySuggestion) {
                 return COMMUNITY_SUGGESTED_BY_HOLDER.ordinal();
 
             } else if (item instanceof ListOfSearch) {
                 return SEARCH_MODULE.ordinal();
+
+            }
+            else if (item instanceof ArticleDetailPojo) {
+                return ARTICLE_DETAIL_HOLDER.ordinal();
 
             }
         }

@@ -25,8 +25,9 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.TouchImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-public class ImageFullViewAdapter extends PagerAdapter implements View.OnClickListener {
+public class ImageFullViewAdapter extends PagerAdapter {
     private final String TAG = LogUtils.makeLogTag(ImageFullViewAdapter.class);
     @Bind(R.id.iv_full_image)
     TouchImageView ivFullImage;
@@ -64,14 +65,13 @@ public class ImageFullViewAdapter extends PagerAdapter implements View.OnClickLi
         inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View viewLayout = inflater.inflate(R.layout.layout_fullscreen_image, container, false);
         ButterKnife.bind(this, viewLayout);
-        tvTotalImage.setText(String.valueOf(position+1)+AppConstants.BACK_SLASH+String.valueOf(mTotalCoverImages.size()));
+        tvTotalImage.setText(String.valueOf(position + 1) + AppConstants.BACK_SLASH + String.valueOf(mTotalCoverImages.size()));
         Glide.with(mContext)
                 .load(mTotalCoverImages.get(position).getFeedDetailImageUrl())
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .skipMemoryCache(true)
                 .into(ivFullImage);
         ((ViewPager) container).addView(viewLayout);
-        ivFullImageBack.setOnClickListener(this);
         return viewLayout;
     }
 
@@ -80,19 +80,13 @@ public class ImageFullViewAdapter extends PagerAdapter implements View.OnClickLi
         ((ViewPager) container).removeView((RelativeLayout) object);
 
     }
-    @Override
-    public void onClick(View view) {
-        int id = view.getId();
-        switch (id) {
-            case R.id.iv_full_image_back:
-                mHomeActivityIntraction.onDialogDissmiss(mFragmentOpen);
-                break;
-            default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
-        }
-    }
 
     public interface HomeActivityIntraction {
         void onDialogDissmiss(FragmentOpen isFragmentOpen);
+    }
+
+    @OnClick(R.id.iv_full_image_back)
+    public void dismissCommentDialog() {
+        mHomeActivityIntraction.onDialogDissmiss(mFragmentOpen);
     }
 }

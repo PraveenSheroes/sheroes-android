@@ -142,13 +142,21 @@
                 android:layout_weight=".23"
                 android:drawableRight="@drawable/ic_bookmark_in_active" />
 
-            <TextView
-                android:id="@+id/tv_feed_article_user_menu"
+            <Spinner
+                android:id="@+id/sp_feed_article_user_menu"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_gravity="right"
                 android:layout_weight=".23"
-                android:drawableRight="@drawable/ic_menu_dashboard" />
+                android:background="@color/fully_transparent"
+                android:dropDownSelector="@color/fully_transparent" />
 
+            <TextView
+                android:id="@+id/tv_feed_article_user_menu"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="right"
+                android:drawableRight="@drawable/ic_menu_dashboard" />
         </LinearLayout>
 
         <View
@@ -233,17 +241,31 @@
 
             <TextView
                 android:id="@+id/tv_feed_article_user_comment_post"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="@integer/int_value_for_line_1"
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp_size_12"
-                android:drawableRight="@drawable/ic_menu_dashboard"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:lineSpacingExtra="@dimen/dp_size_3"
                 android:text="@string/IDS_STR_NETWORK_TIME_OUT_DESCRIPTION"
                 android:textColor="@color/feed_conversation"
                 android:textSize="@dimen/sp_size_12" />
-        </LinearLayout>
+            <Spinner
+                android:id="@+id/sp_feed_article_user_comment_post_menu"
+                android:layout_width="@dimen/dp_size_12"
+                android:layout_height="match_parent"
+                android:layout_gravity="right"
+                android:background="@color/fully_transparent"
+                android:dropDownSelector="@color/fully_transparent" />
+
+            <TextView
+                android:id="@+id/tv_feed_article_user_comment_post_menu"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="right"
+                android:drawableRight="@drawable/ic_menu_dashboard" />
+               </LinearLayout>
 
         <LinearLayout
             android:id="@+id/li_feed_article_join_conversation"

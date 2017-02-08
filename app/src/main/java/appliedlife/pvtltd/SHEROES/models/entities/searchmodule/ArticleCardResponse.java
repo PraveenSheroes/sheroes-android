@@ -1,5 +1,8 @@
 package appliedlife.pvtltd.SHEROES.models.entities.searchmodule;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -9,7 +12,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
  * Created by Praveen_Singh on 18-01-2017.
  */
 
-public class ArticleCardResponse extends BaseResponse {
+public class ArticleCardResponse extends BaseResponse implements Parcelable {
     @SerializedName("id")
     @Expose
     private String id;
@@ -199,4 +202,64 @@ public class ArticleCardResponse extends BaseResponse {
     }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.id);
+        dest.writeString(this.userId);
+        dest.writeValue(this.isViewedByUser);
+        dest.writeString(this.groupName);
+        dest.writeString(this.articleTitle);
+        dest.writeString(this.createdDateTime);
+        dest.writeString(this.tags);
+        dest.writeString(this.articleHeadline);
+        dest.writeString(this.description);
+        dest.writeString(this.articleCircleIconUrl);
+        dest.writeString(this.articleCoverImageUrl);
+        dest.writeValue(this.trending);
+        dest.writeString(this.hashtags);
+        dest.writeString(this.articleLinkUrl);
+        dest.writeString(this.author);
+        dest.writeValue(this.totalViews);
+        dest.writeValue(this.articleReadTime);
+    }
+
+    public ArticleCardResponse() {
+    }
+
+    protected ArticleCardResponse(Parcel in) {
+        this.id = in.readString();
+        this.userId = in.readString();
+        this.isViewedByUser = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.groupName = in.readString();
+        this.articleTitle = in.readString();
+        this.createdDateTime = in.readString();
+        this.tags = in.readString();
+        this.articleHeadline = in.readString();
+        this.description = in.readString();
+        this.articleCircleIconUrl = in.readString();
+        this.articleCoverImageUrl = in.readString();
+        this.trending = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.hashtags = in.readString();
+        this.articleLinkUrl = in.readString();
+        this.author = in.readString();
+        this.totalViews = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.articleReadTime = (Integer) in.readValue(Integer.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<ArticleCardResponse> CREATOR = new Parcelable.Creator<ArticleCardResponse>() {
+        @Override
+        public ArticleCardResponse createFromParcel(Parcel source) {
+            return new ArticleCardResponse(source);
+        }
+
+        @Override
+        public ArticleCardResponse[] newArray(int size) {
+            return new ArticleCardResponse[size];
+        }
+    };
 }

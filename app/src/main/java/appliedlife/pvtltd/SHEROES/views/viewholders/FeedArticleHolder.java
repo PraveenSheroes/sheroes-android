@@ -2,16 +2,23 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
@@ -81,11 +88,13 @@ public class FeedArticleHolder extends BaseViewHolder<ListOfFeed> implements Vie
     TextView tvFeedArticleUserComment;
     @Bind(R.id.fl_feed_article_no_reaction_comments)
     FrameLayout flFeedArticleNoReactionComment;
+    @Bind(R.id.sp_feed_article_user_menu)
+    Spinner spFeedArticleUserMenu;
     BaseHolderInterface viewInterface;
     private ListOfFeed dataItem;
     String mViewMore, mLess;
-
-
+    Context mContext;
+    List<String> mSpinnerMenuItems;
     public FeedArticleHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
@@ -96,6 +105,7 @@ public class FeedArticleHolder extends BaseViewHolder<ListOfFeed> implements Vie
     @Override
     public void bindData(ListOfFeed item, final Context context, int position) {
         this.dataItem = item;
+        this.mContext = context;
         mViewMore = context.getString(R.string.ID_VIEW_MORE);
         mLess = context.getString(R.string.ID_LESS);
         liFeedArticleJoinConversation.setOnClickListener(this);
@@ -111,8 +121,9 @@ public class FeedArticleHolder extends BaseViewHolder<ListOfFeed> implements Vie
         liFeedArticleImages.removeAllViewsInLayout();
         imageOperations(context);
         allTextViewStringOperations(context);
-
+       menuClick();
     }
+
 
     private void allTextViewStringOperations(Context context) {
         if (StringUtil.isNotNullOrEmptyString(dataItem.getFeedTitle())) {
@@ -212,7 +223,6 @@ public class FeedArticleHolder extends BaseViewHolder<ListOfFeed> implements Vie
 
     }
 
-
     @Override
     public void onClick(View view) {
         int id = view.getId();
@@ -224,13 +234,13 @@ public class FeedArticleHolder extends BaseViewHolder<ListOfFeed> implements Vie
                 if (dataItem.getUserReaction().equalsIgnoreCase(AppConstants.HEART_REACTION)) {
                     tvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
                     dataItem.setUserReaction(AppConstants.NO_REACTION);
-                    if(liFeedArticlCardEmojiPopUp.getVisibility()==View.VISIBLE) {
+                    if (liFeedArticlCardEmojiPopUp.getVisibility() == View.VISIBLE) {
                         viewInterface.handleOnClick(dataItem, tvFeedArticleUserReaction);
                     }
                 } else {
                     tvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
                     dataItem.setUserReaction(AppConstants.HEART_REACTION);
-                    if(liFeedArticlCardEmojiPopUp.getVisibility()==View.VISIBLE) {
+                    if (liFeedArticlCardEmojiPopUp.getVisibility() == View.VISIBLE) {
                         viewInterface.handleOnClick(dataItem, tvFeedArticleUserReaction);
                     }
                 }
@@ -291,5 +301,31 @@ public class FeedArticleHolder extends BaseViewHolder<ListOfFeed> implements Vie
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
         }
         return true;
+    }
+
+    public void menuClick() {
+        mSpinnerMenuItems = new ArrayList();
+        mSpinnerMenuItems.add(mContext.getString(R.string.ID_EDIT));
+        mSpinnerMenuItems.add(mContext.getString(R.string.ID_DELETE));
+        mSpinnerMenuItems.add(mContext.getString(R.string.ID_SHARE));
+        ArrayAdapter<String> spinClockInWorkSiteAdapter = new ArrayAdapter<>(mContext, R.layout.about_community_spinner_row_back, mSpinnerMenuItems);
+        spFeedArticleUserMenu.setAdapter(spinClockInWorkSiteAdapter);
+        spFeedArticleUserMenu.setSelected(true);
+        spFeedArticleUserMenu.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (null != view) {
+                    String msupplier = parent.getItemAtPosition(position).toString();
+                    ((TextView) view).setTextSize(0);
+                    ((TextView) view).setTextColor(ContextCompat.getColor(mContext, R.color.fully_transparent));
+                    LogUtils.info("Selected item : ", spFeedArticleUserMenu.getSelectedItem().toString());
+                    LogUtils.info("Selected item position : ",""+position);
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                LogUtils.info("Selected item : ", "*************");
+            }
+        });
     }
 }

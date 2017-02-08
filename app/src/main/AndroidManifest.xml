@@ -76,6 +76,10 @@
             android:name="appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity"
             android:parentActivityName="appliedlife.pvtltd.SHEROES.views.activities.HomeActivity"
             android:theme="@style/AppTheme" />
+        <activity
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.ArticleDetailActivity"
+            android:parentActivityName="appliedlife.pvtltd.SHEROES.views.activities.HomeActivity"
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

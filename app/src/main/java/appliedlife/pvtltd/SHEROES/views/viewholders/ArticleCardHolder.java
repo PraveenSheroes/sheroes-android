@@ -23,6 +23,7 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class ArticleCardHolder extends BaseViewHolder<ArticleCardResponse> {
     private final String TAG = LogUtils.makeLogTag(ArticleCardHolder.class);
@@ -38,8 +39,8 @@ public class ArticleCardHolder extends BaseViewHolder<ArticleCardResponse> {
     TextView tvArticleTime;
     @Bind(R.id.tv_article_trending_label)
     TextView tvArticleTrendingLabel;
-    @Bind(R.id.iv_article_menu)
-    ImageView ivArticleMenu;
+    @Bind(R.id.tv_article_menu)
+    TextView ivArticleMenu;
     @Bind(R.id.tv_article_description_header)
     TextView tvArticleDescriptionHeader;
     @Bind(R.id.tv_article_description_text)
@@ -62,8 +63,6 @@ public class ArticleCardHolder extends BaseViewHolder<ArticleCardResponse> {
     @Override
     public void bindData(ArticleCardResponse item, final Context context, int position) {
         this.dataItem = item;
-        tvArticleTrendingLabel.setOnClickListener(this);
-        ivArticleMenu.setOnClickListener(this);
         liArticleCoverImage.removeAllViews();
         liArticleCoverImage.removeAllViewsInLayout();
         imageOperations(context);
@@ -77,6 +76,7 @@ public class ArticleCardHolder extends BaseViewHolder<ArticleCardResponse> {
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View child = layoutInflater.inflate(R.layout.feed_article_single_image, null);
             ImageView ivFirstLandscape = (ImageView) child.findViewById(R.id.iv_feed_article_single_image);
+            ivFirstLandscape.setOnClickListener(this);
             TextView tvFeedArticleTimeLabel = (TextView) child.findViewById(R.id.tv_feed_article_time_label);
             TextView tvFeedArticleTotalViews = (TextView) child.findViewById(R.id.tv_feed_article_total_views);
             tvFeedArticleTotalViews.setText(dataItem.getTotalViews() + AppConstants.SPACE + context.getString(R.string.ID_VIEWS));
@@ -102,16 +102,21 @@ public class ArticleCardHolder extends BaseViewHolder<ArticleCardResponse> {
     public void viewRecycled() {
 
     }
-
+    @OnClick(R.id.tv_article_menu)
+    public void tvMenuClick() {
+    }
+    @OnClick(R.id.tv_article_join)
+    public void tvArticleJoinClick() {
+        LogUtils.info("click","*********Article join*********");
+    }
 
     @Override
     public void onClick(View view) {
 
         int id = view.getId();
         switch (id) {
-            case R.id.tv_article_trending_label:
-                break;
-            case R.id.iv_article_menu:
+            case R.id.iv_feed_article_single_image:
+                viewInterface.handleOnClick(dataItem,view);
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);

@@ -1,11 +1,12 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
@@ -17,11 +18,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -40,12 +42,13 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
 import appliedlife.pvtltd.SHEROES.models.entities.home.DrawerItems;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
+import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.CustomeDataList;
-import appliedlife.pvtltd.SHEROES.views.adapters.ImageFullViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
+import appliedlife.pvtltd.SHEROES.views.adapters.ImageFullViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.Blurry;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
@@ -109,6 +112,10 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
     public FrameLayout flFeedFullView;
     @Bind(R.id.iv_side_drawer_profile_blur_background)
     ImageView mIvSideDrawerProfileBlurBackground;
+    @Bind(R.id.fab_add_community)
+    FloatingActionButton mFloatingActionButton;
+    @Bind(R.id.li_home_community_button_layout)
+    LinearLayout liHomeCommunityButtonLayout;
     TextView mTvFeedArticleUserReaction, mTvFeedCommunityUserReaction, mTvFeedCommunityPostUserReaction;
     GenericRecyclerViewAdapter mAdapter;
     private List<HomeSpinnerItem> mHomeSpinnerItemList = new ArrayList<>();
@@ -116,8 +123,8 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
     private FragmentOpen mFragmentOpen;
     private CustiomActionBarToggle mCustiomActionBarToggle;
     public View mArticlePopUp, mCommunityPopUp, mCommunityPostPopUp;
-    private Dialog mCouponCodeDialogView;
-
+    Spinner mSpaboutCommunityspn;
+    String[] arraySpinner;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -199,6 +206,9 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
             }
         } else if (baseResponse instanceof CommunitySuggestion) {
 
+        } else if (baseResponse instanceof  ArticleCardResponse) {
+            ArticleCardResponse articleCardResponse = (ArticleCardResponse) baseResponse;
+            articleCardsHandled(view, articleCardResponse);
         }
     }
 
@@ -209,7 +219,17 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
             openImageFullViewFragment(listOfFeed);
         }
     }
+    private void articleCardsHandled(View view, ArticleCardResponse articleCardResponse) {
+        int id = view.getId();
+        switch (id) {
+            case R.id.iv_feed_article_single_image:
+                ArticleDetailActivity.navigateFromArticle(this, view, articleCardResponse);
+                break;
 
+            default:
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
+        }
+    }
 
     private void feedCardsHandled(View view, ListOfFeed listOfFeed) {
         int id = view.getId();
@@ -300,6 +320,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
                 openCommentReactionFragment();
                 break;
             case R.id.li_feed_article_images:
+                //TODO::Article detail call
                 CommunitiesDetailActivity.navigate(this, view, listOfFeed);
                 break;
             case R.id.li_feed_community_images:
@@ -308,27 +329,13 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
             case R.id.li_feed_community_user_post_images:
                 CommunitiesDetailActivity.navigate(this, view, listOfFeed);
                 break;
-            case R.id.tv_feed_article_user_menu:
-                menuClick();
-                break;
-            case R.id.tv_feed_community_post_user_menu:
-                menuClick();
-                break;
-            case R.id.tv_feed_community_user_menu:
-                menuClick();
-                break;
+
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
         }
     }
 
-    public void menuClick() {
-        mCouponCodeDialogView = new Dialog(this);
-        mCouponCodeDialogView.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        mCouponCodeDialogView.show();
-        mCouponCodeDialogView.setContentView(R.layout.menu_option_layout);
 
-    }
     private void openImageFullViewFragment(ListOfFeed listOfFeed ) {
         ImageFullViewFragment imageFullViewFragment = new ImageFullViewFragment();
         Bundle bundle = new Bundle();
@@ -472,6 +479,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
 
     @OnClick(R.id.tv_home)
     public void homeOnClick() {
+        liHomeCommunityButtonLayout.setVisibility(View.GONE);
         if (mFragmentOpen.isArticleFragment()) {
             onBackPressed();
             mFragmentOpen.setArticleFragment(false);
@@ -494,6 +502,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
 
     @OnClick(R.id.tv_communities)
     public void communityOnClick() {
+        liHomeCommunityButtonLayout.setVisibility(View.VISIBLE);
         String search = getString(R.string.ID_SEARCH) + AppConstants.SPACE + getString(R.string.ID_COMMUNITIES);
         mTvSearchBox.setText(search);
         if (mFragmentOpen.isArticleFragment()) {
@@ -562,25 +571,6 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
                 .replace(R.id.fl_article_card_view, articlesFragment).addToBackStack(null).commitAllowingStateLoss();
         mTvSpinnerIcon.setVisibility(View.GONE);
-
-
-       /* mFragmentOpen.setSettingFragment(true);
-        mTvHome.setText(AppConstants.EMPTY_STRING);
-        mTvSearchBox.setVisibility(View.GONE);
-        mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_unselected_icon), null, null);
-        mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_unselected_icon), null, null);
-        mTvCommunities.setText(AppConstants.EMPTY_STRING);
-        SettingFragment settingFragment = new SettingFragment();
-         setContentView(R.layout.activity_setting_dashboard);
-         SettingFragment frag = new SettingFragment();
-         callFirstFragment(R.id.fl_fragment_container, settingFragment);
-      *//*  SettingFragment settingFragment = new SettingFragment();
-        Bundle bundle = new Bundle();
-        settingFragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
-                .replace(R.id.fl_fragment_container, settingFragment).addToBackStack(null).commitAllowingStateLoss();
-        mTvSpinnerIcon.setVisibility(View.VISIBLE);
-*/
     }
 
     @Override
@@ -694,7 +684,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
         switch (id) {
             case R.id.tv_reaction:
                 if (null != mTvFeedArticleUserReaction) {
-                    mTvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_heart_emoji), null, null, null);
+                    mTvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_heart_active), null, null, null);
                     if (null != mArticlePopUp) {
                         mArticlePopUp.setVisibility(View.GONE);
                         dismissUserReactionOption(mArticlePopUp);
@@ -718,7 +708,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
                 break;
             case R.id.tv_reaction1:
                 if (null != mTvFeedArticleUserReaction) {
-                    mTvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_heart_active), null, null, null);
+                    mTvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji3_whistel), null, null, null);
                     if (null != mArticlePopUp) {
                         mArticlePopUp.setVisibility(View.GONE);
                         dismissUserReactionOption(mArticlePopUp);
@@ -870,5 +860,9 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
     @Override
     public void showError(String s) {
 
+    }
+    @OnClick(R.id.fab_add_community)
+    public void createCommunityButton() {
+        Snackbar.make(mCLMainLayout, "Comming soon", Snackbar.LENGTH_SHORT).show();
     }
 }

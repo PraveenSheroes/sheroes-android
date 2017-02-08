@@ -6,7 +6,7 @@
     android:fitsSystemWindows="true">
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/app_bar_coomunities_detail"
+        android:id="@+id/app_bar_article_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
@@ -14,7 +14,7 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/collapsing_toolbar_communities_detail"
+            android:id="@+id/collapsing_toolbar_article_detail"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
@@ -25,7 +25,7 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <appliedlife.pvtltd.SHEROES.views.cutomeviews.SquareImageView
-                android:id="@+id/iv_communities_detail"
+                android:id="@+id/iv_article_detail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fitsSystemWindows="true"
@@ -39,7 +39,7 @@
                 android:layout_margin="@dimen/dp_size_13">
 
                 <TextView
-                    android:id="@+id/tv_communities_time"
+                    android:id="@+id/tv_article_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/ic_timer_icon"
@@ -66,7 +66,7 @@
             </FrameLayout>
 
             <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar_communities_detail"
+                android:id="@+id/toolbar_article_detail"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:layout_gravity="right"
@@ -75,7 +75,7 @@
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
                 <TextView
-                    android:id="@+id/tv_communities_detail_share"
+                    android:id="@+id/tv_article_detail_share"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
@@ -84,7 +84,7 @@
                     android:paddingRight="@dimen/dp_size_38" />
 
                 <TextView
-                    android:id="@+id/tv_communities_detail_bookmark"
+                    android:id="@+id/tv_article_detail_bookmark"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
@@ -96,28 +96,9 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
     <android.support.v4.view.ViewPager
-        android:id="@+id/view_pager_communities_detail"
+        android:id="@+id/view_pager_article_detail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_communities_detail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_search_group_icon"
-        app:layout_anchor="@id/app_bar_coomunities_detail"
-        app:layout_anchorGravity="bottom|center"
-        app:fabSize="auto"
-        app:backgroundTint="@color/colorPrimary"
-        app:borderWidth="@dimen/dp_size_4"
-        app:pressedTranslationZ="@dimen/dp_size_12"
-        app:rippleColor="@color/colorPrimary"/>
-
-    <include
-        android:id="@+id/about_community_container"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        layout="@layout/fragment_container"
-        />
-</android.support.design.widget.CoordinatorLayout>
+     </android.support.design.widget.CoordinatorLayout>

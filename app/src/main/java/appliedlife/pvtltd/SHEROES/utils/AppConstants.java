@@ -45,4 +45,5 @@ public class AppConstants {
     public static final int WORD_LENGTH = 80;
     public static final String IMAGE_FULL_VIEW = "image_view";
     public static final String BACK_SLASH="/";
+    public static final String ARTICLE_DETAIL = "article_detail";
 }

@@ -42,6 +42,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOpenAboutFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 
 public class CommunitiesDetailActivity extends BaseActivity implements AllMembersFragment.MembersHomeActivityIntractionListner,BaseHolderInterface,CommunityOpenAboutFragment.AboutCommunityActivityIntractionListner {
@@ -202,4 +203,5 @@ public class CommunitiesDetailActivity extends BaseActivity implements AllMember
         getSupportFragmentManager().popBackStack();
 
     }
+
 }
