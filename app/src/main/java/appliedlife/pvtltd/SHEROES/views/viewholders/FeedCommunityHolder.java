@@ -2,17 +2,24 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
@@ -25,12 +32,13 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Praveen_Singh on 23-01-2017.
  */
 
-public class FeedCommunityHolder extends BaseViewHolder<ListOfFeed> implements View.OnLongClickListener,View.OnTouchListener{
+public class FeedCommunityHolder extends BaseViewHolder<ListOfFeed> implements View.OnLongClickListener, View.OnTouchListener {
     private final String TAG = LogUtils.makeLogTag(FeedCommunityHolder.class);
     private static final String LEFT_HTML_TAG_FOR_COLOR = "<b><font color='#323940'>";
     private static final String RIGHT_HTML_TAG_FOR_COLOR = "</font></b>";
@@ -84,8 +92,13 @@ public class FeedCommunityHolder extends BaseViewHolder<ListOfFeed> implements V
     TextView tvFeedCommunityRegisterUserComment;
     @Bind(R.id.fl_feed_community_no_reaction_comments)
     FrameLayout flFeedCommunityNoReactionComment;
+    @Bind(R.id.sp_feed_community_user_menu)
+    Spinner spFeedCommunityUserMenu;
     BaseHolderInterface viewInterface;
     private ListOfFeed dataItem;
+    Context mContext;
+    List<String> mSpinnerMenuItems;
+
     public FeedCommunityHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
@@ -96,6 +109,7 @@ public class FeedCommunityHolder extends BaseViewHolder<ListOfFeed> implements V
     @Override
     public void bindData(ListOfFeed item, final Context context, int position) {
         this.dataItem = item;
+        mContext = context;
         liFeedCommunityJoinConversation.setOnClickListener(this);
         tvFeedCommunityUserReaction.setOnLongClickListener(this);
         tvFeedCommunityUserReaction.setOnClickListener(this);
@@ -107,8 +121,9 @@ public class FeedCommunityHolder extends BaseViewHolder<ListOfFeed> implements V
         liFeedCommunityImages.removeAllViews();
         allTextViewStringOperations(context);
         imageOperations(context);
-
+        menuItemForCommunityClick();
     }
+
     private void allTextViewStringOperations(Context context) {
         if (StringUtil.isNotNullOrEmptyString(dataItem.getFeedTitle())) {
             tvFeedCommunityCardTitle.setText(dataItem.getFeedTitle());
@@ -118,15 +133,15 @@ public class FeedCommunityHolder extends BaseViewHolder<ListOfFeed> implements V
         }
 
         if (StringUtil.isNotNullOrEmptyString(dataItem.getDescription())) {
-            String description=dataItem.getDescription();
+            String description = dataItem.getDescription();
             if (description.length() > AppConstants.WORD_LENGTH) {
-                description = description.substring(0,AppConstants.WORD_COUNT);
+                description = description.substring(0, AppConstants.WORD_COUNT);
             }
             String changeDate = LEFT_HTML_VEIW_TAG_FOR_COLOR + context.getString(R.string.ID_VIEW_MORE) + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                tvFeedCommunityText.setText(Html.fromHtml(description+AppConstants.DOTS+ AppConstants.SPACE + changeDate, 0)); // for 24 api and more
+                tvFeedCommunityText.setText(Html.fromHtml(description + AppConstants.DOTS + AppConstants.SPACE + changeDate, 0)); // for 24 api and more
             } else {
-                tvFeedCommunityText.setText(Html.fromHtml(description +AppConstants.DOTS+ AppConstants.SPACE + changeDate));// or for older api
+                tvFeedCommunityText.setText(Html.fromHtml(description + AppConstants.DOTS + AppConstants.SPACE + changeDate));// or for older api
             }
         }
         if (dataItem.getUserReaction().equalsIgnoreCase(AppConstants.HEART_REACTION)) {
@@ -174,7 +189,7 @@ public class FeedCommunityHolder extends BaseViewHolder<ListOfFeed> implements V
 
     private void imageOperations(Context context) {
         String feedCircleIconUrl = dataItem.getFeedCircleIconUrl();
-        if(StringUtil.isNotNullOrEmptyString(feedCircleIconUrl)) {
+        if (StringUtil.isNotNullOrEmptyString(feedCircleIconUrl)) {
             ivFeedCommunityCircleIcon.setCircularImage(true);
             ivFeedCommunityCircleIcon.bindImage(feedCircleIconUrl);
             ivFeedCommunityRegisterUserPic.setCircularImage(true);
@@ -185,7 +200,7 @@ public class FeedCommunityHolder extends BaseViewHolder<ListOfFeed> implements V
             TextView tvFeedCommunityTimeLabel = (TextView) child.findViewById(R.id.tv_feed_article_time_label);
             tvFeedCommunityTimeLabel.setVisibility(View.GONE);
             TextView tvFeedCommunityTotalViews = (TextView) child.findViewById(R.id.tv_feed_article_total_views);
-            tvFeedCommunityTotalViews.setText(dataItem.getNoOfComments()+AppConstants.SPACE+context.getString(R.string.ID_VIEWS));
+            tvFeedCommunityTotalViews.setText(dataItem.getNoOfComments() + AppConstants.SPACE + context.getString(R.string.ID_VIEWS));
             Glide.with(context)
                     .load(feedCircleIconUrl)
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
@@ -205,11 +220,16 @@ public class FeedCommunityHolder extends BaseViewHolder<ListOfFeed> implements V
             }
         }
     }
+
     @Override
     public void viewRecycled() {
 
     }
 
+    @OnClick(R.id.tv_feed_community_total_replies)
+    public void repliesClick() {
+        viewInterface.handleOnClick(dataItem, tvFeedCommunityTotalReplies);
+    }
 
     @Override
     public void onClick(View view) {
@@ -222,18 +242,16 @@ public class FeedCommunityHolder extends BaseViewHolder<ListOfFeed> implements V
                 viewInterface.handleOnClick(dataItem, liFeedCommunityJoinConversation);
                 break;
             case R.id.tv_feed_community_user_reaction:
-                if(dataItem.getUserReaction().equalsIgnoreCase(AppConstants.HEART_REACTION)) {
+                if (dataItem.getUserReaction().equalsIgnoreCase(AppConstants.HEART_REACTION)) {
                     tvFeedCommunityUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
                     dataItem.setUserReaction(AppConstants.NO_REACTION);
-                    if(liFeedCommunityEmojiPopUp.getVisibility()==View.VISIBLE) {
+                    if (liFeedCommunityEmojiPopUp.getVisibility() == View.VISIBLE) {
                         viewInterface.handleOnClick(dataItem, tvFeedCommunityUserReaction);
                     }
-                }
-                else
-                {
+                } else {
                     tvFeedCommunityUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
                     dataItem.setUserReaction(AppConstants.HEART_REACTION);
-                    if(liFeedCommunityEmojiPopUp.getVisibility()==View.VISIBLE) {
+                    if (liFeedCommunityEmojiPopUp.getVisibility() == View.VISIBLE) {
                         viewInterface.handleOnClick(dataItem, tvFeedCommunityUserReaction);
                     }
                 }
@@ -243,10 +261,10 @@ public class FeedCommunityHolder extends BaseViewHolder<ListOfFeed> implements V
                 break;
             case R.id.tv_feed_community_user_bookmark:
                 if (dataItem.getBookmarked()) {
-                    tvFeedCommunityUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_bookmark_in_active, 0);
+                    tvFeedCommunityUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_in_active, 0);
                     dataItem.setBookmarked(false);
                 } else {
-                    tvFeedCommunityUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_bookmark_active, 0);
+                    tvFeedCommunityUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_active, 0);
                     dataItem.setBookmarked(true);
                 }
                 break;
@@ -260,6 +278,7 @@ public class FeedCommunityHolder extends BaseViewHolder<ListOfFeed> implements V
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
         }
     }
+
     @Override
     public boolean onLongClick(View view) {
         int id = view.getId();
@@ -276,5 +295,32 @@ public class FeedCommunityHolder extends BaseViewHolder<ListOfFeed> implements V
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         return true;
+    }
+
+    public void menuItemForCommunityClick() {
+        mSpinnerMenuItems = new ArrayList();
+        mSpinnerMenuItems.add(mContext.getString(R.string.ID_SHARE));
+        mSpinnerMenuItems.add(mContext.getString(R.string.ID_EDIT));
+        mSpinnerMenuItems.add(mContext.getString(R.string.ID_LEAVE));
+        mSpinnerMenuItems.add(AppConstants.SPACE);
+        ArrayAdapter<String> spinClockInWorkSiteAdapter = new ArrayAdapter<>(mContext, R.layout.about_community_spinner_row_back, mSpinnerMenuItems);
+        spFeedCommunityUserMenu.setAdapter(spinClockInWorkSiteAdapter);
+        spFeedCommunityUserMenu.setSelection(3);
+        spFeedCommunityUserMenu.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (null != view) {
+                    String msupplier = parent.getItemAtPosition(position).toString();
+                    ((TextView) view).setTextSize(0);
+                    ((TextView) view).setTextColor(ContextCompat.getColor(mContext, R.color.fully_transparent));
+                    LogUtils.info("Selected item : ", spFeedCommunityUserMenu.getSelectedItem().toString());
+                    LogUtils.info("Selected item position : ", "" + position);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
     }
 }

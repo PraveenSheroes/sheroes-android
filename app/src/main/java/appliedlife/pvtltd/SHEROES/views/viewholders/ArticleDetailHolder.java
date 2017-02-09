@@ -6,6 +6,8 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -23,6 +25,7 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Praveen_Singh on 08-02-2017.
@@ -44,6 +47,24 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
     TextView tvArticleDetailIconName;
     @Bind(R.id.tv_article_detail_description)
     TextView tvArticleDetailDescription;
+    @Bind(R.id.tv_article_detail_user_reaction)
+    TextView tvArticleDetailUserReaction;
+    @Bind(R.id.tv_article_detail_user_comment)
+    TextView tvArticleDetailUserComment;
+    @Bind(R.id.tv_article_detail_total_reactions)
+    TextView tvArticleDetailTotalReaction;
+    @Bind(R.id.tv_article_detail_total_replies)
+    TextView tvArticleDetailTotalReplies;
+    @Bind(R.id.tv_article_detail_user_comment_post)
+    TextView tvArticleDetailUserCommentPost;
+    @Bind(R.id.li_article_detail_join_conversation)
+    LinearLayout liArticleDetailJoinConversation;
+    @Bind(R.id.iv_article_detail_register_user_pic)
+    CircleImageView ivArticleDetailRegisterUserPic;
+    @Bind(R.id.iv_article_detail_user_pic)
+    CircleImageView ivArticleDetailUserPic;
+    @Bind(R.id.sp_article_detail_user_comment_post_menu)
+    Spinner spArticleDetailUserCommentPostMenu;
     BaseHolderInterface viewInterface;
     private ArticleDetailPojo dataItem;
     private ArticleCardResponse mArticleCardResponse;
@@ -100,19 +121,33 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
     public void viewRecycled() {
 
     }
-
-
+    @OnClick(R.id.tv_article_detail_user_reaction)
+    public void userReactionClick() {
+        viewInterface.handleOnClick(dataItem, tvArticleDetailUserReaction);
+    }
+    @OnClick(R.id.tv_article_detail_user_comment)
+    public void userCommentClick() {
+        viewInterface.handleOnClick(dataItem, tvArticleDetailUserComment);
+    }
+    @OnClick(R.id.tv_article_detail_total_replies)
+    public void userRepliesClick() {
+        viewInterface.handleOnClick(dataItem, tvArticleDetailTotalReplies);
+    }
+    @OnClick(R.id.li_article_detail_join_conversation)
+    public void joinConversationClick() {
+        viewInterface.handleOnClick(dataItem, liArticleDetailJoinConversation);
+    }
     @Override
     public void onClick(View view) {
 
-        int id = view.getId();
+     /*   int id = view.getId();
         switch (id) {
             case R.id.iv_feed_article_single_image:
                 viewInterface.handleOnClick(mArticleCardResponse, view);
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
-        }
+        }*/
     }
 
 }

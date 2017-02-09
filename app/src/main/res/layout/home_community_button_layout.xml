@@ -12,7 +12,7 @@
         app:fabSize="auto"
         android:layout_gravity="right|bottom"
         android:layout_marginRight="@dimen/dp_size_16"
-        app:backgroundTint="@color/colorAccent"
+        app:backgroundTint="@color/blue"
         app:borderWidth="@dimen/dp_size_4"
         app:pressedTranslationZ="@dimen/dp_size_12"
         app:rippleColor="@color/colorPrimary"/>

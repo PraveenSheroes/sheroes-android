@@ -5,6 +5,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
@@ -13,7 +16,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -24,7 +27,7 @@ import butterknife.ButterKnife;
 public class FeedJobHolder extends BaseViewHolder<ListOfFeed> {
     private final String TAG = LogUtils.makeLogTag(FeedJobHolder.class);
     @Bind(R.id.iv_feed_job_icon)
-    CircleImageView ivFeedJobCircleIcon;
+    RoundedImageView ivFeedJobCircleIcon;
     @Bind(R.id.tv_feed_job_user_bookmark)
     TextView tvFeedJobUserBookmark;
     @Bind(R.id.tv_feed_job_user_menu)
@@ -65,8 +68,13 @@ public class FeedJobHolder extends BaseViewHolder<ListOfFeed> {
     private void imageOperations(Context context) {
         String feedCircleIconUrl = dataItem.getFeedCircleIconUrl();
         if(StringUtil.isNotNullOrEmptyString(feedCircleIconUrl)) {
-            ivFeedJobCircleIcon.setCircularImage(true);
-            ivFeedJobCircleIcon.bindImage(feedCircleIconUrl);
+            //ivFeedJobCircleIcon.setCircularImage(true);
+           // ivFeedJobCircleIcon.bindImage(feedCircleIconUrl);
+            Glide.with(context)
+                    .load(feedCircleIconUrl)
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .skipMemoryCache(true)
+                    .into(ivFeedJobCircleIcon);
         }
 
     }

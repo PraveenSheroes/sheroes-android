@@ -26,8 +26,8 @@ import butterknife.ButterKnife;
  * Created by Praveen_Singh on 02-02-2017.
  */
 
-public class SuggestedCardHolder extends BaseViewHolder<Feature> {
-    private final String TAG = LogUtils.makeLogTag(SuggestedCardHolder.class);
+public class CommunitySuggestedHolder extends BaseViewHolder<Feature> {
+    private final String TAG = LogUtils.makeLogTag(CommunitySuggestedHolder.class);
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     @Bind(R.id.rv_suggested_list)
@@ -38,7 +38,7 @@ public class SuggestedCardHolder extends BaseViewHolder<Feature> {
     private Feature dataItem;
 
 
-    public SuggestedCardHolder(View itemView, BaseHolderInterface baseHolderInterface) {
+    public CommunitySuggestedHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
         this.viewInterface = baseHolderInterface;

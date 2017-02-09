@@ -71,5 +71,8 @@
     <color name="teg_text_color">#9b9b9b</color>
     <color name="text_color_teg_text">#4a4a4a</color>
     <color name="gray_shap">#9b9b9b</color>
+    <color name="emoji_text">#f5a623</color>
+    <color name="profile_circle">#669b9b9b</color>
+
     <color name="popular_tag_color">#ed3f3b</color>
 </resources>

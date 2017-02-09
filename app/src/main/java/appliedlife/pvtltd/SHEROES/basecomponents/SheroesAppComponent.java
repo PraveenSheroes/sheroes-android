@@ -37,6 +37,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.HomeSpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ImageFullViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LoginFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunitiesFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProfileFullViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SearchArticleFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SearchCommunitiesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SearchJobFragment;
@@ -54,9 +55,12 @@ import appliedlife.pvtltd.SHEROES.views.fragments.SettingTermsAndConditionFragme
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareCommunityFragment;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleDetailHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleDetailSuggestedHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleDetailWithInSuggestedHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CommentHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CommunityCardDetailHeader;
-import appliedlife.pvtltd.SHEROES.views.viewholders.CommunitySggestedByHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.CommunitySuggestedHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.CommunityWithInSggestedHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeatureCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedArticleHolder;
@@ -74,7 +78,6 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.ReactionHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.RequestedHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.SearchModuleHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.SelectDilogHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.SuggestedCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.TagsHolder;
 import dagger.Component;
 
@@ -106,6 +109,7 @@ public interface SheroesAppComponent {
     void inject(CommunitiesDetailFragment communitiesDetailFragment);
     void inject(ImageFullViewFragment imageFullViewFragment);
     void inject(ArticleDetailFragment articleDetailFragment);
+    void inject(ProfileFullViewFragment profileFullViewFragment);
 
     void inject(ArticleDetailHolder articleDetailHolder);
     void inject(ArticleCardHolder articleCardHolder);
@@ -122,6 +126,10 @@ public interface SheroesAppComponent {
     void inject(CommentHolder commentHolder);
     void inject(ReactionHolder reactionHolder);
     void inject(MyCommunitiesCardHolder myCommunitiesCardHolder);
+    void inject(ArticleDetailSuggestedHolder articleDetailSuggestedHolder);
+    void inject(ArticleDetailWithInSuggestedHolder articleDetailWithInSuggestedHolder);
+
+
     void inject(SettingFragment settingFragment);
     void inject(SettingFeedbackFragment settingFeedbackFragment);
     void inject(SettingPreferencsFragment settingPreferencsFragment);
@@ -147,8 +155,8 @@ public interface SheroesAppComponent {
     void inject(ShareCommunityFragment shareCommunityFragment);
     void inject(SelectDilogHolder selectDilogHolder);
     void inject(CommunityCardDetailHeader communityCardDetailHeader);
-    void inject(SuggestedCardHolder suggestedCardHolder);
-    void inject(CommunitySggestedByHolder communitySggestedByHolder);
+    void inject(CommunitySuggestedHolder communitySuggestedHolder);
+    void inject(CommunityWithInSggestedHolder communityWithInSggestedHolder);
     void inject(SearchArticleFragment searchArticleFragment);
     void inject(SearchJobFragment searchJobFragment);
     void inject(SearchRecentFragment searchRecentFragment);

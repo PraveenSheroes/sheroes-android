@@ -5,53 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/home_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_size_65"
-            app:layout_scrollFlags="scroll|enterAlways|snap"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-
-            <include
-                layout="@layout/home_search_bar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start|top" />
-        </android.support.v7.widget.Toolbar>
-
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tv_join_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            app:tabIndicatorColor="@color/footer_icon_text"
-            app:tabIndicatorHeight="0dp"
-            app:tabSelectedTextColor="@color/footer_icon_text"
-            app:tabTextColor="@color/search_tab_unselected_text">
-
-        </android.support.design.widget.TabLayout>
-
-        <TextView
-            android:id="@+id/tv_spinner_icon"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:background="@color/white"
-            android:drawableRight="@drawable/ic_spinner_icon"
-            android:gravity="center"
-            android:importantForAccessibility="no"
-            android:visibility="gone"
-            android:layerType="software"
-            android:padding="@dimen/dp_size_10"
-            android:text="@string/ID_ALL"
-            android:textColor="@color/black" />
-
-    </android.support.design.widget.AppBarLayout>
 
     <!--  <include layout="@layout/fragment_container" />-->
     <android.support.v4.view.ViewPager
@@ -59,12 +12,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
     <include
         android:id="@+id/fl_feed_full_view"
         layout="@layout/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
     <include
         android:id="@+id/fl_article_card_view"
         layout="@layout/fragment_container"
@@ -84,18 +39,111 @@
         layout="@layout/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
     <include
         android:id="@+id/li_home_community_button_layout"
         layout="@layout/home_community_button_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         android:layout_gravity="bottom|right"
-        android:layout_marginBottom="@dimen/dp_size_65"/>
+        android:layout_marginBottom="@dimen/dp_size_65"
+        android:visibility="gone" />
+
     <include
         layout="@layout/home_listing_footer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom" />
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_reaction_strip_background"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar_profile_full_view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_size_266"
+            android:fitsSystemWindows="true"
+            app:contentScrim="@color/search_tab_text"
+            app:expandedTitleMarginEnd="@dimen/dp_size_54"
+            app:expandedTitleMarginStart="@dimen/dp_size_50"
+            app:expandedTitleMarginTop="@dimen/dp_size_160"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <appliedlife.pvtltd.SHEROES.views.cutomeviews.SquareImageView
+                android:id="@+id/iv_profile_full_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fitsSystemWindows="true"
+                android:scaleType="centerCrop"
+                app:layout_collapseMode="parallax" />
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/home_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_size_65"
+                app:layout_scrollFlags="scroll|enterAlways|snap"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+                <include
+                    android:id="@+id/rl_search_box"
+                    layout="@layout/home_search_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|top"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/iv_profile_full_view_menu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center|right"
+                    android:layout_marginRight="@dimen/dp_size_20"
+                    android:background="@drawable/ic_menu_dashboard"
+                    android:importantForAccessibility="no" />
+
+            </android.support.v7.widget.Toolbar>
+
+            <include
+                android:id="@+id/li_profile_full_view_header"
+                layout="@layout/profile_full_view_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|bottom" />
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tv_join_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_reaction_strip_background"
+            app:tabIndicatorColor="@color/footer_icon_text"
+            app:tabIndicatorHeight="@dimen/dp_size_5"
+            app:tabSelectedTextColor="@color/white"
+            app:tabTextColor="@color/search_tab_unselected_text">
+
+        </android.support.design.widget.TabLayout>
+
+        <TextView
+            android:id="@+id/tv_spinner_icon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:background="@color/white"
+            android:drawableRight="@drawable/ic_spinner_icon"
+            android:gravity="center"
+            android:importantForAccessibility="no"
+            android:layerType="software"
+            android:padding="@dimen/dp_size_10"
+            android:text="@string/ID_ALL"
+            android:textColor="@color/black"
+            android:visibility="gone" />
+
+    </android.support.design.widget.AppBarLayout>
 </android.support.design.widget.CoordinatorLayout>

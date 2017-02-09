@@ -21,10 +21,14 @@
             android:orientation="horizontal"
             android:weightSum="1">
 
-            <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
+            <appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView
                 android:id="@+id/iv_feed_job_icon"
                 android:layout_width="@dimen/feed_profile_icon_size"
                 android:layout_height="@dimen/feed_profile_icon_size"
+                app:riv_corner_radius="@dimen/dp_size_10"
+                app:riv_border_width="@dimen/dp_size_0.5"
+                android:scaleType="center"
+                app:riv_oval="false"
                 android:src="@drawable/ic_footer_button_icon" />
 
             <LinearLayout
@@ -129,6 +133,13 @@
             </LinearLayout>
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_size_0.5"
+            android:layout_marginLeft="@dimen/dp_size_12"
+            android:layout_marginRight="@dimen/dp_size_12"
+            android:layout_marginTop="@dimen/dp_size_12"
+            android:background="@color/search_tab_unselected_text" />
         <LinearLayout
             android:id="@+id/li_feed_job_user_reactions"
             android:layout_width="match_parent"

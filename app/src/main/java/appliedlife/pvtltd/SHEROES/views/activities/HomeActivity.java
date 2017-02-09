@@ -1,17 +1,20 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -28,6 +31,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +48,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.DrawerItems;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.MyCommunities;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -51,11 +57,11 @@ import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.adapters.ImageFullViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.Blurry;
-import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.SquareImageView;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.CreateCommunityPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeSpinnerFragment;
@@ -72,9 +78,8 @@ import butterknife.OnClick;
 
 public class HomeActivity extends BaseActivity implements HomeFragment.HomeActivityIntractionListner, SettingView, BaseHolderInterface, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, CommentReactionFragment.HomeActivityIntractionListner, View.OnTouchListener, View.OnClickListener, ImageFullViewAdapter.HomeActivityIntraction {
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
-    private static final String SPINNER_FRAGMENT = "spinnerFragment";
     @Bind(R.id.iv_drawer_profile_circle_icon)
-    CircleImageView ivDrawerProfileCircleIcon;
+    RoundedImageView ivDrawerProfileCircleIcon;
     @Bind(R.id.tv_user_name)
     TextView mTvUserName;
     @Bind(R.id.tv_user_location)
@@ -117,6 +122,14 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
     FloatingActionButton mFloatingActionButton;
     @Bind(R.id.li_home_community_button_layout)
     LinearLayout liHomeCommunityButtonLayout;
+    @Bind(R.id.iv_profile_full_view)
+    SquareImageView ivProfileFullView;
+    @Bind(R.id.collapsing_toolbar_profile_full_view)
+    CollapsingToolbarLayout mCollapsingToolbarLayoutProfileFullView;
+    @Bind(R.id.iv_profile_full_view_icon)
+    RoundedImageView ivProfileFullViewIcon;
+    @Bind(R.id.li_profile_full_view_header)
+    LinearLayout liProfileFullViewHeader;
     TextView mTvFeedArticleUserReaction, mTvFeedCommunityUserReaction, mTvFeedCommunityPostUserReaction;
     GenericRecyclerViewAdapter mAdapter;
     private List<HomeSpinnerItem> mHomeSpinnerItemList = new ArrayList<>();
@@ -144,14 +157,42 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
         ButterKnife.bind(this);
         mCustiomActionBarToggle = new CustiomActionBarToggle(this, mDrawer, mToolbar, R.string.ID_NAVIGATION_DRAWER_OPEN, R.string.ID_NAVIGATION_DRAWER_CLOSE, this);
         mDrawer.addDrawerListener(mCustiomActionBarToggle);
-        ivDrawerProfileCircleIcon.setCircularImage(true);
         //TODO: this data to be removed
         String profile = "https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAhNAAAAJDYwZWIyZTg5LWFmOTItNGIwYS05YjQ5LTM2YTRkNGQ2M2JlNw.jpg";
-        ivDrawerProfileCircleIcon.bindImage(profile);
+        Glide.with(this)
+                .load(profile)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .skipMemoryCache(true)
+                .into(ivDrawerProfileCircleIcon);
         mTvUserName.setText("Praveen Singh");
         mTvUserLocation.setText("Delhi, India");
         mCustiomActionBarToggle.syncState();
         mNavigationView.setNavigationItemSelectedListener(this);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mCollapsingToolbarLayoutProfileFullView.setTitle(" ");
+        mCollapsingToolbarLayoutProfileFullView.setExpandedTitleColor(ContextCompat.getColor(getApplication(),android.R.color.transparent));
+        Glide.with(this)
+                .load(profile).asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .skipMemoryCache(true)
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
+                        ivProfileFullView.setImageBitmap( resource );
+                        Palette.from(resource).generate(new Palette.PaletteAsyncListener() {
+                            public void onGenerated(Palette palette) {
+                                applyPalette(palette);
+                                updateBackground(mFloatingActionButton,palette);
+                            }
+                        });
+                    }
+                });
+        Glide.with(this)
+                .load(profile)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .skipMemoryCache(true)
+                .into(ivProfileFullViewIcon);
         mFragmentOpen = new FragmentOpen(false, false, false, false, false, false, false, false);
         initHomeViewPagerAndTabs();
         mHomeSpinnerItemList = CustomeDataList.makeSpinnerListRequest();
@@ -163,7 +204,21 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
         //  HomeSpinnerFragment frag = new HomeSpinnerFragment();
         //  callFirstFragment(R.id.fl_fragment_container, frag);
     }
+    private void applyPalette(Palette palette) {
+        int primaryDark = ContextCompat.getColor(getApplication(), R.color.colorPrimaryDark);
+        int primary = ContextCompat.getColor(getApplication(), R.color.colorPrimary);
+        //  mCollapsingToolbarLayout.setContentScrimColor(palette.getMutedColor(primary));
+        //   mCollapsingToolbarLayout.setStatusBarScrimColor(palette.getDarkMutedColor(primaryDark));
+        //  updateBackground((FloatingActionButton) findViewById(R.id.fab), palette);
+        supportStartPostponedEnterTransition();
+    }
 
+    private void updateBackground(FloatingActionButton fab, Palette palette) {
+        int lightVibrantColor = palette.getLightVibrantColor(getResources().getColor(android.R.color.white));
+        int vibrantColor = palette.getVibrantColor(getResources().getColor(R.color.colorPrimary));
+        fab.setRippleColor(lightVibrantColor);
+        fab.setBackgroundTintList(ColorStateList.valueOf(vibrantColor));
+    }
     @Override
     public void onErrorOccurence() {
         showNetworkTimeoutDoalog(true);
@@ -194,6 +249,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
             }
             switch (drawerItem) {
                 case 1:
+                    openProfileFullViewFragment();
                     break;
                 case 2:
                     openArticleFragment();
@@ -211,6 +267,10 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
             ArticleCardResponse articleCardResponse = (ArticleCardResponse) baseResponse;
             articleCardsHandled(view, articleCardResponse);
         }
+        else if (baseResponse instanceof MyCommunities) {
+            MyCommunities myCommunities = (MyCommunities) baseResponse;
+            myCommunityHandled(view, myCommunities);
+        }
     }
 
     @Override
@@ -220,21 +280,39 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
             openImageFullViewFragment(listOfFeed);
         }
     }
-    private void articleCardsHandled(View view, ArticleCardResponse articleCardResponse) {
+    private void myCommunityHandled(View view, MyCommunities myCommunities) {
         int id = view.getId();
         switch (id) {
-            case R.id.iv_feed_article_single_image:
-                ArticleDetailActivity.navigateFromArticle(this, view, articleCardResponse);
+            case R.id.li_community_images:
+             //   CommunitiesDetailActivity.navigate(this, view, listOfFeed);
                 break;
 
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
         }
     }
-
+    private void articleCardsHandled(View view, ArticleCardResponse articleCardResponse) {
+        int id = view.getId();
+        switch (id) {
+            case R.id.iv_feed_article_single_image:
+                ArticleDetailActivity.navigateFromArticle(this, view, articleCardResponse);
+                break;
+            default:
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
+        }
+    }
     private void feedCardsHandled(View view, ListOfFeed listOfFeed) {
         int id = view.getId();
         switch (id) {
+            case R.id.tv_feed_community_post_total_replies:
+                openCommentReactionFragment();
+                break;
+            case R.id.tv_feed_community_total_replies:
+                openCommentReactionFragment();
+                break;
+            case R.id.tv_feed_article_total_replies:
+                openCommentReactionFragment();
+                break;
             case R.id.li_feed_article_join_conversation:
                 openCommentReactionFragment();
                 break;
@@ -344,7 +422,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
         bundle.putParcelable(AppConstants.IMAGE_FULL_VIEW,listOfFeed);
         imageFullViewFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.bottom_to_top_slide_reverse_anim)
-                .replace(R.id.fl_feed_comments, imageFullViewFragment, SPINNER_FRAGMENT).addToBackStack(null).commitAllowingStateLoss();
+                .replace(R.id.fl_feed_comments, imageFullViewFragment, ImageFullViewFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
 
     }
     private void openCommentReactionFragment() {
@@ -354,7 +432,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
         bundleArticle.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, mFragmentOpen);
         commentReactionFragmentForArticle.setArguments(bundleArticle);
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.bottom_to_top_slide_reverse_anim)
-                .replace(R.id.fl_feed_comments, commentReactionFragmentForArticle, SPINNER_FRAGMENT).addToBackStack(null).commitAllowingStateLoss();
+                .replace(R.id.fl_feed_comments, commentReactionFragmentForArticle, CommentReactionFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
 
     }
 
@@ -426,7 +504,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
     }
 
     private void initHomeViewPagerAndTabs() {
-        String search = getString(R.string.ID_SEARCH) + AppConstants.FEED_ARTICLE + AppConstants.S + AppConstants.COMMA + AppConstants.FEED_COMMUNITY + AppConstants.COMMA + AppConstants.FEED_JOB;
+        String search = getString(R.string.ID_SEARCH)+AppConstants.COMMA + AppConstants.FEED_ARTICLE + AppConstants.S + AppConstants.COMMA + AppConstants.FEED_COMMUNITY + AppConstants.COMMA + AppConstants.FEED_JOB;
         mTvSearchBox.setText(search);
         mFragmentOpen.setFeedOpen(true);
         mTabLayout.setVisibility(View.GONE);
@@ -435,7 +513,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
         HomeFragment homeFragment = new HomeFragment();
         Bundle bundle = new Bundle();
         homeFragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fl_feed_full_view, homeFragment, SPINNER_FRAGMENT).addToBackStack(null).commitAllowingStateLoss();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fl_feed_full_view, homeFragment, HomeFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
 
     }
 
@@ -470,7 +548,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
             bundle.putParcelableArrayList(AppConstants.HOME_SPINNER_FRAGMENT, (ArrayList<? extends Parcelable>) mHomeSpinnerItemList);
             mHomeSpinnerFragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
-                    .replace(R.id.fragment_home_spinner, mHomeSpinnerFragment, SPINNER_FRAGMENT).addToBackStack(null).commitAllowingStateLoss();
+                    .replace(R.id.fragment_home_spinner, mHomeSpinnerFragment, HomeSpinnerFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
             mFragmentOpen.setOpen(true);
         } else {
             onBackPressed();
@@ -503,7 +581,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
     @OnClick(R.id.tv_communities)
     public void communityOnClick() {
         liHomeCommunityButtonLayout.setVisibility(View.VISIBLE);
-        String search = getString(R.string.ID_SEARCH) + AppConstants.SPACE + getString(R.string.ID_COMMUNITIES);
+        String search = getString(R.string.ID_SEARCH) + AppConstants.COMMA + getString(R.string.ID_COMMUNITIES);
         mTvSearchBox.setText(search);
         if (mFragmentOpen.isArticleFragment()) {
             onBackPressed();
@@ -528,7 +606,15 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
         startActivity(intent);
     }
 
+    private void openProfileFullViewFragment() {
 
+        mTabLayout.setVisibility(View.VISIBLE);
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        viewPagerAdapter.addFragment(FeaturedFragment.createInstance(4), getString(R.string.ID_FEATURED));
+        viewPagerAdapter.addFragment(MyCommunitiesFragment.createInstance(4), getString(R.string.ID_MY_COMMUNITIES));
+        mViewPager.setAdapter(viewPagerAdapter);
+        mTabLayout.setupWithViewPager(mViewPager);
+    }
     private void openArticleFragment() {
 
         mFragmentOpen.setArticleFragment(true);
@@ -544,7 +630,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
         Bundle bundle = new Bundle();
         articlesFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
-                .replace(R.id.fl_article_card_view, articlesFragment, SPINNER_FRAGMENT).addToBackStack(null).commitAllowingStateLoss();
+                .replace(R.id.fl_article_card_view, articlesFragment, ArticlesFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
         mTvSpinnerIcon.setVisibility(View.VISIBLE);
     }
 
@@ -644,7 +730,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
             bundleArticle.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, mFragmentOpen);
             commentReactionFragmentForArticle.setArguments(bundleArticle);
             getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.bottom_to_top_slide_reverse_anim)
-                    .replace(R.id.fl_feed_comments, commentReactionFragmentForArticle, SPINNER_FRAGMENT).addToBackStack(null).commitAllowingStateLoss();
+                    .replace(R.id.fl_feed_comments, commentReactionFragmentForArticle, CommentReactionFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
         }
 
     }

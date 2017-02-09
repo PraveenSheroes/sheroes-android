@@ -109,7 +109,16 @@ public class ArticleCardHolder extends BaseViewHolder<ArticleCardResponse> {
     public void tvArticleJoinClick() {
         LogUtils.info("click","*********Article join*********");
     }
-
+    @OnClick(R.id.tv_article_trending_label)
+    public void tvArticleTrendingClick() {
+        if (dataItem.getTrending()) {
+            tvArticleTrendingLabel.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_in_active, 0);
+            dataItem.setTrending(false);
+        } else {
+            tvArticleTrendingLabel.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_active, 0);
+            dataItem.setTrending(true);
+        }
+    }
     @Override
     public void onClick(View view) {
 

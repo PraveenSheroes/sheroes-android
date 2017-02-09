@@ -8,6 +8,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.article.ArticleDetailSuggestion;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentsList;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.ReactionList;
 import appliedlife.pvtltd.SHEROES.models.entities.communities.CommunitySuggestion;
@@ -131,7 +132,7 @@ public enum HolderMapping {
     }, SUGGESTED_CARD_HOLDER(R.layout.horizontal_suggestion_item) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new SuggestedCardHolder(view, viewInterface);
+            return new CommunitySuggestedHolder(view, viewInterface);
         }
     }, OWNERLIST(R.layout.owner_list) {
         @Override
@@ -153,12 +154,22 @@ public enum HolderMapping {
     }, COMMUNITY_SUGGESTED_BY_HOLDER(R.layout.community_suggested_by_layout) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new CommunitySggestedByHolder(view, viewInterface);
+            return new CommunityWithInSggestedHolder(view, viewInterface);
         }
     }, ARTICLE_DETAIL_HOLDER(R.layout.article_detail_page_reaction_holder) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new ArticleDetailHolder(view, viewInterface);
+        }
+    }, ARTICLE_DETAIL_SUGGESTED_HOLDER(R.layout.article_detail_suggested_holder) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new ArticleDetailSuggestedHolder(view, viewInterface);
+        }
+    }, ARTICLE_DETAIL_WITHIN_SUGGESTED_HOLDER(R.layout.article_detail_within_suggested) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new ArticleDetailWithInSuggestedHolder(view, viewInterface);
         }
     };
     public Object object;
@@ -259,9 +270,15 @@ public enum HolderMapping {
             } else if (item instanceof ListOfSearch) {
                 return SEARCH_MODULE.ordinal();
 
-            }
-            else if (item instanceof ArticleDetailPojo) {
-                return ARTICLE_DETAIL_HOLDER.ordinal();
+            } else if (item instanceof ArticleDetailPojo) {
+                String id = ((ArticleDetailPojo) item).getId();
+                if (id.equalsIgnoreCase("2")) {
+                    return ARTICLE_DETAIL_SUGGESTED_HOLDER.ordinal();
+                } else {
+                    return ARTICLE_DETAIL_HOLDER.ordinal();
+                }
+            } else if (item instanceof ArticleDetailSuggestion) {
+                return ARTICLE_DETAIL_WITHIN_SUGGESTED_HOLDER.ordinal();
 
             }
         }

@@ -28,7 +28,9 @@
     <dimen name="dp_size_10">10dp</dimen>
     <dimen name="dp_size_16">16dp</dimen>
     <dimen name="dp_size_0.5">0.5dp</dimen>
+    <dimen name="dp_size_0.1">0.1dp</dimen>
     <dimen name="dp_size_5">5dp</dimen>
+    <dimen name="dp_size_minus_20"> -20dp</dimen>
     <dimen name="dp_size_6">6dp</dimen>
     <dimen name="dp_size_50">50dp</dimen>
     <dimen name="dp_size_8">8dp</dimen>

@@ -23,6 +23,7 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Praveen_Singh on 30-01-2017.
@@ -101,7 +102,10 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<MyCommunities> {
     public void viewRecycled() {
 
     }
-
+    @OnClick(R.id.li_community_images)
+    public void detailImageClick() {
+        viewInterface.handleOnClick(dataItem, liCoverImage);
+    }
 
     @Override
     public void onClick(View view) {

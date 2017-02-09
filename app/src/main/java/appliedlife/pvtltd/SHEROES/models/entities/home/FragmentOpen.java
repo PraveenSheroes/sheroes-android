@@ -18,6 +18,7 @@ public class FragmentOpen implements Parcelable {
     boolean settingFragment;
     boolean isImageBlur;
 
+
     public FragmentOpen(boolean isOpen, boolean reactionList, boolean commentList, boolean feedOpen, boolean articleFragment, boolean communityOpen, boolean settingFragment, boolean isImageBlur) {
         this.isOpen = isOpen;
         this.reactionList = reactionList;

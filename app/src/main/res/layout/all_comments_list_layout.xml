@@ -17,6 +17,8 @@
             android:id="@+id/iv_comment_profile_pic"
             android:layout_width="@dimen/dp_size_27"
             android:layout_height="@dimen/dp_size_27"
+            android:layout_gravity="center"
+            android:gravity="center"
             android:src="@drawable/ic_footer_button_icon" />
 
         <TextView
@@ -25,6 +27,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:padding="@dimen/dp_size_10"
+
             android:textColor="@color/detail_page_text"
             android:text="@string/ID_ERROR_INVALID_EMAIL"
             android:textSize="@dimen/sp_size_12"
@@ -32,9 +35,9 @@
     </LinearLayout>
     <View
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_size_0.5"
+        android:layout_height="@dimen/dp_size_0.1"
         android:layout_marginLeft="@dimen/dp_size_10"
         android:layout_marginRight="@dimen/dp_size_10"
-        android:background="@color/searchbox_text_color" />
+        android:background="@color/line_color" />
 
 </LinearLayout>

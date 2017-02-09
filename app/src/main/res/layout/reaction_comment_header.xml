@@ -90,6 +90,7 @@
     </FrameLayout>
 
     <View
+        android:id="@+id/view_line_for_reaction"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_size_1"
         android:layout_marginTop="@dimen/dp_size_20"

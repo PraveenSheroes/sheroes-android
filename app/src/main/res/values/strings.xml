@@ -75,6 +75,7 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_LEAVE">Leave</string>
     <string name="ID_DELETE">Delete</string>
     <string name="ID_REPORT">Report as spam</string>
+    <string name="ID_LEAVE">Leave</string>
     <string name="ID_SUGGESTED">Suggested communities</string>
     <string name="ID_GROUP">Group</string>
     <string name="ID_SEE_MORE">See more like this</string>
@@ -82,6 +83,7 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_OWNER">Owner</string>
     <string name="ID_LESS">Less</string>
     <string name="ID_RECENT">Recent</string>
+    <string name="ID_RELATED_ARTICLES">Related Articles</string>
 
 
     <!--string set  through priyanka-->

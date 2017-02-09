@@ -31,6 +31,7 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Praveen_Singh on 23-01-2017.
@@ -121,7 +122,7 @@ public class FeedArticleHolder extends BaseViewHolder<ListOfFeed> implements Vie
         liFeedArticleImages.removeAllViewsInLayout();
         imageOperations(context);
         allTextViewStringOperations(context);
-       menuClick();
+       menuItemForArticleClick();
     }
 
 
@@ -222,6 +223,10 @@ public class FeedArticleHolder extends BaseViewHolder<ListOfFeed> implements Vie
     public void viewRecycled() {
 
     }
+    @OnClick(R.id.tv_feed_article_total_replies)
+    public void repliesClick() {
+        viewInterface.handleOnClick(dataItem, tvFeedArticleTotalReplies);
+    }
 
     @Override
     public void onClick(View view) {
@@ -303,14 +308,14 @@ public class FeedArticleHolder extends BaseViewHolder<ListOfFeed> implements Vie
         return true;
     }
 
-    public void menuClick() {
+    public void menuItemForArticleClick() {
         mSpinnerMenuItems = new ArrayList();
-        mSpinnerMenuItems.add(mContext.getString(R.string.ID_EDIT));
-        mSpinnerMenuItems.add(mContext.getString(R.string.ID_DELETE));
         mSpinnerMenuItems.add(mContext.getString(R.string.ID_SHARE));
+        mSpinnerMenuItems.add(mContext.getString(R.string.ID_REPORT));
+        mSpinnerMenuItems.add(AppConstants.SPACE);
         ArrayAdapter<String> spinClockInWorkSiteAdapter = new ArrayAdapter<>(mContext, R.layout.about_community_spinner_row_back, mSpinnerMenuItems);
         spFeedArticleUserMenu.setAdapter(spinClockInWorkSiteAdapter);
-        spFeedArticleUserMenu.setSelected(true);
+        spFeedArticleUserMenu.setSelection(2);
         spFeedArticleUserMenu.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -324,7 +329,6 @@ public class FeedArticleHolder extends BaseViewHolder<ListOfFeed> implements Vie
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                LogUtils.info("Selected item : ", "*************");
             }
         });
     }

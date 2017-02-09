@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -23,13 +22,13 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleDetailPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.Feature;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.MyCommunities;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.views.activities.ArticleDetailActivity;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
@@ -37,29 +36,31 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
- * Created by Praveen_Singh on 08-02-2017.
+ * Created by Praveen_Singh on 09-02-2017.
  */
 
-public class ArticleDetailFragment extends BaseFragment implements HomeView {
-    private final String TAG = LogUtils.makeLogTag(ArticleDetailFragment.class);
+public class ProfileFullViewFragment extends BaseFragment implements HomeView {
+    private final String TAG = LogUtils.makeLogTag(ProfileFullViewFragment.class);
     @Inject
     HomePresenter mHomePresenter;
-    @Bind(R.id.rv_article_detail_list)
+    @Bind(R.id.rv_home_list)
     RecyclerView mRecyclerView;
-    @Bind(R.id.pb_article_progress_bar)
+    @Bind(R.id.pb_home_progress_bar)
     ProgressBar mProgressBar;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private HomeActivityIntractionListner mHomeActivityIntractionListner;
     private SwipPullRefreshList mPullRefreshList;
-    private ArticleCardResponse mArticleCardResponse;
-    public static ArticleDetailFragment createInstance(ArticleCardResponse articleCardResponse) {
-        ArticleDetailFragment articleDetailFragment = new ArticleDetailFragment();
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(AppConstants.ARTICLE_DETAIL, articleCardResponse);
-        articleDetailFragment.setArguments(bundle);
-        return articleDetailFragment;
+
+
+
+    public static ProfileFullViewFragment createInstance(int itemsCount) {
+
+        ProfileFullViewFragment profileFullViewFragment = new ProfileFullViewFragment();
+
+        return profileFullViewFragment;
     }
+
 
     @Override
     public void onAttach(Context context) {
@@ -77,30 +78,26 @@ public class ArticleDetailFragment extends BaseFragment implements HomeView {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
-        View view = inflater.inflate(R.layout.fragment_article_detail, container, false);
+        View view = inflater.inflate(R.layout.fragment_profile_full_view, container, false);
         ButterKnife.bind(this, view);
-        if(null!=getArguments())
-        {
-            mArticleCardResponse=getArguments().getParcelable(AppConstants.ARTICLE_DETAIL);
-        }
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
         mHomePresenter.attachView(this);
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new GenericRecyclerViewAdapter(getContext(), (ArticleDetailActivity) getActivity());
-        mAdapter.setSheroesGenericListData(getArticleDetailPojo());
+        mAdapter = new GenericRecyclerViewAdapter(getContext(), (HomeActivity) getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
 
-        mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager, AppConstants.MY_COMMUNITIES_FRAGMENT) {
+        mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager,AppConstants.ARTICLE_FRAGMENT) {
             @Override
             public void onHide() {
-
+                ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.INVISIBLE);
             }
 
             @Override
             public void onShow() {
+                ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -108,25 +105,13 @@ public class ArticleDetailFragment extends BaseFragment implements HomeView {
 
             }
         });
+        mHomePresenter.getHomePresenterArticleList(new ArticleCardResponse());
 
         return view;
     }
 
-    private List<ArticleDetailPojo> getArticleDetailPojo() {
-        List<ArticleDetailPojo> articleList=new ArrayList<>();
-        ArticleDetailPojo articleDetailPojo=new ArticleDetailPojo();
-        articleDetailPojo.setId("1");
-        articleDetailPojo.setArticleCardResponse(mArticleCardResponse);
-        ArticleDetailPojo articleDetailPojo1=new ArticleDetailPojo();
-        articleDetailPojo1.setId("2");
-        articleDetailPojo1.setArticleCardResponse(null);
-        articleList.add(articleDetailPojo);
-        articleList.add(articleDetailPojo1);
-        return articleList;
-    }
-
     @Override
-    public void getFeedListSuccess(List<ListOfFeed> listOfFeedList) {
+    public void getFeedListSuccess(List<ListOfFeed> listOfFeeds) {
 
     }
 
@@ -136,11 +121,22 @@ public class ArticleDetailFragment extends BaseFragment implements HomeView {
     }
 
     @Override
-    public void getArticleListSuccess(List<ArticleCardResponse> articleCardResponseList) {
+    public void getArticleListSuccess(List<ArticleCardResponse> articleCardResponses) {
+        if (StringUtil.isNotEmptyCollection(articleCardResponses)) {
+            mPullRefreshList.allListData(articleCardResponses);
+            mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
+            mAdapter.notifyDataSetChanged();
+            if (!mPullRefreshList.isPullToRefresh()) {
+                mLayoutManager.scrollToPositionWithOffset(mPullRefreshList.getFeedResponses().size() - articleCardResponses.size(), 0);
+            } else {
+                mLayoutManager.scrollToPositionWithOffset(0, 0);
+            }
+        }
     }
 
     @Override
-    public void getAllCommunitiesSuccess(List<MyCommunities> myCommunitiesList, List<Feature> featureList) {
+    public void getAllCommunitiesSuccess(List<MyCommunities> myCommunities, List<Feature> features) {
+
     }
 
     @Override
@@ -202,4 +198,3 @@ public class ArticleDetailFragment extends BaseFragment implements HomeView {
     }
 
 }
-

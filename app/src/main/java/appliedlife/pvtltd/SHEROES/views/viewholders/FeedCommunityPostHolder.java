@@ -2,17 +2,22 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
@@ -27,6 +32,7 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Praveen_Singh on 22-01-2017.
@@ -87,7 +93,10 @@ public class FeedCommunityPostHolder extends BaseViewHolder<ListOfFeed> implemen
     FrameLayout flFeedCommunityPostNoReactionComment;
     BaseHolderInterface viewInterface;
     private ListOfFeed dataItem;
-
+    @Bind(R.id.sp_feed_community_post_user_menu)
+    Spinner spFeedCommunityPostUserMenu;
+    Context mContext;
+    List<String> mSpinnerMenuItems;
     public FeedCommunityPostHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
@@ -98,6 +107,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<ListOfFeed> implemen
     @Override
     public void bindData(ListOfFeed item, final Context context, int position) {
         this.dataItem = item;
+        mContext=context;
         liFeedCommunityPostJoinConversation.setOnClickListener(this);
         tvFeedCommunityPostUserReaction.setOnLongClickListener(this);
         tvFeedCommunityPostUserReaction.setOnClickListener(this);
@@ -106,6 +116,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<ListOfFeed> implemen
         tvFeedCommunityPostUserMenu.setOnClickListener(this);
         imageOperations(context);
         allTextViewStringOperations(context);
+        menuItemForCommunityPostClick();
         if (StringUtil.isNotEmptyCollection(dataItem.getTotalCoverImages())) {
             List<TotalCoverImage> coverImageList = dataItem.getTotalCoverImages();
             if (coverImageList.size() > 0) {
@@ -159,6 +170,10 @@ public class FeedCommunityPostHolder extends BaseViewHolder<ListOfFeed> implemen
     @Override
     public void viewRecycled() {
 
+    }
+    @OnClick(R.id.tv_feed_community_post_total_replies)
+    public void repliesClick() {
+        viewInterface.handleOnClick(dataItem, tvFeedCommunityPostTotalReplies);
     }
 
     private void allTextViewStringOperations(Context context) {
@@ -536,5 +551,33 @@ public class FeedCommunityPostHolder extends BaseViewHolder<ListOfFeed> implemen
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
         }
         return true;
+    }
+    public void menuItemForCommunityPostClick() {
+        mSpinnerMenuItems = new ArrayList();
+        mSpinnerMenuItems.add(mContext.getString(R.string.ID_SHARE));
+        mSpinnerMenuItems.add(mContext.getString(R.string.ID_EDIT));
+        mSpinnerMenuItems.add(mContext.getString(R.string.ID_DELETE));
+        mSpinnerMenuItems.add(mContext.getString(R.string.ID_LEAVE));
+        mSpinnerMenuItems.add(mContext.getString(R.string.ID_REPORT));
+        mSpinnerMenuItems.add(AppConstants.SPACE);
+        ArrayAdapter<String> spinClockInWorkSiteAdapter = new ArrayAdapter<>(mContext, R.layout.about_community_spinner_row_back, mSpinnerMenuItems);
+        spFeedCommunityPostUserMenu.setAdapter(spinClockInWorkSiteAdapter);
+        spFeedCommunityPostUserMenu.setSelection(5);
+        spFeedCommunityPostUserMenu.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (null != view) {
+                    String msupplier = parent.getItemAtPosition(position).toString();
+                    ((TextView) view).setTextSize(0);
+                    ((TextView) view).setTextColor(ContextCompat.getColor(mContext, R.color.fully_transparent));
+                    LogUtils.info("Selected item : ", spFeedCommunityPostUserMenu.getSelectedItem().toString());
+                    LogUtils.info("Selected item position : ", "" + position);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
     }
 }
