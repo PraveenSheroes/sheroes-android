@@ -1,147 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
-
-
-    <include layout="@layout/community_header"/>
-
+    android:background="@color/grey8"
+    android:orientation="vertical">
+    <include layout="@layout/community_header" />
     <FrameLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:layout_marginTop="@dimen/dp_size_45"
-    android:background="@drawable/circle_style"
-    >
-    <TextView
-        android:id="@+id/tv_share_community_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@drawable/ic_footer_button_icon"
-        />
-</FrameLayout>
+        android:layout_marginTop="@dimen/dp_size_45"
+        android:background="@drawable/circle_style">
+
+        <TextView
+            android:id="@+id/tv_share_community_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/ic_footer_button_icon" />
+    </FrameLayout>
 
     <TextView
         android:id="@+id/tv_share_community_title"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_size_38"
+        android:layout_marginRight="@dimen/dp_size_38"
+        android:gravity="center"
         android:paddingTop="@dimen/dp_size_15"
         android:text="@string/ID_COMMUNITITES_NAME"
-        android:layout_marginLeft="@dimen/dp_size_38"
-
-        android:layout_marginRight="@dimen/dp_size_38"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:textSize="@dimen/dp_size_14"
         android:textColor="@color/com_post_share_textcolor"
-        />
+        android:textSize="@dimen/dp_size_14"
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/tv_share_community_url"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/dp_size_10"
         android:layout_marginLeft="@dimen/dp_size_38"
-
         android:layout_marginRight="@dimen/dp_size_38"
-        android:text="@string/ID_SHARE_LINK"
         android:gravity="center"
-        android:textSize="@dimen/sp_size_11"
+        android:paddingTop="@dimen/dp_size_10"
+        android:text="@string/ID_SHARE_LINK"
         android:textColor="@color/com_post_share_textcolor"
-        />
+        android:textSize="@dimen/sp_size_11"/>
 
     <TextView
         android:id="@+id/text3"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/dp_size_38"
         android:layout_marginLeft="@dimen/dp_size_38"
-
-        android:text="@string/ID_COMM_SHARE_EMAIL_LINK"
         android:layout_marginRight="@dimen/dp_size_38"
-        android:textSize="@dimen/dp_size_12"
-        android:textStyle="bold"
+        android:paddingTop="@dimen/dp_size_38"
+        android:text="@string/ID_COMM_SHARE_EMAIL_LINK"
         android:textColor="@color/com_share_post_text_color"
-        />
+        android:textSize="@dimen/dp_size_12"
+        android:textStyle="bold"/>
 
 
     <EditText
         android:id="@+id/et_share_community_via_email"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/ID_EMAIL_HINT_TEXT"
-        android:textSize="@dimen/sp_size_11"
-        android:paddingTop="@dimen/dp_size_15"
         android:layout_marginLeft="@dimen/dp_size_38"
-
-        android:background="@drawable/edittext_style"
         android:layout_marginRight="@dimen/dp_size_38"
+        android:background="@drawable/edittext_style"
+        android:hint="@string/ID_EMAIL_HINT_TEXT"
+        android:paddingTop="@dimen/dp_size_15"
         android:textColor="@color/text_color_date_birth"
-        />
+        android:textSize="@dimen/sp_size_11"/>
 
 
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="@dimen/dp_size_1"
         android:layout_marginLeft="@dimen/dp_size_38"
-
-        android:background="@color/share_line_color"
         android:layout_marginRight="@dimen/dp_size_38"
-        android:paddingTop="@dimen/dp_size_12"
-
-
-        />
+        android:background="@color/share_line_color"
+        android:paddingTop="@dimen/dp_size_12"/>
 
     <TextView
         android:id="@+id/btn_share"
         android:layout_width="fill_parent"
         android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_marginLeft="@dimen/dp_size_38"
+        android:layout_marginRight="@dimen/dp_size_38"
         android:layout_marginTop="@dimen/dp_size_24"
         android:background="@drawable/commu_share_button_backgroung_style"
-        android:layout_marginRight="@dimen/dp_size_38"
         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-        android:layout_gravity="center"
         android:gravity="center"
         android:text="@string/ID_SAHRE_TEXT"
-        android:textColor="@color/text_color_close"
-        android:layout_marginLeft="@dimen/dp_size_38"
-
-
-        />
+        android:textColor="@color/text_color_close"/>
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_size_24"
         android:layout_marginLeft="@dimen/dp_size_38"
-
         android:layout_marginRight="@dimen/dp_size_38"
+        android:layout_marginTop="@dimen/dp_size_24"
 
 
         >
+
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="@dimen/dp_size_1"
             android:layout_centerVertical="true"
-            android:background="@color/share_line_color"
+            android:background="@color/share_line_color"/>
 
-
-            />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/white_circle"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
+            android:background="@drawable/white_circle"
+            android:gravity="center"
+            android:text="OR"
             android:textColor="@color/search_tab_text"
             android:textSize="@dimen/dp_size_12"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:text="OR"/>
-
+            android:textStyle="bold"/>
 
 
     </RelativeLayout>
@@ -150,17 +128,15 @@
         android:id="@+id/tv_share_via_social_media"
         android:layout_width="fill_parent"
         android:layout_height="50dp"
-        android:background="@drawable/communities_post_background"
-        android:layout_marginTop="@dimen/dp_size_20"
-        android:layout_marginRight="@dimen/dp_size_38"
-        android:text="@string/ID_COMM_SHARE_BUTTON"
         android:layout_marginBottom="@dimen/dp_size_65"
         android:layout_marginLeft="@dimen/dp_size_38"
-        android:gravity="center"
-
-        android:textColor="@color/white"
+        android:layout_marginRight="@dimen/dp_size_38"
+        android:layout_marginTop="@dimen/dp_size_20"
+        android:background="@drawable/communities_post_background"
         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-        android:textSize="@dimen/sp_size_14"
-        />
+        android:gravity="center"
+        android:text="@string/ID_COMM_SHARE_BUTTON"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_size_14"/>
 
 </LinearLayout>

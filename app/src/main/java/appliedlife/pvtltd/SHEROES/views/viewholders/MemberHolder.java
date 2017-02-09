@@ -48,7 +48,7 @@ public class MemberHolder extends BaseViewHolder<MembersList> {
     @Override
     public void bindData(MembersList obj, Context context, int position) {
         this.dataItem = obj;
-        itemView.setOnClickListener(this);
+       // itemView.setOnClickListener(this);
 
         tvCity.setText(dataItem.getName());
         int pos=position+1;

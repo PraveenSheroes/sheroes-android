@@ -11,6 +11,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerList;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.EditNameDialogListener;
 import butterknife.Bind;
@@ -27,6 +29,8 @@ public class OwnerListHolder extends BaseViewHolder<OwnerList> {
     TextView tv_owner;
     @Bind(R.id.img1)
     CircleImageView background;
+    @Bind(R.id.cross)
+    TextView mTvownerclose;
     BaseHolderInterface viewInterface;
     private OwnerList dataItem;
     private int position;
@@ -47,7 +51,7 @@ public class OwnerListHolder extends BaseViewHolder<OwnerList> {
     @Override
     public void bindData(OwnerList obj, Context context, int position) {
         this.dataItem = obj;
-        itemView.setOnClickListener(this);
+        mTvownerclose.setOnClickListener(this);
 
         tvCity.setText(dataItem.getName());
         int pos=position+1;
@@ -66,11 +70,20 @@ public class OwnerListHolder extends BaseViewHolder<OwnerList> {
 
     @Override
     public void onClick(View view) {
-        HashMap<String,Object> map = new HashMap<String,Object>();
-        //   map.put("collection name",dataItem.getTitle());
-        map.put("collection id",dataItem.getId());
+
+        int id = view.getId();
+        switch (id) {
+            case R.id.cross:
+                HashMap<String,Object> map = new HashMap<String,Object>();
+                //   map.put("collection name",dataItem.getTitle());
+                map.put("collection id",dataItem.getId());
 //    map.put("collection type",dataItem.getType());
-        viewInterface.handleOnClick(this.dataItem,view);
+                viewInterface.handleOnClick(this.dataItem,view);
+                break;
+            default:
+                LogUtils.error("", AppConstants.CASE_NOT_HANDLED + " " + "" + " " + id);
+        }
+
         //createCommunityViewInterface.closeDialog("communityDialog");
 
 

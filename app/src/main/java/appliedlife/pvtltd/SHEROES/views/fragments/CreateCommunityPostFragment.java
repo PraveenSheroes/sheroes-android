@@ -57,7 +57,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.views.activities.ShareCommunityActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CreateCommunityView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.EditNameDialogListener;
@@ -215,8 +214,10 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
     @OnClick(R.id.tv_community_post_submit)
     public void communityPostSubmitClick()
     {
-        Intent intent = new Intent(getActivity(), ShareCommunityActivity.class);
-        startActivity(intent);
+        Toast.makeText(getActivity(),"Posted",Toast.LENGTH_LONG).show();
+        mCreatecommunityPostIntractionListner.onClose();
+        /*Intent intent = new Intent(getActivity(), ShareCommunityActivity.class);
+        startActivity(intent);*/
     }
     @Override
     public void onResume() {

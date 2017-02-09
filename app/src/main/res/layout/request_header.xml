@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tv_user_comment_header_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_size_30"
+        android:fontFamily="@string/ID_ROBOTO_LIGHT"
+        android:padding="@dimen/dp_size_20"
+        android:text="@string/ID_REQUEST"
+        android:textAllCaps="true"
+        android:textColor="@color/searchbox_hint_text_color"
+        android:textSize="@dimen/sp_size_24" />
+
+    <FrameLayout
+        android:id="@+id/fmCommunityMembersClose"
+        android:layout_width="@dimen/dp_size_28"
+        android:layout_height="@dimen/dp_size_28"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="right"
+        android:layout_marginEnd="@dimen/dp_size_25"
+        android:layout_marginRight="@dimen/dp_size_20"
+
+        android:layout_marginTop="@dimen/dp_size_15"
+
+        android:paddingTop="@dimen/dp_size_10">
+
+        <TextView
+            android:id="@+id/tv_requested_cross"
+            android:layout_width="@dimen/dp_size_20"
+            android:layout_height="@dimen/dp_size_20"
+            android:background="@drawable/ic_cross" />
+    </FrameLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/sp_size_1"
+        android:layout_below="@+id/tv_user_comment_header_text"
+        android:background="@color/grey2" />
+</RelativeLayout>

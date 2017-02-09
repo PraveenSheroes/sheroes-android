@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/dp_size_10"
+        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+        android:text="@string/ID_SELECT_PURPOSE"
+        android:textAllCaps="true"
+        android:textSize="@dimen/sp_size_11"/>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/dp_size_10">
+
+        <TextView
+            android:id="@+id/tv_employeer_branding"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:background="@drawable/select_purpose_btn_shap"
+            android:padding="@dimen/dp_size_5"
+            android:text="@string/ID_EMPLOYER_BRANDING"
+            android:textColor="@color/blue"
+            android:textSize="@dimen/sp_size_11"/>
+        <!--
+                android:background="@drawable/invite_color_btn_shap"
+        -->
+
+        <TextView
+            android:id="@+id/tv_customer_review"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_size_25"
+            android:layout_toRightOf="@+id/tv_employeer_branding"
+            android:background="@drawable/select_purpose_btn_shap"
+            android:padding="@dimen/dp_size_5"
+            android:text="@string/ID_COSTOMER_REVIEW"
+            android:textColor="@color/blue"
+            android:textSize="@dimen/sp_size_11"/>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_associate_emloyee_engagement"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/dp_size_10"
+        android:background="@drawable/select_purpose_btn_shap"
+        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+        android:padding="@dimen/dp_size_5"
+        android:text="@string/ID_ASSOCIATE_EMPLOYEE_ENGAGEMENT"
+        android:textAllCaps="true"
+        android:textColor="@color/blue"
+        android:textSize="@dimen/sp_size_11"/>
+
+    <TextView
+        android:id="@+id/tv_product_promotion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/dp_size_10"
+        android:background="@drawable/select_purpose_btn_shap"
+        android:text="@string/ID_PRODUCT_PROMOTION"
+        android:textColor="@color/blue"
+        android:textSize="@dimen/sp_size_11" />
+</LinearLayout>

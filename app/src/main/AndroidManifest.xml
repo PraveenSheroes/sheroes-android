@@ -63,9 +63,6 @@
         <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityPostActivity">
 
         </activity>
-        <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.ShareCommunityActivity">
-
-        </activity>
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.HomeSearchActivity"
             android:parentActivityName="appliedlife.pvtltd.SHEROES.views.activities.HomeActivity"

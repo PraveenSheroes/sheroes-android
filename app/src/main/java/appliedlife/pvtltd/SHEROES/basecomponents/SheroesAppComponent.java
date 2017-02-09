@@ -3,9 +3,14 @@ package appliedlife.pvtltd.SHEROES.basecomponents;
 
 import javax.inject.Singleton;
 
+import appliedlife.pvtltd.SHEROES.models.InviteSearchModel;
+import appliedlife.pvtltd.SHEROES.models.RequestedListModel;
+import appliedlife.pvtltd.SHEROES.presenters.CommunityTagsPresenter;
+import appliedlife.pvtltd.SHEROES.presenters.InvitePresenter;
 import appliedlife.pvtltd.SHEROES.presenters.MembersPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.OwnerPresenter;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleDetailActivity;
+import appliedlife.pvtltd.SHEROES.presenters.RequestedPresenter;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityPostActivity;
@@ -14,14 +19,16 @@ import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeSearchActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.LoginActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.SettingPreferencesActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.ShareCommunityActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.AllMembersFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.AllSearchFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticleDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.CommunityInviteSearchFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOpenAboutFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.CommunityRequestedFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.CommunitySearchTagsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CreateCommunityFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CreateCommunityPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
@@ -59,13 +66,16 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.FeedJobHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FooterViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HomeSpinnerFooterHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HomeSpinnerSelectorHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.InviteSearchHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MemberHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MyCommunitiesCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OwnerListHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ReactionHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.RequestedHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.SearchModuleHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.SelectDilogHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.SuggestedCardHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.TagsHolder;
 import dagger.Component;
 
 /**
@@ -134,7 +144,6 @@ public interface SheroesAppComponent {
     void inject(CreateCommunityPostActivity createCommunityPostActivity);
     void inject(CreateCommunityPostFragment createCommunityPostFragment);
     void inject(SelectCommunityFragment selectCommunityFragment);
-    void inject(ShareCommunityActivity shareCommunityActivity);
     void inject(ShareCommunityFragment shareCommunityFragment);
     void inject(SelectDilogHolder selectDilogHolder);
     void inject(CommunityCardDetailHeader communityCardDetailHeader);
@@ -151,4 +160,17 @@ public interface SheroesAppComponent {
     void inject(MemberHolder memberHolder);
     void inject(MembersPresenter membersPresenter);
     void inject(Feedback_ThankyouActivity feedback_thankyouActivity);
+
+    void inject(CommunitySearchTagsFragment communitySearchTagsFragment);
+    void inject(CommunityTagsPresenter communityTagsPresenter);
+    void inject(TagsHolder tagsHolder);
+    void inject(CommunityRequestedFragment communityRequestedFragment);
+    void inject(RequestedPresenter requestedPresenter);
+    void inject(RequestedListModel tagsHolder);
+    void inject(RequestedHolder requestedHolder);
+
+    void inject(CommunityInviteSearchFragment requestedHolder);
+    void inject(InvitePresenter requestedHolder);
+    void inject(InviteSearchModel requestedHolder);
+    void inject(InviteSearchHolder inviteSearchHolder);
 }

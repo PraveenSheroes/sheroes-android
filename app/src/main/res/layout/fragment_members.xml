@@ -16,17 +16,22 @@
             android:layout_height="wrap_content"
             android:layout_gravity="top" />
 
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/sp_size_1"
+            android:background="@color/grey2" />
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_comment_reaction_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:divider="#00000000" />
+            android:divider="@color/black" />
     </LinearLayout>
 
     <ProgressBar
         android:id="@+id/pb_comment_reaction_progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"/>
 
 </FrameLayout>

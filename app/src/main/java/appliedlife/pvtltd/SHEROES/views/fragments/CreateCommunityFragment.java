@@ -90,6 +90,9 @@ public class CreateCommunityFragment extends BaseFragment implements CreateCommu
     @Bind(R.id.et_create_community_type)
     EditText mEt_community_type;
 
+    @Bind(R.id.et_create_community_tags)
+    EditText mEt_create_community_tags;
+
     private final String mTAG = LogUtils.makeLogTag(CreateCommunityFragment.class);
     private CreateCommunityActivityIntractionListner mCreatecommunityIntractionListner;
     private int mImage_type=0;
@@ -98,7 +101,7 @@ public class CreateCommunityFragment extends BaseFragment implements CreateCommu
     private Uri mImageCaptureUri;
     private File mOutPutFile = null;
     private File mOutPutFile1 = null;
-
+    View view;
 
     public static CreateCommunityFragment createInstance(int itemsCount) {
         CreateCommunityFragment createCommunityFragment = new CreateCommunityFragment();
@@ -121,10 +124,12 @@ public class CreateCommunityFragment extends BaseFragment implements CreateCommu
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
-        View view = inflater.inflate(R.layout.fragmentcreate_community, container, false);
+         view = inflater.inflate(R.layout.fragmentcreate_community, container, false);
         ButterKnife.bind(this, view);
         mOutPutFile = new File(Environment.getExternalStorageDirectory(), "temp.jpg");
         mOutPutFile1 = new File(Environment.getExternalStorageDirectory(), "temp1.jpg");
+        mEt_create_community_tags.setText("Community Tag");
+
         getActivity().setRequestedOrientation(
                 ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         getExternalStoragePermission();
@@ -144,7 +149,13 @@ public class CreateCommunityFragment extends BaseFragment implements CreateCommu
      checkStoragePermission();
         selectImageOption();
     }
+    @OnClick(R.id.et_create_community_tags)
+    public void btnTagClick()
+    {
 
+        mCreatecommunityIntractionListner.callCommunityTagPage();
+       // CommunitySearchTagsFragment newFragment = new CommunitySearchTagsFragment(this);
+    }
     @OnClick(R.id.tv_create_community_cover_img_upload)
     public void btnChangeCover() {
         mImage_type=2;
@@ -154,8 +165,10 @@ public class CreateCommunityFragment extends BaseFragment implements CreateCommu
     @OnClick(R.id.tv_create_community_submit)
     public void btnCreateClick()
     {
-        Intent intent = new Intent(getActivity(), CreateCommunityPostActivity.class);
-        startActivity(intent);
+       /* Intent intent = new Intent(getActivity(), CreateCommunityPostActivity.class);
+        startActivity(intent);*/
+        Toast.makeText(getActivity(),"Created",Toast.LENGTH_LONG).show();
+        mCreatecommunityIntractionListner.close();
     }
     public void checkStoragePermission()
     {
@@ -206,6 +219,8 @@ public class CreateCommunityFragment extends BaseFragment implements CreateCommu
         {
             ChangeCommunityPrivacyDialogFragment newFragment = new ChangeCommunityPrivacyDialogFragment(this);
             newFragment.show(getActivity().getFragmentManager(), "dialog");
+            /*CommunityJoinRegionDialogFragment newFragment = new CommunityJoinRegionDialogFragment(this);
+            newFragment.show(getActivity().getFragmentManager(), "dialog");*/
         }
 
     }
@@ -282,6 +297,7 @@ public class CreateCommunityFragment extends BaseFragment implements CreateCommu
 
     }
 
+
     @Override
     public void onClose() {
     }
@@ -292,9 +308,22 @@ public class CreateCommunityFragment extends BaseFragment implements CreateCommu
 
     }
 
+    public void showTagResult(String[] tagsval) {
+        String tagval="";
+        for(int i=1;i<tagsval.length;i++)
+        {
+            tagval=tagval+" "+tagsval[i];
+        }
+        LogUtils.info("result-", tagval);
+        mEt_create_community_tags.setText("Community Tag");
+
+        Toast.makeText(getActivity(),tagval,Toast.LENGTH_LONG).show();
+    }
+
     public interface CreateCommunityActivityIntractionListner {
         void close();
         void onErrorOccurence();
+        void callCommunityTagPage();
     }
 /*
 This mathod is for select image from camera and gellery

@@ -21,7 +21,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.CreateCommunityPostFragment;
 import butterknife.ButterKnife;
 
 
-public class CreateCommunityPostActivity extends BaseActivity implements CreateCommunityPostFragment.CreateCommunityActivityPostIntractionListner, BaseHolderInterface, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener{
+public class CreateCommunityPostActivity extends BaseActivity implements CreateCommunityPostFragment.CreateCommunityActivityPostIntractionListner,BaseHolderInterface, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener{
     String data="";
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -112,6 +112,7 @@ public class CreateCommunityPostActivity extends BaseActivity implements CreateC
     public void onDrawerClosed() {
 
     }
+
 
     @Override
     public void onErrorOccurence() {

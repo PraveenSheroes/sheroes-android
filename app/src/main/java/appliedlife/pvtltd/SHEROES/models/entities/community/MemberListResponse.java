@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by SHEROES-TECH on 03-02-2017.
+ * Created by Ajit Kumar on 03-02-2017.
  */
 
 public class MemberListResponse {

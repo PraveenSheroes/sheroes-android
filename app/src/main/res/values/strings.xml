@@ -72,6 +72,7 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_TOTAL_IMAGES">4+</string>
     <string name="ID_SHARE">Share</string>
     <string name="ID_EDIT">Edit</string>
+    <string name="ID_LEAVE">Leave</string>
     <string name="ID_DELETE">Delete</string>
     <string name="ID_REPORT">Report as spam</string>
     <string name="ID_SUGGESTED">Suggested communities</string>
@@ -227,14 +228,27 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_ABOUT_COMMUNITY">ABOUT COMMUNITY</string>
     <string name="ID_ABOUT_COMMUNITY_DES">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolorem agna aliqua. Utenim ad minim veniam, quis nostrud exercitation ullamco laboris. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolorem agna aliqua. Utenim ad minim veniam, quis nostrud exercitation ullamco laboris.</string>
     <string name="ID_COMMUNITY_MEMBER">200 Members</string>
+    <string name="ID_SELECT_PURPOSE">Select Purpose</string>
+
     <string name="ID_COMMUNITY_REQUESTED">20 Requested</string>
+    <string name="ID_EMPLOYER_BRANDING">Emloyer Branding</string>
+    <string name="ID_COSTOMER_REVIEW">Costomer Review</string>
+    <string name="ID_ASSOCIATE_EMPLOYEE_ENGAGEMENT">Associate/Employee engagement</string>
+    <string name="ID_PRODUCT_PROMOTION">Product Promotion</string>
+    <string name="ID_REQUEST">Requests</string>
+    <string name="ID_POPULAR_TAG">Popular Tag</string>
+    <string name="ID_TAG_TXT">Choose tags which you’re interested in</string>
+    <string name="ID_COMMUNITY_JOIN_TXT">I would like to join because..</string>
+    <string name="ID_COMMUNITY_JOIN_REGION1">I am highly interested in joining this community</string>
+    <string name="ID_COMMUNITY_JOIN_REGION2">I am already a member of this community outside of SHEROES</string>
+    <string name="ID_USER_NAME">User Name</string>
+    <string name="ID_COMMUNITY_REMOVE_OWNER">Are you sure you want to remove this owner ?</string>
 
     <string-array name="name">
-        <item>Laptop</item>
-        <item>Mobile</item>
-        <item>Desktop</item>
-        <item>TV</item>
-        <item>Pendrive</item>
+        <item>Associate/Employee engagement</item>
+        <item>Group</item>
+        <item>Company/Brand</item>
+        <item>Organisation</item>
     </string-array>
 
 

@@ -28,8 +28,9 @@
 
         android:layout_gravity="right">
     <TextView
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:id="@+id/tv_requested_cross"
+        android:layout_width="@dimen/dp_size_20"
+        android:layout_height="@dimen/dp_size_20"
         android:background="@drawable/ic_cross"
         />
     </FrameLayout>

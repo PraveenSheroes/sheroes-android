@@ -7,7 +7,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityList;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerList;
 
 /**
- * Created by SHEROES-TECH on 31-01-2017.
+ * Created by Ajit Kumar on 31-01-2017.
  */
 
 public interface CommunityView extends BaseMvpView {

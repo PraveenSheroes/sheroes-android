@@ -36,11 +36,14 @@
     <dimen name="dp_size_2">2dp</dimen>
     <dimen name="dp_size_minus_22">-22dp</dimen>
     <dimen name="dp_size_1">1dp</dimen>
+    <dimen name="dp_size_132">132dp</dimen>
     <dimen name="dp_size_18">18dp</dimen>
     <dimen name="dp_size_11">11dp</dimen>
     <dimen name="dp_size_12">12dp</dimen>
     <dimen name="dp_size_13">13dp</dimen>
+    <dimen name="dp_size_37">37dp</dimen>
     <dimen name="dp_size_38">38dp</dimen>
+    <dimen name="dp_size_40">40dp</dimen>
     <dimen name="dp_size_60">60dp</dimen>
     <dimen name="dp_size_105">105dp</dimen>
     <dimen name="dp_size_233">233dp</dimen>
@@ -54,7 +57,7 @@
     <dimen name="dp_size_266">266dp</dimen>
     <dimen name="dp_size_185">185dp</dimen>
     <dimen name="dp_size_350">350dp</dimen>
-
+    <dimen name="dp_size_282">282dp</dimen>
     <!--Text sizes for SHEROES-->
     <dimen name="sp_size_16">16sp</dimen>
     <dimen name="sp_size_1">1sp</dimen>

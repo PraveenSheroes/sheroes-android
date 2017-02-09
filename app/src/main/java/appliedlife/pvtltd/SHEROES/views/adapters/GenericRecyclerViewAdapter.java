@@ -14,6 +14,7 @@ import java.util.List;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.ListOfInviteSearch;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ListOfSearch;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HolderMapping;
 
@@ -126,11 +127,18 @@ public class GenericRecyclerViewAdapter<T extends BaseResponse> extends Recycler
 
     protected List<T> getFilteredResults(String constraint) {
         List<T> results = new ArrayList<>();
-
         for (T item : mSheroesGenericListData) {
-            ListOfSearch listOfSearch = (ListOfSearch) item;
-            if (listOfSearch.getFeedTitle().toLowerCase().contains(constraint)) {
-                results.add(item);
+            if (item instanceof ListOfInviteSearch) {
+                ListOfInviteSearch listOfInviteSearch=(ListOfInviteSearch) item;
+                if (listOfInviteSearch.getFeedTitle().toLowerCase().contains(constraint)) {
+                    results.add(item);
+                }
+            }
+            if (item instanceof ListOfSearch) {
+                ListOfSearch listOfSearch = (ListOfSearch) item;
+                if (listOfSearch.getFeedTitle().toLowerCase().contains(constraint)) {
+                    results.add(item);
+                }
             }
         }
         return results;

@@ -12,8 +12,11 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentsList;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.ReactionList;
 import appliedlife.pvtltd.SHEROES.models.entities.communities.CommunitySuggestion;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityList;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityTags;
+import appliedlife.pvtltd.SHEROES.models.entities.community.ListOfInviteSearch;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MembersList;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerList;
+import appliedlife.pvtltd.SHEROES.models.entities.community.RequestedList;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
 import appliedlife.pvtltd.SHEROES.models.entities.home.DrawerItems;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
@@ -75,7 +78,13 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new SearchModuleHolder(view, viewInterface);
         }
-    }, FEATURE_CARD(R.layout.featured_card_item) {
+    },
+    INVITE_SEARCH_MODULE(R.layout.invitesearch_item) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new InviteSearchHolder(view, viewInterface);
+        }
+    },FEATURE_CARD(R.layout.featured_card_item) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new FeatureCardHolder(view, viewInterface);
@@ -107,6 +116,13 @@ public enum HolderMapping {
             return new SelectDilogHolder(view, viewInterface);
         }
 
+    },
+    SEARCHTAGS(R.layout.list_of_tags) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new TagsHolder(view, viewInterface);
+        }
+
     }, COMMUNITY_DETAIL_HEADER(R.layout.community_detail_header_holder) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
@@ -121,6 +137,12 @@ public enum HolderMapping {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new OwnerListHolder(view, viewInterface);
+        }
+    }
+    , REQUESTLIST(R.layout.request_list) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new RequestedHolder(view, viewInterface);
         }
     },
     MEMBERLIST(R.layout.member_list) {
@@ -208,13 +230,30 @@ public enum HolderMapping {
             } else if (item instanceof ReactionList) {
                 return REACTION.ordinal();
 
-            } else if (item instanceof OwnerList) {
+        }
+            else if (item instanceof ListOfInviteSearch) {
+                return INVITE_SEARCH_MODULE.ordinal();
+
+            }
+            else if(item instanceof RequestedList)
+            {
+                return REQUESTLIST.ordinal();
+            }
+        else if (item instanceof OwnerList) {
                 return OWNERLIST.ordinal();
             } else if (item instanceof MembersList) {
                 return MEMBERLIST.ordinal();
             } else if (item instanceof CommunityList) {
                 return SELECTDILOG.ordinal();
-            } else if (item instanceof CommunitySuggestion) {
+            }
+            else if(item instanceof CommunityTags)
+            {
+                return SEARCHTAGS.ordinal();
+            }
+        else if(item instanceof CommunityList)
+        {
+            return SELECTDILOG.ordinal();
+        } else if (item instanceof CommunitySuggestion) {
                 return COMMUNITY_SUGGESTED_BY_HOLDER.ordinal();
 
             } else if (item instanceof ListOfSearch) {

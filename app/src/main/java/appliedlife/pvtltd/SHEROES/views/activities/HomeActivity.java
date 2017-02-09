@@ -55,6 +55,7 @@ import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.CreateCommunityPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeSpinnerFragment;
@@ -320,7 +321,6 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
                 openCommentReactionFragment();
                 break;
             case R.id.li_feed_article_images:
-                //TODO::Article detail call
                 CommunitiesDetailActivity.navigate(this, view, listOfFeed);
                 break;
             case R.id.li_feed_community_images:
@@ -524,7 +524,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
     @OnClick(R.id.iv_footer_button_icon)
     public void commingOnClick() {
         // Snackbar.make(mCLMainLayout, "Comming soon", Snackbar.LENGTH_SHORT).show();
-        Intent intent = new Intent(getApplicationContext(), CreateCommunityActivity.class);
+        Intent intent = new Intent(getApplicationContext(), CreateCommunityPostActivity.class);
         startActivity(intent);
     }
 
@@ -863,6 +863,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
     }
     @OnClick(R.id.fab_add_community)
     public void createCommunityButton() {
-        Snackbar.make(mCLMainLayout, "Comming soon", Snackbar.LENGTH_SHORT).show();
+        Intent intent = new Intent(getApplicationContext(), CreateCommunityActivity.class);
+        startActivity(intent);
     }
 }

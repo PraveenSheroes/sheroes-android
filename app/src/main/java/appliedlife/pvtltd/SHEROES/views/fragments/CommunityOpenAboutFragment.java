@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -54,8 +55,10 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
     RecyclerView mAboutCommunityOwnerRecyclerView;
     @Bind(R.id.sp_about_community)
     Spinner mSpaboutCommunityspn;
+    List<String> mSpinnerMenuItems;
     @Inject
     OwnerPresenter mOwnerPresenter;
+    int iCurrentSelection;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     public static CommunityOpenAboutFragment createInstance(int itemsCount) {
@@ -93,30 +96,21 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
 
         Fabric.with(getActivity(), new Crashlytics());
 
+        mSpinnerMenuItems=new ArrayList();
+        mSpinnerMenuItems.add(getActivity().getString(R.string.ID_EDIT));
+        mSpinnerMenuItems.add(getActivity().getString(R.string.ID_LEAVE));
+        mSpinnerMenuItems.add(AppConstants.SPACE);
 
-        this.marraySpinner = new String[]{
-                "Edit", "Leave"
-        };
-
-
-        ArrayAdapter spinClockInWorkSiteAdapter = new ArrayAdapter(getActivity(), R.layout.about_community_spinner_row, marraySpinner);
+        ArrayAdapter spinClockInWorkSiteAdapter = new ArrayAdapter(getActivity(), R.layout.about_community_spinner_row, mSpinnerMenuItems);
 
         mSpaboutCommunityspn.setAdapter(spinClockInWorkSiteAdapter);
         mSpaboutCommunityspn.setOnItemSelectedListener(this);
-        mSpaboutCommunityspn.setOnTouchListener(new View.OnTouchListener() {
+         spinClockInWorkSiteAdapter = new ArrayAdapter(getActivity(), R.layout.about_community_spinner_row_back, mSpinnerMenuItems);
 
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    //  doWhatIsRequired();
-                    ArrayAdapter spinClockInWorkSiteAdapter = new ArrayAdapter(getActivity(), R.layout.about_community_spinner_row_back, marraySpinner);
+        mSpaboutCommunityspn.setAdapter(spinClockInWorkSiteAdapter);
+         iCurrentSelection = mSpaboutCommunityspn.getSelectedItemPosition();
+        mSpaboutCommunityspn.setSelection(2);
 
-                    mSpaboutCommunityspn.setAdapter(spinClockInWorkSiteAdapter);
-
-                }
-                return false;
-            }
-        });
         mSpaboutCommunityspn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
@@ -124,17 +118,23 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
                                        int arg2, long arg3) {
                 // TODO Auto-generated method stub
                 if (null != arg1) {
-                    String msupplier = mSpaboutCommunityspn.getSelectedItem().toString();
+                    String msupplier = mSpaboutCommunityspn.getItemAtPosition(arg2).toString();
                     ((TextView) arg1).setTextSize(16);
                     ((TextView) arg1).setTextColor(
                             getResources().getColorStateList(R.color.fully_transparent));
                     LogUtils.info("Selected item : ", msupplier);
+                    if(msupplier.equals("Edit"))
+                    {
+                        mShareCommunityIntractionListner.createCommunityClick();
+                    }
+
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> arg0) {
                 // TODO Auto-generated method stub
+                LogUtils.info("Selected item : ", "nothing");
 
             }
         });
@@ -145,9 +145,23 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
     {
         mShareCommunityIntractionListner.onClose();
     }
+    @OnClick(R.id.tv_about_community_share)
+    public void clickCommunityShare()
+    {
+        mShareCommunityIntractionListner.shareClick();
+    }
+    @OnClick(R.id.tv_community_requested)
+    public void requestClick()
+    {
+        mShareCommunityIntractionListner.requestClick();
+    }
     @OnClick(R.id.tv_community_members)
     public void membersClick() {
         mShareCommunityIntractionListner.memberClick();
+    }
+    @OnClick(R.id.tv_community_invite)
+    public void inviteMembersClick() {
+        mShareCommunityIntractionListner.inviteClick();
     }
   /*  @OnClick(R.id.tv_community_menu)
     public void menueClick()
@@ -208,7 +222,10 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
 
     public interface AboutCommunityActivityIntractionListner {
         void memberClick();
-
+        void inviteClick();
+        void requestClick();
+        void createCommunityClick();
+        void shareClick();
         void onErrorOccurence();
 
         void onClose();

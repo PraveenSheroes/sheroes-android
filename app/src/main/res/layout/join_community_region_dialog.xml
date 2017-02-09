@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ID_TAG_TXT"
+        android:fontFamily="@string/ID_ROBOTO_BOLD"
+        android:textSize="@dimen/sp_size_13"
+        android:textStyle="bold"
+        android:paddingTop="@dimen/dp_size_30"
+        android:layout_gravity="center_horizontal"/>
+    <TextView
+        android:layout_width="@dimen/dp_size_282"
+        android:layout_height="wrap_content"
+        android:text="@string/ID_COMMUNITY_JOIN_REGION1"
+        android:textSize="@dimen/sp_size_13"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:paddingLeft="@dimen/dp_size_20"
+        android:paddingRight="@dimen/dp_size_20"
+        android:paddingBottom="@dimen/dp_size_5"
+        android:textColor="@color/blue"
+        android:paddingTop="@dimen/dp_size_5"
+        android:gravity="center"
+        android:background="@drawable/join_intrest_text_shap"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/dp_size_21"
+        />
+    <TextView
+        android:layout_width="@dimen/dp_size_282"
+        android:layout_height="wrap_content"
+        android:text="@string/ID_COMMUNITY_JOIN_REGION2"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:background="@drawable/join_intrest_text_shap"
+        android:layout_marginTop="@dimen/dp_size_20"
+        android:textColor="@color/blue"
+        android:paddingBottom="@dimen/dp_size_5"
+        android:paddingTop="@dimen/dp_size_5"
+
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/dp_size_50"
+        android:gravity="center"
+        />
+</LinearLayout>

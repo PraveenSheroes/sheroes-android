@@ -1,0 +1,69 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
+        android:id="@+id/img1"
+        android:layout_width="@dimen/dp_size_40"
+        android:layout_height="@dimen/dp_size_40"
+        android:layout_marginLeft="@dimen/dp_size_15"
+        android:layout_marginTop="@dimen/dp_size_10"/>
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_size_3"
+        android:layout_marginLeft="@dimen/dp_size_18"
+        android:layout_marginTop="@dimen/dp_size_10"
+        android:layout_toRightOf="@+id/img1"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="@dimen/sp_size_13" />
+
+    <TextView
+        android:id="@+id/tv_owner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView1"
+        android:layout_marginLeft="@dimen/dp_size_18"
+        android:layout_toRightOf="@+id/img1"
+        android:text="Owner"
+
+        />
+
+    <TextView
+        android:id="@+id/tv_region"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_owner"
+        android:layout_marginLeft="@dimen/dp_size_18"
+        android:layout_toRightOf="@+id/img1"
+        android:text="I am highly intrested."/>
+
+    <TextView
+        android:id="@+id/tick"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/dp_size_25"
+        android:layout_toLeftOf="@+id/cross"
+        android:background="@drawable/ic_chek_box" />
+    <TextView
+        android:id="@+id/cross"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/dp_size_20"
+        android:background="@drawable/ic_cross" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/sp_size_1"
+        android:layout_below="@+id/tv_region"
+        android:layout_marginLeft="@dimen/dp_size_68"
+        android:layout_marginRight="@dimen/dp_size_13"
+        android:layout_marginTop="@dimen/dp_size_10"
+        android:background="@color/grey2" />
+</RelativeLayout>

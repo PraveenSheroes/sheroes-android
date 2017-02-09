@@ -111,7 +111,7 @@ public class ShareCommunityFragment extends BaseFragment implements CreateCommun
     @OnClick(R.id.tv_close_community)
     public void onCloseClick()
     {
-        mShareCommunityIntractionListner.onClose();
+        mShareCommunityIntractionListner.onShareClose();
     }
 
     @Override
@@ -120,7 +120,7 @@ public class ShareCommunityFragment extends BaseFragment implements CreateCommun
     }
     public interface ShareCommunityActivityIntractionListner {
         void onErrorOccurence();
-        void onClose();
+        void onShareClose();
     }
 
     @Override

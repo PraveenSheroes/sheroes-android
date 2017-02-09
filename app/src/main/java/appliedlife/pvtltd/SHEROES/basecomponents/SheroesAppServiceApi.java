@@ -8,8 +8,12 @@ import appliedlife.pvtltd.SHEROES.database.dbentities.MasterData;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityTagsListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.InviteSearchResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.ListOfInviteSearch;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MemberListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.RequestedListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItemResponse;
@@ -46,7 +50,8 @@ public interface SheroesAppServiceApi {
 
     @GET("/v2/587fb45c270000490af0dd7a")
     Observable<CommunityListResponse> getCommunityList();
-
+    @GET("/v2/587fb45c270000490af0dd7a")
+    Observable<CommunityTagsListResponse> getCommunityTagList();
 
     @GET("/v2/587fb45c270000490af0dd7a")
     Observable<OwnerListResponse> getOwnerList();
@@ -54,6 +59,8 @@ public interface SheroesAppServiceApi {
     @GET("/v2/587fb45c270000490af0dd7a")
     Observable<MemberListResponse> getMemberList();
 
+    @GET("/v2/587fb45c270000490af0dd7a")
+    Observable<RequestedListResponse> getRequestList();
 
     @POST("auth/signin")
     Observable<LoginResponse> getLoginAuthToken(@Body LoginRequest loginRequest);
@@ -76,4 +83,7 @@ public interface SheroesAppServiceApi {
 
     @GET("v2/589874931100000e07038a52")
     Observable<Response<List<MasterData>>> getMasterData();
+
+    @POST("v2/58940613260000a11200a97f")
+    Observable<InviteSearchResponse> getInviteSearchResponseFromApi(@Body ListOfInviteSearch listOfInviteSearch );
 }
