@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:isScrollContainer="false"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/r1_schoolproject"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/home_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_size_65"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+            <include
+                layout="@layout/setting_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|top" />
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+
+    <ScrollView
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/r1_schoolproject"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:background="@color/white">
+
+        <LinearLayout
+            android:id="@+id/personal_contactdetails_editpage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/dp_size_16"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="*"
+                    android:padding="@dimen/dp_size_4"
+                    android:layout_marginTop="@dimen/dp_size_8"
+                    android:textColor="@color/star_color"/>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/et_school_project_tittle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                        android:hint="@string/ID_PROJECT_TITTLE"
+                        android:textColorHint="@color/text_color_setting_preference_basicdetails"
+                        android:textColor="@color/text_color_contactdetails_page"
+                        android:focusableInTouchMode="true"
+                        android:textSize="@dimen/sp_size_13" />
+
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="*"
+                    android:padding="@dimen/dp_size_4"
+                    android:layout_marginTop="@dimen/dp_size_8"
+                    android:textColor="@color/star_color"/>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <EditText
+                        android:id="@+id/et_school_functional_area"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                        android:hint="@string/ID_SELF_EMP_FUNCTIONAL"
+                        android:textAllCaps="true"
+                        android:textColorHint="@color/text_color_setting_preference_basicdetails"
+                        android:textColor="@color/text_color_contactdetails_page"
+                        android:focusableInTouchMode="true"
+                        android:textSize="@dimen/sp_size_13"
+                        android:drawablePadding="@dimen/dp_size_8"
+
+
+                        />
+
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+            <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/dp_size_16">
+
+
+                    <EditText
+                        android:id="@+id/et_school_organization"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                        android:hint="@string/ID_school_ORGANIZATION"
+                        android:textColorHint="@color/text_color_setting_preference_basicdetails"
+                        android:textColor="@color/text_color_contactdetails_page"
+                        android:focusableInTouchMode="true"
+                        android:textSize="@dimen/sp_size_13"
+                        />
+
+                </android.support.design.widget.TextInputLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_starid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="*"
+                    android:padding="@dimen/dp_size_4"
+                    android:layout_marginTop="@dimen/dp_size_20"
+                    android:textColor="@color/star_color"/>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_toRightOf="@+id/tv_starid"
+                    android:id="@+id/text_sart_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/et_school_start_date"
+                        android:layout_width="@dimen/dp_size_100"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                        android:hint="@string/ID_SELF_EMP_START"
+                        android:textColorHint="@color/text_color_setting_preference_basicdetails"
+                        android:textColor="@color/text_color_contactdetails_page"
+                        android:focusableInTouchMode="true"
+                        android:textSize="@dimen/sp_size_13" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/et_end_date_text"
+                    android:layout_width="match_parent"
+                    android:layout_toRightOf="@+id/text_sart_date"
+                    android:paddingRight="@dimen/dp_size_16"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/et_school_end_date"
+                        android:layout_width="@dimen/dp_size_100"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                        android:hint="@string/ID_SELF_EMP_END"
+                        android:textColorHint="@color/text_color_setting_preference_basicdetails"
+                        android:textColor="@color/text_color_contactdetails_page"
+                        android:focusableInTouchMode="true"
+                        android:textSize="@dimen/sp_size_13" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <TextView
+                    android:layout_below="@+id/et_end_date_text"
+                    android:id="@+id/et_working_from"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:drawableLeft="@drawable/ic_circle_inactive"
+                    android:drawablePadding="@dimen/dp_size_5"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:hint="@string/ID_SELF_EMP_TITTLE"
+                    android:textColorHint="@color/text_color_setting_preference_basicdetails"
+                    android:textColor="@color/text_color_contactdetails_page"
+                    android:focusableInTouchMode="true"
+                    android:layout_marginRight="@dimen/dp_size_35"
+                    android:textSize="@dimen/sp_size_13" />
+
+            </RelativeLayout>
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:paddingLeft="@dimen/dp_size_16"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/et_description_your_work"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:hint="@string/ID_SCHOOL_DESCRIPTION"
+                    android:textColorHint="@color/text_color_setting_preference_basicdetails"
+                    android:textColor="@color/text_color_contactdetails_page"
+                    android:focusableInTouchMode="true"
+                    android:textSize="@dimen/sp_size_13"
+
+                    />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:paddingLeft="@dimen/dp_size_16"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/et_self_about_organization"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:hint="@string/ID_SELF_EMP_ABOUT"
+                    android:textColorHint="@color/text_color_setting_preference_basicdetails"
+                    android:textColor="@color/text_color_contactdetails_page"
+                    android:focusableInTouchMode="true"
+                    android:textSize="@dimen/sp_size_13"
+
+                    />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/dp_size_16">
+                <EditText
+                    android:id="@+id/et_self_weburl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:hint="@string/ID_SELF_EMP_WEBSITE_URL"
+                    android:textColorHint="@color/text_color_setting_preference_basicdetails"
+                    android:textColor="@color/text_color_contactdetails_page"
+                    android:focusableInTouchMode="true"
+                    android:textSize="@dimen/sp_size_13"/>
+            </android.support.design.widget.TextInputLayout>
+
+        </LinearLayout>
+
+
+    </ScrollView>
+    <Button
+        android:id="@+id/btn_save_selfempolyment_details"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ID_SAVE"
+        android:textColor="@color/white"
+        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+        android:layout_alignParentBottom="true"
+        />
+</RelativeLayout>

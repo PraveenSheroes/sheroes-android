@@ -57,6 +57,20 @@
     <!--text colors of setting_preferences_deactiveaccount page-->
     <color name="setting_errormessage_backgroung">#ea2e11</color>
     <color name="text_color_contactdetails_page">#292f3c</color>
+    <!--colors related visiting_card_edit_basicdetails-->
+    <color name="star_color">#d0021b</color>
+    <color name="line_color_personal">#d2d9de</color>
+
+
+    <color name="back_colo_aboutme_head">#93dae6</color>
+    <color name="count_char_text_color">#788189</color>
+    <color name="text_color_work_list">#828b93</color>
+    <color name="background_color_project_number">#f5f5f5</color>
+
+
+
+    <!--colors close trough priyanka-->
+
 
 
 

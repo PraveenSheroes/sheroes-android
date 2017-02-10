@@ -1,0 +1,153 @@
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.CoordinatorLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/al_community_open_about"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/cl_community_open_about"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_size_200"
+            app:contentScrim="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_size_200"
+                android:scaleType="centerCrop"
+                android:fitsSystemWindows="true"
+                android:background="@color/back_colo_aboutme_head"
+                android:id="@+id/iv_community_cover_img"
+                app:layout_collapseMode="parallax" />
+
+            <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
+                android:id="@+id/iv_profile_image"
+                android:layout_width="@dimen/dp_size_46"
+                android:layout_height="@dimen/dp_size_46"
+                android:background="@drawable/ic_sad_face"
+                android:layout_centerHorizontal="true"
+                android:layout_centerInParent="true"
+                />
+
+            <TextView
+                android:layout_below="@+id/iv_profile_image"
+                android:paddingTop="@dimen/dp_size_16"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/ID_ABOUT_ME"
+                android:textSize="@dimen/dp_size_24"
+                android:layout_centerInParent="true"
+                android:gravity="center" />
+
+
+            </RelativeLayout>
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin" >
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">  
+
+                    <TextView
+                    android:id="@+id/tv_about_community_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@string/ID_ROBOTO_LIGHT"
+                    android:drawableLeft="@drawable/ic_back_white"
+                    android:layout_marginTop="@dimen/dp_size_10"
+                    />
+
+                    <TextView
+                    android:id="@+id/tv_about_community_share"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/ID_ABOUT_ME"
+                    android:padding="@dimen/dp_size_16"
+
+                    />
+
+            </RelativeLayout>
+
+            </android.support.v7.widget.Toolbar>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/dp_size_4">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/et_last_name_basic_details"
+                    android:layout_width="match_parent"
+                    android:focusableInTouchMode="true"
+                    android:padding="@dimen/dp_size_25"
+                    android:layout_height="match_parent">
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                        android:hint="@string/ID_WRITE_REASION"
+                        android:textColorHint="@color/text_color_setting_preference_basicdetails"
+                        android:textColor="@color/count_char_text_color"
+                        android:textSize="@dimen/sp_size_13" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@string/ID_CHAR_COUNT"
+                        android:paddingLeft="@dimen/dp_size_8"
+                        android:textColor="@color/count_char_text_color"/>
+
+                </android.support.design.widget.TextInputLayout>
+
+        </RelativeLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+    </android.support.design.widget.CoordinatorLayout>
+
+
+    <Button
+        android:id="@+id/btn_save_selfempolyment_details"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ID_SAVE"
+        android:textColor="@color/white"
+        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+
+
+        />
+
+</RelativeLayout>

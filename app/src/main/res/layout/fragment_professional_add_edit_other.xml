@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="match_parent">
+
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/home_toolbar"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.v7.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_size_65"
+
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+            <include
+                layout="@layout/setting_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|top" />
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+    <ScrollView
+        android:layout_below="@+id/home_toolbar"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:isScrollContainer="false"
+        android:layout_height="fill_parent">
+
+        <android.support.design.widget.TextInputLayout
+                android:id="@+id/et_others_details"
+                android:layout_width="match_parent"
+                android:focusableInTouchMode="true"
+                android:paddingLeft="@dimen/dp_size_18"
+            android:paddingRight="@dimen/dp_size_18"
+                android:layout_gravity="center_vertical"
+                android:layout_height="wrap_content">
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:hint="@string/ID_ADITIONAL"
+                android:textColorHint="@color/text_color_setting_preference_basicdetails"
+                android:textColor="@color/count_char_text_color"
+                android:textSize="@dimen/sp_size_13" />
+
+            </android.support.design.widget.TextInputLayout>
+
+    </ScrollView>
+
+
+    <Button
+        android:id="@+id/btn_save_addinational_activities"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/dp_size_16"
+        android:text="@string/ID_SAVE"
+        android:textColor="@color/white"
+        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        />
+
+</RelativeLayout>

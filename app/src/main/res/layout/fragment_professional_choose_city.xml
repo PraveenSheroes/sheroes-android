@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/r1_add_work_relative"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/home_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+            <include
+                layout="@layout/setting_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|top" />
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <ScrollView
+        android:id="@+id/add_city_scrool"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:layout_below="@+id/r1_add_work_relative">
+
+        <LinearLayout
+            android:id="@+id/l1_professional_worklike_page"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_work_heading"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/ID_CITY_LIKE"
+                android:textColor="@color/blue"
+                android:textSize="@dimen/sp_size_15"
+                android:padding="@dimen/dp_size_35"
+                />
+
+            <TextView
+                android:id="@+id/tv_worklocation_text1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/ID_CITY_text1"
+                android:textSize="@dimen/sp_size_13"
+                android:textColor="@color/text_color_work_list"
+                android:drawableLeft="@drawable/ic_circle_inactive"
+                android:paddingLeft="@dimen/dp_size_35"
+                android:drawablePadding="@dimen/dp_size_5"
+                />
+
+            <TextView
+                android:id="@+id/tv_worklocation_text2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/ID_CITY_text2"
+                android:textColor="@color/text_color_work_list"
+                android:textSize="@dimen/sp_size_13"
+                android:drawableLeft="@drawable/ic_circle_inactive"
+                android:paddingLeft="@dimen/dp_size_35"
+                android:paddingTop="@dimen/dp_size_15"
+                android:drawablePadding="@dimen/dp_size_5"
+                />
+            <TextView
+                android:id="@+id/tv_worklocation_text3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/ID_CITY_text3"
+                android:textColor="@color/text_color_work_list"
+                android:textSize="@dimen/sp_size_13"
+                android:drawableLeft="@drawable/ic_circle_inactive"
+                android:paddingLeft="@dimen/dp_size_35"
+                android:paddingTop="@dimen/dp_size_15"
+                android:drawablePadding="@dimen/dp_size_5"
+                />
+            <TextView
+                android:id="@+id/tv_worklocation_text4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/ID_CITY_text4"
+                android:textColor="@color/text_color_work_list"
+                android:textSize="@dimen/sp_size_13"
+                android:drawableLeft="@drawable/ic_circle_inactive"
+                android:paddingLeft="@dimen/dp_size_35"
+                android:paddingTop="@dimen/dp_size_15"
+                android:drawablePadding="@dimen/dp_size_5"
+                />
+
+            <EditText
+                android:id="@+id/et_add_city"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textColor="@color/text_color_date_birth"
+                android:textSize="@dimen/sp_size_13"
+                android:text="@string/ID_EXAMPLE"
+                android:layout_marginRight="@dimen/dp_size_35"
+                android:drawableRight="@drawable/ic_add_city_icon"
+                android:layout_marginLeft="@dimen/dp_size_45"
+                android:paddingTop="@dimen/dp_size_13" />
+
+
+
+
+
+
+           <!-- <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_add_cities"
+                android:paddingTop="@dimen/dp_size_10"
+                android:paddingLeft="@dimen/dp_size_45"
+                android:scrollbars="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>-->
+
+        </LinearLayout>
+
+    </ScrollView>
+    <Button
+        android:id="@+id/bt_save_cities"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ID_SAVE"
+        android:background="@color/red"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dp_size_13"
+        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

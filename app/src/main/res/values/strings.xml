@@ -75,7 +75,7 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_LEAVE">Leave</string>
     <string name="ID_DELETE">Delete</string>
     <string name="ID_REPORT">Report as spam</string>
-    <string name="ID_LEAVE">Leave</string>
+
     <string name="ID_SUGGESTED">Suggested communities</string>
     <string name="ID_GROUP">Group</string>
     <string name="ID_SEE_MORE">See more like this</string>
@@ -202,6 +202,120 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_THANK_YOU">THANK YOU</string>
     <string name="ID_FOLLOW_US">FOLLOW US</string>
     <string name="ID_SUBMIT">SUBMIT</string>
+
+    <!--String Related personal contact details edit page-->
+    <string name="ID_FIRST_NAME_HINT">FIRST NAME</string>
+    <string name="ID_LAST_NAME_HINT">LAST NAME</string>
+    <string name="ID_CONTACT_NUMBER_HINT">CONTACT NUMBER</string>
+    <string name="ID_EMAIL_ID_HINT">EMAIL ID</string>
+    <string name="ID_LOCATION_HINT">LOCATION</string>
+    <string name="ID_EDUCATION">EDUCATION</string>
+    <string name="ID_DEGREE_HINT">DEGREE</string>
+    <string name="ID_DEGREE1_HINT">SCHOOL/COLLEGE/UNIVERSITY</string>
+    <string name="ID_WORK_EXPERIENCE">WORK EXPERIENCE</string>
+    <string name="ID_DESIGNATION_HINT">DESIGNATION</string>
+    <string name="ID_COMPANY_NAME_HINT">COMPANY/ORGANIZATION</string>
+    <string name="ID_GOOD_AT_HINT">GOOD AT</string>
+
+    <!--String Related personal BASIC details page-->
+    <string name="ID_CONTACT_NO_HINT">CONTACT NO.</string>
+    <string name="ID_CURRENT_LOCATION_HINT">CURRENT LOCATION</string>
+    <string name="ID_RELACTIONSHIP_HINT">RELATIONSHIP STATUS</string>
+    <string name="ID_CHILDREN_HINT">NUMBER OF CHILDREN</string>
+    <string name="ID_GOFOR_SETTING_LINK">To change mobile no.or email go to settings</string>
+    <string name="ID_SAVE">SAVE</string>
+    <string name="ID_MY_CONTACT_CARD">MY CONTACT CARD</string>
+
+    <!--String Related personal About_me details page-->
+    <string name="ID_ABOUT_ME">ABOUT ME</string>
+    <string name="ID_WRITE_REASION">WRITE REASON</string>
+    <string name="ID_CHAR_COUNT">456 Characters</string>
+
+
+    <!--String Related personal other details page-->
+
+    <string name="ID_ADITIONAL">ADD ADITIONAL ACTIVITIES AND ACHIEVEMENTS</string>
+
+
+
+
+    <!--String Related professional choose_city details page-->
+    <string name="ID_CITY_LIKE">Where would you like to work?</string>
+    <string name="ID_CITY_text1">Around / in NEW DELHI</string>
+    <string name="ID_CITY_text2">Anywhere in INDIA</string>
+    <string name="ID_CITY_text3">Anywhere in worldwide</string>
+    <string name="ID_CITY_text4">Add city</string>
+    <string name="ID_EXAMPLE">New delhi</string>
+
+
+    <!--String Related professional  travel_like details page-->
+    <string name="ID_TRAVEL_LIKE">Are you willing to travel to a client location?</string>
+    <string name="ID_NO">No</string>
+    <string name="ID_YES">Yes</string>
+    <string name="ID_YES_THEN">If yes, then where?</string>
+    <string name="ID_LOCAL">Local</string>
+    <string name="ID_MY_COUNTRY">My Country</string>
+    <string name="ID_WORDSIDE">Worldwide</string>
+
+
+    <!--string related professional work_experience page -->
+
+    <string name="ID_SELF_EMP">Self employment</string>
+    <string name="ID_JOB">Job</string>
+    <string name="ID_FRELANCE_PROJECT">Freelance project</string>
+    <string name="ID_PERSONAL_PROJECT">Personal project</string>
+    <string name="ID_SCHOOL_PROJECT">School project</string>
+    <string name="ID_INTERSHIP">Intership</string>
+    <string name="ID_WORK_EXPERIENCE_TITTLE">TYPE OF EXPERIENCE</string>
+    <string name="ID_CONTINUE">CONTINUE</string>
+
+
+    <!--string related work_experience_selfempolyment page-->
+
+    <string name="ID_SELF_EMP_DESIGNATION">DESIGNATION</string>
+    <string name="ID_SELF_EMP_FUNCTIONAL">FUNCTIONAL AREA</string>
+    <string name="ID_SELF_EMP_ORGANIZATION">ORGANIZATION NAME</string>
+    <string name="ID_school_ORGANIZATION">ORGANIZATION</string>
+    <string name="ID_SELF_EMP_BRAND">ORGANIZATION BRAND NAME</string>
+    <string name="ID_SELF_EMP_START">START </string>
+    <string name="ID_SELF_EMP_END">END </string>
+    <string name="ID_SELF_EMP_TITTLE">Currently working</string>
+    <string name="ID_SELF_EMP_DESCRIPTION">DESCRIPTION OF YOUR WORK</string>
+    <string name="ID_SCHOOL_DESCRIPTION">DESCRIPTION</string>
+    <string name="ID_SELF_EMP_ORGANIZATION_TYPE">ORGANIZATION TYPE </string>
+    <string name="ID_SELF_EMP_SECTOR">SECTOR </string>
+    <string name="ID_SELF_EMP_ABOUT">ABOUT ORGANIZATION</string>
+    <string name="ID_SELF_EMP_WEBSITE_URL">WEBSITE URL</string>
+    <string name="ID_SELF_EMP_APP_URL">MOBILE APP URL</string>
+    <string name="ID_SELF_EMP_LOGO">ADD LOGO/IMAGE</string>
+
+    <string name="ID_PROJECT_NUMBER">PROJECT 1</string>
+    <string name="ID_PROJECT_TITTLE">TITLE</string>
+    <string name="ID_PROJECT_ABOUT_TITLE">ABOUT TITLE</string>
+    <string name="ID_PROJECT">PROJECT</string>
+
+
+
+    <string name="ID_CURRENT_STATUS">CURRENT STATUS</string>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!--close sthring through priyanka-->
+
+
 
 
 

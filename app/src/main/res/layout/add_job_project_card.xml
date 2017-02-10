@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/l1_job_add_card"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_size_10"
+        android:background="@color/background_color_project_number"
+        android:orientation="horizontal">
+
+    <TextView
+            android:id="@+id/et_job_project_number"
+            android:layout_width="wrap_content"
+            android:padding="@dimen/dp_size_16"
+            android:layout_height="wrap_content"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:hint="@string/ID_PROJECT_NUMBER"
+            android:textColor="@color/text_color_contactdetails_page"
+            android:textSize="@dimen/sp_size_13" />
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:layout_gravity="right"
+        android:padding="@dimen/dp_size_16"
+        android:drawableRight="@drawable/ic_delete_inactive_icon"
+        />
+
+    </LinearLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:paddingLeft="@dimen/dp_size_16"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/et_job_project_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:hint="@string/ID_PROJECT_TITTLE"
+            android:textColorHint="@color/text_color_setting_preference_basicdetails"
+            android:textColor="@color/text_color_contactdetails_page"
+            android:focusableInTouchMode="true"
+            android:textSize="@dimen/sp_size_13"
+
+            />
+
+    </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+
+        android:layout_width="match_parent"
+        android:paddingLeft="@dimen/dp_size_16"
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/et_job_about_project"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:hint="@string/ID_PROJECT_ABOUT_TITLE"
+            android:textColorHint="@color/text_color_setting_preference_basicdetails"
+            android:textColor="@color/text_color_contactdetails_page"
+            android:focusableInTouchMode="true"
+            android:textSize="@dimen/sp_size_13"/>
+
+    </android.support.design.widget.TextInputLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:paddingLeft="@dimen/dp_size_16"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_starid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="*"
+            android:padding="@dimen/dp_size_4"
+            android:layout_marginTop="@dimen/dp_size_20"
+            android:textColor="@color/star_color"/>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_toRightOf="@+id/tv_starid"
+            android:id="@+id/text_sart_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/et_job_start_date"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:hint="@string/ID_SELF_EMP_START"
+                android:textColorHint="@color/text_color_setting_preference_basicdetails"
+                android:textColor="@color/text_color_contactdetails_page"
+                android:focusableInTouchMode="true"
+                android:textSize="@dimen/sp_size_13" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/et_end_date_text"
+            android:layout_width="match_parent"
+            android:layout_toRightOf="@+id/text_sart_date"
+            android:layout_marginRight="@dimen/dp_size_35"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/et_job_end_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:hint="@string/ID_SELF_EMP_END"
+                android:textColorHint="@color/text_color_setting_preference_basicdetails"
+                android:textColor="@color/text_color_contactdetails_page"
+                android:focusableInTouchMode="true"
+                android:textSize="@dimen/sp_size_13" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <TextView
+            android:layout_below="@+id/et_end_date_text"
+            android:id="@+id/et_working_from"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:drawableLeft="@drawable/ic_circle_inactive"
+            android:drawablePadding="@dimen/dp_size_5"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:hint="@string/ID_SELF_EMP_TITTLE"
+            android:textColorHint="@color/text_color_setting_preference_basicdetails"
+            android:textColor="@color/text_color_contactdetails_page"
+            android:focusableInTouchMode="true"
+            android:layout_marginRight="@dimen/dp_size_35"
+            android:textSize="@dimen/sp_size_13" />
+
+    </RelativeLayout>
+
+
+
+</LinearLayout>
