@@ -15,13 +15,11 @@
             android:paddingRight="@dimen/dp_size_35"
             android:paddingTop="@dimen/dp_size_16"
             android:paddingBottom="@dimen/dp_size_16"
-
             android:layout_height="wrap_content"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:hint="@string/ID_ABOUT_COMMUNITY_DES"
             android:textColor="@color/text_color_contactdetails_page"
             android:textSize="@dimen/sp_size_13" />
-
 
         <TextView
             android:id="@+id/tv_edit_other_text"

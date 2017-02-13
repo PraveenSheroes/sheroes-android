@@ -60,15 +60,9 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment {
     TextView tv_reson;
     @Bind(R.id.preferences_deactiveaccount_button)
     Button mpreferences_deactiveaccount_button;
-
-
-
     int flag=0;
 
-
     public SettingPreferences_DeactiveAccounActivitytLisIntractionListener settingPreferences_deactiveAccounActivitytLisIntractionListener;
-
-
 
     ImageView miv_back_setting;
 
@@ -228,6 +222,7 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment {
 
     {
         if(flag==0)
+
         {
             textview.setTextColor(getResources().getColor(R.color.search_tab_text));
             checkbox.setChecked(true);
@@ -252,7 +247,6 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment {
                 editText_reson.setVisibility(View.GONE);
                 tv_reson.setVisibility(View.GONE);
                 mpreferences_deactiveaccount_button.setBackgroundColor(getResources().getColor(R.color.grey2));
-
             }
             flag=0;
         }

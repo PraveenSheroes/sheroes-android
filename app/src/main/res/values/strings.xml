@@ -106,7 +106,7 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
 
     <!-- String related to preferences_dashboard page-->
 
-    <string name="ID_BASICDETAILS">BASIC DETAILS</string>
+    <string name="ID_BASICDETAILS">Basic Details</string>
     <string name="ID_EDUCATIONDETAILS">EDUCATION DETAILS</string>
     <string name="ID_WORKEXPERIENCEDETAILS">WORK EXPERIENCE DETAILS</string>
     <string name="ID_DEACTIVEACCOUNT">DEACTIVE ACCOUNT</string>
@@ -143,19 +143,16 @@ By accessing and using the site , or any other services of SHEROES, you agree to
 You shall abide by the Terms and Conditions set forth below in this agreement. You will be bound and constitute to accept by these terms and conditions on accessing or using any service from Applied Life Private Limited. Applied Life Private Limited reserves the right to change or revise the terms and conditions of this Agreement from time to time on this website. The changes or revisions and shall be effective after the date of revision. Your use of the website or any services after changes or revision will constitute as your acceptance to the changes terms and conditions set forth in the agreement. This agreement does not alter any other agreement that you might have undertaken with Applied Life Private Limited in written for any other products and services.
 
 Our website www.sheroes.in offers services for certain products and services. By placing an order or purchasing the products or services through our website you provide your unconditional agreement and consent to the terms and conditions of this agreement.</string>
-    <!-- String related to setting_preferences_basicdetails page-->
 
-    <string name="ID_DATE_OF_BIRTH">DIRTH OF BIRTH</string>
+
+    <!-- String related to setting_preferences_basicdetails page-->
     <string name="ID_DATE_VIEW">12 SEP 1991</string>
-    <string name="ID_HOMETOWN">HOMETOWN</string>
-    <string name="ID_LOCATION">CHANDIGARH, PUNJAB, INDIA</string>
-    <string name="ID_STATUS">RELATIONSHP STATUS</string>
-    <string name="ID_SVIEW">SINGLE</string>
-    <string name="ID_CHILDRENDIRTH">NUMBER OF CHILDREN</string>
+    <string name="ID_SVIEW">Single</string>
+    <string name="ID_CHILDRENDIRTH">Number of children</string>
     <string name="ID_CVIEW">02</string>
 
     <!-- String related to setting_education details  page-->
-    <string name="ID_GRADES_PERCENTAGE">GRADES/PERCENTAGE</string>
+    <string name="ID_GRADES_PERCENTAGE">Grades/Percentage</string>
     <string name="ID_ADD_VALUE">Added in the education details</string>
     <string name="ID_SHEROES_CONDITION">You are requested to read this Terms and Conditions carefully. By using this website www.sheroes.in or ordering or purchasing any product or service from this website you agree to accept and be bound by all the terms and conditions of this agreement.
 
@@ -174,17 +171,13 @@ Our website www.sheroes.in offers services for certain products and services. By
 
       </string-array>
 
-    <!--text colors of deactive_custom dialog page-->
-
-    <color name="text_color_dialog">#1d2832</color>
-    <color name="text_color_close">#3949ab</color>
 
 
-    <!-- String related to setting_preference_work_experience  page-->
 
-    <string name="ID_PORTFOLIO_LINK">PORTFOLIO LINK</string>
+
+    <string name="ID_PORTFOLIO_LINK">Portfolio link </string>
     <string name="ID_PORTFOLIOS">All your freelancing portfolios</string>
-    <string name="ID_UPLOADED_IMAGES">UPLOADED IMAGES</string>
+    <string name="ID_UPLOADED_IMAGES">upload images</string>
     <string name="ID_ADD_SECTION"> Added to your business/freelancing section.</string>
 
     <!--String related setting_preferences_deactiveaccount page -->
@@ -209,13 +202,14 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_CONTACT_NUMBER_HINT">CONTACT NUMBER</string>
     <string name="ID_EMAIL_ID_HINT">EMAIL ID</string>
     <string name="ID_LOCATION_HINT">LOCATION</string>
-    <string name="ID_EDUCATION">EDUCATION</string>
+    <string name="ID_EDUCATION">Education</string>
     <string name="ID_DEGREE_HINT">DEGREE</string>
     <string name="ID_DEGREE1_HINT">SCHOOL/COLLEGE/UNIVERSITY</string>
-    <string name="ID_WORK_EXPERIENCE">WORK EXPERIENCE</string>
+    <string name="ID_WORK_EXPERIENCE">Work experience</string>
     <string name="ID_DESIGNATION_HINT">DESIGNATION</string>
     <string name="ID_COMPANY_NAME_HINT">COMPANY/ORGANIZATION</string>
     <string name="ID_GOOD_AT_HINT">GOOD AT</string>
+
 
     <!--String Related personal BASIC details page-->
     <string name="ID_CONTACT_NO_HINT">CONTACT NO.</string>
@@ -230,6 +224,13 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_ABOUT_ME">ABOUT ME</string>
     <string name="ID_WRITE_REASION">WRITE REASON</string>
     <string name="ID_CHAR_COUNT">456 Characters</string>
+
+    <!--String Related personal work_experience_details  page-->
+
+
+
+
+
 
 
     <!--String Related personal other details page-->
@@ -272,23 +273,27 @@ Our website www.sheroes.in offers services for certain products and services. By
 
     <!--string related work_experience_selfempolyment page-->
 
-    <string name="ID_SELF_EMP_DESIGNATION">DESIGNATION</string>
-    <string name="ID_SELF_EMP_FUNCTIONAL">FUNCTIONAL AREA</string>
-    <string name="ID_SELF_EMP_ORGANIZATION">ORGANIZATION NAME</string>
-    <string name="ID_school_ORGANIZATION">ORGANIZATION</string>
-    <string name="ID_SELF_EMP_BRAND">ORGANIZATION BRAND NAME</string>
-    <string name="ID_SELF_EMP_START">START </string>
-    <string name="ID_SELF_EMP_END">END </string>
-    <string name="ID_SELF_EMP_TITTLE">Currently working</string>
-    <string name="ID_SELF_EMP_DESCRIPTION">DESCRIPTION OF YOUR WORK</string>
-    <string name="ID_SCHOOL_DESCRIPTION">DESCRIPTION</string>
-    <string name="ID_SELF_EMP_ORGANIZATION_TYPE">ORGANIZATION TYPE </string>
-    <string name="ID_SELF_EMP_SECTOR">SECTOR </string>
-    <string name="ID_SELF_EMP_ABOUT">ABOUT ORGANIZATION</string>
-    <string name="ID_SELF_EMP_WEBSITE_URL">WEBSITE URL</string>
-    <string name="ID_SELF_EMP_APP_URL">MOBILE APP URL</string>
-    <string name="ID_SELF_EMP_LOGO">ADD LOGO/IMAGE</string>
+    <string name="ID_SELF_EMP_DESIGNATION_HINT">DESIGNATION</string>
+    <string name="ID_SELF_EMP_FUNCTIONAL_HINT">FUNCTIONAL AREA</string>
+    <string name="ID_SELF_EMP_ORGANIZATION_HINT">ORGANIZATION NAME</string>
+    <string name="ID_school_ORGANIZATION_HINT">ORGANIZATION</string>
+    <string name="ID_SELF_EMP_BRAND_HINT">ORGANIZATION BRAND NAME</string>
+    <string name="ID_SELF_EMP_START">Start </string>
+    <string name="ID_SELF_EMP_END">End</string>
 
+    <string name="ID_SELF_EMP_START_DATE_HINT">DD MM YYYY</string>
+
+
+
+    <string name="ID_SELF_EMP_TITTLE">Currently working</string>
+    <string name="ID_SELF_EMP_DESCRIPTION_HINT">DESCRIPTION OF YOUR WORK</string>
+    <string name="ID_SCHOOL_DESCRIPTION_HINT">DESCRIPTION</string>
+    <string name="ID_SELF_EMP_ORGANIZATION_TYPE_HINT">ORGANIZATION TYPE </string>
+    <string name="ID_SELF_EMP_SECTOR_HINT">SECTOR </string>
+    <string name="ID_SELF_EMP_ABOUT_HINT">ABOUT ORGANIZATION</string>
+    <string name="ID_SELF_EMP_WEBSITE_URL_HINT">WEBSITE URL</string>
+    <string name="ID_SELF_EMP_APP_URL_HINT">MOBILE APP URL</string>
+    <string name="ID_SELF_EMP_LOGO">ADD LOGO/IMAGE</string>
     <string name="ID_PROJECT_NUMBER">PROJECT 1</string>
     <string name="ID_PROJECT_TITTLE">TITLE</string>
     <string name="ID_PROJECT_ABOUT_TITLE">ABOUT TITLE</string>
@@ -297,6 +302,69 @@ Our website www.sheroes.in offers services for certain products and services. By
 
 
     <string name="ID_CURRENT_STATUS">CURRENT STATUS</string>
+    <string name="ID_TOTAL_WORK_EXPERIENCE">Total work experience</string>
+    <string name="ID_DURECTION">DURATION</string>
+    <string name="ID_YEARS">YEARS</string>
+    <string name="ID_MONTHS">MONTHS</string>
+    <string name="ID_LANGUAGE">language</string>
+    <string name="ID_ADD_LANGUAGE">ADD LANGUAGE</string>
+    <string name="ID_SELECT_PROFICIENT">PROFICIENT</string>
+
+
+
+    <!-- String related to setting_preference_work_experience  view page-->
+
+    <string name="ID_WORK_EXPERIENCE_TITLE">WORK EXPERIENCE</string>
+    <string name="ID_DATE_OF_JOING">Job  3 APR 2015 - PRESENT</string>
+    <string name="ID_COMPANY_NAME">Snapdeal</string>
+    <string name="ID_company_details">About Organisation Lorem ipsum dolor sit amet, consect
+etur adipiscing elit,sed do eiusmod tempor incididunt ut…</string>
+
+
+
+<!--string_related_profile_basic_details_card-->
+
+    <string name="basic_details_date_value">11 JUL 1992</string>
+    <string name="basic_details_location">Saket, Delhi, India</string>
+    <string name="basic_details_hometown">Chandigarh, Punjab, India</string>
+    <string name="basic_details_email">deepika@gmail.com</string>
+    <string name="basic_details_contact_number">+91-9654808379</string>
+    <string name="basic_details_child_number">1</string>
+    <string name="basic_details_current_status">Employed</string>
+    <string name="basic_details_sector">Design</string>
+    <string name="basic_details_total_exp_value">4 Years 11 Months</string>
+
+    <string name="ID_DIRTH_OF_BIRTH">Date of Birth</string>
+    <string name="ID_CURRENT_LOCATION">Current Location</string>
+    <string name="ID_HOMETOWN">Hometown</string>
+    <string name="ID_CONTACT_NUMBER">Contact Number</string>
+    <string name="ID_RELATIONSHIP_STATUS">Relationship Status</string>
+    <string name="ID_CHILD_NO">Number Of Children</string>
+    <string name="ID_STATUS">Current Status</string>
+    <string name="ID_SECTOR">Sector</string>
+    <string name="ID_SECTOR_HINT">SECTOR</string>
+
+
+    <string name="ID_DEGREE1">M.COM</string>
+    <string name="ID_DEGREE2">B.COM</string>
+    <string name="ID_COLLEGENAME1">Lady Shri Ram College</string>
+    <string name="ID_COLLEGENAME2">Gargi College</string>
+    <string name="ID_DATE1">(2014-2016)</string>
+    <string name="ID_DATE2">(2012-2014)</string>
+    <string name="ID_MORE">MORE</string>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

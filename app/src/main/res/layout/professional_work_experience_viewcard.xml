@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/l1_job_add_card"
+    android:layout_width="match_parent"
+    android:paddingLeft="@dimen/dp_size_16"
+    android:paddingRight="@dimen/dp_size_16"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:id="@+id/tv_work_exp_designation_name"
+        android:layout_width="match_parent"
+        android:paddingTop="@dimen/dp_size_25"
+        android:layout_height="wrap_content"
+        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+        android:text="@string/ID_WORK_EXPERIENCE"
+        android:textAllCaps="true"
+        android:textColor="@color/text_color_contactdetails_page"
+        android:drawableRight="@drawable/ic_delete_inactive_icon"
+        android:textSize="@dimen/sp_size_13" />
+
+
+
+    <TextView
+        android:id="@+id/tv_work_exp_date_details"
+        android:layout_width="match_parent"
+        android:paddingTop="@dimen/dp_size_10"
+        android:layout_height="wrap_content"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:text="@string/ID_DATE_OF_JOING"
+        android:textColor="@color/text_color_date_view"
+        android:textSize="@dimen/sp_size_12" />
+
+    <TextView
+        android:id="@+id/tv_work_exp_company_name"
+        android:layout_width="match_parent"
+        android:paddingTop="@dimen/dp_size_10"
+        android:layout_height="wrap_content"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:text="@string/ID_COMPANY_NAME"
+        android:textColor="@color/blue"
+        android:textSize="@dimen/sp_size_12" />
+
+    <TextView
+        android:id="@+id/tv_work_exp_about_company"
+        android:layout_width="match_parent"
+        android:paddingTop="@dimen/dp_size_10"
+        android:paddingBottom="@dimen/dp_size_25"
+        android:layout_height="wrap_content"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:text="@string/ID_company_details"
+        android:textColor="@color/text_color_date_view"
+        android:textSize="@dimen/sp_size_12" />
+
+</LinearLayout>

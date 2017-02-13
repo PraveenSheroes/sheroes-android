@@ -26,7 +26,6 @@
     android:background="@color/setting_errormessage_backgroung"
     android:gravity="center"
     android:visibility="gone"
-
     android:textColor="@color/white"
     android:textSize="@dimen/dp_size_12"/>
 
@@ -41,7 +40,7 @@
             android:layout_height="wrap_content"
             android:text="@string/ID_DEACTIVATE"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:background="@drawable/header_backimage"
+            android:background="@drawable/setting_selector_background"
             android:padding="@dimen/dp_size_25"
             android:gravity="center_vertical"
             android:textColor="@color/searchbox_hint_text_color"
@@ -73,7 +72,7 @@
             android:layout_height="wrap_content"
             android:text="@string/ID_NOTFINDTEXT"
             android:textColor="@color/searchbox_hint_text_color"
-            android:background="@drawable/header_backimage"
+            android:background="@drawable/setting_selector_background"
             android:textSize="@dimen/sp_size_13"
             android:padding="@dimen/dp_size_25"/>
 
@@ -105,7 +104,7 @@
             android:layout_height="wrap_content"
             android:text="@string/ID_SPAMMED"
             android:textColor="@color/searchbox_hint_text_color"
-            android:background="@drawable/header_backimage"
+            android:background="@drawable/setting_selector_background"
             android:textSize="@dimen/sp_size_13"
             android:padding="@dimen/dp_size_25"/>
 
@@ -135,7 +134,7 @@
             android:layout_height="wrap_content"
             android:text="@string/ID_PRIVACY"
             android:textColor="@color/searchbox_hint_text_color"
-            android:background="@drawable/header_backimage"
+            android:background="@drawable/setting_selector_background"
 
             android:textSize="@dimen/sp_size_13"
             android:padding="@dimen/dp_size_25"/>
@@ -164,7 +163,7 @@
             android:layout_height="wrap_content"
             android:text="@string/ID_OTHER"
             android:textColor="@color/searchbox_hint_text_color"
-            android:background="@drawable/header_backimage"
+            android:background="@drawable/setting_selector_background"
 
             android:textSize="@dimen/sp_size_13"
             android:padding="@dimen/dp_size_25"/>

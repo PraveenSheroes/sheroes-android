@@ -18,6 +18,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.Feedback_ThankyouActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeSearchActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.LoginActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.Professional_WorkExperience_Activity;
 import appliedlife.pvtltd.SHEROES.views.activities.SettingPreferencesActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.AllMembersFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.AllSearchFragment;
@@ -176,9 +177,9 @@ public interface SheroesAppComponent {
     void inject(RequestedPresenter requestedPresenter);
     void inject(RequestedListModel tagsHolder);
     void inject(RequestedHolder requestedHolder);
-
     void inject(CommunityInviteSearchFragment requestedHolder);
     void inject(InvitePresenter requestedHolder);
     void inject(InviteSearchModel requestedHolder);
     void inject(InviteSearchHolder inviteSearchHolder);
+    void inject(Professional_WorkExperience_Activity professional_workExperience_activity);
 }

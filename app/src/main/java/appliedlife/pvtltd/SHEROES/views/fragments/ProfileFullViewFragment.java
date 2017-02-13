@@ -52,8 +52,6 @@ public class ProfileFullViewFragment extends BaseFragment implements HomeView {
     private HomeActivityIntractionListner mHomeActivityIntractionListner;
     private SwipPullRefreshList mPullRefreshList;
 
-
-
     public static ProfileFullViewFragment createInstance(int itemsCount) {
 
         ProfileFullViewFragment profileFullViewFragment = new ProfileFullViewFragment();

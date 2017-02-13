@@ -43,6 +43,10 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.Professional_WorkExperience_Activity"
+            android:windowSoftInputMode="stateHidden">
+        </activity>
+        <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />

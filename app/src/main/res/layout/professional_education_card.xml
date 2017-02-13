@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_job_language_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableRight="@drawable/ic_add_city_icon"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:padding="@dimen/dp_size_16"
+        android:text="@string/ID_EDUCATION"
+        android:textAllCaps="true"
+        android:textColor="@color/dashboard_fed_text"
+        android:textSize="@dimen/sp_size_13" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/dp_size_30">
+        <TextView
+            android:id="@+id/tv_degree1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:padding="@dimen/dp_size_16"
+            android:text="@string/ID_DEGREE1"
+            android:textColor="@color/searchbox_hint_text_color"
+            android:textSize="@dimen/dp_size_13" />
+        <TextView
+            android:id="@+id/tv_date1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:padding="@dimen/dp_size_16"
+            android:text="@string/ID_DATE1"
+            android:textColor="@color/text_color_date_view"
+            android:textSize="@dimen/dp_size_13" />
+        <TextView
+            android:id="@+id/tv_degree2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_degree1"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:padding="@dimen/dp_size_16"
+            android:text="@string/ID_DEGREE2"
+            android:textColor="@color/searchbox_hint_text_color"
+            android:textSize="@dimen/dp_size_13" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/tv_date1"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:padding="@dimen/dp_size_16"
+            android:text="@string/ID_DATE1"
+            android:textColor="@color/text_color_date_view"
+            android:textSize="@dimen/dp_size_13" />
+        <TextView
+            android:id="@+id/tv_education_saperate_line"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_size_1"
+            android:layout_below="@+id/tv_degree2"
+            android:layout_marginLeft="@dimen/dp_size_16"
+            android:background="@color/text_education_line"
+            />
+        <TextView
+            android:id="@+id/tv_more"
+            android:layout_width="wrap_content"
+            android:layout_below="@+id/tv_education_saperate_line"
+            android:layout_centerInParent="true"
+            android:layout_height="wrap_content"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:padding="@dimen/dp_size_16"
+            android:text="@string/ID_MORE"
+            android:textColor="@color/blue"
+            android:textSize="@dimen/dp_size_13" />
+
+    </RelativeLayout>
+
+</LinearLayout>

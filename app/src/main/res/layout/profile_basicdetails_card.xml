@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+
+    <TextView
+        android:id="@+id/tv_profile_basic_details"
+        android:layout_width="match_parent"
+        android:padding="@dimen/dp_size_16"
+        android:drawableRight="@drawable/ic_edit_icon"
+        android:layout_height="wrap_content"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:text="@string/ID_BASICDETAILS"
+        android:textAllCaps="true"
+        android:textColor="@color/dashboard_fed_text"
+        android:textSize="@dimen/sp_size_13" />
+
+
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+
+    <TextView
+        android:id="@+id/tv_date_of_birth"
+        android:layout_width="wrap_content"
+        android:padding="@dimen/dp_size_16"
+        android:layout_height="wrap_content"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:text="@string/ID_DIRTH_OF_BIRTH"
+        android:textColor="@color/dashboard_fed_text"
+        android:textSize="@dimen/sp_size_13" />
+
+
+    <TextView
+        android:id="@+id/tv_date_of_birth_value"
+        android:layout_toRightOf="@+id/tv_total_work_experience"
+        android:layout_width="wrap_content"
+        android:padding="@dimen/dp_size_16"
+        android:layout_height="wrap_content"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:text="@string/basic_details_date_value"
+        android:textColor="@color/searchbox_hint_text_color"
+        android:textSize="@dimen/sp_size_13" />
+
+
+
+    <TextView
+        android:id="@+id/tv_current_location"
+        android:layout_below="@+id/tv_date_of_birth"
+        android:layout_width="wrap_content"
+        android:padding="@dimen/dp_size_16"
+        android:layout_height="wrap_content"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:text="@string/ID_CURRENT_LOCATION"
+        android:textColor="@color/dashboard_fed_text"
+        android:textSize="@dimen/sp_size_13" />
+
+
+
+
+
+    <TextView
+        android:id="@+id/tv_current_location_value"
+        android:layout_below="@+id/tv_date_of_birth_value"
+        android:layout_toRightOf="@+id/tv_total_work_experience"
+        android:layout_width="wrap_content"
+        android:padding="@dimen/dp_size_16"
+        android:layout_height="wrap_content"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:text="@string/basic_details_location"
+        android:textColor="@color/searchbox_hint_text_color"
+        android:textSize="@dimen/sp_size_13" />
+
+
+
+
+
+
+    <TextView
+        android:id="@+id/tv_home_town"
+        android:layout_below="@+id/tv_current_location"
+        android:layout_width="wrap_content"
+        android:padding="@dimen/dp_size_16"
+        android:layout_height="wrap_content"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:text="@string/ID_HOMETOWN"
+        android:textColor="@color/dashboard_fed_text"
+        android:textSize="@dimen/sp_size_13" />
+
+
+
+
+
+
+
+
+    <TextView
+        android:id="@+id/tv_home_town_value"
+        android:layout_below="@+id/tv_current_location_value"
+        android:layout_toRightOf="@+id/tv_total_work_experience"
+        android:layout_width="wrap_content"
+        android:padding="@dimen/dp_size_16"
+        android:layout_height="wrap_content"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:text="@string/basic_details_hometown"
+        android:textColor="@color/searchbox_hint_text_color"
+        android:textSize="@dimen/sp_size_13" />
+
+
+
+
+
+    <TextView
+        android:id="@+id/tv_email"
+        android:layout_below="@+id/tv_home_town"
+        android:layout_width="wrap_content"
+        android:padding="@dimen/dp_size_16"
+        android:layout_height="wrap_content"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:text="@string/ID_PROMPT_EMAIL"
+        android:textColor="@color/dashboard_fed_text"
+        android:textSize="@dimen/sp_size_13" />
+
+
+
+
+    <TextView
+        android:id="@+id/tv_email_value"
+        android:layout_below="@+id/tv_home_town_value"
+        android:layout_toRightOf="@+id/tv_total_work_experience"
+        android:layout_width="wrap_content"
+        android:padding="@dimen/dp_size_16"
+        android:layout_height="wrap_content"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:text="@string/basic_details_email"
+        android:textColor="@color/searchbox_hint_text_color"
+        android:textSize="@dimen/sp_size_13" />
+
+
+
+    <TextView
+        android:id="@+id/tv_contact_number"
+        android:layout_below="@+id/tv_email"
+        android:layout_width="wrap_content"
+        android:padding="@dimen/dp_size_16"
+        android:layout_height="wrap_content"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:text="@string/ID_CONTACT_NUMBER"
+        android:textColor="@color/dashboard_fed_text"
+        android:textSize="@dimen/sp_size_13" />
+
+
+
+
+    <TextView
+        android:id="@+id/tv_contact_number_value"
+        android:layout_below="@+id/tv_email_value"
+        android:layout_toRightOf="@+id/tv_total_work_experience"
+        android:layout_width="wrap_content"
+        android:padding="@dimen/dp_size_16"
+        android:layout_height="wrap_content"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:text="@string/basic_details_contact_number"
+        android:textColor="@color/searchbox_hint_text_color"
+        android:textSize="@dimen/sp_size_13" />
+
+
+
+
+
+    <TextView
+        android:id="@+id/tv_status"
+        android:layout_below="@+id/tv_contact_number"
+        android:layout_width="wrap_content"
+        android:padding="@dimen/dp_size_16"
+        android:layout_height="wrap_content"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:text="@string/ID_RELATIONSHIP_STATUS"
+        android:textColor="@color/dashboard_fed_text"
+        android:textSize="@dimen/sp_size_13" />
+
+
+
+
+    <TextView
+        android:id="@+id/tv_status_value"
+        android:layout_below="@+id/tv_contact_number_value"
+        android:layout_toRightOf="@+id/tv_total_work_experience"
+        android:layout_width="wrap_content"
+        android:padding="@dimen/dp_size_16"
+        android:layout_height="wrap_content"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:text="@string/ID_SVIEW"
+        android:textColor="@color/searchbox_hint_text_color"
+        android:textSize="@dimen/sp_size_13" />
+
+
+
+
+
+    <TextView
+        android:id="@+id/tv_child_no"
+        android:layout_below="@+id/tv_status"
+        android:layout_width="wrap_content"
+        android:padding="@dimen/dp_size_16"
+        android:layout_height="wrap_content"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:text="@string/ID_CHILD_NO"
+        android:textColor="@color/dashboard_fed_text"
+        android:textSize="@dimen/sp_size_13" />
+
+
+
+
+    <TextView
+        android:id="@+id/tv_child_value"
+        android:layout_below="@+id/tv_status_value"
+        android:layout_toRightOf="@+id/tv_total_work_experience"
+        android:layout_width="wrap_content"
+        android:padding="@dimen/dp_size_16"
+        android:layout_height="wrap_content"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:text="@string/basic_details_child_number"
+        android:textColor="@color/searchbox_hint_text_color"
+        android:textSize="@dimen/sp_size_13" />
+
+
+
+
+
+    <TextView
+        android:id="@+id/tv_current_status"
+        android:layout_below="@+id/tv_child_no"
+        android:layout_width="wrap_content"
+        android:padding="@dimen/dp_size_16"
+        android:layout_height="wrap_content"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:text="@string/ID_STATUS"
+        android:textColor="@color/dashboard_fed_text"
+        android:textSize="@dimen/sp_size_13" />
+
+
+    <TextView
+        android:id="@+id/tv_current_status_value"
+        android:layout_below="@+id/tv_child_value"
+        android:layout_toRightOf="@+id/tv_total_work_experience"
+        android:layout_width="wrap_content"
+        android:padding="@dimen/dp_size_16"
+        android:layout_height="wrap_content"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:text="@string/basic_details_current_status"
+        android:textColor="@color/searchbox_hint_text_color"
+        android:textSize="@dimen/sp_size_13" />
+
+
+    <TextView
+        android:id="@+id/tv_sector"
+        android:layout_below="@+id/tv_current_status"
+        android:layout_width="wrap_content"
+        android:padding="@dimen/dp_size_16"
+        android:layout_height="wrap_content"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:text="@string/ID_SECTOR"
+        android:textColor="@color/dashboard_fed_text"
+        android:textSize="@dimen/sp_size_13" />
+
+    <TextView
+        android:id="@+id/tv_sector_value"
+        android:layout_below="@+id/tv_current_status_value"
+        android:layout_toRightOf="@+id/tv_total_work_experience"
+        android:layout_width="wrap_content"
+        android:padding="@dimen/dp_size_16"
+        android:layout_height="wrap_content"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:text="@string/basic_details_sector"
+        android:textColor="@color/searchbox_hint_text_color"
+        android:textSize="@dimen/sp_size_13" />
+
+
+
+    <TextView
+        android:id="@+id/tv_total_work_experience"
+        android:layout_below="@+id/tv_sector"
+        android:layout_width="wrap_content"
+        android:padding="@dimen/dp_size_16"
+        android:layout_height="wrap_content"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:text="@string/ID_TOTAL_WORK_EXPERIENCE"
+        android:textColor="@color/dashboard_fed_text"
+        android:textSize="@dimen/sp_size_13" />
+
+
+    <TextView
+        android:id="@+id/tv_tot_exp_value"
+        android:layout_below="@+id/tv_sector_value"
+        android:layout_toRightOf="@+id/tv_total_work_experience"
+        android:layout_width="wrap_content"
+        android:padding="@dimen/dp_size_16"
+        android:layout_height="wrap_content"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:text="@string/basic_details_total_exp_value"
+        android:textColor="@color/searchbox_hint_text_color"
+        android:textSize="@dimen/sp_size_13" />
+
+
+
+
+
+    <TextView
+        android:id="@+id/tv_language"
+        android:layout_below="@+id/tv_total_work_experience"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_size_16"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:text="@string/ID_LANGUAGE"
+        android:textAllCaps="true"
+        android:textColor="@color/dashboard_fed_text"
+        android:textSize="@dimen/sp_size_13" />
+
+
+    <TextView
+        android:id="@+id/tv_tot_language_value"
+        android:layout_below="@+id/tv_tot_exp_value"
+        android:layout_toRightOf="@+id/tv_total_work_experience"
+        android:padding="@dimen/dp_size_16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:text="@string/basic_details_total_exp_value"
+        android:textColor="@color/searchbox_hint_text_color"
+        android:textSize="@dimen/sp_size_13" />
+
+
+
+
+
+
+</RelativeLayout>
+</LinearLayout>

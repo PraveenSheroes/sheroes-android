@@ -34,6 +34,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_below="@+id/r1_visitind_card"
+    android:isScrollContainer="false"
     android:background="@color/white">
 
     <LinearLayout
@@ -68,6 +69,7 @@
             android:textColorHint="@color/text_color_setting_preference_basicdetails"
             android:textColor="@color/text_color_contactdetails_page"
             android:focusableInTouchMode="true"
+            android:textAllCaps="true"
             android:textSize="@dimen/sp_size_13" />
 
         </android.support.design.widget.TextInputLayout>
@@ -184,6 +186,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
         android:text="@string/ID_EDUCATION"
+        android:textAllCaps="true"
         android:paddingTop="@dimen/dp_size_18"
         android:paddingLeft="@dimen/dp_size_16" />
     <android.support.design.widget.TextInputLayout
@@ -231,6 +234,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
         android:text="@string/ID_WORK_EXPERIENCE"
+        android:textAllCaps="true"
         android:paddingTop="@dimen/dp_size_18"
         android:paddingLeft="@dimen/dp_size_16" />
 

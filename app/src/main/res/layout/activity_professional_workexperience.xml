@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/r1_add_work_relative"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/workexperience_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white">
+
+            <ImageView
+                android:id="@+id/iv_back_work_exp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:background="@drawable/header_backimage"
+                android:padding="@dimen/dp_size_15"
+                android:src="@drawable/ic_back_grey" />
+
+            <TextView
+                android:id="@+id/tv_workexperience_tittle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:drawablePadding="@dimen/dp_size_5"
+                android:fontFamily="@string/ID_ROBOTO_BOLD"
+                android:layerType="software"
+                android:text="@string/ID_WORK_EXPERIENCE_TITTLE"
+                android:textColor="@color/searchbox_hint_text_color"
+                android:textSize="@dimen/sp_size_24" />
+
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/r1_add_work_relative"
+        android:isScrollContainer="false">
+
+        <LinearLayout
+            android:id="@+id/li_spinner_iten"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:weightSum="1">
+
+            <RelativeLayout
+                android:id="@+id/r1_work_exp_job"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_self_emp"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/setting_selector_background"
+                    android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/dp_size_25"
+                    android:text="@string/ID_SELF_EMP"
+                    android:textColor="@color/searchbox_hint_text_color"
+                    android:textSize="@dimen/sp_size_13" />
+
+                <CheckBox
+                    android:id="@+id/cb_self_emp"
+                    style="@style/CheckBoxStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/dp_size_15"
+
+                    />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/r1_work_exp_self"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                >
+
+                <TextView
+                    android:id="@+id/tv_job"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/setting_selector_background"
+                    android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                    android:padding="@dimen/dp_size_25"
+                    android:text="@string/ID_JOB"
+
+                    android:textColor="@color/searchbox_hint_text_color"
+                    android:textSize="@dimen/sp_size_13" />
+
+
+                <CheckBox
+                    android:id="@+id/cb_job"
+                    style="@style/CheckBoxStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/dp_size_15" />
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/r1_work_exp_freelance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+
+                >
+
+                <TextView
+                    android:id="@+id/tv_freelance_project"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/setting_selector_background"
+                    android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                    android:padding="@dimen/dp_size_20"
+                    android:text="@string/ID_FRELANCE_PROJECT"
+
+                    android:textColor="@color/searchbox_hint_text_color"
+                    android:textSize="@dimen/sp_size_13" />
+
+
+                <CheckBox
+                    android:id="@+id/cb_freelance_project"
+                    style="@style/CheckBoxStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/dp_size_15" />
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/r1_work_exp_personal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+
+                >
+
+                <TextView
+                    android:id="@+id/tv_personal_project"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/setting_selector_background"
+                    android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                    android:padding="@dimen/dp_size_25"
+                    android:text="@string/ID_PERSONAL_PROJECT"
+                    android:textColor="@color/searchbox_hint_text_color"
+                    android:textSize="@dimen/sp_size_13" />
+
+
+                <CheckBox
+                    android:id="@+id/cb_personal_project"
+                    style="@style/CheckBoxStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/dp_size_15" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/r1_work_exp_school_project"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_school_project"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/setting_selector_background"
+                    android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                    android:padding="@dimen/dp_size_25"
+                    android:text="@string/ID_SCHOOL_PROJECT"
+                    android:textColor="@color/searchbox_hint_text_color"
+                    android:textSize="@dimen/sp_size_13" />
+
+                <CheckBox
+                    android:id="@+id/cb_school_project"
+                    style="@style/CheckBoxStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/dp_size_15" />
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/r1_work_exp_intership"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_intership"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/setting_selector_background"
+                    android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                    android:padding="@dimen/dp_size_25"
+                    android:text="@string/ID_INTERSHIP"
+                    android:textColor="@color/searchbox_hint_text_color"
+                    android:textSize="@dimen/sp_size_13" />
+
+                <CheckBox
+                    android:id="@+id/cb_intership"
+                    style="@style/CheckBoxStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/dp_size_15" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <Button xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/btn_continue_work_experience"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+        android:text="@string/ID_CONTINUE"
+        android:textColor="@color/white" />
+
+</RelativeLayout>

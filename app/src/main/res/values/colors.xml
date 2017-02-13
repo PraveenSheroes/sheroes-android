@@ -3,7 +3,7 @@
     <!-- Text color of the search box hint text  -->
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#3F51B5</color>
     <color name="white">#ffffff</color>
     <color name="grey8">#fafafa</color>
     <color name="grey2">#b7b7b7</color>
@@ -21,7 +21,7 @@
     <color name="searchbox_icon_tint">#a4a4a4</color>
     <color name="dashboard_label">#f1403c</color>
     <color name="footer_icon_text">#f2403c</color>
-    <color name="search_tab_text"> #3949ab</color>
+    <color name="search_tab_text">#3949ab</color>
     <color name="search_box">#273691</color>
     <color name="search_box_text">#aeb7ee</color>
     <color name="search_tab_unselected_text">#bec5cc</color>
@@ -68,11 +68,16 @@
     <color name="background_color_project_number">#f5f5f5</color>
 
 
+    <!--text colors of deactive_custom dialog page-->
+
+    <color name="text_color_dialog">#1d2832</color>
+    <color name="text_color_close">#3949ab</color>
+    <color name="text_color_date_view">#767f88</color>
+
+    <color name="text_education_line">#a6aac2</color>
+
 
     <!--colors close trough priyanka-->
-
-
-
 
 
     <color name="com_post_share_textcolor">#323940</color>

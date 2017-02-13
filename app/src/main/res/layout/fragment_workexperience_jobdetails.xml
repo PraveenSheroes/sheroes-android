@@ -41,8 +41,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -66,7 +64,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                        android:hint="@string/ID_SELF_EMP_DESIGNATION"
+                        android:hint="@string/ID_SELF_EMP_DESIGNATION_HINT"
                         android:textColorHint="@color/text_color_setting_preference_basicdetails"
                         android:textColor="@color/text_color_contactdetails_page"
                         android:focusableInTouchMode="true"
@@ -99,7 +97,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                        android:hint="@string/ID_SELF_EMP_FUNCTIONAL"
+                        android:hint="@string/ID_SELF_EMP_FUNCTIONAL_HINT"
                         android:textAllCaps="true"
                         android:textColorHint="@color/text_color_setting_preference_basicdetails"
                         android:textColor="@color/text_color_contactdetails_page"
@@ -161,7 +159,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:hint="@string/ID_SELF_EMP_BRAND"
+                    android:hint="@string/ID_SELF_EMP_BRAND_HINT"
                     android:textColorHint="@color/text_color_setting_preference_basicdetails"
                     android:textColor="@color/text_color_contactdetails_page"
                     android:focusableInTouchMode="true"
@@ -169,70 +167,90 @@
                     />
 
             </android.support.design.widget.TextInputLayout>
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:paddingLeft="@dimen/dp_size_16"
-                >
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/tv_starid"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
                     android:text="*"
                     android:padding="@dimen/dp_size_4"
-                    android:layout_marginTop="@dimen/dp_size_20"
                     android:textColor="@color/star_color"/>
 
-                <android.support.design.widget.TextInputLayout
-                    android:layout_toRightOf="@+id/tv_starid"
-                    android:id="@+id/text_sart_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                <EditText
+                android:id="@+id/tv_job_start_date"
+                android:layout_toRightOf="@+id/tv_starid"
+                android:textAllCaps="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:text="@string/ID_SELF_EMP_START"
+                android:textColor="@color/text_color_setting_preference_basicdetails"
+                android:textSize="@dimen/sp_size_13" />
 
-                    <EditText
+                <EditText
+                android:id="@+id/tv_job_end_date"
+                android:layout_toRightOf="@+id/et_job_start_date"
+                android:paddingLeft="@dimen/dp_size_60"
+                android:layout_width="wrap_content"
+                android:layout_alignParentTop="true"
+                android:textAllCaps="true"
+                android:layout_height="wrap_content"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:text="@string/ID_SELF_EMP_END"
+                android:textColor="@color/text_color_setting_preference_basicdetails"
+                android:textSize="@dimen/sp_size_13" />
+            </LinearLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/dp_size_16">
+                <EditText
                         android:id="@+id/et_job_start_date"
-                        android:layout_width="150dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:padding="@dimen/dp_size_10"
                         android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                        android:hint="@string/ID_SELF_EMP_START"
-                        android:textColorHint="@color/text_color_setting_preference_basicdetails"
-                        android:textColor="@color/text_color_contactdetails_page"
-                        android:focusableInTouchMode="true"
-                        android:textSize="@dimen/sp_size_13" />
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/et_end_date_text"
-                    android:layout_width="match_parent"
-                    android:layout_toRightOf="@+id/text_sart_date"
-                    android:layout_marginRight="@dimen/dp_size_35"
-                    android:layout_height="wrap_content">
-
-                    <EditText
-                        android:id="@+id/et_job_end_date"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                        android:hint="@string/ID_SELF_EMP_END"
-                        android:textColorHint="@color/text_color_setting_preference_basicdetails"
-                        android:textColor="@color/text_color_contactdetails_page"
+                        android:hint="@string/ID_SELF_EMP_START_DATE_HINT"
+                        android:textColorHint="@color/text_color_contactdetails_page"
+                       android:background="@drawable/date_edittext_backgroundstyle"
+                        android:layout_marginLeft="@dimen/dp_size_7"
                         android:focusableInTouchMode="true"
                         android:textSize="@dimen/sp_size_13" />
 
-                </android.support.design.widget.TextInputLayout>
+
+                <EditText
+                    android:id="@+id/et_job_end_date"
+                    android:layout_toRightOf="@+id/et_job_start_date"
+                    android:layout_marginLeft="@dimen/dp_size_30"
+                    android:padding="@dimen/dp_size_10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:hint="@string/ID_SELF_EMP_START_DATE_HINT"
+                    android:textColorHint="@color/text_color_contactdetails_page"
+                    android:background="@drawable/date_edittext_backgroundstyle"
+                    android:focusableInTouchMode="true"
+                    android:textSize="@dimen/sp_size_13" />
+
+
+
 
                 <TextView
-                    android:layout_below="@+id/et_end_date_text"
+                    android:layout_below="@+id/et_job_end_date"
                     android:id="@+id/et_working_from"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:drawableLeft="@drawable/ic_circle_inactive"
+                    android:paddingTop="@dimen/dp_size_16"
                     android:drawablePadding="@dimen/dp_size_5"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:hint="@string/ID_SELF_EMP_TITTLE"
+                    android:text="@string/ID_SELF_EMP_TITTLE"
                     android:textColorHint="@color/text_color_setting_preference_basicdetails"
                     android:textColor="@color/text_color_contactdetails_page"
                     android:focusableInTouchMode="true"
@@ -240,22 +258,21 @@
                     android:textSize="@dimen/sp_size_13" />
 
             </RelativeLayout>
-
-
             <include
+
                 android:id="@+id/include_add_jobcard"
                 layout="@layout/add_job_project_card"
                 android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|top" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="right"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/dp_size_15"
+                android:layout_marginBottom="@dimen/dp_size_40"
                 android:background="@color/background_color_project_number"
                 >
 
@@ -271,8 +288,59 @@
             </LinearLayout>
 
 
+            <android.support.design.widget.TextInputLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp_size_16"
+                android:layout_marginRight="@dimen/dp_size_16"
+                android:focusableInTouchMode="true">
+
+                <EditText
+                    android:id="@+id/et_job_organization_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/date_edittext_backgroundstyle"
+                    android:drawableRight="@drawable/ic_spinner_icon"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:hint="@string/ID_SELF_EMP_ORGANIZATION_TYPE_HINT"
+                    android:padding="@dimen/dp_size_16"
+                    android:textColor="@color/text_color_contactdetails_page"
+                    android:textSize="@dimen/sp_size_13" />
+
+            </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp_size_16"
+                android:layout_marginRight="@dimen/dp_size_16"
+                android:focusableInTouchMode="true">
+
+                <EditText
+                    android:id="@+id/et_add_sector"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/date_edittext_backgroundstyle"
+                    android:drawableRight="@drawable/ic_spinner_icon"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:hint="@string/ID_SECTOR_HINT"
+                    android:padding="@dimen/dp_size_16"
+                    android:textColor="@color/text_color_contactdetails_page"
+                    android:textSize="@dimen/sp_size_13" />
+
+
+            </android.support.design.widget.TextInputLayout>
+
+
+
+
+
         </LinearLayout>
-        </ScrollView>
+
+    </ScrollView>
 
 
     <Button

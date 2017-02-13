@@ -1,52 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingLeft="@dimen/dp_size_16"
     android:paddingRight="@dimen/dp_size_16">
 
 
     <RelativeLayout
         android:id="@+id/l1"
-        android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_size_16"
-        >
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/text1"
+            android:id="@+id/tv_grade_tittle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:text="@string/ID_GRADES_PERCENTAGE"
+            android:textAllCaps="true"
             android:textColor="@color/black"
-            android:textStyle="bold"
             android:textSize="@dimen/sp_size_13"
-            />
+            android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/tv_add_eduction_details"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/ID_ADD_VALUE"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:textColor="@color/text_color_setting_preference_basicdetails"
-            android:layout_marginTop="@dimen/dp_size_15"
-            android:textSize="@dimen/sp_size_12"
-            android:id="@+id/text2"
             android:layout_below="@+id/text1"
+            android:layout_marginTop="@dimen/dp_size_15"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:text="@string/ID_ADD_VALUE"
+            android:textColor="@color/text_color_setting_preference_basicdetails"
+            android:textSize="@dimen/sp_size_12"
 
             />
 
 
         <TextView
+            android:id="@+id/text3"
             android:layout_width="fill_parent"
             android:layout_height="@dimen/dp_size_1"
+            android:layout_below="@+id/text2"
             android:layout_marginTop="@dimen/dp_size_15"
             android:background="@color/line_color"
-            android:layout_below="@+id/text2"
-            android:id="@+id/text3"
 
             />
 
@@ -54,11 +53,9 @@
             android:id="@+id/spinner_educationdetail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            />
+            android:layout_alignParentRight="true" />
 
     </RelativeLayout>
-
 
 
 </LinearLayout>
