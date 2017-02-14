@@ -3,11 +3,11 @@ package appliedlife.pvtltd.SHEROES.views.cutomeviews;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.Feature;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 
 /*
@@ -34,7 +34,11 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
         mManager=manager;
         this.mCallFromFragment=callFromFragment;
     }
-
+    public HidingScrollListener(RecyclerView recyclerView, LinearLayoutManager manager,String callFromFragment) {
+        this.mCallFromFragment=callFromFragment;
+        mRecyclerView=recyclerView;
+        mManager=manager;
+    }
 
     @Override
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -87,7 +91,8 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                     mHomePresenter.getHomePresenterCommunitiesList(new Feature());
                     break;
                 case AppConstants.HOME_FRAGMENT:
-                    mHomePresenter.getFeedFromPresenter(new ListOfFeed());
+                    AppUtils appUtils = AppUtils.getInstance();
+                    mHomePresenter.getFeedFromPresenter(appUtils.feedRequestBuilder());
                     break;
                 default:LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + mCallFromFragment);
             }

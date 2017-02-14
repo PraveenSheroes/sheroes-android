@@ -14,8 +14,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.ListOfInviteSearch;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MemberListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.RequestedListResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItemResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -41,8 +41,8 @@ import rx.Observable;
 public interface SheroesAppServiceApi {
 
     //@GET("v1/city")
-    @POST("v2/588b0544300000e216fa8cfb")
-    Observable<FeedResponse> getFeedFromApi(@Body ListOfFeed listOfFeed );
+    @POST("feed/")
+    Observable<FeedResponsePojo> getFeedFromApi(@Body FeedRequestPojo feedRequestPojo );
     @POST("v2/58940613260000a11200a97f")
     Observable<SearchResponse> getSearchResponseFromApi(@Body ListOfSearch listOfSearch );
     @GET("v2/587877da0f0000231d0d49b1")

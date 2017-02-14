@@ -25,16 +25,16 @@
         android:label="@string/ID_APP_NAME"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <meta-feedResponses
+        <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/app_id" />
 
-        <meta-feedResponses
+        <meta-data
             android:name="io.fabric.ApiKey"
             android:value="07aa242372597565df80681a25002e6e25e6ef0e" />
 
         <activity
-            android:name="appliedlife.pvtltd.SHEROES.views.activities.HomeActivity"
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.LoginActivity"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -52,7 +52,7 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
 
-        <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.LoginActivity">
+        <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.HomeActivity">
 
         </activity>
 
@@ -81,6 +81,8 @@
             android:name="appliedlife.pvtltd.SHEROES.views.activities.ArticleDetailActivity"
             android:parentActivityName="appliedlife.pvtltd.SHEROES.views.activities.HomeActivity"
             android:theme="@style/AppTheme" />
+        <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.ProfileActicity"
+            android:theme="@style/AppTheme"/>
     </application>
 
 </manifest>

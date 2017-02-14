@@ -1,13 +1,14 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 
-import butterknife.ButterKnife;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.fragments.LoginFragment;
+import butterknife.ButterKnife;
 
 /** Created by Praveen Singh on 04/01/2017.
  *
@@ -34,6 +35,13 @@ public class LoginActivity extends BaseActivity implements LoginFragment.LoginAc
     @Override
     public void onErrorOccurence() {
         showNetworkTimeoutDoalog(true);
+    }
+
+    @Override
+    public void onLoginAuthToken() {
+        Intent homeIntent=new Intent(this,HomeActivity.class);
+        startActivity(homeIntent);
+
     }
 }
 

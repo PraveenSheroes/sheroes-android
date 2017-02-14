@@ -72,4 +72,8 @@
         <item name="pressedTranslationZ">12dp</item>
         <item name="rippleColor">@android:color/white</item>
     </style>
+    <style name="NavigationTabTextAppeareance" parent="TextAppearance.Design.Tab">
+        <item name="android:fontFamily">@string/ID_ROBOTO_MEDIUM</item>
+        <item name="android:textSize">@dimen/dp_size_12</item>
+    </style>
 </resources>

@@ -19,7 +19,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.database.dbentities.MasterData;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
@@ -117,7 +117,7 @@ public class MyCommunitiesFragment  extends BaseFragment implements HomeView {
     }
 
     @Override
-    public void getFeedListSuccess(List<ListOfFeed> listOfFeeds) {
+    public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
 
     }
 

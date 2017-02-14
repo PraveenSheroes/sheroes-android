@@ -2,11 +2,9 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -18,6 +16,7 @@ import android.support.v7.graphics.Palette;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -26,13 +25,12 @@ import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +57,6 @@ import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.Blurry;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView;
-import appliedlife.pvtltd.SHEROES.views.cutomeviews.SquareImageView;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
@@ -78,6 +75,7 @@ import butterknife.OnClick;
 
 public class HomeActivity extends BaseActivity implements HomeFragment.HomeActivityIntractionListner, SettingView, BaseHolderInterface, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, CommentReactionFragment.HomeActivityIntractionListner, View.OnTouchListener, View.OnClickListener, ImageFullViewAdapter.HomeActivityIntraction {
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
+
     @Bind(R.id.iv_drawer_profile_circle_icon)
     RoundedImageView ivDrawerProfileCircleIcon;
     @Bind(R.id.tv_user_name)
@@ -96,12 +94,10 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
     RecyclerView mRecyclerView;
     @Bind(R.id.home_view_pager)
     ViewPager mViewPager;
-    @Bind(R.id.tv_join_view)
+    @Bind(R.id.tab_community_view)
     TabLayout mTabLayout;
     @Bind(R.id.fl_home_footer_list)
     public FrameLayout mFlHomeFooterList;
-    @Bind(R.id.iv_home_search_icon)
-    ImageView mIvSearchIcon;
     @Bind(R.id.iv_footer_button_icon)
     ImageView mIvFooterButtonIcon;
     @Bind(R.id.tv_search_box)
@@ -118,18 +114,14 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
     public FrameLayout flFeedFullView;
     @Bind(R.id.iv_side_drawer_profile_blur_background)
     ImageView mIvSideDrawerProfileBlurBackground;
+    @Bind(R.id.iv_home_notification_icon)
+    ImageView mIvHomeNotification;
     @Bind(R.id.fab_add_community)
     FloatingActionButton mFloatingActionButton;
     @Bind(R.id.li_home_community_button_layout)
     LinearLayout liHomeCommunityButtonLayout;
-    @Bind(R.id.iv_profile_full_view)
-    SquareImageView ivProfileFullView;
-    @Bind(R.id.collapsing_toolbar_profile_full_view)
-    CollapsingToolbarLayout mCollapsingToolbarLayoutProfileFullView;
-    @Bind(R.id.iv_profile_full_view_icon)
-    RoundedImageView ivProfileFullViewIcon;
-    @Bind(R.id.li_profile_full_view_header)
-    LinearLayout liProfileFullViewHeader;
+    @Bind(R.id.rl_search_box)
+    RelativeLayout mRlSearchBox;
     TextView mTvFeedArticleUserReaction, mTvFeedCommunityUserReaction, mTvFeedCommunityPostUserReaction;
     GenericRecyclerViewAdapter mAdapter;
     private List<HomeSpinnerItem> mHomeSpinnerItemList = new ArrayList<>();
@@ -168,31 +160,6 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
         mTvUserLocation.setText("Delhi, India");
         mCustiomActionBarToggle.syncState();
         mNavigationView.setNavigationItemSelectedListener(this);
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mCollapsingToolbarLayoutProfileFullView.setTitle(" ");
-        mCollapsingToolbarLayoutProfileFullView.setExpandedTitleColor(ContextCompat.getColor(getApplication(),android.R.color.transparent));
-        Glide.with(this)
-                .load(profile).asBitmap()
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .skipMemoryCache(true)
-                .into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
-                        ivProfileFullView.setImageBitmap( resource );
-                        Palette.from(resource).generate(new Palette.PaletteAsyncListener() {
-                            public void onGenerated(Palette palette) {
-                                applyPalette(palette);
-                                updateBackground(mFloatingActionButton,palette);
-                            }
-                        });
-                    }
-                });
-        Glide.with(this)
-                .load(profile)
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .skipMemoryCache(true)
-                .into(ivProfileFullViewIcon);
         mFragmentOpen = new FragmentOpen(false, false, false, false, false, false, false, false);
         initHomeViewPagerAndTabs();
         mHomeSpinnerItemList = CustomeDataList.makeSpinnerListRequest();
@@ -203,6 +170,16 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
                 .into(mIvSideDrawerProfileBlurBackground);
         //  HomeSpinnerFragment frag = new HomeSpinnerFragment();
         //  callFirstFragment(R.id.fl_fragment_container, frag);
+     //   new Handler().postDelayed(openDrawerRunnable(), 200);
+    }
+    private Runnable openDrawerRunnable() {
+        return new Runnable() {
+
+            @Override
+            public void run() {
+              //  mDrawer.openDrawer(Gravity.LEFT);
+            }
+        };
     }
     private void applyPalette(Palette palette) {
         int primaryDark = ContextCompat.getColor(getApplication(), R.color.colorPrimaryDark);
@@ -249,7 +226,8 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
             }
             switch (drawerItem) {
                 case 1:
-                    openProfileFullViewFragment();
+                    String profile = "https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAhNAAAAJDYwZWIyZTg5LWFmOTItNGIwYS05YjQ5LTM2YTRkNGQ2M2JlNw.jpg";
+                    ProfileActicity.navigate(this, view, profile);
                     break;
                 case 2:
                     openArticleFragment();
@@ -606,15 +584,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
         startActivity(intent);
     }
 
-    private void openProfileFullViewFragment() {
 
-        mTabLayout.setVisibility(View.VISIBLE);
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        viewPagerAdapter.addFragment(FeaturedFragment.createInstance(4), getString(R.string.ID_FEATURED));
-        viewPagerAdapter.addFragment(MyCommunitiesFragment.createInstance(4), getString(R.string.ID_MY_COMMUNITIES));
-        mViewPager.setAdapter(viewPagerAdapter);
-        mTabLayout.setupWithViewPager(mViewPager);
-    }
     private void openArticleFragment() {
 
         mFragmentOpen.setArticleFragment(true);
@@ -951,5 +921,10 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
     public void createCommunityButton() {
         Intent intent = new Intent(getApplicationContext(), CreateCommunityActivity.class);
         startActivity(intent);
+    }
+    @OnClick(R.id.iv_home_notification_icon)
+    public void notificationClick()
+    {
+        mDrawer.openDrawer(Gravity.LEFT);
     }
 }

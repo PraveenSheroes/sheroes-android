@@ -22,8 +22,8 @@ android {
 
         buildConfigField "int", "LIMIT", "100"
        // buildConfigField "String", "BASE_URL", "\"http://private-b8cf44-androidcleancode.apiary-mock.com/\""
-       // buildConfigField "String", "BASE_URL", "\"http://34.193.138.177:9009/\""
-        buildConfigField "String", "BASE_URL", "\"http://www.mocky.io/\""
+       buildConfigField "String", "BASE_URL", "\"http://34.193.138.177:9009/\""
+      //  buildConfigField "String", "BASE_URL", "\"http://www.mocky.io/\""
 
         buildConfigField "int", "CACHETIME", "432000" // 5days
     }

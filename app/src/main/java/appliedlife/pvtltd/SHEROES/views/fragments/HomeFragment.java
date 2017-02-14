@@ -24,7 +24,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.database.dbentities.MasterData;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
@@ -32,6 +32,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.Feature;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.MyCommunities;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
@@ -40,7 +41,6 @@ import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by Praveen Singh on 29/12/2016.
@@ -65,6 +65,7 @@ public class HomeFragment extends BaseFragment implements HomeView {
     private LinearLayoutManager mLayoutManager;
     private HomeActivityIntractionListner mHomeActivityIntractionListner;
     private SwipPullRefreshList mPullRefreshList;
+    private AppUtils mAppUtils;
     public static HomeFragment createInstance(int itemsCount) {
         HomeFragment partThreeFragment = new HomeFragment();
         // Bundle bundle = new Bundle();
@@ -90,14 +91,14 @@ public class HomeFragment extends BaseFragment implements HomeView {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        Fabric.with(getActivity(), new Crashlytics());
         //   forceCrash();
         // TODO: Move this to where you establish a user session
-        logUser();
+       // logUser();
 
         //  GoogleAnalyticsTracing.screenNameTracking(getActivity(),SCREEN_NAME);
 
         ButterKnife.bind(this, view);
+        mAppUtils = AppUtils.getInstance();
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
         mHomePresenter.attachView(this);
@@ -114,13 +115,11 @@ public class HomeFragment extends BaseFragment implements HomeView {
         mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager,AppConstants.HOME_FRAGMENT) {
             @Override
             public void onHide() {
-                // setCustomAnimation(((HomeActivity)getActivity()).mFlHomeFooterList);
                 ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.INVISIBLE);
             }
 
             @Override
             public void onShow() {
-                //   setCustomAnimation(((HomeActivity)getActivity()).mFlHomeFooterList);
                 ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
             }
 
@@ -146,14 +145,14 @@ public class HomeFragment extends BaseFragment implements HomeView {
                 }
             }
         });
-        mHomePresenter.getFeedFromPresenter(new ListOfFeed());
+        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder());
         swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 // Refresh items
                 LogUtils.info("swipe", "*****************end called");
                   mPullRefreshList.setPullToRefresh(true);
-                   mHomePresenter.getFeedFromPresenter(new ListOfFeed());
+                   mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder());
             }
         });
         return view;
@@ -177,13 +176,13 @@ public class HomeFragment extends BaseFragment implements HomeView {
     }
 
     @Override
-    public void getFeedListSuccess(List<ListOfFeed> listOfFeeds) {
-        if (StringUtil.isNotEmptyCollection(listOfFeeds)) {
-            mPullRefreshList.allListData(listOfFeeds);
+    public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
+        if (StringUtil.isNotEmptyCollection(feedDetailList)) {
+            mPullRefreshList.allListData(feedDetailList);
             mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
             mAdapter.notifyDataSetChanged();
             if (!mPullRefreshList.isPullToRefresh()) {
-                mLayoutManager.scrollToPositionWithOffset(mPullRefreshList.getFeedResponses().size() - listOfFeeds.size(), 0);
+                mLayoutManager.scrollToPositionWithOffset(mPullRefreshList.getFeedResponses().size() - feedDetailList.size(), 0);
             } else {
                 mLayoutManager.scrollToPositionWithOffset(0, 0);
             }

@@ -24,8 +24,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.TotalCoverImage;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -38,7 +37,7 @@ import butterknife.OnClick;
  * Created by Praveen_Singh on 22-01-2017.
  */
 
-public class FeedCommunityPostHolder extends BaseViewHolder<ListOfFeed> implements View.OnLongClickListener {
+public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> implements View.OnLongClickListener {
     private final String TAG = LogUtils.makeLogTag(FeedCommunityPostHolder.class);
     private static final String LEFT_HTML_TAG_FOR_COLOR = "<b><font color='#323940'>";
     private static final String RIGHT_HTML_TAG_FOR_COLOR = "</font></b>";
@@ -92,7 +91,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<ListOfFeed> implemen
     @Bind(R.id.fl_feed_community_post_no_reaction_comments)
     FrameLayout flFeedCommunityPostNoReactionComment;
     BaseHolderInterface viewInterface;
-    private ListOfFeed dataItem;
+    private FeedDetail dataItem;
     @Bind(R.id.sp_feed_community_post_user_menu)
     Spinner spFeedCommunityPostUserMenu;
     Context mContext;
@@ -105,7 +104,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<ListOfFeed> implemen
     }
 
     @Override
-    public void bindData(ListOfFeed item, final Context context, int position) {
+    public void bindData(FeedDetail item, final Context context, int position) {
         this.dataItem = item;
         mContext=context;
         liFeedCommunityPostJoinConversation.setOnClickListener(this);
@@ -117,23 +116,23 @@ public class FeedCommunityPostHolder extends BaseViewHolder<ListOfFeed> implemen
         imageOperations(context);
         allTextViewStringOperations(context);
         menuItemForCommunityPostClick();
-        if (StringUtil.isNotEmptyCollection(dataItem.getTotalCoverImages())) {
-            List<TotalCoverImage> coverImageList = dataItem.getTotalCoverImages();
+        if (StringUtil.isNotEmptyCollection(dataItem.getImageUrls())) {
+            List<String> coverImageList = dataItem.getImageUrls();
             if (coverImageList.size() > 0) {
                 switch (coverImageList.size()) {
                     case 1:
                         liFeedCommunityUserPostImages.removeAllViews();
                         liFeedCommunityUserPostImages.removeAllViewsInLayout();
-                        if (StringUtil.isNotEmptyCollection(coverImageList) && StringUtil.isNotNullOrEmptyString(coverImageList.get(0).getFeedDetailImageUrl())) {
-                            oneImagesSetting(context, coverImageList.get(0).getFeedDetailImageUrl());
+                        if (StringUtil.isNotEmptyCollection(coverImageList) && StringUtil.isNotNullOrEmptyString(coverImageList.get(0))) {
+                            oneImagesSetting(context, coverImageList.get(0));
                         }
 
                         break;
-                    case 2:
+                  /*  case 2:
                         liFeedCommunityUserPostImages.removeAllViews();
                         liFeedCommunityUserPostImages.removeAllViewsInLayout();
                         if (StringUtil.isNotEmptyCollection(coverImageList) && StringUtil.isNotNullOrEmptyString(coverImageList.get(0).getFeedDetailImageUrl()) && StringUtil.isNotNullOrEmptyString(coverImageList.get(1).getFeedDetailImageUrl())) {
-                            twoImagesSetting(context, coverImageList.get(0).getFeedDetailImageUrl(), coverImageList.get(1).getFeedDetailImageUrl());
+                            twoImagesSetting(context, coverImageList.get(0), coverImageList.get(1));
                         }
                         break;
                     case 3:
@@ -157,7 +156,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<ListOfFeed> implemen
                                 feedFirstPortraitImageModeSetting(context, coverImageList.get(0).getFeedDetailImageUrl(), coverImageList.get(1).getFeedDetailImageUrl(), coverImageList.get(2).getFeedDetailImageUrl(), coverImageList.get(3).getFeedDetailImageUrl());
                             }
                         }
-                        break;
+                        break;*/
                     case 5:
                         break;
                     default:
@@ -177,10 +176,10 @@ public class FeedCommunityPostHolder extends BaseViewHolder<ListOfFeed> implemen
     }
 
     private void allTextViewStringOperations(Context context) {
-        if (StringUtil.isNotNullOrEmptyString(dataItem.getFeedTitle()) && StringUtil.isNotNullOrEmptyString(dataItem.getFeedHeadline())) {
+        if (StringUtil.isNotNullOrEmptyString(dataItem.getAuthorName())) {
 
-            String feedTitle = dataItem.getFeedTitle();
-            String feedCommunityName = dataItem.getFeedHeadline();
+            String feedTitle = dataItem.getAuthorName();
+            String feedCommunityName = dataItem.getCommunityType();
             if (feedTitle.length() > AppConstants.WORD_LENGTH) {
                 feedTitle = feedTitle.substring(0, AppConstants.WORD_COUNT);
             }
@@ -192,8 +191,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<ListOfFeed> implemen
             }
 
         }
-        if (StringUtil.isNotNullOrEmptyString(dataItem.getCreatedDateTime())) {
-            tvFeedCommunityPostTime.setText(dataItem.getCreatedDateTime());
+        if (StringUtil.isNotNullOrEmptyString(dataItem.getCreatedDate())) {
+           // tvFeedCommunityPostTime.setText(dataItem.getCreatedDate());
         }
 
         if (StringUtil.isNotNullOrEmptyString(dataItem.getDescription())) {
@@ -208,7 +207,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<ListOfFeed> implemen
                 tvFeedCommunityPostText.setText(Html.fromHtml(description + AppConstants.DOTS + AppConstants.SPACE + viewMore));// or for older api
             }
         }
-        if (dataItem.getUserReaction().equalsIgnoreCase(AppConstants.HEART_REACTION)) {
+       /* if (dataItem.getUserReaction().equalsIgnoreCase(AppConstants.HEART_REACTION)) {
             tvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
         }
         if (dataItem.getBookmarked()) {
@@ -235,8 +234,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<ListOfFeed> implemen
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + dataItem.getNoOfReactions());
-        }
-        switch (dataItem.getNoOfComments()) {
+        }*/
+      /*  switch (dataItem.getNoOfComments()) {
             case 0:
                 tvFeedCommunityPostTotalReplies.setVisibility(View.GONE);
                 break;
@@ -248,18 +247,18 @@ public class FeedCommunityPostHolder extends BaseViewHolder<ListOfFeed> implemen
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + dataItem.getNoOfReactions());
-        }
+        }*/
     }
 
     private void imageOperations(Context context) {
-        String feedCircleIconUrl = dataItem.getFeedCircleIconUrl();
+        String feedCircleIconUrl = dataItem.getAuthorImageUrl();
         if (StringUtil.isNotNullOrEmptyString(feedCircleIconUrl)) {
             ivFeedCommunityPostCircleIcon.setCircularImage(true);
             ivFeedCommunityPostCircleIcon.bindImage(feedCircleIconUrl);
             ivFeedCommunityPostRegisterUserPic.setCircularImage(true);
             ivFeedCommunityPostRegisterUserPic.bindImage(feedCircleIconUrl);
         }
-        if (null != dataItem.getRecentComment() && StringUtil.isNotNullOrEmptyString(dataItem.getRecentComment().getCommentDescription()) && StringUtil.isNotNullOrEmptyString(dataItem.getRecentComment().getUserName())) {
+       /* if (null != dataItem.getRecentComment() && StringUtil.isNotNullOrEmptyString(dataItem.getRecentComment().getCommentDescription()) && StringUtil.isNotNullOrEmptyString(dataItem.getRecentComment().getUserName())) {
             String feedUserIconUrl = dataItem.getRecentComment().getUserProfilePicUrl();
             ivFeedCommunityPostUserPic.setCircularImage(true);
             ivFeedCommunityPostUserPic.bindImage(feedUserIconUrl);
@@ -269,7 +268,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<ListOfFeed> implemen
             } else {
                 tvFeedCommunityPostUserCommentPost.setText(Html.fromHtml(userName + AppConstants.COLON + dataItem.getRecentComment().getCommentDescription()));// or for older api
             }
-        }
+        }*/
     }
 
     private void oneImagesSetting(Context context, String firstImage) {
@@ -441,7 +440,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<ListOfFeed> implemen
                 viewInterface.handleOnClick(dataItem, liFeedCommunityPostJoinConversation);
                 break;
             case R.id.tv_feed_community_post_user_reaction:
-                if (dataItem.getUserReaction().equalsIgnoreCase(AppConstants.HEART_REACTION)) {
+              /*  if (dataItem.getUserReaction().equalsIgnoreCase(AppConstants.HEART_REACTION)) {
                     tvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
                     dataItem.setUserReaction(AppConstants.NO_REACTION);
                     if (liFeedCommunityUserPostEmojiPopUp.getVisibility() == View.VISIBLE) {
@@ -453,19 +452,19 @@ public class FeedCommunityPostHolder extends BaseViewHolder<ListOfFeed> implemen
                     if (liFeedCommunityUserPostEmojiPopUp.getVisibility() == View.VISIBLE) {
                         viewInterface.handleOnClick(dataItem, tvFeedCommunityPostUserReaction);
                     }
-                }
+                }*/
                 break;
             case R.id.tv_feed_community_post_user_comment:
                 viewInterface.handleOnClick(dataItem, tvFeedCommunityPostUserComment);
                 break;
             case R.id.tv_feed_community_post_user_bookmark:
-                if (dataItem.getBookmarked()) {
+              /*  if (dataItem.getBookmarked()) {
                     tvFeedCommunityPostUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_in_active, 0);
                     dataItem.setBookmarked(false);
                 } else {
                     tvFeedCommunityPostUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_active, 0);
                     dataItem.setBookmarked(true);
-                }
+                }*/
                 break;
             case R.id.tv_feed_community_post_user_menu:
                 viewInterface.handleOnClick(dataItem, tvFeedCommunityPostUserMenu);

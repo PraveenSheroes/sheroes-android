@@ -25,7 +25,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -38,12 +38,14 @@ import butterknife.OnClick;
  * Created by Praveen_Singh on 23-01-2017.
  */
 
-public class FeedCommunityHolder extends BaseViewHolder<ListOfFeed> implements View.OnLongClickListener, View.OnTouchListener {
+public class FeedCommunityHolder extends BaseViewHolder<FeedDetail> implements View.OnLongClickListener, View.OnTouchListener {
     private final String TAG = LogUtils.makeLogTag(FeedCommunityHolder.class);
     private static final String LEFT_HTML_TAG_FOR_COLOR = "<b><font color='#323940'>";
     private static final String RIGHT_HTML_TAG_FOR_COLOR = "</font></b>";
     private static final String LEFT_HTML_VEIW_TAG_FOR_COLOR = "<font color='#50e3c2'>";
     private static final String RIGHT_HTML_VIEW_TAG_FOR_COLOR = "</font>";
+    private static final String LEFT_HTML_TAG= "<font color='#333333'>";
+    private static final String RIGHT_HTML_TAG= "</font>";
     @Bind(R.id.li_feed_community_images)
     LinearLayout liFeedCommunityImages;
     @Bind(R.id.li_feed_community_join_conversation)
@@ -95,7 +97,7 @@ public class FeedCommunityHolder extends BaseViewHolder<ListOfFeed> implements V
     @Bind(R.id.sp_feed_community_user_menu)
     Spinner spFeedCommunityUserMenu;
     BaseHolderInterface viewInterface;
-    private ListOfFeed dataItem;
+    private FeedDetail dataItem;
     Context mContext;
     List<String> mSpinnerMenuItems;
 
@@ -107,7 +109,7 @@ public class FeedCommunityHolder extends BaseViewHolder<ListOfFeed> implements V
     }
 
     @Override
-    public void bindData(ListOfFeed item, final Context context, int position) {
+    public void bindData(FeedDetail item, final Context context, int position) {
         this.dataItem = item;
         mContext = context;
         liFeedCommunityJoinConversation.setOnClickListener(this);
@@ -125,15 +127,15 @@ public class FeedCommunityHolder extends BaseViewHolder<ListOfFeed> implements V
     }
 
     private void allTextViewStringOperations(Context context) {
-        if (StringUtil.isNotNullOrEmptyString(dataItem.getFeedTitle())) {
-            tvFeedCommunityCardTitle.setText(dataItem.getFeedTitle());
+        if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
+            tvFeedCommunityCardTitle.setText(dataItem.getNameOrTitle());
         }
-        if (StringUtil.isNotNullOrEmptyString(dataItem.getCreatedDateTime())) {
-            tvFeedCommunityTime.setText(dataItem.getCreatedDateTime());
+        if (StringUtil.isNotNullOrEmptyString(dataItem.getCommunityType())) {
+            tvFeedCommunityTime.setText(dataItem.getCommunityType());
         }
 
-        if (StringUtil.isNotNullOrEmptyString(dataItem.getDescription())) {
-            String description = dataItem.getDescription();
+        if (StringUtil.isNotNullOrEmptyString(dataItem.getListShortDescription())) {
+            String description = dataItem.getListShortDescription();
             if (description.length() > AppConstants.WORD_LENGTH) {
                 description = description.substring(0, AppConstants.WORD_COUNT);
             }
@@ -144,7 +146,20 @@ public class FeedCommunityHolder extends BaseViewHolder<ListOfFeed> implements V
                 tvFeedCommunityText.setText(Html.fromHtml(description + AppConstants.DOTS + AppConstants.SPACE + changeDate));// or for older api
             }
         }
-        if (dataItem.getUserReaction().equalsIgnoreCase(AppConstants.HEART_REACTION)) {
+        if (StringUtil.isNotEmptyCollection(dataItem.getTags())) {
+            List<String> tags=dataItem.getTags();
+            String mergeTags=AppConstants.EMPTY_STRING;
+            for(String tag:tags) {
+                mergeTags+=tag+AppConstants.COMMA;
+            }
+            String tagHeader = LEFT_HTML_TAG + context.getString(R.string.ID_TAGS) + LEFT_HTML_TAG;
+            if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                tvFeedCommunityTagLable.setText(Html.fromHtml(tagHeader + AppConstants.COLON + AppConstants.SPACE + mergeTags, 0)); // for 24 api and more
+            } else {
+                tvFeedCommunityTagLable.setText(Html.fromHtml(tagHeader + AppConstants.COLON + AppConstants.SPACE + mergeTags));// or for older api
+            }
+        }
+     /*   if (dataItem.getUserReaction().equalsIgnoreCase(AppConstants.HEART_REACTION)) {
             tvFeedCommunityUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
         }
         if (dataItem.getBookmarked()) {
@@ -152,8 +167,8 @@ public class FeedCommunityHolder extends BaseViewHolder<ListOfFeed> implements V
         }
         if (dataItem.getNoOfReactions() < 1 && dataItem.getNoOfComments() < 1) {
             flFeedCommunityNoReactionComment.setVisibility(View.GONE);
-        }
-        switch (dataItem.getNoOfReactions()) {
+        }*/
+       /* switch (dataItem.getNoOfReactions()) {
             case 0:
                 tvFeedCommunityReaction1.setVisibility(View.GONE);
                 tvFeedCommunityTotalReactions.setVisibility(View.GONE);
@@ -171,8 +186,8 @@ public class FeedCommunityHolder extends BaseViewHolder<ListOfFeed> implements V
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + dataItem.getNoOfReactions());
-        }
-        switch (dataItem.getNoOfComments()) {
+        }*/
+      /*  switch (dataItem.getNoOfComments()) {
             case 0:
                 tvFeedCommunityTotalReplies.setVisibility(View.GONE);
                 break;
@@ -184,31 +199,34 @@ public class FeedCommunityHolder extends BaseViewHolder<ListOfFeed> implements V
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + dataItem.getNoOfReactions());
-        }
+        }*/
     }
 
     private void imageOperations(Context context) {
-        String feedCircleIconUrl = dataItem.getFeedCircleIconUrl();
+        String feedCircleIconUrl = dataItem.getAuthorImageUrl();
         if (StringUtil.isNotNullOrEmptyString(feedCircleIconUrl)) {
             ivFeedCommunityCircleIcon.setCircularImage(true);
             ivFeedCommunityCircleIcon.bindImage(feedCircleIconUrl);
             ivFeedCommunityRegisterUserPic.setCircularImage(true);
             ivFeedCommunityRegisterUserPic.bindImage(feedCircleIconUrl);
+        }
+        String backgroundImageUrl = dataItem.getImageUrl();
+        if (StringUtil.isNotNullOrEmptyString(backgroundImageUrl)) {
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View child = layoutInflater.inflate(R.layout.feed_article_single_image, null);
             ImageView ivFirstLandscape = (ImageView) child.findViewById(R.id.iv_feed_article_single_image);
             TextView tvFeedCommunityTimeLabel = (TextView) child.findViewById(R.id.tv_feed_article_time_label);
             tvFeedCommunityTimeLabel.setVisibility(View.GONE);
             TextView tvFeedCommunityTotalViews = (TextView) child.findViewById(R.id.tv_feed_article_total_views);
-            tvFeedCommunityTotalViews.setText(dataItem.getNoOfComments() + AppConstants.SPACE + context.getString(R.string.ID_VIEWS));
+         //   tvFeedCommunityTotalViews.setText(dataItem.getNoOfComments() + AppConstants.SPACE + context.getString(R.string.ID_VIEWS));
             Glide.with(context)
-                    .load(feedCircleIconUrl)
+                    .load(backgroundImageUrl)
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .skipMemoryCache(true)
                     .into(ivFirstLandscape);
             liFeedCommunityImages.addView(child);
         }
-        if (null != dataItem.getRecentComment() && StringUtil.isNotNullOrEmptyString(dataItem.getRecentComment().getCommentDescription()) && StringUtil.isNotNullOrEmptyString(dataItem.getRecentComment().getUserName())) {
+    /*    if (null != dataItem.getRecentComment() && StringUtil.isNotNullOrEmptyString(dataItem.getRecentComment().getCommentDescription()) && StringUtil.isNotNullOrEmptyString(dataItem.getRecentComment().getUserName())) {
             String feedUserIconUrl = dataItem.getRecentComment().getUserProfilePicUrl();
             ivFeedCommunityUserPic.setCircularImage(true);
             ivFeedCommunityUserPic.bindImage(feedUserIconUrl);
@@ -218,7 +236,7 @@ public class FeedCommunityHolder extends BaseViewHolder<ListOfFeed> implements V
             } else {
                 tvFeedCommunityUserCommentPost.setText(Html.fromHtml(userName + AppConstants.COLON + dataItem.getRecentComment().getCommentDescription()));// or for older api
             }
-        }
+        }*/
     }
 
     @Override
@@ -242,7 +260,7 @@ public class FeedCommunityHolder extends BaseViewHolder<ListOfFeed> implements V
                 viewInterface.handleOnClick(dataItem, liFeedCommunityJoinConversation);
                 break;
             case R.id.tv_feed_community_user_reaction:
-                if (dataItem.getUserReaction().equalsIgnoreCase(AppConstants.HEART_REACTION)) {
+              /*  if (dataItem.getUserReaction().equalsIgnoreCase(AppConstants.HEART_REACTION)) {
                     tvFeedCommunityUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
                     dataItem.setUserReaction(AppConstants.NO_REACTION);
                     if (liFeedCommunityEmojiPopUp.getVisibility() == View.VISIBLE) {
@@ -254,19 +272,19 @@ public class FeedCommunityHolder extends BaseViewHolder<ListOfFeed> implements V
                     if (liFeedCommunityEmojiPopUp.getVisibility() == View.VISIBLE) {
                         viewInterface.handleOnClick(dataItem, tvFeedCommunityUserReaction);
                     }
-                }
+                }*/
                 break;
             case R.id.tv_feed_community_user_comment:
                 viewInterface.handleOnClick(dataItem, tvFeedCommunityUserComment);
                 break;
             case R.id.tv_feed_community_user_bookmark:
-                if (dataItem.getBookmarked()) {
+              /*  if (dataItem.getBookmarked()) {
                     tvFeedCommunityUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_in_active, 0);
                     dataItem.setBookmarked(false);
                 } else {
                     tvFeedCommunityUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_active, 0);
                     dataItem.setBookmarked(true);
-                }
+                }*/
                 break;
             case R.id.tv_feed_community_user_menu:
                 viewInterface.handleOnClick(dataItem, tvFeedCommunityUserMenu);

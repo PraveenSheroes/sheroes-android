@@ -32,6 +32,7 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
+
 /**
  * Created by Praveen Singh on 29/12/2016.
  *
@@ -47,36 +48,36 @@ public class SheroesAppModule {
     File cacheFile;
     SheroesApplication mApplication;
     final static long CACHE_SIZE = 10 * 1024 * 1024;
+
     @Provides
     @Singleton
     SheroesApplication providesApplication() {
         return mApplication;
     }
 
-    public SheroesAppModule(File cacheFile,SheroesApplication application) {
+    public SheroesAppModule(File cacheFile, SheroesApplication application) {
         this.cacheFile = cacheFile;
         mApplication = application;
     }
 
     @Singleton
     @Provides
-    public Interceptor provideInterceptor( final Preference<Token> userPreference) {
+    public Interceptor provideInterceptor(final Preference<Token> userPreference) {
         return new Interceptor() {
             @Override
             public okhttp3.Response intercept(Chain chain) throws IOException {
                 Request original = chain.request();
-                // Customize the request
-                Request request = original.newBuilder()
-                        .header("Content-Type", "application/json")
-                     //   .removeHeader("Pragma")
-                     //   .header("Cache-Control", String.format("max-age=%d", BuildConfig.CACHETIME))
-                        .build();
+                Request request;
+                if (null != userPreference && userPreference.isSet() && null != userPreference.get()) {
+                    request = original.newBuilder().header("Content-Type", "application/json")
+                            .header("Authorization", userPreference.get().getAccessToken())
+                            .build();
+                } else {
+                    request = original.newBuilder().header("Content-Type", "application/json")
+                            .build();
+                }
                 okhttp3.Response response = chain.proceed(request);
                 response.cacheResponse();
-                if (userPreference.isSet()&&null!=userPreference.get()) {
-                       // LogUtils.info("sheroesapp", "--------" + userPreference.get().getAccessToken());
-                      //  LogUtils.info("sheroesapp", "--------" + userPreference.get().getTokenTime());
-                }
                 // Customize or return the response
                 return response;
             }
@@ -92,7 +93,6 @@ public class SheroesAppModule {
     }
 
 
-
     @Singleton
     @Provides
     public RxSharedPreferences provideRxSharedPreferences() {
@@ -102,14 +102,14 @@ public class SheroesAppModule {
     @Singleton
     @Provides
     public Preference<Token> provideTokenPref(RxSharedPreferences rxSharedPreferences, Gson gson) {
-        return rxSharedPreferences.getObject(AppConstants.SHEROES_AUTH_TOKEN,new GsonPreferenceAdapter<>(gson, Token.class));
+        return rxSharedPreferences.getObject(AppConstants.SHEROES_AUTH_TOKEN, new GsonPreferenceAdapter<>(gson, Token.class));
     }
 
 
     @Singleton
     @Provides
     public Preference<SessionUser> provideSessionUserPref(RxSharedPreferences rxSharedPreferences, Gson gson) {
-        return rxSharedPreferences.getObject(AppConstants.SHEROES_USER_SESSION,new GsonPreferenceAdapter<>(gson, SessionUser.class));
+        return rxSharedPreferences.getObject(AppConstants.SHEROES_USER_SESSION, new GsonPreferenceAdapter<>(gson, SessionUser.class));
     }
 
 

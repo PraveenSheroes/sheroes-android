@@ -18,9 +18,10 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.ListOfInviteSearch;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MembersList;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerList;
 import appliedlife.pvtltd.SHEROES.models.entities.community.RequestedList;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.DrawerItems;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
+import appliedlife.pvtltd.SHEROES.models.entities.home.ProfileItems;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleDetailPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.Feature;
@@ -171,6 +172,11 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new ArticleDetailWithInSuggestedHolder(view, viewInterface);
         }
+    }, PROFILE_HOLDER(R.layout.invitesearch_item) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new ProfileViewHolder(view, viewInterface);
+        }
     };
     public Object object;
     public int layout;
@@ -193,8 +199,8 @@ public enum HolderMapping {
     public static int getOrdinal(BaseResponse item, int totalCount) {
         int returnView = 0;
         if (null != item) {
-            if (item instanceof ListOfFeed) {
-                String feedType = ((ListOfFeed) item).getFeedType();
+            if (item instanceof FeedDetail) {
+                String feedType = ((FeedDetail) item).getSubType();
                 switch (feedType) {
                     case AppConstants.FEED_ARTICLE:
                         returnView = FEED_ARTICLE.ordinal();
@@ -208,6 +214,7 @@ public enum HolderMapping {
                     case AppConstants.FEED_COMMUNITY_POST:
                         returnView = FEED_COMMUNITY_POST.ordinal();
                         break;
+                    //TODO: communitydetail header need to change
                     case AppConstants.MY_COMMUNITIES_HEADER:
                         returnView = COMMUNITY_DETAIL_HEADER.ordinal();
                         break;
@@ -280,7 +287,11 @@ public enum HolderMapping {
             } else if (item instanceof ArticleDetailSuggestion) {
                 return ARTICLE_DETAIL_WITHIN_SUGGESTED_HOLDER.ordinal();
 
+            }else if (item instanceof ProfileItems) {
+                return PROFILE_HOLDER.ordinal();
+
             }
+
         }
 
         return returnView;

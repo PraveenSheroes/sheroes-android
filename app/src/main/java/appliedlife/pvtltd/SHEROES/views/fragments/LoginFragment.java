@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -41,9 +40,6 @@ import java.util.Arrays;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -56,6 +52,9 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.LoginView;
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 
 /**
@@ -70,7 +69,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.LoginView;
 public class LoginFragment extends BaseFragment implements LoginView {
     private final String TAG = LogUtils.makeLogTag(LoginFragment.class);
     @Inject
-    Preference<Token> userPreference;
+    Preference<Token> mUserPreference;
     @Inject
     LoginPresenter mLoginPresenter;
     @Bind(R.id.email)
@@ -141,7 +140,6 @@ public class LoginFragment extends BaseFragment implements LoginView {
             LogUtils.info("testing", "Permission is already granted");
 
         }
-
         return view;
     }
 
@@ -168,7 +166,9 @@ public class LoginFragment extends BaseFragment implements LoginView {
             token.setAccessToken(logInAuthToken);
             token.setTokenTime(System.currentTimeMillis());
             token.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
-            userPreference.set(token);
+            mUserPreference.set(token);
+            mProgressBar.setVisibility(View.GONE);
+            mLoginActivityIntractionListner.onLoginAuthToken();
             Snackbar.make(mEmailView, R.string.ID_APP_NAME, Snackbar.LENGTH_SHORT).show();
         }
     }
@@ -223,6 +223,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
 
     public interface LoginActivityIntractionListner {
         void onErrorOccurence();
+        void onLoginAuthToken();
     }
 
     @OnClick(R.id.email_sign_in_button)
@@ -247,7 +248,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
         boolean cancel = false;
         View focusView = null;
         // Check for a valid password, if the user entered one.
-        if (!AppUtils.getInstance().checkEmail(password)) {
+        if (!StringUtil.isNotNullOrEmptyString(password)) {
             mPasswordView.setError(getString(R.string.ID_ERROR_FIELD_REQUIRED));
             focusView = mPasswordView;
             cancel = true;
@@ -393,5 +394,6 @@ public class LoginFragment extends BaseFragment implements LoginView {
         callbackManager.onActivityResult(requestCode, resultCode, data);
 
     }
+
 
 }

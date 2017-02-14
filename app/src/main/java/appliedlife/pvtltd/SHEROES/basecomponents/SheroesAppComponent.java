@@ -19,6 +19,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeSearchActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.LoginActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.Professional_WorkExperience_Activity;
+import appliedlife.pvtltd.SHEROES.views.activities.ProfileActicity;
 import appliedlife.pvtltd.SHEROES.views.activities.SettingPreferencesActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.AllMembersFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.AllSearchFragment;
@@ -38,6 +39,8 @@ import appliedlife.pvtltd.SHEROES.views.fragments.HomeSpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ImageFullViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LoginFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunitiesFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.PersonnelProfileFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProffestionalProfileFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileFullViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SearchArticleFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SearchCommunitiesFragment;
@@ -75,6 +78,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.InviteSearchHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MemberHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MyCommunitiesCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OwnerListHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.ProfileViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ReactionHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.RequestedHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.SearchModuleHolder;
@@ -99,6 +103,7 @@ public interface SheroesAppComponent {
     void inject(HomeSearchActivity homeSearchActivity);
     void inject(CommunitiesDetailActivity communitiesDetailActivity);
     void inject(ArticleDetailActivity articleDetailActivity);
+    void inject(ProfileActicity profileActicity);
     void inject(LoginFragment loginFragment);
     void inject(HomeSpinnerFragment homeSpinnerFragment);
     void inject(SearchCommunitiesFragment searchCommunitiesFragment);
@@ -111,6 +116,8 @@ public interface SheroesAppComponent {
     void inject(ImageFullViewFragment imageFullViewFragment);
     void inject(ArticleDetailFragment articleDetailFragment);
     void inject(ProfileFullViewFragment profileFullViewFragment);
+    void inject(PersonnelProfileFragment personnelProfileFragment);
+    void inject(ProffestionalProfileFragment proffestionalProfileFragment);
 
     void inject(ArticleDetailHolder articleDetailHolder);
     void inject(ArticleCardHolder articleCardHolder);
@@ -129,7 +136,7 @@ public interface SheroesAppComponent {
     void inject(MyCommunitiesCardHolder myCommunitiesCardHolder);
     void inject(ArticleDetailSuggestedHolder articleDetailSuggestedHolder);
     void inject(ArticleDetailWithInSuggestedHolder articleDetailWithInSuggestedHolder);
-
+    void inject(ProfileViewHolder profileViewHolder);
 
     void inject(SettingFragment settingFragment);
     void inject(SettingFeedbackFragment settingFeedbackFragment);

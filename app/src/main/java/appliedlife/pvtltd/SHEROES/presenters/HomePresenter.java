@@ -12,8 +12,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.database.dbentities.MasterData;
 import appliedlife.pvtltd.SHEROES.models.HomeModel;
 import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItemResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleListResponse;
@@ -63,13 +63,13 @@ public class HomePresenter extends BasePresenter<HomeView> {
     }
 
 
-    public void getFeedFromPresenter(ListOfFeed listOfFeed) {
+    public void getFeedFromPresenter(FeedRequestPojo feedRequestPojo) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showNwError();
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = mHomeModel.getFeedFromModel(listOfFeed).subscribe(new Subscriber<FeedResponse>() {
+        Subscription subscription = mHomeModel.getFeedFromModel(feedRequestPojo).subscribe(new Subscriber<FeedResponsePojo>() {
             @Override
             public void onCompleted() {
                 getMvpView().stopProgressBar();
@@ -83,9 +83,9 @@ public class HomePresenter extends BasePresenter<HomeView> {
             }
 
             @Override
-            public void onNext(FeedResponse feedResponse) {
+            public void onNext(FeedResponsePojo feedResponsePojo) {
                 getMvpView().stopProgressBar();
-                getMvpView().getFeedListSuccess(feedResponse.getListOfFeed());
+                getMvpView().getFeedListSuccess(feedResponsePojo.getFeedDetails());
             }
         });
         registerSubscription(subscription);

@@ -8,11 +8,13 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
+import java.util.List;
+
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -24,7 +26,7 @@ import butterknife.ButterKnife;
  * Created by Praveen_Singh on 23-01-2017.
  */
 
-public class FeedJobHolder extends BaseViewHolder<ListOfFeed> {
+public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
     private final String TAG = LogUtils.makeLogTag(FeedJobHolder.class);
     @Bind(R.id.iv_feed_job_icon)
     RoundedImageView ivFeedJobCircleIcon;
@@ -49,7 +51,7 @@ public class FeedJobHolder extends BaseViewHolder<ListOfFeed> {
     @Bind(R.id.iv_feed_job_menu)
     ImageView tvFeedJobMenu;
     BaseHolderInterface viewInterface;
-    private ListOfFeed dataItem;
+    private FeedDetail dataItem;
     public FeedJobHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
@@ -58,7 +60,7 @@ public class FeedJobHolder extends BaseViewHolder<ListOfFeed> {
     }
 
     @Override
-    public void bindData(ListOfFeed item, final Context context, int position) {
+    public void bindData(FeedDetail item, final Context context, int position) {
         this.dataItem = item;
         tvFeedJobUserBookmark.setOnClickListener(this);
         tvFeedJobUserMenu.setOnClickListener(this);
@@ -66,12 +68,12 @@ public class FeedJobHolder extends BaseViewHolder<ListOfFeed> {
         allTextViewStringOperations(context);
     }
     private void imageOperations(Context context) {
-        String feedCircleIconUrl = dataItem.getFeedCircleIconUrl();
+        String feedCircleIconUrl = dataItem.getThumbnailImageUrl();
         if(StringUtil.isNotNullOrEmptyString(feedCircleIconUrl)) {
-            //ivFeedJobCircleIcon.setCircularImage(true);
-           // ivFeedJobCircleIcon.bindImage(feedCircleIconUrl);
             Glide.with(context)
-                    .load(feedCircleIconUrl)
+                    //TODO:: need change
+                  //  .load(feedCircleIconUrl)
+                    .load("https://img.sheroes.in/img/uploads/forumbloggallary/14846520381484652038.png")
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .skipMemoryCache(true)
                     .into(ivFeedJobCircleIcon);
@@ -79,36 +81,45 @@ public class FeedJobHolder extends BaseViewHolder<ListOfFeed> {
 
     }
     private void allTextViewStringOperations(Context context) {
-        if (StringUtil.isNotNullOrEmptyString(dataItem.getFeedTitle())) {
-            tvFeedJobCardTitle.setText(dataItem.getFeedTitle());
+        if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
+            tvFeedJobCardTitle.setText(dataItem.getNameOrTitle());
         }
-        if (StringUtil.isNotNullOrEmptyString(dataItem.getGroupName())) {
-            tvFeedJobGroupName.setText(dataItem.getGroupName());
+        if (StringUtil.isNotNullOrEmptyString(dataItem.getAuthorName())) {
+            tvFeedJobGroupName.setText(dataItem.getAuthorName());
         }
-        if (StringUtil.isNotNullOrEmptyString(dataItem.getCreatedDateTime())) {
-            tvFeedJobDateTime.setText(dataItem.getCreatedDateTime());
+        if (StringUtil.isNotNullOrEmptyString(dataItem.getCreatedDate())) {
+          //  tvFeedJobDateTime.setText(dataItem.getCreatedDate());
         }
-        if(null!=dataItem.getJobDetail()) {
-            if (StringUtil.isNotNullOrEmptyString(dataItem.getJobDetail().getTypeOfJob())) {
-                tvFeedJobType.setText(dataItem.getJobDetail().getTypeOfJob());
+            if (StringUtil.isNotEmptyCollection(dataItem.getOpportunityTypes())) {
+                List<String> jobTypes=dataItem.getOpportunityTypes();
+                String mergeJobTypes=AppConstants.EMPTY_STRING;
+                for(String jobType:jobTypes) {
+                    mergeJobTypes+=jobType+AppConstants.PIPE;
+                }
+                tvFeedJobType.setText(mergeJobTypes);
             }
-            if (StringUtil.isNotNullOrEmptyString(dataItem.getJobDetail().getJobDescription())) {
-                tvFeedJobName.setText(dataItem.getJobDetail().getJobDescription());
+            if (StringUtil.isNotEmptyCollection(dataItem.getSkills()))
+            {
+                List<String> jobSkills=dataItem.getSkills();
+                String mergeJobSkills=AppConstants.EMPTY_STRING;
+                for(String skill:jobSkills) {
+                    mergeJobSkills+=skill+AppConstants.COMMA;
+                }
+                tvFeedJobName.setText(mergeJobSkills);
             }
-            if (StringUtil.isNotNullOrEmptyString(dataItem.getJobDetail().getLocation())) {
-                tvFeedJobLocation.setText(dataItem.getJobDetail().getLocation());
+            if (StringUtil.isNotNullOrEmptyString(dataItem.getCityName())) {
+                tvFeedJobLocation.setText(dataItem.getCityName());
             }
-            if(dataItem.getJobDetail().getIsApplied()) {
+           /* if(dataItem.getJobDetail().getIsApplied()) {
                 tvFeedJobApplied.setText(context.getString(R.string.ID_APPLIED));
             }
             else
             {
                 tvFeedJobApplied.setText(AppConstants.SPACE);
-            }
-        }
-        if(dataItem.getBookmarked()) {
+            }*/
+       /* if(dataItem.getBookmarked()) {
             tvFeedJobUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_active, 0);
-        }
+        }*/
 
 
 

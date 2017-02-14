@@ -70,10 +70,12 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.TimeZone;
@@ -83,6 +85,8 @@ import java.util.zip.GZIPInputStream;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.home.ProfileItems;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 
 
@@ -1595,6 +1599,44 @@ public class AppUtils {
         editText.setLongClickable(false);
         editText.setTextIsSelectable(false);
     }
-
+    /**
+     * Request for feed api
+     */
+    public static FeedRequestPojo feedRequestBuilder() {
+        AppUtils appUtils = AppUtils.getInstance();
+        FeedRequestPojo feedRequestPojo=new FeedRequestPojo();
+        feedRequestPojo.setAppVersion(appUtils.getAppVersionName());
+        feedRequestPojo.setDeviceUniqueId(appUtils.getDeviceId());
+        //TODO:: change rquest data
+        feedRequestPojo.setCloudMessagingId(AppConstants.ALL_SEARCH);
+        feedRequestPojo.setPageNo(1);
+        feedRequestPojo.setPageSize(10);
+        feedRequestPojo.setSubType(AppConstants.FEED_SUB_TYPE);
+        return feedRequestPojo;
+    }
+    /**
+     * Profile data
+     */
+    public static List<ProfileItems> profileDetail() {
+        List<ProfileItems>profileItemsList=new ArrayList<>();
+        ProfileItems profileItems=new ProfileItems();
+        profileItemsList.add(profileItems);
+        profileItemsList.add(profileItems);
+        profileItemsList.add(profileItems);
+        profileItemsList.add(profileItems);
+        profileItemsList.add(profileItems);
+        profileItemsList.add(profileItems);
+        profileItemsList.add(profileItems);
+        profileItemsList.add(profileItems);
+        profileItemsList.add(profileItems);
+        profileItemsList.add(profileItems);
+        profileItemsList.add(profileItems);
+        profileItemsList.add(profileItems);
+        profileItemsList.add(profileItems);
+        profileItemsList.add(profileItems);
+        profileItemsList.add(profileItems);
+        profileItemsList.add(profileItems);
+        return profileItemsList;
+    }
 
 }

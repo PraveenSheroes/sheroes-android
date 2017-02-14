@@ -21,7 +21,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.database.dbentities.MasterData;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
@@ -30,7 +30,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.MyCommunities;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
@@ -113,7 +112,7 @@ public class CommunitiesDetailFragment extends BaseFragment implements HomeView 
 
             }
         });
-        mHomePresenter.getFeedFromPresenter(new ListOfFeed());
+     //   mHomePresenter.getFeedFromPresenter(new ListOfFeed());
         swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -126,25 +125,31 @@ public class CommunitiesDetailFragment extends BaseFragment implements HomeView 
         return view;
     }
 
+
     @Override
-    public void getFeedListSuccess(List<ListOfFeed> listOfFeedList) {
-        if (StringUtil.isNotEmptyCollection(listOfFeedList)) {
-            ListOfFeed listOfFeed = new ListOfFeed();
-            //TODO:: Please remove this or correct
-            listOfFeed.setFeedType(AppConstants.MY_COMMUNITIES_HEADER);
-            listOfFeedList.add(0, listOfFeed);
-            mPullRefreshList.allListData(listOfFeedList);
-            mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
-            mAdapter.notifyDataSetChanged();
-            if (!mPullRefreshList.isPullToRefresh()) {
-                mLayoutManager.scrollToPositionWithOffset(mPullRefreshList.getFeedResponses().size() - listOfFeedList.size(), 0);
-            } else {
-                mLayoutManager.scrollToPositionWithOffset(0, 0);
-            }
-            swipeView.setRefreshing(false);
-        }
+    public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
+
     }
 
+    /* @Override
+        public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
+            if (StringUtil.isNotEmptyCollection(listOfFeedList)) {
+                ListOfFeed listOfFeed = new ListOfFeed();
+                //TODO:: Please remove this or correct
+                listOfFeed.setFeedType(AppConstants.MY_COMMUNITIES_HEADER);
+                listOfFeedList.add(0, listOfFeed);
+                mPullRefreshList.allListData(listOfFeedList);
+                mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
+                mAdapter.notifyDataSetChanged();
+                if (!mPullRefreshList.isPullToRefresh()) {
+                    mLayoutManager.scrollToPositionWithOffset(mPullRefreshList.getFeedResponses().size() - listOfFeedList.size(), 0);
+                } else {
+                    mLayoutManager.scrollToPositionWithOffset(0, 0);
+                }
+                swipeView.setRefreshing(false);
+            }
+        }
+    */
     @Override
     public void getHomeSpinnerListSuccess(List<HomeSpinnerItem> data) {
 

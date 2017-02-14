@@ -72,7 +72,6 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_TOTAL_IMAGES">4+</string>
     <string name="ID_SHARE">Share</string>
     <string name="ID_EDIT">Edit</string>
-    <string name="ID_LEAVE">Leave</string>
     <string name="ID_DELETE">Delete</string>
     <string name="ID_REPORT">Report as spam</string>
 
@@ -84,8 +83,9 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_LESS">Less</string>
     <string name="ID_RECENT">Recent</string>
     <string name="ID_RELATED_ARTICLES">Related Articles</string>
-
-
+    <string name="ID_TAGS">Tags</string>
+    <string name="ID_PERSONAL">PERSONAL</string>
+    <string name="ID_PROFESSIONAL">PROFESSIONAL</string>
     <!--string set  through priyanka-->
 
     <!--text related setting_dashboard page-->
@@ -394,7 +394,6 @@ etur adipiscing elit,sed do eiusmod tempor incididunt ut…</string>
     <string name="ID_SHARE_COMMUNITY">SHARE</string>
 
     <string name="ID_COMMUNITY_TYPE">COMMUNITY TYPE</string>
-    <string name="ID_TAGS">TAGS</string>
     <string name="ID_DESCRIPTION">DESCRIPTION</string>
     <string name="ID_CREATEPOST">CREATE A POST</string>
     <string name="ID_COMMUNITITES_NAME">Ranigarh Women’s Empowerment and Development Group</string>

@@ -8,8 +8,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItemResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleListResponse;
@@ -41,12 +41,12 @@ public class HomeModel {
         this.sheroesAppServiceApi = sheroesAppServiceApi;
         this.gson= gson;
     }
-    public Observable<FeedResponse> getFeedFromModel(ListOfFeed listOfFeed){
-        return sheroesAppServiceApi.getFeedFromApi(listOfFeed)
-                .map(new Func1<FeedResponse, FeedResponse>() {
+    public Observable<FeedResponsePojo> getFeedFromModel(FeedRequestPojo  feedRequestPojo){
+        return sheroesAppServiceApi.getFeedFromApi(feedRequestPojo)
+                .map(new Func1<FeedResponsePojo, FeedResponsePojo>() {
                     @Override
-                    public FeedResponse call(FeedResponse feedResponse) {
-                        return feedResponse;
+                    public FeedResponsePojo call(FeedResponsePojo feedResponsePojo) {
+                        return feedResponsePojo;
                     }
                 })
                 .subscribeOn(Schedulers.io())
