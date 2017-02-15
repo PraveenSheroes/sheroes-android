@@ -217,7 +217,7 @@
                         android:fontFamily="@string/ID_ROBOTO_REGULAR"
                         android:hint="@string/ID_SELF_EMP_START_DATE_HINT"
                         android:textColorHint="@color/text_color_contactdetails_page"
-                       android:background="@drawable/date_edittext_backgroundstyle"
+                        android:background="@drawable/date_edittext_backgroundstyle"
                         android:layout_marginLeft="@dimen/dp_size_7"
                         android:focusableInTouchMode="true"
                         android:textSize="@dimen/sp_size_13" />

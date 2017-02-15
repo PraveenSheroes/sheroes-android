@@ -227,14 +227,6 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_WRITE_REASION">WRITE REASON</string>
     <string name="ID_CHAR_COUNT">456 Characters</string>
 
-    <!--String Related personal work_experience_details  page-->
-
-
-
-
-
-
-
     <!--String Related personal other details page-->
 
     <string name="ID_ADITIONAL">ADD ADITIONAL ACTIVITIES AND ACHIEVEMENTS</string>
@@ -356,6 +348,30 @@ etur adipiscing elit,sed do eiusmod tempor incididunt ut…</string>
     <string name="ID_MORE">MORE</string>
     <string name="ID_LEAVE">Leave</string>
 
+<!--String related of professional_add_education page-->
+    <string name="ID_FILED_OF_STUDY_HINT">FIELD OF STUDY</string>
+    <string name="ID_GPA">GPA</string>
+    <string name="ID_7">7.5</string>
+    <string name="ID_8">8</string>
+
+
+    <!--string related of personal lokking_for card-->
+
+    <string name="ID_LOOKING_FOR">Looking FOR</string>
+    <string name="ID_OPP_SEARCh">Opportunity Search</string>
+    <string name="ID_OPP_SEARCH_1">Business and Entrepreneurship</string>
+
+    <!--string related of personal i_am_interesting card-->
+
+
+    <string name="ID_INTERESTINNG_TITTLE">I AM INTERESTED IN</string>
+
+
+
+
+
+
+
 
 
 
@@ -428,7 +444,7 @@ etur adipiscing elit,sed do eiusmod tempor incididunt ut…</string>
     <string name="ID_COMMUNITY_JOIN_REGION2">I am already a member of this community outside of SHEROES</string>
     <string name="ID_USER_NAME">User Name</string>
     <string name="ID_COMMUNITY_REMOVE_OWNER">Are you sure you want to remove this owner ?</string>
-
+    <string name="ID_LEAVE">Leave</string>
     <string-array name="name">
         <item>Associate/Employee engagement</item>
         <item>Group</item>
