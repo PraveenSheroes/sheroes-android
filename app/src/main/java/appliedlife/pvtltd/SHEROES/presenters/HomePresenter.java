@@ -14,11 +14,8 @@ import appliedlife.pvtltd.SHEROES.models.HomeModel;
 import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
-import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItemResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleListResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.CommunitiesResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.Feature;
+import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
 import appliedlife.pvtltd.SHEROES.preferences.Token;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -91,13 +88,13 @@ public class HomePresenter extends BasePresenter<HomeView> {
         registerSubscription(subscription);
     }
 
-    public void getSpinnerListFromPresenter() {
+    public void getLikesFromPresenter(LikeRequestPojo likeRequestPojo) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showNwError();
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = mHomeModel.getSpinnerListFromModel().subscribe(new Subscriber<HomeSpinnerItemResponse>() {
+        Subscription subscription = mHomeModel.getLikesFromModel(likeRequestPojo).subscribe(new Subscriber<LikeResponse>() {
             @Override
             public void onCompleted() {
                 getMvpView().stopProgressBar();
@@ -111,21 +108,20 @@ public class HomePresenter extends BasePresenter<HomeView> {
             }
 
             @Override
-            public void onNext(HomeSpinnerItemResponse homeSpinnerItemResponse) {
+            public void onNext(LikeResponse likeResponse) {
                 getMvpView().stopProgressBar();
-                getMvpView().getHomeSpinnerListSuccess(homeSpinnerItemResponse.getHomeSpinnerItem());
+               getMvpView().getLikesSuccess(likeResponse.getStatus());
             }
         });
         registerSubscription(subscription);
     }
-
-    public void getHomePresenterArticleList(ArticleCardResponse articleCardResponse) {
+    public void getUnLikesFromPresenter(LikeRequestPojo likeRequestPojo) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showNwError();
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = mHomeModel.getHomeModelArticleList(articleCardResponse).subscribe(new Subscriber<ArticleListResponse>() {
+        Subscription subscription = mHomeModel.getUnLikesFromModel(likeRequestPojo).subscribe(new Subscriber<LikeResponse>() {
             @Override
             public void onCompleted() {
                 getMvpView().stopProgressBar();
@@ -139,46 +135,13 @@ public class HomePresenter extends BasePresenter<HomeView> {
             }
 
             @Override
-            public void onNext(ArticleListResponse articleListResponse) {
+            public void onNext(LikeResponse likeResponse) {
                 getMvpView().stopProgressBar();
-                getMvpView().getArticleListSuccess(articleListResponse.getArticleCardResponses());
+                getMvpView().getLikesSuccess(likeResponse.getStatus());
             }
         });
         registerSubscription(subscription);
     }
-
-    public void getHomePresenterCommunitiesList(Feature feature) {
-        if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showNwError();
-            return;
-        }
-        getMvpView().startProgressBar();
-        Subscription subscription = mHomeModel.getHomeModelCommnutiesList(feature).subscribe(new Subscriber<CommunitiesResponse>() {
-            @Override
-            public void onCompleted() {
-                getMvpView().stopProgressBar();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
-                getMvpView().showNwError();
-                getMvpView().stopProgressBar();
-            }
-
-            @Override
-            public void onNext(CommunitiesResponse communitiesResponse) {
-                getMvpView().stopProgressBar();
-                getMvpView().getAllCommunitiesSuccess(communitiesResponse.getMyCommunitiesCardResponses(), communitiesResponse.getFeatureCardResponses());
-            }
-        });
-        registerSubscription(subscription);
-    }
-
-    public void onStop() {
-        detachView();
-    }
-
 
     public void saveMasterDataTypes() {
         getMvpView().startProgressBar();
@@ -228,4 +191,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
         registerSubscription(subscribe);
     }
 
+    public void onStop() {
+        detachView();
+    }
 }

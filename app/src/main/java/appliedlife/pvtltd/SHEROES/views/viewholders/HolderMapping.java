@@ -9,6 +9,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.article.ArticleDetailSuggestion;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentDoc;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentsList;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.ReactionList;
 import appliedlife.pvtltd.SHEROES.models.entities.communities.CommunitySuggestion;
@@ -86,7 +87,7 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new InviteSearchHolder(view, viewInterface);
         }
-    },FEATURE_CARD(R.layout.featured_card_item) {
+    }, FEATURE_CARD(R.layout.featured_card_item) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new FeatureCardHolder(view, viewInterface);
@@ -140,8 +141,7 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new OwnerListHolder(view, viewInterface);
         }
-    }
-    , REQUESTLIST(R.layout.request_list) {
+    }, REQUESTLIST(R.layout.request_list) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new RequestedHolder(view, viewInterface);
@@ -196,116 +196,127 @@ public enum HolderMapping {
         return layout;
     }
 
-    public static int getOrdinal(BaseResponse item, int totalCount) {
+    public static int getOrdinal(BaseResponse item, int totalCount, String callFromType) {
         int returnView = 0;
         if (null != item) {
-            if (item instanceof FeedDetail) {
-                String feedType = ((FeedDetail) item).getSubType();
-                switch (feedType) {
-                    case AppConstants.FEED_ARTICLE:
-                        returnView = FEED_ARTICLE.ordinal();
-                        break;
-                    case AppConstants.FEED_COMMUNITY:
-                        returnView = FEED_COMMUNITY.ordinal();
-                        break;
-                    case AppConstants.FEED_JOB:
-                        returnView = FEED_JOB.ordinal();
-                        break;
-                    case AppConstants.FEED_COMMUNITY_POST:
-                        returnView = FEED_COMMUNITY_POST.ordinal();
-                        break;
-                    //TODO: communitydetail header need to change
-                    case AppConstants.MY_COMMUNITIES_HEADER:
-                        returnView = COMMUNITY_DETAIL_HEADER.ordinal();
-                        break;
-                    default:
+            if (callFromType.equalsIgnoreCase(AppConstants.FEED_SUB_TYPE)) {
+                if (item instanceof FeedDetail) {
+                    String feedType = ((FeedDetail) item).getSubType().toUpperCase();
+                    switch (feedType) {
+                        case AppConstants.FEED_ARTICLE:
+                            returnView = FEED_ARTICLE.ordinal();
+                            break;
+                        case AppConstants.FEED_COMMUNITY:
+                            returnView = FEED_COMMUNITY.ordinal();
+                            break;
+                        case AppConstants.FEED_JOB:
+                            returnView = FEED_JOB.ordinal();
+                            break;
+                        case AppConstants.FEED_COMMUNITY_POST:
+                            returnView = FEED_COMMUNITY_POST.ordinal();
+                            break;
+                        //TODO: communitydetail header need to change
+                        case AppConstants.MY_COMMUNITIES_HEADER:
+                            returnView = COMMUNITY_DETAIL_HEADER.ordinal();
+                            break;
+                        default:
+                    }
                 }
-            } else if (item instanceof HomeSpinnerItem) {
-                String id = ((HomeSpinnerItem) item).getId();
-                if (id.equalsIgnoreCase(String.valueOf(totalCount))) {
-                    return HOME_SPINNER_FOOTER.ordinal();
-                } else {
-                    return HOME_SPINNER_ITEMS.ordinal();
+            } else {
+                if (item instanceof FeedDetail) {
+                    FeedDetail feedDetail=((FeedDetail) item);
+                    String feedType =feedDetail.getSubType().toUpperCase();
+                    switch (feedType) {
+                        case AppConstants.FEED_ARTICLE:
+                            returnView = ARTICLE_CARD_HOLDER.ordinal();
+                            break;
+                        case AppConstants.FEED_COMMUNITY:
+                            if(feedDetail.isFeatured())
+                            {
+                                returnView = FEATURE_CARD.ordinal();
+
+                             //   return SUGGESTED_CARD_HOLDER.ordinal();
+                            }
+                            else {
+                                returnView = MY_COMMUNITIES_CARD.ordinal();
+                            }
+                            break;
+                        case AppConstants.FEED_JOB:
+                            returnView = FEED_JOB.ordinal();
+                            break;
+                        //TODO: communitydetail header need to change
+                        case AppConstants.MY_COMMUNITIES_HEADER:
+                            returnView = COMMUNITY_DETAIL_HEADER.ordinal();
+                            break;
+                        default:
+                    }
+                } else if (item instanceof HomeSpinnerItem) {
+                    String id = ((HomeSpinnerItem) item).getId();
+                    if (id.equalsIgnoreCase(String.valueOf(totalCount))) {
+                        return HOME_SPINNER_FOOTER.ordinal();
+                    } else {
+                        return HOME_SPINNER_ITEMS.ordinal();
+                    }
+                } else if (item instanceof DrawerItems) {
+                    return DRAWER_ITEMS.ordinal();
+                } else if (item instanceof ArticleCardResponse) {
+                    return ARTICLE_CARD_HOLDER.ordinal();
+                } else if (item instanceof MyCommunities) {
+                    return MY_COMMUNITIES_CARD.ordinal();
+                } else if (item instanceof Feature) {
+                    String id = ((Feature) item).getId();
+                    if (id.equalsIgnoreCase("1")) {
+                        return SUGGESTED_CARD_HOLDER.ordinal();
+                    } else {
+                        return FEATURE_CARD.ordinal();
+                    }
+
+                } else if (item instanceof CommentsList) {
+                    return COMMENT.ordinal();
+
+                } else if (item instanceof ReactionList) {
+                    return REACTION.ordinal();
+
+                } else if (item instanceof ListOfInviteSearch) {
+                    return INVITE_SEARCH_MODULE.ordinal();
+
+                } else if (item instanceof RequestedList) {
+                    return REQUESTLIST.ordinal();
+                } else if (item instanceof OwnerList) {
+                    return OWNERLIST.ordinal();
+                } else if (item instanceof MembersList) {
+                    return MEMBERLIST.ordinal();
+                } else if (item instanceof CommunityList) {
+                    return SELECTDILOG.ordinal();
+                } else if (item instanceof CommunityTags) {
+                    return SEARCHTAGS.ordinal();
+                } else if (item instanceof CommunitySuggestion) {
+                    return COMMUNITY_SUGGESTED_BY_HOLDER.ordinal();
+
+                } else if (item instanceof ListOfSearch) {
+                    return SEARCH_MODULE.ordinal();
+
+                } else if (item instanceof ArticleDetailPojo) {
+                    String id = ((ArticleDetailPojo) item).getId();
+                    if (id.equalsIgnoreCase("2")) {
+                        return ARTICLE_DETAIL_SUGGESTED_HOLDER.ordinal();
+                    } else {
+                        return ARTICLE_DETAIL_HOLDER.ordinal();
+                    }
+                } else if (item instanceof ArticleDetailSuggestion) {
+                    return ARTICLE_DETAIL_WITHIN_SUGGESTED_HOLDER.ordinal();
+
+                } else if (item instanceof ProfileItems) {
+                    return PROFILE_HOLDER.ordinal();
+
                 }
-            } else if (item instanceof DrawerItems) {
-                return DRAWER_ITEMS.ordinal();
-            } else if (item instanceof ArticleCardResponse) {
-                // return SEARCH_MODULE.ordinal();
-                return ARTICLE_CARD_HOLDER.ordinal();
-            } else if (item instanceof MyCommunities) {
-                return MY_COMMUNITIES_CARD.ordinal();
-            } else if (item instanceof Feature) {
-                String id = ((Feature) item).getId();
-                if (id.equalsIgnoreCase("1")) {
-                    return SUGGESTED_CARD_HOLDER.ordinal();
-                } else {
-                    return FEATURE_CARD.ordinal();
+                else if (item instanceof CommentDoc) {
+                    return COMMENT.ordinal();
                 }
-
-            } else if (item instanceof CommentsList) {
-                return COMMENT.ordinal();
-
-            } else if (item instanceof ReactionList) {
-                return REACTION.ordinal();
-
-        }
-            else if (item instanceof ListOfInviteSearch) {
-                return INVITE_SEARCH_MODULE.ordinal();
-
             }
-            else if(item instanceof RequestedList)
-            {
-                return REQUESTLIST.ordinal();
-            }
-        else if (item instanceof OwnerList) {
-                return OWNERLIST.ordinal();
-            } else if (item instanceof MembersList) {
-                return MEMBERLIST.ordinal();
-            } else if (item instanceof CommunityList) {
-                return SELECTDILOG.ordinal();
-            }
-            else if(item instanceof CommunityTags)
-            {
-                return SEARCHTAGS.ordinal();
-            }
-        else if(item instanceof CommunityList)
-        {
-            return SELECTDILOG.ordinal();
-        } else if (item instanceof CommunitySuggestion) {
-                return COMMUNITY_SUGGESTED_BY_HOLDER.ordinal();
-
-            } else if (item instanceof ListOfSearch) {
-                return SEARCH_MODULE.ordinal();
-
-            } else if (item instanceof ArticleDetailPojo) {
-                String id = ((ArticleDetailPojo) item).getId();
-                if (id.equalsIgnoreCase("2")) {
-                    return ARTICLE_DETAIL_SUGGESTED_HOLDER.ordinal();
-                } else {
-                    return ARTICLE_DETAIL_HOLDER.ordinal();
-                }
-            } else if (item instanceof ArticleDetailSuggestion) {
-                return ARTICLE_DETAIL_WITHIN_SUGGESTED_HOLDER.ordinal();
-
-            }else if (item instanceof ProfileItems) {
-                return PROFILE_HOLDER.ordinal();
-
-            }
-
         }
 
         return returnView;
-    }
-
-    public static int getOrdinalForHeader(BaseResponse item) {
-        int returnView = 0;
-        if (null != item) {
-            if (item instanceof MyCommunities)
-                returnView = COMMUNITY_DETAIL_HEADER.ordinal();
-        }
-
-        return returnView;
-
     }
 
 }

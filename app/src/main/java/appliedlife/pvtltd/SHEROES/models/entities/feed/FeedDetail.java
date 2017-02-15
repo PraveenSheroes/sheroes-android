@@ -1,14 +1,19 @@
 
 package appliedlife.pvtltd.SHEROES.models.entities.feed;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.LastComment;
 
-public class FeedDetail extends BaseResponse{
+public class FeedDetail extends BaseResponse implements Parcelable {
     @SerializedName("search_id_post_image")
     private List<Long> imagesIds;
 
@@ -152,6 +157,36 @@ public class FeedDetail extends BaseResponse{
     @SerializedName("functional_area_ss")
     private List<String> functionalAreaNames;
 
+    /*Like and comment*/
+    @SerializedName("reacted_value")
+    @Expose
+    private int reactionValue;
+    @SerializedName("no_of_likes")
+    @Expose
+    private int noOfLikes;
+    @SerializedName("no_of_comments")
+    @Expose
+    private int noOfComments;
+    @SerializedName("last_comment")
+    @Expose
+    private LastComment lastComment;
+
+
+    public List<Long> getImagesIds() {
+        return imagesIds;
+    }
+
+    public void setImagesIds(List<Long> imagesIds) {
+        this.imagesIds = imagesIds;
+    }
+
+    public List<String> getImageUrls() {
+        return imageUrls;
+    }
+
+    public void setImageUrls(List<String> imageUrls) {
+        this.imageUrls = imageUrls;
+    }
 
     public String getCommunityType() {
         return communityType;
@@ -561,6 +596,37 @@ public class FeedDetail extends BaseResponse{
         this.functionalAreaNames = functionalAreaNames;
     }
 
+    public int getReactionValue() {
+        return reactionValue;
+    }
+
+    public void setReactionValue(int reactionValue) {
+        this.reactionValue = reactionValue;
+    }
+
+    public int getNoOfLikes() {
+        return noOfLikes;
+    }
+
+    public void setNoOfLikes(int noOfLikes) {
+        this.noOfLikes = noOfLikes;
+    }
+
+    public int getNoOfComments() {
+        return noOfComments;
+    }
+
+    public void setNoOfComments(int noOfComments) {
+        this.noOfComments = noOfComments;
+    }
+
+    public LastComment getLastComment() {
+        return lastComment;
+    }
+
+    public void setLastComment(LastComment lastComment) {
+        this.lastComment = lastComment;
+    }
 
     public String getId() {
         return id;
@@ -682,19 +748,191 @@ public class FeedDetail extends BaseResponse{
         isDeleted = deleted;
     }
 
-    public List<Long> getImagesIds() {
-        return imagesIds;
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
-    public void setImagesIds(List<Long> imagesIds) {
-        this.imagesIds = imagesIds;
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeList(this.imagesIds);
+        dest.writeStringList(this.imageUrls);
+        dest.writeString(this.communityType);
+        dest.writeByte(this.active ? (byte) 1 : (byte) 0);
+        dest.writeString(this.id);
+        dest.writeLong(this.entityOrParticipantId);
+        dest.writeLong(this.idOfEntityOrParticipant);
+        dest.writeString(this.type);
+        dest.writeString(this.subType);
+        dest.writeString(this.nameOrTitle);
+        dest.writeString(this.imageUrl);
+        dest.writeString(this.thumbnailImageUrl);
+        dest.writeString(this.shortDescription);
+        dest.writeString(this.description);
+        dest.writeString(this.listShortDescription);
+        dest.writeString(this.listDescription);
+        dest.writeStringList(this.tags);
+        dest.writeList(this.tag_ids);
+        dest.writeByte(this.isDeleted ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isActive ? (byte) 1 : (byte) 0);
+        dest.writeString(this.createdDate);
+        dest.writeByte(this.isExpired ? (byte) 1 : (byte) 0);
+        dest.writeString(this.lastModifiedDate);
+        dest.writeLong(this.authorParticipantId);
+        dest.writeLong(this.authorId);
+        dest.writeByte(this.isAuthorConfidential ? (byte) 1 : (byte) 0);
+        dest.writeString(this.authorParticipantType);
+        dest.writeString(this.authorFirstName);
+        dest.writeString(this.authorLastName);
+        dest.writeString(this.authorName);
+        dest.writeString(this.authorImageUrl);
+        dest.writeByte(this.isAuthorImagePublic ? (byte) 1 : (byte) 0);
+        dest.writeString(this.authorCityId);
+        dest.writeString(this.authorCityName);
+        dest.writeString(this.authorShortDescription);
+        dest.writeByte(this.isFeatured ? (byte) 1 : (byte) 0);
+        dest.writeStringList(this.opportunityTypes);
+        dest.writeStringList(this.employmentTypes);
+        dest.writeStringList(this.skills);
+        dest.writeList(this.totalExperience);
+        dest.writeValue(this.cityId);
+        dest.writeString(this.cityName);
+        dest.writeList(this.skillIds);
+        dest.writeStringList(this.searchTextSkills);
+        dest.writeList(this.opportunityTypeIds);
+        dest.writeStringList(this.searchIdOpportunityTypes);
+        dest.writeList(this.canHelpInIds);
+        dest.writeStringList(this.canHelpIns);
+        dest.writeList(this.experienceIds);
+        dest.writeStringList(this.experienceTitles);
+        dest.writeList(this.experienceCompanyIds);
+        dest.writeStringList(this.experienceCompanyNames);
+        dest.writeList(this.currExperienceIds);
+        dest.writeStringList(this.currExperienceTitles);
+        dest.writeList(this.currExperienceCompanyIds);
+        dest.writeStringList(this.currExperienceCompanyNames);
+        dest.writeList(this.educationIds);
+        dest.writeList(this.educationSchoolIds);
+        dest.writeStringList(this.educationSchoolNames);
+        dest.writeList(this.educationDegreeIds);
+        dest.writeStringList(this.educationDegreeNames);
+        dest.writeString(this.gender);
+        dest.writeValue(this.currently_id);
+        dest.writeString(this.currently);
+        dest.writeInt(this.noOfChildren);
+        dest.writeList(this.interestId);
+        dest.writeStringList(this.interestNames);
+        dest.writeList(this.functionalAreaIds);
+        dest.writeStringList(this.functionalAreaNames);
+        dest.writeInt(this.reactionValue);
+        dest.writeInt(this.noOfLikes);
+        dest.writeInt(this.noOfComments);
+        dest.writeParcelable(this.lastComment, flags);
     }
 
-    public List<String> getImageUrls() {
-        return imageUrls;
+    public FeedDetail() {
     }
 
-    public void setImageUrls(List<String> imageUrls) {
-        this.imageUrls = imageUrls;
+    protected FeedDetail(Parcel in) {
+        this.imagesIds = new ArrayList<Long>();
+        in.readList(this.imagesIds, Long.class.getClassLoader());
+        this.imageUrls = in.createStringArrayList();
+        this.communityType = in.readString();
+        this.active = in.readByte() != 0;
+        this.id = in.readString();
+        this.entityOrParticipantId = in.readLong();
+        this.idOfEntityOrParticipant = in.readLong();
+        this.type = in.readString();
+        this.subType = in.readString();
+        this.nameOrTitle = in.readString();
+        this.imageUrl = in.readString();
+        this.thumbnailImageUrl = in.readString();
+        this.shortDescription = in.readString();
+        this.description = in.readString();
+        this.listShortDescription = in.readString();
+        this.listDescription = in.readString();
+        this.tags = in.createStringArrayList();
+        this.tag_ids = new ArrayList<Long>();
+        in.readList(this.tag_ids, Long.class.getClassLoader());
+        this.isDeleted = in.readByte() != 0;
+        this.isActive = in.readByte() != 0;
+        this.createdDate = in.readString();
+        this.isExpired = in.readByte() != 0;
+        this.lastModifiedDate = in.readString();
+        this.authorParticipantId = in.readLong();
+        this.authorId = in.readLong();
+        this.isAuthorConfidential = in.readByte() != 0;
+        this.authorParticipantType = in.readString();
+        this.authorFirstName = in.readString();
+        this.authorLastName = in.readString();
+        this.authorName = in.readString();
+        this.authorImageUrl = in.readString();
+        this.isAuthorImagePublic = in.readByte() != 0;
+        this.authorCityId = in.readString();
+        this.authorCityName = in.readString();
+        this.authorShortDescription = in.readString();
+        this.isFeatured = in.readByte() != 0;
+        this.opportunityTypes = in.createStringArrayList();
+        this.employmentTypes = in.createStringArrayList();
+        this.skills = in.createStringArrayList();
+        this.totalExperience = new ArrayList<Long>();
+        in.readList(this.totalExperience, Long.class.getClassLoader());
+        this.cityId = (Long) in.readValue(Long.class.getClassLoader());
+        this.cityName = in.readString();
+        this.skillIds = new ArrayList<Long>();
+        in.readList(this.skillIds, Long.class.getClassLoader());
+        this.searchTextSkills = in.createStringArrayList();
+        this.opportunityTypeIds = new ArrayList<Long>();
+        in.readList(this.opportunityTypeIds, Long.class.getClassLoader());
+        this.searchIdOpportunityTypes = in.createStringArrayList();
+        this.canHelpInIds = new ArrayList<Long>();
+        in.readList(this.canHelpInIds, Long.class.getClassLoader());
+        this.canHelpIns = in.createStringArrayList();
+        this.experienceIds = new ArrayList<Long>();
+        in.readList(this.experienceIds, Long.class.getClassLoader());
+        this.experienceTitles = in.createStringArrayList();
+        this.experienceCompanyIds = new ArrayList<Long>();
+        in.readList(this.experienceCompanyIds, Long.class.getClassLoader());
+        this.experienceCompanyNames = in.createStringArrayList();
+        this.currExperienceIds = new ArrayList<Long>();
+        in.readList(this.currExperienceIds, Long.class.getClassLoader());
+        this.currExperienceTitles = in.createStringArrayList();
+        this.currExperienceCompanyIds = new ArrayList<Long>();
+        in.readList(this.currExperienceCompanyIds, Long.class.getClassLoader());
+        this.currExperienceCompanyNames = in.createStringArrayList();
+        this.educationIds = new ArrayList<Long>();
+        in.readList(this.educationIds, Long.class.getClassLoader());
+        this.educationSchoolIds = new ArrayList<Long>();
+        in.readList(this.educationSchoolIds, Long.class.getClassLoader());
+        this.educationSchoolNames = in.createStringArrayList();
+        this.educationDegreeIds = new ArrayList<Long>();
+        in.readList(this.educationDegreeIds, Long.class.getClassLoader());
+        this.educationDegreeNames = in.createStringArrayList();
+        this.gender = in.readString();
+        this.currently_id = (Long) in.readValue(Long.class.getClassLoader());
+        this.currently = in.readString();
+        this.noOfChildren = in.readInt();
+        this.interestId = new ArrayList<Long>();
+        in.readList(this.interestId, Long.class.getClassLoader());
+        this.interestNames = in.createStringArrayList();
+        this.functionalAreaIds = new ArrayList<Long>();
+        in.readList(this.functionalAreaIds, Long.class.getClassLoader());
+        this.functionalAreaNames = in.createStringArrayList();
+        this.reactionValue = in.readInt();
+        this.noOfLikes = in.readInt();
+        this.noOfComments = in.readInt();
+        this.lastComment = in.readParcelable(LastComment.class.getClassLoader());
     }
+
+    public static final Parcelable.Creator<FeedDetail> CREATOR = new Parcelable.Creator<FeedDetail>() {
+        @Override
+        public FeedDetail createFromParcel(Parcel source) {
+            return new FeedDetail(source);
+        }
+
+        @Override
+        public FeedDetail[] newArray(int size) {
+            return new FeedDetail[size];
+        }
+    };
 }

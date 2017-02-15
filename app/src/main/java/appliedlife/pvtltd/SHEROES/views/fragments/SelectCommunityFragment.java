@@ -123,6 +123,11 @@ public class SelectCommunityFragment extends DialogFragment implements Community
     }
 
     @Override
+    public void userCommentLikeRequest(long entityId, int reactionValue) {
+
+    }
+
+    @Override
     public List getListData() {
         return null;
     }

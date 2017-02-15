@@ -98,6 +98,10 @@ public class HomeSearchActivity extends BaseActivity implements BaseHolderInterf
     public void setListData(BaseResponse data, boolean flag) {
     }
 
+    @Override
+    public void userCommentLikeRequest(long entityId, int reactionValue) {
+
+    }
 
 
     @Override

@@ -3,7 +3,7 @@ package appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseMvpView;
-import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentsList;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.ReactionList;
 
 /**
@@ -11,7 +11,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.ReactionList;
  */
 
 public interface AllCommentReactionView extends BaseMvpView {
-    void getAllComments(List<CommentsList> data);
+    void getAllComments(CommentResponsePojo commentResponsePojo);
     void getAllReactions(List<ReactionList> data);
     void showNwError();
 }

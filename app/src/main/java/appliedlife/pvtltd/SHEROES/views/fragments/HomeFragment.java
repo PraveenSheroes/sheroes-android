@@ -16,6 +16,7 @@ import android.widget.ProgressBar;
 
 import com.crashlytics.android.Crashlytics;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -25,11 +26,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.database.dbentities.MasterData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.Feature;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.MyCommunities;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -66,6 +63,7 @@ public class HomeFragment extends BaseFragment implements HomeView {
     private HomeActivityIntractionListner mHomeActivityIntractionListner;
     private SwipPullRefreshList mPullRefreshList;
     private AppUtils mAppUtils;
+    public List<FeedDetail> mFeedDetailList=new ArrayList<>();
     public static HomeFragment createInstance(int itemsCount) {
         HomeFragment partThreeFragment = new HomeFragment();
         // Bundle bundle = new Bundle();
@@ -103,7 +101,6 @@ public class HomeFragment extends BaseFragment implements HomeView {
         mPullRefreshList.setPullToRefresh(false);
         mHomePresenter.attachView(this);
 
-     //   mHomePresenter.saveMasterDataTypes();
       //  mHomePresenter.saveMasterDataTypes();
 
         mLayoutManager = new LinearLayoutManager(getContext());
@@ -145,19 +142,28 @@ public class HomeFragment extends BaseFragment implements HomeView {
                 }
             }
         });
-        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder());
+        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE));
         swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 // Refresh items
                 LogUtils.info("swipe", "*****************end called");
                   mPullRefreshList.setPullToRefresh(true);
-                   mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder());
+                   mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE));
             }
         });
         return view;
     }
-
+    public void likeAndUnlikeRequest(long entityId, int reactionValue)
+    {
+        if(reactionValue==0) {
+            mHomePresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(entityId, reactionValue));
+        }
+        else
+        {
+            mHomePresenter.getUnLikesFromPresenter(mAppUtils.unLikeRequestBuilder(entityId));
+        }
+    }
     private void logUser() {
         // TODO: Use the current user's information
         // You can call any combination of these three methods
@@ -180,6 +186,7 @@ public class HomeFragment extends BaseFragment implements HomeView {
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
             mPullRefreshList.allListData(feedDetailList);
             mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
+            mAdapter.setCallForRecycler(AppConstants.FEED_SUB_TYPE);
             mAdapter.notifyDataSetChanged();
             if (!mPullRefreshList.isPullToRefresh()) {
                 mLayoutManager.scrollToPositionWithOffset(mPullRefreshList.getFeedResponses().size() - feedDetailList.size(), 0);
@@ -191,18 +198,9 @@ public class HomeFragment extends BaseFragment implements HomeView {
     }
 
     @Override
-    public void getHomeSpinnerListSuccess(List<HomeSpinnerItem> data) {
-
-    }
-
-    @Override
-    public void getArticleListSuccess(List<ArticleCardResponse> data) {
-
-    }
-
-    @Override
-    public void getAllCommunitiesSuccess(List<MyCommunities> myCommunities, List<Feature> features) {
-
+    public void getLikesSuccess(String success) {
+        mAdapter.notifyDataSetChanged();
+        LogUtils.info("likes", "*********************like success******"+success);
     }
 
     @Override
@@ -215,7 +213,7 @@ public class HomeFragment extends BaseFragment implements HomeView {
 
     @Override
     public void showNwError() {
-        mHomeActivityIntractionListner.onErrorOccurence();
+       // mHomeActivityIntractionListner.onErrorOccurence();
     }
 
 
@@ -232,7 +230,7 @@ public class HomeFragment extends BaseFragment implements HomeView {
 
     @Override
     public void showError(String errorMsg) {
-        mAdapter.notifyDataSetChanged();
+
     }
 
     @Override

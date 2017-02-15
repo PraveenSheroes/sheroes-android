@@ -20,13 +20,10 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.database.dbentities.MasterData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.Feature;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.MyCommunities;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
@@ -56,7 +53,7 @@ public class ArticlesFragment extends BaseFragment implements HomeView {
     private LinearLayoutManager mLayoutManager;
     private HomeActivityIntractionListner mHomeActivityIntractionListner;
     private SwipPullRefreshList mPullRefreshList;
-
+    private AppUtils mAppUtils;
 
 
     public static ArticlesFragment createInstance(int itemsCount) {
@@ -79,12 +76,13 @@ public class ArticlesFragment extends BaseFragment implements HomeView {
         }
     }
 
-     @Nullable
-     @Override
+    @Nullable
+    @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.bind(this, view);
+        mAppUtils = AppUtils.getInstance();
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
         mHomePresenter.attachView(this);
@@ -94,7 +92,7 @@ public class ArticlesFragment extends BaseFragment implements HomeView {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
 
-        mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager,AppConstants.ARTICLE_FRAGMENT) {
+        mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager, AppConstants.ARTICLE_FRAGMENT) {
             @Override
             public void onHide() {
                 ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.INVISIBLE);
@@ -110,39 +108,28 @@ public class ArticlesFragment extends BaseFragment implements HomeView {
 
             }
         });
-        mHomePresenter.getHomePresenterArticleList(new ArticleCardResponse());
+        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_ARTICLE));
         swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 // Refresh items
                 LogUtils.info("swipe", "*****************end called");
-                 mPullRefreshList.setPullToRefresh(true);
-                mHomePresenter.getHomePresenterArticleList(new ArticleCardResponse());
+                mPullRefreshList.setPullToRefresh(true);
+                mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_ARTICLE));
             }
         });
         return view;
     }
 
 
-
     @Override
     public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
-
-    }
-
-    @Override
-    public void getHomeSpinnerListSuccess(List<HomeSpinnerItem> data) {
-
-    }
-
-    @Override
-    public void getArticleListSuccess(List<ArticleCardResponse> articleCardResponses) {
-        if (StringUtil.isNotEmptyCollection(articleCardResponses)) {
-            mPullRefreshList.allListData(articleCardResponses);
+        if (StringUtil.isNotEmptyCollection(feedDetailList)) {
+            mPullRefreshList.allListData(feedDetailList);
             mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
             mAdapter.notifyDataSetChanged();
             if (!mPullRefreshList.isPullToRefresh()) {
-                mLayoutManager.scrollToPositionWithOffset(mPullRefreshList.getFeedResponses().size() - articleCardResponses.size(), 0);
+                mLayoutManager.scrollToPositionWithOffset(mPullRefreshList.getFeedResponses().size() - feedDetailList.size(), 0);
             } else {
                 mLayoutManager.scrollToPositionWithOffset(0, 0);
             }
@@ -151,9 +138,10 @@ public class ArticlesFragment extends BaseFragment implements HomeView {
     }
 
     @Override
-    public void getAllCommunitiesSuccess(List<MyCommunities> myCommunities, List<Feature> features) {
+    public void getLikesSuccess(String success) {
 
     }
+
 
     @Override
     public void getDB(List<MasterData> masterDatas) {

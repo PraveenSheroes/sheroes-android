@@ -98,6 +98,11 @@ public class CreateCommunityPostActivity extends BaseActivity implements CreateC
     }
 
     @Override
+    public void userCommentLikeRequest(long entityId, int reactionValue) {
+
+    }
+
+    @Override
     public List getListData() {
         return null;
     }

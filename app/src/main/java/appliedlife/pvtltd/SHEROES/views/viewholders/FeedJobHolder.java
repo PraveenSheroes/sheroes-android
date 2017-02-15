@@ -68,12 +68,10 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
         allTextViewStringOperations(context);
     }
     private void imageOperations(Context context) {
-        String feedCircleIconUrl = dataItem.getThumbnailImageUrl();
+        String feedCircleIconUrl = dataItem.getAuthorImageUrl();
         if(StringUtil.isNotNullOrEmptyString(feedCircleIconUrl)) {
             Glide.with(context)
-                    //TODO:: need change
-                  //  .load(feedCircleIconUrl)
-                    .load("https://img.sheroes.in/img/uploads/forumbloggallary/14846520381484652038.png")
+                    .load(feedCircleIconUrl)
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .skipMemoryCache(true)
                     .into(ivFeedJobCircleIcon);

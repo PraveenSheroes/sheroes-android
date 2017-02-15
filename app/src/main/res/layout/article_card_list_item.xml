@@ -143,17 +143,6 @@
                     android:textColor="@color/feed_article_label"
                     android:textSize="@dimen/sp_size_12" />
 
-                <TextView
-                    android:id="@+id/tv_article_join"
-                    android:layout_width="@dimen/dp_size_80"
-                    android:layout_height="@dimen/dp_size_30"
-                    android:background="@drawable/rectangle_feed_commnity_join"
-                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:gravity="center"
-                    android:text="@string/ID_JOIN"
-                    android:textColor="@color/footer_icon_text"
-                    android:textSize="@dimen/sp_size_12" />
-
             </LinearLayout>
 
         </LinearLayout>

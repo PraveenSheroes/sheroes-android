@@ -3,8 +3,6 @@ package appliedlife.pvtltd.SHEROES.views.cutomeviews;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.Feature;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -78,21 +76,20 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
         int lastVisibleItem = mManager.findLastVisibleItemPosition();
 
         if (!loading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
-
+            AppUtils appUtils = AppUtils.getInstance();
             switch (mCallFromFragment)
             {
                 case AppConstants.ARTICLE_FRAGMENT:
-                    mHomePresenter.getHomePresenterArticleList(new ArticleCardResponse());
+                    mHomePresenter.getFeedFromPresenter(appUtils.feedRequestBuilder(AppConstants.FEED_ARTICLE));
                     break;
                 case AppConstants.FEATURE_FRAGMENT:
-                    mHomePresenter.getHomePresenterCommunitiesList(new Feature());
+                    mHomePresenter.getFeedFromPresenter(appUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY));
                     break;
                 case AppConstants.MY_COMMUNITIES_FRAGMENT:
-                    mHomePresenter.getHomePresenterCommunitiesList(new Feature());
+                    mHomePresenter.getFeedFromPresenter(appUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY));
                     break;
                 case AppConstants.HOME_FRAGMENT:
-                    AppUtils appUtils = AppUtils.getInstance();
-                    mHomePresenter.getFeedFromPresenter(appUtils.feedRequestBuilder());
+                    mHomePresenter.getFeedFromPresenter(appUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE));
                     break;
                 default:LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + mCallFromFragment);
             }

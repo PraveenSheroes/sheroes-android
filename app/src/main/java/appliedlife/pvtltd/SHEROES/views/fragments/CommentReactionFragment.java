@@ -20,12 +20,15 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentDoc;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentsList;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.ReactionList;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.presenters.CommentReactionPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
@@ -61,7 +64,16 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
     private String mSearchDataName = AppConstants.EMPTY_STRING;
     private GenericRecyclerViewAdapter mAdapter;
     private HomeActivityIntractionListner mHomeActivityIntractionListner;
-
+    private AppUtils mAppUtils;
+    private FeedDetail mFeedDetail;
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (null != getArguments()) {
+            mFragmentOpen = getArguments().getParcelable(AppConstants.FRAGMENT_FLAG_CHECK);
+            mFeedDetail = getArguments().getParcelable(AppConstants.COMMENTS);
+        }
+    }
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -80,9 +92,7 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_comment, container, false);
         ButterKnife.bind(this, view);
-        if (null != getArguments()) {
-            mFragmentOpen = getArguments().getParcelable(AppConstants.FRAGMENT_FLAG_CHECK);
-        }
+        mAppUtils = AppUtils.getInstance();
         mCommentReactionPresenter.attachView(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         if (mFragmentOpen.isOpen()) {
@@ -94,7 +104,9 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mAdapter);
         if (mFragmentOpen.isCommentList()) {
-            mCommentReactionPresenter.getAllCommentListFromPresenter(new CommentRequest());
+            if(null!=mFeedDetail) {
+                mCommentReactionPresenter.getAllCommentListFromPresenter(mAppUtils.commentRequestBuilder(mFeedDetail.getEntityOrParticipantId()));
+            }
         } else if (mFragmentOpen.isReactionList()) {
             mFlCommentReaction.setVisibility(View.GONE);
             liUserComment.setVisibility(View.GONE);
@@ -104,12 +116,12 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
 
         return view;
     }
-
     @Override
-    public void getAllComments(List<CommentsList> data) {
+    public void getAllComments(CommentResponsePojo commentResponsePojo) {
+        List<CommentDoc> commentDocList= commentResponsePojo.getCommentDocList();
         if (mAdapter != null) {
-            mTvUserCommentHeaderText.setText(getString(R.string.ID_REPLIES) + getString(R.string.ID_OPEN_BRACKET) + String.valueOf(data.size()) + getString(R.string.ID_CLOSE_BRACKET));
-            mAdapter.setSheroesGenericListData(data);
+            mTvUserCommentHeaderText.setText(getString(R.string.ID_REPLIES) + getString(R.string.ID_OPEN_BRACKET) + String.valueOf(commentDocList.size()) + getString(R.string.ID_CLOSE_BRACKET));
+            mAdapter.setSheroesGenericListData(commentDocList);
             mAdapter.notifyDataSetChanged();
         }
     }

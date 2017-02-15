@@ -22,13 +22,10 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.database.dbentities.MasterData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.Feature;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.MyCommunities;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
@@ -57,7 +54,7 @@ public class CommunitiesDetailFragment extends BaseFragment implements HomeView 
     private SwipPullRefreshList mPullRefreshList;
     @Bind(R.id.tv_join_view)
     TextView mTvJoinView;
-
+    private AppUtils mAppUtils;
     public static CommunitiesDetailFragment createInstance(int itemsCount) {
         CommunitiesDetailFragment communitiesDetailFragment = new CommunitiesDetailFragment();
         return communitiesDetailFragment;
@@ -81,6 +78,7 @@ public class CommunitiesDetailFragment extends BaseFragment implements HomeView 
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_communities_detail, container, false);
         ButterKnife.bind(this, view);
+        mAppUtils = AppUtils.getInstance();
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
         mHomePresenter.attachView(this);
@@ -112,14 +110,14 @@ public class CommunitiesDetailFragment extends BaseFragment implements HomeView 
 
             }
         });
-     //   mHomePresenter.getFeedFromPresenter(new ListOfFeed());
+        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY));
         swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 // Refresh items
                 LogUtils.info("swipe", "*****************end called");
                 mPullRefreshList.setPullToRefresh(true);
-                mHomePresenter.getHomePresenterCommunitiesList(new Feature());
+                mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY));
             }
         });
         return view;
@@ -128,6 +126,11 @@ public class CommunitiesDetailFragment extends BaseFragment implements HomeView 
 
     @Override
     public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
+
+    }
+
+    @Override
+    public void getLikesSuccess(String success) {
 
     }
 
@@ -150,18 +153,6 @@ public class CommunitiesDetailFragment extends BaseFragment implements HomeView 
             }
         }
     */
-    @Override
-    public void getHomeSpinnerListSuccess(List<HomeSpinnerItem> data) {
-
-    }
-
-    @Override
-    public void getArticleListSuccess(List<ArticleCardResponse> articleCardResponseList) {
-    }
-
-    @Override
-    public void getAllCommunitiesSuccess(List<MyCommunities> myCommunitiesList, List<Feature> featureList) {
-    }
 
     @Override
     public void getDB(List<MasterData> masterDatas) {

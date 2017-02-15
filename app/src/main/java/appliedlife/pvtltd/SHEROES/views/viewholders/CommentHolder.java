@@ -9,7 +9,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentsList;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentDoc;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
@@ -20,7 +20,7 @@ import butterknife.ButterKnife;
  * Created by Praveen_Singh on 24-01-2017.
  */
 
-public class CommentHolder extends BaseViewHolder<CommentsList> {
+public class CommentHolder extends BaseViewHolder<CommentDoc> {
     private final String TAG = LogUtils.makeLogTag(CommentHolder.class);
     @Bind(R.id.li_comment)
     LinearLayout liComment;
@@ -29,7 +29,7 @@ public class CommentHolder extends BaseViewHolder<CommentsList> {
     @Bind(R.id.tv_user_comment)
     TextView tvUserComment;
     BaseHolderInterface viewInterface;
-    private CommentsList dataItem;
+    private CommentDoc dataItem;
     public CommentHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
@@ -38,12 +38,12 @@ public class CommentHolder extends BaseViewHolder<CommentsList> {
     }
 
     @Override
-    public void bindData(CommentsList item, final Context context, int position) {
+    public void bindData(CommentDoc item, final Context context, int position) {
         this.dataItem = item;
-        tvUserComment.setText(item.getDescription());
-        String images = dataItem.getProfilePicUrl();
-        ivCommentProfilePic.setCircularImage(true);
-        ivCommentProfilePic.bindImage(images);
+       // tvUserComment.setText(item.getDescription());
+      //  String images = dataItem.getProfilePicUrl();
+      //  ivCommentProfilePic.setCircularImage(true);
+       // ivCommentProfilePic.bindImage(images);
     }
 
     @Override

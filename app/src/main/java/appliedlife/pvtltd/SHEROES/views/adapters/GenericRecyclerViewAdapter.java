@@ -14,8 +14,7 @@ import java.util.List;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.ListOfInviteSearch;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ListOfSearch;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HolderMapping;
 
 /**
@@ -33,6 +32,7 @@ public class GenericRecyclerViewAdapter<T extends BaseResponse> extends Recycler
     List<T> mSheroesGenericListData = new ArrayList<>();
     BaseHolderInterface viewHolderInterface;
     protected List<T> filterListData;
+    private String mCallFromType= AppConstants.FOR_ALL;
 
     public GenericRecyclerViewAdapter(Context context, BaseHolderInterface viewHolderInterface) {
         this.context = context;
@@ -43,7 +43,9 @@ public class GenericRecyclerViewAdapter<T extends BaseResponse> extends Recycler
         this.mSheroesGenericListData = mSheroesGenericListData;
         this.filterListData = mSheroesGenericListData;
     }
-
+    public void setCallForRecycler(String callFromType) {
+        this.mCallFromType = callFromType;
+    }
     public void addAllDataForList(List<T> data) {
         this.filterListData.addAll(data);
     }
@@ -75,9 +77,8 @@ public class GenericRecyclerViewAdapter<T extends BaseResponse> extends Recycler
 
     @Override
     public int getItemViewType(int position) {
-        return HolderMapping.getOrdinal(filterListData.get(position), filterListData.size());
+        return HolderMapping.getOrdinal(filterListData.get(position), filterListData.size(),mCallFromType);
     }
-
     @Override
     public int getItemCount() {
         return filterListData == null ? 0 : filterListData.size();
@@ -128,7 +129,7 @@ public class GenericRecyclerViewAdapter<T extends BaseResponse> extends Recycler
     protected List<T> getFilteredResults(String constraint) {
         List<T> results = new ArrayList<>();
         for (T item : mSheroesGenericListData) {
-            if (item instanceof ListOfInviteSearch) {
+          /*  if (item instanceof ListOfInviteSearch) {
                 ListOfInviteSearch listOfInviteSearch=(ListOfInviteSearch) item;
                 if (listOfInviteSearch.getFeedTitle().toLowerCase().contains(constraint)) {
                     results.add(item);
@@ -139,7 +140,8 @@ public class GenericRecyclerViewAdapter<T extends BaseResponse> extends Recycler
                 if (listOfSearch.getFeedTitle().toLowerCase().contains(constraint)) {
                     results.add(item);
                 }
-            }
+            }*/
+
         }
         return results;
     }

@@ -7,7 +7,9 @@ import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentResponsePojo;
 import appliedlife.pvtltd.SHEROES.preferences.SessionUser;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import rx.Observable;
@@ -29,12 +31,12 @@ public class CommentReactionModel {
         this.sheroesAppServiceApi = sheroesAppServiceApi;
         this.gson= gson;
     }
-    public Observable<CommentResponse> getAllCommentListFromModel(CommentRequest commentRequest){
-        return sheroesAppServiceApi.getCommentFromApi(commentRequest)
-                .map(new Func1<CommentResponse, CommentResponse>() {
+    public Observable<CommentResponsePojo> getAllCommentListFromModel(CommentRequestPojo commentRequestPojo){
+        return sheroesAppServiceApi.getCommentFromApi(commentRequestPojo)
+                .map(new Func1<CommentResponsePojo, CommentResponsePojo>() {
                     @Override
-                    public CommentResponse call(CommentResponse commentResponse) {
-                        return commentResponse;
+                    public CommentResponsePojo call(CommentResponsePojo commentResponsePojo) {
+                        return commentResponsePojo;
                     }
                 })
                 .subscribeOn(Schedulers.io())

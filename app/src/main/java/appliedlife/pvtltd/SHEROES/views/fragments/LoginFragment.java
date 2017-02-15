@@ -175,7 +175,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
 
     @Override
     public void showNwError() {
-        mLoginActivityIntractionListner.onErrorOccurence();
+       // mLoginActivityIntractionListner.onErrorOccurence();
     }
 
 

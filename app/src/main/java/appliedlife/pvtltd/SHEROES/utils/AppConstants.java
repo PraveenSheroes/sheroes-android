@@ -11,7 +11,6 @@ package appliedlife.pvtltd.SHEROES.utils;
 public class AppConstants {
     public static final int ONEGIGABYTE = 1024 * 1024 * 1024;
     public static final int ANDROID_SDK_24 = 24;
-    public static final String FEED_SUB_TYPE= "f";
     public static final String SPACE=" ";
     public static final String SHEROES_AUTH_TOKEN = "sheroes_auth_token";
     public static final String SHEROES_USER_SESSION = "sheroes_user_session";
@@ -29,11 +28,14 @@ public class AppConstants {
     public static final String COLON = ":";
     public static final String DOTS = "...";
     public static final String S="s";
-    public static final String FEED_COMMUNITY = "c";
-    public static final String FEED_JOB = "j";
-    public static final String FEED_ARTICLE= "a";
-    public static final String FEED_COMMUNITY_POST= "p";
+    public static final String FOR_ALL= "all";
+    public static final String FEED_SUB_TYPE= "F";
+    public static final String FEED_COMMUNITY = "C";
+    public static final String FEED_JOB = "J";
+    public static final String FEED_ARTICLE= "A";
+    public static final String FEED_COMMUNITY_POST= "P";
     public static final String FRAGMENT_FLAG_CHECK = "is_fragment_open";
+    public static final String COMMENTS="comments";
     public static final String NO_REACTION="no_reaction";
     public static final String HEART_REACTION="heart";
     public static final String HOME_FRAGMENT="home";

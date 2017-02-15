@@ -227,6 +227,11 @@ public class ArticleDetailActivity extends BaseActivity implements BaseHolderInt
     }
 
     @Override
+    public void userCommentLikeRequest(long entityId, int reactionValue) {
+
+    }
+
+    @Override
     public List getListData() {
         return null;
     }

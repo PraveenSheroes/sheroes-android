@@ -6,7 +6,9 @@ import java.util.List;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.Response;
 import appliedlife.pvtltd.SHEROES.database.dbentities.MasterData;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityTagsListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.InviteSearchResponse;
@@ -17,6 +19,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.RequestedListRespons
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItemResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
@@ -40,9 +44,22 @@ import rx.Observable;
  */
 public interface SheroesAppServiceApi {
 
-    //@GET("v1/city")
-    @POST("feed/")
+    @POST("participant/feed/")
     Observable<FeedResponsePojo> getFeedFromApi(@Body FeedRequestPojo feedRequestPojo );
+    @POST("participation/reaction/like")
+    Observable<LikeResponse> getLikesFromApi(@Body LikeRequestPojo likeRequestPojo );
+    @POST("participation/reaction/unlike")
+    Observable<LikeResponse> getUnLikesFromApi(@Body LikeRequestPojo likeRequestPojo );
+    @POST("participation/reaction/get_comments")
+    Observable<CommentResponsePojo> getCommentFromApi(@Body CommentRequestPojo commentRequestPojo );
+
+
+
+
+
+
+
+
     @POST("v2/58940613260000a11200a97f")
     Observable<SearchResponse> getSearchResponseFromApi(@Body ListOfSearch listOfSearch );
     @GET("v2/587877da0f0000231d0d49b1")
@@ -62,7 +79,7 @@ public interface SheroesAppServiceApi {
     @GET("/v2/587fb45c270000490af0dd7a")
     Observable<RequestedListResponse> getRequestList();
 
-    @POST("auth/signin")
+    @POST("participant/auth/signin")
     Observable<LoginResponse> getLoginAuthToken(@Body LoginRequest loginRequest);
 
     @POST("v2/588eef663f00007412dde331")
@@ -73,8 +90,6 @@ public interface SheroesAppServiceApi {
     Observable<ArticleListResponse> getOnlyJobList(@Body ArticleCardResponse articleCardResponse);
     @POST("v2/587fc963270000010df0ddac")
     Observable<Feature> getFeature(@Body Feature articleRequest );
-    @POST("v2/588748de100000e11f25e1ec")
-    Observable<CommentResponse> getCommentFromApi(@Body CommentRequest commentRequest );
     @POST("v2/588748de100000e11f25e1ec")
     Observable<CommentResponse> getReactionFromApi(@Body CommentRequest commentRequest );
 

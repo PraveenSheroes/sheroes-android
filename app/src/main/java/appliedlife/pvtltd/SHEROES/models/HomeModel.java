@@ -11,6 +11,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItemResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.CommunitiesResponse;
@@ -47,6 +49,29 @@ public class HomeModel {
                     @Override
                     public FeedResponsePojo call(FeedResponsePojo feedResponsePojo) {
                         return feedResponsePojo;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<LikeResponse> getLikesFromModel(LikeRequestPojo  likeRequestPojo){
+        return sheroesAppServiceApi.getLikesFromApi(likeRequestPojo)
+                .map(new Func1<LikeResponse, LikeResponse>() {
+                    @Override
+                    public LikeResponse call(LikeResponse likeResponse) {
+                        return likeResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+    public Observable<LikeResponse> getUnLikesFromModel(LikeRequestPojo  likeRequestPojo){
+        return sheroesAppServiceApi.getUnLikesFromApi(likeRequestPojo)
+                .map(new Func1<LikeResponse, LikeResponse>() {
+                    @Override
+                    public LikeResponse call(LikeResponse likeResponse) {
+                        return likeResponse;
                     }
                 })
                 .subscribeOn(Schedulers.io())

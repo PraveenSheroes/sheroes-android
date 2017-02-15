@@ -1,18 +1,18 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.content.Intent;
-import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.graphics.Palette;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -31,6 +31,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +43,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.communities.CommunitySuggestion;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
 import appliedlife.pvtltd.SHEROES.models.entities.home.DrawerItems;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
@@ -54,7 +57,7 @@ import appliedlife.pvtltd.SHEROES.views.CustomeDataList;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.adapters.ImageFullViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
-import appliedlife.pvtltd.SHEROES.views.cutomeviews.Blurry;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.BlurrImage;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
@@ -131,6 +134,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
     public View mArticlePopUp, mCommunityPopUp, mCommunityPostPopUp;
     Spinner mSpaboutCommunityspn;
     String[] arraySpinner;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -147,6 +151,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
     public void renderHomeFragmentView() {
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
+
         mCustiomActionBarToggle = new CustiomActionBarToggle(this, mDrawer, mToolbar, R.string.ID_NAVIGATION_DRAWER_OPEN, R.string.ID_NAVIGATION_DRAWER_CLOSE, this);
         mDrawer.addDrawerListener(mCustiomActionBarToggle);
         //TODO: this data to be removed
@@ -164,37 +169,30 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
         initHomeViewPagerAndTabs();
         mHomeSpinnerItemList = CustomeDataList.makeSpinnerListRequest();
         Glide.with(this)
-                .load(profile)
+                .load(profile).asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .skipMemoryCache(true)
-                .into(mIvSideDrawerProfileBlurBackground);
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
+
+                        Bitmap blurred = BlurrImage.blurRenderScript(HomeActivity.this,profileImage,10);
+                        mIvSideDrawerProfileBlurBackground.setImageBitmap(blurred);
+                    }
+                });
         //  HomeSpinnerFragment frag = new HomeSpinnerFragment();
         //  callFirstFragment(R.id.fl_fragment_container, frag);
-     //   new Handler().postDelayed(openDrawerRunnable(), 200);
+        //   new Handler().postDelayed(openDrawerRunnable(), 200);
     }
+
     private Runnable openDrawerRunnable() {
         return new Runnable() {
 
             @Override
             public void run() {
-              //  mDrawer.openDrawer(Gravity.LEFT);
+                //  mDrawer.openDrawer(Gravity.LEFT);
             }
         };
-    }
-    private void applyPalette(Palette palette) {
-        int primaryDark = ContextCompat.getColor(getApplication(), R.color.colorPrimaryDark);
-        int primary = ContextCompat.getColor(getApplication(), R.color.colorPrimary);
-        //  mCollapsingToolbarLayout.setContentScrimColor(palette.getMutedColor(primary));
-        //   mCollapsingToolbarLayout.setStatusBarScrimColor(palette.getDarkMutedColor(primaryDark));
-        //  updateBackground((FloatingActionButton) findViewById(R.id.fab), palette);
-        supportStartPostponedEnterTransition();
-    }
-
-    private void updateBackground(FloatingActionButton fab, Palette palette) {
-        int lightVibrantColor = palette.getLightVibrantColor(getResources().getColor(android.R.color.white));
-        int vibrantColor = palette.getVibrantColor(getResources().getColor(R.color.colorPrimary));
-        fab.setRippleColor(lightVibrantColor);
-        fab.setBackgroundTintList(ColorStateList.valueOf(vibrantColor));
     }
     @Override
     public void onErrorOccurence() {
@@ -209,9 +207,9 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
 
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
-        if (baseResponse instanceof ListOfFeed) {
-            ListOfFeed listOfFeed = (ListOfFeed) baseResponse;
-            feedCardsHandled(view, listOfFeed);
+        if (baseResponse instanceof FeedDetail) {
+            FeedDetail feedDetail = (FeedDetail) baseResponse;
+            feedCardsHandled(view, feedDetail);
         } else if (baseResponse instanceof HomeSpinnerItem) {
             String spinnerHeaderName = ((HomeSpinnerItem) baseResponse).getName();
             if (StringUtil.isNotNullOrEmptyString(spinnerHeaderName)) {
@@ -231,7 +229,6 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
                     break;
                 case 2:
                     openArticleFragment();
-
                     break;
                 case 5:
                     openSettingFragment();
@@ -241,11 +238,10 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
             }
         } else if (baseResponse instanceof CommunitySuggestion) {
 
-        } else if (baseResponse instanceof  ArticleCardResponse) {
+        } else if (baseResponse instanceof ArticleCardResponse) {
             ArticleCardResponse articleCardResponse = (ArticleCardResponse) baseResponse;
             articleCardsHandled(view, articleCardResponse);
-        }
-        else if (baseResponse instanceof MyCommunities) {
+        } else if (baseResponse instanceof MyCommunities) {
             MyCommunities myCommunities = (MyCommunities) baseResponse;
             myCommunityHandled(view, myCommunities);
         }
@@ -258,17 +254,19 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
             openImageFullViewFragment(listOfFeed);
         }
     }
+
     private void myCommunityHandled(View view, MyCommunities myCommunities) {
         int id = view.getId();
         switch (id) {
             case R.id.li_community_images:
-             //   CommunitiesDetailActivity.navigate(this, view, listOfFeed);
+                //   CommunitiesDetailActivity.navigate(this, view, listOfFeed);
                 break;
 
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
         }
     }
+
     private void articleCardsHandled(View view, ArticleCardResponse articleCardResponse) {
         int id = view.getId();
         switch (id) {
@@ -279,26 +277,27 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
         }
     }
-    private void feedCardsHandled(View view, ListOfFeed listOfFeed) {
+
+    private void feedCardsHandled(View view, FeedDetail feedDetail) {
         int id = view.getId();
         switch (id) {
             case R.id.tv_feed_community_post_total_replies:
-                openCommentReactionFragment();
+                openCommentReactionFragment(feedDetail);
                 break;
             case R.id.tv_feed_community_total_replies:
-                openCommentReactionFragment();
+                openCommentReactionFragment(feedDetail);
                 break;
             case R.id.tv_feed_article_total_replies:
-                openCommentReactionFragment();
+                openCommentReactionFragment(feedDetail);
                 break;
             case R.id.li_feed_article_join_conversation:
-                openCommentReactionFragment();
+                openCommentReactionFragment(feedDetail);
                 break;
             case R.id.li_feed_community_join_conversation:
-                openCommentReactionFragment();
+                openCommentReactionFragment(feedDetail);
                 break;
             case R.id.li_feed_community_post_join_conversation:
-                openCommentReactionFragment();
+                openCommentReactionFragment(feedDetail);
                 break;
             case R.id.tv_feed_article_user_reaction:
                 mArticlePopUp = findViewById(R.id.li_feed_article_card_emoji_pop_up);
@@ -368,22 +367,22 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
                 }
                 break;
             case R.id.tv_feed_article_user_comment:
-                openCommentReactionFragment();
+                openCommentReactionFragment(feedDetail);
                 break;
             case R.id.tv_feed_community_user_comment:
-                openCommentReactionFragment();
+                openCommentReactionFragment(feedDetail);
                 break;
             case R.id.tv_feed_community_post_user_comment:
-                openCommentReactionFragment();
+                openCommentReactionFragment(feedDetail);
                 break;
             case R.id.li_feed_article_images:
-                CommunitiesDetailActivity.navigate(this, view, listOfFeed);
+              //  CommunitiesDetailActivity.navigate(this, view, feedDetail);
                 break;
             case R.id.li_feed_community_images:
-                CommunitiesDetailActivity.navigate(this, view, listOfFeed);
+              //  CommunitiesDetailActivity.navigate(this, view, feedDetail);
                 break;
             case R.id.li_feed_community_user_post_images:
-                CommunitiesDetailActivity.navigate(this, view, listOfFeed);
+               // CommunitiesDetailActivity.navigate(this, view, feedDetail);
                 break;
 
             default:
@@ -392,22 +391,24 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
     }
 
 
-    private void openImageFullViewFragment(ListOfFeed listOfFeed ) {
+    private void openImageFullViewFragment(ListOfFeed listOfFeed) {
         ImageFullViewFragment imageFullViewFragment = new ImageFullViewFragment();
         Bundle bundle = new Bundle();
         mFragmentOpen.setCommentList(true);
         bundle.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, mFragmentOpen);
-        bundle.putParcelable(AppConstants.IMAGE_FULL_VIEW,listOfFeed);
+        bundle.putParcelable(AppConstants.IMAGE_FULL_VIEW, listOfFeed);
         imageFullViewFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.bottom_to_top_slide_reverse_anim)
                 .replace(R.id.fl_feed_comments, imageFullViewFragment, ImageFullViewFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
 
     }
-    private void openCommentReactionFragment() {
+
+    private void openCommentReactionFragment(FeedDetail feedDetail) {
         CommentReactionFragment commentReactionFragmentForArticle = new CommentReactionFragment();
         Bundle bundleArticle = new Bundle();
         mFragmentOpen.setCommentList(true);
         bundleArticle.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, mFragmentOpen);
+        bundleArticle.putParcelable(AppConstants.COMMENTS, feedDetail);
         commentReactionFragmentForArticle.setArguments(bundleArticle);
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.bottom_to_top_slide_reverse_anim)
                 .replace(R.id.fl_feed_comments, commentReactionFragmentForArticle, CommentReactionFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
@@ -444,6 +445,16 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
     }
 
     @Override
+    public void userCommentLikeRequest(long entityId, int reactionValue) {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+        if(null!=fragment)
+        {
+            ((HomeFragment) fragment).likeAndUnlikeRequest( entityId,  reactionValue);
+        }
+    }
+
+
+    @Override
     public List getListData() {
         return mHomeSpinnerItemList;
     }
@@ -451,15 +462,15 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
 
     @Override
     public void onDrawerOpened() {
-        if (!mFragmentOpen.isImageBlur()) {
-            Blurry.with(HomeActivity.this)
+       /* if (!mFragmentOpen.isImageBlur()) {
+            BlurrImage.with(HomeActivity.this)
                     .radius(25)
                     .sampling(2)
                     .async()
                     .capture(mIvSideDrawerProfileBlurBackground)
                     .into(mIvSideDrawerProfileBlurBackground);
             mFragmentOpen.setImageBlur(true);
-        }
+        }*/
     }
 
     @Override
@@ -482,8 +493,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
     }
 
     private void initHomeViewPagerAndTabs() {
-        String search = getString(R.string.ID_SEARCH)+AppConstants.COMMA + AppConstants.FEED_ARTICLE + AppConstants.S + AppConstants.COMMA + AppConstants.FEED_COMMUNITY + AppConstants.COMMA + AppConstants.FEED_JOB;
-        mTvSearchBox.setText(search);
+        mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_FEED));
         mFragmentOpen.setFeedOpen(true);
         mTabLayout.setVisibility(View.GONE);
         mTvCommunities.setText(AppConstants.EMPTY_STRING);
@@ -498,11 +508,11 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
     private void initCommunityViewPagerAndTabs() {
         mFragmentOpen.setCommunityOpen(true);
         mTabLayout.setVisibility(View.VISIBLE);
-        mTvCommunities.setText(getString(R.string.ID_COMMUNITIY));
+        mTvCommunities.setText(getString(R.string.ID_SEARCH_IN_COMMUNITIES));
         mTvHome.setText(AppConstants.EMPTY_STRING);
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        viewPagerAdapter.addFragment(FeaturedFragment.createInstance(4), getString(R.string.ID_FEATURED));
-        viewPagerAdapter.addFragment(MyCommunitiesFragment.createInstance(4), getString(R.string.ID_MY_COMMUNITIES));
+        viewPagerAdapter.addFragment(FeaturedFragment.createInstance(), getString(R.string.ID_FEATURED));
+        viewPagerAdapter.addFragment(MyCommunitiesFragment.createInstance(), getString(R.string.ID_MY_COMMUNITIES));
         mViewPager.setAdapter(viewPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
     }
@@ -552,15 +562,13 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
         mTabLayout.setVisibility(View.GONE);
         mTvCommunities.setText(AppConstants.EMPTY_STRING);
         mTvHome.setText(getString(R.string.ID_FEED));
-        String search = getString(R.string.ID_SEARCH) + AppConstants.FEED_ARTICLE + AppConstants.S + AppConstants.COMMA + AppConstants.FEED_COMMUNITY + AppConstants.COMMA + AppConstants.FEED_JOB;
-        mTvSearchBox.setText(search);
+        mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_FEED));
     }
 
     @OnClick(R.id.tv_communities)
     public void communityOnClick() {
         liHomeCommunityButtonLayout.setVisibility(View.VISIBLE);
-        String search = getString(R.string.ID_SEARCH) + AppConstants.COMMA + getString(R.string.ID_COMMUNITIES);
-        mTvSearchBox.setText(search);
+        mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_COMMUNITIES));
         if (mFragmentOpen.isArticleFragment()) {
             onBackPressed();
             mFragmentOpen.setArticleFragment(false);
@@ -597,8 +605,8 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
         mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_unselected_icon), null, null);
         mTvCommunities.setText(AppConstants.EMPTY_STRING);
         ArticlesFragment articlesFragment = new ArticlesFragment();
-        Bundle bundle = new Bundle();
-        articlesFragment.setArguments(bundle);
+        Bundle bundleArticle = new Bundle();
+        articlesFragment.setArguments(bundleArticle);
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
                 .replace(R.id.fl_article_card_view, articlesFragment, ArticlesFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
         mTvSpinnerIcon.setVisibility(View.VISIBLE);
@@ -917,14 +925,16 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
     public void showError(String s) {
 
     }
+
     @OnClick(R.id.fab_add_community)
     public void createCommunityButton() {
         Intent intent = new Intent(getApplicationContext(), CreateCommunityActivity.class);
         startActivity(intent);
     }
+
     @OnClick(R.id.iv_home_notification_icon)
-    public void notificationClick()
-    {
+    public void notificationClick() {
         mDrawer.openDrawer(Gravity.LEFT);
     }
+
 }

@@ -12,7 +12,6 @@ public abstract class BaseResponse
     @Expose
     protected ResponseStatus responseStatus;
 
-
     public ServiceErrors getServiceErrors()
     {
         return serviceErrors;

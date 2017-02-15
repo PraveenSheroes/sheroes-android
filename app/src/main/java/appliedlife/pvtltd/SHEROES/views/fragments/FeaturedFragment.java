@@ -20,13 +20,10 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.database.dbentities.MasterData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.Feature;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.MyCommunities;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
@@ -54,8 +51,8 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
     private LinearLayoutManager mLayoutManager;
     private MyCommunitiesFragment.HomeActivityIntractionListner mHomeActivityIntractionListner;
     private SwipPullRefreshList mPullRefreshList;
-
-    public static FeaturedFragment createInstance(int itemsCount) {
+    private AppUtils mAppUtils;
+    public static FeaturedFragment createInstance() {
         FeaturedFragment featuredFragment = new FeaturedFragment();
         return featuredFragment;
     }
@@ -79,6 +76,7 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.bind(this, view);
+        mAppUtils = AppUtils.getInstance();
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
         mHomePresenter.attachView(this);
@@ -104,14 +102,14 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
 
             }
         });
-        mHomePresenter.getHomePresenterCommunitiesList(new Feature());
+        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY));
         swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 // Refresh items
                 LogUtils.info("swipe", "*****************end called");
                 mPullRefreshList.setPullToRefresh(true);
-                mHomePresenter.getHomePresenterCommunitiesList(new Feature());
+                mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY));
             }
         });
         return view;
@@ -120,35 +118,24 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
 
     @Override
     public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
-
-    }
-
-    @Override
-    public void getHomeSpinnerListSuccess(List<HomeSpinnerItem> data) {
-
-    }
-
-    @Override
-    public void getArticleListSuccess(List<ArticleCardResponse> articleCardResponseList) {
-    }
-
-    @Override
-    public void getAllCommunitiesSuccess(List<MyCommunities> myCommunitiesList, List<Feature> featureList) {
-        if (StringUtil.isNotEmptyCollection(featureList)) {
-            Feature feature=new Feature();
-            feature.setId("1");
-            featureList.add(2,feature);
-            mPullRefreshList.allListData(featureList);
+        if (StringUtil.isNotEmptyCollection(feedDetailList)) {
+            mPullRefreshList.allListData(feedDetailList);
             mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
             mAdapter.notifyDataSetChanged();
             if (!mPullRefreshList.isPullToRefresh()) {
-                mLayoutManager.scrollToPositionWithOffset(mPullRefreshList.getFeedResponses().size() - featureList.size(), 0);
+                mLayoutManager.scrollToPositionWithOffset(mPullRefreshList.getFeedResponses().size() - feedDetailList.size(), 0);
             } else {
                 mLayoutManager.scrollToPositionWithOffset(0, 0);
             }
             swipeView.setRefreshing(false);
         }
     }
+
+    @Override
+    public void getLikesSuccess(String success) {
+
+    }
+
 
     @Override
     public void getDB(List<MasterData> masterDatas) {

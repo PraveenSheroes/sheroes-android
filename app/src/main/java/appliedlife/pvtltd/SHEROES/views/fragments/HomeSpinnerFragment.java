@@ -20,9 +20,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.database.dbentities.MasterData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.Feature;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.MyCommunities;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -104,20 +101,10 @@ public class HomeSpinnerFragment extends BaseFragment implements HomeView {
     }
 
     @Override
-    public void getHomeSpinnerListSuccess(List<HomeSpinnerItem> data) {
-      //  mAdapter.setSheroesGenericListData(MockService.makeSpinnerListRequest());
-      //  mAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void getArticleListSuccess(List<ArticleCardResponse> data) {
+    public void getLikesSuccess(String success) {
 
     }
 
-    @Override
-    public void getAllCommunitiesSuccess(List<MyCommunities> myCommunities, List<Feature> features) {
-
-    }
 
     @Override
     public void getDB(List<MasterData> masterDatas) {
