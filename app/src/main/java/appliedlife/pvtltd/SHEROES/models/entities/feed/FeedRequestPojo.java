@@ -11,6 +11,9 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
 
 public class FeedRequestPojo extends BaseRequest {
 
+    @SerializedName("id")
+    @Expose
+    private String idForFeedDetail;
     @SerializedName("sub_type")
     @Expose
     private String subType;
@@ -33,5 +36,13 @@ public class FeedRequestPojo extends BaseRequest {
 
     public void setQuestion(String question) {
         this.question = question;
+    }
+
+    public String getIdForFeedDetail() {
+        return idForFeedDetail;
+    }
+
+    public void setIdForFeedDetail(String idForFeedDetail) {
+        this.idForFeedDetail = idForFeedDetail;
     }
 }

@@ -1,7 +1,9 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -17,17 +19,20 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -42,6 +47,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionDoc;
 import appliedlife.pvtltd.SHEROES.models.entities.communities.CommunitySuggestion;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
@@ -51,6 +57,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.MyCommunities;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.CustomeDataList;
@@ -125,27 +132,25 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
     LinearLayout liHomeCommunityButtonLayout;
     @Bind(R.id.rl_search_box)
     RelativeLayout mRlSearchBox;
-    TextView mTvFeedArticleUserReaction, mTvFeedCommunityUserReaction, mTvFeedCommunityPostUserReaction;
     GenericRecyclerViewAdapter mAdapter;
     private List<HomeSpinnerItem> mHomeSpinnerItemList = new ArrayList<>();
     private HomeSpinnerFragment mHomeSpinnerFragment;
     private FragmentOpen mFragmentOpen;
     private CustiomActionBarToggle mCustiomActionBarToggle;
     public View mArticlePopUp, mCommunityPopUp, mCommunityPostPopUp;
-    Spinner mSpaboutCommunityspn;
-    String[] arraySpinner;
+    private FeedDetail mFeedDetail;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
         renderHomeFragmentView();
+        assignNavigationRecyclerListView();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        assignNavigationRecyclerListView();
     }
 
     public void renderHomeFragmentView() {
@@ -153,6 +158,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
         ButterKnife.bind(this);
 
         mCustiomActionBarToggle = new CustiomActionBarToggle(this, mDrawer, mToolbar, R.string.ID_NAVIGATION_DRAWER_OPEN, R.string.ID_NAVIGATION_DRAWER_CLOSE, this);
+
         mDrawer.addDrawerListener(mCustiomActionBarToggle);
         //TODO: this data to be removed
         String profile = "https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAhNAAAAJDYwZWIyZTg5LWFmOTItNGIwYS05YjQ5LTM2YTRkNGQ2M2JlNw.jpg";
@@ -165,7 +171,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
         mTvUserLocation.setText("Delhi, India");
         mCustiomActionBarToggle.syncState();
         mNavigationView.setNavigationItemSelectedListener(this);
-        mFragmentOpen = new FragmentOpen(false, false, false, false, false, false, false, false);
+        mFragmentOpen = new FragmentOpen();
         initHomeViewPagerAndTabs();
         mHomeSpinnerItemList = CustomeDataList.makeSpinnerListRequest();
         Glide.with(this)
@@ -176,7 +182,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
                     @Override
                     public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
 
-                        Bitmap blurred = BlurrImage.blurRenderScript(HomeActivity.this,profileImage,10);
+                        Bitmap blurred = BlurrImage.blurRenderScript(HomeActivity.this, profileImage, 10);
                         mIvSideDrawerProfileBlurBackground.setImageBitmap(blurred);
                     }
                 });
@@ -194,6 +200,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
             }
         };
     }
+
     @Override
     public void onErrorOccurence() {
         showNetworkTimeoutDoalog(true);
@@ -208,8 +215,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
         if (baseResponse instanceof FeedDetail) {
-            FeedDetail feedDetail = (FeedDetail) baseResponse;
-            feedCardsHandled(view, feedDetail);
+            feedCardsHandled(view, baseResponse);
         } else if (baseResponse instanceof HomeSpinnerItem) {
             String spinnerHeaderName = ((HomeSpinnerItem) baseResponse).getName();
             if (StringUtil.isNotNullOrEmptyString(spinnerHeaderName)) {
@@ -244,6 +250,8 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
         } else if (baseResponse instanceof MyCommunities) {
             MyCommunities myCommunities = (MyCommunities) baseResponse;
             myCommunityHandled(view, myCommunities);
+        } else if (baseResponse instanceof CommentReactionDoc) {
+            clickMenuItem(view, baseResponse);
         }
     }
 
@@ -271,119 +279,225 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
         int id = view.getId();
         switch (id) {
             case R.id.iv_feed_article_single_image:
-                ArticleDetailActivity.navigateFromArticle(this, view, articleCardResponse);
+                //   ArticleDetailActivity.navigateFromArticle(this, view, articleCardResponse);
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
         }
     }
 
-    private void feedCardsHandled(View view, FeedDetail feedDetail) {
+    private void feedCardsHandled(View view, BaseResponse baseResponse) {
+        mFeedDetail = (FeedDetail) baseResponse;
         int id = view.getId();
         switch (id) {
+            case R.id.tv_feed_article_user_bookmark:
+                bookmarkCall();
+                break;
+            case R.id.tv_feed_article_user_menu:
+                clickMenuItem(view, baseResponse);
+                break;
             case R.id.tv_feed_community_post_total_replies:
-                openCommentReactionFragment(feedDetail);
+                openCommentReactionFragment(mFeedDetail);
                 break;
             case R.id.tv_feed_community_total_replies:
-                openCommentReactionFragment(feedDetail);
+                openCommentReactionFragment(mFeedDetail);
                 break;
             case R.id.tv_feed_article_total_replies:
-                openCommentReactionFragment(feedDetail);
+                openCommentReactionFragment(mFeedDetail);
                 break;
             case R.id.li_feed_article_join_conversation:
-                openCommentReactionFragment(feedDetail);
+                openCommentReactionFragment(mFeedDetail);
                 break;
             case R.id.li_feed_community_join_conversation:
-                openCommentReactionFragment(feedDetail);
+                openCommentReactionFragment(mFeedDetail);
                 break;
             case R.id.li_feed_community_post_join_conversation:
-                openCommentReactionFragment(feedDetail);
+                openCommentReactionFragment(mFeedDetail);
                 break;
             case R.id.tv_feed_article_user_reaction:
-                mArticlePopUp = findViewById(R.id.li_feed_article_card_emoji_pop_up);
-                if (mArticlePopUp.getVisibility() == View.VISIBLE) {
-                    mArticlePopUp.setVisibility(View.GONE);
-                    dismissUserReactionOption(mArticlePopUp);
-                } else {
-                    mTvFeedArticleUserReaction = (TextView) findViewById(R.id.tv_feed_article_user_reaction);
-                    TextView tvArticleReaction = (TextView) mArticlePopUp.findViewById(R.id.tv_reaction);
-                    TextView tvArticleReaction1 = (TextView) mArticlePopUp.findViewById(R.id.tv_reaction1);
-                    TextView tvArticleReaction2 = (TextView) mArticlePopUp.findViewById(R.id.tv_reaction2);
-                    TextView tvArticleReaction3 = (TextView) mArticlePopUp.findViewById(R.id.tv_reaction3);
-                    TextView tvArticleReaction4 = (TextView) mArticlePopUp.findViewById(R.id.tv_reaction4);
-                    mArticlePopUp.setOnTouchListener(this);
-                    tvArticleReaction.setOnClickListener(this);
-                    tvArticleReaction1.setOnClickListener(this);
-                    tvArticleReaction2.setOnClickListener(this);
-                    tvArticleReaction3.setOnClickListener(this);
-                    tvArticleReaction4.setOnClickListener(this);
-                    mArticlePopUp.setVisibility(View.VISIBLE);
-                    showUserReactionOption(mArticlePopUp);
-                }
+                articleUserReaction();
                 break;
             case R.id.tv_feed_community_user_reaction:
-                mCommunityPopUp = findViewById(R.id.li_feed_community_emoji_pop_up);
-                if (mCommunityPopUp.getVisibility() == View.VISIBLE) {
-                    mCommunityPopUp.setVisibility(View.GONE);
-                    dismissUserReactionOption(mCommunityPopUp);
-                } else {
-                    mTvFeedCommunityUserReaction = (TextView) findViewById(R.id.tv_feed_community_user_reaction);
-                    TextView tvCommunityReaction = (TextView) mCommunityPopUp.findViewById(R.id.tv_reaction);
-                    TextView tvCommunityReaction1 = (TextView) mCommunityPopUp.findViewById(R.id.tv_reaction1);
-                    TextView tvCommunityReaction2 = (TextView) mCommunityPopUp.findViewById(R.id.tv_reaction2);
-                    TextView tvCommunityReaction3 = (TextView) mCommunityPopUp.findViewById(R.id.tv_reaction3);
-                    TextView tvCommunityReaction4 = (TextView) mCommunityPopUp.findViewById(R.id.tv_reaction4);
-                    mCommunityPopUp.setOnTouchListener(this);
-                    tvCommunityReaction.setOnClickListener(this);
-                    tvCommunityReaction1.setOnClickListener(this);
-                    tvCommunityReaction2.setOnClickListener(this);
-                    tvCommunityReaction3.setOnClickListener(this);
-                    tvCommunityReaction4.setOnClickListener(this);
-                    mCommunityPopUp.setVisibility(View.VISIBLE);
-                    showUserReactionOption(mCommunityPopUp);
-                }
+                communityUserReaction();
                 break;
             case R.id.tv_feed_community_post_user_reaction:
-                mCommunityPostPopUp = findViewById(R.id.li_feed_community_user_post_emoji_pop_up);
-                if (mCommunityPostPopUp.getVisibility() == View.VISIBLE) {
-                    mCommunityPostPopUp.setVisibility(View.GONE);
-                    dismissUserReactionOption(mCommunityPostPopUp);
-                } else {
-                    mTvFeedCommunityPostUserReaction = (TextView) findViewById(R.id.tv_feed_community_post_user_reaction);
-                    mCommunityPostPopUp = findViewById(R.id.li_feed_community_user_post_emoji_pop_up);
-                    TextView tvCommunityPostReaction = (TextView) mCommunityPostPopUp.findViewById(R.id.tv_reaction);
-                    TextView tvCommunityPostReaction1 = (TextView) mCommunityPostPopUp.findViewById(R.id.tv_reaction1);
-                    TextView tvCommunityPostReaction2 = (TextView) mCommunityPostPopUp.findViewById(R.id.tv_reaction2);
-                    TextView tvCommunityPostReaction3 = (TextView) mCommunityPostPopUp.findViewById(R.id.tv_reaction3);
-                    TextView tvCommunityPostReaction4 = (TextView) mCommunityPostPopUp.findViewById(R.id.tv_reaction4);
-                    mCommunityPostPopUp.setOnTouchListener(this);
-                    tvCommunityPostReaction.setOnClickListener(this);
-                    tvCommunityPostReaction1.setOnClickListener(this);
-                    tvCommunityPostReaction2.setOnClickListener(this);
-                    tvCommunityPostReaction3.setOnClickListener(this);
-                    tvCommunityPostReaction4.setOnClickListener(this);
-                    mCommunityPostPopUp.setVisibility(View.VISIBLE);
-                    showUserReactionOption(mCommunityPostPopUp);
-                }
+                communityPostUserReaction();
                 break;
             case R.id.tv_feed_article_user_comment:
-                openCommentReactionFragment(feedDetail);
+                openCommentReactionFragment(mFeedDetail);
                 break;
             case R.id.tv_feed_community_user_comment:
-                openCommentReactionFragment(feedDetail);
+                openCommentReactionFragment(mFeedDetail);
                 break;
             case R.id.tv_feed_community_post_user_comment:
-                openCommentReactionFragment(feedDetail);
+                openCommentReactionFragment(mFeedDetail);
                 break;
             case R.id.li_feed_article_images:
-              //  CommunitiesDetailActivity.navigate(this, view, feedDetail);
+                ArticleDetailActivity.navigateFromArticle(this, view, mFeedDetail);
                 break;
             case R.id.li_feed_community_images:
-              //  CommunitiesDetailActivity.navigate(this, view, feedDetail);
+                CommunitiesDetailActivity.navigate(this, view, mFeedDetail);
                 break;
             case R.id.li_feed_community_user_post_images:
-               // CommunitiesDetailActivity.navigate(this, view, feedDetail);
+                // CommunitiesDetailActivity.navigate(this, view, mFeedDetail);
                 break;
+            case R.id.tv_article_detail_user_reaction:
+
+                break;
+            case R.id.tv_article_detail_user_comment:
+                break;
+            case R.id.tv_article_detail_total_replies:
+                break;
+            case R.id.tv_article_detail_view_more:
+                break;
+            case R.id.tv_article_detail_user_comment_post_menu:
+                break;
+            case R.id.tv_article_detail_user_comment_post_menu_second:
+                break;
+            case R.id.tv_article_detail_user_comment_post_menu_third:
+                break;
+            case R.id.li_feed_job_card:
+                break;
+            default:
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
+        }
+    }
+
+    private void communityPostUserReaction() {
+        mCommunityPostPopUp = findViewById(R.id.li_feed_community_user_post_emoji_pop_up);
+        if (mCommunityPostPopUp.getVisibility() == View.VISIBLE) {
+            mCommunityPostPopUp.setVisibility(View.GONE);
+            dismissUserReactionOption(mCommunityPostPopUp);
+        } else {
+            mCommunityPostPopUp = findViewById(R.id.li_feed_community_user_post_emoji_pop_up);
+            TextView tvCommunityPostReaction = (TextView) mCommunityPostPopUp.findViewById(R.id.tv_reaction);
+            TextView tvCommunityPostReaction1 = (TextView) mCommunityPostPopUp.findViewById(R.id.tv_reaction1);
+            TextView tvCommunityPostReaction2 = (TextView) mCommunityPostPopUp.findViewById(R.id.tv_reaction2);
+            TextView tvCommunityPostReaction3 = (TextView) mCommunityPostPopUp.findViewById(R.id.tv_reaction3);
+            TextView tvCommunityPostReaction4 = (TextView) mCommunityPostPopUp.findViewById(R.id.tv_reaction4);
+            mCommunityPostPopUp.setOnTouchListener(this);
+            tvCommunityPostReaction.setOnClickListener(this);
+            tvCommunityPostReaction1.setOnClickListener(this);
+            tvCommunityPostReaction2.setOnClickListener(this);
+            tvCommunityPostReaction3.setOnClickListener(this);
+            tvCommunityPostReaction4.setOnClickListener(this);
+            mCommunityPostPopUp.setVisibility(View.VISIBLE);
+            showUserReactionOption(mCommunityPostPopUp);
+        }
+    }
+
+    private void communityUserReaction() {
+        mCommunityPopUp = findViewById(R.id.li_feed_community_emoji_pop_up);
+        if (mCommunityPopUp.getVisibility() == View.VISIBLE) {
+            mCommunityPopUp.setVisibility(View.GONE);
+            dismissUserReactionOption(mCommunityPopUp);
+        } else {
+            TextView tvCommunityReaction = (TextView) mCommunityPopUp.findViewById(R.id.tv_reaction);
+            TextView tvCommunityReaction1 = (TextView) mCommunityPopUp.findViewById(R.id.tv_reaction1);
+            TextView tvCommunityReaction2 = (TextView) mCommunityPopUp.findViewById(R.id.tv_reaction2);
+            TextView tvCommunityReaction3 = (TextView) mCommunityPopUp.findViewById(R.id.tv_reaction3);
+            TextView tvCommunityReaction4 = (TextView) mCommunityPopUp.findViewById(R.id.tv_reaction4);
+            mCommunityPopUp.setOnTouchListener(this);
+            tvCommunityReaction.setOnClickListener(this);
+            tvCommunityReaction1.setOnClickListener(this);
+            tvCommunityReaction2.setOnClickListener(this);
+            tvCommunityReaction3.setOnClickListener(this);
+            tvCommunityReaction4.setOnClickListener(this);
+            mCommunityPopUp.setVisibility(View.VISIBLE);
+            showUserReactionOption(mCommunityPopUp);
+        }
+    }
+
+    private void articleUserReaction() {
+        mArticlePopUp = findViewById(R.id.li_feed_article_card_emoji_pop_up);
+        if (mArticlePopUp.getVisibility() == View.VISIBLE) {
+            mArticlePopUp.setVisibility(View.GONE);
+            dismissUserReactionOption(mArticlePopUp);
+        } else {
+            TextView tvArticleReaction = (TextView) mArticlePopUp.findViewById(R.id.tv_reaction);
+            TextView tvArticleReaction1 = (TextView) mArticlePopUp.findViewById(R.id.tv_reaction1);
+            TextView tvArticleReaction2 = (TextView) mArticlePopUp.findViewById(R.id.tv_reaction2);
+            TextView tvArticleReaction3 = (TextView) mArticlePopUp.findViewById(R.id.tv_reaction3);
+            TextView tvArticleReaction4 = (TextView) mArticlePopUp.findViewById(R.id.tv_reaction4);
+            mArticlePopUp.setOnTouchListener(this);
+            tvArticleReaction.setOnClickListener(this);
+            tvArticleReaction1.setOnClickListener(this);
+            tvArticleReaction2.setOnClickListener(this);
+            tvArticleReaction3.setOnClickListener(this);
+            tvArticleReaction4.setOnClickListener(this);
+            mArticlePopUp.setVisibility(View.VISIBLE);
+            showUserReactionOption(mArticlePopUp);
+        }
+    }
+
+    private void bookmarkCall() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+        if (AppUtils.isFragmentUIActive(fragment)) {
+            ((HomeFragment) fragment).bookMarkForCard(mFeedDetail);
+        }
+    }
+
+    private void clickMenuItem(View view, final BaseResponse baseResponse) {
+        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final View popupView = layoutInflater.inflate(R.layout.menu_option_layout, null);
+        final PopupWindow popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                popupWindow.dismiss();
+            }
+        });
+        final TextView tvEdit = (TextView) popupView.findViewById(R.id.tv_article_menu_edit);
+        final TextView tvDelete = (TextView) popupView.findViewById(R.id.tv_article_menu_delete);
+        final TextView tvShare = (TextView) popupView.findViewById(R.id.tv_article_menu_share);
+        final TextView tvReport = (TextView) popupView.findViewById(R.id.tv_article_menu_report);
+        final Fragment fragmentCommentReaction = getSupportFragmentManager().findFragmentByTag(CommentReactionFragment.class.getName());
+        popupWindow.showAsDropDown(view);
+        tvEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "You Clicked : " + tvEdit.getText(), Toast.LENGTH_SHORT).show();
+                CommentReactionDoc commentReactionDoc = (CommentReactionDoc) baseResponse;
+                if (AppUtils.isFragmentUIActive(fragmentCommentReaction)) {
+                    ((CommentReactionFragment) fragmentCommentReaction).editCommentInList(commentReactionDoc);
+                }
+                popupWindow.dismiss();
+            }
+        });
+        tvDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "You Clicked : " + tvDelete.getText(), Toast.LENGTH_SHORT).show();
+
+                popupWindow.dismiss();
+            }
+        });
+        tvShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "You Clicked : " + tvShare.getText(), Toast.LENGTH_SHORT).show();
+                popupWindow.dismiss();
+            }
+        });
+        tvReport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "You Clicked : " + tvReport.getText(), Toast.LENGTH_SHORT).show();
+                popupWindow.dismiss();
+            }
+        });
+        int id = view.getId();
+        switch (id) {
+            case R.id.tv_feed_article_user_menu:
+                tvEdit.setVisibility(View.GONE);
+                tvDelete.setVisibility(View.GONE);
+
+                break;
+            case R.id.tv_user_comment_list_menu:
+                tvShare.setVisibility(View.GONE);
+                tvReport.setVisibility(View.GONE);
 
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
@@ -445,11 +559,10 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
     }
 
     @Override
-    public void userCommentLikeRequest(long entityId, int reactionValue) {
+    public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-        if(null!=fragment)
-        {
-            ((HomeFragment) fragment).likeAndUnlikeRequest( entityId,  reactionValue);
+        if (AppUtils.isFragmentUIActive(fragment)) {
+            ((HomeFragment) fragment).likeAndUnlikeRequest(baseResponse, reactionValue, position);
         }
     }
 
@@ -747,125 +860,106 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
         int id = view.getId();
         switch (id) {
             case R.id.tv_reaction:
-                if (null != mTvFeedArticleUserReaction) {
-                    mTvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_heart_active), null, null, null);
-                    if (null != mArticlePopUp) {
-                        mArticlePopUp.setVisibility(View.GONE);
-                        dismissUserReactionOption(mArticlePopUp);
-                    }
-                }
-                if (null != mTvFeedCommunityUserReaction) {
-                    mTvFeedCommunityUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_heart_active), null, null, null);
-                    if (null != mCommunityPopUp) {
-                        mCommunityPopUp.setVisibility(View.GONE);
-                        dismissUserReactionOption(mCommunityPopUp);
-                    }
-                }
-                if (null != mTvFeedCommunityPostUserReaction) {
-                    mTvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_heart_active), null, null, null);
-                    if (null != mCommunityPostPopUp) {
-                        mCommunityPostPopUp.setVisibility(View.GONE);
-                        dismissUserReactionOption(mCommunityPostPopUp);
-                    }
-                }
-
+                heartEmojiSelection();
                 break;
             case R.id.tv_reaction1:
-                if (null != mTvFeedArticleUserReaction) {
-                    mTvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji3_whistel), null, null, null);
-                    if (null != mArticlePopUp) {
-                        mArticlePopUp.setVisibility(View.GONE);
-                        dismissUserReactionOption(mArticlePopUp);
-                    }
-                }
-                if (null != mTvFeedCommunityUserReaction) {
-                    mTvFeedCommunityUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji3_whistel), null, null, null);
-                    if (null != mCommunityPopUp) {
-                        mCommunityPopUp.setVisibility(View.GONE);
-                        dismissUserReactionOption(mCommunityPopUp);
-                    }
-                }
-                if (null != mTvFeedCommunityPostUserReaction) {
-                    mTvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji3_whistel), null, null, null);
-                    if (null != mCommunityPostPopUp) {
-                        mCommunityPostPopUp.setVisibility(View.GONE);
-                        dismissUserReactionOption(mCommunityPostPopUp);
-                    }
-                }
-
+                emojiFirstSelection();
                 break;
             case R.id.tv_reaction2:
-                if (null != mTvFeedArticleUserReaction) {
-                    mTvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji_xo_xo), null, null, null);
-                    if (null != mArticlePopUp) {
-                        mArticlePopUp.setVisibility(View.GONE);
-                        dismissUserReactionOption(mArticlePopUp);
-                    }
-                }
-                if (null != mTvFeedCommunityUserReaction) {
-                    mTvFeedCommunityUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji_xo_xo), null, null, null);
-                    if (null != mCommunityPopUp) {
-                        mCommunityPopUp.setVisibility(View.GONE);
-                        dismissUserReactionOption(mCommunityPopUp);
-                    }
-                }
-                if (null != mTvFeedCommunityPostUserReaction) {
-                    mTvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji_xo_xo), null, null, null);
-                    if (null != mCommunityPostPopUp) {
-                        mCommunityPostPopUp.setVisibility(View.GONE);
-                        dismissUserReactionOption(mCommunityPostPopUp);
-                    }
-                }
+                emojiSecondSelection();
+
                 break;
             case R.id.tv_reaction3:
-                if (null != mTvFeedArticleUserReaction) {
-                    mTvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji2_with_you), null, null, null);
-                    if (null != mArticlePopUp) {
-                        mArticlePopUp.setVisibility(View.GONE);
-                        dismissUserReactionOption(mArticlePopUp);
-                    }
-                }
-                if (null != mTvFeedCommunityUserReaction) {
-                    mTvFeedCommunityUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji2_with_you), null, null, null);
-                    if (null != mCommunityPopUp) {
-                        mCommunityPopUp.setVisibility(View.GONE);
-                        dismissUserReactionOption(mCommunityPopUp);
-                    }
-                }
-                if (null != mTvFeedCommunityPostUserReaction) {
-                    mTvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji2_with_you), null, null, null);
-                    if (null != mCommunityPostPopUp) {
-                        mCommunityPostPopUp.setVisibility(View.GONE);
-                        dismissUserReactionOption(mCommunityPostPopUp);
-                    }
-                }
+                emojiThirdSelection();
+
                 break;
             case R.id.tv_reaction4:
-                if (null != mTvFeedArticleUserReaction) {
-                    mTvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji4_face_palm), null, null, null);
-                    if (null != mArticlePopUp) {
-                        mArticlePopUp.setVisibility(View.GONE);
-                        dismissUserReactionOption(mArticlePopUp);
-                    }
-                }
-                if (null != mTvFeedCommunityUserReaction) {
-                    mTvFeedCommunityUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji4_face_palm), null, null, null);
-                    if (null != mCommunityPopUp) {
-                        mCommunityPopUp.setVisibility(View.GONE);
-                        dismissUserReactionOption(mCommunityPopUp);
-                    }
-                }
-                if (null != mTvFeedCommunityPostUserReaction) {
-                    mTvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji4_face_palm), null, null, null);
-                    if (null != mCommunityPostPopUp) {
-                        mCommunityPostPopUp.setVisibility(View.GONE);
-                        dismissUserReactionOption(mCommunityPostPopUp);
-                    }
-                }
+                emojiFourthSelection();
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + "  " + TAG + " " + id);
         }
+    }
+
+    private void emojiFourthSelection() {
+        if (null != mArticlePopUp) {
+            mArticlePopUp.setVisibility(View.GONE);
+            dismissUserReactionOption(mArticlePopUp);
+        }
+        if (null != mCommunityPopUp) {
+            mCommunityPopUp.setVisibility(View.GONE);
+            dismissUserReactionOption(mCommunityPopUp);
+        }
+        if (null != mCommunityPostPopUp) {
+            mCommunityPostPopUp.setVisibility(View.GONE);
+            dismissUserReactionOption(mCommunityPostPopUp);
+        }
+        userCommentLikeRequest(mFeedDetail, AppConstants.EMOJI_FOURTH_REACTION_CONSTANT, mFeedDetail.getItemPosition());
+    }
+
+    private void emojiThirdSelection() {
+        if (null != mArticlePopUp) {
+            mArticlePopUp.setVisibility(View.GONE);
+            dismissUserReactionOption(mArticlePopUp);
+        }
+        if (null != mCommunityPopUp) {
+            mCommunityPopUp.setVisibility(View.GONE);
+            dismissUserReactionOption(mCommunityPopUp);
+        }
+        if (null != mCommunityPostPopUp) {
+            mCommunityPostPopUp.setVisibility(View.GONE);
+            dismissUserReactionOption(mCommunityPostPopUp);
+        }
+        userCommentLikeRequest(mFeedDetail, AppConstants.EMOJI_THIRD_REACTION_CONSTANT, mFeedDetail.getItemPosition());
+    }
+
+    private void emojiSecondSelection() {
+        if (null != mArticlePopUp) {
+            mArticlePopUp.setVisibility(View.GONE);
+            dismissUserReactionOption(mArticlePopUp);
+        }
+        if (null != mCommunityPopUp) {
+            mCommunityPopUp.setVisibility(View.GONE);
+            dismissUserReactionOption(mCommunityPopUp);
+        }
+        if (null != mCommunityPostPopUp) {
+            mCommunityPostPopUp.setVisibility(View.GONE);
+            dismissUserReactionOption(mCommunityPostPopUp);
+        }
+        userCommentLikeRequest(mFeedDetail, AppConstants.EMOJI_SECOND_REACTION_CONSTANT, mFeedDetail.getItemPosition());
+    }
+
+    public void heartEmojiSelection() {
+        if (null != mArticlePopUp) {
+            mArticlePopUp.setVisibility(View.GONE);
+            dismissUserReactionOption(mArticlePopUp);
+        }
+
+        if (null != mCommunityPopUp) {
+            mCommunityPopUp.setVisibility(View.GONE);
+            dismissUserReactionOption(mCommunityPopUp);
+        }
+        if (null != mCommunityPostPopUp) {
+            mCommunityPostPopUp.setVisibility(View.GONE);
+            dismissUserReactionOption(mCommunityPostPopUp);
+        }
+        userCommentLikeRequest(mFeedDetail, AppConstants.HEART_REACTION_CONSTANT, mFeedDetail.getItemPosition());
+    }
+
+    public void emojiFirstSelection() {
+        if (null != mArticlePopUp) {
+            mArticlePopUp.setVisibility(View.GONE);
+            dismissUserReactionOption(mArticlePopUp);
+        }
+        if (null != mCommunityPopUp) {
+            mCommunityPopUp.setVisibility(View.GONE);
+            dismissUserReactionOption(mCommunityPopUp);
+        }
+        if (null != mCommunityPostPopUp) {
+            mCommunityPostPopUp.setVisibility(View.GONE);
+            dismissUserReactionOption(mCommunityPostPopUp);
+        }
+        userCommentLikeRequest(mFeedDetail, AppConstants.EMOJI_FIRST_REACTION_CONSTANT, mFeedDetail.getItemPosition());
     }
 
 

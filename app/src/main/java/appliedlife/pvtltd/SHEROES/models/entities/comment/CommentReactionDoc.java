@@ -12,7 +12,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
  * Created by Praveen_Singh on 15-02-2017.
  */
 
-public class CommentDoc extends BaseResponse implements Parcelable {
+public class CommentReactionDoc extends BaseResponse implements Parcelable {
     @SerializedName("comment")
     @Expose
     private String comment;
@@ -179,10 +179,10 @@ public class CommentDoc extends BaseResponse implements Parcelable {
         dest.writeLong(this.participationTypeId);
     }
 
-    public CommentDoc() {
+    public CommentReactionDoc() {
     }
 
-    protected CommentDoc(Parcel in) {
+    protected CommentReactionDoc(Parcel in) {
         this.comment = in.readString();
         this.commentsId = in.readLong();
         this.createdOn = in.readString();
@@ -198,15 +198,15 @@ public class CommentDoc extends BaseResponse implements Parcelable {
         this.participationTypeId = in.readLong();
     }
 
-    public static final Parcelable.Creator<CommentDoc> CREATOR = new Parcelable.Creator<CommentDoc>() {
+    public static final Parcelable.Creator<CommentReactionDoc> CREATOR = new Parcelable.Creator<CommentReactionDoc>() {
         @Override
-        public CommentDoc createFromParcel(Parcel source) {
-            return new CommentDoc(source);
+        public CommentReactionDoc createFromParcel(Parcel source) {
+            return new CommentReactionDoc(source);
         }
 
         @Override
-        public CommentDoc[] newArray(int size) {
-            return new CommentDoc[size];
+        public CommentReactionDoc[] newArray(int size) {
+            return new CommentReactionDoc[size];
         }
     };
 }

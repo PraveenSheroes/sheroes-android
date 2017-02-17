@@ -85,7 +85,8 @@ import java.util.zip.GZIPInputStream;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentRequestPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.ProfileItems;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
@@ -1604,30 +1605,41 @@ public class AppUtils {
     /**
      * Request for feed api
      */
-    public static FeedRequestPojo feedRequestBuilder(String typeOfFeed) {
+    public static FeedRequestPojo feedRequestBuilder(String typeOfFeed,int pageNo) {
+        FeedRequestPojo feedRequestPojo=makeFeedRequest(typeOfFeed,pageNo);
+        return feedRequestPojo;
+    }
+    public static FeedRequestPojo feedDetailRequestBuilder(String typeOfFeed,int pageNo,String idForDetail) {
+
+        FeedRequestPojo feedRequestPojo=makeFeedRequest(typeOfFeed,pageNo);
+        feedRequestPojo.setIdForFeedDetail(idForDetail);
+        return feedRequestPojo;
+    }
+    private  static FeedRequestPojo makeFeedRequest(String typeOfFeed,int pageNo)
+    {
         AppUtils appUtils = AppUtils.getInstance();
         FeedRequestPojo feedRequestPojo=new FeedRequestPojo();
         feedRequestPojo.setAppVersion(appUtils.getAppVersionName());
         feedRequestPojo.setDeviceUniqueId(appUtils.getDeviceId());
         //TODO:: change rquest data
         feedRequestPojo.setCloudMessagingId(AppConstants.ALL_SEARCH);
-        feedRequestPojo.setPageNo(1);
-        feedRequestPojo.setPageSize(10);
+        feedRequestPojo.setPageNo(pageNo);
+        feedRequestPojo.setPageSize(AppConstants.PAGE_SIZE);
         feedRequestPojo.setSubType(typeOfFeed);
         return feedRequestPojo;
     }
     /**
      * Request for feed api
      */
-    public static FeedRequestPojo searchRequestBuilder(String typeOfFeed,String queryName) {
+    public static FeedRequestPojo searchRequestBuilder(String typeOfFeed,String queryName,int pageNo) {
         AppUtils appUtils = AppUtils.getInstance();
         FeedRequestPojo feedRequestPojo=new FeedRequestPojo();
         feedRequestPojo.setAppVersion(appUtils.getAppVersionName());
         feedRequestPojo.setDeviceUniqueId(appUtils.getDeviceId());
         //TODO:: change rquest data
         feedRequestPojo.setCloudMessagingId(AppConstants.ALL_SEARCH);
-        feedRequestPojo.setPageNo(1);
-        feedRequestPojo.setPageSize(10);
+        feedRequestPojo.setPageNo(pageNo);
+        feedRequestPojo.setPageSize(AppConstants.PAGE_SIZE);
         feedRequestPojo.setSubType(typeOfFeed);
         feedRequestPojo.setQuestion(queryName);
         return feedRequestPojo;
@@ -1659,17 +1671,53 @@ public class AppUtils {
         likeRequestPojo.setEntityId(entityId);
         return likeRequestPojo;
     }
-    public static CommentRequestPojo commentRequestBuilder(long entityId) {
+    public static CommentReactionRequestPojo getCommentRequestBuilder(long entityId) {
         AppUtils appUtils = AppUtils.getInstance();
-        CommentRequestPojo commentRequestPojo=new CommentRequestPojo();
-        commentRequestPojo.setAppVersion(appUtils.getAppVersionName());
-        commentRequestPojo.setDeviceUniqueId(appUtils.getDeviceId());
+        CommentReactionRequestPojo commentReactionRequestPojo =new CommentReactionRequestPojo();
+        commentReactionRequestPojo.setAppVersion(appUtils.getAppVersionName());
+        commentReactionRequestPojo.setDeviceUniqueId(appUtils.getDeviceId());
         //TODO:: change rquest data
-        commentRequestPojo.setCloudMessagingId(AppConstants.ALL_SEARCH);
-        commentRequestPojo.setPageNo(1);
-        commentRequestPojo.setPageSize(10);
-        commentRequestPojo.setEntityId(entityId);
-        return commentRequestPojo;
+        commentReactionRequestPojo.setCloudMessagingId(AppConstants.ALL_SEARCH);
+        commentReactionRequestPojo.setPageNo(1);
+        commentReactionRequestPojo.setPageSize(AppConstants.PAGE_SIZE);
+        commentReactionRequestPojo.setEntityId(entityId);
+        return commentReactionRequestPojo;
+    }
+    public static BookmarkRequestPojo bookMarkRequestBuilder(long entityId) {
+        AppUtils appUtils = AppUtils.getInstance();
+        BookmarkRequestPojo bookmarkRequestPojo =new BookmarkRequestPojo();
+        bookmarkRequestPojo.setAppVersion(appUtils.getAppVersionName());
+        bookmarkRequestPojo.setDeviceUniqueId(appUtils.getDeviceId());
+        //TODO:: change rquest data
+        bookmarkRequestPojo.setCloudMessagingId(AppConstants.ALL_SEARCH);
+        bookmarkRequestPojo.setEntityId(entityId);
+        return bookmarkRequestPojo;
+    }
+    public static CommentReactionRequestPojo postCommentRequestBuilder(long entityId, String userComment, boolean isAnonymous) {
+        AppUtils appUtils = AppUtils.getInstance();
+        CommentReactionRequestPojo commentReactionRequestPojo =new CommentReactionRequestPojo();
+        commentReactionRequestPojo.setAppVersion(appUtils.getAppVersionName());
+        commentReactionRequestPojo.setDeviceUniqueId(appUtils.getDeviceId());
+        //TODO:: change rquest data
+        commentReactionRequestPojo.setCloudMessagingId(AppConstants.ALL_SEARCH);
+        commentReactionRequestPojo.setUserComment(userComment);
+        commentReactionRequestPojo.setIsAnonymous(isAnonymous);
+        commentReactionRequestPojo.setEntityId(entityId);
+        return commentReactionRequestPojo;
+    }
+    public static CommentReactionRequestPojo editCommentRequestBuilder(long entityId, String userComment, boolean isAnonymous, boolean isActive, long participationId) {
+        AppUtils appUtils = AppUtils.getInstance();
+        CommentReactionRequestPojo commentReactionRequestPojo =new CommentReactionRequestPojo();
+        commentReactionRequestPojo.setAppVersion(appUtils.getAppVersionName());
+        commentReactionRequestPojo.setDeviceUniqueId(appUtils.getDeviceId());
+        //TODO:: change rquest data
+        commentReactionRequestPojo.setCloudMessagingId(AppConstants.ALL_SEARCH);
+        commentReactionRequestPojo.setUserComment(userComment);
+        commentReactionRequestPojo.setIsAnonymous(isAnonymous);
+        commentReactionRequestPojo.setIsActive(isActive);
+        commentReactionRequestPojo.setEntityId(entityId);
+        commentReactionRequestPojo.setParticipationId(participationId);
+        return commentReactionRequestPojo;
     }
     /**
      * Profile data

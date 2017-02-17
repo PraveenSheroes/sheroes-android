@@ -1,27 +1,28 @@
 package appliedlife.pvtltd.SHEROES.models.entities.searchmodule;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 
 /**
  * Created by Praveen_Singh on 08-02-2017.
  */
 
 public class ArticleDetailPojo extends BaseResponse {
-    private ArticleCardResponse articleCardResponse;
-    private String id;
-    public ArticleCardResponse getArticleCardResponse() {
-        return articleCardResponse;
+    private FeedDetail feedDetail;
+    private int id;
+    public FeedDetail getFeedDetail() {
+        return feedDetail;
     }
 
-    public void setArticleCardResponse(ArticleCardResponse articleCardResponse) {
-        this.articleCardResponse = articleCardResponse;
+    public void setFeedDetail(FeedDetail feedDetail) {
+        this.feedDetail = feedDetail;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 }

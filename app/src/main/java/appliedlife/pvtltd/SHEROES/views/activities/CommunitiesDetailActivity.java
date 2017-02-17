@@ -33,10 +33,12 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerList;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.MyCommunities;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.AllMembersFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
@@ -49,13 +51,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 
-public class CommunitiesDetailActivity extends BaseActivity implements ShareCommunityFragment.ShareCommunityActivityIntractionListner,CommunityInviteSearchFragment.InviteSearchActivityIntractionListner,CommunityRequestedFragment.RequestHomeActivityIntractionListner,AllMembersFragment.MembersHomeActivityIntractionListner,BaseHolderInterface,CommunityOpenAboutFragment.AboutCommunityActivityIntractionListner {
+public class CommunitiesDetailActivity extends BaseActivity implements ShareCommunityFragment.ShareCommunityActivityIntractionListner, CommunityInviteSearchFragment.InviteSearchActivityIntractionListner, CommunityRequestedFragment.RequestHomeActivityIntractionListner, AllMembersFragment.MembersHomeActivityIntractionListner, BaseHolderInterface, CommunityOpenAboutFragment.AboutCommunityActivityIntractionListner {
     private final String TAG = LogUtils.makeLogTag(CommunitiesDetailActivity.class);
-    private static final String EXTRA_IMAGE = "extraImage";
-    private static final String DECRIPTION = "desc";
-    private static final String HEADER = "header";
-    private static final String TIME = "time";
-    private CollapsingToolbarLayout collapsingToolbarLayout;
     @Bind(R.id.app_bar_coomunities_detail)
     AppBarLayout mAppBarLayout;
     @Bind(R.id.iv_communities_detail)
@@ -68,54 +65,65 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
     Toolbar mToolbarCommunitiesDetail;
     @Bind(R.id.collapsing_toolbar_communities_detail)
     CollapsingToolbarLayout mCollapsingToolbarLayout;
-    public static void navigate(AppCompatActivity activity, View transitionImage, ListOfFeed  listOfFeed) {
+    private FeedDetail mFeedDetail;
+
+    public static void navigate(AppCompatActivity activity, View transitionImage, FeedDetail feedDetail) {
         Intent intent = new Intent(activity, CommunitiesDetailActivity.class);
-        intent.putExtra(EXTRA_IMAGE, listOfFeed.getFeedCircleIconUrl());
-        intent.putExtra(DECRIPTION, listOfFeed.getDescription());
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, transitionImage, EXTRA_IMAGE);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, feedDetail);
+        intent.putExtras(bundle);
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, transitionImage, AppConstants.COMMUNITY_DETAIL);
         ActivityCompat.startActivity(activity, intent, options.toBundle());
     }
 
-    @Override public void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
         initActivityTransitions();
         setContentView(R.layout.activity_communities_detail);
         ButterKnife.bind(this);
+        if (null != getIntent()) {
+            mFeedDetail = getIntent().getParcelableExtra(AppConstants.ARTICLE_DETAIL);
+        }
         setPagerAndLayouts();
     }
+
     private void setPagerAndLayouts() {
-        ViewCompat.setTransitionName(mAppBarLayout, EXTRA_IMAGE);
+        ViewCompat.setTransitionName(mAppBarLayout, AppConstants.COMMUNITY_DETAIL);
         supportPostponeEnterTransition();
 
         setSupportActionBar(mToolbarCommunitiesDetail);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mCollapsingToolbarLayout.setTitle(" ");
-        mCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplication(),android.R.color.transparent));
-
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        viewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(4), getString(R.string.ID_FEATURED));
-        mViewPagerCommunitiesDetail.setAdapter(viewPagerAdapter);
-        Glide.with(this)
-                .load(getIntent().getStringExtra(EXTRA_IMAGE)).asBitmap()
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .skipMemoryCache(true)
-                .into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
-                        LogUtils.info("swipe", "*****************image height******* "+ resource.getHeight());
-                        ivCommunitiesDetail.setImageBitmap( resource );
-                        Palette.from(resource).generate(new Palette.PaletteAsyncListener() {
-                            public void onGenerated(Palette palette) {
-                                applyPalette(palette);
-                                updateBackground(mFloatingActionButton,palette);
+        mCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
+        if (null != mFeedDetail) {
+            ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+            viewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(mFeedDetail), getString(R.string.ID_COMMUNITIES));
+            mViewPagerCommunitiesDetail.setAdapter(viewPagerAdapter);
+            if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getImageUrl())) {
+                Glide.with(this)
+                        .load(getIntent().getStringExtra(mFeedDetail.getImageUrl())).asBitmap()
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .skipMemoryCache(true)
+                        .into(new SimpleTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
+                                LogUtils.info("swipe", "*****************image height******* " + resource.getHeight());
+                                ivCommunitiesDetail.setImageBitmap(resource);
+                                Palette.from(resource).generate(new Palette.PaletteAsyncListener() {
+                                    public void onGenerated(Palette palette) {
+                                        supportStartPostponedEnterTransition();
+                                        updateBackground(mFloatingActionButton, palette);
+                                    }
+                                });
                             }
                         });
-                    }
-                });
-
+            }
+        }
     }
+
     private void initActivityTransitions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Slide transition = new Slide();
@@ -125,41 +133,28 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
         }
     }
 
-    private void applyPalette(Palette palette) {
-        int primaryDark = ContextCompat.getColor(getApplication(), R.color.colorPrimaryDark);
-        int primary = ContextCompat.getColor(getApplication(), R.color.colorPrimary);
-      //  mCollapsingToolbarLayout.setContentScrimColor(palette.getMutedColor(primary));
-     //   mCollapsingToolbarLayout.setStatusBarScrimColor(palette.getDarkMutedColor(primaryDark));
-        //  updateBackground((FloatingActionButton) findViewById(R.id.fab), palette);
-        supportStartPostponedEnterTransition();
-    }
-
     private void updateBackground(FloatingActionButton fab, Palette palette) {
         int lightVibrantColor = palette.getLightVibrantColor(getResources().getColor(android.R.color.white));
         int vibrantColor = palette.getVibrantColor(getResources().getColor(R.color.colorPrimary));
         fab.setRippleColor(lightVibrantColor);
-       fab.setBackgroundTintList(ColorStateList.valueOf(vibrantColor));
+        fab.setBackgroundTintList(ColorStateList.valueOf(vibrantColor));
     }
+
     @Override
     public void startActivityFromHolder(Intent intent) {
 
     }
 
 
-
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
         if (baseResponse instanceof MyCommunities) {
             MyCommunities myCommunities = (MyCommunities) baseResponse;
-            LogUtils.info("detail","**********Community header click********");
-        }
-        else if(baseResponse instanceof OwnerList)
-        {
+            LogUtils.info("detail", "**********Community header click********");
+        } else if (baseResponse instanceof OwnerList) {
             OwnerRemoveDialog newFragment = new OwnerRemoveDialog(this);
             newFragment.show(this.getFragmentManager(), "dialog");
-        }
-        else
-        {
+        } else {
             ivCommunitiesDetail.setVisibility(View.GONE);
             mToolbarCommunitiesDetail.setVisibility(View.GONE);
             mFloatingActionButton.setVisibility(View.GONE);
@@ -168,8 +163,20 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
                     .replace(R.id.about_community_container, communityOpenAboutFragment).addToBackStack(null).commitAllowingStateLoss();
 
         }
-    }
 
+        if (baseResponse instanceof FeedDetail) {
+            FeedDetail feedDetail = (FeedDetail) baseResponse;
+            communityDetailHandled(view, feedDetail);
+        }
+    }
+    private void communityDetailHandled(View view, FeedDetail feedDetail) {
+        int id = view.getId();
+        switch (id) {
+
+            default:
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
+        }
+    }
     @Override
     public void dataOperationOnClick(BaseResponse baseResponse) {
 
@@ -181,9 +188,10 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
     }
 
     @Override
-    public void userCommentLikeRequest(long entityId, int reactionValue) {
+    public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
 
     }
+
 
     @Override
     public List getListData() {
@@ -218,7 +226,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
 
     @Override
     public void createCommunityClick() {
-        Intent intent=new Intent(this,CreateCommunityActivity.class);
+        Intent intent = new Intent(this, CreateCommunityActivity.class);
         startActivity(intent);
     }
 

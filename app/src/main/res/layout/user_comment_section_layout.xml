@@ -14,7 +14,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dp_size_12"
+        android:layout_margin="@dimen/dp_size_8"
         android:background="@drawable/rectangle_comment_background"
         android:orientation="horizontal"
         android:weightSum="1">
@@ -30,20 +30,21 @@
         <EditText
             android:id="@+id/et_user_comment_description"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_marginLeft="@dimen/dp_size_8"
-            android:layout_weight=".95"
+            android:layout_weight="1"
             android:background="@android:color/transparent"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:hint="@string/ID_ERROR_FIELD_REQUIRED"
-            android:textSize="@dimen/sp_size_12"
-            android:textStyle="bold" />
+            android:textColor="@color/user_comment_text"
+            android:textSize="@dimen/sp_size_13" />
 
         <TextView
             android:id="@+id/tv_post_comment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="@dimen/dp_size_10"
             android:layout_gravity="center"
             android:drawableLeft="@drawable/ic_post_comment" />
     </LinearLayout>
@@ -54,6 +55,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_size_13"
         android:layout_marginRight="@dimen/dp_size_13"
+        android:visibility="gone"
         android:orientation="horizontal">
 
         <TextView
@@ -70,9 +72,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_size_25"
+            android:text="@string/ID_OWNER"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:text="@string/ID_COMMUNITES"
-            android:textColor="@color/searchbox_text_color"
+            android:textColor="@color/blue"
             android:textSize="@dimen/sp_size_12" />
 
         <TextView
@@ -82,6 +84,7 @@
             android:layout_marginLeft="@dimen/dp_size_20"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:text="@string/ID_OWNER"
+            android:visibility="gone"
             android:textColor="@color/searchbox_text_color"
             android:textSize="@dimen/sp_size_12" />
 

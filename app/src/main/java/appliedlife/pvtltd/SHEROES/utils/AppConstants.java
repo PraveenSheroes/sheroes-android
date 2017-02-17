@@ -29,7 +29,7 @@ public class AppConstants {
     public static final String DOTS = "...";
     public static final String S="s";
     public static final String FOR_ALL= "all";
-    public static final String FEED_SUB_TYPE= "F";
+    public static final String FEED_SUB_TYPE= "A";
     public static final String FEED_COMMUNITY = "C";
     public static final String FEED_JOB = "J";
     public static final String FEED_ARTICLE= "A";
@@ -44,11 +44,26 @@ public class AppConstants {
     public static final String MY_COMMUNITIES_FRAGMENT="my_communities";
     public static final String ARTICLE_FRAGMENT="article";
     public static final String MY_COMMUNITIES_HEADER= "community_header";
+    public static final String COMMUNITIES_DETAIL= "community_detail";
     public static final String ALL_SEARCH= "search";
     public static final int WORD_COUNT = 92;
     public static final int WORD_LENGTH = 80;
     public static final String IMAGE_FULL_VIEW = "image_view";
     public static final String BACK_SLASH="/";
     public static final String ARTICLE_DETAIL = "article_detail";
+    public static final String COMMUNITY_DETAIL = "community_detail";
     public static final String PIPE="|";
+    public static final String SUCCESS= "SUCCESS";
+    public static final String FAILED= "FAILED";
+    public static final int ONE_CONSTANT= 1;
+    public static final int TWO_CONSTANT= 2;
+    public static final int THREE_CONSTANT= 3;
+    public static final int FOURTH_CONSTANT= 4;
+    public static final int PAGE_SIZE= 10;
+    public static final int NO_REACTION_CONSTANT= 0;
+    public static final int HEART_REACTION_CONSTANT= 10;
+    public static final int EMOJI_FIRST_REACTION_CONSTANT= 20;
+    public static final int EMOJI_SECOND_REACTION_CONSTANT= 30;
+    public static final int EMOJI_THIRD_REACTION_CONSTANT= 40;
+    public static final int EMOJI_FOURTH_REACTION_CONSTANT= 50;
 }

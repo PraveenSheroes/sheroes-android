@@ -3,25 +3,20 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 import android.content.Context;
 import android.os.Build;
 import android.text.Html;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleDetailPojo;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.ArticleDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -63,56 +58,53 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
     CircleImageView ivArticleDetailRegisterUserPic;
     @Bind(R.id.iv_article_detail_user_pic)
     CircleImageView ivArticleDetailUserPic;
-    @Bind(R.id.sp_article_detail_user_comment_post_menu)
-    Spinner spArticleDetailUserCommentPostMenu;
+
+    @Bind(R.id.tv_article_detail_view_more)
+    TextView tvArticleDetailViewMore;
+    @Bind(R.id.tv_article_detail_user_comment_post_menu)
+    TextView tvArticleDetailUserCommentPostMenu;
+    @Bind(R.id.tv_article_detail_user_comment_post_menu_second)
+    TextView tvArticleDetailUserCommentPostMenuSecond;
+    @Bind(R.id.tv_article_detail_user_comment_post_menu_third)
+    TextView tvArticleDetailUserCommentPostMenuThird;
     BaseHolderInterface viewInterface;
     private ArticleDetailPojo dataItem;
-    private ArticleCardResponse mArticleCardResponse;
+    private FeedDetail mFeedDetail;
+    private Context mContext;
 
     public ArticleDetailHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
+        SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
         ButterKnife.bind(this, itemView);
         this.viewInterface = baseHolderInterface;
-        SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
+
     }
 
     @Override
     public void bindData(ArticleDetailPojo item, final Context context, int position) {
         this.dataItem = item;
+        this.mContext=context;
         imageOperations(context);
     }
 
     private void imageOperations(Context context) {
-        mArticleCardResponse = dataItem.getArticleCardResponse();
-        if (null != mArticleCardResponse) {
-            String feedCircleIconUrl = mArticleCardResponse.getArticleCircleIconUrl();
+        mFeedDetail = dataItem.getFeedDetail();
+        if (null != mFeedDetail) {
+            if(StringUtil.isNotNullOrEmptyString(mFeedDetail.getNameOrTitle())) {
+                ((ArticleDetailActivity) mContext).mCollapsingToolbarLayout.setTitle(mFeedDetail.getNameOrTitle());
+            }
+            String feedCircleIconUrl = mFeedDetail.getAuthorImageUrl();
             if (StringUtil.isNotNullOrEmptyString(feedCircleIconUrl)) {
                 ivArticleDetailCardCircleIcon.setCircularImage(true);
                 ivArticleDetailCardCircleIcon.bindImage(feedCircleIconUrl);
-                LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View child = layoutInflater.inflate(R.layout.feed_article_single_image, null);
-                ImageView ivFirstLandscape = (ImageView) child.findViewById(R.id.iv_feed_article_single_image);
-                ivFirstLandscape.setOnClickListener(this);
-                TextView tvFeedArticleTimeLabel = (TextView) child.findViewById(R.id.tv_feed_article_time_label);
-                TextView tvFeedArticleTotalViews = (TextView) child.findViewById(R.id.tv_feed_article_total_views);
-                tvFeedArticleTotalViews.setText(mArticleCardResponse.getTotalViews() + AppConstants.SPACE + context.getString(R.string.ID_VIEWS));
-                Glide.with(context)
-                        .load(feedCircleIconUrl)
-                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                        .skipMemoryCache(true)
-                        .into(ivFirstLandscape);
             }
-            String str ;
-
-            str="<p align=right> <b> "
-                    + "Hi!" + " </br> <font size=6>"
-                    + " How are you "+"</font> </br>"
-                    + "I am fine" + "  </b> </p>";
-            String changeDate = LEFT_HTML_TAG_FOR_COLOR + context.getString(R.string.ID_VIEW_MORE) + RIGHT_HTML_TAG_FOR_COLOR;
-            if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                tvHtmlData.setText(Html.fromHtml(str , 0)); // for 24 api and more
-            } else {
-                tvHtmlData.setText(Html.fromHtml(str));// or for older api
+            String description = mFeedDetail.getDescription();
+            if (StringUtil.isNotNullOrEmptyString(description)) {
+                if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                    tvHtmlData.setText(Html.fromHtml(description, 0)); // for 24 api and more
+                } else {
+                    tvHtmlData.setText(Html.fromHtml(description));// or for older api
+                }
             }
         }
     }
@@ -121,33 +113,50 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
     public void viewRecycled() {
 
     }
+
     @OnClick(R.id.tv_article_detail_user_reaction)
     public void userReactionClick() {
-        viewInterface.handleOnClick(dataItem, tvArticleDetailUserReaction);
+        viewInterface.handleOnClick(mFeedDetail, tvArticleDetailUserReaction);
     }
+
     @OnClick(R.id.tv_article_detail_user_comment)
     public void userCommentClick() {
-        viewInterface.handleOnClick(dataItem, tvArticleDetailUserComment);
+        viewInterface.handleOnClick(mFeedDetail, tvArticleDetailUserComment);
     }
+
     @OnClick(R.id.tv_article_detail_total_replies)
     public void userRepliesClick() {
-        viewInterface.handleOnClick(dataItem, tvArticleDetailTotalReplies);
+        viewInterface.handleOnClick(mFeedDetail, tvArticleDetailTotalReplies);
     }
+
     @OnClick(R.id.li_article_detail_join_conversation)
     public void joinConversationClick() {
-        viewInterface.handleOnClick(dataItem, liArticleDetailJoinConversation);
+        viewInterface.handleOnClick(mFeedDetail, liArticleDetailJoinConversation);
     }
+
+    @OnClick(R.id.tv_article_detail_view_more)
+    public void viewMoreClick() {
+        viewInterface.handleOnClick(mFeedDetail, tvArticleDetailViewMore);
+    }
+
+    @OnClick(R.id.tv_article_detail_user_comment_post_menu)
+    public void menuClick() {
+        viewInterface.handleOnClick(mFeedDetail, tvArticleDetailUserCommentPostMenu);
+    }
+
+    @OnClick(R.id.tv_article_detail_user_comment_post_menu_second)
+    public void menuSecondClick() {
+        viewInterface.handleOnClick(mFeedDetail, tvArticleDetailUserCommentPostMenuSecond);
+    }
+
+    @OnClick(R.id.tv_article_detail_user_comment_post_menu_third)
+    public void menuThirdClick() {
+        viewInterface.handleOnClick(mFeedDetail, tvArticleDetailUserCommentPostMenuThird);
+    }
+
     @Override
     public void onClick(View view) {
 
-     /*   int id = view.getId();
-        switch (id) {
-            case R.id.iv_feed_article_single_image:
-                viewInterface.handleOnClick(mArticleCardResponse, view);
-                break;
-            default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
-        }*/
     }
 
 }

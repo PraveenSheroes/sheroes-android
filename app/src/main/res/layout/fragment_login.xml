@@ -6,14 +6,6 @@
     android:orientation="vertical"
     tools:context="appliedlife.pvtltd.SHEROES.views.activities.LoginActivity">
 
-    <!-- Login progress -->
-    <ProgressBar
-        android:id="@+id/pb_login_progress_bar"
-        android:layout_width="37dp"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="gone"/>
-
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="match_parent"
@@ -23,6 +15,7 @@
             android:id="@+id/email_login_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:orientation="vertical">
 
             <android.support.design.widget.TextInputLayout
@@ -33,7 +26,7 @@
                     android:id="@+id/email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/ID_PROMPT_EMAIL"
+                    android:text="abc@gmail.com"
                     android:inputType="textEmailAddress"
                     android:maxLines="1" />
 
@@ -47,13 +40,21 @@
                     android:id="@+id/password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/ID_PROMPT_PASSWORD"
+                    android:text="@string/ID_PROMPT_PASSWORD"
                     android:imeActionId="@+id/login"
                     android:imeOptions="actionUnspecified"
                     android:inputType="textPassword"
                     android:maxLines="1" />
 
             </android.support.design.widget.TextInputLayout>
+            <!-- Login progress -->
+            <ProgressBar
+                android:id="@+id/pb_login_progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                android:layout_centerInParent="true"/>
 
             <Button
                 android:id="@+id/email_sign_in_button"
@@ -68,6 +69,7 @@
                 android:id="@+id/login_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="@dimen/dp_size_15"
                 android:layout_marginTop="@dimen/dp_size_15" />
 
         </LinearLayout>

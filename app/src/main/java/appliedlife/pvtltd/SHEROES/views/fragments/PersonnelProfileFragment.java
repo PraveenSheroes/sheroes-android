@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -32,7 +33,7 @@ public class PersonnelProfileFragment extends BaseFragment {
     RecyclerView mRecyclerView;
     GenericRecyclerViewAdapter mAdapter;
     private HomeActivityIntractionWithPersonnelProfile mHomeActivityIntractionWithPersonnelProfile;
-
+    private FragmentListRefreshData mFragmentListRefreshData;
     public static PersonnelProfileFragment createInstance() {
         PersonnelProfileFragment personnelProfileFragment = new PersonnelProfileFragment();
         return personnelProfileFragment;
@@ -56,12 +57,13 @@ public class PersonnelProfileFragment extends BaseFragment {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_home_spinner, container, false);
         ButterKnife.bind(this, view);
+        mFragmentListRefreshData=new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.PROFILE_FRAGMENT,AppConstants.EMPTY_STRING);
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(manager);
         mAdapter = new GenericRecyclerViewAdapter(getContext(),(ProfileActicity) getActivity());
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.addOnScrollListener(new HidingScrollListener(mRecyclerView, manager, AppConstants.PROFILE_FRAGMENT) {
+        mRecyclerView.addOnScrollListener(new HidingScrollListener(mRecyclerView, manager,mFragmentListRefreshData) {
             @Override
             public void onHide() {
 

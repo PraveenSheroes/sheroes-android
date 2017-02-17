@@ -20,15 +20,15 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.database.dbentities.MasterData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleDetailPojo;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
-import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -48,12 +48,13 @@ public class ArticleDetailFragment extends BaseFragment implements HomeView {
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private HomeActivityIntractionListner mHomeActivityIntractionListner;
-    private SwipPullRefreshList mPullRefreshList;
-    private ArticleCardResponse mArticleCardResponse;
-    public static ArticleDetailFragment createInstance(ArticleCardResponse articleCardResponse) {
+    private FeedDetail mFeedDetail;
+    private FragmentListRefreshData mFragmentListRefreshData;
+    private AppUtils mAppUtils;
+    public static ArticleDetailFragment createInstance(FeedDetail feedDetail) {
         ArticleDetailFragment articleDetailFragment = new ArticleDetailFragment();
         Bundle bundle = new Bundle();
-        bundle.putParcelable(AppConstants.ARTICLE_DETAIL, articleCardResponse);
+        bundle.putParcelable(AppConstants.ARTICLE_DETAIL, feedDetail);
         articleDetailFragment.setArguments(bundle);
         return articleDetailFragment;
     }
@@ -69,70 +70,51 @@ public class ArticleDetailFragment extends BaseFragment implements HomeView {
             LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
         }
     }
-
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if(null!=getArguments())
+        {
+            mFeedDetail =getArguments().getParcelable(AppConstants.ARTICLE_DETAIL);
+        }
+    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_article_detail, container, false);
         ButterKnife.bind(this, view);
-        if(null!=getArguments())
-        {
-            mArticleCardResponse=getArguments().getParcelable(AppConstants.ARTICLE_DETAIL);
-        }
-        mPullRefreshList = new SwipPullRefreshList();
-        mPullRefreshList.setPullToRefresh(false);
+        mAppUtils = AppUtils.getInstance();
+        mFragmentListRefreshData=new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ARTICLE_DETAIL,mFeedDetail.getId());
         mHomePresenter.attachView(this);
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new GenericRecyclerViewAdapter(getContext(), (ArticleDetailActivity) getActivity());
-        mAdapter.setSheroesGenericListData(getArticleDetailPojo());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
-
-        mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager, AppConstants.MY_COMMUNITIES_FRAGMENT) {
-            @Override
-            public void onHide() {
-
-            }
-
-            @Override
-            public void onShow() {
-            }
-
-            @Override
-            public void dismissReactions() {
-
-            }
-        });
-
+        mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo(),mFragmentListRefreshData.getIdFeedDetail()));
         return view;
     }
 
-    private List<ArticleDetailPojo> getArticleDetailPojo() {
-        List<ArticleDetailPojo> articleList=new ArrayList<>();
-        ArticleDetailPojo articleDetailPojo=new ArticleDetailPojo();
-        articleDetailPojo.setId("1");
-        articleDetailPojo.setArticleCardResponse(mArticleCardResponse);
-        ArticleDetailPojo articleDetailPojo1=new ArticleDetailPojo();
-        articleDetailPojo1.setId("2");
-        articleDetailPojo1.setArticleCardResponse(null);
-        articleList.add(articleDetailPojo);
-        articleList.add(articleDetailPojo1);
-        return articleList;
-    }
-
-
-
     @Override
     public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
-
+        if(StringUtil.isNotEmptyCollection(feedDetailList)&&mAdapter!=null) {
+            List<ArticleDetailPojo> articleList = new ArrayList<>();
+            ArticleDetailPojo articleDetailPojo = new ArticleDetailPojo();
+            articleDetailPojo.setId(AppConstants.ONE_CONSTANT);
+            articleDetailPojo.setFeedDetail(feedDetailList.get(0));
+            articleDetailPojo.setFeedDetail(mFeedDetail);
+            articleList.add(articleDetailPojo);
+            mAdapter.setSheroesGenericListData(articleList);
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
-    public void getLikesSuccess(String success) {
+    public void getSuccessForAllResponse(String success, int successFrom) {
 
     }
+
 
     @Override
     public void getDB(List<MasterData> masterDatas) {

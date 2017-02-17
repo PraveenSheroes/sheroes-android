@@ -6,10 +6,8 @@ import com.google.gson.Gson;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
-import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentRequestPojo;
-import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionResponsePojo;
 import appliedlife.pvtltd.SHEROES.preferences.SessionUser;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import rx.Observable;
@@ -31,27 +29,54 @@ public class CommentReactionModel {
         this.sheroesAppServiceApi = sheroesAppServiceApi;
         this.gson= gson;
     }
-    public Observable<CommentResponsePojo> getAllCommentListFromModel(CommentRequestPojo commentRequestPojo){
-        return sheroesAppServiceApi.getCommentFromApi(commentRequestPojo)
-                .map(new Func1<CommentResponsePojo, CommentResponsePojo>() {
+    public Observable<CommentReactionResponsePojo> getAllCommentListFromModel(CommentReactionRequestPojo commentReactionRequestPojo,boolean isReaction){
+        if(!isReaction) {
+            return sheroesAppServiceApi.getCommentFromApi(commentReactionRequestPojo)
+                    .map(new Func1<CommentReactionResponsePojo, CommentReactionResponsePojo>() {
+                        @Override
+                        public CommentReactionResponsePojo call(CommentReactionResponsePojo commentReactionResponsePojo) {
+                            return commentReactionResponsePojo;
+                        }
+                    })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread());
+        }
+        else
+        {
+            return sheroesAppServiceApi.getAllReactionFromApi(commentReactionRequestPojo)
+                    .map(new Func1<CommentReactionResponsePojo, CommentReactionResponsePojo>() {
+                        @Override
+                        public CommentReactionResponsePojo call(CommentReactionResponsePojo commentReactionResponsePojo) {
+                            return commentReactionResponsePojo;
+                        }
+                    })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread());
+        }
+    }
+
+    public Observable<CommentReactionResponsePojo> addCommentListFromModel(CommentReactionRequestPojo commentReactionRequestPojo){
+        return sheroesAppServiceApi.addCommentFromApi(commentReactionRequestPojo)
+                .map(new Func1<CommentReactionResponsePojo, CommentReactionResponsePojo>() {
                     @Override
-                    public CommentResponsePojo call(CommentResponsePojo commentResponsePojo) {
-                        return commentResponsePojo;
+                    public CommentReactionResponsePojo call(CommentReactionResponsePojo commentReactionResponsePojo) {
+                        return commentReactionResponsePojo;
                     }
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-    public Observable<CommentResponse> getAllReactionListFromModel(CommentRequest commentRequest){
-        return sheroesAppServiceApi.getReactionFromApi(commentRequest)
-                .map(new Func1<CommentResponse, CommentResponse>() {
+    public Observable<CommentReactionResponsePojo> editCommentListFromModel(CommentReactionRequestPojo commentReactionRequestPojo){
+        return sheroesAppServiceApi.editCommentFromApi(commentReactionRequestPojo)
+                .map(new Func1<CommentReactionResponsePojo, CommentReactionResponsePojo>() {
                     @Override
-                    public CommentResponse call(CommentResponse commentResponse) {
-                        return commentResponse;
+                    public CommentReactionResponsePojo call(CommentReactionResponsePojo commentReactionResponsePojo) {
+                        return commentReactionResponsePojo;
                     }
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
     }
 

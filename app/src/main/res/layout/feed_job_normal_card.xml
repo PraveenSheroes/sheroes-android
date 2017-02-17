@@ -7,6 +7,7 @@
     app:cardElevation="@dimen/dp_size_2">
 
     <LinearLayout
+        android:id="@+id/li_feed_job_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -146,7 +147,10 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:weightSum="1"
-            android:layout_margin="@dimen/dp_size_12">
+            android:layout_marginLeft="@dimen/dp_size_12"
+            android:layout_marginTop="@dimen/dp_size_12"
+            android:layout_marginBottom="@dimen/dp_size_12"
+            android:layout_marginRight="@dimen/dp_size_8">
             <TextView
                 android:id="@+id/tv_feed_job_applied"
                 android:layout_width="0dp"
@@ -167,6 +171,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawablePadding="@dimen/dp_size_50"
+                android:paddingRight="@dimen/dp_size_10"
                 android:drawableRight="@drawable/ic_menu_dashboard" />
 
         </LinearLayout>

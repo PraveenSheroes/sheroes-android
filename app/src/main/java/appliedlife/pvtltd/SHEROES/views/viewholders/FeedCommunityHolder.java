@@ -2,29 +2,24 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
 import android.os.Build;
-import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.LastComment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -33,12 +28,13 @@ import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnLongClick;
 
 /**
  * Created by Praveen_Singh on 23-01-2017.
  */
 
-public class FeedCommunityHolder extends BaseViewHolder<FeedDetail> implements View.OnLongClickListener, View.OnTouchListener {
+public class FeedCommunityHolder extends BaseViewHolder<FeedDetail>{
     private final String TAG = LogUtils.makeLogTag(FeedCommunityHolder.class);
     private static final String LEFT_HTML_TAG_FOR_COLOR = "<b><font color='#323940'>";
     private static final String RIGHT_HTML_TAG_FOR_COLOR = "</font></b>";
@@ -62,8 +58,6 @@ public class FeedCommunityHolder extends BaseViewHolder<FeedDetail> implements V
     CircleImageView ivFeedCommunityUserPic;
     @Bind(R.id.iv_feed_community_register_user_pic)
     CircleImageView ivFeedCommunityRegisterUserPic;
-    @Bind(R.id.tv_feed_community_user_bookmark)
-    TextView tvFeedCommunityUserBookmark;
     @Bind(R.id.tv_feed_community_card_title)
     TextView tvFeedCommunityCardTitle;
     @Bind(R.id.tv_feed_community_time)
@@ -94,8 +88,8 @@ public class FeedCommunityHolder extends BaseViewHolder<FeedDetail> implements V
     TextView tvFeedCommunityRegisterUserComment;
     @Bind(R.id.fl_feed_community_no_reaction_comments)
     FrameLayout flFeedCommunityNoReactionComment;
-    @Bind(R.id.sp_feed_community_user_menu)
-    Spinner spFeedCommunityUserMenu;
+    @Bind(R.id.tv_feed_community_user_comment_post_menu)
+    TextView tvFeedCommunityUserCommentPostMenu;
     BaseHolderInterface viewInterface;
     private FeedDetail dataItem;
     Context mContext;
@@ -112,18 +106,10 @@ public class FeedCommunityHolder extends BaseViewHolder<FeedDetail> implements V
     public void bindData(FeedDetail item, final Context context, int position) {
         this.dataItem = item;
         mContext = context;
-        liFeedCommunityJoinConversation.setOnClickListener(this);
-        tvFeedCommunityUserReaction.setOnLongClickListener(this);
-        tvFeedCommunityUserReaction.setOnClickListener(this);
-        tvFeedCommunityUserComment.setOnClickListener(this);
-        tvFeedCommunityUserBookmark.setOnClickListener(this);
-        tvFeedCommunityUserMenu.setOnClickListener(this);
-        tvFeedCommunityJoin.setOnClickListener(this);
         liFeedCommunityImages.removeAllViewsInLayout();
         liFeedCommunityImages.removeAllViews();
         allTextViewStringOperations(context);
         imageOperations(context);
-        menuItemForCommunityClick();
     }
 
     private void allTextViewStringOperations(Context context) {
@@ -159,49 +145,80 @@ public class FeedCommunityHolder extends BaseViewHolder<FeedDetail> implements V
                 tvFeedCommunityTagLable.setText(Html.fromHtml(tagHeader + AppConstants.COLON + AppConstants.SPACE + mergeTags));// or for older api
             }
         }
-     /*   if (dataItem.getUserReaction().equalsIgnoreCase(AppConstants.HEART_REACTION)) {
-            tvFeedCommunityUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
-        }
-        if (dataItem.getBookmarked()) {
-            tvFeedCommunityUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_active, 0);
-        }
-        if (dataItem.getNoOfReactions() < 1 && dataItem.getNoOfComments() < 1) {
+
+        if (dataItem.getNoOfLikes() < AppConstants.ONE_CONSTANT && dataItem.getNoOfComments() < AppConstants.ONE_CONSTANT) {
+            tvFeedCommunityUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
             flFeedCommunityNoReactionComment.setVisibility(View.GONE);
-        }*/
-       /* switch (dataItem.getNoOfReactions()) {
-            case 0:
-                tvFeedCommunityReaction1.setVisibility(View.GONE);
-                tvFeedCommunityTotalReactions.setVisibility(View.GONE);
+        } else if (dataItem.getNoOfLikes() < AppConstants.ONE_CONSTANT) {
+            flFeedCommunityNoReactionComment.setVisibility(View.GONE);
+            tvFeedCommunityTotalReactions.setVisibility(View.GONE);
+        } else {
+            flFeedCommunityNoReactionComment.setVisibility(View.VISIBLE);
+            switch (dataItem.getNoOfLikes()) {
+                case AppConstants.ONE_CONSTANT:
+                    tvFeedCommunityTotalReactions.setText(String.valueOf(dataItem.getNoOfLikes()) + AppConstants.SPACE + context.getString(R.string.ID_REACTION));
+                    userLike();
+                    break;
+                default:
+                    tvFeedCommunityTotalReactions.setText(String.valueOf(dataItem.getNoOfLikes()) + AppConstants.SPACE + context.getString(R.string.ID_REACTION) + AppConstants.S);
+                    userLike();
+            }
+        }
+        if (dataItem.getNoOfComments() < AppConstants.ONE_CONSTANT) {
+            tvFeedCommunityTotalReplies.setVisibility(View.GONE);
+        } else {
+            switch (dataItem.getNoOfComments()) {
+                case AppConstants.ONE_CONSTANT:
+                    tvFeedCommunityTotalReplies.setText(String.valueOf(dataItem.getNoOfComments()) + AppConstants.SPACE + context.getString(R.string.ID_REPLY));
+                    userComments();
+                    break;
+                default:
+                    tvFeedCommunityTotalReplies.setText(String.valueOf(dataItem.getNoOfComments()) + AppConstants.SPACE + context.getString(R.string.ID_REPLIES));
+                    userComments();
+            }
+        }
+    }
+    private void userLike() {
+
+        switch (dataItem.getReactionValue()) {
+            case AppConstants.NO_REACTION_CONSTANT:
+                tvFeedCommunityUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
                 break;
-            case 1:
-                tvFeedCommunityTotalReactions.setText(String.valueOf(dataItem.getNoOfReactions()) + AppConstants.SPACE + context.getString(R.string.ID_REACTION));
-                tvFeedCommunityReaction2.setVisibility(View.GONE);
-                tvFeedCommunityReaction3.setVisibility(View.GONE);
+            case AppConstants.HEART_REACTION_CONSTANT:
+                tvFeedCommunityUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
                 break;
-            case 2:
-                tvFeedCommunityTotalReactions.setText(String.valueOf(dataItem.getNoOfReactions()) + AppConstants.SPACE + context.getString(R.string.ID_REACTION) + AppConstants.S);
-                tvFeedCommunityReaction3.setVisibility(View.GONE);
+            case AppConstants.EMOJI_FIRST_REACTION_CONSTANT:
+                tvFeedCommunityUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_emoji_xo_xo, 0, 0, 0);
                 break;
-            case 3:
+            case AppConstants.EMOJI_SECOND_REACTION_CONSTANT:
+                tvFeedCommunityUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_emoji2_with_you, 0, 0, 0);
                 break;
+            case AppConstants.EMOJI_THIRD_REACTION_CONSTANT:
+                tvFeedCommunityUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_emoji3_whistel, 0, 0, 0);
+                break;
+
             default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + dataItem.getNoOfReactions());
-        }*/
-      /*  switch (dataItem.getNoOfComments()) {
-            case 0:
-                tvFeedCommunityTotalReplies.setVisibility(View.GONE);
-                break;
-            case 1:
-                tvFeedCommunityTotalReplies.setText(String.valueOf(dataItem.getNoOfComments()) + AppConstants.SPACE + context.getString(R.string.ID_REPLY));
-                break;
-            case 2:
-                tvFeedCommunityTotalReplies.setText(String.valueOf(dataItem.getNoOfComments()) + AppConstants.SPACE + context.getString(R.string.ID_REPLIES));
-                break;
-            default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + dataItem.getNoOfReactions());
-        }*/
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + dataItem.getReactionValue());
+        }
     }
 
+    private void userComments() {
+        LastComment lastComment = dataItem.getLastComment();
+        if (null != lastComment) {
+            String feedUserIconUrl = lastComment.getParticipantImageUrl();
+            ivFeedCommunityUserPic.setCircularImage(true);
+            ivFeedCommunityUserPic.bindImage(feedUserIconUrl);
+            String userName = LEFT_HTML_TAG_FOR_COLOR + lastComment.getParticipantName() + RIGHT_HTML_TAG_FOR_COLOR;
+            if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                tvFeedCommunityUserCommentPost.setText(Html.fromHtml(userName + AppConstants.COLON + lastComment.getComment(), 0)); // for 24 api and more
+            } else {
+                tvFeedCommunityUserCommentPost.setText(Html.fromHtml(userName + AppConstants.COLON + lastComment.getComment()));// or for older api
+            }
+            if (lastComment.getIsAnonymous()) {
+                tvFeedCommunityUserCommentPostMenu.setVisibility(View.GONE);
+            }
+        }
+    }
     private void imageOperations(Context context) {
         String feedCircleIconUrl = dataItem.getAuthorImageUrl();
         if (StringUtil.isNotNullOrEmptyString(feedCircleIconUrl)) {
@@ -226,18 +243,7 @@ public class FeedCommunityHolder extends BaseViewHolder<FeedDetail> implements V
                     .into(ivFirstLandscape);
             liFeedCommunityImages.addView(child);
         }
-    /*    if (null != dataItem.getRecentComment() && StringUtil.isNotNullOrEmptyString(dataItem.getRecentComment().getCommentDescription()) && StringUtil.isNotNullOrEmptyString(dataItem.getRecentComment().getUserName())) {
-            String feedUserIconUrl = dataItem.getRecentComment().getUserProfilePicUrl();
-            ivFeedCommunityUserPic.setCircularImage(true);
-            ivFeedCommunityUserPic.bindImage(feedUserIconUrl);
-            String userName = LEFT_HTML_TAG_FOR_COLOR + dataItem.getRecentComment().getUserName() + RIGHT_HTML_TAG_FOR_COLOR;
-            if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                tvFeedCommunityUserCommentPost.setText(Html.fromHtml(userName + AppConstants.COLON + dataItem.getRecentComment().getCommentDescription(), 0)); // for 24 api and more
-            } else {
-                tvFeedCommunityUserCommentPost.setText(Html.fromHtml(userName + AppConstants.COLON + dataItem.getRecentComment().getCommentDescription()));// or for older api
-            }
-        }*/
-    }
+     }
 
     @Override
     public void viewRecycled() {
@@ -249,96 +255,58 @@ public class FeedCommunityHolder extends BaseViewHolder<FeedDetail> implements V
         viewInterface.handleOnClick(dataItem, tvFeedCommunityTotalReplies);
     }
 
+    @OnClick(R.id.tv_feed_community_user_menu)
+    public void menuItemClick() {
+        viewInterface.handleOnClick(dataItem, tvFeedCommunityUserMenu);
+    }
+
+    @OnClick(R.id.tv_feed_community_user_comment_post_menu)
+    public void commentItemClick() {
+        viewInterface.handleOnClick(dataItem, tvFeedCommunityUserCommentPostMenu);
+    }
+    @OnClick(R.id.li_feed_community_images)
+    public void communityImageClick() {
+        viewInterface.handleOnClick(dataItem, liFeedCommunityImages);
+    }
+    @OnClick(R.id.li_feed_community_join_conversation)
+    public void joinConversationClick() {
+        viewInterface.handleOnClick(dataItem, liFeedCommunityJoinConversation);
+    }
+    @OnClick(R.id.tv_feed_community_user_reaction)
+    public void userReactionClick() {
+        dataItem.setLongPress(false);
+        if (dataItem.getReactionValue() == AppConstants.HEART_REACTION_CONSTANT) {
+            if (liFeedCommunityEmojiPopUp.getVisibility() == View.VISIBLE) {
+                viewInterface.handleOnClick(dataItem, tvFeedCommunityUserReaction);
+            }
+            viewInterface.userCommentLikeRequest(dataItem, AppConstants.NO_REACTION_CONSTANT, getAdapterPosition());
+
+        } else {
+            if (liFeedCommunityEmojiPopUp.getVisibility() == View.VISIBLE) {
+                viewInterface.handleOnClick(dataItem, tvFeedCommunityUserReaction);
+            }
+            viewInterface.userCommentLikeRequest(dataItem, AppConstants.HEART_REACTION_CONSTANT, getAdapterPosition());
+        }
+    }
+    @OnClick(R.id.tv_feed_community_user_comment)
+    public void communityUserCommentClick() {
+        viewInterface.handleOnClick(dataItem, tvFeedCommunityUserComment);
+    }
+    @OnClick(R.id.tv_feed_community_join)
+    public void communityJoinClick() {
+        viewInterface.handleOnClick(dataItem, tvFeedCommunityJoin);
+    }
     @Override
     public void onClick(View view) {
-        int id = view.getId();
-        switch (id) {
-            case R.id.li_feed_community_images:
-                viewInterface.handleOnClick(dataItem, liFeedCommunityImages);
-                break;
-            case R.id.li_feed_community_join_conversation:
-                viewInterface.handleOnClick(dataItem, liFeedCommunityJoinConversation);
-                break;
-            case R.id.tv_feed_community_user_reaction:
-              /*  if (dataItem.getUserReaction().equalsIgnoreCase(AppConstants.HEART_REACTION)) {
-                    tvFeedCommunityUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
-                    dataItem.setUserReaction(AppConstants.NO_REACTION);
-                    if (liFeedCommunityEmojiPopUp.getVisibility() == View.VISIBLE) {
-                        viewInterface.handleOnClick(dataItem, tvFeedCommunityUserReaction);
-                    }
-                } else {
-                    tvFeedCommunityUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
-                    dataItem.setUserReaction(AppConstants.HEART_REACTION);
-                    if (liFeedCommunityEmojiPopUp.getVisibility() == View.VISIBLE) {
-                        viewInterface.handleOnClick(dataItem, tvFeedCommunityUserReaction);
-                    }
-                }*/
-                break;
-            case R.id.tv_feed_community_user_comment:
-                viewInterface.handleOnClick(dataItem, tvFeedCommunityUserComment);
-                break;
-            case R.id.tv_feed_community_user_bookmark:
-              /*  if (dataItem.getBookmarked()) {
-                    tvFeedCommunityUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_in_active, 0);
-                    dataItem.setBookmarked(false);
-                } else {
-                    tvFeedCommunityUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_active, 0);
-                    dataItem.setBookmarked(true);
-                }*/
-                break;
-            case R.id.tv_feed_community_user_menu:
-                viewInterface.handleOnClick(dataItem, tvFeedCommunityUserMenu);
-                break;
-            case R.id.tv_feed_community_join:
-                viewInterface.handleOnClick(dataItem, tvFeedCommunityJoin);
-                break;
-            default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
-        }
-    }
 
-    @Override
-    public boolean onLongClick(View view) {
-        int id = view.getId();
-        switch (id) {
-            case R.id.tv_feed_community_user_reaction:
-                viewInterface.handleOnClick(dataItem, tvFeedCommunityUserReaction);
-                break;
-            default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + "  " + TAG + " " + id);
-        }
+    }
+    @OnLongClick(R.id.tv_feed_community_user_reaction)
+    public boolean userReactionLongClick() {
+        dataItem.setItemPosition(getAdapterPosition());
+        viewInterface.handleOnClick(dataItem, tvFeedCommunityUserReaction);
         return true;
     }
 
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        return true;
-    }
 
-    public void menuItemForCommunityClick() {
-        mSpinnerMenuItems = new ArrayList();
-        mSpinnerMenuItems.add(mContext.getString(R.string.ID_SHARE));
-        mSpinnerMenuItems.add(mContext.getString(R.string.ID_EDIT));
-        mSpinnerMenuItems.add(mContext.getString(R.string.ID_LEAVE));
-        mSpinnerMenuItems.add(AppConstants.SPACE);
-        ArrayAdapter<String> spinClockInWorkSiteAdapter = new ArrayAdapter<>(mContext, R.layout.about_community_spinner_row_back, mSpinnerMenuItems);
-        spFeedCommunityUserMenu.setAdapter(spinClockInWorkSiteAdapter);
-        spFeedCommunityUserMenu.setSelection(3);
-        spFeedCommunityUserMenu.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (null != view) {
-                    String msupplier = parent.getItemAtPosition(position).toString();
-                    ((TextView) view).setTextSize(0);
-                    ((TextView) view).setTextColor(ContextCompat.getColor(mContext, R.color.fully_transparent));
-                    LogUtils.info("Selected item : ", spFeedCommunityUserMenu.getSelectedItem().toString());
-                    LogUtils.info("Selected item position : ", "" + position);
-                }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-    }
 }

@@ -3,32 +3,52 @@ package appliedlife.pvtltd.SHEROES.basecomponents.baseresponse;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.HashMap;
+
 public abstract class BaseResponse
 {
-    @SerializedName("errors")
+    @SerializedName("fieldErrorMessageMap")
     @Expose
-    protected ServiceErrors serviceErrors;
+    private HashMap<String,String> fieldErrorMessageMap;
+    @SerializedName("numFound")
+    @Expose
+    private int numFound;
+    @SerializedName("start")
+    @Expose
+    private int start;
     @SerializedName("status")
     @Expose
-    protected ResponseStatus responseStatus;
+    private String status;
 
-    public ServiceErrors getServiceErrors()
-    {
-        return serviceErrors;
+    public HashMap<String, String> getFieldErrorMessageMap() {
+        return fieldErrorMessageMap;
     }
 
-    public void setServiceErrors(ServiceErrors serviceErrors)
-    {
-        this.serviceErrors = serviceErrors;
+    public void setFieldErrorMessageMap(HashMap<String, String> fieldErrorMessageMap) {
+        this.fieldErrorMessageMap = fieldErrorMessageMap;
     }
 
-    public ResponseStatus getResponseStatus()
-    {
-        return responseStatus;
+    public int getNumFound() {
+        return numFound;
     }
 
-    public void setResponseStatus(ResponseStatus responseStatus)
-    {
-        this.responseStatus = responseStatus;
+    public void setNumFound(int numFound) {
+        this.numFound = numFound;
+    }
+
+    public int getStart() {
+        return start;
+    }
+
+    public void setStart(int start) {
+        this.start = start;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

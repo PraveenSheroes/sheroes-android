@@ -9,7 +9,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 
 public interface HomeView extends BaseMvpView {
     void getFeedListSuccess(List<FeedDetail> feedDetailList);
-    void getLikesSuccess(String success);
+    void getSuccessForAllResponse(String success, int successFrom);
     void getDB(List<MasterData> masterDatas);
     void showNwError();
 }

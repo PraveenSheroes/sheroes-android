@@ -22,11 +22,13 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.database.dbentities.MasterData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
@@ -55,11 +57,23 @@ public class CommunitiesDetailFragment extends BaseFragment implements HomeView 
     @Bind(R.id.tv_join_view)
     TextView mTvJoinView;
     private AppUtils mAppUtils;
-    public static CommunitiesDetailFragment createInstance(int itemsCount) {
+    private FragmentListRefreshData mFragmentListRefreshData;
+    private FeedDetail mFeedDetail;
+    public static CommunitiesDetailFragment createInstance(FeedDetail feedDetail) {
         CommunitiesDetailFragment communitiesDetailFragment = new CommunitiesDetailFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, feedDetail);
+        communitiesDetailFragment.setArguments(bundle);
         return communitiesDetailFragment;
     }
-
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if(null!=getArguments())
+        {
+            mFeedDetail =getArguments().getParcelable(AppConstants.ARTICLE_DETAIL);
+        }
+    }
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -79,6 +93,7 @@ public class CommunitiesDetailFragment extends BaseFragment implements HomeView 
         View view = inflater.inflate(R.layout.fragment_communities_detail, container, false);
         ButterKnife.bind(this, view);
         mAppUtils = AppUtils.getInstance();
+        mFragmentListRefreshData=new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.COMMUNITY_DETAIL,mFeedDetail.getId());
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
         mHomePresenter.attachView(this);
@@ -87,8 +102,7 @@ public class CommunitiesDetailFragment extends BaseFragment implements HomeView 
         mAdapter = new GenericRecyclerViewAdapter(getContext(), (CommunitiesDetailActivity) getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
-
-        mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager, AppConstants.MY_COMMUNITIES_FRAGMENT) {
+        mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager,mFragmentListRefreshData) {
             @Override
             public void onHide() {
                 if (mTvJoinView.getVisibility() == View.GONE) {
@@ -110,14 +124,15 @@ public class CommunitiesDetailFragment extends BaseFragment implements HomeView 
 
             }
         });
-        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY));
+        if(StringUtil.isNotNullOrEmptyString(mFeedDetail.getId())) {
+            mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo(),mFragmentListRefreshData.getIdFeedDetail()));
+        }
         swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                // Refresh items
                 LogUtils.info("swipe", "*****************end called");
                 mPullRefreshList.setPullToRefresh(true);
-                mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY));
+                mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_SUB_TYPE,mFragmentListRefreshData.getPageNo()+1,mFragmentListRefreshData.getIdFeedDetail()));
             }
         });
         return view;
@@ -130,9 +145,11 @@ public class CommunitiesDetailFragment extends BaseFragment implements HomeView 
     }
 
     @Override
-    public void getLikesSuccess(String success) {
+    public void getSuccessForAllResponse(String success, int successFrom) {
 
     }
+
+
 
     /* @Override
         public void getFeedListSuccess(List<FeedDetail> feedDetailList) {

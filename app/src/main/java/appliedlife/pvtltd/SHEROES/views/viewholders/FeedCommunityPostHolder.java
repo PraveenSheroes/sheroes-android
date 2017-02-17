@@ -1,29 +1,28 @@
 package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Build;
-import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.LastComment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -32,12 +31,13 @@ import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnLongClick;
 
 /**
  * Created by Praveen_Singh on 22-01-2017.
  */
 
-public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> implements View.OnLongClickListener {
+public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     private final String TAG = LogUtils.makeLogTag(FeedCommunityPostHolder.class);
     private static final String LEFT_HTML_TAG_FOR_COLOR = "<b><font color='#323940'>";
     private static final String RIGHT_HTML_TAG_FOR_COLOR = "</font></b>";
@@ -90,12 +90,12 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> implemen
     TextView tvFeedCommunityPostRegisterUserComment;
     @Bind(R.id.fl_feed_community_post_no_reaction_comments)
     FrameLayout flFeedCommunityPostNoReactionComment;
+    @Bind(R.id.tv_feed_community_post_user_comment_post_menu)
+    TextView tvFeedCommunityPostUserCommentPostMenu;
     BaseHolderInterface viewInterface;
     private FeedDetail dataItem;
-    @Bind(R.id.sp_feed_community_post_user_menu)
-    Spinner spFeedCommunityPostUserMenu;
     Context mContext;
-    List<String> mSpinnerMenuItems;
+
     public FeedCommunityPostHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
@@ -106,16 +106,14 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> implemen
     @Override
     public void bindData(FeedDetail item, final Context context, int position) {
         this.dataItem = item;
-        mContext=context;
+        mContext = context;
         liFeedCommunityPostJoinConversation.setOnClickListener(this);
-        tvFeedCommunityPostUserReaction.setOnLongClickListener(this);
         tvFeedCommunityPostUserReaction.setOnClickListener(this);
         tvFeedCommunityPostUserComment.setOnClickListener(this);
         tvFeedCommunityPostUserBookmark.setOnClickListener(this);
         tvFeedCommunityPostUserMenu.setOnClickListener(this);
         imageOperations(context);
         allTextViewStringOperations(context);
-        menuItemForCommunityPostClick();
         if (StringUtil.isNotEmptyCollection(dataItem.getImageUrls())) {
             List<String> coverImageList = dataItem.getImageUrls();
             if (coverImageList.size() > 0) {
@@ -134,19 +132,20 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> implemen
                         if (StringUtil.isNotEmptyCollection(coverImageList) && StringUtil.isNotNullOrEmptyString(coverImageList.get(0).getFeedDetailImageUrl()) && StringUtil.isNotNullOrEmptyString(coverImageList.get(1).getFeedDetailImageUrl())) {
                             twoImagesSetting(context, coverImageList.get(0), coverImageList.get(1));
                         }
-                        break;
+                        break;*/
                     case 3:
                         liFeedCommunityUserPostImages.removeAllViews();
                         liFeedCommunityUserPostImages.removeAllViewsInLayout();
-                        if (StringUtil.isNotEmptyCollection(coverImageList) && StringUtil.isNotNullOrEmptyString(coverImageList.get(0).getFeedDetailImageUrl()) && StringUtil.isNotNullOrEmptyString(coverImageList.get(1).getFeedDetailImageUrl()) && StringUtil.isNotNullOrEmptyString(coverImageList.get(2).getFeedDetailImageUrl())) {
-                            if (coverImageList.get(0).getWidth() > coverImageList.get(0).getHeight()) {
-                                feedFirstLandscapWIthTwoImageModeSetting(context, coverImageList.get(0).getFeedDetailImageUrl(), coverImageList.get(1).getFeedDetailImageUrl(), coverImageList.get(2).getFeedDetailImageUrl());
+                        if (StringUtil.isNotEmptyCollection(coverImageList) && StringUtil.isNotNullOrEmptyString(coverImageList.get(0)) && StringUtil.isNotNullOrEmptyString(coverImageList.get(1)) && StringUtil.isNotNullOrEmptyString(coverImageList.get(2))) {
+                            boolean isHeightGreater = getCoverImageHeightWidth(coverImageList.get(0));
+                            if (isHeightGreater) {
+                                feedFirstLandscapWIthTwoImageModeSetting(context, coverImageList.get(0), coverImageList.get(1), coverImageList.get(2));
                             } else {
-                                feedFirstPortraitWithTwoImageModeSetting(context, coverImageList.get(0).getFeedDetailImageUrl(), coverImageList.get(1).getFeedDetailImageUrl(), coverImageList.get(2).getFeedDetailImageUrl());
+                                feedFirstPortraitWithTwoImageModeSetting(context, coverImageList.get(0), coverImageList.get(1), coverImageList.get(2));
                             }
                         }
                         break;
-                    case 4:
+                 /*   case 4:
                         liFeedCommunityUserPostImages.removeAllViews();
                         liFeedCommunityUserPostImages.removeAllViewsInLayout();
                         if (StringUtil.isNotEmptyCollection(coverImageList) && StringUtil.isNotNullOrEmptyString(coverImageList.get(0).getFeedDetailImageUrl()) && StringUtil.isNotNullOrEmptyString(coverImageList.get(1).getFeedDetailImageUrl()) && StringUtil.isNotNullOrEmptyString(coverImageList.get(2).getFeedDetailImageUrl()) && StringUtil.isNotNullOrEmptyString(coverImageList.get(3).getFeedDetailImageUrl())) {
@@ -166,13 +165,29 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> implemen
         }
     }
 
+    private boolean getCoverImageHeightWidth(String imagePath) {
+        final boolean[] isHeightGreater = new boolean[1];
+        Glide.with(mContext)
+                .load(imagePath).asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .skipMemoryCache(true)
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
+                        LogUtils.info("swipe", "*****************image height******* " + resource.getHeight());
+                        if (resource.getHeight() > resource.getWidth()) {
+                            isHeightGreater[0] = true;
+                        } else {
+                            isHeightGreater[0] = false;
+                        }
+                    }
+                });
+        return isHeightGreater[0];
+    }
+
     @Override
     public void viewRecycled() {
 
-    }
-    @OnClick(R.id.tv_feed_community_post_total_replies)
-    public void repliesClick() {
-        viewInterface.handleOnClick(dataItem, tvFeedCommunityPostTotalReplies);
     }
 
     private void allTextViewStringOperations(Context context) {
@@ -192,7 +207,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> implemen
 
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getCreatedDate())) {
-           // tvFeedCommunityPostTime.setText(dataItem.getCreatedDate());
+            // tvFeedCommunityPostTime.setText(dataItem.getCreatedDate());
         }
 
         if (StringUtil.isNotNullOrEmptyString(dataItem.getDescription())) {
@@ -207,47 +222,83 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> implemen
                 tvFeedCommunityPostText.setText(Html.fromHtml(description + AppConstants.DOTS + AppConstants.SPACE + viewMore));// or for older api
             }
         }
-       /* if (dataItem.getUserReaction().equalsIgnoreCase(AppConstants.HEART_REACTION)) {
-            tvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
-        }
-        if (dataItem.getBookmarked()) {
+        if (dataItem.isBookmarked()) {
             tvFeedCommunityPostUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_active, 0);
+        } else {
+            tvFeedCommunityPostUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_in_active, 0);
         }
-        if (dataItem.getNoOfReactions() < 1 && dataItem.getNoOfComments() < 1) {
+        if (dataItem.getNoOfLikes() < AppConstants.ONE_CONSTANT && dataItem.getNoOfComments() < AppConstants.ONE_CONSTANT) {
+            tvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
             flFeedCommunityPostNoReactionComment.setVisibility(View.GONE);
+        } else if (dataItem.getNoOfLikes() < AppConstants.ONE_CONSTANT) {
+            flFeedCommunityPostNoReactionComment.setVisibility(View.GONE);
+            tvFeedCommunityPostTotalReactions.setVisibility(View.GONE);
+        } else {
+            flFeedCommunityPostNoReactionComment.setVisibility(View.VISIBLE);
+            switch (dataItem.getNoOfLikes()) {
+                case AppConstants.ONE_CONSTANT:
+                    tvFeedCommunityPostTotalReactions.setText(String.valueOf(dataItem.getNoOfLikes()) + AppConstants.SPACE + context.getString(R.string.ID_REACTION));
+                    userLike();
+                    break;
+                default:
+                    tvFeedCommunityPostTotalReactions.setText(String.valueOf(dataItem.getNoOfLikes()) + AppConstants.SPACE + context.getString(R.string.ID_REACTION) + AppConstants.S);
+                    userLike();
+            }
         }
-        switch (dataItem.getNoOfReactions()) {
-            case 0:
-                tvFeedCommunityPostReaction1.setVisibility(View.GONE);
-                tvFeedCommunityPostTotalReactions.setVisibility(View.GONE);
+        if (dataItem.getNoOfComments() < AppConstants.ONE_CONSTANT) {
+            tvFeedCommunityPostTotalReplies.setVisibility(View.GONE);
+        } else {
+            switch (dataItem.getNoOfComments()) {
+                case AppConstants.ONE_CONSTANT:
+                    tvFeedCommunityPostTotalReplies.setText(String.valueOf(dataItem.getNoOfComments()) + AppConstants.SPACE + context.getString(R.string.ID_REPLY));
+                    userComments();
+                    break;
+                default:
+                    tvFeedCommunityPostTotalReplies.setText(String.valueOf(dataItem.getNoOfComments()) + AppConstants.SPACE + context.getString(R.string.ID_REPLIES));
+                    userComments();
+            }
+        }
+    }
+
+    private void userLike() {
+
+        switch (dataItem.getReactionValue()) {
+            case AppConstants.NO_REACTION_CONSTANT:
+                tvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
                 break;
-            case 1:
-                tvFeedCommunityPostTotalReactions.setText(String.valueOf(dataItem.getNoOfReactions()) + AppConstants.SPACE + context.getString(R.string.ID_REACTION));
-                tvFeedCommunityPostReaction2.setVisibility(View.GONE);
-                tvFeedCommunityPostReaction3.setVisibility(View.GONE);
+            case AppConstants.HEART_REACTION_CONSTANT:
+                tvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
                 break;
-            case 2:
-                tvFeedCommunityPostTotalReactions.setText(String.valueOf(dataItem.getNoOfReactions()) + AppConstants.SPACE + context.getString(R.string.ID_REACTION) + AppConstants.S);
-                tvFeedCommunityPostReaction3.setVisibility(View.GONE);
+            case AppConstants.EMOJI_FIRST_REACTION_CONSTANT:
+                tvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_emoji_xo_xo, 0, 0, 0);
                 break;
-            case 3:
+            case AppConstants.EMOJI_SECOND_REACTION_CONSTANT:
+                tvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_emoji2_with_you, 0, 0, 0);
+                break;
+            case AppConstants.EMOJI_THIRD_REACTION_CONSTANT:
+                tvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_emoji3_whistel, 0, 0, 0);
                 break;
             default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + dataItem.getNoOfReactions());
-        }*/
-      /*  switch (dataItem.getNoOfComments()) {
-            case 0:
-                tvFeedCommunityPostTotalReplies.setVisibility(View.GONE);
-                break;
-            case 1:
-                tvFeedCommunityPostTotalReplies.setText(String.valueOf(dataItem.getNoOfComments()) + AppConstants.SPACE + context.getString(R.string.ID_REPLY));
-                break;
-            case 2:
-                tvFeedCommunityPostTotalReplies.setText(String.valueOf(dataItem.getNoOfComments()) + AppConstants.SPACE + context.getString(R.string.ID_REPLIES));
-                break;
-            default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + dataItem.getNoOfReactions());
-        }*/
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + dataItem.getReactionValue());
+        }
+    }
+
+    private void userComments() {
+        LastComment lastComment = dataItem.getLastComment();
+        if (null != lastComment) {
+            String feedUserIconUrl = lastComment.getParticipantImageUrl();
+            ivFeedCommunityPostUserPic.setCircularImage(true);
+            ivFeedCommunityPostUserPic.bindImage(feedUserIconUrl);
+            String userName = LEFT_HTML_TAG_FOR_COLOR + lastComment.getParticipantName() + RIGHT_HTML_TAG_FOR_COLOR;
+            if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                tvFeedCommunityPostUserCommentPost.setText(Html.fromHtml(userName + AppConstants.COLON + lastComment.getComment(), 0)); // for 24 api and more
+            } else {
+                tvFeedCommunityPostUserCommentPost.setText(Html.fromHtml(userName + AppConstants.COLON + lastComment.getComment()));// or for older api
+            }
+            if (lastComment.getIsAnonymous()) {
+                tvFeedCommunityPostUserCommentPostMenu.setVisibility(View.GONE);
+            }
+        }
     }
 
     private void imageOperations(Context context) {
@@ -258,17 +309,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> implemen
             ivFeedCommunityPostRegisterUserPic.setCircularImage(true);
             ivFeedCommunityPostRegisterUserPic.bindImage(feedCircleIconUrl);
         }
-       /* if (null != dataItem.getRecentComment() && StringUtil.isNotNullOrEmptyString(dataItem.getRecentComment().getCommentDescription()) && StringUtil.isNotNullOrEmptyString(dataItem.getRecentComment().getUserName())) {
-            String feedUserIconUrl = dataItem.getRecentComment().getUserProfilePicUrl();
-            ivFeedCommunityPostUserPic.setCircularImage(true);
-            ivFeedCommunityPostUserPic.bindImage(feedUserIconUrl);
-            String userName = LEFT_HTML_TAG_FOR_COLOR + dataItem.getRecentComment().getUserName() + RIGHT_HTML_TAG_FOR_COLOR;
-            if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                tvFeedCommunityPostUserCommentPost.setText(Html.fromHtml(userName + AppConstants.COLON + dataItem.getRecentComment().getCommentDescription(), 0)); // for 24 api and more
-            } else {
-                tvFeedCommunityPostUserCommentPost.setText(Html.fromHtml(userName + AppConstants.COLON + dataItem.getRecentComment().getCommentDescription()));// or for older api
-            }
-        }*/
     }
 
     private void oneImagesSetting(Context context, String firstImage) {
@@ -429,46 +469,35 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> implemen
         liFeedCommunityUserPostImages.addView(child);
     }
 
+    @OnClick(R.id.tv_feed_community_post_total_replies)
+    public void repliesClick() {
+        viewInterface.handleOnClick(dataItem, tvFeedCommunityPostTotalReplies);
+    }
+
+    @OnClick(R.id.li_feed_community_user_post_images)
+    public void communityPostImageClick() {
+        viewInterface.handleOnClick(dataItem, liFeedCommunityUserPostImages);
+    }
+
+    @OnClick(R.id.li_feed_community_post_join_conversation)
+    public void joinConversationClick() {
+        viewInterface.handleOnClick(dataItem, liFeedCommunityPostJoinConversation);
+    }
+
+    @OnClick(R.id.tv_feed_community_post_user_comment)
+    public void userCommentClick() {
+        viewInterface.handleOnClick(dataItem, tvFeedCommunityPostUserComment);
+    }
+
+    @OnClick(R.id.tv_feed_community_post_user_menu)
+    public void userMenuClick() {
+        viewInterface.handleOnClick(dataItem, tvFeedCommunityPostUserMenu);
+    }
+
     @Override
     public void onClick(View view) {
         int id = view.getId();
         switch (id) {
-            case R.id.li_feed_community_user_post_images:
-                viewInterface.handleOnClick(dataItem, liFeedCommunityUserPostImages);
-                break;
-            case R.id.li_feed_community_post_join_conversation:
-                viewInterface.handleOnClick(dataItem, liFeedCommunityPostJoinConversation);
-                break;
-            case R.id.tv_feed_community_post_user_reaction:
-              /*  if (dataItem.getUserReaction().equalsIgnoreCase(AppConstants.HEART_REACTION)) {
-                    tvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
-                    dataItem.setUserReaction(AppConstants.NO_REACTION);
-                    if (liFeedCommunityUserPostEmojiPopUp.getVisibility() == View.VISIBLE) {
-                        viewInterface.handleOnClick(dataItem, tvFeedCommunityPostUserReaction);
-                    }
-                } else {
-                    tvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
-                    dataItem.setUserReaction(AppConstants.HEART_REACTION);
-                    if (liFeedCommunityUserPostEmojiPopUp.getVisibility() == View.VISIBLE) {
-                        viewInterface.handleOnClick(dataItem, tvFeedCommunityPostUserReaction);
-                    }
-                }*/
-                break;
-            case R.id.tv_feed_community_post_user_comment:
-                viewInterface.handleOnClick(dataItem, tvFeedCommunityPostUserComment);
-                break;
-            case R.id.tv_feed_community_post_user_bookmark:
-              /*  if (dataItem.getBookmarked()) {
-                    tvFeedCommunityPostUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_in_active, 0);
-                    dataItem.setBookmarked(false);
-                } else {
-                    tvFeedCommunityPostUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_active, 0);
-                    dataItem.setBookmarked(true);
-                }*/
-                break;
-            case R.id.tv_feed_community_post_user_menu:
-                viewInterface.handleOnClick(dataItem, tvFeedCommunityPostUserMenu);
-                break;
             case R.id.iv_feed_community_post_first:
                 LogUtils.info("img", "**********Image first******");
                 viewInterface.dataOperationOnClick(dataItem);
@@ -538,45 +567,11 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> implemen
         }
     }
 
-    @Override
-    public boolean onLongClick(View view) {
-        int id = view.getId();
-        switch (id) {
-
-            case R.id.tv_feed_community_post_user_reaction:
-                viewInterface.handleOnClick(dataItem, tvFeedCommunityPostUserReaction);
-                break;
-            default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
-        }
+    @OnLongClick(R.id.tv_feed_community_post_user_reaction)
+    public boolean userReactionLongClick() {
+        dataItem.setItemPosition(getAdapterPosition());
+        viewInterface.handleOnClick(dataItem, tvFeedCommunityPostUserReaction);
         return true;
     }
-    public void menuItemForCommunityPostClick() {
-        mSpinnerMenuItems = new ArrayList();
-        mSpinnerMenuItems.add(mContext.getString(R.string.ID_SHARE));
-        mSpinnerMenuItems.add(mContext.getString(R.string.ID_EDIT));
-        mSpinnerMenuItems.add(mContext.getString(R.string.ID_DELETE));
-        mSpinnerMenuItems.add(mContext.getString(R.string.ID_LEAVE));
-        mSpinnerMenuItems.add(mContext.getString(R.string.ID_REPORT));
-        mSpinnerMenuItems.add(AppConstants.SPACE);
-        ArrayAdapter<String> spinClockInWorkSiteAdapter = new ArrayAdapter<>(mContext, R.layout.about_community_spinner_row_back, mSpinnerMenuItems);
-        spFeedCommunityPostUserMenu.setAdapter(spinClockInWorkSiteAdapter);
-        spFeedCommunityPostUserMenu.setSelection(5);
-        spFeedCommunityPostUserMenu.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (null != view) {
-                    String msupplier = parent.getItemAtPosition(position).toString();
-                    ((TextView) view).setTextSize(0);
-                    ((TextView) view).setTextColor(ContextCompat.getColor(mContext, R.color.fully_transparent));
-                    LogUtils.info("Selected item : ", spFeedCommunityPostUserMenu.getSelectedItem().toString());
-                    LogUtils.info("Selected item position : ", "" + position);
-                }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-    }
 }

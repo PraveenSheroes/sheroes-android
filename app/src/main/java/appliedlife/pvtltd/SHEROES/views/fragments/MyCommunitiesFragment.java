@@ -20,6 +20,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.database.dbentities.MasterData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -52,6 +53,7 @@ public class MyCommunitiesFragment  extends BaseFragment implements HomeView {
     private HomeActivityIntractionListner mHomeActivityIntractionListner;
     private SwipPullRefreshList mPullRefreshList;
     private AppUtils mAppUtils;
+    private FragmentListRefreshData mFragmentListRefreshData;
     public static MyCommunitiesFragment createInstance() {
         MyCommunitiesFragment myCommunitiesFragment = new MyCommunitiesFragment();
         return myCommunitiesFragment;
@@ -76,6 +78,7 @@ public class MyCommunitiesFragment  extends BaseFragment implements HomeView {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.bind(this, view);
         mAppUtils = AppUtils.getInstance();
+        mFragmentListRefreshData=new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MY_COMMUNITIES_FRAGMENT,AppConstants.EMPTY_STRING);
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
         mHomePresenter.attachView(this);
@@ -85,7 +88,7 @@ public class MyCommunitiesFragment  extends BaseFragment implements HomeView {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
 
-        mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager,AppConstants.MY_COMMUNITIES_FRAGMENT) {
+        mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager,mFragmentListRefreshData) {
             @Override
             public void onHide() {
                 ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.INVISIBLE);
@@ -101,14 +104,14 @@ public class MyCommunitiesFragment  extends BaseFragment implements HomeView {
 
             }
         });
-        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY));
+        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY,mFragmentListRefreshData.getPageNo()));
         swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 // Refresh items
                 LogUtils.info("swipe", "*****************end called");
                 mPullRefreshList.setPullToRefresh(true);
-                mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY));
+                mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY,mFragmentListRefreshData.getPageNo()+1));
             }
         });
         return view;
@@ -130,9 +133,11 @@ public class MyCommunitiesFragment  extends BaseFragment implements HomeView {
     }
 
     @Override
-    public void getLikesSuccess(String success) {
+    public void getSuccessForAllResponse(String success, int successFrom) {
 
     }
+
+
 
 
     @Override

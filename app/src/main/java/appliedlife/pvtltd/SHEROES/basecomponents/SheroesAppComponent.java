@@ -61,6 +61,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleDetailHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleDetailSuggestedHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleDetailWithInSuggestedHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.BlankHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CommentHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CommunityCardDetailHeader;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CommunitySuggestedHolder;
@@ -119,6 +120,7 @@ public interface SheroesAppComponent {
     void inject(PersonnelProfileFragment personnelProfileFragment);
     void inject(ProffestionalProfileFragment proffestionalProfileFragment);
 
+    void inject(BlankHolder blankHolder);
     void inject(ArticleDetailHolder articleDetailHolder);
     void inject(ArticleCardHolder articleCardHolder);
     void inject(FooterViewHolder footerViewHolder);

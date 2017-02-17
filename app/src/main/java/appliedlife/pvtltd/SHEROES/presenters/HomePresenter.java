@@ -12,6 +12,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.database.dbentities.MasterData;
 import appliedlife.pvtltd.SHEROES.models.HomeModel;
 import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
+import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
@@ -88,6 +90,34 @@ public class HomePresenter extends BasePresenter<HomeView> {
         registerSubscription(subscription);
     }
 
+    public void getBookMarkFromPresenter(BookmarkRequestPojo bookmarkRequestPojo) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showNwError();
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = mHomeModel.getBookMarkFromModel(bookmarkRequestPojo).subscribe(new Subscriber<FeedResponsePojo>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
+                getMvpView().showNwError();
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onNext(FeedResponsePojo feedResponsePojo) {
+                getMvpView().stopProgressBar();
+                getMvpView().getFeedListSuccess(feedResponsePojo.getFeedDetails());
+            }
+        });
+        registerSubscription(subscription);
+    }
+
     public void getLikesFromPresenter(LikeRequestPojo likeRequestPojo) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showNwError();
@@ -105,12 +135,13 @@ public class HomePresenter extends BasePresenter<HomeView> {
                 getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
                 getMvpView().showNwError();
                 getMvpView().stopProgressBar();
+                getMvpView().getSuccessForAllResponse(AppConstants.FAILED,AppConstants.ONE_CONSTANT);
             }
 
             @Override
             public void onNext(LikeResponse likeResponse) {
                 getMvpView().stopProgressBar();
-               getMvpView().getLikesSuccess(likeResponse.getStatus());
+               getMvpView().getSuccessForAllResponse(likeResponse.getStatus(),AppConstants.ONE_CONSTANT);
             }
         });
         registerSubscription(subscription);
@@ -132,16 +163,76 @@ public class HomePresenter extends BasePresenter<HomeView> {
                 getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
                 getMvpView().showNwError();
                 getMvpView().stopProgressBar();
+                getMvpView().getSuccessForAllResponse(AppConstants.FAILED,AppConstants.ONE_CONSTANT);
             }
 
             @Override
             public void onNext(LikeResponse likeResponse) {
                 getMvpView().stopProgressBar();
-                getMvpView().getLikesSuccess(likeResponse.getStatus());
+                getMvpView().getSuccessForAllResponse(likeResponse.getStatus(),AppConstants.ONE_CONSTANT);
             }
         });
         registerSubscription(subscription);
     }
+    public void editCommentFromPresenter(LikeRequestPojo likeRequestPojo) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showNwError();
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = mHomeModel.getUnLikesFromModel(likeRequestPojo).subscribe(new Subscriber<LikeResponse>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
+                getMvpView().showNwError();
+                getMvpView().stopProgressBar();
+                getMvpView().getSuccessForAllResponse(AppConstants.FAILED,AppConstants.TWO_CONSTANT);
+            }
+
+            @Override
+            public void onNext(LikeResponse likeResponse) {
+                getMvpView().stopProgressBar();
+                getMvpView().getSuccessForAllResponse(likeResponse.getStatus(),AppConstants.TWO_CONSTANT);
+            }
+        });
+        registerSubscription(subscription);
+    }
+
+
+    public void addBookMarkFromPresenter(BookmarkRequestPojo bookmarkRequestPojo,boolean isBookmarked) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showNwError();
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = mHomeModel.addBookmarkFromModel(bookmarkRequestPojo,isBookmarked).subscribe(new Subscriber<BookmarkResponsePojo>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
+                getMvpView().showNwError();
+                getMvpView().stopProgressBar();
+                getMvpView().getSuccessForAllResponse(AppConstants.FAILED,AppConstants.THREE_CONSTANT);
+            }
+
+            @Override
+            public void onNext(BookmarkResponsePojo bookmarkResponsePojo) {
+                getMvpView().stopProgressBar();
+                getMvpView().getSuccessForAllResponse(bookmarkResponsePojo.getStatus(),AppConstants.THREE_CONSTANT);
+            }
+        });
+        registerSubscription(subscription);
+    }
+
 
     public void saveMasterDataTypes() {
         getMvpView().startProgressBar();

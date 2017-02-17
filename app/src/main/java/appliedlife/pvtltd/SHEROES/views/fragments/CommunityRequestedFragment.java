@@ -85,7 +85,7 @@ public class CommunityRequestedFragment extends BaseFragment implements Requeste
         mHomeActivityIntractionListner.closeRequestFragment();
     }
    /* @Override
-    public void getAllComments(List<CommentsList> data) {
+    public void getAllCommentsAndReactions(List<CommentsList> data) {
         if(mAdapter!=null) {
             mTvUserCommentHeaderText.setText(getString(R.string.ID_REPLIES)+getString(R.string.ID_OPEN_BRACKET)+String.valueOf(data.size())+getString(R.string.ID_CLOSE_BRACKET));
             mAdapter.setSheroesGenericListData(data);

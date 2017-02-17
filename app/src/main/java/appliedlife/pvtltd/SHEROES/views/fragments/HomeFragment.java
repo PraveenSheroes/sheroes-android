@@ -16,7 +16,6 @@ import android.widget.ProgressBar;
 
 import com.crashlytics.android.Crashlytics;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -24,8 +23,10 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.database.dbentities.MasterData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -63,7 +64,12 @@ public class HomeFragment extends BaseFragment implements HomeView {
     private HomeActivityIntractionListner mHomeActivityIntractionListner;
     private SwipPullRefreshList mPullRefreshList;
     private AppUtils mAppUtils;
-    public List<FeedDetail> mFeedDetailList=new ArrayList<>();
+    FeedDetail mFeedDetail;
+    private FragmentListRefreshData mFragmentListRefreshData;
+    int position;
+    int pressedEmoji;
+    boolean listLoad = true;
+
     public static HomeFragment createInstance(int itemsCount) {
         HomeFragment partThreeFragment = new HomeFragment();
         // Bundle bundle = new Bundle();
@@ -91,17 +97,18 @@ public class HomeFragment extends BaseFragment implements HomeView {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         //   forceCrash();
         // TODO: Move this to where you establish a user session
-       // logUser();
+        // logUser();
 
         //  GoogleAnalyticsTracing.screenNameTracking(getActivity(),SCREEN_NAME);
 
         ButterKnife.bind(this, view);
         mAppUtils = AppUtils.getInstance();
+        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.HOME_FRAGMENT, AppConstants.EMPTY_STRING);
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
         mHomePresenter.attachView(this);
 
-      //  mHomePresenter.saveMasterDataTypes();
+        //  mHomePresenter.saveMasterDataTypes();
 
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -109,14 +116,16 @@ public class HomeFragment extends BaseFragment implements HomeView {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
 
-        mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager,AppConstants.HOME_FRAGMENT) {
+        mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager, mFragmentListRefreshData) {
             @Override
             public void onHide() {
+                listLoad = true;
                 ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.INVISIBLE);
             }
 
             @Override
             public void onShow() {
+                listLoad = true;
                 ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
             }
 
@@ -142,28 +151,40 @@ public class HomeFragment extends BaseFragment implements HomeView {
                 }
             }
         });
-        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE));
+        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
         swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                // Refresh items
+                listLoad = true;
                 LogUtils.info("swipe", "*****************end called");
-                  mPullRefreshList.setPullToRefresh(true);
-                   mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE));
+                mPullRefreshList.setPullToRefresh(true);
+                mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo() + 1));
             }
         });
         return view;
     }
-    public void likeAndUnlikeRequest(long entityId, int reactionValue)
-    {
-        if(reactionValue==0) {
-            mHomePresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(entityId, reactionValue));
-        }
-        else
-        {
-            mHomePresenter.getUnLikesFromPresenter(mAppUtils.unLikeRequestBuilder(entityId));
+
+    public void bookMarkForCard(FeedDetail feedDetail) {
+        listLoad = false;
+        mHomePresenter.addBookMarkFromPresenter(mAppUtils.bookMarkRequestBuilder(feedDetail.getEntityOrParticipantId()), feedDetail.isBookmarked());
+    }
+
+    public void likeAndUnlikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
+        listLoad = false;
+        mFeedDetail = (FeedDetail) baseResponse;
+        this.position = position;
+        this.pressedEmoji = reactionValue;
+        if (null != mFeedDetail && mFeedDetail.isLongPress()) {
+            mHomePresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(mFeedDetail.getEntityOrParticipantId(), reactionValue));
+        } else {
+            if (reactionValue == AppConstants.NO_REACTION_CONSTANT) {
+                mHomePresenter.getUnLikesFromPresenter(mAppUtils.unLikeRequestBuilder(mFeedDetail.getEntityOrParticipantId()));
+            } else {
+                mHomePresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(mFeedDetail.getEntityOrParticipantId(), reactionValue));
+            }
         }
     }
+
     private void logUser() {
         // TODO: Use the current user's information
         // You can call any combination of these three methods
@@ -198,29 +219,89 @@ public class HomeFragment extends BaseFragment implements HomeView {
     }
 
     @Override
-    public void getLikesSuccess(String success) {
-        mAdapter.notifyDataSetChanged();
-        LogUtils.info("likes", "*********************like success******"+success);
+    public void getSuccessForAllResponse(String success, int successFrom) {
+        switch (successFrom) {
+            case AppConstants.ONE_CONSTANT:
+                likeSuccess(success);
+                break;
+            case AppConstants.TWO_CONSTANT:
+                commentSuccess(success);
+                break;
+            case AppConstants.THREE_CONSTANT:
+                bookMarkSuccess(success);
+                break;
+            default:
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + successFrom);
+        }
+
+        LogUtils.info("likes", "*********************like success******" + success);
     }
+
+    private void commentSuccess(String success) {
+
+    }
+
+    private void bookMarkSuccess(String success) {
+        if (success.equalsIgnoreCase(AppConstants.SUCCESS)) {
+            if (!mFeedDetail.isBookmarked()) {
+                mFeedDetail.setBookmarked(true);
+            } else {
+                mFeedDetail.setBookmarked(false);
+            }
+            mAdapter.setDataOnPosition(mFeedDetail, position);
+        } else {
+            mAdapter.setDataOnPosition(mFeedDetail, position);
+        }
+
+    }
+
+    private void likeSuccess(String success) {
+
+        if (success.equalsIgnoreCase(AppConstants.SUCCESS)) {
+
+            if (null != mFeedDetail && mFeedDetail.isLongPress()) {
+                if (mFeedDetail.getReactionValue() == AppConstants.NO_REACTION_CONSTANT) {
+                    mFeedDetail.setReactionValue(pressedEmoji);
+                    mFeedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
+                } else {
+                    mFeedDetail.setReactionValue(pressedEmoji);
+                }
+
+            } else {
+
+                if (mFeedDetail.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
+                    mFeedDetail.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
+                    mFeedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() - AppConstants.ONE_CONSTANT);
+                } else {
+                    mFeedDetail.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
+                    mFeedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
+                }
+            }
+            mAdapter.setDataOnPosition(mFeedDetail, position);
+        }
+    }
+
 
     @Override
     public void getDB(List<MasterData> masterDatas) {
-        for(MasterData master:masterDatas) {
-            LogUtils.info("db", "*********************List master******" +master);
+        for (MasterData master : masterDatas) {
+            LogUtils.info("db", "*********************List master******" + master);
         }
         mHomePresenter.fetchMasterDataTypes();
     }
 
     @Override
     public void showNwError() {
-       // mHomeActivityIntractionListner.onErrorOccurence();
+        // mHomeActivityIntractionListner.onErrorOccurence();
     }
 
 
     @Override
     public void startProgressBar() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mProgressBar.bringToFront();
+        if (listLoad) {
+            mProgressBar.setVisibility(View.VISIBLE);
+            mProgressBar.bringToFront();
+        }
     }
 
     @Override

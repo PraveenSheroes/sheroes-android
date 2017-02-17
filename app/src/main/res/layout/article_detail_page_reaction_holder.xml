@@ -120,11 +120,11 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight=".28"
-                android:text="@string/ID_LOVE"
-                android:drawablePadding="@dimen/dp_size_minus_20"
-                android:textColor="@color/emoji_text"
                 android:drawableLeft="@drawable/ic_heart_in_active"
-                android:gravity="center" />
+                android:drawablePadding="@dimen/dp_size_minus_20"
+                android:gravity="center"
+                android:text="@string/ID_LOVE"
+                android:textColor="@color/emoji_text" />
 
             <TextView
                 android:id="@+id/tv_article_detail_user_comment"
@@ -229,27 +229,22 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp_size_12"
                 android:layout_weight="@integer/int_value_for_line_1"
+                android:lines="@integer/int_value_for_line_2"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:lineSpacingExtra="@dimen/dp_size_3"
                 android:text="@string/IDS_STR_NETWORK_TIME_OUT_DESCRIPTION"
                 android:textColor="@color/feed_conversation"
                 android:textSize="@dimen/sp_size_12" />
 
-            <Spinner
-                android:id="@+id/sp_article_detail_user_comment_post_menu"
-                android:layout_width="@dimen/dp_size_12"
-                android:layout_height="match_parent"
-                android:layout_gravity="right"
-                android:background="@color/fully_transparent"
-                android:dropDownSelector="@color/fully_transparent" />
-
             <TextView
                 android:id="@+id/tv_article_detail_user_comment_post_menu"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="right"
-                android:drawableRight="@drawable/ic_menu_dashboard" />
+                android:drawableRight="@drawable/ic_menu_dashboard"
+                android:paddingLeft="@dimen/dp_size_10" />
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/li_article_detail_user_comments_second"
             android:layout_width="match_parent"
@@ -275,26 +270,21 @@
                 android:layout_marginLeft="@dimen/dp_size_12"
                 android:layout_weight="@integer/int_value_for_line_1"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:lines="@integer/int_value_for_line_2"
                 android:lineSpacingExtra="@dimen/dp_size_3"
                 android:text="@string/IDS_STR_NETWORK_TIME_OUT_DESCRIPTION"
                 android:textColor="@color/feed_conversation"
                 android:textSize="@dimen/sp_size_12" />
-
-            <Spinner
-                android:id="@+id/sp_article_detail_user_comment_post_menu_second"
-                android:layout_width="@dimen/dp_size_12"
-                android:layout_height="match_parent"
-                android:layout_gravity="right"
-                android:background="@color/fully_transparent"
-                android:dropDownSelector="@color/fully_transparent" />
 
             <TextView
                 android:id="@+id/tv_article_detail_user_comment_post_menu_second"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="right"
-                android:drawableRight="@drawable/ic_menu_dashboard" />
+                android:drawableRight="@drawable/ic_menu_dashboard"
+                android:paddingLeft="@dimen/dp_size_10" />
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/li_article_detail_user_comments_third"
             android:layout_width="match_parent"
@@ -319,27 +309,35 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp_size_12"
                 android:layout_weight="@integer/int_value_for_line_1"
+                android:lines="@integer/int_value_for_line_2"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:lineSpacingExtra="@dimen/dp_size_3"
                 android:text="@string/IDS_STR_NETWORK_TIME_OUT_DESCRIPTION"
                 android:textColor="@color/feed_conversation"
                 android:textSize="@dimen/sp_size_12" />
 
-            <Spinner
-                android:id="@+id/sp_article_detail_user_comment_post_menu_third"
-                android:layout_width="@dimen/dp_size_12"
-                android:layout_height="match_parent"
-                android:layout_gravity="right"
-                android:background="@color/fully_transparent"
-                android:dropDownSelector="@color/fully_transparent" />
 
             <TextView
                 android:id="@+id/tv_article_detail_user_comment_post_menu_third"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="right"
-                android:drawableRight="@drawable/ic_menu_dashboard" />
+                android:drawableRight="@drawable/ic_menu_dashboard"
+                android:paddingLeft="@dimen/dp_size_10" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_article_detail_view_more"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:gravity="center"
+            android:padding="@dimen/dp_size_8"
+            android:text="@string/ID_VIEW_MORE"
+            android:textColor="@color/teg_text_color"
+            android:textSize="@dimen/dp_size_12" />
+
         <LinearLayout
             android:id="@+id/li_article_detail_join_conversation"
             android:layout_width="match_parent"

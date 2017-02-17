@@ -5,10 +5,12 @@ import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.Response;
 import appliedlife.pvtltd.SHEROES.database.dbentities.MasterData;
+import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityTagsListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.InviteSearchResponse;
@@ -43,21 +45,29 @@ import rx.Observable;
  * Title: All network calls api whill be register here and all get ,post will be redirect .
  */
 public interface SheroesAppServiceApi {
-
+    /*Participant*/
     @POST("participant/feed/")
     Observable<FeedResponsePojo> getFeedFromApi(@Body FeedRequestPojo feedRequestPojo );
+    @POST("participant/feed/get_bookmarked")
+    Observable<FeedResponsePojo> getBookMarkFromApi(@Body  BookmarkRequestPojo bookmarkResponsePojo);
+
+    /*Participation*/
     @POST("participation/reaction/like")
     Observable<LikeResponse> getLikesFromApi(@Body LikeRequestPojo likeRequestPojo );
     @POST("participation/reaction/unlike")
     Observable<LikeResponse> getUnLikesFromApi(@Body LikeRequestPojo likeRequestPojo );
     @POST("participation/reaction/get_comments")
-    Observable<CommentResponsePojo> getCommentFromApi(@Body CommentRequestPojo commentRequestPojo );
-
-
-
-
-
-
+    Observable<CommentReactionResponsePojo> getCommentFromApi(@Body CommentReactionRequestPojo commentReactionRequestPojo);
+    @POST("participation/reaction/get_reactions")
+    Observable<CommentReactionResponsePojo> getAllReactionFromApi(@Body CommentReactionRequestPojo commentReactionRequestPojo);
+    @POST("participation/reaction/add_comment")
+    Observable<CommentReactionResponsePojo> addCommentFromApi(@Body CommentReactionRequestPojo commentReactionRequestPojo);
+    @POST("participation/reaction/edit_comment")
+    Observable<CommentReactionResponsePojo> editCommentFromApi(@Body CommentReactionRequestPojo commentReactionRequestPojo);
+    @POST("participation/reaction/bookmark")
+    Observable<BookmarkResponsePojo> addBookMarkToApi(@Body BookmarkRequestPojo bookmarkResponsePojo );
+    @POST("participation/reaction/unbookmark")
+    Observable<BookmarkResponsePojo> UnBookMarkToApi(@Body BookmarkRequestPojo bookmarkResponsePojo );
 
 
     @POST("v2/58940613260000a11200a97f")

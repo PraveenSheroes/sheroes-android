@@ -7,10 +7,8 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.CommentReactionModel;
-import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentRequestPojo;
-import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionResponsePojo;
 import appliedlife.pvtltd.SHEROES.preferences.Token;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -47,13 +45,13 @@ public class CommentReactionPresenter extends BasePresenter<AllCommentReactionVi
     }
 
 
-    public void getAllCommentListFromPresenter(CommentRequestPojo commentRequestPojo) {
+    public void getAllCommentListFromPresenter(CommentReactionRequestPojo commentReactionRequestPojo,boolean isReaction) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showNwError();
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = mCommentReactionModel.getAllCommentListFromModel(commentRequestPojo).subscribe(new Subscriber<CommentResponsePojo>() {
+        Subscription subscription = mCommentReactionModel.getAllCommentListFromModel(commentReactionRequestPojo,isReaction).subscribe(new Subscriber<CommentReactionResponsePojo>() {
             @Override
             public void onCompleted() {
                 getMvpView().stopProgressBar();
@@ -66,20 +64,21 @@ public class CommentReactionPresenter extends BasePresenter<AllCommentReactionVi
             }
 
             @Override
-            public void onNext(CommentResponsePojo commentResponsePojo) {
+            public void onNext(CommentReactionResponsePojo commentResponsePojo) {
                 getMvpView().stopProgressBar();
-                getMvpView().getAllComments(commentResponsePojo);
+                getMvpView().getAllCommentsAndReactions(commentResponsePojo);
             }
         });
         registerSubscription(subscription);
     }
-    public void getAllReactionListFromPresenter(CommentRequest commentRequest) {
+
+    public void addCommentListFromPresenter(CommentReactionRequestPojo commentReactionRequestPojo) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showNwError();
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = mCommentReactionModel.getAllReactionListFromModel(commentRequest).subscribe(new Subscriber<CommentResponse>() {
+        Subscription subscription = mCommentReactionModel.addCommentListFromModel(commentReactionRequestPojo).subscribe(new Subscriber<CommentReactionResponsePojo>() {
             @Override
             public void onCompleted() {
                 getMvpView().stopProgressBar();
@@ -92,13 +91,40 @@ public class CommentReactionPresenter extends BasePresenter<AllCommentReactionVi
             }
 
             @Override
-            public void onNext(CommentResponse commentResponse) {
+            public void onNext(CommentReactionResponsePojo commentResponsePojo) {
                 getMvpView().stopProgressBar();
-                getMvpView().getAllReactions(commentResponse.getListOfReaction());
+                getMvpView().addCommentSuccess(commentResponsePojo.getStatus());
             }
         });
         registerSubscription(subscription);
     }
+    public void editCommentListFromPresenter(CommentReactionRequestPojo commentReactionRequestPojo) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showNwError();
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = mCommentReactionModel.editCommentListFromModel(commentReactionRequestPojo).subscribe(new Subscriber<CommentReactionResponsePojo>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+            @Override
+            public void onError(Throwable e) {
+                getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
+                getMvpView().showNwError();
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onNext(CommentReactionResponsePojo commentResponsePojo) {
+                getMvpView().stopProgressBar();
+                getMvpView().addCommentSuccess(commentResponsePojo.getStatus());
+            }
+        });
+        registerSubscription(subscription);
+    }
+
     public void onStop() {
         detachView();
     }

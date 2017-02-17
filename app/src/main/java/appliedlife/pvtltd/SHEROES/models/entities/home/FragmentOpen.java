@@ -29,6 +29,9 @@ public class FragmentOpen implements Parcelable {
         this.isImageBlur = isImageBlur;
     }
 
+    public FragmentOpen() {
+    }
+
 
     public boolean isOpen() {
         return isOpen;

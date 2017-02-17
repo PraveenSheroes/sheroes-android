@@ -34,9 +34,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleDetailPojo;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -52,7 +51,6 @@ import butterknife.ButterKnife;
 
 public class ArticleDetailActivity extends BaseActivity implements BaseHolderInterface, View.OnClickListener, View.OnTouchListener, CommentReactionFragment.HomeActivityIntractionListner {
     private final String TAG = LogUtils.makeLogTag(ArticleDetailActivity.class);
-    private CollapsingToolbarLayout collapsingToolbarLayout;
     @Bind(R.id.app_bar_article_detail)
     AppBarLayout mAppBarLayout;
     @Bind(R.id.iv_article_detail)
@@ -62,16 +60,16 @@ public class ArticleDetailActivity extends BaseActivity implements BaseHolderInt
     @Bind(R.id.toolbar_article_detail)
     Toolbar mToolbarArticleDetail;
     @Bind(R.id.collapsing_toolbar_article_detail)
-    CollapsingToolbarLayout mCollapsingToolbarLayout;
-    private ArticleCardResponse mArticleCardResponse;
+     public CollapsingToolbarLayout mCollapsingToolbarLayout;
+    private FeedDetail mFeedDetail;
     public View mArticlePopUp;
     TextView mTvFeedArticleDetailUserReaction;
     private FragmentOpen mFragmentOpen;
 
-    public static void navigateFromArticle(AppCompatActivity activity, View transitionImage, ArticleCardResponse articleCardResponse) {
+    public static void navigateFromArticle(AppCompatActivity activity, View transitionImage, FeedDetail feedDetail) {
         Intent intent = new Intent(activity, ArticleDetailActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putParcelable(AppConstants.ARTICLE_DETAIL, articleCardResponse);
+        bundle.putParcelable(AppConstants.ARTICLE_DETAIL, feedDetail);
         intent.putExtras(bundle);
         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, transitionImage, AppConstants.ARTICLE_DETAIL);
         ActivityCompat.startActivity(activity, intent, options.toBundle());
@@ -84,9 +82,9 @@ public class ArticleDetailActivity extends BaseActivity implements BaseHolderInt
         initActivityTransitions();
         setContentView(R.layout.activity_article_detail);
         ButterKnife.bind(this);
-        mFragmentOpen = new FragmentOpen(false, false, false, false, false, false, false, false);
+        mFragmentOpen = new FragmentOpen();
         if (null != getIntent()) {
-            mArticleCardResponse = getIntent().getParcelableExtra(AppConstants.ARTICLE_DETAIL);
+            mFeedDetail = getIntent().getParcelableExtra(AppConstants.ARTICLE_DETAIL);
         }
         setPagerAndLayouts();
     }
@@ -97,16 +95,14 @@ public class ArticleDetailActivity extends BaseActivity implements BaseHolderInt
 
         setSupportActionBar(mToolbarArticleDetail);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        mCollapsingToolbarLayout.setTitle(" Testing article");
         mCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
-        if (null != mArticleCardResponse) {
+        if (null != mFeedDetail) {
             ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-            viewPagerAdapter.addFragment(ArticleDetailFragment.createInstance(mArticleCardResponse), getString(R.string.ID_FEATURED));
+            viewPagerAdapter.addFragment(ArticleDetailFragment.createInstance(mFeedDetail), getString(R.string.ID_FEATURED));
             mViewPagerArticleDetail.setAdapter(viewPagerAdapter);
-            if (StringUtil.isNotNullOrEmptyString(mArticleCardResponse.getArticleCircleIconUrl())) {
+            if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getImageUrl())) {
                 Glide.with(this)
-                        .load(mArticleCardResponse.getArticleCircleIconUrl()).asBitmap()
+                        .load(mFeedDetail.getImageUrl()).asBitmap()
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                         .skipMemoryCache(true)
                         .into(new SimpleTarget<Bitmap>() {
@@ -134,11 +130,6 @@ public class ArticleDetailActivity extends BaseActivity implements BaseHolderInt
     }
 
     private void applyPalette(Palette palette) {
-        int primaryDark = ContextCompat.getColor(getApplication(), R.color.colorPrimaryDark);
-        int primary = ContextCompat.getColor(getApplication(), R.color.colorPrimary);
-        //  mCollapsingToolbarLayout.setContentScrimColor(palette.getMutedColor(primary));
-        //   mCollapsingToolbarLayout.setStatusBarScrimColor(palette.getDarkMutedColor(primaryDark));
-        //  updateBackground((FloatingActionButton) findViewById(R.id.fab), palette);
         supportStartPostponedEnterTransition();
     }
 
@@ -150,13 +141,13 @@ public class ArticleDetailActivity extends BaseActivity implements BaseHolderInt
 
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
-        if (baseResponse instanceof ArticleDetailPojo) {
-            ArticleDetailPojo articleDetailPojo = (ArticleDetailPojo) baseResponse;
-            articleDetailHandled(view, articleDetailPojo);
+        if (baseResponse instanceof FeedDetail) {
+            FeedDetail feedDetail = (FeedDetail) baseResponse;
+            articleDetailHandled(view, feedDetail);
         }
     }
 
-    private void articleDetailHandled(View view, ArticleDetailPojo articleDetailPojo) {
+    private void articleDetailHandled(View view, FeedDetail feedDetail) {
         int id = view.getId();
         switch (id) {
             case R.id.tv_article_detail_user_comment:
@@ -227,9 +218,10 @@ public class ArticleDetailActivity extends BaseActivity implements BaseHolderInt
     }
 
     @Override
-    public void userCommentLikeRequest(long entityId, int reactionValue) {
+    public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
 
     }
+
 
     @Override
     public List getListData() {

@@ -101,7 +101,7 @@ public class HomeSpinnerFragment extends BaseFragment implements HomeView {
     }
 
     @Override
-    public void getLikesSuccess(String success) {
+    public void getSuccessForAllResponse(String success, int successFrom) {
 
     }
 

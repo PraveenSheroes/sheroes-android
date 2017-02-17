@@ -165,26 +165,11 @@
                 android:drawableLeft="@drawable/ic_comment_icon" />
 
             <TextView
-                android:id="@+id/tv_feed_community_user_bookmark"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight=".1"
-                android:drawableRight="@drawable/ic_bookmark_active"
-                android:visibility="invisible" />
-
-            <Spinner
-                android:id="@+id/sp_feed_community_user_menu"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="right"
-                android:layout_weight=".25"
-                android:background="@color/fully_transparent"
-                android:dropDownSelector="@color/fully_transparent" />
-
-            <TextView
                 android:id="@+id/tv_feed_community_user_menu"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_weight=".4"
+                android:paddingRight="@dimen/dp_size_20"
                 android:layout_gravity="right"
                 android:drawableRight="@drawable/ic_menu_dashboard" />
         </LinearLayout>
@@ -256,7 +241,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_size_12"
-            android:layout_marginRight="@dimen/dp_size_12"
+            android:layout_marginRight="@dimen/dp_size_7"
             android:layout_marginTop="@dimen/dp_size_20"
             android:orientation="horizontal"
             android:weightSum="1">
@@ -265,6 +250,7 @@
                 android:id="@+id/iv_feed_community_user_pic"
                 android:layout_width="@dimen/dp_size_27"
                 android:layout_height="@dimen/dp_size_28"
+                android:layout_margin="@dimen/dp_size_8"
                 android:src="@drawable/ic_footer_button_icon" />
 
 
@@ -275,25 +261,20 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp_size_12"
                 android:layout_weight="@integer/int_value_for_line_1"
+                android:lines="@integer/int_value_for_line_2"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:lineSpacingExtra="@dimen/dp_size_3"
                 android:text="@string/IDS_STR_NETWORK_TIME_OUT_DESCRIPTION"
                 android:textColor="@color/feed_conversation"
                 android:textSize="@dimen/sp_size_12" />
 
-            <Spinner
-                android:id="@+id/sp_feed_community_user_comment_post_menu"
-                android:layout_width="@dimen/dp_size_12"
-                android:layout_height="match_parent"
-                android:layout_gravity="right"
-                android:background="@color/fully_transparent"
-                android:dropDownSelector="@color/fully_transparent" />
-
             <TextView
                 android:id="@+id/tv_feed_community_user_comment_post_menu"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="right"
+                android:paddingRight="@dimen/dp_size_10"
+                android:paddingLeft="@dimen/dp_size_10"
                 android:drawableRight="@drawable/ic_menu_dashboard" />
         </LinearLayout>
 

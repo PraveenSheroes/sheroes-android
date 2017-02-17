@@ -102,9 +102,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
-
         callbackManager = CallbackManager.Factory.create();
-
         accessTokenTracker = new AccessTokenTracker() {
             @Override
             protected void onCurrentAccessTokenChanged(AccessToken oldToken, AccessToken newToken) {
@@ -127,14 +125,11 @@ public class LoginFragment extends BaseFragment implements LoginView {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
-
-
         View view = inflater.inflate(R.layout.fragment_login, container, false);
         ButterKnife.bind(this, view);
         mLoginPresenter.attachView(this);
         if (Build.VERSION.SDK_INT >= 23) {
             getPermissionToReadUserContacts();
-
 
         } else { //permission is automatically granted on sdk<23 upon installation
             LogUtils.info("testing", "Permission is already granted");
@@ -160,6 +155,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
      */
     @Override
     public void getLogInResponse(LoginResponse loginResponse) {
+        mProgressBar.setVisibility(View.GONE);
         if (null != loginResponse && StringUtil.isNotNullOrEmptyString(loginResponse.getToken())) {
             String logInAuthToken = loginResponse.getToken();
             Token token = new Token();
@@ -192,6 +188,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
 
     @Override
     public void showError(String errorMsg) {
+        mProgressBar.setVisibility(View.GONE);
     }
 
     @Override

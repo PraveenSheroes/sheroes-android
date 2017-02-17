@@ -8,6 +8,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
+import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItemResponse;
@@ -53,6 +55,42 @@ public class HomeModel {
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
+    }
+    public Observable<FeedResponsePojo> getBookMarkFromModel(BookmarkRequestPojo bookmarkResponsePojo){
+        return sheroesAppServiceApi.getBookMarkFromApi(bookmarkResponsePojo)
+                .map(new Func1<FeedResponsePojo, FeedResponsePojo>() {
+                    @Override
+                    public FeedResponsePojo call(FeedResponsePojo feedResponsePojo) {
+                        return feedResponsePojo;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+    public Observable<BookmarkResponsePojo> addBookmarkFromModel(BookmarkRequestPojo bookmarkRequestPojo,boolean isBookmarked){
+        if(!isBookmarked) {
+            return sheroesAppServiceApi.addBookMarkToApi(bookmarkRequestPojo)
+                    .map(new Func1<BookmarkResponsePojo, BookmarkResponsePojo>() {
+                        @Override
+                        public BookmarkResponsePojo call(BookmarkResponsePojo bookmarkResponsePojo) {
+                            return bookmarkResponsePojo;
+                        }
+                    })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread());
+        }
+        else
+        {
+            return sheroesAppServiceApi.UnBookMarkToApi(bookmarkRequestPojo)
+                    .map(new Func1<BookmarkResponsePojo, BookmarkResponsePojo>() {
+                        @Override
+                        public BookmarkResponsePojo call(BookmarkResponsePojo bookmarkResponsePojo) {
+                            return bookmarkResponsePojo;
+                        }
+                    })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread());
+        }
     }
 
     public Observable<LikeResponse> getLikesFromModel(LikeRequestPojo  likeRequestPojo){

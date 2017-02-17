@@ -14,6 +14,7 @@ import java.util.List;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HolderMapping;
 
@@ -49,7 +50,10 @@ public class GenericRecyclerViewAdapter<T extends BaseResponse> extends Recycler
     public void addAllDataForList(List<T> data) {
         this.filterListData.addAll(data);
     }
-
+    public void setDataOnPosition(FeedDetail feedDetail,int position) {
+        this.filterListData.add(position,(T)feedDetail);
+        notifyItemChanged(position);
+    }
 
     public void clearAllDataForList() {
         this.filterListData.clear();
@@ -68,7 +72,6 @@ public class GenericRecyclerViewAdapter<T extends BaseResponse> extends Recycler
 
         return holder;
     }
-
     @Override
     public void onBindViewHolder(BaseViewHolder holder, int position) {
 

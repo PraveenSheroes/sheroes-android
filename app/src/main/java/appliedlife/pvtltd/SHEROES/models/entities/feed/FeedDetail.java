@@ -14,9 +14,13 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.LastComment;
 
 public class FeedDetail extends BaseResponse implements Parcelable {
+
+    int itemPosition;
+    boolean isLongPress;
+    @SerializedName("is_bookmarked")
+    private boolean isBookmarked;
     @SerializedName("search_id_post_image")
     private List<Long> imagesIds;
-
     @SerializedName("display_text_image_url")
     private List<String> imageUrls;
     /*Community*/
@@ -748,6 +752,17 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         isDeleted = deleted;
     }
 
+    public FeedDetail() {
+    }
+
+    public boolean isBookmarked() {
+        return isBookmarked;
+    }
+
+    public void setBookmarked(boolean bookmarked) {
+        isBookmarked = bookmarked;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -755,6 +770,7 @@ public class FeedDetail extends BaseResponse implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeByte(this.isBookmarked ? (byte) 1 : (byte) 0);
         dest.writeList(this.imagesIds);
         dest.writeStringList(this.imageUrls);
         dest.writeString(this.communityType);
@@ -830,10 +846,8 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         dest.writeParcelable(this.lastComment, flags);
     }
 
-    public FeedDetail() {
-    }
-
     protected FeedDetail(Parcel in) {
+        this.isBookmarked = in.readByte() != 0;
         this.imagesIds = new ArrayList<Long>();
         in.readList(this.imagesIds, Long.class.getClassLoader());
         this.imageUrls = in.createStringArrayList();
@@ -924,7 +938,7 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         this.lastComment = in.readParcelable(LastComment.class.getClassLoader());
     }
 
-    public static final Parcelable.Creator<FeedDetail> CREATOR = new Parcelable.Creator<FeedDetail>() {
+    public static final Creator<FeedDetail> CREATOR = new Creator<FeedDetail>() {
         @Override
         public FeedDetail createFromParcel(Parcel source) {
             return new FeedDetail(source);
@@ -935,4 +949,20 @@ public class FeedDetail extends BaseResponse implements Parcelable {
             return new FeedDetail[size];
         }
     };
+
+    public int getItemPosition() {
+        return itemPosition;
+    }
+
+    public void setItemPosition(int itemPosition) {
+        this.itemPosition = itemPosition;
+    }
+
+    public boolean isLongPress() {
+        return isLongPress;
+    }
+
+    public void setLongPress(boolean longPress) {
+        isLongPress = longPress;
+    }
 }

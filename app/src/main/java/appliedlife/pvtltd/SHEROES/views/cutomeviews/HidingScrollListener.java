@@ -3,10 +3,12 @@ package appliedlife.pvtltd.SHEROES.views.cutomeviews;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 
 /*
 * This class is a ScrollListener for RecyclerView that allows to show/hide
@@ -25,15 +27,15 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
     private boolean loading = true;
     private int visibleThreshold = 2;
     int firstVisibleItem, visibleItemCount, totalItemCount;
-    private String mCallFromFragment;
-    public HidingScrollListener(HomePresenter homePresenter, RecyclerView recyclerView, LinearLayoutManager manager,String callFromFragment) {
+    private FragmentListRefreshData mFragmentListRefreshData;
+    public HidingScrollListener(HomePresenter homePresenter, RecyclerView recyclerView, LinearLayoutManager manager, FragmentListRefreshData fragmentListRefreshData) {
         mHomePresenter=homePresenter;
         mRecyclerView=recyclerView;
         mManager=manager;
-        this.mCallFromFragment=callFromFragment;
+        this.mFragmentListRefreshData=fragmentListRefreshData;
     }
-    public HidingScrollListener(RecyclerView recyclerView, LinearLayoutManager manager,String callFromFragment) {
-        this.mCallFromFragment=callFromFragment;
+    public HidingScrollListener(RecyclerView recyclerView, LinearLayoutManager manager, FragmentListRefreshData fragmentListRefreshData) {
+        this.mFragmentListRefreshData=fragmentListRefreshData;
         mRecyclerView=recyclerView;
         mManager=manager;
     }
@@ -77,21 +79,29 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
 
         if (!loading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
             AppUtils appUtils = AppUtils.getInstance();
-            switch (mCallFromFragment)
-            {
-                case AppConstants.ARTICLE_FRAGMENT:
-                    mHomePresenter.getFeedFromPresenter(appUtils.feedRequestBuilder(AppConstants.FEED_ARTICLE));
-                    break;
-                case AppConstants.FEATURE_FRAGMENT:
-                    mHomePresenter.getFeedFromPresenter(appUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY));
-                    break;
-                case AppConstants.MY_COMMUNITIES_FRAGMENT:
-                    mHomePresenter.getFeedFromPresenter(appUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY));
-                    break;
-                case AppConstants.HOME_FRAGMENT:
-                    mHomePresenter.getFeedFromPresenter(appUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE));
-                    break;
-                default:LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + mCallFromFragment);
+            if(null!=mFragmentListRefreshData&& StringUtil.isNotNullOrEmptyString(mFragmentListRefreshData.getCallFromFragment())) {
+                int pageNo=mFragmentListRefreshData.getPageNo()+1;
+                switch (mFragmentListRefreshData.getCallFromFragment()) {
+                    case AppConstants.ARTICLE_FRAGMENT:
+                        mHomePresenter.getFeedFromPresenter(appUtils.feedRequestBuilder(AppConstants.FEED_ARTICLE,pageNo));
+                        break;
+                    case AppConstants.FEATURE_FRAGMENT:
+                        mHomePresenter.getFeedFromPresenter(appUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY,pageNo));
+                        break;
+                    case AppConstants.MY_COMMUNITIES_FRAGMENT:
+                        mHomePresenter.getFeedFromPresenter(appUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY,pageNo));
+                        break;
+                    case AppConstants.HOME_FRAGMENT:
+                        mHomePresenter.getFeedFromPresenter(appUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE,pageNo));
+                        break;
+                    case AppConstants.COMMUNITY_DETAIL:
+                        mHomePresenter.getFeedFromPresenter(appUtils.feedDetailRequestBuilder(AppConstants.FEED_SUB_TYPE,pageNo,mFragmentListRefreshData.getIdFeedDetail()));
+                        break;
+                    case AppConstants.ARTICLE_DETAIL:
+                        mHomePresenter.getFeedFromPresenter(appUtils.feedDetailRequestBuilder(AppConstants.FEED_SUB_TYPE,pageNo,mFragmentListRefreshData.getIdFeedDetail()));
+                    default:
+                        LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + mFragmentListRefreshData.getCallFromFragment());
+                }
             }
 
             loading = true;

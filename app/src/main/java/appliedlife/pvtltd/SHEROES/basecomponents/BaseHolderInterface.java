@@ -13,7 +13,6 @@ public interface BaseHolderInterface<T extends BaseResponse> {
     void handleOnClick(BaseResponse baseResponse, View view);
     void dataOperationOnClick(BaseResponse baseResponse);
     void setListData(T data,boolean flag);
-    void userCommentLikeRequest(long entityId,int reactionValue);
-
     List<T> getListData();
+    void userCommentLikeRequest(BaseResponse baseResponse,int reactionValue,int position);
 }

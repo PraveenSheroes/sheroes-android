@@ -166,7 +166,7 @@ public class ProfileActicity extends BaseActivity implements BaseHolderInterface
     }
 
     @Override
-    public void userCommentLikeRequest(long entityId, int reactionValue) {
+    public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
 
     }
 

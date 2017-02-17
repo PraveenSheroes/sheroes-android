@@ -21,6 +21,7 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Praveen_Singh on 23-01-2017.
@@ -50,8 +51,11 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
     TextView tvFeedJobLocation;
     @Bind(R.id.iv_feed_job_menu)
     ImageView tvFeedJobMenu;
+    @Bind(R.id.li_feed_job_card)
+    ImageView liFeedJobCard;
     BaseHolderInterface viewInterface;
     private FeedDetail dataItem;
+
     public FeedJobHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
@@ -67,9 +71,10 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
         imageOperations(context);
         allTextViewStringOperations(context);
     }
+
     private void imageOperations(Context context) {
         String feedCircleIconUrl = dataItem.getAuthorImageUrl();
-        if(StringUtil.isNotNullOrEmptyString(feedCircleIconUrl)) {
+        if (StringUtil.isNotNullOrEmptyString(feedCircleIconUrl)) {
             Glide.with(context)
                     .load(feedCircleIconUrl)
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
@@ -78,6 +83,7 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
         }
 
     }
+
     private void allTextViewStringOperations(Context context) {
         if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
             tvFeedJobCardTitle.setText(dataItem.getNameOrTitle());
@@ -86,43 +92,60 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
             tvFeedJobGroupName.setText(dataItem.getAuthorName());
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getCreatedDate())) {
-          //  tvFeedJobDateTime.setText(dataItem.getCreatedDate());
+            //  tvFeedJobDateTime.setText(dataItem.getCreatedDate());
         }
-            if (StringUtil.isNotEmptyCollection(dataItem.getOpportunityTypes())) {
-                List<String> jobTypes=dataItem.getOpportunityTypes();
-                String mergeJobTypes=AppConstants.EMPTY_STRING;
-                for(String jobType:jobTypes) {
-                    mergeJobTypes+=jobType+AppConstants.PIPE;
-                }
-                tvFeedJobType.setText(mergeJobTypes);
+        if (StringUtil.isNotEmptyCollection(dataItem.getOpportunityTypes())) {
+            List<String> jobTypes = dataItem.getOpportunityTypes();
+            String mergeJobTypes = AppConstants.EMPTY_STRING;
+            for (String jobType : jobTypes) {
+                mergeJobTypes += jobType + AppConstants.PIPE;
             }
-            if (StringUtil.isNotEmptyCollection(dataItem.getSkills()))
-            {
-                List<String> jobSkills=dataItem.getSkills();
-                String mergeJobSkills=AppConstants.EMPTY_STRING;
-                for(String skill:jobSkills) {
-                    mergeJobSkills+=skill+AppConstants.COMMA;
-                }
-                tvFeedJobName.setText(mergeJobSkills);
+            tvFeedJobType.setText(mergeJobTypes);
+        }
+        if (StringUtil.isNotEmptyCollection(dataItem.getSkills())) {
+            List<String> jobSkills = dataItem.getSkills();
+            String mergeJobSkills = AppConstants.EMPTY_STRING;
+            for (String skill : jobSkills) {
+                mergeJobSkills += skill + AppConstants.COMMA;
             }
-            if (StringUtil.isNotNullOrEmptyString(dataItem.getCityName())) {
-                tvFeedJobLocation.setText(dataItem.getCityName());
-            }
-           /* if(dataItem.getJobDetail().getIsApplied()) {
-                tvFeedJobApplied.setText(context.getString(R.string.ID_APPLIED));
-            }
-            else
-            {
-                tvFeedJobApplied.setText(AppConstants.SPACE);
-            }*/
-       /* if(dataItem.getBookmarked()) {
-            tvFeedJobUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_active, 0);
-        }*/
+            tvFeedJobName.setText(mergeJobSkills);
+        }
+        if (StringUtil.isNotNullOrEmptyString(dataItem.getCityName())) {
+            tvFeedJobLocation.setText(dataItem.getCityName());
+        }
+        if (dataItem.isActive()) {
+            tvFeedJobApplied.setText(context.getString(R.string.ID_APPLIED));
+        } else {
+            tvFeedJobApplied.setText(AppConstants.SPACE);
+        }
 
+        if (dataItem.isBookmarked()) {
+            tvFeedJobUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_active, 0);
+        } else {
+            tvFeedJobUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_in_active, 0);
+        }
 
 
     }
 
+    @OnClick(R.id.tv_feed_job_user_bookmark)
+    public void isBookMarkClick() {
+        if (dataItem.isBookmarked()) {
+            viewInterface.handleOnClick(dataItem, tvFeedJobUserBookmark);
+        } else {
+            viewInterface.handleOnClick(dataItem, tvFeedJobUserBookmark);
+        }
+    }
+
+    @OnClick(R.id.tv_feed_job_user_menu)
+    public void userMenuClick() {
+        viewInterface.handleOnClick(dataItem, tvFeedJobUserMenu);
+    }
+
+    @OnClick(R.id.li_feed_job_card)
+    public void feedJobClick() {
+        viewInterface.handleOnClick(dataItem, liFeedJobCard);
+    }
 
     @Override
     public void viewRecycled() {
@@ -132,18 +155,6 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
 
     @Override
     public void onClick(View view) {
-        viewInterface.handleOnClick(this.dataItem, view);
-        int id = view.getId();
-        switch (id) {
-            case R.id.tv_feed_job_user_bookmark:
-                viewInterface.handleOnClick(dataItem, tvFeedJobUserBookmark);
-                break;
-            case R.id.tv_feed_job_user_menu:
-                viewInterface.handleOnClick(dataItem, tvFeedJobUserMenu);
-                break;
-            default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
-        }
     }
 
 }
