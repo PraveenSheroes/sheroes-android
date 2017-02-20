@@ -48,7 +48,8 @@ public class ProfileFullViewFragment extends BaseFragment implements HomeView {
     private LinearLayoutManager mLayoutManager;
     private HomeActivityIntractionListner mHomeActivityIntractionListner;
     private SwipPullRefreshList mPullRefreshList;
-    private AppUtils mAppUtils;
+    @Inject
+    AppUtils mAppUtils;
     private FragmentListRefreshData mFragmentListRefreshData;
     public static ProfileFullViewFragment createInstance(int itemsCount) {
 
@@ -76,7 +77,6 @@ public class ProfileFullViewFragment extends BaseFragment implements HomeView {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_profile_full_view, container, false);
         ButterKnife.bind(this, view);
-        mAppUtils = AppUtils.getInstance();
         mFragmentListRefreshData=new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.PROFILE_FRAGMENT,AppConstants.EMPTY_STRING);
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);

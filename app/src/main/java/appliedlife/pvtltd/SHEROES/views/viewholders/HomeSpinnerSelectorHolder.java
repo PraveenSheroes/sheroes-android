@@ -31,7 +31,6 @@ public class HomeSpinnerSelectorHolder extends BaseViewHolder<HomeSpinnerItem>{
     CheckBox cbSpinner;
     BaseHolderInterface viewInterface;
     private HomeSpinnerItem dataItem;
-    private int position;
     public HomeSpinnerSelectorHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this,itemView);
@@ -63,30 +62,14 @@ public class HomeSpinnerSelectorHolder extends BaseViewHolder<HomeSpinnerItem>{
         int id = view.getId();
         switch (id) {
             case R.id.li_spinner_iten:
-                AdapterHolder adapterHolder = (AdapterHolder) tvSpinner.getTag();
-                int position = adapterHolder.getPosition();
                 dataItem.setChecked(!cbSpinner.isChecked());
                 cbSpinner.setChecked(!cbSpinner.isChecked());
                 liSpinnerItem.setBackgroundResource(R.drawable.rectangle_grey_round_corner);
                 viewInterface.setListData(dataItem,cbSpinner.isChecked());
-               // checkBoxClick(cbSpinner, position);
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
         }
     }
-    private void checkBoxClick(CheckBox checkBox, int position)
-    {
-        if (checkBox.isChecked())
-        {
-            dataItem.setChecked(checkBox.isChecked());
-            cbSpinner.setChecked(checkBox.isChecked());
-            viewInterface.setListData(dataItem,checkBox.isChecked());
-        }
-        else
-        {
-            cbSpinner.setChecked(true);
-            viewInterface.setListData(dataItem,true);
-        }
-    }
+
 }

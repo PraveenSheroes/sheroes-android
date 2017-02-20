@@ -2,7 +2,6 @@ package appliedlife.pvtltd.SHEROES.views.adapters;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.TotalCoverImage;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.TouchImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -35,18 +34,18 @@ public class ImageFullViewAdapter extends PagerAdapter {
     Button ivFullImageBack;
     @Bind(R.id.tv_total_image)
     TextView tvTotalImage;
-    private ListOfFeed mListOfFeed;
+    private FeedDetail mFeedDetail;
     private FragmentOpen mFragmentOpen;
     private Context mContext;
-    private List<TotalCoverImage> mTotalCoverImages = new ArrayList<>();
+    private List<String> mTotalCoverImages = new ArrayList<>();
     private LayoutInflater inflater;
     private HomeActivityIntraction mHomeActivityIntraction;
 
-    public ImageFullViewAdapter(Context context, ListOfFeed listOfFeed, FragmentOpen fragmentOpen) {
+    public ImageFullViewAdapter(Context context, FeedDetail feedDetail, FragmentOpen fragmentOpen) {
         this.mContext = context;
-        this.mListOfFeed = listOfFeed;
+        this.mFeedDetail = feedDetail;
         this.mFragmentOpen = fragmentOpen;
-        mTotalCoverImages = mListOfFeed.getTotalCoverImages();
+            mTotalCoverImages = mFeedDetail.getImageUrls();
         mHomeActivityIntraction = (HomeActivityIntraction) context;
     }
 
@@ -65,19 +64,21 @@ public class ImageFullViewAdapter extends PagerAdapter {
         inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View viewLayout = inflater.inflate(R.layout.layout_fullscreen_image, container, false);
         ButterKnife.bind(this, viewLayout);
-        tvTotalImage.setText(String.valueOf(position + 1) + AppConstants.BACK_SLASH + String.valueOf(mTotalCoverImages.size()));
-        Glide.with(mContext)
-                .load(mTotalCoverImages.get(position).getFeedDetailImageUrl())
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .skipMemoryCache(true)
-                .into(ivFullImage);
-        ((ViewPager) container).addView(viewLayout);
+        if (StringUtil.isNotEmptyCollection(mTotalCoverImages)) {
+            tvTotalImage.setText(String.valueOf(position + 1) + AppConstants.BACK_SLASH + String.valueOf(mTotalCoverImages.size()));
+            Glide.with(mContext)
+                    .load(mTotalCoverImages.get(position))
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .skipMemoryCache(true)
+                    .into(ivFullImage);
+        }
+        (container).addView(viewLayout);
         return viewLayout;
     }
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        ((ViewPager) container).removeView((RelativeLayout) object);
+        (container).removeView((RelativeLayout) object);
 
     }
 

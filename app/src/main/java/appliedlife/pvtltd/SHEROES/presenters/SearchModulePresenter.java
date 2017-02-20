@@ -7,16 +7,9 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.SearchModel;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.Feature;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ListOfSearch;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.SearchResponse;
 import appliedlife.pvtltd.SHEROES.preferences.Token;
-import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SearchModuleView;
-import rx.Subscriber;
-import rx.Subscription;
 
 /**
  * Created by Praveen Singh on 18-01-2017.
@@ -51,9 +44,9 @@ public class SearchModulePresenter extends BasePresenter<SearchModuleView> {
 
 
 
+/*
 
-
-    public void getFeedFromPresenter(ListOfSearch listOfFeed) {
+    public void getFeedFromPresenter(Fe listOfFeed) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showNwError();
             return;
@@ -106,7 +99,7 @@ public class SearchModulePresenter extends BasePresenter<SearchModuleView> {
             }
         });
         registerSubscription(subscription);
-    }
+    }*/
     public void onStop() {
         detachView();
     }

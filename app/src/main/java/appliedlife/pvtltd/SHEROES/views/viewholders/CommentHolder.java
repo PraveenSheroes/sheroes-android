@@ -66,6 +66,7 @@ public class CommentHolder extends BaseViewHolder<CommentReactionDoc> {
 
     @OnClick(R.id.tv_user_comment_list_menu)
     public void onCommentMenuClick() {
+        dataItem.setItemPosition(getAdapterPosition());
         viewInterface.handleOnClick(dataItem, tvUserCommentListMenu);
     }
 

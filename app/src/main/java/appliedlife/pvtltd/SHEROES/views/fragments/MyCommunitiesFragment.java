@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import java.util.List;
@@ -48,11 +49,14 @@ public class MyCommunitiesFragment  extends BaseFragment implements HomeView {
     ProgressBar mProgressBar;
     @Bind(R.id.swipe_view_home)
     SwipeRefreshLayout swipeView;
+    @Bind(R.id.li_no_result)
+    LinearLayout liNoResult;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private HomeActivityIntractionListner mHomeActivityIntractionListner;
     private SwipPullRefreshList mPullRefreshList;
-    private AppUtils mAppUtils;
+    @Inject
+    AppUtils mAppUtils;
     private FragmentListRefreshData mFragmentListRefreshData;
     public static MyCommunitiesFragment createInstance() {
         MyCommunitiesFragment myCommunitiesFragment = new MyCommunitiesFragment();
@@ -77,7 +81,6 @@ public class MyCommunitiesFragment  extends BaseFragment implements HomeView {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.bind(this, view);
-        mAppUtils = AppUtils.getInstance();
         mFragmentListRefreshData=new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MY_COMMUNITIES_FRAGMENT,AppConstants.EMPTY_STRING);
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
@@ -129,6 +132,10 @@ public class MyCommunitiesFragment  extends BaseFragment implements HomeView {
                 mLayoutManager.scrollToPositionWithOffset(0, 0);
             }
             swipeView.setRefreshing(false);
+        }
+        else
+        {
+            liNoResult.setVisibility(View.VISIBLE);
         }
     }
 

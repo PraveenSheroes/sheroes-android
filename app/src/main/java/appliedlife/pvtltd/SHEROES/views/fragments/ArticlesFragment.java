@@ -21,6 +21,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.database.dbentities.MasterData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
+import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -41,7 +42,6 @@ import butterknife.ButterKnife;
 
 public class ArticlesFragment extends BaseFragment implements HomeView {
     private final String TAG = LogUtils.makeLogTag(ArticlesFragment.class);
-    private final String SCREEN_NAME = "Home Screen";
     @Inject
     HomePresenter mHomePresenter;
     @Bind(R.id.rv_home_list)
@@ -54,7 +54,8 @@ public class ArticlesFragment extends BaseFragment implements HomeView {
     private LinearLayoutManager mLayoutManager;
     private HomeActivityIntractionListner mHomeActivityIntractionListner;
     private SwipPullRefreshList mPullRefreshList;
-    private AppUtils mAppUtils;
+    @Inject
+    AppUtils mAppUtils;
     private FragmentListRefreshData mFragmentListRefreshData;
 
     public static ArticlesFragment createInstance(int itemsCount) {
@@ -83,7 +84,6 @@ public class ArticlesFragment extends BaseFragment implements HomeView {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.bind(this, view);
-        mAppUtils = AppUtils.getInstance();
         mFragmentListRefreshData=new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ARTICLE_FRAGMENT,AppConstants.EMPTY_STRING);
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
@@ -144,6 +144,10 @@ public class ArticlesFragment extends BaseFragment implements HomeView {
 
     }
 
+    public void categorySearchInArticle(List<HomeSpinnerItem> mHomeSpinnerItemList)
+    {
+
+    }
 
 
 

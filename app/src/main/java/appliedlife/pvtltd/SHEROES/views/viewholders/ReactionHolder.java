@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -9,9 +10,10 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.comment.ReactionList;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionDoc;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -19,7 +21,7 @@ import butterknife.ButterKnife;
 /**
  * Created by Praveen_Singh on 24-01-2017.
  */
-public class ReactionHolder  extends BaseViewHolder<ReactionList> {
+public class ReactionHolder  extends BaseViewHolder<CommentReactionDoc> {
     private final String TAG = LogUtils.makeLogTag(ReactionHolder.class);
     @Bind(R.id.li_reaction)
     LinearLayout liReaction;
@@ -29,8 +31,11 @@ public class ReactionHolder  extends BaseViewHolder<ReactionList> {
     TextView tvUserName;
     @Bind(R.id.tv_user_location)
     TextView tvUserLoaction;
+    @Bind(R.id.iv_user_reaction_emoji)
+    ImageView ivUserReactionEmoji;
+
     BaseHolderInterface viewInterface;
-    private ReactionList dataItem;
+    private CommentReactionDoc dataItem;
     public ReactionHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
@@ -39,13 +44,38 @@ public class ReactionHolder  extends BaseViewHolder<ReactionList> {
     }
 
     @Override
-    public void bindData(ReactionList item, final Context context, int position) {
+    public void bindData(CommentReactionDoc item, final Context context, int position) {
         this.dataItem = item;
-        tvUserName.setText(item.getName());
-        tvUserLoaction.setText(item.getName());
-        String images = dataItem.getProfilePicUrl();
-        ivReactionProfilePic.setCircularImage(true);
-        ivReactionProfilePic.bindImage(images);
+        if(StringUtil.isNotNullOrEmptyString(item.getParticipantName())) {
+            tvUserName.setText(item.getParticipantName());
+        }
+        if(StringUtil.isNotNullOrEmptyString(item.getParticipantName())) {
+            tvUserLoaction.setText(item.getParticipantName());
+        }
+        if(StringUtil.isNotNullOrEmptyString(item.getParticipantImageUrl())) {
+            String images = dataItem.getParticipantImageUrl();
+            ivReactionProfilePic.setCircularImage(true);
+            ivReactionProfilePic.bindImage(images);
+        }
+        switch (item.getLikeValue())
+        {
+            case AppConstants.HEART_REACTION_CONSTANT:
+                ivUserReactionEmoji.setImageResource(R.drawable.ic_heart_active);
+            break;
+            case AppConstants.EMOJI_FIRST_REACTION_CONSTANT:
+                ivUserReactionEmoji.setImageResource(R.drawable.ic_emoji3_whistel);
+                break;
+            case AppConstants.EMOJI_SECOND_REACTION_CONSTANT:
+                ivUserReactionEmoji.setImageResource(R.drawable.ic_emoji_xo_xo);
+                break;
+            case AppConstants.EMOJI_THIRD_REACTION_CONSTANT:
+                ivUserReactionEmoji.setImageResource(R.drawable.ic_emoji2_with_you);
+                break;
+            case AppConstants.EMOJI_FOURTH_REACTION_CONSTANT:
+                ivUserReactionEmoji.setImageResource(R.drawable.ic_emoji4_face_palm);
+                break;
+            default:  LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + "  " + TAG + " " + item.getLikeValue());
+        }
     }
 
     @Override

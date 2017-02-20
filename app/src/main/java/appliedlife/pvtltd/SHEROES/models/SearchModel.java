@@ -9,8 +9,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.Feature;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ListOfSearch;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.SearchResponse;
 import appliedlife.pvtltd.SHEROES.preferences.SessionUser;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import rx.Observable;
@@ -34,17 +32,6 @@ public class SearchModel {
     public SearchModel(SheroesAppServiceApi sheroesAppServiceApi,Gson gson) {
         this.sheroesAppServiceApi = sheroesAppServiceApi;
         this.gson= gson;
-    }
-    public Observable<SearchResponse> getSearchFromModel(ListOfSearch listOfSearch){
-        return sheroesAppServiceApi.getSearchResponseFromApi(listOfSearch)
-                .map(new Func1<SearchResponse, SearchResponse>() {
-                    @Override
-                    public SearchResponse call(SearchResponse searchResponse) {
-                        return searchResponse;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
     }
     public Observable<ArticleListResponse> getSearchModelArticleList(ArticleCardResponse articleCardResponse){
         return sheroesAppServiceApi.getAricleList(articleCardResponse)

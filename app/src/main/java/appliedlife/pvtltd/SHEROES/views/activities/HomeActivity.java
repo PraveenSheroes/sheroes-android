@@ -50,11 +50,9 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionDoc;
 import appliedlife.pvtltd.SHEROES.models.entities.communities.CommunitySuggestion;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
 import appliedlife.pvtltd.SHEROES.models.entities.home.DrawerItems;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.MyCommunities;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -219,8 +217,23 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
         } else if (baseResponse instanceof HomeSpinnerItem) {
             String spinnerHeaderName = ((HomeSpinnerItem) baseResponse).getName();
             if (StringUtil.isNotNullOrEmptyString(spinnerHeaderName)) {
-                mTvSpinnerIcon.setText(spinnerHeaderName);
-                mFragmentOpen.setOpen(true);
+                if (spinnerHeaderName.equalsIgnoreCase(AppConstants.FEED_ARTICLE)) {
+                    mFragmentOpen.setOpen(true);
+                } else {
+                    for(int i=0;i<mHomeSpinnerItemList.size();i++)
+                    {
+                        mHomeSpinnerItemList.get(i).setDone(true);
+                    }
+                    mTvSpinnerIcon.setText(spinnerHeaderName);
+                    mFragmentOpen.setOpen(true);
+                    Fragment fragment = getSupportFragmentManager().findFragmentByTag(ArticlesFragment.class.getName());
+                    if (AppUtils.isFragmentUIActive(fragment)) {
+                        ((ArticlesFragment) fragment).categorySearchInArticle(mHomeSpinnerItemList);
+                    }
+                }
+            } else {
+                mHomeSpinnerItemList.clear();
+                mHomeSpinnerItemList = CustomeDataList.makeSpinnerListRequest();
             }
             onBackPressed();
         } else if (baseResponse instanceof DrawerItems) {
@@ -244,9 +257,6 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
             }
         } else if (baseResponse instanceof CommunitySuggestion) {
 
-        } else if (baseResponse instanceof ArticleCardResponse) {
-            ArticleCardResponse articleCardResponse = (ArticleCardResponse) baseResponse;
-            articleCardsHandled(view, articleCardResponse);
         } else if (baseResponse instanceof MyCommunities) {
             MyCommunities myCommunities = (MyCommunities) baseResponse;
             myCommunityHandled(view, myCommunities);
@@ -257,9 +267,9 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
 
     @Override
     public void dataOperationOnClick(BaseResponse baseResponse) {
-        if (baseResponse instanceof ListOfFeed) {
-            ListOfFeed listOfFeed = (ListOfFeed) baseResponse;
-            openImageFullViewFragment(listOfFeed);
+        if (baseResponse instanceof FeedDetail) {
+            FeedDetail feedDetail = (FeedDetail) baseResponse;
+            openImageFullViewFragment(feedDetail);
         }
     }
 
@@ -275,17 +285,6 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
         }
     }
 
-    private void articleCardsHandled(View view, ArticleCardResponse articleCardResponse) {
-        int id = view.getId();
-        switch (id) {
-            case R.id.iv_feed_article_single_image:
-                //   ArticleDetailActivity.navigateFromArticle(this, view, articleCardResponse);
-                break;
-            default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
-        }
-    }
-
     private void feedCardsHandled(View view, BaseResponse baseResponse) {
         mFeedDetail = (FeedDetail) baseResponse;
         int id = view.getId();
@@ -296,22 +295,36 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
             case R.id.tv_feed_article_user_menu:
                 clickMenuItem(view, baseResponse);
                 break;
+            case R.id.tv_article_menu:
+                clickMenuItem(view, baseResponse);
+                break;
+            case R.id.tv_feed_article_total_reactions:
+                mFragmentOpen.setCommentList(false);
+                mFragmentOpen.setReactionList(true);
+                openCommentReactionFragment(mFeedDetail);
+                break;
             case R.id.tv_feed_community_post_total_replies:
+                mFragmentOpen.setCommentList(true);
                 openCommentReactionFragment(mFeedDetail);
                 break;
             case R.id.tv_feed_community_total_replies:
+                mFragmentOpen.setCommentList(true);
                 openCommentReactionFragment(mFeedDetail);
                 break;
             case R.id.tv_feed_article_total_replies:
+                mFragmentOpen.setCommentList(true);
                 openCommentReactionFragment(mFeedDetail);
                 break;
             case R.id.li_feed_article_join_conversation:
+                mFragmentOpen.setCommentList(true);
                 openCommentReactionFragment(mFeedDetail);
                 break;
             case R.id.li_feed_community_join_conversation:
+                mFragmentOpen.setCommentList(true);
                 openCommentReactionFragment(mFeedDetail);
                 break;
             case R.id.li_feed_community_post_join_conversation:
+                mFragmentOpen.setCommentList(true);
                 openCommentReactionFragment(mFeedDetail);
                 break;
             case R.id.tv_feed_article_user_reaction:
@@ -324,12 +337,15 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
                 communityPostUserReaction();
                 break;
             case R.id.tv_feed_article_user_comment:
+                mFragmentOpen.setCommentList(true);
                 openCommentReactionFragment(mFeedDetail);
                 break;
             case R.id.tv_feed_community_user_comment:
+                mFragmentOpen.setCommentList(true);
                 openCommentReactionFragment(mFeedDetail);
                 break;
             case R.id.tv_feed_community_post_user_comment:
+                mFragmentOpen.setCommentList(true);
                 openCommentReactionFragment(mFeedDetail);
                 break;
             case R.id.li_feed_article_images:
@@ -357,6 +373,9 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
             case R.id.tv_article_detail_user_comment_post_menu_third:
                 break;
             case R.id.li_feed_job_card:
+                break;
+            case R.id.li_article_cover_image:
+                ArticleDetailActivity.navigateFromArticle(this, view, mFeedDetail);
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
@@ -458,9 +477,10 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
         tvEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "You Clicked : " + tvEdit.getText(), Toast.LENGTH_SHORT).show();
                 CommentReactionDoc commentReactionDoc = (CommentReactionDoc) baseResponse;
                 if (AppUtils.isFragmentUIActive(fragmentCommentReaction)) {
+                    commentReactionDoc.setActive(true);
+                    commentReactionDoc.setEdit(true);
                     ((CommentReactionFragment) fragmentCommentReaction).editCommentInList(commentReactionDoc);
                 }
                 popupWindow.dismiss();
@@ -469,8 +489,12 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
         tvDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "You Clicked : " + tvDelete.getText(), Toast.LENGTH_SHORT).show();
-
+                CommentReactionDoc commentReactionDoc = (CommentReactionDoc) baseResponse;
+                if (AppUtils.isFragmentUIActive(fragmentCommentReaction)) {
+                    commentReactionDoc.setActive(false);
+                    commentReactionDoc.setEdit(false);
+                    ((CommentReactionFragment) fragmentCommentReaction).editCommentInList(commentReactionDoc);
+                }
                 popupWindow.dismiss();
             }
         });
@@ -493,24 +517,25 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
             case R.id.tv_feed_article_user_menu:
                 tvEdit.setVisibility(View.GONE);
                 tvDelete.setVisibility(View.GONE);
-
                 break;
             case R.id.tv_user_comment_list_menu:
                 tvShare.setVisibility(View.GONE);
                 tvReport.setVisibility(View.GONE);
-
+            case R.id.tv_article_menu:
+                tvShare.setVisibility(View.GONE);
+                tvReport.setVisibility(View.GONE);
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
         }
     }
 
 
-    private void openImageFullViewFragment(ListOfFeed listOfFeed) {
+    private void openImageFullViewFragment(FeedDetail feedDetail) {
         ImageFullViewFragment imageFullViewFragment = new ImageFullViewFragment();
         Bundle bundle = new Bundle();
         mFragmentOpen.setCommentList(true);
         bundle.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, mFragmentOpen);
-        bundle.putParcelable(AppConstants.IMAGE_FULL_VIEW, listOfFeed);
+        bundle.putParcelable(AppConstants.IMAGE_FULL_VIEW, feedDetail);
         imageFullViewFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.bottom_to_top_slide_reverse_anim)
                 .replace(R.id.fl_feed_comments, imageFullViewFragment, ImageFullViewFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
@@ -520,7 +545,6 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
     private void openCommentReactionFragment(FeedDetail feedDetail) {
         CommentReactionFragment commentReactionFragmentForArticle = new CommentReactionFragment();
         Bundle bundleArticle = new Bundle();
-        mFragmentOpen.setCommentList(true);
         bundleArticle.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, mFragmentOpen);
         bundleArticle.putParcelable(AppConstants.COMMENTS, feedDetail);
         commentReactionFragmentForArticle.setArguments(bundleArticle);
@@ -601,7 +625,6 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
         LinearLayoutManager manager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mAdapter);
-
         mAdapter.setSheroesGenericListData(CustomeDataList.makeDrawerItemList());
     }
 
@@ -621,7 +644,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
     private void initCommunityViewPagerAndTabs() {
         mFragmentOpen.setCommunityOpen(true);
         mTabLayout.setVisibility(View.VISIBLE);
-        mTvCommunities.setText(getString(R.string.ID_SEARCH_IN_COMMUNITIES));
+        mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
         mTvHome.setText(AppConstants.EMPTY_STRING);
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         viewPagerAdapter.addFragment(FeaturedFragment.createInstance(), getString(R.string.ID_FEATURED));
@@ -813,17 +836,12 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
     }
 
     @Override
-    public void onClickReactionList(FragmentOpen isFragmentOpen) {
+    public void onClickReactionList(FragmentOpen isFragmentOpen, FeedDetail feedDetail) {
         mFragmentOpen = isFragmentOpen;
+        mFeedDetail = feedDetail;
         if (mFragmentOpen.isReactionList()) {
-            CommentReactionFragment commentReactionFragmentForArticle = new CommentReactionFragment();
-            Bundle bundleArticle = new Bundle();
-            bundleArticle.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, mFragmentOpen);
-            commentReactionFragmentForArticle.setArguments(bundleArticle);
-            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.bottom_to_top_slide_reverse_anim)
-                    .replace(R.id.fl_feed_comments, commentReactionFragmentForArticle, CommentReactionFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+            openCommentReactionFragment(mFeedDetail);
         }
-
     }
 
 

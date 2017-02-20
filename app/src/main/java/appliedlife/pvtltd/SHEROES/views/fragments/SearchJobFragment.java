@@ -12,14 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ListOfSearch;
 import appliedlife.pvtltd.SHEROES.presenters.SearchModulePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -75,17 +72,17 @@ public class SearchJobFragment extends BaseFragment implements SearchModuleView 
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mAdapter);
-        mSearchModPresenter.getFeedFromPresenter(new ListOfSearch());
+      //  mSearchModPresenter.getFeedFromPresenter(new ListOfSearch());
         return view;
     }
-
+/*
     @Override
     public void getSearchListSuccess(List<ListOfSearch> listOfSearches) {
         if(mAdapter!=null) {
             mAdapter.setSheroesGenericListData(listOfSearches);
             mAdapter.notifyDataSetChanged();
         }
-    }
+    }*/
 
     @Override
     public void showNwError() {

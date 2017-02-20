@@ -9,7 +9,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import butterknife.Bind;
@@ -19,7 +19,7 @@ import butterknife.ButterKnife;
  * Created by Praveen_Singh on 01-02-2017.
  */
 
-public class CommunityCardDetailHeader extends BaseViewHolder<ListOfFeed> {
+public class CommunityCardDetailHeader extends BaseViewHolder<FeedDetail> {
     private final String TAG = LogUtils.makeLogTag(CommunityCardDetailHeader.class);
     @Bind(R.id.card_community_detail)
     CardView cardCommunityDetail;
@@ -28,7 +28,7 @@ public class CommunityCardDetailHeader extends BaseViewHolder<ListOfFeed> {
     @Bind(R.id.tv_community_related)
     TextView tvCommunityRelated;
     BaseHolderInterface viewInterface;
-    private ListOfFeed dataItem;
+    private FeedDetail dataItem;
 
 
     public CommunityCardDetailHeader(View itemView, BaseHolderInterface baseHolderInterface) {
@@ -39,7 +39,7 @@ public class CommunityCardDetailHeader extends BaseViewHolder<ListOfFeed> {
     }
 
     @Override
-    public void bindData(ListOfFeed item, final Context context, int position) {
+    public void bindData(FeedDetail item, final Context context, int position) {
         this.dataItem = item;
         cardCommunityDetail.setOnClickListener(this);
     }

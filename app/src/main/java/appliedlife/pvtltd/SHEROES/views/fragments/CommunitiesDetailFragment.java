@@ -56,7 +56,8 @@ public class CommunitiesDetailFragment extends BaseFragment implements HomeView 
     private SwipPullRefreshList mPullRefreshList;
     @Bind(R.id.tv_join_view)
     TextView mTvJoinView;
-    private AppUtils mAppUtils;
+    @Inject
+    AppUtils mAppUtils;
     private FragmentListRefreshData mFragmentListRefreshData;
     private FeedDetail mFeedDetail;
     public static CommunitiesDetailFragment createInstance(FeedDetail feedDetail) {
@@ -92,7 +93,6 @@ public class CommunitiesDetailFragment extends BaseFragment implements HomeView 
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_communities_detail, container, false);
         ButterKnife.bind(this, view);
-        mAppUtils = AppUtils.getInstance();
         mFragmentListRefreshData=new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.COMMUNITY_DETAIL,mFeedDetail.getId());
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);

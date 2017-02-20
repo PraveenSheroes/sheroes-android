@@ -50,7 +50,8 @@ public class ArticleDetailFragment extends BaseFragment implements HomeView {
     private HomeActivityIntractionListner mHomeActivityIntractionListner;
     private FeedDetail mFeedDetail;
     private FragmentListRefreshData mFragmentListRefreshData;
-    private AppUtils mAppUtils;
+    @Inject
+    AppUtils mAppUtils;
     public static ArticleDetailFragment createInstance(FeedDetail feedDetail) {
         ArticleDetailFragment articleDetailFragment = new ArticleDetailFragment();
         Bundle bundle = new Bundle();
@@ -84,7 +85,6 @@ public class ArticleDetailFragment extends BaseFragment implements HomeView {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_article_detail, container, false);
         ButterKnife.bind(this, view);
-        mAppUtils = AppUtils.getInstance();
         mFragmentListRefreshData=new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ARTICLE_DETAIL,mFeedDetail.getId());
         mHomePresenter.attachView(this);
         mLayoutManager = new LinearLayoutManager(getContext());

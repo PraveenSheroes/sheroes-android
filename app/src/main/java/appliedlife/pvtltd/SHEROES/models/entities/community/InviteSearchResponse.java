@@ -5,8 +5,6 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ListOfSearch;
-
 /**
  * Created by Ajit Kumar on 08-02-2017.
  */

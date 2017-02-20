@@ -11,8 +11,8 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -23,7 +23,7 @@ import butterknife.ButterKnife;
  * Created by Praveen_Singh on 13-01-2017.
  */
 
-public class HomeSpinnerFooterHolder extends BaseViewHolder<HomeSpinnerItem>  {
+public class HomeSpinnerFooterHolder extends BaseViewHolder<HomeSpinnerItem> {
     private final String TAG = LogUtils.makeLogTag(HomeSpinnerFooterHolder.class);
     @Bind(R.id.tv_cancel)
     TextView tvCancel;
@@ -31,7 +31,6 @@ public class HomeSpinnerFooterHolder extends BaseViewHolder<HomeSpinnerItem>  {
     TextView tvDone;
     BaseHolderInterface viewInterface;
     private HomeSpinnerItem dataItem;
-    private int position;
     Context mContext;
 
     public HomeSpinnerFooterHolder(View itemView, BaseHolderInterface baseHolderInterface) {
@@ -43,7 +42,7 @@ public class HomeSpinnerFooterHolder extends BaseViewHolder<HomeSpinnerItem>  {
 
     @Override
     public void bindData(HomeSpinnerItem item, Context context, int position) {
-        mContext=context;
+        mContext = context;
         this.dataItem = item;
         tvDone.setOnClickListener(this);
         tvCancel.setOnClickListener(this);
@@ -57,22 +56,31 @@ public class HomeSpinnerFooterHolder extends BaseViewHolder<HomeSpinnerItem>  {
 
     @Override
     public void onClick(View view) {
-
         int id = view.getId();
         switch (id) {
             case R.id.tv_done:
-                if(viewInterface!=null&&StringUtil.isNotEmptyCollection(viewInterface.getListData())) {
+                if (viewInterface != null && StringUtil.isNotEmptyCollection(viewInterface.getListData())) {
                     tvDone.setTextColor(ContextCompat.getColor(mContext, R.color.blue));
                     List<BaseResponse> mHomeSpinnerItemList = viewInterface.getListData();
                     if (StringUtil.isNotEmptyCollection(mHomeSpinnerItemList)) {
                         BaseResponse baseResponse = getAllSelectedData(mHomeSpinnerItemList);
                         viewInterface.handleOnClick(baseResponse, tvDone);
                     }
+
                 }
                 break;
             case R.id.tv_cancel:
                 tvCancel.setTextColor(ContextCompat.getColor(mContext, R.color.blue));
-                viewInterface.handleOnClick(dataItem,tvCancel);
+                List<BaseResponse> mHomeSpinnerItemList = viewInterface.getListData();
+                BaseResponse baseResponse = mHomeSpinnerItemList.get(getAdapterPosition());
+                HomeSpinnerItem homeSpinnerItem = (HomeSpinnerItem) baseResponse;
+                boolean isDone = homeSpinnerItem.isDone();
+                if (isDone) {
+                    dataItem.setName(AppConstants.FEED_ARTICLE);
+                } else {
+                    dataItem.setName(AppConstants.EMPTY_STRING);
+                }
+                viewInterface.handleOnClick(dataItem, tvCancel);
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
@@ -80,19 +88,17 @@ public class HomeSpinnerFooterHolder extends BaseViewHolder<HomeSpinnerItem>  {
     }
 
     private HomeSpinnerItem getAllSelectedData(List<BaseResponse> homeSpinnerItemList) {
-        String addAllText=AppConstants.EMPTY_STRING;
-        HomeSpinnerItem homeSpinnerItem=new HomeSpinnerItem();
-
-        for(BaseResponse baseResponse :homeSpinnerItemList)
-        {
-            homeSpinnerItem=((HomeSpinnerItem) baseResponse);
-            if(homeSpinnerItem.isChecked())
-            {
-                addAllText +=homeSpinnerItem.getName()+AppConstants.COMMA;
+        String addAllText = AppConstants.EMPTY_STRING;
+        HomeSpinnerItem homeSpinnerItem = new HomeSpinnerItem();
+        for (BaseResponse baseResponse : homeSpinnerItemList) {
+            homeSpinnerItem = ((HomeSpinnerItem) baseResponse);
+            if (homeSpinnerItem.isChecked()) {
+                addAllText += homeSpinnerItem.getName() + AppConstants.COMMA;
             }
         }
-        if(StringUtil.isNotNullOrEmptyString(addAllText)) {
+        if (StringUtil.isNotNullOrEmptyString(addAllText)) {
             homeSpinnerItem.setName(addAllText.substring(0, addAllText.length() - 1));
+            homeSpinnerItem.setDone(true);
         }
         return homeSpinnerItem;
     }

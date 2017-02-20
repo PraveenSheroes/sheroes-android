@@ -1,4 +1,4 @@
-package appliedlife.pvtltd.SHEROES.models.entities.comment;
+package appliedlife.pvtltd.SHEROES.models.entities.feed;
 
 import android.os.Parcel;
 import android.os.Parcelable;

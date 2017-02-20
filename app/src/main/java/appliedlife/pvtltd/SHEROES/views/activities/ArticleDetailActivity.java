@@ -330,7 +330,7 @@ public class ArticleDetailActivity extends BaseActivity implements BaseHolderInt
     }
 
     @Override
-    public void onClickReactionList(FragmentOpen isFragmentOpen) {
+    public void onClickReactionList(FragmentOpen isFragmentOpen, FeedDetail feedDetail) {
         mFragmentOpen = isFragmentOpen;
         if (mFragmentOpen.isReactionList()) {
             CommentReactionFragment commentReactionFragmentForArticle = new CommentReactionFragment();
@@ -340,6 +340,7 @@ public class ArticleDetailActivity extends BaseActivity implements BaseHolderInt
             getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.bottom_to_top_slide_reverse_anim)
                     .replace(R.id.fl_article_detail_comments, commentReactionFragmentForArticle, CommentReactionFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
         }
+
     }
 
     @Override

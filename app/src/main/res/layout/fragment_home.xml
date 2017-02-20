@@ -13,11 +13,27 @@
             android:id="@+id/rv_home_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:divider="#00000000" />
+            android:divider="@color/fully_transparent" />
     </android.support.v4.widget.SwipeRefreshLayout>
     <ProgressBar
         android:id="@+id/pb_home_progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center" />
+    <LinearLayout
+        android:id="@+id/li_no_result"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone"
+        android:background="@color/white"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:textColor="@color/detail_page_text"
+            android:layout_gravity="center"
+            android:text="@string/ID_NO_RESULT_FOUND"/>
+    </LinearLayout>
 </FrameLayout>

@@ -6,7 +6,8 @@
     <ImageView
         android:id="@+id/iv_feed_article_single_image"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@drawable/ic_reaction_strip_background"
         android:scaleType="fitXY" />
 
     <TextView

@@ -12,7 +12,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.community.ListOfInviteSearch;
-import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerList;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
@@ -56,12 +55,12 @@ public class InviteSearchHolder extends BaseViewHolder<ListOfInviteSearch> {
     public void bindData(ListOfInviteSearch obj, Context context, int position) {
         this.dataItem = obj;
         tv_add_invite.setOnClickListener(this);
-        tvCity.setText(dataItem.getFeedTitle().substring(0,10));
+      //  tvCity.setText(dataItem.getFeedTitle().substring(0,10));
         int pos=position+1;
         tv_owner.setText("Admin"+pos);
-        String images = dataItem.getFeedCircleIconUrl();
+     //   String images = dataItem.getFeedCircleIconUrl();
         background.setCircularImage(true);
-        background.bindImage(images);
+     //   background.bindImage(images);
     }
 
     @Override
@@ -85,7 +84,7 @@ public class InviteSearchHolder extends BaseViewHolder<ListOfInviteSearch> {
         }
         HashMap<String,Object> map = new HashMap<String,Object>();
         //   map.put("collection name",dataItem.getTitle());
-        map.put("collection id",dataItem.getId());
+    //    map.put("collection id",dataItem.getId());
 //    map.put("collection type",dataItem.getType());
 
 

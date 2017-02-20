@@ -5,14 +5,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.article.ArticleDetailSuggestion;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleDetailPojo;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -45,7 +41,7 @@ public class ArticleDetailSuggestedHolder extends BaseViewHolder<ArticleDetailPo
     @Override
     public void bindData(ArticleDetailPojo item, final Context context, int position) {
         this.dataItem = item;
-        List<ArticleDetailSuggestion> suggestedPost=new ArrayList<>();
+      /*  List<ArticleDetailSuggestion> suggestedPost=new ArrayList<>();
         ArticleDetailSuggestion articleDetailSuggestion=new ArticleDetailSuggestion();
         articleDetailSuggestion.setImageUrl("https://img.sheroes.in/img/uploads/forumbloggallary/14846520381484652038.png");
         articleDetailSuggestion.setPostName("First name");
@@ -60,14 +56,14 @@ public class ArticleDetailSuggestedHolder extends BaseViewHolder<ArticleDetailPo
         suggestedPost.add(articleDetailSuggestion);
         suggestedPost.add(communitySuggestion2);
         suggestedPost.add(communitySuggestion3);
-        suggestedPost.add(communitySuggestion4);
+        suggestedPost.add(communitySuggestion4);*/
 
         mLayoutManager = new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new GenericRecyclerViewAdapter(context,(ArticleDetailActivity) context);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
-        mAdapter.setSheroesGenericListData(suggestedPost);
+   //     mAdapter.setSheroesGenericListData(suggestedPost);
     }
 
 

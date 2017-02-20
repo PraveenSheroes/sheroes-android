@@ -22,6 +22,8 @@ import appliedlife.pvtltd.SHEROES.preferences.SessionUser;
 import appliedlife.pvtltd.SHEROES.preferences.Token;
 import appliedlife.pvtltd.SHEROES.utils.AnnotationExclusionStrategy;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
+import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.Cache;
@@ -91,8 +93,16 @@ public class SheroesAppModule {
                 .setExclusionStrategies(new AnnotationExclusionStrategy())
                 .create();
     }
-
-
+    @Singleton
+    @Provides
+    public DateUtil provideDateUtil() {
+        return DateUtil.getInstance();
+    }
+    @Singleton
+    @Provides
+    public AppUtils provideAppUtil() {
+        return AppUtils.getInstance();
+    }
     @Singleton
     @Provides
     public RxSharedPreferences provideRxSharedPreferences() {

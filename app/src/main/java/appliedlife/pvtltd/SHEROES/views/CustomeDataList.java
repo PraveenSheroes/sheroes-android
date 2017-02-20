@@ -48,13 +48,13 @@ public class CustomeDataList {
         HomeSpinnerItem homeSpinnerItem1=new HomeSpinnerItem();
         homeSpinnerItem1.setId("1");
         homeSpinnerItem1.setName("All ");
-        homeSpinnerItem1.setDescription("This first mock city discription");
+        homeSpinnerItem1.setDescription("All");
         homeSpinnerItem1.setChecked(false);
 
         HomeSpinnerItem homeSpinnerItem2=new HomeSpinnerItem();
         homeSpinnerItem2.setId("2");
         homeSpinnerItem2.setName("Relationship ");
-        homeSpinnerItem2.setDescription("This second mock city discription");
+        homeSpinnerItem2.setDescription("From");
         homeSpinnerItem2.setChecked(false);
 
         HomeSpinnerItem homeSpinnerItem3=new HomeSpinnerItem();
@@ -74,18 +74,11 @@ public class CustomeDataList {
         homeSpinnerItem5.setName("womens of the day");
         homeSpinnerItem5.setDescription("This fifth mock city discription");
         homeSpinnerItem5.setChecked(false);
-
         HomeSpinnerItem homeSpinnerItem6=new HomeSpinnerItem();
         homeSpinnerItem6.setId("6");
-        homeSpinnerItem6.setName("Profile");
-        homeSpinnerItem6.setDescription("This six mock city discription");
+        homeSpinnerItem6.setName("footer");
+        homeSpinnerItem6.setDescription("This fifth mock city discription");
         homeSpinnerItem6.setChecked(false);
-
-        HomeSpinnerItem homeSpinnerItem7=new HomeSpinnerItem();
-        homeSpinnerItem7.setId("7");
-        homeSpinnerItem7.setName("Featured ");
-        homeSpinnerItem7.setDescription("This seven mock city discription");
-        homeSpinnerItem7.setChecked(false);
 
         homeSpinnerItems.add(homeSpinnerItem1);
         homeSpinnerItems.add(homeSpinnerItem2);
@@ -93,7 +86,6 @@ public class CustomeDataList {
         homeSpinnerItems.add(homeSpinnerItem4);
         homeSpinnerItems.add(homeSpinnerItem5);
         homeSpinnerItems.add(homeSpinnerItem6);
-        homeSpinnerItems.add(homeSpinnerItem7);
         return  homeSpinnerItems;
     }
 }

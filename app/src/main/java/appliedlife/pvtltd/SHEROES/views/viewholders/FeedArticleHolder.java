@@ -13,13 +13,16 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
+import javax.inject.Inject;
+
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.comment.LastComment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.LastComment;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
@@ -34,6 +37,8 @@ import butterknife.OnLongClick;
 
 public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     private final String TAG = LogUtils.makeLogTag(FeedArticleHolder.class);
+    @Inject
+    DateUtil mDateUtil;
     private static final String LEFT_HTML_TAG_FOR_COLOR = "<b><font color='#323940'>";
     private static final String RIGHT_HTML_TAG_FOR_COLOR = "</font></b>";
     private static final String LEFT_HTML_VEIW_TAG_FOR_COLOR = "<font color='#50e3c2'>";
@@ -119,14 +124,21 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             tvFeedArticleCardTitle.setText(dataItem.getAuthorName());
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getCreatedDate())) {
-            //   tvFeedArticleTitleLabel.setText(dataItem.getAuthorName());
+            long createdDate = mDateUtil.getTimeInMillis(dataItem.getCreatedDate(), AppConstants.DATE_FORMAT);
+            long minuts = mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate);
+            if (minuts < 60) {
+                tvFeedArticleTitleLabel.setText(String.valueOf((int) minuts)+AppConstants.SPACE+mContext.getString(R.string.ID_MINUTS));
+            } else {
+                int hour = (int) minuts / 60;
+                tvFeedArticleTitleLabel.setText(String.valueOf(hour)+AppConstants.SPACE+mContext.getString(R.string.ID_HOURS));
+            }
+
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
             tvFeedArticleHeader.setText(dataItem.getNameOrTitle());
         }
-        if (StringUtil.isNotNullOrEmptyString(dataItem.getListShortDescription())) {
-            String description = dataItem.getListShortDescription().trim();
-            LogUtils.info("Article", "***********Short description******" + description);
+        if (StringUtil.isNotNullOrEmptyString(dataItem.getListDescription())) {
+            String description = dataItem.getListDescription().trim();
             if (description.length() > AppConstants.WORD_LENGTH) {
                 description = description.substring(0, AppConstants.WORD_COUNT);
             }
@@ -163,7 +175,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         }
         if (dataItem.getNoOfComments() < AppConstants.ONE_CONSTANT) {
             tvFeedArticleTotalReplies.setVisibility(View.GONE);
-            //     liFeedArticleUserComments.setVisibility(View.GONE);
+             liFeedArticleUserComments.setVisibility(View.GONE);
         } else {
             switch (dataItem.getNoOfComments()) {
                 case AppConstants.ONE_CONSTANT:
@@ -182,21 +194,27 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         switch (dataItem.getReactionValue()) {
             case AppConstants.NO_REACTION_CONSTANT:
                 tvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
+                tvFeedArticleUserReaction.setText(AppConstants.EMPTY_STRING);
                 break;
             case AppConstants.HEART_REACTION_CONSTANT:
                 tvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
+                tvFeedArticleUserReaction.setText(mContext.getString(R.string.ID_LOVE));
                 break;
             case AppConstants.EMOJI_FIRST_REACTION_CONSTANT:
                 tvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_emoji3_whistel, 0, 0, 0);
+                tvFeedArticleUserReaction.setText(mContext.getString(R.string.ID_WISHTLE));
                 break;
             case AppConstants.EMOJI_SECOND_REACTION_CONSTANT:
                 tvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_emoji_xo_xo, 0, 0, 0);
+                tvFeedArticleUserReaction.setText(mContext.getString(R.string.ID_XOXO));
                 break;
             case AppConstants.EMOJI_THIRD_REACTION_CONSTANT:
                 tvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_emoji2_with_you, 0, 0, 0);
+                tvFeedArticleUserReaction.setText(mContext.getString(R.string.ID_LIKE));
                 break;
             case AppConstants.EMOJI_FOURTH_REACTION_CONSTANT:
                 tvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_emoji4_face_palm, 0, 0, 0);
+                tvFeedArticleUserReaction.setText(mContext.getString(R.string.ID_FACE_PALM));
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + dataItem.getReactionValue());
@@ -262,6 +280,10 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         viewInterface.handleOnClick(dataItem, tvFeedArticleUserCommentPostMenu);
     }
 
+    @OnClick(R.id.tv_feed_article_total_reactions)
+    public void reactionClick() {
+        viewInterface.handleOnClick(dataItem, tvFeedArticleTotalReactions);
+    }
 
     @OnClick(R.id.tv_feed_article_total_replies)
     public void repliesClick() {
@@ -271,8 +293,8 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     @OnClick(R.id.tv_feed_article_header_lebel)
     public void viewMoreClick() {
         if (tvFeedArticleHeaderLebel.getTag().toString().equalsIgnoreCase(mViewMore)) {
-            if (StringUtil.isNotNullOrEmptyString(dataItem.getListShortDescription())) {
-                String description = dataItem.getListShortDescription();
+            if (StringUtil.isNotNullOrEmptyString(dataItem.getListDescription())) {
+                String description = dataItem.getListDescription();
                 String lessWithColor = LEFT_HTML_VEIW_TAG_FOR_COLOR + mLess + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
 
                 if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
@@ -284,8 +306,8 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             }
         } else {
             tvFeedArticleHeaderLebel.setTag(mViewMore);
-            if (StringUtil.isNotNullOrEmptyString(dataItem.getListShortDescription())) {
-                String description = dataItem.getListShortDescription();
+            if (StringUtil.isNotNullOrEmptyString(dataItem.getListDescription())) {
+                String description = dataItem.getListDescription();
                 String viewMore = LEFT_HTML_VEIW_TAG_FOR_COLOR + mViewMore + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
                 if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                     tvFeedArticleHeaderLebel.setText(Html.fromHtml(description.substring(0, AppConstants.WORD_COUNT) + AppConstants.DOTS + AppConstants.SPACE + viewMore, 0)); // for 24 api and more

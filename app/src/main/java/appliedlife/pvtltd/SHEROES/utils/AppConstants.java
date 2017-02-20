@@ -11,6 +11,7 @@ package appliedlife.pvtltd.SHEROES.utils;
 public class AppConstants {
     public static final int ONEGIGABYTE = 1024 * 1024 * 1024;
     public static final int ANDROID_SDK_24 = 24;
+    public static final String DATE_FORMAT = "yyyy-MM-dd'T'00:00:00+05:30";
     public static final String SPACE=" ";
     public static final String SHEROES_AUTH_TOKEN = "sheroes_auth_token";
     public static final String SHEROES_USER_SESSION = "sheroes_user_session";
@@ -29,7 +30,7 @@ public class AppConstants {
     public static final String DOTS = "...";
     public static final String S="s";
     public static final String FOR_ALL= "all";
-    public static final String FEED_SUB_TYPE= "A";
+    public static final String FEED_SUB_TYPE= "a";
     public static final String FEED_COMMUNITY = "C";
     public static final String FEED_JOB = "J";
     public static final String FEED_ARTICLE= "A";
@@ -66,4 +67,5 @@ public class AppConstants {
     public static final int EMOJI_SECOND_REACTION_CONSTANT= 30;
     public static final int EMOJI_THIRD_REACTION_CONSTANT= 40;
     public static final int EMOJI_FOURTH_REACTION_CONSTANT= 50;
+    public static final int SEARCH_CONSTANT_DELAY= 500;
 }

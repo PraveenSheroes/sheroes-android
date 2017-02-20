@@ -98,7 +98,7 @@
             <LinearLayout
                 android:id="@+id/li_feed_community_user_post_images"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/dp_size_230"
                 android:background="@color/white"
                 android:orientation="vertical" />
 
@@ -127,6 +127,10 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight=".28"
+                android:gravity="center|left"
+                android:drawablePadding="@dimen/dp_size_5"
+                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                android:textColor="@color/emoji_text"
                 android:drawableLeft="@drawable/ic_heart_in_active" />
 
             <TextView
@@ -254,6 +258,7 @@
                 android:layout_marginLeft="@dimen/dp_size_12"
                 android:layout_weight="@integer/int_value_for_line_1"
                 android:lines="@integer/int_value_for_line_2"
+                android:gravity="center|left"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:lineSpacingExtra="@dimen/dp_size_3"
                 android:text="@string/IDS_STR_NETWORK_TIME_OUT_DESCRIPTION"

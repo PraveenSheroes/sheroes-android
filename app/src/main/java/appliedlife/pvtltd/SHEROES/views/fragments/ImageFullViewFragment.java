@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.ListOfFeed;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -29,7 +29,7 @@ public class ImageFullViewFragment extends BaseFragment {
     ViewPager viewPagerFullImageView;
     private ImageFullViewAdapter mImageFullViewAdapter;
     private HomeActivityIntractionWithSpinnerListner mHomeActivityIntractionWithSpinnerListner;
-    private ListOfFeed mListOfFeed;
+    private FeedDetail mFeedDetail;
     private FragmentOpen mFragmentOpen;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,10 +55,10 @@ public class ImageFullViewFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_image_full_view, container, false);
         ButterKnife.bind(this, view);
         if(null!=getArguments()) {
-            mListOfFeed = getArguments().getParcelable(AppConstants.IMAGE_FULL_VIEW);
+            mFeedDetail = getArguments().getParcelable(AppConstants.IMAGE_FULL_VIEW);
             mFragmentOpen = getArguments().getParcelable(AppConstants.FRAGMENT_FLAG_CHECK);
         }
-        mImageFullViewAdapter = new ImageFullViewAdapter(getActivity(),mListOfFeed,mFragmentOpen);
+        mImageFullViewAdapter = new ImageFullViewAdapter(getActivity(), mFeedDetail,mFragmentOpen);
         viewPagerFullImageView.setAdapter(mImageFullViewAdapter);
 
         return view;

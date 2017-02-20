@@ -61,7 +61,7 @@ public class HomeSearchActivity extends BaseActivity implements BaseHolderInterf
     private void initHomeViewPagerAndTabs() {
         mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         if(mFragmenOpen.isFeedOpen()) {
-            String search =  getString(R.string.ID_SEARCH)+AppConstants.COMMA+AppConstants.FEED_ARTICLE+AppConstants.S + AppConstants.COMMA + AppConstants.FEED_COMMUNITY + AppConstants.COMMA + AppConstants.FEED_JOB;
+            String search =  getString(R.string.ID_SEARCH_IN_FEED);
             mSearchEditText.setHint(search);
             mViewPagerAdapter.addFragment(AllSearchFragment.createInstance(20), getString(R.string.ID_ALL));
             mViewPagerAdapter.addFragment(SearchRecentFragment.createInstance(20), getString(R.string.ID_RECENT));
@@ -71,7 +71,7 @@ public class HomeSearchActivity extends BaseActivity implements BaseHolderInterf
         }
         else
         {
-            mSearchEditText.setHint(getString(R.string.ID_SEARCH)+AppConstants.SPACE+getString(R.string.ID_COMMUNITIES));
+            mSearchEditText.setHint(getString(R.string.ID_SEARCH_IN_COMMUNITIES));
             mTabLayout.setVisibility(View.GONE);
             mViewPagerAdapter.addFragment(SearchCommunitiesFragment.createInstance(20), getString(R.string.ID_COMMUNITIES));
         }

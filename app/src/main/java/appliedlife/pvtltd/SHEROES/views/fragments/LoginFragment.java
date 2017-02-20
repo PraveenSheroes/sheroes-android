@@ -72,6 +72,8 @@ public class LoginFragment extends BaseFragment implements LoginView {
     Preference<Token> mUserPreference;
     @Inject
     LoginPresenter mLoginPresenter;
+    @Inject
+    AppUtils mAppUtils;
     @Bind(R.id.email)
     AutoCompleteTextView mEmailView;
     @Bind(R.id.password)
@@ -251,11 +253,11 @@ public class LoginFragment extends BaseFragment implements LoginView {
             cancel = true;
         }
         // Check for a valid email address.
-        if (!AppUtils.getInstance().checkEmail(email)) {
+        if (!mAppUtils.checkEmail(email)) {
             mEmailView.setError(getString(R.string.ID_ERROR_FIELD_REQUIRED));
             focusView = mEmailView;
             cancel = true;
-        } else if (!AppUtils.getInstance().checkEmail(email)) {
+        } else if (!mAppUtils.checkEmail(email)) {
             mEmailView.setError(getString(R.string.ID_ERROR_INVALID_EMAIL));
             focusView = mEmailView;
             cancel = true;

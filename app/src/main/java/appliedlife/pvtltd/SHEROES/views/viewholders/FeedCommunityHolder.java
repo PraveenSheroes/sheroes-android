@@ -19,8 +19,8 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.comment.LastComment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.LastComment;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -42,6 +42,8 @@ public class FeedCommunityHolder extends BaseViewHolder<FeedDetail>{
     private static final String RIGHT_HTML_VIEW_TAG_FOR_COLOR = "</font>";
     private static final String LEFT_HTML_TAG= "<font color='#333333'>";
     private static final String RIGHT_HTML_TAG= "</font>";
+    @Bind(R.id.li_feed_community_user_comments)
+    LinearLayout liFeedCommunityUserComments;
     @Bind(R.id.li_feed_community_images)
     LinearLayout liFeedCommunityImages;
     @Bind(R.id.li_feed_community_join_conversation)
@@ -93,7 +95,6 @@ public class FeedCommunityHolder extends BaseViewHolder<FeedDetail>{
     BaseHolderInterface viewInterface;
     private FeedDetail dataItem;
     Context mContext;
-    List<String> mSpinnerMenuItems;
 
     public FeedCommunityHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
@@ -138,7 +139,7 @@ public class FeedCommunityHolder extends BaseViewHolder<FeedDetail>{
             for(String tag:tags) {
                 mergeTags+=tag+AppConstants.COMMA;
             }
-            String tagHeader = LEFT_HTML_TAG + context.getString(R.string.ID_TAGS) + LEFT_HTML_TAG;
+            String tagHeader = LEFT_HTML_TAG + context.getString(R.string.ID_TAGS) + RIGHT_HTML_TAG;
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                 tvFeedCommunityTagLable.setText(Html.fromHtml(tagHeader + AppConstants.COLON + AppConstants.SPACE + mergeTags, 0)); // for 24 api and more
             } else {
@@ -166,6 +167,7 @@ public class FeedCommunityHolder extends BaseViewHolder<FeedDetail>{
         }
         if (dataItem.getNoOfComments() < AppConstants.ONE_CONSTANT) {
             tvFeedCommunityTotalReplies.setVisibility(View.GONE);
+            liFeedCommunityUserComments.setVisibility(View.GONE);
         } else {
             switch (dataItem.getNoOfComments()) {
                 case AppConstants.ONE_CONSTANT:
@@ -183,20 +185,28 @@ public class FeedCommunityHolder extends BaseViewHolder<FeedDetail>{
         switch (dataItem.getReactionValue()) {
             case AppConstants.NO_REACTION_CONSTANT:
                 tvFeedCommunityUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
+                tvFeedCommunityUserReaction.setText(AppConstants.EMPTY_STRING);
                 break;
             case AppConstants.HEART_REACTION_CONSTANT:
                 tvFeedCommunityUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
+                tvFeedCommunityUserReaction.setText(mContext.getString(R.string.ID_LOVE));
                 break;
             case AppConstants.EMOJI_FIRST_REACTION_CONSTANT:
-                tvFeedCommunityUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_emoji_xo_xo, 0, 0, 0);
+                tvFeedCommunityUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_emoji3_whistel, 0, 0, 0);
+                tvFeedCommunityUserReaction.setText(mContext.getString(R.string.ID_WISHTLE));
                 break;
             case AppConstants.EMOJI_SECOND_REACTION_CONSTANT:
-                tvFeedCommunityUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_emoji2_with_you, 0, 0, 0);
+                tvFeedCommunityUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_emoji_xo_xo, 0, 0, 0);
+                tvFeedCommunityUserReaction.setText(mContext.getString(R.string.ID_XOXO));
                 break;
             case AppConstants.EMOJI_THIRD_REACTION_CONSTANT:
-                tvFeedCommunityUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_emoji3_whistel, 0, 0, 0);
+                tvFeedCommunityUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_emoji2_with_you, 0, 0, 0);
+                tvFeedCommunityUserReaction.setText(mContext.getString(R.string.ID_LIKE));
                 break;
-
+            case AppConstants.EMOJI_FOURTH_REACTION_CONSTANT:
+                tvFeedCommunityUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_emoji4_face_palm, 0, 0, 0);
+                tvFeedCommunityUserReaction.setText(mContext.getString(R.string.ID_FACE_PALM));
+                break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + dataItem.getReactionValue());
         }

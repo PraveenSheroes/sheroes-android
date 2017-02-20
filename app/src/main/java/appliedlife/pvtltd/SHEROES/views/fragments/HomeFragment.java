@@ -7,11 +7,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.crashlytics.android.Crashlytics;
@@ -59,11 +61,14 @@ public class HomeFragment extends BaseFragment implements HomeView {
     ProgressBar mProgressBar;
     @Bind(R.id.swipe_view_home)
     SwipeRefreshLayout swipeView;
+    @Bind(R.id.li_no_result)
+    LinearLayout liNoResult;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private HomeActivityIntractionListner mHomeActivityIntractionListner;
     private SwipPullRefreshList mPullRefreshList;
-    private AppUtils mAppUtils;
+    @Inject
+    AppUtils mAppUtils;
     FeedDetail mFeedDetail;
     private FragmentListRefreshData mFragmentListRefreshData;
     int position;
@@ -102,7 +107,6 @@ public class HomeFragment extends BaseFragment implements HomeView {
         //  GoogleAnalyticsTracing.screenNameTracking(getActivity(),SCREEN_NAME);
 
         ButterKnife.bind(this, view);
-        mAppUtils = AppUtils.getInstance();
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.HOME_FRAGMENT, AppConstants.EMPTY_STRING);
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
@@ -166,6 +170,7 @@ public class HomeFragment extends BaseFragment implements HomeView {
 
     public void bookMarkForCard(FeedDetail feedDetail) {
         listLoad = false;
+        mFeedDetail=feedDetail;
         mHomePresenter.addBookMarkFromPresenter(mAppUtils.bookMarkRequestBuilder(feedDetail.getEntityOrParticipantId()), feedDetail.isBookmarked());
     }
 
@@ -216,6 +221,10 @@ public class HomeFragment extends BaseFragment implements HomeView {
             }
             swipeView.setRefreshing(false);
         }
+        else
+        {
+            liNoResult.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -249,10 +258,7 @@ public class HomeFragment extends BaseFragment implements HomeView {
                 mFeedDetail.setBookmarked(false);
             }
             mAdapter.setDataOnPosition(mFeedDetail, position);
-        } else {
-            mAdapter.setDataOnPosition(mFeedDetail, position);
         }
-
     }
 
     private void likeSuccess(String success) {
@@ -277,7 +283,10 @@ public class HomeFragment extends BaseFragment implements HomeView {
                     mFeedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
                 }
             }
-            mAdapter.setDataOnPosition(mFeedDetail, position);
+             mAdapter.setDataOnPosition(mFeedDetail, position);
+            if (mRecyclerView.getItemAnimator() instanceof SimpleItemAnimator) {
+                ((SimpleItemAnimator)mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+            }
         }
     }
 

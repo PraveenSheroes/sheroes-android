@@ -9,8 +9,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionResponsePojo;
-import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityTagsListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.InviteSearchResponse;
@@ -29,8 +27,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardRespon
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.CommunitiesResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.Feature;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ListOfSearch;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.SearchResponse;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
@@ -70,8 +66,6 @@ public interface SheroesAppServiceApi {
     Observable<BookmarkResponsePojo> UnBookMarkToApi(@Body BookmarkRequestPojo bookmarkResponsePojo );
 
 
-    @POST("v2/58940613260000a11200a97f")
-    Observable<SearchResponse> getSearchResponseFromApi(@Body ListOfSearch listOfSearch );
     @GET("v2/587877da0f0000231d0d49b1")
     Observable<HomeSpinnerItemResponse> getHomeSpinnerList();
 
@@ -100,8 +94,6 @@ public interface SheroesAppServiceApi {
     Observable<ArticleListResponse> getOnlyJobList(@Body ArticleCardResponse articleCardResponse);
     @POST("v2/587fc963270000010df0ddac")
     Observable<Feature> getFeature(@Body Feature articleRequest );
-    @POST("v2/588748de100000e11f25e1ec")
-    Observable<CommentResponse> getReactionFromApi(@Body CommentRequest commentRequest );
 
     @POST("v2/588f43133f0000d81adde412")
     Observable<CommunitiesResponse> getAllCommunities(@Body Feature feature );

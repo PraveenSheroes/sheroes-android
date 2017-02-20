@@ -79,8 +79,6 @@ public class HomeSpinnerFragment extends BaseFragment implements HomeView {
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mAdapter);
         checkForSpinnerItemSelection();
-       // mCommentReactionPresenter.getSpinnerListFromPresenter();
-
         return view;
     }
 

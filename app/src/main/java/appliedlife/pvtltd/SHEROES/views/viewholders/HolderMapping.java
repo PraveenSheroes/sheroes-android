@@ -188,7 +188,7 @@ public enum HolderMapping {
     }
 
     public static int getOrdinal(BaseResponse item, int totalCount, String callFromType) {
-        int returnView = BLANK_LIST.ordinal();
+        int returnView = 0;
         if (null != item) {
             if (callFromType.equalsIgnoreCase(AppConstants.FEED_SUB_TYPE)) {
                 if (item instanceof FeedDetail) {
@@ -211,38 +211,52 @@ public enum HolderMapping {
                             returnView = COMMUNITY_DETAIL_HEADER.ordinal();
                             break;
                         default:
-                            returnView = BLANK_LIST.ordinal();
                     }
                 }
             } else {
                 if (item instanceof FeedDetail) {
                     FeedDetail feedDetail = ((FeedDetail) item);
                     String feedType = feedDetail.getSubType().toUpperCase();
-                    switch (feedType) {
-                        case AppConstants.FEED_ARTICLE:
-                            returnView = ARTICLE_CARD_HOLDER.ordinal();
-                            break;
-                        case AppConstants.FEED_COMMUNITY:
-                            if (feedDetail.isFeatured()) {
-                                returnView = FEATURE_CARD.ordinal();
-                                //   return SUGGESTED_CARD_HOLDER.ordinal();
-                            } else {
-                                returnView = MY_COMMUNITIES_CARD.ordinal();
-                            }
-                            break;
-                        case AppConstants.FEED_JOB:
-                            returnView = FEED_JOB.ordinal();
-                            break;
-                        //TODO: communitydetail header need to change
-                        case AppConstants.MY_COMMUNITIES_HEADER:
-                            returnView = COMMUNITY_DETAIL_HEADER.ordinal();
-                            break;
-                        default:
-                    }
+                    boolean isSearch = feedDetail.isActive();
+                   // if(!isSearch) {
+                        switch (feedType) {
+                            case AppConstants.FEED_ARTICLE:
+                                returnView = ARTICLE_CARD_HOLDER.ordinal();
+                                break;
+                            case AppConstants.FEED_COMMUNITY:
+                                if (feedDetail.isFeatured()) {
+                                    returnView = FEATURE_CARD.ordinal();
+                                    //   return SUGGESTED_CARD_HOLDER.ordinal();
+                                } else {
+                                    returnView = MY_COMMUNITIES_CARD.ordinal();
+                                }
+                                break;
+                            case AppConstants.FEED_JOB:
+                                returnView = FEED_JOB.ordinal();
+                                break;
+                            //TODO: communitydetail header need to change
+                            case AppConstants.MY_COMMUNITIES_HEADER:
+                                returnView = COMMUNITY_DETAIL_HEADER.ordinal();
+                                break;
+                            default:
+
+                        }
+                   /* }
+                    else
+                    {
+                        returnView = SEARCH_MODULE.ordinal();
+                    }*/
                 } else if (item instanceof DrawerItems) {
                     returnView = DRAWER_ITEMS.ordinal();
                 } else if (item instanceof CommentReactionDoc) {
-                    returnView = COMMENT.ordinal();
+                    CommentReactionDoc commentReactionDoc = ((CommentReactionDoc) item);
+                    if(commentReactionDoc.getLikeValue()>AppConstants.NO_REACTION_CONSTANT)
+                    {
+                        returnView = REACTION.ordinal();
+                    }
+                    else {
+                        returnView = COMMENT.ordinal();
+                    }
                 }else if (item instanceof HomeSpinnerItem) {
                     String id = ((HomeSpinnerItem) item).getId();
                     if (id.equalsIgnoreCase(String.valueOf(totalCount))) {

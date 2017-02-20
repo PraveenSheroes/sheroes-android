@@ -13,6 +13,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
  */
 
 public class CommentReactionDoc extends BaseResponse implements Parcelable {
+    boolean isEdit;
+    int itemPosition;
     @SerializedName("comment")
     @Expose
     private String comment;
@@ -52,6 +54,23 @@ public class CommentReactionDoc extends BaseResponse implements Parcelable {
     @SerializedName("participation_type_id")
     @Expose
     private long participationTypeId;
+
+
+    public boolean isEdit() {
+        return isEdit;
+    }
+
+    public void setEdit(boolean edit) {
+        isEdit = edit;
+    }
+
+    public int getItemPosition() {
+        return itemPosition;
+    }
+
+    public void setItemPosition(int itemPosition) {
+        this.itemPosition = itemPosition;
+    }
 
     public String getComment() {
         return comment;
@@ -164,6 +183,8 @@ public class CommentReactionDoc extends BaseResponse implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeByte(this.isEdit ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.itemPosition);
         dest.writeString(this.comment);
         dest.writeLong(this.commentsId);
         dest.writeString(this.createdOn);
@@ -183,6 +204,8 @@ public class CommentReactionDoc extends BaseResponse implements Parcelable {
     }
 
     protected CommentReactionDoc(Parcel in) {
+        this.isEdit = in.readByte() != 0;
+        this.itemPosition = in.readInt();
         this.comment = in.readString();
         this.commentsId = in.readLong();
         this.createdOn = in.readString();
@@ -198,7 +221,7 @@ public class CommentReactionDoc extends BaseResponse implements Parcelable {
         this.participationTypeId = in.readLong();
     }
 
-    public static final Parcelable.Creator<CommentReactionDoc> CREATOR = new Parcelable.Creator<CommentReactionDoc>() {
+    public static final Creator<CommentReactionDoc> CREATOR = new Creator<CommentReactionDoc>() {
         @Override
         public CommentReactionDoc createFromParcel(Parcel source) {
             return new CommentReactionDoc(source);

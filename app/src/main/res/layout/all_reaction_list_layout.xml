@@ -50,15 +50,13 @@
                 android:textStyle="bold" />
 
         </LinearLayout>
-        <TextView
-            android:id="@+id/tv_user_reaction_emoji"
+        <ImageView
+            android:id="@+id/iv_user_reaction_emoji"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_emoji3_whistel"
+            android:background="@drawable/ic_emoji3_whistel"
             android:layout_gravity="center|right"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:textColor="@color/feed_article_comment"
-            android:textSize="@dimen/sp_size_11" />
+           />
     </LinearLayout>
 
     <View

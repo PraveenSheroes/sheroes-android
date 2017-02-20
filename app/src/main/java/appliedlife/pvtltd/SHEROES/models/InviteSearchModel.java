@@ -8,8 +8,6 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.models.entities.community.InviteSearchResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.ListOfInviteSearch;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ListOfSearch;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.SearchResponse;
 import appliedlife.pvtltd.SHEROES.preferences.SessionUser;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import rx.Observable;

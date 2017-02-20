@@ -7,18 +7,13 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.InviteSearchModel;
-import appliedlife.pvtltd.SHEROES.models.SearchModel;
 import appliedlife.pvtltd.SHEROES.models.entities.community.InviteSearchResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.ListOfInviteSearch;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.Feature;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ListOfSearch;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.SearchResponse;
 import appliedlife.pvtltd.SHEROES.preferences.Token;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.InviteSearchView;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SearchModuleView;
 import rx.Subscriber;
 import rx.Subscription;
 

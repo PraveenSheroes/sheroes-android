@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.comment.LastComment;
 
 public class FeedDetail extends BaseResponse implements Parcelable {
 
