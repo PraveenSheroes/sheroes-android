@@ -11,5 +11,4 @@ public interface HomeView extends BaseMvpView {
     void getFeedListSuccess(List<FeedDetail> feedDetailList);
     void getSuccessForAllResponse(String success, int successFrom);
     void getDB(List<MasterData> masterDatas);
-    void showNwError();
 }

@@ -51,6 +51,7 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_JOIN">Join</string>
     <string name="ID_JOINED">Joined</string>
     <string name="ID_REPLIES">Replies</string>
+    <string name="ID_NO_REPLIES">No replies</string>
     <string name="ID_REPLY">Reply</string>
     <string name="ID_OPEN_BRACKET">(</string>
     <string name="ID_CLOSE_BRACKET">)</string>
@@ -88,6 +89,9 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_TAGS">Tags</string>
     <string name="ID_PERSONAL">PERSONAL</string>
     <string name="ID_PROFESSIONAL">PROFESSIONAL</string>
+    <string name="ID_BOOKMARKS">Bookmarks</string>
+    <string name="ID_DAILOG">dialog</string>
+
     <!--string set  through priyanka-->
 
     <!--text related setting_dashboard page-->

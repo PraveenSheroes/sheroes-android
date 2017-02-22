@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.database.dbentities.MasterData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
@@ -29,6 +31,7 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
+import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -47,11 +50,16 @@ public class ArticleDetailFragment extends BaseFragment implements HomeView {
     ProgressBar mProgressBar;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
-    private HomeActivityIntractionListner mHomeActivityIntractionListner;
+    private FragmentIntractionWithActivityListner mHomeActivityFragmentIntractionWithActivityListner;
     private FeedDetail mFeedDetail;
     private FragmentListRefreshData mFragmentListRefreshData;
     @Inject
     AppUtils mAppUtils;
+    int position;
+    int pressedEmoji;
+    boolean listLoad = true;
+    private List<ArticleDetailPojo> articleList;
+    private ArticleDetailPojo articleDetailPojo;
     public static ArticleDetailFragment createInstance(FeedDetail feedDetail) {
         ArticleDetailFragment articleDetailFragment = new ArticleDetailFragment();
         Bundle bundle = new Bundle();
@@ -64,8 +72,8 @@ public class ArticleDetailFragment extends BaseFragment implements HomeView {
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            if (getActivity() instanceof HomeActivityIntractionListner) {
-                mHomeActivityIntractionListner = (HomeActivityIntractionListner) getActivity();
+            if (getActivity() instanceof FragmentIntractionWithActivityListner) {
+                mHomeActivityFragmentIntractionWithActivityListner = (FragmentIntractionWithActivityListner) getActivity();
             }
         } catch (InstantiationException exception) {
             LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
@@ -92,39 +100,94 @@ public class ArticleDetailFragment extends BaseFragment implements HomeView {
         mAdapter = new GenericRecyclerViewAdapter(getContext(), (ArticleDetailActivity) getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
-        mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo(),mFragmentListRefreshData.getIdFeedDetail()));
+        mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo(),mFragmentListRefreshData.getIdFeedDetail()));
         return view;
     }
 
     @Override
     public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
         if(StringUtil.isNotEmptyCollection(feedDetailList)&&mAdapter!=null) {
-            List<ArticleDetailPojo> articleList = new ArrayList<>();
-            ArticleDetailPojo articleDetailPojo = new ArticleDetailPojo();
+            articleList = new ArrayList<>();
+            articleDetailPojo = new ArticleDetailPojo();
             articleDetailPojo.setId(AppConstants.ONE_CONSTANT);
             articleDetailPojo.setFeedDetail(feedDetailList.get(0));
-            articleDetailPojo.setFeedDetail(mFeedDetail);
             articleList.add(articleDetailPojo);
             mAdapter.setSheroesGenericListData(articleList);
             mAdapter.notifyDataSetChanged();
         }
     }
-
     @Override
     public void getSuccessForAllResponse(String success, int successFrom) {
-
+        switch (successFrom) {
+            case AppConstants.ONE_CONSTANT:
+                likeSuccess(success);
+                break;
+            case AppConstants.TWO_CONSTANT:
+                break;
+            default:
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + successFrom);
+        }
     }
 
+    private void likeSuccess(String success) {
+
+        if (success.equalsIgnoreCase(AppConstants.SUCCESS)) {
+
+            if (null != mFeedDetail && mFeedDetail.isLongPress()) {
+                if (mFeedDetail.getReactionValue() == AppConstants.NO_REACTION_CONSTANT) {
+                    mFeedDetail.setReactionValue(pressedEmoji);
+                    mFeedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
+                } else {
+                    mFeedDetail.setReactionValue(pressedEmoji);
+                }
+
+            } else {
+
+                if (mFeedDetail.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
+                    mFeedDetail.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
+                    mFeedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() - AppConstants.ONE_CONSTANT);
+                } else {
+                    mFeedDetail.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
+                    mFeedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
+                }
+            }
+            articleDetailPojo.setFeedDetail(mFeedDetail);
+            articleList.clear();
+            articleList.add(articleDetailPojo);
+            mAdapter.notifyDataSetChanged();
+            if (mRecyclerView.getItemAnimator() instanceof SimpleItemAnimator) {
+                ((SimpleItemAnimator)mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+            }
+        }
+    }
+
+
+
+    public void likeAndUnlikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
+        listLoad = false;
+        mFeedDetail = (FeedDetail) baseResponse;
+        this.position = position;
+        this.pressedEmoji = reactionValue;
+        if (null != mFeedDetail && mFeedDetail.isLongPress()) {
+            mHomePresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(mFeedDetail.getEntityOrParticipantId(), reactionValue));
+        } else {
+            if (reactionValue == AppConstants.NO_REACTION_CONSTANT) {
+                mHomePresenter.getUnLikesFromPresenter(mAppUtils.unLikeRequestBuilder(mFeedDetail.getEntityOrParticipantId()));
+            } else {
+                mHomePresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(mFeedDetail.getEntityOrParticipantId(), reactionValue));
+            }
+        }
+    }
+
+    public void commentListRefresh(FeedDetail feedDetail) {
+        mAdapter.setDataOnPosition(feedDetail,feedDetail.getItemPosition());
+    }
 
     @Override
     public void getDB(List<MasterData> masterDatas) {
 
     }
 
-    @Override
-    public void showNwError() {
-        mHomeActivityIntractionListner.onErrorOccurence();
-    }
 
 
     @Override
@@ -140,7 +203,7 @@ public class ArticleDetailFragment extends BaseFragment implements HomeView {
 
     @Override
     public void showError(String errorMsg) {
-        mAdapter.notifyDataSetChanged();
+        mHomeActivityFragmentIntractionWithActivityListner.onShowErrorDialog();
     }
 
     @Override
@@ -170,9 +233,6 @@ public class ArticleDetailFragment extends BaseFragment implements HomeView {
         super.onResume();
     }
 
-    public interface HomeActivityIntractionListner {
-        void onErrorOccurence();
-    }
 
 }
 

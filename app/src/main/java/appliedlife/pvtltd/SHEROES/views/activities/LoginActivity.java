@@ -8,6 +8,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.fragments.LoginFragment;
+import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import butterknife.ButterKnife;
 
 /** Created by Praveen Singh on 04/01/2017.
@@ -17,7 +18,7 @@ import butterknife.ButterKnife;
  * @since 04/01/2017.
  * Title: A login screen that offers login via email/password.
  */
-public class LoginActivity extends BaseActivity implements LoginFragment.LoginActivityIntractionListner {
+public class LoginActivity extends BaseActivity implements LoginFragment.LoginActivityIntractionListner,FragmentIntractionWithActivityListner {
     private final String TAG = LogUtils.makeLogTag(LoginActivity.class);
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,6 +43,11 @@ public class LoginActivity extends BaseActivity implements LoginFragment.LoginAc
         Intent homeIntent=new Intent(this,HomeActivity.class);
         startActivity(homeIntent);
 
+    }
+
+    @Override
+    public void onShowErrorDialog() {
+        getSupportFragmentManager().popBackStack();
     }
 }
 

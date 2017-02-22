@@ -32,6 +32,7 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
+import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -52,12 +53,13 @@ public class CommunitiesDetailFragment extends BaseFragment implements HomeView 
     SwipeRefreshLayout swipeView;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
-    private HomeActivityIntractionListner mHomeActivityIntractionListner;
+    private FragmentIntractionWithActivityListner mHomeActivityFragmentIntractionWithActivityListner;
     private SwipPullRefreshList mPullRefreshList;
     @Bind(R.id.tv_join_view)
     TextView mTvJoinView;
     @Inject
     AppUtils mAppUtils;
+    int pageNo=AppConstants.ONE_CONSTANT;
     private FragmentListRefreshData mFragmentListRefreshData;
     private FeedDetail mFeedDetail;
     public static CommunitiesDetailFragment createInstance(FeedDetail feedDetail) {
@@ -70,17 +72,13 @@ public class CommunitiesDetailFragment extends BaseFragment implements HomeView 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(null!=getArguments())
-        {
-            mFeedDetail =getArguments().getParcelable(AppConstants.ARTICLE_DETAIL);
-        }
     }
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            if (getActivity() instanceof HomeActivityIntractionListner) {
-                mHomeActivityIntractionListner = (HomeActivityIntractionListner) getActivity();
+            if (getActivity() instanceof FragmentIntractionWithActivityListner) {
+                mHomeActivityFragmentIntractionWithActivityListner = (FragmentIntractionWithActivityListner) getActivity();
             }
         } catch (InstantiationException exception) {
             LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
@@ -93,7 +91,11 @@ public class CommunitiesDetailFragment extends BaseFragment implements HomeView 
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_communities_detail, container, false);
         ButterKnife.bind(this, view);
-        mFragmentListRefreshData=new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.COMMUNITY_DETAIL,mFeedDetail.getId());
+        if(null!=getArguments())
+        {
+            mFeedDetail =getArguments().getParcelable(AppConstants.COMMUNITY_DETAIL);
+        }
+        mFragmentListRefreshData=new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.COMMUNITY_POST_FRAGMENT,mFeedDetail.getId());
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
         mHomePresenter.attachView(this);
@@ -125,24 +127,19 @@ public class CommunitiesDetailFragment extends BaseFragment implements HomeView 
             }
         });
         if(StringUtil.isNotNullOrEmptyString(mFeedDetail.getId())) {
-            mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo(),mFragmentListRefreshData.getIdFeedDetail()));
+            mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo()));
         }
         swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 LogUtils.info("swipe", "*****************end called");
                 mPullRefreshList.setPullToRefresh(true);
-                mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_SUB_TYPE,mFragmentListRefreshData.getPageNo()+1,mFragmentListRefreshData.getIdFeedDetail()));
+                mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY_POST,mFragmentListRefreshData.getPageNo()));
             }
         });
         return view;
     }
 
-
-    @Override
-    public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
-
-    }
 
     @Override
     public void getSuccessForAllResponse(String success, int successFrom) {
@@ -151,35 +148,34 @@ public class CommunitiesDetailFragment extends BaseFragment implements HomeView 
 
 
 
-    /* @Override
+     @Override
         public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
-            if (StringUtil.isNotEmptyCollection(listOfFeedList)) {
-                ListOfFeed listOfFeed = new ListOfFeed();
-                //TODO:: Please remove this or correct
-                listOfFeed.setFeedType(AppConstants.MY_COMMUNITIES_HEADER);
-                listOfFeedList.add(0, listOfFeed);
-                mPullRefreshList.allListData(listOfFeedList);
+            if (StringUtil.isNotEmptyCollection(feedDetailList)) {
+                pageNo=mFragmentListRefreshData.getPageNo();
+                if(pageNo==AppConstants.ONE_CONSTANT)
+                {
+                    FeedDetail feedDetail = new FeedDetail();
+                    //TODO:: Please remove this or correct
+                    feedDetail.setSubType(AppConstants.MY_COMMUNITIES_HEADER);
+                    feedDetailList.add(0, feedDetail);
+                }
+                mFragmentListRefreshData.setPageNo(++pageNo);
+                mPullRefreshList.allListData(feedDetailList);
                 mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
-                mAdapter.notifyDataSetChanged();
                 if (!mPullRefreshList.isPullToRefresh()) {
-                    mLayoutManager.scrollToPositionWithOffset(mPullRefreshList.getFeedResponses().size() - listOfFeedList.size(), 0);
+                    mLayoutManager.scrollToPositionWithOffset(mPullRefreshList.getFeedResponses().size() - feedDetailList.size(), 0);
                 } else {
                     mLayoutManager.scrollToPositionWithOffset(0, 0);
                 }
                 swipeView.setRefreshing(false);
             }
         }
-    */
 
     @Override
     public void getDB(List<MasterData> masterDatas) {
 
     }
 
-    @Override
-    public void showNwError() {
-        mHomeActivityIntractionListner.onErrorOccurence();
-    }
 
 
     @Override
@@ -195,7 +191,7 @@ public class CommunitiesDetailFragment extends BaseFragment implements HomeView 
 
     @Override
     public void showError(String errorMsg) {
-        mAdapter.notifyDataSetChanged();
+        mHomeActivityFragmentIntractionWithActivityListner.onShowErrorDialog();
     }
 
     @Override
@@ -225,9 +221,6 @@ public class CommunitiesDetailFragment extends BaseFragment implements HomeView 
         super.onResume();
     }
 
-    public interface HomeActivityIntractionListner {
-        void onErrorOccurence();
-    }
 
 }
 

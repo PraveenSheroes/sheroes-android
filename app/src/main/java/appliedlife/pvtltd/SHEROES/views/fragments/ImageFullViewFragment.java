@@ -28,7 +28,6 @@ public class ImageFullViewFragment extends BaseFragment {
     @Bind(R.id.vp_full_image_view)
     ViewPager viewPagerFullImageView;
     private ImageFullViewAdapter mImageFullViewAdapter;
-    private HomeActivityIntractionWithSpinnerListner mHomeActivityIntractionWithSpinnerListner;
     private FeedDetail mFeedDetail;
     private FragmentOpen mFragmentOpen;
     @Override
@@ -39,13 +38,6 @@ public class ImageFullViewFragment extends BaseFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        try {
-            if (getActivity() instanceof HomeActivityIntractionWithSpinnerListner) {
-                mHomeActivityIntractionWithSpinnerListner = (HomeActivityIntractionWithSpinnerListner) getActivity();
-            }
-        } catch (InstantiationException exception) {
-            LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
-        }
     }
 
     @Nullable
@@ -86,7 +78,4 @@ public class ImageFullViewFragment extends BaseFragment {
         super.onResume();
     }
 
-    public interface HomeActivityIntractionWithSpinnerListner {
-        void onErrorOccurence();
-    }
 }

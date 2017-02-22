@@ -35,7 +35,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerList;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.MyCommunities;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -49,6 +48,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.OwnerRemoveDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareCommunityFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 
 public class CommunitiesDetailActivity extends BaseActivity implements ShareCommunityFragment.ShareCommunityActivityIntractionListner, CommunityInviteSearchFragment.InviteSearchActivityIntractionListner, CommunityRequestedFragment.RequestHomeActivityIntractionListner, AllMembersFragment.MembersHomeActivityIntractionListner, BaseHolderInterface, CommunityOpenAboutFragment.AboutCommunityActivityIntractionListner {
@@ -84,7 +84,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
         setContentView(R.layout.activity_communities_detail);
         ButterKnife.bind(this);
         if (null != getIntent()) {
-            mFeedDetail = getIntent().getParcelableExtra(AppConstants.ARTICLE_DETAIL);
+            mFeedDetail = getIntent().getParcelableExtra(AppConstants.COMMUNITY_DETAIL);
         }
         setPagerAndLayouts();
     }
@@ -94,23 +94,21 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
         supportPostponeEnterTransition();
 
         setSupportActionBar(mToolbarCommunitiesDetail);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         mCollapsingToolbarLayout.setTitle(" ");
         mCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
         if (null != mFeedDetail) {
             ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
             viewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(mFeedDetail), getString(R.string.ID_COMMUNITIES));
             mViewPagerCommunitiesDetail.setAdapter(viewPagerAdapter);
+            mFeedDetail.setImageUrl("http://www.hotel-r.net/im/hotel/bg/paris-hotel-21.jpg");
             if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getImageUrl())) {
                 Glide.with(this)
-                        .load(getIntent().getStringExtra(mFeedDetail.getImageUrl())).asBitmap()
+                        .load(mFeedDetail.getImageUrl()).asBitmap()
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                         .skipMemoryCache(true)
                         .into(new SimpleTarget<Bitmap>() {
                             @Override
                             public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
-                                LogUtils.info("swipe", "*****************image height******* " + resource.getHeight());
                                 ivCommunitiesDetail.setImageBitmap(resource);
                                 Palette.from(resource).generate(new Palette.PaletteAsyncListener() {
                                     public void onGenerated(Palette palette) {
@@ -148,31 +146,24 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
 
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
-        if (baseResponse instanceof MyCommunities) {
-            MyCommunities myCommunities = (MyCommunities) baseResponse;
-            LogUtils.info("detail", "**********Community header click********");
-        } else if (baseResponse instanceof OwnerList) {
-            OwnerRemoveDialog newFragment = new OwnerRemoveDialog(this);
-            newFragment.show(this.getFragmentManager(), "dialog");
-        } else {
-            ivCommunitiesDetail.setVisibility(View.GONE);
-            mToolbarCommunitiesDetail.setVisibility(View.GONE);
-            mFloatingActionButton.setVisibility(View.GONE);
-            CommunityOpenAboutFragment communityOpenAboutFragment = new CommunityOpenAboutFragment();
-            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.bottom_to_top_slide_reverse_anim)
-                    .replace(R.id.about_community_container, communityOpenAboutFragment).addToBackStack(null).commitAllowingStateLoss();
-
-        }
 
         if (baseResponse instanceof FeedDetail) {
             FeedDetail feedDetail = (FeedDetail) baseResponse;
             communityDetailHandled(view, feedDetail);
+        } else if (baseResponse instanceof OwnerList) {
+            OwnerRemoveDialog newFragment = new OwnerRemoveDialog(this);
+            newFragment.show(this.getFragmentManager(),getString(R.string.ID_DAILOG));
         }
     }
     private void communityDetailHandled(View view, FeedDetail feedDetail) {
         int id = view.getId();
         switch (id) {
+            case R.id.card_community_detail:
+                CommunityOpenAboutFragment communityOpenAboutFragment = new CommunityOpenAboutFragment();
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.bottom_to_top_slide_reverse_anim)
+                        .replace(R.id.about_community_container, communityOpenAboutFragment).addToBackStack(null).commitAllowingStateLoss();
 
+                break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
         }
@@ -277,6 +268,11 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
         mFloatingActionButton.setVisibility(View.VISIBLE);
         getSupportFragmentManager().popBackStack();
 
+    }
+    @OnClick(R.id.iv_community_detail_back)
+    public void onBackClick()
+    {
+        finish();
     }
 
 }

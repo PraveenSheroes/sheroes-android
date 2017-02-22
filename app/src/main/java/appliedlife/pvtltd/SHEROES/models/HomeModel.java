@@ -56,8 +56,8 @@ public class HomeModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-    public Observable<FeedResponsePojo> getBookMarkFromModel(BookmarkRequestPojo bookmarkResponsePojo){
-        return sheroesAppServiceApi.getBookMarkFromApi(bookmarkResponsePojo)
+    public Observable<FeedResponsePojo> getBookMarkFromModel(FeedRequestPojo feedRequestPojo){
+        return sheroesAppServiceApi.getBookMarkFromApi(feedRequestPojo)
                 .map(new Func1<FeedResponsePojo, FeedResponsePojo>() {
                     @Override
                     public FeedResponsePojo call(FeedResponsePojo feedResponsePojo) {

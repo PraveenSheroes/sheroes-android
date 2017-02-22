@@ -18,6 +18,8 @@ import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
@@ -25,6 +27,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LastComment;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
@@ -45,6 +48,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     private static final String RIGHT_HTML_VIEW_TAG_FOR_COLOR = "</font>";
     private static final String LEFT_HTML_COMMUNITY_TITLE_FOR_COLOR = "<b><font color='#f2403c'>";
     private static final String RIGHT_HTML_COMMUNITY_TITLE_FOR_COLOR = "</font></b>";
+    @Inject
+    DateUtil mDateUtil;
     @Bind(R.id.li_feed_community_post_user_comments)
     LinearLayout liFeedCommunityPostUserComments;
     @Bind(R.id.li_feed_community_user_post_images)
@@ -96,6 +101,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     TextView tvFeedCommunityPostUserCommentPostMenu;
     BaseHolderInterface viewInterface;
     private FeedDetail dataItem;
+    String mViewMoreDescription;
+    String mViewMore, mLess;
     Context mContext;
 
     public FeedCommunityPostHolder(View itemView, BaseHolderInterface baseHolderInterface) {
@@ -109,18 +116,23 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     public void bindData(FeedDetail item, final Context context, int position) {
         this.dataItem = item;
         mContext = context;
-        liFeedCommunityPostJoinConversation.setOnClickListener(this);
-        tvFeedCommunityPostUserReaction.setOnClickListener(this);
-        tvFeedCommunityPostUserComment.setOnClickListener(this);
-        tvFeedCommunityPostUserBookmark.setOnClickListener(this);
-        tvFeedCommunityPostUserMenu.setOnClickListener(this);
+        mViewMore = context.getString(R.string.ID_VIEW_MORE);
+        mLess = context.getString(R.string.ID_LESS);
+        tvFeedCommunityPostText.setTag(mViewMore);
         imageOperations(context);
         allTextViewStringOperations(context);
         if (StringUtil.isNotEmptyCollection(dataItem.getImageUrls())) {
             List<String> coverImageList = dataItem.getImageUrls();
-            if (coverImageList.size() > 0) {
-                switch (coverImageList.size()) {
-                    case 1:
+      /*  List<String> coverImageList = new ArrayList<>();
+        coverImageList.add("http://www.hotel-r.net/im/hotel/bg/paris-hotel-21.jpg");
+        coverImageList.add("https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAhNAAAAJDYwZWIyZTg5LWFmOTItNGIwYS05YjQ5LTM2YTRkNGQ2M2JlNw.jpg");
+        coverImageList.add("http://www.tnetnoc.com/hotelphotos/591/327591/2631759-The-Cangkringan-Spa-Villas-Hotel-Yogyakarta-Guest-Room-3-RTS.jpg");
+        coverImageList.add("https://media-cdn.tripadvisor.com/media/photo-s/08/dc/c3/be/the-park-lane-jakarta.jpg");
+        coverImageList.add("http://balispecialevent.com/images/bali-hotel.jpg");*/
+            int listSize = coverImageList.size();
+            if (listSize > AppConstants.NO_REACTION_CONSTANT) {
+                switch (listSize) {
+                    case AppConstants.ONE_CONSTANT:
                         liFeedCommunityUserPostImages.removeAllViews();
                         liFeedCommunityUserPostImages.removeAllViewsInLayout();
                         if (StringUtil.isNotEmptyCollection(coverImageList) && StringUtil.isNotNullOrEmptyString(coverImageList.get(0))) {
@@ -128,42 +140,55 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                         }
 
                         break;
-                  /*  case 2:
+                    case AppConstants.TWO_CONSTANT:
                         liFeedCommunityUserPostImages.removeAllViews();
                         liFeedCommunityUserPostImages.removeAllViewsInLayout();
-                        if (StringUtil.isNotEmptyCollection(coverImageList) && StringUtil.isNotNullOrEmptyString(coverImageList.get(0).getFeedDetailImageUrl()) && StringUtil.isNotNullOrEmptyString(coverImageList.get(1).getFeedDetailImageUrl())) {
+                        if (StringUtil.isNotEmptyCollection(coverImageList) && StringUtil.isNotNullOrEmptyString(coverImageList.get(0)) && StringUtil.isNotNullOrEmptyString(coverImageList.get(1))) {
                             twoImagesSetting(context, coverImageList.get(0), coverImageList.get(1));
                         }
-                        break;*/
-                    case 3:
+                        break;
+                    case AppConstants.THREE_CONSTANT:
                         liFeedCommunityUserPostImages.removeAllViews();
                         liFeedCommunityUserPostImages.removeAllViewsInLayout();
                         if (StringUtil.isNotEmptyCollection(coverImageList) && StringUtil.isNotNullOrEmptyString(coverImageList.get(0)) && StringUtil.isNotNullOrEmptyString(coverImageList.get(1)) && StringUtil.isNotNullOrEmptyString(coverImageList.get(2))) {
                             boolean isHeightGreater = getCoverImageHeightWidth(coverImageList.get(0));
                             if (isHeightGreater) {
-                                feedFirstLandscapWIthTwoImageModeSetting(context, coverImageList.get(0), coverImageList.get(1), coverImageList.get(2));
-                            } else {
                                 feedFirstPortraitWithTwoImageModeSetting(context, coverImageList.get(0), coverImageList.get(1), coverImageList.get(2));
+                            } else {
+                                feedFirstLandscapWIthTwoImageModeSetting(context, coverImageList.get(0), coverImageList.get(1), coverImageList.get(2));
                             }
                         }
                         break;
-                 /*   case 4:
+                    case AppConstants.FOURTH_CONSTANT:
                         liFeedCommunityUserPostImages.removeAllViews();
                         liFeedCommunityUserPostImages.removeAllViewsInLayout();
-                        if (StringUtil.isNotEmptyCollection(coverImageList) && StringUtil.isNotNullOrEmptyString(coverImageList.get(0).getFeedDetailImageUrl()) && StringUtil.isNotNullOrEmptyString(coverImageList.get(1).getFeedDetailImageUrl()) && StringUtil.isNotNullOrEmptyString(coverImageList.get(2).getFeedDetailImageUrl()) && StringUtil.isNotNullOrEmptyString(coverImageList.get(3).getFeedDetailImageUrl())) {
-                            if (coverImageList.get(0).getWidth() > coverImageList.get(0).getHeight()) {
-                                feedFirstLandscapImageModeSetting(context, coverImageList.get(0).getFeedDetailImageUrl(), coverImageList.get(1).getFeedDetailImageUrl(), coverImageList.get(2).getFeedDetailImageUrl(), coverImageList.get(3).getFeedDetailImageUrl());
+                        if (StringUtil.isNotEmptyCollection(coverImageList) && StringUtil.isNotNullOrEmptyString(coverImageList.get(0)) && StringUtil.isNotNullOrEmptyString(coverImageList.get(1)) && StringUtil.isNotNullOrEmptyString(coverImageList.get(2)) && StringUtil.isNotNullOrEmptyString(coverImageList.get(3))) {
+                            boolean isHeightGreater = getCoverImageHeightWidth(coverImageList.get(0));
+                            if (isHeightGreater) {
+                                feedFirstPortraitImageModeSetting(context, coverImageList.get(0), coverImageList.get(1), coverImageList.get(2), coverImageList.get(3), listSize);
                             } else {
-                                feedFirstPortraitImageModeSetting(context, coverImageList.get(0).getFeedDetailImageUrl(), coverImageList.get(1).getFeedDetailImageUrl(), coverImageList.get(2).getFeedDetailImageUrl(), coverImageList.get(3).getFeedDetailImageUrl());
+                                feedFirstLandscapImageModeSetting(context, coverImageList.get(0), coverImageList.get(1), coverImageList.get(2), coverImageList.get(3), listSize);
                             }
                         }
-                        break;*/
+                        break;
                     case 5:
+                        liFeedCommunityUserPostImages.removeAllViews();
+                        liFeedCommunityUserPostImages.removeAllViewsInLayout();
+                        if (StringUtil.isNotEmptyCollection(coverImageList) && StringUtil.isNotNullOrEmptyString(coverImageList.get(0)) && StringUtil.isNotNullOrEmptyString(coverImageList.get(1)) && StringUtil.isNotNullOrEmptyString(coverImageList.get(2)) && StringUtil.isNotNullOrEmptyString(coverImageList.get(3))) {
+                            boolean isHeightGreater = getCoverImageHeightWidth(coverImageList.get(0));
+                            if (isHeightGreater) {
+                                feedFirstPortraitImageModeSetting(context, coverImageList.get(0), coverImageList.get(1), coverImageList.get(2), coverImageList.get(3), listSize);
+                            } else {
+                                feedFirstLandscapImageModeSetting(context, coverImageList.get(0), coverImageList.get(1), coverImageList.get(2), coverImageList.get(3), listSize);
+                            }
+                        }
                         break;
                     default:
                         LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + coverImageList.size());
                 }
             }
+        } else {
+            liFeedCommunityUserPostImages.setBackgroundResource(R.drawable.ic_image_holder);
         }
     }
 
@@ -176,7 +201,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
-                        LogUtils.info("swipe", "*****************image height******* " + resource.getHeight());
                         if (resource.getHeight() > resource.getWidth()) {
                             isHeightGreater[0] = true;
                         } else {
@@ -209,19 +233,25 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getCreatedDate())) {
-            // tvFeedCommunityPostTime.setText(dataItem.getCreatedDate());
+            long createdDate = mDateUtil.getTimeInMillis(dataItem.getCreatedDate(), AppConstants.DATE_FORMAT);
+            long minuts = mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate);
+            if (minuts < 60) {
+                tvFeedCommunityPostTime.setText(String.valueOf((int) minuts) + AppConstants.SPACE + mContext.getString(R.string.ID_MINUTS));
+            } else {
+                int hour = (int) minuts / 60;
+                tvFeedCommunityPostTime.setText(String.valueOf(hour) + AppConstants.SPACE + mContext.getString(R.string.ID_HOURS));
+            }
         }
-
-        if (StringUtil.isNotNullOrEmptyString(dataItem.getDescription())) {
-            String description = dataItem.getDescription();
-            if (description.length() > AppConstants.WORD_LENGTH) {
-                description = description.substring(0, AppConstants.WORD_COUNT);
+        mViewMoreDescription = mContext.getString(R.string.ID_DASHBOARD);//dataItem.getDescription();
+        if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
+            if (mViewMoreDescription.length() > AppConstants.WORD_LENGTH) {
+                mViewMoreDescription = mViewMoreDescription.substring(0, AppConstants.WORD_COUNT);
             }
             String viewMore = LEFT_HTML_VEIW_TAG_FOR_COLOR + context.getString(R.string.ID_VIEW_MORE) + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                tvFeedCommunityPostText.setText(Html.fromHtml(description + AppConstants.DOTS + AppConstants.SPACE + viewMore, 0)); // for 24 api and more
+                tvFeedCommunityPostText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + viewMore, 0)); // for 24 api and more
             } else {
-                tvFeedCommunityPostText.setText(Html.fromHtml(description + AppConstants.DOTS + AppConstants.SPACE + viewMore));// or for older api
+                tvFeedCommunityPostText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + viewMore));// or for older api
             }
         }
         if (dataItem.isBookmarked()) {
@@ -296,30 +326,32 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     }
 
     private void userComments() {
-        LastComment lastComment = dataItem.getLastComment();
-        if (null != lastComment) {
-            String feedUserIconUrl = lastComment.getParticipantImageUrl();
-            ivFeedCommunityPostUserPic.setCircularImage(true);
-            ivFeedCommunityPostUserPic.bindImage(feedUserIconUrl);
-            String userName = LEFT_HTML_TAG_FOR_COLOR + lastComment.getParticipantName() + RIGHT_HTML_TAG_FOR_COLOR;
-            if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                tvFeedCommunityPostUserCommentPost.setText(Html.fromHtml(userName + AppConstants.COLON + lastComment.getComment(), 0)); // for 24 api and more
-            } else {
-                tvFeedCommunityPostUserCommentPost.setText(Html.fromHtml(userName + AppConstants.COLON + lastComment.getComment()));// or for older api
-            }
-            if (lastComment.getIsAnonymous()) {
-                tvFeedCommunityPostUserCommentPostMenu.setVisibility(View.GONE);
+        List<LastComment> lastCommentList = dataItem.getLastComments();
+        if (StringUtil.isNotEmptyCollection(lastCommentList)) {
+            for (LastComment lastComment : lastCommentList) {
+                String feedUserIconUrl = lastComment.getParticipantImageUrl();
+                ivFeedCommunityPostUserPic.setCircularImage(true);
+                ivFeedCommunityPostUserPic.bindImage(feedUserIconUrl);
+                String userName = LEFT_HTML_TAG_FOR_COLOR + lastComment.getParticipantName() + RIGHT_HTML_TAG_FOR_COLOR;
+                if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                    tvFeedCommunityPostUserCommentPost.setText(Html.fromHtml(userName + AppConstants.COLON + lastComment.getComment(), 0)); // for 24 api and more
+                } else {
+                    tvFeedCommunityPostUserCommentPost.setText(Html.fromHtml(userName + AppConstants.COLON + lastComment.getComment()));// or for older api
+                }
+                if (lastComment.getIsAnonymous()) {
+                    tvFeedCommunityPostUserCommentPostMenu.setVisibility(View.GONE);
+                }
             }
         }
     }
 
     private void imageOperations(Context context) {
-        String feedCircleIconUrl = dataItem.getAuthorImageUrl();
-        if (StringUtil.isNotNullOrEmptyString(feedCircleIconUrl)) {
+        String authorImageUrl = dataItem.getAuthorImageUrl();
+        if (StringUtil.isNotNullOrEmptyString(authorImageUrl)) {
             ivFeedCommunityPostCircleIcon.setCircularImage(true);
-            ivFeedCommunityPostCircleIcon.bindImage(feedCircleIconUrl);
+            ivFeedCommunityPostCircleIcon.bindImage(authorImageUrl);
             ivFeedCommunityPostRegisterUserPic.setCircularImage(true);
-            ivFeedCommunityPostRegisterUserPic.bindImage(feedCircleIconUrl);
+            ivFeedCommunityPostRegisterUserPic.bindImage(authorImageUrl);
         }
     }
 
@@ -356,9 +388,13 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         liFeedCommunityUserPostImages.addView(child);
     }
 
-    private void feedFirstPortraitImageModeSetting(Context context, String firstImage, String secondImage, String thirdImage, String fourthImage) {
+    private void feedFirstPortraitImageModeSetting(Context context, String firstImage, String secondImage, String thirdImage, String fourthImage, int listSize) {
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View child = layoutInflater.inflate(R.layout.feed_community_post_first_portrait_with_multiple, null);
+        TextView tvFeedCommunityPost = (TextView) child.findViewById(R.id.tv_feed_community_post_portrait_total_images);
+        if (listSize > AppConstants.FOURTH_CONSTANT) {
+            tvFeedCommunityPost.setVisibility(View.VISIBLE);
+        }
         ImageView ivFirstLandscape = (ImageView) child.findViewById(R.id.iv_feed_community_post_first_portrait);
         ivFirstLandscape.setOnClickListener(this);
         Glide.with(context)
@@ -446,10 +482,14 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         liFeedCommunityUserPostImages.addView(child);
     }
 
-    private void feedFirstLandscapImageModeSetting(Context context, String firstImage, String secondImage, String thirdImage, String fourthImage) {
+    private void feedFirstLandscapImageModeSetting(Context context, String firstImage, String secondImage, String thirdImage, String fourthImage, int listSize) {
 
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View child = layoutInflater.inflate(R.layout.feed_community_post_first_landscape_with_multiple, null);
+        TextView tvFeedCommunityPost = (TextView) child.findViewById(R.id.tv_feed_community_post_landscape_total_images);
+        if (listSize > AppConstants.FOURTH_CONSTANT) {
+            tvFeedCommunityPost.setVisibility(View.VISIBLE);
+        }
         ImageView ivFirstLandscape = (ImageView) child.findViewById(R.id.iv_feed_community_post_first_landscape);
         ivFirstLandscape.setOnClickListener(this);
         Glide.with(context)
@@ -483,6 +523,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_feed_community_post_total_replies)
     public void repliesClick() {
+        dataItem.setItemPosition(getAdapterPosition());
         viewInterface.handleOnClick(dataItem, tvFeedCommunityPostTotalReplies);
     }
 
@@ -493,18 +534,53 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.li_feed_community_post_join_conversation)
     public void joinConversationClick() {
+        dataItem.setItemPosition(getAdapterPosition());
         viewInterface.handleOnClick(dataItem, liFeedCommunityPostJoinConversation);
     }
 
     @OnClick(R.id.tv_feed_community_post_user_comment)
     public void userCommentClick() {
+        dataItem.setItemPosition(getAdapterPosition());
         viewInterface.handleOnClick(dataItem, tvFeedCommunityPostUserComment);
     }
 
     @OnClick(R.id.tv_feed_community_post_user_menu)
     public void userMenuClick() {
+        dataItem.setItemPosition(getAdapterPosition());
         viewInterface.handleOnClick(dataItem, tvFeedCommunityPostUserMenu);
     }
+
+    @OnClick(R.id.tv_feed_community_post_user_comment_post_menu)
+    public void userCommentMenuClick() {
+        dataItem.setItemPosition(getAdapterPosition());
+        viewInterface.handleOnClick(dataItem, tvFeedCommunityPostUserCommentPostMenu);
+    }
+
+    @OnClick(R.id.tv_feed_community_post_text)
+    public void viewMoreClick() {
+        if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
+            if (tvFeedCommunityPostText.getTag().toString().equalsIgnoreCase(mViewMore)) {
+                String lessWithColor = LEFT_HTML_VEIW_TAG_FOR_COLOR + mLess + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
+                mViewMoreDescription = mContext.getString(R.string.ID_ABOUT_TEXT);
+                if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                    tvFeedCommunityPostText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + lessWithColor, 0)); // for 24 api and more
+                } else {
+                    tvFeedCommunityPostText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + lessWithColor));// or for older api
+                }
+                tvFeedCommunityPostText.setTag(mLess);
+            } else {
+                mViewMoreDescription = mContext.getString(R.string.ID_ABOUT_TEXT);
+                tvFeedCommunityPostText.setTag(mViewMore);
+                String viewMore = LEFT_HTML_VEIW_TAG_FOR_COLOR + mViewMore + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
+                if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                    tvFeedCommunityPostText.setText(Html.fromHtml(mViewMoreDescription.substring(0, AppConstants.WORD_COUNT) + AppConstants.DOTS + AppConstants.SPACE + viewMore, 0)); // for 24 api and more
+                } else {
+                    tvFeedCommunityPostText.setText(Html.fromHtml(mViewMoreDescription.substring(0, AppConstants.WORD_COUNT) + AppConstants.DOTS + AppConstants.SPACE + viewMore));// or for older api
+                }
+            }
+        }
+    }
+
 
     @Override
     public void onClick(View view) {
@@ -579,8 +655,26 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         }
     }
 
+    @OnClick(R.id.tv_feed_community_post_user_reaction)
+    public void userReactionClick() {
+        dataItem.setLongPress(false);
+        if (dataItem.getReactionValue() == AppConstants.HEART_REACTION_CONSTANT) {
+            if (liFeedCommunityUserPostEmojiPopUp.getVisibility() == View.VISIBLE) {
+                viewInterface.handleOnClick(dataItem, tvFeedCommunityPostUserReaction);
+            }
+            viewInterface.userCommentLikeRequest(dataItem, AppConstants.NO_REACTION_CONSTANT, getAdapterPosition());
+
+        } else {
+            if (liFeedCommunityUserPostEmojiPopUp.getVisibility() == View.VISIBLE) {
+                viewInterface.handleOnClick(dataItem, tvFeedCommunityPostUserReaction);
+            }
+            viewInterface.userCommentLikeRequest(dataItem, AppConstants.HEART_REACTION_CONSTANT, getAdapterPosition());
+        }
+    }
+
     @OnLongClick(R.id.tv_feed_community_post_user_reaction)
     public boolean userReactionLongClick() {
+        dataItem.setLongPress(true);
         dataItem.setItemPosition(getAdapterPosition());
         viewInterface.handleOnClick(dataItem, tvFeedCommunityPostUserReaction);
         return true;

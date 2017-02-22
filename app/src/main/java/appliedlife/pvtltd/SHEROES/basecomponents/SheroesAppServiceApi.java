@@ -45,7 +45,7 @@ public interface SheroesAppServiceApi {
     @POST("participant/feed/")
     Observable<FeedResponsePojo> getFeedFromApi(@Body FeedRequestPojo feedRequestPojo );
     @POST("participant/feed/get_bookmarked")
-    Observable<FeedResponsePojo> getBookMarkFromApi(@Body  BookmarkRequestPojo bookmarkResponsePojo);
+    Observable<FeedResponsePojo> getBookMarkFromApi(@Body FeedRequestPojo feedRequestPojo);
 
     /*Participation*/
     @POST("participation/reaction/like")

@@ -16,15 +16,103 @@ public class FeedDetail extends BaseResponse implements Parcelable {
 
     int itemPosition;
     boolean isLongPress;
+
+    @SerializedName("published_in_s")
+    @Expose
+    private String publishedInS;
+    @SerializedName("meta_description_s")
+    @Expose
+    private String metaDescriptionS;
+    @SerializedName("meta_title_s")
+    @Expose
+    private String metaTitleS;
+    @SerializedName("article_status_i")
+    @Expose
+    private String articleStatusI;
+    @SerializedName("third_party_id_s")
+    @Expose
+    private String thirdPartyIdS;
+    @SerializedName("article_category_name_s")
+    @Expose
+    private String articleCategoryNameS;
+    @SerializedName("article_category_l")
+    @Expose
+    private int articleCategoryL;
+    @SerializedName("slug_s")
+    @Expose
+    private String slugS;
+    @SerializedName("entity_or_participant_type_id_i")
+    @Expose
+    private int entityOrParticipantTypeIdI;
+    @SerializedName("display_id_profile_id")
+    @Expose
+    private String displayIdProfileId;
+
+    @SerializedName("no_of_views")
+    @Expose
+    private int noOfViews;
+    @SerializedName("sector_id_l")
+    @Expose
+    private int sectorIdL;
+    @SerializedName("sector_name_s")
+    @Expose
+    private String sectorNameS;
+    @SerializedName("job_city_id_l")
+    @Expose
+    private String jobCityIdL;
+    @SerializedName("job_city_name_s")
+    @Expose
+    private String jobCityNameS;
+    @SerializedName("is_from_search_firm_b")
+    @Expose
+    private boolean isFromSearchFirmB;
+    @SerializedName("is_search_firm_b")
+    @Expose
+    private boolean isSearchFirmB;
+    @SerializedName("h_company_name_s")
+    @Expose
+    private String hCompanyNameS;
+    @SerializedName("h_company_logo_s")
+    @Expose
+    private String hCompanyLogoS;
+    @SerializedName("experience_from_i")
+    @Expose
+    private int experienceFromI;
+    @SerializedName("experience_to_i")
+    @Expose
+    private int experienceToI;
+    @SerializedName("search_id_job_opp_types")
+    @Expose
+    private List<Integer> searchIdJobOppTypes = null;
+    @SerializedName("search_text_job_emp_types")
+    @Expose
+    private List<String> searchTextJobEmpTypes = null;
+    @SerializedName("search_id_job_skills")
+    @Expose
+    private List<Integer> searchIdJobSkills = null;
+    @SerializedName("top_company_tag_link_id_l")
+    @Expose
+    private String topCompanyTagLinkIdL;
+    @SerializedName("company_profile_id_l")
+    @Expose
+    private int companyProfileIdL;
+    @SerializedName("searchFirm")
+    @Expose
+    private boolean searchFirm;
     @SerializedName("is_bookmarked")
     private boolean isBookmarked;
+    @SerializedName("applied")
+    private boolean isApplied;
     @SerializedName("search_id_post_image")
     private List<Long> imagesIds;
     @SerializedName("display_text_image_url")
     private List<String> imageUrls;
     /*Community*/
-    @SerializedName("search_text_community_type")
+    @SerializedName("community_type_s")
     public String communityType;
+
+    @SerializedName("community_type_l")
+    public String communityTypeL;
     @SerializedName("active")
     @Expose
     private boolean active;
@@ -159,6 +247,8 @@ public class FeedDetail extends BaseResponse implements Parcelable {
     private List<Long> functionalAreaIds;
     @SerializedName("functional_area_ss")
     private List<String> functionalAreaNames;
+    @SerializedName("last_activity_date_dt")
+    private List<String> lastActivityDate;
 
     /*Like and comment*/
     @SerializedName("reacted_value")
@@ -170,10 +260,260 @@ public class FeedDetail extends BaseResponse implements Parcelable {
     @SerializedName("no_of_comments")
     @Expose
     private int noOfComments;
-    @SerializedName("last_comment")
+    @SerializedName("last_comments")
     @Expose
-    private LastComment lastComment;
+    private List<LastComment> lastComments= null;;
 
+    public int getItemPosition() {
+        return itemPosition;
+    }
+
+    public void setItemPosition(int itemPosition) {
+        this.itemPosition = itemPosition;
+    }
+
+    public boolean isLongPress() {
+        return isLongPress;
+    }
+
+    public void setLongPress(boolean longPress) {
+        isLongPress = longPress;
+    }
+
+    public String getPublishedInS() {
+        return publishedInS;
+    }
+
+    public void setPublishedInS(String publishedInS) {
+        this.publishedInS = publishedInS;
+    }
+
+    public String getMetaDescriptionS() {
+        return metaDescriptionS;
+    }
+
+    public void setMetaDescriptionS(String metaDescriptionS) {
+        this.metaDescriptionS = metaDescriptionS;
+    }
+
+    public String getMetaTitleS() {
+        return metaTitleS;
+    }
+
+    public void setMetaTitleS(String metaTitleS) {
+        this.metaTitleS = metaTitleS;
+    }
+
+    public String getArticleStatusI() {
+        return articleStatusI;
+    }
+
+    public void setArticleStatusI(String articleStatusI) {
+        this.articleStatusI = articleStatusI;
+    }
+
+    public String getThirdPartyIdS() {
+        return thirdPartyIdS;
+    }
+
+    public void setThirdPartyIdS(String thirdPartyIdS) {
+        this.thirdPartyIdS = thirdPartyIdS;
+    }
+
+    public String getArticleCategoryNameS() {
+        return articleCategoryNameS;
+    }
+
+    public void setArticleCategoryNameS(String articleCategoryNameS) {
+        this.articleCategoryNameS = articleCategoryNameS;
+    }
+
+    public int getArticleCategoryL() {
+        return articleCategoryL;
+    }
+
+    public void setArticleCategoryL(int articleCategoryL) {
+        this.articleCategoryL = articleCategoryL;
+    }
+
+    public String getSlugS() {
+        return slugS;
+    }
+
+    public void setSlugS(String slugS) {
+        this.slugS = slugS;
+    }
+
+    public int getEntityOrParticipantTypeIdI() {
+        return entityOrParticipantTypeIdI;
+    }
+
+    public void setEntityOrParticipantTypeIdI(int entityOrParticipantTypeIdI) {
+        this.entityOrParticipantTypeIdI = entityOrParticipantTypeIdI;
+    }
+
+    public String getDisplayIdProfileId() {
+        return displayIdProfileId;
+    }
+
+    public void setDisplayIdProfileId(String displayIdProfileId) {
+        this.displayIdProfileId = displayIdProfileId;
+    }
+
+    public int getNoOfViews() {
+        return noOfViews;
+    }
+
+    public void setNoOfViews(int noOfViews) {
+        this.noOfViews = noOfViews;
+    }
+
+    public int getSectorIdL() {
+        return sectorIdL;
+    }
+
+    public void setSectorIdL(int sectorIdL) {
+        this.sectorIdL = sectorIdL;
+    }
+
+    public String getSectorNameS() {
+        return sectorNameS;
+    }
+
+    public void setSectorNameS(String sectorNameS) {
+        this.sectorNameS = sectorNameS;
+    }
+
+    public String getJobCityIdL() {
+        return jobCityIdL;
+    }
+
+    public void setJobCityIdL(String jobCityIdL) {
+        this.jobCityIdL = jobCityIdL;
+    }
+
+    public String getJobCityNameS() {
+        return jobCityNameS;
+    }
+
+    public void setJobCityNameS(String jobCityNameS) {
+        this.jobCityNameS = jobCityNameS;
+    }
+
+    public boolean isFromSearchFirmB() {
+        return isFromSearchFirmB;
+    }
+
+    public void setFromSearchFirmB(boolean fromSearchFirmB) {
+        isFromSearchFirmB = fromSearchFirmB;
+    }
+
+    public boolean isSearchFirmB() {
+        return isSearchFirmB;
+    }
+
+    public void setSearchFirmB(boolean searchFirmB) {
+        isSearchFirmB = searchFirmB;
+    }
+
+    public String gethCompanyNameS() {
+        return hCompanyNameS;
+    }
+
+    public void sethCompanyNameS(String hCompanyNameS) {
+        this.hCompanyNameS = hCompanyNameS;
+    }
+
+    public String gethCompanyLogoS() {
+        return hCompanyLogoS;
+    }
+
+    public void sethCompanyLogoS(String hCompanyLogoS) {
+        this.hCompanyLogoS = hCompanyLogoS;
+    }
+
+    public int getExperienceFromI() {
+        return experienceFromI;
+    }
+
+    public void setExperienceFromI(int experienceFromI) {
+        this.experienceFromI = experienceFromI;
+    }
+
+    public int getExperienceToI() {
+        return experienceToI;
+    }
+
+    public void setExperienceToI(int experienceToI) {
+        this.experienceToI = experienceToI;
+    }
+
+    public List<Integer> getSearchIdJobOppTypes() {
+        return searchIdJobOppTypes;
+    }
+
+    public void setSearchIdJobOppTypes(List<Integer> searchIdJobOppTypes) {
+        this.searchIdJobOppTypes = searchIdJobOppTypes;
+    }
+
+
+    public List<String> getSearchTextJobEmpTypes() {
+        return searchTextJobEmpTypes;
+    }
+
+    public void setSearchTextJobEmpTypes(List<String> searchTextJobEmpTypes) {
+        this.searchTextJobEmpTypes = searchTextJobEmpTypes;
+    }
+
+    public List<Integer> getSearchIdJobSkills() {
+        return searchIdJobSkills;
+    }
+
+    public void setSearchIdJobSkills(List<Integer> searchIdJobSkills) {
+        this.searchIdJobSkills = searchIdJobSkills;
+    }
+
+
+    public String getTopCompanyTagLinkIdL() {
+        return topCompanyTagLinkIdL;
+    }
+
+    public void setTopCompanyTagLinkIdL(String topCompanyTagLinkIdL) {
+        this.topCompanyTagLinkIdL = topCompanyTagLinkIdL;
+    }
+
+    public int getCompanyProfileIdL() {
+        return companyProfileIdL;
+    }
+
+    public void setCompanyProfileIdL(int companyProfileIdL) {
+        this.companyProfileIdL = companyProfileIdL;
+    }
+
+
+    public boolean isSearchFirm() {
+        return searchFirm;
+    }
+
+    public void setSearchFirm(boolean searchFirm) {
+        this.searchFirm = searchFirm;
+    }
+
+    public boolean isBookmarked() {
+        return isBookmarked;
+    }
+
+    public void setBookmarked(boolean bookmarked) {
+        isBookmarked = bookmarked;
+    }
+
+    public boolean isApplied() {
+        return isApplied;
+    }
+
+    public void setApplied(boolean applied) {
+        isApplied = applied;
+    }
 
     public List<Long> getImagesIds() {
         return imagesIds;
@@ -197,6 +537,14 @@ public class FeedDetail extends BaseResponse implements Parcelable {
 
     public void setCommunityType(String communityType) {
         this.communityType = communityType;
+    }
+
+    public String getCommunityTypeL() {
+        return communityTypeL;
+    }
+
+    public void setCommunityTypeL(String communityTypeL) {
+        this.communityTypeL = communityTypeL;
     }
 
     public boolean isActive() {
@@ -599,6 +947,14 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         this.functionalAreaNames = functionalAreaNames;
     }
 
+    public List<String> getLastActivityDate() {
+        return lastActivityDate;
+    }
+
+    public void setLastActivityDate(List<String> lastActivityDate) {
+        this.lastActivityDate = lastActivityDate;
+    }
+
     public int getReactionValue() {
         return reactionValue;
     }
@@ -623,12 +979,12 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         this.noOfComments = noOfComments;
     }
 
-    public LastComment getLastComment() {
-        return lastComment;
+    public List<LastComment> getLastComments() {
+        return lastComments;
     }
 
-    public void setLastComment(LastComment lastComment) {
-        this.lastComment = lastComment;
+    public void setLastComments(List<LastComment> lastComments) {
+        this.lastComments = lastComments;
     }
 
     public String getId() {
@@ -751,15 +1107,8 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         isDeleted = deleted;
     }
 
+
     public FeedDetail() {
-    }
-
-    public boolean isBookmarked() {
-        return isBookmarked;
-    }
-
-    public void setBookmarked(boolean bookmarked) {
-        isBookmarked = bookmarked;
     }
 
     @Override
@@ -769,10 +1118,41 @@ public class FeedDetail extends BaseResponse implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.itemPosition);
+        dest.writeByte(this.isLongPress ? (byte) 1 : (byte) 0);
+        dest.writeString(this.publishedInS);
+        dest.writeString(this.metaDescriptionS);
+        dest.writeString(this.metaTitleS);
+        dest.writeString(this.articleStatusI);
+        dest.writeString(this.thirdPartyIdS);
+        dest.writeString(this.articleCategoryNameS);
+        dest.writeInt(this.articleCategoryL);
+        dest.writeString(this.slugS);
+        dest.writeInt(this.entityOrParticipantTypeIdI);
+        dest.writeString(this.displayIdProfileId);
+        dest.writeInt(this.noOfViews);
+        dest.writeInt(this.sectorIdL);
+        dest.writeString(this.sectorNameS);
+        dest.writeString(this.jobCityIdL);
+        dest.writeString(this.jobCityNameS);
+        dest.writeByte(this.isFromSearchFirmB ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isSearchFirmB ? (byte) 1 : (byte) 0);
+        dest.writeString(this.hCompanyNameS);
+        dest.writeString(this.hCompanyLogoS);
+        dest.writeInt(this.experienceFromI);
+        dest.writeInt(this.experienceToI);
+        dest.writeList(this.searchIdJobOppTypes);
+        dest.writeStringList(this.searchTextJobEmpTypes);
+        dest.writeList(this.searchIdJobSkills);
+        dest.writeString(this.topCompanyTagLinkIdL);
+        dest.writeInt(this.companyProfileIdL);
+        dest.writeByte(this.searchFirm ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isBookmarked ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isApplied ? (byte) 1 : (byte) 0);
         dest.writeList(this.imagesIds);
         dest.writeStringList(this.imageUrls);
         dest.writeString(this.communityType);
+        dest.writeString(this.communityTypeL);
         dest.writeByte(this.active ? (byte) 1 : (byte) 0);
         dest.writeString(this.id);
         dest.writeLong(this.entityOrParticipantId);
@@ -839,18 +1219,52 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         dest.writeStringList(this.interestNames);
         dest.writeList(this.functionalAreaIds);
         dest.writeStringList(this.functionalAreaNames);
+        dest.writeStringList(this.lastActivityDate);
         dest.writeInt(this.reactionValue);
         dest.writeInt(this.noOfLikes);
         dest.writeInt(this.noOfComments);
-        dest.writeParcelable(this.lastComment, flags);
+        dest.writeTypedList(this.lastComments);
     }
 
     protected FeedDetail(Parcel in) {
+        this.itemPosition = in.readInt();
+        this.isLongPress = in.readByte() != 0;
+        this.publishedInS = in.readString();
+        this.metaDescriptionS = in.readString();
+        this.metaTitleS = in.readString();
+        this.articleStatusI = in.readString();
+        this.thirdPartyIdS = in.readString();
+        this.articleCategoryNameS = in.readString();
+        this.articleCategoryL = in.readInt();
+        this.slugS = in.readString();
+        this.entityOrParticipantTypeIdI = in.readInt();
+        this.displayIdProfileId = in.readString();
+        this.noOfViews = in.readInt();
+        this.sectorIdL = in.readInt();
+        this.sectorNameS = in.readString();
+        this.jobCityIdL = in.readString();
+        this.jobCityNameS = in.readString();
+        this.isFromSearchFirmB = in.readByte() != 0;
+        this.isSearchFirmB = in.readByte() != 0;
+        this.hCompanyNameS = in.readString();
+        this.hCompanyLogoS = in.readString();
+        this.experienceFromI = in.readInt();
+        this.experienceToI = in.readInt();
+        this.searchIdJobOppTypes = new ArrayList<Integer>();
+        in.readList(this.searchIdJobOppTypes, Integer.class.getClassLoader());
+        this.searchTextJobEmpTypes = in.createStringArrayList();
+        this.searchIdJobSkills = new ArrayList<Integer>();
+        in.readList(this.searchIdJobSkills, Integer.class.getClassLoader());
+        this.topCompanyTagLinkIdL = in.readString();
+        this.companyProfileIdL = in.readInt();
+        this.searchFirm = in.readByte() != 0;
         this.isBookmarked = in.readByte() != 0;
+        this.isApplied = in.readByte() != 0;
         this.imagesIds = new ArrayList<Long>();
         in.readList(this.imagesIds, Long.class.getClassLoader());
         this.imageUrls = in.createStringArrayList();
         this.communityType = in.readString();
+        this.communityTypeL = in.readString();
         this.active = in.readByte() != 0;
         this.id = in.readString();
         this.entityOrParticipantId = in.readLong();
@@ -931,10 +1345,11 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         this.functionalAreaIds = new ArrayList<Long>();
         in.readList(this.functionalAreaIds, Long.class.getClassLoader());
         this.functionalAreaNames = in.createStringArrayList();
+        this.lastActivityDate = in.createStringArrayList();
         this.reactionValue = in.readInt();
         this.noOfLikes = in.readInt();
         this.noOfComments = in.readInt();
-        this.lastComment = in.readParcelable(LastComment.class.getClassLoader());
+        this.lastComments = in.createTypedArrayList(LastComment.CREATOR);
     }
 
     public static final Creator<FeedDetail> CREATOR = new Creator<FeedDetail>() {
@@ -948,20 +1363,4 @@ public class FeedDetail extends BaseResponse implements Parcelable {
             return new FeedDetail[size];
         }
     };
-
-    public int getItemPosition() {
-        return itemPosition;
-    }
-
-    public void setItemPosition(int itemPosition) {
-        this.itemPosition = itemPosition;
-    }
-
-    public boolean isLongPress() {
-        return isLongPress;
-    }
-
-    public void setLongPress(boolean longPress) {
-        isLongPress = longPress;
-    }
 }

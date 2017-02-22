@@ -47,7 +47,7 @@ public class CommentReactionPresenter extends BasePresenter<AllCommentReactionVi
 
     public void getAllCommentListFromPresenter(CommentReactionRequestPojo commentReactionRequestPojo,boolean isReaction) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showNwError();
+            getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
             return;
         }
         getMvpView().startProgressBar();
@@ -59,7 +59,6 @@ public class CommentReactionPresenter extends BasePresenter<AllCommentReactionVi
             @Override
             public void onError(Throwable e) {
                 getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
-                getMvpView().showNwError();
                 getMvpView().stopProgressBar();
             }
 
@@ -74,7 +73,7 @@ public class CommentReactionPresenter extends BasePresenter<AllCommentReactionVi
 
     public void addCommentListFromPresenter(CommentReactionRequestPojo commentReactionRequestPojo) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showNwError();
+            getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
             return;
         }
         getMvpView().startProgressBar();
@@ -86,8 +85,6 @@ public class CommentReactionPresenter extends BasePresenter<AllCommentReactionVi
             @Override
             public void onError(Throwable e) {
                 getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
-                getMvpView().showNwError();
-                getMvpView().stopProgressBar();
             }
 
             @Override
@@ -100,7 +97,7 @@ public class CommentReactionPresenter extends BasePresenter<AllCommentReactionVi
     }
     public void editCommentListFromPresenter(CommentReactionRequestPojo commentReactionRequestPojo) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showNwError();
+            getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
             return;
         }
         getMvpView().startProgressBar();
@@ -112,7 +109,6 @@ public class CommentReactionPresenter extends BasePresenter<AllCommentReactionVi
             @Override
             public void onError(Throwable e) {
                 getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
-                getMvpView().showNwError();
                 getMvpView().stopProgressBar();
             }
 

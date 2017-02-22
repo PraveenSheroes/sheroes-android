@@ -33,6 +33,7 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeSearchActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
+import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -57,7 +58,7 @@ public class SearchArticleFragment extends BaseFragment implements HomeView {
     TextView tvSearchResult;
     private String mSearchDataName = AppConstants.EMPTY_STRING;
     private GenericRecyclerViewAdapter mAdapter;
-    private HomeSearchActivityIntractionListner mHomeSearchActivityIntractionListner;
+    private FragmentIntractionWithActivityListner mHomeSearchActivityFragmentIntractionWithActivityListner;
     private FragmentListRefreshData mFragmentListRefreshData;
     private Handler mHandler = new Handler();
     public static SearchArticleFragment createInstance(int itemsCount) {
@@ -69,8 +70,8 @@ public class SearchArticleFragment extends BaseFragment implements HomeView {
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            if (getActivity() instanceof HomeSearchActivityIntractionListner) {
-                mHomeSearchActivityIntractionListner = (HomeSearchActivityIntractionListner) getActivity();
+            if (getActivity() instanceof FragmentIntractionWithActivityListner) {
+                mHomeSearchActivityFragmentIntractionWithActivityListner = (FragmentIntractionWithActivityListner) getActivity();
             }
         } catch (Fragment.InstantiationException exception) {
             LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
@@ -116,10 +117,6 @@ public class SearchArticleFragment extends BaseFragment implements HomeView {
 
     }
 
-    @Override
-    public void showNwError() {
-        mHomeSearchActivityIntractionListner.onErrorOccurence();
-    }
 
 
     @Override
@@ -135,7 +132,7 @@ public class SearchArticleFragment extends BaseFragment implements HomeView {
 
     @Override
     public void showError(String errorMsg) {
-        mAdapter.notifyDataSetChanged();
+        mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog();
     }
 
     @Override
@@ -223,7 +220,4 @@ public class SearchArticleFragment extends BaseFragment implements HomeView {
             }
         }
     };
-    public interface HomeSearchActivityIntractionListner {
-        void onErrorOccurence();
-    }
 }

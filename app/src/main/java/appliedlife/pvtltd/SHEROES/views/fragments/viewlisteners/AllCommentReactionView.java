@@ -10,5 +10,4 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRespons
 public interface AllCommentReactionView extends BaseMvpView {
     void getAllCommentsAndReactions(CommentReactionResponsePojo commentReactionResponsePojo);
     void addCommentSuccess(String success);
-    void showNwError();
 }

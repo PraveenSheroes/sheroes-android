@@ -1628,6 +1628,18 @@ public class AppUtils {
         feedRequestPojo.setSubType(typeOfFeed);
         return feedRequestPojo;
     }
+    public  static FeedRequestPojo getBookMarks(int pageNo)
+    {
+        AppUtils appUtils = AppUtils.getInstance();
+        FeedRequestPojo feedRequestPojo=new FeedRequestPojo();
+        feedRequestPojo.setAppVersion(appUtils.getAppVersionName());
+        feedRequestPojo.setDeviceUniqueId(appUtils.getDeviceId());
+        //TODO:: change rquest data
+        feedRequestPojo.setCloudMessagingId(AppConstants.ALL_SEARCH);
+        feedRequestPojo.setPageNo(pageNo);
+        feedRequestPojo.setPageSize(AppConstants.PAGE_SIZE);
+        return feedRequestPojo;
+    }
     /**
      * Request for feed api
      */

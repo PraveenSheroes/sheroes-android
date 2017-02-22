@@ -96,7 +96,7 @@
                 android:id="@+id/li_feed_article_images"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_size_180"
-                android:background="@color/white"
+                android:background="@drawable/ic_image_holder"
                 android:orientation="vertical" />
 
             <include

@@ -31,6 +31,7 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
+import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -53,10 +54,11 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
     LinearLayout liNoResult;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
-    private MyCommunitiesFragment.HomeActivityIntractionListner mHomeActivityIntractionListner;
+    private FragmentIntractionWithActivityListner mHomeActivityFragmentIntractionWithActivityListner;
     private SwipPullRefreshList mPullRefreshList;
     @Inject
     AppUtils mAppUtils;
+    int pageNo=AppConstants.ONE_CONSTANT;
     private FragmentListRefreshData mFragmentListRefreshData;
     public static FeaturedFragment createInstance() {
         FeaturedFragment featuredFragment = new FeaturedFragment();
@@ -68,8 +70,8 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            if (getActivity() instanceof MyCommunitiesFragment.HomeActivityIntractionListner) {
-                mHomeActivityIntractionListner = (MyCommunitiesFragment.HomeActivityIntractionListner) getActivity();
+            if (getActivity() instanceof FragmentIntractionWithActivityListner) {
+                mHomeActivityFragmentIntractionWithActivityListner = (FragmentIntractionWithActivityListner) getActivity();
             }
         } catch (InstantiationException exception) {
             LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
@@ -108,14 +110,13 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
 
             }
         });
-        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY,mFragmentListRefreshData.getPageNo()));
+        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEATURED_COMMUNITY,mFragmentListRefreshData.getPageNo()));
         swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 // Refresh items
-                LogUtils.info("swipe", "*****************end called");
                 mPullRefreshList.setPullToRefresh(true);
-                mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY,mFragmentListRefreshData.getPageNo()+1));
+                mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEATURED_COMMUNITY,mFragmentListRefreshData.getPageNo()));
             }
         });
         return view;
@@ -125,6 +126,8 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
     @Override
     public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
+            pageNo=mFragmentListRefreshData.getPageNo();
+            mFragmentListRefreshData.setPageNo(++pageNo);
             mPullRefreshList.allListData(feedDetailList);
             mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
             mAdapter.notifyDataSetChanged();
@@ -152,10 +155,6 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
 
     }
 
-    @Override
-    public void showNwError() {
-        mHomeActivityIntractionListner.onErrorOccurence();
-    }
 
 
     @Override
@@ -171,7 +170,7 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
 
     @Override
     public void showError(String errorMsg) {
-        mAdapter.notifyDataSetChanged();
+        mHomeActivityFragmentIntractionWithActivityListner.onShowErrorDialog();
     }
 
     @Override
@@ -201,8 +200,5 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
         super.onResume();
     }
 
-    public interface HomeActivityIntractionListner {
-        void onErrorOccurence();
-    }
 
 }

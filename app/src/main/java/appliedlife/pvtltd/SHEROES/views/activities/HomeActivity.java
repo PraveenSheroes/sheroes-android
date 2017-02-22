@@ -53,7 +53,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.DrawerItems;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.MyCommunities;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -65,7 +64,9 @@ import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.BlurrImage;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView;
+import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
@@ -81,7 +82,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class HomeActivity extends BaseActivity implements HomeFragment.HomeActivityIntractionListner, SettingView, BaseHolderInterface, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, CommentReactionFragment.HomeActivityIntractionListner, View.OnTouchListener, View.OnClickListener, ImageFullViewAdapter.HomeActivityIntraction {
+public class HomeActivity extends BaseActivity implements FragmentIntractionWithActivityListner, SettingView, BaseHolderInterface, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, CommentReactionFragment.HomeActivityIntractionListner, View.OnTouchListener, View.OnClickListener, ImageFullViewAdapter.HomeActivityIntraction {
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
 
     @Bind(R.id.iv_drawer_profile_circle_icon)
@@ -201,7 +202,8 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
 
     @Override
     public void onErrorOccurence() {
-        showNetworkTimeoutDoalog(true);
+        getSupportFragmentManager().popBackStack();
+        //showNetworkTimeoutDoalog(true);
     }
 
 
@@ -220,8 +222,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
                 if (spinnerHeaderName.equalsIgnoreCase(AppConstants.FEED_ARTICLE)) {
                     mFragmentOpen.setOpen(true);
                 } else {
-                    for(int i=0;i<mHomeSpinnerItemList.size();i++)
-                    {
+                    for (int i = 0; i < mHomeSpinnerItemList.size(); i++) {
                         mHomeSpinnerItemList.get(i).setDone(true);
                     }
                     mTvSpinnerIcon.setText(spinnerHeaderName);
@@ -247,9 +248,15 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
                     ProfileActicity.navigate(this, view, profile);
                     break;
                 case 2:
+                    checkForAllOpenFragments();
                     openArticleFragment();
                     break;
+                case 4:
+                    checkForAllOpenFragments();
+                    openBookMarkFragment();
+                    break;
                 case 5:
+                    checkForAllOpenFragments();
                     openSettingFragment();
 
                 default:
@@ -257,9 +264,6 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
             }
         } else if (baseResponse instanceof CommunitySuggestion) {
 
-        } else if (baseResponse instanceof MyCommunities) {
-            MyCommunities myCommunities = (MyCommunities) baseResponse;
-            myCommunityHandled(view, myCommunities);
         } else if (baseResponse instanceof CommentReactionDoc) {
             clickMenuItem(view, baseResponse);
         }
@@ -273,26 +277,27 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
         }
     }
 
-    private void myCommunityHandled(View view, MyCommunities myCommunities) {
-        int id = view.getId();
-        switch (id) {
-            case R.id.li_community_images:
-                //   CommunitiesDetailActivity.navigate(this, view, listOfFeed);
-                break;
-
-            default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
-        }
-    }
 
     private void feedCardsHandled(View view, BaseResponse baseResponse) {
         mFeedDetail = (FeedDetail) baseResponse;
         int id = view.getId();
         switch (id) {
+            case R.id.tv_feed_community_user_menu:
+                clickMenuItem(view, baseResponse);
+                break;
+            case R.id.tv_feed_community_post_user_menu:
+                clickMenuItem(view, baseResponse);
+                break;
             case R.id.tv_feed_article_user_bookmark:
                 bookmarkCall();
                 break;
             case R.id.tv_feed_article_user_menu:
+                clickMenuItem(view, baseResponse);
+                break;
+            case R.id.tv_feed_community_post_user_comment_post_menu:
+                clickMenuItem(view, baseResponse);
+                break;
+            case R.id.tv_feed_community_user_comment_post_menu:
                 clickMenuItem(view, baseResponse);
                 break;
             case R.id.tv_article_menu:
@@ -355,7 +360,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
                 CommunitiesDetailActivity.navigate(this, view, mFeedDetail);
                 break;
             case R.id.li_feed_community_user_post_images:
-                // CommunitiesDetailActivity.navigate(this, view, mFeedDetail);
+                CommunitiesDetailActivity.navigate(this, view, mFeedDetail);
                 break;
             case R.id.tv_article_detail_user_reaction:
 
@@ -376,6 +381,9 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
                 break;
             case R.id.li_article_cover_image:
                 ArticleDetailActivity.navigateFromArticle(this, view, mFeedDetail);
+                break;
+            case R.id.li_community_images:
+                CommunitiesDetailActivity.navigate(this, view, mFeedDetail);
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
@@ -478,10 +486,12 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
             @Override
             public void onClick(View v) {
                 CommentReactionDoc commentReactionDoc = (CommentReactionDoc) baseResponse;
-                if (AppUtils.isFragmentUIActive(fragmentCommentReaction)) {
-                    commentReactionDoc.setActive(true);
-                    commentReactionDoc.setEdit(true);
-                    ((CommentReactionFragment) fragmentCommentReaction).editCommentInList(commentReactionDoc);
+                if (null != commentReactionDoc) {
+                    if (AppUtils.isFragmentUIActive(fragmentCommentReaction)) {
+                        commentReactionDoc.setActive(true);
+                        commentReactionDoc.setEdit(true);
+                        ((CommentReactionFragment) fragmentCommentReaction).editCommentInList(commentReactionDoc);
+                    }
                 }
                 popupWindow.dismiss();
             }
@@ -515,15 +525,65 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
         int id = view.getId();
         switch (id) {
             case R.id.tv_feed_article_user_menu:
-                tvEdit.setVisibility(View.GONE);
-                tvDelete.setVisibility(View.GONE);
+                tvShare.setVisibility(View.VISIBLE);
                 break;
             case R.id.tv_user_comment_list_menu:
-                tvShare.setVisibility(View.GONE);
-                tvReport.setVisibility(View.GONE);
+                tvEdit.setVisibility(View.VISIBLE);
+                tvDelete.setVisibility(View.VISIBLE);
+                break;
+            case R.id.tv_feed_community_post_user_comment_post_menu:
+                //if owner
+                tvDelete.setVisibility(View.VISIBLE);
+                //if commenter
+                tvEdit.setVisibility(View.VISIBLE);
+                tvDelete.setVisibility(View.VISIBLE);
+                break;
+            case R.id.tv_feed_community_user_comment_post_menu:
+                //if owner
+                tvDelete.setVisibility(View.VISIBLE);
+                //if commenter
+                tvEdit.setVisibility(View.VISIBLE);
+                tvDelete.setVisibility(View.VISIBLE);
+                break;
             case R.id.tv_article_menu:
-                tvShare.setVisibility(View.GONE);
-                tvReport.setVisibility(View.GONE);
+                tvShare.setVisibility(View.VISIBLE);
+                break;
+            case R.id.tv_feed_community_post_user_menu:
+                FeedDetail feedPostDetail = (FeedDetail) baseResponse;
+                tvShare.setVisibility(View.VISIBLE);
+              /*  if(null!=feedPostDetail)
+                {
+                    //If creator then
+                    tvEdit.setVisibility(View.VISIBLE);
+                    tvDelete.setVisibility(View.VISIBLE);
+                    tvShare.setVisibility(View.VISIBLE);
+
+                    //if owner then
+                    tvDelete.setVisibility(View.VISIBLE);
+                    tvShare.setVisibility(View.VISIBLE);
+                    tvReport.setVisibility(View.VISIBLE);
+                    //if Other then
+                    tvShare.setVisibility(View.VISIBLE);
+                    tvReport.setVisibility(View.VISIBLE);
+                }*/
+                break;
+            case R.id.tv_feed_community_user_menu:
+                FeedDetail feedCommunityDetail = (FeedDetail) baseResponse;
+                if (null != feedCommunityDetail) {
+                    //If creator then
+                    tvEdit.setVisibility(View.VISIBLE);
+                    tvDelete.setVisibility(View.VISIBLE);
+                    tvShare.setVisibility(View.VISIBLE);
+
+                    //if owner then
+                    tvDelete.setVisibility(View.VISIBLE);
+                    tvShare.setVisibility(View.VISIBLE);
+                    tvReport.setVisibility(View.VISIBLE);
+                    //if Other then
+                    tvShare.setVisibility(View.VISIBLE);
+                    tvReport.setVisibility(View.VISIBLE);
+                }
+                break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
         }
@@ -679,13 +739,25 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
         }
     }
 
-    @OnClick(R.id.tv_home)
-    public void homeOnClick() {
-        liHomeCommunityButtonLayout.setVisibility(View.GONE);
+    private void checkForAllOpenFragments() {
         if (mFragmentOpen.isArticleFragment()) {
             onBackPressed();
             mFragmentOpen.setArticleFragment(false);
         }
+        if (mFragmentOpen.isBookmarkFragment()) {
+            onBackPressed();
+            mFragmentOpen.setBookmarkFragment(false);
+        }
+        if (mFragmentOpen.isSettingFragment()) {
+            onBackPressed();
+            mFragmentOpen.setSettingFragment(false);
+        }
+    }
+
+    @OnClick(R.id.tv_home)
+    public void homeOnClick() {
+        checkForAllOpenFragments();
+        liHomeCommunityButtonLayout.setVisibility(View.GONE);
         mFragmentOpen.setFeedOpen(true);
         mFragmentOpen.setCommunityOpen(false);
         flFeedFullView.setVisibility(View.VISIBLE);
@@ -705,10 +777,7 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
     public void communityOnClick() {
         liHomeCommunityButtonLayout.setVisibility(View.VISIBLE);
         mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_COMMUNITIES));
-        if (mFragmentOpen.isArticleFragment()) {
-            onBackPressed();
-            mFragmentOpen.setArticleFragment(false);
-        }
+        checkForAllOpenFragments();
         mFragmentOpen.setCommunityOpen(true);
         mFragmentOpen.setFeedOpen(false);
         flFeedFullView.setVisibility(View.GONE);
@@ -760,8 +829,6 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
         mTvSearchBox.setVisibility(View.GONE);
         mTvSetting.setVisibility(View.VISIBLE);
         mTvSetting.setText(R.string.ID_SETTINGS);
-
-
         mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_unselected_icon), null, null);
         mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_unselected_icon), null, null);
         mTvCommunities.setText(AppConstants.EMPTY_STRING);
@@ -773,6 +840,29 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
         mTvSpinnerIcon.setVisibility(View.GONE);
     }
 
+    private void openBookMarkFragment() {
+
+        mFragmentOpen.setBookmarkFragment(true);
+        mViewPager.setVisibility(View.GONE);
+        mTabLayout.setVisibility(View.GONE);
+        flFeedFullView.setVisibility(View.GONE);
+        mTvSpinnerIcon.setVisibility(View.GONE);
+        mTvHome.setText(AppConstants.EMPTY_STRING);
+        mTvSearchBox.setVisibility(View.GONE);
+        mTvSetting.setVisibility(View.VISIBLE);
+        mTvSetting.setText(R.string.ID_BOOKMARKS);
+        mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_unselected_icon), null, null);
+        mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_unselected_icon), null, null);
+        mTvCommunities.setText(AppConstants.EMPTY_STRING);
+        BookmarksFragment bookmarksFragment = new BookmarksFragment();
+        Bundle bundleBookMarks = new Bundle();
+        bundleBookMarks.putParcelable(AppConstants.BOOKMARKS, mFeedDetail);
+        bookmarksFragment.setArguments(bundleBookMarks);
+        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
+                .replace(R.id.fl_article_card_view, bookmarksFragment, BookmarksFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+        mTvSpinnerIcon.setVisibility(View.GONE);
+    }
+
     @Override
     public void onBackPressed() {
         if (mFragmentOpen.isOpen()) {
@@ -780,13 +870,17 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
             mFragmentOpen.setOpen(false);
         } else if (mFragmentOpen.isCommentList()) {
             getSupportFragmentManager().popBackStackImmediate();
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+            if (AppUtils.isFragmentUIActive(fragment)) {
+                ((HomeFragment) fragment).commentListRefresh(mFeedDetail);
+            }
             mFragmentOpen.setCommentList(false);
         } else if (mFragmentOpen.isReactionList()) {
             getSupportFragmentManager().popBackStack();
             mFragmentOpen.setReactionList(false);
             mFragmentOpen.setCommentList(true);
         } else if (mFragmentOpen.isArticleFragment()) {
-            getSupportFragmentManager().popBackStack();
+            getSupportFragmentManager().popBackStackImmediate();
             if (mFragmentOpen.isFeedOpen()) {
                 flFeedFullView.setVisibility(View.VISIBLE);
                 mTvHome.setText(getString(R.string.ID_FEED));
@@ -805,35 +899,46 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
 
 
         } else if (mFragmentOpen.isSettingFragment()) {
-            getSupportFragmentManager().popBackStack();
-            if (mFragmentOpen.isFeedOpen()) {
-                flFeedFullView.setVisibility(View.VISIBLE);
-                mTvHome.setText(getString(R.string.ID_FEED));
-                mTvSpinnerIcon.setVisibility(View.GONE);
-                mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_selected_icon), null, null);
-                mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.footer_icon_text));
-            } else {
-                mViewPager.setVisibility(View.VISIBLE);
-                mTabLayout.setVisibility(View.VISIBLE);
-                mTvSpinnerIcon.setVisibility(View.GONE);
-                mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_selected_icon), null, null);
-                mTvCommunities.setText(getString(R.string.ID_COMMUNITIY));
-                mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.footer_icon_text));
-            }
-            mTvSearchBox.setVisibility(View.VISIBLE);
-            mTvSetting.setVisibility(View.GONE);
+            getSupportFragmentManager().popBackStackImmediate();
+            setHomeFeedCommunityData();
             mFragmentOpen.setSettingFragment(false);
 
+        } else if (mFragmentOpen.isBookmarkFragment()) {
+            getSupportFragmentManager().popBackStackImmediate();
+            setHomeFeedCommunityData();
+            mFragmentOpen.setBookmarkFragment(false);
         } else {
             finish();
         }
     }
 
+    private void setHomeFeedCommunityData() {
+        if (mFragmentOpen.isFeedOpen()) {
+            flFeedFullView.setVisibility(View.VISIBLE);
+            mTvHome.setText(getString(R.string.ID_FEED));
+            mTvSpinnerIcon.setVisibility(View.GONE);
+            mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_selected_icon), null, null);
+            mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.footer_icon_text));
+        } else {
+            mViewPager.setVisibility(View.VISIBLE);
+            mTabLayout.setVisibility(View.VISIBLE);
+            mTvSpinnerIcon.setVisibility(View.GONE);
+            mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_selected_icon), null, null);
+            mTvCommunities.setText(getString(R.string.ID_COMMUNITIY));
+            mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.footer_icon_text));
+        }
+        mTvSearchBox.setVisibility(View.VISIBLE);
+        mTvSetting.setVisibility(View.GONE);
+    }
+
     @Override
-    public void onDialogDissmiss(FragmentOpen isFragmentOpen) {
+    public void onDialogDissmiss(FragmentOpen isFragmentOpen,FeedDetail feedDetail) {
         mFragmentOpen = isFragmentOpen;
+        mFeedDetail=feedDetail;
         onBackPressed();
     }
+
+
 
     @Override
     public void onClickReactionList(FragmentOpen isFragmentOpen, FeedDetail feedDetail) {
@@ -1049,4 +1154,13 @@ public class HomeActivity extends BaseActivity implements HomeFragment.HomeActiv
         mDrawer.openDrawer(Gravity.LEFT);
     }
 
+    @Override
+    public void onShowErrorDialog() {
+        onBackPressed();
+    }
+
+    @Override
+    public void onDialogDissmiss(FragmentOpen isFragmentOpen) {
+
+    }
 }

@@ -51,6 +51,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.LoginView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -80,6 +81,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
     EditText mPasswordView;
     @Bind(R.id.pb_login_progress_bar)
     ProgressBar mProgressBar;
+    FragmentIntractionWithActivityListner fragmentIntractionWithActivityListner;
     private LoginActivityIntractionListner mLoginActivityIntractionListner;
 
 
@@ -94,6 +96,9 @@ public class LoginFragment extends BaseFragment implements LoginView {
         try {
             if (getActivity() instanceof LoginActivityIntractionListner) {
                 mLoginActivityIntractionListner = (LoginActivityIntractionListner) getActivity();
+            }
+            if (getActivity() instanceof FragmentIntractionWithActivityListner) {
+                fragmentIntractionWithActivityListner = (FragmentIntractionWithActivityListner) getActivity();
             }
         } catch (InstantiationException exception) {
             LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
@@ -191,6 +196,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
     @Override
     public void showError(String errorMsg) {
         mProgressBar.setVisibility(View.GONE);
+        fragmentIntractionWithActivityListner.onShowErrorDialog();
     }
 
     @Override

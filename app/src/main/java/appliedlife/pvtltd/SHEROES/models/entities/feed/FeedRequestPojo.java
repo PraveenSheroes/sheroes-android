@@ -20,7 +20,9 @@ public class FeedRequestPojo extends BaseRequest {
     @SerializedName("q")
     @Expose
     private String question;
-
+    @SerializedName("screen_name")
+    @Expose
+    private String screenName;
 
     public String getSubType() {
         return subType;
@@ -44,5 +46,13 @@ public class FeedRequestPojo extends BaseRequest {
 
     public void setIdForFeedDetail(String idForFeedDetail) {
         this.idForFeedDetail = idForFeedDetail;
+    }
+
+    public String getScreenName() {
+        return screenName;
+    }
+
+    public void setScreenName(String screenName) {
+        this.screenName = screenName;
     }
 }

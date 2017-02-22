@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import java.util.List;
@@ -21,7 +22,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.database.dbentities.MasterData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
-import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -37,12 +37,11 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
- * Created by Praveen_Singh on 09-01-2017.
+ * Created by Praveen_Singh on 21-02-2017.
  */
 
-
-public class ArticlesFragment extends BaseFragment implements HomeView {
-    private final String TAG = LogUtils.makeLogTag(ArticlesFragment.class);
+public class BookmarksFragment extends BaseFragment implements HomeView {
+    private final String TAG = LogUtils.makeLogTag(BookmarksFragment.class);
     @Inject
     HomePresenter mHomePresenter;
     @Bind(R.id.rv_home_list)
@@ -57,16 +56,10 @@ public class ArticlesFragment extends BaseFragment implements HomeView {
     private SwipPullRefreshList mPullRefreshList;
     @Inject
     AppUtils mAppUtils;
-    private FragmentListRefreshData mFragmentListRefreshData;
+    @Bind(R.id.li_no_result)
+    LinearLayout liNoResult;
     int pageNo=AppConstants.ONE_CONSTANT;
-    public static ArticlesFragment createInstance(int itemsCount) {
-
-        ArticlesFragment articlesFragment = new ArticlesFragment();
-
-        return articlesFragment;
-    }
-
-
+    private FragmentListRefreshData mFragmentListRefreshData;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -85,7 +78,7 @@ public class ArticlesFragment extends BaseFragment implements HomeView {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.bind(this, view);
-        mFragmentListRefreshData=new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ARTICLE_FRAGMENT,AppConstants.EMPTY_STRING);
+        mFragmentListRefreshData=new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.BOOKMARKS,AppConstants.EMPTY_STRING);
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
         mHomePresenter.attachView(this);
@@ -105,20 +98,18 @@ public class ArticlesFragment extends BaseFragment implements HomeView {
             public void onShow() {
                 ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
             }
-
             @Override
             public void dismissReactions() {
 
             }
         });
-        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_ARTICLE,mFragmentListRefreshData.getPageNo()));
+        mHomePresenter.getBookMarkFromPresenter(mAppUtils.getBookMarks(mFragmentListRefreshData.getPageNo()));
         swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 // Refresh items
-                LogUtils.info("swipe", "*****************end called");
                 mPullRefreshList.setPullToRefresh(true);
-                mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_ARTICLE,mFragmentListRefreshData.getPageNo()));
+               mHomePresenter.getBookMarkFromPresenter(mAppUtils.getBookMarks(mFragmentListRefreshData.getPageNo()));
             }
         });
         return view;
@@ -132,13 +123,17 @@ public class ArticlesFragment extends BaseFragment implements HomeView {
             mFragmentListRefreshData.setPageNo(++pageNo);
             mPullRefreshList.allListData(feedDetailList);
             mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
-            mAdapter.notifyDataSetChanged();
+            mAdapter.setCallForRecycler(AppConstants.FEED_SUB_TYPE);
             if (!mPullRefreshList.isPullToRefresh()) {
                 mLayoutManager.scrollToPositionWithOffset(mPullRefreshList.getFeedResponses().size() - feedDetailList.size(), 0);
             } else {
                 mLayoutManager.scrollToPositionWithOffset(0, 0);
             }
             swipeView.setRefreshing(false);
+        }
+        else
+        {
+            liNoResult.setVisibility(View.VISIBLE);
         }
     }
 
@@ -147,19 +142,10 @@ public class ArticlesFragment extends BaseFragment implements HomeView {
 
     }
 
-    public void categorySearchInArticle(List<HomeSpinnerItem> mHomeSpinnerItemList)
-    {
-
-    }
-
-
-
     @Override
     public void getDB(List<MasterData> masterDatas) {
 
     }
-
-
 
     @Override
     public void startProgressBar() {
@@ -203,4 +189,5 @@ public class ArticlesFragment extends BaseFragment implements HomeView {
     public void onResume() {
         super.onResume();
     }
+
 }

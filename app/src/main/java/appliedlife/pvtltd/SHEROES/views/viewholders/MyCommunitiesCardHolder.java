@@ -12,11 +12,13 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
+import java.util.List;
+
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.MyCommunities;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -29,10 +31,12 @@ import butterknife.OnClick;
  * Created by Praveen_Singh on 30-01-2017.
  */
 
-public class MyCommunitiesCardHolder extends BaseViewHolder<MyCommunities> {
+public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
     private final String TAG = LogUtils.makeLogTag(MyCommunitiesCardHolder.class);
-    private static final String LEFT_HTML_TAG_FOR_COLOR = "<font color='#50e3c2'>";
-    private static final String RIGHT_HTML_TAG_FOR_COLOR = "</font>";
+    private static final String LEFT_HTML_TAG = "<font color='#333333'>";
+    private static final String RIGHT_HTML_TAG = "</font>";
+    private static final String LEFT_HTML_VEIW_TAG_FOR_COLOR = "<font color='#50e3c2'>";
+    private static final String RIGHT_HTML_VIEW_TAG_FOR_COLOR = "</font>";
     @Bind(R.id.li_community_images)
     LinearLayout liCoverImage;
     @Bind(R.id.iv_community_card_circle_icon)
@@ -48,9 +52,9 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<MyCommunities> {
     @Bind(R.id.tv_community_join)
     TextView tvCommunityJoin;
     BaseHolderInterface viewInterface;
-    private MyCommunities dataItem;
-
-
+    private FeedDetail dataItem;
+    String mViewMoreDescription;
+    String mViewMore, mLess;
     public MyCommunitiesCardHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
@@ -59,42 +63,77 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<MyCommunities> {
     }
 
     @Override
-    public void bindData(MyCommunities item, final Context context, int position) {
+    public void bindData(FeedDetail item, final Context context, int position) {
         this.dataItem = item;
+        mViewMore = context.getString(R.string.ID_VIEW_MORE);
+        mLess = context.getString(R.string.ID_LESS);
+        tvDescriptionText.setTag(mViewMore);
         liCoverImage.removeAllViews();
         liCoverImage.removeAllViewsInLayout();
         imageOperations(context);
+        textViewOperation(context);
+    }
+    private void textViewOperation(Context context) {
+        if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
+            tvCommunityCardTitle.setText(dataItem.getNameOrTitle());
+        }
+        if (StringUtil.isNotNullOrEmptyString(dataItem.getCommunityType())) {
+            tvCommunityTime.setText(dataItem.getCommunityType());
+        }
+
+        mViewMoreDescription = dataItem.getListDescription();
+        if(StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
+            if (mViewMoreDescription.length() > AppConstants.WORD_LENGTH) {
+                mViewMoreDescription = mViewMoreDescription.substring(0, AppConstants.WORD_COUNT);
+            }
+            String changeDate = LEFT_HTML_VEIW_TAG_FOR_COLOR + context.getString(R.string.ID_VIEW_MORE) + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
+            if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                tvDescriptionText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.SPACE + changeDate, 0)); // for 24 api and more
+            } else {
+                tvDescriptionText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.SPACE + changeDate));// or for older api
+            }
+        }
+        if (StringUtil.isNotEmptyCollection(dataItem.getTags())) {
+            List<String> tags = dataItem.getTags();
+            String mergeTags = AppConstants.EMPTY_STRING;
+            for (String tag : tags) {
+                mergeTags += tag + AppConstants.COMMA;
+            }
+            String tagHeader = LEFT_HTML_TAG + context.getString(R.string.ID_TAGS) + RIGHT_HTML_TAG;
+            if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                tvCommunityTag.setText(Html.fromHtml(tagHeader + AppConstants.COLON + AppConstants.SPACE + mergeTags, 0)); // for 24 api and more
+            } else {
+                tvCommunityTag.setText(Html.fromHtml(tagHeader + AppConstants.COLON + AppConstants.SPACE + mergeTags));// or for older api
+            }
+        }
     }
 
     private void imageOperations(Context context) {
-        String feedCircleIconUrl = dataItem.getArticleCircleIconUrl();
-        if (StringUtil.isNotNullOrEmptyString(feedCircleIconUrl)) {
+       String authorImageUrl = dataItem.getAuthorImageUrl();
+        if (StringUtil.isNotNullOrEmptyString(authorImageUrl)) {
 
             ivCommunityCircleIcon.setCircularImage(true);
-            ivCommunityCircleIcon.bindImage(feedCircleIconUrl);
+            ivCommunityCircleIcon.bindImage(authorImageUrl);
+        }
+        String imageUrl = dataItem.getImageUrl();
+        if (StringUtil.isNotNullOrEmptyString(imageUrl)) {
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View child = layoutInflater.inflate(R.layout.feed_article_single_image, null);
             ImageView ivFirstLandscape = (ImageView) child.findViewById(R.id.iv_feed_article_single_image);
             TextView tvFeedArticleTimeLabel = (TextView) child.findViewById(R.id.tv_feed_article_time_label);
             tvFeedArticleTimeLabel.setVisibility(View.GONE);
             TextView tvFeedArticleTotalViews = (TextView) child.findViewById(R.id.tv_feed_article_total_views);
-            tvFeedArticleTotalViews.setText(dataItem.getTotalViews() + AppConstants.SPACE + context.getString(R.string.ID_VIEWS));
+         //   tvFeedArticleTotalViews.setText(dataItem.getTotalViews() + AppConstants.SPACE + context.getString(R.string.ID_VIEWS));
             Glide.with(context)
-                    .load(feedCircleIconUrl)
+                    .load(imageUrl)
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .skipMemoryCache(true)
                     .into(ivFirstLandscape);
             liCoverImage.addView(child);
         }
-        String str = dataItem.getDescription();
-        if (str.length() > AppConstants.WORD_LENGTH) {
-            str = str.substring(0, AppConstants.WORD_COUNT);
-        }
-        String changeDate = LEFT_HTML_TAG_FOR_COLOR + context.getString(R.string.ID_VIEW_MORE) + RIGHT_HTML_TAG_FOR_COLOR;
-        if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-            tvDescriptionText.setText(Html.fromHtml(str + AppConstants.SPACE + changeDate, 0)); // for 24 api and more
-        } else {
-            tvDescriptionText.setText(Html.fromHtml(str + AppConstants.SPACE + changeDate));// or for older api
+        else
+        {
+            liCoverImage.setBackgroundResource(R.drawable.ic_image_holder);
         }
     }
 
@@ -107,16 +146,34 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<MyCommunities> {
         viewInterface.handleOnClick(dataItem, liCoverImage);
     }
 
+
+    @OnClick(R.id.tv_community_text)
+    public void viewMoreClick() {
+        if(StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
+            if (tvDescriptionText.getTag().toString().equalsIgnoreCase(mViewMore)) {
+                    String lessWithColor = LEFT_HTML_VEIW_TAG_FOR_COLOR + mLess + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
+
+                    if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                        tvDescriptionText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + lessWithColor, 0)); // for 24 api and more
+                    } else {
+                        tvDescriptionText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + lessWithColor));// or for older api
+                    }
+                    tvDescriptionText.setTag(mLess);
+            } else {
+                tvDescriptionText.setTag(mViewMore);
+                    String viewMore = LEFT_HTML_VEIW_TAG_FOR_COLOR + mViewMore + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
+                    if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                        tvDescriptionText.setText(Html.fromHtml(mViewMoreDescription.substring(0, AppConstants.WORD_COUNT) + AppConstants.DOTS + AppConstants.SPACE + viewMore, 0)); // for 24 api and more
+                    } else {
+                        tvDescriptionText.setText(Html.fromHtml(mViewMoreDescription.substring(0, AppConstants.WORD_COUNT) + AppConstants.DOTS + AppConstants.SPACE + viewMore));// or for older api
+                    }
+            }
+        }
+    }
+
     @Override
     public void onClick(View view) {
 
-        int id = view.getId();
-        switch (id) {
-            case R.id.tv_community_join:
-                break;
-            default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
-        }
     }
 
 }

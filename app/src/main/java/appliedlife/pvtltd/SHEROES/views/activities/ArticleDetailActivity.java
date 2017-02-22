@@ -1,13 +1,16 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
@@ -15,12 +18,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.transition.Slide;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -34,9 +41,11 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionDoc;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
@@ -44,6 +53,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ArticleDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Praveen_Singh on 07-02-2017.
@@ -60,11 +70,14 @@ public class ArticleDetailActivity extends BaseActivity implements BaseHolderInt
     @Bind(R.id.toolbar_article_detail)
     Toolbar mToolbarArticleDetail;
     @Bind(R.id.collapsing_toolbar_article_detail)
-     public CollapsingToolbarLayout mCollapsingToolbarLayout;
+    public CollapsingToolbarLayout mCollapsingToolbarLayout;
+    @Bind(R.id.tv_article_detail_total_views)
+    TextView mTvArticleDetailTotalViews;
     private FeedDetail mFeedDetail;
     public View mArticlePopUp;
     TextView mTvFeedArticleDetailUserReaction;
     private FragmentOpen mFragmentOpen;
+    ViewPagerAdapter viewPagerAdapter;
 
     public static void navigateFromArticle(AppCompatActivity activity, View transitionImage, FeedDetail feedDetail) {
         Intent intent = new Intent(activity, ArticleDetailActivity.class);
@@ -92,13 +105,12 @@ public class ArticleDetailActivity extends BaseActivity implements BaseHolderInt
     private void setPagerAndLayouts() {
         ViewCompat.setTransitionName(mAppBarLayout, AppConstants.ARTICLE_DETAIL);
         supportPostponeEnterTransition();
-
         setSupportActionBar(mToolbarArticleDetail);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
         if (null != mFeedDetail) {
-            ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-            viewPagerAdapter.addFragment(ArticleDetailFragment.createInstance(mFeedDetail), getString(R.string.ID_FEATURED));
+            mTvArticleDetailTotalViews.setText(mFeedDetail.getNoOfViews() + AppConstants.SPACE + getString(R.string.ID_VIEWS));
+            viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+            viewPagerAdapter.addFragment(ArticleDetailFragment.createInstance(mFeedDetail), getString(R.string.ID_ARTICLE));
             mViewPagerArticleDetail.setAdapter(viewPagerAdapter);
             if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getImageUrl())) {
                 Glide.with(this)
@@ -142,14 +154,29 @@ public class ArticleDetailActivity extends BaseActivity implements BaseHolderInt
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
         if (baseResponse instanceof FeedDetail) {
-            FeedDetail feedDetail = (FeedDetail) baseResponse;
-            articleDetailHandled(view, feedDetail);
+            articleDetailHandled(view, baseResponse);
         }
     }
 
-    private void articleDetailHandled(View view, FeedDetail feedDetail) {
+    private void articleDetailHandled(View view, BaseResponse baseResponse) {
+        FeedDetail feedDetail = (FeedDetail) baseResponse;
         int id = view.getId();
         switch (id) {
+            case R.id.tv_article_detail_user_comment_post_menu:
+                clickMenuItem(view, baseResponse);
+                break;
+            case R.id.tv_article_detail_user_comment_post_menu_second:
+                clickMenuItem(view, baseResponse);
+                break;
+            case R.id.tv_article_detail_user_comment_post_menu_third:
+                clickMenuItem(view, baseResponse);
+                break;
+            case R.id.tv_article_detail_view_more:
+
+                break;
+            case R.id.li_article_detail_join_conversation:
+                openCommentReactionFragment();
+                break;
             case R.id.tv_article_detail_user_comment:
                 openCommentReactionFragment();
                 break;
@@ -219,9 +246,11 @@ public class ArticleDetailActivity extends BaseActivity implements BaseHolderInt
 
     @Override
     public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-
+        Fragment fragment = viewPagerAdapter.getActiveFragment(mViewPagerArticleDetail, 0);
+        if (AppUtils.isFragmentUIActive(fragment)) {
+            ((ArticleDetailFragment) fragment).likeAndUnlikeRequest(baseResponse, reactionValue, position);
+        }
     }
-
 
     @Override
     public List getListData() {
@@ -239,53 +268,48 @@ public class ArticleDetailActivity extends BaseActivity implements BaseHolderInt
         switch (id) {
             case R.id.tv_reaction:
                 if (null != mTvFeedArticleDetailUserReaction) {
-                    mTvFeedArticleDetailUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_heart_active), null, null, null);
                     if (null != mArticlePopUp) {
                         mArticlePopUp.setVisibility(View.GONE);
                         dismissUserReactionOption(mArticlePopUp);
                     }
                 }
-
+                userCommentLikeRequest(mFeedDetail, AppConstants.HEART_REACTION_CONSTANT, mFeedDetail.getItemPosition());
                 break;
             case R.id.tv_reaction1:
                 if (null != mTvFeedArticleDetailUserReaction) {
-                    mTvFeedArticleDetailUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji3_whistel), null, null, null);
                     if (null != mArticlePopUp) {
                         mArticlePopUp.setVisibility(View.GONE);
                         dismissUserReactionOption(mArticlePopUp);
                     }
                 }
-
+                userCommentLikeRequest(mFeedDetail, AppConstants.EMOJI_FIRST_REACTION_CONSTANT, mFeedDetail.getItemPosition());
                 break;
             case R.id.tv_reaction2:
                 if (null != mTvFeedArticleDetailUserReaction) {
-                    mTvFeedArticleDetailUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji_xo_xo), null, null, null);
                     if (null != mArticlePopUp) {
                         mArticlePopUp.setVisibility(View.GONE);
                         dismissUserReactionOption(mArticlePopUp);
                     }
                 }
-
+                userCommentLikeRequest(mFeedDetail, AppConstants.EMOJI_SECOND_REACTION_CONSTANT, mFeedDetail.getItemPosition());
                 break;
             case R.id.tv_reaction3:
                 if (null != mTvFeedArticleDetailUserReaction) {
-                    mTvFeedArticleDetailUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji2_with_you), null, null, null);
                     if (null != mArticlePopUp) {
                         mArticlePopUp.setVisibility(View.GONE);
                         dismissUserReactionOption(mArticlePopUp);
                     }
                 }
-
+                userCommentLikeRequest(mFeedDetail, AppConstants.EMOJI_THIRD_REACTION_CONSTANT, mFeedDetail.getItemPosition());
                 break;
             case R.id.tv_reaction4:
                 if (null != mTvFeedArticleDetailUserReaction) {
-                    mTvFeedArticleDetailUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji4_face_palm), null, null, null);
                     if (null != mArticlePopUp) {
                         mArticlePopUp.setVisibility(View.GONE);
                         dismissUserReactionOption(mArticlePopUp);
                     }
                 }
-
+                userCommentLikeRequest(mFeedDetail, AppConstants.EMOJI_FOURTH_REACTION_CONSTANT, mFeedDetail.getItemPosition());
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + "  " + TAG + " " + id);
@@ -324,8 +348,9 @@ public class ArticleDetailActivity extends BaseActivity implements BaseHolderInt
     }
 
     @Override
-    public void onDialogDissmiss(FragmentOpen isFragmentOpen) {
+    public void onDialogDissmiss(FragmentOpen isFragmentOpen, FeedDetail feedDetail) {
         mFragmentOpen = isFragmentOpen;
+        mFeedDetail = feedDetail;
         onBackPressed();
     }
 
@@ -347,6 +372,10 @@ public class ArticleDetailActivity extends BaseActivity implements BaseHolderInt
     public void onBackPressed() {
         if (mFragmentOpen.isCommentList()) {
             getSupportFragmentManager().popBackStackImmediate();
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag(ArticleDetailFragment.class.getName());
+            if (AppUtils.isFragmentUIActive(fragment)) {
+                ((ArticleDetailFragment) fragment).commentListRefresh(mFeedDetail);
+            }
             mFragmentOpen.setCommentList(false);
         } else if (mFragmentOpen.isReactionList()) {
             getSupportFragmentManager().popBackStack();
@@ -357,4 +386,81 @@ public class ArticleDetailActivity extends BaseActivity implements BaseHolderInt
         }
     }
 
+    private void clickMenuItem(View view, final BaseResponse baseResponse) {
+        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final View popupView = layoutInflater.inflate(R.layout.menu_option_layout, null);
+        final PopupWindow popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                popupWindow.dismiss();
+            }
+        });
+        final TextView tvEdit = (TextView) popupView.findViewById(R.id.tv_article_menu_edit);
+        final TextView tvDelete = (TextView) popupView.findViewById(R.id.tv_article_menu_delete);
+        final TextView tvShare = (TextView) popupView.findViewById(R.id.tv_article_menu_share);
+        final TextView tvReport = (TextView) popupView.findViewById(R.id.tv_article_menu_report);
+        final Fragment fragmentCommentReaction = getSupportFragmentManager().findFragmentByTag(CommentReactionFragment.class.getName());
+        popupWindow.showAsDropDown(view);
+        tvEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CommentReactionDoc commentReactionDoc = (CommentReactionDoc) baseResponse;
+                if (AppUtils.isFragmentUIActive(fragmentCommentReaction)) {
+                    commentReactionDoc.setActive(true);
+                    commentReactionDoc.setEdit(true);
+                    ((CommentReactionFragment) fragmentCommentReaction).editCommentInList(commentReactionDoc);
+                }
+                popupWindow.dismiss();
+            }
+        });
+        tvDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CommentReactionDoc commentReactionDoc = (CommentReactionDoc) baseResponse;
+                if (AppUtils.isFragmentUIActive(fragmentCommentReaction)) {
+                    commentReactionDoc.setActive(false);
+                    commentReactionDoc.setEdit(false);
+                    ((CommentReactionFragment) fragmentCommentReaction).editCommentInList(commentReactionDoc);
+                }
+                popupWindow.dismiss();
+            }
+        });
+        tvShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "You Clicked : " + tvShare.getText(), Toast.LENGTH_SHORT).show();
+                popupWindow.dismiss();
+            }
+        });
+        tvReport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "You Clicked : " + tvReport.getText(), Toast.LENGTH_SHORT).show();
+                popupWindow.dismiss();
+            }
+        });
+        int id = view.getId();
+        switch (id) {
+            case R.id.tv_feed_article_user_menu:
+                tvEdit.setVisibility(View.GONE);
+                tvDelete.setVisibility(View.GONE);
+                break;
+            case R.id.tv_user_comment_list_menu:
+                tvShare.setVisibility(View.GONE);
+                tvReport.setVisibility(View.GONE);
+            case R.id.tv_article_menu:
+                tvShare.setVisibility(View.GONE);
+                tvReport.setVisibility(View.GONE);
+            default:
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
+        }
+    }
+
+    @OnClick(R.id.iv_article_detail_back)
+    public void onBackClick() {
+        finish();
+    }
 }

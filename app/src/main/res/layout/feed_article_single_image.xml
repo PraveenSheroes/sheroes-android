@@ -7,7 +7,6 @@
         android:id="@+id/iv_feed_article_single_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/ic_reaction_strip_background"
         android:scaleType="fitXY" />
 
     <TextView
@@ -21,6 +20,7 @@
         android:drawableLeft="@drawable/ic_timer_icon"
         android:fontFamily="@string/ID_ROBOTO_REGULAR"
         android:paddingLeft="@dimen/dp_size_5"
+        android:visibility="gone"
         android:text="1 Min Read"
         android:textColor="@color/white"
         android:textSize="@dimen/sp_size_12" />
@@ -40,6 +40,7 @@
         android:paddingRight="@dimen/dp_size_10"
         android:paddingTop="@dimen/dp_size_5"
         android:text="200 views"
+        android:visibility="gone"
         android:textColor="@color/white"
         android:textSize="@dimen/sp_size_10" />
 </FrameLayout>

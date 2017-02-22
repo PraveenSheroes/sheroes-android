@@ -31,6 +31,7 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
+import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -53,11 +54,12 @@ public class MyCommunitiesFragment  extends BaseFragment implements HomeView {
     LinearLayout liNoResult;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
-    private HomeActivityIntractionListner mHomeActivityIntractionListner;
+    private FragmentIntractionWithActivityListner mHomeActivityFragmentIntractionWithActivityListner;
     private SwipPullRefreshList mPullRefreshList;
     @Inject
     AppUtils mAppUtils;
     private FragmentListRefreshData mFragmentListRefreshData;
+    int pageNo=AppConstants.ONE_CONSTANT;
     public static MyCommunitiesFragment createInstance() {
         MyCommunitiesFragment myCommunitiesFragment = new MyCommunitiesFragment();
         return myCommunitiesFragment;
@@ -67,8 +69,8 @@ public class MyCommunitiesFragment  extends BaseFragment implements HomeView {
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            if (getActivity() instanceof HomeActivityIntractionListner) {
-                mHomeActivityIntractionListner = (HomeActivityIntractionListner) getActivity();
+            if (getActivity() instanceof FragmentIntractionWithActivityListner) {
+                mHomeActivityFragmentIntractionWithActivityListner = (FragmentIntractionWithActivityListner) getActivity();
             }
         } catch (InstantiationException exception) {
             LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
@@ -114,7 +116,7 @@ public class MyCommunitiesFragment  extends BaseFragment implements HomeView {
                 // Refresh items
                 LogUtils.info("swipe", "*****************end called");
                 mPullRefreshList.setPullToRefresh(true);
-                mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY,mFragmentListRefreshData.getPageNo()+1));
+                mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY,mFragmentListRefreshData.getPageNo()));
             }
         });
         return view;
@@ -123,6 +125,8 @@ public class MyCommunitiesFragment  extends BaseFragment implements HomeView {
     @Override
     public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
+            pageNo=mFragmentListRefreshData.getPageNo();
+            mFragmentListRefreshData.setPageNo(++pageNo);
             mPullRefreshList.allListData(feedDetailList);
             mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
             mAdapter.notifyDataSetChanged();
@@ -152,10 +156,6 @@ public class MyCommunitiesFragment  extends BaseFragment implements HomeView {
 
     }
 
-    @Override
-    public void showNwError() {
-        mHomeActivityIntractionListner.onErrorOccurence();
-    }
 
 
     @Override
@@ -171,7 +171,7 @@ public class MyCommunitiesFragment  extends BaseFragment implements HomeView {
 
     @Override
     public void showError(String errorMsg) {
-        mAdapter.notifyDataSetChanged();
+        mHomeActivityFragmentIntractionWithActivityListner.onShowErrorDialog();
     }
 
     @Override
@@ -201,8 +201,6 @@ public class MyCommunitiesFragment  extends BaseFragment implements HomeView {
         super.onResume();
     }
 
-    public interface HomeActivityIntractionListner {
-        void onErrorOccurence();
-    }
+
 
 }

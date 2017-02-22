@@ -54,7 +54,6 @@ public class GenericRecyclerViewAdapter<T extends BaseResponse> extends Recycler
         this.filterListData.add(position,(T)feedDetail);
         notifyItemChanged(position);
     }
-
     public void clearAllDataForList() {
         this.filterListData.clear();
     }

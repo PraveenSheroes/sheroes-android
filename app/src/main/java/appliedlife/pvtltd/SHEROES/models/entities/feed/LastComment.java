@@ -52,6 +52,10 @@ public class LastComment implements Parcelable {
     @Expose
     private String participantImageUrl;
 
+    @SerializedName("entity_author_user_id_l")
+    @Expose
+    private int entityAuthorUserIdL;
+
     public int getId() {
         return id;
     }

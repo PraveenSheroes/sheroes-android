@@ -30,13 +30,15 @@ public class AppConstants {
     public static final String DOTS = "...";
     public static final String S="s";
     public static final String FOR_ALL= "all";
-    public static final String FEED_SUB_TYPE= "a";
+    public static final String FEED_SUB_TYPE= "F";
     public static final String FEED_COMMUNITY = "C";
     public static final String FEED_JOB = "J";
     public static final String FEED_ARTICLE= "A";
     public static final String FEED_COMMUNITY_POST= "P";
+    public static final String FEATURED_COMMUNITY = "T";
     public static final String FRAGMENT_FLAG_CHECK = "is_fragment_open";
     public static final String COMMENTS="comments";
+    public static final String BOOKMARKS="bookmarks";
     public static final String NO_REACTION="no_reaction";
     public static final String HEART_REACTION="heart";
     public static final String HOME_FRAGMENT="home";
@@ -44,7 +46,8 @@ public class AppConstants {
     public static final String FEATURE_FRAGMENT="feature";
     public static final String MY_COMMUNITIES_FRAGMENT="my_communities";
     public static final String ARTICLE_FRAGMENT="article";
-    public static final String MY_COMMUNITIES_HEADER= "community_header";
+    public static final String COMMUNITY_POST_FRAGMENT="community_post_fragment";
+    public static final String MY_COMMUNITIES_HEADER= "COMMUNITY_HEADER";
     public static final String COMMUNITIES_DETAIL= "community_detail";
     public static final String ALL_SEARCH= "search";
     public static final int WORD_COUNT = 92;

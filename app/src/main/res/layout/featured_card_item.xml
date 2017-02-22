@@ -57,7 +57,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:text="Local group"
                     android:drawableRight="@drawable/ic_lock"
                     android:drawablePadding="@dimen/dp_size_5"
                     android:layout_marginTop="@dimen/dp_size_3"

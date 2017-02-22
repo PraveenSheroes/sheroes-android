@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -25,6 +26,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionDoc;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.LastComment;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.presenters.CommentReactionPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -35,6 +37,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.ArticleDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
+import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.AllCommentReactionView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -80,6 +83,7 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
     private FragmentOpen mFragmentOpen;
     private String mSearchDataName = AppConstants.EMPTY_STRING;
     private GenericRecyclerViewAdapter mAdapter;
+    private LinearLayoutManager mLayoutManager;
     private HomeActivityIntractionListner mHomeActivityIntractionListner;
     @Inject
     AppUtils mAppUtils;
@@ -87,7 +91,7 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
     boolean isAnonymous = false;
     private List<CommentReactionDoc> mCommentReactionDocList;
     CommentReactionDoc mCommentReactionDoc;
-
+    FragmentIntractionWithActivityListner fragmentIntractionWithActivityListner;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,6 +103,9 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
         try {
             if (getActivity() instanceof HomeActivityIntractionListner) {
                 mHomeActivityIntractionListner = (HomeActivityIntractionListner) getActivity();
+            }
+            if (getActivity() instanceof FragmentIntractionWithActivityListner) {
+                fragmentIntractionWithActivityListner = (FragmentIntractionWithActivityListner) getActivity();
             }
         } catch (InstantiationException exception) {
             LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
@@ -123,8 +130,8 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
         } else {
             mAdapter = new GenericRecyclerViewAdapter(getContext(), (HomeActivity) getActivity());
         }
-        LinearLayoutManager manager = new LinearLayoutManager(getContext());
-        mRecyclerView.setLayoutManager(manager);
+        mLayoutManager = new LinearLayoutManager(getContext());
+        mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
         if (mFragmentOpen.isCommentList()) {
             mCommentReactionPresenter.getAllCommentListFromPresenter(mAppUtils.getCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId()), mFragmentOpen.isReactionList());
@@ -156,15 +163,31 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
     @Override
     public void getAllCommentsAndReactions(CommentReactionResponsePojo commentReactionResponsePojo) {
         mCommentReactionDocList = commentReactionResponsePojo.getCommentReactionDocList();
-        if (mAdapter != null) {
+        if (mAdapter != null& StringUtil.isNotEmptyCollection(mCommentReactionDocList)) {
             mTvUserCommentHeaderText.setText(getString(R.string.ID_REPLIES) + getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mCommentReactionDocList.size()) + getString(R.string.ID_CLOSE_BRACKET));
             if (null != mCommentReactionDoc && mCommentReactionDoc.isEdit()) {
                 mCommentReactionDocList.remove(mCommentReactionDoc.getItemPosition());
                 mEtUserCommentDescription.setText(mCommentReactionDoc.getComment());
             }
-            mAdapter.setSheroesGenericListData(mCommentReactionDocList);
-            mAdapter.notifyDataSetChanged();
+            for(CommentReactionDoc commentReactionDoc:mCommentReactionDocList) {
+                LastComment lastComment = new LastComment();
+                lastComment.setAnonymous(commentReactionDoc.isAnonymous());
+                lastComment.setComment(commentReactionDoc.getComment());
+                lastComment.setParticipantImageUrl(commentReactionDoc.getParticipantImageUrl());
+                lastComment.setParticipantName(commentReactionDoc.getParticipantName());
+                List<LastComment> lastCommentList = new ArrayList<>();
+                lastCommentList.add(lastComment);
+                mFeedDetail.setLastComments(lastCommentList);
+                mFeedDetail.setNoOfComments(mCommentReactionDocList.size());
+            }
+
+        }else
+        {
+            mTvUserCommentHeaderText.setText(getString(R.string.ID_NO_REPLIES));
         }
+        mAdapter.setSheroesGenericListData(mCommentReactionDocList);
+        mLayoutManager.scrollToPositionWithOffset(0, 0);
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -173,11 +196,6 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
             mEtUserCommentDescription.setText(AppConstants.EMPTY_STRING);
             mCommentReactionPresenter.getAllCommentListFromPresenter(mAppUtils.getCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId()), mFragmentOpen.isReactionList());
         }
-    }
-
-    @Override
-    public void showNwError() {
-        mHomeActivityIntractionListner.onErrorOccurence();
     }
 
 
@@ -194,7 +212,7 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
 
     @Override
     public void showError(String errorMsg) {
-        mAdapter.notifyDataSetChanged();
+        fragmentIntractionWithActivityListner.onShowErrorDialog();
     }
 
     @Override
@@ -227,15 +245,13 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
 
     public interface HomeActivityIntractionListner {
         void onErrorOccurence();
-
-        void onDialogDissmiss(FragmentOpen isFragmentOpen);
-
+        void onDialogDissmiss(FragmentOpen isFragmentOpen,FeedDetail feedDetail);
         void onClickReactionList(FragmentOpen isFragmentOpen, FeedDetail feedDetail);
     }
 
     @OnClick(R.id.tv_user_comment_close)
     public void dismissCommentDialog() {
-        mHomeActivityIntractionListner.onDialogDissmiss(mFragmentOpen);
+        mHomeActivityIntractionListner.onDialogDissmiss(mFragmentOpen,mFeedDetail);
     }
 
     @OnClick(R.id.fl_comment_reaction)

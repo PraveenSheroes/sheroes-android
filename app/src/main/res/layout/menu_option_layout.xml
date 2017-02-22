@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/li_feed_menu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:background="@drawable/rectangle_comment_background"
-        android:orientation="vertical"
-        android:padding="@dimen/dp_size_10">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/li_feed_menu"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="right"
+    android:background="@drawable/rectangle_comment_background"
+    android:orientation="vertical"
+    android:padding="@dimen/dp_size_10">
 
     <TextView
         android:id="@+id/tv_article_menu_share"
@@ -16,7 +15,8 @@
         android:padding="@dimen/dp_size_5"
         android:text="@string/ID_SHARE"
         android:textColor="@color/dashboard_text"
-        android:textSize="@dimen/sp_size_12" />
+        android:textSize="@dimen/sp_size_12"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/tv_article_menu_edit"
@@ -25,7 +25,8 @@
         android:padding="@dimen/dp_size_5"
         android:text="@string/ID_EDIT"
         android:textColor="@color/dashboard_text"
-        android:textSize="@dimen/sp_size_12" />
+        android:textSize="@dimen/sp_size_12"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/tv_article_menu_delete"
@@ -34,7 +35,8 @@
         android:padding="@dimen/dp_size_5"
         android:text="@string/ID_DELETE"
         android:textColor="@color/dashboard_text"
-        android:textSize="@dimen/sp_size_12" />
+        android:textSize="@dimen/sp_size_12"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/tv_article_menu_report"
@@ -43,5 +45,6 @@
         android:padding="@dimen/dp_size_5"
         android:text="@string/ID_REPORT"
         android:textColor="@color/dashboard_text"
-        android:textSize="@dimen/sp_size_12" />
+        android:textSize="@dimen/sp_size_12"
+        android:visibility="gone" />
 </LinearLayout>

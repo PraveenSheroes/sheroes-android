@@ -16,9 +16,14 @@ public class FragmentOpen implements Parcelable {
     boolean articleFragment;
     boolean communityOpen;
     boolean settingFragment;
+    boolean bookmarkFragment;
     boolean isImageBlur;
 
-    public FragmentOpen(boolean isOpen, boolean reactionList, boolean commentList, boolean feedOpen, boolean articleFragment, boolean communityOpen, boolean settingFragment, boolean isImageBlur) {
+
+    public FragmentOpen() {
+    }
+
+    public FragmentOpen(boolean isOpen, boolean reactionList, boolean commentList, boolean feedOpen, boolean articleFragment, boolean communityOpen, boolean settingFragment, boolean bookmarkFragment, boolean isImageBlur) {
         this.isOpen = isOpen;
         this.reactionList = reactionList;
         this.commentList = commentList;
@@ -26,10 +31,8 @@ public class FragmentOpen implements Parcelable {
         this.articleFragment = articleFragment;
         this.communityOpen = communityOpen;
         this.settingFragment = settingFragment;
+        this.bookmarkFragment = bookmarkFragment;
         this.isImageBlur = isImageBlur;
-    }
-
-    public FragmentOpen() {
     }
 
 
@@ -97,6 +100,14 @@ public class FragmentOpen implements Parcelable {
         isImageBlur = imageBlur;
     }
 
+    public boolean isBookmarkFragment() {
+        return bookmarkFragment;
+    }
+
+    public void setBookmarkFragment(boolean bookmarkFragment) {
+        this.bookmarkFragment = bookmarkFragment;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -111,6 +122,7 @@ public class FragmentOpen implements Parcelable {
         dest.writeByte(this.articleFragment ? (byte) 1 : (byte) 0);
         dest.writeByte(this.communityOpen ? (byte) 1 : (byte) 0);
         dest.writeByte(this.settingFragment ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.bookmarkFragment ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isImageBlur ? (byte) 1 : (byte) 0);
     }
 
@@ -122,6 +134,7 @@ public class FragmentOpen implements Parcelable {
         this.articleFragment = in.readByte() != 0;
         this.communityOpen = in.readByte() != 0;
         this.settingFragment = in.readByte() != 0;
+        this.bookmarkFragment = in.readByte() != 0;
         this.isImageBlur = in.readByte() != 0;
     }
 

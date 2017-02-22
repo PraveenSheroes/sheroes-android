@@ -85,7 +85,6 @@
             android:layout_marginRight="@dimen/dp_size_12"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:lineSpacingExtra="@dimen/dp_size_5"
-            android:text="@string/ID_DASHBOARD"
             android:textColor="@color/feed_article_label"
             android:textSize="@dimen/sp_size_13" />
 
@@ -98,8 +97,7 @@
             <LinearLayout
                 android:id="@+id/li_feed_community_user_post_images"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_size_230"
-                android:background="@color/white"
+                android:layout_height="match_parent"
                 android:orientation="vertical" />
 
             <include
@@ -271,6 +269,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="right"
                 android:paddingRight="@dimen/dp_size_10"
+                android:paddingLeft="@dimen/dp_size_10"
                 android:drawableRight="@drawable/ic_menu_dashboard" />
         </LinearLayout>
 

@@ -29,7 +29,7 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
     private LinearLayoutManager mManager;
     private int previousTotal = 0;
     private boolean loading = true;
-    private int visibleThreshold = 2;
+    private int visibleThreshold = 1;
     int firstVisibleItem, visibleItemCount, totalItemCount;
     private FragmentListRefreshData mFragmentListRefreshData;
     public HidingScrollListener(HomePresenter homePresenter, RecyclerView recyclerView, LinearLayoutManager manager, FragmentListRefreshData fragmentListRefreshData) {
@@ -78,18 +78,20 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                 previousTotal = totalItemCount;
             }
         }
-        totalItemCount = mManager.getItemCount();
         int lastVisibleItem = mManager.findLastVisibleItemPosition();
 
-        if (!loading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
+        if (totalItemCount>visibleThreshold&&!loading && totalItemCount <=(lastVisibleItem + visibleThreshold)) {
             if(null!=mFragmentListRefreshData&& StringUtil.isNotNullOrEmptyString(mFragmentListRefreshData.getCallFromFragment())) {
-                int pageNo=mFragmentListRefreshData.getPageNo()+1;
+                int pageNo=mFragmentListRefreshData.getPageNo();
                 switch (mFragmentListRefreshData.getCallFromFragment()) {
                     case AppConstants.ARTICLE_FRAGMENT:
                         mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_ARTICLE,pageNo));
                         break;
+                    case AppConstants.COMMUNITY_POST_FRAGMENT:
+                        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY_POST,pageNo));
+                        break;
                     case AppConstants.FEATURE_FRAGMENT:
-                        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY,pageNo));
+                        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEATURED_COMMUNITY,pageNo));
                         break;
                     case AppConstants.MY_COMMUNITIES_FRAGMENT:
                         mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY,pageNo));
@@ -98,10 +100,15 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                         mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE,pageNo));
                         break;
                     case AppConstants.COMMUNITY_DETAIL:
-                        mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_SUB_TYPE,pageNo,mFragmentListRefreshData.getIdFeedDetail()));
+                        mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST,pageNo,mFragmentListRefreshData.getIdFeedDetail()));
                         break;
                     case AppConstants.ARTICLE_DETAIL:
-                        mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_SUB_TYPE,pageNo,mFragmentListRefreshData.getIdFeedDetail()));
+                        mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_ARTICLE,pageNo,mFragmentListRefreshData.getIdFeedDetail()));
+                        break;
+                    case AppConstants.BOOKMARKS:
+                        mHomePresenter.getBookMarkFromPresenter(mAppUtils.getBookMarks(pageNo));
+                        break;
+
                     default:
                         LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + mFragmentListRefreshData.getCallFromFragment());
                 }

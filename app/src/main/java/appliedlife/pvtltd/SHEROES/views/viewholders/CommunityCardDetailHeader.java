@@ -10,10 +10,11 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Praveen_Singh on 01-02-2017.
@@ -34,17 +35,28 @@ public class CommunityCardDetailHeader extends BaseViewHolder<FeedDetail> {
     public CommunityCardDetailHeader(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
-        this.viewInterface = baseHolderInterface;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
+        this.viewInterface = baseHolderInterface;
+
     }
 
     @Override
     public void bindData(FeedDetail item, final Context context, int position) {
         this.dataItem = item;
-        cardCommunityDetail.setOnClickListener(this);
+        if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
+            tvCommunityName.setText(dataItem.getNameOrTitle());
+        }
+        if (StringUtil.isNotNullOrEmptyString(dataItem.getCommunityType())) {
+            tvCommunityRelated.setText(dataItem.getCommunityType());
+        }
+
     }
 
-
+    @OnClick(R.id.card_community_detail)
+    public void onBackClick()
+    {
+        viewInterface.handleOnClick(dataItem, cardCommunityDetail);
+    }
     @Override
     public void viewRecycled() {
 
@@ -54,14 +66,6 @@ public class CommunityCardDetailHeader extends BaseViewHolder<FeedDetail> {
     @Override
     public void onClick(View view) {
 
-        int id = view.getId();
-        switch (id) {
-            case R.id.card_community_detail:
-                viewInterface.handleOnClick(dataItem,cardCommunityDetail);
-                break;
-            default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
-        }
     }
 
 }

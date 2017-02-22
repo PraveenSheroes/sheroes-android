@@ -124,11 +124,6 @@ public class ProfileFullViewFragment extends BaseFragment implements HomeView {
 
     }
 
-    @Override
-    public void showNwError() {
-        mHomeActivityIntractionListner.onErrorOccurence();
-    }
-
 
     @Override
     public void startProgressBar() {

@@ -43,7 +43,6 @@ public class HomeSpinnerFragment extends BaseFragment implements HomeView {
     @Bind(R.id.pb_home_progress_bar)
     ProgressBar mProgressBar;
     GenericRecyclerViewAdapter mAdapter;
-    private HomeActivityIntractionWithSpinnerListner mHomeActivityIntractionWithSpinnerListner;
     private List<HomeSpinnerItem> mHomeSpinnerItemList;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,13 +56,6 @@ public class HomeSpinnerFragment extends BaseFragment implements HomeView {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        try {
-            if (getActivity() instanceof HomeActivityIntractionWithSpinnerListner) {
-                mHomeActivityIntractionWithSpinnerListner = (HomeActivityIntractionWithSpinnerListner) getActivity();
-            }
-        } catch (InstantiationException exception) {
-            LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
-        }
     }
 
     @Nullable
@@ -109,10 +101,6 @@ public class HomeSpinnerFragment extends BaseFragment implements HomeView {
 
     }
 
-    @Override
-    public void showNwError() {
-        mHomeActivityIntractionWithSpinnerListner.onErrorOccurence();
-    }
 
 
     @Override
@@ -128,7 +116,6 @@ public class HomeSpinnerFragment extends BaseFragment implements HomeView {
 
     @Override
     public void showError(String errorMsg) {
-        mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -158,7 +145,4 @@ public class HomeSpinnerFragment extends BaseFragment implements HomeView {
         super.onResume();
     }
 
-    public interface HomeActivityIntractionWithSpinnerListner {
-        void onErrorOccurence();
-    }
 }

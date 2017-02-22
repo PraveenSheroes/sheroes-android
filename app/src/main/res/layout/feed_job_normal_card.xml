@@ -156,6 +156,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
+                android:visibility="invisible"
                 android:textColor="@color/search_tab_text"
                 android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:text="@string/ID_APPLIED" />

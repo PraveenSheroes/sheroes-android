@@ -38,6 +38,7 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
+import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -65,7 +66,7 @@ public class HomeFragment extends BaseFragment implements HomeView {
     LinearLayout liNoResult;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
-    private HomeActivityIntractionListner mHomeActivityIntractionListner;
+    private FragmentIntractionWithActivityListner mHomeActivityFragmentIntractionWithActivityListner;
     private SwipPullRefreshList mPullRefreshList;
     @Inject
     AppUtils mAppUtils;
@@ -74,7 +75,7 @@ public class HomeFragment extends BaseFragment implements HomeView {
     int position;
     int pressedEmoji;
     boolean listLoad = true;
-
+    int pageNo=AppConstants.ONE_CONSTANT;
     public static HomeFragment createInstance(int itemsCount) {
         HomeFragment partThreeFragment = new HomeFragment();
         // Bundle bundle = new Bundle();
@@ -87,8 +88,8 @@ public class HomeFragment extends BaseFragment implements HomeView {
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            if (getActivity() instanceof HomeActivityIntractionListner) {
-                mHomeActivityIntractionListner = (HomeActivityIntractionListner) getActivity();
+            if (getActivity() instanceof FragmentIntractionWithActivityListner) {
+                mHomeActivityFragmentIntractionWithActivityListner = (FragmentIntractionWithActivityListner) getActivity();
             }
         } catch (Fragment.InstantiationException exception) {
             LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
@@ -162,7 +163,7 @@ public class HomeFragment extends BaseFragment implements HomeView {
                 listLoad = true;
                 LogUtils.info("swipe", "*****************end called");
                 mPullRefreshList.setPullToRefresh(true);
-                mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo() + 1));
+                mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
             }
         });
         return view;
@@ -210,6 +211,8 @@ public class HomeFragment extends BaseFragment implements HomeView {
     @Override
     public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
+            pageNo=mFragmentListRefreshData.getPageNo();
+            mFragmentListRefreshData.setPageNo(++pageNo);
             mPullRefreshList.allListData(feedDetailList);
             mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
             mAdapter.setCallForRecycler(AppConstants.FEED_SUB_TYPE);
@@ -234,7 +237,7 @@ public class HomeFragment extends BaseFragment implements HomeView {
                 likeSuccess(success);
                 break;
             case AppConstants.TWO_CONSTANT:
-                commentSuccess(success);
+
                 break;
             case AppConstants.THREE_CONSTANT:
                 bookMarkSuccess(success);
@@ -242,12 +245,9 @@ public class HomeFragment extends BaseFragment implements HomeView {
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + successFrom);
         }
-
-        LogUtils.info("likes", "*********************like success******" + success);
     }
-
-    private void commentSuccess(String success) {
-
+    public void commentListRefresh(FeedDetail feedDetail) {
+        mAdapter.setDataOnPosition(feedDetail,feedDetail.getItemPosition());
     }
 
     private void bookMarkSuccess(String success) {
@@ -299,10 +299,6 @@ public class HomeFragment extends BaseFragment implements HomeView {
         mHomePresenter.fetchMasterDataTypes();
     }
 
-    @Override
-    public void showNwError() {
-        // mHomeActivityIntractionListner.onErrorOccurence();
-    }
 
 
     @Override
@@ -320,7 +316,7 @@ public class HomeFragment extends BaseFragment implements HomeView {
 
     @Override
     public void showError(String errorMsg) {
-
+        mHomeActivityFragmentIntractionWithActivityListner.onShowErrorDialog();
     }
 
     @Override
@@ -350,8 +346,5 @@ public class HomeFragment extends BaseFragment implements HomeView {
         super.onResume();
     }
 
-    public interface HomeActivityIntractionListner {
-        void onErrorOccurence();
-    }
 
 }

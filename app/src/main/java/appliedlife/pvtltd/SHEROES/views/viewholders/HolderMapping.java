@@ -206,10 +206,6 @@ public enum HolderMapping {
                         case AppConstants.FEED_COMMUNITY_POST:
                             returnView = FEED_COMMUNITY_POST.ordinal();
                             break;
-                        //TODO: communitydetail header need to change
-                        case AppConstants.MY_COMMUNITIES_HEADER:
-                            returnView = COMMUNITY_DETAIL_HEADER.ordinal();
-                            break;
                         default:
                     }
                 }
@@ -217,54 +213,46 @@ public enum HolderMapping {
                 if (item instanceof FeedDetail) {
                     FeedDetail feedDetail = ((FeedDetail) item);
                     String feedType = feedDetail.getSubType().toUpperCase();
-                    boolean isSearch = feedDetail.isActive();
-                   // if(!isSearch) {
-                        switch (feedType) {
-                            case AppConstants.FEED_ARTICLE:
-                                returnView = ARTICLE_CARD_HOLDER.ordinal();
-                                break;
-                            case AppConstants.FEED_COMMUNITY:
-                                if (feedDetail.isFeatured()) {
-                                    returnView = FEATURE_CARD.ordinal();
-                                    //   return SUGGESTED_CARD_HOLDER.ordinal();
-                                } else {
-                                    returnView = MY_COMMUNITIES_CARD.ordinal();
-                                }
-                                break;
-                            case AppConstants.FEED_JOB:
-                                returnView = FEED_JOB.ordinal();
-                                break;
-                            //TODO: communitydetail header need to change
-                            case AppConstants.MY_COMMUNITIES_HEADER:
-                                returnView = COMMUNITY_DETAIL_HEADER.ordinal();
-                                break;
-                            default:
+                    switch (feedType) {
+                        case AppConstants.FEED_ARTICLE:
+                            returnView = ARTICLE_CARD_HOLDER.ordinal();
+                            break;
+                        case AppConstants.FEED_COMMUNITY:
+                            returnView = MY_COMMUNITIES_CARD.ordinal();
+                            //   return SUGGESTED_CARD_HOLDER.ordinal();
+                            break;
+                        case AppConstants.FEATURED_COMMUNITY:
+                            returnView = FEATURE_CARD.ordinal();
+                            break;
+                        case AppConstants.FEED_JOB:
+                            returnView = FEED_JOB.ordinal();
+                            break;
+                        case AppConstants.FEED_COMMUNITY_POST:
+                            returnView = FEED_COMMUNITY_POST.ordinal();
+                            break;
+                        case AppConstants.MY_COMMUNITIES_HEADER:
+                            returnView = COMMUNITY_DETAIL_HEADER.ordinal();
+                            break;
+                        default:
 
-                        }
-                   /* }
-                    else
-                    {
-                        returnView = SEARCH_MODULE.ordinal();
-                    }*/
+                    }
                 } else if (item instanceof DrawerItems) {
                     returnView = DRAWER_ITEMS.ordinal();
                 } else if (item instanceof CommentReactionDoc) {
                     CommentReactionDoc commentReactionDoc = ((CommentReactionDoc) item);
-                    if(commentReactionDoc.getLikeValue()>AppConstants.NO_REACTION_CONSTANT)
-                    {
+                    if (commentReactionDoc.getLikeValue() > AppConstants.NO_REACTION_CONSTANT) {
                         returnView = REACTION.ordinal();
-                    }
-                    else {
+                    } else {
                         returnView = COMMENT.ordinal();
                     }
-                }else if (item instanceof HomeSpinnerItem) {
+                } else if (item instanceof HomeSpinnerItem) {
                     String id = ((HomeSpinnerItem) item).getId();
                     if (id.equalsIgnoreCase(String.valueOf(totalCount))) {
                         return HOME_SPINNER_FOOTER.ordinal();
                     } else {
                         return HOME_SPINNER_ITEMS.ordinal();
                     }
-                }else if (item instanceof ArticleDetailPojo) {
+                } else if (item instanceof ArticleDetailPojo) {
                     returnView = ARTICLE_DETAIL_HOLDER.ordinal();
                 }
             }

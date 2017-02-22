@@ -5,18 +5,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-import com.crashlytics.android.Crashlytics;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +35,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.EditNameDialogLi
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by Ajit Kumar on 01-02-2017.
@@ -94,7 +88,7 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
         mOwnerPresenter.getCommunityList();
 
 
-        Fabric.with(getActivity(), new Crashlytics());
+       // Fabric.with(getActivity(), new Crashlytics());
 
         mSpinnerMenuItems=new ArrayList();
         mSpinnerMenuItems.add(getActivity().getString(R.string.ID_EDIT));

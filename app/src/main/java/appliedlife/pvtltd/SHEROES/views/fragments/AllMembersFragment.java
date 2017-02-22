@@ -178,7 +178,7 @@ public void communityClosePress()
    /* @OnClick(R.id.tv_user_comment_header_text)
     public void dismissCommentDialog()
     {
-        mHomeActivityIntractionListner.onDialogDissmiss(mFragmentOpen);
+        mHomeActivityIntractionListner.onDialogDismissWithListRefresh(mFragmentOpen);
     }
     @OnClick(R.id.fl_comment_reaction)
     public void openReactionList()

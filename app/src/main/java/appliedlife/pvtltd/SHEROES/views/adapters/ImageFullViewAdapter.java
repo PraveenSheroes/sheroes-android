@@ -45,7 +45,7 @@ public class ImageFullViewAdapter extends PagerAdapter {
         this.mContext = context;
         this.mFeedDetail = feedDetail;
         this.mFragmentOpen = fragmentOpen;
-            mTotalCoverImages = mFeedDetail.getImageUrls();
+        mTotalCoverImages = mFeedDetail.getImageUrls();
         mHomeActivityIntraction = (HomeActivityIntraction) context;
     }
 
