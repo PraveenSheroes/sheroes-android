@@ -35,7 +35,7 @@ public class CreateCommunityActivity extends BaseActivity implements CreateCommu
         ButterKnife.bind(this);
         CreateCommunityFragment frag = new CreateCommunityFragment();
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
-                .replace(R.id.fl_fragment_container, frag,CreateCommunityFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+                .replace(R.id.create_community_container, frag,CreateCommunityFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
 
     }
 
@@ -65,10 +65,14 @@ public class CreateCommunityActivity extends BaseActivity implements CreateCommu
     @Override
     public void onBackPress() {
         getSupportFragmentManager().popBackStack();
+      //  finish();
 
     }
 
-
+    @Override
+    public void onBackPressed() {
+    finish();
+    }
 
     @Override
     public void callCommunityTagPage() {

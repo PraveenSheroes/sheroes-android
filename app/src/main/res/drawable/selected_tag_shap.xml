@@ -13,6 +13,6 @@
         android:top="@dimen/dp_size_8"
         android:bottom="@dimen/dp_size_8"/>
 
-    <solid android:color="@color/grey8"/>
+    <solid android:color="@color/tags_shap_selected_color"/>
 
 </shape>

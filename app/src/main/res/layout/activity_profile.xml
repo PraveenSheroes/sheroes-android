@@ -19,9 +19,7 @@
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
             app:contentScrim="@color/search_tab_text"
-            app:expandedTitleMarginEnd="@dimen/dp_size_54"
-            app:expandedTitleMarginStart="@dimen/dp_size_50"
-            app:expandedTitleMarginTop="@dimen/dp_size_160"
+
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <appliedlife.pvtltd.SHEROES.views.cutomeviews.SquareImageView

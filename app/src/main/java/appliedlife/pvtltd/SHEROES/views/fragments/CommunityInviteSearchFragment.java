@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -49,6 +50,8 @@ public class CommunityInviteSearchFragment extends BaseFragment implements Invit
     public EditText mSearchEditText;
     @Bind(R.id.tv_back_community_tag)
     TextView mBackCommunityTag;
+    @Bind(R.id.lnr_invite_member)
+    LinearLayout mLnr_invite_member;
     private String mSearchDataName = AppConstants.EMPTY_STRING;
     private GenericRecyclerViewAdapter mAdapter;
     private InviteSearchActivityIntractionListner mHomeSearchActivityIntractionListner;
@@ -77,6 +80,7 @@ public class CommunityInviteSearchFragment extends BaseFragment implements Invit
         View view = inflater.inflate(R.layout.invitesearch, container, false);
         ButterKnife.bind(this, view);
         mSearchModPresenter.attachView(this);
+        mSearchEditText.setHint("Search Users");
         editTextWatcher();
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new GenericRecyclerViewAdapter(getContext(), (CommunitiesDetailActivity) getActivity());
@@ -155,7 +159,6 @@ public class CommunityInviteSearchFragment extends BaseFragment implements Invit
         mSearchEditText.addTextChangedListener(dataSearchTextWatcher());
         mSearchEditText.setFocusableInTouchMode(true);
         mSearchEditText.requestFocus();
-
     }
 
     /**
@@ -178,6 +181,9 @@ public class CommunityInviteSearchFragment extends BaseFragment implements Invit
             public void afterTextChanged(Editable inputSearch) {
                 /**As soon as user starts typing take the scroll to top **/
                 mSearchDataName = inputSearch.toString();
+                mLnr_invite_member.setVisibility(View.GONE);
+                mRecyclerView.setVisibility(View.VISIBLE);
+
                 if (!((CommunitiesDetailActivity) getActivity()).mIsDestroyed) {
                     mAdapter.getFilter().filter(mSearchDataName);
                 }

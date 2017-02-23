@@ -43,6 +43,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.AllMembersFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityInviteSearchFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOpenAboutFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOwnerSearchFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityRequestedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.OwnerRemoveDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareCommunityFragment;
@@ -51,7 +52,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
-public class CommunitiesDetailActivity extends BaseActivity implements ShareCommunityFragment.ShareCommunityActivityIntractionListner, CommunityInviteSearchFragment.InviteSearchActivityIntractionListner, CommunityRequestedFragment.RequestHomeActivityIntractionListner, AllMembersFragment.MembersHomeActivityIntractionListner, BaseHolderInterface, CommunityOpenAboutFragment.AboutCommunityActivityIntractionListner {
+public class CommunitiesDetailActivity extends BaseActivity implements  CommunityOwnerSearchFragment.InviteOwnerActivityIntractionListner,ShareCommunityFragment.ShareCommunityActivityIntractionListner,CommunityInviteSearchFragment.InviteSearchActivityIntractionListner,CommunityRequestedFragment.RequestHomeActivityIntractionListner,AllMembersFragment.MembersHomeActivityIntractionListner,BaseHolderInterface,CommunityOpenAboutFragment.AboutCommunityActivityIntractionListner {
     private final String TAG = LogUtils.makeLogTag(CommunitiesDetailActivity.class);
     @Bind(R.id.app_bar_coomunities_detail)
     AppBarLayout mAppBarLayout;
@@ -206,7 +207,14 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
                 .replace(R.id.about_community_container, frag).addToBackStack(null).commitAllowingStateLoss();
 
     }
+    @Override
+    public void ownerClick() {
 
+        CommunityOwnerSearchFragment frag = new CommunityOwnerSearchFragment();
+        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.bottom_to_top_slide_reverse_anim)
+                .replace(R.id.about_community_container, frag).addToBackStack(null).commitAllowingStateLoss();
+
+    }
     @Override
     public void requestClick() {
         CommunityRequestedFragment frag = new CommunityRequestedFragment();
@@ -232,6 +240,12 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
     @Override
     public void onErrorOccurence() {
 
+
+    }
+
+    @Override
+    public void closeOwner() {
+        getSupportFragmentManager().popBackStack();
 
     }
 

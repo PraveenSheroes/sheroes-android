@@ -9,6 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -32,6 +35,7 @@ public class PersonnelProfileFragment extends BaseFragment {
     @Bind(R.id.rv_spinner_list)
     RecyclerView mRecyclerView;
     GenericRecyclerViewAdapter mAdapter;
+
     private HomeActivityIntractionWithPersonnelProfile mHomeActivityIntractionWithPersonnelProfile;
     private FragmentListRefreshData mFragmentListRefreshData;
     public static PersonnelProfileFragment createInstance() {
@@ -63,6 +67,7 @@ public class PersonnelProfileFragment extends BaseFragment {
         mAdapter = new GenericRecyclerViewAdapter(getContext(),(ProfileActicity) getActivity());
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mAdapter);
+
         mRecyclerView.addOnScrollListener(new HidingScrollListener(mRecyclerView, manager,mFragmentListRefreshData) {
             @Override
             public void onHide() {
@@ -78,9 +83,11 @@ public class PersonnelProfileFragment extends BaseFragment {
 
             }
         });
-        checkForSpinnerItemSelection();
+       // checkForSpinnerItemSelection();
+        //setListValue();
         return view;
     }
+
 
     private void checkForSpinnerItemSelection() {
         if (StringUtil.isNotEmptyCollection(AppUtils.profileDetail())) {

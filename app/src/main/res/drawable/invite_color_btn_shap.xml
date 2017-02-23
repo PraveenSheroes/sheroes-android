@@ -5,11 +5,11 @@
         android:width="@dimen/dp_size_1"
         android:color="@color/blue"/>
     <corners
-        android:radius="@dimen/dp_size_5" />
+        android:radius="@dimen/dp_size_10" />
 
     <padding
-        android:left="@dimen/dp_size_8"
-        android:right="@dimen/dp_size_8"
+        android:left="@dimen/dp_size_15"
+        android:right="@dimen/dp_size_15"
         android:top="@dimen/dp_size_3"
         android:bottom="@dimen/dp_size_3"/>
 

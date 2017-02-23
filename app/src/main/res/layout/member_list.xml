@@ -32,7 +32,14 @@
         android:text="Owner"
 
         />
-
+    <TextView
+        android:id="@+id/cross"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/dp_size_20"
+        android:background="@drawable/ic_cross" />
     <View
         android:layout_width="fill_parent"
         android:layout_height="@dimen/sp_size_1"

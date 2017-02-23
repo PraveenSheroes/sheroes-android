@@ -73,7 +73,7 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_MEMBERS">Members</string>
     <string name="ID_INVITE">Invite</string>
     <string name="ID_TOTAL_IMAGES">4+</string>
-    <string name="ID_SHARE">Share</string>
+    <string name="ID_SHARE">Share with your community…</string>
     <string name="ID_EDIT">Edit</string>
     <string name="ID_DELETE">Delete</string>
     <string name="ID_REPORT">Report as spam</string>
@@ -421,7 +421,7 @@ etur adipiscing elit,sed do eiusmod tempor incididunt ut…</string>
     <string name="ID_COMMUNITITES_NAME">Ranigarh Women’s Empowerment and Development Group</string>
     <string name="ID_SHARE_LINK">https://sheroes.com/community/ranigarh-women’s-empowerment-and-development-group/Mjc0MA==</string>
     <string name="ID_COMM_SHARE_EMAIL_LINK">SHARE COMMUNITY LINK ON EMAIL</string>
-    <string name="ID_EMAIL_HINT_TEXT">Enter Email id</string>
+    <string name="ID_EMAIL_HINT_TEXT">Enter emails to share...</string>
     <string name="ID_SAHRE_TEXT">SHARE</string>
     <string name="ID_COMM_SHARE_BUTTON">SHARE VIA SOCIAL MEDIA</string>
 
@@ -448,11 +448,38 @@ etur adipiscing elit,sed do eiusmod tempor incididunt ut…</string>
     <string name="ID_COMMUNITY_JOIN_REGION2">I am already a member of this community outside of SHEROES</string>
     <string name="ID_USER_NAME">User Name</string>
     <string name="ID_COMMUNITY_REMOVE_OWNER">Are you sure you want to remove this owner ?</string>
+    <string name="ID_INVITE_MEMBER_COMMUNITY">Invite members to your community</string>
+    <string name="ID_INVITE_OWNER_COMMUNITY">Invite owner to your community</string>
+    <string name="ID_INVITE_USER_TEXT">SHEROES users only</string>
+    <string name="ID_MIN_LEBEL"></string>
+    <string name="ID_MAX_LABEL"></string>
+    <string name="ID_EXP">Experience</string>
+
+    <string name="ID_WORK_FROM_HOME">Work From Home</string>
+    <string name="ID_FREELANCE_RORK">Freelance Work</string>
+    <string name="ID_CORPORATE_JOBS">Corporate Jobs</string>
+    <string name="ID_INTERNSHIP_VOLUNTEER">Internship/Volunteer</string>
+    <string name="ID_BUSSINESS_OPPORTUNITIES">Business Opportunities</string>
+    <string name="ID_PART_TIME">Part Time</string>
+    <string name="ID_FULL_TIME">Full Time</string>
+    <string name="ID_JOB_PACKAGE">250K/Annum</string>
+    <string name="ID_JOB_OPENING">2 Openings</string>
+    <string name="ID_JOB_OPT">Work from home | Part Time, Corporate Job | Full time</string>
+    <string name="ID_JOB_SKILL">Social Media, Process Design, Data Analytics, Creativity, Communication</string>
+    <string name="ID_JOB_START_DATE">12 Dec, 2016</string>
+    <string name="ID_JOB_END_DATE">12 Jan, 2017</string>
+    <string name="ID_JOB_EDUCATION">B.COM, Bachelors in Communications</string>
+    <string name="ID_JOB_LOCATION">Mumbai, India</string>
+    <string name="ID_JOB_DES">Description</string>
+
+
     <string-array name="name">
+
+        <item>Topic/Interest</item>
         <item>Associate/Employee engagement</item>
         <item>Group</item>
         <item>Company/Brand</item>
-        <item>Organisation</item>
+        <item>Organization</item>
     </string-array>
 
 

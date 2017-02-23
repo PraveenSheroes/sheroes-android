@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:baselineAligned="false"
     android:gravity="center_horizontal"
+    android:background="@color/white"
     tools:context="appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityActivity">
 
     <RelativeLayout
@@ -27,8 +28,8 @@
 
         <TextView
             android:id="@+id/iv_create_community_cross"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/dp_size_14"
+            android:layout_height="@dimen/dp_size_14"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:background="@drawable/ic_cross"
@@ -88,13 +89,14 @@
                     android:textSize="10sp"/>
 
 
-                <ImageView
-                    android:id="@+id/iv_create_community_logo"
+                <TextView
+                    android:id="@+id/tv_create_community_logo"
                     android:layout_width="@dimen/dp_size_60"
                     android:layout_height="@dimen/dp_size_60"
                     android:layout_gravity="center_horizontal|bottom"
+                    android:padding="@dimen/dp_size_18"
                     android:adjustViewBounds="false"
-                    android:background="@drawable/rectangle_shap"
+                    android:background="@drawable/create_community_rectangle_shap"
                     android:drawableLeft="@drawable/camera_ico"
                     android:scaleType="fitXY"/>
             </FrameLayout>

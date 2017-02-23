@@ -31,7 +31,7 @@ import butterknife.OnClick;
  * Created by Ajit Kumar on 13-01-2017.
  */
 
-public class CommunityTypeFragment extends BaseDialogFragment implements CommunityView,CommunityTypeAdapter.CommunityTypeAdapterCallback {
+public class CommunityTypeFragment extends BaseDialogFragment implements CommunityView, CommunityTypeAdapter.CommunityTypeAdapterCallback {
     @Bind(R.id.tv_community_type_submit)
     TextView mcommunity_type_submit;
     @Bind(R.id.lv_community_type_listview)
@@ -48,15 +48,17 @@ public class CommunityTypeFragment extends BaseDialogFragment implements Communi
     public void onAttach(Context context) {
         super.onAttach(context);
     }
+
     CommunityTypeFragment(CreateCommunityFragment context) {
         try {
             if (context instanceof MyDialogFragmentListener) {
-                mHomeActivityIntractionListner = (MyDialogFragmentListener)context;
+                mHomeActivityIntractionListner = (MyDialogFragmentListener) context;
             }
         } catch (InstantiationException exception) {
             LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
         }
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -64,7 +66,7 @@ public class CommunityTypeFragment extends BaseDialogFragment implements Communi
         ButterKnife.bind(this, view);
 
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-       // tryAgain.setOnClickListener(this);
+        // tryAgain.setOnClickListener(this);
 //*-
 //        finishParent = getArguments().getBoolean(DISMISS_PARENT_ON_OK_OR_BACK, false);
         setCancelable(true);
@@ -73,33 +75,34 @@ public class CommunityTypeFragment extends BaseDialogFragment implements Communi
         rowItem = new ArrayList<CommunityType>();
         ItemName = getResources().getStringArray(R.array.name);
 
-        for(int i = 0 ; i < ItemName.length ; i++)
-        {
+        for (int i = 0; i < ItemName.length; i++) {
             CommunityType itm = new CommunityType(ItemName[i]);
             rowItem.add(itm);
         }
 
-        madapter = new CommunityTypeAdapter(getActivity(), rowItem,mcommunity_type_submit);
+        madapter = new CommunityTypeAdapter(getActivity(), rowItem, mcommunity_type_submit);
         madapter.setCallback(this);
         mCommunityTypelistView.setAdapter(madapter);
 
 
         return view;
     }
+
     @OnClick(R.id.tv_community_type_submit)
-    public void onDoneClick()
-    {
-       Toast.makeText(getActivity(), mCommunityTypelistView.getSelectedItem()+"",Toast.LENGTH_LONG).show();
+    public void onDoneClick() {
+        Toast.makeText(getActivity(), mCommunityTypelistView.getSelectedItem() + "", Toast.LENGTH_LONG).show();
     }
+
     @Override
     public void onStart() {
         super.onStart();
 
     }
-    public void doneClick(String community_type)
-    {
-        mHomeActivityIntractionListner.onAddFriendSubmit(community_type,"");
+
+    public void doneClick(String community_type) {
+        mHomeActivityIntractionListner.onAddFriendSubmit(community_type, "");
     }
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         return new Dialog(getActivity(), getTheme()) {
@@ -112,8 +115,6 @@ public class CommunityTypeFragment extends BaseDialogFragment implements Communi
             }
         };
     }
-
-
 
 
     @Override
@@ -130,11 +131,12 @@ public class CommunityTypeFragment extends BaseDialogFragment implements Communi
     public void showNwError() {
 
     }
+
     @Override
     public void communityType(String communitytype) {
-        Toast.makeText(getActivity(),communitytype,Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), communitytype, Toast.LENGTH_LONG).show();
         getDialog().cancel();
-        mHomeActivityIntractionListner.onAddFriendSubmit(communitytype,"");
+        mHomeActivityIntractionListner.onAddFriendSubmit(communitytype, "");
 
     }
 
@@ -161,6 +163,7 @@ public class CommunityTypeFragment extends BaseDialogFragment implements Communi
 
     public interface MyDialogFragmentListener {
         void onErrorOccurence();
+
         void onAddFriendSubmit(String communitynm, String image);
     }
 }

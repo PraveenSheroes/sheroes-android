@@ -4,7 +4,8 @@
       xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
+        android:layout_marginTop="@dimen/dp_size_10"
+        android:layout_marginBottom="@dimen/dp_size_10"
         android:background="@color/white"
         android:orientation="horizontal">
 
@@ -16,6 +17,7 @@
             android:paddingTop="@dimen/dp_size_16"
             android:paddingBottom="@dimen/dp_size_16"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:hint="@string/ID_ABOUT_COMMUNITY_DES"
             android:textColor="@color/text_color_contactdetails_page"
@@ -27,7 +29,9 @@
             android:layout_height="wrap_content"
             android:gravity="top"
             android:layout_gravity="right"
+            android:layout_marginLeft="@dimen/dp_size_16"
             android:paddingRight="@dimen/dp_size_16"
+            android:paddingBottom="@dimen/dp_size_16"
             android:paddingTop="@dimen/dp_size_16"
             android:drawableRight="@drawable/ic_edit_icon"
             />

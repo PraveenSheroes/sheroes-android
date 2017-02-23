@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/fully_transparent"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+    <ImageView
+        android:id="@+id/tv_back_btn"
+        android:layout_width="@dimen/dp_size_16"
+        android:layout_height="@dimen/dp_size_12"
+        android:layout_gravity="left|center"
+        android:layout_marginLeft="@dimen/dp_size_10"
+        android:background="@drawable/ic_back_black"/>
+    <ImageView
+        android:id="@+id/iv_search_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="@dimen/dp_size_4"
+        android:background="@drawable/ic_search_icon"
+        android:importantForAccessibility="no" />
+    <EditText
+        android:id="@+id/et_search_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/fully_transparent"
+        android:hint="@string/ID_SEARCH"
+        android:textColorHint="@color/searchbox_hint_text_color"
+        android:textColor="@color/searchbox_hint_text_color"
+        android:inputType="text"
+        android:textSize="@dimen/sp_size_15"
+        android:padding="@dimen/dp_size_20" />
+    </LinearLayout>
+
+</LinearLayout>
+

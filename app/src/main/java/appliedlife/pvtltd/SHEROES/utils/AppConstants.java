@@ -42,6 +42,7 @@ public class AppConstants {
     public static final String NO_REACTION="no_reaction";
     public static final String HEART_REACTION="heart";
     public static final String HOME_FRAGMENT="home";
+    public static final String JOB_FRAGMENT="job";
     public static final String PROFILE_FRAGMENT="profile";
     public static final String FEATURE_FRAGMENT="feature";
     public static final String MY_COMMUNITIES_FRAGMENT="my_communities";
@@ -55,6 +56,7 @@ public class AppConstants {
     public static final String IMAGE_FULL_VIEW = "image_view";
     public static final String BACK_SLASH="/";
     public static final String ARTICLE_DETAIL = "article_detail";
+    public static final String JOB_DETAIL = "job_detail";
     public static final String COMMUNITY_DETAIL = "community_detail";
     public static final String PIPE="|";
     public static final String SUCCESS= "SUCCESS";

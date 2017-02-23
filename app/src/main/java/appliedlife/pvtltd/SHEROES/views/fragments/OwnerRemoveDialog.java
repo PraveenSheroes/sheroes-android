@@ -20,7 +20,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * Created by SHEROES-TECH on 09-02-2017.
+ * Created by Ajit Kumar on 09-02-2017.
  */
 
 public class OwnerRemoveDialog extends BaseDialogFragment {

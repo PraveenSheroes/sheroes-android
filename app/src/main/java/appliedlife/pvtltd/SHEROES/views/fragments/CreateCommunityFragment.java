@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -78,8 +79,8 @@ public class CreateCommunityFragment extends BaseFragment implements CreateCommu
     @Bind(R.id.iv_create_community_cover_img)
     ImageView mIv_cover;
 
-    @Bind(R.id.iv_create_community_logo)
-    ImageView mIvlogo;
+    @Bind(R.id.tv_create_community_logo)
+    TextView mIvlogo;
 
     @Bind(R.id.tv_create_community_submit)
     TextView mTv_create;
@@ -92,6 +93,7 @@ public class CreateCommunityFragment extends BaseFragment implements CreateCommu
 
     @Bind(R.id.et_create_community_tags)
     EditText mEt_create_community_tags;
+
 
     private final String mTAG = LogUtils.makeLogTag(CreateCommunityFragment.class);
     private CreateCommunityActivityIntractionListner mCreatecommunityIntractionListner;
@@ -147,6 +149,20 @@ public class CreateCommunityFragment extends BaseFragment implements CreateCommu
     {
         mImage_type=1;
      checkStoragePermission();
+        selectImageOption();
+    }
+    @OnClick(R.id.iv_create_community_cover_img)
+    public void coverImageClick()
+    {
+        mImage_type=2;
+        checkCameraPermission();
+        selectImageOption();
+    }
+    @OnClick(R.id.tv_create_community_logo)
+    public void changeCommunityLogo()
+    {
+        mImage_type=1;
+        checkStoragePermission();
         selectImageOption();
     }
     @OnClick(R.id.et_create_community_tags)
@@ -217,8 +233,8 @@ public class CreateCommunityFragment extends BaseFragment implements CreateCommu
         mCbclose_community.setChecked(false);
         if(mCbopen_community.isChecked())
         {
-            ChangeCommunityPrivacyDialogFragment newFragment = new ChangeCommunityPrivacyDialogFragment(this);
-            newFragment.show(getActivity().getFragmentManager(), "dialog");
+           // ChangeCommunityPrivacyDialogFragment newFragment = new ChangeCommunityPrivacyDialogFragment(this);
+          //  newFragment.show(getActivity().getFragmentManager(), "dialog");
             /*CommunityJoinRegionDialogFragment newFragment = new CommunityJoinRegionDialogFragment(this);
             newFragment.show(getActivity().getFragmentManager(), "dialog");*/
         }
@@ -230,8 +246,8 @@ public class CreateCommunityFragment extends BaseFragment implements CreateCommu
         mCbopen_community.setChecked(false);
         if(mCbclose_community.isChecked())
         {
-            ChangeCommunityPrivacyDialogFragment newFragment = new ChangeCommunityPrivacyDialogFragment(this);
-            newFragment.show(getActivity().getFragmentManager(), "dialog");
+           // ChangeCommunityPrivacyDialogFragment newFragment = new ChangeCommunityPrivacyDialogFragment(this);
+           // newFragment.show(getActivity().getFragmentManager(), "dialog");
         }
 
 
@@ -396,8 +412,11 @@ private void selectImageOption() {
                     // profile.setImageBitmap(photo);//**********************set image on imageview
                     if(mImage_type==2)
                         mIv_cover.setImageBitmap(photo);
-                    else
-                        mIvlogo.setImageBitmap(photo);
+                    else {
+                        //   mIvlogo.setImageBitmap(photo);
+                        mIvlogo.setBackground(new BitmapDrawable(getResources(), photo));
+                        mIvlogo.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                    }
                     byte[] buffer = new byte[4096];
 
 
@@ -429,8 +448,13 @@ private void selectImageOption() {
                 // profile.setImageBitmap(photo);
                 if(mImage_type==2)
                mIv_cover.setImageBitmap(photo);
-                else
-                mIvlogo.setImageBitmap(photo);
+                else {
+                    mIvlogo.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+
+                    mIvlogo.setBackground(new BitmapDrawable(getResources(), photo));
+                }
+
+              //  mIvlogo.setImageBitmap(photo);
 
 
             }
@@ -469,8 +493,13 @@ private void selectImageOption() {
                 // profilepic.setImageBitmap(bmp);
                 if(mImage_type==2)
                     mIv_cover.setImageBitmap(bmp);
-                else
-                    mIvlogo.setImageBitmap(bmp);
+                else {
+                    mIvlogo.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+
+                    mIvlogo.setBackground(new BitmapDrawable(getResources(), bmp));
+                }
+
+              //  mIvlogo.setImageBitmap(bmp);
                 //  imageView.setImageBitmap(bmp);
             }
 

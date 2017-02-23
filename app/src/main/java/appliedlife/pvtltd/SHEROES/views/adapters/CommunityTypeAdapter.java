@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -88,6 +89,7 @@ String mCommunityType;
 
             if(position ==mPos) {
                 mListView.setBackgroundColor((Color.parseColor("#f5f5f5")));
+
                 // tvItemName.setTextColor((Color.parseColor("#3949ab")));
 
             }
@@ -202,6 +204,7 @@ String mCommunityType;
                     {
                         mCheckState[i]=false;
                         //v.setBackgroundColor(Color.WHITE);
+                        mHolder.tvItemName.setTypeface(Typeface.create("sans-serif-regular", Typeface.NORMAL));
 
 
 
@@ -218,10 +221,15 @@ String mCommunityType;
         {
             mCommunityType=mRowItem.get(position).getItems().toString();
             mHolder.tvItemName.setTextColor((Color.parseColor("#3949ab")));
+            mHolder.tvItemName.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
+
 
         }
-        else
+        else {
             mHolder.tvItemName.setTextColor((Color.parseColor("#000000")));
+            mHolder.tvItemName.setTypeface(Typeface.create("sans-serif-regular", Typeface.NORMAL));
+
+        }
 
         if(mHolder.check.isChecked())
         {

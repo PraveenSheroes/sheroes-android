@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/grey8"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/search_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+        <TextView
+            android:id="@+id/tv_back_community_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_back_black"/>
+        <include layout="@layout/search_layout" />
+    </android.support.v7.widget.Toolbar>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/sp_size_1"
+        android:background="@color/share_line_color"
+        android:layout_marginLeft="@dimen/dp_size_38"
+        android:layout_marginRight="@dimen/dp_size_38"
+        android:layout_below="@+id/search_toolbar"
+        />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/lnr_invite_member">
+        <ImageView
+            android:id="@+id/tv_blank_img"
+            android:layout_width="@dimen/dp_size_89"
+            android:layout_height="@dimen/dp_size_60"
+            android:layout_gravity="center"
+            android:background="@drawable/ic_community_icon"
+            />
+        <TextView
+            android:id="@+id/tv_invite_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_size_5"
+            android:layout_gravity="center"
+            android:textStyle="bold"
+            android:text="@string/ID_INVITE_OWNER_COMMUNITY"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_size_5"
+            android:layout_gravity="center"
+            android:text="@string/ID_INVITE_USER_TEXT"/>
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_search_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/search_toolbar"
+        android:visibility="gone"
+        android:divider="@color/black"/>
+
+    <ProgressBar
+        android:id="@+id/pb_search_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/search_toolbar"
+        android:layout_centerInParent="true"/>
+</RelativeLayout>

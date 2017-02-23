@@ -4,9 +4,9 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/text_color_close</item>
-        <item name="colorAccent">@color/colorAccent</item>
-    </style>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/grey2</item>
+        </style>
 
     <style name="dialog_animation_fade">
         <item name="android:windowEnterAnimation">@anim/fade_in_dialog</item>
@@ -75,5 +75,32 @@
     <style name="NavigationTabTextAppeareance" parent="TextAppearance.Design.Tab">
         <item name="android:fontFamily">@string/ID_ROBOTO_MEDIUM</item>
         <item name="android:textSize">@dimen/dp_size_12</item>
+    </style>
+    <style name="SubtitleCollapsingToolbar"
+        parent="@style/Widget.Design.CollapsingToolbar">
+    </style>
+    <style name="CollapsedSubtitleAppearance" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">13sp</item>
+    </style>
+    <style name="ExpandedSubtitleAppearance" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="title" >
+        <item name="android:textColor">#fff</item>
+    </style>
+
+    <style name="title.expanded">
+        <item name="android:textSize">30dp</item>
+    </style>
+    <style name="title.collapsed">
+        <item name="android:textSize">20dp</item>
+    </style>
+
+    <style name="subtitle">
+        <item name="android:textColor">@color/fully_transparent</item> <!-- I only change the color -->
+    </style>
+    <style name="subtitle_collapsed">
+        <item  name="android:textColor">@color/white</item> <!-- I only change the color -->
     </style>
 </resources>

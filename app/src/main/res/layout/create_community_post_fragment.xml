@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:orientation="vertical"
+    android:background="@color/white"
    >
 <LinearLayout
     android:layout_width="fill_parent"
@@ -181,12 +182,13 @@
         <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:background="@drawable/ripple_button">
+            >
 
             <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
                 android:id="@+id/iv_community_anonymous"
                 android:layout_width="@dimen/dp_size_35"
                 android:layout_height="@dimen/dp_size_35"
+                android:background="@drawable/ic_anonomous"
                 android:layout_weight="1"
                 />
 
@@ -242,6 +244,7 @@
     android:layout_marginLeft="@dimen/dp_size_45"
     android:layout_marginRight="@dimen/dp_size_45"
     android:layout_marginBottom="@dimen/dp_size_20"
+    android:textAllCaps="true"
     android:background="@drawable/rectangle_btn"
     android:textColor="#FFFFFF"
     android:text="Post As Deepika"/>

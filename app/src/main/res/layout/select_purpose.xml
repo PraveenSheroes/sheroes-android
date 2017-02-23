@@ -9,8 +9,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="@dimen/dp_size_10"
+        android:layout_marginTop="@dimen/dp_size_20"
         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+        android:textColor="@color/grey2"
         android:text="@string/ID_SELECT_PURPOSE"
         android:textAllCaps="true"
         android:textSize="@dimen/sp_size_11"/>
@@ -19,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="@dimen/dp_size_10">
+        android:layout_marginTop="@dimen/dp_size_20">
 
         <TextView
             android:id="@+id/tv_employeer_branding"
@@ -27,6 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:background="@drawable/select_purpose_btn_shap"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:padding="@dimen/dp_size_5"
             android:text="@string/ID_EMPLOYER_BRANDING"
             android:textColor="@color/blue"
@@ -39,9 +41,10 @@
             android:id="@+id/tv_customer_review"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_size_25"
+            android:layout_marginLeft="@dimen/dp_size_20"
             android:layout_toRightOf="@+id/tv_employeer_branding"
             android:background="@drawable/select_purpose_btn_shap"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:padding="@dimen/dp_size_5"
             android:text="@string/ID_COSTOMER_REVIEW"
             android:textColor="@color/blue"
@@ -53,12 +56,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="@dimen/dp_size_10"
+        android:layout_marginTop="@dimen/dp_size_15"
         android:background="@drawable/select_purpose_btn_shap"
-        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
         android:padding="@dimen/dp_size_5"
         android:text="@string/ID_ASSOCIATE_EMPLOYEE_ENGAGEMENT"
-        android:textAllCaps="true"
         android:textColor="@color/blue"
         android:textSize="@dimen/sp_size_11"/>
 
@@ -67,7 +69,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="@dimen/dp_size_10"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+
+        android:layout_marginTop="@dimen/dp_size_15"
         android:background="@drawable/select_purpose_btn_shap"
         android:text="@string/ID_PRODUCT_PROMOTION"
         android:textColor="@color/blue"

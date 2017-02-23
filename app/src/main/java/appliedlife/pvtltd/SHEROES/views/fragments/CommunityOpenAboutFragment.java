@@ -157,6 +157,11 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
     public void inviteMembersClick() {
         mShareCommunityIntractionListner.inviteClick();
     }
+    @OnClick(R.id.tv_community_add_more)
+    public void addMoreClick()
+    {
+        mShareCommunityIntractionListner.ownerClick();
+    }
   /*  @OnClick(R.id.tv_community_menu)
     public void menueClick()
     {
@@ -217,6 +222,7 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
     public interface AboutCommunityActivityIntractionListner {
         void memberClick();
         void inviteClick();
+        void ownerClick();
         void requestClick();
         void createCommunityClick();
         void shareClick();

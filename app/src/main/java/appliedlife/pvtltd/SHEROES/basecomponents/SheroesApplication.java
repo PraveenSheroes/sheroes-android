@@ -36,6 +36,7 @@ public class SheroesApplication extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
       //  Fabric.with(this, new Crashlytics());
+        //Fabric.with(this, new Crashlytics());
         mContext = this;
         File cacheFile = new File(getCacheDir(), "responses");
         mSheroesAppComponent = DaggerSheroesAppComponent.builder().sheroesAppModule(new SheroesAppModule(cacheFile,this)).build();

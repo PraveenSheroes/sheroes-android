@@ -8,11 +8,29 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.article.ArticleDetailSuggestion;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionDoc;
+
+import appliedlife.pvtltd.SHEROES.models.entities.communities.CommunitySuggestion;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityList;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityTags;
+import appliedlife.pvtltd.SHEROES.models.entities.community.ListOfInviteSearch;
+import appliedlife.pvtltd.SHEROES.models.entities.community.MembersList;
+import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerList;
+import appliedlife.pvtltd.SHEROES.models.entities.community.RequestedList;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.DrawerItems;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
+import appliedlife.pvtltd.SHEROES.models.entities.home.ProfileItems;
+import appliedlife.pvtltd.SHEROES.models.entities.jobs.FilterList;
+import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobDetailPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobLocationList;
+
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.can_help;
+import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleDetailPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.Feature;
+import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.MyCommunities;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 
 public enum HolderMapping {
@@ -111,7 +129,14 @@ public enum HolderMapping {
             return new TagsHolder(view, viewInterface);
         }
 
-    }, COMMUNITY_DETAIL_HEADER(R.layout.community_detail_header_holder) {
+    },CANHELP(R.layout.list_of_can_help) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new CanHelpHolder(view, viewInterface);
+        }
+
+    }
+    , COMMUNITY_DETAIL_HEADER(R.layout.community_detail_header_holder) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new CommunityCardDetailHeader(view, viewInterface);
@@ -137,10 +162,29 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new MemberHolder(view, viewInterface);
         }
-    }, COMMUNITY_SUGGESTED_BY_HOLDER(R.layout.community_suggested_by_layout) {
+    },
+
+    FILTERLIST(R.layout.filter_list) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new FilterHolder(view, viewInterface);
+        }
+    },
+    JOBLOCATIONLIST(R.layout.joblocationlist) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new JobLocationHolder(view, viewInterface);
+        }
+    },COMMUNITY_SUGGESTED_BY_HOLDER(R.layout.community_suggested_by_layout) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new CommunityWithInSggestedHolder(view, viewInterface);
+        }
+    }
+    , JOB_DETAIL_HOLDER(R.layout.job_detail_page) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new JobDetailHolder(view, viewInterface);
         }
     }, ARTICLE_DETAIL_HOLDER(R.layout.article_detail_page_reaction_holder) {
         @Override
@@ -252,6 +296,130 @@ public enum HolderMapping {
                     } else {
                         return HOME_SPINNER_ITEMS.ordinal();
                     }
+                } else if (item instanceof DrawerItems) {
+                    return DRAWER_ITEMS.ordinal();
+                } else if (item instanceof ArticleCardResponse) {
+                    return ARTICLE_CARD_HOLDER.ordinal();
+                } else if (item instanceof MyCommunities) {
+                    return MY_COMMUNITIES_CARD.ordinal();
+                } else if (item instanceof Feature) {
+                    String id = ((Feature) item).getId();
+                    if (id.equalsIgnoreCase("1")) {
+                        return SUGGESTED_CARD_HOLDER.ordinal();
+                    } else {
+                        return FEATURE_CARD.ordinal();
+                    }
+
+                }/* else if (item instanceof CommentsList) {
+                    return COMMENT.ordinal();
+
+                } else if (item instanceof ReactionList) {
+                    return REACTION.ordinal();
+
+                }*/ else if (item instanceof ListOfInviteSearch) {
+                    return INVITE_SEARCH_MODULE.ordinal();
+                }
+               /* else if (item instanceof ProfileHorList) {
+                    return PROFILEHORLIST.ordinal();
+                }
+                else if (item instanceof ProfileViewList) {
+
+                    ProfileViewList profileViewList=((ProfileViewList) item);
+                    String tagType =(profileViewList.getTag().toString());
+                    if(tagType.equals("EDUCATION"))
+                    {
+                        return PROFILEEDUCATION.ordinal();
+                    }
+                    else if(tagType.equals("Good At"))
+                    {
+                        return PROFILEGOODAT.ordinal();
+                    }
+                    else if(tagType.equals("WORK EXPERIENCE"))
+                    {
+                        return PROFILEWORKEXPERIENCE.ordinal();
+                    }
+                    else if(tagType.equals("Hor"))
+                    {
+                        return PROFILEHOR.ordinal();
+                    }
+                    else if(tagType.equals("BASIC DETAILS"))
+                    {
+                        return PROFILEBASICDETAILS.ordinal();
+                    }
+
+                    else if(tagType.equals("OTHER"))
+                    {
+                        return PROFILEOTHER.ordinal();
+                    }
+                }
+*/
+                else if (item instanceof can_help) {
+                    return CANHELP.ordinal();
+                }
+                else if (item instanceof RequestedList) {
+                    return REQUESTLIST.ordinal();
+                } else if (item instanceof OwnerList) {
+                    return OWNERLIST.ordinal();
+                } else if (item instanceof MembersList) {
+                    return MEMBERLIST.ordinal();
+                } else if (item instanceof CommunityList) {
+                    return SELECTDILOG.ordinal();
+                } else if (item instanceof CommunityTags) {
+                    return SEARCHTAGS.ordinal();
+                } else if (item instanceof CommunitySuggestion) {
+                    return COMMUNITY_SUGGESTED_BY_HOLDER.ordinal();
+            }
+            else if(item instanceof JobLocationList)
+            {
+                return JOBLOCATIONLIST.ordinal();
+            }
+            else if(item instanceof FilterList)
+            {
+                return FILTERLIST.ordinal();
+            }
+            else if(item instanceof RequestedList)
+            {
+                return REQUESTLIST.ordinal();
+            }
+        else if (item instanceof OwnerList) {
+                return OWNERLIST.ordinal();
+            } else if (item instanceof MembersList) {
+                return MEMBERLIST.ordinal();
+            } else if (item instanceof CommunityList) {
+                return SELECTDILOG.ordinal();
+            }
+            else if(item instanceof CommunityTags)
+            {
+                return SEARCHTAGS.ordinal();
+            }
+        else if(item instanceof CommunityList)
+        {
+            return SELECTDILOG.ordinal();
+        } else if (item instanceof CommunitySuggestion) {
+                return COMMUNITY_SUGGESTED_BY_HOLDER.ordinal();
+
+                } /*else if (item instanceof ListOfSearch) {
+                    return SEARCH_MODULE.ordinal();
+
+                }*/ else if (item instanceof ArticleDetailPojo) {
+
+                        return ARTICLE_DETAIL_HOLDER.ordinal();
+
+                }
+                else if (item instanceof JobDetailPojo) {
+
+                    return JOB_DETAIL_HOLDER.ordinal();
+
+                }else if (item instanceof ArticleDetailSuggestion) {
+                    return ARTICLE_DETAIL_WITHIN_SUGGESTED_HOLDER.ordinal();
+
+                } else if (item instanceof ProfileItems) {
+                    return PROFILE_HOLDER.ordinal();
+
+                }
+                else if (item instanceof CommentReactionDoc) {
+                    return COMMENT.ordinal();
+                }else if (item instanceof ArticleDetailPojo) {
                 } else if (item instanceof ArticleDetailPojo) {
                     returnView = ARTICLE_DETAIL_HOLDER.ordinal();
                 }

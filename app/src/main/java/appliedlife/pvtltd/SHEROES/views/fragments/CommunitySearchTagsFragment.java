@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.List;
@@ -60,6 +61,8 @@ public class CommunitySearchTagsFragment extends BaseFragment implements Communi
     View mVindecator2;
     @Bind(R.id.tv_community_tag_submit)
     TextView tv_community_tag_submit;
+    @Bind(R.id.et_search_edit_text)
+    EditText mEt_search_edit_text;
 
     @Bind(R.id.tv_no_of_tags)
     TextView mTv_no_of_tags;
@@ -98,7 +101,9 @@ public class CommunitySearchTagsFragment extends BaseFragment implements Communi
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
         mcommunityListPresenter.getCommunityList();
-
+        mEt_search_edit_text.setHint("Search Tags");
+        mTv_no_of_tags.setVisibility(View.GONE);
+        tv_community_tag_submit.setVisibility(View.GONE);
         return v;
     }
     @OnClick(R.id.tv_back_community_tag)
@@ -134,6 +139,7 @@ public class CommunitySearchTagsFragment extends BaseFragment implements Communi
 
     @Override
     public void handleOnClick(BaseResponse sheroesListDataItem, View view) {
+        mTv_no_of_tags.setVisibility(View.VISIBLE);
         if (sheroesListDataItem instanceof CommunityTags) {
             CommunityTags communityTags = (CommunityTags) sheroesListDataItem;
             if (mCount<=3) {
@@ -161,6 +167,7 @@ public class CommunitySearchTagsFragment extends BaseFragment implements Communi
 
                 } else if (mCount == 3) {
                     mTv_no_of_tags.setText("3/3");
+                    tv_community_tag_submit.setVisibility(View.VISIBLE);
                     mVindecator2.setBackgroundColor((getResources().getColor(R.color.popular_tag_color)));
 
                     if (mTags[mCount - 1].length() + mTags[mCount - 2].length() > 30) {

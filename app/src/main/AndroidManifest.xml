@@ -36,11 +36,11 @@
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.LoginActivity"
             android:windowSoftInputMode="stateHidden">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        </activity>
+        <activity
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.OnboardingActivity"
+            android:windowSoftInputMode="stateHidden">
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.Professional_WorkExperience_Activity"
@@ -53,7 +53,11 @@
 
 
         <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.HomeActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.SettingPreferencesActivity"/>
@@ -63,8 +67,12 @@
 
 
         <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityActivity">
+
         </activity>
         <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityPostActivity">
+
+        </activity>
+        <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.JobDetailActivity">
 
         </activity>
         <activity
@@ -72,7 +80,10 @@
             android:parentActivityName="appliedlife.pvtltd.SHEROES.views.activities.HomeActivity"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
-
+        <activity
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.JobFilterActivity"
+            android:parentActivityName="appliedlife.pvtltd.SHEROES.views.activities.HomeActivity"
+            android:theme="@style/AppTheme" />
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity"
             android:theme="@style/AppTheme" />

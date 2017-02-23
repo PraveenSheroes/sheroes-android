@@ -16,10 +16,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="top" />
 
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="@dimen/sp_size_1"
-            android:background="@color/grey2" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_comment_reaction_list"

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/dp_size_10">
+
+        <TextView
+            android:id="@+id/tv_work_from_home"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:background="@drawable/select_tag_shap"
+            android:text="@string/ID_WORK_FROM_HOME"
+            android:textColor="@color/grey2"
+            android:textSize="@dimen/sp_size_11"/>
+        <!--
+                android:background="@drawable/invite_color_btn_shap"
+        -->
+
+        <TextView
+            android:id="@+id/tv_freelance_work"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_size_25"
+            android:layout_toRightOf="@+id/tv_work_from_home"
+            android:background="@drawable/select_tag_shap"
+            android:text="@string/ID_FREELANCE_RORK"
+            android:textColor="@color/grey2"
+            android:textSize="@dimen/sp_size_11"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/dp_size_10">
+    <TextView
+        android:id="@+id/tv_corporate_job"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/select_tag_shap"
+        android:fontFamily="@string/ID_CORPORATE_JOBS"
+        android:text="@string/ID_CORPORATE_JOBS"
+        android:textAllCaps="true"
+        android:textColor="@color/grey2"
+        android:textSize="@dimen/sp_size_11"/>
+
+    <TextView
+        android:id="@+id/tv_internship_volunteer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/select_tag_shap"
+        android:layout_marginLeft="@dimen/dp_size_25"
+
+        android:layout_toRightOf="@+id/tv_corporate_job"
+        android:text="@string/ID_INTERNSHIP_VOLUNTEER"
+        android:textColor="@color/grey2"
+        android:textSize="@dimen/sp_size_11" />
+    </RelativeLayout>
+    <TextView
+        android:id="@+id/tv_business_opertunities"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/select_tag_shap"
+        android:fontFamily="@string/ID_CORPORATE_JOBS"
+        android:text="@string/ID_BUSSINESS_OPPORTUNITIES"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/dp_size_10"
+        android:layout_marginBottom="@dimen/dp_size_10"
+        android:textAllCaps="true"
+        android:textColor="@color/grey2"
+        android:textSize="@dimen/sp_size_11"/>
+
+        <RelativeLayout
+            android:id="@+id/rl_corporate_job"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_size_80"
+            android:layout_marginTop="@dimen/dp_size_20"
+            android:layout_marginBottom="@dimen/dp_size_10"
+            android:background="@color/search_shortcut_icon_color"
+            >
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                >
+        <TextView
+            android:id="@+id/tv_part_time_job"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/select_tag_shap"
+            android:fontFamily="@string/ID_CORPORATE_JOBS"
+            android:text="@string/ID_FULL_TIME"
+            android:textAllCaps="true"
+            android:layout_centerVertical="true"
+            android:textColor="@color/grey2"
+            android:textSize="@dimen/sp_size_11"/>
+
+        <TextView
+            android:id="@+id/tv_full_time_job"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/select_tag_shap"
+            android:layout_marginLeft="@dimen/dp_size_25"
+            android:layout_centerVertical="true"
+            android:textAllCaps="true"
+            android:layout_toRightOf="@+id/tv_part_time_job"
+            android:text="@string/ID_PART_TIME"
+            android:textColor="@color/grey2"
+            android:textSize="@dimen/sp_size_11" />
+            </RelativeLayout>
+
+        </RelativeLayout>
+</LinearLayout>

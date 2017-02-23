@@ -22,8 +22,8 @@
     <TextView
         android:id="@+id/tv_close_community"
 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/dp_size_14"
+        android:layout_height="@dimen/dp_size_14"
         android:background="@drawable/ic_cross"
         android:paddingTop="@dimen/dp_size_2"
         android:paddingLeft="10dp"

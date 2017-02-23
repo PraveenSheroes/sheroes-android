@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.view.View;
 import android.widget.TextView;
 
@@ -11,12 +12,9 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityList;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityTags;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityTagsListResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.EditNameDialogListener;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -138,20 +136,26 @@ if(mcount<=3)
             case R.id.tv_tags:
                     tvTags.setBackgroundResource(R.drawable.selected_tag_shap);
                     tvTags.setTextColor((Color.parseColor("#3949ab")));
+                //tvTags.Typeface.createFromAsset(this, R.string.ID_ROBOTO_MEDIUM));
+                tvTags.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
+
                 LogUtils.error(TAG, ""+mcount);
 
                 break;
             case R.id.tv_tags1:
+                tvTags1.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
                     tvTags1.setBackgroundResource(R.drawable.selected_tag_shap);
                     tvTags1.setTextColor((Color.parseColor("#3949ab")));
                 LogUtils.error(TAG, ""+mcount);
                 break;
             case R.id.tv_tags2:
+                tvTags2.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
                     tvTags2.setBackgroundResource(R.drawable.selected_tag_shap);
                     tvTags2.setTextColor((Color.parseColor("#3949ab")));
                 LogUtils.error(TAG, ""+mcount);
                 break;
             case R.id.tv_tags3:
+                tvTags3.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
                     tvTags3.setBackgroundResource(R.drawable.selected_tag_shap);
                     tvTags3.setTextColor((Color.parseColor("#3949ab")));
                 LogUtils.error(TAG, ""+mcount);

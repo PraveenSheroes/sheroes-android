@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_job_detail_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@color/fully_transparent" />
+
+    <ProgressBar
+        android:id="@+id/pb_article_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+
+    <TextView
+        android:id="@+id/tv_apply_job"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_size_48"
+        android:layout_marginTop="@dimen/dp_size_30"
+        android:layout_gravity="bottom"
+        android:background="@drawable/rect_btn"
+        android:gravity="center"
+        android:paddingBottom="@dimen/dp_size_10"
+        android:paddingTop="@dimen/dp_size_10"
+        android:text="APPLY"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_size_12" />
+</FrameLayout>
