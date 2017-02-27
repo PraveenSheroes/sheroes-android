@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/white"
+    android:layout_marginTop="@dimen/dp_size_10"
     android:orientation="vertical">
     <TextView
         android:id="@+id/tv_lookinfor_number"
@@ -29,7 +30,7 @@
             android:textSize="@dimen/dp_size_13" />
         <TextView
             android:id="@+id/tv_lookingfor_text2"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/dp_size_270"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_lookingfor_text1"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"

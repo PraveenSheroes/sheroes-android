@@ -1024,7 +1024,6 @@ public class HomeActivity extends BaseActivity implements  SettingView, BaseHold
             }
         }
 
-
         @Override
         public boolean onTouch(View view, MotionEvent event) {
             int id = view.getId();
@@ -1055,6 +1054,7 @@ public class HomeActivity extends BaseActivity implements  SettingView, BaseHold
 
         @Override
         public void onClick(View view) {
+
             int id = view.getId();
             switch (id) {
                 case R.id.tv_reaction:

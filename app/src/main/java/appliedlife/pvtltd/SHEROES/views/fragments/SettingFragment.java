@@ -1,20 +1,43 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.RatingBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
+
+import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingDeActivateResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingFeedbackRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingFeedbackResponce;
+import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingRatingRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingRatingResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.setting.UserPreferenceRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.setting.UserpreferenseResponse;
+import appliedlife.pvtltd.SHEROES.presenters.SettingFeedbackPresenter;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.Feedback_ThankyouActivity;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SettingFeedbackView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SettingView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by priyanka
@@ -24,7 +47,7 @@ import butterknife.ButterKnife;
 
 public class SettingFragment extends BaseFragment implements View.OnClickListener {
 
-    private final String TAG = LogUtils.makeLogTag(ArticlesFragment.class);
+    private final String TAG = LogUtils.makeLogTag(SettingFragment.class);
     private final String SCREEN_NAME = "Setting_dashboard_screen";
     @Bind(R.id.id_setting_feedback)
     TextView mid_setting_feedback;
@@ -35,7 +58,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
     @Bind(R.id.id_setting_terms_and_condition)
     TextView mid_setting_terms_and_condition;
     SettingView msettingFragmentCallBack;
-
+    SettingFeedbackPresenter mSettingFeedbackPresenter;
 
     @Override
     public void onAttach(Context context) {
@@ -44,15 +67,14 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
         super.onAttach(context);
         try {
             if (getActivity() instanceof SettingView) {
+
                 msettingFragmentCallBack = (SettingView) getActivity();
+
             }
 
         } catch (Exception e) {
         }
-
-
     }
-
 
     @Nullable
     @Override
@@ -64,10 +86,19 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
         mid_preferences.setOnClickListener(this);
         mid_setting_about.setOnClickListener(this);
         mid_setting_terms_and_condition.setOnClickListener(this);
-
         return view;
     }
 
+
+    public void get_user_preference()
+    {
+        UserPreferenceRequest UserPreferenceRequest = new UserPreferenceRequest();
+        UserPreferenceRequest.setAppVersion("string");
+        UserPreferenceRequest.setCloudMessagingId("string");
+        UserPreferenceRequest.setDeviceUniqueId("string");
+        mSettingFeedbackPresenter.getUserPreferenceAuthTokeInPresenter(UserPreferenceRequest);
+
+    }
 
     @Override
     public void onClick(View view) {

@@ -119,6 +119,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@string/ID_ROBOTO_LIGHT"
                 android:hint="@string/ID_COMMENT"
+                android:textColorHint="@color/back_ground_color"
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true"
                 android:padding="@dimen/dp_size_10"

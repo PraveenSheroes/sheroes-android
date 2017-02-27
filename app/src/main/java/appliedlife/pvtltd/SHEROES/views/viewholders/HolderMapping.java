@@ -27,6 +27,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobDetailPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobLocationList;
 
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.can_help;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileHorList;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfilePersonalViewList;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileViewList;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleDetailPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.Feature;
@@ -163,7 +166,79 @@ public enum HolderMapping {
             return new MemberHolder(view, viewInterface);
         }
     },
+    PROFILE_GOODAT(R.layout.profile_goodat_card) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new ProfileGoodAtHolder(view, viewInterface);
+        }
+    },
+    PROFIL_EEDUCATION(R.layout.professional_education_card) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new ProfileEducationHolder(view, viewInterface);
+        }
+    }
+    ,
+    PROFILE_WORKEXPERIENCE(R.layout.professional_education_card) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new ProfileWorkExperienceHolder(view, viewInterface);
+        }
+    }
+    ,
+    PROFILE_HORIZONTAL_LIST(R.layout.profile_hor_card) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new ProfileHorListHolder(view, viewInterface);
+        }
+    }
+    ,
+    PROFILE_HORIZONTAL_RECYCLER_LIST(R.layout.profile_horizontal_recycler) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new ProfileHorizontalViewHolder(view, viewInterface);
+        }
+    },
+    PROFILE_BASICDETAILS(R.layout.profile_basicdetails_card) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new ProfileBasicDetailsHolder(view, viewInterface);
+        }
+    },
+    PROFILE_OTHER(R.layout.professional_other_card) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new ProfileOtherHolder(view, viewInterface);
+        }
+    },
 
+    PROFILE_LOOK_IN_FOR(R.layout.personal_lookingfor_card) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new ProfileLookingForHolder(view, viewInterface);
+        }
+    },
+    PROFILE_I_CAN_HELP(R.layout.personal_lookingfor_card) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new ProfileICanHelpWithHolder(view, viewInterface);
+        }
+    }, PROFILE_ABOUTME(R.layout.personal_lookingfor_card) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new ProfileAboutMeHolder(view, viewInterface);
+        }
+    },PROFILE_PERSONAL_BASICDETAILS(R.layout.profile_basicdetails_card) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new ProfilePersonalBasicDetailsHolder(view, viewInterface);
+        }
+    },PROFILE_PERSONAL_INTERESTING(R.layout.profile_interesting_in_card) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new ProfileIAmInterestingInHolder(view, viewInterface);
+        }
+    },
     FILTERLIST(R.layout.filter_list) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
@@ -310,49 +385,84 @@ public enum HolderMapping {
                         return FEATURE_CARD.ordinal();
                     }
 
-                }/* else if (item instanceof CommentsList) {
-                    return COMMENT.ordinal();
-
-                } else if (item instanceof ReactionList) {
-                    return REACTION.ordinal();
-
-                }*/ else if (item instanceof ListOfInviteSearch) {
-                    return INVITE_SEARCH_MODULE.ordinal();
                 }
-               /* else if (item instanceof ProfileHorList) {
-                    return PROFILEHORLIST.ordinal();
+                else if (item instanceof ProfileHorList) {
+                    return PROFILE_HORIZONTAL_LIST.ordinal();
                 }
                 else if (item instanceof ProfileViewList) {
 
                     ProfileViewList profileViewList=((ProfileViewList) item);
+
                     String tagType =(profileViewList.getTag().toString());
+
+
                     if(tagType.equals("EDUCATION"))
                     {
-                        return PROFILEEDUCATION.ordinal();
+                        return PROFIL_EEDUCATION.ordinal();
                     }
                     else if(tagType.equals("Good At"))
                     {
-                        return PROFILEGOODAT.ordinal();
+                        return PROFILE_GOODAT.ordinal();
                     }
                     else if(tagType.equals("WORK EXPERIENCE"))
                     {
-                        return PROFILEWORKEXPERIENCE.ordinal();
+                        return PROFILE_WORKEXPERIENCE.ordinal();
                     }
-                    else if(tagType.equals("Hor"))
+                    else if(tagType.equals("Horizontal"))
                     {
-                        return PROFILEHOR.ordinal();
+                        return PROFILE_HORIZONTAL_RECYCLER_LIST.ordinal();
                     }
                     else if(tagType.equals("BASIC DETAILS"))
                     {
-                        return PROFILEBASICDETAILS.ordinal();
+                        return PROFILE_BASICDETAILS.ordinal();
                     }
 
                     else if(tagType.equals("OTHER"))
                     {
-                        return PROFILEOTHER.ordinal();
+                        return PROFILE_OTHER.ordinal();
                     }
+
                 }
-*/
+                else if (item instanceof ProfilePersonalViewList)
+
+                {
+
+                    ProfilePersonalViewList profilePersonalViewList=((ProfilePersonalViewList) item);
+
+                    String tagType =(profilePersonalViewList.getTag().toString());
+
+
+                    if (tagType.equals("Looking For"))
+                    {
+
+                        return PROFILE_LOOK_IN_FOR.ordinal();
+
+                    }else  if (tagType.equals("I Can Help With"))
+                    {
+
+                        return PROFILE_I_CAN_HELP.ordinal();
+
+                    }else  if (tagType.equals("About Me"))
+                    {
+
+                        return PROFILE_ABOUTME.ordinal();
+
+                    }else  if (tagType.equals("Basic Details"))
+                    {
+                        return PROFILE_PERSONAL_BASICDETAILS.ordinal();
+
+                    }else  if (tagType.equals("I AM INTERESTED IN"))
+                    {
+                        return PROFILE_PERSONAL_INTERESTING.ordinal();
+
+                    }
+
+                }
+
+                else if (item instanceof ListOfInviteSearch) {
+                    return INVITE_SEARCH_MODULE.ordinal();
+                }
+
                 else if (item instanceof can_help) {
                     return CANHELP.ordinal();
                 }

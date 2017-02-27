@@ -5,8 +5,10 @@ import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
@@ -19,8 +21,11 @@ import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.transition.Slide;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -34,11 +39,14 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileHorList;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView;
-import appliedlife.pvtltd.SHEROES.views.fragments.PersonnelProfileFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.PersonalProfileFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProffestionalProfileFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProfileTravelClientFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -69,6 +77,17 @@ public class ProfileActicity extends BaseActivity implements BaseHolderInterface
     public LinearLayout mLytUserProfileStatus;
     @Bind(R.id.iv_back)
     ImageView ivBack;
+    @Bind(R.id.tv_profile_completed)
+    TextView mTv_profile_completed;
+    @Bind(R.id.pb_profile_full_view)
+    ProgressBar mPb_profile_full_view;
+    @Bind(R.id.profile_container)
+    FrameLayout flprofile_container;
+    @Bind(R.id.cl_profile)
+    CoordinatorLayout coordinatorLayout;
+    int mflag=0;
+    private Handler handler = new Handler();
+    private int progressStatus = 0;
     public static void navigate(AppCompatActivity activity, View transitionImage, String profile) {
         Intent intent = new Intent(activity, ProfileActicity.class);
         intent.putExtra(EXTRA_IMAGE,profile);
@@ -83,7 +102,59 @@ public class ProfileActicity extends BaseActivity implements BaseHolderInterface
         setContentView(R.layout.activity_profile);
         ButterKnife.bind(this);
         setPagerAndLayouts();
+        setprogressbar();
     }
+
+    @Override
+    public void onBackPressed() {
+        if(mflag==1) {
+            mflag=0;
+            getSupportFragmentManager().popBackStack();
+            coordinatorLayout.setVisibility(View.VISIBLE);
+        }
+        else
+            finish();
+
+    }
+
+    //set function for progressbar
+
+    private void setprogressbar()
+    {
+
+        // Start the lengthy operation in a background thread
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                progressStatus = 0;
+
+                while(progressStatus < 40){
+                    // Update the progress status
+                    progressStatus +=1;
+
+                    // Try to sleep the thread for 20 milliseconds
+                    try{
+                        Thread.sleep(20);
+                    }catch(InterruptedException e){
+                        e.printStackTrace();
+                    }
+
+                    // Update the progress bar
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mPb_profile_full_view.setProgress(progressStatus);
+                            // Show the progress on TextView
+                            mTv_profile_completed.setText(progressStatus+""+"% Profile Completed");
+                        }
+                    });
+                }
+            }
+        }).start(); // Start the operation
+
+    }
+
     private void setPagerAndLayouts() {
         ViewCompat.setTransitionName(mAppBarLayout, EXTRA_IMAGE);
         supportPostponeEnterTransition();
@@ -94,7 +165,7 @@ public class ProfileActicity extends BaseActivity implements BaseHolderInterface
         mCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplication(),android.R.color.transparent));
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        viewPagerAdapter.addFragment(PersonnelProfileFragment.createInstance(), getString(R.string.ID_PERSONAL));
+        viewPagerAdapter.addFragment(PersonalProfileFragment.createInstance(), getString(R.string.ID_PERSONAL));
         viewPagerAdapter.addFragment(ProffestionalProfileFragment.createInstance(), getString(R.string.ID_PROFESSIONAL));
         mViewPager.setAdapter(viewPagerAdapter);
        mTabLayout.setupWithViewPager(mViewPager);
@@ -121,6 +192,7 @@ public class ProfileActicity extends BaseActivity implements BaseHolderInterface
         mAppBarLayout.addOnOffsetChangedListener(this);
 
     }
+
     private void initActivityTransitions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Slide transition = new Slide();
@@ -129,6 +201,7 @@ public class ProfileActicity extends BaseActivity implements BaseHolderInterface
             getWindow().setReturnTransition(transition);
         }
     }
+
 
     private void applyPalette(Palette palette) {
         int primaryDark = ContextCompat.getColor(getApplication(), R.color.colorPrimaryDark);
@@ -150,9 +223,44 @@ public class ProfileActicity extends BaseActivity implements BaseHolderInterface
     public void startActivityFromHolder(Intent intent) {
 
     }
+
+
+
+
+
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
 
+        if (baseResponse instanceof ProfileHorList) {
+            ProfileHorList dataItem= (ProfileHorList) baseResponse;
+            ProfileCardlHandled(view.getId(),((ProfileHorList) baseResponse).getTag());
+        }
+
+
+
+    }
+
+
+    private void ProfileCardlHandled(int id,String tag) {
+        switch (id) {
+
+            case R.id.tv_edit_other_text:
+                if(tag.equals("Are you willing to travel to client side location?")) {
+                    coordinatorLayout.setVisibility(View.GONE);
+                    flprofile_container.setVisibility(View.VISIBLE);
+                    ProfileTravelClientFragment profiletravelFragment = new ProfileTravelClientFragment();
+                    Bundle bundleTravel = new Bundle();
+                    ButterKnife.bind(this);
+                    profiletravelFragment.setArguments(bundleTravel);
+                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
+                            .replace(R.id.profile_container, profiletravelFragment, ProfileTravelClientFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+                    mflag = 1;
+                }
+                break;
+            default:
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
+
+        }
     }
 
     @Override
@@ -201,4 +309,5 @@ public class ProfileActicity extends BaseActivity implements BaseHolderInterface
         finish();
         overridePendingTransition(R.anim.top_to_bottom_exit,R.anim.top_bottom_exit_anim);
     }
+
 }

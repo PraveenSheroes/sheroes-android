@@ -1,0 +1,67 @@
+package appliedlife.pvtltd.SHEROES.views.viewholders;
+
+import android.content.Context;
+import android.view.View;
+import android.widget.TextView;
+
+import java.util.HashMap;
+
+import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileViewList;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.EditNameDialogListener;
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
+/**
+ * Created by SHEROES-TECH on 16-02-2017.
+ */
+
+public class ProfileOtherHolder extends BaseViewHolder<ProfileViewList> {
+    @Bind(R.id.tv_edit_other_text)
+    TextView mtv_edit_other_text;
+
+    BaseHolderInterface viewInterface;
+    private ProfileViewList dataItem;
+
+
+    public ProfileOtherHolder(View itemView, BaseHolderInterface baseHolderInterface) {
+        super(itemView);
+        ButterKnife.bind(this,itemView);
+        this.viewInterface = baseHolderInterface;
+        SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
+    }
+    public ProfileOtherHolder(View itemView, EditNameDialogListener baseHolderInterface) {
+        super(itemView);
+        ButterKnife.bind(this,itemView);
+        SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
+    }
+
+
+
+    @Override
+    public void bindData(ProfileViewList obj, Context context, int position) {
+        this.dataItem = obj;
+        itemView.setOnClickListener(this);
+
+        mtv_edit_other_text.setText(dataItem.getTag());
+
+
+    }
+
+    @Override
+    public void viewRecycled() {
+
+    }
+
+
+    @Override
+    public void onClick(View view) {
+
+        //viewInterface.handleOnClick(this.dataItem,view);
+
+
+    }
+}

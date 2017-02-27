@@ -41,6 +41,7 @@ public class CreateCommunityActivity extends BaseActivity implements CreateCommu
 
     @Override
     public void close() {
+
         finish();
     }
 
@@ -51,6 +52,7 @@ public class CreateCommunityActivity extends BaseActivity implements CreateCommu
 
     @Override
     public void onTagsSubmit(String[] tagsval) {
+
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(CreateCommunityFragment.class.getName());
 
 
@@ -82,7 +84,11 @@ public class CreateCommunityActivity extends BaseActivity implements CreateCommu
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
                 .replace(R.id.fl_fragment_container, frag).addToBackStack(null).commitAllowingStateLoss();
 
-        //  ChangeCommunityPrivacyDialogFragment frag1 = new ChangeCommunityPrivacyDialogFragment();
-      //  callFirstFragment(R.id.fl_fragment_container, frag1);
+
+         //ChangeCommunityPrivacyDialogFragment frag1 = new ChangeCommunityPrivacyDialogFragment();
+        //callFirstFragment(R.id.fl_fragment_container, frag1);
+
+
     }
+
 }

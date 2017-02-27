@@ -1,5 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -12,11 +13,24 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import javax.inject.Inject;
+
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingDeActivateRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingDeActivateResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingFeedbackResponce;
+import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingRatingResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.setting.UserpreferenseResponse;
+import appliedlife.pvtltd.SHEROES.presenters.SettingFeedbackPresenter;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.SettingPreferencesActivity;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SettingFeedbackView;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SettingView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -29,7 +43,7 @@ import butterknife.OnClick;
 
 
 
-public class SettingPreferencesDeactiveAccountFragment extends BaseFragment {
+public class SettingPreferencesDeactiveAccountFragment extends BaseFragment implements SettingFeedbackView {
 
     private final String TAG = LogUtils.makeLogTag(SettingPreferencesDeactiveAccountFragment.class);
 
@@ -55,34 +69,59 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment {
     @Bind(R.id.deactive_check_box1d)
     CheckBox mdeactive_check_box1d;
     @Bind(R.id.et_edit_text_reson)
-    EditText editText_reson;
+    EditText mEditText_reson;
     @Bind(R.id.ID_tvreason)
     TextView tv_reson;
     @Bind(R.id.preferences_deactiveaccount_button)
     Button mpreferences_deactiveaccount_button;
-    int flag=0;
+    int flag = 0;
+    String value;
+    @Inject
+    SettingFeedbackPresenter mSettingFeedbackPresenter;
+    SettingView settingViewlistener;
+
 
     public SettingPreferences_DeactiveAccounActivitytLisIntractionListener settingPreferences_deactiveAccounActivitytLisIntractionListener;
-
     ImageView miv_back_setting;
 
-    public SettingPreferencesDeactiveAccountFragment(TextView mtv_setting_tittle, TextView mtv_setting_tittle1, ImageView miv_back_setting)
-    {
+    public SettingPreferencesDeactiveAccountFragment(TextView mtv_setting_tittle, TextView mtv_setting_tittle1, ImageView miv_back_setting) {
         mtv_setting_tittle.setText(R.string.ID_DEACTIVEACCOUNT);
         mtv_setting_tittle1.setText(R.string.ID_PREFERENCES);
-        this.miv_back_setting= miv_back_setting;
+        this.miv_back_setting = miv_back_setting;
 
     }
+
+
+
+
+
+    @Override
+    public void onAttach(Context context){
+
+        super.onAttach(context);
+        try {
+            if (getActivity() instanceof SettingFeedbackView) {
+
+                settingViewlistener = (SettingView) getActivity();
+            }
+        } catch (InstantiationException exception) {
+            LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
+        }
+
+    }
+
+
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_setting_preferences_deactiveaccount, container, false);
         ButterKnife.bind(this, view);
-
+        mSettingFeedbackPresenter.attachView(this);
 
         //Open setting_preferences_Activity
-
         miv_back_setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,7 +129,6 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment {
                 Intent i = new Intent(getActivity(), SettingPreferencesActivity.class);
                 startActivity(i);
                 getActivity().finish();
-
             }
         });
         return view;
@@ -107,15 +145,15 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment {
 
     }
 
-
-
     //click on deactive_text1
 
     @OnClick(R.id.deactive_text1)
 
     public void ondeactivetext1click() {
 
-        setcolorontextview(mtvdeactive_text1,mdeactive_check_box1);
+        setcolorontextview(mtvdeactive_text1, mdeactive_check_box1);
+        value = mtvdeactive_text1.getText().toString();
+
 
     }
 //click on check_1
@@ -124,7 +162,8 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment {
 
     public void ondeactivecheck1click() {
 
-        setcolorontextview(mtvdeactive_text1,mdeactive_check_box1);
+        setcolorontextview(mtvdeactive_text1, mdeactive_check_box1);
+
 
     }
 
@@ -134,7 +173,8 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment {
 
     public void ondeactivetext1aclick() {
 
-        setcolorontextview(mtvdeactive_text1a,mdeactive_check_box1a);
+        setcolorontextview(mtvdeactive_text1a, mdeactive_check_box1a);
+        value = mtvdeactive_text1a.getText().toString();
 
     }
 
@@ -145,7 +185,8 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment {
 
     public void ondeactivecheck1aclick() {
 
-        setcolorontextview(mtvdeactive_text1a,mdeactive_check_box1a);
+        setcolorontextview(mtvdeactive_text1a, mdeactive_check_box1a);
+
 
     }
 
@@ -156,7 +197,8 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment {
 
     public void ondeactivetext1bclick() {
 
-        setcolorontextview(mtvdeactive_text1b,mdeactive_check_box1b);
+        setcolorontextview(mtvdeactive_text1b, mdeactive_check_box1b);
+        value = mtvdeactive_text1b.getText().toString();
 
 
     }
@@ -167,11 +209,10 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment {
 
     public void ondeactivecheck3bclick() {
 
-        setcolorontextview(mtvdeactive_text1b,mdeactive_check_box1b);
+        setcolorontextview(mtvdeactive_text1b, mdeactive_check_box1b);
 
 
     }
-
 
 
     //click on deactive_text4
@@ -180,7 +221,9 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment {
 
     public void ondeactivetext1cclick() {
 
-        setcolorontextview(mtvdeactive_text1c,mdeactive_check_box1c);
+        setcolorontextview(mtvdeactive_text1c, mdeactive_check_box1c);
+        value = mtvdeactive_text1c.getText().toString();
+
 
     }
 
@@ -191,7 +234,7 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment {
 
     public void ondeactivecheck4cclick() {
 
-        setcolorontextview(mtvdeactive_text1c,mdeactive_check_box1c);
+        setcolorontextview(mtvdeactive_text1c, mdeactive_check_box1c);
 
     }
 
@@ -201,7 +244,10 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment {
 
     public void ondeactivetext1dclick() {
 
-        setcolorontextview(mtvdeactive_text1d,mdeactive_check_box1d);
+        setcolorontextview(mtvdeactive_text1d, mdeactive_check_box1d);
+
+        value = mtvdeactive_text1d.getText().toString();
+
 
     }
 
@@ -212,62 +258,144 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment {
 
     public void ondeactivecheck5click() {
 
-        setcolorontextview(mtvdeactive_text1d,mdeactive_check_box1d);
+        setcolorontextview(mtvdeactive_text1d, mdeactive_check_box1d);
+
 
     }
 
     //function for change text color and show checkbox
 
-    public void setcolorontextview(TextView textview,CheckBox checkbox)
+    public void setcolorontextview(TextView textview, CheckBox checkbox)
 
     {
-        if(flag==0)
+        if (flag == 0)
 
         {
             textview.setTextColor(getResources().getColor(R.color.search_tab_text));
+            mpreferences_deactiveaccount_button.setBackgroundColor(getResources().getColor(R.color.red));
             checkbox.setChecked(true);
 
-            if(textview.getText().equals(getResources().getString(R.string.ID_OTHER)))
-            {
-                editText_reson.setVisibility(View.VISIBLE);
-                tv_reson.setVisibility(View.VISIBLE);
+            if (textview.getText().equals(getResources().getString(R.string.ID_OTHER))) {
+                mEditText_reson.setVisibility(View.VISIBLE);
+
                 mpreferences_deactiveaccount_button.setBackgroundColor(getResources().getColor(R.color.red));
 
             }
 
-            flag=1;
-        }
-        else
+            flag = 1;
+        } else
 
         {
             textview.setTextColor(getResources().getColor(R.color.black));
             checkbox.setChecked(false);
-            if(textview.getText().equals(getResources().getString(R.string.ID_OTHER)))
-            {
-                editText_reson.setVisibility(View.GONE);
+            if (textview.getText().equals(getResources().getString(R.string.ID_OTHER))) {
+                mEditText_reson.setVisibility(View.GONE);
                 tv_reson.setVisibility(View.GONE);
                 mpreferences_deactiveaccount_button.setBackgroundColor(getResources().getColor(R.color.grey2));
             }
-            flag=0;
+            flag = 0;
         }
 
 
     }
 
+    @OnClick(R.id.preferences_deactiveaccount_button)
 
 
-   /* @OnClick(R.id.preferences_deactiveaccount_button)
     public void deactivebuttonclick() {
-        Intent i = new Intent(getActivity(), PreferencesDeactiveAccountDialogFragment.class);
-        startActivity(i);
 
-    }*/
+
+        if (value.equals("Other")) {
+
+            String reson_value = mEditText_reson.getText().toString();
+
+            if (!StringUtil.isNotNullOrEmptyString(reson_value)) {
+
+                tv_reson.setVisibility(View.VISIBLE);
+                SettingDeActivateRequest deActivateRequest = new SettingDeActivateRequest();
+                deActivateRequest.setAppVersion("string");
+                deActivateRequest.setCloudMessagingId("string");
+                deActivateRequest.setDeviceUniqueId("string");
+                deActivateRequest.setReasonForInactive(reson_value);
+                mSettingFeedbackPresenter.getUserDeactiveAuthTokeInPresenter(deActivateRequest);
+                Intent i = new Intent(getActivity(), PreferencesDeactiveAccountDialogFragment.class);
+                startActivity(i);
+
+            }else {
+
+
+            }
+
+
+        } else {
+            SettingDeActivateRequest deActivateRequest = new SettingDeActivateRequest();
+            deActivateRequest.setAppVersion("string");
+            deActivateRequest.setCloudMessagingId("string");
+            deActivateRequest.setDeviceUniqueId("string");
+            deActivateRequest.setReasonForInactive(value);
+            mSettingFeedbackPresenter.getUserDeactiveAuthTokeInPresenter(deActivateRequest);
+
+
+
+
+
+        }
+
+
+
+
+    }
+
+    @Override
+    public void getFeedbackResponse(SettingFeedbackResponce feedbackResponce) {
+
+    }
+
+    @Override
+    public void getUserRatingResponse(SettingRatingResponse ratingResponse) {
+
+    }
+
+    @Override
+    public void getUserDeactiveResponse(SettingDeActivateResponse deActivateResponse) {
+
+    }
+
+    @Override
+    public void getUserPreferenceResponse(UserpreferenseResponse userpreferenseResponse) {
+
+    }
+
+    @Override
+    public void showNwError() {
+
+    }
+
+    @Override
+    public void startProgressBar() {
+
+    }
+
+    @Override
+    public void stopProgressBar() {
+
+    }
+
+    @Override
+    public void startNextScreen() {
+
+    }
+
+    @Override
+    public void showError(String s) {
+
+    }
+
 
     interface SettingPreferences_DeactiveAccounActivitytLisIntractionListener {
 
         void onErrorOccurence();
     }
-
 
 
 }

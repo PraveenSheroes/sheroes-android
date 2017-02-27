@@ -50,9 +50,10 @@ import appliedlife.pvtltd.SHEROES.views.fragments.JobLocationFilter;
 import appliedlife.pvtltd.SHEROES.views.fragments.LoginFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunitiesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.OnboardingFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.PersonnelProfileFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.PersonalProfileFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProffestionalProfileFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileFullViewFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProfileTravelClientFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SearchArticleFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SearchCommunitiesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SearchJobFragment;
@@ -95,7 +96,19 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.JobLocationHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MemberHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MyCommunitiesCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OwnerListHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.ProfileAboutMeHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.ProfileBasicDetailsHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.ProfileEducationHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.ProfileGoodAtHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.ProfileHorListHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.ProfileHorizontalViewHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.ProfileIAmInterestingInHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.ProfileICanHelpWithHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.ProfileLookingForHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.ProfileOtherHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.ProfilePersonalBasicDetailsHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ProfileViewHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.ProfileWorkExperienceHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ReactionHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.RequestedHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.SearchModuleHolder;
@@ -133,7 +146,7 @@ public interface SheroesAppComponent {
     void inject(ImageFullViewFragment imageFullViewFragment);
     void inject(ArticleDetailFragment articleDetailFragment);
     void inject(ProfileFullViewFragment profileFullViewFragment);
-    void inject(PersonnelProfileFragment personnelProfileFragment);
+    void inject(PersonalProfileFragment personalProfileFragment);
     void inject(ProffestionalProfileFragment proffestionalProfileFragment);
     void inject(BookmarksFragment bookmarksFragment);
     void inject(BlankHolder blankHolder);
@@ -155,6 +168,22 @@ public interface SheroesAppComponent {
     void inject(ArticleDetailSuggestedHolder articleDetailSuggestedHolder);
     void inject(ArticleDetailWithInSuggestedHolder articleDetailWithInSuggestedHolder);
     void inject(ProfileViewHolder profileViewHolder);
+
+
+
+    void inject(ProfileWorkExperienceHolder profileWorkExperienceHolder);
+    void inject(ProfileBasicDetailsHolder profileBasicDetailsHolder);
+    void inject(ProfileEducationHolder profileEducationHolder);
+    void inject(ProfileOtherHolder profileOtherHolder);
+    void inject(ProfileHorListHolder profileHorListHolder);
+    void inject(ProfileHorizontalViewHolder profileHorizontalViewHolder);
+    void inject(ProfileGoodAtHolder profileGoodAtHolder);
+    void inject(ProfileLookingForHolder profileLookingForHolder);
+    void inject(ProfileICanHelpWithHolder profileICanHelpWithHolder);
+    void inject(ProfileAboutMeHolder profileAboutMeHolder);
+    void inject(ProfilePersonalBasicDetailsHolder profilePersonalBasicDetailsHolder);
+    void inject(ProfileIAmInterestingInHolder profileIAmInterestingInHolder);
+
 
     void inject(SettingFragment settingFragment);
     void inject(SettingFeedbackFragment settingFeedbackFragment);
@@ -224,4 +253,5 @@ public interface SheroesAppComponent {
     void inject(OnboardingFragment onboardingFragment);
     void inject(SheroesHelpYouFragment sheroesHelpYouFragment);
     void inject(CanHelpHolder canHelpHolder);
+    void inject(ProfileTravelClientFragment profileTravelClientFragment);
 }

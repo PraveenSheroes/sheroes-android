@@ -6,6 +6,7 @@
     android:orientation="horizontal"
     android:weightSum="@integer/int_value_for_line_1">
 
+
     <appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView
         android:id="@+id/iv_profile_full_view_icon"
         android:layout_width="@dimen/drawer_profile_icon_size"
@@ -32,8 +33,10 @@
             android:layout_height="wrap_content"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:text="@string/ID_APP_NAME"
+            android:textAllCaps="true"
             android:textColor="@color/white"
             android:textSize="@dimen/dp_size_14" />
+
 
         <TextView
             android:id="@+id/tv_profile_completed"
@@ -41,20 +44,22 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_size_10"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:text="@string/ID_APP_NAME"
+            android:text=""
             android:textColor="@color/white"
             android:textSize="@dimen/dp_size_14" />
-          <ProgressBar
-              android:id="@+id/pb_profile_full_view"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_marginTop="@dimen/dp_size_10"
-              style="?android:attr/progressBarStyleHorizontal"
-              android:progressDrawable="@drawable/rectangle_join"
-              android:progressTint="@color/colorAccent"
-              android:progress="40"
-              android:secondaryProgress="60"
-              android:secondaryProgressTint="@color/blue"
-              />
+
+        <ProgressBar
+            android:id="@+id/pb_profile_full_view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_size_10"
+            android:layout_marginTop="@dimen/dp_size_10"
+            style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+            android:progressDrawable="@drawable/progressbar_backgroungdstyle"
+            android:progressTint="#50e3c2"
+            android:focusable="false"
+            android:progress="40" />
+
+
     </LinearLayout>
+
 </LinearLayout>

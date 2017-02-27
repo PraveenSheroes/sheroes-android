@@ -71,11 +71,13 @@ public class GenericRecyclerViewAdapter<T extends BaseResponse> extends Recycler
 
         return holder;
     }
+
     @Override
     public void onBindViewHolder(BaseViewHolder holder, int position) {
 
         holder.bindData(filterListData.get(position), context, position);
     }
+
 
     @Override
     public int getItemViewType(int position) {
@@ -127,6 +129,7 @@ public class GenericRecyclerViewAdapter<T extends BaseResponse> extends Recycler
             }
         };
     }
+
 
     protected List<T> getFilteredResults(String constraint) {
         List<T> results = new ArrayList<>();
