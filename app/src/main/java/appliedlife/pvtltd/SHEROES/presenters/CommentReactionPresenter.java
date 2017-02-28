@@ -58,8 +58,8 @@ public class CommentReactionPresenter extends BasePresenter<AllCommentReactionVi
             }
             @Override
             public void onError(Throwable e) {
-                getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
                 getMvpView().stopProgressBar();
+                getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
             }
 
             @Override
@@ -90,12 +90,12 @@ public class CommentReactionPresenter extends BasePresenter<AllCommentReactionVi
             @Override
             public void onNext(CommentReactionResponsePojo commentResponsePojo) {
                 getMvpView().stopProgressBar();
-                getMvpView().addCommentSuccess(commentResponsePojo.getStatus());
+                getMvpView().commentSuccess(commentResponsePojo.getStatus(),false);
             }
         });
         registerSubscription(subscription);
     }
-    public void editCommentListFromPresenter(CommentReactionRequestPojo commentReactionRequestPojo) {
+    public void editCommentListFromPresenter(CommentReactionRequestPojo commentReactionRequestPojo, final boolean isEdit) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
             return;
@@ -108,14 +108,13 @@ public class CommentReactionPresenter extends BasePresenter<AllCommentReactionVi
             }
             @Override
             public void onError(Throwable e) {
-                getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
                 getMvpView().stopProgressBar();
+                getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
             }
-
             @Override
             public void onNext(CommentReactionResponsePojo commentResponsePojo) {
                 getMvpView().stopProgressBar();
-                getMvpView().addCommentSuccess(commentResponsePojo.getStatus());
+                getMvpView().commentSuccess(commentResponsePojo.getStatus(),isEdit);
             }
         });
         registerSubscription(subscription);

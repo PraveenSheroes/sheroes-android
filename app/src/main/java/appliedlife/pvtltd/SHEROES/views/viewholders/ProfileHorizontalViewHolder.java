@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
@@ -26,7 +25,7 @@ import butterknife.ButterKnife;
  */
 
 public class ProfileHorizontalViewHolder  extends BaseViewHolder<ProfileViewList> {
-    @Bind(R.id.rv_spinner_list)
+    @Bind(R.id.rv_profile_horizontal_list)
     RecyclerView mRecyclerView;
     GenericRecyclerViewAdapter mAdapter;
     List<ProfileHorList> profileList = new ArrayList<ProfileHorList>();

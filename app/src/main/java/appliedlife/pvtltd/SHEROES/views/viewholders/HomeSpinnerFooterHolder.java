@@ -5,6 +5,7 @@ import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
@@ -89,16 +90,19 @@ public class HomeSpinnerFooterHolder extends BaseViewHolder<HomeSpinnerItem> {
 
     private HomeSpinnerItem getAllSelectedData(List<BaseResponse> homeSpinnerItemList) {
         String addAllText = AppConstants.EMPTY_STRING;
+        List<Integer>categoryList=new ArrayList<>();
         HomeSpinnerItem homeSpinnerItem = new HomeSpinnerItem();
         for (BaseResponse baseResponse : homeSpinnerItemList) {
             homeSpinnerItem = ((HomeSpinnerItem) baseResponse);
             if (homeSpinnerItem.isChecked()) {
                 addAllText += homeSpinnerItem.getName() + AppConstants.COMMA;
+                categoryList.add(homeSpinnerItem.getCategoryIdItem());
             }
         }
         if (StringUtil.isNotNullOrEmptyString(addAllText)) {
             homeSpinnerItem.setName(addAllText.substring(0, addAllText.length() - 1));
             homeSpinnerItem.setDone(true);
+            homeSpinnerItem.setCategoryId(categoryList);
         }
         return homeSpinnerItem;
     }

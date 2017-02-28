@@ -338,7 +338,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 } else {
                     tvFeedCommunityPostUserCommentPost.setText(Html.fromHtml(userName + AppConstants.COLON + lastComment.getComment()));// or for older api
                 }
-                if (lastComment.getIsAnonymous()) {
+                if (!lastComment.isMyOwnParticipation()) {
                     tvFeedCommunityPostUserCommentPostMenu.setVisibility(View.GONE);
                 }
             }

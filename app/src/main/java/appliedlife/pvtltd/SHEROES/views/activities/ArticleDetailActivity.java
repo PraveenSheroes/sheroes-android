@@ -7,7 +7,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
@@ -49,12 +48,12 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.CustomCollapsingToolbarLayout;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticleDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
 /**
  * Created by Praveen_Singh on 07-02-2017.
  */
@@ -70,7 +69,7 @@ public class ArticleDetailActivity extends BaseActivity implements BaseHolderInt
     @Bind(R.id.toolbar_article_detail)
     Toolbar mToolbarArticleDetail;
     @Bind(R.id.collapsing_toolbar_article_detail)
-    public CollapsingToolbarLayout mCollapsingToolbarLayout;
+    public CustomCollapsingToolbarLayout mCollapsingToolbarLayout;
     @Bind(R.id.tv_article_detail_total_views)
     TextView mTvArticleDetailTotalViews;
     private FeedDetail mFeedDetail;
@@ -86,6 +85,7 @@ public class ArticleDetailActivity extends BaseActivity implements BaseHolderInt
         intent.putExtras(bundle);
         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, transitionImage, AppConstants.ARTICLE_DETAIL);
         ActivityCompat.startActivity(activity, intent, options.toBundle());
+        activity.finish();
     }
 
     @Override
@@ -106,8 +106,11 @@ public class ArticleDetailActivity extends BaseActivity implements BaseHolderInt
         ViewCompat.setTransitionName(mAppBarLayout, AppConstants.ARTICLE_DETAIL);
         supportPostponeEnterTransition();
         setSupportActionBar(mToolbarArticleDetail);
+        mCollapsingToolbarLayout.setExpandedSubTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
         mCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
         if (null != mFeedDetail) {
+            mCollapsingToolbarLayout.setTitle(mFeedDetail.getNameOrTitle());
+            mCollapsingToolbarLayout.setSubtitle(mFeedDetail.getAuthorName());
             mTvArticleDetailTotalViews.setText(mFeedDetail.getNoOfViews() + AppConstants.SPACE + getString(R.string.ID_VIEWS));
             viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
             viewPagerAdapter.addFragment(ArticleDetailFragment.createInstance(mFeedDetail), getString(R.string.ID_ARTICLE));
@@ -171,16 +174,7 @@ public class ArticleDetailActivity extends BaseActivity implements BaseHolderInt
             case R.id.tv_article_detail_user_comment_post_menu_third:
                 clickMenuItem(view, baseResponse);
                 break;
-            case R.id.tv_article_detail_view_more:
-
-                break;
             case R.id.li_article_detail_join_conversation:
-                openCommentReactionFragment();
-                break;
-            case R.id.tv_article_detail_user_comment:
-                openCommentReactionFragment();
-                break;
-            case R.id.tv_article_detail_total_replies:
                 openCommentReactionFragment();
                 break;
             case R.id.tv_article_detail_user_reaction:
@@ -212,15 +206,17 @@ public class ArticleDetailActivity extends BaseActivity implements BaseHolderInt
     }
 
     private void openCommentReactionFragment() {
-        CommentReactionFragment commentReactionFragmentForArticle = new CommentReactionFragment();
-        Bundle bundleArticle = new Bundle();
-        mFragmentOpen.setCommentList(true);
-        mFragmentOpen.setOpen(true);
-        bundleArticle.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, mFragmentOpen);
-        commentReactionFragmentForArticle.setArguments(bundleArticle);
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.bottom_to_top_slide_reverse_anim)
-                .replace(R.id.fl_article_detail_comments, commentReactionFragmentForArticle, CommentReactionFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
-
+        if (null != mFeedDetail && null != mFragmentOpen) {
+            CommentReactionFragment commentReactionFragmentForArticle = new CommentReactionFragment();
+            Bundle bundleComment = new Bundle();
+            mFragmentOpen.setCommentList(true);
+            mFragmentOpen.setOpen(true);
+            bundleComment.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, mFragmentOpen);
+            bundleComment.putParcelable(AppConstants.COMMENTS, mFeedDetail);
+            commentReactionFragmentForArticle.setArguments(bundleComment);
+            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.bottom_to_top_slide_reverse_anim)
+                    .replace(R.id.fl_article_detail_comments, commentReactionFragmentForArticle, CommentReactionFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+        }
     }
 
     private void showUserReactionOption(View viewToAnimate) {
@@ -356,14 +352,17 @@ public class ArticleDetailActivity extends BaseActivity implements BaseHolderInt
 
     @Override
     public void onClickReactionList(FragmentOpen isFragmentOpen, FeedDetail feedDetail) {
-        mFragmentOpen = isFragmentOpen;
-        if (mFragmentOpen.isReactionList()) {
-            CommentReactionFragment commentReactionFragmentForArticle = new CommentReactionFragment();
-            Bundle bundleArticle = new Bundle();
-            bundleArticle.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, mFragmentOpen);
-            commentReactionFragmentForArticle.setArguments(bundleArticle);
-            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.bottom_to_top_slide_reverse_anim)
-                    .replace(R.id.fl_article_detail_comments, commentReactionFragmentForArticle, CommentReactionFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+        if(null!=isFragmentOpen&&null!=feedDetail) {
+            mFragmentOpen = isFragmentOpen;
+            if (mFragmentOpen.isReactionList()) {
+                CommentReactionFragment commentReactionFragmentForArticle = new CommentReactionFragment();
+                Bundle bundleArticle = new Bundle();
+                bundleArticle.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, mFragmentOpen);
+                bundleArticle.putParcelable(AppConstants.COMMENTS, feedDetail);
+                commentReactionFragmentForArticle.setArguments(bundleArticle);
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.bottom_to_top_slide_reverse_anim)
+                        .replace(R.id.fl_article_detail_comments, commentReactionFragmentForArticle, CommentReactionFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+            }
         }
 
     }
@@ -382,7 +381,7 @@ public class ArticleDetailActivity extends BaseActivity implements BaseHolderInt
             mFragmentOpen.setReactionList(false);
             mFragmentOpen.setCommentList(true);
         } else {
-            finish();
+            onBackClick();
         }
     }
 
@@ -461,6 +460,10 @@ public class ArticleDetailActivity extends BaseActivity implements BaseHolderInt
 
     @OnClick(R.id.iv_article_detail_back)
     public void onBackClick() {
+        Intent homeIntent = new Intent(this, HomeActivity.class);
+        startActivity(homeIntent);
         finish();
+        overridePendingTransition(R.anim.fade_in_dialog,R.anim.fade_out_dialog);
     }
+
 }

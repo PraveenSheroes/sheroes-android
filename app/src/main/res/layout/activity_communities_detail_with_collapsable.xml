@@ -13,16 +13,18 @@
         android:background="@color/fully_transparent"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <android.support.design.widget.CollapsingToolbarLayout
+        <appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.CustomCollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar_communities_detail"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
-            app:contentScrim="@color/search_tab_text"
-            app:expandedTitleMarginEnd="@dimen/dp_size_54"
-            app:expandedTitleMarginStart="@dimen/dp_size_50"
-            app:expandedTitleMarginTop="@dimen/dp_size_160"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:contentScrim="@color/colorAccent"
+            app:collapsedTitleTextAppearance="@style/title.collapsed"
+            app:expandedTitleTextAppearance="@style/title.expanded"
+            app:collapsedSubtitleAppearance="@style/subtitle_collapsed"
+            app:expandedSubtitleAppearance="@style/subtitle"
+            app:expandedTitleGravity="bottom|center_horizontal"
+            android:fitsSystemWindows="true">
 
             <appliedlife.pvtltd.SHEROES.views.cutomeviews.SquareImageView
                 android:id="@+id/iv_communities_detail"
@@ -99,7 +101,7 @@
                     android:paddingRight="@dimen/dp_size_20" />
             </android.support.v7.widget.Toolbar>
 
-        </android.support.design.widget.CollapsingToolbarLayout>
+        </appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.CustomCollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager_communities_detail"

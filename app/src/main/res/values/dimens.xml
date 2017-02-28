@@ -83,6 +83,7 @@
     <dimen name="sp_size_2">2sp</dimen>
 
     <dimen name="sp_size_4">4sp</dimen>
+    <dimen name="sp_size_6">6sp</dimen>
     <dimen name="sp_size_15">15sp</dimen>
     <dimen name="sp_size_19">19sp</dimen>
     <dimen name="sp_size_22">22sp</dimen>

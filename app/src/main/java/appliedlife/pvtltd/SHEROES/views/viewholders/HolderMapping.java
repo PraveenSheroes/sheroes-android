@@ -8,9 +8,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.article.ArticleDetailSuggestion;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionDoc;
-
 import appliedlife.pvtltd.SHEROES.models.entities.communities.CommunitySuggestion;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityList;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityTags;
@@ -25,15 +23,11 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.ProfileItems;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.FilterList;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobDetailPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobLocationList;
-
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.can_help;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileHorList;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfilePersonalViewList;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileViewList;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleDetailPojo;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.Feature;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.MyCommunities;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 
 public enum HolderMapping {
@@ -132,14 +126,13 @@ public enum HolderMapping {
             return new TagsHolder(view, viewInterface);
         }
 
-    },CANHELP(R.layout.list_of_can_help) {
+    }, CANHELP(R.layout.list_of_can_help) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new CanHelpHolder(view, viewInterface);
         }
 
-    }
-    , COMMUNITY_DETAIL_HEADER(R.layout.community_detail_header_holder) {
+    }, COMMUNITY_DETAIL_HEADER(R.layout.community_detail_header_holder) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new CommunityCardDetailHeader(view, viewInterface);
@@ -177,22 +170,19 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new ProfileEducationHolder(view, viewInterface);
         }
-    }
-    ,
+    },
     PROFILE_WORKEXPERIENCE(R.layout.professional_education_card) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new ProfileWorkExperienceHolder(view, viewInterface);
         }
-    }
-    ,
+    },
     PROFILE_HORIZONTAL_LIST(R.layout.profile_hor_card) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new ProfileHorListHolder(view, viewInterface);
         }
-    }
-    ,
+    },
     PROFILE_HORIZONTAL_RECYCLER_LIST(R.layout.profile_horizontal_recycler) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
@@ -228,12 +218,12 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new ProfileAboutMeHolder(view, viewInterface);
         }
-    },PROFILE_PERSONAL_BASICDETAILS(R.layout.profile_basicdetails_card) {
+    }, PROFILE_PERSONAL_BASICDETAILS(R.layout.profile_basicdetails_card) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new ProfilePersonalBasicDetailsHolder(view, viewInterface);
         }
-    },PROFILE_PERSONAL_INTERESTING(R.layout.profile_interesting_in_card) {
+    }, PROFILE_PERSONAL_INTERESTING(R.layout.profile_interesting_in_card) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new ProfileIAmInterestingInHolder(view, viewInterface);
@@ -250,13 +240,12 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new JobLocationHolder(view, viewInterface);
         }
-    },COMMUNITY_SUGGESTED_BY_HOLDER(R.layout.community_suggested_by_layout) {
+    }, COMMUNITY_SUGGESTED_BY_HOLDER(R.layout.community_suggested_by_layout) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new CommunityWithInSggestedHolder(view, viewInterface);
         }
-    }
-    , JOB_DETAIL_HOLDER(R.layout.job_detail_page) {
+    }, JOB_DETAIL_HOLDER(R.layout.job_detail_page) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new JobDetailHolder(view, viewInterface);
@@ -328,7 +317,11 @@ public enum HolderMapping {
                         default:
                     }
                 }
-            } else {
+            } else if (callFromType.equalsIgnoreCase(AppConstants.ALL_SEARCH)) {
+                if (item instanceof FeedDetail) {
+                    returnView = SEARCH_MODULE.ordinal();
+                }
+            } else if (callFromType.equalsIgnoreCase(AppConstants.FOR_ALL)) {
                 if (item instanceof FeedDetail) {
                     FeedDetail feedDetail = ((FeedDetail) item);
                     String feedType = feedDetail.getSubType().toUpperCase();
@@ -371,102 +364,65 @@ public enum HolderMapping {
                     } else {
                         return HOME_SPINNER_ITEMS.ordinal();
                     }
-                } else if (item instanceof DrawerItems) {
-                    return DRAWER_ITEMS.ordinal();
-                } else if (item instanceof ArticleCardResponse) {
-                    return ARTICLE_CARD_HOLDER.ordinal();
-                } else if (item instanceof MyCommunities) {
-                    return MY_COMMUNITIES_CARD.ordinal();
-                } else if (item instanceof Feature) {
-                    String id = ((Feature) item).getId();
-                    if (id.equalsIgnoreCase("1")) {
-                        return SUGGESTED_CARD_HOLDER.ordinal();
-                    } else {
-                        return FEATURE_CARD.ordinal();
-                    }
-
-                }
-                else if (item instanceof ProfileHorList) {
+                } else if (item instanceof ArticleDetailPojo) {
+                    returnView = ARTICLE_DETAIL_HOLDER.ordinal();//TODO: Home related changes
+                } else if (item instanceof ProfileHorList) {
                     return PROFILE_HORIZONTAL_LIST.ordinal();
-                }
-                else if (item instanceof ProfileViewList) {
+                } else if (item instanceof ProfileViewList) {
 
-                    ProfileViewList profileViewList=((ProfileViewList) item);
+                    ProfileViewList profileViewList = ((ProfileViewList) item);
 
-                    String tagType =(profileViewList.getTag().toString());
+                    String tagType = (profileViewList.getTag().toString());
 
 
-                    if(tagType.equals("EDUCATION"))
-                    {
+                    if (tagType.equals("EDUCATION")) {
                         return PROFIL_EEDUCATION.ordinal();
-                    }
-                    else if(tagType.equals("Good At"))
-                    {
+                    } else if (tagType.equals("Good At")) {
                         return PROFILE_GOODAT.ordinal();
-                    }
-                    else if(tagType.equals("WORK EXPERIENCE"))
-                    {
+                    } else if (tagType.equals("WORK EXPERIENCE")) {
                         return PROFILE_WORKEXPERIENCE.ordinal();
-                    }
-                    else if(tagType.equals("Horizontal"))
-                    {
+                    } else if (tagType.equals("Horizontal")) {
                         return PROFILE_HORIZONTAL_RECYCLER_LIST.ordinal();
-                    }
-                    else if(tagType.equals("BASIC DETAILS"))
-                    {
+                    } else if (tagType.equals("BASIC DETAILS")) {
                         return PROFILE_BASICDETAILS.ordinal();
-                    }
-
-                    else if(tagType.equals("OTHER"))
-                    {
+                    } else if (tagType.equals("OTHER")) {
                         return PROFILE_OTHER.ordinal();
                     }
 
-                }
-                else if (item instanceof ProfilePersonalViewList)
+                } else if (item instanceof ProfilePersonalViewList)
 
                 {
 
-                    ProfilePersonalViewList profilePersonalViewList=((ProfilePersonalViewList) item);
+                    ProfilePersonalViewList profilePersonalViewList = ((ProfilePersonalViewList) item);
 
-                    String tagType =(profilePersonalViewList.getTag().toString());
+                    String tagType = (profilePersonalViewList.getTag().toString());
 
 
-                    if (tagType.equals("Looking For"))
-                    {
+                    if (tagType.equals("Looking For")) {
 
                         return PROFILE_LOOK_IN_FOR.ordinal();
 
-                    }else  if (tagType.equals("I Can Help With"))
-                    {
+                    } else if (tagType.equals("I Can Help With")) {
 
                         return PROFILE_I_CAN_HELP.ordinal();
 
-                    }else  if (tagType.equals("About Me"))
-                    {
+                    } else if (tagType.equals("About Me")) {
 
                         return PROFILE_ABOUTME.ordinal();
 
-                    }else  if (tagType.equals("Basic Details"))
-                    {
+                    } else if (tagType.equals("Basic Details")) {
                         return PROFILE_PERSONAL_BASICDETAILS.ordinal();
 
-                    }else  if (tagType.equals("I AM INTERESTED IN"))
-                    {
+                    } else if (tagType.equals("I AM INTERESTED IN")) {
                         return PROFILE_PERSONAL_INTERESTING.ordinal();
 
                     }
 
-                }
-
-                else if (item instanceof ListOfInviteSearch) {
+                } else if (item instanceof ListOfInviteSearch) {
                     return INVITE_SEARCH_MODULE.ordinal();
-                }
-
-                else if (item instanceof can_help) {
+                } else if (item instanceof can_help) {
                     return CANHELP.ordinal();
-                }
-                else if (item instanceof RequestedList) {
+                } else if (item instanceof RequestedList) {
                     return REQUESTLIST.ordinal();
                 } else if (item instanceof OwnerList) {
                     return OWNERLIST.ordinal();
@@ -478,64 +434,17 @@ public enum HolderMapping {
                     return SEARCHTAGS.ordinal();
                 } else if (item instanceof CommunitySuggestion) {
                     return COMMUNITY_SUGGESTED_BY_HOLDER.ordinal();
-            }
-            else if(item instanceof JobLocationList)
-            {
-                return JOBLOCATIONLIST.ordinal();
-            }
-            else if(item instanceof FilterList)
-            {
-                return FILTERLIST.ordinal();
-            }
-            else if(item instanceof RequestedList)
-            {
-                return REQUESTLIST.ordinal();
-            }
-        else if (item instanceof OwnerList) {
-                return OWNERLIST.ordinal();
-            } else if (item instanceof MembersList) {
-                return MEMBERLIST.ordinal();
-            } else if (item instanceof CommunityList) {
-                return SELECTDILOG.ordinal();
-            }
-            else if(item instanceof CommunityTags)
-            {
-                return SEARCHTAGS.ordinal();
-            }
-        else if(item instanceof CommunityList)
-        {
-            return SELECTDILOG.ordinal();
-        } else if (item instanceof CommunitySuggestion) {
-                return COMMUNITY_SUGGESTED_BY_HOLDER.ordinal();
-
-                } /*else if (item instanceof ListOfSearch) {
-                    return SEARCH_MODULE.ordinal();
-
-                }*/ else if (item instanceof ArticleDetailPojo) {
-
-                        return ARTICLE_DETAIL_HOLDER.ordinal();
-
-                }
-                else if (item instanceof JobDetailPojo) {
-
+                } else if (item instanceof JobLocationList) {
+                    return JOBLOCATIONLIST.ordinal();
+                } else if (item instanceof FilterList) {
+                    return FILTERLIST.ordinal();
+                } else if (item instanceof JobDetailPojo) {
                     return JOB_DETAIL_HOLDER.ordinal();
-
-                }else if (item instanceof ArticleDetailSuggestion) {
-                    return ARTICLE_DETAIL_WITHIN_SUGGESTED_HOLDER.ordinal();
-
                 } else if (item instanceof ProfileItems) {
                     return PROFILE_HOLDER.ordinal();
-
-                }
-                else if (item instanceof CommentReactionDoc) {
-                    return COMMENT.ordinal();
-                }else if (item instanceof ArticleDetailPojo) {
-                } else if (item instanceof ArticleDetailPojo) {
-                    returnView = ARTICLE_DETAIL_HOLDER.ordinal();
                 }
             }
         }
-
         return returnView;
     }
 

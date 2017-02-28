@@ -40,28 +40,35 @@ public class SearchModuleHolder extends BaseViewHolder<FeedDetail> {
     @Override
     public void bindData(FeedDetail item, Context context, int position) {
         this.dataItem = item;
-        if(StringUtil.isNotNullOrEmptyString(item.getSubType())) {
+        if(null!=dataItem&&StringUtil.isNotNullOrEmptyString(dataItem.getSubType())) {
+
             switch (item.getSubType())
             {
                 case AppConstants.FEED_ARTICLE:
                     mTvHeaderText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_feed_article_top_left,0,0,0);
+                    mTvHeaderText.setText(dataItem.getAuthorName());
                     break;
                 case AppConstants.FEED_COMMUNITY:
                     mTvHeaderText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search_group_icon,0,0,0);
+                    mTvLabelText.setText(item.getCommunityType());
+                    mTvLabelText.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_lock,0);
                     break;
                 case AppConstants.FEED_COMMUNITY_POST:
                     mTvHeaderText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search_group_icon,0,0,0);
+                    mTvHeaderText.setText(item.getNameOrTitle());
+                    mTvLabelText.setText(item.getCommunityType());
                     break;
                 case AppConstants.FEED_JOB:
                     mTvHeaderText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search_proffesion_icon,0,0,0);
+                    mTvHeaderText.setText(item.getNameOrTitle());
+                    mTvLabelText.setText(item.getAuthorCityName());
                     break;
                 default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + item.getSubType());
             }
 
         }
-            mTvHeaderText.setText(item.getAuthorName());
-            mTvLabelText.setText(item.getAuthorCityName());
+
 
     }
 

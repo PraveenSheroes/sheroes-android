@@ -59,8 +59,6 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
     TextView tvArticleDetailTotalReaction;
     @Bind(R.id.tv_article_detail_total_replies)
     TextView tvArticleDetailTotalReplies;
-    @Bind(R.id.tv_article_detail_user_comment_post)
-    TextView tvArticleDetailUserCommentPost;
     @Bind(R.id.li_article_detail_join_conversation)
     LinearLayout liArticleDetailJoinConversation;
     @Bind(R.id.iv_article_detail_register_user_pic)
@@ -77,6 +75,12 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
     TextView tvArticleDetailUserCommentPostMenuSecond;
     @Bind(R.id.tv_article_detail_user_comment_post_menu_third)
     TextView tvArticleDetailUserCommentPostMenuThird;
+    @Bind(R.id.tv_article_detail_user_comment_post)
+    TextView tvArticleDetailUserCommentPost;
+    @Bind(R.id.tv_article_detail_user_comment_post_second)
+    TextView tvArticleDetailUserCommentPostSecond;
+    @Bind(R.id.tv_article_detail_user_comment_post_third)
+    TextView tvArticleDetailUserCommentPostThird;
     BaseHolderInterface viewInterface;
     private ArticleDetailPojo dataItem;
     private FeedDetail mFeedDetail;
@@ -94,6 +98,7 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
     LinearLayout liArticleDetailUserCommentsThird;
     @Bind(R.id.iv_article_detail_user_pic_third)
     CircleImageView ivArticleDetailUserPicThird;
+
     public ArticleDetailHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
@@ -105,7 +110,7 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
     @Override
     public void bindData(ArticleDetailPojo item, final Context context, int position) {
         this.dataItem = item;
-        this.mContext=context;
+        this.mContext = context;
         mFeedDetail = dataItem.getFeedDetail();
         if (null != mFeedDetail) {
             imageOperations(context);
@@ -115,23 +120,24 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
 
     private void imageOperations(Context context) {
 
-            if(StringUtil.isNotNullOrEmptyString(mFeedDetail.getNameOrTitle())) {
-                ((ArticleDetailActivity) mContext).mCollapsingToolbarLayout.setTitle(mFeedDetail.getNameOrTitle());
+        if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getNameOrTitle())) {
+            ((ArticleDetailActivity) mContext).mCollapsingToolbarLayout.setTitle(mFeedDetail.getNameOrTitle());
+        }
+        String feedCircleIconUrl = mFeedDetail.getAuthorImageUrl();
+        if (StringUtil.isNotNullOrEmptyString(feedCircleIconUrl)) {
+            ivArticleDetailCardCircleIcon.setCircularImage(true);
+            ivArticleDetailCardCircleIcon.bindImage(feedCircleIconUrl);
+        }
+        String description = mFeedDetail.getDescription();
+        if (StringUtil.isNotNullOrEmptyString(description)) {
+            if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                tvHtmlData.setText(Html.fromHtml(description, 0)); // for 24 api and more
+            } else {
+                tvHtmlData.setText(Html.fromHtml(description));// or for older api
             }
-            String feedCircleIconUrl = mFeedDetail.getAuthorImageUrl();
-            if (StringUtil.isNotNullOrEmptyString(feedCircleIconUrl)) {
-                ivArticleDetailCardCircleIcon.setCircularImage(true);
-                ivArticleDetailCardCircleIcon.bindImage(feedCircleIconUrl);
-            }
-            String description = mFeedDetail.getDescription();
-            if (StringUtil.isNotNullOrEmptyString(description)) {
-                if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                    tvHtmlData.setText(Html.fromHtml(description, 0)); // for 24 api and more
-                } else {
-                    tvHtmlData.setText(Html.fromHtml(description));// or for older api
-                }
-            }
+        }
     }
+
     private void allTextViewStringOperations(Context context) {
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getAuthorName())) {
             tvArticleDetailIconName.setText(mFeedDetail.getAuthorName());
@@ -140,17 +146,17 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
             long createdDate = mDateUtil.getTimeInMillis(mFeedDetail.getCreatedDate(), AppConstants.DATE_FORMAT);
             long minuts = mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate);
             if (minuts < 60) {
-                tvArticleDetailTime.setText(String.valueOf((int) minuts)+AppConstants.SPACE+mContext.getString(R.string.ID_MINUTS));
+                tvArticleDetailTime.setText(String.valueOf((int) minuts) + AppConstants.SPACE + mContext.getString(R.string.ID_MINUTS));
             } else {
                 int hour = (int) minuts / 60;
-                tvArticleDetailTime.setText(String.valueOf(hour)+AppConstants.SPACE+mContext.getString(R.string.ID_HOURS));
+                tvArticleDetailTime.setText(String.valueOf(hour) + AppConstants.SPACE + mContext.getString(R.string.ID_HOURS));
             }
 
         }
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getDescription())) {
             String description = mFeedDetail.getDescription().trim();
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                tvArticleDetailDescription.setText(Html.fromHtml(description , 0)); // for 24 api and more
+                tvArticleDetailDescription.setText(Html.fromHtml(description, 0)); // for 24 api and more
             } else {
                 tvArticleDetailDescription.setText(Html.fromHtml(description));// or for older api
             }
@@ -173,29 +179,9 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
                     userLike();
             }
         }
-        if (mFeedDetail.getNoOfComments() < AppConstants.ONE_CONSTANT) {
-            tvArticleDetailTotalReplies.setVisibility(View.GONE);
-            liArticleDetailUserComments.setVisibility(View.GONE);
-            liArticleDetailUserCommentsSecond.setVisibility(View.GONE);
-            liArticleDetailUserCommentsThird.setVisibility(View.GONE);
-        } else {
-            switch (mFeedDetail.getNoOfComments()) {
-                case AppConstants.ONE_CONSTANT:
-                    tvArticleDetailTotalReplies.setText(String.valueOf(mFeedDetail.getNoOfComments()) + AppConstants.SPACE + context.getString(R.string.ID_REPLY));
-                    userComments();
-                    break;
-                case AppConstants.TWO_CONSTANT:
-                    tvArticleDetailTotalReplies.setText(String.valueOf(mFeedDetail.getNoOfComments()) + AppConstants.SPACE + context.getString(R.string.ID_REPLIES));
-                    userComments();
-                    break;
-                case AppConstants.THREE_CONSTANT:
-                    tvArticleDetailTotalReplies.setText(String.valueOf(mFeedDetail.getNoOfComments()) + AppConstants.SPACE + context.getString(R.string.ID_REPLIES));
-                    userComments();
-                    break;
-                default:
-                    LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + mFeedDetail.getNoOfComments());
+            if(mFeedDetail.getNoOfComments()>AppConstants.NO_REACTION_CONSTANT) {
+                userComments();
             }
-        }
     }
 
     private void userLike() {
@@ -231,54 +217,60 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
     }
 
     private void userComments() {
-        List<LastComment> lastCommentList = mFeedDetail.getLastComments();
-        if (StringUtil.isNotEmptyCollection(lastCommentList)) {
-            for(int index=0;index<lastCommentList.size();index++) {
+
+        if (StringUtil.isNotEmptyCollection(mFeedDetail.getLastComments())) {
+            List<LastComment> lastCommentList = mFeedDetail.getLastComments();
+            for (int index = 0; index < lastCommentList.size(); index++) {
                 String feedUserIconUrl = lastCommentList.get(index).getParticipantImageUrl();
                 String userName = LEFT_HTML_TAG_FOR_COLOR + lastCommentList.get(index).getParticipantName() + RIGHT_HTML_TAG_FOR_COLOR;
-                switch (index)
-                {
-                    case AppConstants.ONE_CONSTANT:
+                switch (index) {
+                    case AppConstants.NO_REACTION_CONSTANT:
                         ivArticleDetailUserPic.setCircularImage(true);
                         ivArticleDetailUserPic.bindImage(feedUserIconUrl);
+                        liArticleDetailUserComments.setVisibility(View.VISIBLE);
+                        tvArticleDetailTotalReplies.setText(String.valueOf(mFeedDetail.getNoOfComments()) + AppConstants.SPACE + mContext.getString(R.string.ID_REPLY));
 
                         if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                             tvArticleDetailUserCommentPost.setText(Html.fromHtml(userName + AppConstants.COLON + lastCommentList.get(index).getComment(), 0)); // for 24 api and more
                         } else {
                             tvArticleDetailUserCommentPost.setText(Html.fromHtml(userName + AppConstants.COLON + lastCommentList.get(index).getComment()));// or for older api
                         }
-                        if (lastCommentList.get(index).getIsAnonymous()) {
+                        if (!lastCommentList.get(index).isMyOwnParticipation()) {
                             tvArticleDetailUserCommentPostMenu.setVisibility(View.GONE);
                         }
                         break;
-                    case AppConstants.TWO_CONSTANT:
+                    case AppConstants.ONE_CONSTANT:
                         ivArticleDetailUserPicSecond.setCircularImage(true);
                         ivArticleDetailUserPicSecond.bindImage(feedUserIconUrl);
+                        liArticleDetailUserCommentsSecond.setVisibility(View.VISIBLE);
+                        tvArticleDetailTotalReplies.setText(String.valueOf(mFeedDetail.getNoOfComments()) + AppConstants.SPACE + mContext.getString(R.string.ID_REPLIES));
 
                         if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                            tvArticleDetailUserCommentPostMenuSecond.setText(Html.fromHtml(userName + AppConstants.COLON + lastCommentList.get(index).getComment(), 0)); // for 24 api and more
+                            tvArticleDetailUserCommentPostSecond.setText(Html.fromHtml(userName + AppConstants.COLON + lastCommentList.get(index).getComment(), 0)); // for 24 api and more
                         } else {
-                            tvArticleDetailUserCommentPostMenuSecond.setText(Html.fromHtml(userName + AppConstants.COLON + lastCommentList.get(index).getComment()));// or for older api
+                            tvArticleDetailUserCommentPostSecond.setText(Html.fromHtml(userName + AppConstants.COLON + lastCommentList.get(index).getComment()));// or for older api
                         }
-                        if (lastCommentList.get(index).getIsAnonymous()) {
+                        if (!lastCommentList.get(index).isMyOwnParticipation()) {
                             tvArticleDetailUserCommentPostMenuSecond.setVisibility(View.GONE);
                         }
                         break;
-                    case AppConstants.THREE_CONSTANT:
+                    case AppConstants.TWO_CONSTANT:
                         ivArticleDetailUserPicThird.setCircularImage(true);
                         ivArticleDetailUserPicThird.bindImage(feedUserIconUrl);
+                        liArticleDetailUserCommentsThird.setVisibility(View.VISIBLE);
+                        tvArticleDetailTotalReplies.setText(String.valueOf(mFeedDetail.getNoOfComments()) + AppConstants.SPACE + mContext.getString(R.string.ID_REPLIES));
 
                         if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                            tvArticleDetailUserCommentPostMenuThird.setText(Html.fromHtml(userName + AppConstants.COLON + lastCommentList.get(index).getComment(), 0)); // for 24 api and more
+                            tvArticleDetailUserCommentPostThird.setText(Html.fromHtml(userName + AppConstants.COLON + lastCommentList.get(index).getComment(), 0)); // for 24 api and more
                         } else {
-                            tvArticleDetailUserCommentPostMenuThird.setText(Html.fromHtml(userName + AppConstants.COLON + lastCommentList.get(index).getComment()));// or for older api
+                            tvArticleDetailUserCommentPostThird.setText(Html.fromHtml(userName + AppConstants.COLON + lastCommentList.get(index).getComment()));// or for older api
                         }
-                        if (lastCommentList.get(index).getIsAnonymous()) {
+                        if (!lastCommentList.get(index).isMyOwnParticipation()) {
                             tvArticleDetailUserCommentPostMenuThird.setVisibility(View.GONE);
                         }
                         break;
                     default:
-                        LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " +index);
+                        LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + index);
                 }
             }
         }
@@ -306,13 +298,14 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
     @OnClick(R.id.tv_article_detail_user_comment)
     public void userCommentClick() {
         mFeedDetail.setItemPosition(getAdapterPosition());
-        viewInterface.handleOnClick(mFeedDetail, tvArticleDetailUserComment);
+        viewInterface.handleOnClick(mFeedDetail, liArticleDetailJoinConversation);
     }
+
 
     @OnClick(R.id.tv_article_detail_total_replies)
     public void userRepliesClick() {
         mFeedDetail.setItemPosition(getAdapterPosition());
-        viewInterface.handleOnClick(mFeedDetail, tvArticleDetailTotalReplies);
+        viewInterface.handleOnClick(mFeedDetail, liArticleDetailJoinConversation);
     }
 
     @OnClick(R.id.li_article_detail_join_conversation)
@@ -324,7 +317,7 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
     @OnClick(R.id.tv_article_detail_view_more)
     public void viewMoreClick() {
         mFeedDetail.setItemPosition(getAdapterPosition());
-        viewInterface.handleOnClick(mFeedDetail, tvArticleDetailViewMore);
+        viewInterface.handleOnClick(mFeedDetail, liArticleDetailJoinConversation);
     }
 
     @OnClick(R.id.tv_article_detail_user_comment_post_menu)

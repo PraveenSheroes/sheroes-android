@@ -8,7 +8,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
@@ -32,6 +31,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.util.List;
 
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.CustomCollapsingToolbarLayout;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
@@ -43,7 +43,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
-import appliedlife.pvtltd.SHEROES.views.fragments.ArticleDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobDetailFragment;
 import butterknife.Bind;
@@ -66,7 +65,7 @@ public class JobDetailActivity extends BaseActivity implements BaseHolderInterfa
     @Bind(R.id.tv_job_title)
     TextView mTv_job_title;
     @Bind(R.id.collapsing_toolbar_job_detail)
-    public appliedlife.pvtltd.SHEROES.CustomeCollapsableToolBar.CollapsingToolbarLayout mCollapsingToolbarLayout;
+    public CustomCollapsingToolbarLayout mCustomCollapsingToolbarLayout;
     @Bind(R.id.tv_job_comp_nm)
     TextView mTv_job_comp_nm;
     @Bind(R.id.iv_job_comp_logo)
@@ -105,16 +104,14 @@ public class JobDetailActivity extends BaseActivity implements BaseHolderInterfa
     private void setPagerAndLayouts() {
         ViewCompat.setTransitionName(mAppBarLayout, AppConstants.JOB_DETAIL);
         supportPostponeEnterTransition();
-
         setSupportActionBar(mToolbarArticleDetail);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mCollapsingToolbarLayout.setExpandedSubTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
-        mCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
-        mCollapsingToolbarLayout.setExpandedTitleMarginStart(200);
+        mCustomCollapsingToolbarLayout.setExpandedSubTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
+        mCustomCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
+        mCustomCollapsingToolbarLayout.setExpandedTitleMarginStart(200);
         if (null != mFeedDetail) {
-
-            mCollapsingToolbarLayout.setTitle(mFeedDetail.getNameOrTitle());
-            mCollapsingToolbarLayout.setSubtitle(mFeedDetail.getAuthorName());
+            mCustomCollapsingToolbarLayout.setTitle(mFeedDetail.getNameOrTitle());
+            mCustomCollapsingToolbarLayout.setSubtitle(mFeedDetail.getAuthorName());
             mTv_job_comp_nm.setText(mFeedDetail.getAuthorName());
             mTv_job_title.setText(mFeedDetail.getNameOrTitle());
             ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());

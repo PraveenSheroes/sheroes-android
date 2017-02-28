@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package appliedlife.pvtltd.SHEROES.CustomeCollapsableToolBar;
+package appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar;
 
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;

@@ -55,6 +55,9 @@ public class LastComment implements Parcelable {
     @SerializedName("entity_author_user_id_l")
     @Expose
     private int entityAuthorUserIdL;
+    @SerializedName("solr_ignore_my_own_participation")
+    @Expose
+    private boolean myOwnParticipation;
 
     public int getId() {
         return id;
@@ -176,6 +179,25 @@ public class LastComment implements Parcelable {
         isAnonymous = anonymous;
     }
 
+    public LastComment() {
+    }
+
+    public int getEntityAuthorUserIdL() {
+        return entityAuthorUserIdL;
+    }
+
+    public void setEntityAuthorUserIdL(int entityAuthorUserIdL) {
+        this.entityAuthorUserIdL = entityAuthorUserIdL;
+    }
+
+    public boolean isMyOwnParticipation() {
+        return myOwnParticipation;
+    }
+
+    public void setMyOwnParticipation(boolean myOwnParticipation) {
+        this.myOwnParticipation = myOwnParticipation;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -196,9 +218,8 @@ public class LastComment implements Parcelable {
         dest.writeString(this.comment);
         dest.writeString(this.participantName);
         dest.writeString(this.participantImageUrl);
-    }
-
-    public LastComment() {
+        dest.writeInt(this.entityAuthorUserIdL);
+        dest.writeByte(this.myOwnParticipation ? (byte) 1 : (byte) 0);
     }
 
     protected LastComment(Parcel in) {
@@ -215,9 +236,11 @@ public class LastComment implements Parcelable {
         this.comment = in.readString();
         this.participantName = in.readString();
         this.participantImageUrl = in.readString();
+        this.entityAuthorUserIdL = in.readInt();
+        this.myOwnParticipation = in.readByte() != 0;
     }
 
-    public static final Parcelable.Creator<LastComment> CREATOR = new Parcelable.Creator<LastComment>() {
+    public static final Creator<LastComment> CREATOR = new Creator<LastComment>() {
         @Override
         public LastComment createFromParcel(Parcel source) {
             return new LastComment(source);

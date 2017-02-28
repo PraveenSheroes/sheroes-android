@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -12,6 +13,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.util.List;
 
@@ -230,9 +233,10 @@ public class FeedCommunityHolder extends BaseViewHolder<FeedDetail> {
                 } else {
                     tvFeedCommunityUserCommentPost.setText(Html.fromHtml(userName + AppConstants.COLON + lastComment.getComment()));// or for older api
                 }
-                if (lastComment.getIsAnonymous()) {
+                if (!lastComment.isMyOwnParticipation()) {
                     tvFeedCommunityUserCommentPostMenu.setVisibility(View.GONE);
                 }
+
             }
         }
     }
@@ -249,18 +253,24 @@ public class FeedCommunityHolder extends BaseViewHolder<FeedDetail> {
         if (StringUtil.isNotNullOrEmptyString(backgroundImageUrl)) {
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View child = layoutInflater.inflate(R.layout.feed_article_single_image, null);
-            ImageView ivFirstLandscape = (ImageView) child.findViewById(R.id.iv_feed_article_single_image);
-            TextView tvFeedCommunityTimeLabel = (TextView) child.findViewById(R.id.tv_feed_article_time_label);
-            TextView tvFeedCommunityTotalViews = (TextView) child.findViewById(R.id.tv_feed_article_total_views);
-            tvFeedCommunityTotalViews.setVisibility(View.VISIBLE);
-            //   tvFeedCommunityTotalViews.setText(dataItem.getNoOfComments() + AppConstants.SPACE + context.getString(R.string.ID_VIEWS));
-            Glide.with(context)
-                    .load(backgroundImageUrl)
+           final ImageView ivFirstLandscape = (ImageView) child.findViewById(R.id.iv_feed_article_single_image);
+            final TextView tvFeedCommunityTimeLabel = (TextView) child.findViewById(R.id.tv_feed_article_time_label);
+            final TextView tvFeedCommunityTotalViews = (TextView) child.findViewById(R.id.tv_feed_article_total_views);
+            tvFeedCommunityTotalViews.setText(dataItem.getNoOfViews()+ AppConstants.SPACE + context.getString(R.string.ID_VIEWS));
+            Glide.with(mContext)
+                    .load(backgroundImageUrl).asBitmap()
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .skipMemoryCache(true)
-                    .into(ivFirstLandscape);
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
+                            ivFirstLandscape.setImageBitmap(profileImage);
+                            tvFeedCommunityTotalViews.setVisibility(View.VISIBLE);
+                        }
+                    });
 
             liFeedCommunityImages.addView(child);
+
         }
 
     }

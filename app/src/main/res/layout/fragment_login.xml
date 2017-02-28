@@ -17,7 +17,15 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:orientation="vertical">
+        <LinearLayout
+            android:id="@+id/li_tags"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_size_50"
+            android:layout_gravity="center"
+            android:background="@drawable/rectangle_comment_background"
+            android:orientation="vertical">
 
+            </LinearLayout>
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">

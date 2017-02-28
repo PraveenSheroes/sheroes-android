@@ -199,7 +199,6 @@
                 android:layout_marginLeft="@dimen/dp_size_15"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:gravity="right"
-                android:text="8 replies"
                 android:textColor="@color/feed_article_comment"
                 android:textSize="@dimen/sp_size_11" />
         </FrameLayout>
@@ -209,8 +208,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_size_12"
-            android:layout_marginRight="@dimen/dp_size_12"
             android:layout_marginTop="@dimen/dp_size_20"
+            android:visibility="gone"
             android:orientation="horizontal"
             android:weightSum="1">
 
@@ -231,7 +230,6 @@
                 android:lines="@integer/int_value_for_line_2"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:lineSpacingExtra="@dimen/dp_size_3"
-                android:text="@string/IDS_STR_NETWORK_TIME_OUT_DESCRIPTION"
                 android:textColor="@color/feed_conversation"
                 android:textSize="@dimen/sp_size_12" />
 
@@ -241,7 +239,8 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="right"
                 android:drawableRight="@drawable/ic_menu_dashboard"
-                android:paddingLeft="@dimen/dp_size_10" />
+                android:paddingLeft="@dimen/dp_size_10"
+                android:paddingRight="@dimen/dp_size_12"/>
         </LinearLayout>
 
         <LinearLayout
@@ -249,8 +248,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_size_12"
-            android:layout_marginRight="@dimen/dp_size_12"
             android:layout_marginTop="@dimen/dp_size_20"
+            android:visibility="gone"
             android:orientation="horizontal"
             android:weightSum="1">
 
@@ -271,7 +270,6 @@
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:lines="@integer/int_value_for_line_2"
                 android:lineSpacingExtra="@dimen/dp_size_3"
-                android:text="@string/IDS_STR_NETWORK_TIME_OUT_DESCRIPTION"
                 android:textColor="@color/feed_conversation"
                 android:textSize="@dimen/sp_size_12" />
 
@@ -281,7 +279,8 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="right"
                 android:drawableRight="@drawable/ic_menu_dashboard"
-                android:paddingLeft="@dimen/dp_size_10" />
+                android:paddingLeft="@dimen/dp_size_10"
+                android:paddingRight="@dimen/dp_size_12" />
         </LinearLayout>
 
         <LinearLayout
@@ -289,7 +288,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_size_12"
-            android:layout_marginRight="@dimen/dp_size_12"
+            android:visibility="gone"
             android:layout_marginTop="@dimen/dp_size_20"
             android:orientation="horizontal"
             android:weightSum="1">
@@ -311,7 +310,6 @@
                 android:lines="@integer/int_value_for_line_2"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:lineSpacingExtra="@dimen/dp_size_3"
-                android:text="@string/IDS_STR_NETWORK_TIME_OUT_DESCRIPTION"
                 android:textColor="@color/feed_conversation"
                 android:textSize="@dimen/sp_size_12" />
 
@@ -322,7 +320,8 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="right"
                 android:drawableRight="@drawable/ic_menu_dashboard"
-                android:paddingLeft="@dimen/dp_size_10" />
+                android:paddingLeft="@dimen/dp_size_10"
+                android:paddingRight="@dimen/dp_size_12" />
         </LinearLayout>
 
         <TextView

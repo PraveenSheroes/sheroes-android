@@ -98,7 +98,6 @@
                 android:layout_height="@dimen/dp_size_180"
                 android:background="@drawable/ic_image_holder"
                 android:orientation="vertical" />
-
             <include
                 android:id="@+id/li_feed_article_card_emoji_pop_up"
                 layout="@layout/emoji_reaction_layout"

@@ -16,7 +16,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.f2prateek.rx.preferences.Preference;
@@ -36,7 +38,9 @@ import com.facebook.login.widget.LoginButton;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -81,9 +85,11 @@ public class LoginFragment extends BaseFragment implements LoginView {
     EditText mPasswordView;
     @Bind(R.id.pb_login_progress_bar)
     ProgressBar mProgressBar;
+    @Bind(R.id.li_tags)
+    LinearLayout liTags;
     FragmentIntractionWithActivityListner fragmentIntractionWithActivityListner;
     private LoginActivityIntractionListner mLoginActivityIntractionListner;
-
+    int mCurrentIndex = 0;
 
     private static final int READ_CONTACTS_PERMISSIONS_REQUEST1 = 1;
     private CallbackManager callbackManager;
@@ -134,6 +140,9 @@ public class LoginFragment extends BaseFragment implements LoginView {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_login, container, false);
         ButterKnife.bind(this, view);
+        renderView();
+
+
         mLoginPresenter.attachView(this);
         if (Build.VERSION.SDK_INT >= 23) {
             getPermissionToReadUserContacts();
@@ -145,6 +154,82 @@ public class LoginFragment extends BaseFragment implements LoginView {
         return view;
     }
 
+    public void renderView() {
+        int mSeatHeight = 100;//(int) getActivity().getResources().getDimension(R.dimen.dp_size_48);
+        int mSeatWidth = (int) getActivity().getResources().getDimension(R.dimen.dp_size_48);
+        List<String> stringList = new ArrayList<>();
+        stringList.add("testing is ");
+        stringList.add("Fourth is v ");
+        stringList.add("long here for testing very gt");
+        stringList.add("Fourth is very long here for testing is v");
+
+        int row = 0;
+        for (int index = 0; index <= row; index++) {
+            LayoutInflater layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LinearLayout liRow = (LinearLayout) layoutInflater.inflate(R.layout.row, null);
+            int column = 3;
+            row = cloumnViewTwo(liRow, row, column, stringList);
+            liTags.addView(liRow);
+        }
+
+    }
+
+    private int cloumnViewTwo(LinearLayout liRow, int passedRow, int column, List<String> stringList) {
+
+        if (mCurrentIndex < stringList.size()) {
+            int lengthString = stringList.get(mCurrentIndex).length();
+            if (lengthString > 30) {
+                if (column < 3) {
+                    passedRow += 1;
+                    return passedRow;
+                } else {
+                    LayoutInflater columnInflate = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    LinearLayout backgroundImage = (LinearLayout) columnInflate.inflate(R.layout.tag, null);
+                    TextView textView = (TextView) backgroundImage.findViewById(R.id.test);
+                    textView.setText(stringList.get(mCurrentIndex));
+                    liRow.addView(backgroundImage);
+                    passedRow += 1;
+                    mCurrentIndex++;
+                }
+            } else if (lengthString <= 30 && lengthString > 15) {
+                if (column < 2) {
+                    passedRow += 1;
+                    return passedRow;
+                } else {
+                    LayoutInflater columnInflate = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    View backgroundImage = columnInflate.inflate(R.layout.tag, null);
+                    TextView textView = (TextView) backgroundImage.findViewById(R.id.test);
+                    textView.setText(stringList.get(mCurrentIndex));
+                    liRow.addView(backgroundImage);
+                    mCurrentIndex++;
+                    passedRow = cloumnViewTwo(liRow, passedRow, column - 1, stringList);
+                }
+            } else if (lengthString >= 10 && lengthString <= 25) {
+                if (column < 1) {
+                    passedRow += 1;
+                    return passedRow;
+                } else {
+                    LayoutInflater columnInflate = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    View backgroundImage = columnInflate.inflate(R.layout.tag, null);
+                    TextView textView = (TextView) backgroundImage.findViewById(R.id.test);
+                    textView.setText(stringList.get(mCurrentIndex));
+                    liRow.addView(backgroundImage);
+                    mCurrentIndex++;
+                    passedRow = cloumnViewTwo(liRow, passedRow, column - 1, stringList);
+                }
+            } else if (lengthString <= 5 && lengthString < 10) {
+                LayoutInflater columnInflate = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                LinearLayout backgroundImage = (LinearLayout) columnInflate.inflate(R.layout.tag, null);
+                TextView textView = (TextView) backgroundImage.findViewById(R.id.test);
+                textView.setText(stringList.get(mCurrentIndex));
+                liRow.addView(backgroundImage);
+                passedRow += 1;
+                mCurrentIndex++;
+            }
+
+        }
+        return passedRow;
+    }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -157,7 +242,9 @@ public class LoginFragment extends BaseFragment implements LoginView {
 
     }
 
-    /**Stor token into share prefrances
+    /**
+     * Stor token into share prefrances
+     *
      * @param loginResponse
      */
     @Override
@@ -178,7 +265,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
 
     @Override
     public void showNwError() {
-       // mLoginActivityIntractionListner.onErrorOccurence();
+        // mLoginActivityIntractionListner.onErrorOccurence();
     }
 
 
@@ -228,6 +315,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
 
     public interface LoginActivityIntractionListner {
         void onErrorOccurence();
+
         void onLoginAuthToken();
     }
 
@@ -284,6 +372,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
             mLoginPresenter.getLoginAuthTokeInPresenter(loginRequest);
         }
     }
+
     // Class for facebook access token and user details
     public FacebookCallback<LoginResult> callback = new FacebookCallback<LoginResult>() {
 
@@ -321,7 +410,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                                 e.printStackTrace();
                             }
                             Log.e("response", "" + response);
-                            Toast.makeText(getActivity(),response+"",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), response + "", Toast.LENGTH_LONG).show();
 
 
                         }

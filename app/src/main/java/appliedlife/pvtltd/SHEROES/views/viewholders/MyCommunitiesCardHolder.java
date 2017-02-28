@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -11,6 +12,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.util.List;
 
@@ -55,6 +58,8 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
     private FeedDetail dataItem;
     String mViewMoreDescription;
     String mViewMore, mLess;
+    Context mContext;
+
     public MyCommunitiesCardHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
@@ -65,6 +70,7 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
     @Override
     public void bindData(FeedDetail item, final Context context, int position) {
         this.dataItem = item;
+        mContext = context;
         mViewMore = context.getString(R.string.ID_VIEW_MORE);
         mLess = context.getString(R.string.ID_LESS);
         tvDescriptionText.setTag(mViewMore);
@@ -73,6 +79,7 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
         imageOperations(context);
         textViewOperation(context);
     }
+
     private void textViewOperation(Context context) {
         if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
             tvCommunityCardTitle.setText(dataItem.getNameOrTitle());
@@ -82,7 +89,7 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
         }
 
         mViewMoreDescription = dataItem.getListDescription();
-        if(StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
+        if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
             if (mViewMoreDescription.length() > AppConstants.WORD_LENGTH) {
                 mViewMoreDescription = mViewMoreDescription.substring(0, AppConstants.WORD_COUNT);
             }
@@ -109,7 +116,7 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
     }
 
     private void imageOperations(Context context) {
-       String authorImageUrl = dataItem.getAuthorImageUrl();
+        String authorImageUrl = dataItem.getAuthorImageUrl();
         if (StringUtil.isNotNullOrEmptyString(authorImageUrl)) {
 
             ivCommunityCircleIcon.setCircularImage(true);
@@ -119,20 +126,22 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
         if (StringUtil.isNotNullOrEmptyString(imageUrl)) {
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View child = layoutInflater.inflate(R.layout.feed_article_single_image, null);
-            ImageView ivFirstLandscape = (ImageView) child.findViewById(R.id.iv_feed_article_single_image);
-            TextView tvFeedArticleTimeLabel = (TextView) child.findViewById(R.id.tv_feed_article_time_label);
-            tvFeedArticleTimeLabel.setVisibility(View.GONE);
-            TextView tvFeedArticleTotalViews = (TextView) child.findViewById(R.id.tv_feed_article_total_views);
-         //   tvFeedArticleTotalViews.setText(dataItem.getTotalViews() + AppConstants.SPACE + context.getString(R.string.ID_VIEWS));
-            Glide.with(context)
-                    .load(imageUrl)
+            final ImageView ivFirstLandscape = (ImageView) child.findViewById(R.id.iv_feed_article_single_image);
+            final TextView tvTotalViews = (TextView) child.findViewById(R.id.tv_feed_article_total_views);
+            //   tvFeedArticleTotalViews.setText(dataItem.getTotalViews() + AppConstants.SPACE + context.getString(R.string.ID_VIEWS));
+            Glide.with(mContext)
+                    .load(imageUrl).asBitmap()
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .skipMemoryCache(true)
-                    .into(ivFirstLandscape);
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
+                            ivFirstLandscape.setImageBitmap(profileImage);
+                            tvTotalViews.setVisibility(View.VISIBLE);
+                        }
+                    });
             liCoverImage.addView(child);
-        }
-        else
-        {
+        } else {
             liCoverImage.setBackgroundResource(R.drawable.ic_image_holder);
         }
     }
@@ -141,6 +150,7 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
     public void viewRecycled() {
 
     }
+
     @OnClick(R.id.li_community_images)
     public void detailImageClick() {
         viewInterface.handleOnClick(dataItem, liCoverImage);
@@ -149,24 +159,24 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_community_text)
     public void viewMoreClick() {
-        if(StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
+        if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
             if (tvDescriptionText.getTag().toString().equalsIgnoreCase(mViewMore)) {
-                    String lessWithColor = LEFT_HTML_VEIW_TAG_FOR_COLOR + mLess + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
+                String lessWithColor = LEFT_HTML_VEIW_TAG_FOR_COLOR + mLess + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
 
-                    if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                        tvDescriptionText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + lessWithColor, 0)); // for 24 api and more
-                    } else {
-                        tvDescriptionText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + lessWithColor));// or for older api
-                    }
-                    tvDescriptionText.setTag(mLess);
+                if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                    tvDescriptionText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + lessWithColor, 0)); // for 24 api and more
+                } else {
+                    tvDescriptionText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + lessWithColor));// or for older api
+                }
+                tvDescriptionText.setTag(mLess);
             } else {
                 tvDescriptionText.setTag(mViewMore);
-                    String viewMore = LEFT_HTML_VEIW_TAG_FOR_COLOR + mViewMore + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
-                    if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                        tvDescriptionText.setText(Html.fromHtml(mViewMoreDescription.substring(0, AppConstants.WORD_COUNT) + AppConstants.DOTS + AppConstants.SPACE + viewMore, 0)); // for 24 api and more
-                    } else {
-                        tvDescriptionText.setText(Html.fromHtml(mViewMoreDescription.substring(0, AppConstants.WORD_COUNT) + AppConstants.DOTS + AppConstants.SPACE + viewMore));// or for older api
-                    }
+                String viewMore = LEFT_HTML_VEIW_TAG_FOR_COLOR + mViewMore + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
+                if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                    tvDescriptionText.setText(Html.fromHtml(mViewMoreDescription.substring(0, AppConstants.WORD_COUNT) + AppConstants.DOTS + AppConstants.SPACE + viewMore, 0)); // for 24 api and more
+                } else {
+                    tvDescriptionText.setText(Html.fromHtml(mViewMoreDescription.substring(0, AppConstants.WORD_COUNT) + AppConstants.DOTS + AppConstants.SPACE + viewMore));// or for older api
+                }
             }
         }
     }

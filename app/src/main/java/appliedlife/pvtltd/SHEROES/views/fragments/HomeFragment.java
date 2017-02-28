@@ -76,14 +76,6 @@ public class HomeFragment extends BaseFragment implements HomeView {
     int pressedEmoji;
     boolean listLoad = true;
     int pageNo=AppConstants.ONE_CONSTANT;
-    public static HomeFragment createInstance(int itemsCount) {
-        HomeFragment partThreeFragment = new HomeFragment();
-        // Bundle bundle = new Bundle();
-        //  bundle.putInt(ITEMS_COUNT_KEY, itemsCount);
-        //   partThreeFragment.setArguments(bundle);
-        return partThreeFragment;
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -156,12 +148,11 @@ public class HomeFragment extends BaseFragment implements HomeView {
                 }
             }
         });
-        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
+       mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
         swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 listLoad = true;
-                LogUtils.info("swipe", "*****************end called");
                 mPullRefreshList.setPullToRefresh(true);
                 mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
             }
@@ -248,10 +239,11 @@ public class HomeFragment extends BaseFragment implements HomeView {
     }
     public void commentListRefresh(FeedDetail feedDetail) {
         mAdapter.setDataOnPosition(feedDetail,feedDetail.getItemPosition());
+        mAdapter.notifyDataSetChanged();
     }
 
     private void bookMarkSuccess(String success) {
-        if (success.equalsIgnoreCase(AppConstants.SUCCESS)) {
+        if (success.equalsIgnoreCase(AppConstants.SUCCESS)&&null!=mFeedDetail) {
             if (!mFeedDetail.isBookmarked()) {
                 mFeedDetail.setBookmarked(true);
             } else {
@@ -263,9 +255,9 @@ public class HomeFragment extends BaseFragment implements HomeView {
 
     private void likeSuccess(String success) {
 
-        if (success.equalsIgnoreCase(AppConstants.SUCCESS)) {
+        if (success.equalsIgnoreCase(AppConstants.SUCCESS)&&null!=mFeedDetail) {
 
-            if (null != mFeedDetail && mFeedDetail.isLongPress()) {
+            if (mFeedDetail.isLongPress()) {
                 if (mFeedDetail.getReactionValue() == AppConstants.NO_REACTION_CONSTANT) {
                     mFeedDetail.setReactionValue(pressedEmoji);
                     mFeedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);

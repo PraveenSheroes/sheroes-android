@@ -7,6 +7,8 @@ package appliedlife.pvtltd.SHEROES.models.entities.feed;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
 
 public class FeedRequestPojo extends BaseRequest {
@@ -23,6 +25,12 @@ public class FeedRequestPojo extends BaseRequest {
     @SerializedName("screen_name")
     @Expose
     private String screenName;
+    @SerializedName("article_categories")
+    @Expose
+    private List<String> articleCategories ;
+    @SerializedName("category_ids")
+    @Expose
+    private List<Integer> categoryIds;
 
     public String getSubType() {
         return subType;
@@ -54,5 +62,21 @@ public class FeedRequestPojo extends BaseRequest {
 
     public void setScreenName(String screenName) {
         this.screenName = screenName;
+    }
+
+    public List<String> getArticleCategories() {
+        return articleCategories;
+    }
+
+    public void setArticleCategories(List<String> articleCategories) {
+        this.articleCategories = articleCategories;
+    }
+
+    public List<Integer> getCategoryIds() {
+        return categoryIds;
+    }
+
+    public void setCategoryIds(List<Integer> categoryIds) {
+        this.categoryIds = categoryIds;
     }
 }

@@ -8,16 +8,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dp_size_12"
-        android:weightSum="@integer/int_value_for_line_1"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:weightSum="@integer/int_value_for_line_1">
 
         <TextView
             android:id="@+id/tv_user_comment_header_text"
             android:layout_width="0dp"
-            android:layout_weight="@integer/int_value_for_line_1"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_size_30"
             android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/dp_size_30"
+            android:layout_weight="@integer/int_value_for_line_1"
             android:fontFamily="@string/ID_ROBOTO_LIGHT"
             android:text="@string/ID_REPLIES"
             android:textColor="@color/searchbox_hint_text_color"
@@ -28,22 +28,24 @@
             android:layout_width="@dimen/dp_size_50"
             android:layout_height="@dimen/dp_size_50"
             android:layout_gravity="center"
-            android:paddingRight="@dimen/dp_size_15"
-            android:drawableRight="@drawable/ic_close" />
+            android:drawableRight="@drawable/ic_close"
+            android:paddingRight="@dimen/dp_size_15" />
     </LinearLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_size_1"
         android:layout_marginTop="@dimen/dp_size_8"
         android:background="@color/search_tab_unselected_text" />
+
     <FrameLayout
         android:id="@+id/fl_comment_reaction"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
-        android:layout_marginTop="@dimen/dp_size_20"
-        android:layout_marginRight="@dimen/dp_size_20"
-        android:layout_marginLeft="@dimen/dp_size_15">
+        android:paddingLeft="@dimen/dp_size_15"
+        android:paddingRight="@dimen/dp_size_20"
+        android:paddingTop="@dimen/dp_size_20">
 
         <TextView
             android:id="@+id/tv_reaction_type1"
@@ -55,8 +57,8 @@
             android:id="@+id/tv_reaction_type2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_emoji2_with_you"
-            android:layout_marginLeft="@dimen/dp_size_12"/>
+            android:layout_marginLeft="@dimen/dp_size_12"
+            android:drawableLeft="@drawable/ic_emoji2_with_you" />
 
         <TextView
             android:id="@+id/tv_total_replies"
@@ -81,10 +83,10 @@
             android:id="@+id/tv_reaction_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginRight="@dimen/dp_size_74"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:text="@string/ID_REACTION"
-            android:layout_gravity="center"
             android:textColor="@color/feed_article_comment"
             android:textSize="@dimen/sp_size_11" />
     </FrameLayout>

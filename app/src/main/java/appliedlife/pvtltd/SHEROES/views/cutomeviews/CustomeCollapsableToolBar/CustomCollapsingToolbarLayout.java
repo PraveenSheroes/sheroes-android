@@ -1,20 +1,4 @@
-/*
- * Copyright (C) 2015 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-package appliedlife.pvtltd.SHEROES.CustomeCollapsableToolBar;
+package appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -53,8 +37,8 @@ import java.lang.annotation.RetentionPolicy;
 import appliedlife.pvtltd.SHEROES.R;
 
 import static android.support.annotation.RestrictTo.Scope.GROUP_ID;
-import static appliedlife.pvtltd.SHEROES.CustomeCollapsableToolBar.MathUtils.constrain;
-import static appliedlife.pvtltd.SHEROES.CustomeCollapsableToolBar.ViewUtils.objectEquals;
+import static appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.MathUtils.constrain;
+import static appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.ViewUtils.objectEquals;
 
 
 /**
@@ -102,7 +86,7 @@ import static appliedlife.pvtltd.SHEROES.CustomeCollapsableToolBar.ViewUtils.obj
  * @attr ref android.support.design.R.styleable#CollapsingToolbarLayout_statusBarScrim
  * @attr ref android.support.design.R.styleable#CollapsingToolbarLayout_toolbarId
  */
-public class CollapsingToolbarLayout extends FrameLayout {
+ public class CustomCollapsingToolbarLayout extends FrameLayout {
 
     private static final int DEFAULT_SCRIM_ANIMATION_DURATION = 600;
     final CollapsingTextHelper mCollapsingTextHelper;
@@ -130,15 +114,15 @@ public class CollapsingToolbarLayout extends FrameLayout {
     private int mScrimVisibleHeightTrigger = -1;
     private AppBarLayout.OnOffsetChangedListener mOnOffsetChangedListener;
 
-    public CollapsingToolbarLayout(Context context) {
+    public CustomCollapsingToolbarLayout(Context context) {
         this(context, null);
     }
 
-    public CollapsingToolbarLayout(Context context, AttributeSet attrs) {
+    public CustomCollapsingToolbarLayout(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public CollapsingToolbarLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CustomCollapsingToolbarLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
         ThemeUtils.checkAppCompatTheme(context);
@@ -181,7 +165,7 @@ public class CollapsingToolbarLayout extends FrameLayout {
                 R.styleable.CollapsingToolbarLayout_titleEnabled, true);
         setTitle(a.getText(R.styleable.CollapsingToolbarLayout_title));
 
-	// begin modification
+        // begin modification
         TypedArray mStyle = context.obtainStyledAttributes(attrs,
                 R.styleable.SubtitleCollapsingToolbar, defStyleAttr,
                 R.style.SubtitleCollapsingToolbar);
@@ -205,7 +189,7 @@ public class CollapsingToolbarLayout extends FrameLayout {
                     mStyle.getResourceId(R.styleable.SubtitleCollapsingToolbar_expandedSubtitleAppearance,0)
             );
         }
-    // end
+        // end
 
         // First load the default text appearances
         mCollapsingTextHelper.setExpandedTextAppearance(
@@ -245,7 +229,7 @@ public class CollapsingToolbarLayout extends FrameLayout {
                 new android.support.v4.view.OnApplyWindowInsetsListener() {
                     @Override
                     public WindowInsetsCompat onApplyWindowInsets(View v,
-                            WindowInsetsCompat insets) {
+                                                                  WindowInsetsCompat insets) {
                         return onWindowInsetChanged(insets);
                     }
                 });
@@ -653,7 +637,7 @@ public class CollapsingToolbarLayout extends FrameLayout {
                 ViewCompat.postInvalidateOnAnimation(mToolbar);
             }
             mScrimAlpha = alpha;
-            ViewCompat.postInvalidateOnAnimation(CollapsingToolbarLayout.this);
+            ViewCompat.postInvalidateOnAnimation(CustomCollapsingToolbarLayout.this);
         }
     }
 
@@ -1179,10 +1163,7 @@ public class CollapsingToolbarLayout extends FrameLayout {
          * The view will act as normal with no collapsing behavior.
          */
         public static final int COLLAPSE_MODE_OFF = 0;
-        /**
-         * The view will pin in place until it reaches the bottom of the
-         * {@link CollapsingToolbarLayout}.
-         */
+
         public static final int COLLAPSE_MODE_PIN = 1;
         /**
          * The view will scroll in a parallax fashion. See {@link #setParallaxMultiplier(float)}
@@ -1308,12 +1289,12 @@ public class CollapsingToolbarLayout extends FrameLayout {
             updateScrimVisibility();
 
             if (mStatusBarScrim != null && insetTop > 0) {
-                ViewCompat.postInvalidateOnAnimation(CollapsingToolbarLayout.this);
+                ViewCompat.postInvalidateOnAnimation(CustomCollapsingToolbarLayout.this);
             }
 
             // Update the collapsing text's fraction
             final int expandRange = getHeight() - ViewCompat.getMinimumHeight(
-                    CollapsingToolbarLayout.this) - insetTop;
+                    CustomCollapsingToolbarLayout.this) - insetTop;
             mCollapsingTextHelper.setExpansionFraction(
                     Math.abs(verticalOffset) / (float) expandRange);
         }

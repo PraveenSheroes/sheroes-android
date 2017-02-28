@@ -107,16 +107,16 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
                 tvFeedJobDateTime.setText(String.valueOf(hour) + AppConstants.SPACE + mContext.getString(R.string.ID_HOURS));
             }
         }
-        if (StringUtil.isNotEmptyCollection(dataItem.getOpportunityTypes())) {
-            List<String> jobTypes = dataItem.getOpportunityTypes();
+        if (StringUtil.isNotEmptyCollection(dataItem.getSearchTextJobEmpTypes())) {
+            List<String> jobTypes = dataItem.getSearchTextJobEmpTypes();
             String mergeJobTypes = AppConstants.EMPTY_STRING;
             for (String jobType : jobTypes) {
                 mergeJobTypes += jobType + AppConstants.PIPE;
             }
             tvFeedJobType.setText(mergeJobTypes);
         }
-        if (StringUtil.isNotEmptyCollection(dataItem.getSkills())) {
-            List<String> jobSkills = dataItem.getSkills();
+        if (StringUtil.isNotEmptyCollection(dataItem.getSearchTextSkills())) {
+            List<String> jobSkills = dataItem.getSearchTextSkills();
             String mergeJobSkills = AppConstants.EMPTY_STRING;
             for (String skill : jobSkills) {
                 mergeJobSkills += skill + AppConstants.COMMA;

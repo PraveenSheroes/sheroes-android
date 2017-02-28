@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -39,6 +38,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.CustomCollapsingToolbarLayout;
 import appliedlife.pvtltd.SHEROES.views.fragments.AllMembersFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityInviteSearchFragment;
@@ -65,7 +65,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements  Communit
     @Bind(R.id.toolbar_communities_detail)
     Toolbar mToolbarCommunitiesDetail;
     @Bind(R.id.collapsing_toolbar_communities_detail)
-    CollapsingToolbarLayout mCollapsingToolbarLayout;
+    CustomCollapsingToolbarLayout mCollapsingToolbarLayout;
     private FeedDetail mFeedDetail;
 
     public static void navigate(AppCompatActivity activity, View transitionImage, FeedDetail feedDetail) {
@@ -95,9 +95,12 @@ public class CommunitiesDetailActivity extends BaseActivity implements  Communit
         supportPostponeEnterTransition();
 
         setSupportActionBar(mToolbarCommunitiesDetail);
-        mCollapsingToolbarLayout.setTitle(" ");
+        mCollapsingToolbarLayout.setExpandedSubTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
+        mCollapsingToolbarLayout.setExpandedTitleMarginStart(200);
         mCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
         if (null != mFeedDetail) {
+            mCollapsingToolbarLayout.setTitle(mFeedDetail.getNameOrTitle());
+            mCollapsingToolbarLayout.setSubtitle(mFeedDetail.getAuthorName());
             ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
             viewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(mFeedDetail), getString(R.string.ID_COMMUNITIES));
             mViewPagerCommunitiesDetail.setAdapter(viewPagerAdapter);

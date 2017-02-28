@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -12,6 +13,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.util.List;
 
@@ -111,8 +114,6 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         this.dataItem = item;
         this.mContext = context;
         mViewMore = context.getString(R.string.ID_VIEW_MORE);
-        liFeedArticleImages.removeAllViews();
-        liFeedArticleImages.removeAllViewsInLayout();
         imageOperations(context);
         allTextViewStringOperations(context);
     }
@@ -233,7 +234,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
                 } else {
                     tvFeedArticleUserCommentPost.setText(Html.fromHtml(userName + AppConstants.COLON + lastComment.getComment()));// or for older api
                 }
-                if (lastComment.getIsAnonymous()) {
+                if (!lastComment.isMyOwnParticipation()) {
                     tvFeedArticleUserCommentPostMenu.setVisibility(View.GONE);
                 }
             }
@@ -243,7 +244,6 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     private void imageOperations(Context context) {
         String feedCircleIconUrl = dataItem.getAuthorImageUrl();
         if (StringUtil.isNotNullOrEmptyString(feedCircleIconUrl)) {
-
             ivFeedArticleCircleIcon.setCircularImage(true);
             ivFeedArticleCircleIcon.bindImage(feedCircleIconUrl);
             ivFeedArticleRegisterUserPic.setCircularImage(true);
@@ -251,25 +251,28 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         }
         String backgrndImageUrl = dataItem.getImageUrl();
         if (StringUtil.isNotNullOrEmptyString(backgrndImageUrl)) {
+            liFeedArticleImages.removeAllViews();
+            liFeedArticleImages.removeAllViewsInLayout();
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View backgroundImage = layoutInflater.inflate(R.layout.feed_article_single_image, null);
-            ImageView ivFirstLandscape = (ImageView) backgroundImage.findViewById(R.id.iv_feed_article_single_image);
-
-            TextView tvFeedArticleTimeLabel = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_time_label);
-            tvFeedArticleTimeLabel.setVisibility(View.VISIBLE);
-            TextView tvFeedArticleTotalViews = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_total_views);
-            tvFeedArticleTotalViews.setVisibility(View.VISIBLE);
-            //  tvFeedArticleTotalViews.setText(dataItem.getNoOfComments() + AppConstants.SPACE + context.getString(R.string.ID_VIEWS));
-
-            Glide.with(context)
-                    .load(backgrndImageUrl)
+            final ImageView ivFirstLandscape = (ImageView) backgroundImage.findViewById(R.id.iv_feed_article_single_image);
+            final TextView tvFeedArticleTimeLabel = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_time_label);
+            final TextView tvFeedArticleTotalViews = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_total_views);
+            tvFeedArticleTotalViews.setText(dataItem.getNoOfViews()+ AppConstants.SPACE + context.getString(R.string.ID_VIEWS));
+            Glide.with(mContext)
+                    .load(backgrndImageUrl).asBitmap()
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .skipMemoryCache(true)
-                    .into(ivFirstLandscape);
-
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
+                            ivFirstLandscape.setImageBitmap(profileImage);
+                            tvFeedArticleTimeLabel.setVisibility(View.VISIBLE);
+                            tvFeedArticleTotalViews.setVisibility(View.VISIBLE);
+                        }
+                    });
             liFeedArticleImages.addView(backgroundImage);
         }
-
     }
 
     @Override
@@ -298,7 +301,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     @OnClick(R.id.tv_feed_article_total_replies)
     public void repliesClick() {
         dataItem.setItemPosition(getAdapterPosition());
-        viewInterface.handleOnClick(dataItem, tvFeedArticleTotalReplies);
+        viewInterface.handleOnClick(dataItem, liFeedArticleJoinConversation);
     }
 
 
@@ -320,7 +323,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     @OnClick(R.id.tv_feed_article_user_comment)
     public void articleUserCommentClick() {
         dataItem.setItemPosition(getAdapterPosition());
-        viewInterface.handleOnClick(dataItem, tvFeedArticleUserComment);
+        viewInterface.handleOnClick(dataItem, liFeedArticleJoinConversation);
     }
 
     @OnClick(R.id.li_feed_article_images)

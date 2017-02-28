@@ -55,10 +55,12 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_REPLY">Reply</string>
     <string name="ID_OPEN_BRACKET">(</string>
     <string name="ID_CLOSE_BRACKET">)</string>
-    <string name="ID_REACTION">Reaction</string>
+    <string name="ID_REACTION">Reactions</string>
+    <string name="ID_NO_REACTION">No reaction</string>
     <string name="ID_APPLIED">Applied</string>
     <string name="ID_VIEWS">Views</string>
     <string name="ID_JOIN_CONVERSATION">Join the conversation...</string>
+    <string name="ID_EMPTY_TEXT">Please enter comment</string>
     <string name="ID_WISHTLE">Whistle</string>
     <string name="ID_LOVE">Love</string>
     <string name="ID_LIKE">Like</string>
@@ -73,7 +75,8 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_MEMBERS">Members</string>
     <string name="ID_INVITE">Invite</string>
     <string name="ID_TOTAL_IMAGES">4+</string>
-    <string name="ID_SHARE">Share with your community…</string>
+    <string name="ID_SHARE">Share</string>
+    <string name="ID_SHARE_WITH_COMMUNITY">Share with your community…</string>
     <string name="ID_EDIT">Edit</string>
     <string name="ID_DELETE">Delete</string>
     <string name="ID_REPORT">Report as spam</string>

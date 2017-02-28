@@ -3,29 +3,46 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.f2prateek.rx.preferences.Preference;
+
+import javax.inject.Inject;
+
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.preferences.Token;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.views.fragments.LoginFragment;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
+import appliedlife.pvtltd.SHEROES.views.fragments.LoginFragment;
 import butterknife.ButterKnife;
 
-/** Created by Praveen Singh on 04/01/2017.
+/**
+ * Created by Praveen Singh on 04/01/2017.
  *
  * @author Praveen Singh
  * @version 5.0
  * @since 04/01/2017.
  * Title: A login screen that offers login via email/password.
  */
-public class LoginActivity extends BaseActivity implements LoginFragment.LoginActivityIntractionListner,FragmentIntractionWithActivityListner {
+public class LoginActivity extends BaseActivity implements LoginFragment.LoginActivityIntractionListner, FragmentIntractionWithActivityListner {
     private final String TAG = LogUtils.makeLogTag(LoginActivity.class);
+    @Inject
+    Preference<Token> userPreference;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
-        renderLoginFragmentView();
+        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getAccessToken())) {
+            Intent homeIntent = new Intent(this, HomeActivity.class);
+            startActivity(homeIntent);
+
+        } else {
+            renderLoginFragmentView();
+        }
     }
+
     public void renderLoginFragmentView() {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
@@ -40,7 +57,7 @@ public class LoginActivity extends BaseActivity implements LoginFragment.LoginAc
 
     @Override
     public void onLoginAuthToken() {
-        Intent homeIntent=new Intent(this,HomeActivity.class);
+        Intent homeIntent = new Intent(this, HomeActivity.class);
         startActivity(homeIntent);
 
     }

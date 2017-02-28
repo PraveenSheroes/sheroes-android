@@ -9,24 +9,22 @@
         android:id="@+id/app_bar_article_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
         android:background="@color/fully_transparent"
+        android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <appliedlife.pvtltd.SHEROES.CustomeCollapsableToolBar.CollapsingToolbarLayout
+        <appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.CustomCollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar_job_detail"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:contentScrim="@color/colorAccent"
-            app:collapsedTitleTextAppearance="@style/title.collapsed"
-            app:expandedTitleTextAppearance="@style/title.expanded"
+            android:fitsSystemWindows="true"
             app:collapsedSubtitleAppearance="@style/subtitle_collapsed"
+            app:collapsedTitleTextAppearance="@style/title.collapsed"
+            app:contentScrim="@color/colorAccent"
             app:expandedSubtitleAppearance="@style/subtitle"
             app:expandedTitleGravity="bottom|center_horizontal"
-            app:title=" "
-            app:subtitle=" "
-            android:fitsSystemWindows="true">
+            app:expandedTitleTextAppearance="@style/title.expanded"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <appliedlife.pvtltd.SHEROES.views.cutomeviews.SquareImageView
                 android:id="@+id/iv_article_detail"
@@ -35,34 +33,35 @@
                 android:fitsSystemWindows="true"
                 android:scaleType="fitXY"
                 app:layout_collapseMode="parallax" />
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|bottom"
                 android:layout_marginBottom="@dimen/dp_size_10">
-            <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
-                android:id="@+id/iv_job_comp_logo"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_marginLeft="@dimen/dp_size_10"
-                android:layout_gravity="center_vertical"
-                android:background="@drawable/ripple_button"
-                android:src="@drawable/ic_post_icon" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/tv_job_title"
-                android:layout_marginTop="@dimen/dp_size_10"
-                android:layout_marginLeft="@dimen/dp_size_100"
-                />
+                <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
+                    android:id="@+id/iv_job_comp_logo"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/dp_size_10"
+                    android:background="@drawable/ripple_button"
+                    android:src="@drawable/ic_post_icon" />
+
+                <TextView
+                    android:id="@+id/tv_job_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_size_100"
+                    android:layout_marginTop="@dimen/dp_size_10" />
+
                 <TextView
                     android:id="@+id/tv_job_comp_nm"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tv_job_title"
-                    android:layout_marginLeft="@dimen/dp_size_100"
-                    />
+                    android:layout_marginLeft="@dimen/dp_size_100" />
             </RelativeLayout>
 
 
@@ -72,8 +71,7 @@
                 android:layout_height="?attr/actionBarSize"
                 android:layout_gravity="right"
                 android:gravity="right"
-                app:layout_collapseMode="pin"
-                >
+                app:layout_collapseMode="pin">
 
                 <TextView
                     android:id="@+id/tv_article_detail_share"
@@ -81,8 +79,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:drawableLeft="@drawable/ic_share_icon"
-                    android:drawablePadding="@dimen/dp_size_10"
-                     />
+                    android:drawablePadding="@dimen/dp_size_10" />
 
                 <TextView
                     android:id="@+id/tv_article_detail_bookmark"
@@ -94,8 +91,9 @@
                     android:paddingRight="@dimen/dp_size_10" />
             </android.support.v7.widget.Toolbar>
 
-        </appliedlife.pvtltd.SHEROES.CustomeCollapsableToolBar.CollapsingToolbarLayout>
+        </appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.CustomCollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
+
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager_job_detail"
         android:layout_width="match_parent"

@@ -13,13 +13,17 @@
         android:background="@color/fully_transparent"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <android.support.design.widget.CollapsingToolbarLayout
+        <appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.CustomCollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar_article_detail"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            app:contentScrim="@color/search_tab_text"
-            app:expandedTitleMarginEnd="@dimen/dp_size_54"
+            app:collapsedSubtitleAppearance="@style/subtitle_collapsed"
+            app:collapsedTitleTextAppearance="@style/title.collapsed"
+            app:contentScrim="@color/colorAccent"
+            app:expandedSubtitleAppearance="@style/subtitle"
+            app:expandedTitleGravity="bottom|center_horizontal"
+            app:expandedTitleTextAppearance="@style/title.expanded"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <appliedlife.pvtltd.SHEROES.views.cutomeviews.SquareImageView
@@ -76,6 +80,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left|top"
+                    android:layout_marginRight="@dimen/dp_size_25"
                     android:background="@drawable/ic_back_white"/>
                 <TextView
                     android:id="@+id/tv_article_detail_share"
@@ -84,7 +89,7 @@
                     android:layout_gravity="right"
                     android:drawableLeft="@drawable/ic_share_icon"
                     android:drawablePadding="@dimen/dp_size_10"
-                    android:paddingRight="@dimen/dp_size_38" />
+                    android:paddingRight="@dimen/dp_size_15"/>
 
                 <TextView
                     android:id="@+id/tv_article_detail_bookmark"
@@ -93,10 +98,10 @@
                     android:layout_gravity="right"
                     android:drawableLeft="@drawable/ic_bookmark_in_active"
                     android:drawablePadding="@dimen/dp_size_10"
-                    android:paddingRight="@dimen/dp_size_20" />
+                    android:paddingRight="@dimen/dp_size_18" />
             </android.support.v7.widget.Toolbar>
 
-        </android.support.design.widget.CollapsingToolbarLayout>
+        </appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.CustomCollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager_article_detail"

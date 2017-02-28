@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -11,6 +12,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.util.List;
 
@@ -36,8 +39,8 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
     DateUtil mDateUtil;
     private static final String LEFT_HTML_TAG_FOR_COLOR = "<b><font color='#50e3c2'>";
     private static final String RIGHT_HTML_TAG_FOR_COLOR = "</font></b>";
-    private static final String LEFT_HTML_TAG= "<font color='#333333'>";
-    private static final String RIGHT_HTML_TAG= "</font>";
+    private static final String LEFT_HTML_TAG = "<font color='#333333'>";
+    private static final String RIGHT_HTML_TAG = "</font>";
     @Bind(R.id.li_article_cover_image)
     LinearLayout liArticleCoverImage;
     @Bind(R.id.iv_article_circle_icon)
@@ -70,7 +73,7 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
     @Override
     public void bindData(FeedDetail item, final Context context, int position) {
         this.dataItem = item;
-        mContext=context;
+        mContext = context;
         liArticleCoverImage.removeAllViews();
         liArticleCoverImage.removeAllViewsInLayout();
         if (StringUtil.isNotNullOrEmptyString(dataItem.getAuthorName())) {
@@ -80,10 +83,10 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
             long createdDate = mDateUtil.getTimeInMillis(dataItem.getCreatedDate(), AppConstants.DATE_FORMAT);
             long minuts = mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate);
             if (minuts < 60) {
-                tvArticleTime.setText(String.valueOf((int) minuts)+AppConstants.SPACE+mContext.getString(R.string.ID_MINUTS));
+                tvArticleTime.setText(String.valueOf((int) minuts) + AppConstants.SPACE + mContext.getString(R.string.ID_MINUTS));
             } else {
                 int hour = (int) minuts / 60;
-                tvArticleTime.setText(String.valueOf(hour)+AppConstants.SPACE+mContext.getString(R.string.ID_HOURS));
+                tvArticleTime.setText(String.valueOf(hour) + AppConstants.SPACE + mContext.getString(R.string.ID_HOURS));
             }
 
         }
@@ -91,12 +94,12 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
             tvArticleDescriptionHeader.setText(dataItem.getNameOrTitle());
         }
         if (StringUtil.isNotEmptyCollection(dataItem.getTags())) {
-            List<String> tags=dataItem.getTags();
-            String mergeTags=AppConstants.EMPTY_STRING;
-            for(String tag:tags) {
-                mergeTags+=tag+AppConstants.COMMA;
+            List<String> tags = dataItem.getTags();
+            String mergeTags = AppConstants.EMPTY_STRING;
+            for (String tag : tags) {
+                mergeTags += tag + AppConstants.COMMA;
             }
-            String tagHeader = LEFT_HTML_TAG + context.getString(R.string.ID_TAGS) +RIGHT_HTML_TAG;
+            String tagHeader = LEFT_HTML_TAG + context.getString(R.string.ID_TAGS) + RIGHT_HTML_TAG;
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                 tvArticleTag.setText(Html.fromHtml(tagHeader + AppConstants.COLON + AppConstants.SPACE + mergeTags, 0)); // for 24 api and more
             } else {
@@ -114,23 +117,30 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
             ivArticleCircleIcon.bindImage(feedCircleIconUrl);
 
         }
-        if (StringUtil.isNotNullOrEmptyString( dataItem.getImageUrl())) {
+        if (StringUtil.isNotNullOrEmptyString(dataItem.getImageUrl())) {
             String backgrndImageUrl = dataItem.getImageUrl();
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View backgroundImage = layoutInflater.inflate(R.layout.feed_article_single_image, null);
-            ImageView ivFirstLandscape = (ImageView) backgroundImage.findViewById(R.id.iv_feed_article_single_image);
+            final ImageView ivFirstLandscape = (ImageView) backgroundImage.findViewById(R.id.iv_feed_article_single_image);
             ivFirstLandscape.setOnClickListener(this);
-            TextView tvFeedArticleTimeLabel = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_time_label);
-            TextView tvFeedArticleTotalViews = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_total_views);
-            //    tvFeedArticleTotalViews.setText(dataItem.getTotalViews() + AppConstants.SPACE + context.getString(R.string.ID_VIEWS));
-            Glide.with(context)
-                    .load(backgrndImageUrl)
+            final TextView tvFeedArticleTimeLabel = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_time_label);
+            final TextView tvFeedArticleTotalViews = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_total_views);
+            tvFeedArticleTotalViews.setText(dataItem.getNoOfViews() + AppConstants.SPACE + context.getString(R.string.ID_VIEWS));
+            Glide.with(mContext)
+                    .load(backgrndImageUrl).asBitmap()
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .skipMemoryCache(true)
-                    .into(ivFirstLandscape);
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
+                            ivFirstLandscape.setImageBitmap(profileImage);
+                            tvFeedArticleTimeLabel.setVisibility(View.VISIBLE);
+                            tvFeedArticleTotalViews.setVisibility(View.VISIBLE);
+                        }
+                    });
             liArticleCoverImage.addView(backgroundImage);
         }
-        if (StringUtil.isNotNullOrEmptyString( dataItem.getListShortDescription())) {
+        if (StringUtil.isNotNullOrEmptyString(dataItem.getListShortDescription())) {
             String listShortDescription = dataItem.getListShortDescription();
             if (listShortDescription.length() > AppConstants.WORD_LENGTH) {
                 listShortDescription = listShortDescription.substring(0, AppConstants.WORD_COUNT);
@@ -161,11 +171,11 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_article_trending_label)
     public void tvArticleTrendingClick() {
-            if (dataItem.isBookmarked()) {
-                viewInterface.handleOnClick(dataItem, tvArticleTrendingLabel);
-            } else {
-                viewInterface.handleOnClick(dataItem, tvArticleTrendingLabel);
-            }
+        if (dataItem.isBookmarked()) {
+            viewInterface.handleOnClick(dataItem, tvArticleTrendingLabel);
+        } else {
+            viewInterface.handleOnClick(dataItem, tvArticleTrendingLabel);
+        }
     }
 
     @Override

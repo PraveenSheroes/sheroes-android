@@ -79,16 +79,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="right"
-                android:paddingRight="@dimen/dp_size_10"
+                android:paddingRight="@dimen/dp_size_20"
                 android:drawableRight="@drawable/ic_menu_dashboard" />
-
-            <Spinner
-                android:id="@+id/sp_article_menu"
-                android:layout_width="@dimen/dp_size_15"
-                android:layout_height="match_parent"
-                android:layout_gravity="right"
-                android:background="@color/fully_transparent"
-                android:dropDownSelector="@color/fully_transparent" />
         </LinearLayout>
 
         <LinearLayout

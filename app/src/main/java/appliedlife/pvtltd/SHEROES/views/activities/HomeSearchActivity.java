@@ -19,6 +19,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
+import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import appliedlife.pvtltd.SHEROES.views.fragments.AllSearchFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SearchArticleFragment;
@@ -28,7 +29,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.SearchRecentFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class HomeSearchActivity extends BaseActivity implements BaseHolderInterface,ViewPager.OnPageChangeListener {
+public class HomeSearchActivity extends BaseActivity implements BaseHolderInterface,ViewPager.OnPageChangeListener,FragmentIntractionWithActivityListner {
     @Bind(R.id.search_toolbar)
     Toolbar mToolbar;
     @Bind(R.id.search_view_pager)
@@ -63,17 +64,17 @@ public class HomeSearchActivity extends BaseActivity implements BaseHolderInterf
         if(mFragmenOpen.isFeedOpen()) {
             String search =  getString(R.string.ID_SEARCH_IN_FEED);
             mSearchEditText.setHint(search);
-            mViewPagerAdapter.addFragment(AllSearchFragment.createInstance(20), getString(R.string.ID_ALL));
-            mViewPagerAdapter.addFragment(SearchRecentFragment.createInstance(20), getString(R.string.ID_RECENT));
-            mViewPagerAdapter.addFragment(SearchArticleFragment.createInstance(20), getString(R.string.ID_ARTICLE) + AppConstants.S);
-            mViewPagerAdapter.addFragment(SearchCommunitiesFragment.createInstance(20), getString(R.string.ID_COMMUNITIES));
-            mViewPagerAdapter.addFragment(SearchJobFragment.createInstance(20), getString(R.string.ID_JOBS));
+            mViewPagerAdapter.addFragment(AllSearchFragment.createInstance(), getString(R.string.ID_ALL));
+            mViewPagerAdapter.addFragment(SearchRecentFragment.createInstance(), getString(R.string.ID_RECENT));
+            mViewPagerAdapter.addFragment(SearchArticleFragment.createInstance(), getString(R.string.ID_ARTICLE) + AppConstants.S);
+            mViewPagerAdapter.addFragment(SearchCommunitiesFragment.createInstance(), getString(R.string.ID_COMMUNITIES));
+            mViewPagerAdapter.addFragment(SearchJobFragment.createInstance(), getString(R.string.ID_JOBS));
         }
         else
         {
             mSearchEditText.setHint(getString(R.string.ID_SEARCH_IN_COMMUNITIES));
             mTabLayout.setVisibility(View.GONE);
-            mViewPagerAdapter.addFragment(SearchCommunitiesFragment.createInstance(20), getString(R.string.ID_COMMUNITIES));
+            mViewPagerAdapter.addFragment(SearchCommunitiesFragment.createInstance(), getString(R.string.ID_COMMUNITIES));
         }
         mViewPager.setAdapter(mViewPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
@@ -139,4 +140,8 @@ public class HomeSearchActivity extends BaseActivity implements BaseHolderInterf
 
     }
 
+    @Override
+    public void onShowErrorDialog() {
+        getSupportFragmentManager().popBackStack();
+    }
 }

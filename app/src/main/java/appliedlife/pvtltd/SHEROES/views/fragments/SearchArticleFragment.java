@@ -61,7 +61,7 @@ public class SearchArticleFragment extends BaseFragment implements HomeView {
     private FragmentIntractionWithActivityListner mHomeSearchActivityFragmentIntractionWithActivityListner;
     private FragmentListRefreshData mFragmentListRefreshData;
     private Handler mHandler = new Handler();
-    public static SearchArticleFragment createInstance(int itemsCount) {
+    public static SearchArticleFragment createInstance() {
         SearchArticleFragment searchArticleFragment = new SearchArticleFragment();
         return searchArticleFragment;
     }
@@ -86,12 +86,14 @@ public class SearchArticleFragment extends BaseFragment implements HomeView {
         ButterKnife.bind(this, view);
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ALL_SEARCH, AppConstants.EMPTY_STRING);
         mHomePresenter.attachView(this);
+        tvSearchResult.setText(getString(R.string.ID_SEARCH));
         editTextWatcher();
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new GenericRecyclerViewAdapter(getContext(), (HomeSearchActivity) getActivity());
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mAdapter);
+        liNoSearchResult.setVisibility(View.VISIBLE);
         return view;
     }
 
@@ -99,11 +101,14 @@ public class SearchArticleFragment extends BaseFragment implements HomeView {
     @Override
     public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
         if(StringUtil.isNotEmptyCollection(feedDetailList)&&mAdapter!=null) {
+            mAdapter.setCallForRecycler(AppConstants.ALL_SEARCH);
             mAdapter.setSheroesGenericListData(feedDetailList);
+            mAdapter.notifyDataSetChanged();
         }
         else
         {
             liNoSearchResult.setVisibility(View.VISIBLE);
+            tvSearchResult.setText(getString(R.string.ID_NO_RESULT_FOUND));
         }
     }
 
@@ -116,8 +121,6 @@ public class SearchArticleFragment extends BaseFragment implements HomeView {
     public void getDB(List<MasterData> masterDatas) {
 
     }
-
-
 
     @Override
     public void startProgressBar() {
@@ -195,8 +198,9 @@ public class SearchArticleFragment extends BaseFragment implements HomeView {
                     mAdapter.getFilter().filter(mSearchDataName);
                 }*/
 
-                if (StringUtil.isNotNullOrEmptyString(inputSearch.toString()))
+                if (StringUtil.isNotNullOrEmptyString(inputSearch.toString())&&inputSearch.toString().length()>AppConstants.THREE_CONSTANT)
                 {
+                    liNoSearchResult.setVisibility(View.GONE);
                     mSearchDataName = inputSearch.toString();
                     /**hitting the servers to get data if length is greater than threshold defined **/
                     mHandler.removeCallbacks(mFilterTask);
@@ -216,7 +220,7 @@ public class SearchArticleFragment extends BaseFragment implements HomeView {
             if (!isDetached())
             {
                 mSearchDataName = mSearchDataName.trim().replaceAll(AppConstants.SPACE, AppConstants.EMPTY_STRING);
-                mHomePresenter.getFeedFromPresenter(mAppUtils.searchRequestBuilder(AppConstants.FEED_SUB_TYPE,mSearchDataName ,mFragmentListRefreshData.getPageNo()));
+                mHomePresenter.getFeedFromPresenter(mAppUtils.searchRequestBuilder(AppConstants.FEED_ARTICLE,mSearchDataName ,mFragmentListRefreshData.getPageNo(),AppConstants.ALL_SEARCH));
             }
         }
     };

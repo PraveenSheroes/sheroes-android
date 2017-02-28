@@ -10,6 +10,9 @@ public class LoginResponse {
     @SerializedName("token")
     @Expose
     private String token;
+    @SerializedName("user_summary")
+    @Expose
+    private UserSummary userSummary;
 
     public String getToken() {
         return token;
@@ -17,5 +20,13 @@ public class LoginResponse {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public UserSummary getUserSummary() {
+        return userSummary;
+    }
+
+    public void setUserSummary(UserSummary userSummary) {
+        this.userSummary = userSummary;
     }
 }

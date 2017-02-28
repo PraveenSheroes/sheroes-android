@@ -58,7 +58,8 @@ public class ArticlesFragment extends BaseFragment implements HomeView {
     @Inject
     AppUtils mAppUtils;
     private FragmentListRefreshData mFragmentListRefreshData;
-    int pageNo=AppConstants.ONE_CONSTANT;
+    int pageNo = AppConstants.ONE_CONSTANT;
+
     public static ArticlesFragment createInstance(int itemsCount) {
 
         ArticlesFragment articlesFragment = new ArticlesFragment();
@@ -85,7 +86,7 @@ public class ArticlesFragment extends BaseFragment implements HomeView {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.bind(this, view);
-        mFragmentListRefreshData=new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ARTICLE_FRAGMENT,AppConstants.EMPTY_STRING);
+        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ARTICLE_FRAGMENT, AppConstants.EMPTY_STRING);
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
         mHomePresenter.attachView(this);
@@ -95,7 +96,7 @@ public class ArticlesFragment extends BaseFragment implements HomeView {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
 
-        mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager,mFragmentListRefreshData) {
+        mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager, mFragmentListRefreshData) {
             @Override
             public void onHide() {
                 ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.INVISIBLE);
@@ -111,14 +112,14 @@ public class ArticlesFragment extends BaseFragment implements HomeView {
 
             }
         });
-        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_ARTICLE,mFragmentListRefreshData.getPageNo()));
+        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo()));
         swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 // Refresh items
                 LogUtils.info("swipe", "*****************end called");
                 mPullRefreshList.setPullToRefresh(true);
-                mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_ARTICLE,mFragmentListRefreshData.getPageNo()));
+                mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo()));
             }
         });
         return view;
@@ -128,7 +129,7 @@ public class ArticlesFragment extends BaseFragment implements HomeView {
     @Override
     public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
-            pageNo=mFragmentListRefreshData.getPageNo();
+            pageNo = mFragmentListRefreshData.getPageNo();
             mFragmentListRefreshData.setPageNo(++pageNo);
             mPullRefreshList.allListData(feedDetailList);
             mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
@@ -147,18 +148,15 @@ public class ArticlesFragment extends BaseFragment implements HomeView {
 
     }
 
-    public void categorySearchInArticle(List<HomeSpinnerItem> mHomeSpinnerItemList)
-    {
-
+    public void categorySearchInArticle(HomeSpinnerItem homeSpinnerItem) {
+            mHomePresenter.getFeedFromPresenter(mAppUtils.articleCategoryRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo(), homeSpinnerItem.getCategoryId()));
     }
-
 
 
     @Override
     public void getDB(List<MasterData> masterDatas) {
 
     }
-
 
 
     @Override

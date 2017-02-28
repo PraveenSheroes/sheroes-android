@@ -19,6 +19,9 @@ public abstract class BaseResponse
     @SerializedName("status")
     @Expose
     private String status;
+    @SerializedName("screen_name")
+    @Expose
+    private String screenName;
 
     public HashMap<String, String> getFieldErrorMessageMap() {
         return fieldErrorMessageMap;
@@ -50,5 +53,13 @@ public abstract class BaseResponse
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getScreenName() {
+        return screenName;
+    }
+
+    public void setScreenName(String screenName) {
+        this.screenName = screenName;
     }
 }

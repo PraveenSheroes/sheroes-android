@@ -1609,6 +1609,11 @@ public class AppUtils {
         FeedRequestPojo feedRequestPojo=makeFeedRequest(typeOfFeed,pageNo);
         return feedRequestPojo;
     }
+    public static FeedRequestPojo articleCategoryRequestBuilder(String typeOfFeed,int pageNo,List<Integer>categoryIds) {
+        FeedRequestPojo feedRequestPojo=makeFeedRequest(typeOfFeed,pageNo);
+        feedRequestPojo.setCategoryIds(categoryIds);
+        return feedRequestPojo;
+    }
     public static FeedRequestPojo feedDetailRequestBuilder(String typeOfFeed,int pageNo,String idForDetail) {
 
         FeedRequestPojo feedRequestPojo=makeFeedRequest(typeOfFeed,pageNo);
@@ -1643,7 +1648,7 @@ public class AppUtils {
     /**
      * Request for feed api
      */
-    public static FeedRequestPojo searchRequestBuilder(String typeOfFeed,String queryName,int pageNo) {
+    public static FeedRequestPojo searchRequestBuilder(String typeOfFeed,String queryName,int pageNo,String screenName) {
         AppUtils appUtils = AppUtils.getInstance();
         FeedRequestPojo feedRequestPojo=new FeedRequestPojo();
         feedRequestPojo.setAppVersion(appUtils.getAppVersionName());
@@ -1654,6 +1659,7 @@ public class AppUtils {
         feedRequestPojo.setPageSize(AppConstants.PAGE_SIZE);
         feedRequestPojo.setSubType(typeOfFeed);
         feedRequestPojo.setQuestion(queryName);
+        feedRequestPojo.setScreenName(screenName);
         return feedRequestPojo;
     }
     /**

@@ -131,9 +131,9 @@ public class ArticleDetailFragment extends BaseFragment implements HomeView {
 
     private void likeSuccess(String success) {
 
-        if (success.equalsIgnoreCase(AppConstants.SUCCESS)) {
+        if (success.equalsIgnoreCase(AppConstants.SUCCESS)&&null != mFeedDetail) {
 
-            if (null != mFeedDetail && mFeedDetail.isLongPress()) {
+            if (mFeedDetail.isLongPress()) {
                 if (mFeedDetail.getReactionValue() == AppConstants.NO_REACTION_CONSTANT) {
                     mFeedDetail.setReactionValue(pressedEmoji);
                     mFeedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);

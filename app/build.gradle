@@ -19,20 +19,17 @@ android {
         targetSdkVersion 25
         versionCode 30
         versionName "5.0"
-
-        buildConfigField "int", "LIMIT", "100"
-       // buildConfigField "String", "BASE_URL", "\"http://private-b8cf44-androidcleancode.apiary-mock.com/\""
-       buildConfigField "String", "BASE_URL", "\"http://34.193.138.177/\""
-      //  buildConfigField "String", "BASE_URL", "\"http://www.mocky.io/\""
-
-        buildConfigField "int", "CACHETIME", "432000" // 5days
     }
     buildTypes {
         debug {
+            buildConfigField "String", "BASE_URL", "\"http://34.193.138.177/\""
             ext.enableCrashlytics = false
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         release {
             minifyEnabled false
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -71,7 +68,7 @@ dependencies {
     compile "com.pushtorefresh.storio:sqlite:$STORIO_VERSION"
     compile "com.pushtorefresh.storio:sqlite-annotations:$STORIO_VERSION"
     apt "com.pushtorefresh.storio:sqlite-annotations-processor:$STORIO_VERSION"
-
+    compile 'com.yahoo.mobile.client.android.util.rangeseekbar:rangeseekbar-library:0.1.0'
     testCompile 'junit:junit:4.12'
     apt 'com.google.dagger:dagger-compiler:2.2'
     provided 'org.glassfish:javax.annotation:10.0-b28'

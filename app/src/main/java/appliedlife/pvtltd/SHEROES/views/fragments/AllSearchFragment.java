@@ -60,7 +60,7 @@ public class AllSearchFragment extends BaseFragment implements HomeView {
     private FragmentIntractionWithActivityListner mHomeSearchActivityFragmentIntractionWithActivityListner;
     private FragmentListRefreshData mFragmentListRefreshData;
     private Handler mHandler = new Handler();
-    public static AllSearchFragment createInstance(int itemsCount) {
+    public static AllSearchFragment createInstance() {
         AllSearchFragment allSearchFragment = new AllSearchFragment();
         return allSearchFragment;
     }
@@ -100,7 +100,9 @@ public class AllSearchFragment extends BaseFragment implements HomeView {
     @Override
     public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
         if(StringUtil.isNotEmptyCollection(feedDetailList)&&mAdapter!=null) {
+            mAdapter.setCallForRecycler(AppConstants.ALL_SEARCH);
             mAdapter.setSheroesGenericListData(feedDetailList);
+            mAdapter.notifyDataSetChanged();
         }
         else
         {
@@ -217,7 +219,7 @@ public class AllSearchFragment extends BaseFragment implements HomeView {
             if (!isDetached())
             {
                 mSearchDataName = mSearchDataName.trim().replaceAll(AppConstants.SPACE, AppConstants.EMPTY_STRING);
-                mHomePresenter.getFeedFromPresenter(mAppUtils.searchRequestBuilder(AppConstants.FEED_SUB_TYPE,mSearchDataName ,mFragmentListRefreshData.getPageNo()));
+                mHomePresenter.getFeedFromPresenter(mAppUtils.searchRequestBuilder(AppConstants.FEED_SUB_TYPE,mSearchDataName ,mFragmentListRefreshData.getPageNo(),AppConstants.ALL_SEARCH));
             }
         }
     };

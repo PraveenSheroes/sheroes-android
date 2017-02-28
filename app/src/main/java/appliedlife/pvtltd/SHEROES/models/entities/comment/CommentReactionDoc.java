@@ -54,8 +54,9 @@ public class CommentReactionDoc extends BaseResponse implements Parcelable {
     @SerializedName("participation_type_id")
     @Expose
     private long participationTypeId;
-
-
+    @SerializedName("solr_ignore_my_own_participation")
+    @Expose
+    private boolean myOwnParticipation;
     public boolean isEdit() {
         return isEdit;
     }
@@ -176,6 +177,17 @@ public class CommentReactionDoc extends BaseResponse implements Parcelable {
         this.participationTypeId = participationTypeId;
     }
 
+    public CommentReactionDoc() {
+    }
+
+    public boolean isMyOwnParticipation() {
+        return myOwnParticipation;
+    }
+
+    public void setMyOwnParticipation(boolean myOwnParticipation) {
+        this.myOwnParticipation = myOwnParticipation;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -198,9 +210,7 @@ public class CommentReactionDoc extends BaseResponse implements Parcelable {
         dest.writeString(this.participantImageUrl);
         dest.writeString(this.participantName);
         dest.writeLong(this.participationTypeId);
-    }
-
-    public CommentReactionDoc() {
+        dest.writeByte(this.myOwnParticipation ? (byte) 1 : (byte) 0);
     }
 
     protected CommentReactionDoc(Parcel in) {
@@ -219,6 +229,7 @@ public class CommentReactionDoc extends BaseResponse implements Parcelable {
         this.participantImageUrl = in.readString();
         this.participantName = in.readString();
         this.participationTypeId = in.readLong();
+        this.myOwnParticipation = in.readByte() != 0;
     }
 
     public static final Creator<CommentReactionDoc> CREATOR = new Creator<CommentReactionDoc>() {
