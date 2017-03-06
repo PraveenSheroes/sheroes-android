@@ -75,7 +75,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleDetailHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleDetailSuggestedHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleDetailWithInSuggestedHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.BlankHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.CanHelpHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.OnBoardingHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CommentHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CommunityCardDetailHeader;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CommunitySuggestedHolder;
@@ -252,6 +252,6 @@ public interface SheroesAppComponent {
     void inject(OnboardingActivity onboardingActivity);
     void inject(OnboardingFragment onboardingFragment);
     void inject(SheroesHelpYouFragment sheroesHelpYouFragment);
-    void inject(CanHelpHolder canHelpHolder);
+    void inject(OnBoardingHolder onBoardingHolder);
     void inject(ProfileTravelClientFragment profileTravelClientFragment);
 }

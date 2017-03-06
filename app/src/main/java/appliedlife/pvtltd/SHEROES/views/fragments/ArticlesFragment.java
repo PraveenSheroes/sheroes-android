@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -18,7 +19,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.database.dbentities.MasterData;
+import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
@@ -59,6 +60,9 @@ public class ArticlesFragment extends BaseFragment implements HomeView {
     AppUtils mAppUtils;
     private FragmentListRefreshData mFragmentListRefreshData;
     int pageNo = AppConstants.ONE_CONSTANT;
+    List<FeedDetail> mTrendingFeedDetail = new ArrayList<>();
+    boolean listLoad = true;
+    FeedDetail mFeedDetail;
 
     public static ArticlesFragment createInstance(int itemsCount) {
 
@@ -130,8 +134,26 @@ public class ArticlesFragment extends BaseFragment implements HomeView {
     public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
             pageNo = mFragmentListRefreshData.getPageNo();
+            if (pageNo == AppConstants.ONE_CONSTANT) {
+                for (FeedDetail feedDetail : feedDetailList) {
+                    feedDetail.setTrending(true);
+                    mTrendingFeedDetail.add(feedDetail);
+                }
+                mPullRefreshList.allListData(mTrendingFeedDetail);
+
+            } else {
+                if (StringUtil.isNotEmptyCollection(mTrendingFeedDetail)) {
+                    for (FeedDetail feedDetail : feedDetailList) {
+                        for (FeedDetail trendingFeedDetail : mTrendingFeedDetail) {
+                            if (feedDetail.getEntityOrParticipantId() == trendingFeedDetail.getEntityOrParticipantId()) {
+                                feedDetailList.remove(feedDetail);
+                            }
+                        }
+                    }
+                }
+                mPullRefreshList.allListData(feedDetailList);
+            }
             mFragmentListRefreshData.setPageNo(++pageNo);
-            mPullRefreshList.allListData(feedDetailList);
             mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
             mAdapter.notifyDataSetChanged();
             if (!mPullRefreshList.isPullToRefresh()) {
@@ -145,24 +167,48 @@ public class ArticlesFragment extends BaseFragment implements HomeView {
 
     @Override
     public void getSuccessForAllResponse(String success, int successFrom) {
-
+        switch (successFrom) {
+            case AppConstants.THREE_CONSTANT:
+                bookMarkSuccess(success);
+                break;
+            default:
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + successFrom);
+        }
     }
 
     public void categorySearchInArticle(HomeSpinnerItem homeSpinnerItem) {
-            mHomePresenter.getFeedFromPresenter(mAppUtils.articleCategoryRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo(), homeSpinnerItem.getCategoryId()));
+        mHomePresenter.getFeedFromPresenter(mAppUtils.articleCategoryRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo(), homeSpinnerItem.getCategoryId()));
     }
 
+    public void bookMarkForCard(FeedDetail feedDetail) {
+        listLoad = false;
+        mFeedDetail = feedDetail;
+        mHomePresenter.addBookMarkFromPresenter(mAppUtils.bookMarkRequestBuilder(feedDetail.getEntityOrParticipantId()), feedDetail.isBookmarked());
+    }
+
+    private void bookMarkSuccess(String success) {
+        if (success.equalsIgnoreCase(AppConstants.SUCCESS) && null != mFeedDetail) {
+            if (!mFeedDetail.isBookmarked()) {
+                mFeedDetail.setBookmarked(true);
+            } else {
+                mFeedDetail.setBookmarked(false);
+            }
+            mAdapter.setDataOnPosition(mFeedDetail, mFeedDetail.getItemPosition());
+        }
+    }
 
     @Override
-    public void getDB(List<MasterData> masterDatas) {
+    public void getDB(List<RecentSearchData> recentSearchDatas) {
 
     }
 
 
     @Override
     public void startProgressBar() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mProgressBar.bringToFront();
+        if(listLoad) {
+            mProgressBar.setVisibility(View.VISIBLE);
+            mProgressBar.bringToFront();
+        }
     }
 
     @Override

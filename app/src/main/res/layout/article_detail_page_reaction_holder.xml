@@ -20,7 +20,6 @@
             android:layout_marginRight="@dimen/dp_size_12"
             android:layout_marginTop="@dimen/dp_size_12"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:text="Tags: Health,Education"
             android:textColor="@color/suggested_card_text"
             android:textSize="@dimen/sp_size_12" />
 
@@ -34,7 +33,6 @@
             android:layout_marginTop="@dimen/dp_size_12"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:gravity="center"
-            android:text="Tags: Health,Education"
             android:textColor="@color/suggested_card_text"
             android:textSize="@dimen/sp_size_12" />
 
@@ -48,7 +46,6 @@
             android:layout_marginTop="@dimen/dp_size_12"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:gravity="center"
-            android:text="5 hr ago"
             android:textColor="@color/text_color_setting_preference_basicdetails"
             android:textSize="@dimen/sp_size_12" />
 
@@ -72,7 +69,6 @@
             android:layout_marginTop="@dimen/dp_size_10"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:gravity="center"
-            android:text="@string/ID_APP_NAME"
             android:textColor="@color/com_post_share_textcolor"
             android:textSize="@dimen/sp_size_12" />
 
@@ -91,7 +87,6 @@
                 android:layout_marginRight="@dimen/dp_size_12"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:gravity="center"
-                android:text="@string/ID_APP_NAME"
                 android:textColor="@color/teg_text_color"
                 android:textSize="@dimen/sp_size_12" />
 
@@ -187,7 +182,6 @@
                 android:layout_gravity="center"
                 android:layout_marginRight="@dimen/dp_size_84"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                android:text="53 reactions"
                 android:textColor="@color/feed_article_comment"
                 android:textSize="@dimen/sp_size_11" />
 

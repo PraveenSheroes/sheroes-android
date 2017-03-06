@@ -9,7 +9,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.RequestedListModel;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.RequestedListResponse;
-import appliedlife.pvtltd.SHEROES.preferences.Token;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
@@ -26,9 +26,9 @@ public class RequestedPresenter extends BasePresenter<RequestedView> {
     RequestedListModel requestedListModel;
     SheroesApplication mSheroesApplication;
     @Inject
-    Preference<Token> mUserPreference;
+    Preference<LoginResponse> mUserPreference;
     @Inject
-    public RequestedPresenter(RequestedListModel memberListModel, SheroesApplication mSheroesApplication, Preference<Token> mUserPreference) {
+    public RequestedPresenter(RequestedListModel memberListModel, SheroesApplication mSheroesApplication, Preference<LoginResponse> mUserPreference) {
         this.requestedListModel = memberListModel;
         this.mSheroesApplication = mSheroesApplication;
         this.mUserPreference = mUserPreference;

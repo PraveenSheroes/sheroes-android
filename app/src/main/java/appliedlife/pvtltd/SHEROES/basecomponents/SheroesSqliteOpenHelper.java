@@ -1,4 +1,4 @@
-package appliedlife.pvtltd.SHEROES.database;
+package appliedlife.pvtltd.SHEROES.basecomponents;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -8,35 +8,31 @@ import com.pushtorefresh.storio.sqlite.impl.DefaultStorIOSQLite;
 
 import javax.inject.Inject;
 
-import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.database.dbentities.MasterData;
-import appliedlife.pvtltd.SHEROES.database.dbentities.User;
-import appliedlife.pvtltd.SHEROES.database.dbtables.MasterDataTable;
+import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
+import appliedlife.pvtltd.SHEROES.database.dbtables.RecentSearchDataTable;
 
-import static appliedlife.pvtltd.SHEROES.database.dbtables.MasterDataTable.getAllTypeMapping;
-import static appliedlife.pvtltd.SHEROES.database.dbtables.UserTable.getUserTypeMapping;
+import static appliedlife.pvtltd.SHEROES.database.dbtables.RecentSearchDataTable.getAllTypeMapping;
 
 
-public class YipStaySqliteOpenHelper extends SQLiteOpenHelper {
+public class SheroesSqliteOpenHelper extends SQLiteOpenHelper {
 
   public static final String DATABASE = "sheroes_database";
   public static final int DATABASE_VERSION = 1;
   @Inject
-  public YipStaySqliteOpenHelper() {
+  public SheroesSqliteOpenHelper() {
     super(SheroesApplication.mContext, DATABASE, null, DATABASE_VERSION);
   }
 
   public static StorIOSQLite getStorIOSQLite(SQLiteOpenHelper sqliteOpenHelper) {
     return DefaultStorIOSQLite.builder()
         .sqliteOpenHelper(sqliteOpenHelper)
-            .addTypeMapping(MasterData.class, getAllTypeMapping())
-        .addTypeMapping(User.class, getUserTypeMapping())
+            .addTypeMapping(RecentSearchData.class, getAllTypeMapping())
         .build();
   }
 
   @Override
   public void onCreate(SQLiteDatabase db) {
-    db.execSQL(MasterDataTable.getCreateQuery());
+    db.execSQL(RecentSearchDataTable.getCreateQuery());
   }
 
   @Override

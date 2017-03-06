@@ -4,7 +4,7 @@ package appliedlife.pvtltd.SHEROES.basecomponents;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.Response;
-import appliedlife.pvtltd.SHEROES.database.dbentities.MasterData;
+import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
@@ -107,7 +107,7 @@ public interface SheroesAppServiceApi {
     Observable<CommunitiesResponse> getAllCommunities(@Body Feature feature );
 
     @GET("v2/589874931100000e07038a52")
-    Observable<Response<List<MasterData>>> getMasterData();
+    Observable<Response<List<RecentSearchData>>> getMasterData();
 
     @POST("v2/58940613260000a11200a97f")
     Observable<InviteSearchResponse> getInviteSearchResponseFromApi(@Body ListOfInviteSearch listOfInviteSearch );

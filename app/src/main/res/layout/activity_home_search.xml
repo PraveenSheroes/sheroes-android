@@ -15,7 +15,13 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-
+            <ImageView
+                android:id="@+id/iv_search_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|top"
+                android:layout_marginRight="@dimen/dp_size_25"
+                android:background="@drawable/ic_back_white"/>
             <include layout="@layout/search_layout" />
         </android.support.v7.widget.Toolbar>
 

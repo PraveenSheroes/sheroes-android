@@ -29,6 +29,7 @@ public class AppConstants {
     public static final String COLON = ":";
     public static final String DOTS = "...";
     public static final String S="s";
+    public static final String SHARE_MENU_TYPE= "text/plain";
     public static final String FOR_ALL= "all";
     public static final String FEED_SUB_TYPE= "F";
     public static final String FEED_COMMUNITY = "C";
@@ -51,6 +52,7 @@ public class AppConstants {
     public static final String MY_COMMUNITIES_HEADER= "COMMUNITY_HEADER";
     public static final String COMMUNITIES_DETAIL= "community_detail";
     public static final String ALL_SEARCH= "search";
+    public static final String SHARE= "Share";
     public static final int WORD_COUNT = 92;
     public static final int WORD_LENGTH = 80;
     public static final String IMAGE_FULL_VIEW = "image_view";

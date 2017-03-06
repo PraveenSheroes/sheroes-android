@@ -15,8 +15,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.f2prateek.rx.preferences.Preference;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
@@ -24,6 +27,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LastComment;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -100,7 +104,8 @@ public class FeedCommunityHolder extends BaseViewHolder<FeedDetail> {
     String mViewMoreDescription;
     String mViewMore, mLess;
     Context mContext;
-
+    @Inject
+    Preference<LoginResponse> userPreference;
     public FeedCommunityHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
@@ -165,26 +170,29 @@ public class FeedCommunityHolder extends BaseViewHolder<FeedDetail> {
             switch (dataItem.getNoOfLikes()) {
                 case AppConstants.ONE_CONSTANT:
                     tvFeedCommunityTotalReactions.setText(String.valueOf(dataItem.getNoOfLikes()) + AppConstants.SPACE + context.getString(R.string.ID_REACTION));
+                    tvFeedCommunityUserReaction.setText(AppConstants.EMPTY_STRING);
                     userLike();
                     break;
                 default:
                     tvFeedCommunityTotalReactions.setText(String.valueOf(dataItem.getNoOfLikes()) + AppConstants.SPACE + context.getString(R.string.ID_REACTION) + AppConstants.S);
+                    tvFeedCommunityUserReaction.setText(AppConstants.EMPTY_STRING);
                     userLike();
             }
         }
-        if (dataItem.getNoOfComments() < AppConstants.ONE_CONSTANT) {
-            tvFeedCommunityTotalReplies.setVisibility(View.GONE);
-            liFeedCommunityUserComments.setVisibility(View.GONE);
-        } else {
             switch (dataItem.getNoOfComments()) {
+                case AppConstants.NO_REACTION_CONSTANT:
+                    break;
                 case AppConstants.ONE_CONSTANT:
                     tvFeedCommunityTotalReplies.setText(String.valueOf(dataItem.getNoOfComments()) + AppConstants.SPACE + context.getString(R.string.ID_REPLY));
+                    tvFeedCommunityTotalReplies.setVisibility(View.VISIBLE);
+                    liFeedCommunityUserComments.setVisibility(View.VISIBLE);
                     userComments();
                     break;
                 default:
                     tvFeedCommunityTotalReplies.setText(String.valueOf(dataItem.getNoOfComments()) + AppConstants.SPACE + context.getString(R.string.ID_REPLIES));
+                    tvFeedCommunityTotalReplies.setVisibility(View.VISIBLE);
+                    liFeedCommunityUserComments.setVisibility(View.VISIBLE);
                     userComments();
-            }
         }
     }
 
@@ -233,8 +241,8 @@ public class FeedCommunityHolder extends BaseViewHolder<FeedDetail> {
                 } else {
                     tvFeedCommunityUserCommentPost.setText(Html.fromHtml(userName + AppConstants.COLON + lastComment.getComment()));// or for older api
                 }
-                if (!lastComment.isMyOwnParticipation()) {
-                    tvFeedCommunityUserCommentPostMenu.setVisibility(View.GONE);
+                if (lastComment.isMyOwnParticipation()) {
+                    tvFeedCommunityUserCommentPostMenu.setVisibility(View.VISIBLE);
                 }
 
             }
@@ -246,8 +254,10 @@ public class FeedCommunityHolder extends BaseViewHolder<FeedDetail> {
         if (StringUtil.isNotNullOrEmptyString(authorImageUrl)) {
             ivFeedCommunityCircleIcon.setCircularImage(true);
             ivFeedCommunityCircleIcon.bindImage(authorImageUrl);
+        }
+        if (null != userPreference && userPreference.isSet() && null != userPreference.get()&&null!=userPreference.get().getUserSummary()&& StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getPhotoUrl())) {
             ivFeedCommunityRegisterUserPic.setCircularImage(true);
-            ivFeedCommunityRegisterUserPic.bindImage(authorImageUrl);
+            ivFeedCommunityRegisterUserPic.bindImage(userPreference.get().getUserSummary().getPhotoUrl());
         }
         String backgroundImageUrl = dataItem.getImageUrl();
         if (StringUtil.isNotNullOrEmptyString(backgroundImageUrl)) {
@@ -313,24 +323,20 @@ public class FeedCommunityHolder extends BaseViewHolder<FeedDetail> {
     public void userReactionClick() {
         dataItem.setLongPress(false);
         dataItem.setItemPosition(getAdapterPosition());
-        if (dataItem.getReactionValue() == AppConstants.HEART_REACTION_CONSTANT) {
-            if (liFeedCommunityEmojiPopUp.getVisibility() == View.VISIBLE) {
-                viewInterface.handleOnClick(dataItem, tvFeedCommunityUserReaction);
-            }
+        if (dataItem.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
             viewInterface.userCommentLikeRequest(dataItem, AppConstants.NO_REACTION_CONSTANT, getAdapterPosition());
-
         } else {
-            if (liFeedCommunityEmojiPopUp.getVisibility() == View.VISIBLE) {
-                viewInterface.handleOnClick(dataItem, tvFeedCommunityUserReaction);
-            }
             viewInterface.userCommentLikeRequest(dataItem, AppConstants.HEART_REACTION_CONSTANT, getAdapterPosition());
+        }
+        if (liFeedCommunityEmojiPopUp.getVisibility() == View.VISIBLE) {
+            viewInterface.handleOnClick(dataItem, tvFeedCommunityUserReaction);
         }
     }
 
     @OnClick(R.id.tv_feed_community_user_comment)
     public void communityUserCommentClick() {
         dataItem.setItemPosition(getAdapterPosition());
-        viewInterface.handleOnClick(dataItem, tvFeedCommunityUserComment);
+        viewInterface.handleOnClick(dataItem, liFeedCommunityJoinConversation);
     }
 
     @OnClick(R.id.tv_feed_community_join)
@@ -375,6 +381,7 @@ public class FeedCommunityHolder extends BaseViewHolder<FeedDetail> {
     @OnLongClick(R.id.tv_feed_community_user_reaction)
     public boolean userReactionLongClick() {
         dataItem.setItemPosition(getAdapterPosition());
+        dataItem.setLongPress(true);
         viewInterface.handleOnClick(dataItem, tvFeedCommunityUserReaction);
         return true;
     }

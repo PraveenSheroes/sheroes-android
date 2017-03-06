@@ -18,8 +18,7 @@ import java.util.List;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobLocationList;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.can_help;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.OnBoardingData;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.activities.OnboardingActivity;
@@ -33,13 +32,13 @@ import io.fabric.sdk.android.Fabric;
  */
 
 public class SheroesHelpYouFragment extends BaseFragment {
+    private final String TAG = LogUtils.makeLogTag(SheroesHelpYouFragment.class);
     @Bind(R.id.rv_how_can_sheroes_help_list)
     RecyclerView mRecyclerView;
     private GenericRecyclerViewAdapter mAdapter;
-    List<can_help> listFeelter = new ArrayList<can_help>();
+    List<OnBoardingData> listFeelter = new ArrayList<OnBoardingData>();
 
     private OnBoardingSheroesHelpActivityIntractionListner mOnboardingIntractionListner;
-    private final String mTAG = LogUtils.makeLogTag(SheroesHelpYouFragment.class);
     View view;
 
     @Override
@@ -50,7 +49,7 @@ public class SheroesHelpYouFragment extends BaseFragment {
                 mOnboardingIntractionListner = (OnBoardingSheroesHelpActivityIntractionListner) getActivity();
             }
         } catch (InstantiationException exception) {
-            LogUtils.error(mTAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + mTAG + AppConstants.SPACE + exception.getMessage());
+            LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
         }
     }
     @Nullable
@@ -59,7 +58,6 @@ public class SheroesHelpYouFragment extends BaseFragment {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         view = inflater.inflate(R.layout.how_can_sheroes_help_fragment, container, false);
         ButterKnife.bind(this, view);
-
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new GenericRecyclerViewAdapter(getContext(), (OnboardingActivity) getActivity());
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
@@ -68,10 +66,7 @@ public class SheroesHelpYouFragment extends BaseFragment {
         setFilterValues();
         mAdapter.setSheroesGenericListData(listFeelter);
         mAdapter.notifyDataSetChanged();
-
-        getActivity().setRequestedOrientation(
-                ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         Fabric.with(getActivity(), new Crashlytics());
         return view;
     }
@@ -82,24 +77,23 @@ public class SheroesHelpYouFragment extends BaseFragment {
     }
     private void setFilterValues()
     {
-        can_help filterList=new can_help();
-        filterList.setId("1");
-        filterList.setName("HELP FOR A BUSINESS");
-        filterList.setItem1("Grow my business");
-        filterList.setItem2("Business Marketing");
-        filterList.setItem3("Customer Review");
-        filterList.setItem4("Balance Work & Life");
-        filterList.setItem5("Child care tips");
-        filterList.setItem6("Child care tips");
-        filterList.setItem7("Child care tips");
-        filterList.setItem8("Child care tips");
-        filterList.setItem9("Child care tips");
-        filterList.setItem10("Child care tips");
-        filterList.setItem11("Child care tips");
-        filterList.setItem12("tips");
-        filterList.setItem13("care tips");
-        filterList.setItem14("Child care tips");
-        filterList.setItem15("Child");
+        OnBoardingData filterList=new OnBoardingData();
+        filterList.setName("JobAt");
+        List<String> jobAtList=new ArrayList<>();
+        jobAtList.add("Proffestional carrier");
+        jobAtList.add("Contact data");
+        jobAtList.add("Typing data");
+        filterList.setBoardingDataList(jobAtList);
+
+        OnBoardingData filterList1=new OnBoardingData();
+        filterList1.setName("Contact Info");
+        List<String> jobAtList1=new ArrayList<>();
+        jobAtList1.add("Proffestional");
+        jobAtList1.add("Second data planning");
+        jobAtList1.add("Finding data");
+        filterList.setBoardingDataList(jobAtList1);
+
+
         listFeelter.add(filterList);
 
 

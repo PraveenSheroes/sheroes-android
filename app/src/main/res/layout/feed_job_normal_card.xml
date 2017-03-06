@@ -165,13 +165,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableRight="@drawable/ic_bookmark_active"
-                android:drawablePadding="@dimen/dp_size_35" />
+                android:drawablePadding="@dimen/dp_size_15"
+                android:paddingRight="@dimen/dp_size_20"/>
 
             <TextView
                 android:id="@+id/tv_feed_job_user_menu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawablePadding="@dimen/dp_size_50"
+                android:drawablePadding="@dimen/dp_size_30"
                 android:paddingRight="@dimen/dp_size_10"
                 android:drawableRight="@drawable/ic_menu_dashboard" />
 

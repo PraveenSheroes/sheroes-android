@@ -16,6 +16,9 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -23,7 +26,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.database.dbentities.MasterData;
+import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
@@ -82,7 +85,7 @@ public class AllSearchFragment extends BaseFragment implements HomeView {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_search, container, false);
-        ButterKnife.bind(this, view);
+        ButterKnife.bind(this,view);
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ALL_SEARCH, AppConstants.EMPTY_STRING);
         mHomePresenter.attachView(this);
         tvSearchResult.setText(getString(R.string.ID_SEARCH));
@@ -117,8 +120,11 @@ public class AllSearchFragment extends BaseFragment implements HomeView {
     }
 
     @Override
-    public void getDB(List<MasterData> masterDatas) {
+    public void getDB(List<RecentSearchData> recentSearchDatas) {
+        if(StringUtil.isNotEmptyCollection(recentSearchDatas))
+        {
 
+        }
     }
 
     @Override
@@ -141,7 +147,18 @@ public class AllSearchFragment extends BaseFragment implements HomeView {
     public void startNextScreen() {
 
     }
-
+    public void saveRecentSearchData(FeedDetail feedDetail)
+    {
+        List<RecentSearchData> recentSearchData= new ArrayList<>();
+        RecentSearchData masterData=new RecentSearchData();
+        masterData.setInternalId(feedDetail.getEntityOrParticipantId());
+        masterData.setEntityOrParticipantId(feedDetail.getEntityOrParticipantId());
+        Gson gson = new Gson();
+        String feedObject=gson.toJson(feedDetail, FeedDetail.class);
+        masterData.setRecentSearchFeed(feedObject);
+        recentSearchData.add(masterData);
+        mHomePresenter.saveMasterDataTypes(recentSearchData,feedDetail.getEntityOrParticipantId());
+    }
     @Override
     public void onDestroyView() {
         super.onDestroyView();

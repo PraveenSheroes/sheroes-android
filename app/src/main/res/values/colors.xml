@@ -17,6 +17,7 @@
     <color name="shadow">#3b99fc</color>
     <color name="searchbox_text_color">#9b9b9b</color>
     <!-- Text color of the search box hint text  -->
+    <color name="forgot_password">#838a9c</color>
     <color name="searchbox_hint_text_color">#1c2024</color>
     <color name="searchbox_icon_tint">#a4a4a4</color>
     <color name="dashboard_label">#f1403c</color>

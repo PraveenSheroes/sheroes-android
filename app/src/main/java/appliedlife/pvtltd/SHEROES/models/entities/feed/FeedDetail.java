@@ -16,6 +16,8 @@ public class FeedDetail extends BaseResponse implements Parcelable {
 
     int itemPosition;
     boolean isLongPress;
+    boolean isTrending;
+    boolean isFromHome;
 
      /*Community post*/
 
@@ -262,28 +264,30 @@ public class FeedDetail extends BaseResponse implements Parcelable {
     @SerializedName("is_featured")
     private boolean isFeatured;
     /*Like and comment*/
-    @SerializedName("reacted_value")
+    @SerializedName("solr_ignore_reacted_value")
     @Expose
     private int reactionValue;
-    @SerializedName("no_of_likes")
+    @SerializedName("solr_ignore_no_of_likes")
     @Expose
     private int noOfLikes;
-    @SerializedName("no_of_comments")
+    @SerializedName("solr_ignore_no_of_comments")
     @Expose
     private int noOfComments;
-    @SerializedName("last_comments")
+    @SerializedName("solr_ignore_last_comments")
     @Expose
     private List<LastComment> lastComments= null;;
-    @SerializedName("no_of_views")
+    @SerializedName("solr_ignore_no_of_views")
     @Expose
     private int noOfViews;
-    @SerializedName("is_applied")
+    @SerializedName("solr_ignore_is_applied")
     @Expose
     private boolean isApplied;
-    @SerializedName("is_bookmarked")
+    @SerializedName("solr_ignore_is_bookmarked")
     @Expose
     private boolean isBookmarked;
-
+    @SerializedName("solr_ignore_no_of_applies")
+    @Expose
+    private int noOfApplied;
 
 
 
@@ -1182,6 +1186,30 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         this.postingDateOnly = postingDateOnly;
     }
 
+    public int getNoOfApplied() {
+        return noOfApplied;
+    }
+
+    public void setNoOfApplied(int noOfApplied) {
+        this.noOfApplied = noOfApplied;
+    }
+
+    public boolean isTrending() {
+        return isTrending;
+    }
+
+    public void setTrending(boolean trending) {
+        isTrending = trending;
+    }
+
+    public boolean isFromHome() {
+        return isFromHome;
+    }
+
+    public void setFromHome(boolean fromHome) {
+        isFromHome = fromHome;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -1191,6 +1219,8 @@ public class FeedDetail extends BaseResponse implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(this.itemPosition);
         dest.writeByte(this.isLongPress ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isTrending ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isFromHome ? (byte) 1 : (byte) 0);
         dest.writeList(this.imagesIds);
         dest.writeStringList(this.imageUrls);
         dest.writeLong(this.communityId);
@@ -1299,11 +1329,14 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         dest.writeInt(this.noOfViews);
         dest.writeByte(this.isApplied ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isBookmarked ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.noOfApplied);
     }
 
     protected FeedDetail(Parcel in) {
         this.itemPosition = in.readInt();
         this.isLongPress = in.readByte() != 0;
+        this.isTrending = in.readByte() != 0;
+        this.isFromHome = in.readByte() != 0;
         this.imagesIds = new ArrayList<Long>();
         in.readList(this.imagesIds, Long.class.getClassLoader());
         this.imageUrls = in.createStringArrayList();
@@ -1429,6 +1462,7 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         this.noOfViews = in.readInt();
         this.isApplied = in.readByte() != 0;
         this.isBookmarked = in.readByte() != 0;
+        this.noOfApplied = in.readInt();
     }
 
     public static final Creator<FeedDetail> CREATOR = new Creator<FeedDetail>() {

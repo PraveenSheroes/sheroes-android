@@ -16,6 +16,9 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -23,7 +26,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.database.dbentities.MasterData;
+import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
@@ -111,14 +114,24 @@ public class SearchJobFragment extends BaseFragment implements HomeView {
             tvSearchResult.setText(getString(R.string.ID_NO_RESULT_FOUND));
         }
     }
-
+    public void saveRecentSearchData(FeedDetail feedDetail)
+    {
+        List<RecentSearchData> recentSearchData= new ArrayList<>();
+        RecentSearchData masterData=new RecentSearchData();
+        masterData.setEntityOrParticipantId(feedDetail.getEntityOrParticipantId());
+        Gson gson = new Gson();
+        String feedObject=gson.toJson(feedDetail, FeedDetail.class);
+        masterData.setRecentSearchFeed(feedObject);
+        recentSearchData.add(masterData);
+        mHomePresenter.saveMasterDataTypes(recentSearchData,feedDetail.getEntityOrParticipantId());
+    }
     @Override
     public void getSuccessForAllResponse(String success, int successFrom) {
 
     }
 
     @Override
-    public void getDB(List<MasterData> masterDatas) {
+    public void getDB(List<RecentSearchData> recentSearchDatas) {
 
     }
 

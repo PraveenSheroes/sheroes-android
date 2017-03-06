@@ -26,7 +26,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -54,6 +53,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
 /**
  * Created by Praveen_Singh on 07-02-2017.
  */
@@ -72,6 +72,8 @@ public class ArticleDetailActivity extends BaseActivity implements BaseHolderInt
     public CustomCollapsingToolbarLayout mCollapsingToolbarLayout;
     @Bind(R.id.tv_article_detail_total_views)
     TextView mTvArticleDetailTotalViews;
+    @Bind(R.id.tv_article_detail_bookmark)
+    TextView mTvArticleDetailBookmark;
     private FeedDetail mFeedDetail;
     public View mArticlePopUp;
     TextView mTvFeedArticleDetailUserReaction;
@@ -85,7 +87,6 @@ public class ArticleDetailActivity extends BaseActivity implements BaseHolderInt
         intent.putExtras(bundle);
         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, transitionImage, AppConstants.ARTICLE_DETAIL);
         ActivityCompat.startActivity(activity, intent, options.toBundle());
-        activity.finish();
     }
 
     @Override
@@ -109,6 +110,13 @@ public class ArticleDetailActivity extends BaseActivity implements BaseHolderInt
         mCollapsingToolbarLayout.setExpandedSubTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
         mCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
         if (null != mFeedDetail) {
+            if(mFeedDetail.isBookmarked()) {
+                mTvArticleDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_active, 0, 0, 0);
+            }
+            else
+            {
+                mTvArticleDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_in_active, 0, 0, 0);
+            }
             mCollapsingToolbarLayout.setTitle(mFeedDetail.getNameOrTitle());
             mCollapsingToolbarLayout.setSubtitle(mFeedDetail.getAuthorName());
             mTvArticleDetailTotalViews.setText(mFeedDetail.getNoOfViews() + AppConstants.SPACE + getString(R.string.ID_VIEWS));
@@ -158,6 +166,8 @@ public class ArticleDetailActivity extends BaseActivity implements BaseHolderInt
     public void handleOnClick(BaseResponse baseResponse, View view) {
         if (baseResponse instanceof FeedDetail) {
             articleDetailHandled(view, baseResponse);
+        }else if (baseResponse instanceof CommentReactionDoc) {
+            clickMenuItem(view, baseResponse, true);
         }
     }
 
@@ -166,16 +176,25 @@ public class ArticleDetailActivity extends BaseActivity implements BaseHolderInt
         int id = view.getId();
         switch (id) {
             case R.id.tv_article_detail_user_comment_post_menu:
-                clickMenuItem(view, baseResponse);
+                clickMenuItem(view, baseResponse,false);
                 break;
             case R.id.tv_article_detail_user_comment_post_menu_second:
-                clickMenuItem(view, baseResponse);
+                clickMenuItem(view, baseResponse,false);
                 break;
             case R.id.tv_article_detail_user_comment_post_menu_third:
-                clickMenuItem(view, baseResponse);
+                clickMenuItem(view, baseResponse,false);
                 break;
             case R.id.li_article_detail_join_conversation:
-                openCommentReactionFragment();
+                mFragmentOpen.setCommentList(true);
+                mFragmentOpen.setReactionList(false);
+                mFragmentOpen.setOpen(true);
+                openCommentReactionFragment(feedDetail);
+                break;
+            case R.id.tv_article_detail_total_reactions:
+                mFragmentOpen.setCommentList(false);
+                mFragmentOpen.setReactionList(true);
+                mFragmentOpen.setOpen(true);
+                openCommentReactionFragment(feedDetail);
                 break;
             case R.id.tv_article_detail_user_reaction:
                 mArticlePopUp = findViewById(R.id.li_article_detail_emoji_pop_up);
@@ -205,15 +224,13 @@ public class ArticleDetailActivity extends BaseActivity implements BaseHolderInt
         }
     }
 
-    private void openCommentReactionFragment() {
-        if (null != mFeedDetail && null != mFragmentOpen) {
+    private void openCommentReactionFragment(FeedDetail feedDetail) {
+        if (null != feedDetail && null != mFragmentOpen) {
             CommentReactionFragment commentReactionFragmentForArticle = new CommentReactionFragment();
-            Bundle bundleComment = new Bundle();
-            mFragmentOpen.setCommentList(true);
-            mFragmentOpen.setOpen(true);
-            bundleComment.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, mFragmentOpen);
-            bundleComment.putParcelable(AppConstants.COMMENTS, mFeedDetail);
-            commentReactionFragmentForArticle.setArguments(bundleComment);
+            Bundle bundleArticle = new Bundle();
+            bundleArticle.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, mFragmentOpen);
+            bundleArticle.putParcelable(AppConstants.COMMENTS, feedDetail);
+            commentReactionFragmentForArticle.setArguments(bundleArticle);
             getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.bottom_to_top_slide_reverse_anim)
                     .replace(R.id.fl_article_detail_comments, commentReactionFragmentForArticle, CommentReactionFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
         }
@@ -352,7 +369,7 @@ public class ArticleDetailActivity extends BaseActivity implements BaseHolderInt
 
     @Override
     public void onClickReactionList(FragmentOpen isFragmentOpen, FeedDetail feedDetail) {
-        if(null!=isFragmentOpen&&null!=feedDetail) {
+        if (null != isFragmentOpen && null != feedDetail) {
             mFragmentOpen = isFragmentOpen;
             if (mFragmentOpen.isReactionList()) {
                 CommentReactionFragment commentReactionFragmentForArticle = new CommentReactionFragment();
@@ -385,7 +402,7 @@ public class ArticleDetailActivity extends BaseActivity implements BaseHolderInt
         }
     }
 
-    private void clickMenuItem(View view, final BaseResponse baseResponse) {
+    private void clickMenuItem(View view, final BaseResponse baseResponse,final boolean isCommentReaction) {
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View popupView = layoutInflater.inflate(R.layout.menu_option_layout, null);
         final PopupWindow popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -406,11 +423,18 @@ public class ArticleDetailActivity extends BaseActivity implements BaseHolderInt
         tvEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CommentReactionDoc commentReactionDoc = (CommentReactionDoc) baseResponse;
-                if (AppUtils.isFragmentUIActive(fragmentCommentReaction)) {
-                    commentReactionDoc.setActive(true);
-                    commentReactionDoc.setEdit(true);
-                    ((CommentReactionFragment) fragmentCommentReaction).editCommentInList(commentReactionDoc);
+                if (isCommentReaction) {
+                    CommentReactionDoc commentReactionDoc = (CommentReactionDoc) baseResponse;
+                    if (AppUtils.isFragmentUIActive(fragmentCommentReaction)) {
+                        commentReactionDoc.setActive(true);
+                        commentReactionDoc.setEdit(true);
+                        ((CommentReactionFragment) fragmentCommentReaction).editCommentInList(commentReactionDoc);
+                    }
+                } else {
+                    if (null != mFeedDetail) {
+                        mFragmentOpen.setCommentList(true);
+                        openCommentReactionFragment(mFeedDetail);
+                    }
                 }
                 popupWindow.dismiss();
             }
@@ -418,11 +442,18 @@ public class ArticleDetailActivity extends BaseActivity implements BaseHolderInt
         tvDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CommentReactionDoc commentReactionDoc = (CommentReactionDoc) baseResponse;
-                if (AppUtils.isFragmentUIActive(fragmentCommentReaction)) {
-                    commentReactionDoc.setActive(false);
-                    commentReactionDoc.setEdit(false);
-                    ((CommentReactionFragment) fragmentCommentReaction).editCommentInList(commentReactionDoc);
+                if (isCommentReaction) {
+                    CommentReactionDoc commentReactionDoc = (CommentReactionDoc) baseResponse;
+                    if (AppUtils.isFragmentUIActive(fragmentCommentReaction)) {
+                        commentReactionDoc.setActive(false);
+                        commentReactionDoc.setEdit(false);
+                        ((CommentReactionFragment) fragmentCommentReaction).editCommentInList(commentReactionDoc);
+                    }
+                } else {
+                    if (null != mFeedDetail) {
+                        mFragmentOpen.setCommentList(true);
+                        openCommentReactionFragment(mFeedDetail);
+                    }
                 }
                 popupWindow.dismiss();
             }
@@ -430,40 +461,35 @@ public class ArticleDetailActivity extends BaseActivity implements BaseHolderInt
         tvShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "You Clicked : " + tvShare.getText(), Toast.LENGTH_SHORT).show();
                 popupWindow.dismiss();
             }
         });
         tvReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "You Clicked : " + tvReport.getText(), Toast.LENGTH_SHORT).show();
                 popupWindow.dismiss();
             }
         });
-        int id = view.getId();
-        switch (id) {
-            case R.id.tv_feed_article_user_menu:
-                tvEdit.setVisibility(View.GONE);
-                tvDelete.setVisibility(View.GONE);
-                break;
-            case R.id.tv_user_comment_list_menu:
-                tvShare.setVisibility(View.GONE);
-                tvReport.setVisibility(View.GONE);
-            case R.id.tv_article_menu:
-                tvShare.setVisibility(View.GONE);
-                tvReport.setVisibility(View.GONE);
-            default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
-        }
+        tvEdit.setVisibility(View.VISIBLE);
+        tvDelete.setVisibility(View.VISIBLE);
     }
 
     @OnClick(R.id.iv_article_detail_back)
     public void onBackClick() {
-        Intent homeIntent = new Intent(this, HomeActivity.class);
-        startActivity(homeIntent);
-        finish();
-        overridePendingTransition(R.anim.fade_in_dialog,R.anim.fade_out_dialog);
-    }
 
+        if (!mFeedDetail.isFromHome()) {
+            Intent intent = new Intent(this, HomeActivity.class);
+            startActivity(intent);
+        }
+        finish();
+        overridePendingTransition(R.anim.fade_in_dialog, R.anim.fade_out_dialog);
+    }
+    @OnClick(R.id.tv_article_detail_share)
+    public void shareOnClick() {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType(AppConstants.SHARE_MENU_TYPE);
+        intent.putExtra(Intent.EXTRA_TEXT, "Testing Text From SHEROES2.0");
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Check out this site!");
+        startActivity(Intent.createChooser(intent,AppConstants.SHARE));
+    }
 }

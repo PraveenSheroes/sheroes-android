@@ -9,7 +9,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.LoginModel;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.preferences.Token;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
@@ -30,9 +29,9 @@ public class LoginPresenter extends BasePresenter<LoginView> {
     LoginModel mLoginModel;
     SheroesApplication sheroesApplication;
     @Inject
-    Preference<Token> userPreference;
+    Preference<LoginResponse> userPreference;
     @Inject
-    public LoginPresenter(LoginModel mLoginModel, SheroesApplication sheroesApplication, Preference<Token> userPreference) {
+    public LoginPresenter(LoginModel mLoginModel, SheroesApplication sheroesApplication, Preference<LoginResponse> userPreference) {
         this.mLoginModel = mLoginModel;
         this.sheroesApplication=sheroesApplication;
         this.userPreference=userPreference;
@@ -62,9 +61,10 @@ public class LoginPresenter extends BasePresenter<LoginView> {
             }
             @Override
             public void onError(Throwable e) {
-                getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
-                getMvpView().showNwError();
                 getMvpView().stopProgressBar();
+                getMvpView().showNwError();
+                getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
+
             }
 
             @Override

@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import appliedlife.pvtltd.SHEROES.R;
@@ -14,6 +15,7 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Praveen_Singh on 18-01-2017.
@@ -25,6 +27,8 @@ public class SearchModuleHolder extends BaseViewHolder<FeedDetail> {
     TextView mTvHeaderText;
     @Bind(R.id.tv_search_list_label_text)
     TextView mTvLabelText;
+    @Bind(R.id.rl_search_module_list)
+    RelativeLayout rlSearchModuleList;
     BaseHolderInterface viewInterface;
     private FeedDetail dataItem;
     private int position;
@@ -32,7 +36,7 @@ public class SearchModuleHolder extends BaseViewHolder<FeedDetail> {
 
     public SearchModuleHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
-        ButterKnife.bind(this,itemView);
+        ButterKnife.bind(this, itemView);
         this.viewInterface = baseHolderInterface;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
     }
@@ -40,31 +44,34 @@ public class SearchModuleHolder extends BaseViewHolder<FeedDetail> {
     @Override
     public void bindData(FeedDetail item, Context context, int position) {
         this.dataItem = item;
-        if(null!=dataItem&&StringUtil.isNotNullOrEmptyString(dataItem.getSubType())) {
+        if (null != dataItem && StringUtil.isNotNullOrEmptyString(dataItem.getSubType())) {
 
-            switch (item.getSubType())
-            {
+            switch (item.getSubType()) {
                 case AppConstants.FEED_ARTICLE:
-                    mTvHeaderText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_feed_article_top_left,0,0,0);
+                    mTvHeaderText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_feed_article_top_left, 0, 0, 0);
                     mTvHeaderText.setText(dataItem.getAuthorName());
+                    rlSearchModuleList.setTag(AppConstants.FEED_ARTICLE);
                     break;
                 case AppConstants.FEED_COMMUNITY:
-                    mTvHeaderText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search_group_icon,0,0,0);
+                    mTvHeaderText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search_group_icon, 0, 0, 0);
                     mTvLabelText.setText(item.getCommunityType());
-                    mTvLabelText.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_lock,0);
+                    mTvLabelText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_lock, 0);
+                    rlSearchModuleList.setTag(AppConstants.FEED_COMMUNITY);
                     break;
                 case AppConstants.FEED_COMMUNITY_POST:
-                    mTvHeaderText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search_group_icon,0,0,0);
+                    mTvHeaderText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search_group_icon, 0, 0, 0);
                     mTvHeaderText.setText(item.getNameOrTitle());
                     mTvLabelText.setText(item.getCommunityType());
+                    rlSearchModuleList.setTag(AppConstants.FEED_COMMUNITY_POST);
                     break;
                 case AppConstants.FEED_JOB:
-                    mTvHeaderText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search_proffesion_icon,0,0,0);
+                    mTvHeaderText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search_proffesion_icon, 0, 0, 0);
                     mTvHeaderText.setText(item.getNameOrTitle());
                     mTvLabelText.setText(item.getAuthorCityName());
+                    rlSearchModuleList.setTag(AppConstants.FEED_JOB);
                     break;
                 default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + item.getSubType());
+                    LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + item.getSubType());
             }
 
         }
@@ -77,17 +84,15 @@ public class SearchModuleHolder extends BaseViewHolder<FeedDetail> {
 
     }
 
+    @OnClick(R.id.rl_search_module_list)
+    public void onSearchModuleClick() {
+        dataItem.setItemPosition(getAdapterPosition());
+        viewInterface.handleOnClick(dataItem, rlSearchModuleList);
+    }
 
     @Override
     public void onClick(View view) {
-        viewInterface.handleOnClick(this.dataItem,view);
-        int id = view.getId();
-        switch (id) {
-          //  case R.id.iv_dashboard:
-          //      break;
-            default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
-        }
+
     }
 
 }

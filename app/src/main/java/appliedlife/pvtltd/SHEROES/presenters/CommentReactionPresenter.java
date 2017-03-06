@@ -9,7 +9,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.CommentReactionModel;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionResponsePojo;
-import appliedlife.pvtltd.SHEROES.preferences.Token;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
@@ -26,9 +26,9 @@ public class CommentReactionPresenter extends BasePresenter<AllCommentReactionVi
     CommentReactionModel mCommentReactionModel;
     SheroesApplication mSheroesApplication;
     @Inject
-    Preference<Token> mUserPreference;
+    Preference<LoginResponse> mUserPreference;
     @Inject
-    public CommentReactionPresenter(CommentReactionModel commentReactionModel, SheroesApplication mSheroesApplication, Preference<Token> mUserPreference) {
+    public CommentReactionPresenter(CommentReactionModel commentReactionModel, SheroesApplication mSheroesApplication, Preference<LoginResponse> mUserPreference) {
         this.mCommentReactionModel = commentReactionModel;
         this.mSheroesApplication = mSheroesApplication;
         this.mUserPreference = mUserPreference;

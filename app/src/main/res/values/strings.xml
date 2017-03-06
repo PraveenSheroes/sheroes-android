@@ -40,6 +40,7 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_FEED">Feed</string>
     <string name="ID_COMMUNITIY">Community</string>
     <string name="ID_SEARCH">Search</string>
+    <string name="ID_RECENT_SEARCH">Recent Search</string>
     <string name="ID_SEARCH_IN_FEED">Search article,communities,job</string>
     <string name="ID_SEARCH_IN_COMMUNITIES">Search communities</string>
     <string name="ID_DASHBOARD"> Working women have it hard enough – managing a 9 to 6 job along with family, friends, and the demand…View More</string>
@@ -55,7 +56,7 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_REPLY">Reply</string>
     <string name="ID_OPEN_BRACKET">(</string>
     <string name="ID_CLOSE_BRACKET">)</string>
-    <string name="ID_REACTION">Reactions</string>
+    <string name="ID_REACTION">Reaction</string>
     <string name="ID_NO_REACTION">No reaction</string>
     <string name="ID_APPLIED">Applied</string>
     <string name="ID_VIEWS">Views</string>
@@ -67,6 +68,7 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_FACE_PALM">Face Palm</string>
     <string name="ID_XOXO">Xoxo</string>
     <string name="ID_MORE_FROM_LIFE">More From Life</string>
+    <string name="ID_FORGOT_PASSWORD">Forgot Password?</string>
     <string name="ID_PROFILE">Profile</string>
     <string name="ID_ARTICLE">Article</string>
     <string name="ID_BOOKMARK">Bookmarks</string>

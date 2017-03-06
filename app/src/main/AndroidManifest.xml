@@ -34,16 +34,15 @@
             android:value="07aa242372597565df80681a25002e6e25e6ef0e" />
 
         <activity
-            android:name="appliedlife.pvtltd.SHEROES.views.activities.LoginActivity"
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.OnboardingActivity"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="appliedlife.pvtltd.SHEROES.views.activities.OnboardingActivity"
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.LoginActivity"
             android:windowSoftInputMode="stateHidden">
 
         </activity>
@@ -77,7 +76,6 @@
         </activity>
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.HomeSearchActivity"
-            android:parentActivityName="appliedlife.pvtltd.SHEROES.views.activities.HomeActivity"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity

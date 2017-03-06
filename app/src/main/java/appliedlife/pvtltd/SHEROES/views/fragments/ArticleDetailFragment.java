@@ -20,7 +20,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.database.dbentities.MasterData;
+import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleDetailPojo;
@@ -184,7 +184,7 @@ public class ArticleDetailFragment extends BaseFragment implements HomeView {
     }
 
     @Override
-    public void getDB(List<MasterData> masterDatas) {
+    public void getDB(List<RecentSearchData> recentSearchDatas) {
 
     }
 
@@ -192,8 +192,10 @@ public class ArticleDetailFragment extends BaseFragment implements HomeView {
 
     @Override
     public void startProgressBar() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mProgressBar.bringToFront();
+        if(listLoad) {
+            mProgressBar.setVisibility(View.VISIBLE);
+            mProgressBar.bringToFront();
+        }
     }
 
     @Override

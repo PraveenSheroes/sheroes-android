@@ -46,9 +46,9 @@ public class CommentHolder extends BaseViewHolder<CommentReactionDoc> {
     public void bindData(CommentReactionDoc item, final Context context, int position) {
         this.dataItem = item;
         this.mContext = context;
-       // if (item.getParticipantId()==)) {
-       //     tvUserCommentListMenu.setVisibility(View.GONE);
-       // }
+        if (dataItem.isMyOwnParticipation()) {
+            tvUserCommentListMenu.setVisibility(View.VISIBLE);
+        }
         if (StringUtil.isNotNullOrEmptyString(item.getParticipantImageUrl())) {
             ivListCommentProfilePic.setCircularImage(true);
             ivListCommentProfilePic.bindImage(item.getParticipantImageUrl());

@@ -23,7 +23,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.ProfileItems;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.FilterList;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobDetailPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobLocationList;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.can_help;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.OnBoardingData;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileHorList;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfilePersonalViewList;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileViewList;
@@ -126,10 +126,10 @@ public enum HolderMapping {
             return new TagsHolder(view, viewInterface);
         }
 
-    }, CANHELP(R.layout.list_of_can_help) {
+    }, ON_BOARDING_HOLDER(R.layout.list_of_can_help) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new CanHelpHolder(view, viewInterface);
+            return new OnBoardingHolder(view, viewInterface);
         }
 
     }, COMMUNITY_DETAIL_HEADER(R.layout.community_detail_header_holder) {
@@ -420,8 +420,8 @@ public enum HolderMapping {
 
                 } else if (item instanceof ListOfInviteSearch) {
                     return INVITE_SEARCH_MODULE.ordinal();
-                } else if (item instanceof can_help) {
-                    return CANHELP.ordinal();
+                } else if (item instanceof OnBoardingData) {
+                    return ON_BOARDING_HOLDER.ordinal();
                 } else if (item instanceof RequestedList) {
                     return REQUESTLIST.ordinal();
                 } else if (item instanceof OwnerList) {

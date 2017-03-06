@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.f2prateek.rx.preferences.Preference;
 
@@ -10,7 +11,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.preferences.Token;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
@@ -28,13 +29,13 @@ import butterknife.ButterKnife;
 public class LoginActivity extends BaseActivity implements LoginFragment.LoginActivityIntractionListner, FragmentIntractionWithActivityListner {
     private final String TAG = LogUtils.makeLogTag(LoginActivity.class);
     @Inject
-    Preference<Token> userPreference;
+    Preference<LoginResponse> userPreference;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
-        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getAccessToken())) {
+        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getToken())) {
             Intent homeIntent = new Intent(this, HomeActivity.class);
             startActivity(homeIntent);
 
@@ -47,7 +48,7 @@ public class LoginActivity extends BaseActivity implements LoginFragment.LoginAc
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         LoginFragment frag = new LoginFragment();
-        callFirstFragment(R.id.fl_fragment_container, frag);
+        callFirstFragment(R.id.fragment_login, frag);
     }
 
     @Override
@@ -64,7 +65,8 @@ public class LoginActivity extends BaseActivity implements LoginFragment.LoginAc
 
     @Override
     public void onShowErrorDialog() {
-        getSupportFragmentManager().popBackStack();
+        Toast.makeText(this,"Error in login",Toast.LENGTH_SHORT).show();
+        //getSupportFragmentManager().popBackStack();
     }
 }
 

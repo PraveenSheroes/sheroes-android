@@ -26,7 +26,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.database.dbentities.MasterData;
+import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
@@ -249,7 +249,7 @@ public class HomeFragment extends BaseFragment implements HomeView {
             } else {
                 mFeedDetail.setBookmarked(false);
             }
-            mAdapter.setDataOnPosition(mFeedDetail, position);
+            mAdapter.setDataOnPosition(mFeedDetail, mFeedDetail.getItemPosition());
         }
     }
 
@@ -284,11 +284,7 @@ public class HomeFragment extends BaseFragment implements HomeView {
 
 
     @Override
-    public void getDB(List<MasterData> masterDatas) {
-        for (MasterData master : masterDatas) {
-            LogUtils.info("db", "*********************List master******" + master);
-        }
-        mHomePresenter.fetchMasterDataTypes();
+    public void getDB(List<RecentSearchData> recentSearchDatas) {
     }
 
 

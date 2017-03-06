@@ -9,7 +9,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.InviteSearchModel;
 import appliedlife.pvtltd.SHEROES.models.entities.community.InviteSearchResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.ListOfInviteSearch;
-import appliedlife.pvtltd.SHEROES.preferences.Token;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
@@ -26,9 +26,9 @@ public class InvitePresenter extends BasePresenter<InviteSearchView> {
     InviteSearchModel mSearchModel;
     SheroesApplication mSheroesApplication;
     @Inject
-    Preference<Token> mUserPreference;
+    Preference<LoginResponse> mUserPreference;
     @Inject
-    public InvitePresenter(InviteSearchModel mSearchModel, SheroesApplication mSheroesApplication, Preference<Token> mUserPreference) {
+    public InvitePresenter(InviteSearchModel mSearchModel, SheroesApplication mSheroesApplication, Preference<LoginResponse> mUserPreference) {
         this.mSearchModel = mSearchModel;
         this.mSheroesApplication = mSheroesApplication;
         this.mUserPreference = mUserPreference;

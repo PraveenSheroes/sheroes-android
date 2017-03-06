@@ -17,7 +17,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.database.dbentities.MasterData;
+import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
@@ -40,7 +40,7 @@ public class HomeSpinnerFragment extends BaseFragment implements HomeView {
     HomePresenter mHomePresenter;
     @Bind(R.id.rv_spinner_list)
     RecyclerView mRecyclerView;
-    @Bind(R.id.pb_home_progress_bar)
+    @Bind(R.id.pb_spinner_progress_bar)
     ProgressBar mProgressBar;
     GenericRecyclerViewAdapter mAdapter;
     private List<HomeSpinnerItem> mHomeSpinnerItemList;
@@ -62,7 +62,7 @@ public class HomeSpinnerFragment extends BaseFragment implements HomeView {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
-        View view = inflater.inflate(R.layout.fragment_home_spinner, container, false);
+        View view = inflater.inflate(R.layout.fragment_home_spinner_layout, container, false);
         ButterKnife.bind(this, view);
         mHomePresenter.attachView(this);
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
@@ -97,7 +97,7 @@ public class HomeSpinnerFragment extends BaseFragment implements HomeView {
 
 
     @Override
-    public void getDB(List<MasterData> masterDatas) {
+    public void getDB(List<RecentSearchData> recentSearchDatas) {
 
     }
 

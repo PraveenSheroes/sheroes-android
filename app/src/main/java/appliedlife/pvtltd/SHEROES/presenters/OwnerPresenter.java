@@ -8,7 +8,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.OwnerListModel;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
-import appliedlife.pvtltd.SHEROES.preferences.Token;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
@@ -25,9 +25,9 @@ public class OwnerPresenter extends BasePresenter<CommunityView> {
     OwnerListModel ownerListModel;
     SheroesApplication sheroesApplication;
     @Inject
-    Preference<Token> userPreference;
+    Preference<LoginResponse> userPreference;
     @Inject
-    public OwnerPresenter(OwnerListModel communityListModel, SheroesApplication sheroesApplication, Preference<Token> userPreference) {
+    public OwnerPresenter(OwnerListModel communityListModel, SheroesApplication sheroesApplication, Preference<LoginResponse> userPreference) {
         this.ownerListModel = communityListModel;
         this.sheroesApplication=sheroesApplication;
         this.userPreference=userPreference;

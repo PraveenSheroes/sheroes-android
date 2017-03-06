@@ -13,7 +13,7 @@
             android:id="@+id/rv_home_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:divider="@color/fully_transparent" />
+            android:divider="@color/fully_transparent"/>
     </android.support.v4.widget.SwipeRefreshLayout>
     <ProgressBar
         android:id="@+id/pb_home_progress_bar"

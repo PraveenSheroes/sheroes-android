@@ -1,13 +1,19 @@
 package appliedlife.pvtltd.SHEROES.models.entities.login;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
 /**
- * Created by Praveen_Singh on 28-02-2017.
+ * Created by Praveen Singh on 29/12/2016.
+ *
+ * @author Praveen Singh
+ * @version 5.0
+ * @since 29/12/2016.
+ * Title:User summary
  */
-
-public class UserSummary {
+public class UserSummary implements Parcelable {
 
     @SerializedName("user_id")
     @Expose
@@ -75,4 +81,43 @@ public class UserSummary {
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.userId);
+        dest.writeString(this.emailId);
+        dest.writeString(this.mobile);
+        dest.writeString(this.firstName);
+        dest.writeString(this.lastName);
+        dest.writeString(this.photoUrl);
+    }
+
+    public UserSummary() {
+    }
+
+    protected UserSummary(Parcel in) {
+        this.userId = in.readInt();
+        this.emailId = in.readString();
+        this.mobile = in.readString();
+        this.firstName = in.readString();
+        this.lastName = in.readString();
+        this.photoUrl = in.readString();
+    }
+
+    public static final Parcelable.Creator<UserSummary> CREATOR = new Parcelable.Creator<UserSummary>() {
+        @Override
+        public UserSummary createFromParcel(Parcel source) {
+            return new UserSummary(source);
+        }
+
+        @Override
+        public UserSummary[] newArray(int size) {
+            return new UserSummary[size];
+        }
+    };
 }

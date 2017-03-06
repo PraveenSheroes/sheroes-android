@@ -49,7 +49,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.preferences.Token;
 import appliedlife.pvtltd.SHEROES.presenters.LoginPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -74,7 +73,7 @@ import butterknife.OnClick;
 public class LoginFragment extends BaseFragment implements LoginView {
     private final String TAG = LogUtils.makeLogTag(LoginFragment.class);
     @Inject
-    Preference<Token> mUserPreference;
+    Preference<LoginResponse> mUserPreference;
     @Inject
     LoginPresenter mLoginPresenter;
     @Inject
@@ -85,8 +84,8 @@ public class LoginFragment extends BaseFragment implements LoginView {
     EditText mPasswordView;
     @Bind(R.id.pb_login_progress_bar)
     ProgressBar mProgressBar;
-    @Bind(R.id.li_tags)
-    LinearLayout liTags;
+   // @Bind(R.id.li_tags)
+   // LinearLayout liTags;
     FragmentIntractionWithActivityListner fragmentIntractionWithActivityListner;
     private LoginActivityIntractionListner mLoginActivityIntractionListner;
     int mCurrentIndex = 0;
@@ -140,7 +139,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_login, container, false);
         ButterKnife.bind(this, view);
-        renderView();
+      //  renderView();
 
 
         mLoginPresenter.attachView(this);
@@ -169,7 +168,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
             LinearLayout liRow = (LinearLayout) layoutInflater.inflate(R.layout.row, null);
             int column = 3;
             row = cloumnViewTwo(liRow, row, column, stringList);
-            liTags.addView(liRow);
+         //   liTags.addView(liRow);
         }
 
     }
@@ -251,12 +250,9 @@ public class LoginFragment extends BaseFragment implements LoginView {
     public void getLogInResponse(LoginResponse loginResponse) {
         mProgressBar.setVisibility(View.GONE);
         if (null != loginResponse && StringUtil.isNotNullOrEmptyString(loginResponse.getToken())) {
-            String logInAuthToken = loginResponse.getToken();
-            Token token = new Token();
-            token.setAccessToken(logInAuthToken);
-            token.setTokenTime(System.currentTimeMillis());
-            token.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
-            mUserPreference.set(token);
+            loginResponse.setTokenTime(System.currentTimeMillis());
+            loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
+            mUserPreference.set(loginResponse);
             mProgressBar.setVisibility(View.GONE);
             mLoginActivityIntractionListner.onLoginAuthToken();
             Snackbar.make(mEmailView, R.string.ID_APP_NAME, Snackbar.LENGTH_SHORT).show();

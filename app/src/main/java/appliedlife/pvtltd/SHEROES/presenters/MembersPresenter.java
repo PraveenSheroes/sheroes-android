@@ -9,7 +9,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.MemberListModel;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MemberListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MemberRequest;
-import appliedlife.pvtltd.SHEROES.preferences.Token;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
@@ -26,9 +26,9 @@ public class MembersPresenter extends BasePresenter<AllMembersView> {
     MemberListModel mCommentReactionModel;
     SheroesApplication mSheroesApplication;
     @Inject
-    Preference<Token> mUserPreference;
+    Preference<LoginResponse> mUserPreference;
     @Inject
-    public MembersPresenter(MemberListModel memberListModel, SheroesApplication mSheroesApplication, Preference<Token> mUserPreference) {
+    public MembersPresenter(MemberListModel memberListModel, SheroesApplication mSheroesApplication, Preference<LoginResponse> mUserPreference) {
         this.mCommentReactionModel = memberListModel;
         this.mSheroesApplication = mSheroesApplication;
         this.mUserPreference = mUserPreference;

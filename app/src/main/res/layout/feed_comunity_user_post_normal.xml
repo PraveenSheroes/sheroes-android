@@ -51,7 +51,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@string/ID_ROBOTO_BOLD"
-                    android:text="Testing walfare sociaty India for "
                     android:textColor="@color/feed_article_label"
                     android:textSize="@dimen/sp_size_14"
                     android:textStyle="bold" />
@@ -62,7 +61,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp_size_3"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:text="2 hr ago"
                     android:textColor="@color/feed_article_label"
                     android:textSize="@dimen/sp_size_12" />
             </LinearLayout>
@@ -114,8 +112,8 @@
             android:id="@+id/li_feed_community_post_user_reactions"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_size_35"
-            android:layout_marginLeft="@dimen/dp_size_16"
-            android:layout_marginRight="@dimen/dp_size_12"
+            android:layout_marginLeft="@dimen/dp_size_6"
+            android:layout_marginRight="@dimen/dp_size_6"
             android:layout_marginTop="@dimen/dp_size_20"
             android:orientation="horizontal"
             android:weightSum="1">
@@ -124,10 +122,11 @@
                 android:id="@+id/tv_feed_community_post_user_reaction"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight=".28"
+                android:layout_weight=".26"
                 android:gravity="center|left"
                 android:drawablePadding="@dimen/dp_size_5"
                 android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                android:paddingLeft="@dimen/dp_size_10"
                 android:textColor="@color/emoji_text"
                 android:drawableLeft="@drawable/ic_heart_in_active" />
 
@@ -136,14 +135,16 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight=".26"
+                android:paddingLeft="@dimen/dp_size_10"
                 android:drawableLeft="@drawable/ic_comment_icon" />
 
             <TextView
                 android:id="@+id/tv_feed_community_post_user_bookmark"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight=".23"
-                android:drawableRight="@drawable/ic_bookmark_active" />
+                android:layout_weight=".25"
+                android:paddingRight="@dimen/dp_size_20"
+                android:drawableRight="@drawable/ic_bookmark_in_active" />
 
 
             <TextView
@@ -152,7 +153,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight=".24"
                 android:layout_gravity="right"
-                android:paddingRight="@dimen/dp_size_10"
+                android:paddingRight="@dimen/dp_size_12"
                 android:drawableRight="@drawable/ic_menu_dashboard" />
         </LinearLayout>
 
@@ -201,7 +202,6 @@
                 android:layout_gravity="center"
                 android:layout_marginRight="@dimen/dp_size_84"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                android:text="reactions"
                 android:textColor="@color/feed_article_comment"
                 android:textSize="@dimen/sp_size_11" />
 
@@ -211,8 +211,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:visibility="gone"
                 android:gravity="right"
-                android:text="8 replies"
                 android:textColor="@color/feed_article_comment"
                 android:textSize="@dimen/sp_size_11" />
         </FrameLayout>
@@ -223,6 +223,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_size_12"
             android:layout_marginRight="@dimen/dp_size_7"
+            android:visibility="gone"
             android:layout_marginTop="@dimen/dp_size_20"
             android:orientation="horizontal"
             android:weightSum="1">
@@ -259,7 +260,6 @@
                 android:gravity="center|left"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:lineSpacingExtra="@dimen/dp_size_3"
-                android:text="@string/IDS_STR_NETWORK_TIME_OUT_DESCRIPTION"
                 android:textColor="@color/feed_conversation"
                 android:textSize="@dimen/sp_size_12" />
 
@@ -270,6 +270,7 @@
                 android:layout_gravity="right"
                 android:paddingRight="@dimen/dp_size_10"
                 android:paddingLeft="@dimen/dp_size_10"
+                android:visibility="gone"
                 android:drawableRight="@drawable/ic_menu_dashboard" />
         </LinearLayout>
 

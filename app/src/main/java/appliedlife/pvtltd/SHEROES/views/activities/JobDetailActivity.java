@@ -31,7 +31,6 @@ import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.util.List;
 
-import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.CustomCollapsingToolbarLayout;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
@@ -43,6 +42,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.CustomCollapsingToolbarLayout;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobDetailFragment;
 import butterknife.Bind;
@@ -58,6 +58,8 @@ public class JobDetailActivity extends BaseActivity implements BaseHolderInterfa
     AppBarLayout mAppBarLayout;
     @Bind(R.id.iv_article_detail)
     ImageView ivArticleDetail;
+    @Bind(R.id.tv_job_detail_bookmark)
+    TextView mTvJobDetailBookmark;
     @Bind(R.id.view_pager_job_detail)
     ViewPager mViewPagerJobDetail;
     @Bind(R.id.toolbar_article_detail)
@@ -110,6 +112,13 @@ public class JobDetailActivity extends BaseActivity implements BaseHolderInterfa
         mCustomCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
         mCustomCollapsingToolbarLayout.setExpandedTitleMarginStart(200);
         if (null != mFeedDetail) {
+            if(mFeedDetail.isBookmarked()) {
+                mTvJobDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_active, 0, 0, 0);
+            }
+            else
+            {
+                mTvJobDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_in_active, 0, 0, 0);
+            }
             mCustomCollapsingToolbarLayout.setTitle(mFeedDetail.getNameOrTitle());
             mCustomCollapsingToolbarLayout.setSubtitle(mFeedDetail.getAuthorName());
             mTv_job_comp_nm.setText(mFeedDetail.getAuthorName());

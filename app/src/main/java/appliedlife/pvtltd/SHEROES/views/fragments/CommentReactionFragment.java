@@ -17,6 +17,8 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.f2prateek.rx.preferences.Preference;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +33,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRespons
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LastComment;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.presenters.CommentReactionPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -92,6 +95,8 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private HomeActivityIntractionListner mHomeActivityIntractionListner;
+    @Inject
+    Preference<LoginResponse> userPreference;
     @Inject
     AppUtils mAppUtils;
     private FeedDetail mFeedDetail;
@@ -157,7 +162,9 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
 
     private void initializeUiComponent() {
         //TODO:: set user name here
-        mTvUserNameForPost.setText("Praveen");
+        if (null != userPreference && userPreference.isSet() && null != userPreference.get()&&null!=userPreference.get().getUserSummary()&& StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getFirstName())) {
+            mTvUserNameForPost.setText(userPreference.get().getUserSummary().getFirstName());
+        }
         if (null != mFeedDetail) {
             if (mFeedDetail.getNoOfLikes() < 1) {
                 mFlCommentReaction.setVisibility(View.GONE);

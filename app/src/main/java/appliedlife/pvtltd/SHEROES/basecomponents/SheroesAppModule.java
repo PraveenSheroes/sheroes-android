@@ -16,10 +16,9 @@ import java.io.IOException;
 import javax.inject.Singleton;
 
 import appliedlife.pvtltd.SHEROES.BuildConfig;
-import appliedlife.pvtltd.SHEROES.database.YipStaySqliteOpenHelper;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.preferences.GsonPreferenceAdapter;
 import appliedlife.pvtltd.SHEROES.preferences.SessionUser;
-import appliedlife.pvtltd.SHEROES.preferences.Token;
 import appliedlife.pvtltd.SHEROES.utils.AnnotationExclusionStrategy;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -64,7 +63,7 @@ public class SheroesAppModule {
 
     @Singleton
     @Provides
-    public Interceptor provideInterceptor(final Preference<Token> userPreference) {
+    public Interceptor provideInterceptor(final Preference<LoginResponse> userPreference) {
         return new Interceptor() {
             @Override
             public okhttp3.Response intercept(Chain chain) throws IOException {
@@ -72,7 +71,7 @@ public class SheroesAppModule {
                 Request request;
                 if (null != userPreference && userPreference.isSet() && null != userPreference.get()) {
                     request = original.newBuilder().header("Content-Type", "application/json")
-                            .header("Authorization", userPreference.get().getAccessToken())
+                            .header("Authorization", userPreference.get().getToken())
                             .build();
                 } else {
                     request = original.newBuilder().header("Content-Type", "application/json")
@@ -111,8 +110,8 @@ public class SheroesAppModule {
 
     @Singleton
     @Provides
-    public Preference<Token> provideTokenPref(RxSharedPreferences rxSharedPreferences, Gson gson) {
-        return rxSharedPreferences.getObject(AppConstants.SHEROES_AUTH_TOKEN, new GsonPreferenceAdapter<>(gson, Token.class));
+    public Preference<LoginResponse> provideTokenPref(RxSharedPreferences rxSharedPreferences, Gson gson) {
+        return rxSharedPreferences.getObject(AppConstants.SHEROES_AUTH_TOKEN, new GsonPreferenceAdapter<>(gson, LoginResponse.class));
     }
 
 
@@ -160,8 +159,8 @@ public class SheroesAppModule {
 
     @Singleton
     @Provides
-    public StorIOSQLite getStorIOSQLite(YipStaySqliteOpenHelper openHelper) {
-        return YipStaySqliteOpenHelper.getStorIOSQLite(openHelper);
+    public StorIOSQLite getStorIOSQLite(SheroesSqliteOpenHelper openHelper) {
+        return SheroesSqliteOpenHelper.getStorIOSQLite(openHelper);
     }
 
 }

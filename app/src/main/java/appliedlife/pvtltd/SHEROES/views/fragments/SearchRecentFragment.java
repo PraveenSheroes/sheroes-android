@@ -2,13 +2,10 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +13,9 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -23,9 +23,8 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.database.dbentities.MasterData;
+import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -56,11 +55,10 @@ public class SearchRecentFragment extends BaseFragment implements HomeView {
     LinearLayout liNoSearchResult;
     @Bind(R.id.tv_search_result)
     TextView tvSearchResult;
-    private String mSearchDataName = AppConstants.EMPTY_STRING;
     private GenericRecyclerViewAdapter mAdapter;
     private FragmentIntractionWithActivityListner mHomeSearchActivityFragmentIntractionWithActivityListner;
-    private FragmentListRefreshData mFragmentListRefreshData;
-    private Handler mHandler = new Handler();
+    private List<RecentSearchData> recentSearchDatas;
+
     public static SearchRecentFragment createInstance() {
         SearchRecentFragment searchRecentFragment = new SearchRecentFragment();
         return searchRecentFragment;
@@ -84,10 +82,8 @@ public class SearchRecentFragment extends BaseFragment implements HomeView {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         ButterKnife.bind(this, view);
-        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ALL_SEARCH, AppConstants.EMPTY_STRING);
         mHomePresenter.attachView(this);
-        tvSearchResult.setText(getString(R.string.ID_SEARCH));
-        editTextWatcher();
+        mHomePresenter.fetchMasterDataTypes();
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new GenericRecyclerViewAdapter(getContext(), (HomeSearchActivity) getActivity());
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
@@ -100,16 +96,6 @@ public class SearchRecentFragment extends BaseFragment implements HomeView {
 
     @Override
     public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
-        if(StringUtil.isNotEmptyCollection(feedDetailList)&&mAdapter!=null) {
-            mAdapter.setCallForRecycler(AppConstants.ALL_SEARCH);
-            mAdapter.setSheroesGenericListData(feedDetailList);
-            mAdapter.notifyDataSetChanged();
-        }
-        else
-        {
-            liNoSearchResult.setVisibility(View.VISIBLE);
-            tvSearchResult.setText(getString(R.string.ID_NO_RESULT_FOUND));
-        }
     }
 
     @Override
@@ -118,8 +104,32 @@ public class SearchRecentFragment extends BaseFragment implements HomeView {
     }
 
     @Override
-    public void getDB(List<MasterData> masterDatas) {
+    public void getDB(List<RecentSearchData> recentSearchDatas) {
+        this.recentSearchDatas = recentSearchDatas;
+    }
 
+    public void updateUiAfterSwip() {
+        if (StringUtil.isNotEmptyCollection(recentSearchDatas)) {
+            List<FeedDetail> feedDetailList = new ArrayList<>();
+            for (RecentSearchData master : recentSearchDatas) {
+                Gson gson = new Gson();
+                FeedDetail feedObject = gson.fromJson(master.getRecentSearchFeed(), FeedDetail.class);
+                feedDetailList.add(feedObject);
+            }
+            if (StringUtil.isNotEmptyCollection(feedDetailList) && mAdapter != null) {
+                liNoSearchResult.setVisibility(View.GONE);
+                mAdapter.setCallForRecycler(AppConstants.ALL_SEARCH);
+                mAdapter.setSheroesGenericListData(feedDetailList);
+                mAdapter.notifyDataSetChanged();
+
+            } else {
+                liNoSearchResult.setVisibility(View.VISIBLE);
+                tvSearchResult.setText(getString(R.string.ID_NO_RESULT_FOUND));
+            }
+        } else {
+            liNoSearchResult.setVisibility(View.VISIBLE);
+            tvSearchResult.setText(getString(R.string.ID_NO_RESULT_FOUND));
+        }
     }
 
     @Override
@@ -165,63 +175,5 @@ public class SearchRecentFragment extends BaseFragment implements HomeView {
         super.onResume();
     }
 
-    /**
-     * When user type city name it works for each character.
-     */
-    protected void editTextWatcher() {
-        ((HomeSearchActivity) getActivity()).mSearchEditText.addTextChangedListener(dataSearchTextWatcher());
-        ((HomeSearchActivity) getActivity()).mSearchEditText.setFocusableInTouchMode(true);
-        ((HomeSearchActivity) getActivity()).mSearchEditText.requestFocus();
-    }
 
-    /**
-     * Text watcher workes on every character change and make hit for server accordingly.
-     */
-    private TextWatcher dataSearchTextWatcher() {
-
-        return new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable inputSearch) {
-                /**As soon as user starts typing take the scroll to top **/
-             /*   mSearchDataName = inputSearch.toString();
-                if (!((HomeSearchActivity) getActivity()).mIsDestroyed) {
-                    mAdapter.getFilter().filter(mSearchDataName);
-                }*/
-
-                if (StringUtil.isNotNullOrEmptyString(inputSearch.toString())&&inputSearch.toString().length()>AppConstants.THREE_CONSTANT)
-                {
-                    liNoSearchResult.setVisibility(View.GONE);
-                    mSearchDataName = inputSearch.toString();
-                    /**hitting the servers to get data if length is greater than threshold defined **/
-                    mHandler.removeCallbacks(mFilterTask);
-                    mHandler.postDelayed(mFilterTask, AppConstants.SEARCH_CONSTANT_DELAY);
-                }
-            }
-        };
-    }
-    /**
-     * Runnable use to make network call on every character change while search for city name.
-     */
-    Runnable mFilterTask = new Runnable()
-    {
-        @Override
-        public void run()
-        {
-            if (!isDetached())
-            {
-                mSearchDataName = mSearchDataName.trim().replaceAll(AppConstants.SPACE, AppConstants.EMPTY_STRING);
-                mHomePresenter.getFeedFromPresenter(mAppUtils.searchRequestBuilder(AppConstants.FEED_SUB_TYPE,mSearchDataName ,mFragmentListRefreshData.getPageNo(),AppConstants.ALL_SEARCH));
-            }
-        }
-    };
 }

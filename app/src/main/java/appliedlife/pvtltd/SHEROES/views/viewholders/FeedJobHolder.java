@@ -140,6 +140,7 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_feed_job_user_bookmark)
     public void isBookMarkClick() {
+        dataItem.setItemPosition(getAdapterPosition());
         if (dataItem.isBookmarked()) {
             viewInterface.handleOnClick(dataItem, tvFeedJobUserBookmark);
         } else {
@@ -149,11 +150,13 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_feed_job_user_menu)
     public void userMenuClick() {
+        dataItem.setItemPosition(getAdapterPosition());
         viewInterface.handleOnClick(dataItem, tvFeedJobUserMenu);
     }
 
     @OnClick(R.id.li_feed_job_card)
     public void feedJobClick() {
+        dataItem.setItemPosition(getAdapterPosition());
         viewInterface.handleOnClick(dataItem, liFeedJobCard);
     }
 

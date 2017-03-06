@@ -82,12 +82,13 @@
                     android:drawablePadding="@dimen/dp_size_10" />
 
                 <TextView
-                    android:id="@+id/tv_article_detail_bookmark"
+                    android:id="@+id/tv_job_detail_bookmark"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:drawableLeft="@drawable/ic_bookmark_in_active"
                     android:drawablePadding="@dimen/dp_size_10"
+                    android:paddingLeft="@dimen/dp_size_20"
                     android:paddingRight="@dimen/dp_size_10" />
             </android.support.v7.widget.Toolbar>
 

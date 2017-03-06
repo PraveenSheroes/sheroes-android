@@ -76,6 +76,23 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
         mContext = context;
         liArticleCoverImage.removeAllViews();
         liArticleCoverImage.removeAllViewsInLayout();
+
+        if(dataItem.isTrending())
+        {
+            tvArticleTrendingLabel.setText(mContext.getString(R.string.ID_TRENDING));
+        }
+        else
+        {
+            tvArticleTrendingLabel.setText(AppConstants.EMPTY_STRING);
+        }
+        if(dataItem.isBookmarked())
+        {
+            tvArticleTrendingLabel.setCompoundDrawablesWithIntrinsicBounds(0, 0,R.drawable.ic_bookmark_active, 0);
+        }
+        else
+        {
+            tvArticleTrendingLabel.setCompoundDrawablesWithIntrinsicBounds(0, 0,R.drawable.ic_bookmark_in_active, 0);
+        }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getAuthorName())) {
             tvArticleCardTitle.setText(dataItem.getAuthorName());
         }
@@ -171,6 +188,7 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_article_trending_label)
     public void tvArticleTrendingClick() {
+        dataItem.setItemPosition(getAdapterPosition());
         if (dataItem.isBookmarked()) {
             viewInterface.handleOnClick(dataItem, tvArticleTrendingLabel);
         } else {

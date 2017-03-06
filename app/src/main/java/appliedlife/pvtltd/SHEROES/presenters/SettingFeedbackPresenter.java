@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.SettingFeedbackModel;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingDeActivateRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingDeActivateResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingFeedbackRequest;
@@ -15,7 +16,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingRatingRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingRatingResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.UserPreferenceRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.UserpreferenseResponse;
-import appliedlife.pvtltd.SHEROES.preferences.Token;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
@@ -34,10 +34,10 @@ public class SettingFeedbackPresenter extends BasePresenter<SettingFeedbackView>
     SettingFeedbackModel mSettingFeedbackModel;
     SheroesApplication sheroesApplication;
     @Inject
-    Preference<Token> userPreference;
+    Preference<LoginResponse> userPreference;
 
     @Inject
-    public SettingFeedbackPresenter(SettingFeedbackModel mSettingFeedbackModel, SheroesApplication sheroesApplication, Preference<Token> userPreference) {
+    public SettingFeedbackPresenter(SettingFeedbackModel mSettingFeedbackModel, SheroesApplication sheroesApplication, Preference<LoginResponse> userPreference) {
         this.mSettingFeedbackModel = mSettingFeedbackModel;
         this.sheroesApplication = sheroesApplication;
         this.userPreference = userPreference;

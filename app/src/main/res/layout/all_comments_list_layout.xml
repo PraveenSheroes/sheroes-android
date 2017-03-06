@@ -31,7 +31,6 @@
             android:paddingLeft="@dimen/dp_size_10"
             android:paddingBottom="@dimen/dp_size_10"
             android:textColor="@color/detail_page_text"
-            android:text="@string/ID_ERROR_INVALID_EMAIL"
             android:textSize="@dimen/sp_size_12"
             android:textStyle="bold" />
 
@@ -42,6 +41,7 @@
             android:layout_gravity="right"
             android:paddingLeft="@dimen/dp_size_10"
             android:paddingRight="@dimen/dp_size_5"
+            android:visibility="gone"
             android:drawableRight="@drawable/ic_menu_dashboard" />
     </LinearLayout>
     <View

@@ -8,6 +8,8 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.f2prateek.rx.preferences.Preference;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -18,6 +20,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LastComment;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleDetailPojo;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
@@ -37,6 +40,8 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
     private final String TAG = LogUtils.makeLogTag(ArticleCardHolder.class);
     private static final String LEFT_HTML_TAG_FOR_COLOR = "<b><font color='#323940'>";
     private static final String RIGHT_HTML_TAG_FOR_COLOR = "</font></b>";
+    @Inject
+    Preference<LoginResponse> userPreference;
     @Inject
     DateUtil mDateUtil;
     @Bind(R.id.iv_article_detail_card_circle_icon)
@@ -87,7 +92,6 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
     private Context mContext;
     @Bind(R.id.fl_article_detail_no_reaction_comments)
     FrameLayout flArticleDetailNoReactionComment;
-
     @Bind(R.id.li_article_detail_user_comments)
     LinearLayout liArticleDetailUserComments;
     @Bind(R.id.li_article_detail_user_comments_second)
@@ -98,7 +102,6 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
     LinearLayout liArticleDetailUserCommentsThird;
     @Bind(R.id.iv_article_detail_user_pic_third)
     CircleImageView ivArticleDetailUserPicThird;
-
     public ArticleDetailHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
@@ -142,6 +145,10 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getAuthorName())) {
             tvArticleDetailIconName.setText(mFeedDetail.getAuthorName());
         }
+        if (null != userPreference && userPreference.isSet() && null != userPreference.get()&&null!=userPreference.get().getUserSummary()&& StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getPhotoUrl())) {
+            ivArticleDetailRegisterUserPic.setCircularImage(true);
+            ivArticleDetailRegisterUserPic.bindImage(userPreference.get().getUserSummary().getPhotoUrl());
+        }
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getCreatedDate())) {
             long createdDate = mDateUtil.getTimeInMillis(mFeedDetail.getCreatedDate(), AppConstants.DATE_FORMAT);
             long minuts = mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate);
@@ -172,10 +179,12 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
             switch (mFeedDetail.getNoOfLikes()) {
                 case AppConstants.ONE_CONSTANT:
                     tvArticleDetailTotalReaction.setText(String.valueOf(mFeedDetail.getNoOfLikes()) + AppConstants.SPACE + context.getString(R.string.ID_REACTION));
+                    tvArticleDetailUserReaction.setText(AppConstants.EMPTY_STRING);
                     userLike();
                     break;
                 default:
                     tvArticleDetailTotalReaction.setText(String.valueOf(mFeedDetail.getNoOfLikes()) + AppConstants.SPACE + context.getString(R.string.ID_REACTION) + AppConstants.S);
+                    tvArticleDetailUserReaction.setText(AppConstants.EMPTY_STRING);
                     userLike();
             }
         }
@@ -235,8 +244,8 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
                         } else {
                             tvArticleDetailUserCommentPost.setText(Html.fromHtml(userName + AppConstants.COLON + lastCommentList.get(index).getComment()));// or for older api
                         }
-                        if (!lastCommentList.get(index).isMyOwnParticipation()) {
-                            tvArticleDetailUserCommentPostMenu.setVisibility(View.GONE);
+                        if (lastCommentList.get(index).isMyOwnParticipation()) {
+                            tvArticleDetailUserCommentPostMenu.setVisibility(View.VISIBLE);
                         }
                         break;
                     case AppConstants.ONE_CONSTANT:
@@ -250,8 +259,8 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
                         } else {
                             tvArticleDetailUserCommentPostSecond.setText(Html.fromHtml(userName + AppConstants.COLON + lastCommentList.get(index).getComment()));// or for older api
                         }
-                        if (!lastCommentList.get(index).isMyOwnParticipation()) {
-                            tvArticleDetailUserCommentPostMenuSecond.setVisibility(View.GONE);
+                        if (lastCommentList.get(index).isMyOwnParticipation()) {
+                            tvArticleDetailUserCommentPostMenuSecond.setVisibility(View.VISIBLE);
                         }
                         break;
                     case AppConstants.TWO_CONSTANT:
@@ -265,8 +274,8 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
                         } else {
                             tvArticleDetailUserCommentPostThird.setText(Html.fromHtml(userName + AppConstants.COLON + lastCommentList.get(index).getComment()));// or for older api
                         }
-                        if (!lastCommentList.get(index).isMyOwnParticipation()) {
-                            tvArticleDetailUserCommentPostMenuThird.setVisibility(View.GONE);
+                        if (lastCommentList.get(index).isMyOwnParticipation()) {
+                            tvArticleDetailUserCommentPostMenuThird.setVisibility(View.VISIBLE);
                         }
                         break;
                     default:
@@ -294,13 +303,16 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
             viewInterface.handleOnClick(mFeedDetail, tvArticleDetailUserReaction);
         }
     }
-
     @OnClick(R.id.tv_article_detail_user_comment)
     public void userCommentClick() {
         mFeedDetail.setItemPosition(getAdapterPosition());
         viewInterface.handleOnClick(mFeedDetail, liArticleDetailJoinConversation);
     }
-
+    @OnClick(R.id.tv_article_detail_total_reactions)
+    public void reactionClick() {
+        mFeedDetail.setItemPosition(getAdapterPosition());
+        viewInterface.handleOnClick(mFeedDetail, tvArticleDetailTotalReaction);
+    }
 
     @OnClick(R.id.tv_article_detail_total_replies)
     public void userRepliesClick() {
