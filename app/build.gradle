@@ -25,11 +25,11 @@ android {
             buildConfigField "String", "BASE_URL", "\"http://34.193.138.177/\""
             ext.enableCrashlytics = false
             shrinkResources false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+           proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         release {
-            minifyEnabled false
-            shrinkResources true
+           minifyEnabled false
+           shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

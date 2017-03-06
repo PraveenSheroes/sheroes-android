@@ -14,7 +14,7 @@ public class ProfileViewList extends BaseResponse {
     @SerializedName("id")
     @Expose
     private String id;
-    @SerializedName("tag")
+    @SerializedName("tag_item_ui_for_onboarding")
     @Expose
     private String tag;
 

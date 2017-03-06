@@ -162,18 +162,17 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
 
     private void initializeUiComponent() {
         //TODO:: set user name here
-        if (null != userPreference && userPreference.isSet() && null != userPreference.get()&&null!=userPreference.get().getUserSummary()&& StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getFirstName())) {
+        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getFirstName())) {
             mTvUserNameForPost.setText(userPreference.get().getUserSummary().getFirstName());
+            ivUserCommentProfilePic.setCircularImage(true);
+            ivUserCommentProfilePic.bindImage(userPreference.get().getUserSummary().getPhotoUrl());
         }
         if (null != mFeedDetail) {
             if (mFeedDetail.getNoOfLikes() < 1) {
                 mFlCommentReaction.setVisibility(View.GONE);
                 mViewLineReaction.setVisibility(View.GONE);
             }
-            if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getAuthorImageUrl())) {
-                ivUserCommentProfilePic.setCircularImage(true);
-                ivUserCommentProfilePic.bindImage(mFeedDetail.getAuthorImageUrl());
-            }
+
         }
     }
 
@@ -209,7 +208,7 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
             mTvUserCommentHeaderText.setText(getString(R.string.ID_NO_REPLIES));
         }
         mAdapter.setSheroesGenericListData(mCommentReactionDocList);
-        mLayoutManager.scrollToPositionWithOffset(0, 0);
+        mLayoutManager.scrollToPosition(mCommentReactionDocList.size());
         mAdapter.notifyDataSetChanged();
     }
 
@@ -222,7 +221,7 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
                 tvPostComment.setVisibility(View.GONE);
                 mCommentReactionPresenter.getAllCommentListFromPresenter(mAppUtils.getCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId()), mFragmentOpen.isReactionList());
             } else {
-                mCommentReactionDoc=null;
+                mCommentReactionDoc = null;
                 tvPostComment.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_post_comment_active, 0, 0, 0);
                 mCommentReactionPresenter.addCommentListFromPresenter(mAppUtils.postCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId(), mEtUserCommentDescription.getText().toString(), isAnonymous));
                 mEtUserCommentDescription.setText(AppConstants.EMPTY_STRING);
@@ -318,7 +317,7 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
     @OnClick(R.id.tv_post_comment)
     public void postComment() {
         if (null != mCommentReactionDoc && mCommentReactionDoc.isEdit()) {
-            mCommentReactionPresenter.editCommentListFromPresenter(mAppUtils.editCommentRequestBuilder(mCommentReactionDoc.getEntityId(), mCommentReactionDoc.getComment(), isAnonymous, false, mCommentReactionDoc.getId()),true);
+            mCommentReactionPresenter.editCommentListFromPresenter(mAppUtils.editCommentRequestBuilder(mCommentReactionDoc.getEntityId(), mCommentReactionDoc.getComment(), isAnonymous, false, mCommentReactionDoc.getId()), true);
         } else {
             tvPostComment.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_post_comment_active, 0, 0, 0);
             mCommentReactionPresenter.addCommentListFromPresenter(mAppUtils.postCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId(), mEtUserCommentDescription.getText().toString(), isAnonymous));
@@ -331,9 +330,10 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
         mCommentReactionDoc = commentReactionDoc;
         mCommentReactionPresenter.getAllCommentListFromPresenter(mAppUtils.getCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId()), mFragmentOpen.isReactionList());
     }
+
     public void deleteCommentFromList(CommentReactionDoc commentReactionDoc) {
         mCommentReactionDoc = commentReactionDoc;
-        mCommentReactionPresenter.editCommentListFromPresenter(mAppUtils.editCommentRequestBuilder(commentReactionDoc.getEntityId(), commentReactionDoc.getComment(), isAnonymous, commentReactionDoc.isActive(), commentReactionDoc.getId()),false);
+        mCommentReactionPresenter.editCommentListFromPresenter(mAppUtils.editCommentRequestBuilder(commentReactionDoc.getEntityId(), commentReactionDoc.getComment(), isAnonymous, commentReactionDoc.isActive(), commentReactionDoc.getId()), false);
     }
 
     /**

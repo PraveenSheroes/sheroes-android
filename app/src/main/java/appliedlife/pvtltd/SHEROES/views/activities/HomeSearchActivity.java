@@ -76,7 +76,7 @@ public class HomeSearchActivity extends BaseActivity implements BaseHolderInterf
             mSearchEditText.setHint(search);
             mViewPagerAdapter.addFragment(AllSearchFragment.createInstance(), getString(R.string.ID_ALL));
             mViewPagerAdapter.addFragment(SearchRecentFragment.createInstance(), getString(R.string.ID_RECENT));
-            mViewPagerAdapter.addFragment(SearchArticleFragment.createInstance(), getString(R.string.ID_ARTICLE) + AppConstants.S);
+            mViewPagerAdapter.addFragment(SearchArticleFragment.createInstance(), getString(R.string.ID_ARTICLE));
             mViewPagerAdapter.addFragment(SearchCommunitiesFragment.createInstance(), getString(R.string.ID_COMMUNITIES));
             mViewPagerAdapter.addFragment(SearchJobFragment.createInstance(), getString(R.string.ID_JOBS));
         } else {

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_tag_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_size_16"
+        android:layout_marginRight="@dimen/dp_size_16"
+        android:layout_marginTop="@dimen/dp_size_16"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:textColor="@color/blue"
+        android:textSize="@dimen/sp_size_15" />
+
+    <LinearLayout
+        android:id="@+id/li_tags"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_size_16"
+        android:layout_marginRight="@dimen/dp_size_16"
+        android:layout_marginTop="@dimen/dp_size_16"
+        android:orientation="vertical">
+
+    </LinearLayout>
+
+</LinearLayout>

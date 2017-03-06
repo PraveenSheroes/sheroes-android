@@ -1,5 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.viewholders;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Build;
@@ -123,7 +124,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         allTextViewStringOperations(context);
     }
 
-
+    @TargetApi(AppConstants.ANDROID_SDK_24)
     private void allTextViewStringOperations(Context context) {
         if (StringUtil.isNotNullOrEmptyString(dataItem.getAuthorName())) {
             tvFeedArticleCardTitle.setText(dataItem.getAuthorName());
@@ -230,20 +231,34 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + dataItem.getReactionValue());
         }
     }
-
+    @TargetApi(AppConstants.ANDROID_SDK_24)
     private void userComments() {
         List<LastComment> lastCommentList = dataItem.getLastComments();
         if (StringUtil.isNotEmptyCollection(lastCommentList)) {
             for (LastComment lastComment : lastCommentList) {
                 String feedUserIconUrl = lastComment.getParticipantImageUrl();
                 ivFeedArticleUserPic.setCircularImage(true);
-                ivFeedArticleUserPic.bindImage(feedUserIconUrl);
-                String userName = LEFT_HTML_TAG_FOR_COLOR + lastComment.getParticipantName() + RIGHT_HTML_TAG_FOR_COLOR;
-                if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                    tvFeedArticleUserCommentPost.setText(Html.fromHtml(userName + AppConstants.COLON + lastComment.getComment(), 0)); // for 24 api and more
-                } else {
-                    tvFeedArticleUserCommentPost.setText(Html.fromHtml(userName + AppConstants.COLON + lastComment.getComment()));// or for older api
+                if(lastComment.isAnonymous())
+                {
+                    String userName = LEFT_HTML_TAG_FOR_COLOR + mContext.getString(R.string.ID_ANONYMOUS) + RIGHT_HTML_TAG_FOR_COLOR;
+                    if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                        tvFeedArticleUserCommentPost.setText(Html.fromHtml(userName + AppConstants.SPACE + lastComment.getComment(), 0)); // for 24 api and more
+                    } else {
+                        tvFeedArticleUserCommentPost.setText(Html.fromHtml(userName + AppConstants.SPACE + lastComment.getComment()));// or for older api
+                    }
+                    ivFeedArticleUserPic.setImageResource(R.drawable.ic_add_city_icon);
                 }
+                else
+                {
+                    String userName = LEFT_HTML_TAG_FOR_COLOR + lastComment.getParticipantName() + RIGHT_HTML_TAG_FOR_COLOR;
+                    if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                        tvFeedArticleUserCommentPost.setText(Html.fromHtml(userName + AppConstants.SPACE + lastComment.getComment(), 0)); // for 24 api and more
+                    } else {
+                        tvFeedArticleUserCommentPost.setText(Html.fromHtml(userName + AppConstants.SPACE + lastComment.getComment()));// or for older api
+                    }
+                    ivFeedArticleUserPic.bindImage(feedUserIconUrl);
+                }
+
                 if (lastComment.isMyOwnParticipation()) {
                     tvFeedArticleUserCommentPostMenu.setVisibility(View.VISIBLE);
                 }

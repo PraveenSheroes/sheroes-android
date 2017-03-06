@@ -114,6 +114,7 @@
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:gravity="center"
                     android:text="@string/ID_JOIN"
+                    android:visibility="gone"
                     android:textColor="@color/footer_icon_text"
                     android:textSize="@dimen/sp_size_12" />
 

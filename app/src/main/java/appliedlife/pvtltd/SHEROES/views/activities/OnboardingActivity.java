@@ -11,6 +11,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.OnBoardingData;
 import appliedlife.pvtltd.SHEROES.views.fragments.CreateCommunityFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.OnboardingFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SheroesHelpYouFragment;
@@ -65,6 +66,12 @@ public class OnboardingActivity extends BaseActivity implements OnboardingFragme
 
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
+        if (baseResponse instanceof OnBoardingData) {
+            onBoardingDataHandle(view, baseResponse);
+        }
+    }
+    private void onBoardingDataHandle(View view,BaseResponse baseResponse)
+    {
 
     }
 

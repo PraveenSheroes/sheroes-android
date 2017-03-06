@@ -36,15 +36,14 @@
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.OnboardingActivity"
             android:windowSoftInputMode="stateHidden">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.LoginActivity"
             android:windowSoftInputMode="stateHidden">
-
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.Professional_WorkExperience_Activity"

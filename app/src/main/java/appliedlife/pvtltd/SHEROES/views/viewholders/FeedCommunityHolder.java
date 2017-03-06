@@ -1,5 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.viewholders;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Build;
@@ -10,6 +11,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -125,15 +127,22 @@ public class FeedCommunityHolder extends BaseViewHolder<FeedDetail> {
         allTextViewStringOperations(context);
         imageOperations(context);
     }
-
+    @TargetApi(AppConstants.ANDROID_SDK_24)
     private void allTextViewStringOperations(Context context) {
+        if(!dataItem.isApplied())
+        {
+            tvFeedCommunityJoin.setVisibility(View.VISIBLE);
+        }else
+        {
+            tvFeedCommunityJoin.setVisibility(View.GONE);
+        }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
             tvFeedCommunityCardTitle.setText(dataItem.getNameOrTitle());
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getCommunityType())) {
             tvFeedCommunityTime.setText(dataItem.getCommunityType());
         }
-        mViewMoreDescription=mContext.getString(R.string.ID_DASHBOARD);//dataItem.getListDescription()
+        mViewMoreDescription=dataItem.getListDescription();
         if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
             if (mViewMoreDescription.length() > AppConstants.WORD_LENGTH) {
                 mViewMoreDescription = mViewMoreDescription.substring(0, AppConstants.WORD_COUNT);
@@ -227,24 +236,37 @@ public class FeedCommunityHolder extends BaseViewHolder<FeedDetail> {
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + dataItem.getReactionValue());
         }
     }
-
+    @TargetApi(AppConstants.ANDROID_SDK_24)
     private void userComments() {
         List<LastComment> lastCommentList = dataItem.getLastComments();
         if (StringUtil.isNotEmptyCollection(lastCommentList)) {
             for(LastComment lastComment:lastCommentList) {
                 String feedUserIconUrl = lastComment.getParticipantImageUrl();
                 ivFeedCommunityUserPic.setCircularImage(true);
-                ivFeedCommunityUserPic.bindImage(feedUserIconUrl);
-                String userName = LEFT_HTML_TAG_FOR_COLOR + lastComment.getParticipantName() + RIGHT_HTML_TAG_FOR_COLOR;
-                if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                    tvFeedCommunityUserCommentPost.setText(Html.fromHtml(userName + AppConstants.COLON + lastComment.getComment(), 0)); // for 24 api and more
-                } else {
-                    tvFeedCommunityUserCommentPost.setText(Html.fromHtml(userName + AppConstants.COLON + lastComment.getComment()));// or for older api
+                if(lastComment.isAnonymous())
+                {
+                    String userName = LEFT_HTML_TAG_FOR_COLOR + mContext.getString(R.string.ID_ANONYMOUS) + RIGHT_HTML_TAG_FOR_COLOR;
+                    if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                        tvFeedCommunityUserCommentPost.setText(Html.fromHtml(userName + AppConstants.SPACE + lastComment.getComment(), 0)); // for 24 api and more
+                    } else {
+                        tvFeedCommunityUserCommentPost.setText(Html.fromHtml(userName + AppConstants.SPACE + lastComment.getComment()));// or for older api
+                    }
+                    ivFeedCommunityUserPic.setImageResource(R.drawable.ic_add_city_icon);
                 }
+                else
+                {
+                    String userName = LEFT_HTML_TAG_FOR_COLOR + lastComment.getParticipantName() + RIGHT_HTML_TAG_FOR_COLOR;
+                    if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                        tvFeedCommunityUserCommentPost.setText(Html.fromHtml(userName + AppConstants.SPACE + lastComment.getComment(), 0)); // for 24 api and more
+                    } else {
+                        tvFeedCommunityUserCommentPost.setText(Html.fromHtml(userName + AppConstants.SPACE + lastComment.getComment()));// or for older api
+                    }
+                    ivFeedCommunityUserPic.bindImage(feedUserIconUrl);
+                }
+
                 if (lastComment.isMyOwnParticipation()) {
                     tvFeedCommunityUserCommentPostMenu.setVisibility(View.VISIBLE);
                 }
-
             }
         }
     }
@@ -345,13 +367,12 @@ public class FeedCommunityHolder extends BaseViewHolder<FeedDetail> {
         viewInterface.handleOnClick(dataItem, tvFeedCommunityJoin);
     }
 
-
+    @TargetApi(AppConstants.ANDROID_SDK_24)
     @OnClick(R.id.tv_feed_community_text)
     public void viewMoreClick() {
         if(StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
             if (tvFeedCommunityText.getTag().toString().equalsIgnoreCase(mViewMore)) {
                 String lessWithColor = LEFT_HTML_VEIW_TAG_FOR_COLOR + mLess + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
-                mViewMoreDescription=mContext.getString(R.string.ID_ABOUT_TEXT);
                 if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                     tvFeedCommunityText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + lessWithColor, 0)); // for 24 api and more
                 } else {
@@ -359,7 +380,6 @@ public class FeedCommunityHolder extends BaseViewHolder<FeedDetail> {
                 }
                 tvFeedCommunityText.setTag(mLess);
             } else {
-                mViewMoreDescription=mContext.getString(R.string.ID_ABOUT_TEXT);
                 tvFeedCommunityText.setTag(mViewMore);
                 String viewMore = LEFT_HTML_VEIW_TAG_FOR_COLOR + mViewMore + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
                 if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
@@ -386,5 +406,9 @@ public class FeedCommunityHolder extends BaseViewHolder<FeedDetail> {
         return true;
     }
 
-
+    @OnClick(R.id.tv_feed_community_join)
+    public void joinClick()
+    {
+        Toast.makeText(mContext,"Clciekd",Toast.LENGTH_SHORT).show();
+    }
 }

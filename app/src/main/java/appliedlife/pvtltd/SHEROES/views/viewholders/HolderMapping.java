@@ -126,7 +126,7 @@ public enum HolderMapping {
             return new TagsHolder(view, viewInterface);
         }
 
-    }, ON_BOARDING_HOLDER(R.layout.list_of_can_help) {
+    }, ON_BOARDING_HOLDER(R.layout.on_boarding_holder_list_item) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new OnBoardingHolder(view, viewInterface);

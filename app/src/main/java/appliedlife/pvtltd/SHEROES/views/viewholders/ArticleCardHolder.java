@@ -1,5 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.viewholders;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Build;
@@ -69,7 +70,7 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
         this.viewInterface = baseHolderInterface;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
     }
-
+    @TargetApi(AppConstants.ANDROID_SDK_24)
     @Override
     public void bindData(FeedDetail item, final Context context, int position) {
         this.dataItem = item;
@@ -185,6 +186,11 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
     public void articleCoverImageClick() {
         viewInterface.handleOnClick(dataItem, liArticleCoverImage);
     }
+    @OnClick(R.id.card_article)
+    public void articleCardClick() {
+        viewInterface.handleOnClick(dataItem, liArticleCoverImage);
+    }
+
 
     @OnClick(R.id.tv_article_trending_label)
     public void tvArticleTrendingClick() {

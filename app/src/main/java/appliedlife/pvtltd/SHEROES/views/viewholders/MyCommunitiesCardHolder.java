@@ -1,5 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.viewholders;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Build;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -79,8 +81,15 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
         imageOperations(context);
         textViewOperation(context);
     }
-
+    @TargetApi(AppConstants.ANDROID_SDK_24)
     private void textViewOperation(Context context) {
+        if(!dataItem.isApplied())
+        {
+            tvCommunityJoin.setVisibility(View.VISIBLE);
+        }else
+        {
+            tvCommunityJoin.setVisibility(View.GONE);
+        }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
             tvCommunityCardTitle.setText(dataItem.getNameOrTitle());
         }
@@ -156,7 +165,7 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
         viewInterface.handleOnClick(dataItem, liCoverImage);
     }
 
-
+    @TargetApi(AppConstants.ANDROID_SDK_24)
     @OnClick(R.id.tv_community_text)
     public void viewMoreClick() {
         if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
@@ -179,6 +188,12 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
                 }
             }
         }
+    }
+
+    @OnClick(R.id.tv_community_join)
+    public void joinClick()
+    {
+        Toast.makeText(mContext,"Clciekd",Toast.LENGTH_SHORT).show();
     }
 
     @Override

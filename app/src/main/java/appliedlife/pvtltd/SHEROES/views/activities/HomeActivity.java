@@ -75,6 +75,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ImageFullViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobLocationFilter;
 import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunitiesFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunityInviteSearchFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SettingAboutFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SettingFeedbackFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SettingFragment;
@@ -517,7 +518,7 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
                 } else {
                     if (null != mFeedDetail) {
                         mFragmentOpen.setCommentList(true);
-                        openCommentReactionFragment(mFeedDetail);
+                        editDeleteComment(mFeedDetail);
                     }
                 }
                 popupWindow.dismiss();
@@ -614,6 +615,11 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
         }
+    }
+
+    private void editDeleteComment(FeedDetail feedDetail) {
+
+
     }
 
 
@@ -841,6 +847,25 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
         articlesFragment.setArguments(bundleArticle);
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
                 .replace(R.id.fl_article_card_view, articlesFragment, ArticlesFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+        mTvSpinnerIcon.setVisibility(View.VISIBLE);
+    }
+    private void openInviteSearch() {
+        mFlHomeFooterList.setVisibility(View.VISIBLE);
+        mToolbar.setVisibility(View.VISIBLE);
+        mFragmentOpen.setArticleFragment(true);
+        mViewPager.setVisibility(View.GONE);
+        mTabLayout.setVisibility(View.GONE);
+        flFeedFullView.setVisibility(View.GONE);
+        mTvSpinnerIcon.setVisibility(View.GONE);
+        mTvHome.setText(AppConstants.EMPTY_STRING);
+        mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_unselected_icon), null, null);
+        mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_unselected_icon), null, null);
+        mTvCommunities.setText(AppConstants.EMPTY_STRING);
+        MyCommunityInviteSearchFragment myCommunityInviteSearchFragment = new MyCommunityInviteSearchFragment();
+        Bundle bundleArticle = new Bundle();
+        myCommunityInviteSearchFragment.setArguments(bundleArticle);
+        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
+                .replace(R.id.fl_article_card_view, myCommunityInviteSearchFragment, MyCommunityInviteSearchFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
         mTvSpinnerIcon.setVisibility(View.VISIBLE);
     }
 

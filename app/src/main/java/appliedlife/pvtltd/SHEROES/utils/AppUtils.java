@@ -171,7 +171,7 @@ public class AppUtils {
     }
 
     /**
-     * The version number of this package, as specified by the manifest tag's
+     * The version number of this package, as specified by the manifest tag_item_ui_for_onboarding's
      * attribute.
      */
     public String getAppVersionName() {
@@ -189,7 +189,7 @@ public class AppUtils {
 
     /**
      * The version name of this package, as specified by the manifest
-     * tag's attribute.
+     * tag_item_ui_for_onboarding's attribute.
      */
     public int getAppVersionCode() {
         if (getPackageInfo(0) != null) {

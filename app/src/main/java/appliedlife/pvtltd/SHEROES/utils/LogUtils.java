@@ -84,7 +84,7 @@ public class LogUtils {
     }
 
     /**
-     * for display debug. working same as Log.d(tag,log) with enter tag
+     * for display debug. working same as Log.d(tag_item_ui_for_onboarding,log) with enter tag_item_ui_for_onboarding
      *
      * use at starting of method to mark initial point.
      */
@@ -98,7 +98,7 @@ public class LogUtils {
     }
 
     /**
-     * for display debug. working same as Log.d(tag,log) with exit tag
+     * for display debug. working same as Log.d(tag_item_ui_for_onboarding,log) with exit tag_item_ui_for_onboarding
      *
      * use at ending of method to mark exit point.
      *
@@ -160,7 +160,7 @@ public class LogUtils {
         }
     }
     /**
-     * for display information . working same as Log.i(tag,message)
+     * for display information . working same as Log.i(tag_item_ui_for_onboarding,message)
      *
      */
     public static final void info(String tag, String message) {
@@ -173,7 +173,7 @@ public class LogUtils {
     }
 
     /**
-     * for display warning. working same as Log.d(tag,message)
+     * for display warning. working same as Log.d(tag_item_ui_for_onboarding,message)
      *
      */
     public static final void warning(String tag, String message) {
@@ -186,7 +186,7 @@ public class LogUtils {
     }
 
     /**
-     * for display error. working same as Log.e(tag,message)
+     * for display error. working same as Log.e(tag_item_ui_for_onboarding,message)
      *
      */
     public static final void error(String tag, String message) {
@@ -209,7 +209,7 @@ public class LogUtils {
         }
     }
     /**
-     * for display error. working same as Log.e(tag,message). Added print stack track and Crashlytics
+     * for display error. working same as Log.e(tag_item_ui_for_onboarding,message). Added print stack track and Crashlytics
      * caught exception logging
      */
     public static final void error(String tag, String message, Throwable cause) {

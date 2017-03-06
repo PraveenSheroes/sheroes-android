@@ -36,7 +36,7 @@
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:hint="@string/ID_ERROR_FIELD_REQUIRED"
+            android:hint="@string/ID_JOIN_CONVERSATION"
             android:textColor="@color/user_comment_text"
             android:textSize="@dimen/sp_size_13" />
 

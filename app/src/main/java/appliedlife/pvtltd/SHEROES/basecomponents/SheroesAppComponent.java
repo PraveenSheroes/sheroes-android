@@ -49,6 +49,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.JobFunctionalAreaFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobLocationFilter;
 import appliedlife.pvtltd.SHEROES.views.fragments.LoginFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunitiesFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunityInviteSearchFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.OnboardingFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.PersonalProfileFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProffestionalProfileFragment;
@@ -148,6 +149,7 @@ public interface SheroesAppComponent {
     void inject(ProfileFullViewFragment profileFullViewFragment);
     void inject(PersonalProfileFragment personalProfileFragment);
     void inject(ProffestionalProfileFragment proffestionalProfileFragment);
+    void inject(MyCommunityInviteSearchFragment myCommunityInviteSearchFragment);
     void inject(BookmarksFragment bookmarksFragment);
     void inject(BlankHolder blankHolder);
     void inject(ArticleDetailHolder articleDetailHolder);

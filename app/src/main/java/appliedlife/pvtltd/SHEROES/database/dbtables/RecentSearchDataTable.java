@@ -8,6 +8,7 @@ import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
 import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchDataStorIOSQLiteDeleteResolver;
 import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchDataStorIOSQLiteGetResolver;
 import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchDataStorIOSQLitePutResolver;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 
 
 public final class RecentSearchDataTable {
@@ -28,7 +29,7 @@ public final class RecentSearchDataTable {
     return Query.builder().table(TABLE).build();
   }
     public static RawQuery getQueryForList() {
-        String query="Select * from "+TABLE;
+        String query= AppConstants.SELECT_ALL_QUERY+TABLE;
         return RawQuery.builder().query(query).build();
     }
   public static SQLiteTypeMapping<RecentSearchData> getAllTypeMapping() {

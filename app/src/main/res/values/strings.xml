@@ -41,7 +41,7 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_COMMUNITIY">Community</string>
     <string name="ID_SEARCH">Search</string>
     <string name="ID_RECENT_SEARCH">Recent Search</string>
-    <string name="ID_SEARCH_IN_FEED">Search article,communities,job</string>
+    <string name="ID_SEARCH_IN_FEED">Search communities,article &amp; job</string>
     <string name="ID_SEARCH_IN_COMMUNITIES">Search communities</string>
     <string name="ID_DASHBOARD"> Working women have it hard enough – managing a 9 to 6 job along with family, friends, and the demand…View More</string>
     <string name="ID_TRENDING">Trending</string>
@@ -70,7 +70,7 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_MORE_FROM_LIFE">More From Life</string>
     <string name="ID_FORGOT_PASSWORD">Forgot Password?</string>
     <string name="ID_PROFILE">Profile</string>
-    <string name="ID_ARTICLE">Article</string>
+    <string name="ID_ARTICLE">Articles</string>
     <string name="ID_BOOKMARK">Bookmarks</string>
     <string name="ID_SETTING">Settings</string>
     <string name="ID_POST">Post as:</string>
@@ -347,7 +347,6 @@ etur adipiscing elit,sed do eiusmod tempor incididunt ut…</string>
     <string name="ID_SECTOR">Sector</string>
     <string name="ID_SECTOR_HINT">SECTOR</string>
 
-
     <string name="ID_DEGREE1">M.COM</string>
     <string name="ID_DEGREE2">B.COM</string>
     <string name="ID_COLLEGENAME1">Lady Shri Ram College</string>
@@ -514,6 +513,6 @@ etur adipiscing elit,sed do eiusmod tempor incididunt ut…</string>
         </string-array>
 
     <string name="ID_HOURS">hours ago</string>
-    <string name="ID_MINUTS">minuts ago</string>
+    <string name="ID_MINUTS">minutes ago</string>
 
 </resources>

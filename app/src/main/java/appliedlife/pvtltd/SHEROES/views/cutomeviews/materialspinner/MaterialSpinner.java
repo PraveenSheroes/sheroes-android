@@ -514,7 +514,7 @@ public class MaterialSpinner extends TextView {
      * @param position
      *     The position of the view in the adapter
      * @param id
-     *     The row id of the item that is selected
+     *     The tags_onboarding_ui_layout id of the item that is selected
      * @param item
      *     The selected item
      */

@@ -131,7 +131,7 @@ public class BookmarksFragment extends BaseFragment implements HomeView {
             }
             swipeView.setRefreshing(false);
         }
-        else
+        else if(!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses()))
         {
             liNoResult.setVisibility(View.VISIBLE);
         }

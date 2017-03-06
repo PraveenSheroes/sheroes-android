@@ -1,5 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.viewholders;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Build;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -79,8 +81,16 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
         imageOperations(context);
         textViewOperation(context);
     }
-
+    @TargetApi(AppConstants.ANDROID_SDK_24)
     private void textViewOperation(Context context) {
+
+        if(!dataItem.isApplied())
+        {
+            tvFeaturedCommunityJoin.setVisibility(View.VISIBLE);
+        }else
+        {
+            tvFeaturedCommunityJoin.setVisibility(View.GONE);
+        }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
             tvFeaturedCommunityCardTitle.setText(dataItem.getNameOrTitle());
         }
@@ -88,7 +98,7 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
             tvFeaturedCommunityTime.setText(dataItem.getCommunityType());
         }
 
-        mViewMoreDescription=mContext.getString(R.string.ID_DASHBOARD);//dataItem.getListDescription();
+        mViewMoreDescription=dataItem.getListDescription();
         if(StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
             if (mViewMoreDescription.length() > AppConstants.WORD_LENGTH) {
                 mViewMoreDescription = mViewMoreDescription.substring(0, AppConstants.WORD_COUNT);
@@ -149,13 +159,12 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
 
     }
 
-
+    @TargetApi(AppConstants.ANDROID_SDK_24)
     @OnClick(R.id.tv_featured_community_text)
     public void viewMoreClick() {
         if(StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
             if (tvFeaturedDescriptionText.getTag().toString().equalsIgnoreCase(mViewMore)) {
                 String lessWithColor = LEFT_HTML_VEIW_TAG_FOR_COLOR + mLess + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
-                mViewMoreDescription=mContext.getString(R.string.ID_ABOUT_TEXT);
                 if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                     tvFeaturedDescriptionText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + lessWithColor, 0)); // for 24 api and more
                 } else {
@@ -163,7 +172,6 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
                 }
                 tvFeaturedDescriptionText.setTag(mLess);
             } else {
-                mViewMoreDescription=mContext.getString(R.string.ID_ABOUT_TEXT);
                 tvFeaturedDescriptionText.setTag(mViewMore);
                 String viewMore = LEFT_HTML_VEIW_TAG_FOR_COLOR + mViewMore + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
                 if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
@@ -173,6 +181,11 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
                 }
             }
         }
+    }
+    @OnClick(R.id.tv_featured_community_join)
+    public void joinClick()
+    {
+        Toast.makeText(mContext,"Clciekd",Toast.LENGTH_SHORT).show();
     }
     @Override
     public void viewRecycled() {

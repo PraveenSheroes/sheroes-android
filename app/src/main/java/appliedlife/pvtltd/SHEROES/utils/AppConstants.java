@@ -75,4 +75,5 @@ public class AppConstants {
     public static final int EMOJI_THIRD_REACTION_CONSTANT= 40;
     public static final int EMOJI_FOURTH_REACTION_CONSTANT= 50;
     public static final int SEARCH_CONSTANT_DELAY= 500;
+    public static final String SELECT_ALL_QUERY= "Select * from ";
 }

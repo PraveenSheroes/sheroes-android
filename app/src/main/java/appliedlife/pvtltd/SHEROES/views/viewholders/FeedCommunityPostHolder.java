@@ -1,5 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.viewholders;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Build;
@@ -219,7 +220,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     public void viewRecycled() {
 
     }
-
+    @TargetApi(AppConstants.ANDROID_SDK_24)
     private void allTextViewStringOperations(Context context) {
         if (StringUtil.isNotNullOrEmptyString(dataItem.getAuthorName())) {
 
@@ -246,7 +247,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 tvFeedCommunityPostTime.setText(String.valueOf(hour) + AppConstants.SPACE + mContext.getString(R.string.ID_HOURS));
             }
         }
-        mViewMoreDescription = mContext.getString(R.string.ID_DASHBOARD);//dataItem.getRecentSearchFeed();
+        mViewMoreDescription = dataItem.getListDescription();
         if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
             if (mViewMoreDescription.length() > AppConstants.WORD_LENGTH) {
                 mViewMoreDescription = mViewMoreDescription.substring(0, AppConstants.WORD_COUNT);
@@ -331,20 +332,34 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + dataItem.getReactionValue());
         }
     }
-
+    @TargetApi(AppConstants.ANDROID_SDK_24)
     private void userComments() {
         List<LastComment> lastCommentList = dataItem.getLastComments();
         if (StringUtil.isNotEmptyCollection(lastCommentList)) {
             for (LastComment lastComment : lastCommentList) {
                 String feedUserIconUrl = lastComment.getParticipantImageUrl();
                 ivFeedCommunityPostUserPic.setCircularImage(true);
-                ivFeedCommunityPostUserPic.bindImage(feedUserIconUrl);
-                String userName = LEFT_HTML_TAG_FOR_COLOR + lastComment.getParticipantName() + RIGHT_HTML_TAG_FOR_COLOR;
-                if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                    tvFeedCommunityPostUserCommentPost.setText(Html.fromHtml(userName + AppConstants.COLON + lastComment.getComment(), 0)); // for 24 api and more
-                } else {
-                    tvFeedCommunityPostUserCommentPost.setText(Html.fromHtml(userName + AppConstants.COLON + lastComment.getComment()));// or for older api
+                if(lastComment.isAnonymous())
+                {
+                    String userName = LEFT_HTML_TAG_FOR_COLOR + mContext.getString(R.string.ID_ANONYMOUS) + RIGHT_HTML_TAG_FOR_COLOR;
+                    if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                        tvFeedCommunityPostUserCommentPost.setText(Html.fromHtml(userName + AppConstants.SPACE + lastComment.getComment(), 0)); // for 24 api and more
+                    } else {
+                        tvFeedCommunityPostUserCommentPost.setText(Html.fromHtml(userName + AppConstants.SPACE + lastComment.getComment()));// or for older api
+                    }
+                    ivFeedCommunityPostUserPic.setImageResource(R.drawable.ic_add_city_icon);
                 }
+                else
+                {
+                    String userName = LEFT_HTML_TAG_FOR_COLOR + lastComment.getParticipantName() + RIGHT_HTML_TAG_FOR_COLOR;
+                    if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                        tvFeedCommunityPostUserCommentPost.setText(Html.fromHtml(userName + AppConstants.SPACE + lastComment.getComment(), 0)); // for 24 api and more
+                    } else {
+                        tvFeedCommunityPostUserCommentPost.setText(Html.fromHtml(userName + AppConstants.SPACE + lastComment.getComment()));// or for older api
+                    }
+                    ivFeedCommunityPostUserPic.bindImage(feedUserIconUrl);
+                }
+
                 if (lastComment.isMyOwnParticipation()) {
                     tvFeedCommunityPostUserCommentPostMenu.setVisibility(View.VISIBLE);
                 }
@@ -564,7 +579,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         dataItem.setItemPosition(getAdapterPosition());
         viewInterface.handleOnClick(dataItem, tvFeedCommunityPostUserCommentPostMenu);
     }
-
+    @TargetApi(AppConstants.ANDROID_SDK_24)
     @OnClick(R.id.tv_feed_community_post_text)
     public void viewMoreClick() {
         if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {

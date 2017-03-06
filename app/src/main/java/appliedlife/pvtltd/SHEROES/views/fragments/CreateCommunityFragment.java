@@ -471,7 +471,7 @@ private void selectImageOption() {
             intent.putExtra("aspectY", 1);
             intent.putExtra("scale", true);
 
-            //TODO: don't use return-data tag because it's not return large image data and crash not given any message
+            //TODO: don't use return-data tag_item_ui_for_onboarding because it's not return large image data and crash not given any message
             //intent.putExtra("return-data", true);
 
             //Create output file here

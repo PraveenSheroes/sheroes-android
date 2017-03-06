@@ -19,7 +19,7 @@ public class ProfileItems extends BaseResponse {
     @SerializedName("description")
     @Expose
     private String description;
-    @SerializedName("tag")
+    @SerializedName("tag_item_ui_for_onboarding")
     @Expose
     private String tag;
 

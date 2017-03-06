@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.crashlytics.android.Crashlytics;
@@ -49,12 +50,14 @@ public class JobFragment extends BaseFragment implements HomeView {
     private final String TAG = LogUtils.makeLogTag(HomeFragment.class);
     @Inject
     HomePresenter mHomePresenter;
-    @Bind(R.id.rv_home_list)
+    @Bind(R.id.rv_job_list)
     RecyclerView mRecyclerView;
-    @Bind(R.id.pb_home_progress_bar)
+    @Bind(R.id.pb_job_progress_bar)
     ProgressBar mProgressBar;
-    @Bind(R.id.swipe_view_home)
+    @Bind(R.id.swipe_view_job)
     SwipeRefreshLayout swipeView;
+    @Bind(R.id.li_no_job_result)
+    LinearLayout liNoResult;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private HomeActivityIntractionListner mHomeActivityIntractionListner;
@@ -65,15 +68,7 @@ public class JobFragment extends BaseFragment implements HomeView {
     int position;
     int pressedEmoji;
     boolean listLoad = true;
-
-    public static HomeFragment createInstance(int itemsCount) {
-        HomeFragment partThreeFragment = new HomeFragment();
-        // Bundle bundle = new Bundle();
-        //  bundle.putInt(ITEMS_COUNT_KEY, itemsCount);
-        //   partThreeFragment.setArguments(bundle);
-        return partThreeFragment;
-    }
-
+    int pageNo=AppConstants.ONE_CONSTANT;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -90,7 +85,7 @@ public class JobFragment extends BaseFragment implements HomeView {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
-        View view = inflater.inflate(R.layout.jobfragment, container, false);
+        View view = inflater.inflate(R.layout.job_fragment, container, false);
         //   forceCrash();
         // TODO: Move this to where you establish a user session
         // logUser();
@@ -130,24 +125,7 @@ public class JobFragment extends BaseFragment implements HomeView {
 
             @Override
             public void dismissReactions() {
-                if (null != ((HomeActivity) getActivity()).mArticlePopUp) {
-                    ((HomeActivity) getActivity()).mArticlePopUp.setVisibility(View.GONE);
-                    Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_out);
-                    ((HomeActivity) getActivity()).mArticlePopUp.clearAnimation();
-                    animation.setFillAfter(false);
-                }
-                if (null != ((HomeActivity) getActivity()).mCommunityPopUp) {
-                    ((HomeActivity) getActivity()).mCommunityPopUp.setVisibility(View.GONE);
-                    Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_out);
-                    ((HomeActivity) getActivity()).mCommunityPopUp.clearAnimation();
-                    animation.setFillAfter(false);
-                }
-                if (null != ((HomeActivity) getActivity()).mCommunityPostPopUp) {
-                    ((HomeActivity) getActivity()).mCommunityPostPopUp.setVisibility(View.GONE);
-                    Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_out);
-                    ((HomeActivity) getActivity()).mCommunityPostPopUp.clearAnimation();
-                    animation.setFillAfter(false);
-                }
+
             }
         });
         mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_JOB, mFragmentListRefreshData.getPageNo()));
@@ -157,7 +135,7 @@ public class JobFragment extends BaseFragment implements HomeView {
                 listLoad = true;
                 LogUtils.info("swipe", "*****************end called");
                 mPullRefreshList.setPullToRefresh(true);
-                mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_JOB, mFragmentListRefreshData.getPageNo() + 1));
+                mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_JOB,mFragmentListRefreshData.getPageNo()));
             }
         });
         return view;
@@ -208,17 +186,22 @@ public class JobFragment extends BaseFragment implements HomeView {
     @Override
     public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
+            pageNo=mFragmentListRefreshData.getPageNo();
+            mFragmentListRefreshData.setPageNo(++pageNo);
             mPullRefreshList.allListData(feedDetailList);
             mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
-            mAdapter.setCallForRecycler(AppConstants.FEED_JOB);
-            mAdapter.notifyDataSetChanged();
+            mAdapter.setCallForRecycler(AppConstants.FEED_SUB_TYPE);
             if (!mPullRefreshList.isPullToRefresh()) {
                 mLayoutManager.scrollToPositionWithOffset(mPullRefreshList.getFeedResponses().size() - feedDetailList.size(), 0);
             } else {
                 mLayoutManager.scrollToPositionWithOffset(0, 0);
             }
             swipeView.setRefreshing(false);
+        } else if(!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses()))
+        {
+            liNoResult.setVisibility(View.VISIBLE);
         }
+
     }
 
     @Override

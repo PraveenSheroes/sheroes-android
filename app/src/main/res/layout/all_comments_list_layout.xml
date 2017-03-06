@@ -26,13 +26,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="@integer/int_value_for_line_1"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:paddingTop="@dimen/dp_size_10"
             android:paddingLeft="@dimen/dp_size_10"
             android:paddingBottom="@dimen/dp_size_10"
             android:textColor="@color/detail_page_text"
-            android:textSize="@dimen/sp_size_12"
-            android:textStyle="bold" />
+            android:textSize="@dimen/sp_size_12"/>
 
         <TextView
             android:id="@+id/tv_user_comment_list_menu"
