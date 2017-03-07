@@ -72,6 +72,13 @@ public interface SheroesAppServiceApi {
     Observable<BookmarkResponsePojo> addBookMarkToApi(@Body BookmarkRequestPojo bookmarkResponsePojo );
     @POST("participation/reaction/unbookmark")
     Observable<BookmarkResponsePojo> UnBookMarkToApi(@Body BookmarkRequestPojo bookmarkResponsePojo );
+    @POST("participant/auth/signin")
+    Observable<LoginResponse> getLoginAuthToken(@Body LoginRequest loginRequest);
+    @POST("user/fbsignup")
+    Observable<LoginResponse> getFbSignUpToken(@Body LoginRequest loginRequest);
+
+
+
 
 
     @GET("v2/587877da0f0000231d0d49b1")
@@ -91,8 +98,6 @@ public interface SheroesAppServiceApi {
     @GET("/v2/587fb45c270000490af0dd7a")
     Observable<RequestedListResponse> getRequestList();
 
-    @POST("participant/auth/signin")
-    Observable<LoginResponse> getLoginAuthToken(@Body LoginRequest loginRequest);
 
     @POST("v2/588eef663f00007412dde331")
     Observable<ArticleListResponse> getAricleList(@Body ArticleCardResponse articleCardResponse);

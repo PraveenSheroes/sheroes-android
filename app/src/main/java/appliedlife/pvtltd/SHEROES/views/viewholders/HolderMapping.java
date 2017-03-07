@@ -314,7 +314,10 @@ public enum HolderMapping {
                         case AppConstants.FEED_COMMUNITY_POST:
                             returnView = FEED_COMMUNITY_POST.ordinal();
                             break;
-                        default:
+                        case AppConstants.USER_SUB_TYPE:
+                            returnView = INVITE_SEARCH_MODULE.ordinal();
+                            break;
+                       default:
                     }
                 }
             } else if (callFromType.equalsIgnoreCase(AppConstants.ALL_SEARCH)) {

@@ -15,7 +15,7 @@
         android:layerType="software"
         android:textColor="@color/search_box_text"
         android:textSize="@dimen/sp_size_12"
-        android:layout_marginRight="@dimen/dp_size_20"
+        android:layout_marginRight="@dimen/dp_size_12"
         android:layout_toLeftOf="@+id/iv_home_notification_icon"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
@@ -36,7 +36,7 @@
         android:background="@drawable/ic_notification"
         android:importantForAccessibility="no"
         android:padding="@dimen/dp_size_10"
-        android:layout_marginRight="@dimen/dp_size_20"
+        android:layout_marginRight="@dimen/dp_size_10"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />

@@ -26,6 +26,13 @@ public abstract class BaseRequest {
     @SerializedName("deviceUniqueId")
     @Expose
     private String deviceUniqueId;
+    @SerializedName("screen_name")
+    @Expose
+    private String screenName;
+    @SerializedName("last_screen_name")
+    @Expose
+    private String lastScreenName;
+
     @SerializedName("page_no")
     @Expose
     private int pageNo;
@@ -36,12 +43,15 @@ public abstract class BaseRequest {
     @Expose
     private long entityId;
 
-    public BaseRequest(TrackingParams trackingParams, DeviceInfo deviceInfo, String appVersion, String cloudMessagingId, String deviceUniqueId, int pageNo, int pageSize, long entityId) {
+
+    public BaseRequest(TrackingParams trackingParams, DeviceInfo deviceInfo, String appVersion, String cloudMessagingId, String deviceUniqueId, String screenName, String lastScreenName, int pageNo, int pageSize, long entityId) {
         this.trackingParams = trackingParams;
         this.deviceInfo = deviceInfo;
         this.appVersion = appVersion;
         this.cloudMessagingId = cloudMessagingId;
         this.deviceUniqueId = deviceUniqueId;
+        this.screenName = screenName;
+        this.lastScreenName = lastScreenName;
         this.pageNo = pageNo;
         this.pageSize = pageSize;
         this.entityId = entityId;
@@ -88,6 +98,22 @@ public abstract class BaseRequest {
 
     public void setDeviceUniqueId(String deviceUniqueId) {
         this.deviceUniqueId = deviceUniqueId;
+    }
+
+    public String getScreenName() {
+        return screenName;
+    }
+
+    public void setScreenName(String screenName) {
+        this.screenName = screenName;
+    }
+
+    public String getLastScreenName() {
+        return lastScreenName;
+    }
+
+    public void setLastScreenName(String lastScreenName) {
+        this.lastScreenName = lastScreenName;
     }
 
     public int getPageNo() {

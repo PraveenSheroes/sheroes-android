@@ -32,6 +32,7 @@
                 android:id="@+id/rl_search_box"
                 layout="@layout/home_search_bar"
                 android:layout_width="match_parent"
+                android:layout_marginLeft="-150dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|top" />
         </android.support.v7.widget.Toolbar>

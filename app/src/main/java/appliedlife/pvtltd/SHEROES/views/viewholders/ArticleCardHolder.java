@@ -52,6 +52,8 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
     TextView tvArticleTime;
     @Bind(R.id.tv_article_trending_label)
     TextView tvArticleTrendingLabel;
+    @Bind(R.id.tv_article_bookmark)
+    TextView tvArticleBookmark;
     @Bind(R.id.tv_article_menu)
     TextView tvArticleMenu;
     @Bind(R.id.tv_article_description_header)
@@ -88,11 +90,11 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
         }
         if(dataItem.isBookmarked())
         {
-            tvArticleTrendingLabel.setCompoundDrawablesWithIntrinsicBounds(0, 0,R.drawable.ic_bookmark_active, 0);
+            tvArticleBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0,R.drawable.ic_bookmark_active, 0);
         }
         else
         {
-            tvArticleTrendingLabel.setCompoundDrawablesWithIntrinsicBounds(0, 0,R.drawable.ic_bookmark_in_active, 0);
+            tvArticleBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0,R.drawable.ic_bookmark_in_active, 0);
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getAuthorName())) {
             tvArticleCardTitle.setText(dataItem.getAuthorName());
@@ -191,14 +193,13 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
         viewInterface.handleOnClick(dataItem, liArticleCoverImage);
     }
 
-
-    @OnClick(R.id.tv_article_trending_label)
-    public void tvArticleTrendingClick() {
+    @OnClick(R.id.tv_article_bookmark)
+    public void tvBookMarkClick() {
         dataItem.setItemPosition(getAdapterPosition());
         if (dataItem.isBookmarked()) {
-            viewInterface.handleOnClick(dataItem, tvArticleTrendingLabel);
+            viewInterface.handleOnClick(dataItem, tvArticleBookmark);
         } else {
-            viewInterface.handleOnClick(dataItem, tvArticleTrendingLabel);
+            viewInterface.handleOnClick(dataItem, tvArticleBookmark);
         }
     }
 

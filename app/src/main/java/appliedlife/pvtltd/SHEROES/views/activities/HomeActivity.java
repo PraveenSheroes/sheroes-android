@@ -38,9 +38,12 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.f2prateek.rx.preferences.Preference;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
@@ -53,6 +56,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.DrawerItems;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -87,6 +91,8 @@ import butterknife.OnClick;
 
 public class HomeActivity extends BaseActivity implements JobFragment.HomeActivityIntractionListner, FragmentIntractionWithActivityListner, SettingView, BaseHolderInterface, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, CommentReactionFragment.HomeActivityIntractionListner, View.OnTouchListener, View.OnClickListener, ImageFullViewAdapter.HomeActivityIntraction {
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
+    @Inject
+    Preference<LoginResponse> userPreference;
     @Bind(R.id.iv_drawer_profile_circle_icon)
     RoundedImageView ivDrawerProfileCircleIcon;
     @Bind(R.id.tv_user_name)
@@ -158,34 +164,36 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
         ButterKnife.bind(this);
 
         mCustiomActionBarToggle = new CustiomActionBarToggle(this, mDrawer, mToolbar, R.string.ID_NAVIGATION_DRAWER_OPEN, R.string.ID_NAVIGATION_DRAWER_CLOSE, this);
-
         mDrawer.addDrawerListener(mCustiomActionBarToggle);
-        //TODO: this data to be removed
-        String profile = "https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAhNAAAAJDYwZWIyZTg5LWFmOTItNGIwYS05YjQ5LTM2YTRkNGQ2M2JlNw.jpg";
-        Glide.with(this)
-                .load(profile)
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .skipMemoryCache(true)
-                .into(ivDrawerProfileCircleIcon);
-        mTvUserName.setText("Praveen Singh");
-        mTvUserLocation.setText("Delhi, India");
         mCustiomActionBarToggle.syncState();
         mNavigationView.setNavigationItemSelectedListener(this);
         mFragmentOpen = new FragmentOpen();
         initHomeViewPagerAndTabs();
         mHomeSpinnerItemList = CustomeDataList.makeSpinnerListRequest();
-        Glide.with(this)
-                .load(profile).asBitmap()
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .skipMemoryCache(true)
-                .into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
+        assignNavigationRecyclerListView();
+        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getPhotoUrl())) {
+            //TODO: this data to be removed
+            String profile =userPreference.get().getUserSummary().getPhotoUrl(); //"https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAhNAAAAJDYwZWIyZTg5LWFmOTItNGIwYS05YjQ5LTM2YTRkNGQ2M2JlNw.jpg";
+            Glide.with(this)
+                    .load(profile)
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .skipMemoryCache(true)
+                    .into(ivDrawerProfileCircleIcon);
+            mTvUserName.setText(userPreference.get().getUserSummary().getFirstName()+AppConstants.SPACE+userPreference.get().getUserSummary().getLastName());
+            //mTvUserLocation.setText("Delhi, India");
+            Glide.with(this)
+                    .load(profile).asBitmap()
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .skipMemoryCache(true)
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
 
-                        Bitmap blurred = BlurrImage.blurRenderScript(HomeActivity.this, profileImage, 10);
-                        mIvSideDrawerProfileBlurBackground.setImageBitmap(blurred);
-                    }
-                });
+                            Bitmap blurred = BlurrImage.blurRenderScript(HomeActivity.this, profileImage, 10);
+                            mIvSideDrawerProfileBlurBackground.setImageBitmap(blurred);
+                        }
+                    });
+        }
         //  HomeSpinnerFragment frag = new HomeSpinnerFragment();
         //  callFirstFragment(R.id.fl_fragment_container, frag);
         //   new Handler().postDelayed(openDrawerRunnable(), 200);
@@ -295,6 +303,9 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
         mFeedDetail = (FeedDetail) baseResponse;
         int id = view.getId();
         switch (id) {
+            case R.id.tv_community_join:
+                openInviteSearch();
+                break;
             case R.id.tv_feed_community_user_menu:
                 clickMenuItem(view, baseResponse, false);
                 break;
@@ -310,7 +321,7 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
             case R.id.tv_feed_job_user_bookmark:
                 bookmarkCall();
                 break;
-            case R.id.tv_article_trending_label:
+            case R.id.tv_article_bookmark:
                 bookMarkTrending();
                 break;
             case R.id.tv_feed_article_user_menu:
@@ -358,7 +369,6 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
             case R.id.tv_feed_community_post_user_reaction:
                 communityPostUserReaction();
                 break;
-
             case R.id.li_feed_article_images:
                 ArticleDetailActivity.navigateFromArticle(this, view, mFeedDetail);
                 finish();
@@ -518,7 +528,9 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
                 } else {
                     if (null != mFeedDetail) {
                         mFragmentOpen.setCommentList(true);
-                        editDeleteComment(mFeedDetail);
+                        mFragmentOpen.setCommentList(true);
+                        openCommentReactionFragment(mFeedDetail);
+                        // editDeleteComment(mFeedDetail,false);
                     }
                 }
                 popupWindow.dismiss();
@@ -527,11 +539,12 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
         tvShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FeedDetail feedDetail = (FeedDetail) baseResponse;
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType(AppConstants.SHARE_MENU_TYPE);
-                intent.putExtra(Intent.EXTRA_TEXT, "Testing Text From SHEROES2.0");
-                intent.putExtra(Intent.EXTRA_SUBJECT, "Check out this site!");
-                startActivity(Intent.createChooser(intent,AppConstants.SHARE));
+                intent.putExtra(Intent.EXTRA_TEXT,feedDetail.getSlugS());
+                intent.putExtra(Intent.EXTRA_SUBJECT,feedDetail.getDescription());
+                startActivity(Intent.createChooser(intent, AppConstants.SHARE));
                 popupWindow.dismiss();
             }
         });
@@ -617,9 +630,11 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
         }
     }
 
-    private void editDeleteComment(FeedDetail feedDetail) {
-
-
+    private void editDeleteComment(FeedDetail feedDetail, boolean isEdit) {
+        final Fragment fragmentHome = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+        if (AppUtils.isFragmentUIActive(fragmentHome)) {
+            ((HomeFragment) fragmentHome).editDeleteRecentComment(feedDetail, isEdit);
+        }
     }
 
 
@@ -692,10 +707,10 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
 
     @Override
     public void onDrawerOpened() {
-        if (!mFragmentOpen.isImageBlur()) {
+      /*  if (!mFragmentOpen.isImageBlur()) {
             assignNavigationRecyclerListView();
             mFragmentOpen.setImageBlur(true);
-        }
+        }*/
     }
 
     @Override
@@ -831,6 +846,8 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
 
 
     private void openArticleFragment() {
+        mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_ARTICLES));
+        liHomeCommunityButtonLayout.setVisibility(View.GONE);
         mFlHomeFooterList.setVisibility(View.VISIBLE);
         mToolbar.setVisibility(View.VISIBLE);
         mFragmentOpen.setArticleFragment(true);
@@ -849,6 +866,7 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
                 .replace(R.id.fl_article_card_view, articlesFragment, ArticlesFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
         mTvSpinnerIcon.setVisibility(View.VISIBLE);
     }
+
     private void openInviteSearch() {
         mFlHomeFooterList.setVisibility(View.VISIBLE);
         mToolbar.setVisibility(View.VISIBLE);
@@ -871,7 +889,8 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
 
 
     private void openSettingFragment() {
-
+        mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_FEED));
+        liHomeCommunityButtonLayout.setVisibility(View.GONE);
         mFlHomeFooterList.setVisibility(View.VISIBLE);
         mToolbar.setVisibility(View.VISIBLE);
         mFragmentOpen.setSettingFragment(true);
@@ -895,7 +914,8 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
     }
 
     private void openBookMarkFragment() {
-
+        mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_FEED));
+        liHomeCommunityButtonLayout.setVisibility(View.GONE);
         mFragmentOpen.setBookmarkFragment(true);
         mViewPager.setVisibility(View.GONE);
         mTabLayout.setVisibility(View.GONE);
@@ -918,8 +938,8 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
     }
 
     public void openJobFragment() {
-
-
+        mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_JOBS));
+        liHomeCommunityButtonLayout.setVisibility(View.GONE);
         mFlHomeFooterList.setVisibility(View.VISIBLE);
         mToolbar.setVisibility(View.VISIBLE);
         mFragmentOpen.setArticleFragment(true);

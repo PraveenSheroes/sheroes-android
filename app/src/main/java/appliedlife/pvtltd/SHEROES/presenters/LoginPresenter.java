@@ -48,13 +48,13 @@ public class LoginPresenter extends BasePresenter<LoginView> {
     }
 
 
-    public void getLoginAuthTokeInPresenter(LoginRequest loginRequest) {
+    public void getLoginAuthTokeInPresenter(LoginRequest loginRequest,boolean isSignUp) {
         if (!NetworkUtil.isConnected(sheroesApplication)) {
             getMvpView().showNwError();
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = mLoginModel.getLoginAuthTokenFromModel(loginRequest).subscribe(new Subscriber<LoginResponse>() {
+        Subscription subscription = mLoginModel.getLoginAuthTokenFromModel(loginRequest,isSignUp).subscribe(new Subscriber<LoginResponse>() {
             @Override
             public void onCompleted() {
                 getMvpView().stopProgressBar();

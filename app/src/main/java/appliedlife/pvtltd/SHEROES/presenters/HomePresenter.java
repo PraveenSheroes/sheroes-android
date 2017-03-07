@@ -14,6 +14,8 @@ import appliedlife.pvtltd.SHEROES.models.HomeModel;
 import appliedlife.pvtltd.SHEROES.models.RecentSearchDataModel;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
@@ -84,7 +86,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onNext(FeedResponsePojo feedResponsePojo) {
                 getMvpView().stopProgressBar();
-                if(null!=feedRequestPojo&& StringUtil.isNotEmptyCollection(feedResponsePojo.getFeaturedDocs()))
+                if(null!=feedRequestPojo&& StringUtil.isNotEmptyCollection(feedResponsePojo.getFeaturedDocs())&&feedResponsePojo.getFeaturedDocs().size()>AppConstants.ONE_CONSTANT)
                 {
                     getMvpView().getFeedListSuccess(feedResponsePojo.getFeaturedDocs());
                 }else
@@ -198,6 +200,32 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onNext(BookmarkResponsePojo bookmarkResponsePojo) {
                 getMvpView().stopProgressBar();
                 getMvpView().getSuccessForAllResponse(bookmarkResponsePojo.getStatus(),AppConstants.THREE_CONSTANT);
+            }
+        });
+        registerSubscription(subscription);
+    }
+
+
+    public void editCommentListFromPresenter(CommentReactionRequestPojo commentReactionRequestPojo) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = mHomeModel.editCommentListFromModel(commentReactionRequestPojo).subscribe(new Subscriber<CommentReactionResponsePojo>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+            @Override
+            public void onError(Throwable e) {
+                getMvpView().stopProgressBar();
+                getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
+            }
+            @Override
+            public void onNext(CommentReactionResponsePojo commentResponsePojo) {
+                getMvpView().stopProgressBar();
+                getMvpView().getSuccessForAllResponse(commentResponsePojo.getStatus(),AppConstants.TWO_CONSTANT);
             }
         });
         registerSubscription(subscription);

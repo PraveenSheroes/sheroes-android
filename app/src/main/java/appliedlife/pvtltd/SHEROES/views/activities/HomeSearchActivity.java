@@ -213,7 +213,7 @@ public class HomeSearchActivity extends BaseActivity implements BaseHolderInterf
             mSearchEditText.setEnabled(false);
             ((SearchRecentFragment) fragment).updateUiAfterSwip();
         } else if (fragment instanceof SearchArticleFragment) {
-            String string = getString(R.string.ID_SEARCH) + AppConstants.SPACE + getString(R.string.ID_ARTICLE) + AppConstants.S;
+            String string = getString(R.string.ID_SEARCH) + AppConstants.SPACE + getString(R.string.ID_ARTICLE);
             mSearchEditText.setHint(string);
             mSearchEditText.setEnabled(true);
         } else if (fragment instanceof SearchCommunitiesFragment) {

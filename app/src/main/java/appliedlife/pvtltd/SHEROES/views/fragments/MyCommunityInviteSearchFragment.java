@@ -98,11 +98,10 @@ public class MyCommunityInviteSearchFragment extends BaseFragment implements Hom
         return view;
     }
 
-
     @Override
     public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
         if(StringUtil.isNotEmptyCollection(feedDetailList)&&mAdapter!=null) {
-            mAdapter.setCallForRecycler(AppConstants.ALL_SEARCH);
+            mAdapter.setCallForRecycler(AppConstants.FEED_SUB_TYPE);
             mAdapter.setSheroesGenericListData(feedDetailList);
             mAdapter.notifyDataSetChanged();
         }
@@ -121,10 +120,6 @@ public class MyCommunityInviteSearchFragment extends BaseFragment implements Hom
 
     @Override
     public void getDB(List<RecentSearchData> recentSearchDatas) {
-        if(StringUtil.isNotEmptyCollection(recentSearchDatas))
-        {
-
-        }
     }
 
     @Override
@@ -225,7 +220,7 @@ public class MyCommunityInviteSearchFragment extends BaseFragment implements Hom
             if (!isDetached())
             {
                 mSearchDataName = mSearchDataName.trim().replaceAll(AppConstants.SPACE, AppConstants.EMPTY_STRING);
-                mHomePresenter.getFeedFromPresenter(mAppUtils.searchRequestBuilder(AppConstants.FEED_SUB_TYPE,mSearchDataName ,mFragmentListRefreshData.getPageNo(),AppConstants.ALL_SEARCH));
+                mHomePresenter.getFeedFromPresenter(mAppUtils.searchRequestBuilder(AppConstants.USER_SUB_TYPE,mSearchDataName ,mFragmentListRefreshData.getPageNo(),AppConstants.ALL_SEARCH));
             }
         }
     };

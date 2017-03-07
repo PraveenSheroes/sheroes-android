@@ -15,6 +15,7 @@ import rx.schedulers.Schedulers;
 
 /**
  * Created by Praveen_Singh on 04-01-2017.
+ *
  * @author Praveen Singh
  * @version 5.0
  * @since 04-01-2017.
@@ -22,22 +23,39 @@ import rx.schedulers.Schedulers;
  * required response data for login activity.
  */
 @Singleton
-public class LoginModel { private final SheroesAppServiceApi sheroesAppServiceApi;
+public class LoginModel {
+    private final SheroesAppServiceApi sheroesAppServiceApi;
     Gson gson;
+
     @Inject
-    public LoginModel(SheroesAppServiceApi sheroesAppServiceApi,Gson gson) {
+    public LoginModel(SheroesAppServiceApi sheroesAppServiceApi, Gson gson) {
         this.sheroesAppServiceApi = sheroesAppServiceApi;
-        this.gson= gson;
+        this.gson = gson;
     }
-    public Observable<LoginResponse> getLoginAuthTokenFromModel(LoginRequest loginRequest){
-        return sheroesAppServiceApi.getLoginAuthToken(loginRequest)
-                .map(new Func1<LoginResponse, LoginResponse>() {
-                    @Override
-                    public LoginResponse call(LoginResponse loginResponse) {
-                        return loginResponse;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+
+    public Observable<LoginResponse> getLoginAuthTokenFromModel(LoginRequest loginRequest, boolean isSignUp) {
+        if (isSignUp) {
+            return sheroesAppServiceApi.getFbSignUpToken(loginRequest)
+                    .map(new Func1<LoginResponse, LoginResponse>() {
+                        @Override
+                        public LoginResponse call(LoginResponse loginResponse) {
+                            return loginResponse;
+                        }
+                    })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread());
+        } else {
+            return sheroesAppServiceApi.getLoginAuthToken(loginRequest)
+                    .map(new Func1<LoginResponse, LoginResponse>() {
+                        @Override
+                        public LoginResponse call(LoginResponse loginResponse) {
+                            return loginResponse;
+                        }
+                    })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread());
+        }
+
     }
+
 }

@@ -10,14 +10,12 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.f2prateek.rx.preferences.Preference;
 import com.facebook.AccessToken;
@@ -33,7 +31,6 @@ import com.facebook.ProfileTracker;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
@@ -80,6 +77,8 @@ public class LoginFragment extends BaseFragment implements LoginView {
     EditText mPasswordView;
     @Bind(R.id.pb_login_progress_bar)
     ProgressBar mProgressBar;
+    //  @Bind(R.id.login_button)
+    //  LoginButton mFbLogin;
     FragmentIntractionWithActivityListner fragmentIntractionWithActivityListner;
     private LoginActivityIntractionListner mLoginActivityIntractionListner;
     private static final int READ_CONTACTS_PERMISSIONS_REQUEST1 = 1;
@@ -146,12 +145,18 @@ public class LoginFragment extends BaseFragment implements LoginView {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         LoginButton loginButton = (LoginButton) view.findViewById(R.id.login_button);
-        loginButton.setReadPermissions(Arrays.asList(
-                "public_profile", "email", "user_birthday", "user_friends"));
+        loginButton.setReadPermissions(Arrays.asList("public_profile", "email", "user_birthday", "user_friends"));
         loginButton.setFragment(this);
         loginButton.registerCallback(callbackManager, callback);
 
     }
+ /*   @OnClick(R.id.login_button)
+    public void fbOnClick()
+    {
+        mFbLogin.setReadPermissions(Arrays.asList("public_profile", "email", "user_birthday", "user_friends"));
+        mFbLogin.setFragment(this);
+        mFbLogin.registerCallback(callbackManager, callback);
+    }*/
 
     /**
      * Stor token into share prefrances
@@ -185,7 +190,6 @@ public class LoginFragment extends BaseFragment implements LoginView {
 
     @Override
     public void stopProgressBar() {
-        mProgressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -275,9 +279,9 @@ public class LoginFragment extends BaseFragment implements LoginView {
             loginRequest.setDeviceid("string");
             loginRequest.setDevicetype("string");
             loginRequest.setGcmorapnsid("string");
-            loginRequest.setUsername("amleshsinha@gmail.com");
-            loginRequest.setPassword("amlesh");
-            mLoginPresenter.getLoginAuthTokeInPresenter(loginRequest);
+            loginRequest.setUsername(email);
+            loginRequest.setPassword(password);
+            mLoginPresenter.getLoginAuthTokeInPresenter(loginRequest, false);
         }
     }
 
@@ -286,13 +290,11 @@ public class LoginFragment extends BaseFragment implements LoginView {
 
         @Override
         public void onSuccess(final LoginResult loginResult) {
+            if (null != mProgressBar) {
+                mProgressBar.setVisibility(View.VISIBLE);
+                mProgressBar.bringToFront();
+            }
             final AccessToken accessToken = loginResult.getAccessToken();
-            String access_tok = "" + loginResult.getAccessToken().getToken();
-            final Profile profile = Profile.getCurrentProfile();
-            //displayMessage(profile);
-
-            // fb_flag = 1;
-
             // Facebook Email address
             GraphRequest request = GraphRequest.newMeRequest(
                     accessToken,
@@ -300,26 +302,26 @@ public class LoginFragment extends BaseFragment implements LoginView {
                         @Override
                         public void onCompleted(JSONObject object, GraphResponse response) {
                             // Insert your code here
-                            String gettok = "" + AccessToken.getCurrentAccessToken();
-                            Log.e("permission", "isPermissionGranted : " + accessToken.getPermissions());
-                            try {
+                          //  String gettok = "" + AccessToken.getCurrentAccessToken();
 
-                                String user_email = object.getString("email");
-
+                              /*  String user_email = object.getString("email");
                                 Log.e("showinguser-emailid", user_email);
                                 String user_id = object.getString("id");
                                 String user_gender = object.getString("gender");
                                 String user_fname = object.getString("first_name");
-                                String user_lname = object.getString("last_name");
-                                // textView2.setText(profile.getLastName());
-
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                                String user_lname = object.getString("last_name");*/
+                            if (null != accessToken && StringUtil.isNotNullOrEmptyString(accessToken.getToken())) {
+                                LoginRequest loginRequest = new LoginRequest();
+                                loginRequest.setAccessToken(accessToken.getToken());
+                                loginRequest.setAdvertisementid("string");
+                                loginRequest.setAppVersion("String");
+                                loginRequest.setCloudMessagingId("string");
+                                loginRequest.setDeviceUniqueId("string");
+                                loginRequest.setDeviceid("string");
+                                loginRequest.setDevicetype("string");
+                                loginRequest.setGcmorapnsid("string");
+                                mLoginPresenter.getLoginAuthTokeInPresenter(loginRequest, true);
                             }
-                            Log.e("response", "" + response);
-                            Toast.makeText(getActivity(), response + "", Toast.LENGTH_LONG).show();
-
 
                         }
                     });
@@ -335,9 +337,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
         @Override
         public void onCancel() {
 
-
             //LoginManager.getInstance().logOut();
-
 
         }
 
@@ -391,8 +391,6 @@ public class LoginFragment extends BaseFragment implements LoginView {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         super.onActivityResult(requestCode, resultCode, data);
-
-
         callbackManager.onActivityResult(requestCode, resultCode, data);
 
     }

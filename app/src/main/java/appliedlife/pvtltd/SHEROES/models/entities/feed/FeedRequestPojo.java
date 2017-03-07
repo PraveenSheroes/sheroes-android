@@ -22,9 +22,7 @@ public class FeedRequestPojo extends BaseRequest {
     @SerializedName("q")
     @Expose
     private String question;
-    @SerializedName("screen_name")
-    @Expose
-    private String screenName;
+
     @SerializedName("article_categories")
     @Expose
     private List<String> articleCategories ;
@@ -56,13 +54,6 @@ public class FeedRequestPojo extends BaseRequest {
         this.idForFeedDetail = idForFeedDetail;
     }
 
-    public String getScreenName() {
-        return screenName;
-    }
-
-    public void setScreenName(String screenName) {
-        this.screenName = screenName;
-    }
 
     public List<String> getArticleCategories() {
         return articleCategories;

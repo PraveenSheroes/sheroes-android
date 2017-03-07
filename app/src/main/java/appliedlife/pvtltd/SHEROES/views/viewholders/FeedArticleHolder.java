@@ -167,20 +167,23 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         } else if (dataItem.getNoOfLikes() < AppConstants.ONE_CONSTANT) {
             flFeedArticleNoReactionComment.setVisibility(View.GONE);
             tvFeedArticleTotalReactions.setVisibility(View.GONE);
-        } else {
-            flFeedArticleNoReactionComment.setVisibility(View.VISIBLE);
-            switch (dataItem.getNoOfLikes()) {
-                case AppConstants.ONE_CONSTANT:
-                    tvFeedArticleTotalReactions.setText(String.valueOf(dataItem.getNoOfLikes()) + AppConstants.SPACE + context.getString(R.string.ID_REACTION));
-                    tvFeedArticleUserReaction.setText(AppConstants.EMPTY_STRING);
-                    userLike();
-                    break;
-                default:
-                    tvFeedArticleTotalReactions.setText(String.valueOf(dataItem.getNoOfLikes()) + AppConstants.SPACE + context.getString(R.string.ID_REACTION) + AppConstants.S);
-                    tvFeedArticleUserReaction.setText(AppConstants.EMPTY_STRING);
-                    userLike();
-            }
+        }
 
+        switch (dataItem.getNoOfLikes()) {
+            case AppConstants.NO_REACTION_CONSTANT:
+                userLike();
+                break;
+            case AppConstants.ONE_CONSTANT:
+                flFeedArticleNoReactionComment.setVisibility(View.VISIBLE);
+                tvFeedArticleTotalReactions.setText(AppConstants.ONE_CONSTANT + AppConstants.SPACE + context.getString(R.string.ID_REACTION));
+                tvFeedArticleUserReaction.setText(AppConstants.EMPTY_STRING);
+                userLike();
+                break;
+            default:
+                flFeedArticleNoReactionComment.setVisibility(View.VISIBLE);
+                tvFeedArticleTotalReactions.setText(String.valueOf(dataItem.getNoOfLikes()) + AppConstants.SPACE + context.getString(R.string.ID_REACTION) + AppConstants.S);
+                tvFeedArticleUserReaction.setText(AppConstants.EMPTY_STRING);
+                userLike();
         }
 
         switch (dataItem.getNoOfComments()) {
@@ -231,6 +234,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + dataItem.getReactionValue());
         }
     }
+
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void userComments() {
         List<LastComment> lastCommentList = dataItem.getLastComments();
@@ -238,8 +242,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             for (LastComment lastComment : lastCommentList) {
                 String feedUserIconUrl = lastComment.getParticipantImageUrl();
                 ivFeedArticleUserPic.setCircularImage(true);
-                if(lastComment.isAnonymous())
-                {
+                if (lastComment.isAnonymous()) {
                     String userName = LEFT_HTML_TAG_FOR_COLOR + mContext.getString(R.string.ID_ANONYMOUS) + RIGHT_HTML_TAG_FOR_COLOR;
                     if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                         tvFeedArticleUserCommentPost.setText(Html.fromHtml(userName + AppConstants.SPACE + lastComment.getComment(), 0)); // for 24 api and more
@@ -247,9 +250,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
                         tvFeedArticleUserCommentPost.setText(Html.fromHtml(userName + AppConstants.SPACE + lastComment.getComment()));// or for older api
                     }
                     ivFeedArticleUserPic.setImageResource(R.drawable.ic_add_city_icon);
-                }
-                else
-                {
+                } else {
                     String userName = LEFT_HTML_TAG_FOR_COLOR + lastComment.getParticipantName() + RIGHT_HTML_TAG_FOR_COLOR;
                     if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                         tvFeedArticleUserCommentPost.setText(Html.fromHtml(userName + AppConstants.SPACE + lastComment.getComment(), 0)); // for 24 api and more
@@ -261,6 +262,8 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
 
                 if (lastComment.isMyOwnParticipation()) {
                     tvFeedArticleUserCommentPostMenu.setVisibility(View.VISIBLE);
+                } else {
+                    tvFeedArticleUserCommentPostMenu.setVisibility(View.GONE);
                 }
             }
         }
@@ -372,6 +375,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             viewInterface.handleOnClick(dataItem, tvFeedArticleUserReaction);
         }
     }
+
     @OnLongClick(R.id.tv_feed_article_user_reaction)
     public boolean userReactionLongClick() {
         dataItem.setItemPosition(getAdapterPosition());

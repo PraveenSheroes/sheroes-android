@@ -198,7 +198,7 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
         if (null != view) {
             String item = (String) parent.getItemAtPosition(position);
         }
-        //  item = (String) parent.getItemAtPosition(position);
+        //  item = (String) parent.getItemAtPosition(mPosition);
 
       /*  if(null !=parent)
         ((TextView) parent.getChildAt(0)).setTextColor(Color.TRANSPARENT);

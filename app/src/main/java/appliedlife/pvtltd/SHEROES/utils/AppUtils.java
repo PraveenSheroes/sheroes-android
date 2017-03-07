@@ -39,6 +39,7 @@ import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -168,6 +169,26 @@ public class AppUtils {
      */
     public void setApplicationContext(Context context) {
 
+    }
+    /**
+     * This method shows the softkeyboard
+     *
+     * @param view
+     */
+    public static void showKeyboard(View view, String TAG)
+    {
+        if (view == null)
+        {
+            return;
+        }
+        try
+        {
+            InputMethodManager inputManager = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        } catch (Exception e)
+        {
+            LogUtils.error(TAG, e);
+        }
     }
 
     /**

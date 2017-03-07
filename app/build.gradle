@@ -20,17 +20,34 @@ android {
         versionCode 30
         versionName "5.0"
     }
+    signingConfigs {
+        debug {
+            keyAlias 'SHEROES'
+            keyPassword 'SHEROES2015'
+            storeFile file('../SHEROES.jks')
+            storePassword 'SHEROES2015'
+        }
+        release {
+            keyAlias 'SHEROES'
+            keyPassword 'SHEROES2015'
+            storeFile file('../SHEROES.jks')
+            storePassword 'SHEROES2015'
+        }
+    }
     buildTypes {
         debug {
             buildConfigField "String", "BASE_URL", "\"http://34.193.138.177/\""
             ext.enableCrashlytics = false
             shrinkResources false
            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
         }
         release {
+            buildConfigField "String", "BASE_URL", "\"http://34.193.138.177/\""
            minifyEnabled false
            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 }

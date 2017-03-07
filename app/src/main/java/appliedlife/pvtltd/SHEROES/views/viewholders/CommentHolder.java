@@ -54,6 +54,7 @@ public class CommentHolder extends BaseViewHolder<CommentReactionDoc> {
         this.viewInterface = baseHolderInterface;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
     }
+
     @TargetApi(AppConstants.ANDROID_SDK_24)
     @Override
     public void bindData(CommentReactionDoc item, final Context context, int position) {
@@ -63,26 +64,22 @@ public class CommentHolder extends BaseViewHolder<CommentReactionDoc> {
             tvUserCommentListMenu.setVisibility(View.VISIBLE);
         }
         ivListCommentProfilePic.setCircularImage(true);
-        if(item.isAnonymous())
-        {
-            String userName = LEFT_HTML_TAG_FOR_COLOR +mContext.getString(R.string.ID_ANONYMOUS)+ RIGHT_HTML_TAG_FOR_COLOR;
+        if (item.isAnonymous()) {
+            String userName = LEFT_HTML_TAG_FOR_COLOR + mContext.getString(R.string.ID_ANONYMOUS) + RIGHT_HTML_TAG_FOR_COLOR;
             ivListCommentProfilePic.setImageResource(R.drawable.ic_add_city_icon);
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                 tvUserComment.setText(Html.fromHtml(userName + AppConstants.SPACE + item.getComment(), 0)); // for 24 api and more
             } else {
                 tvUserComment.setText(Html.fromHtml(userName + AppConstants.SPACE + item.getComment()));// or for older api
             }
-        }
-        else {
-            if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getFirstName())) {
-                String userName = LEFT_HTML_TAG_FOR_COLOR + userPreference.get().getUserSummary().getFirstName() + RIGHT_HTML_TAG_FOR_COLOR;
-                if (StringUtil.isNotNullOrEmptyString(dataItem.getComment())) {
-                    ivListCommentProfilePic.bindImage(dataItem.getParticipantImageUrl());
-                    if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                        tvUserComment.setText(Html.fromHtml(userName + AppConstants.SPACE + dataItem.getComment(), 0)); // for 24 api and more
-                    } else {
-                        tvUserComment.setText(Html.fromHtml(userName + AppConstants.SPACE + dataItem.getComment()));// or for older api
-                    }
+        } else {
+            String userName = LEFT_HTML_TAG_FOR_COLOR + dataItem.getParticipantName() + RIGHT_HTML_TAG_FOR_COLOR;
+            if (StringUtil.isNotNullOrEmptyString(dataItem.getComment())) {
+                ivListCommentProfilePic.bindImage(dataItem.getParticipantImageUrl());
+                if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                    tvUserComment.setText(Html.fromHtml(userName + AppConstants.SPACE + dataItem.getComment(), 0)); // for 24 api and more
+                } else {
+                    tvUserComment.setText(Html.fromHtml(userName + AppConstants.SPACE + dataItem.getComment()));// or for older api
                 }
             }
         }

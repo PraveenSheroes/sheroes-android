@@ -4,8 +4,13 @@ package appliedlife.pvtltd.SHEROES.models.entities.login;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class LoginRequest {
+import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
 
+public class LoginRequest extends BaseRequest {
+
+    @SerializedName("accees_token")
+    @Expose
+    private String accessToken;
     @SerializedName("advertisementid")
     @Expose
     private String advertisementid;
@@ -73,4 +78,11 @@ public class LoginRequest {
         this.username = username;
     }
 
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
 }

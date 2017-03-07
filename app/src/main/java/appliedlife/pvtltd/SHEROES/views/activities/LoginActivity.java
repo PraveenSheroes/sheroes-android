@@ -60,12 +60,12 @@ public class LoginActivity extends BaseActivity implements LoginFragment.LoginAc
     public void onLoginAuthToken() {
         Intent homeIntent = new Intent(this, HomeActivity.class);
         startActivity(homeIntent);
-
+        finish();
     }
 
     @Override
     public void onShowErrorDialog() {
-        Toast.makeText(this,"Error in login",Toast.LENGTH_SHORT).show();
+        Toast.makeText(this,"Please check your email id, password",Toast.LENGTH_SHORT).show();
         //getSupportFragmentManager().popBackStack();
     }
 }

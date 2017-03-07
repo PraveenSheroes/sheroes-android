@@ -220,6 +220,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     public void viewRecycled() {
 
     }
+
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void allTextViewStringOperations(Context context) {
         if (StringUtil.isNotNullOrEmptyString(dataItem.getAuthorName())) {
@@ -270,34 +271,38 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         } else if (dataItem.getNoOfLikes() < AppConstants.ONE_CONSTANT) {
             flFeedCommunityPostNoReactionComment.setVisibility(View.GONE);
             tvFeedCommunityPostTotalReactions.setVisibility(View.GONE);
-        } else {
-            flFeedCommunityPostNoReactionComment.setVisibility(View.VISIBLE);
-            switch (dataItem.getNoOfLikes()) {
-                case AppConstants.ONE_CONSTANT:
-                    tvFeedCommunityPostTotalReactions.setText(String.valueOf(dataItem.getNoOfLikes()) + AppConstants.SPACE + context.getString(R.string.ID_REACTION));
-                    tvFeedCommunityPostUserReaction.setText(AppConstants.EMPTY_STRING);
-                    userLike();
-                    break;
-                default:
-                    tvFeedCommunityPostTotalReactions.setText(String.valueOf(dataItem.getNoOfLikes()) + AppConstants.SPACE + context.getString(R.string.ID_REACTION) + AppConstants.S);
-                    tvFeedCommunityPostUserReaction.setText(AppConstants.EMPTY_STRING);
-                    userLike();
-            }
         }
-            switch (dataItem.getNoOfComments()) {
-                case AppConstants.NO_REACTION_CONSTANT:
-                    break;
-                case AppConstants.ONE_CONSTANT:
-                    tvFeedCommunityPostTotalReplies.setText(String.valueOf(dataItem.getNoOfComments()) + AppConstants.SPACE + context.getString(R.string.ID_REPLY));
-                    tvFeedCommunityPostTotalReplies.setVisibility(View.VISIBLE);
-                    liFeedCommunityPostUserComments.setVisibility(View.VISIBLE);
-                    userComments();
-                    break;
-                default:
-                    tvFeedCommunityPostTotalReplies.setText(String.valueOf(dataItem.getNoOfComments()) + AppConstants.SPACE + context.getString(R.string.ID_REPLIES));
-                    tvFeedCommunityPostTotalReplies.setVisibility(View.VISIBLE);
-                    liFeedCommunityPostUserComments.setVisibility(View.VISIBLE);
-                    userComments();
+
+        switch (dataItem.getNoOfLikes()) {
+            case AppConstants.NO_REACTION_CONSTANT:
+                userLike();
+                break;
+            case AppConstants.ONE_CONSTANT:
+                flFeedCommunityPostNoReactionComment.setVisibility(View.VISIBLE);
+                tvFeedCommunityPostTotalReactions.setText(AppConstants.ONE_CONSTANT  + AppConstants.SPACE + context.getString(R.string.ID_REACTION));
+                tvFeedCommunityPostUserReaction.setText(AppConstants.EMPTY_STRING);
+                userLike();
+                break;
+            default:
+                flFeedCommunityPostNoReactionComment.setVisibility(View.VISIBLE);
+                tvFeedCommunityPostTotalReactions.setText(String.valueOf(dataItem.getNoOfLikes()) + AppConstants.SPACE + context.getString(R.string.ID_REACTION) + AppConstants.S);
+                tvFeedCommunityPostUserReaction.setText(AppConstants.EMPTY_STRING);
+                userLike();
+        }
+        switch (dataItem.getNoOfComments()) {
+            case AppConstants.NO_REACTION_CONSTANT:
+                break;
+            case AppConstants.ONE_CONSTANT:
+                tvFeedCommunityPostTotalReplies.setText(String.valueOf(dataItem.getNoOfComments()) + AppConstants.SPACE + context.getString(R.string.ID_REPLY));
+                tvFeedCommunityPostTotalReplies.setVisibility(View.VISIBLE);
+                liFeedCommunityPostUserComments.setVisibility(View.VISIBLE);
+                userComments();
+                break;
+            default:
+                tvFeedCommunityPostTotalReplies.setText(String.valueOf(dataItem.getNoOfComments()) + AppConstants.SPACE + context.getString(R.string.ID_REPLIES));
+                tvFeedCommunityPostTotalReplies.setVisibility(View.VISIBLE);
+                liFeedCommunityPostUserComments.setVisibility(View.VISIBLE);
+                userComments();
         }
     }
 
@@ -332,6 +337,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + dataItem.getReactionValue());
         }
     }
+
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void userComments() {
         List<LastComment> lastCommentList = dataItem.getLastComments();
@@ -339,8 +345,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             for (LastComment lastComment : lastCommentList) {
                 String feedUserIconUrl = lastComment.getParticipantImageUrl();
                 ivFeedCommunityPostUserPic.setCircularImage(true);
-                if(lastComment.isAnonymous())
-                {
+                if (lastComment.isAnonymous()) {
                     String userName = LEFT_HTML_TAG_FOR_COLOR + mContext.getString(R.string.ID_ANONYMOUS) + RIGHT_HTML_TAG_FOR_COLOR;
                     if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                         tvFeedCommunityPostUserCommentPost.setText(Html.fromHtml(userName + AppConstants.SPACE + lastComment.getComment(), 0)); // for 24 api and more
@@ -348,9 +353,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                         tvFeedCommunityPostUserCommentPost.setText(Html.fromHtml(userName + AppConstants.SPACE + lastComment.getComment()));// or for older api
                     }
                     ivFeedCommunityPostUserPic.setImageResource(R.drawable.ic_add_city_icon);
-                }
-                else
-                {
+                } else {
                     String userName = LEFT_HTML_TAG_FOR_COLOR + lastComment.getParticipantName() + RIGHT_HTML_TAG_FOR_COLOR;
                     if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                         tvFeedCommunityPostUserCommentPost.setText(Html.fromHtml(userName + AppConstants.SPACE + lastComment.getComment(), 0)); // for 24 api and more
@@ -363,6 +366,9 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 if (lastComment.isMyOwnParticipation()) {
                     tvFeedCommunityPostUserCommentPostMenu.setVisibility(View.VISIBLE);
                 }
+                else {
+                    tvFeedCommunityPostUserCommentPostMenu.setVisibility(View.GONE);
+                }
             }
         }
     }
@@ -373,7 +379,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             ivFeedCommunityPostCircleIcon.setCircularImage(true);
             ivFeedCommunityPostCircleIcon.bindImage(authorImageUrl);
         }
-        if (null != userPreference && userPreference.isSet() && null != userPreference.get()&&null!=userPreference.get().getUserSummary()&& StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getPhotoUrl())) {
+        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getPhotoUrl())) {
             ivFeedCommunityPostRegisterUserPic.setCircularImage(true);
             ivFeedCommunityPostRegisterUserPic.bindImage(userPreference.get().getUserSummary().getPhotoUrl());
         }
@@ -579,6 +585,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         dataItem.setItemPosition(getAdapterPosition());
         viewInterface.handleOnClick(dataItem, tvFeedCommunityPostUserCommentPostMenu);
     }
+
     @TargetApi(AppConstants.ANDROID_SDK_24)
     @OnClick(R.id.tv_feed_community_post_text)
     public void viewMoreClick() {
@@ -692,6 +699,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             viewInterface.handleOnClick(dataItem, tvFeedCommunityPostUserReaction);
         }
     }
+
     @OnClick(R.id.tv_feed_community_post_user_bookmark)
     public void isBookMarkClick() {
         dataItem.setItemPosition(getAdapterPosition());
@@ -701,6 +709,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             viewInterface.handleOnClick(dataItem, tvFeedCommunityPostUserBookmark);
         }
     }
+
     @OnLongClick(R.id.tv_feed_community_post_user_reaction)
     public boolean userReactionLongClick() {
         dataItem.setItemPosition(getAdapterPosition());

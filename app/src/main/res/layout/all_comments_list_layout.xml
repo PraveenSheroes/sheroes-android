@@ -18,7 +18,6 @@
             android:layout_width="@dimen/dp_size_27"
             android:layout_height="@dimen/dp_size_27"
             android:layout_gravity="center"
-            android:gravity="center"
             android:src="@drawable/ic_footer_button_icon" />
 
         <TextView

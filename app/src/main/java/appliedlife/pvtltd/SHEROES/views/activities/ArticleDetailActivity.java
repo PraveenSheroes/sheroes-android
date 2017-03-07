@@ -432,6 +432,7 @@ public class ArticleDetailActivity extends BaseActivity implements BaseHolderInt
                     }
                 } else {
                     if (null != mFeedDetail) {
+                        mFragmentOpen.setOpen(true);
                         mFragmentOpen.setCommentList(true);
                         openCommentReactionFragment(mFeedDetail);
                     }
@@ -451,6 +452,7 @@ public class ArticleDetailActivity extends BaseActivity implements BaseHolderInt
                     }
                 } else {
                     if (null != mFeedDetail) {
+                        mFragmentOpen.setOpen(true);
                         mFragmentOpen.setCommentList(true);
                         openCommentReactionFragment(mFeedDetail);
                     }

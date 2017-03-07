@@ -1,5 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.viewholders;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 import android.text.Html;
@@ -31,6 +32,7 @@ import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnLongClick;
 
 /**
  * Created by Praveen_Singh on 08-02-2017.
@@ -120,7 +122,7 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
             allTextViewStringOperations(context);
         }
     }
-
+    @TargetApi(AppConstants.ANDROID_SDK_24)
     private void imageOperations(Context context) {
 
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getNameOrTitle())) {
@@ -140,7 +142,7 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
             }
         }
     }
-
+    @TargetApi(AppConstants.ANDROID_SDK_24)
     private void allTextViewStringOperations(Context context) {
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getAuthorName())) {
             tvArticleDetailIconName.setText(mFeedDetail.getAuthorName());
@@ -174,20 +176,24 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
         } else if (mFeedDetail.getNoOfLikes() < AppConstants.ONE_CONSTANT) {
             flArticleDetailNoReactionComment.setVisibility(View.GONE);
             tvArticleDetailTotalReaction.setVisibility(View.GONE);
-        } else {
-            flArticleDetailNoReactionComment.setVisibility(View.VISIBLE);
+        }
+
             switch (mFeedDetail.getNoOfLikes()) {
+                case AppConstants.NO_REACTION_CONSTANT:
+                    userLike();
+                    break;
                 case AppConstants.ONE_CONSTANT:
+                    flArticleDetailNoReactionComment.setVisibility(View.VISIBLE);
                     tvArticleDetailTotalReaction.setText(String.valueOf(mFeedDetail.getNoOfLikes()) + AppConstants.SPACE + context.getString(R.string.ID_REACTION));
                     tvArticleDetailUserReaction.setText(AppConstants.EMPTY_STRING);
                     userLike();
                     break;
                 default:
+                    flArticleDetailNoReactionComment.setVisibility(View.VISIBLE);
                     tvArticleDetailTotalReaction.setText(String.valueOf(mFeedDetail.getNoOfLikes()) + AppConstants.SPACE + context.getString(R.string.ID_REACTION) + AppConstants.S);
                     tvArticleDetailUserReaction.setText(AppConstants.EMPTY_STRING);
                     userLike();
             }
-        }
             if(mFeedDetail.getNoOfComments()>AppConstants.NO_REACTION_CONSTANT) {
                 userComments();
             }
@@ -224,7 +230,7 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + mFeedDetail.getReactionValue());
         }
     }
-
+    @TargetApi(AppConstants.ANDROID_SDK_24)
     private void userComments() {
 
         if (StringUtil.isNotEmptyCollection(mFeedDetail.getLastComments())) {
@@ -289,7 +295,13 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
     public void viewRecycled() {
 
     }
-
+    @OnLongClick(R.id.tv_article_detail_user_reaction)
+    public boolean userReactionLongClick() {
+        mFeedDetail.setItemPosition(getAdapterPosition());
+        mFeedDetail.setLongPress(true);
+        viewInterface.handleOnClick(dataItem, tvArticleDetailUserReaction);
+        return true;
+    }
     @OnClick(R.id.tv_article_detail_user_reaction)
     public void userReactionClick() {
         mFeedDetail.setLongPress(false);

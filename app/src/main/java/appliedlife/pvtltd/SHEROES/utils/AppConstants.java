@@ -32,6 +32,7 @@ public class AppConstants {
     public static final String SHARE_MENU_TYPE= "text/plain";
     public static final String FOR_ALL= "all";
     public static final String FEED_SUB_TYPE= "F";
+    public static final String USER_SUB_TYPE= "U";
     public static final String FEED_COMMUNITY = "C";
     public static final String FEED_JOB = "J";
     public static final String FEED_ARTICLE= "A";

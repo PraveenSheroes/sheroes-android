@@ -55,9 +55,9 @@ public class ArticleDetailFragment extends BaseFragment implements HomeView {
     private FragmentListRefreshData mFragmentListRefreshData;
     @Inject
     AppUtils mAppUtils;
-    int position;
-    int pressedEmoji;
-    boolean listLoad = true;
+    int mPosition;
+    int mPressedEmoji;
+    boolean mListLoad = true;
     private List<ArticleDetailPojo> articleList;
     private ArticleDetailPojo articleDetailPojo;
     public static ArticleDetailFragment createInstance(FeedDetail feedDetail) {
@@ -114,6 +114,10 @@ public class ArticleDetailFragment extends BaseFragment implements HomeView {
             articleList.add(articleDetailPojo);
             mAdapter.setSheroesGenericListData(articleList);
             mAdapter.notifyDataSetChanged();
+            if (mRecyclerView.getItemAnimator() instanceof SimpleItemAnimator) {
+                ((SimpleItemAnimator)mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+                ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setAddDuration(AppConstants.NO_REACTION_CONSTANT);
+            }
         }
     }
     @Override
@@ -135,10 +139,10 @@ public class ArticleDetailFragment extends BaseFragment implements HomeView {
 
             if (mFeedDetail.isLongPress()) {
                 if (mFeedDetail.getReactionValue() == AppConstants.NO_REACTION_CONSTANT) {
-                    mFeedDetail.setReactionValue(pressedEmoji);
+                    mFeedDetail.setReactionValue(mPressedEmoji);
                     mFeedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
                 } else {
-                    mFeedDetail.setReactionValue(pressedEmoji);
+                    mFeedDetail.setReactionValue(mPressedEmoji);
                 }
 
             } else {
@@ -157,6 +161,7 @@ public class ArticleDetailFragment extends BaseFragment implements HomeView {
             mAdapter.notifyDataSetChanged();
             if (mRecyclerView.getItemAnimator() instanceof SimpleItemAnimator) {
                 ((SimpleItemAnimator)mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+                ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setAddDuration(AppConstants.NO_REACTION_CONSTANT);
             }
         }
     }
@@ -164,10 +169,10 @@ public class ArticleDetailFragment extends BaseFragment implements HomeView {
 
 
     public void likeAndUnlikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-        listLoad = false;
+        mListLoad = false;
         mFeedDetail = (FeedDetail) baseResponse;
-        this.position = position;
-        this.pressedEmoji = reactionValue;
+        this.mPosition = position;
+        this.mPressedEmoji = reactionValue;
         if (null != mFeedDetail && mFeedDetail.isLongPress()) {
             mHomePresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(mFeedDetail.getEntityOrParticipantId(), reactionValue));
         } else {
@@ -192,7 +197,7 @@ public class ArticleDetailFragment extends BaseFragment implements HomeView {
 
     @Override
     public void startProgressBar() {
-        if(listLoad) {
+        if(mListLoad) {
             mProgressBar.setVisibility(View.VISIBLE);
             mProgressBar.bringToFront();
         }

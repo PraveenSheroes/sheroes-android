@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -210,6 +211,10 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
         mAdapter.setSheroesGenericListData(mCommentReactionDocList);
         mLayoutManager.scrollToPosition(mCommentReactionDocList.size());
         mAdapter.notifyDataSetChanged();
+        if (mRecyclerView.getItemAnimator() instanceof SimpleItemAnimator) {
+            ((SimpleItemAnimator)mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+            ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setAddDuration(AppConstants.NO_REACTION_CONSTANT);
+        }
     }
 
     @Override
@@ -323,6 +328,7 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
             mCommentReactionPresenter.addCommentListFromPresenter(mAppUtils.postCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId(), mEtUserCommentDescription.getText().toString(), isAnonymous));
             mEtUserCommentDescription.setText(AppConstants.EMPTY_STRING);
         }
+       AppUtils.showKeyboard(tvPostComment,TAG);
 
     }
 

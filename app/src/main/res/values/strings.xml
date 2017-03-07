@@ -41,8 +41,10 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_COMMUNITIY">Community</string>
     <string name="ID_SEARCH">Search</string>
     <string name="ID_RECENT_SEARCH">Recent Search</string>
-    <string name="ID_SEARCH_IN_FEED">Search communities,article &amp; job</string>
-    <string name="ID_SEARCH_IN_COMMUNITIES">Search communities</string>
+    <string name="ID_SEARCH_IN_FEED">Communities, Articles &amp; Jobs</string>
+    <string name="ID_SEARCH_IN_COMMUNITIES">Search Communities</string>
+    <string name="ID_SEARCH_IN_ARTICLES">Search Articles</string>
+    <string name="ID_SEARCH_IN_JOBS">Search Jobs</string>
     <string name="ID_DASHBOARD"> Working women have it hard enough – managing a 9 to 6 job along with family, friends, and the demand…View More</string>
     <string name="ID_TRENDING">Trending</string>
     <string name="ID_CHOOSE_CATEGORY">Choose Category</string>

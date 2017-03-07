@@ -10,6 +10,8 @@ import javax.inject.Singleton;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItemResponse;
@@ -115,6 +117,20 @@ public class HomeModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
+
+    public Observable<CommentReactionResponsePojo> editCommentListFromModel(CommentReactionRequestPojo commentReactionRequestPojo){
+        return sheroesAppServiceApi.editCommentFromApi(commentReactionRequestPojo)
+                .map(new Func1<CommentReactionResponsePojo, CommentReactionResponsePojo>() {
+                    @Override
+                    public CommentReactionResponsePojo call(CommentReactionResponsePojo commentReactionResponsePojo) {
+                        return commentReactionResponsePojo;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
     public Observable<HomeSpinnerItemResponse>getSpinnerListFromModel(){
         return sheroesAppServiceApi.getHomeSpinnerList()
                 .map(new Func1<HomeSpinnerItemResponse, HomeSpinnerItemResponse>() {

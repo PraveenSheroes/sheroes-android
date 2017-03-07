@@ -50,7 +50,8 @@ public class ReactionHolder  extends BaseViewHolder<CommentReactionDoc> {
             tvUserName.setText(item.getParticipantName());
         }
         if(StringUtil.isNotNullOrEmptyString(item.getParticipantName())) {
-            tvUserLoaction.setText(item.getParticipantName());
+            //TODO:: need city name
+            tvUserLoaction.setText("India");
         }
         if(StringUtil.isNotNullOrEmptyString(item.getParticipantImageUrl())) {
             String images = dataItem.getParticipantImageUrl();
