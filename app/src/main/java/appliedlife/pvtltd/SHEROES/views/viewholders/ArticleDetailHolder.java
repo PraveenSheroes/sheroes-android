@@ -299,7 +299,7 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
     public boolean userReactionLongClick() {
         mFeedDetail.setItemPosition(getAdapterPosition());
         mFeedDetail.setLongPress(true);
-        viewInterface.handleOnClick(dataItem, tvArticleDetailUserReaction);
+        viewInterface.handleOnClick(mFeedDetail, tvArticleDetailUserReaction);
         return true;
     }
     @OnClick(R.id.tv_article_detail_user_reaction)

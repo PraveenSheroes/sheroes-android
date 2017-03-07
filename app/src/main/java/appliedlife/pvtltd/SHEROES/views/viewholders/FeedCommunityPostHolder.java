@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Build;
+import android.os.Vibrator;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -224,19 +225,14 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void allTextViewStringOperations(Context context) {
         if (StringUtil.isNotNullOrEmptyString(dataItem.getAuthorName())) {
-
-            String feedTitle = dataItem.getAuthorName();
-            String feedCommunityName = dataItem.getCommunityType();
-            if (feedTitle.length() > AppConstants.WORD_LENGTH) {
-                feedTitle = feedTitle.substring(0, AppConstants.WORD_COUNT);
-            }
+            String feedTitle = dataItem.getAuthorName()+AppConstants.SPACE+mContext.getString(R.string.ID_POSTED_IN);
+            String feedCommunityName = dataItem.getNameOrTitle();
             String coloredFeedCommunityName = LEFT_HTML_COMMUNITY_TITLE_FOR_COLOR + feedCommunityName + RIGHT_HTML_COMMUNITY_TITLE_FOR_COLOR;
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                 tvFeedCommunityPostCardTitle.setText(Html.fromHtml(feedTitle + AppConstants.SPACE + coloredFeedCommunityName)); // for 24 api and more
             } else {
                 tvFeedCommunityPostCardTitle.setText(Html.fromHtml(feedTitle + AppConstants.SPACE + coloredFeedCommunityName));// or for older api
             }
-
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getCreatedDate())) {
             long createdDate = mDateUtil.getTimeInMillis(dataItem.getCreatedDate(), AppConstants.DATE_FORMAT);
@@ -592,7 +588,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
             if (tvFeedCommunityPostText.getTag().toString().equalsIgnoreCase(mViewMore)) {
                 String lessWithColor = LEFT_HTML_VEIW_TAG_FOR_COLOR + mLess + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
-                mViewMoreDescription = mContext.getString(R.string.ID_ABOUT_TEXT);
+                mViewMoreDescription = dataItem.getListDescription();
                 if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                     tvFeedCommunityPostText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + lessWithColor, 0)); // for 24 api and more
                 } else {
@@ -600,7 +596,9 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 }
                 tvFeedCommunityPostText.setTag(mLess);
             } else {
-                mViewMoreDescription = mContext.getString(R.string.ID_ABOUT_TEXT);
+                if (mViewMoreDescription.length() > AppConstants.WORD_LENGTH) {
+                    mViewMoreDescription = mViewMoreDescription.substring(0, AppConstants.WORD_COUNT);
+                }
                 tvFeedCommunityPostText.setTag(mViewMore);
                 String viewMore = LEFT_HTML_VEIW_TAG_FOR_COLOR + mViewMore + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
                 if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
@@ -709,9 +707,15 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             viewInterface.handleOnClick(dataItem, tvFeedCommunityPostUserBookmark);
         }
     }
-
+    @OnClick(R.id.tv_feed_community_post_total_reactions)
+    public void reactionClick() {
+        dataItem.setItemPosition(getAdapterPosition());
+        viewInterface.handleOnClick(dataItem, tvFeedCommunityPostTotalReactions);
+    }
     @OnLongClick(R.id.tv_feed_community_post_user_reaction)
     public boolean userReactionLongClick() {
+        Vibrator vibe = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE) ;
+        vibe.vibrate(100);
         dataItem.setItemPosition(getAdapterPosition());
         dataItem.setLongPress(true);
         viewInterface.handleOnClick(dataItem, tvFeedCommunityPostUserReaction);

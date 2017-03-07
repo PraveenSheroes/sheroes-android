@@ -9,6 +9,7 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -18,7 +19,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -30,7 +30,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -79,7 +78,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ImageFullViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobLocationFilter;
 import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunitiesFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunityInviteSearchFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunityInviteMemberFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SettingAboutFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SettingFeedbackFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SettingFragment;
@@ -137,13 +136,12 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
     FloatingActionButton mFloatingActionButton;
     @Bind(R.id.li_home_community_button_layout)
     LinearLayout liHomeCommunityButtonLayout;
-    @Bind(R.id.rl_search_box)
-    RelativeLayout mRlSearchBox;
     GenericRecyclerViewAdapter mAdapter;
     private List<HomeSpinnerItem> mHomeSpinnerItemList = new ArrayList<>();
     private HomeSpinnerFragment mHomeSpinnerFragment;
     private FragmentOpen mFragmentOpen;
     private CustiomActionBarToggle mCustiomActionBarToggle;
+
     public View mArticlePopUp, mCommunityPopUp, mCommunityPostPopUp;
     private FeedDetail mFeedDetail;
 
@@ -173,13 +171,13 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
         assignNavigationRecyclerListView();
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getPhotoUrl())) {
             //TODO: this data to be removed
-            String profile =userPreference.get().getUserSummary().getPhotoUrl(); //"https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAhNAAAAJDYwZWIyZTg5LWFmOTItNGIwYS05YjQ5LTM2YTRkNGQ2M2JlNw.jpg";
+            String profile = userPreference.get().getUserSummary().getPhotoUrl(); //"https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAhNAAAAJDYwZWIyZTg5LWFmOTItNGIwYS05YjQ5LTM2YTRkNGQ2M2JlNw.jpg";
             Glide.with(this)
                     .load(profile)
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .skipMemoryCache(true)
                     .into(ivDrawerProfileCircleIcon);
-            mTvUserName.setText(userPreference.get().getUserSummary().getFirstName()+AppConstants.SPACE+userPreference.get().getUserSummary().getLastName());
+            mTvUserName.setText(userPreference.get().getUserSummary().getFirstName() + AppConstants.SPACE + userPreference.get().getUserSummary().getLastName());
             //mTvUserLocation.setText("Delhi, India");
             Glide.with(this)
                     .load(profile).asBitmap()
@@ -347,7 +345,16 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
                 mFragmentOpen.setReactionList(true);
                 openCommentReactionFragment(mFeedDetail);
                 break;
-
+            case R.id.tv_feed_community_total_reactions:
+                mFragmentOpen.setCommentList(false);
+                mFragmentOpen.setReactionList(true);
+                openCommentReactionFragment(mFeedDetail);
+                break;
+            case R.id.tv_feed_community_post_total_reactions:
+                mFragmentOpen.setCommentList(false);
+                mFragmentOpen.setReactionList(true);
+                openCommentReactionFragment(mFeedDetail);
+                break;
             case R.id.li_feed_article_join_conversation:
                 mFragmentOpen.setCommentList(true);
                 openCommentReactionFragment(mFeedDetail);
@@ -462,9 +469,16 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
     }
 
     private void bookmarkCall() {
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-        if (AppUtils.isFragmentUIActive(fragment)) {
-            ((HomeFragment) fragment).bookMarkForCard(mFeedDetail);
+        if (mFragmentOpen.isBookmarkFragment()) {
+            Fragment fragmentBookMark = getSupportFragmentManager().findFragmentByTag(BookmarksFragment.class.getName());
+            if (AppUtils.isFragmentUIActive(fragmentBookMark)) {
+                ((BookmarksFragment) fragmentBookMark).bookMarkForCard(mFeedDetail);
+            }
+        } else {
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+            if (AppUtils.isFragmentUIActive(fragment)) {
+                ((HomeFragment) fragment).bookMarkForCard(mFeedDetail);
+            }
         }
     }
 
@@ -511,7 +525,6 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
                         openCommentReactionFragment(mFeedDetail);
                     }
                 }
-
                 popupWindow.dismiss();
             }
         });
@@ -539,11 +552,23 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
         tvShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //TODO:: reveiw for share
+               /* if (mFragmentOpen.isBookmarkFragment()) {
+                    Fragment fragment = getSupportFragmentManager().findFragmentByTag(BookmarksFragment.class.getName());
+                    if (AppUtils.isFragmentUIActive(fragment)) {
+                        ((BookmarksFragment) fragment).commentListRefresh(mFeedDetail);
+                    }
+                } else {
+                    Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+                    if (AppUtils.isFragmentUIActive(fragment)) {
+                        ((HomeFragment) fragment).commentListRefresh(mFeedDetail);
+                    }
+                }*/
                 FeedDetail feedDetail = (FeedDetail) baseResponse;
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType(AppConstants.SHARE_MENU_TYPE);
-                intent.putExtra(Intent.EXTRA_TEXT,feedDetail.getSlugS());
-                intent.putExtra(Intent.EXTRA_SUBJECT,feedDetail.getDescription());
+                intent.putExtra(Intent.EXTRA_TEXT, feedDetail.getSlugS());
+                intent.putExtra(Intent.EXTRA_SUBJECT, feedDetail.getDescription());
                 startActivity(Intent.createChooser(intent, AppConstants.SHARE));
                 popupWindow.dismiss();
             }
@@ -651,6 +676,20 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
     }
 
     private void openCommentReactionFragment(FeedDetail feedDetail) {
+        if (mFragmentOpen.isBookmarkFragment()) {
+            Fragment fragmentBookMark = getSupportFragmentManager().findFragmentByTag(BookmarksFragment.class.getName());
+            if (AppUtils.isFragmentUIActive(fragmentBookMark)) {
+                clickCommentReactionFragment( feedDetail);
+            }
+        } else {
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+            if (AppUtils.isFragmentUIActive(fragment)) {
+                clickCommentReactionFragment( feedDetail);
+            }
+        }
+    }
+    private void clickCommentReactionFragment(FeedDetail feedDetail)
+    {
         CommentReactionFragment commentReactionFragmentForArticle = new CommentReactionFragment();
         Bundle bundleArticle = new Bundle();
         bundleArticle.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, mFragmentOpen);
@@ -692,9 +731,16 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
 
     @Override
     public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-        if (AppUtils.isFragmentUIActive(fragment)) {
-            ((HomeFragment) fragment).likeAndUnlikeRequest(baseResponse, reactionValue, position);
+        if (mFragmentOpen.isBookmarkFragment()) {
+            Fragment fragmentBookMark = getSupportFragmentManager().findFragmentByTag(BookmarksFragment.class.getName());
+            if (AppUtils.isFragmentUIActive(fragmentBookMark)) {
+                ((BookmarksFragment) fragmentBookMark).likeAndUnlikeRequest(baseResponse, reactionValue, position);
+            }
+        } else {
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+            if (AppUtils.isFragmentUIActive(fragment)) {
+                ((HomeFragment) fragment).likeAndUnlikeRequest(baseResponse, reactionValue, position);
+            }
         }
     }
 
@@ -756,7 +802,7 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
         mTabLayout.setupWithViewPager(mViewPager);
     }
 
-    @OnClick(R.id.rl_search_box)
+    @OnClick(R.id.tv_search_box)
     public void searchButtonClick() {
         Intent intent = new Intent(this, HomeSearchActivity.class);
         Bundle bundle = new Bundle();
@@ -775,7 +821,7 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
             bundle.putParcelableArrayList(AppConstants.HOME_SPINNER_FRAGMENT, (ArrayList<? extends Parcelable>) mHomeSpinnerItemList);
             mHomeSpinnerFragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
-                    .replace(R.id.fragment_home_spinner, mHomeSpinnerFragment, HomeSpinnerFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+                    .replace(R.id.fl_article_card_view, mHomeSpinnerFragment, HomeSpinnerFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
             mFragmentOpen.setOpen(true);
         } else {
             onBackPressed();
@@ -879,11 +925,11 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
         mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_unselected_icon), null, null);
         mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_unselected_icon), null, null);
         mTvCommunities.setText(AppConstants.EMPTY_STRING);
-        MyCommunityInviteSearchFragment myCommunityInviteSearchFragment = new MyCommunityInviteSearchFragment();
+        MyCommunityInviteMemberFragment myCommunityInviteMemberFragment = new MyCommunityInviteMemberFragment();
         Bundle bundleArticle = new Bundle();
-        myCommunityInviteSearchFragment.setArguments(bundleArticle);
+        myCommunityInviteMemberFragment.setArguments(bundleArticle);
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
-                .replace(R.id.fl_article_card_view, myCommunityInviteSearchFragment, MyCommunityInviteSearchFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+                .replace(R.id.fl_feed_comments, myCommunityInviteMemberFragment, MyCommunityInviteMemberFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
         mTvSpinnerIcon.setVisibility(View.VISIBLE);
     }
 
@@ -985,7 +1031,7 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
         Bundle bundle = new Bundle();
         articlesFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
-                .replace(R.id.fl_Job_card_view, articlesFragment).addToBackStack(null).commitAllowingStateLoss();
+                .replace(R.id.fl_article_card_view, articlesFragment).addToBackStack(null).commitAllowingStateLoss();
         mTvSpinnerIcon.setVisibility(View.GONE);
     }
 
@@ -996,9 +1042,16 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
             mFragmentOpen.setOpen(false);
         } else if (mFragmentOpen.isCommentList()) {
             getSupportFragmentManager().popBackStackImmediate();
-            Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-            if (AppUtils.isFragmentUIActive(fragment)) {
-                ((HomeFragment) fragment).commentListRefresh(mFeedDetail);
+            if (mFragmentOpen.isBookmarkFragment()) {
+                Fragment fragment = getSupportFragmentManager().findFragmentByTag(BookmarksFragment.class.getName());
+                if (AppUtils.isFragmentUIActive(fragment)) {
+                    ((BookmarksFragment) fragment).commentListRefresh(mFeedDetail);
+                }
+            } else {
+                Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+                if (AppUtils.isFragmentUIActive(fragment)) {
+                    ((HomeFragment) fragment).commentListRefresh(mFeedDetail);
+                }
             }
             mFragmentOpen.setCommentList(false);
         } else if (mFragmentOpen.isReactionList()) {
@@ -1276,7 +1329,8 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
 
     @OnClick(R.id.iv_home_notification_icon)
     public void notificationClick() {
-        mDrawer.openDrawer(Gravity.LEFT);
+       // mDrawer.openDrawer(Gravity.LEFT);
+        Snackbar.make(mCLMainLayout, "Work in progress", Snackbar.LENGTH_SHORT).show();
     }
 
     @Override

@@ -14,6 +14,7 @@
     <color name="noConnection">#2f2f2f</color>
     <color name="black">#de000000</color>
     <color name="blue">#3949ab</color>
+    <color name="add_member_line">#e4e9ec</color>
     <color name="shadow">#3b99fc</color>
     <color name="searchbox_text_color">#9b9b9b</color>
     <!-- Text color of the search box hint text  -->

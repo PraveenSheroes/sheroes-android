@@ -65,7 +65,8 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
     BaseHolderInterface viewInterface;
     private FeedDetail dataItem;
     Context mContext;
-
+    String mViewMore,mLess;
+    String mViewMoreDescription;
     public ArticleCardHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
@@ -77,6 +78,9 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
     public void bindData(FeedDetail item, final Context context, int position) {
         this.dataItem = item;
         mContext = context;
+        mViewMore = context.getString(R.string.ID_VIEW_MORE);
+        mLess = context.getString(R.string.ID_LESS);
+        tvArticleDescriptionText.setTag(mViewMore);
         liArticleCoverImage.removeAllViews();
         liArticleCoverImage.removeAllViewsInLayout();
 
@@ -128,7 +132,7 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
         }
         imageOperations(context);
     }
-
+    @TargetApi(AppConstants.ANDROID_SDK_24)
     private void imageOperations(Context context) {
 
         if (StringUtil.isNotNullOrEmptyString(dataItem.getAuthorImageUrl())) {
@@ -142,7 +146,6 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View backgroundImage = layoutInflater.inflate(R.layout.feed_article_single_image, null);
             final ImageView ivFirstLandscape = (ImageView) backgroundImage.findViewById(R.id.iv_feed_article_single_image);
-            ivFirstLandscape.setOnClickListener(this);
             final TextView tvFeedArticleTimeLabel = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_time_label);
             final TextView tvFeedArticleTotalViews = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_total_views);
             tvFeedArticleTotalViews.setText(dataItem.getNoOfViews() + AppConstants.SPACE + context.getString(R.string.ID_VIEWS));
@@ -160,16 +163,17 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
                     });
             liArticleCoverImage.addView(backgroundImage);
         }
-        if (StringUtil.isNotNullOrEmptyString(dataItem.getListShortDescription())) {
-            String listShortDescription = dataItem.getListShortDescription();
-            if (listShortDescription.length() > AppConstants.WORD_LENGTH) {
-                listShortDescription = listShortDescription.substring(0, AppConstants.WORD_COUNT);
+
+        mViewMoreDescription = dataItem.getListDescription();
+        if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
+            if (mViewMoreDescription.length() > AppConstants.WORD_LENGTH) {
+                mViewMoreDescription = mViewMoreDescription.substring(0, AppConstants.WORD_COUNT);
             }
-            String changeDate = LEFT_HTML_TAG_FOR_COLOR + context.getString(R.string.ID_VIEW_MORE) + RIGHT_HTML_TAG_FOR_COLOR;
+            String viewMore = LEFT_HTML_TAG_FOR_COLOR + mViewMore + RIGHT_HTML_TAG_FOR_COLOR;
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                tvArticleDescriptionText.setText(Html.fromHtml(listShortDescription + AppConstants.SPACE + changeDate, 0)); // for 24 api and more
+                tvArticleDescriptionText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + viewMore, 0)); // for 24 api and more
             } else {
-                tvArticleDescriptionText.setText(Html.fromHtml(listShortDescription + AppConstants.SPACE + changeDate));// or for older api
+                tvArticleDescriptionText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + viewMore));// or for older api
             }
         }
     }
@@ -202,6 +206,35 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
             viewInterface.handleOnClick(dataItem, tvArticleBookmark);
         }
     }
+
+    @TargetApi(AppConstants.ANDROID_SDK_24)
+    @OnClick(R.id.tv_article_description_text)
+    public void viewMoreClick() {
+        if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
+            if (tvArticleDescriptionText.getTag().toString().equalsIgnoreCase(mViewMore)) {
+                String lessWithColor = LEFT_HTML_TAG_FOR_COLOR + mLess + RIGHT_HTML_TAG_FOR_COLOR;
+                mViewMoreDescription = dataItem.getListDescription();
+                if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                    tvArticleDescriptionText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + lessWithColor, 0)); // for 24 api and more
+                } else {
+                    tvArticleDescriptionText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + lessWithColor));// or for older api
+                }
+                tvArticleDescriptionText.setTag(mLess);
+            } else {
+                tvArticleDescriptionText.setTag(mViewMore);
+                if (mViewMoreDescription.length() > AppConstants.WORD_LENGTH) {
+                    mViewMoreDescription = mViewMoreDescription.substring(0, AppConstants.WORD_COUNT);
+                }
+                String viewMore = LEFT_HTML_TAG_FOR_COLOR + mViewMore + RIGHT_HTML_TAG_FOR_COLOR;
+                if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                    tvArticleDescriptionText.setText(Html.fromHtml(mViewMoreDescription.substring(0, AppConstants.WORD_COUNT) + AppConstants.DOTS + AppConstants.SPACE + viewMore, 0)); // for 24 api and more
+                } else {
+                    tvArticleDescriptionText.setText(Html.fromHtml(mViewMoreDescription.substring(0, AppConstants.WORD_COUNT) + AppConstants.DOTS + AppConstants.SPACE + viewMore));// or for older api
+                }
+            }
+        }
+    }
+
 
     @Override
     public void onClick(View view) {

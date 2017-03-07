@@ -113,7 +113,7 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
             for (String jobType : jobTypes) {
                 mergeJobTypes += jobType + AppConstants.PIPE;
             }
-            tvFeedJobType.setText(mergeJobTypes);
+            tvFeedJobType.setText(mergeJobTypes.substring(0,mergeJobTypes.length()-1));
         }
         if (StringUtil.isNotEmptyCollection(dataItem.getSearchTextSkills())) {
             List<String> jobSkills = dataItem.getSearchTextSkills();

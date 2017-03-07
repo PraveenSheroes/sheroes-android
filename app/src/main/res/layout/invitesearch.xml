@@ -41,7 +41,7 @@
             android:background="@drawable/ic_community_icon"
             />
         <TextView
-            android:id="@+id/tv_invite_text"
+            android:id="@+id/tv_invite_member_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_size_5"

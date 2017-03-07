@@ -448,7 +448,7 @@ public class ArticleDetailActivity extends BaseActivity implements BaseHolderInt
                     if (AppUtils.isFragmentUIActive(fragmentCommentReaction)) {
                         commentReactionDoc.setActive(false);
                         commentReactionDoc.setEdit(false);
-                        ((CommentReactionFragment) fragmentCommentReaction).editCommentInList(commentReactionDoc);
+                        ((CommentReactionFragment) fragmentCommentReaction).deleteCommentFromList(commentReactionDoc);
                     }
                 } else {
                     if (null != mFeedDetail) {

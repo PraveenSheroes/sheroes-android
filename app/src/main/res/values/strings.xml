@@ -16,6 +16,7 @@
     <string name="ID_ERROR_INVALID_EMAIL">This email address is invalid</string>
     <string name="ID_ERROR_INVALID_PASSWORD">This password is too short</string>
     <string name="ID_ERROR_FIELD_REQUIRED">This field is required</string>
+    <string name="ID_POSTED_IN">posted in</string>
     <!--String related in home page-->
 
     <string name="ID_NAVIGATION_DRAWER_OPEN">Open navigation drawer</string>
@@ -30,7 +31,7 @@ Today’s companies need to attract and retain the best and they are upping thei
 Let’s check out the Top 5 companies that believe in much more than just hard work!</string>
 
     <!--String related to facebook integration-->
-    <string name="app_id">994271980664614</string>
+    <string name="ID_FACEBOOK_APP_ID">994271980664614</string>
     <!--Fragment classes-->
     <string name="ID_ALL">All</string>
     <string name="ID_COMMUNITIES">Communities</string>

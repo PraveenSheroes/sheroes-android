@@ -77,8 +77,8 @@ public class LoginFragment extends BaseFragment implements LoginView {
     EditText mPasswordView;
     @Bind(R.id.pb_login_progress_bar)
     ProgressBar mProgressBar;
-    //  @Bind(R.id.login_button)
-    //  LoginButton mFbLogin;
+      @Bind(R.id.login_button)
+      LoginButton mFbLogin;
     FragmentIntractionWithActivityListner fragmentIntractionWithActivityListner;
     private LoginActivityIntractionListner mLoginActivityIntractionListner;
     private static final int READ_CONTACTS_PERMISSIONS_REQUEST1 = 1;
@@ -144,19 +144,19 @@ public class LoginFragment extends BaseFragment implements LoginView {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        LoginButton loginButton = (LoginButton) view.findViewById(R.id.login_button);
+     /*   LoginButton loginButton = (LoginButton) view.findViewById(R.id.login_button);
         loginButton.setReadPermissions(Arrays.asList("public_profile", "email", "user_birthday", "user_friends"));
         loginButton.setFragment(this);
-        loginButton.registerCallback(callbackManager, callback);
+        loginButton.registerCallback(callbackManager, callback);*/
 
     }
- /*   @OnClick(R.id.login_button)
+    @OnClick(R.id.login_button)
     public void fbOnClick()
     {
         mFbLogin.setReadPermissions(Arrays.asList("public_profile", "email", "user_birthday", "user_friends"));
         mFbLogin.setFragment(this);
         mFbLogin.registerCallback(callbackManager, callback);
-    }*/
+    }
 
     /**
      * Stor token into share prefrances

@@ -7,10 +7,11 @@
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/inivite_search_toolbar"
+        android:id="@+id/inivite_member_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:background="@drawable/rectangle_grey_round_corner">
 
         <TextView
             android:id="@+id/tv_back_community"
@@ -34,6 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:visibility="gone"
         android:layout_centerVertical="true"
         android:orientation="vertical">
 
@@ -45,7 +47,7 @@
             android:background="@drawable/ic_community_icon" />
 
         <TextView
-            android:id="@+id/tv_invite_text"
+            android:id="@+id/tv_invite_member_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -63,17 +65,17 @@
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_invite_search_list"
+        android:id="@+id/rv_invite_member_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/search_toolbar"
-        android:divider="@color/black"
-        android:visibility="gone" />
+        android:layout_below="@+id/inivite_member_toolbar"
+        android:divider="@color/black" />
 
     <ProgressBar
-        android:id="@+id/pb_invite_search_progress_bar"
+        android:id="@+id/pb_invite_member_progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:layout_below="@+id/search_toolbar"
         android:layout_centerInParent="true" />
 </RelativeLayout>

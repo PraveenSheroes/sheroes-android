@@ -181,7 +181,7 @@
 
             <TextView
                 android:id="@+id/tv_feed_article_reaction2"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_size_12"
                 android:drawableLeft="@drawable/ic_emoji2_with_you" />
@@ -210,8 +210,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginRight="@dimen/dp_size_84"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:layout_marginRight="@dimen/dp_size_74"
                 android:gravity="center"
                 android:textColor="@color/feed_article_comment"
                 android:textSize="@dimen/sp_size_11" />

@@ -32,7 +32,6 @@
                 android:id="@+id/rl_search_box"
                 layout="@layout/home_search_bar"
                 android:layout_width="match_parent"
-                android:layout_marginLeft="-150dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|top" />
         </android.support.v7.widget.Toolbar>
@@ -79,26 +78,6 @@
 
     <include
         android:id="@+id/fl_article_card_view"
-        layout="@layout/fragment_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-    <include
-        android:id="@+id/fl_Job_card_view"
-        layout="@layout/fragment_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <include
-        android:id="@+id/fl_setting_view"
-        layout="@layout/fragment_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-    <include
-        android:id="@+id/fragment_home_spinner"
         layout="@layout/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

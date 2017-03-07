@@ -8,6 +8,9 @@
         android:id="@+id/rv_spinner_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/rectangle_pop_border"
+        android:layout_marginLeft="@dimen/dp_size_5"
+        android:layout_marginRight="@dimen/dp_size_5"
         android:divider="@color/fully_transparent" />
 
     <ProgressBar

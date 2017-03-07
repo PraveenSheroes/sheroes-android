@@ -82,6 +82,12 @@ public enum HolderMapping {
             return new SearchModuleHolder(view, viewInterface);
         }
     },
+    INVITE_MEMBER_MODULE(R.layout.initvite_member_list_item) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new InviteMemberHolder(view, viewInterface);
+        }
+    },
     INVITE_SEARCH_MODULE(R.layout.invitesearch_item) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
@@ -315,7 +321,7 @@ public enum HolderMapping {
                             returnView = FEED_COMMUNITY_POST.ordinal();
                             break;
                         case AppConstants.USER_SUB_TYPE:
-                            returnView = INVITE_SEARCH_MODULE.ordinal();
+                            returnView = INVITE_MEMBER_MODULE.ordinal();
                             break;
                        default:
                     }

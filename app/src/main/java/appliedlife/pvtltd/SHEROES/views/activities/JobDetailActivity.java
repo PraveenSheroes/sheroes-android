@@ -47,6 +47,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobDetailFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by SHEROES-TECH on 20-02-2017.
@@ -102,12 +103,19 @@ public class JobDetailActivity extends BaseActivity implements BaseHolderInterfa
         }
         setPagerAndLayouts();
     }
+    @OnClick(R.id.iv_job_detail_back)
+    public void onBackClick() {
 
+        if (!mFeedDetail.isFromHome()) {
+            Intent intent = new Intent(this, HomeActivity.class);
+            startActivity(intent);
+        }
+        finish();
+        overridePendingTransition(R.anim.fade_in_dialog, R.anim.fade_out_dialog);
+    }
     private void setPagerAndLayouts() {
         ViewCompat.setTransitionName(mAppBarLayout, AppConstants.JOB_DETAIL);
         supportPostponeEnterTransition();
-        setSupportActionBar(mToolbarArticleDetail);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mCustomCollapsingToolbarLayout.setExpandedSubTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
         mCustomCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
         mCustomCollapsingToolbarLayout.setExpandedTitleMarginStart(200);

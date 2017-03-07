@@ -220,7 +220,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginRight="@dimen/dp_size_84"
+                android:layout_marginRight="@dimen/dp_size_74"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:textColor="@color/feed_article_comment"
                 android:textSize="@dimen/sp_size_11" />

@@ -44,19 +44,19 @@ import butterknife.OnClick;
  * Created by Praveen_Singh on 06-03-2017.
  */
 
-public class MyCommunityInviteSearchFragment extends BaseFragment implements HomeView{
+public class MyCommunityInviteMemberFragment extends BaseFragment implements HomeView{
     private final String TAG = LogUtils.makeLogTag(CommunityInviteSearchFragment.class);
     @Inject
     HomePresenter mHomePresenter;
     @Inject
     AppUtils mAppUtils;
-    @Bind(R.id.rv_invite_search_list)
+    @Bind(R.id.rv_invite_member_list)
     RecyclerView mRecyclerView;
-    @Bind(R.id.pb_invite_search_progress_bar)
+    @Bind(R.id.pb_invite_member_progress_bar)
     ProgressBar mProgressBar;
     @Bind(R.id.li_invite_member)
     LinearLayout liInviteMember;
-    @Bind(R.id.tv_invite_text)
+    @Bind(R.id.tv_invite_member_text)
     TextView tvInviteText;
     @Bind(R.id.tv_invite_user_only)
     TextView tvInviteUserOnly;
@@ -83,7 +83,7 @@ public class MyCommunityInviteSearchFragment extends BaseFragment implements Hom
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
-        View view = inflater.inflate(R.layout.mycommunity_invite_search, container, false);
+        View view = inflater.inflate(R.layout.my_community_invite_member, container, false);
         ButterKnife.bind(this,view);
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ALL_SEARCH, AppConstants.EMPTY_STRING);
         mHomePresenter.attachView(this);
@@ -101,6 +101,7 @@ public class MyCommunityInviteSearchFragment extends BaseFragment implements Hom
     @Override
     public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
         if(StringUtil.isNotEmptyCollection(feedDetailList)&&mAdapter!=null) {
+            liInviteMember.setVisibility(View.GONE);
             mAdapter.setCallForRecycler(AppConstants.FEED_SUB_TYPE);
             mAdapter.setSheroesGenericListData(feedDetailList);
             mAdapter.notifyDataSetChanged();

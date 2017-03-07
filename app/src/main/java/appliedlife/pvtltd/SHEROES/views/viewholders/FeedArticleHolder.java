@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Build;
+import android.os.Vibrator;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -106,8 +107,8 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     BaseHolderInterface viewInterface;
     private FeedDetail dataItem;
     Context mContext;
-    String mViewMore;
-
+    String mViewMore,mLess;
+    String mViewMoreDescription;
     public FeedArticleHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
@@ -120,6 +121,8 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         this.dataItem = item;
         this.mContext = context;
         mViewMore = context.getString(R.string.ID_VIEW_MORE);
+        mLess = context.getString(R.string.ID_LESS);
+        tvFeedArticleHeaderLebel.setTag(mViewMore);
         imageOperations(context);
         allTextViewStringOperations(context);
     }
@@ -143,18 +146,17 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
             tvFeedArticleHeader.setText(dataItem.getNameOrTitle());
         }
-        if (StringUtil.isNotNullOrEmptyString(dataItem.getListDescription())) {
-            String description = dataItem.getListDescription().trim();
-            if (description.length() > AppConstants.WORD_LENGTH) {
-                description = description.substring(0, AppConstants.WORD_COUNT);
+        mViewMoreDescription = dataItem.getListDescription();
+        if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
+            if (mViewMoreDescription.length() > AppConstants.WORD_LENGTH) {
+                mViewMoreDescription = mViewMoreDescription.substring(0, AppConstants.WORD_COUNT);
             }
             String viewMore = LEFT_HTML_VEIW_TAG_FOR_COLOR + mViewMore + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                tvFeedArticleHeaderLebel.setText(Html.fromHtml(description + AppConstants.DOTS + AppConstants.SPACE + viewMore, 0)); // for 24 api and more
+                tvFeedArticleHeaderLebel.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + viewMore, 0)); // for 24 api and more
             } else {
-                tvFeedArticleHeaderLebel.setText(Html.fromHtml(description + AppConstants.DOTS + AppConstants.SPACE + viewMore));// or for older api
+                tvFeedArticleHeaderLebel.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + viewMore));// or for older api
             }
-
         }
         if (dataItem.isBookmarked()) {
             tvFeedArticleUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_active, 0);
@@ -259,7 +261,6 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
                     }
                     ivFeedArticleUserPic.bindImage(feedUserIconUrl);
                 }
-
                 if (lastComment.isMyOwnParticipation()) {
                     tvFeedArticleUserCommentPostMenu.setVisibility(View.VISIBLE);
                 } else {
@@ -378,10 +379,39 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
 
     @OnLongClick(R.id.tv_feed_article_user_reaction)
     public boolean userReactionLongClick() {
+        Vibrator vibe = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE) ;
+        vibe.vibrate(100);
         dataItem.setItemPosition(getAdapterPosition());
         dataItem.setLongPress(true);
         viewInterface.handleOnClick(dataItem, tvFeedArticleUserReaction);
         return true;
+    }
+    @TargetApi(AppConstants.ANDROID_SDK_24)
+    @OnClick(R.id.tv_feed_article_header_lebel)
+    public void viewMoreClick() {
+        if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
+            if (tvFeedArticleHeaderLebel.getTag().toString().equalsIgnoreCase(mViewMore)) {
+                String lessWithColor = LEFT_HTML_VEIW_TAG_FOR_COLOR + mLess + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
+                mViewMoreDescription = dataItem.getListDescription();
+                if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                    tvFeedArticleHeaderLebel.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + lessWithColor, 0)); // for 24 api and more
+                } else {
+                    tvFeedArticleHeaderLebel.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + lessWithColor));// or for older api
+                }
+                tvFeedArticleHeaderLebel.setTag(mLess);
+            } else {
+                tvFeedArticleHeaderLebel.setTag(mViewMore);
+                if (mViewMoreDescription.length() > AppConstants.WORD_LENGTH) {
+                    mViewMoreDescription = mViewMoreDescription.substring(0, AppConstants.WORD_COUNT);
+                }
+                String viewMore = LEFT_HTML_VEIW_TAG_FOR_COLOR + mViewMore + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
+                if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                    tvFeedArticleHeaderLebel.setText(Html.fromHtml(mViewMoreDescription.substring(0, AppConstants.WORD_COUNT) + AppConstants.DOTS + AppConstants.SPACE + viewMore, 0)); // for 24 api and more
+                } else {
+                    tvFeedArticleHeaderLebel.setText(Html.fromHtml(mViewMoreDescription.substring(0, AppConstants.WORD_COUNT) + AppConstants.DOTS + AppConstants.SPACE + viewMore));// or for older api
+                }
+            }
+        }
     }
 
     @Override

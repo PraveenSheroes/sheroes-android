@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Build;
+import android.os.Vibrator;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -101,6 +102,7 @@ public class FeedCommunityHolder extends BaseViewHolder<FeedDetail> {
     FrameLayout flFeedCommunityNoReactionComment;
     @Bind(R.id.tv_feed_community_user_comment_post_menu)
     TextView tvFeedCommunityUserCommentPostMenu;
+
     BaseHolderInterface viewInterface;
     private FeedDetail dataItem;
     String mViewMoreDescription;
@@ -377,6 +379,7 @@ public class FeedCommunityHolder extends BaseViewHolder<FeedDetail> {
     public void viewMoreClick() {
         if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
             if (tvFeedCommunityText.getTag().toString().equalsIgnoreCase(mViewMore)) {
+                mViewMoreDescription=dataItem.getListDescription();
                 String lessWithColor = LEFT_HTML_VEIW_TAG_FOR_COLOR + mLess + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
                 if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                     tvFeedCommunityText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + lessWithColor, 0)); // for 24 api and more
@@ -386,6 +389,9 @@ public class FeedCommunityHolder extends BaseViewHolder<FeedDetail> {
                 tvFeedCommunityText.setTag(mLess);
             } else {
                 tvFeedCommunityText.setTag(mViewMore);
+                if (mViewMoreDescription.length() > AppConstants.WORD_LENGTH) {
+                    mViewMoreDescription = mViewMoreDescription.substring(0, AppConstants.WORD_COUNT);
+                }
                 String viewMore = LEFT_HTML_VEIW_TAG_FOR_COLOR + mViewMore + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
                 if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                     tvFeedCommunityText.setText(Html.fromHtml(mViewMoreDescription.substring(0, AppConstants.WORD_COUNT) + AppConstants.DOTS + AppConstants.SPACE + viewMore, 0)); // for 24 api and more
@@ -401,9 +407,15 @@ public class FeedCommunityHolder extends BaseViewHolder<FeedDetail> {
     public void onClick(View view) {
 
     }
-
+    @OnClick(R.id.tv_feed_community_total_reactions)
+    public void reactionClick() {
+        dataItem.setItemPosition(getAdapterPosition());
+        viewInterface.handleOnClick(dataItem, tvFeedCommunityTotalReactions);
+    }
     @OnLongClick(R.id.tv_feed_community_user_reaction)
     public boolean userReactionLongClick() {
+        Vibrator vibe = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE) ;
+        vibe.vibrate(100);
         dataItem.setItemPosition(getAdapterPosition());
         dataItem.setLongPress(true);
         viewInterface.handleOnClick(dataItem, tvFeedCommunityUserReaction);
