@@ -10,8 +10,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
@@ -175,25 +173,7 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
         }
     }
 
-    @Override
-    public void dataOperationOnClick(BaseResponse baseResponse) {
 
-    }
-
-    @Override
-    public void setListData(BaseResponse data, boolean flag) {
-    }
-
-    @Override
-    public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-
-    }
-
-
-    @Override
-    public List getListData() {
-        return null;
-    }
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

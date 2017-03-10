@@ -45,15 +45,6 @@ public class HomeSpinnerFragment extends BaseFragment implements HomeView {
     GenericRecyclerViewAdapter mAdapter;
     private List<HomeSpinnerItem> mHomeSpinnerItemList;
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Bundle bundle = getArguments();
-        if (bundle != null)
-        {
-            mHomeSpinnerItemList =bundle.getParcelableArrayList(AppConstants.HOME_SPINNER_FRAGMENT);
-        }
-    }
-    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
     }
@@ -65,6 +56,11 @@ public class HomeSpinnerFragment extends BaseFragment implements HomeView {
         View view = inflater.inflate(R.layout.fragment_home_spinner_layout, container, false);
         ButterKnife.bind(this, view);
         mHomePresenter.attachView(this);
+        Bundle bundle = getArguments();
+        if (bundle != null)
+        {
+            mHomeSpinnerItemList =bundle.getParcelableArrayList(AppConstants.HOME_SPINNER_FRAGMENT);
+        }
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(manager);
         mAdapter = new GenericRecyclerViewAdapter(getContext(), (HomeActivity) getActivity());

@@ -29,7 +29,6 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.filtersorter.CommentCreatedDateComparator;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionDoc;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -55,8 +54,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnFocusChange;
-
-import static java.util.Collections.sort;
 
 /**
  * Created by Praveen_Singh on 24-01-2017.
@@ -102,23 +99,25 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
     private LinearLayoutManager mLayoutManager;
     private HomeActivityIntractionListner mHomeActivityIntractionListner;
     @Bind(R.id.swipe_comment_view)
-    SwipeRefreshLayout swipeView;
+    SwipeRefreshLayout mSwipeView;
+    @Bind(R.id.li_no_result)
+    LinearLayout mLiNoResult;
     @Inject
-    Preference<LoginResponse> userPreference;
+    Preference<LoginResponse> mUserPreference;
     @Inject
     AppUtils mAppUtils;
     private FeedDetail mFeedDetail;
-    boolean isAnonymous = false;
+    boolean mIsAnonymous;
     private List<CommentReactionDoc> mCommentReactionDocList;
     CommentReactionDoc mCommentReactionDoc;
     FragmentIntractionWithActivityListner fragmentIntractionWithActivityListner;
     private FragmentListRefreshData mFragmentListRefreshData;
     private SwipPullRefreshList mPullRefreshList;
-    int mPageNo = AppConstants.ONE_CONSTANT;
-    int mTotalComments;
-    int isEditedOrDeletedValue = 0;
-    int countForDeleteComment = 0;
-    int countForAddComment = 0;
+    private int mPageNo = AppConstants.ONE_CONSTANT;
+    private int mTotalComments;
+    private int isEditedOrDeletedValue = 0;
+    private int countForDeleteComment = 0;
+    private int countForAddComment = 0;
 
     @Override
     public void onAttach(Context context) {
@@ -146,16 +145,57 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
             mFeedDetail = getArguments().getParcelable(AppConstants.COMMENTS);
             if (null != mFeedDetail) {
                 mTotalComments = mFeedDetail.getNoOfComments();
+                if (mFeedDetail.getNoOfLikes() < 1) {
+                    mFlCommentReaction.setVisibility(View.GONE);
+                    mViewLineReaction.setVisibility(View.GONE);
+                }
             }
         }
+        initializeUiComponent();
+        super.setCommentReaction(mFragmentListRefreshData, mAdapter, mLayoutManager, mFeedDetail, mRecyclerView, mCommentReactionPresenter, mAppUtils, mProgressBar);
+        if (mFragmentOpen.isCommentList()) {
+            mCommentReactionPresenter.getAllCommentListFromPresenter(mAppUtils.getCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId(), mFragmentListRefreshData.getPageNo()), mFragmentOpen.isReactionList());
+        } else if (mFragmentOpen.isReactionList()) {
+            mFlCommentReaction.setVisibility(View.GONE);
+            liUserComment.setVisibility(View.GONE);
+            mViewLineReaction.setVisibility(View.GONE);
+            mCommentReactionPresenter.getAllCommentListFromPresenter(mAppUtils.getCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId(), mFragmentListRefreshData.getPageNo()), mFragmentOpen.isReactionList());
+        }
+        mEtUserCommentDescription.addTextChangedListener(dataSearchTextWatcher());
+        mEtUserCommentDescription.setFocusableInTouchMode(true);
+        mEtUserCommentDescription.requestFocus();
+        mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Refresh items
+                mPullRefreshList.setPullToRefresh(false);
+                if (mFragmentOpen.isCommentList()) {
+                    mCommentReactionPresenter.getAllCommentListFromPresenter(mAppUtils.getCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId(), mFragmentListRefreshData.getPageNo()), mFragmentOpen.isReactionList());
+                } else if (mFragmentOpen.isReactionList()) {
+                    mFlCommentReaction.setVisibility(View.GONE);
+                    liUserComment.setVisibility(View.GONE);
+                    mViewLineReaction.setVisibility(View.GONE);
+                    mCommentReactionPresenter.getAllCommentListFromPresenter(mAppUtils.getCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId(), mFragmentListRefreshData.getPageNo()), mFragmentOpen.isReactionList());
+                }
+            }
+        });
+        return view;
+    }
+
+    private void initializeUiComponent() {
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
         mCommentReactionPresenter.attachView(this);
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.COMMENT_REACTION_FRAGMENT, mFragmentOpen.isReactionList(), mFeedDetail.getEntityOrParticipantId());
-        initializeUiComponent();
+
+        //TODO:: set user name here
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getFirstName())) {
+            mTvUserNameForPost.setText(mUserPreference.get().getUserSummary().getFirstName());
+            ivUserCommentProfilePic.setCircularImage(true);
+            ivUserCommentProfilePic.bindImage(mUserPreference.get().getUserSummary().getPhotoUrl());
+        }
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        switch (mFragmentOpen.getOpenCommentReactionFragmentFor())
-        {
+        switch (mFragmentOpen.getOpenCommentReactionFragmentFor()) {
             case AppConstants.ONE_CONSTANT:
                 mAdapter = new GenericRecyclerViewAdapter(getContext(), (HomeActivity) getActivity());
                 break;
@@ -183,57 +223,35 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
 
             }
         });
-
-        if (mFragmentOpen.isCommentList()) {
-            mCommentReactionPresenter.getAllCommentListFromPresenter(mAppUtils.getCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId(), mFragmentListRefreshData.getPageNo()), mFragmentOpen.isReactionList());
-        } else if (mFragmentOpen.isReactionList()) {
-            mFlCommentReaction.setVisibility(View.GONE);
-            liUserComment.setVisibility(View.GONE);
-            mViewLineReaction.setVisibility(View.GONE);
-            mCommentReactionPresenter.getAllCommentListFromPresenter(mAppUtils.getCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId(), mFragmentListRefreshData.getPageNo()), mFragmentOpen.isReactionList());
-        }
-        mEtUserCommentDescription.addTextChangedListener(dataSearchTextWatcher());
-        mEtUserCommentDescription.setFocusableInTouchMode(true);
-        mEtUserCommentDescription.requestFocus();
-        swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                // Refresh items
-            /*    mPullRefreshList.setPullToRefresh(false);
-                if (mFragmentOpen.isCommentList()) {
-                    mCommentReactionPresenter.getAllCommentListFromPresenter(mAppUtils.getCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId(), mFragmentListRefreshData.getPageNo()), mFragmentOpen.isReactionList());
-                } else if (mFragmentOpen.isReactionList()) {
-                    mFlCommentReaction.setVisibility(View.GONE);
-                    liUserComment.setVisibility(View.GONE);
-                    mViewLineReaction.setVisibility(View.GONE);
-                    mCommentReactionPresenter.getAllCommentListFromPresenter(mAppUtils.getCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId(), mFragmentListRefreshData.getPageNo()), mFragmentOpen.isReactionList());
-                }*/
-            }
-        });
-        return view;
-    }
-
-    private void initializeUiComponent() {
-        //TODO:: set user name here
-        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getFirstName())) {
-            mTvUserNameForPost.setText(userPreference.get().getUserSummary().getFirstName());
-            ivUserCommentProfilePic.setCircularImage(true);
-            ivUserCommentProfilePic.bindImage(userPreference.get().getUserSummary().getPhotoUrl());
-        }
-        if (null != mFeedDetail) {
-            if (mFeedDetail.getNoOfLikes() < 1) {
-                mFlCommentReaction.setVisibility(View.GONE);
-                mViewLineReaction.setVisibility(View.GONE);
-            }
-
-        }
     }
 
     @Override
     public void getAllCommentsAndReactions(CommentReactionResponsePojo commentReactionResponsePojo) {
-        mCommentReactionDocList = commentReactionResponsePojo.getCommentReactionDocList();
-        if (mAdapter != null & StringUtil.isNotEmptyCollection(mCommentReactionDocList)) {
-            sort(mCommentReactionDocList, new CommentCreatedDateComparator());
+        if (StringUtil.isNotEmptyCollection(commentReactionResponsePojo.getCommentReactionDocList())) {
+            mPageNo = mFragmentListRefreshData.getPageNo();
+            mFragmentListRefreshData.setPageNo(++mPageNo);
+            mPullRefreshList.allListData(commentReactionResponsePojo.getCommentReactionDocList());
+            mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
+            mCommentReactionDocList = mPullRefreshList.getFeedResponses();
+            mAdapter.notifyDataSetChanged();
+            if (!mPullRefreshList.isPullToRefresh()) {
+                mLayoutManager.scrollToPositionWithOffset(mPullRefreshList.getFeedResponses().size() - mCommentReactionDocList.size(), 0);
+            } else {
+                mLayoutManager.scrollToPositionWithOffset(0, 0);
+            }
+            mSwipeView.setRefreshing(false);
+            if (mFragmentOpen.isCommentList()) {
+                mTvUserCommentHeaderText.setText(getString(R.string.ID_REPLIES) + getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mCommentReactionDocList.size()) + getString(R.string.ID_CLOSE_BRACKET));
+            } else if (mFragmentOpen.isReactionList()) {
+                mTvUserCommentHeaderText.setText(getString(R.string.ID_REACTION) + getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mCommentReactionDocList.size()) + getString(R.string.ID_CLOSE_BRACKET));
+            }
+        } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
+            mLiNoResult.setVisibility(View.VISIBLE);
+        }
+
+
+      /*  if (mAdapter != null & StringUtil.isNotEmptyCollection(mCommentReactionDocList)) {
+            // sort(mCommentReactionDocList, new CommentCreatedDateComparator());
             if (null != mCommentReactionDoc && mCommentReactionDoc.isEdit()) {
                 mCommentReactionDocList.remove(mCommentReactionDoc.getItemPosition());
                 mEtUserCommentDescription.setText(mCommentReactionDoc.getComment());
@@ -242,7 +260,7 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
             }
             if (StringUtil.isNotEmptyCollection(mCommentReactionDocList)) {
                 List<LastComment> lastCommentList = new ArrayList<>();
-                if(mCommentReactionDocList.size()>=3) {
+                if (mCommentReactionDocList.size() >= 3) {
                     for (int i = 3; i > 0; i--) {
                         CommentReactionDoc commentReactionDoc = mCommentReactionDocList.get(mCommentReactionDocList.size() - i);
                         LastComment lastComment = new LastComment();
@@ -252,8 +270,7 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
                         lastComment.setParticipantName(commentReactionDoc.getParticipantName());
                         lastCommentList.add(lastComment);
                     }
-                }else if(mCommentReactionDocList.size()==2)
-                {
+                } else if (mCommentReactionDocList.size() == 2) {
                     for (int i = 2; i > 0; i--) {
                         CommentReactionDoc commentReactionDoc = mCommentReactionDocList.get(mCommentReactionDocList.size() - i);
                         LastComment lastComment = new LastComment();
@@ -263,8 +280,7 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
                         lastComment.setParticipantName(commentReactionDoc.getParticipantName());
                         lastCommentList.add(lastComment);
                     }
-                }else
-                {
+                } else {
                     CommentReactionDoc commentReactionDoc = mCommentReactionDocList.get(mCommentReactionDocList.size() - 1);
                     LastComment lastComment = new LastComment();
                     lastComment.setAnonymous(commentReactionDoc.isAnonymous());
@@ -299,29 +315,58 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
         } else {
             mTvUserCommentHeaderText.setText(getString(R.string.ID_NO_REPLIES));
             mTvUserCommentHeaderText.setText(getString(R.string.ID_NO_REPLIES));
-        }
+        }*/
+
+    }
+
+    private void setAdapterData() {
         mAdapter.setSheroesGenericListData(mCommentReactionDocList);
-        mLayoutManager.scrollToPosition(mCommentReactionDocList.size()-1);
+        mLayoutManager.scrollToPosition(0);
         mAdapter.notifyDataSetChanged();
         if (mRecyclerView.getItemAnimator() instanceof SimpleItemAnimator) {
-            ((SimpleItemAnimator)mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+            ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
             ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setAddDuration(AppConstants.NO_REACTION_CONSTANT);
         }
     }
 
     @Override
-    public void commentSuccess(String success, boolean isAddComment) {
+    public void commentSuccess(String success,int operationId) {
         if (success.equalsIgnoreCase(AppConstants.SUCCESS)) {
-            if (!isAddComment) {
-                mEtUserCommentDescription.setText(AppConstants.EMPTY_STRING);
-                tvPostComment.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_post_comment_active, 0, 0, 0);
-                tvPostComment.setVisibility(View.GONE);
-                mCommentReactionPresenter.getAllCommentListFromPresenter(mAppUtils.getCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId(), mFragmentListRefreshData.getPageNo()), mFragmentOpen.isReactionList());
-            } else {
-                mCommentReactionDoc = null;
-                tvPostComment.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_post_comment_active, 0, 0, 0);
-                mCommentReactionPresenter.addCommentListFromPresenter(mAppUtils.postCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId(), mEtUserCommentDescription.getText().toString(), isAnonymous));
-                mEtUserCommentDescription.setText(AppConstants.EMPTY_STRING);
+            switch (operationId)
+            {
+                case AppConstants.NO_REACTION_CONSTANT:
+                    mCommentReactionDoc.setComment(mEtUserCommentDescription.getText().toString());
+                    mEtUserCommentDescription.setText(AppConstants.EMPTY_STRING);
+                    tvPostComment.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_post_comment_active, 0, 0, 0);
+                    tvPostComment.setVisibility(View.GONE);
+                    // mCommentReactionPresenter.getAllCommentListFromPresenter(mAppUtils.getCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId(), mFragmentListRefreshData.getPageNo()), mFragmentOpen.isReactionList());
+                    mCommentReactionDocList.add(0,mCommentReactionDoc);
+                    List<LastComment> lastCommentList = new ArrayList<>();
+                    LastComment lastComment = new LastComment();
+                    lastComment.setAnonymous(mCommentReactionDoc.isAnonymous());
+                    lastComment.setComment(mCommentReactionDoc.getComment());
+                    lastComment.setParticipantImageUrl(mCommentReactionDoc.getParticipantImageUrl());
+                    lastComment.setParticipantName(mCommentReactionDoc.getParticipantName());
+                    lastCommentList.add(lastComment);
+
+                    mFeedDetail.setLastComments(lastCommentList);
+                    setAdapterData();
+                    break;
+                case AppConstants.ONE_CONSTANT:
+                    tvPostComment.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_post_comment_active, 0, 0, 0);
+                    mCommentReactionPresenter.addCommentListFromPresenter(mAppUtils.postCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId(), mEtUserCommentDescription.getText().toString(), mIsAnonymous),AppConstants.NO_REACTION_CONSTANT);
+                    break;
+                case AppConstants.TWO_CONSTANT:
+                    if (null != mCommentReactionDoc) {
+                        mCommentReactionDocList.remove(mCommentReactionDoc.getItemPosition());
+                        mEtUserCommentDescription.setText(mCommentReactionDoc.getComment());
+                        mEtUserCommentDescription.setSelection(mCommentReactionDoc.getComment().length());
+                        mEtUserCommentDescription.setTextColor(ContextCompat.getColor(getActivity(), R.color.feed_article_label));
+                    }
+                    setAdapterData();
+                    break;
+                default:
+                    LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + operationId);
             }
         }
     }
@@ -344,32 +389,10 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
     }
 
     @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
         mCommentReactionPresenter.detachView();
     }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
 
     public interface HomeActivityIntractionListner {
         void onErrorOccurence();
@@ -399,14 +422,14 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
 
     @OnClick(R.id.tv_user_name_for_post)
     public void userNamePostForComment() {
-        isAnonymous = false;
+        mIsAnonymous = false;
         mTvUserNameForPost.setTextColor(ContextCompat.getColor(getActivity(), R.color.blue));
         mTvAnonymousPost.setTextColor(ContextCompat.getColor(getActivity(), R.color.searchbox_text_color));
     }
 
     @OnClick(R.id.tv_anonymous_post)
     public void anonymousPostForComment() {
-        isAnonymous = true;
+        mIsAnonymous = true;
         mTvUserNameForPost.setTextColor(ContextCompat.getColor(getActivity(), R.color.searchbox_text_color));
         mTvAnonymousPost.setTextColor(ContextCompat.getColor(getActivity(), R.color.blue));
     }
@@ -415,12 +438,12 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
     public void postComment() {
         if (null != mCommentReactionDoc && mCommentReactionDoc.isEdit()) {
             isEditedOrDeletedValue = 2;
-            mCommentReactionPresenter.editCommentListFromPresenter(mAppUtils.editCommentRequestBuilder(mCommentReactionDoc.getEntityId(), mCommentReactionDoc.getComment(), isAnonymous, false, mCommentReactionDoc.getId()), true);
+            mCommentReactionPresenter.editCommentListFromPresenter(mAppUtils.editCommentRequestBuilder(mCommentReactionDoc.getEntityId(), mCommentReactionDoc.getComment(), mIsAnonymous, false, mCommentReactionDoc.getId()),AppConstants.ONE_CONSTANT);
         } else {
             countForAddComment++;
             isEditedOrDeletedValue = 3;
             tvPostComment.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_post_comment_active, 0, 0, 0);
-            mCommentReactionPresenter.addCommentListFromPresenter(mAppUtils.postCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId(), mEtUserCommentDescription.getText().toString(), isAnonymous));
+            mCommentReactionPresenter.addCommentListFromPresenter(mAppUtils.postCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId(), mEtUserCommentDescription.getText().toString(), mIsAnonymous),AppConstants.NO_REACTION_CONSTANT);
             mEtUserCommentDescription.setText(AppConstants.EMPTY_STRING);
         }
         AppUtils.showKeyboard(tvPostComment, TAG);
@@ -429,14 +452,21 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
 
     public void editCommentInList(CommentReactionDoc commentReactionDoc) {
         mCommentReactionDoc = commentReactionDoc;
-        mCommentReactionPresenter.getAllCommentListFromPresenter(mAppUtils.getCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId(), mFragmentListRefreshData.getPageNo()), mFragmentOpen.isReactionList());
+        // mCommentReactionPresenter.getAllCommentListFromPresenter(mAppUtils.getCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId(), mFragmentListRefreshData.getPageNo()), mFragmentOpen.isReactionList());
+        if (null != mCommentReactionDoc && mCommentReactionDoc.isEdit()) {
+            mCommentReactionDocList.remove(mCommentReactionDoc.getItemPosition());
+            mEtUserCommentDescription.setText(mCommentReactionDoc.getComment());
+            mEtUserCommentDescription.setSelection(mCommentReactionDoc.getComment().length());
+            mEtUserCommentDescription.setTextColor(ContextCompat.getColor(getActivity(), R.color.feed_article_label));
+        }
+        setAdapterData();
     }
 
     public void deleteCommentFromList(CommentReactionDoc commentReactionDoc) {
         countForDeleteComment++;
         isEditedOrDeletedValue = 1;
         mCommentReactionDoc = commentReactionDoc;
-        mCommentReactionPresenter.editCommentListFromPresenter(mAppUtils.editCommentRequestBuilder(commentReactionDoc.getEntityId(), commentReactionDoc.getComment(), isAnonymous, commentReactionDoc.isActive(), commentReactionDoc.getId()), false);
+        mCommentReactionPresenter.editCommentListFromPresenter(mAppUtils.editCommentRequestBuilder(commentReactionDoc.getEntityId(), commentReactionDoc.getComment(), mIsAnonymous, commentReactionDoc.isActive(), commentReactionDoc.getId()), AppConstants.TWO_CONSTANT);
     }
 
     /**

@@ -36,6 +36,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center" />
+    <LinearLayout
+        android:id="@+id/li_no_result"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone"
+        android:background="@color/white"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:textColor="@color/detail_page_text"
+            android:layout_gravity="center"
+            android:text="@string/ID_NO_RESULT_FOUND"/>
+    </LinearLayout>
     <include
         layout="@layout/user_comment_section_layout"
         android:layout_width="match_parent"

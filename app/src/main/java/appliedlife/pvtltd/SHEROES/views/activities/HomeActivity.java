@@ -210,7 +210,7 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
             mFeedDetail = (FeedDetail) baseResponse;
             int id = view.getId();
             if (id == R.id.tv_community_join) {
-                openInviteSearch();
+                openInviteSearch(mFeedDetail);
             }else if(id==R.id.tv_add_invite)
             {
                 if(null!=mFeedDetail) {
@@ -455,16 +455,17 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
         mTvSpinnerIcon.setVisibility(View.VISIBLE);
     }
 
-    private void openInviteSearch() {
+    private void openInviteSearch(FeedDetail feedDetail) {
         mFragmentOpen=new FragmentOpen();
         mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.FOURTH_CONSTANT);
         mFlHomeFooterList.setVisibility(View.VISIBLE);
+        mTvSpinnerIcon.setVisibility(View.GONE);
         MyCommunityInviteMemberFragment myCommunityInviteMemberFragment = new MyCommunityInviteMemberFragment();
         Bundle bundleInvite = new Bundle();
+        bundleInvite.putParcelable(AppConstants.COMMUNITIES_DETAIL, feedDetail);
         myCommunityInviteMemberFragment.setArguments(bundleInvite);
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
                 .replace(R.id.fl_feed_comments, myCommunityInviteMemberFragment, MyCommunityInviteMemberFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
-        mTvSpinnerIcon.setVisibility(View.VISIBLE);
     }
 
 
@@ -556,7 +557,6 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
         mTvSearchBox.setVisibility(View.GONE);
         mTvSetting.setVisibility(View.GONE);
         mTvSetting.setText(R.string.ID_JOBS);
-
         mFlHomeFooterList.setVisibility(View.GONE);
         mToolbar.setVisibility(View.GONE);
         mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_unselected_icon), null, null);

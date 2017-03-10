@@ -72,7 +72,6 @@ public class InviteMemberHolder extends BaseViewHolder<FeedDetail> {
             tvAddInvite.setBackgroundResource(R.drawable.select_purpose_btn_shap);
             tvAddInvite.setTextColor(ContextCompat.getColor(mContext, R.color.blue));
         }
-        dataItem.setAuthorId(dataItem.getEntityOrParticipantId());
         viewInterface.handleOnClick(dataItem, tvAddInvite);
     }
 

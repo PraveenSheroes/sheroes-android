@@ -1719,7 +1719,7 @@ public class AppUtils {
         //TODO:: change rquest data
         commentReactionRequestPojo.setCloudMessagingId(AppConstants.ALL_SEARCH);
         commentReactionRequestPojo.setPageNo(pageNo);
-        commentReactionRequestPojo.setPageSize(AppConstants.WORD_LENGTH);
+        commentReactionRequestPojo.setPageSize(AppConstants.PAGE_SIZE);
         commentReactionRequestPojo.setEntityId(entityId);
         return commentReactionRequestPojo;
     }
@@ -1761,9 +1761,16 @@ public class AppUtils {
     }
 
 
-    public static CommunityRequest communityRequestBuilder(List<Long> userId) {
+    public static CommunityRequest communityRequestBuilder(List<Long> userId,long idOfEntityParticipant) {
+        AppUtils appUtils = AppUtils.getInstance();
         CommunityRequest communityRequest=new CommunityRequest();
         communityRequest.setUserId(userId);
+        communityRequest.setCommunityId(idOfEntityParticipant);
+        communityRequest.setAppVersion(appUtils.getAppVersionName());
+        communityRequest.setCloudMessagingId(AppConstants.ALL_SEARCH);
+        communityRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        communityRequest.setLastScreenName(AppConstants.COMMUNITY_DETAIL);
+        communityRequest.setScreenName(AppConstants.ALL_SEARCH);
         return communityRequest;
     }
     /**

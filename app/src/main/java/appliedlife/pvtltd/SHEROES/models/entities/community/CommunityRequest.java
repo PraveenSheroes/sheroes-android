@@ -11,6 +11,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
  */
 
 public class CommunityRequest extends BaseRequest {
+    @SerializedName("community_id")
+    private long communityId;
     @SerializedName("user_ids")
     private List<Long> userId;
 
@@ -20,5 +22,13 @@ public class CommunityRequest extends BaseRequest {
 
     public void setUserId(List<Long> userId) {
         this.userId = userId;
+    }
+
+    public long getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(long communityId) {
+        this.communityId = communityId;
     }
 }

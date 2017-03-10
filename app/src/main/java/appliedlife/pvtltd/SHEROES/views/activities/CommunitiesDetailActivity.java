@@ -109,7 +109,6 @@ public class CommunitiesDetailActivity extends BaseActivity implements Community
             viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
             viewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(mFeedDetail), getString(R.string.ID_COMMUNITIES));
             mViewPagerCommunitiesDetail.setAdapter(viewPagerAdapter);
-            mFeedDetail.setImageUrl("http://www.hotel-r.net/im/hotel/bg/paris-hotel-21.jpg");
             if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getImageUrl())) {
                 Glide.with(this)
                         .load(mFeedDetail.getImageUrl()).asBitmap()

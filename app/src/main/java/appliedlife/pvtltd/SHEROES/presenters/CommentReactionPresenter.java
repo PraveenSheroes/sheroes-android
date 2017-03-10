@@ -71,7 +71,7 @@ public class CommentReactionPresenter extends BasePresenter<AllCommentReactionVi
         registerSubscription(subscription);
     }
 
-    public void addCommentListFromPresenter(CommentReactionRequestPojo commentReactionRequestPojo) {
+    public void addCommentListFromPresenter(CommentReactionRequestPojo commentReactionRequestPojo,final int operationId) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
             return;
@@ -90,12 +90,12 @@ public class CommentReactionPresenter extends BasePresenter<AllCommentReactionVi
             @Override
             public void onNext(CommentReactionResponsePojo commentResponsePojo) {
                 getMvpView().stopProgressBar();
-                getMvpView().commentSuccess(commentResponsePojo.getStatus(),false);
+                getMvpView().commentSuccess(commentResponsePojo.getStatus(),operationId);
             }
         });
         registerSubscription(subscription);
     }
-    public void editCommentListFromPresenter(CommentReactionRequestPojo commentReactionRequestPojo, final boolean isEdit) {
+    public void editCommentListFromPresenter(CommentReactionRequestPojo commentReactionRequestPojo, final int editDeleteId) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
             return;
@@ -114,7 +114,7 @@ public class CommentReactionPresenter extends BasePresenter<AllCommentReactionVi
             @Override
             public void onNext(CommentReactionResponsePojo commentResponsePojo) {
                 getMvpView().stopProgressBar();
-                getMvpView().commentSuccess(commentResponsePojo.getStatus(),isEdit);
+                getMvpView().commentSuccess(commentResponsePojo.getStatus(),editDeleteId);
             }
         });
         registerSubscription(subscription);

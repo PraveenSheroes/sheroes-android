@@ -8,12 +8,12 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
-import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItemResponse;
@@ -132,12 +132,12 @@ public class HomeModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-    public Observable<BaseResponse> communityJoinFromModel(CommunityRequest communityRequest){
+    public Observable<CommunityResponse> communityJoinFromModel(CommunityRequest communityRequest){
         return sheroesAppServiceApi.getCommunityJoinResponse(communityRequest)
-                .map(new Func1<BaseResponse, BaseResponse>() {
+                .map(new Func1<CommunityResponse, CommunityResponse>() {
                     @Override
-                    public BaseResponse call(BaseResponse baseResponse) {
-                        return baseResponse;
+                    public CommunityResponse call(CommunityResponse communityResponse) {
+                        return communityResponse;
                     }
                 })
                 .subscribeOn(Schedulers.io())

@@ -95,6 +95,7 @@ public class AllSearchFragment extends BaseFragment implements HomeView {
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mAdapter);
+        super.setAllInitializationForFeeds(mFragmentListRefreshData,  mAdapter, manager, mRecyclerView, mHomePresenter, mAppUtils, mProgressBar);
         liNoSearchResult.setVisibility(View.VISIBLE);
         return view;
     }

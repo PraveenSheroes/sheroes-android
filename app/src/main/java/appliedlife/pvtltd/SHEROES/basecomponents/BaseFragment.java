@@ -26,6 +26,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LastComment;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
+import appliedlife.pvtltd.SHEROES.presenters.CommentReactionPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -47,6 +48,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     private final String TAG = LogUtils.makeLogTag(BaseFragment.class);
     public FragmentActivity mActivity;
     private FragmentListRefreshData mFragmentListRefreshData;
+    private CommentReactionPresenter mCommentReactionPresenter;
     private SwipPullRefreshList mPullRefreshList;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
@@ -111,7 +113,16 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
         this.mAppUtils = mAppUtils;
         this.mProgressBar = mProgressBar;
     }
-
+    public void setCommentReaction(FragmentListRefreshData mFragmentListRefreshData, GenericRecyclerViewAdapter mAdapter, LinearLayoutManager mLayoutManager, FeedDetail mFeedDetail, RecyclerView mRecyclerView, CommentReactionPresenter commentReactionPresenter, AppUtils mAppUtils, ProgressBar mProgressBar){
+        this.mFragmentListRefreshData = mFragmentListRefreshData;
+        this.mAdapter = mAdapter;
+        this.mLayoutManager = mLayoutManager;
+        this.mFeedDetail = mFeedDetail;
+        this.mRecyclerView = mRecyclerView;
+        this.mCommentReactionPresenter = commentReactionPresenter;
+        this.mAppUtils = mAppUtils;
+        this.mProgressBar = mProgressBar;
+    }
     public void callFragment(int layout, Fragment fragment) {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

@@ -94,6 +94,7 @@ public class SearchCommunitiesFragment extends BaseFragment implements HomeView 
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mAdapter);
+        super.setAllInitializationForFeeds(mFragmentListRefreshData,  mAdapter, manager, mRecyclerView, mHomePresenter, mAppUtils, mProgressBar);
         mLiNoSearchResult.setVisibility(View.VISIBLE);
         return view;
     }

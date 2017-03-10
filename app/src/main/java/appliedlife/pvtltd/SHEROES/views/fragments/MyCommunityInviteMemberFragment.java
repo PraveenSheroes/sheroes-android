@@ -70,6 +70,7 @@ public class MyCommunityInviteMemberFragment extends BaseFragment {
     private FragmentListRefreshData mFragmentListRefreshData;
     private Handler mHandler = new Handler();
     private List<Long> mUserIdForAddMember = new ArrayList<>();
+    private FeedDetail mFeedDetail;
 
     @Override
     public void onAttach(Context context) {
@@ -91,6 +92,10 @@ public class MyCommunityInviteMemberFragment extends BaseFragment {
         ButterKnife.bind(this, view);
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ALL_SEARCH, AppConstants.EMPTY_STRING);
         mHomePresenter.attachView(this);
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            mFeedDetail = bundle.getParcelable(AppConstants.COMMUNITIES_DETAIL);
+        }
         tvInviteText.setText(getString(R.string.ID_SEARCH));
         editTextWatcher();
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -188,8 +193,9 @@ public class MyCommunityInviteMemberFragment extends BaseFragment {
     public void getSuccessForAllResponse(String success, int successFrom) {
         switch (successFrom) {
             case AppConstants.ONE_CONSTANT:
-             //ToDO:; need to verify dialog;
-                Toast.makeText(getContext(),"Add members",Toast.LENGTH_SHORT).show();
+                //ToDO:; need to verify dialog;
+                Toast.makeText(getContext(), "Add members", Toast.LENGTH_SHORT).show();
+                inviteSearchBack();
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + successFrom);
@@ -203,24 +209,32 @@ public class MyCommunityInviteMemberFragment extends BaseFragment {
 
     @OnClick(R.id.tv_invite_post_submit)
     public void inviteSubmit() {
-        if (StringUtil.isNotEmptyCollection(mUserIdForAddMember)) {
-            mHomePresenter.communityJoinFromPresenter(mAppUtils.communityRequestBuilder(mUserIdForAddMember));
+        if (StringUtil.isNotEmptyCollection(mUserIdForAddMember) && null != mFeedDetail) {
+            mHomePresenter.communityJoinFromPresenter(mAppUtils.communityRequestBuilder(mUserIdForAddMember, mFeedDetail.getIdOfEntityOrParticipant()));
         }
     }
 
     public void onAddMemberClick(FeedDetail feedDetail) {
-        if(feedDetail.isLongPress())
-        {
-            mUserIdForAddMember.add(feedDetail.getAuthorId());
+        if (feedDetail.isLongPress()) {
+            mUserIdForAddMember.add(feedDetail.getIdOfEntityOrParticipant());
+        } else {
+            mUserIdForAddMember.remove(feedDetail.getIdOfEntityOrParticipant());
         }
-        else
+        switch (mUserIdForAddMember.size())
         {
-            mUserIdForAddMember.remove(feedDetail.getAuthorId());
+            case AppConstants.NO_REACTION_CONSTANT:
+                tvAddedMember.setText(AppConstants.SPACE);
+                break;
+            case AppConstants.ONE_CONSTANT:
+                tvAddedMember.setText(getString(R.string.ID_ADDED) + AppConstants.SPACE + +mUserIdForAddMember.size() + AppConstants.SPACE + getString(R.string.ID_MEMBERS).substring(0, getString(R.string.ID_MEMBERS).length() - 1));
+                break;
+            default:
+                tvAddedMember.setText(getString(R.string.ID_ADDED) + AppConstants.SPACE + mUserIdForAddMember.size() + AppConstants.SPACE + getString(R.string.ID_MEMBERS));
         }
         if (mUserIdForAddMember.size() == AppConstants.ONE_CONSTANT) {
-            tvAddedMember.setText(getString(R.string.ID_ADDED) +AppConstants.SPACE+  + mUserIdForAddMember.size() +AppConstants.SPACE+  getString(R.string.ID_MEMBERS).substring(0, getString(R.string.ID_MEMBERS).length() - 1));
+            tvAddedMember.setText(getString(R.string.ID_ADDED) + AppConstants.SPACE + +mUserIdForAddMember.size() + AppConstants.SPACE + getString(R.string.ID_MEMBERS).substring(0, getString(R.string.ID_MEMBERS).length() - 1));
         } else {
-            tvAddedMember.setText(getString(R.string.ID_ADDED) +AppConstants.SPACE+ mUserIdForAddMember.size() +AppConstants.SPACE+  getString(R.string.ID_MEMBERS));
+            tvAddedMember.setText(getString(R.string.ID_ADDED) + AppConstants.SPACE + mUserIdForAddMember.size() + AppConstants.SPACE + getString(R.string.ID_MEMBERS));
         }
     }
 }
