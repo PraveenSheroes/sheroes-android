@@ -45,7 +45,7 @@ public class CommentReactionPresenter extends BasePresenter<AllCommentReactionVi
     }
 
 
-    public void getAllCommentListFromPresenter(CommentReactionRequestPojo commentReactionRequestPojo,boolean isReaction) {
+    public void getAllCommentListFromPresenter(CommentReactionRequestPojo commentReactionRequestPojo,boolean isReaction,final int addEditOperation) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
             return;
@@ -65,7 +65,7 @@ public class CommentReactionPresenter extends BasePresenter<AllCommentReactionVi
             @Override
             public void onNext(CommentReactionResponsePojo commentResponsePojo) {
                 getMvpView().stopProgressBar();
-                getMvpView().getAllCommentsAndReactions(commentResponsePojo);
+                getMvpView().getAllCommentsAndReactions(commentResponsePojo,addEditOperation);
             }
         });
         registerSubscription(subscription);
