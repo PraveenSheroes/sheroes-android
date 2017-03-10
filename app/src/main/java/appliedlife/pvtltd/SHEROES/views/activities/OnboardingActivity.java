@@ -8,7 +8,6 @@ import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
-import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.OnBoardingData;
@@ -21,7 +20,7 @@ import butterknife.ButterKnife;
  * Created by Ajit Kumar on 22-02-2017.
  */
 
-public class OnboardingActivity extends BaseActivity implements OnboardingFragment.OnBoardingActivityIntractionListner, BaseHolderInterface {
+public class OnboardingActivity extends BaseActivity implements OnboardingFragment.OnBoardingActivityIntractionListner {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

@@ -53,6 +53,7 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_CANCEL">Cancel</string>
     <string name="ID_VIEW_MORE">View More</string>
     <string name="ID_JOIN">Join</string>
+    <string name="ID_REQUESTED">Requested</string>
     <string name="ID_JOINED">Joined</string>
     <string name="ID_REPLIES">Replies</string>
     <string name="ID_NO_REPLIES">No replies</string>
@@ -315,8 +316,7 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_LANGUAGE">language</string>
     <string name="ID_ADD_LANGUAGE">ADD LANGUAGE</string>
     <string name="ID_SELECT_PROFICIENT">PROFICIENT</string>
-
-
+    <string name="ID_ADDED">Added</string>
 
     <!-- String related to setting_preference_work_experience  view page-->
 
@@ -484,7 +484,7 @@ etur adipiscing elit,sed do eiusmod tempor incididunt ut…</string>
     <string name="ID_JOB_EDUCATION">B.COM, Bachelors in Communications</string>
     <string name="ID_JOB_LOCATION">Mumbai, India</string>
     <string name="ID_JOB_DES">Description</string>
-
+    <string name="ID_ADD">Add</string>
 
     <string-array name="name">
 

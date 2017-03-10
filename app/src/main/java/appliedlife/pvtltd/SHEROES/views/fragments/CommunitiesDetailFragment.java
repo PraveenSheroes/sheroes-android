@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -20,7 +21,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
@@ -33,7 +34,6 @@ import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -41,7 +41,7 @@ import butterknife.ButterKnife;
  * Created by Praveen_Singh on 01-02-2017.
  */
 
-public class CommunitiesDetailFragment extends BaseFragment implements HomeView {
+public class CommunitiesDetailFragment extends BaseFragment  {
     private final String TAG = LogUtils.makeLogTag(CommunitiesDetailFragment.class);
     @Inject
     HomePresenter mHomePresenter;
@@ -50,7 +50,7 @@ public class CommunitiesDetailFragment extends BaseFragment implements HomeView 
     @Bind(R.id.pb_communities_progress_bar)
     ProgressBar mProgressBar;
     @Bind(R.id.swipe_view_communities_detail)
-    SwipeRefreshLayout swipeView;
+    SwipeRefreshLayout mSwipeView;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private FragmentIntractionWithActivityListner mHomeActivityFragmentIntractionWithActivityListner;
@@ -59,9 +59,16 @@ public class CommunitiesDetailFragment extends BaseFragment implements HomeView 
     TextView mTvJoinView;
     @Inject
     AppUtils mAppUtils;
-    int pageNo=AppConstants.ONE_CONSTANT;
+    @Bind(R.id.li_no_result)
+    LinearLayout mLiNoResult;
+    private int mPageNo = AppConstants.ONE_CONSTANT;
     private FragmentListRefreshData mFragmentListRefreshData;
     private FeedDetail mFeedDetail;
+    private int mPosition;
+    private int mPressedEmoji;
+    private boolean mListLoad = true;
+    private boolean mIsEdit = false;
+
     public static CommunitiesDetailFragment createInstance(FeedDetail feedDetail) {
         CommunitiesDetailFragment communitiesDetailFragment = new CommunitiesDetailFragment();
         Bundle bundle = new Bundle();
@@ -69,10 +76,7 @@ public class CommunitiesDetailFragment extends BaseFragment implements HomeView 
         communitiesDetailFragment.setArguments(bundle);
         return communitiesDetailFragment;
     }
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -91,11 +95,10 @@ public class CommunitiesDetailFragment extends BaseFragment implements HomeView 
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_communities_detail, container, false);
         ButterKnife.bind(this, view);
-        if(null!=getArguments())
-        {
-            mFeedDetail =getArguments().getParcelable(AppConstants.COMMUNITY_DETAIL);
+        if (null != getArguments()) {
+            mFeedDetail = getArguments().getParcelable(AppConstants.COMMUNITY_DETAIL);
         }
-        mFragmentListRefreshData=new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.COMMUNITY_POST_FRAGMENT,mFeedDetail.getId());
+        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.COMMUNITY_POST_FRAGMENT, mFeedDetail.getId());
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
         mHomePresenter.attachView(this);
@@ -104,7 +107,7 @@ public class CommunitiesDetailFragment extends BaseFragment implements HomeView 
         mAdapter = new GenericRecyclerViewAdapter(getContext(), (CommunitiesDetailActivity) getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager,mFragmentListRefreshData) {
+        mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager, mFragmentListRefreshData) {
             @Override
             public void onHide() {
                 if (mTvJoinView.getVisibility() == View.GONE) {
@@ -126,78 +129,49 @@ public class CommunitiesDetailFragment extends BaseFragment implements HomeView 
 
             }
         });
-        if(StringUtil.isNotNullOrEmptyString(mFeedDetail.getId())) {
+        super.setAllInitializationForFeeds(mFragmentListRefreshData, mPullRefreshList, mAdapter, mLayoutManager, mPageNo, mSwipeView, mLiNoResult, mFeedDetail, mRecyclerView, mPosition, mPressedEmoji, mListLoad, mIsEdit, mHomePresenter, mAppUtils, mProgressBar);
+        if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getId())) {
             mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo()));
         }
-        swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 LogUtils.info("swipe", "*****************end called");
                 mPullRefreshList.setPullToRefresh(true);
-                mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY_POST,mFragmentListRefreshData.getPageNo()));
+                mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo()));
             }
         });
         return view;
     }
 
-
     @Override
-    public void getSuccessForAllResponse(String success, int successFrom) {
-
-    }
-
-
-
-     @Override
-        public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
-            if (StringUtil.isNotEmptyCollection(feedDetailList)) {
-                pageNo=mFragmentListRefreshData.getPageNo();
-                if(pageNo==AppConstants.ONE_CONSTANT)
-                {
-                    FeedDetail feedDetail = new FeedDetail();
-                    //TODO:: Please remove this or correct
-                    feedDetail.setSubType(AppConstants.MY_COMMUNITIES_HEADER);
-                    feedDetailList.add(0, feedDetail);
-                }
-                mFragmentListRefreshData.setPageNo(++pageNo);
-                mPullRefreshList.allListData(feedDetailList);
-                mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
-                if (!mPullRefreshList.isPullToRefresh()) {
-                    mLayoutManager.scrollToPositionWithOffset(mPullRefreshList.getFeedResponses().size() - feedDetailList.size(), 0);
-                } else {
-                    mLayoutManager.scrollToPositionWithOffset(0, 0);
-                }
-                swipeView.setRefreshing(false);
+    public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
+        if (StringUtil.isNotEmptyCollection(feedDetailList)) {
+            mPageNo = mFragmentListRefreshData.getPageNo();
+            if (mPageNo == AppConstants.ONE_CONSTANT) {
+                FeedDetail feedDetail = new FeedDetail();
+                //TODO:: Please remove this or correct
+                feedDetail.setSubType(AppConstants.MY_COMMUNITIES_HEADER);
+                feedDetailList.add(0, feedDetail);
             }
+            mFragmentListRefreshData.setPageNo(++mPageNo);
+            mPullRefreshList.allListData(feedDetailList);
+            mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
+            if (!mPullRefreshList.isPullToRefresh()) {
+                mLayoutManager.scrollToPositionWithOffset(mPullRefreshList.getFeedResponses().size() - feedDetailList.size(), 0);
+            } else {
+                mLayoutManager.scrollToPositionWithOffset(0, 0);
+            }
+            mSwipeView.setRefreshing(false);
         }
-
-    @Override
-    public void getDB(List<RecentSearchData> recentSearchDatas) {
-
     }
 
-
-
-    @Override
-    public void startProgressBar() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mProgressBar.bringToFront();
-    }
-
-    @Override
-    public void stopProgressBar() {
-        mProgressBar.setVisibility(View.GONE);
-    }
 
     @Override
     public void showError(String errorMsg) {
         mHomeActivityFragmentIntractionWithActivityListner.onShowErrorDialog();
     }
 
-    @Override
-    public void startNextScreen() {
-
-    }
 
     @Override
     public void onDestroyView() {
@@ -205,22 +179,27 @@ public class CommunitiesDetailFragment extends BaseFragment implements HomeView 
         mHomePresenter.detachView();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
 
     @Override
-    public void onStop() {
-        super.onStop();
-
+    public void getSuccessForAllResponse(String success, int successFrom) {
+        super.getSuccessForAllResponse(success, successFrom);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+    public void bookMarkForCard(FeedDetail feedDetail) {
+        super.bookMarkForCard(feedDetail);
     }
 
+    public void editDeleteRecentComment(FeedDetail feedDetail, boolean isEdit) {
+        super.editDeleteRecentComment(feedDetail, isEdit);
+    }
+
+    public void likeAndUnlikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
+        super.likeAndUnlikeRequest(baseResponse, reactionValue, position);
+    }
+
+    public void commentListRefresh(FeedDetail feedDetail) {
+        super.commentListRefresh(feedDetail);
+    }
 
 }
 

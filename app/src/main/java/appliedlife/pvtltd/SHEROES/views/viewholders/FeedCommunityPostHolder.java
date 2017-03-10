@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Vibrator;
+import android.support.v7.widget.CardView;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,6 +57,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     DateUtil mDateUtil;
     @Inject
     Preference<LoginResponse> userPreference;
+    @Bind(R.id.card_commuinity_post)
+    CardView cardCommunityPost;
     @Bind(R.id.li_feed_community_post_user_comments)
     LinearLayout liFeedCommunityPostUserComments;
     @Bind(R.id.li_feed_community_user_post_images)
@@ -193,11 +196,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                         LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + coverImageList.size());
                 }
             }
-        } else {
-            liFeedCommunityUserPostImages.setBackgroundResource(R.drawable.ic_image_holder);
         }
     }
-
     private boolean getCoverImageHeightWidth(String imagePath) {
         final boolean[] isHeightGreater = new boolean[1];
         Glide.with(mContext)
@@ -264,23 +264,23 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         if (dataItem.getNoOfLikes() < AppConstants.ONE_CONSTANT && dataItem.getNoOfComments() < AppConstants.ONE_CONSTANT) {
             tvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
             flFeedCommunityPostNoReactionComment.setVisibility(View.GONE);
-        } else if (dataItem.getNoOfLikes() < AppConstants.ONE_CONSTANT) {
-            flFeedCommunityPostNoReactionComment.setVisibility(View.GONE);
-            tvFeedCommunityPostTotalReactions.setVisibility(View.GONE);
         }
-
         switch (dataItem.getNoOfLikes()) {
             case AppConstants.NO_REACTION_CONSTANT:
+                flFeedCommunityPostNoReactionComment.setVisibility(View.GONE);
+                tvFeedCommunityPostTotalReactions.setVisibility(View.GONE);
                 userLike();
                 break;
             case AppConstants.ONE_CONSTANT:
                 flFeedCommunityPostNoReactionComment.setVisibility(View.VISIBLE);
+                tvFeedCommunityPostTotalReactions.setVisibility(View.VISIBLE);
                 tvFeedCommunityPostTotalReactions.setText(AppConstants.ONE_CONSTANT  + AppConstants.SPACE + context.getString(R.string.ID_REACTION));
                 tvFeedCommunityPostUserReaction.setText(AppConstants.EMPTY_STRING);
                 userLike();
                 break;
             default:
                 flFeedCommunityPostNoReactionComment.setVisibility(View.VISIBLE);
+                tvFeedCommunityPostTotalReactions.setVisibility(View.VISIBLE);
                 tvFeedCommunityPostTotalReactions.setText(String.valueOf(dataItem.getNoOfLikes()) + AppConstants.SPACE + context.getString(R.string.ID_REACTION) + AppConstants.S);
                 tvFeedCommunityPostUserReaction.setText(AppConstants.EMPTY_STRING);
                 userLike();
@@ -557,7 +557,10 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     public void communityPostImageClick() {
         viewInterface.handleOnClick(dataItem, liFeedCommunityUserPostImages);
     }
-
+    @OnClick(R.id.card_commuinity_post)
+    public void communityCardClick() {
+        viewInterface.handleOnClick(dataItem, liFeedCommunityUserPostImages);
+    }
     @OnClick(R.id.li_feed_community_post_join_conversation)
     public void joinConversationClick() {
         dataItem.setItemPosition(getAdapterPosition());
@@ -590,9 +593,9 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 String lessWithColor = LEFT_HTML_VEIW_TAG_FOR_COLOR + mLess + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
                 mViewMoreDescription = dataItem.getListDescription();
                 if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                    tvFeedCommunityPostText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + lessWithColor, 0)); // for 24 api and more
+                    tvFeedCommunityPostText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.SPACE + AppConstants.SPACE + lessWithColor, 0)); // for 24 api and more
                 } else {
-                    tvFeedCommunityPostText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + lessWithColor));// or for older api
+                    tvFeedCommunityPostText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.SPACE + AppConstants.SPACE + lessWithColor));// or for older api
                 }
                 tvFeedCommunityPostText.setTag(mLess);
             } else {
@@ -602,9 +605,9 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 tvFeedCommunityPostText.setTag(mViewMore);
                 String viewMore = LEFT_HTML_VEIW_TAG_FOR_COLOR + mViewMore + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
                 if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                    tvFeedCommunityPostText.setText(Html.fromHtml(mViewMoreDescription.substring(0, AppConstants.WORD_COUNT) + AppConstants.DOTS + AppConstants.SPACE + viewMore, 0)); // for 24 api and more
+                    tvFeedCommunityPostText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + viewMore, 0)); // for 24 api and more
                 } else {
-                    tvFeedCommunityPostText.setText(Html.fromHtml(mViewMoreDescription.substring(0, AppConstants.WORD_COUNT) + AppConstants.DOTS + AppConstants.SPACE + viewMore));// or for older api
+                    tvFeedCommunityPostText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + viewMore));// or for older api
                 }
             }
         }

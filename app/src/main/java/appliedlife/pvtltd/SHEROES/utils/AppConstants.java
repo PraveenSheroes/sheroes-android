@@ -41,6 +41,7 @@ public class AppConstants {
     public static final String FRAGMENT_FLAG_CHECK = "is_fragment_open";
     public static final String COMMENTS="comments";
     public static final String BOOKMARKS="bookmarks";
+    public static final String COMMENT_REACTION_FRAGMENT="comment_reaction_fragment";
     public static final String NO_REACTION="no_reaction";
     public static final String HEART_REACTION="heart";
     public static final String HOME_FRAGMENT="home";
@@ -53,6 +54,7 @@ public class AppConstants {
     public static final String MY_COMMUNITIES_HEADER= "COMMUNITY_HEADER";
     public static final String COMMUNITIES_DETAIL= "community_detail";
     public static final String ALL_SEARCH= "search";
+    public static final String NETWORK_TIMEOUT= "network_timout";
     public static final String SHARE= "Share";
     public static final int WORD_COUNT = 92;
     public static final int WORD_LENGTH = 80;

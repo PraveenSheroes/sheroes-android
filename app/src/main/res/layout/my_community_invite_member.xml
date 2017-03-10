@@ -10,15 +10,16 @@
         android:id="@+id/inivite_member_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        android:background="@drawable/rectangle_grey_round_corner">
+        android:background="@drawable/rectangle_grey_round_corner"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
         <TextView
             android:id="@+id/tv_back_community"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_back_black"
-            android:layout_marginRight="@dimen/dp_size_5"/>
+            android:layout_marginRight="@dimen/dp_size_5"
+            android:background="@drawable/ic_back_black" />
+
         <include layout="@layout/search_layout" />
     </android.support.v7.widget.Toolbar>
 
@@ -35,9 +36,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:visibility="gone"
         android:layout_centerVertical="true"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/tv_blank_img"
@@ -75,7 +76,10 @@
         android:id="@+id/pb_invite_member_progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         android:layout_below="@+id/search_toolbar"
-        android:layout_centerInParent="true" />
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+    <include layout="@layout/invite_submit_layout" />
+
 </RelativeLayout>

@@ -63,6 +63,10 @@ public class CommentHolder extends BaseViewHolder<CommentReactionDoc> {
         if (dataItem.isMyOwnParticipation()) {
             tvUserCommentListMenu.setVisibility(View.VISIBLE);
         }
+        else
+        {
+            tvUserCommentListMenu.setVisibility(View.GONE);
+        }
         ivListCommentProfilePic.setCircularImage(true);
         if (item.isAnonymous()) {
             String userName = LEFT_HTML_TAG_FOR_COLOR + mContext.getString(R.string.ID_ANONYMOUS) + RIGHT_HTML_TAG_FOR_COLOR;

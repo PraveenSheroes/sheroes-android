@@ -57,7 +57,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:drawableRight="@drawable/ic_lock"
                     android:drawablePadding="@dimen/dp_size_5"
                     android:layout_marginTop="@dimen/dp_size_3"
                     android:textColor="@color/footer_icon_text"
@@ -108,7 +107,6 @@
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:gravity="center"
                 android:text="@string/ID_JOIN"
-                android:visibility="gone"
                 android:textColor="@color/footer_icon_text"
                 android:textSize="@dimen/sp_size_12" />
 

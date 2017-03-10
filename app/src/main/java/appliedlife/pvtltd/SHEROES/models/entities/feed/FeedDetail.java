@@ -289,7 +289,24 @@ public class FeedDetail extends BaseResponse implements Parcelable {
     @Expose
     private int noOfApplied;
 
-
+    @SerializedName("is_closed_b")
+    @Expose
+    private boolean isClosedCommunity;
+    @SerializedName("solr_ignore_no_of_members")
+    @Expose
+    private int noOfMembers;
+    @SerializedName("solr_ignore_no_of_pending_requests")
+    @Expose
+    private int noOfPendingRequest;
+    @SerializedName("solr_ignore_is_owner")
+    @Expose
+    private boolean isOwner;
+    @SerializedName("solr_ignore_is_member")
+    @Expose
+    private boolean isMember;
+    @SerializedName("solr_ignore_is_request_pending")
+    @Expose
+    private boolean isRequestPending;
 
 
     public int getItemPosition() {
@@ -1210,6 +1227,54 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         isFromHome = fromHome;
     }
 
+    public boolean isClosedCommunity() {
+        return isClosedCommunity;
+    }
+
+    public void setClosedCommunity(boolean closedCommunity) {
+        isClosedCommunity = closedCommunity;
+    }
+
+    public int getNoOfMembers() {
+        return noOfMembers;
+    }
+
+    public void setNoOfMembers(int noOfMembers) {
+        this.noOfMembers = noOfMembers;
+    }
+
+    public int getNoOfPendingRequest() {
+        return noOfPendingRequest;
+    }
+
+    public void setNoOfPendingRequest(int noOfPendingRequest) {
+        this.noOfPendingRequest = noOfPendingRequest;
+    }
+
+    public boolean isOwner() {
+        return isOwner;
+    }
+
+    public void setOwner(boolean owner) {
+        isOwner = owner;
+    }
+
+    public boolean isMember() {
+        return isMember;
+    }
+
+    public void setMember(boolean member) {
+        isMember = member;
+    }
+
+    public boolean isRequestPending() {
+        return isRequestPending;
+    }
+
+    public void setRequestPending(boolean requestPending) {
+        isRequestPending = requestPending;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -1330,6 +1395,12 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         dest.writeByte(this.isApplied ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isBookmarked ? (byte) 1 : (byte) 0);
         dest.writeInt(this.noOfApplied);
+        dest.writeByte(this.isClosedCommunity ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.noOfMembers);
+        dest.writeInt(this.noOfPendingRequest);
+        dest.writeByte(this.isOwner ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isMember ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isRequestPending ? (byte) 1 : (byte) 0);
     }
 
     protected FeedDetail(Parcel in) {
@@ -1463,6 +1534,12 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         this.isApplied = in.readByte() != 0;
         this.isBookmarked = in.readByte() != 0;
         this.noOfApplied = in.readInt();
+        this.isClosedCommunity = in.readByte() != 0;
+        this.noOfMembers = in.readInt();
+        this.noOfPendingRequest = in.readInt();
+        this.isOwner = in.readByte() != 0;
+        this.isMember = in.readByte() != 0;
+        this.isRequestPending = in.readByte() != 0;
     }
 
     public static final Creator<FeedDetail> CREATOR = new Creator<FeedDetail>() {

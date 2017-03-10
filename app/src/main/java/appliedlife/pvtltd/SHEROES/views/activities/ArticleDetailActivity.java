@@ -36,7 +36,6 @@ import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
-import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionDoc;
@@ -58,7 +57,7 @@ import butterknife.OnClick;
  * Created by Praveen_Singh on 07-02-2017.
  */
 
-public class ArticleDetailActivity extends BaseActivity implements BaseHolderInterface, View.OnClickListener, View.OnTouchListener, CommentReactionFragment.HomeActivityIntractionListner {
+public class ArticleDetailActivity extends BaseActivity implements CommentReactionFragment.HomeActivityIntractionListner {
     private final String TAG = LogUtils.makeLogTag(ArticleDetailActivity.class);
     @Bind(R.id.app_bar_article_detail)
     AppBarLayout mAppBarLayout;
@@ -157,12 +156,6 @@ public class ArticleDetailActivity extends BaseActivity implements BaseHolderInt
     }
 
     @Override
-    public void startActivityFromHolder(Intent intent) {
-
-    }
-
-
-    @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
         if (baseResponse instanceof FeedDetail) {
             articleDetailHandled(view, baseResponse);
@@ -187,13 +180,13 @@ public class ArticleDetailActivity extends BaseActivity implements BaseHolderInt
             case R.id.li_article_detail_join_conversation:
                 mFragmentOpen.setCommentList(true);
                 mFragmentOpen.setReactionList(false);
-                mFragmentOpen.setOpen(true);
+                mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.TWO_CONSTANT);
                 openCommentReactionFragment(feedDetail);
                 break;
             case R.id.tv_article_detail_total_reactions:
                 mFragmentOpen.setCommentList(false);
                 mFragmentOpen.setReactionList(true);
-                mFragmentOpen.setOpen(true);
+                mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.TWO_CONSTANT);
                 openCommentReactionFragment(feedDetail);
                 break;
             case R.id.tv_article_detail_user_reaction:
@@ -224,7 +217,7 @@ public class ArticleDetailActivity extends BaseActivity implements BaseHolderInt
         }
     }
 
-    private void openCommentReactionFragment(FeedDetail feedDetail) {
+    protected void openCommentReactionFragment(FeedDetail feedDetail) {
         if (null != feedDetail && null != mFragmentOpen) {
             CommentReactionFragment commentReactionFragmentForArticle = new CommentReactionFragment();
             Bundle bundleArticle = new Bundle();
@@ -388,7 +381,7 @@ public class ArticleDetailActivity extends BaseActivity implements BaseHolderInt
     public void onBackPressed() {
         if (mFragmentOpen.isCommentList()) {
             getSupportFragmentManager().popBackStackImmediate();
-            Fragment fragment = getSupportFragmentManager().findFragmentByTag(ArticleDetailFragment.class.getName());
+            Fragment fragment = viewPagerAdapter.getActiveFragment(mViewPagerArticleDetail, 0);
             if (AppUtils.isFragmentUIActive(fragment)) {
                 ((ArticleDetailFragment) fragment).commentListRefresh(mFeedDetail);
             }
@@ -402,7 +395,7 @@ public class ArticleDetailActivity extends BaseActivity implements BaseHolderInt
         }
     }
 
-    private void clickMenuItem(View view, final BaseResponse baseResponse,final boolean isCommentReaction) {
+    protected void clickMenuItem(View view, final BaseResponse baseResponse,final boolean isCommentReaction) {
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View popupView = layoutInflater.inflate(R.layout.menu_option_layout, null);
         final PopupWindow popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);

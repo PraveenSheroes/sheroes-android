@@ -56,9 +56,9 @@ public class SearchArticleFragment extends BaseFragment implements HomeView {
     @Bind(R.id.pb_search_progress_bar)
     ProgressBar mProgressBar;
     @Bind(R.id.li_no_search_result)
-    LinearLayout liNoSearchResult;
+    LinearLayout mLiNoSearchResult;
     @Bind(R.id.tv_search_result)
-    TextView tvSearchResult;
+    TextView mTvSearchResult;
     private String mSearchDataName = AppConstants.EMPTY_STRING;
     private GenericRecyclerViewAdapter mAdapter;
     private FragmentIntractionWithActivityListner mHomeSearchActivityFragmentIntractionWithActivityListner;
@@ -89,14 +89,14 @@ public class SearchArticleFragment extends BaseFragment implements HomeView {
         ButterKnife.bind(this, view);
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ALL_SEARCH, AppConstants.EMPTY_STRING);
         mHomePresenter.attachView(this);
-        tvSearchResult.setText(getString(R.string.ID_SEARCH));
+        mTvSearchResult.setText(getString(R.string.ID_SEARCH));
         editTextWatcher();
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new GenericRecyclerViewAdapter(getContext(), (HomeSearchActivity) getActivity());
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mAdapter);
-        liNoSearchResult.setVisibility(View.VISIBLE);
+        mLiNoSearchResult.setVisibility(View.VISIBLE);
         return view;
     }
 
@@ -110,8 +110,8 @@ public class SearchArticleFragment extends BaseFragment implements HomeView {
         }
         else
         {
-            liNoSearchResult.setVisibility(View.VISIBLE);
-            tvSearchResult.setText(getString(R.string.ID_NO_RESULT_FOUND));
+            mLiNoSearchResult.setVisibility(View.VISIBLE);
+            mTvSearchResult.setText(getString(R.string.ID_NO_RESULT_FOUND));
         }
     }
     public void saveRecentSearchData(FeedDetail feedDetail)
@@ -125,58 +125,17 @@ public class SearchArticleFragment extends BaseFragment implements HomeView {
         recentSearchData.add(masterData);
         mHomePresenter.saveMasterDataTypes(recentSearchData,feedDetail.getEntityOrParticipantId());
     }
-    @Override
-    public void getSuccessForAllResponse(String success, int successFrom) {
-
-    }
-
-    @Override
-    public void getDB(List<RecentSearchData> recentSearchDatas) {
-
-    }
-
-    @Override
-    public void startProgressBar() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mProgressBar.bringToFront();
-    }
-
-    @Override
-    public void stopProgressBar() {
-        mProgressBar.setVisibility(View.GONE);
-    }
 
     @Override
     public void showError(String errorMsg) {
         mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog();
     }
-
-    @Override
-    public void startNextScreen() {
-
-    }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         mHomePresenter.detachView();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
 
     /**
      * When user type city name it works for each character.
@@ -213,7 +172,7 @@ public class SearchArticleFragment extends BaseFragment implements HomeView {
 
                 if (StringUtil.isNotNullOrEmptyString(inputSearch.toString())&&inputSearch.toString().length()>AppConstants.THREE_CONSTANT)
                 {
-                    liNoSearchResult.setVisibility(View.GONE);
+                    mLiNoSearchResult.setVisibility(View.GONE);
                     mSearchDataName = inputSearch.toString();
                     /**hitting the servers to get data if length is greater than threshold defined **/
                     mHandler.removeCallbacks(mFilterTask);

@@ -10,7 +10,9 @@ import appliedlife.pvtltd.SHEROES.presenters.InvitePresenter;
 import appliedlife.pvtltd.SHEROES.presenters.MembersPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.OwnerPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.RequestedPresenter;
+import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleDetailActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.BookMarkActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityPostActivity;
@@ -133,6 +135,8 @@ public interface SheroesAppComponent {
     void inject(HomeFragment homeFragment);
     void inject(LoginActivity loginActivity);
     void inject(HomeSearchActivity homeSearchActivity);
+    void inject(BookMarkActivity bookMarkActivity);
+    void inject(ArticleActivity articleActivity);
     void inject(CommunitiesDetailActivity communitiesDetailActivity);
     void inject(ArticleDetailActivity articleDetailActivity);
     void inject(ProfileActicity profileActicity);

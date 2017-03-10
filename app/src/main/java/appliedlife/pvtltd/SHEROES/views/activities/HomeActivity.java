@@ -1,9 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -19,19 +17,13 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
+import android.view.Gravity;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -46,7 +38,6 @@ import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
-import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionDoc;
@@ -74,21 +65,16 @@ import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeSpinnerFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.ImageFullViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobLocationFilter;
 import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunitiesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunityInviteMemberFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.SettingAboutFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.SettingFeedbackFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SettingFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.SettingTermsAndConditionFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SettingView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class HomeActivity extends BaseActivity implements JobFragment.HomeActivityIntractionListner, FragmentIntractionWithActivityListner, SettingView, BaseHolderInterface, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, CommentReactionFragment.HomeActivityIntractionListner, View.OnTouchListener, View.OnClickListener, ImageFullViewAdapter.HomeActivityIntraction {
+public class HomeActivity extends BaseActivity implements JobFragment.HomeActivityIntractionListner, FragmentIntractionWithActivityListner, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, CommentReactionFragment.HomeActivityIntractionListner, ImageFullViewAdapter.HomeActivityIntraction {
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
     @Inject
     Preference<LoginResponse> userPreference;
@@ -141,10 +127,8 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
     private HomeSpinnerFragment mHomeSpinnerFragment;
     private FragmentOpen mFragmentOpen;
     private CustiomActionBarToggle mCustiomActionBarToggle;
-
     public View mArticlePopUp, mCommunityPopUp, mCommunityPostPopUp;
     private FeedDetail mFeedDetail;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -160,12 +144,12 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
     public void renderHomeFragmentView() {
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
-
         mCustiomActionBarToggle = new CustiomActionBarToggle(this, mDrawer, mToolbar, R.string.ID_NAVIGATION_DRAWER_OPEN, R.string.ID_NAVIGATION_DRAWER_CLOSE, this);
         mDrawer.addDrawerListener(mCustiomActionBarToggle);
-        mCustiomActionBarToggle.syncState();
+        // mCustiomActionBarToggle.syncState();
         mNavigationView.setNavigationItemSelectedListener(this);
         mFragmentOpen = new FragmentOpen();
+        setAllValues(mFragmentOpen);
         initHomeViewPagerAndTabs();
         mHomeSpinnerItemList = CustomeDataList.makeSpinnerListRequest();
         assignNavigationRecyclerListView();
@@ -221,14 +205,25 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
 
 
     @Override
-    public void startActivityFromHolder(Intent intent) {
-
-    }
-
-    @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
         if (baseResponse instanceof FeedDetail) {
-            feedCardsHandled(view, baseResponse);
+            mFeedDetail = (FeedDetail) baseResponse;
+            int id = view.getId();
+            if (id == R.id.tv_community_join) {
+                openInviteSearch();
+            }else if(id==R.id.tv_add_invite)
+            {
+                if(null!=mFeedDetail) {
+                    Fragment fragmentMyCommunityInviteMember = getSupportFragmentManager().findFragmentByTag(MyCommunityInviteMemberFragment.class.getName());
+                    if (AppUtils.isFragmentUIActive(fragmentMyCommunityInviteMember)) {
+                        ((MyCommunityInviteMemberFragment) fragmentMyCommunityInviteMember).onAddMemberClick(mFeedDetail);
+                    }
+                }
+            } else {
+                mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.ONE_CONSTANT);
+                setAllValues(mFragmentOpen);
+                super.feedCardsHandled(view, baseResponse);
+            }
         } else if (baseResponse instanceof HomeSpinnerItem) {
             HomeSpinnerItem homeSpinnerItem = (HomeSpinnerItem) baseResponse;
             String spinnerHeaderName = homeSpinnerItem.getName();
@@ -266,6 +261,7 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
                     openArticleFragment();
                     break;
                 case 4:
+                    initHomeViewPagerAndTabs();
                     checkForAllOpenFragments();
                     openBookMarkFragment();
                     break;
@@ -283,464 +279,8 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
         } else if (baseResponse instanceof CommunitySuggestion) {
 
         } else if (baseResponse instanceof CommentReactionDoc) {
-
-            clickMenuItem(view, baseResponse, true);
-        }
-    }
-
-    @Override
-    public void dataOperationOnClick(BaseResponse baseResponse) {
-        if (baseResponse instanceof FeedDetail) {
-            FeedDetail feedDetail = (FeedDetail) baseResponse;
-            openImageFullViewFragment(feedDetail);
-        }
-    }
-
-
-    private void feedCardsHandled(View view, BaseResponse baseResponse) {
-        mFeedDetail = (FeedDetail) baseResponse;
-        int id = view.getId();
-        switch (id) {
-            case R.id.tv_community_join:
-                openInviteSearch();
-                break;
-            case R.id.tv_feed_community_user_menu:
-                clickMenuItem(view, baseResponse, false);
-                break;
-            case R.id.tv_feed_community_post_user_menu:
-                clickMenuItem(view, baseResponse, false);
-                break;
-            case R.id.tv_feed_article_user_bookmark:
-                bookmarkCall();
-                break;
-            case R.id.tv_feed_community_post_user_bookmark:
-                bookmarkCall();
-                break;
-            case R.id.tv_feed_job_user_bookmark:
-                bookmarkCall();
-                break;
-            case R.id.tv_article_bookmark:
-                bookMarkTrending();
-                break;
-            case R.id.tv_feed_article_user_menu:
-                clickMenuItem(view, baseResponse, false);
-                break;
-            case R.id.tv_feed_job_user_menu:
-                clickMenuItem(view, baseResponse, false);
-                break;
-            case R.id.tv_feed_community_post_user_comment_post_menu:
-                clickMenuItem(view, baseResponse, false);
-                break;
-            case R.id.tv_feed_community_user_comment_post_menu:
-                clickMenuItem(view, baseResponse, false);
-                break;
-            case R.id.tv_article_menu:
-                clickMenuItem(view, baseResponse, false);
-                break;
-            case R.id.tv_feed_article_user_comment_post_menu:
-                clickMenuItem(view, baseResponse, false);
-                break;
-            case R.id.tv_feed_article_total_reactions:
-                mFragmentOpen.setCommentList(false);
-                mFragmentOpen.setReactionList(true);
-                openCommentReactionFragment(mFeedDetail);
-                break;
-            case R.id.tv_feed_community_total_reactions:
-                mFragmentOpen.setCommentList(false);
-                mFragmentOpen.setReactionList(true);
-                openCommentReactionFragment(mFeedDetail);
-                break;
-            case R.id.tv_feed_community_post_total_reactions:
-                mFragmentOpen.setCommentList(false);
-                mFragmentOpen.setReactionList(true);
-                openCommentReactionFragment(mFeedDetail);
-                break;
-            case R.id.li_feed_article_join_conversation:
-                mFragmentOpen.setCommentList(true);
-                openCommentReactionFragment(mFeedDetail);
-                break;
-            case R.id.li_feed_community_join_conversation:
-                mFragmentOpen.setCommentList(true);
-                openCommentReactionFragment(mFeedDetail);
-                break;
-            case R.id.li_feed_community_post_join_conversation:
-                mFragmentOpen.setCommentList(true);
-                openCommentReactionFragment(mFeedDetail);
-                break;
-            case R.id.tv_feed_article_user_reaction:
-                articleUserReaction();
-                break;
-            case R.id.tv_feed_community_user_reaction:
-                communityUserReaction();
-                break;
-            case R.id.tv_feed_community_post_user_reaction:
-                communityPostUserReaction();
-                break;
-            case R.id.li_feed_article_images:
-                ArticleDetailActivity.navigateFromArticle(this, view, mFeedDetail);
-                finish();
-                break;
-            case R.id.li_feed_community_images:
-                CommunitiesDetailActivity.navigate(this, view, mFeedDetail);
-                break;
-            case R.id.li_feed_community_user_post_images:
-                CommunitiesDetailActivity.navigate(this, view, mFeedDetail);
-                break;
-            case R.id.li_feed_job_card:
-                JobDetailActivity.navigateFromJob(this, view, mFeedDetail);
-                break;
-            case R.id.li_article_cover_image:
-                ArticleDetailActivity.navigateFromArticle(this, view, mFeedDetail);
-                finish();
-                break;
-            case R.id.li_community_images:
-                CommunitiesDetailActivity.navigate(this, view, mFeedDetail);
-                break;
-            default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
-        }
-    }
-
-    private void communityPostUserReaction() {
-        mCommunityPostPopUp = findViewById(R.id.li_feed_community_user_post_emoji_pop_up);
-        if (mCommunityPostPopUp.getVisibility() == View.VISIBLE) {
-            mCommunityPostPopUp.setVisibility(View.GONE);
-            dismissUserReactionOption(mCommunityPostPopUp);
-        } else {
-            mCommunityPostPopUp = findViewById(R.id.li_feed_community_user_post_emoji_pop_up);
-            TextView tvCommunityPostReaction = (TextView) mCommunityPostPopUp.findViewById(R.id.tv_reaction);
-            TextView tvCommunityPostReaction1 = (TextView) mCommunityPostPopUp.findViewById(R.id.tv_reaction1);
-            TextView tvCommunityPostReaction2 = (TextView) mCommunityPostPopUp.findViewById(R.id.tv_reaction2);
-            TextView tvCommunityPostReaction3 = (TextView) mCommunityPostPopUp.findViewById(R.id.tv_reaction3);
-            TextView tvCommunityPostReaction4 = (TextView) mCommunityPostPopUp.findViewById(R.id.tv_reaction4);
-            mCommunityPostPopUp.setOnTouchListener(this);
-            tvCommunityPostReaction.setOnClickListener(this);
-            tvCommunityPostReaction1.setOnClickListener(this);
-            tvCommunityPostReaction2.setOnClickListener(this);
-            tvCommunityPostReaction3.setOnClickListener(this);
-            tvCommunityPostReaction4.setOnClickListener(this);
-            mCommunityPostPopUp.setVisibility(View.VISIBLE);
-            showUserReactionOption(mCommunityPostPopUp);
-        }
-    }
-
-    private void communityUserReaction() {
-        mCommunityPopUp = findViewById(R.id.li_feed_community_emoji_pop_up);
-        if (mCommunityPopUp.getVisibility() == View.VISIBLE) {
-            mCommunityPopUp.setVisibility(View.GONE);
-            dismissUserReactionOption(mCommunityPopUp);
-        } else {
-            TextView tvCommunityReaction = (TextView) mCommunityPopUp.findViewById(R.id.tv_reaction);
-            TextView tvCommunityReaction1 = (TextView) mCommunityPopUp.findViewById(R.id.tv_reaction1);
-            TextView tvCommunityReaction2 = (TextView) mCommunityPopUp.findViewById(R.id.tv_reaction2);
-            TextView tvCommunityReaction3 = (TextView) mCommunityPopUp.findViewById(R.id.tv_reaction3);
-            TextView tvCommunityReaction4 = (TextView) mCommunityPopUp.findViewById(R.id.tv_reaction4);
-            mCommunityPopUp.setOnTouchListener(this);
-            tvCommunityReaction.setOnClickListener(this);
-            tvCommunityReaction1.setOnClickListener(this);
-            tvCommunityReaction2.setOnClickListener(this);
-            tvCommunityReaction3.setOnClickListener(this);
-            tvCommunityReaction4.setOnClickListener(this);
-            mCommunityPopUp.setVisibility(View.VISIBLE);
-            showUserReactionOption(mCommunityPopUp);
-        }
-    }
-
-    private void articleUserReaction() {
-        mArticlePopUp = findViewById(R.id.li_feed_article_card_emoji_pop_up);
-        if (mArticlePopUp.getVisibility() == View.VISIBLE) {
-            mArticlePopUp.setVisibility(View.GONE);
-            dismissUserReactionOption(mArticlePopUp);
-        } else {
-            TextView tvArticleReaction = (TextView) mArticlePopUp.findViewById(R.id.tv_reaction);
-            TextView tvArticleReaction1 = (TextView) mArticlePopUp.findViewById(R.id.tv_reaction1);
-            TextView tvArticleReaction2 = (TextView) mArticlePopUp.findViewById(R.id.tv_reaction2);
-            TextView tvArticleReaction3 = (TextView) mArticlePopUp.findViewById(R.id.tv_reaction3);
-            TextView tvArticleReaction4 = (TextView) mArticlePopUp.findViewById(R.id.tv_reaction4);
-            mArticlePopUp.setOnTouchListener(this);
-            tvArticleReaction.setOnClickListener(this);
-            tvArticleReaction1.setOnClickListener(this);
-            tvArticleReaction2.setOnClickListener(this);
-            tvArticleReaction3.setOnClickListener(this);
-            tvArticleReaction4.setOnClickListener(this);
-            mArticlePopUp.setVisibility(View.VISIBLE);
-            showUserReactionOption(mArticlePopUp);
-        }
-    }
-
-    private void bookmarkCall() {
-        if (mFragmentOpen.isBookmarkFragment()) {
-            Fragment fragmentBookMark = getSupportFragmentManager().findFragmentByTag(BookmarksFragment.class.getName());
-            if (AppUtils.isFragmentUIActive(fragmentBookMark)) {
-                ((BookmarksFragment) fragmentBookMark).bookMarkForCard(mFeedDetail);
-            }
-        } else {
-            Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-            if (AppUtils.isFragmentUIActive(fragment)) {
-                ((HomeFragment) fragment).bookMarkForCard(mFeedDetail);
-            }
-        }
-    }
-
-    private void bookMarkTrending() {
-        Fragment articleFragment = getSupportFragmentManager().findFragmentByTag(ArticlesFragment.class.getName());
-        if (AppUtils.isFragmentUIActive(articleFragment)) {
-            ((ArticlesFragment) articleFragment).bookMarkForCard(mFeedDetail);
-        }
-    }
-
-    private void clickMenuItem(View view, final BaseResponse baseResponse, final boolean isCommentReaction) {
-        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final View popupView = layoutInflater.inflate(R.layout.menu_option_layout, null);
-        final PopupWindow popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        popupWindow.setBackgroundDrawable(new BitmapDrawable());
-        popupWindow.setOutsideTouchable(true);
-        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                popupWindow.dismiss();
-            }
-        });
-        final TextView tvEdit = (TextView) popupView.findViewById(R.id.tv_article_menu_edit);
-        final TextView tvDelete = (TextView) popupView.findViewById(R.id.tv_article_menu_delete);
-        final TextView tvShare = (TextView) popupView.findViewById(R.id.tv_article_menu_share);
-        final TextView tvReport = (TextView) popupView.findViewById(R.id.tv_article_menu_report);
-        final Fragment fragmentCommentReaction = getSupportFragmentManager().findFragmentByTag(CommentReactionFragment.class.getName());
-        popupWindow.showAsDropDown(view);
-        tvEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isCommentReaction) {
-                    CommentReactionDoc commentReactionDoc = (CommentReactionDoc) baseResponse;
-                    if (null != commentReactionDoc) {
-                        if (AppUtils.isFragmentUIActive(fragmentCommentReaction)) {
-                            commentReactionDoc.setActive(true);
-                            commentReactionDoc.setEdit(true);
-                            ((CommentReactionFragment) fragmentCommentReaction).editCommentInList(commentReactionDoc);
-                        }
-                    }
-                } else {
-                    if (null != mFeedDetail) {
-                        mFragmentOpen.setCommentList(true);
-                        openCommentReactionFragment(mFeedDetail);
-                    }
-                }
-                popupWindow.dismiss();
-            }
-        });
-        tvDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isCommentReaction) {
-                    CommentReactionDoc commentReactionDoc = (CommentReactionDoc) baseResponse;
-                    if (AppUtils.isFragmentUIActive(fragmentCommentReaction)) {
-                        commentReactionDoc.setActive(false);
-                        commentReactionDoc.setEdit(false);
-                        ((CommentReactionFragment) fragmentCommentReaction).deleteCommentFromList(commentReactionDoc);
-                    }
-                } else {
-                    if (null != mFeedDetail) {
-                        mFragmentOpen.setCommentList(true);
-                        mFragmentOpen.setCommentList(true);
-                        openCommentReactionFragment(mFeedDetail);
-                        // editDeleteComment(mFeedDetail,false);
-                    }
-                }
-                popupWindow.dismiss();
-            }
-        });
-        tvShare.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO:: reveiw for share
-               /* if (mFragmentOpen.isBookmarkFragment()) {
-                    Fragment fragment = getSupportFragmentManager().findFragmentByTag(BookmarksFragment.class.getName());
-                    if (AppUtils.isFragmentUIActive(fragment)) {
-                        ((BookmarksFragment) fragment).commentListRefresh(mFeedDetail);
-                    }
-                } else {
-                    Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-                    if (AppUtils.isFragmentUIActive(fragment)) {
-                        ((HomeFragment) fragment).commentListRefresh(mFeedDetail);
-                    }
-                }*/
-                FeedDetail feedDetail = (FeedDetail) baseResponse;
-                Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setType(AppConstants.SHARE_MENU_TYPE);
-                intent.putExtra(Intent.EXTRA_TEXT, feedDetail.getSlugS());
-                intent.putExtra(Intent.EXTRA_SUBJECT, feedDetail.getDescription());
-                startActivity(Intent.createChooser(intent, AppConstants.SHARE));
-                popupWindow.dismiss();
-            }
-        });
-        tvReport.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "You Clicked : " + tvReport.getText(), Toast.LENGTH_SHORT).show();
-                popupWindow.dismiss();
-            }
-        });
-        int id = view.getId();
-        switch (id) {
-            case R.id.tv_feed_article_user_comment_post_menu:
-                tvEdit.setVisibility(View.VISIBLE);
-                tvDelete.setVisibility(View.VISIBLE);
-                break;
-            case R.id.tv_feed_article_user_menu:
-                tvShare.setVisibility(View.VISIBLE);
-                break;
-            case R.id.tv_feed_job_user_menu:
-                tvShare.setVisibility(View.VISIBLE);
-                break;
-            case R.id.tv_user_comment_list_menu:
-                tvEdit.setVisibility(View.VISIBLE);
-                tvDelete.setVisibility(View.VISIBLE);
-                break;
-            case R.id.tv_feed_community_post_user_comment_post_menu:
-              /*  //if owner
-                tvDelete.setVisibility(View.VISIBLE);
-                //if commenter*/
-                tvEdit.setVisibility(View.VISIBLE);
-                tvDelete.setVisibility(View.VISIBLE);
-                break;
-            case R.id.tv_feed_community_user_comment_post_menu:
-              /*  //if owner
-                tvDelete.setVisibility(View.VISIBLE);
-                //if commenter*/
-                tvEdit.setVisibility(View.VISIBLE);
-                tvDelete.setVisibility(View.VISIBLE);
-                break;
-
-            case R.id.tv_article_menu:
-                tvShare.setVisibility(View.VISIBLE);
-                break;
-            case R.id.tv_feed_community_post_user_menu:
-                FeedDetail feedPostDetail = (FeedDetail) baseResponse;
-                tvShare.setVisibility(View.VISIBLE);
-              /*  if(null!=feedPostDetail)
-                {
-                    //If creator then
-                    tvEdit.setVisibility(View.VISIBLE);
-                    tvDelete.setVisibility(View.VISIBLE);
-                    tvShare.setVisibility(View.VISIBLE);
-
-                    //if owner then
-                    tvDelete.setVisibility(View.VISIBLE);
-                    tvShare.setVisibility(View.VISIBLE);
-                    tvReport.setVisibility(View.VISIBLE);
-                    //if Other then
-                    tvShare.setVisibility(View.VISIBLE);
-                    tvReport.setVisibility(View.VISIBLE);
-                }*/
-                break;
-            case R.id.tv_feed_community_user_menu:
-                FeedDetail feedCommunityDetail = (FeedDetail) baseResponse;
-                if (null != feedCommunityDetail) {
-                    //If creator then
-                    tvEdit.setVisibility(View.VISIBLE);
-                    tvDelete.setVisibility(View.VISIBLE);
-                    tvShare.setVisibility(View.VISIBLE);
-
-                    //if owner then
-                    tvDelete.setVisibility(View.VISIBLE);
-                    tvShare.setVisibility(View.VISIBLE);
-                    tvReport.setVisibility(View.VISIBLE);
-                    //if Other then
-                    tvShare.setVisibility(View.VISIBLE);
-                    tvReport.setVisibility(View.VISIBLE);
-                }
-                break;
-            default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
-        }
-    }
-
-    private void editDeleteComment(FeedDetail feedDetail, boolean isEdit) {
-        final Fragment fragmentHome = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-        if (AppUtils.isFragmentUIActive(fragmentHome)) {
-            ((HomeFragment) fragmentHome).editDeleteRecentComment(feedDetail, isEdit);
-        }
-    }
-
-
-    private void openImageFullViewFragment(FeedDetail feedDetail) {
-        ImageFullViewFragment imageFullViewFragment = new ImageFullViewFragment();
-        Bundle bundle = new Bundle();
-        mFragmentOpen.setCommentList(true);
-        bundle.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, mFragmentOpen);
-        bundle.putParcelable(AppConstants.IMAGE_FULL_VIEW, feedDetail);
-        imageFullViewFragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.bottom_to_top_slide_reverse_anim)
-                .replace(R.id.fl_feed_comments, imageFullViewFragment, ImageFullViewFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
-
-    }
-
-    private void openCommentReactionFragment(FeedDetail feedDetail) {
-        if (mFragmentOpen.isBookmarkFragment()) {
-            Fragment fragmentBookMark = getSupportFragmentManager().findFragmentByTag(BookmarksFragment.class.getName());
-            if (AppUtils.isFragmentUIActive(fragmentBookMark)) {
-                clickCommentReactionFragment( feedDetail);
-            }
-        } else {
-            Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-            if (AppUtils.isFragmentUIActive(fragment)) {
-                clickCommentReactionFragment( feedDetail);
-            }
-        }
-    }
-    private void clickCommentReactionFragment(FeedDetail feedDetail)
-    {
-        CommentReactionFragment commentReactionFragmentForArticle = new CommentReactionFragment();
-        Bundle bundleArticle = new Bundle();
-        bundleArticle.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, mFragmentOpen);
-        bundleArticle.putParcelable(AppConstants.COMMENTS, feedDetail);
-        commentReactionFragmentForArticle.setArguments(bundleArticle);
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.bottom_to_top_slide_reverse_anim)
-                .replace(R.id.fl_feed_comments, commentReactionFragmentForArticle, CommentReactionFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
-
-    }
-
-    private void showUserReactionOption(View viewToAnimate) {
-        Animation animation = AnimationUtils.loadAnimation(this, R.anim.fade_in);
-        viewToAnimate.startAnimation(animation);
-    }
-
-    private void dismissUserReactionOption(View viewToAnimate) {
-        Animation animation = AnimationUtils.loadAnimation(this, R.anim.fade_out);
-        viewToAnimate.clearAnimation();
-        animation.setFillAfter(false);
-    }
-
-    @Override
-    public void setListData(BaseResponse data, boolean isCheked) {
-        List<HomeSpinnerItem> localList = new ArrayList<>();
-        if (StringUtil.isNotEmptyCollection(mHomeSpinnerItemList)) {
-            HomeSpinnerItem passedHomeItem = (HomeSpinnerItem) data;
-            for (HomeSpinnerItem homeSpinnerItem : mHomeSpinnerItemList) {
-                if (homeSpinnerItem.getId().equalsIgnoreCase(passedHomeItem.getId())) {
-                    homeSpinnerItem.setChecked(passedHomeItem.isChecked());
-                    localList.add(homeSpinnerItem);
-                } else {
-                    localList.add(homeSpinnerItem);
-                }
-            }
-        }
-        mHomeSpinnerItemList.clear();
-        mHomeSpinnerItemList.addAll(localList);
-    }
-
-    @Override
-    public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-        if (mFragmentOpen.isBookmarkFragment()) {
-            Fragment fragmentBookMark = getSupportFragmentManager().findFragmentByTag(BookmarksFragment.class.getName());
-            if (AppUtils.isFragmentUIActive(fragmentBookMark)) {
-                ((BookmarksFragment) fragmentBookMark).likeAndUnlikeRequest(baseResponse, reactionValue, position);
-            }
-        } else {
-            Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-            if (AppUtils.isFragmentUIActive(fragment)) {
-                ((HomeFragment) fragment).likeAndUnlikeRequest(baseResponse, reactionValue, position);
-            }
+            setAllValues(mFragmentOpen);
+            super.clickMenuItem(view, baseResponse, true);
         }
     }
 
@@ -864,6 +404,7 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
         mTvCommunities.setText(AppConstants.EMPTY_STRING);
         mTvHome.setText(getString(R.string.ID_FEED));
         mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_FEED));
+        initHomeViewPagerAndTabs();
     }
 
     @OnClick(R.id.tv_communities)
@@ -905,6 +446,7 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
         mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_unselected_icon), null, null);
         mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_unselected_icon), null, null);
         mTvCommunities.setText(AppConstants.EMPTY_STRING);
+        setAllValues(mFragmentOpen);
         ArticlesFragment articlesFragment = new ArticlesFragment();
         Bundle bundleArticle = new Bundle();
         articlesFragment.setArguments(bundleArticle);
@@ -914,20 +456,12 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
     }
 
     private void openInviteSearch() {
+        mFragmentOpen=new FragmentOpen();
+        mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.FOURTH_CONSTANT);
         mFlHomeFooterList.setVisibility(View.VISIBLE);
-        mToolbar.setVisibility(View.VISIBLE);
-        mFragmentOpen.setArticleFragment(true);
-        mViewPager.setVisibility(View.GONE);
-        mTabLayout.setVisibility(View.GONE);
-        flFeedFullView.setVisibility(View.GONE);
-        mTvSpinnerIcon.setVisibility(View.GONE);
-        mTvHome.setText(AppConstants.EMPTY_STRING);
-        mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_unselected_icon), null, null);
-        mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_unselected_icon), null, null);
-        mTvCommunities.setText(AppConstants.EMPTY_STRING);
         MyCommunityInviteMemberFragment myCommunityInviteMemberFragment = new MyCommunityInviteMemberFragment();
-        Bundle bundleArticle = new Bundle();
-        myCommunityInviteMemberFragment.setArguments(bundleArticle);
+        Bundle bundleInvite = new Bundle();
+        myCommunityInviteMemberFragment.setArguments(bundleInvite);
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
                 .replace(R.id.fl_feed_comments, myCommunityInviteMemberFragment, MyCommunityInviteMemberFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
         mTvSpinnerIcon.setVisibility(View.VISIBLE);
@@ -974,6 +508,7 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
         mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_unselected_icon), null, null);
         mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_unselected_icon), null, null);
         mTvCommunities.setText(AppConstants.EMPTY_STRING);
+        setAllValues(mFragmentOpen);
         BookmarksFragment bookmarksFragment = new BookmarksFragment();
         Bundle bundleBookMarks = new Bundle();
         bundleBookMarks.putParcelable(AppConstants.BOOKMARKS, mFeedDetail);
@@ -1060,6 +595,7 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
             mFragmentOpen.setCommentList(true);
         } else if (mFragmentOpen.isArticleFragment()) {
             getSupportFragmentManager().popBackStackImmediate();
+            initHomeViewPagerAndTabs();
             if (mFragmentOpen.isFeedOpen()) {
                 flFeedFullView.setVisibility(View.VISIBLE);
                 mTvHome.setText(getString(R.string.ID_FEED));
@@ -1084,9 +620,14 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
 
         } else if (mFragmentOpen.isBookmarkFragment()) {
             getSupportFragmentManager().popBackStackImmediate();
+            initHomeViewPagerAndTabs();
             setHomeFeedCommunityData();
             mFragmentOpen.setBookmarkFragment(false);
-        } else {
+        } else if(mFragmentOpen.getOpenCommentReactionFragmentFor()==AppConstants.FOURTH_CONSTANT) {
+            getSupportFragmentManager().popBackStackImmediate();
+            mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.NO_REACTION_CONSTANT);
+        }else
+        {
             finish();
         }
     }
@@ -1117,159 +658,7 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
         onBackPressed();
     }
 
-
-    @Override
-    public void onClickReactionList(FragmentOpen isFragmentOpen, FeedDetail feedDetail) {
-        mFragmentOpen = isFragmentOpen;
-        mFeedDetail = feedDetail;
-        if (mFragmentOpen.isReactionList()) {
-            openCommentReactionFragment(mFeedDetail);
-        }
-    }
-
-    @Override
-    public boolean onTouch(View view, MotionEvent event) {
-        int id = view.getId();
-        switch (id) {
-            case R.id.li_feed_article_card_emoji_pop_up:
-                if (null != mArticlePopUp) {
-                    mArticlePopUp.setVisibility(View.GONE);
-                    dismissUserReactionOption(mArticlePopUp);
-                }
-                break;
-            case R.id.li_feed_community_emoji_pop_up:
-                if (null != mCommunityPopUp) {
-                    mCommunityPopUp.setVisibility(View.GONE);
-                    dismissUserReactionOption(mCommunityPopUp);
-                }
-                break;
-            case R.id.li_feed_community_user_post_emoji_pop_up:
-                if (null != mCommunityPostPopUp) {
-                    mCommunityPostPopUp.setVisibility(View.GONE);
-                    dismissUserReactionOption(mCommunityPostPopUp);
-                }
-                break;
-            default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + "  " + TAG + " " + id);
-        }
-        return true;
-    }
-
-    @Override
-    public void onClick(View view) {
-
-        int id = view.getId();
-        switch (id) {
-            case R.id.tv_reaction:
-                heartEmojiSelection();
-                break;
-            case R.id.tv_reaction1:
-                emojiFirstSelection();
-                break;
-            case R.id.tv_reaction2:
-                emojiSecondSelection();
-
-                break;
-            case R.id.tv_reaction3:
-                emojiThirdSelection();
-
-                break;
-            case R.id.tv_reaction4:
-                emojiFourthSelection();
-                break;
-            default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + "  " + TAG + " " + id);
-        }
-    }
-
-    private void emojiFourthSelection() {
-        if (null != mArticlePopUp) {
-            mArticlePopUp.setVisibility(View.GONE);
-            dismissUserReactionOption(mArticlePopUp);
-        }
-        if (null != mCommunityPopUp) {
-            mCommunityPopUp.setVisibility(View.GONE);
-            dismissUserReactionOption(mCommunityPopUp);
-        }
-        if (null != mCommunityPostPopUp) {
-            mCommunityPostPopUp.setVisibility(View.GONE);
-            dismissUserReactionOption(mCommunityPostPopUp);
-        }
-        userCommentLikeRequest(mFeedDetail, AppConstants.EMOJI_FOURTH_REACTION_CONSTANT, mFeedDetail.getItemPosition());
-    }
-
-    private void emojiThirdSelection() {
-        if (null != mArticlePopUp) {
-            mArticlePopUp.setVisibility(View.GONE);
-            dismissUserReactionOption(mArticlePopUp);
-        }
-        if (null != mCommunityPopUp) {
-            mCommunityPopUp.setVisibility(View.GONE);
-            dismissUserReactionOption(mCommunityPopUp);
-        }
-        if (null != mCommunityPostPopUp) {
-            mCommunityPostPopUp.setVisibility(View.GONE);
-            dismissUserReactionOption(mCommunityPostPopUp);
-        }
-        userCommentLikeRequest(mFeedDetail, AppConstants.EMOJI_THIRD_REACTION_CONSTANT, mFeedDetail.getItemPosition());
-    }
-
-    private void emojiSecondSelection() {
-        if (null != mArticlePopUp) {
-            mArticlePopUp.setVisibility(View.GONE);
-            dismissUserReactionOption(mArticlePopUp);
-        }
-        if (null != mCommunityPopUp) {
-            mCommunityPopUp.setVisibility(View.GONE);
-            dismissUserReactionOption(mCommunityPopUp);
-        }
-        if (null != mCommunityPostPopUp) {
-            mCommunityPostPopUp.setVisibility(View.GONE);
-            dismissUserReactionOption(mCommunityPostPopUp);
-        }
-        userCommentLikeRequest(mFeedDetail, AppConstants.EMOJI_SECOND_REACTION_CONSTANT, mFeedDetail.getItemPosition());
-    }
-
-    public void heartEmojiSelection() {
-        if (null != mArticlePopUp) {
-            mArticlePopUp.setVisibility(View.GONE);
-            dismissUserReactionOption(mArticlePopUp);
-        }
-
-        if (null != mCommunityPopUp) {
-            mCommunityPopUp.setVisibility(View.GONE);
-            dismissUserReactionOption(mCommunityPopUp);
-        }
-        if (null != mCommunityPostPopUp) {
-            mCommunityPostPopUp.setVisibility(View.GONE);
-            dismissUserReactionOption(mCommunityPostPopUp);
-        }
-        userCommentLikeRequest(mFeedDetail, AppConstants.HEART_REACTION_CONSTANT, mFeedDetail.getItemPosition());
-    }
-
-    public void emojiFirstSelection() {
-        if (null != mArticlePopUp) {
-            mArticlePopUp.setVisibility(View.GONE);
-            dismissUserReactionOption(mArticlePopUp);
-        }
-        if (null != mCommunityPopUp) {
-            mCommunityPopUp.setVisibility(View.GONE);
-            dismissUserReactionOption(mCommunityPopUp);
-        }
-        if (null != mCommunityPostPopUp) {
-            mCommunityPostPopUp.setVisibility(View.GONE);
-            dismissUserReactionOption(mCommunityPostPopUp);
-        }
-        userCommentLikeRequest(mFeedDetail, AppConstants.EMOJI_FIRST_REACTION_CONSTANT, mFeedDetail.getItemPosition());
-    }
-
-
-    @Override
-    public void showNwError() {
-
-    }
-
-    @Override
+  /*  @Override
     public void backListener(int id) {
 
         switch (id) {
@@ -1299,27 +688,8 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
                 getSupportFragmentManager().popBackStack();
 
         }
-    }
+    }*/
 
-    @Override
-    public void startProgressBar() {
-
-    }
-
-    @Override
-    public void stopProgressBar() {
-
-    }
-
-    @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
-    public void showError(String s) {
-
-    }
 
     @OnClick(R.id.fab_add_community)
     public void createCommunityButton() {
@@ -1329,7 +699,7 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
 
     @OnClick(R.id.iv_home_notification_icon)
     public void notificationClick() {
-       // mDrawer.openDrawer(Gravity.LEFT);
+        // mDrawer.openDrawer(Gravity.LEFT);
         Snackbar.make(mCLMainLayout, "Work in progress", Snackbar.LENGTH_SHORT).show();
     }
 
@@ -1341,6 +711,46 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
     @Override
     public void onDialogDissmiss(FragmentOpen isFragmentOpen) {
 
+    }
+
+    @OnClick(R.id.tv_drawer_navigation)
+    public void drawerNavigationClick() {
+        mDrawer.openDrawer(Gravity.LEFT);
+    }
+
+    @Override
+    public void dataOperationOnClick(BaseResponse baseResponse) {
+        setAllValues(mFragmentOpen);
+        super.dataOperationOnClick(baseResponse);
+    }
+
+    @Override
+    public void setListData(BaseResponse data, boolean isCheked) {
+        List<HomeSpinnerItem> localList = new ArrayList<>();
+        if (StringUtil.isNotEmptyCollection(mHomeSpinnerItemList)) {
+            HomeSpinnerItem passedHomeItem = (HomeSpinnerItem) data;
+            for (HomeSpinnerItem homeSpinnerItem : mHomeSpinnerItemList) {
+                if (homeSpinnerItem.getId().equalsIgnoreCase(passedHomeItem.getId())) {
+                    homeSpinnerItem.setChecked(passedHomeItem.isChecked());
+                    localList.add(homeSpinnerItem);
+                } else {
+                    localList.add(homeSpinnerItem);
+                }
+            }
+        }
+        mHomeSpinnerItemList.clear();
+        mHomeSpinnerItemList.addAll(localList);
+    }
+
+    @Override
+    public void onClickReactionList(FragmentOpen isFragmentOpen, FeedDetail feedDetail) {
+        mFragmentOpen = isFragmentOpen;
+        mFeedDetail = feedDetail;
+        if (mFragmentOpen.isReactionList()) {
+            mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.ONE_CONSTANT);
+            setAllValues(mFragmentOpen);
+            super.openCommentReactionFragment(mFeedDetail);
+        }
     }
 }
 

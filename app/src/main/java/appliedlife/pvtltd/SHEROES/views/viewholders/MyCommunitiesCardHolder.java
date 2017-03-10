@@ -82,7 +82,15 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
     }
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void textViewOperation(Context context) {
-        if(!dataItem.isApplied())
+         if(dataItem.isClosedCommunity())
+        {
+            tvCommunityTime.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_lock, 0);
+        }
+        else
+        {
+            tvCommunityTime.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
+        }
+        if(dataItem.isOwner()||dataItem.isMember())
         {
             tvCommunityJoin.setVisibility(View.VISIBLE);
         }else
@@ -172,9 +180,9 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
                 String lessWithColor = LEFT_HTML_VEIW_TAG_FOR_COLOR + mLess + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
                 mViewMoreDescription=dataItem.getListDescription();
                 if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                    tvDescriptionText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + lessWithColor, 0)); // for 24 api and more
+                    tvDescriptionText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.SPACE + lessWithColor, 0)); // for 24 api and more
                 } else {
-                    tvDescriptionText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + lessWithColor));// or for older api
+                    tvDescriptionText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.SPACE + lessWithColor));// or for older api
                 }
                 tvDescriptionText.setTag(mLess);
             } else {
@@ -184,9 +192,9 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
                 }
                 String viewMore = LEFT_HTML_VEIW_TAG_FOR_COLOR + mViewMore + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
                 if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                    tvDescriptionText.setText(Html.fromHtml(mViewMoreDescription.substring(0, AppConstants.WORD_COUNT) + AppConstants.DOTS + AppConstants.SPACE + viewMore, 0)); // for 24 api and more
+                    tvDescriptionText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + viewMore, 0)); // for 24 api and more
                 } else {
-                    tvDescriptionText.setText(Html.fromHtml(mViewMoreDescription.substring(0, AppConstants.WORD_COUNT) + AppConstants.DOTS + AppConstants.SPACE + viewMore));// or for older api
+                    tvDescriptionText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + viewMore));// or for older api
                 }
             }
         }

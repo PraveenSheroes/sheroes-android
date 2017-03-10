@@ -88,6 +88,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.ProfileItems;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
@@ -1710,15 +1711,15 @@ public class AppUtils {
         likeRequestPojo.setEntityId(entityId);
         return likeRequestPojo;
     }
-    public static CommentReactionRequestPojo getCommentRequestBuilder(long entityId) {
+    public static CommentReactionRequestPojo getCommentRequestBuilder(long entityId,int pageNo) {
         AppUtils appUtils = AppUtils.getInstance();
         CommentReactionRequestPojo commentReactionRequestPojo =new CommentReactionRequestPojo();
         commentReactionRequestPojo.setAppVersion(appUtils.getAppVersionName());
         commentReactionRequestPojo.setDeviceUniqueId(appUtils.getDeviceId());
         //TODO:: change rquest data
         commentReactionRequestPojo.setCloudMessagingId(AppConstants.ALL_SEARCH);
-        commentReactionRequestPojo.setPageNo(1);
-        commentReactionRequestPojo.setPageSize(AppConstants.PAGE_SIZE);
+        commentReactionRequestPojo.setPageNo(pageNo);
+        commentReactionRequestPojo.setPageSize(AppConstants.WORD_LENGTH);
         commentReactionRequestPojo.setEntityId(entityId);
         return commentReactionRequestPojo;
     }
@@ -1757,6 +1758,13 @@ public class AppUtils {
         commentReactionRequestPojo.setEntityId(entityId);
         commentReactionRequestPojo.setParticipationId(participationId);
         return commentReactionRequestPojo;
+    }
+
+
+    public static CommunityRequest communityRequestBuilder(List<Long> userId) {
+        CommunityRequest communityRequest=new CommunityRequest();
+        communityRequest.setUserId(userId);
+        return communityRequest;
     }
     /**
      * Profile data

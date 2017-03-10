@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
+import appliedlife.pvtltd.SHEROES.presenters.CommentReactionPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -32,8 +33,15 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
     private int visibleThreshold = 1;
     int firstVisibleItem, visibleItemCount, totalItemCount;
     private FragmentListRefreshData mFragmentListRefreshData;
+    CommentReactionPresenter mCommentReactionPresenter;
     public HidingScrollListener(HomePresenter homePresenter, RecyclerView recyclerView, LinearLayoutManager manager, FragmentListRefreshData fragmentListRefreshData) {
         mHomePresenter=homePresenter;
+        mRecyclerView=recyclerView;
+        mManager=manager;
+        this.mFragmentListRefreshData=fragmentListRefreshData;
+    }
+    public HidingScrollListener(CommentReactionPresenter commentReactionPresenter, RecyclerView recyclerView, LinearLayoutManager manager, FragmentListRefreshData fragmentListRefreshData) {
+        mCommentReactionPresenter=commentReactionPresenter;
         mRecyclerView=recyclerView;
         mManager=manager;
         this.mFragmentListRefreshData=fragmentListRefreshData;
@@ -111,7 +119,9 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                     case AppConstants.BOOKMARKS:
                         mHomePresenter.getBookMarkFromPresenter(mAppUtils.getBookMarks(pageNo));
                         break;
-
+                    case AppConstants.COMMENT_REACTION_FRAGMENT:
+                     //   mCommentReactionPresenter.getAllCommentListFromPresenter(mAppUtils.getCommentRequestBuilder(mFragmentListRefreshData.getEnitityOrParticpantid(),pageNo), mFragmentListRefreshData.isReactionList());
+                        break;
                     default:
                         LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + mFragmentListRefreshData.getCallFromFragment());
                 }

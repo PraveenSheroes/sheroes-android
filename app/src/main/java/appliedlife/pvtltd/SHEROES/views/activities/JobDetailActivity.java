@@ -33,7 +33,6 @@ import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
-import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -53,7 +52,7 @@ import butterknife.OnClick;
  * Created by SHEROES-TECH on 20-02-2017.
  */
 
-public class JobDetailActivity extends BaseActivity implements BaseHolderInterface, View.OnClickListener, View.OnTouchListener, CommentReactionFragment.HomeActivityIntractionListner {
+public class JobDetailActivity extends BaseActivity implements CommentReactionFragment.HomeActivityIntractionListner {
     private final String TAG = LogUtils.makeLogTag(ArticleDetailActivity.class);
     @Bind(R.id.app_bar_article_detail)
     AppBarLayout mAppBarLayout;

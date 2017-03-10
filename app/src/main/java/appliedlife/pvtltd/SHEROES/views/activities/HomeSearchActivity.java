@@ -16,7 +16,6 @@ import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
-import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -36,7 +35,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class HomeSearchActivity extends BaseActivity implements BaseHolderInterface, ViewPager.OnPageChangeListener, FragmentIntractionWithActivityListner {
+public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPageChangeListener, FragmentIntractionWithActivityListner {
     private final String TAG = LogUtils.makeLogTag(HomeSearchActivity.class);
     @Inject
     HomePresenter mHomePresenter;

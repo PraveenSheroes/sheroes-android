@@ -16,7 +16,9 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -24,7 +26,6 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
@@ -35,7 +36,6 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -44,8 +44,8 @@ import butterknife.OnClick;
  * Created by Praveen_Singh on 06-03-2017.
  */
 
-public class MyCommunityInviteMemberFragment extends BaseFragment implements HomeView{
-    private final String TAG = LogUtils.makeLogTag(CommunityInviteSearchFragment.class);
+public class MyCommunityInviteMemberFragment extends BaseFragment {
+    private final String TAG = LogUtils.makeLogTag(MyCommunityInviteMemberFragment.class);
     @Inject
     HomePresenter mHomePresenter;
     @Inject
@@ -62,11 +62,15 @@ public class MyCommunityInviteMemberFragment extends BaseFragment implements Hom
     TextView tvInviteUserOnly;
     @Bind(R.id.et_search_edit_text)
     public EditText mSearchEditText;
+    @Bind(R.id.tv_added_member)
+    TextView tvAddedMember;
     private String mSearchDataName = AppConstants.EMPTY_STRING;
     private GenericRecyclerViewAdapter mAdapter;
     private FragmentIntractionWithActivityListner mHomeSearchActivityFragmentIntractionWithActivityListner;
     private FragmentListRefreshData mFragmentListRefreshData;
     private Handler mHandler = new Handler();
+    private List<Long> mUserIdForAddMember = new ArrayList<>();
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -84,7 +88,7 @@ public class MyCommunityInviteMemberFragment extends BaseFragment implements Hom
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.my_community_invite_member, container, false);
-        ButterKnife.bind(this,view);
+        ButterKnife.bind(this, view);
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ALL_SEARCH, AppConstants.EMPTY_STRING);
         mHomePresenter.attachView(this);
         tvInviteText.setText(getString(R.string.ID_SEARCH));
@@ -95,44 +99,22 @@ public class MyCommunityInviteMemberFragment extends BaseFragment implements Hom
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mAdapter);
         liInviteMember.setVisibility(View.VISIBLE);
+        super.setAllInitializationForFeeds(mFragmentListRefreshData, mAdapter, manager, mRecyclerView, mHomePresenter, mAppUtils, mProgressBar);
         return view;
     }
 
     @Override
     public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
-        if(StringUtil.isNotEmptyCollection(feedDetailList)&&mAdapter!=null) {
+        if (StringUtil.isNotEmptyCollection(feedDetailList) && mAdapter != null) {
             liInviteMember.setVisibility(View.GONE);
             mAdapter.setCallForRecycler(AppConstants.FEED_SUB_TYPE);
             mAdapter.setSheroesGenericListData(feedDetailList);
             mAdapter.notifyDataSetChanged();
-        }
-        else
-        {
+        } else {
             liInviteMember.setVisibility(View.VISIBLE);
-            tvInviteText.setText(getString(R.string.ID_INVITE_MEMBER_COMMUNITY));
-            tvInviteUserOnly.setText(getString(R.string.ID_INVITE_USER_TEXT));
         }
     }
 
-    @Override
-    public void getSuccessForAllResponse(String success, int successFrom) {
-
-    }
-
-    @Override
-    public void getDB(List<RecentSearchData> recentSearchDatas) {
-    }
-
-    @Override
-    public void startProgressBar() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mProgressBar.bringToFront();
-    }
-
-    @Override
-    public void stopProgressBar() {
-        mProgressBar.setVisibility(View.GONE);
-    }
 
     @Override
     public void showError(String errorMsg) {
@@ -140,30 +122,9 @@ public class MyCommunityInviteMemberFragment extends BaseFragment implements Hom
     }
 
     @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
         mHomePresenter.detachView();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
     }
 
     /**
@@ -199,8 +160,7 @@ public class MyCommunityInviteMemberFragment extends BaseFragment implements Hom
                     mAdapter.getFilter().filter(mSearchDataName);
                 }*/
 
-                if (StringUtil.isNotNullOrEmptyString(inputSearch.toString())&&inputSearch.toString().length()>AppConstants.THREE_CONSTANT)
-                {
+                if (StringUtil.isNotNullOrEmptyString(inputSearch.toString()) && inputSearch.toString().length() > AppConstants.THREE_CONSTANT) {
                     liInviteMember.setVisibility(View.GONE);
                     mSearchDataName = inputSearch.toString();
                     /**hitting the servers to get data if length is greater than threshold defined **/
@@ -210,24 +170,57 @@ public class MyCommunityInviteMemberFragment extends BaseFragment implements Hom
             }
         };
     }
+
     /**
      * Runnable use to make network call on every character change while search for city name.
      */
-    Runnable mFilterTask = new Runnable()
-    {
+    Runnable mFilterTask = new Runnable() {
         @Override
-        public void run()
-        {
-            if (!isDetached())
-            {
+        public void run() {
+            if (!isDetached()) {
                 mSearchDataName = mSearchDataName.trim().replaceAll(AppConstants.SPACE, AppConstants.EMPTY_STRING);
-                mHomePresenter.getFeedFromPresenter(mAppUtils.searchRequestBuilder(AppConstants.USER_SUB_TYPE,mSearchDataName ,mFragmentListRefreshData.getPageNo(),AppConstants.ALL_SEARCH));
+                mHomePresenter.getFeedFromPresenter(mAppUtils.searchRequestBuilder(AppConstants.USER_SUB_TYPE, mSearchDataName, mFragmentListRefreshData.getPageNo(), AppConstants.ALL_SEARCH));
             }
         }
     };
+
+    @Override
+    public void getSuccessForAllResponse(String success, int successFrom) {
+        switch (successFrom) {
+            case AppConstants.ONE_CONSTANT:
+             //ToDO:; need to verify dialog;
+                Toast.makeText(getContext(),"Add members",Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + successFrom);
+        }
+    }
+
     @OnClick(R.id.tv_back_community)
-    public void inviteSearchBack()
-    {
+    public void inviteSearchBack() {
         getActivity().getSupportFragmentManager().popBackStack();
+    }
+
+    @OnClick(R.id.tv_invite_post_submit)
+    public void inviteSubmit() {
+        if (StringUtil.isNotEmptyCollection(mUserIdForAddMember)) {
+            mHomePresenter.communityJoinFromPresenter(mAppUtils.communityRequestBuilder(mUserIdForAddMember));
+        }
+    }
+
+    public void onAddMemberClick(FeedDetail feedDetail) {
+        if(feedDetail.isLongPress())
+        {
+            mUserIdForAddMember.add(feedDetail.getAuthorId());
+        }
+        else
+        {
+            mUserIdForAddMember.remove(feedDetail.getAuthorId());
+        }
+        if (mUserIdForAddMember.size() == AppConstants.ONE_CONSTANT) {
+            tvAddedMember.setText(getString(R.string.ID_ADDED) +AppConstants.SPACE+  + mUserIdForAddMember.size() +AppConstants.SPACE+  getString(R.string.ID_MEMBERS).substring(0, getString(R.string.ID_MEMBERS).length() - 1));
+        } else {
+            tvAddedMember.setText(getString(R.string.ID_ADDED) +AppConstants.SPACE+ mUserIdForAddMember.size() +AppConstants.SPACE+  getString(R.string.ID_MEMBERS));
+        }
     }
 }

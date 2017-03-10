@@ -52,9 +52,9 @@ public class SearchRecentFragment extends BaseFragment implements HomeView {
     @Bind(R.id.pb_search_progress_bar)
     ProgressBar mProgressBar;
     @Bind(R.id.li_no_search_result)
-    LinearLayout liNoSearchResult;
+    LinearLayout mLiNoSearchResult;
     @Bind(R.id.tv_search_result)
-    TextView tvSearchResult;
+    TextView mTvSearchResult;
     private GenericRecyclerViewAdapter mAdapter;
     private FragmentIntractionWithActivityListner mHomeSearchActivityFragmentIntractionWithActivityListner;
     private List<RecentSearchData> recentSearchDatas;
@@ -89,18 +89,8 @@ public class SearchRecentFragment extends BaseFragment implements HomeView {
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mAdapter);
-        liNoSearchResult.setVisibility(View.VISIBLE);
+        mLiNoSearchResult.setVisibility(View.VISIBLE);
         return view;
-    }
-
-
-    @Override
-    public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
-    }
-
-    @Override
-    public void getSuccessForAllResponse(String success, int successFrom) {
-
     }
 
     @Override
@@ -117,31 +107,21 @@ public class SearchRecentFragment extends BaseFragment implements HomeView {
                 feedDetailList.add(feedObject);
             }
             if (StringUtil.isNotEmptyCollection(feedDetailList) && mAdapter != null) {
-                liNoSearchResult.setVisibility(View.GONE);
+                mLiNoSearchResult.setVisibility(View.GONE);
                 mAdapter.setCallForRecycler(AppConstants.ALL_SEARCH);
                 mAdapter.setSheroesGenericListData(feedDetailList);
                 mAdapter.notifyDataSetChanged();
 
             } else {
-                liNoSearchResult.setVisibility(View.VISIBLE);
-                tvSearchResult.setText(getString(R.string.ID_NO_RESULT_FOUND));
+                mLiNoSearchResult.setVisibility(View.VISIBLE);
+                mTvSearchResult.setText(getString(R.string.ID_NO_RESULT_FOUND));
             }
         } else {
-            liNoSearchResult.setVisibility(View.VISIBLE);
-            tvSearchResult.setText(getString(R.string.ID_NO_RESULT_FOUND));
+            mLiNoSearchResult.setVisibility(View.VISIBLE);
+            mTvSearchResult.setText(getString(R.string.ID_NO_RESULT_FOUND));
         }
     }
 
-    @Override
-    public void startProgressBar() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mProgressBar.bringToFront();
-    }
-
-    @Override
-    public void stopProgressBar() {
-        mProgressBar.setVisibility(View.GONE);
-    }
 
     @Override
     public void showError(String errorMsg) {
@@ -149,30 +129,9 @@ public class SearchRecentFragment extends BaseFragment implements HomeView {
     }
 
     @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
         mHomePresenter.detachView();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
     }
 
 

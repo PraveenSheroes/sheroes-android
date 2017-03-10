@@ -31,10 +31,10 @@ public class InviteMemberHolder extends BaseViewHolder<FeedDetail> {
     TextView tvAddInvite;
     BaseHolderInterface viewInterface;
     private FeedDetail dataItem;
-    Context mContext;
+    private Context mContext;
     public InviteMemberHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
-        ButterKnife.bind(this,itemView);
+        ButterKnife.bind(this, itemView);
         this.viewInterface = baseHolderInterface;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
     }
@@ -42,12 +42,12 @@ public class InviteMemberHolder extends BaseViewHolder<FeedDetail> {
     @Override
     public void bindData(FeedDetail feedDetail, Context context, int position) {
         this.dataItem = feedDetail;
-        mContext=context;
-        if(StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle()));
+        mContext = context;
+        if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) ;
         {
             tvMemberName.setText(dataItem.getNameOrTitle());
         }
-        if(StringUtil.isNotNullOrEmptyString(dataItem.getCityName()));
+        if (StringUtil.isNotNullOrEmptyString(dataItem.getCityName())) ;
         {
             tvCity.setText(dataItem.getCityName());
         }
@@ -57,12 +57,24 @@ public class InviteMemberHolder extends BaseViewHolder<FeedDetail> {
     public void viewRecycled() {
 
     }
-@OnClick(R.id.tv_add_invite)
-public void inviteOnclick()
-{
-    tvAddInvite.setBackgroundResource(R.drawable.selected_add_btn_shap);
-    tvAddInvite.setTextColor(ContextCompat.getColor(mContext, R.color.white));
-}
+
+    @OnClick(R.id.tv_add_invite)
+    public void inviteOnclick() {
+        if(!dataItem.isLongPress()) {
+            dataItem.setLongPress(true);
+            tvAddInvite.setText(mContext.getString(R.string.ID_ADDED));
+            tvAddInvite.setBackgroundResource(R.drawable.select_inivite_button_added_color);
+            tvAddInvite.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+        }else
+        {
+            dataItem.setLongPress(false);
+            tvAddInvite.setText(mContext.getString(R.string.ID_ADD));
+            tvAddInvite.setBackgroundResource(R.drawable.select_purpose_btn_shap);
+            tvAddInvite.setTextColor(ContextCompat.getColor(mContext, R.color.blue));
+        }
+        dataItem.setAuthorId(dataItem.getEntityOrParticipantId());
+        viewInterface.handleOnClick(dataItem, tvAddInvite);
+    }
 
     @Override
     public void onClick(View view) {

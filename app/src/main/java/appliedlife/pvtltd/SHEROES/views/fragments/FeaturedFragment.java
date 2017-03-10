@@ -19,7 +19,6 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
@@ -49,16 +48,16 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
     @Bind(R.id.pb_home_progress_bar)
     ProgressBar mProgressBar;
     @Bind(R.id.swipe_view_home)
-    SwipeRefreshLayout swipeView;
+    SwipeRefreshLayout mSwipeView;
     @Bind(R.id.li_no_result)
-    LinearLayout liNoResult;
+    LinearLayout mLiNoResult;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private FragmentIntractionWithActivityListner mHomeActivityFragmentIntractionWithActivityListner;
     private SwipPullRefreshList mPullRefreshList;
     @Inject
     AppUtils mAppUtils;
-    int pageNo=AppConstants.ONE_CONSTANT;
+    private int mPageNo =AppConstants.ONE_CONSTANT;
     private FragmentListRefreshData mFragmentListRefreshData;
     public static FeaturedFragment createInstance() {
         FeaturedFragment featuredFragment = new FeaturedFragment();
@@ -110,8 +109,9 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
 
             }
         });
+        super.setAllInitializationForFeeds(mFragmentListRefreshData,  mAdapter, mLayoutManager, mRecyclerView, mHomePresenter, mAppUtils, mProgressBar);
         mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEATURED_COMMUNITY,mFragmentListRefreshData.getPageNo()));
-        swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 // Refresh items
@@ -126,8 +126,8 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
     @Override
     public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
-            pageNo=mFragmentListRefreshData.getPageNo();
-            mFragmentListRefreshData.setPageNo(++pageNo);
+            mPageNo =mFragmentListRefreshData.getPageNo();
+            mFragmentListRefreshData.setPageNo(++mPageNo);
             mPullRefreshList.allListData(feedDetailList);
             mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
             mAdapter.notifyDataSetChanged();
@@ -136,36 +136,10 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
             } else {
                 mLayoutManager.scrollToPositionWithOffset(0, 0);
             }
-            swipeView.setRefreshing(false);
+            mSwipeView.setRefreshing(false);
+        } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
+            mLiNoResult.setVisibility(View.VISIBLE);
         }
-        else
-        {
-            liNoResult.setVisibility(View.VISIBLE);
-        }
-    }
-
-    @Override
-    public void getSuccessForAllResponse(String success, int successFrom) {
-
-    }
-
-
-    @Override
-    public void getDB(List<RecentSearchData> recentSearchDatas) {
-
-    }
-
-
-
-    @Override
-    public void startProgressBar() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mProgressBar.bringToFront();
-    }
-
-    @Override
-    public void stopProgressBar() {
-        mProgressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -173,31 +147,11 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
         mHomeActivityFragmentIntractionWithActivityListner.onShowErrorDialog();
     }
 
-    @Override
-    public void startNextScreen() {
-
-    }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         mHomePresenter.detachView();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
     }
 
 

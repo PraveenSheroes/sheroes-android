@@ -113,39 +113,9 @@ public class AllSearchFragment extends BaseFragment implements HomeView {
             tvSearchResult.setText(getString(R.string.ID_NO_RESULT_FOUND));
         }
     }
-
-    @Override
-    public void getSuccessForAllResponse(String success, int successFrom) {
-
-    }
-
-    @Override
-    public void getDB(List<RecentSearchData> recentSearchDatas) {
-        if(StringUtil.isNotEmptyCollection(recentSearchDatas))
-        {
-
-        }
-    }
-
-    @Override
-    public void startProgressBar() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mProgressBar.bringToFront();
-    }
-
-    @Override
-    public void stopProgressBar() {
-        mProgressBar.setVisibility(View.GONE);
-    }
-
     @Override
     public void showError(String errorMsg) {
         mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog();
-    }
-
-    @Override
-    public void startNextScreen() {
-
     }
     public void saveRecentSearchData(FeedDetail feedDetail)
     {
@@ -165,21 +135,6 @@ public class AllSearchFragment extends BaseFragment implements HomeView {
         mHomePresenter.detachView();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
 
     /**
      * When user type city name it works for each character.

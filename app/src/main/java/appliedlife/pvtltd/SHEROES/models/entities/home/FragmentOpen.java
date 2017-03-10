@@ -18,23 +18,11 @@ public class FragmentOpen implements Parcelable {
     boolean settingFragment;
     boolean bookmarkFragment;
     boolean isImageBlur;
+    int openCommentReactionFragmentFor;
 
 
     public FragmentOpen() {
     }
-
-    public FragmentOpen(boolean isOpen, boolean reactionList, boolean commentList, boolean feedOpen, boolean articleFragment, boolean communityOpen, boolean settingFragment, boolean bookmarkFragment, boolean isImageBlur) {
-        this.isOpen = isOpen;
-        this.reactionList = reactionList;
-        this.commentList = commentList;
-        this.feedOpen = feedOpen;
-        this.articleFragment = articleFragment;
-        this.communityOpen = communityOpen;
-        this.settingFragment = settingFragment;
-        this.bookmarkFragment = bookmarkFragment;
-        this.isImageBlur = isImageBlur;
-    }
-
 
     public boolean isOpen() {
         return isOpen;
@@ -108,6 +96,14 @@ public class FragmentOpen implements Parcelable {
         this.bookmarkFragment = bookmarkFragment;
     }
 
+    public int getOpenCommentReactionFragmentFor() {
+        return openCommentReactionFragmentFor;
+    }
+
+    public void setOpenCommentReactionFragmentFor(int openCommentReactionFragmentFor) {
+        this.openCommentReactionFragmentFor = openCommentReactionFragmentFor;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -124,6 +120,7 @@ public class FragmentOpen implements Parcelable {
         dest.writeByte(this.settingFragment ? (byte) 1 : (byte) 0);
         dest.writeByte(this.bookmarkFragment ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isImageBlur ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.openCommentReactionFragmentFor);
     }
 
     protected FragmentOpen(Parcel in) {
@@ -136,6 +133,7 @@ public class FragmentOpen implements Parcelable {
         this.settingFragment = in.readByte() != 0;
         this.bookmarkFragment = in.readByte() != 0;
         this.isImageBlur = in.readByte() != 0;
+        this.openCommentReactionFragmentFor = in.readInt();
     }
 
     public static final Creator<FragmentOpen> CREATOR = new Creator<FragmentOpen>() {

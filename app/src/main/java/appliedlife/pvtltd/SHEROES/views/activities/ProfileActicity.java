@@ -36,7 +36,6 @@ import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
-import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileHorList;
@@ -55,7 +54,7 @@ import butterknife.OnClick;
  * Created by Praveen_Singh on 13-02-2017.
  */
 
-public class ProfileActicity extends BaseActivity implements BaseHolderInterface ,AppBarLayout.OnOffsetChangedListener {
+public class ProfileActicity extends BaseActivity implements AppBarLayout.OnOffsetChangedListener {
     private final String TAG = LogUtils.makeLogTag(ProfileActicity.class);
     private static final String EXTRA_IMAGE = "extraImage";
     private static final String DECRIPTION = "desc";

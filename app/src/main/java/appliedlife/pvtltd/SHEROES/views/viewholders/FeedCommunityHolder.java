@@ -133,6 +133,14 @@ public class FeedCommunityHolder extends BaseViewHolder<FeedDetail> {
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void allTextViewStringOperations(Context context) {
+        if(dataItem.isClosedCommunity())
+        {
+            tvFeedCommunityTime.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_lock, 0);
+        }
+        else
+        {
+            tvFeedCommunityTime.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
+        }
         if (!dataItem.isApplied()) {
             tvFeedCommunityJoin.setVisibility(View.VISIBLE);
         } else {
@@ -173,22 +181,23 @@ public class FeedCommunityHolder extends BaseViewHolder<FeedDetail> {
         if (dataItem.getNoOfLikes() < AppConstants.ONE_CONSTANT && dataItem.getNoOfComments() < AppConstants.ONE_CONSTANT) {
             tvFeedCommunityUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
             flFeedCommunityNoReactionComment.setVisibility(View.GONE);
-        } else if (dataItem.getNoOfLikes() < AppConstants.ONE_CONSTANT) {
-            flFeedCommunityNoReactionComment.setVisibility(View.GONE);
-            tvFeedCommunityTotalReactions.setVisibility(View.GONE);
         }
         switch (dataItem.getNoOfLikes()) {
             case AppConstants.NO_REACTION_CONSTANT:
+                flFeedCommunityNoReactionComment.setVisibility(View.GONE);
+                tvFeedCommunityTotalReactions.setVisibility(View.GONE);
                 userLike();
                 break;
             case AppConstants.ONE_CONSTANT:
                 flFeedCommunityNoReactionComment.setVisibility(View.VISIBLE);
+                tvFeedCommunityTotalReactions.setVisibility(View.VISIBLE);
                 tvFeedCommunityTotalReactions.setText(AppConstants.ONE_CONSTANT + AppConstants.SPACE + context.getString(R.string.ID_REACTION));
                 tvFeedCommunityUserReaction.setText(AppConstants.EMPTY_STRING);
                 userLike();
                 break;
             default:
                 flFeedCommunityNoReactionComment.setVisibility(View.VISIBLE);
+                tvFeedCommunityTotalReactions.setVisibility(View.VISIBLE);
                 tvFeedCommunityTotalReactions.setText(String.valueOf(dataItem.getNoOfLikes()) + AppConstants.SPACE + context.getString(R.string.ID_REACTION) + AppConstants.S);
                 tvFeedCommunityUserReaction.setText(AppConstants.EMPTY_STRING);
                 userLike();
@@ -382,9 +391,9 @@ public class FeedCommunityHolder extends BaseViewHolder<FeedDetail> {
                 mViewMoreDescription=dataItem.getListDescription();
                 String lessWithColor = LEFT_HTML_VEIW_TAG_FOR_COLOR + mLess + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
                 if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                    tvFeedCommunityText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + lessWithColor, 0)); // for 24 api and more
+                    tvFeedCommunityText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.SPACE + AppConstants.SPACE + lessWithColor, 0)); // for 24 api and more
                 } else {
-                    tvFeedCommunityText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + lessWithColor));// or for older api
+                    tvFeedCommunityText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.SPACE + AppConstants.SPACE + lessWithColor));// or for older api
                 }
                 tvFeedCommunityText.setTag(mLess);
             } else {
@@ -394,9 +403,9 @@ public class FeedCommunityHolder extends BaseViewHolder<FeedDetail> {
                 }
                 String viewMore = LEFT_HTML_VEIW_TAG_FOR_COLOR + mViewMore + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
                 if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                    tvFeedCommunityText.setText(Html.fromHtml(mViewMoreDescription.substring(0, AppConstants.WORD_COUNT) + AppConstants.DOTS + AppConstants.SPACE + viewMore, 0)); // for 24 api and more
+                    tvFeedCommunityText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + viewMore, 0)); // for 24 api and more
                 } else {
-                    tvFeedCommunityText.setText(Html.fromHtml(mViewMoreDescription.substring(0, AppConstants.WORD_COUNT) + AppConstants.DOTS + AppConstants.SPACE + viewMore));// or for older api
+                    tvFeedCommunityText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + viewMore));// or for older api
                 }
             }
         }

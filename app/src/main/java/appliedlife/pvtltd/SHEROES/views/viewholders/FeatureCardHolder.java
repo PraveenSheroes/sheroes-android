@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -72,7 +73,7 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
     @Override
     public void bindData(FeedDetail item, final Context context, int position) {
         this.dataItem = item;
-        this.mContext=context;
+        this.mContext = context;
         mViewMore = context.getString(R.string.ID_VIEW_MORE);
         mLess = context.getString(R.string.ID_LESS);
         tvFeaturedDescriptionText.setTag(mViewMore);
@@ -81,25 +82,59 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
         imageOperations(context);
         textViewOperation(context);
     }
+
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void textViewOperation(Context context) {
-
-        if(!dataItem.isApplied())
-        {
-            tvFeaturedCommunityJoin.setVisibility(View.VISIBLE);
-        }else
-        {
-            tvFeaturedCommunityJoin.setVisibility(View.GONE);
+        if (dataItem.isClosedCommunity()) {
+            tvFeaturedCommunityTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_lock, 0);
+        } else {
+            tvFeaturedCommunityTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         }
-        if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
+        if (!dataItem.isMember() && !dataItem.isOwner() && !dataItem.isRequestPending()) {
+
+           /* if(dataItem.isClosedCommunity())
+            {
+                tvFeaturedCommunityJoin.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+                tvFeaturedCommunityJoin.setText(mContext.getString(R.string.ID_REQUESTED));
+                tvFeaturedCommunityJoin.setBackgroundResource(R.drawable.rectangle_feed_community_requested);
+                tvFeaturedCommunityJoin.setVisibility(View.VISIBLE);
+            }
+            else
+            {
+                tvFeaturedCommunityJoin.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
+                tvFeaturedCommunityJoin.setText(mContext.getString(R.string.ID_JOIN));
+                tvFeaturedCommunityJoin.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
+                tvFeaturedCommunityJoin.setVisibility(View.VISIBLE);
+            }*/
+            tvFeaturedCommunityJoin.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
+            tvFeaturedCommunityJoin.setText(mContext.getString(R.string.ID_JOIN));
+            tvFeaturedCommunityJoin.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
+            tvFeaturedCommunityJoin.setVisibility(View.VISIBLE);
+        } else if (dataItem.isRequestPending()) {
+            tvFeaturedCommunityJoin.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+            tvFeaturedCommunityJoin.setText(mContext.getString(R.string.ID_REQUESTED));
+            tvFeaturedCommunityJoin.setBackgroundResource(R.drawable.rectangle_feed_community_requested);
+            tvFeaturedCommunityJoin.setVisibility(View.VISIBLE);
+        } else if (dataItem.isOwner() || dataItem.isMember()) {
+            tvFeaturedCommunityJoin.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+            tvFeaturedCommunityJoin.setText(mContext.getString(R.string.ID_JOINED));
+            tvFeaturedCommunityJoin.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
+            tvFeaturedCommunityJoin.setVisibility(View.VISIBLE);
+        }
+        if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle()))
+        {
             tvFeaturedCommunityCardTitle.setText(dataItem.getNameOrTitle());
         }
-        if (StringUtil.isNotNullOrEmptyString(dataItem.getCommunityType())) {
+        if (StringUtil.isNotNullOrEmptyString(dataItem.getCommunityType()))
+
+        {
             tvFeaturedCommunityTime.setText(dataItem.getCommunityType());
         }
 
-        mViewMoreDescription=dataItem.getListDescription();
-        if(StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
+        mViewMoreDescription = dataItem.getListDescription();
+        if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription))
+
+        {
             if (mViewMoreDescription.length() > AppConstants.WORD_LENGTH) {
                 mViewMoreDescription = mViewMoreDescription.substring(0, AppConstants.WORD_COUNT);
             }
@@ -110,7 +145,9 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
                 tvFeaturedDescriptionText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.SPACE + changeDate));// or for older api
             }
         }
-        if (StringUtil.isNotEmptyCollection(dataItem.getTags())) {
+        if (StringUtil.isNotEmptyCollection(dataItem.getTags()))
+
+        {
             List<String> tags = dataItem.getTags();
             String mergeTags = AppConstants.EMPTY_STRING;
             for (String tag : tags) {
@@ -123,6 +160,7 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
                 tvFeaturedCommunityTagLable.setText(Html.fromHtml(tagHeader + AppConstants.COLON + AppConstants.SPACE + mergeTags));// or for older api
             }
         }
+
     }
 
     private void imageOperations(Context context) {
@@ -136,9 +174,9 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
         if (StringUtil.isNotNullOrEmptyString(imageUrl)) {
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View child = layoutInflater.inflate(R.layout.feed_article_single_image, null);
-           final ImageView ivFirstLandscape = (ImageView) child.findViewById(R.id.iv_feed_article_single_image);
-           final TextView tvTotalViews = (TextView) child.findViewById(R.id.tv_feed_article_total_views);
-          //  tvFeedArticleTotalViews.setText(dataItem.getTotalViews() + AppConstants.SPACE + context.getString(R.string.ID_VIEWS));
+            final ImageView ivFirstLandscape = (ImageView) child.findViewById(R.id.iv_feed_article_single_image);
+            final TextView tvTotalViews = (TextView) child.findViewById(R.id.tv_feed_article_total_views);
+            //  tvFeedArticleTotalViews.setText(dataItem.getTotalViews() + AppConstants.SPACE + context.getString(R.string.ID_VIEWS));
             Glide.with(mContext)
                     .load(imageUrl).asBitmap()
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
@@ -151,9 +189,7 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
                         }
                     });
             liFeaturedCoverImage.addView(child);
-        }
-        else
-        {
+        } else {
             liFeaturedCoverImage.setBackgroundResource(R.drawable.ic_image_holder);
         }
 
@@ -162,14 +198,14 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
     @TargetApi(AppConstants.ANDROID_SDK_24)
     @OnClick(R.id.tv_featured_community_text)
     public void viewMoreClick() {
-        if(StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
+        if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
             if (tvFeaturedDescriptionText.getTag().toString().equalsIgnoreCase(mViewMore)) {
                 String lessWithColor = LEFT_HTML_VEIW_TAG_FOR_COLOR + mLess + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
-                mViewMoreDescription=dataItem.getListDescription();
+                mViewMoreDescription = dataItem.getListDescription();
                 if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                    tvFeaturedDescriptionText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + lessWithColor, 0)); // for 24 api and more
+                    tvFeaturedDescriptionText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.SPACE + AppConstants.SPACE + lessWithColor, 0)); // for 24 api and more
                 } else {
-                    tvFeaturedDescriptionText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + lessWithColor));// or for older api
+                    tvFeaturedDescriptionText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.SPACE + AppConstants.SPACE + lessWithColor));// or for older api
                 }
                 tvFeaturedDescriptionText.setTag(mLess);
             } else {
@@ -179,18 +215,20 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
                 }
                 String viewMore = LEFT_HTML_VEIW_TAG_FOR_COLOR + mViewMore + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
                 if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                    tvFeaturedDescriptionText.setText(Html.fromHtml(mViewMoreDescription.substring(0, AppConstants.WORD_COUNT) + AppConstants.DOTS + AppConstants.SPACE + viewMore, 0)); // for 24 api and more
+                    tvFeaturedDescriptionText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + viewMore, 0)); // for 24 api and more
                 } else {
-                    tvFeaturedDescriptionText.setText(Html.fromHtml(mViewMoreDescription.substring(0, AppConstants.WORD_COUNT) + AppConstants.DOTS + AppConstants.SPACE + viewMore));// or for older api
+                    tvFeaturedDescriptionText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + viewMore));// or for older api
                 }
             }
         }
     }
+
     @OnClick(R.id.tv_featured_community_join)
-    public void joinClick()
-    {
-        Toast.makeText(mContext,"Clciekd",Toast.LENGTH_SHORT).show();
+    public void joinClick() {
+        Toast.makeText(mContext, "Clciekd", Toast.LENGTH_SHORT).show();
+            viewInterface.handleOnClick(dataItem, tvFeaturedCommunityJoin);
     }
+
     @Override
     public void viewRecycled() {
 

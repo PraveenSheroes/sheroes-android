@@ -8,11 +8,20 @@ public class FragmentListRefreshData {
     int pageNo;
     String callFromFragment;
     String idFeedDetail;
+    boolean isReactionList;
+    long enitityOrParticpantid;
 
     public FragmentListRefreshData(int pageNo, String callFromFragment, String idFeedDetail) {
         this.pageNo = pageNo;
         this.callFromFragment = callFromFragment;
         this.idFeedDetail = idFeedDetail;
+    }
+
+    public FragmentListRefreshData(int pageNo, String callFromFragment, boolean isReactionList, long enitityOrParticpantid) {
+        this.pageNo = pageNo;
+        this.callFromFragment = callFromFragment;
+        this.isReactionList = isReactionList;
+        this.enitityOrParticpantid = enitityOrParticpantid;
     }
 
     public int getPageNo() {
@@ -37,5 +46,21 @@ public class FragmentListRefreshData {
 
     public void setIdFeedDetail(String idFeedDetail) {
         this.idFeedDetail = idFeedDetail;
+    }
+
+    public boolean isReactionList() {
+        return isReactionList;
+    }
+
+    public void setReactionList(boolean reactionList) {
+        isReactionList = reactionList;
+    }
+
+    public long getEnitityOrParticpantid() {
+        return enitityOrParticpantid;
+    }
+
+    public void setEnitityOrParticpantid(long enitityOrParticpantid) {
+        this.enitityOrParticpantid = enitityOrParticpantid;
     }
 }

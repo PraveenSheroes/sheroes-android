@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import java.util.ArrayList;
@@ -19,7 +20,6 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
@@ -33,7 +33,6 @@ import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -42,7 +41,7 @@ import butterknife.ButterKnife;
  */
 
 
-public class ArticlesFragment extends BaseFragment implements HomeView {
+public class ArticlesFragment extends BaseFragment {
     private final String TAG = LogUtils.makeLogTag(ArticlesFragment.class);
     @Inject
     HomePresenter mHomePresenter;
@@ -51,7 +50,9 @@ public class ArticlesFragment extends BaseFragment implements HomeView {
     @Bind(R.id.pb_home_progress_bar)
     ProgressBar mProgressBar;
     @Bind(R.id.swipe_view_home)
-    SwipeRefreshLayout swipeView;
+    SwipeRefreshLayout mSwipeView;
+    @Bind(R.id.li_no_result)
+    LinearLayout mLiNoResult;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private FragmentIntractionWithActivityListner mHomeActivityFragmentIntractionWithActivityListner;
@@ -59,18 +60,13 @@ public class ArticlesFragment extends BaseFragment implements HomeView {
     @Inject
     AppUtils mAppUtils;
     private FragmentListRefreshData mFragmentListRefreshData;
-    int pageNo = AppConstants.ONE_CONSTANT;
-    List<FeedDetail> mTrendingFeedDetail = new ArrayList<>();
-    boolean listLoad = true;
-    FeedDetail mFeedDetail;
-
-    public static ArticlesFragment createInstance(int itemsCount) {
-
-        ArticlesFragment articlesFragment = new ArticlesFragment();
-
-        return articlesFragment;
-    }
-
+    private int mPageNo = AppConstants.ONE_CONSTANT;
+    private List<FeedDetail> mTrendingFeedDetail = new ArrayList<>();
+    private FeedDetail mFeedDetail;
+    private int mPosition;
+    private int mPressedEmoji;
+    private boolean mListLoad = true;
+    private boolean mIsEdit = false;
 
     @Override
     public void onAttach(Context context) {
@@ -116,8 +112,9 @@ public class ArticlesFragment extends BaseFragment implements HomeView {
 
             }
         });
+        super.setAllInitializationForFeeds(mFragmentListRefreshData, mPullRefreshList, mAdapter, mLayoutManager, mPageNo, mSwipeView, mLiNoResult, mFeedDetail, mRecyclerView, mPosition, mPressedEmoji, mListLoad, mIsEdit, mHomePresenter, mAppUtils, mProgressBar);
         mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo()));
-        swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 // Refresh items
@@ -133,8 +130,8 @@ public class ArticlesFragment extends BaseFragment implements HomeView {
     @Override
     public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
-            pageNo = mFragmentListRefreshData.getPageNo();
-            if (pageNo == AppConstants.ONE_CONSTANT) {
+            mPageNo = mFragmentListRefreshData.getPageNo();
+            if (mPageNo == AppConstants.ONE_CONSTANT) {
                 for (FeedDetail feedDetail : feedDetailList) {
                     feedDetail.setTrending(true);
                     mTrendingFeedDetail.add(feedDetail);
@@ -153,7 +150,7 @@ public class ArticlesFragment extends BaseFragment implements HomeView {
                 }
                 mPullRefreshList.allListData(feedDetailList);
             }
-            mFragmentListRefreshData.setPageNo(++pageNo);
+            mFragmentListRefreshData.setPageNo(++mPageNo);
             mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
             mAdapter.notifyDataSetChanged();
             if (!mPullRefreshList.isPullToRefresh()) {
@@ -161,19 +158,15 @@ public class ArticlesFragment extends BaseFragment implements HomeView {
             } else {
                 mLayoutManager.scrollToPositionWithOffset(0, 0);
             }
-            swipeView.setRefreshing(false);
+            mSwipeView.setRefreshing(false);
+        } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
+            mLiNoResult.setVisibility(View.VISIBLE);
         }
     }
 
     @Override
     public void getSuccessForAllResponse(String success, int successFrom) {
-        switch (successFrom) {
-            case AppConstants.THREE_CONSTANT:
-                bookMarkSuccess(success);
-                break;
-            default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + successFrom);
-        }
+        super.getSuccessForAllResponse(success, successFrom);
     }
 
     public void categorySearchInArticle(HomeSpinnerItem homeSpinnerItem) {
@@ -181,40 +174,9 @@ public class ArticlesFragment extends BaseFragment implements HomeView {
     }
 
     public void bookMarkForCard(FeedDetail feedDetail) {
-        listLoad = false;
-        mFeedDetail = feedDetail;
-        mHomePresenter.addBookMarkFromPresenter(mAppUtils.bookMarkRequestBuilder(feedDetail.getEntityOrParticipantId()), feedDetail.isBookmarked());
+        super.bookMarkForCard(feedDetail);
     }
 
-    private void bookMarkSuccess(String success) {
-        if (success.equalsIgnoreCase(AppConstants.SUCCESS) && null != mFeedDetail) {
-            if (!mFeedDetail.isBookmarked()) {
-                mFeedDetail.setBookmarked(true);
-            } else {
-                mFeedDetail.setBookmarked(false);
-            }
-            mAdapter.setDataOnPosition(mFeedDetail, mFeedDetail.getItemPosition());
-        }
-    }
-
-    @Override
-    public void getDB(List<RecentSearchData> recentSearchDatas) {
-
-    }
-
-
-    @Override
-    public void startProgressBar() {
-        if(listLoad) {
-            mProgressBar.setVisibility(View.VISIBLE);
-            mProgressBar.bringToFront();
-        }
-    }
-
-    @Override
-    public void stopProgressBar() {
-        mProgressBar.setVisibility(View.GONE);
-    }
 
     @Override
     public void showError(String errorMsg) {
@@ -222,29 +184,8 @@ public class ArticlesFragment extends BaseFragment implements HomeView {
     }
 
     @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
         mHomePresenter.detachView();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
     }
 }

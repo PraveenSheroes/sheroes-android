@@ -8,10 +8,12 @@
     <color name="grey8">#fafafa</color>
     <color name="grey2">#b7b7b7</color>
     <color name="red">#d50000</color>
+    <color name="added_member">#56596b</color>
     <color name="dashboard_text">#323940</color>
     <color name="detail_page_text">#4a4a4a</color>
     <color name="dashboard_fed_text">#757e87</color>
     <color name="noConnection">#2f2f2f</color>
+    <color name="added_member_text">#cbcddd</color>
     <color name="black">#de000000</color>
     <color name="blue">#3949ab</color>
     <color name="add_member_line">#e4e9ec</color>

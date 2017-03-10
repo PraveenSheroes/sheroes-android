@@ -57,7 +57,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:drawableRight="@drawable/ic_lock"
                     android:drawablePadding="@dimen/dp_size_5"
                     android:layout_marginTop="@dimen/dp_size_3"
                     android:textColor="@color/footer_icon_text"
@@ -76,7 +75,6 @@
             android:layout_marginTop="@dimen/dp_size_12"
             android:layout_marginLeft="@dimen/dp_size_12"
             android:layout_marginRight="@dimen/dp_size_12"
-            android:lines="@integer/int_value_for_line_2"
             android:text="@string/ID_DASHBOARD"
             android:textColor="@color/feed_article_label"
             android:textSize="@dimen/sp_size_13" />

@@ -215,9 +215,9 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
                 String lessWithColor = LEFT_HTML_TAG_FOR_COLOR + mLess + RIGHT_HTML_TAG_FOR_COLOR;
                 mViewMoreDescription = dataItem.getListDescription();
                 if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                    tvArticleDescriptionText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + lessWithColor, 0)); // for 24 api and more
+                    tvArticleDescriptionText.setText(Html.fromHtml(mViewMoreDescription  + AppConstants.SPACE + lessWithColor, 0)); // for 24 api and more
                 } else {
-                    tvArticleDescriptionText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + lessWithColor));// or for older api
+                    tvArticleDescriptionText.setText(Html.fromHtml(mViewMoreDescription  + AppConstants.SPACE + lessWithColor));// or for older api
                 }
                 tvArticleDescriptionText.setTag(mLess);
             } else {
@@ -227,9 +227,9 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
                 }
                 String viewMore = LEFT_HTML_TAG_FOR_COLOR + mViewMore + RIGHT_HTML_TAG_FOR_COLOR;
                 if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                    tvArticleDescriptionText.setText(Html.fromHtml(mViewMoreDescription.substring(0, AppConstants.WORD_COUNT) + AppConstants.DOTS + AppConstants.SPACE + viewMore, 0)); // for 24 api and more
+                    tvArticleDescriptionText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + viewMore, 0)); // for 24 api and more
                 } else {
-                    tvArticleDescriptionText.setText(Html.fromHtml(mViewMoreDescription.substring(0, AppConstants.WORD_COUNT) + AppConstants.DOTS + AppConstants.SPACE + viewMore));// or for older api
+                    tvArticleDescriptionText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + viewMore));// or for older api
                 }
             }
         }

@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.f2prateek.rx.preferences.Preference;
 import com.facebook.AccessToken;
@@ -338,12 +339,13 @@ public class LoginFragment extends BaseFragment implements LoginView {
         public void onCancel() {
 
             //LoginManager.getInstance().logOut();
+            Toast.makeText(getContext(),"error",Toast.LENGTH_SHORT).show();
 
         }
 
         @Override
         public void onError(FacebookException e) {
-
+            Toast.makeText(getContext(),"exception"+e.toString(),Toast.LENGTH_SHORT).show();
         }
     };
 

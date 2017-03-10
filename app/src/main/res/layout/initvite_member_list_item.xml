@@ -17,9 +17,9 @@
         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
         android:textSize="@dimen/sp_size_13"
         android:layout_marginTop="@dimen/dp_size_10"
-        android:layout_marginLeft="@dimen/dp_size_10"
+        android:layout_marginLeft="@dimen/dp_size_15"
         android:layout_toRightOf="@+id/iv_circle_profile_pic"
-        android:paddingLeft="@dimen/dp_size_10"/>
+        />
 
     <TextView
         android:id="@+id/tv_member_city"
@@ -27,19 +27,23 @@
         android:layout_height="wrap_content"
         android:textColor="@color/teg_text_color"
         android:layout_below="@+id/tv_member_name"
-        android:layout_marginLeft="@dimen/dp_size_10"
+        android:layout_marginLeft="@dimen/dp_size_15"
         android:layout_toRightOf="@+id/iv_circle_profile_pic"
         android:layout_marginTop="@dimen/dp_size_2"
         android:fontFamily="@string/ID_ROBOTO_REGULAR"
         android:textSize="@dimen/sp_size_12"/>
     <TextView
         android:id="@+id/tv_add_invite"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/dp_size_65"
+        android:layout_height="@dimen/dp_size_25"
         android:layout_alignParentRight="true"
         android:fontFamily="@string/ID_ROBOTO_REGULAR"
         android:layout_centerVertical="true"
-        android:text="@string/add"
+        android:gravity="center"
+        android:textAllCaps="true"
+        android:text="@string/ID_ADD"
+        android:textSize="@dimen/sp_size_11"
+        android:textColor="@color/blue"
         android:background="@drawable/select_purpose_btn_shap"
         android:layout_marginRight="@dimen/dp_size_10"/>
     <View

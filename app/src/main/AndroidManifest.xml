@@ -60,7 +60,10 @@
 
         <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.HomeActivity"
             android:screenOrientation="portrait"/>
-
+        <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.BookMarkActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.SettingPreferencesActivity"
             android:screenOrientation="portrait"/>
 

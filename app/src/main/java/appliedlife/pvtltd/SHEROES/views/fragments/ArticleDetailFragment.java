@@ -20,7 +20,6 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleDetailPojo;
@@ -32,7 +31,6 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -40,7 +38,7 @@ import butterknife.ButterKnife;
  * Created by Praveen_Singh on 08-02-2017.
  */
 
-public class ArticleDetailFragment extends BaseFragment implements HomeView {
+public class ArticleDetailFragment extends BaseFragment  {
     private final String TAG = LogUtils.makeLogTag(ArticleDetailFragment.class);
     @Inject
     HomePresenter mHomePresenter;
@@ -79,20 +77,16 @@ public class ArticleDetailFragment extends BaseFragment implements HomeView {
             LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
         }
     }
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if(null!=getArguments())
-        {
-            mFeedDetail =getArguments().getParcelable(AppConstants.ARTICLE_DETAIL);
-        }
-    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_article_detail, container, false);
         ButterKnife.bind(this, view);
+        if(null!=getArguments())
+        {
+            mFeedDetail =getArguments().getParcelable(AppConstants.ARTICLE_DETAIL);
+        }
         mFragmentListRefreshData=new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ARTICLE_DETAIL,mFeedDetail.getId());
         mHomePresenter.attachView(this);
         mLayoutManager = new LinearLayoutManager(getContext());
@@ -100,6 +94,7 @@ public class ArticleDetailFragment extends BaseFragment implements HomeView {
         mAdapter = new GenericRecyclerViewAdapter(getContext(), (ArticleDetailActivity) getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
+        super.setAllInitializationForFeeds(mFragmentListRefreshData,  mAdapter, mLayoutManager, mFeedDetail, mRecyclerView, mPosition, mPressedEmoji, mListLoad,  mHomePresenter, mAppUtils, mProgressBar);
         mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo(),mFragmentListRefreshData.getIdFeedDetail()));
         return view;
     }
@@ -133,7 +128,7 @@ public class ArticleDetailFragment extends BaseFragment implements HomeView {
         }
     }
 
-    private void likeSuccess(String success) {
+    protected void likeSuccess(String success) {
 
         if (success.equalsIgnoreCase(AppConstants.SUCCESS)&&null != mFeedDetail) {
 
@@ -165,58 +160,26 @@ public class ArticleDetailFragment extends BaseFragment implements HomeView {
             }
         }
     }
-
-
-
     public void likeAndUnlikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-        mListLoad = false;
-        mFeedDetail = (FeedDetail) baseResponse;
-        this.mPosition = position;
-        this.mPressedEmoji = reactionValue;
-        if (null != mFeedDetail && mFeedDetail.isLongPress()) {
-            mHomePresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(mFeedDetail.getEntityOrParticipantId(), reactionValue));
-        } else {
-            if (reactionValue == AppConstants.NO_REACTION_CONSTANT) {
-                mHomePresenter.getUnLikesFromPresenter(mAppUtils.unLikeRequestBuilder(mFeedDetail.getEntityOrParticipantId()));
-            } else {
-                mHomePresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(mFeedDetail.getEntityOrParticipantId(), reactionValue));
-            }
-        }
+        super.likeAndUnlikeRequest(baseResponse,reactionValue,position);
     }
 
     public void commentListRefresh(FeedDetail feedDetail) {
-        mAdapter.setDataOnPosition(feedDetail,feedDetail.getItemPosition());
-    }
-
-    @Override
-    public void getDB(List<RecentSearchData> recentSearchDatas) {
-
-    }
-
-
-
-    @Override
-    public void startProgressBar() {
-        if(mListLoad) {
-            mProgressBar.setVisibility(View.VISIBLE);
-            mProgressBar.bringToFront();
+        articleDetailPojo.setFeedDetail(feedDetail);
+        articleList.clear();
+        articleList.add(articleDetailPojo);
+        mAdapter.notifyDataSetChanged();
+        if (mRecyclerView.getItemAnimator() instanceof SimpleItemAnimator) {
+            ((SimpleItemAnimator)mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+            ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setAddDuration(AppConstants.NO_REACTION_CONSTANT);
         }
     }
 
-    @Override
-    public void stopProgressBar() {
-        mProgressBar.setVisibility(View.GONE);
-    }
-
-    @Override
+   @Override
     public void showError(String errorMsg) {
         mHomeActivityFragmentIntractionWithActivityListner.onShowErrorDialog();
     }
 
-    @Override
-    public void startNextScreen() {
-
-    }
 
     @Override
     public void onDestroyView() {
@@ -224,21 +187,6 @@ public class ArticleDetailFragment extends BaseFragment implements HomeView {
         mHomePresenter.detachView();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
 
 
 }

@@ -166,22 +166,23 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         if (dataItem.getNoOfLikes() < AppConstants.ONE_CONSTANT && dataItem.getNoOfComments() < AppConstants.ONE_CONSTANT) {
             tvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
             flFeedArticleNoReactionComment.setVisibility(View.GONE);
-        } else if (dataItem.getNoOfLikes() < AppConstants.ONE_CONSTANT) {
-            flFeedArticleNoReactionComment.setVisibility(View.GONE);
-            tvFeedArticleTotalReactions.setVisibility(View.GONE);
         }
 
         switch (dataItem.getNoOfLikes()) {
             case AppConstants.NO_REACTION_CONSTANT:
+                flFeedArticleNoReactionComment.setVisibility(View.GONE);
+                tvFeedArticleTotalReactions.setVisibility(View.GONE);
                 userLike();
                 break;
             case AppConstants.ONE_CONSTANT:
+                tvFeedArticleTotalReactions.setVisibility(View.VISIBLE);
                 flFeedArticleNoReactionComment.setVisibility(View.VISIBLE);
                 tvFeedArticleTotalReactions.setText(AppConstants.ONE_CONSTANT + AppConstants.SPACE + context.getString(R.string.ID_REACTION));
                 tvFeedArticleUserReaction.setText(AppConstants.EMPTY_STRING);
                 userLike();
                 break;
             default:
+                tvFeedArticleTotalReactions.setVisibility(View.VISIBLE);
                 flFeedArticleNoReactionComment.setVisibility(View.VISIBLE);
                 tvFeedArticleTotalReactions.setText(String.valueOf(dataItem.getNoOfLikes()) + AppConstants.SPACE + context.getString(R.string.ID_REACTION) + AppConstants.S);
                 tvFeedArticleUserReaction.setText(AppConstants.EMPTY_STRING);
@@ -261,6 +262,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
                     }
                     ivFeedArticleUserPic.bindImage(feedUserIconUrl);
                 }
+
                 if (lastComment.isMyOwnParticipation()) {
                     tvFeedArticleUserCommentPostMenu.setVisibility(View.VISIBLE);
                 } else {
@@ -394,9 +396,9 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
                 String lessWithColor = LEFT_HTML_VEIW_TAG_FOR_COLOR + mLess + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
                 mViewMoreDescription = dataItem.getListDescription();
                 if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                    tvFeedArticleHeaderLebel.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + lessWithColor, 0)); // for 24 api and more
+                    tvFeedArticleHeaderLebel.setText(Html.fromHtml(mViewMoreDescription  + AppConstants.SPACE + lessWithColor, 0)); // for 24 api and more
                 } else {
-                    tvFeedArticleHeaderLebel.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + lessWithColor));// or for older api
+                    tvFeedArticleHeaderLebel.setText(Html.fromHtml(mViewMoreDescription + AppConstants.SPACE + lessWithColor));// or for older api
                 }
                 tvFeedArticleHeaderLebel.setTag(mLess);
             } else {
@@ -406,9 +408,9 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
                 }
                 String viewMore = LEFT_HTML_VEIW_TAG_FOR_COLOR + mViewMore + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
                 if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                    tvFeedArticleHeaderLebel.setText(Html.fromHtml(mViewMoreDescription.substring(0, AppConstants.WORD_COUNT) + AppConstants.DOTS + AppConstants.SPACE + viewMore, 0)); // for 24 api and more
+                    tvFeedArticleHeaderLebel.setText(Html.fromHtml(mViewMoreDescription+ AppConstants.DOTS + AppConstants.SPACE + viewMore, 0)); // for 24 api and more
                 } else {
-                    tvFeedArticleHeaderLebel.setText(Html.fromHtml(mViewMoreDescription.substring(0, AppConstants.WORD_COUNT) + AppConstants.DOTS + AppConstants.SPACE + viewMore));// or for older api
+                    tvFeedArticleHeaderLebel.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + viewMore));// or for older api
                 }
             }
         }

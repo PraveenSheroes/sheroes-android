@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/bookmark_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_size_65"
+            android:background="@color/text_color_close"
+            app:layout_scrollFlags="enterAlways"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+            <include
+                android:id="@+id/rl_article_header"
+                layout="@layout/home_search_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|top" />
+        </android.support.v7.widget.Toolbar>
+        <TextView
+            android:id="@+id/tv_spinner_icon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:background="@color/white"
+            android:drawableRight="@drawable/ic_spinner_icon"
+            android:gravity="center"
+            android:importantForAccessibility="no"
+            android:layerType="software"
+            android:padding="@dimen/dp_size_10"
+            android:text="@string/ID_ALL"
+            android:textColor="@color/black"
+            android:visibility="gone" />
+    </android.support.design.widget.AppBarLayout>
+    <include
+        android:id="@+id/fragment_spinner"
+        layout="@layout/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/dp_size_100"/>
+    <include
+        android:id="@+id/fragment_bookmark"
+        layout="@layout/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+    <include
+        layout="@layout/home_listing_footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom" />
+</android.support.design.widget.CoordinatorLayout>
+

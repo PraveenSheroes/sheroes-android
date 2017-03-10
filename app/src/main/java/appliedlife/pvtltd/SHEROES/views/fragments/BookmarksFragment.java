@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SimpleItemAnimator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,21 +22,17 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.LastComment;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -45,7 +40,7 @@ import butterknife.ButterKnife;
  * Created by Praveen_Singh on 21-02-2017.
  */
 
-public class BookmarksFragment extends BaseFragment implements HomeView {
+public class BookmarksFragment extends BaseFragment {
     private final String TAG = LogUtils.makeLogTag(BookmarksFragment.class);
     @Inject
     HomePresenter mHomePresenter;
@@ -54,7 +49,7 @@ public class BookmarksFragment extends BaseFragment implements HomeView {
     @Bind(R.id.pb_home_progress_bar)
     ProgressBar mProgressBar;
     @Bind(R.id.swipe_view_home)
-    SwipeRefreshLayout swipeView;
+    SwipeRefreshLayout mSwipeView;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private FragmentIntractionWithActivityListner mHomeActivityFragmentIntractionWithActivityListner;
@@ -62,14 +57,14 @@ public class BookmarksFragment extends BaseFragment implements HomeView {
     @Inject
     AppUtils mAppUtils;
     @Bind(R.id.li_no_result)
-    LinearLayout liNoResult;
-    int pageNo=AppConstants.ONE_CONSTANT;
+    LinearLayout mLiNoResult;
+    private  int mPageNo=AppConstants.ONE_CONSTANT;
     private FragmentListRefreshData mFragmentListRefreshData;
-    FeedDetail mFeedDetail;
-    int mPosition;
-    int mPressedEmoji;
-    boolean mListLoad = true;
-    boolean mIsEdit = false;
+    private FeedDetail mFeedDetail;
+    private int mPosition;
+    private int mPressedEmoji;
+    private boolean mListLoad = true;
+    private boolean mIsEdit = false;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -103,7 +98,6 @@ public class BookmarksFragment extends BaseFragment implements HomeView {
             public void onHide() {
                 ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.INVISIBLE);
             }
-
             @Override
             public void onShow() {
                 ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
@@ -130,8 +124,9 @@ public class BookmarksFragment extends BaseFragment implements HomeView {
                 }
             }
         });
+        super.setAllInitializationForFeeds(mFragmentListRefreshData, mPullRefreshList, mAdapter, mLayoutManager, mPageNo, mSwipeView, mLiNoResult, mFeedDetail, mRecyclerView, mPosition, mPressedEmoji, mListLoad, mIsEdit, mHomePresenter, mAppUtils, mProgressBar);
         mHomePresenter.getBookMarkFromPresenter(mAppUtils.getBookMarks(mFragmentListRefreshData.getPageNo()));
-        swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 // Refresh items
@@ -143,56 +138,12 @@ public class BookmarksFragment extends BaseFragment implements HomeView {
     }
     @Override
     public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
-        if (StringUtil.isNotEmptyCollection(feedDetailList)) {
-            pageNo=mFragmentListRefreshData.getPageNo();
-            mFragmentListRefreshData.setPageNo(++pageNo);
-            mPullRefreshList.allListData(feedDetailList);
-            mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
-            mAdapter.setCallForRecycler(AppConstants.FEED_SUB_TYPE);
-            if (!mPullRefreshList.isPullToRefresh()) {
-                mLayoutManager.scrollToPositionWithOffset(mPullRefreshList.getFeedResponses().size() - feedDetailList.size(), 0);
-            } else {
-                mLayoutManager.scrollToPositionWithOffset(0, 0);
-            }
-            swipeView.setRefreshing(false);
-        }
-        else if(!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses()))
-        {
-            liNoResult.setVisibility(View.VISIBLE);
-        }
+      super.getFeedListSuccess(feedDetailList);
     }
 
     @Override
     public void getSuccessForAllResponse(String success, int successFrom) {
-        switch (successFrom) {
-            case AppConstants.ONE_CONSTANT:
-                likeSuccess(success);
-                break;
-            case AppConstants.TWO_CONSTANT:
-                recentCommentEditDelete(success);
-                break;
-            case AppConstants.THREE_CONSTANT:
-                bookMarkSuccess(success);
-                break;
-            default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + successFrom);
-        }
-    }
-
-    @Override
-    public void getDB(List<RecentSearchData> recentSearchDatas) {
-
-    }
-
-    @Override
-    public void startProgressBar() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mProgressBar.bringToFront();
-    }
-
-    @Override
-    public void stopProgressBar() {
-        mProgressBar.setVisibility(View.GONE);
+    super.getSuccessForAllResponse(success,successFrom);
     }
 
     @Override
@@ -201,132 +152,25 @@ public class BookmarksFragment extends BaseFragment implements HomeView {
     }
 
     @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
         mHomePresenter.detachView();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-
-
     public void bookMarkForCard(FeedDetail feedDetail) {
-        mListLoad = false;
-        mFeedDetail = feedDetail;
-        mHomePresenter.addBookMarkFromPresenter(mAppUtils.bookMarkRequestBuilder(feedDetail.getEntityOrParticipantId()), feedDetail.isBookmarked());
+       super.bookMarkForCard(feedDetail);
     }
 
     public void editDeleteRecentComment(FeedDetail feedDetail, boolean isEdit) {
-        mListLoad = false;
-        mFeedDetail = feedDetail;
-        mIsEdit = isEdit;
-        List<LastComment> lastCommentList = feedDetail.getLastComments();
-        if (StringUtil.isNotEmptyCollection(lastCommentList) && null != lastCommentList.get(lastCommentList.size() - 1)) {
-            LastComment lastComment = lastCommentList.get(lastCommentList.size() - 1);
-            mHomePresenter.editCommentListFromPresenter(mAppUtils.editCommentRequestBuilder(lastComment.getEntityId(), lastComment.getComment(), lastComment.isAnonymous(), isEdit, lastComment.getId()));
-        }
+        super.editDeleteRecentComment(feedDetail,isEdit);
     }
 
     public void likeAndUnlikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-        mListLoad = false;
-        mFeedDetail = (FeedDetail) baseResponse;
-        this.mPosition = position;
-        this.mPressedEmoji = reactionValue;
-        if (null != mFeedDetail && mFeedDetail.isLongPress()) {
-            mHomePresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(mFeedDetail.getEntityOrParticipantId(), reactionValue));
-        } else {
-            if (reactionValue == AppConstants.NO_REACTION_CONSTANT) {
-                mHomePresenter.getUnLikesFromPresenter(mAppUtils.unLikeRequestBuilder(mFeedDetail.getEntityOrParticipantId()));
-            } else {
-                mHomePresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(mFeedDetail.getEntityOrParticipantId(), reactionValue));
-            }
-        }
+       super.likeAndUnlikeRequest(baseResponse,reactionValue,position);
     }
-    private void recentCommentEditDelete(String success) {
-        if (success.equalsIgnoreCase(AppConstants.SUCCESS)) {
-            List<LastComment> lastCommentList = mFeedDetail.getLastComments();
-            if (StringUtil.isNotEmptyCollection(lastCommentList) && null != lastCommentList.get(lastCommentList.size() - 1)) {
-                LastComment lastComment = lastCommentList.get(lastCommentList.size() - 1);
-                lastCommentList.remove(lastComment);
-                mFeedDetail.setLastComments(lastCommentList);
-            }
-            mAdapter.setDataOnPosition(mFeedDetail, mFeedDetail.getItemPosition());
-            mAdapter.notifyDataSetChanged();
-        }
-    }
+
 
     public void commentListRefresh(FeedDetail feedDetail) {
-        mAdapter.notifyDataSetChanged();
-        if (mRecyclerView.getItemAnimator() instanceof SimpleItemAnimator) {
-            ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
-            ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setAddDuration(AppConstants.NO_REACTION_CONSTANT);
-        }
+     super.commentListRefresh(feedDetail);
     }
-
-    private void bookMarkSuccess(String success) {
-        if (success.equalsIgnoreCase(AppConstants.SUCCESS) && null != mFeedDetail) {
-            if (!mFeedDetail.isBookmarked()) {
-                mFeedDetail.setBookmarked(true);
-            } else {
-                mFeedDetail.setBookmarked(false);
-            }
-            mAdapter.notifyDataSetChanged();
-            mAdapter.removeDataOnPosition(mFeedDetail,mPosition);
-            if (mRecyclerView.getItemAnimator() instanceof SimpleItemAnimator) {
-                ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
-                ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setAddDuration(AppConstants.NO_REACTION_CONSTANT);
-            }
-        }
-    }
-
-    private void likeSuccess(String success) {
-
-        if (success.equalsIgnoreCase(AppConstants.SUCCESS) && null != mFeedDetail) {
-
-            if (mFeedDetail.isLongPress()) {
-                if (mFeedDetail.getReactionValue() == AppConstants.NO_REACTION_CONSTANT) {
-                    mFeedDetail.setReactionValue(mPressedEmoji);
-                    mFeedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
-                } else {
-                    mFeedDetail.setReactionValue(mPressedEmoji);
-                }
-
-            } else {
-
-                if (mFeedDetail.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
-                    mFeedDetail.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
-                    mFeedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() - AppConstants.ONE_CONSTANT);
-                } else {
-                    mFeedDetail.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
-                    mFeedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
-                }
-            }
-            mAdapter.setDataOnPosition(mFeedDetail, mPosition);
-            mAdapter.notifyDataSetChanged();
-            if (mRecyclerView.getItemAnimator() instanceof SimpleItemAnimator) {
-                ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
-                ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setAddDuration(AppConstants.NO_REACTION_CONSTANT);
-            }
-        }
-    }
-
 }

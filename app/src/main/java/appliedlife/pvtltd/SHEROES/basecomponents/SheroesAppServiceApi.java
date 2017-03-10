@@ -3,6 +3,7 @@ package appliedlife.pvtltd.SHEROES.basecomponents;
 
 import java.util.List;
 
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.Response;
 import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
@@ -10,6 +11,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityTagsListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.InviteSearchResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.ListOfInviteSearch;
@@ -76,6 +78,8 @@ public interface SheroesAppServiceApi {
     Observable<LoginResponse> getLoginAuthToken(@Body LoginRequest loginRequest);
     @POST("participant/user/fbsignup")
     Observable<LoginResponse> getFbSignUpToken(@Body LoginRequest loginRequest);
+    @POST("participant/community/join")
+    Observable<BaseResponse> getCommunityJoinResponse(@Body CommunityRequest communityRequest);
 
 
 
