@@ -47,6 +47,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.DrawerItems;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.setting.Segments;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -69,12 +70,16 @@ import appliedlife.pvtltd.SHEROES.views.fragments.JobFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobLocationFilter;
 import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunitiesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunityInviteMemberFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.SettingAboutFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.SettingFeedbackFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SettingFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.SettingTermsAndConditionFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SettingView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class HomeActivity extends BaseActivity implements JobFragment.HomeActivityIntractionListner, FragmentIntractionWithActivityListner, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, CommentReactionFragment.HomeActivityIntractionListner, ImageFullViewAdapter.HomeActivityIntraction {
+public class HomeActivity extends BaseActivity implements SettingView, JobFragment.HomeActivityIntractionListner, FragmentIntractionWithActivityListner, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, CommentReactionFragment.HomeActivityIntractionListner, ImageFullViewAdapter.HomeActivityIntraction {
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
     @Inject
     Preference<LoginResponse> userPreference;
@@ -752,5 +757,86 @@ public class HomeActivity extends BaseActivity implements JobFragment.HomeActivi
             super.openCommentReactionFragment(mFeedDetail);
         }
     }
-}
 
+    @Override
+    public void showNwError() {
+
+    }
+
+    @Override
+    public void backListener(int id, Segments segments) {
+
+
+
+        switch (id) {
+            case R.id.tv_setting_feedback:
+                SettingFeedbackFragment articlesFragment = new SettingFeedbackFragment();
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
+                        .replace(R.id.fl_feed_comments, articlesFragment).addToBackStack(null).commitAllowingStateLoss();
+                break;
+
+
+         /*   case R.id.tv_setting_preferences:
+
+                *//* Setting_basic_details setting_basic_details=segments.get1();
+                PrivilegesList privilegesList=setting_basic_details.getPrivilegesList();
+                RelationshipStatus relationshipStatus=privilegesList.getRelationshipStatus();
+                String privacy_type= relationshipStatus.getPrivacySettingType();*//*
+
+                Intent intent = new Intent(this, SettingPreferencesActivity.class);
+                intent.putExtra("Segment",segments);
+                startActivity(intent);
+
+                break;*/
+
+
+            case R.id.tv_setting_terms_and_condition:
+
+                SettingTermsAndConditionFragment settingTermsAndConditionFragment = new SettingTermsAndConditionFragment();
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
+                        .replace(R.id.fl_feed_comments, settingTermsAndConditionFragment).addToBackStack(null).commitAllowingStateLoss();
+                break;
+            case R.id.tv_setting_about:
+
+                SettingAboutFragment settingAboutFragmentFragment = new SettingAboutFragment();
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
+                        .replace(R.id.fl_feed_comments, settingAboutFragmentFragment).addToBackStack(null).commitAllowingStateLoss();
+                break;
+
+
+            case R.id.tv_logout:
+                if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getPhotoUrl())) {
+                    userPreference.delete();
+                }
+                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(intent);
+                finish();
+                break;
+
+            default:
+                getSupportFragmentManager().popBackStack();
+
+        }
+    }
+
+
+    @Override
+    public void startProgressBar() {
+
+    }
+
+    @Override
+    public void stopProgressBar() {
+
+    }
+
+    @Override
+    public void startNextScreen() {
+
+    }
+
+    @Override
+    public void showError(String s) {
+
+    }
+}

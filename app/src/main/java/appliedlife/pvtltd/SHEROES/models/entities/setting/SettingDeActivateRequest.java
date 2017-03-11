@@ -22,6 +22,14 @@ public class SettingDeActivateRequest {
     @Expose
     private String reasonForInactive;
 
+    @SerializedName("last_screen_name")
+    @Expose
+    private String lastScreenName;
+
+    @SerializedName("screen_name")
+    @Expose
+    private String screenName;
+
     public String getAppVersion() {
         return appVersion;
     }
@@ -54,4 +62,18 @@ public class SettingDeActivateRequest {
         this.reasonForInactive = reasonForInactive;
     }
 
+
+    public String getLastScreenName() {
+        return lastScreenName;
+    }
+
+    public void setLastScreenName(String LastScreenName) {
+        this.lastScreenName = LastScreenName;}
+
+    public String getScreenName() {
+        return screenName;
+    }
+
+    public void setScreenName(String screenName) {
+        this.screenName = screenName;}
 }

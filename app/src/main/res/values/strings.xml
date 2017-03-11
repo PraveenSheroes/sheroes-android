@@ -382,6 +382,37 @@ etur adipiscing elit,sed do eiusmod tempor incididunt ut…</string>
     <!--string related visiting card-->
     <string name="ID_MY_CARD">My Contact Card</string>
     <string name="ID_DOWNLOAD_NOW">Download Now</string>
+    <string name="ID_VISITING">Visiting</string>
+    <string name="ID_CARD">Card</string>
+    <string name="ID_DES_CARD">Homeboss</string>
+    <string name="ID_ADDRESS">Dilshad Garden, New Delhi, INDIA</string>
+    <string name="ID_INTERESTING_DETAILS">#Cooking</string>
+    <string name="ID_INTERESTING_DETAILS1">#Painting</string>
+    <string name="ID_INTERESTING_DETAILS2">#Blogging</string>
+    <string name="ID_EDUCATION_DETAILS">BSC  IIT Delhi</string>
+    <string name="ID_USER_MOBILE">028 1234 5678</string>
+    <string name="ID_USER_EMAIL">yourname@email.com</string>
+
+    <string name="ID_ADD_EDUCATION">ADD EDUCATION</string>
+    
+    <!--string related welcome page-->
+    
+    <string name="ID_GROW_WITH_SHEROES">Grow With SHEROES</string>
+    <string name="ID_WELCOME_TEXT1">Own your success. Invest in your growth
+    with our career guides, flexible jobs,and learning new things</string>
+    <string name="ID_CLICK_TO_JOIN">CLICK TO JOIN</string>
+    <string name="ID_JOIN_COMMUNITIES">Join Community</string>
+    <string name="ID_WELCOME_TEXT2">Talk, share, celebrate, inspire in a community that cares</string>
+    <string name="ID_WELCOME_TEXT3">Discover things that matter to you Career, Life, Love</string>
+    <string name="ID_ALL_OF_YOU">All For You</string>
+    <string name="ID_CONTINUE_WITH_FACEBOOK">CONTINUE WITH FACEBOOK</string>
+    <string name="ID_WELCOME_TEXT4">OTHER LOGIN OPTIONS (ONLY FOR EXISTING USERS)</string>
+
+
+
+
+
+
 
 
 

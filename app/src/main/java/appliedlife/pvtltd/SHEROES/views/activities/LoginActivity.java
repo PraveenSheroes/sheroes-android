@@ -20,7 +20,6 @@ import butterknife.ButterKnife;
 
 /**
  * Created by Praveen Singh on 04/01/2017.
- *
  * @author Praveen Singh
  * @version 5.0
  * @since 04/01/2017.
@@ -55,7 +54,6 @@ public class LoginActivity extends BaseActivity implements LoginFragment.LoginAc
     public void onErrorOccurence() {
         showNetworkTimeoutDoalog(true);
     }
-
     @Override
     public void onLoginAuthToken() {
         Intent homeIntent = new Intent(this, HomeActivity.class);

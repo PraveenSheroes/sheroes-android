@@ -19,6 +19,7 @@ public interface SettingFeedbackView extends BaseMvpView {
     void getUserDeactiveResponse(SettingDeActivateResponse deActivateResponse);
 
     void getUserPreferenceResponse(UserpreferenseResponse userpreferenseResponse);
+
     void showNwError();
 
 

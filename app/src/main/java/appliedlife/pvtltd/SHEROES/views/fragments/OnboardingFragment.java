@@ -60,7 +60,7 @@ public class OnboardingFragment extends BaseFragment {
         getActivity().setRequestedOrientation(
                 ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        Fabric.with(getActivity(), new Crashlytics());
+//        Fabric.with(getActivity(), new Crashlytics());
         return view;
     }
     @OnClick(R.id.fab_next)

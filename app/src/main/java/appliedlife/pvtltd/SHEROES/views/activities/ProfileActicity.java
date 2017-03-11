@@ -36,16 +36,27 @@ import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileHorList;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfilePersonalViewList;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileViewList;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView;
 import appliedlife.pvtltd.SHEROES.views.fragments.PersonalProfileFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProfessionalEditBasicDetailsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProffestionalProfileFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProfileAboutMeFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProfileAddEducationFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProfileAddOtherFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProfileCityWorkFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProfileOtherFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileTravelClientFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProfileWorkExperienceFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -54,7 +65,7 @@ import butterknife.OnClick;
  * Created by Praveen_Singh on 13-02-2017.
  */
 
-public class ProfileActicity extends BaseActivity implements AppBarLayout.OnOffsetChangedListener {
+public class ProfileActicity extends BaseActivity implements ProfileView,BaseHolderInterface,AppBarLayout.OnOffsetChangedListener {
     private final String TAG = LogUtils.makeLogTag(ProfileActicity.class);
     private static final String EXTRA_IMAGE = "extraImage";
     private static final String DECRIPTION = "desc";
@@ -231,21 +242,33 @@ public class ProfileActicity extends BaseActivity implements AppBarLayout.OnOffs
     public void handleOnClick(BaseResponse baseResponse, View view) {
 
         if (baseResponse instanceof ProfileHorList) {
+
             ProfileHorList dataItem= (ProfileHorList) baseResponse;
+
             ProfileCardlHandled(view.getId(),((ProfileHorList) baseResponse).getTag());
+
+        }else  if (baseResponse instanceof ProfileViewList) {
+
+            ProfileViewList dataItem1= (ProfileViewList) baseResponse;
+
+            ProfileCardlHandled(view.getId(),((ProfileViewList) baseResponse).getTag());
+
+
+        }else if (baseResponse instanceof ProfilePersonalViewList) {
+
+            ProfilePersonalViewList dataItem2= (ProfilePersonalViewList) baseResponse;
+            ProfileCardlHandled(view.getId(),((ProfilePersonalViewList) baseResponse).getTag());
+
+        }else {
+
+
         }
-
-
-
     }
-
 
     private void ProfileCardlHandled(int id,String tag) {
         switch (id) {
-
             case R.id.tv_edit_other_text:
                 if(tag.equals("Are you willing to travel to client side location?")) {
-                    coordinatorLayout.setVisibility(View.GONE);
                     flprofile_container.setVisibility(View.VISIBLE);
                     ProfileTravelClientFragment profiletravelFragment = new ProfileTravelClientFragment();
                     Bundle bundleTravel = new Bundle();
@@ -254,8 +277,77 @@ public class ProfileActicity extends BaseActivity implements AppBarLayout.OnOffs
                     getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
                             .replace(R.id.profile_container, profiletravelFragment, ProfileTravelClientFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
                     mflag = 1;
+                    break;
+                }else {
+
+                    flprofile_container.setVisibility(View.VISIBLE);
+                    ProfileCityWorkFragment profileCityWorkFragment = new ProfileCityWorkFragment();
+                    Bundle bundleTravel = new Bundle();
+                    ButterKnife.bind(this);
+                    profileCityWorkFragment.setArguments(bundleTravel);
+                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
+                            .replace(R.id.profile_container, profileCityWorkFragment, ProfileCityWorkFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+                    break;
                 }
+            case R.id.tv_add_education:
+                if(tag.equals("EDUCATION")) {
+                    flprofile_container.setVisibility(View.VISIBLE);
+                    ProfileAddEducationFragment profileAddEducationFragment = new ProfileAddEducationFragment();
+                    Bundle bundleTravel = new Bundle();
+                    ButterKnife.bind(this);
+                    profileAddEducationFragment.setArguments(bundleTravel);
+                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
+                            .replace(R.id.profile_container, profileAddEducationFragment, ProfileAddEducationFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+                    break;
+                }else{
+                    flprofile_container.setVisibility(View.VISIBLE);
+                    ProfileWorkExperienceFragment profileWorkExperienceFragment = new ProfileWorkExperienceFragment();
+                    Bundle bundleTravel = new Bundle();
+                    ButterKnife.bind(this);
+                    profileWorkExperienceFragment.setArguments(bundleTravel);
+                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
+                            .replace(R.id.profile_container, profileWorkExperienceFragment, ProfileWorkExperienceFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+
+                    break;
+
+                }
+
+            case R.id.tv_edit_other_textline:
+                flprofile_container.setVisibility(View.VISIBLE);
+                 ProfileOtherFragment  profileOtherFragment= new ProfileOtherFragment();
+                Bundle bundleOther = new Bundle();
+                ButterKnife.bind(this);
+                profileOtherFragment.setArguments(bundleOther);
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
+                        .replace(R.id.profile_container, profileOtherFragment, ProfileWorkExperienceFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+
                 break;
+
+            case R.id.tv_professional_edit_basic_details:
+
+                flprofile_container.setVisibility(View.VISIBLE);
+                ProfessionalEditBasicDetailsFragment profileEditBasicDetailsFragment= new ProfessionalEditBasicDetailsFragment();
+                Bundle bundleEditBasicDetails = new Bundle();
+                ButterKnife.bind(this);
+                profileEditBasicDetailsFragment.setArguments(bundleEditBasicDetails);
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
+                        .replace(R.id.profile_container, profileEditBasicDetailsFragment, ProfessionalEditBasicDetailsFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+                break;
+
+
+            case R.id.tv_add_about_me:
+
+                flprofile_container.setVisibility(View.VISIBLE);
+                ProfileAboutMeFragment profileAboutMeFragment= new ProfileAboutMeFragment();
+                Bundle bundleAddAboutMeFragment = new Bundle();
+                ButterKnife.bind(this);
+                profileAboutMeFragment.setArguments(bundleAddAboutMeFragment);
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
+                        .replace(R.id.profile_container, profileAboutMeFragment, ProfileAboutMeFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+
+                break;
+
+
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
 
@@ -302,6 +394,7 @@ public class ProfileActicity extends BaseActivity implements AppBarLayout.OnOffs
             mLytUserProfileStatus.setVisibility(View.VISIBLE);
         }
     }
+
     @OnClick(R.id.iv_back)
     public void backOnclick()
     {
@@ -309,4 +402,37 @@ public class ProfileActicity extends BaseActivity implements AppBarLayout.OnOffs
         overridePendingTransition(R.anim.top_to_bottom_exit,R.anim.top_bottom_exit_anim);
     }
 
+    @Override
+    public void backListener(int id) {
+
+        getSupportFragmentManager().popBackStack();
+    }
+
+    @Override
+    public void callFragment(int id) {
+        switch (id) {
+
+            case R.id.fab_add_other:
+            ProfileAddOtherFragment profileAddOtherFragment = new ProfileAddOtherFragment();
+            Bundle bundleAddOther = new Bundle();
+            ButterKnife.bind(this);
+            profileAddOtherFragment.setArguments(bundleAddOther);
+            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
+                    .replace(R.id.profile_container, profileAddOtherFragment, ProfileAddOtherFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+             break;
+
+
+            case R.id.tv_edit_other_textline:
+                ProfileAddOtherFragment profileEditOtherFragment = new ProfileAddOtherFragment();
+                Bundle bundleEditOther = new Bundle();
+                ButterKnife.bind(this);
+                profileEditOtherFragment.setArguments(bundleEditOther);
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
+                        .replace(R.id.profile_container, profileEditOtherFragment, ProfileAddOtherFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+                break;
+
+
+        }
+
+    }
 }

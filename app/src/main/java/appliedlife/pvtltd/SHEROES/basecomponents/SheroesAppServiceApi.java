@@ -56,7 +56,6 @@ public interface SheroesAppServiceApi {
     Observable<FeedResponsePojo> getFeedFromApi(@Body FeedRequestPojo feedRequestPojo );
     @POST("participant/feed/get_bookmarked")
     Observable<FeedResponsePojo> getBookMarkFromApi(@Body FeedRequestPojo feedRequestPojo);
-
     /*Participation*/
     @POST("participation/reaction/like")
     Observable<LikeResponse> getLikesFromApi(@Body LikeRequestPojo likeRequestPojo );
@@ -111,23 +110,22 @@ public interface SheroesAppServiceApi {
     Observable<ArticleListResponse> getOnlyJobList(@Body ArticleCardResponse articleCardResponse);
     @POST("v2/587fc963270000010df0ddac")
     Observable<Feature> getFeature(@Body Feature articleRequest );
-
     @POST("v2/588f43133f0000d81adde412")
     Observable<CommunitiesResponse> getAllCommunities(@Body Feature feature );
-
     @GET("v2/589874931100000e07038a52")
     Observable<Response<List<RecentSearchData>>> getMasterData();
-
     @POST("v2/58940613260000a11200a97f")
     Observable<InviteSearchResponse> getInviteSearchResponseFromApi(@Body ListOfInviteSearch listOfInviteSearch );
-
-
-    @POST("settings/saveFeedback")
+    @POST("participant/settings/save_feedback")
     Observable<SettingFeedbackResponce> getSettingAuthToken(@Body SettingFeedbackRequest feedbackRequest);
-    @POST("settings/saveRating")
+    @POST("participant/settings/save_rating")
     Observable<SettingRatingResponse> getUserRatingAuthToken(@Body SettingRatingRequest ratingRequest);
-    @POST("settings/deactivateAccount")
+    @POST("participant/settings/deactivate_account")
     Observable<SettingDeActivateResponse> getUserDeactiveAuthToken(@Body SettingDeActivateRequest deActivateRequest);
-    @POST("settings/changeUserPreference")
-    Observable<UserpreferenseResponse> getUserPreferenceAuthToken(@Body UserPreferenceRequest userPreferenceRequest);
+    @POST("participant/settings/get_user_preferences")
+    Observable<UserpreferenseResponse>getUserPreferenceAuthToken(@Body UserPreferenceRequest userPreferenceRequest);
+
+
+
+
 }

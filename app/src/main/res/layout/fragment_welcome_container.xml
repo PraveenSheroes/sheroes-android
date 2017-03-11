@@ -1,0 +1,59 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/imageviewPager"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginBottom="@dimen/dp_size_100">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_centerInParent="true">
+
+            <ImageView
+                android:layout_width="@dimen/dp_size_10"
+                android:layout_height="@dimen/dp_size_20"
+                android:id="@+id/iv_btn1"
+                android:layout_marginLeft="@dimen/dp_size_2"
+                android:src="@drawable/ic_circle_red"
+                android:layout_gravity="center" />
+
+            <ImageView
+                android:layout_width="@dimen/dp_size_10"
+                android:layout_height="@dimen/dp_size_20"
+                android:id="@+id/iv_btn2"
+                android:layout_toRightOf="@id/iv_btn1"
+                android:layout_marginLeft="@dimen/dp_size_2"
+                android:src="@drawable/ic_circle_red"
+                android:layout_gravity="center" />
+
+            <ImageView
+                android:layout_width="@dimen/dp_size_10"
+                android:layout_height="@dimen/dp_size_20"
+                android:id="@+id/iv_btn3"
+                android:layout_toRightOf="@id/iv_btn2"
+                android:layout_marginLeft="@dimen/dp_size_2"
+                android:src="@drawable/ic_circle_red"
+                android:layout_gravity="center" />
+
+
+        </LinearLayout>
+
+
+
+    </RelativeLayout>
+
+
+
+
+</FrameLayout>

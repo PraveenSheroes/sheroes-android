@@ -128,7 +128,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        SheroesApplication.getAppComponent(getContext()).inject(this);
+       SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_login, container, false);
         ButterKnife.bind(this, view);
         mLoginPresenter.attachView(this);
@@ -218,7 +218,6 @@ public class LoginFragment extends BaseFragment implements LoginView {
     @Override
     public void onStop() {
         super.onStop();
-
     }
 
     @Override
@@ -273,7 +272,9 @@ public class LoginFragment extends BaseFragment implements LoginView {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
             focusView.requestFocus();
+
         } else {
+
             mProgressBar.setVisibility(View.VISIBLE);
             LoginRequest loginRequest = new LoginRequest();
             loginRequest.setAdvertisementid("string");

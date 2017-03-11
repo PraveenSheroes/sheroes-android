@@ -11,9 +11,13 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileViewList;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.EditNameDialogListener;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
+import static com.facebook.login.widget.ProfilePictureView.TAG;
 
 /**
  * Created by SHEROES-TECH on 16-02-2017.
@@ -38,8 +42,16 @@ public class ProfileWorkExperienceHolder extends BaseViewHolder<ProfileViewList>
     TextView mTv_degree22;
     @Bind(R.id.tv_date2)
     TextView mTv_date2;
+    @Bind(R.id.tv_add_education)
+    TextView mTv_add_education;
     BaseHolderInterface viewInterface;
     private ProfileViewList dataItem;
+
+
+
+
+
+
 
     public ProfileWorkExperienceHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
@@ -56,9 +68,10 @@ public class ProfileWorkExperienceHolder extends BaseViewHolder<ProfileViewList>
     @Override
     public void bindData(ProfileViewList obj, Context context, int position) {
         this.dataItem = obj;
-        itemView.setOnClickListener(this);
+        mTv_add_education.setOnClickListener(this);
         mTv_degree12.setVisibility(View.VISIBLE);
         mTv_degree22.setVisibility(View.VISIBLE);
+
         mTv_job_language_number.setText(dataItem.getTag());
         mTv_degree1.setText(dataItem.getItem1());
         mTv_date1.setText(dataItem.getItem4());
@@ -79,7 +92,19 @@ public class ProfileWorkExperienceHolder extends BaseViewHolder<ProfileViewList>
     @Override
     public void onClick(View view) {
 
-        //viewInterface.handleOnClick(this.dataItem,view);
+        switch (view.getId()) {
+
+            case R.id.tv_add_education:
+
+                viewInterface.handleOnClick(this.dataItem,mTv_add_education);
+
+                break;
+
+            default:
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + view.getId());
+        }
+
+
 
 
     }

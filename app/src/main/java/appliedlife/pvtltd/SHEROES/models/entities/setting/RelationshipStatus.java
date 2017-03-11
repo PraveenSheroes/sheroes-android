@@ -1,10 +1,13 @@
 
 package appliedlife.pvtltd.SHEROES.models.entities.setting;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class RelationshipStatus {
+public class RelationshipStatus implements Parcelable {
 
     @SerializedName("id")
     @Expose
@@ -40,4 +43,13 @@ public class RelationshipStatus {
         this.privacySettingType = privacySettingType;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+
+    }
 }

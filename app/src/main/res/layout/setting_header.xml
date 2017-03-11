@@ -22,6 +22,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@string/ID_ROBOTO_BOLD"
         android:drawablePadding="@dimen/dp_size_12"
+        android:textAllCaps="true"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:layerType="software"

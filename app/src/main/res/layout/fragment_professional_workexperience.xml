@@ -7,7 +7,7 @@
         android:layout_height="match_parent">
 
         <android.support.design.widget.AppBarLayout
-            android:id="@+id/al_community_open_about"
+            android:id="@+id/a1_profile_workexperiences"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
@@ -38,9 +38,10 @@
                         android:layout_height="@dimen/dp_size_46"
                         android:layout_centerHorizontal="true"
                         android:layout_centerInParent="true"
-                        android:background="@drawable/ic_sad_face" />
+                        android:background="@drawable/ic_work_experience" />
 
                     <TextView
+                        android:id="@+id/tv_workexperience_tittle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/iv_profile_image"
@@ -63,19 +64,21 @@
                         android:layout_height="match_parent">  
 
                         <TextView
-                            android:id="@+id/tv_about_community_back"
+                            android:id="@+id/tv_profile_workexperience_back"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
                             android:layout_marginTop="@dimen/dp_size_10"
                             android:drawableLeft="@drawable/ic_back_white"
                             android:fontFamily="@string/ID_ROBOTO_LIGHT" />
 
                         <TextView
-                            android:id="@+id/tv_about_community_share"
+                            android:id="@+id/tv_workexperience"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
                             android:padding="@dimen/dp_size_16"
+                            android:textAllCaps="true"
                             android:text="@string/ID_WORK_EXPERIENCE"
 
                             />
@@ -108,7 +111,7 @@
 
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_add_other"
+        android:id="@+id/fab_add_other_work_experience"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

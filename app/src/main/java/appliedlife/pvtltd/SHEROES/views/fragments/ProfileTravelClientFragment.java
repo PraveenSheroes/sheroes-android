@@ -14,7 +14,7 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import butterknife.ButterKnife;
 
 /**
- * Created by Ajit Kumar on 20/02/17.
+ * Created by priyanka on 20/02/17.
  */
 
 public class ProfileTravelClientFragment extends BaseFragment {
@@ -31,19 +31,12 @@ private final String SCREEN_NAME = "Profile_Travel_screen";
       return profiletravelFragment;
         }
 
-
-
-
-
 @Override
 public void onAttach(Context context) {
-
-
-        super.onAttach(context);
-
-
+    super.onAttach(context);
 
 }
+
 
 
 @Nullable
@@ -61,9 +54,5 @@ public void onClick(View view) {
         int id = view.getId();
 
 }
-
-
-
-
 
 }

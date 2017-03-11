@@ -71,8 +71,6 @@ public class SettingFeedbackModel {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-
-
     /*for User_User_Deactivatted */
 
     public Observable<SettingDeActivateResponse> getUserUserDeactiveAuthTokenFromModel(SettingDeActivateRequest deActivateRequest) {
@@ -95,8 +93,6 @@ public class SettingFeedbackModel {
 
 
     /*for User_User_Prefence */
-
-
 
     public Observable<UserpreferenseResponse> getUserUserPreferenceAuthTokenFromModel(UserPreferenceRequest preferenceRequest) {
 

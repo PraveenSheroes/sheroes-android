@@ -12,7 +12,6 @@
         android:right="@dimen/dp_size_8"
         android:top="@dimen/dp_size_3"
         android:bottom="@dimen/dp_size_3"/>
-
     <solid android:color="@color/blue"/>
 
 </shape>

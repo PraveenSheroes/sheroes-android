@@ -154,8 +154,21 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
         setcolorontextview(mtvdeactive_text1, mdeactive_check_box1);
         value = mtvdeactive_text1.getText().toString();
 
+        mdeactive_check_box1.setChecked(true);
+        mdeactive_check_box1a.setChecked(false);
+        mdeactive_check_box1c.setChecked(false);
+        mdeactive_check_box1b.setChecked(false);
+        mdeactive_check_box1d.setChecked(false);
+
+
+        mtvdeactive_text1.setTextColor(getResources().getColor(R.color.blue));
+        mtvdeactive_text1a.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
+        mtvdeactive_text1b.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
+        mtvdeactive_text1c.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
+        mtvdeactive_text1d.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
 
     }
+
 //click on check_1
 
     @OnClick(R.id.deactive_check_box1)
@@ -163,6 +176,17 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
     public void ondeactivecheck1click() {
 
         setcolorontextview(mtvdeactive_text1, mdeactive_check_box1);
+        mdeactive_check_box1.setChecked(true);
+        mdeactive_check_box1a.setChecked(false);
+        mdeactive_check_box1b.setChecked(false);
+        mdeactive_check_box1c.setChecked(false);
+        mdeactive_check_box1d.setChecked(false);
+        mtvdeactive_text1.setTextColor(getResources().getColor(R.color.blue));
+        mtvdeactive_text1a.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
+        mtvdeactive_text1b.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
+        mtvdeactive_text1c.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
+        mtvdeactive_text1d.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
+
 
 
     }
@@ -176,6 +200,17 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
         setcolorontextview(mtvdeactive_text1a, mdeactive_check_box1a);
         value = mtvdeactive_text1a.getText().toString();
 
+        mdeactive_check_box1a.setChecked(true);
+        mdeactive_check_box1.setChecked(false);
+        mdeactive_check_box1b.setChecked(false);
+        mdeactive_check_box1c.setChecked(false);
+        mdeactive_check_box1d.setChecked(false);
+        mtvdeactive_text1a.setTextColor(getResources().getColor(R.color.blue));
+        mtvdeactive_text1.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
+        mtvdeactive_text1b.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
+        mtvdeactive_text1c.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
+        mtvdeactive_text1d.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
+
     }
 
 
@@ -185,7 +220,20 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
 
     public void ondeactivecheck1aclick() {
 
+
         setcolorontextview(mtvdeactive_text1a, mdeactive_check_box1a);
+
+        mdeactive_check_box1a.setChecked(true);
+        mdeactive_check_box1.setChecked(false);
+        mdeactive_check_box1b.setChecked(false);
+        mdeactive_check_box1c.setChecked(false);
+        mdeactive_check_box1d.setChecked(false);
+        mtvdeactive_text1a.setTextColor(getResources().getColor(R.color.blue));
+        mtvdeactive_text1.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
+        mtvdeactive_text1b.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
+        mtvdeactive_text1c.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
+        mtvdeactive_text1d.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
+
 
 
     }
@@ -199,6 +247,16 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
 
         setcolorontextview(mtvdeactive_text1b, mdeactive_check_box1b);
         value = mtvdeactive_text1b.getText().toString();
+        mdeactive_check_box1b.setChecked(true);
+        mdeactive_check_box1.setChecked(false);
+        mdeactive_check_box1a.setChecked(false);
+        mdeactive_check_box1c.setChecked(false);
+        mdeactive_check_box1d.setChecked(false);
+        mtvdeactive_text1b.setTextColor(getResources().getColor(R.color.blue));
+        mtvdeactive_text1.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
+        mtvdeactive_text1a.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
+        mtvdeactive_text1c.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
+        mtvdeactive_text1d.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
 
 
     }
@@ -210,6 +268,16 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
     public void ondeactivecheck3bclick() {
 
         setcolorontextview(mtvdeactive_text1b, mdeactive_check_box1b);
+        mdeactive_check_box1b.setChecked(true);
+        mdeactive_check_box1.setChecked(false);
+        mdeactive_check_box1a.setChecked(false);
+        mdeactive_check_box1c.setChecked(false);
+        mdeactive_check_box1d.setChecked(false);
+        mtvdeactive_text1b.setTextColor(getResources().getColor(R.color.blue));
+        mtvdeactive_text1.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
+        mtvdeactive_text1a.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
+        mtvdeactive_text1c.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
+        mtvdeactive_text1d.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
 
 
     }
@@ -224,17 +292,36 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
         setcolorontextview(mtvdeactive_text1c, mdeactive_check_box1c);
         value = mtvdeactive_text1c.getText().toString();
 
+        mdeactive_check_box1c.setChecked(true);
+        mdeactive_check_box1.setChecked(false);
+        mdeactive_check_box1a.setChecked(false);
+        mdeactive_check_box1b.setChecked(false);
+        mdeactive_check_box1d.setChecked(false);
+        mtvdeactive_text1c.setTextColor(getResources().getColor(R.color.blue));
+        mtvdeactive_text1.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
+        mtvdeactive_text1a.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
+        mtvdeactive_text1b.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
+        mtvdeactive_text1d.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
+
 
     }
 
-
     //click on deactive_check4
-
     @OnClick(R.id.deactive_check_box1c)
 
     public void ondeactivecheck4cclick() {
 
         setcolorontextview(mtvdeactive_text1c, mdeactive_check_box1c);
+        mdeactive_check_box1c.setChecked(true);
+        mdeactive_check_box1.setChecked(false);
+        mdeactive_check_box1a.setChecked(false);
+        mdeactive_check_box1b.setChecked(false);
+        mdeactive_check_box1d.setChecked(false);
+        mtvdeactive_text1c.setTextColor(getResources().getColor(R.color.blue));
+        mtvdeactive_text1.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
+        mtvdeactive_text1a.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
+        mtvdeactive_text1b.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
+        mtvdeactive_text1d.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
 
     }
 
@@ -245,8 +332,20 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
     public void ondeactivetext1dclick() {
 
         setcolorontextview(mtvdeactive_text1d, mdeactive_check_box1d);
-
         value = mtvdeactive_text1d.getText().toString();
+        mdeactive_check_box1d.setChecked(true);
+        mdeactive_check_box1.setChecked(false);
+        mdeactive_check_box1a.setChecked(false);
+        mdeactive_check_box1b.setChecked(false);
+        mdeactive_check_box1c.setChecked(false);
+        mtvdeactive_text1d.setTextColor(getResources().getColor(R.color.blue));
+        mtvdeactive_text1.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
+        mtvdeactive_text1a.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
+        mtvdeactive_text1b.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
+        mtvdeactive_text1c.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
+
+
+
 
 
     }
@@ -259,6 +358,18 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
     public void ondeactivecheck5click() {
 
         setcolorontextview(mtvdeactive_text1d, mdeactive_check_box1d);
+
+        mdeactive_check_box1.setChecked(false);
+        mdeactive_check_box1a.setChecked(false);
+        mdeactive_check_box1b.setChecked(false);
+        mdeactive_check_box1c.setChecked(false);
+        mdeactive_check_box1d.setChecked(true);
+        mtvdeactive_text1d.setTextColor(getResources().getColor(R.color.blue));
+        mtvdeactive_text1.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
+        mtvdeactive_text1a.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
+        mtvdeactive_text1b.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
+        mtvdeactive_text1c.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
+
 
 
     }
@@ -309,7 +420,7 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
 
             String reson_value = mEditText_reson.getText().toString();
 
-            if (!StringUtil.isNotNullOrEmptyString(reson_value)) {
+            if (null!= reson_value) {
 
                 tv_reson.setVisibility(View.VISIBLE);
                 SettingDeActivateRequest deActivateRequest = new SettingDeActivateRequest();
@@ -317,6 +428,8 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
                 deActivateRequest.setCloudMessagingId("string");
                 deActivateRequest.setDeviceUniqueId("string");
                 deActivateRequest.setReasonForInactive(reson_value);
+                deActivateRequest.setLastScreenName("string");
+                deActivateRequest.setScreenName("string");
                 mSettingFeedbackPresenter.getUserDeactiveAuthTokeInPresenter(deActivateRequest);
                 Intent i = new Intent(getActivity(), PreferencesDeactiveAccountDialogFragment.class);
                 startActivity(i);
@@ -324,7 +437,7 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
             }else {
 
 
-            }
+         }
 
 
         } else {
@@ -333,10 +446,9 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
             deActivateRequest.setCloudMessagingId("string");
             deActivateRequest.setDeviceUniqueId("string");
             deActivateRequest.setReasonForInactive(value);
+            deActivateRequest.setLastScreenName("string");
+            deActivateRequest.setScreenName("string");
             mSettingFeedbackPresenter.getUserDeactiveAuthTokeInPresenter(deActivateRequest);
-
-
-
 
 
         }

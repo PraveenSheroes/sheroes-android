@@ -3,37 +3,38 @@
 <RelativeLayout
       xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/dp_size_50"
         android:layout_marginTop="@dimen/dp_size_10"
         android:layout_marginBottom="@dimen/dp_size_10"
-        android:background="@color/white"
-        android:orientation="horizontal">
+        android:background="@color/white">
 
-        <TextView
+     <TextView
             android:id="@+id/tv_other_view"
             android:layout_width="wrap_content"
-            android:paddingLeft="@dimen/dp_size_16"
-            android:paddingRight="@dimen/dp_size_35"
-            android:paddingTop="@dimen/dp_size_16"
-            android:paddingBottom="@dimen/dp_size_16"
+            android:layout_marginLeft="@dimen/dp_size_16"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:text=""
             android:layout_height="wrap_content"
-            android:visibility="gone"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:hint="@string/ID_ABOUT_COMMUNITY_DES"
-            android:textColor="@color/text_color_contactdetails_page"
+            android:textColor="@color/text_color_setting_preference_basicdetails"
             android:textSize="@dimen/sp_size_13" />
 
         <TextView
-            android:id="@+id/tv_edit_other_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="top"
-            android:layout_gravity="right"
-            android:layout_marginLeft="@dimen/dp_size_16"
-            android:paddingRight="@dimen/dp_size_16"
-            android:paddingBottom="@dimen/dp_size_16"
-            android:paddingTop="@dimen/dp_size_16"
-            android:drawableRight="@drawable/ic_edit_icon"
+            android:id="@+id/tv_edit_other_textline"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:textSize="@dimen/dp_size_17"
+            android:layout_centerVertical="true"
+            android:background="@drawable/other_count_backgroung_shap"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:textColor="@color/white"
+            android:text="1"
+            android:layout_marginRight="@dimen/dp_size_16"
+
+
+
             />
 
 

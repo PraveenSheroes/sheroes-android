@@ -76,8 +76,29 @@ public class ProffestionalProfileFragment extends BaseFragment {
     }
     private void setListValue() {
 
+
+
+
+        ProfileViewList listProfile_card=new ProfileViewList();
+        listProfile_card.setId("0");
+        listProfile_card.setTag("My Contact Card");
+        listProfile_card.setItem1("Download Now");
+        listProfile_card.setItem2("");
+        listProfile_card.setItem3("");
+        listProfile_card.setItem4("");
+        listProfile_card.setItem5("");
+        listProfile_card.setItem6("");
+        listProfile_card.setItem7("");
+        listProfile_card.setItem8("");
+        listProfile_card.setItem9("");
+        listProfile_card.setItem10("");
+        profileList.add(listProfile_card);
+
+
+
+
         ProfileViewList listProfile=new ProfileViewList();
-        listProfile.setId("0");
+        listProfile.setId("1");
         listProfile.setTag("Good At");
         listProfile.setItem1("WORK FROM HOME");
         listProfile.setItem2("FREELANCE WORK");
@@ -92,7 +113,7 @@ public class ProffestionalProfileFragment extends BaseFragment {
         profileList.add(listProfile);
 
         ProfileViewList listProfile1=new ProfileViewList();
-        listProfile1.setId("1");
+        listProfile1.setId("2");
         listProfile1.setTag("EDUCATION");
         listProfile1.setItem1("M.COM");
         listProfile1.setItem2("Lady Shri Ram College");
@@ -108,7 +129,7 @@ public class ProffestionalProfileFragment extends BaseFragment {
 
 
         ProfileViewList listProfile2=new ProfileViewList();
-        listProfile2.setId("2");
+        listProfile2.setId("3");
         listProfile2.setTag("WORK EXPERIENCE");
         listProfile2.setItem1("Lead Designer");
         listProfile2.setItem2("Snapdeal");
@@ -123,7 +144,7 @@ public class ProffestionalProfileFragment extends BaseFragment {
         profileList.add(listProfile2);
 
         ProfileViewList listProfile3=new ProfileViewList();
-        listProfile3.setId("3");
+        listProfile3.setId("4");
         listProfile3.setTag("Horizontal");
         listProfile3.setItem1("Are you willing to travel to client side location?");
         listProfile3.setItem2("Yes, My Country");
@@ -139,13 +160,13 @@ public class ProffestionalProfileFragment extends BaseFragment {
 
 
         ProfileViewList listProfile4=new ProfileViewList();
-        listProfile4.setId("4");
+        listProfile4.setId("5");
         listProfile4.setTag("BASIC DETAILS");
         listProfile4.setItem1("Current Status");
         listProfile4.setItem2("Employed");
         listProfile4.setItem3("Sector");
         listProfile4.setItem4("Design");
-        listProfile4.setItem5("Total Work Experience");
+        listProfile4.setItem5("Total work_experience");
         listProfile4.setItem6("4 Years 11 Months");
         listProfile4.setItem7("Language");
         listProfile4.setItem8("English");
@@ -154,7 +175,7 @@ public class ProffestionalProfileFragment extends BaseFragment {
         profileList.add(listProfile4);
 
         ProfileViewList listProfile5=new ProfileViewList();
-        listProfile5.setId("4");
+        listProfile5.setId("6");
         listProfile5.setTag("OTHER");
         listProfile5.setItem1("");
         listProfile5.setItem2("");

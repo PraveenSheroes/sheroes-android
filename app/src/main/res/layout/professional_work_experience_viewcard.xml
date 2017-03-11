@@ -11,17 +11,36 @@
     android:layout_height="match_parent">
 
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_size_25"
+        android:paddingRight="@dimen/dp_size_10">
+
     <TextView
         android:id="@+id/tv_work_exp_designation_name"
-        android:layout_width="match_parent"
-        android:paddingTop="@dimen/dp_size_25"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
         android:text="@string/ID_WORK_EXPERIENCE"
         android:textAllCaps="true"
         android:textColor="@color/text_color_contactdetails_page"
-        android:drawableRight="@drawable/ic_delete_inactive_icon"
         android:textSize="@dimen/sp_size_13" />
+
+
+        <TextView
+            android:id="@+id/tv_edit_workexperience"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:drawableRight="@drawable/ic_edit_icon"
+            />
+
+
+
+
+    </RelativeLayout>
 
 
 

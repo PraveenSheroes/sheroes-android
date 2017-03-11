@@ -11,6 +11,7 @@ import android.widget.TextView;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.setting.Segments;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SettingView;
 import butterknife.Bind;
@@ -90,9 +91,12 @@ public class SettingPreferencsFragment extends BaseFragment  implements SettingV
     }
 
     @Override
-    public void backListener(int id) {
+    public void backListener(int id, Segments segments) {
 
     }
+
+
+
 
     @Override
     public void startProgressBar() {

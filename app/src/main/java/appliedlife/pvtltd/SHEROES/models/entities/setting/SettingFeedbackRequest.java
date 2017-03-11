@@ -22,6 +22,14 @@ public class SettingFeedbackRequest {
     @Expose
     private String deviceUniqueId;
 
+    @SerializedName("last_screen_name")
+    @Expose
+    private String lastScreenName;
+
+    @SerializedName("screen_name")
+    @Expose
+    private String screenName;
+
     public String getAppVersion() {
         return appVersion;
     }
@@ -53,5 +61,19 @@ public class SettingFeedbackRequest {
     public void setDeviceUniqueId(String deviceUniqueId) {
         this.deviceUniqueId = deviceUniqueId;
     }
+
+    public String getLastScreenName() {
+        return lastScreenName;
+    }
+
+    public void setLastScreenName(String LastScreenName) {
+        this.lastScreenName = LastScreenName;}
+
+    public String getScreenName() {
+        return screenName;
+    }
+
+    public void setScreenName(String screenName) {
+        this.screenName = screenName;}
 
 }

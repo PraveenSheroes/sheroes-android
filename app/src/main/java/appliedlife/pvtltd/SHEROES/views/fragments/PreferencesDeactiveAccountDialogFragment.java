@@ -9,11 +9,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -25,6 +27,8 @@ public class PreferencesDeactiveAccountDialogFragment extends BaseDialogFragment
     private boolean finishParent;
     private NewCloseListener mHomeActivityIntractionListner;
     private final String TAG = LogUtils.makeLogTag(SettingPreferencesDeactiveAccountFragment.class);
+
+
 
     PreferencesDeactiveAccountDialogFragment(SettingPreferencesDeactiveAccountFragment context) {
         try {
@@ -56,12 +60,11 @@ public class PreferencesDeactiveAccountDialogFragment extends BaseDialogFragment
     }
 
 
-@OnClick(R.id.dialogButtoncancle)
+@OnClick(R.id.tv_dialog_close)
 public void onBack()
 {
     getDialog().cancel();
 }
-
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {

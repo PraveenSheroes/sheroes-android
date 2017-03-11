@@ -11,9 +11,14 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileViewList;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.EditNameDialogListener;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
+import static appliedlife.pvtltd.SHEROES.R.id.view;
+import static com.facebook.login.widget.ProfilePictureView.TAG;
 
 /**
  * Created by priyanka on 16-02-2017.
@@ -22,6 +27,8 @@ import butterknife.ButterKnife;
 public class ProfileEducationHolder extends BaseViewHolder<ProfileViewList> {
     @Bind(R.id.tv_job_language_number)
     TextView mTv_job_language_number;
+    @Bind(R.id.tv_add_education)
+    TextView mTv_add_education;
     @Bind(R.id.tv_degree1)
     TextView mTv_degree1;
     @Bind(R.id.tv_date1)
@@ -43,6 +50,8 @@ public class ProfileEducationHolder extends BaseViewHolder<ProfileViewList> {
         ButterKnife.bind(this,itemView);
         this.viewInterface = baseHolderInterface;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
+
+
     }
     public ProfileEducationHolder(View itemView, EditNameDialogListener baseHolderInterface) {
         super(itemView);
@@ -55,8 +64,7 @@ public class ProfileEducationHolder extends BaseViewHolder<ProfileViewList> {
     @Override
     public void bindData(ProfileViewList obj, Context context, int position) {
         this.dataItem = obj;
-        itemView.setOnClickListener(this);
-
+        mTv_add_education.setOnClickListener(this);
         mTv_job_language_number.setText(dataItem.getTag());
         mTv_degree1.setText(dataItem.getItem1());
         mTv_date1.setText(dataItem.getItem3());
@@ -72,12 +80,27 @@ public class ProfileEducationHolder extends BaseViewHolder<ProfileViewList> {
 
     }
 
-
     @Override
     public void onClick(View view) {
 
-       // viewInterface.handleOnClick(this.dataItem,view);
+
+        switch (view.getId()) {
+
+            case R.id.tv_add_education:
+                viewInterface.handleOnClick(this.dataItem,mTv_add_education);
+                break;
+            default:
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + view.getId());
+
+
+        }
+
+
 
 
     }
+
+
+
+
 }

@@ -61,7 +61,7 @@ public class SettingTermsAndConditionFragment extends BaseFragment {
 
     public void onBackClick()
     {
-        settingViewlistener.backListener(R.id.iv_back_setting);
+        settingViewlistener.backListener(R.id.iv_back_setting,null);
 
     }
 

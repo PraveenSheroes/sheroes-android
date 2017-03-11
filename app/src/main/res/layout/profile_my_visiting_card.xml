@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <LinearLayout
+        android:id="@+id/li_profile_full_view_header_img"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_size_90"
+        android:background="@drawable/visiting_card_img"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_my_contacct_card"
+            android:padding="@dimen/dp_size_16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ID_MY_CARD"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dp_size_13"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"/>
+
+        <TextView
+            android:id="@+id/tv_download_my_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ID_DOWNLOAD_NOW"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dp_size_13"
+            android:paddingTop="@dimen/dp_size_10"
+            android:paddingBottom="@dimen/dp_size_10"
+            android:paddingLeft="@dimen/dp_size_16"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>

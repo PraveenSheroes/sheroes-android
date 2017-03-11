@@ -11,6 +11,7 @@ import android.widget.TextView;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.setting.Segments;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SettingView;
@@ -61,7 +62,7 @@ public class SettingAboutFragment extends BaseFragment implements SettingView {
     @OnClick(R.id.iv_back_setting)
     public void onBackClick()
     {
-        settingViewlistener.backListener(R.id.iv_back_setting);
+        settingViewlistener.backListener(R.id.iv_back_setting,null);
 
     }
 
@@ -72,9 +73,12 @@ public class SettingAboutFragment extends BaseFragment implements SettingView {
     }
 
     @Override
-    public void backListener(int id) {
+    public void backListener(int id, Segments segments) {
 
     }
+
+
+
 
     @Override
     public void startProgressBar() {

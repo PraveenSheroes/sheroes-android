@@ -176,8 +176,9 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new ProfileEducationHolder(view, viewInterface);
         }
-    },
-    PROFILE_WORKEXPERIENCE(R.layout.professional_education_card) {
+    }
+    ,
+    PROFILE_WORK_EXPERIENCE(R.layout.professional_education_card) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new ProfileWorkExperienceHolder(view, viewInterface);
@@ -186,7 +187,7 @@ public enum HolderMapping {
     PROFILE_HORIZONTAL_LIST(R.layout.profile_hor_card) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new ProfileHorListHolder(view, viewInterface);
+            return new ProfileHorizantalListHolder(view, viewInterface);
         }
     },
     PROFILE_HORIZONTAL_RECYCLER_LIST(R.layout.profile_horizontal_recycler) {
@@ -195,10 +196,10 @@ public enum HolderMapping {
             return new ProfileHorizontalViewHolder(view, viewInterface);
         }
     },
-    PROFILE_BASICDETAILS(R.layout.profile_basicdetails_card) {
+    PROFILE_BASIC_DETAILS(R.layout.profile_basicdetails_card) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new ProfileBasicDetailsHolder(view, viewInterface);
+            return new ProfileProfessionalBasicDetailsHolder(view, viewInterface);
         }
     },
     PROFILE_OTHER(R.layout.professional_other_card) {
@@ -233,6 +234,16 @@ public enum HolderMapping {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new ProfileIAmInterestingInHolder(view, viewInterface);
+        }
+    },PROFILE_PERSONAL_VISITINGCARD(R.layout.profile_my_visiting_card) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new Visiting_card_holder1(view, viewInterface);
+        }
+    },PROFFESTIONAL_VISITINGCARD(R.layout.profile_my_visiting_card) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new VisitingCardholder(view, viewInterface);
         }
     },
     FILTERLIST(R.layout.filter_list) {
@@ -388,14 +399,27 @@ public enum HolderMapping {
                         return PROFIL_EEDUCATION.ordinal();
                     } else if (tagType.equals("Good At")) {
                         return PROFILE_GOODAT.ordinal();
-                    } else if (tagType.equals("WORK EXPERIENCE")) {
-                        return PROFILE_WORKEXPERIENCE.ordinal();
-                    } else if (tagType.equals("Horizontal")) {
+                    }
+                    else if(tagType.equals("WORK EXPERIENCE"))
+                    {
+                        return PROFILE_WORK_EXPERIENCE.ordinal();
+                    }
+                    else if(tagType.equals("Horizontal"))
+                    {
                         return PROFILE_HORIZONTAL_RECYCLER_LIST.ordinal();
-                    } else if (tagType.equals("BASIC DETAILS")) {
-                        return PROFILE_BASICDETAILS.ordinal();
-                    } else if (tagType.equals("OTHER")) {
+                    }
+                    else if(tagType.equals("BASIC DETAILS"))
+                    {
+                        return PROFILE_BASIC_DETAILS.ordinal();
+                    }
+
+                    else if(tagType.equals("OTHER"))
+                    {
                         return PROFILE_OTHER.ordinal();
+
+                    }else if(tagType.equals("My Contact Card"))
+                    {
+                        return PROFFESTIONAL_VISITINGCARD.ordinal();
                     }
 
                 } else if (item instanceof ProfilePersonalViewList)
@@ -422,7 +446,11 @@ public enum HolderMapping {
                     } else if (tagType.equals("Basic Details")) {
                         return PROFILE_PERSONAL_BASICDETAILS.ordinal();
 
-                    } else if (tagType.equals("I AM INTERESTED IN")) {
+                    }else if(tagType.equals("My Contact Card"))
+                    {
+                        return PROFILE_PERSONAL_VISITINGCARD.ordinal();
+                    }
+                    else if (tagType.equals("I AM INTERESTED IN")) {
                         return PROFILE_PERSONAL_INTERESTING.ordinal();
 
                     }

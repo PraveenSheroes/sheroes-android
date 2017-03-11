@@ -16,6 +16,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfilePersonalViewList;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileViewList;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActicity;
@@ -87,8 +88,29 @@ public class PersonalProfileFragment extends BaseFragment {
 
     private void setListValue() {
 
-        ProfilePersonalViewList personalprofile = new ProfilePersonalViewList();
-        personalprofile.setId("0");
+
+        ProfilePersonalViewList personal_profile_card = new ProfilePersonalViewList();
+        personal_profile_card.setId("0");
+        personal_profile_card.setTag("My Contact Card");
+        personal_profile_card.setItem1("Download Now");
+        personal_profile_card.setItem2("");
+        personal_profile_card.setItem3("");
+        personal_profile_card.setItem4("");
+        personal_profile_card.setItem5("");
+        personal_profile_card.setItem6("");
+        personal_profile_card.setItem7("");
+        personal_profile_card.setItem8("");
+        personal_profile_card.setItem9("");
+        personal_profile_card.setItem10("");
+        personal_profile_card.setItem11("");
+        personal_profile_card.setItem12("");
+        personal_profile_card.setItem13("");
+        personal_profile_card.setItem14("");
+        personalprofileList.add(personal_profile_card);
+
+
+        ProfilePersonalViewList personalprofile=new ProfilePersonalViewList();
+        personalprofile.setId("1");
         personalprofile.setTag("Looking For");
         personalprofile.setItem1("Opportunity Search");
         personalprofile.setItem2("Business & Entrepreneurship");
@@ -108,7 +130,7 @@ public class PersonalProfileFragment extends BaseFragment {
 
 
         ProfilePersonalViewList personalprofile1=new ProfilePersonalViewList();
-        personalprofile1.setId("1");
+        personalprofile1.setId("2");
         personalprofile1.setTag("I Can Help With");
         personalprofile1.setItem1("Trends & Insights");
         personalprofile1.setItem2("Motivation & Inspiration");
@@ -128,7 +150,7 @@ public class PersonalProfileFragment extends BaseFragment {
 
 
         ProfilePersonalViewList personalprofile2=new ProfilePersonalViewList();
-        personalprofile2.setId("2");
+        personalprofile2.setId("3");
         personalprofile2.setTag("About Me");
         personalprofile2.setItem1("sed do eiusmod tempor incididunt ut labore et dolore…");
         personalprofile.setItem2("");
@@ -148,7 +170,7 @@ public class PersonalProfileFragment extends BaseFragment {
 
 
         ProfilePersonalViewList personalprofile3=new ProfilePersonalViewList();
-        personalprofile3.setId("3");
+        personalprofile3.setId("4");
         personalprofile3.setTag("Basic Details");
         personalprofile3.setItem1("Date of Birth");
         personalprofile3.setItem2("11 JUL 1992");
@@ -168,7 +190,7 @@ public class PersonalProfileFragment extends BaseFragment {
 
 
         ProfilePersonalViewList personalprofile4=new ProfilePersonalViewList();
-        personalprofile4.setId("4");
+        personalprofile4.setId("5");
         personalprofile4.setTag("I AM INTERESTED IN");
         personalprofile4.setItem1("WORK FROM HOME");
         personalprofile4.setItem2("FREELANCE WORK");

@@ -165,13 +165,16 @@ public class SettingFeedbackPresenter extends BasePresenter<SettingFeedbackView>
 
 
 
-      /*function for User_deactive_rating */
+      /*function for User_Get_Preferences */
 
 
     public void getUserPreferenceAuthTokeInPresenter(UserPreferenceRequest userPreferenceRequest) {
 
         if (!NetworkUtil.isConnected(sheroesApplication)) {
+
+
             getMvpView().showNwError();
+
             return;
         }
         getMvpView().startProgressBar();
@@ -180,6 +183,7 @@ public class SettingFeedbackPresenter extends BasePresenter<SettingFeedbackView>
         Subscription subscription = mSettingFeedbackModel.getUserUserPreferenceAuthTokenFromModel(userPreferenceRequest).subscribe(new Subscriber<UserpreferenseResponse>() {
             @Override
             public void onCompleted() {
+
                 getMvpView().stopProgressBar();
             }
 
@@ -198,6 +202,13 @@ public class SettingFeedbackPresenter extends BasePresenter<SettingFeedbackView>
         });
         registerSubscription(subscription);
     }
+
+
+
+
+
+
+
 
 
     public void onStop() {

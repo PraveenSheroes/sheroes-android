@@ -110,4 +110,8 @@
     <color name="text_color_profile_hor">#1c2024</color>
     <color name="text_color_profile_hor_txt">#757e87</color>
     <color name="user_comment_text">#88888b</color>
+    <color name="back_broung_color">#f8f9fc</color>
+    <color name="visiting_card_text_color">#c8cce4</color>
+    <color name="text_color_another_login_opction">#4a4a4a</color>
+
 </resources>

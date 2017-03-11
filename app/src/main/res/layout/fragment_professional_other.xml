@@ -24,7 +24,7 @@
                     android:layout_height="match_parent">
 
                     <ImageView
-                        android:id="@+id/iv_community_cover_img"
+                        android:id="@+id/iv_profile_other_img"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp_size_200"
                         android:background="@color/back_colo_aboutme_head"
@@ -38,7 +38,7 @@
                         android:layout_height="@dimen/dp_size_46"
                         android:layout_centerHorizontal="true"
                         android:layout_centerInParent="true"
-                        android:background="@drawable/ic_sad_face" />
+                        android:background="@drawable/ic_others" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -65,7 +65,7 @@
                         android:layout_height="match_parent">  
 
                         <TextView
-                            android:id="@+id/tv_about_community_back"
+                            android:id="@+id/tv_profile_other_back"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/dp_size_10"
@@ -99,13 +99,15 @@
 
 
             <include
-                layout="@layout/professional_other_card"
+                layout="@layout/profile_edit_other_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|top" />
 
         </android.support.v4.widget.NestedScrollView>
     </android.support.design.widget.CoordinatorLayout>
+
+
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_add_other"
@@ -114,6 +116,8 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_dialog_email" />
+        android:backgroundTint="@color/blue" />
+
+
 
 </RelativeLayout>

@@ -49,9 +49,6 @@ public class Professional_WorkExperience_Activity extends BaseActivity {
     CheckBox mCb_intership;
     @Bind(R.id.btn_continue_work_experience)
     Button mBtn_continue_work_experience;
-
-
-
     int flag=0;
 
 
@@ -140,12 +137,9 @@ public class Professional_WorkExperience_Activity extends BaseActivity {
            textview.setTextColor(getResources().getColor(R.color.search_tab_text));
            mBtn_continue_work_experience.setBackgroundColor(getResources().getColor(R.color.red));
 
-
-
-
            checkbox.setChecked(true);
-
            flag=1;
+
        }else {
            textview.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
            mBtn_continue_work_experience.setBackgroundColor(getResources().getColor(R.color.grey2));
@@ -153,8 +147,6 @@ public class Professional_WorkExperience_Activity extends BaseActivity {
            flag=0;
 
        }
-
-
 
    }
 

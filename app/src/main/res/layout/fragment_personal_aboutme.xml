@@ -39,7 +39,7 @@
                 android:id="@+id/iv_profile_image"
                 android:layout_width="@dimen/dp_size_46"
                 android:layout_height="@dimen/dp_size_46"
-                android:background="@drawable/ic_sad_face"
+                android:background="@drawable/ic_about_me"
                 android:layout_centerHorizontal="true"
                 android:layout_centerInParent="true"
                 />
@@ -68,7 +68,7 @@
                     android:layout_height="match_parent">  
 
                     <TextView
-                    android:id="@+id/tv_about_community_back"
+                    android:id="@+id/tv_about_me_back"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@string/ID_ROBOTO_LIGHT"
@@ -77,7 +77,7 @@
                     />
 
                     <TextView
-                    android:id="@+id/tv_about_community_share"
+                    android:id="@+id/tv_about_me_tittle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
@@ -111,7 +111,10 @@
                     android:focusableInTouchMode="true"
                     android:padding="@dimen/dp_size_25"
                     android:layout_height="match_parent">
+
+
                     <EditText
+                        android:id="@+id/et_write_about_me"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@string/ID_ROBOTO_REGULAR"
@@ -137,7 +140,7 @@
 
 
     <Button
-        android:id="@+id/btn_save_selfempolyment_details"
+        android:id="@+id/btn_save_about_me_details"
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

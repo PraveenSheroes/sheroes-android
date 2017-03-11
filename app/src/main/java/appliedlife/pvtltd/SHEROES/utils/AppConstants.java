@@ -63,6 +63,7 @@ public class AppConstants {
     public static final String ARTICLE_DETAIL = "article_detail";
     public static final String JOB_DETAIL = "job_detail";
     public static final String COMMUNITY_DETAIL = "community_detail";
+    public static final String SETTING = "setting";
     public static final String PIPE="|";
     public static final String SUCCESS= "SUCCESS";
     public static final String FAILED= "FAILED";

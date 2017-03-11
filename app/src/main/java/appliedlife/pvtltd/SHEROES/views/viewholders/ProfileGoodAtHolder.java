@@ -47,7 +47,6 @@ public class ProfileGoodAtHolder extends BaseViewHolder<ProfileViewList> {
     }
 
 
-
     @Override
     public void bindData(ProfileViewList obj, Context context, int position) {
         this.dataItem = obj;

@@ -146,6 +146,8 @@ public class SettingFeedbackFragment extends BaseFragment implements SettingFeed
         ratingRequest.setCloudMessagingId("string");
         ratingRequest.setDeviceUniqueId("string");
         ratingRequest.setRating(starvalue);
+        ratingRequest.setLastScreenName("string");
+        ratingRequest.setScreenName("string");
         mSettingFeedbackPresenter.getUserRatingAuthTokeInPresenter(ratingRequest);
 
 
@@ -159,8 +161,10 @@ public class SettingFeedbackFragment extends BaseFragment implements SettingFeed
         SettingFeedbackRequest feedbackRequest = new SettingFeedbackRequest();
         feedbackRequest.setAppVersion("string");
         feedbackRequest.setCloudMessagingId("string");
-        feedbackRequest.setComment("feebackvalue");
+        feedbackRequest.setComment(feebackvalue);
         feedbackRequest.setDeviceUniqueId("string");
+        feedbackRequest.setLastScreenName("string");
+        feedbackRequest.setScreenName("string");
         mSettingFeedbackPresenter.getFeedbackAuthTokeInPresenter(feedbackRequest);
 
     }
@@ -173,7 +177,7 @@ public class SettingFeedbackFragment extends BaseFragment implements SettingFeed
 
         feebackvalue= mEt_write_comment.getText().toString();
 
-        if (!StringUtil.isNotNullOrEmptyString(feebackvalue)) {
+        if (null !=feebackvalue) {
             userfeedback();
             Intent intent=new Intent(getActivity(), Feedback_ThankyouActivity.class);
             startActivity(intent);
@@ -194,12 +198,14 @@ public class SettingFeedbackFragment extends BaseFragment implements SettingFeed
     public void onBackClick()
     {
 
-        settingViewlistener.backListener(R.id.iv_back_setting);
+        settingViewlistener.backListener(R.id.iv_back_setting,null);
     }
 
 
     @Override
     public void getFeedbackResponse(SettingFeedbackResponce feedbackResponce) {
+
+
 
 
 

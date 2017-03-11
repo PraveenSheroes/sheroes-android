@@ -11,9 +11,13 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfilePersonalViewList;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.EditNameDialogListener;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
+import static appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView.TAG;
 
 /**
  * Created by priyanka on 17/02/17.
@@ -67,9 +71,8 @@ public class ProfilePersonalBasicDetailsHolder extends BaseViewHolder<ProfilePer
     TextView mTv_language;
     @Bind(R.id.tv_tot_language_value)
     TextView mTv_tot_language_value;
-
-
-
+    @Bind(R.id.tv_edit_basic_details)
+    TextView mTv_edit_basic_details;
 
     BaseHolderInterface viewInterface;
 
@@ -93,7 +96,7 @@ public class ProfilePersonalBasicDetailsHolder extends BaseViewHolder<ProfilePer
     public void bindData(ProfilePersonalViewList obj, Context context, int position) {
 
         this.dataItem = obj;
-        itemView.setOnClickListener(this);
+        mTv_edit_basic_details.setOnClickListener(this);
         MTv_date_of_birth.setVisibility(View.VISIBLE);
         mTv_date_of_birth_value.setVisibility(View.VISIBLE);
         mTv_current_location.setVisibility(View.VISIBLE);
@@ -140,10 +143,17 @@ public class ProfilePersonalBasicDetailsHolder extends BaseViewHolder<ProfilePer
     }
 
 
+
     @Override
     public void onClick(View view) {
 
-        //viewInterface.handleOnClick(this.dataItem,view);
+        switch (view.getId()) {
+            case R.id.tv_edit_basic_details:
+                viewInterface.handleOnClick(this.dataItem,mTv_edit_basic_details);
+                break;
+            default:
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + view.getId());
+        }
 
 
 

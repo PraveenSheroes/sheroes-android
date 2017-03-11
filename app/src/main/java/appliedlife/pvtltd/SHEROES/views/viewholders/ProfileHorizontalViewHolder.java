@@ -71,7 +71,10 @@ public class ProfileHorizontalViewHolder  extends BaseViewHolder<ProfileViewList
     @Override
     public void onClick(View view) {
 
+
         viewInterface.handleOnClick(this.dataItem,view);
+
+
     }
     private void setListValue() {
 
