@@ -633,7 +633,7 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
             mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.NO_REACTION_CONSTANT);
         }else
         {
-            finish();
+           this.finish();
         }
     }
 

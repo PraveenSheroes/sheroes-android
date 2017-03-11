@@ -139,6 +139,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
             LogUtils.info("testing", "Permission is already granted");
 
         }
+        fbSignIn();
         return view;
     }
 
@@ -153,6 +154,11 @@ public class LoginFragment extends BaseFragment implements LoginView {
     }
     @OnClick(R.id.login_button)
     public void fbOnClick()
+    {
+        fbSignIn();
+    }
+
+    private void fbSignIn()
     {
         mFbLogin.setReadPermissions(Arrays.asList("public_profile", "email", "user_birthday", "user_friends"));
         mFbLogin.setFragment(this);
