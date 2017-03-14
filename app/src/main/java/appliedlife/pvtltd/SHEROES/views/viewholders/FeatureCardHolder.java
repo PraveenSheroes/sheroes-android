@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -225,7 +224,6 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_featured_community_join)
     public void joinClick() {
-        Toast.makeText(mContext, "Clciekd", Toast.LENGTH_SHORT).show();
             viewInterface.handleOnClick(dataItem, tvFeaturedCommunityJoin);
     }
 

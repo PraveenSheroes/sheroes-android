@@ -1,6 +1,10 @@
 package appliedlife.pvtltd.SHEROES.models.entities.community;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.util.HashMap;
+import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 
@@ -18,7 +22,9 @@ public class CommunityResponse extends BaseResponse {
     public void setFieldErrorMessageMap(HashMap<String, String> fieldErrorMessageMap) {
         super.setFieldErrorMessageMap(fieldErrorMessageMap);
     }
-
+    @SerializedName("members")
+    @Expose
+    private List<Member> members;
     @Override
     public String getStatus() {
         return super.getStatus();

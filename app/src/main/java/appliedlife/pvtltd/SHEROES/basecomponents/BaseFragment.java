@@ -33,6 +33,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
+import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 
 /**
@@ -59,20 +60,24 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     private RecyclerView mRecyclerView;
     private int mPosition;
     private int mPressedEmoji;
-    private boolean mListLoad =true;
-    private boolean mIsEdit ;
+    private boolean mListLoad = true;
+    private boolean mIsEdit;
     private HomePresenter mHomePresenter;
     private AppUtils mAppUtils;
     private ProgressBar mProgressBar;
+    private FragmentIntractionWithActivityListner mHomeSearchActivityFragmentIntractionWithActivityListner;
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,@Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         return super.onCreateView(inflater, container, savedInstanceState);
 
     }
-
+    public void setProgressBar( ProgressBar mProgressBar)
+    {
+       this.mProgressBar=mProgressBar;
+    }
     public void setAllInitializationForFeeds(FragmentListRefreshData mFragmentListRefreshData, SwipPullRefreshList mPullRefreshList, GenericRecyclerViewAdapter mAdapter, LinearLayoutManager mLayoutManager, int mPageNo, SwipeRefreshLayout swipeView, LinearLayout liNoResult, FeedDetail mFeedDetail, RecyclerView mRecyclerView, int mPosition, int mPressedEmoji, boolean mListLoad, boolean mIsEdit, HomePresenter mHomePresenter, AppUtils mAppUtils, ProgressBar mProgressBar) {
         this.mFragmentListRefreshData = mFragmentListRefreshData;
         this.mPullRefreshList = mPullRefreshList;
@@ -91,6 +96,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
         this.mAppUtils = mAppUtils;
         this.mProgressBar = mProgressBar;
     }
+
     public void setAllInitializationForFeeds(FragmentListRefreshData mFragmentListRefreshData, GenericRecyclerViewAdapter mAdapter, LinearLayoutManager mLayoutManager, FeedDetail mFeedDetail, RecyclerView mRecyclerView, int mPosition, int mPressedEmoji, boolean mListLoad, HomePresenter mHomePresenter, AppUtils mAppUtils, ProgressBar mProgressBar) {
         this.mFragmentListRefreshData = mFragmentListRefreshData;
         this.mAdapter = mAdapter;
@@ -104,7 +110,8 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
         this.mAppUtils = mAppUtils;
         this.mProgressBar = mProgressBar;
     }
-    public void setAllInitializationForFeeds(FragmentListRefreshData mFragmentListRefreshData, GenericRecyclerViewAdapter mAdapter, LinearLayoutManager mLayoutManager, RecyclerView mRecyclerView,HomePresenter mHomePresenter, AppUtils mAppUtils, ProgressBar mProgressBar) {
+
+    public void setAllInitializationForFeeds(FragmentListRefreshData mFragmentListRefreshData, GenericRecyclerViewAdapter mAdapter, LinearLayoutManager mLayoutManager, RecyclerView mRecyclerView, HomePresenter mHomePresenter, AppUtils mAppUtils, ProgressBar mProgressBar) {
         this.mFragmentListRefreshData = mFragmentListRefreshData;
         this.mAdapter = mAdapter;
         this.mLayoutManager = mLayoutManager;
@@ -113,7 +120,8 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
         this.mAppUtils = mAppUtils;
         this.mProgressBar = mProgressBar;
     }
-    public void setCommentReaction(FragmentListRefreshData mFragmentListRefreshData, GenericRecyclerViewAdapter mAdapter, LinearLayoutManager mLayoutManager, FeedDetail mFeedDetail, RecyclerView mRecyclerView, CommentReactionPresenter commentReactionPresenter, AppUtils mAppUtils, ProgressBar mProgressBar){
+
+    public void setCommentReaction(FragmentListRefreshData mFragmentListRefreshData, GenericRecyclerViewAdapter mAdapter, LinearLayoutManager mLayoutManager, FeedDetail mFeedDetail, RecyclerView mRecyclerView, CommentReactionPresenter commentReactionPresenter, AppUtils mAppUtils, ProgressBar mProgressBar) {
         this.mFragmentListRefreshData = mFragmentListRefreshData;
         this.mAdapter = mAdapter;
         this.mLayoutManager = mLayoutManager;
@@ -123,6 +131,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
         this.mAppUtils = mAppUtils;
         this.mProgressBar = mProgressBar;
     }
+
     public void callFragment(int layout, Fragment fragment) {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -141,6 +150,13 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
         super.onAttach(context);
         if (getActivity() != null) {
             mActivity = getActivity();
+        }
+        try {
+            if (mActivity instanceof FragmentIntractionWithActivityListner) {
+                mHomeSearchActivityFragmentIntractionWithActivityListner = (FragmentIntractionWithActivityListner) getActivity();
+            }
+        } catch (Fragment.InstantiationException exception) {
+            LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
         }
     }
 
@@ -311,6 +327,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
 
     @Override
     public void showError(String errorMsg) {
+        stopProgressBar();
+        mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(errorMsg);
     }
-
 }

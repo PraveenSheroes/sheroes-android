@@ -143,6 +143,17 @@ public class HomeModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+    public Observable<CommunityResponse> ApproveJoiningRequestFromModel(CommunityRequest communityRequest){
+        return sheroesAppServiceApi.getApproveJoinResponse(communityRequest)
+                .map(new Func1<CommunityResponse, CommunityResponse>() {
+                    @Override
+                    public CommunityResponse call(CommunityResponse communityResponse) {
+                        return communityResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
 
     public Observable<HomeSpinnerItemResponse>getSpinnerListFromModel(){
         return sheroesAppServiceApi.getHomeSpinnerList()

@@ -75,13 +75,16 @@
                 android:gravity="right"
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
                 <ImageView
                     android:id="@+id/iv_article_detail_back"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left|top"
                     android:layout_marginRight="@dimen/dp_size_25"
-                    android:background="@drawable/ic_back_white"/>
+                    android:background="@drawable/ic_back_white"
+                    android:padding="@dimen/dp_size_10" />
+
                 <TextView
                     android:id="@+id/tv_article_detail_share"
                     android:layout_width="wrap_content"
@@ -89,7 +92,8 @@
                     android:layout_gravity="right"
                     android:drawableLeft="@drawable/ic_share_icon"
                     android:drawablePadding="@dimen/dp_size_10"
-                    android:paddingRight="@dimen/dp_size_15"/>
+                    android:paddingBottom="@dimen/dp_size_10"
+                    android:paddingTop="@dimen/dp_size_5" />
 
                 <TextView
                     android:id="@+id/tv_article_detail_bookmark"
@@ -98,7 +102,10 @@
                     android:layout_gravity="right"
                     android:drawableLeft="@drawable/ic_bookmark_in_active"
                     android:drawablePadding="@dimen/dp_size_10"
-                    android:paddingRight="@dimen/dp_size_18" />
+                    android:paddingBottom="@dimen/dp_size_10"
+                    android:paddingLeft="@dimen/dp_size_10"
+                    android:paddingRight="@dimen/dp_size_18"
+                    android:paddingTop="@dimen/dp_size_5" />
             </android.support.v7.widget.Toolbar>
 
         </appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.CustomCollapsingToolbarLayout>

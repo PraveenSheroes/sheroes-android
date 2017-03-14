@@ -348,7 +348,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                     } else {
                         tvFeedCommunityPostUserCommentPost.setText(Html.fromHtml(userName + AppConstants.SPACE + lastComment.getComment()));// or for older api
                     }
-                    ivFeedCommunityPostUserPic.setImageResource(R.drawable.ic_add_city_icon);
+                    ivFeedCommunityPostUserPic.setImageResource(R.drawable.ic_anonomous);
                 } else {
                     String userName = LEFT_HTML_TAG_FOR_COLOR + lastComment.getParticipantName() + RIGHT_HTML_TAG_FOR_COLOR;
                     if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {

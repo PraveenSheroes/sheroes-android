@@ -1,9 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -35,7 +33,6 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
-import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -62,7 +59,6 @@ public class HomeFragment extends BaseFragment {
     LinearLayout mLiNoResult;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
-    private FragmentIntractionWithActivityListner mHomeActivityFragmentIntractionWithActivityListner;
     private SwipPullRefreshList mPullRefreshList;
     @Inject
     AppUtils mAppUtils;
@@ -74,17 +70,6 @@ public class HomeFragment extends BaseFragment {
     private boolean mIsEdit = false;
     private int mPageNo = AppConstants.ONE_CONSTANT;
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            if (getActivity() instanceof FragmentIntractionWithActivityListner) {
-                mHomeActivityFragmentIntractionWithActivityListner = (FragmentIntractionWithActivityListner) getActivity();
-            }
-        } catch (Fragment.InstantiationException exception) {
-            LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
-        }
-    }
 
     @Nullable
     @Override
@@ -195,11 +180,6 @@ public class HomeFragment extends BaseFragment {
         super.likeAndUnlikeRequest(baseResponse, reactionValue, position);
     }
 
-
-    @Override
-    public void showError(String errorMsg) {
-        mHomeActivityFragmentIntractionWithActivityListner.onShowErrorDialog();
-    }
 
     @Override
     public void onDestroyView() {

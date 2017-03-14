@@ -1,6 +1,5 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -23,7 +22,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
-import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import appliedlife.pvtltd.SHEROES.views.fragments.AllSearchFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SearchArticleFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SearchCommunitiesFragment;
@@ -33,7 +31,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPageChangeListener, FragmentIntractionWithActivityListner {
+public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
     private final String TAG = LogUtils.makeLogTag(HomeSearchActivity.class);
     @Inject
     HomePresenter mHomePresenter;
@@ -86,10 +84,6 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
         mViewPager.addOnPageChangeListener(this);
     }
 
-    @Override
-    public void startActivityFromHolder(Intent intent) {
-
-    }
 
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
@@ -209,12 +203,6 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
 
     @Override
     public void onPageScrollStateChanged(int state) {
-
-    }
-
-    @Override
-    public void onShowErrorDialog() {
-        getSupportFragmentManager().popBackStack();
 
     }
 

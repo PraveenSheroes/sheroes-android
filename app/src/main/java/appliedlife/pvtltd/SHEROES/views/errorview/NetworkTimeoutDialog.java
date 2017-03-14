@@ -37,7 +37,8 @@ public class NetworkTimeoutDialog extends BaseDialogFragment implements View.OnC
         if (view.getId() == tryAgain.getId()) {
             dismissAllowingStateLoss();
             if (finishParent) {
-              getActivity().finish();
+                dismiss();
+            //  getActivity().finish();
             }
         }
     }

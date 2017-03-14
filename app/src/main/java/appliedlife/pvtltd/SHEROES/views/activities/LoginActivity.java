@@ -12,11 +12,12 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import appliedlife.pvtltd.SHEROES.views.fragments.LoginFragment;
 import butterknife.ButterKnife;
+
 
 /**
  * Created by Praveen Singh on 04/01/2017.
@@ -25,7 +26,7 @@ import butterknife.ButterKnife;
  * @since 04/01/2017.
  * Title: A login screen that offers login via email/password.
  */
-public class LoginActivity extends BaseActivity implements LoginFragment.LoginActivityIntractionListner, FragmentIntractionWithActivityListner {
+public class LoginActivity extends BaseActivity implements LoginFragment.LoginActivityIntractionListner {
     private final String TAG = LogUtils.makeLogTag(LoginActivity.class);
     @Inject
     Preference<LoginResponse> userPreference;
@@ -54,16 +55,24 @@ public class LoginActivity extends BaseActivity implements LoginFragment.LoginAc
     public void onErrorOccurence() {
         showNetworkTimeoutDoalog(true);
     }
+
     @Override
     public void onLoginAuthToken() {
         Intent homeIntent = new Intent(this, HomeActivity.class);
         startActivity(homeIntent);
         finish();
     }
-
     @Override
-    public void onShowErrorDialog() {
-        Toast.makeText(this,"Please check your email id, password",Toast.LENGTH_SHORT).show();
+    public void onShowErrorDialog(String errorReason) {
+        switch (errorReason)
+        {
+            case AppConstants.CHECK_NETWORK_CONNECTION:
+                showNetworkTimeoutDoalog(true);
+                break;
+            case AppConstants.ERROR_IN_RESPONSE:
+                Toast.makeText(this,"Please check your email id, password",Toast.LENGTH_SHORT).show();
+                break;
+        }
         //getSupportFragmentManager().popBackStack();
     }
 }

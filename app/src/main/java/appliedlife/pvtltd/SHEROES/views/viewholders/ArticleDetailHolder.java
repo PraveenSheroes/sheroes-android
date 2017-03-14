@@ -104,6 +104,7 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
     LinearLayout liArticleDetailUserCommentsThird;
     @Bind(R.id.iv_article_detail_user_pic_third)
     CircleImageView ivArticleDetailUserPicThird;
+
     public ArticleDetailHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
@@ -122,6 +123,7 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
             allTextViewStringOperations(context);
         }
     }
+
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void imageOperations(Context context) {
 
@@ -142,12 +144,13 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
             }
         }
     }
+
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void allTextViewStringOperations(Context context) {
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getAuthorName())) {
             tvArticleDetailIconName.setText(mFeedDetail.getAuthorName());
         }
-        if (null != userPreference && userPreference.isSet() && null != userPreference.get()&&null!=userPreference.get().getUserSummary()&& StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getPhotoUrl())) {
+        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getPhotoUrl())) {
             ivArticleDetailRegisterUserPic.setCircularImage(true);
             ivArticleDetailRegisterUserPic.bindImage(userPreference.get().getUserSummary().getPhotoUrl());
         }
@@ -178,25 +181,23 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
             tvArticleDetailTotalReaction.setVisibility(View.GONE);
         }
 
-            switch (mFeedDetail.getNoOfLikes()) {
-                case AppConstants.NO_REACTION_CONSTANT:
-                    userLike();
-                    break;
-                case AppConstants.ONE_CONSTANT:
-                    flArticleDetailNoReactionComment.setVisibility(View.VISIBLE);
-                    tvArticleDetailTotalReaction.setText(String.valueOf(mFeedDetail.getNoOfLikes()) + AppConstants.SPACE + context.getString(R.string.ID_REACTION));
-                    tvArticleDetailUserReaction.setText(AppConstants.EMPTY_STRING);
-                    userLike();
-                    break;
-                default:
-                    flArticleDetailNoReactionComment.setVisibility(View.VISIBLE);
-                    tvArticleDetailTotalReaction.setText(String.valueOf(mFeedDetail.getNoOfLikes()) + AppConstants.SPACE + context.getString(R.string.ID_REACTION) + AppConstants.S);
-                    tvArticleDetailUserReaction.setText(AppConstants.EMPTY_STRING);
-                    userLike();
-            }
-            if(mFeedDetail.getNoOfComments()>AppConstants.NO_REACTION_CONSTANT) {
-                userComments();
-            }
+        switch (mFeedDetail.getNoOfLikes()) {
+            case AppConstants.NO_REACTION_CONSTANT:
+                userLike();
+                break;
+            case AppConstants.ONE_CONSTANT:
+                flArticleDetailNoReactionComment.setVisibility(View.VISIBLE);
+                tvArticleDetailTotalReaction.setText(String.valueOf(mFeedDetail.getNoOfLikes()) + AppConstants.SPACE + context.getString(R.string.ID_REACTION));
+                tvArticleDetailUserReaction.setText(AppConstants.EMPTY_STRING);
+                userLike();
+                break;
+            default:
+                flArticleDetailNoReactionComment.setVisibility(View.VISIBLE);
+                tvArticleDetailTotalReaction.setText(String.valueOf(mFeedDetail.getNoOfLikes()) + AppConstants.SPACE + context.getString(R.string.ID_REACTION) + AppConstants.S);
+                tvArticleDetailUserReaction.setText(AppConstants.EMPTY_STRING);
+                userLike();
+        }
+        userComments();
     }
 
     private void userLike() {
@@ -230,58 +231,103 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + mFeedDetail.getReactionValue());
         }
     }
+
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void userComments() {
 
         if (StringUtil.isNotEmptyCollection(mFeedDetail.getLastComments())) {
             List<LastComment> lastCommentList = mFeedDetail.getLastComments();
+            if (lastCommentList.size() > AppConstants.ONE_CONSTANT) {
+                tvArticleDetailTotalReplies.setText(String.valueOf(mFeedDetail.getNoOfComments()) + AppConstants.SPACE + mContext.getString(R.string.ID_REPLIES));
+            } else {
+                tvArticleDetailTotalReplies.setText(String.valueOf(mFeedDetail.getNoOfComments()) + AppConstants.SPACE + mContext.getString(R.string.ID_REPLY));
+            }
             for (int index = 0; index < lastCommentList.size(); index++) {
-                String feedUserIconUrl = lastCommentList.get(index).getParticipantImageUrl();
-                String userName = LEFT_HTML_TAG_FOR_COLOR + lastCommentList.get(index).getParticipantName() + RIGHT_HTML_TAG_FOR_COLOR;
+                //   String feedUserIconUrl = lastCommentList.get(index).getParticipantImageUrl();
+                //   String userName = LEFT_HTML_TAG_FOR_COLOR + lastCommentList.get(index).getParticipantName() + RIGHT_HTML_TAG_FOR_COLOR;
                 switch (index) {
                     case AppConstants.NO_REACTION_CONSTANT:
                         ivArticleDetailUserPic.setCircularImage(true);
-                        ivArticleDetailUserPic.bindImage(feedUserIconUrl);
                         liArticleDetailUserComments.setVisibility(View.VISIBLE);
-                        tvArticleDetailTotalReplies.setText(String.valueOf(mFeedDetail.getNoOfComments()) + AppConstants.SPACE + mContext.getString(R.string.ID_REPLY));
-
-                        if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                            tvArticleDetailUserCommentPost.setText(Html.fromHtml(userName + AppConstants.COLON + lastCommentList.get(index).getComment(), 0)); // for 24 api and more
+                        if (lastCommentList.get(index).isAnonymous()) {
+                            String userName = LEFT_HTML_TAG_FOR_COLOR + mContext.getString(R.string.ID_ANONYMOUS) + RIGHT_HTML_TAG_FOR_COLOR;
+                            if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                                tvArticleDetailUserCommentPost.setText(Html.fromHtml(userName + AppConstants.SPACE + lastCommentList.get(index).getComment(), 0)); // for 24 api and more
+                            } else {
+                                tvArticleDetailUserCommentPost.setText(Html.fromHtml(userName + AppConstants.SPACE + lastCommentList.get(index).getComment()));// or for older api
+                            }
+                            ivArticleDetailUserPic.setImageResource(R.drawable.ic_anonomous);
                         } else {
-                            tvArticleDetailUserCommentPost.setText(Html.fromHtml(userName + AppConstants.COLON + lastCommentList.get(index).getComment()));// or for older api
+                            String userName = LEFT_HTML_TAG_FOR_COLOR + lastCommentList.get(index).getParticipantName() + RIGHT_HTML_TAG_FOR_COLOR;
+                            String feedUserIconUrl = lastCommentList.get(index).getParticipantImageUrl();
+                            if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                                tvArticleDetailUserCommentPost.setText(Html.fromHtml(userName + AppConstants.SPACE + lastCommentList.get(index).getComment(), 0)); // for 24 api and more
+                            } else {
+                                tvArticleDetailUserCommentPost.setText(Html.fromHtml(userName + AppConstants.SPACE + lastCommentList.get(index).getComment()));// or for older api
+                            }
+                            ivArticleDetailUserPic.bindImage(feedUserIconUrl);
                         }
                         if (lastCommentList.get(index).isMyOwnParticipation()) {
                             tvArticleDetailUserCommentPostMenu.setVisibility(View.VISIBLE);
+                        } else {
+                            tvArticleDetailUserCommentPostMenu.setVisibility(View.GONE);
                         }
                         break;
                     case AppConstants.ONE_CONSTANT:
                         ivArticleDetailUserPicSecond.setCircularImage(true);
-                        ivArticleDetailUserPicSecond.bindImage(feedUserIconUrl);
                         liArticleDetailUserCommentsSecond.setVisibility(View.VISIBLE);
-                        tvArticleDetailTotalReplies.setText(String.valueOf(mFeedDetail.getNoOfComments()) + AppConstants.SPACE + mContext.getString(R.string.ID_REPLIES));
 
-                        if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                            tvArticleDetailUserCommentPostSecond.setText(Html.fromHtml(userName + AppConstants.COLON + lastCommentList.get(index).getComment(), 0)); // for 24 api and more
+                        if (lastCommentList.get(index).isAnonymous()) {
+                            String userName = LEFT_HTML_TAG_FOR_COLOR + mContext.getString(R.string.ID_ANONYMOUS) + RIGHT_HTML_TAG_FOR_COLOR;
+                            if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                                tvArticleDetailUserCommentPostSecond.setText(Html.fromHtml(userName + AppConstants.SPACE + lastCommentList.get(index).getComment(), 0)); // for 24 api and more
+                            } else {
+                                tvArticleDetailUserCommentPostSecond.setText(Html.fromHtml(userName + AppConstants.SPACE + lastCommentList.get(index).getComment()));// or for older api
+                            }
+                            ivArticleDetailUserPicSecond.setImageResource(R.drawable.ic_anonomous);
                         } else {
-                            tvArticleDetailUserCommentPostSecond.setText(Html.fromHtml(userName + AppConstants.COLON + lastCommentList.get(index).getComment()));// or for older api
+                            String userName = LEFT_HTML_TAG_FOR_COLOR + lastCommentList.get(index).getParticipantName() + RIGHT_HTML_TAG_FOR_COLOR;
+                            String feedUserIconUrl = lastCommentList.get(index).getParticipantImageUrl();
+                            if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                                tvArticleDetailUserCommentPostSecond.setText(Html.fromHtml(userName + AppConstants.SPACE + lastCommentList.get(index).getComment(), 0)); // for 24 api and more
+                            } else {
+                                tvArticleDetailUserCommentPostSecond.setText(Html.fromHtml(userName + AppConstants.SPACE + lastCommentList.get(index).getComment()));// or for older api
+                            }
+                            ivArticleDetailUserPicSecond.bindImage(feedUserIconUrl);
                         }
                         if (lastCommentList.get(index).isMyOwnParticipation()) {
                             tvArticleDetailUserCommentPostMenuSecond.setVisibility(View.VISIBLE);
+                        } else {
+                            tvArticleDetailUserCommentPostMenuSecond.setVisibility(View.GONE);
                         }
+
                         break;
                     case AppConstants.TWO_CONSTANT:
                         ivArticleDetailUserPicThird.setCircularImage(true);
-                        ivArticleDetailUserPicThird.bindImage(feedUserIconUrl);
                         liArticleDetailUserCommentsThird.setVisibility(View.VISIBLE);
-                        tvArticleDetailTotalReplies.setText(String.valueOf(mFeedDetail.getNoOfComments()) + AppConstants.SPACE + mContext.getString(R.string.ID_REPLIES));
-
-                        if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                            tvArticleDetailUserCommentPostThird.setText(Html.fromHtml(userName + AppConstants.COLON + lastCommentList.get(index).getComment(), 0)); // for 24 api and more
+                        if (lastCommentList.get(index).isAnonymous()) {
+                            String userName = LEFT_HTML_TAG_FOR_COLOR + mContext.getString(R.string.ID_ANONYMOUS) + RIGHT_HTML_TAG_FOR_COLOR;
+                            if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                                tvArticleDetailUserCommentPostThird.setText(Html.fromHtml(userName + AppConstants.SPACE + lastCommentList.get(index).getComment(), 0)); // for 24 api and more
+                            } else {
+                                tvArticleDetailUserCommentPostThird.setText(Html.fromHtml(userName + AppConstants.SPACE + lastCommentList.get(index).getComment()));// or for older api
+                            }
+                            ivArticleDetailUserPicThird.setImageResource(R.drawable.ic_anonomous);
                         } else {
-                            tvArticleDetailUserCommentPostThird.setText(Html.fromHtml(userName + AppConstants.COLON + lastCommentList.get(index).getComment()));// or for older api
+                            String userName = LEFT_HTML_TAG_FOR_COLOR + lastCommentList.get(index).getParticipantName() + RIGHT_HTML_TAG_FOR_COLOR;
+                            String feedUserIconUrl = lastCommentList.get(index).getParticipantImageUrl();
+                            if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                                tvArticleDetailUserCommentPostThird.setText(Html.fromHtml(userName + AppConstants.SPACE + lastCommentList.get(index).getComment(), 0)); // for 24 api and more
+                            } else {
+                                tvArticleDetailUserCommentPostThird.setText(Html.fromHtml(userName + AppConstants.SPACE + lastCommentList.get(index).getComment()));// or for older api
+                            }
+                            ivArticleDetailUserPicThird.bindImage(feedUserIconUrl);
                         }
+
                         if (lastCommentList.get(index).isMyOwnParticipation()) {
                             tvArticleDetailUserCommentPostMenuThird.setVisibility(View.VISIBLE);
+                        } else {
+                            tvArticleDetailUserCommentPostMenuThird.setVisibility(View.GONE);
                         }
                         break;
                     default:
@@ -295,6 +341,7 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
     public void viewRecycled() {
 
     }
+
     @OnLongClick(R.id.tv_article_detail_user_reaction)
     public boolean userReactionLongClick() {
         mFeedDetail.setItemPosition(getAdapterPosition());
@@ -302,6 +349,7 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
         viewInterface.handleOnClick(mFeedDetail, tvArticleDetailUserReaction);
         return true;
     }
+
     @OnClick(R.id.tv_article_detail_user_reaction)
     public void userReactionClick() {
         mFeedDetail.setLongPress(false);
@@ -315,11 +363,13 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
             viewInterface.handleOnClick(mFeedDetail, tvArticleDetailUserReaction);
         }
     }
+
     @OnClick(R.id.tv_article_detail_user_comment)
     public void userCommentClick() {
         mFeedDetail.setItemPosition(getAdapterPosition());
         viewInterface.handleOnClick(mFeedDetail, liArticleDetailJoinConversation);
     }
+
     @OnClick(R.id.tv_article_detail_total_reactions)
     public void reactionClick() {
         mFeedDetail.setItemPosition(getAdapterPosition());

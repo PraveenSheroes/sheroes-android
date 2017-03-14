@@ -70,7 +70,7 @@ public class CommentHolder extends BaseViewHolder<CommentReactionDoc> {
         ivListCommentProfilePic.setCircularImage(true);
         if (item.isAnonymous()) {
             String userName = LEFT_HTML_TAG_FOR_COLOR + mContext.getString(R.string.ID_ANONYMOUS) + RIGHT_HTML_TAG_FOR_COLOR;
-            ivListCommentProfilePic.setImageResource(R.drawable.ic_add_city_icon);
+            ivListCommentProfilePic.setImageResource(R.drawable.ic_anonomous);
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                 tvUserComment.setText(Html.fromHtml(userName + AppConstants.SPACE + item.getComment(), 0)); // for 24 api and more
             } else {

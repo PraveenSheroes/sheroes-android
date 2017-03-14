@@ -32,8 +32,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 
-import java.util.List;
-
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -57,7 +55,7 @@ import butterknife.OnClick;
  * Created by Praveen_Singh on 07-02-2017.
  */
 
-public class ArticleDetailActivity extends BaseActivity implements CommentReactionFragment.HomeActivityIntractionListner {
+public class ArticleDetailActivity extends BaseActivity implements CommentReactionFragment.HomeActivityIntractionListner,ArticleDetailFragment.ArticleDetailActivityIntractionListner {
     private final String TAG = LogUtils.makeLogTag(ArticleDetailActivity.class);
     @Bind(R.id.app_bar_article_detail)
     AppBarLayout mAppBarLayout;
@@ -141,7 +139,6 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
             }
         }
     }
-
     private void initActivityTransitions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Slide transition = new Slide();
@@ -241,26 +238,11 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
     }
 
     @Override
-    public void dataOperationOnClick(BaseResponse baseResponse) {
-
-    }
-
-    @Override
-    public void setListData(BaseResponse data, boolean flag) {
-
-    }
-
-    @Override
     public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
         Fragment fragment = viewPagerAdapter.getActiveFragment(mViewPagerArticleDetail, 0);
         if (AppUtils.isFragmentUIActive(fragment)) {
             ((ArticleDetailFragment) fragment).likeAndUnlikeRequest(baseResponse, reactionValue, position);
         }
-    }
-
-    @Override
-    public List getListData() {
-        return null;
     }
 
     /**
@@ -468,7 +450,17 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
         tvEdit.setVisibility(View.VISIBLE);
         tvDelete.setVisibility(View.VISIBLE);
     }
-
+    @OnClick(R.id.tv_article_detail_bookmark)
+    public void onBookMarkClick() {
+        mFeedDetail.setItemPosition(0);
+        bookmarkCall();
+    }
+    private void bookmarkCall() {
+        Fragment fragment = viewPagerAdapter.getActiveFragment(mViewPagerArticleDetail, 0);
+        if (AppUtils.isFragmentUIActive(fragment)) {
+            ((ArticleDetailFragment) fragment).bookMarkForCard(mFeedDetail);
+        }
+    }
     @OnClick(R.id.iv_article_detail_back)
     public void onBackClick() {
 
@@ -486,5 +478,17 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
         intent.putExtra(Intent.EXTRA_TEXT, "Testing Text From SHEROES2.0");
         intent.putExtra(Intent.EXTRA_SUBJECT, "Check out this site!");
         startActivity(Intent.createChooser(intent,AppConstants.SHARE));
+    }
+
+    @Override
+    public void onBookmarkClick(FeedDetail feedDetail) {
+        if (!feedDetail.isBookmarked()) {
+            feedDetail.setBookmarked(true);
+          mTvArticleDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_active, 0, 0, 0);
+        } else {
+            feedDetail.setBookmarked(false);
+         mTvArticleDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_in_active, 0, 0, 0);
+        }
+        mFeedDetail=feedDetail;
     }
 }

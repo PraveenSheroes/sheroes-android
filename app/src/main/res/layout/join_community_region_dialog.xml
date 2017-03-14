@@ -14,6 +14,7 @@
         android:paddingTop="@dimen/dp_size_30"
         android:layout_gravity="center_horizontal"/>
     <TextView
+        android:id="@+id/tv_higly_intreseted"
         android:layout_width="@dimen/dp_size_282"
         android:layout_height="wrap_content"
         android:text="@string/ID_COMMUNITY_JOIN_REGION1"
@@ -30,6 +31,7 @@
         android:layout_marginTop="@dimen/dp_size_21"
         />
     <TextView
+        android:id="@+id/tv_already_member"
         android:layout_width="@dimen/dp_size_282"
         android:layout_height="wrap_content"
         android:text="@string/ID_COMMUNITY_JOIN_REGION2"

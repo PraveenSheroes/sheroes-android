@@ -128,6 +128,7 @@
                 android:drawablePadding="@dimen/dp_size_5"
                 android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:paddingLeft="@dimen/dp_size_10"
+                android:textSize="@dimen/sp_size_11"
                 android:textColor="@color/emoji_text"
                 android:drawableLeft="@drawable/ic_heart_in_active" />
 

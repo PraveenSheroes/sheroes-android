@@ -59,7 +59,6 @@ import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.BlurrImage;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView;
-import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
@@ -79,7 +78,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class HomeActivity extends BaseActivity implements SettingView, JobFragment.HomeActivityIntractionListner, FragmentIntractionWithActivityListner, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, CommentReactionFragment.HomeActivityIntractionListner, ImageFullViewAdapter.HomeActivityIntraction {
+public class HomeActivity extends BaseActivity implements SettingView, JobFragment.HomeActivityIntractionListner, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, CommentReactionFragment.HomeActivityIntractionListner, ImageFullViewAdapter.HomeActivityIntraction {
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
     @Inject
     Preference<LoginResponse> userPreference;
@@ -215,7 +214,8 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
             mFeedDetail = (FeedDetail) baseResponse;
             int id = view.getId();
             if (id == R.id.tv_community_join) {
-                openInviteSearch(mFeedDetail);
+              //  openInviteSearch(mFeedDetail);
+                showCommunityJoinReason(mFeedDetail);
             }else if(id==R.id.tv_add_invite)
             {
                 if(null!=mFeedDetail) {
@@ -708,10 +708,6 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
         Snackbar.make(mCLMainLayout, "Work in progress", Snackbar.LENGTH_SHORT).show();
     }
 
-    @Override
-    public void onShowErrorDialog() {
-        onBackPressed();
-    }
 
     @Override
     public void onDialogDissmiss(FragmentOpen isFragmentOpen) {

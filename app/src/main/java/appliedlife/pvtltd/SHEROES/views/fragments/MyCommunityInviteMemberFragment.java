@@ -1,10 +1,8 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -16,7 +14,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +32,6 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
-import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -66,25 +62,12 @@ public class MyCommunityInviteMemberFragment extends BaseFragment {
     TextView tvAddedMember;
     private String mSearchDataName = AppConstants.EMPTY_STRING;
     private GenericRecyclerViewAdapter mAdapter;
-    private FragmentIntractionWithActivityListner mHomeSearchActivityFragmentIntractionWithActivityListner;
     private FragmentListRefreshData mFragmentListRefreshData;
     private Handler mHandler = new Handler();
     private List<Long> mUserIdForAddMember = new ArrayList<>();
     private FeedDetail mFeedDetail;
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            if (getActivity() instanceof FragmentIntractionWithActivityListner) {
-                mHomeSearchActivityFragmentIntractionWithActivityListner = (FragmentIntractionWithActivityListner) getActivity();
-            }
-        } catch (Fragment.InstantiationException exception) {
-            LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
-        }
-    }
 
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -120,11 +103,6 @@ public class MyCommunityInviteMemberFragment extends BaseFragment {
         }
     }
 
-
-    @Override
-    public void showError(String errorMsg) {
-        mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog();
-    }
 
     @Override
     public void onDestroyView() {
@@ -194,7 +172,6 @@ public class MyCommunityInviteMemberFragment extends BaseFragment {
         switch (successFrom) {
             case AppConstants.ONE_CONSTANT:
                 //ToDO:; need to verify dialog;
-                Toast.makeText(getContext(), "Add members", Toast.LENGTH_SHORT).show();
                 inviteSearchBack();
                 break;
             default:

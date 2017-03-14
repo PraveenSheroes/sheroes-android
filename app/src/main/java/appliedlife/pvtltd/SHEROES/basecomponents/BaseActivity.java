@@ -35,10 +35,12 @@ import appliedlife.pvtltd.SHEROES.views.activities.ArticleDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.JobDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.errorview.NetworkTimeoutDialog;
+import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.CommunityJoinRegionDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ImageFullViewFragment;
 
@@ -50,7 +52,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ImageFullViewFragment;
  * @since 29/12/2016.
  * Title: Base activity for all activities.
  */
-public class BaseActivity extends AppCompatActivity implements BaseHolderInterface, View.OnTouchListener, View.OnClickListener {
+public class BaseActivity extends AppCompatActivity implements BaseHolderInterface,FragmentIntractionWithActivityListner,View.OnTouchListener, View.OnClickListener {
     private final String TAG = LogUtils.makeLogTag(BaseActivity.class);
     protected boolean mIsSavedInstance;
     public boolean mIsDestroyed;
@@ -95,7 +97,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
      *                                     pass false:- to just dismiss the dialog on try again and or press of back key in case you want to handle it your self say a retry
      * @return
      */
-    protected DialogFragment showNetworkTimeoutDoalog(boolean finishParentOnBackOrTryagain) {
+    public DialogFragment showNetworkTimeoutDoalog(boolean finishParentOnBackOrTryagain) {
         NetworkTimeoutDialog fragment = (NetworkTimeoutDialog) getFragmentManager().findFragmentByTag(AppConstants.NETWORK_TIMEOUT);
         if (fragment == null) {
             fragment = new NetworkTimeoutDialog();
@@ -142,7 +144,15 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
         if (this.getClass().getSimpleName().equals(currActivityName))
             mSheroesApplication.setCurrentActivityName(null);
     }
-
+    @Override
+    public void onShowErrorDialog(String errorReason) {
+        switch (errorReason)
+        {
+            case AppConstants.CHECK_NETWORK_CONNECTION:
+                showNetworkTimeoutDoalog(true);
+                break;
+        }
+    }
 
     @Override
     public void startActivityFromHolder(Intent intent) {
@@ -172,12 +182,25 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
 
     }
 
+    protected DialogFragment showCommunityJoinReason(FeedDetail feedDetail) {
+        CommunityJoinRegionDialogFragment fragment = (CommunityJoinRegionDialogFragment) getFragmentManager().findFragmentByTag(AppConstants.FEATURED_COMMUNITY);
+        if (fragment == null) {
+            fragment = new CommunityJoinRegionDialogFragment();
+            Bundle b = new Bundle();
+            b.putParcelable(BaseDialogFragment.DISMISS_PARENT_ON_OK_OR_BACK, feedDetail);
+            fragment.setArguments(b);
+        }
+        if (!fragment.isVisible() && !fragment.isAdded() && !isFinishing() && !mIsSavedInstance && !mIsDestroyed) {
+            fragment.show(getFragmentManager(), AppConstants.FEATURED_COMMUNITY);
+        }
+        return fragment;
+    }
     protected void feedCardsHandled(View view, BaseResponse baseResponse) {
         mFeedDetail = (FeedDetail) baseResponse;
         int id = view.getId();
         switch (id) {
             case R.id.tv_featured_community_join:
-
+                showCommunityJoinReason(mFeedDetail);
                 break;
             case R.id.tv_feed_community_user_menu:
                 clickMenuItem(view, baseResponse, false);

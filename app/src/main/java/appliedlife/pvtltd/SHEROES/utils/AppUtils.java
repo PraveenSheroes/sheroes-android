@@ -117,7 +117,6 @@ public class AppUtils {
     public static final String DEVICE_SCREEN_RESOLUTION_XXXDPI_FOR_LOGO = "xxxdpi";
 
 
-
     public final Pattern EMAIL_ADDRESS_PATTERN = Pattern.compile("[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" + "\\@"
             + "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" + "(" + "\\." + "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" + ")+");
 
@@ -171,23 +170,20 @@ public class AppUtils {
     public void setApplicationContext(Context context) {
 
     }
+
     /**
      * This method shows the softkeyboard
      *
      * @param view
      */
-    public static void showKeyboard(View view, String TAG)
-    {
-        if (view == null)
-        {
+    public static void showKeyboard(View view, String TAG) {
+        if (view == null) {
             return;
         }
-        try
-        {
+        try {
             InputMethodManager inputManager = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             inputManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             LogUtils.error(TAG, e);
         }
     }
@@ -1624,28 +1620,31 @@ public class AppUtils {
         editText.setLongClickable(false);
         editText.setTextIsSelectable(false);
     }
+
     /**
      * Request for feed api
      */
-    public static FeedRequestPojo feedRequestBuilder(String typeOfFeed,int pageNo) {
-        FeedRequestPojo feedRequestPojo=makeFeedRequest(typeOfFeed,pageNo);
+    public static FeedRequestPojo feedRequestBuilder(String typeOfFeed, int pageNo) {
+        FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, pageNo);
         return feedRequestPojo;
     }
-    public static FeedRequestPojo articleCategoryRequestBuilder(String typeOfFeed,int pageNo,List<Integer>categoryIds) {
-        FeedRequestPojo feedRequestPojo=makeFeedRequest(typeOfFeed,pageNo);
+
+    public static FeedRequestPojo articleCategoryRequestBuilder(String typeOfFeed, int pageNo, List<Integer> categoryIds) {
+        FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, pageNo);
         feedRequestPojo.setCategoryIds(categoryIds);
         return feedRequestPojo;
     }
-    public static FeedRequestPojo feedDetailRequestBuilder(String typeOfFeed,int pageNo,String idForDetail) {
 
-        FeedRequestPojo feedRequestPojo=makeFeedRequest(typeOfFeed,pageNo);
+    public static FeedRequestPojo feedDetailRequestBuilder(String typeOfFeed, int pageNo, String idForDetail) {
+
+        FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, pageNo);
         feedRequestPojo.setIdForFeedDetail(idForDetail);
         return feedRequestPojo;
     }
-    private  static FeedRequestPojo makeFeedRequest(String typeOfFeed,int pageNo)
-    {
+
+    private static FeedRequestPojo makeFeedRequest(String typeOfFeed, int pageNo) {
         AppUtils appUtils = AppUtils.getInstance();
-        FeedRequestPojo feedRequestPojo=new FeedRequestPojo();
+        FeedRequestPojo feedRequestPojo = new FeedRequestPojo();
         feedRequestPojo.setAppVersion(appUtils.getAppVersionName());
         feedRequestPojo.setDeviceUniqueId(appUtils.getDeviceId());
         //TODO:: change rquest data
@@ -1655,10 +1654,10 @@ public class AppUtils {
         feedRequestPojo.setSubType(typeOfFeed);
         return feedRequestPojo;
     }
-    public  static FeedRequestPojo getBookMarks(int pageNo)
-    {
+
+    public static FeedRequestPojo getBookMarks(int pageNo) {
         AppUtils appUtils = AppUtils.getInstance();
-        FeedRequestPojo feedRequestPojo=new FeedRequestPojo();
+        FeedRequestPojo feedRequestPojo = new FeedRequestPojo();
         feedRequestPojo.setAppVersion(appUtils.getAppVersionName());
         feedRequestPojo.setDeviceUniqueId(appUtils.getDeviceId());
         //TODO:: change rquest data
@@ -1667,12 +1666,13 @@ public class AppUtils {
         feedRequestPojo.setPageSize(AppConstants.PAGE_SIZE);
         return feedRequestPojo;
     }
+
     /**
      * Request for feed api
      */
-    public static FeedRequestPojo searchRequestBuilder(String typeOfFeed,String queryName,int pageNo,String screenName) {
+    public static FeedRequestPojo searchRequestBuilder(String typeOfFeed, String queryName, int pageNo, String screenName) {
         AppUtils appUtils = AppUtils.getInstance();
-        FeedRequestPojo feedRequestPojo=new FeedRequestPojo();
+        FeedRequestPojo feedRequestPojo = new FeedRequestPojo();
         feedRequestPojo.setAppVersion(appUtils.getAppVersionName());
         feedRequestPojo.setDeviceUniqueId(appUtils.getDeviceId());
         //TODO:: change rquest data
@@ -1684,12 +1684,13 @@ public class AppUtils {
         feedRequestPojo.setScreenName(screenName);
         return feedRequestPojo;
     }
+
     /**
      * Request for feed api
      */
-    public static LikeRequestPojo likeRequestBuilder(long entityId,int reactionValue) {
+    public static LikeRequestPojo likeRequestBuilder(long entityId, int reactionValue) {
         AppUtils appUtils = AppUtils.getInstance();
-        LikeRequestPojo likeRequestPojo=new LikeRequestPojo();
+        LikeRequestPojo likeRequestPojo = new LikeRequestPojo();
         likeRequestPojo.setAppVersion(appUtils.getAppVersionName());
         likeRequestPojo.setDeviceUniqueId(appUtils.getDeviceId());
         //TODO:: change rquest data
@@ -1698,12 +1699,13 @@ public class AppUtils {
         likeRequestPojo.setReactionValue(reactionValue);
         return likeRequestPojo;
     }
+
     /**
      * Request for feed api
      */
     public static LikeRequestPojo unLikeRequestBuilder(long entityId) {
         AppUtils appUtils = AppUtils.getInstance();
-        LikeRequestPojo likeRequestPojo=new LikeRequestPojo();
+        LikeRequestPojo likeRequestPojo = new LikeRequestPojo();
         likeRequestPojo.setAppVersion(appUtils.getAppVersionName());
         likeRequestPojo.setDeviceUniqueId(appUtils.getDeviceId());
         //TODO:: change rquest data
@@ -1711,9 +1713,10 @@ public class AppUtils {
         likeRequestPojo.setEntityId(entityId);
         return likeRequestPojo;
     }
-    public static CommentReactionRequestPojo getCommentRequestBuilder(long entityId,int pageNo) {
+
+    public static CommentReactionRequestPojo getCommentRequestBuilder(long entityId, int pageNo) {
         AppUtils appUtils = AppUtils.getInstance();
-        CommentReactionRequestPojo commentReactionRequestPojo =new CommentReactionRequestPojo();
+        CommentReactionRequestPojo commentReactionRequestPojo = new CommentReactionRequestPojo();
         commentReactionRequestPojo.setAppVersion(appUtils.getAppVersionName());
         commentReactionRequestPojo.setDeviceUniqueId(appUtils.getDeviceId());
         //TODO:: change rquest data
@@ -1723,9 +1726,10 @@ public class AppUtils {
         commentReactionRequestPojo.setEntityId(entityId);
         return commentReactionRequestPojo;
     }
+
     public static BookmarkRequestPojo bookMarkRequestBuilder(long entityId) {
         AppUtils appUtils = AppUtils.getInstance();
-        BookmarkRequestPojo bookmarkRequestPojo =new BookmarkRequestPojo();
+        BookmarkRequestPojo bookmarkRequestPojo = new BookmarkRequestPojo();
         bookmarkRequestPojo.setAppVersion(appUtils.getAppVersionName());
         bookmarkRequestPojo.setDeviceUniqueId(appUtils.getDeviceId());
         //TODO:: change rquest data
@@ -1733,9 +1737,10 @@ public class AppUtils {
         bookmarkRequestPojo.setEntityId(entityId);
         return bookmarkRequestPojo;
     }
+
     public static CommentReactionRequestPojo postCommentRequestBuilder(long entityId, String userComment, boolean isAnonymous) {
         AppUtils appUtils = AppUtils.getInstance();
-        CommentReactionRequestPojo commentReactionRequestPojo =new CommentReactionRequestPojo();
+        CommentReactionRequestPojo commentReactionRequestPojo = new CommentReactionRequestPojo();
         commentReactionRequestPojo.setAppVersion(appUtils.getAppVersionName());
         commentReactionRequestPojo.setDeviceUniqueId(appUtils.getDeviceId());
         //TODO:: change rquest data
@@ -1745,9 +1750,10 @@ public class AppUtils {
         commentReactionRequestPojo.setEntityId(entityId);
         return commentReactionRequestPojo;
     }
+
     public static CommentReactionRequestPojo editCommentRequestBuilder(long entityId, String userComment, boolean isAnonymous, boolean isActive, long participationId) {
         AppUtils appUtils = AppUtils.getInstance();
-        CommentReactionRequestPojo commentReactionRequestPojo =new CommentReactionRequestPojo();
+        CommentReactionRequestPojo commentReactionRequestPojo = new CommentReactionRequestPojo();
         commentReactionRequestPojo.setAppVersion(appUtils.getAppVersionName());
         commentReactionRequestPojo.setDeviceUniqueId(appUtils.getDeviceId());
         //TODO:: change rquest data
@@ -1761,9 +1767,9 @@ public class AppUtils {
     }
 
 
-    public static CommunityRequest communityRequestBuilder(List<Long> userId,long idOfEntityParticipant) {
+    public static CommunityRequest communityRequestBuilder(List<Long> userId, long idOfEntityParticipant) {
         AppUtils appUtils = AppUtils.getInstance();
-        CommunityRequest communityRequest=new CommunityRequest();
+        CommunityRequest communityRequest = new CommunityRequest();
         communityRequest.setUserId(userId);
         communityRequest.setCommunityId(idOfEntityParticipant);
         communityRequest.setAppVersion(appUtils.getAppVersionName());
@@ -1773,12 +1779,13 @@ public class AppUtils {
         communityRequest.setScreenName(AppConstants.ALL_SEARCH);
         return communityRequest;
     }
+
     /**
      * Profile data
      */
     public static List<ProfileItems> profileDetail() {
-        List<ProfileItems>profileItemsList=new ArrayList<>();
-        ProfileItems profileItems=new ProfileItems();
+        List<ProfileItems> profileItemsList = new ArrayList<>();
+        ProfileItems profileItems = new ProfileItems();
         profileItemsList.add(profileItems);
         profileItemsList.add(profileItems);
         profileItemsList.add(profileItems);

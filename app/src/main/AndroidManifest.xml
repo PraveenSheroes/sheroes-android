@@ -40,7 +40,8 @@
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.LoginActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden">
+            android:windowSoftInputMode="stateHidden"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -61,10 +62,6 @@
         <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.HomeActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"/>
-        <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.BookMarkActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity"
-            android:screenOrientation="portrait"/>
         <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.SettingPreferencesActivity"
             android:screenOrientation="portrait"/>
 
@@ -98,13 +95,13 @@
             android:name="appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-        <activity
-            android:name="appliedlife.pvtltd.SHEROES.views.activities.ArticleDetailActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
         <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.ProfileActicity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>
+        <activity
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.ArticleDetailActivity"
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

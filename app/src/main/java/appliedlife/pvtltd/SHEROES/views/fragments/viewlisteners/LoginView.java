@@ -9,5 +9,4 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 
 public interface LoginView extends BaseMvpView {
     void getLogInResponse(LoginResponse loginResponse);
-    void showNwError();
 }

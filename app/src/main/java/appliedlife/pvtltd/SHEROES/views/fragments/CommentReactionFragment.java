@@ -48,7 +48,6 @@ import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
-import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.AllCommentReactionView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -110,7 +109,6 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
     boolean mIsAnonymous;
     private List<CommentReactionDoc> mCommentReactionDocList;
     CommentReactionDoc mCommentReactionDoc;
-    FragmentIntractionWithActivityListner fragmentIntractionWithActivityListner;
     private FragmentListRefreshData mFragmentListRefreshData;
     private SwipPullRefreshList mPullRefreshList;
     private int mPageNo = AppConstants.ONE_CONSTANT;
@@ -122,9 +120,6 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
         try {
             if (getActivity() instanceof HomeActivityIntractionListner) {
                 mHomeActivityIntractionListner = (HomeActivityIntractionListner) getActivity();
-            }
-            if (getActivity() instanceof FragmentIntractionWithActivityListner) {
-                fragmentIntractionWithActivityListner = (FragmentIntractionWithActivityListner) getActivity();
             }
         } catch (InstantiationException exception) {
             LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
@@ -343,12 +338,6 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
         return lastCommentList;
     }
 
-
-    @Override
-    public void showError(String errorMsg) {
-        fragmentIntractionWithActivityListner.onShowErrorDialog();
-    }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -410,7 +399,6 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
 
     public void editCommentInList(CommentReactionDoc commentReactionDoc) {
         mCommentReactionDoc = commentReactionDoc;
-        // mCommentReactionPresenter.getAllCommentListFromPresenter(mAppUtils.getCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId(), mFragmentListRefreshData.getPageNo()), mFragmentOpen.isReactionList());
         if (null != mCommentReactionDoc && mCommentReactionDoc.isEdit()) {
             mCommentReactionDocList.remove(mCommentReactionDoc.getItemPosition());
             mEtUserCommentDescription.setText(mCommentReactionDoc.getComment());

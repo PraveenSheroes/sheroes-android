@@ -79,7 +79,8 @@ public interface SheroesAppServiceApi {
     Observable<LoginResponse> getFbSignUpToken(@Body LoginRequest loginRequest);
     @POST("participant/community/join")
     Observable<CommunityResponse> getCommunityJoinResponse(@Body CommunityRequest communityRequest);
-
+    @POST("participant/community/approve_joining_request")
+    Observable<CommunityResponse> getApproveJoinResponse(@Body CommunityRequest communityRequest);
 
 
 

@@ -17,6 +17,7 @@ public class AppConstants {
     public static final String SHEROES_USER_SESSION = "sheroes_user_session";
     public static final String SHEROES_PREFERENCE = "sheroes_preference";
     public static final String ERROR_IN_RESPONSE = "error_in_response";
+    public static final String CHECK_NETWORK_CONNECTION = "check_network_connection";
     public static final String VIEW_NOT_ATTACHED_EXCEPTION = "Please call SheroesPresenter.attachView(BaseMvpView) before" + " requesting data to the SheroesPresenter";
     public static final String EXCEPTION_MUST_IMPLEMENT = "Exception while implement listner with in :";
     public static final String CASE_NOT_HANDLED = "Case not handled on : ";

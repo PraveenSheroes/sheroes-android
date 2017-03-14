@@ -105,10 +105,11 @@ public class CommunitiesDetailActivity extends BaseActivity implements Community
         mCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
         if (null != mFeedDetail) {
             mCollapsingToolbarLayout.setTitle(mFeedDetail.getNameOrTitle());
-            mCollapsingToolbarLayout.setSubtitle(mFeedDetail.getAuthorName());
+            mCollapsingToolbarLayout.setSubtitle(mFeedDetail.getNameOrTitle());
             viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
             viewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(mFeedDetail), getString(R.string.ID_COMMUNITIES));
             mViewPagerCommunitiesDetail.setAdapter(viewPagerAdapter);
+            mFeedDetail.setImageUrl("https://img.sheroes.in/img/uploads/forumbloggallary/14845475641484547564.png");
             if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getImageUrl())) {
                 Glide.with(this)
                         .load(mFeedDetail.getImageUrl()).asBitmap()
@@ -127,7 +128,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements Community
                             }
                         });
             }
-            mFragment = viewPagerAdapter.getActiveFragment(mViewPagerCommunitiesDetail, AppConstants.NO_REACTION_CONSTANT);
+
         }
     }
 
@@ -170,6 +171,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements Community
             getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.bottom_to_top_slide_reverse_anim)
                     .replace(R.id.about_community_container, communityOpenAboutFragment).addToBackStack(null).commitAllowingStateLoss();
         } else {
+            mFragment = viewPagerAdapter.getActiveFragment(mViewPagerCommunitiesDetail, AppConstants.NO_REACTION_CONSTANT);
             setFragment(mFragment);
             mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.THREE_CONSTANT);
             setAllValues(mFragmentOpen);

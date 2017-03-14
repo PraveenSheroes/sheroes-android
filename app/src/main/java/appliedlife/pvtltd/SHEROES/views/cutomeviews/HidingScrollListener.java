@@ -31,9 +31,9 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
     private int previousTotal = 0;
     private boolean loading = true;
     private int visibleThreshold = 1;
-    int firstVisibleItem, visibleItemCount, totalItemCount;
+    private int firstVisibleItem, visibleItemCount, totalItemCount;
     private FragmentListRefreshData mFragmentListRefreshData;
-    CommentReactionPresenter mCommentReactionPresenter;
+    private CommentReactionPresenter mCommentReactionPresenter;
     public HidingScrollListener(HomePresenter homePresenter, RecyclerView recyclerView, LinearLayoutManager manager, FragmentListRefreshData fragmentListRefreshData) {
         mHomePresenter=homePresenter;
         mRecyclerView=recyclerView;

@@ -12,11 +12,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobDetailPojo;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleDetailPojo;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.ArticleDetailActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.JobDetailActivity;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 

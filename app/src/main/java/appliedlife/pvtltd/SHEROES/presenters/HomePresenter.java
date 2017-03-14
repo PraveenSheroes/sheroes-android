@@ -69,7 +69,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
     public void getFeedFromPresenter(final FeedRequestPojo feedRequestPojo) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION);
             return;
         }
         getMvpView().startProgressBar();
@@ -102,7 +102,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
     public void getBookMarkFromPresenter(FeedRequestPojo feedRequestPojo) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION);
             return;
         }
         getMvpView().startProgressBar();
@@ -128,7 +128,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
     public void getLikesFromPresenter(LikeRequestPojo likeRequestPojo) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION);
             return;
         }
         getMvpView().startProgressBar();
@@ -154,7 +154,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
     }
     public void getUnLikesFromPresenter(LikeRequestPojo likeRequestPojo) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION);
             return;
         }
         getMvpView().startProgressBar();
@@ -182,7 +182,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
     public void addBookMarkFromPresenter(BookmarkRequestPojo bookmarkRequestPojo,boolean isBookmarked) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION);
             return;
         }
         getMvpView().startProgressBar();
@@ -210,7 +210,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
     public void editCommentListFromPresenter(CommentReactionRequestPojo commentReactionRequestPojo) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION);
             return;
         }
         getMvpView().startProgressBar();
@@ -234,7 +234,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
     }
     public void communityJoinFromPresenter(CommunityRequest communityRequest) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION);
             return;
         }
         getMvpView().startProgressBar();

@@ -176,8 +176,7 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new ProfileEducationHolder(view, viewInterface);
         }
-    }
-    ,
+    },
     PROFILE_WORK_EXPERIENCE(R.layout.professional_education_card) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
@@ -235,12 +234,12 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new ProfileIAmInterestingInHolder(view, viewInterface);
         }
-    },PROFILE_PERSONAL_VISITINGCARD(R.layout.profile_my_visiting_card) {
+    }, PROFILE_PERSONAL_VISITINGCARD(R.layout.profile_my_visiting_card) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new Visiting_card_holder1(view, viewInterface);
         }
-    },PROFFESTIONAL_VISITINGCARD(R.layout.profile_my_visiting_card) {
+    }, PROFFESTIONAL_VISITINGCARD(R.layout.profile_my_visiting_card) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new VisitingCardholder(view, viewInterface);
@@ -334,7 +333,7 @@ public enum HolderMapping {
                         case AppConstants.USER_SUB_TYPE:
                             returnView = INVITE_MEMBER_MODULE.ordinal();
                             break;
-                       default:
+                        default:
                     }
                 }
             } else if (callFromType.equalsIgnoreCase(AppConstants.ALL_SEARCH)) {
@@ -350,11 +349,14 @@ public enum HolderMapping {
                             returnView = ARTICLE_CARD_HOLDER.ordinal();
                             break;
                         case AppConstants.FEED_COMMUNITY:
-                            returnView = MY_COMMUNITIES_CARD.ordinal();
-                            //   return SUGGESTED_CARD_HOLDER.ordinal();
-                            break;
-                        case AppConstants.FEATURED_COMMUNITY:
-                            returnView = FEATURE_CARD.ordinal();
+                            boolean isFeatured = feedDetail.isFeatured();
+                            if (isFeatured) {
+                                returnView = FEATURE_CARD.ordinal();
+                                //   return SUGGESTED_CARD_HOLDER.ordinal();
+                            }
+                            else {
+                                returnView = MY_COMMUNITIES_CARD.ordinal();
+                            }
                             break;
                         case AppConstants.FEED_JOB:
                             returnView = FEED_JOB.ordinal();
@@ -399,26 +401,16 @@ public enum HolderMapping {
                         return PROFIL_EEDUCATION.ordinal();
                     } else if (tagType.equals("Good At")) {
                         return PROFILE_GOODAT.ordinal();
-                    }
-                    else if(tagType.equals("WORK EXPERIENCE"))
-                    {
+                    } else if (tagType.equals("WORK EXPERIENCE")) {
                         return PROFILE_WORK_EXPERIENCE.ordinal();
-                    }
-                    else if(tagType.equals("Horizontal"))
-                    {
+                    } else if (tagType.equals("Horizontal")) {
                         return PROFILE_HORIZONTAL_RECYCLER_LIST.ordinal();
-                    }
-                    else if(tagType.equals("BASIC DETAILS"))
-                    {
+                    } else if (tagType.equals("BASIC DETAILS")) {
                         return PROFILE_BASIC_DETAILS.ordinal();
-                    }
-
-                    else if(tagType.equals("OTHER"))
-                    {
+                    } else if (tagType.equals("OTHER")) {
                         return PROFILE_OTHER.ordinal();
 
-                    }else if(tagType.equals("My Contact Card"))
-                    {
+                    } else if (tagType.equals("My Contact Card")) {
                         return PROFFESTIONAL_VISITINGCARD.ordinal();
                     }
 
@@ -446,11 +438,9 @@ public enum HolderMapping {
                     } else if (tagType.equals("Basic Details")) {
                         return PROFILE_PERSONAL_BASICDETAILS.ordinal();
 
-                    }else if(tagType.equals("My Contact Card"))
-                    {
+                    } else if (tagType.equals("My Contact Card")) {
                         return PROFILE_PERSONAL_VISITINGCARD.ordinal();
-                    }
-                    else if (tagType.equals("I AM INTERESTED IN")) {
+                    } else if (tagType.equals("I AM INTERESTED IN")) {
                         return PROFILE_PERSONAL_INTERESTING.ordinal();
 
                     }

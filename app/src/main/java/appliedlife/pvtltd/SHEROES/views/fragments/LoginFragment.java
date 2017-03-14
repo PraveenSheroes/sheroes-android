@@ -48,7 +48,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.LoginView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -78,9 +77,8 @@ public class LoginFragment extends BaseFragment implements LoginView {
     EditText mPasswordView;
     @Bind(R.id.pb_login_progress_bar)
     ProgressBar mProgressBar;
-      @Bind(R.id.login_button)
-      LoginButton mFbLogin;
-    FragmentIntractionWithActivityListner fragmentIntractionWithActivityListner;
+    @Bind(R.id.login_button)
+    LoginButton mFbLogin;
     private LoginActivityIntractionListner mLoginActivityIntractionListner;
     private static final int READ_CONTACTS_PERMISSIONS_REQUEST1 = 1;
     private CallbackManager callbackManager;
@@ -93,9 +91,6 @@ public class LoginFragment extends BaseFragment implements LoginView {
         try {
             if (getActivity() instanceof LoginActivityIntractionListner) {
                 mLoginActivityIntractionListner = (LoginActivityIntractionListner) getActivity();
-            }
-            if (getActivity() instanceof FragmentIntractionWithActivityListner) {
-                fragmentIntractionWithActivityListner = (FragmentIntractionWithActivityListner) getActivity();
             }
         } catch (InstantiationException exception) {
             LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
@@ -113,25 +108,23 @@ public class LoginFragment extends BaseFragment implements LoginView {
 
             }
         };
-
         profileTracker = new ProfileTracker() {
             @Override
             protected void onCurrentProfileChanged(Profile oldProfile, Profile newProfile) {
                 // displayMessage(newProfile);
             }
         };
-
         accessTokenTracker.startTracking();
         profileTracker.startTracking();
     }
 
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-       SheroesApplication.getAppComponent(getContext()).inject(this);
+        SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_login, container, false);
         ButterKnife.bind(this, view);
         mLoginPresenter.attachView(this);
+        setProgressBar(mProgressBar);
         if (Build.VERSION.SDK_INT >= 23) {
             getPermissionToReadUserContacts();
 
@@ -152,14 +145,13 @@ public class LoginFragment extends BaseFragment implements LoginView {
         loginButton.registerCallback(callbackManager, callback);*/
 
     }
+
     @OnClick(R.id.login_button)
-    public void fbOnClick()
-    {
+    public void fbOnClick() {
         fbSignIn();
     }
 
-    private void fbSignIn()
-    {
+    private void fbSignIn() {
         mFbLogin.setReadPermissions(Arrays.asList("public_profile", "email", "user_birthday", "user_friends"));
         mFbLogin.setFragment(this);
         mFbLogin.registerCallback(callbackManager, callback);
@@ -184,52 +176,11 @@ public class LoginFragment extends BaseFragment implements LoginView {
     }
 
     @Override
-    public void showNwError() {
-        // mLoginActivityIntractionListner.onErrorOccurence();
-    }
-
-
-    @Override
-    public void startProgressBar() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mProgressBar.bringToFront();
-    }
-
-    @Override
-    public void stopProgressBar() {
-    }
-
-    @Override
-    public void showError(String errorMsg) {
-        mProgressBar.setVisibility(View.GONE);
-        fragmentIntractionWithActivityListner.onShowErrorDialog();
-    }
-
-    @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
         mLoginPresenter.detachView();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
 
     public interface LoginActivityIntractionListner {
         void onErrorOccurence();
@@ -310,7 +261,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                         @Override
                         public void onCompleted(JSONObject object, GraphResponse response) {
                             // Insert your code here
-                          //  String gettok = "" + AccessToken.getCurrentAccessToken();
+                            //  String gettok = "" + AccessToken.getCurrentAccessToken();
 
                               /*  String user_email = object.getString("email");
                                 Log.e("showinguser-emailid", user_email);
@@ -346,13 +297,13 @@ public class LoginFragment extends BaseFragment implements LoginView {
         public void onCancel() {
 
             //LoginManager.getInstance().logOut();
-            Toast.makeText(getContext(),"error",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "error", Toast.LENGTH_SHORT).show();
 
         }
 
         @Override
         public void onError(FacebookException e) {
-            Toast.makeText(getContext(),"exception"+e.toString(),Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "exception" + e.toString(), Toast.LENGTH_SHORT).show();
         }
     };
 
