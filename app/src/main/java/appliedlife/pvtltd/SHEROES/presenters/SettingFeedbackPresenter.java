@@ -74,7 +74,7 @@ public class SettingFeedbackPresenter extends BasePresenter<SettingFeedbackView>
 
             @Override
             public void onError(Throwable e) {
-                getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
+                getMvpView().showError(AppConstants.HTTP_401_UNAUTHORIZED);
                 getMvpView().showNwError();
                 getMvpView().stopProgressBar();
             }
@@ -112,7 +112,7 @@ public class SettingFeedbackPresenter extends BasePresenter<SettingFeedbackView>
 
             @Override
             public void onError(Throwable e) {
-                getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
+                getMvpView().showError(AppConstants.HTTP_401_UNAUTHORIZED);
                 getMvpView().showNwError();
                 getMvpView().stopProgressBar();
             }
@@ -147,7 +147,7 @@ public class SettingFeedbackPresenter extends BasePresenter<SettingFeedbackView>
 
             @Override
             public void onError(Throwable e) {
-                getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
+                getMvpView().showError(AppConstants.HTTP_401_UNAUTHORIZED);
                 getMvpView().showNwError();
                 getMvpView().stopProgressBar();
             }
@@ -189,7 +189,7 @@ public class SettingFeedbackPresenter extends BasePresenter<SettingFeedbackView>
 
             @Override
             public void onError(Throwable e) {
-                getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
+                getMvpView().showError(AppConstants.HTTP_401_UNAUTHORIZED);
                 getMvpView().showNwError();
                 getMvpView().stopProgressBar();
             }

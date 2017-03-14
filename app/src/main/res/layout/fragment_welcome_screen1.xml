@@ -37,6 +37,7 @@
             android:textSize="@dimen/sp_size_10" />
 
         <TextView
+            android:id="@+id/tv_click_to_join"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_welcome_text1"
@@ -52,7 +53,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone" />
-
 
     </RelativeLayout>
 

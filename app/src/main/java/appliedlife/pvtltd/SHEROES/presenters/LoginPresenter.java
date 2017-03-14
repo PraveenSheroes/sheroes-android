@@ -62,7 +62,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
+                getMvpView().showError(e.getMessage());
             }
 
             @Override
@@ -73,7 +73,6 @@ public class LoginPresenter extends BasePresenter<LoginView> {
         });
         registerSubscription(subscription);
     }
-
 
     public void onStop() {
         detachView();

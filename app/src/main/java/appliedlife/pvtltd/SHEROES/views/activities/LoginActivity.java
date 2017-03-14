@@ -2,7 +2,6 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.f2prateek.rx.preferences.Preference;
 
@@ -52,13 +51,19 @@ public class LoginActivity extends BaseActivity implements LoginFragment.LoginAc
     }
 
     @Override
-    public void onErrorOccurence() {
-        showNetworkTimeoutDoalog(true);
+    public void onErrorOccurence(String errorMessage) {
+         mIsSavedInstance=false;
+        if(!StringUtil.isNotNullOrEmptyString(errorMessage))
+        {
+            errorMessage = getString(R.string.ID_GENERIC_ERROR);
+        }
+        showNetworkTimeoutDoalog(true,false,errorMessage);
     }
 
     @Override
     public void onLoginAuthToken() {
         Intent homeIntent = new Intent(this, HomeActivity.class);
+        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(homeIntent);
         finish();
     }
@@ -67,11 +72,13 @@ public class LoginActivity extends BaseActivity implements LoginFragment.LoginAc
         switch (errorReason)
         {
             case AppConstants.CHECK_NETWORK_CONNECTION:
-                showNetworkTimeoutDoalog(true);
+                showNetworkTimeoutDoalog(true,false,getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
                 break;
-            case AppConstants.ERROR_IN_RESPONSE:
-                Toast.makeText(this,"Please check your email id, password",Toast.LENGTH_SHORT).show();
+            case AppConstants.HTTP_401_UNAUTHORIZED:
+                showNetworkTimeoutDoalog(true,false,getString(R.string.IDS_INVALID_USER_PASSWORD));
                 break;
+            default:
+                showNetworkTimeoutDoalog(true,false,getString(R.string.ID_GENERIC_ERROR));
         }
         //getSupportFragmentManager().popBackStack();
     }

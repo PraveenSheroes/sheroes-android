@@ -93,6 +93,11 @@ public class CommunityJoinRegionDialogFragment extends BaseDialogFragment implem
     }
 
     @Override
+    public void getLogInResponse(LoginResponse loginResponse) {
+
+    }
+
+    @Override
     public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
 
     }

@@ -19,6 +19,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItemResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.CommunitiesResponse;
@@ -187,5 +188,17 @@ public class HomeModel {
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
+    }
+    public Observable<LoginResponse> getAuthTokenRefreshFromModel() {
+        return sheroesAppServiceApi.getRefreshToken()
+                .map(new Func1<LoginResponse, LoginResponse>() {
+                    @Override
+                    public LoginResponse call(LoginResponse loginResponse) {
+                        return loginResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
     }
 }

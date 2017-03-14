@@ -11,6 +11,7 @@
         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
         android:gravity="center"
         android:paddingBottom="@dimen/dp_size_10"
+        android:visibility="gone"
         android:paddingTop="@dimen/dp_size_15"
         android:text="@string/IDS_STR_NETWORK_TIME_OUT_TITLE"
         android:textColor="@color/noConnection"
@@ -20,6 +21,7 @@
         android:id="@+id/imv_no_connection_img"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:layout_below="@id/tv_no_connection"
         android:src="@drawable/ic_emoji4_face_palm" />
 
@@ -29,12 +31,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/imv_no_connection_img"
-        android:layout_marginTop="@dimen/dp_size_5"
+        android:layout_marginTop="@dimen/dp_size_30"
         android:fontFamily="@string/ID_ROBOTO_REGULAR"
         android:gravity="center"
         android:paddingLeft="@dimen/dp_size_31"
         android:paddingRight="@dimen/dp_size_30"
-        android:text="@string/IDS_STR_NETWORK_TIME_OUT_DESCRIPTION"
         android:textColor="@color/grey2"
         android:textSize="@dimen/sp_size_14"
         android:textStyle="bold" />

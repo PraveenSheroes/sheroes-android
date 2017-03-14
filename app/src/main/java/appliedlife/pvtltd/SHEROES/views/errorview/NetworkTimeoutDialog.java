@@ -10,36 +10,44 @@ import android.widget.TextView;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 
 /**
  * DialogFragment displayed when timeout in request occurs .
  */
-public class NetworkTimeoutDialog extends BaseDialogFragment implements View.OnClickListener {
-    private TextView tryAgain;
+public class NetworkTimeoutDialog extends BaseDialogFragment {
+    @Bind(R.id.tv_no_conn_desc)
+    TextView mTvNoConnDesc;
     private boolean finishParent;
-    public static final String DISMISS_PARENT_ON_OK_OR_BACK = "DISMISS_PARENT_ON_OK_OR_BACK";
-
+    private boolean isCancellable;
+    private String errorMessage;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.dialog_network_timeout, container, false);
+        ButterKnife.bind(this,view);
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        tryAgain = (TextView) view.findViewById(R.id.tv_try_again);
-        tryAgain.setOnClickListener(this);
-        finishParent = getArguments().getBoolean(DISMISS_PARENT_ON_OK_OR_BACK, false);
-        setCancelable(false);
+        finishParent = getArguments().getBoolean(DISMISS_PARENT_ON_OK_OR_BACK);
+        isCancellable = getArguments().getBoolean(IS_CANCELABLE);
+        errorMessage = getArguments().getString(ERROR_MESSAGE);
+        if(StringUtil.isNotNullOrEmptyString(errorMessage)) {
+            mTvNoConnDesc.setText(errorMessage);
+        }
+        setCancelable(isCancellable);
         return view;
     }
 
-    @Override
-    public void onClick(View view) {
-        if (view.getId() == tryAgain.getId()) {
-            dismissAllowingStateLoss();
-            if (finishParent) {
-                dismiss();
+    @OnClick(R.id.tv_try_again)
+    public void tryAgainClick()
+    {
+        dismissAllowingStateLoss();
+        if (finishParent) {
+            dismiss();
             //  getActivity().finish();
-            }
         }
     }
 
@@ -56,7 +64,7 @@ public class NetworkTimeoutDialog extends BaseDialogFragment implements View.OnC
             public void onBackPressed() {
                 dismissAllowingStateLoss();//dismiss dialog on back button press
                 if (finishParent) {
-                    getActivity().finish();
+                    dismiss();
                 }
             }
         };

@@ -39,7 +39,7 @@ import butterknife.ButterKnife;
  * Created by Praveen_Singh on 01-02-2017.
  */
 
-public class CommunitiesDetailFragment extends BaseFragment  {
+public class CommunitiesDetailFragment extends BaseFragment {
     private final String TAG = LogUtils.makeLogTag(CommunitiesDetailFragment.class);
     @Inject
     HomePresenter mHomePresenter;
@@ -73,6 +73,7 @@ public class CommunitiesDetailFragment extends BaseFragment  {
         communitiesDetailFragment.setArguments(bundle);
         return communitiesDetailFragment;
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.f2prateek.rx.preferences.Preference;
 import com.facebook.AccessToken;
@@ -29,6 +28,7 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
@@ -152,6 +152,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
     }
 
     private void fbSignIn() {
+        LoginManager.getInstance().logOut();
         mFbLogin.setReadPermissions(Arrays.asList("public_profile", "email", "user_birthday", "user_friends"));
         mFbLogin.setFragment(this);
         mFbLogin.registerCallback(callbackManager, callback);
@@ -165,6 +166,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
     @Override
     public void getLogInResponse(LoginResponse loginResponse) {
         mProgressBar.setVisibility(View.GONE);
+
         if (null != loginResponse && StringUtil.isNotNullOrEmptyString(loginResponse.getToken())) {
             loginResponse.setTokenTime(System.currentTimeMillis());
             loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
@@ -172,6 +174,10 @@ public class LoginFragment extends BaseFragment implements LoginView {
             mProgressBar.setVisibility(View.GONE);
             mLoginActivityIntractionListner.onLoginAuthToken();
             Snackbar.make(mEmailView, R.string.ID_APP_NAME, Snackbar.LENGTH_SHORT).show();
+        }else
+        {
+            LoginManager.getInstance().logOut();
+            mLoginActivityIntractionListner.onErrorOccurence(loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA));
         }
     }
 
@@ -183,8 +189,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
 
 
     public interface LoginActivityIntractionListner {
-        void onErrorOccurence();
-
+        void onErrorOccurence(String errorMessage);
         void onLoginAuthToken();
     }
 
@@ -249,10 +254,6 @@ public class LoginFragment extends BaseFragment implements LoginView {
 
         @Override
         public void onSuccess(final LoginResult loginResult) {
-            if (null != mProgressBar) {
-                mProgressBar.setVisibility(View.VISIBLE);
-                mProgressBar.bringToFront();
-            }
             final AccessToken accessToken = loginResult.getAccessToken();
             // Facebook Email address
             GraphRequest request = GraphRequest.newMeRequest(
@@ -279,7 +280,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                                 loginRequest.setDeviceid("string");
                                 loginRequest.setDevicetype("string");
                                 loginRequest.setGcmorapnsid("string");
-                                mLoginPresenter.getLoginAuthTokeInPresenter(loginRequest, true);
+                               mLoginPresenter.getLoginAuthTokeInPresenter(loginRequest, true);
                             }
 
                         }
@@ -296,14 +297,13 @@ public class LoginFragment extends BaseFragment implements LoginView {
         @Override
         public void onCancel() {
 
-            //LoginManager.getInstance().logOut();
-            Toast.makeText(getContext(), "error", Toast.LENGTH_SHORT).show();
+            mLoginActivityIntractionListner.onErrorOccurence(getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
 
         }
 
         @Override
         public void onError(FacebookException e) {
-            Toast.makeText(getContext(), "exception" + e.toString(), Toast.LENGTH_SHORT).show();
+            mLoginActivityIntractionListner.onErrorOccurence(getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
         }
     };
 

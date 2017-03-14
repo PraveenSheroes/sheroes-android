@@ -257,29 +257,26 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
                 mDrawer.closeDrawer(GravityCompat.START);
             }
             switch (drawerItem) {
-                case 1:
+                case AppConstants.ONE_CONSTANT:
                     String profile = "https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAhNAAAAJDYwZWIyZTg5LWFmOTItNGIwYS05YjQ5LTM2YTRkNGQ2M2JlNw.jpg";
                     ProfileActicity.navigate(this, view, profile);
                     break;
-                case 2:
+                case AppConstants.TWO_CONSTANT:
                     checkForAllOpenFragments();
                     openArticleFragment();
                     break;
-                case 4:
+                case AppConstants.THREE_CONSTANT:
+                    checkForAllOpenFragments();
+                    openJobFragment();
+                    break;
+                case AppConstants.FOURTH_CONSTANT:
                     initHomeViewPagerAndTabs();
                     checkForAllOpenFragments();
                     openBookMarkFragment();
                     break;
-                case 3:
-                    checkForAllOpenFragments();
-                    openJobFragment();
-                    break;
-                case 5:
+                default:
                     checkForAllOpenFragments();
                     openSettingFragment();
-                    break;
-                default:
-                    LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + drawerItem);
             }
         } else if (baseResponse instanceof CommunitySuggestion) {
 
@@ -830,7 +827,18 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
     public void startNextScreen() {
 
     }
+    @Override
+    public void onShowErrorDialog(String errorReason) {
+        switch (errorReason)
+        {
+            case AppConstants.CHECK_NETWORK_CONNECTION:
+                showNetworkTimeoutDoalog(true,false,getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
+                break;
+            default:
+                showNetworkTimeoutDoalog(true,false,getString(R.string.ID_GENERIC_ERROR));
+        }
 
+    }
     @Override
     public void showError(String s) {
 
