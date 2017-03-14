@@ -56,8 +56,8 @@ public class JobDetailActivity extends BaseActivity implements CommentReactionFr
     private final String TAG = LogUtils.makeLogTag(ArticleDetailActivity.class);
     @Bind(R.id.app_bar_article_detail)
     AppBarLayout mAppBarLayout;
-    @Bind(R.id.iv_article_detail)
-    ImageView ivArticleDetail;
+    @Bind(R.id.iv_job_detail)
+    ImageView ivJobDetail;
     @Bind(R.id.tv_job_detail_bookmark)
     TextView mTvJobDetailBookmark;
     @Bind(R.id.view_pager_job_detail)
@@ -161,7 +161,7 @@ public class JobDetailActivity extends BaseActivity implements CommentReactionFr
                         .into(new SimpleTarget<Bitmap>() {
                             @Override
                             public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
-                                ivArticleDetail.setImageBitmap(resource);
+                                ivJobDetail.setImageBitmap(resource);
                                 Palette.from(resource).generate(new Palette.PaletteAsyncListener() {
                                     public void onGenerated(Palette palette) {
                                         applyPalette(palette);
@@ -173,7 +173,7 @@ public class JobDetailActivity extends BaseActivity implements CommentReactionFr
             }
             else
             {
-                ivArticleDetail.setImageDrawable(getResources().getDrawable(R.drawable.ic_sad_face));
+                ivJobDetail.setImageDrawable(getResources().getDrawable(R.drawable.appicon));
                 mTv_job_title.setText(mFeedDetail.getNameOrTitle());
                 if(mlogoflag==0)
                 mIv_job_comp_logo.setImageDrawable(getResources().getDrawable(R.drawable.appicon));
