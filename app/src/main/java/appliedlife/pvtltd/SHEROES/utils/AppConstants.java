@@ -11,7 +11,7 @@ package appliedlife.pvtltd.SHEROES.utils;
 public class AppConstants {
     public static final int ONEGIGABYTE = 1024 * 1024 * 1024;
     public static final int ANDROID_SDK_24 = 24;
-    public static final String DATE_FORMAT = "yyyy-MM-dd'T'00:00:00+05:30";
+    public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
     public static final String SPACE=" ";
     public static final String SHEROES_AUTH_TOKEN = "sheroes_auth_token";
     public static final String SHEROES_USER_SESSION = "sheroes_user_session";
