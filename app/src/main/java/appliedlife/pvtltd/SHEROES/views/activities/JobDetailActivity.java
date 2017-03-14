@@ -173,7 +173,7 @@ public class JobDetailActivity extends BaseActivity implements CommentReactionFr
             }
             else
             {
-                ivJobDetail.setImageDrawable(getResources().getDrawable(R.drawable.appicon));
+                ivJobDetail.setImageDrawable(getResources().getDrawable(R.drawable.job_default_cover));
                 mTv_job_title.setText(mFeedDetail.getNameOrTitle());
                 if(mlogoflag==0)
                 mIv_job_comp_logo.setImageDrawable(getResources().getDrawable(R.drawable.appicon));

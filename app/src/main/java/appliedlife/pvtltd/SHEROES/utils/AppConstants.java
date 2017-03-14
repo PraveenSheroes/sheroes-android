@@ -16,7 +16,8 @@ public class AppConstants {
     public static final String SHEROES_AUTH_TOKEN = "sheroes_auth_token";
     public static final String SHEROES_USER_SESSION = "sheroes_user_session";
     public static final String SHEROES_PREFERENCE = "sheroes_preference";
-    public static final String ERROR_IN_RESPONSE = "error_in_response";
+    public static final String HTTP_401_UNAUTHORIZED = "HTTP 401 Unauthorized";
+    public static final String INAVLID_DATA= "INVALID_DATA";
     public static final String CHECK_NETWORK_CONNECTION = "check_network_connection";
     public static final String VIEW_NOT_ATTACHED_EXCEPTION = "Please call SheroesPresenter.attachView(BaseMvpView) before" + " requesting data to the SheroesPresenter";
     public static final String EXCEPTION_MUST_IMPLEMENT = "Exception while implement listner with in :";
@@ -68,6 +69,7 @@ public class AppConstants {
     public static final String PIPE="|";
     public static final String SUCCESS= "SUCCESS";
     public static final String FAILED= "FAILED";
+    public static final long SAVED_DAYS_TIME= 86400000;
     public static final int ONE_CONSTANT= 1;
     public static final int TWO_CONSTANT= 2;
     public static final int THREE_CONSTANT= 3;

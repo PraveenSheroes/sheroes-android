@@ -52,8 +52,8 @@ public class ArticleDetailFragment extends BaseFragment {
     private ArticleDetailActivityIntractionListner mArticleDetailActivityIntractionListner;
     @Inject
     AppUtils mAppUtils;
-    int mPosition;
-    int mPressedEmoji;
+    private int mPosition;
+    private int mPressedEmoji;
     boolean mListLoad = true;
     private List<ArticleDetailPojo> articleList;
     private ArticleDetailPojo articleDetailPojo;

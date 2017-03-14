@@ -97,12 +97,14 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
      *                                     pass false:- to just dismiss the dialog on try again and or press of back key in case you want to handle it your self say a retry
      * @return
      */
-    public DialogFragment showNetworkTimeoutDoalog(boolean finishParentOnBackOrTryagain) {
+    public DialogFragment showNetworkTimeoutDoalog(boolean finishParentOnBackOrTryagain,boolean isCancellable,String errorMessage) {
         NetworkTimeoutDialog fragment = (NetworkTimeoutDialog) getFragmentManager().findFragmentByTag(AppConstants.NETWORK_TIMEOUT);
         if (fragment == null) {
             fragment = new NetworkTimeoutDialog();
             Bundle b = new Bundle();
             b.putBoolean(BaseDialogFragment.DISMISS_PARENT_ON_OK_OR_BACK, finishParentOnBackOrTryagain);
+            b.putBoolean(BaseDialogFragment.IS_CANCELABLE, isCancellable);
+            b.putString(BaseDialogFragment.ERROR_MESSAGE, errorMessage);
             fragment.setArguments(b);
         }
         if (!fragment.isVisible() && !fragment.isAdded() && !isFinishing() && !mIsSavedInstance && !mIsDestroyed) {
@@ -146,12 +148,6 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
     }
     @Override
     public void onShowErrorDialog(String errorReason) {
-        switch (errorReason)
-        {
-            case AppConstants.CHECK_NETWORK_CONNECTION:
-                showNetworkTimeoutDoalog(true);
-                break;
-        }
     }
 
     @Override

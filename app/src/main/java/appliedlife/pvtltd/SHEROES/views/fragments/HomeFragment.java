@@ -1,5 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -14,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.crashlytics.android.Crashlytics;
+import com.f2prateek.rx.preferences.Preference;
 
 import java.util.List;
 
@@ -26,11 +28,14 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.LoginActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import butterknife.Bind;
@@ -47,6 +52,8 @@ import butterknife.ButterKnife;
  */
 public class HomeFragment extends BaseFragment {
     private final String TAG = LogUtils.makeLogTag(HomeFragment.class);
+    @Inject
+    Preference<LoginResponse> mUserPreference;
     @Inject
     HomePresenter mHomePresenter;
     @Bind(R.id.rv_home_list)
@@ -96,13 +103,13 @@ public class HomeFragment extends BaseFragment {
         mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager, mFragmentListRefreshData) {
             @Override
             public void onHide() {
-                mListLoad = true;
+                mListLoad = false;
                 ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.INVISIBLE);
             }
 
             @Override
             public void onShow() {
-                mListLoad = true;
+                mListLoad = false;
                 ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
             }
 
@@ -129,11 +136,29 @@ public class HomeFragment extends BaseFragment {
             }
         });
         super.setAllInitializationForFeeds(mFragmentListRefreshData, mPullRefreshList, mAdapter, mLayoutManager, mPageNo, mSwipeView, mLiNoResult, mFeedDetail, mRecyclerView, mPosition, mPressedEmoji, mListLoad, mIsEdit, mHomePresenter, mAppUtils, mProgressBar);
-        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
+       if(null==mUserPreference || !StringUtil.isNotNullOrEmptyString(mUserPreference.get().getToken()))
+       {
+           Intent intent=new Intent(getActivity(),LoginActivity.class);
+           startActivity(intent);
+           getActivity().finish();
+       }
+        else
+        {
+            long daysDifference=System.currentTimeMillis()-mUserPreference.get().getTokenTime();
+            if(daysDifference>=AppConstants.SAVED_DAYS_TIME)
+            {
+                mHomePresenter.getAuthTokenRefreshPresenter();
+            }
+            else
+            {
+                mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
+            }
+        }
+
         mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mListLoad = true;
+                setListLoadFlag(false);
                 mPullRefreshList.setPullToRefresh(true);
                 mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
             }
@@ -186,5 +211,13 @@ public class HomeFragment extends BaseFragment {
         super.onDestroyView();
         mHomePresenter.detachView();
     }
-
+    @Override
+    public void getLogInResponse(LoginResponse loginResponse) {
+        if (null != loginResponse && StringUtil.isNotNullOrEmptyString(loginResponse.getToken())) {
+            loginResponse.setTokenTime(System.currentTimeMillis());
+            loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
+            mUserPreference.set(loginResponse);
+            mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
+        }
+    }
 }

@@ -1,11 +1,10 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     tools:context="appliedlife.pvtltd.SHEROES.views.activities.LoginActivity">
-
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="match_parent"
@@ -18,26 +17,20 @@
             android:layout_marginLeft="@dimen/dp_size_50"
             android:layout_marginRight="@dimen/dp_size_50"
             android:orientation="vertical">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:drawablePadding="@dimen/dp_size_10"
                 android:drawableTop="@drawable/ic_sheroes"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:gravity="center"
                 android:padding="@dimen/dp_size_12"
-                android:drawablePadding="@dimen/dp_size_10"
-                android:textAllCaps="true"
                 android:text="@string/ID_MORE_FROM_LIFE"
+                android:textAllCaps="true"
                 android:textColor="@color/searchbox_text_color"
                 android:textSize="@dimen/sp_size_18" />
-            <ProgressBar
-                android:id="@+id/pb_login_progress_bar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:visibility="gone"
-                android:backgroundTint="@color/search_box"/>
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -47,9 +40,9 @@
                     android:id="@+id/email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="amleshsinha@gmail.com"
                     android:inputType="textEmailAddress"
-                    android:maxLines="1" />
+                    android:maxLines="1"
+                    android:text="amleshsinha@gmail.com" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -61,11 +54,11 @@
                     android:id="@+id/password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="amlesh"
                     android:imeActionId="@+id/login"
                     android:imeOptions="actionUnspecified"
                     android:inputType="textPassword"
-                    android:maxLines="1" />
+                    android:maxLines="1"
+                    android:text="amlesh" />
 
             </android.support.design.widget.TextInputLayout>
             <!-- Login progress -->
@@ -78,21 +71,23 @@
                 android:layout_marginTop="@dimen/dp_size_20"
                 android:background="@drawable/rectangle_search_bar"
                 android:backgroundTint="@color/search_tab_text"
+                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:text="@string/ID_ACTION_LOG_IN_SHORT"
                 android:textColor="@color/white"
-                android:textSize="@dimen/sp_size_15"
-                android:fontFamily="@string/ID_ROBOTO_MEDIUM" />
+                android:textSize="@dimen/sp_size_15" />
+
             <TextView
                 android:id="@+id/tv_forgot_password"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginTop="@dimen/dp_size_20"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:gravity="center"
-                android:layout_marginTop="@dimen/dp_size_20"
                 android:text="@string/ID_FORGOT_PASSWORD"
                 android:textColor="@color/forgot_password"
                 android:textSize="@dimen/sp_size_12" />
+
             <View
                 android:layout_width="@dimen/dp_size_105"
                 android:layout_height="@dimen/dp_size_0.5"
@@ -100,14 +95,14 @@
                 android:background="@color/forgot_password" />
 
             <com.facebook.login.widget.LoginButton
-                xmlns:fb="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/login_button"
                 android:layout_width="match_parent"
-                android:background="@drawable/rectangle_search_bar"
-                android:backgroundTint="@color/search_tab_text"
                 android:layout_height="@dimen/dp_size_50"
-                android:layout_marginTop="@dimen/dp_size_50" />
-
+                android:layout_marginTop="@dimen/dp_size_50"
+                android:background="@drawable/rectangle_search_bar"
+                android:backgroundTint="@color/search_tab_text" />
         </LinearLayout>
     </ScrollView>
-</LinearLayout>
+
+    <include layout="@layout/progress_bar_login" />
+</FrameLayout>

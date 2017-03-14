@@ -16,7 +16,7 @@
             android:layout_height="@dimen/dp_size_30"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/dp_size_20"
-            android:background="@color/blue"
+            android:background="@drawable/rectangle_search_bar"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:text="@string/ID_CONTINUE_WITH_FACEBOOK"
             android:textColor="@color/white"

@@ -109,7 +109,6 @@ public class CommunitiesDetailActivity extends BaseActivity implements Community
             viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
             viewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(mFeedDetail), getString(R.string.ID_COMMUNITIES));
             mViewPagerCommunitiesDetail.setAdapter(viewPagerAdapter);
-            mFeedDetail.setImageUrl("https://img.sheroes.in/img/uploads/forumbloggallary/14845475641484547564.png");
             if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getImageUrl())) {
                 Glide.with(this)
                         .load(mFeedDetail.getImageUrl()).asBitmap()

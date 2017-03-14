@@ -65,7 +65,31 @@ public class HomePresenter extends BasePresenter<HomeView> {
     public boolean isViewAttached() {
         return super.isViewAttached();
     }
+    public void getAuthTokenRefreshPresenter() {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = mHomeModel.getAuthTokenRefreshFromModel().subscribe(new Subscriber<LoginResponse>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+            @Override
+            public void onError(Throwable e) {
+                getMvpView().stopProgressBar();
+                getMvpView().showError(e.getMessage());
+            }
 
+            @Override
+            public void onNext(LoginResponse loginResponse) {
+                getMvpView().stopProgressBar();
+                getMvpView().getLogInResponse(loginResponse);
+            }
+        });
+        registerSubscription(subscription);
+    }
 
     public void getFeedFromPresenter(final FeedRequestPojo feedRequestPojo) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
@@ -82,7 +106,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
+                getMvpView().showError(e.getMessage());
             }
 
             @Override
@@ -115,6 +139,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
+                getMvpView().showError(e.getMessage());
             }
 
             @Override
@@ -141,7 +166,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().getSuccessForAllResponse(AppConstants.FAILED,AppConstants.ONE_CONSTANT);
+                getMvpView().getSuccessForAllResponse(e.getMessage(),AppConstants.ONE_CONSTANT);
             }
 
             @Override
@@ -167,8 +192,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().getSuccessForAllResponse(AppConstants.FAILED,AppConstants.ONE_CONSTANT);
-                getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
+                getMvpView().getSuccessForAllResponse(e.getMessage(),AppConstants.ONE_CONSTANT);
             }
 
             @Override
@@ -195,7 +219,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().getSuccessForAllResponse(AppConstants.FAILED,AppConstants.THREE_CONSTANT);
+                getMvpView().getSuccessForAllResponse(e.getMessage(),AppConstants.THREE_CONSTANT);
             }
 
             @Override
@@ -222,7 +246,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
+                getMvpView().showError(e.getMessage());
             }
             @Override
             public void onNext(CommentReactionResponsePojo commentResponsePojo) {
@@ -246,7 +270,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
+                getMvpView().showError(e.getMessage());
             }
             @Override
             public void onNext(CommunityResponse communityResponse) {
@@ -269,7 +293,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
+                getMvpView().showError(e.getMessage());
             }
 
             @Override
@@ -292,7 +316,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
 
                 getMvpView().stopProgressBar();
-                getMvpView().showError(AppConstants.ERROR_IN_RESPONSE);
+                getMvpView().showError(e.getMessage());
             }
 
             @Override

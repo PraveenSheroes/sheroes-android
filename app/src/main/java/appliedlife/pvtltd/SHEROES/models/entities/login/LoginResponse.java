@@ -6,6 +6,8 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+
 /**
  * Created by Praveen Singh on 29/12/2016.
  *
@@ -15,7 +17,7 @@ import com.google.gson.annotations.SerializedName;
  * Title:Token use for user login
  * This token will remain throughout user login.
  */
-public class LoginResponse implements Parcelable {
+public class LoginResponse extends BaseResponse implements Parcelable {
     @SerializedName("token")
     @Expose
     private String token;
