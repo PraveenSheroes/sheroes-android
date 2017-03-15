@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -146,8 +147,9 @@ public class FeedCommunityHolder extends BaseViewHolder<FeedDetail> {
         } else {
             tvFeedCommunityJoin.setVisibility(View.GONE);
         }
+        //TODO:: change for UI
         if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
-            tvFeedCommunityCardTitle.setText(dataItem.getNameOrTitle());
+            tvFeedCommunityCardTitle.setText(dataItem.getNameOrTitle()+dataItem.getId());
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getCommunityType())) {
             tvFeedCommunityTime.setText(dataItem.getCommunityType());
@@ -300,10 +302,11 @@ public class FeedCommunityHolder extends BaseViewHolder<FeedDetail> {
         String backgroundImageUrl = dataItem.getImageUrl();
         if (StringUtil.isNotNullOrEmptyString(backgroundImageUrl)) {
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View child = layoutInflater.inflate(R.layout.feed_article_single_image, null);
-            final ImageView ivFirstLandscape = (ImageView) child.findViewById(R.id.iv_feed_article_single_image);
-            final TextView tvFeedCommunityTimeLabel = (TextView) child.findViewById(R.id.tv_feed_article_time_label);
-            final TextView tvFeedCommunityTotalViews = (TextView) child.findViewById(R.id.tv_feed_article_total_views);
+            View backgroundImage = layoutInflater.inflate(R.layout.feed_article_single_image, null);
+            final ImageView ivFirstLandscape = (ImageView) backgroundImage.findViewById(R.id.iv_feed_article_single_image);
+            final TextView tvFeedCommunityTimeLabel = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_time_label);
+            final TextView tvFeedCommunityTotalViews = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_total_views);
+            final RelativeLayout rlFeedArticleViews = (RelativeLayout) backgroundImage.findViewById(R.id.rl_gradiant);
             tvFeedCommunityTotalViews.setText(dataItem.getNoOfViews() + AppConstants.SPACE + context.getString(R.string.ID_VIEWS));
             Glide.with(mContext)
                     .load(backgroundImageUrl).asBitmap()
@@ -313,11 +316,11 @@ public class FeedCommunityHolder extends BaseViewHolder<FeedDetail> {
                         @Override
                         public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
                             ivFirstLandscape.setImageBitmap(profileImage);
-                            tvFeedCommunityTotalViews.setVisibility(View.VISIBLE);
+                            rlFeedArticleViews.setVisibility(View.VISIBLE);
                         }
                     });
 
-            liFeedCommunityImages.addView(child);
+            liFeedCommunityImages.addView(backgroundImage);
 
         }
 

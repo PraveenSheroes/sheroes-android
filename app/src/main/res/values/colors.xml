@@ -15,6 +15,7 @@
     <color name="noConnection">#2f2f2f</color>
     <color name="added_member_text">#cbcddd</color>
     <color name="black">#de000000</color>
+    <color name="black_gradiant">#80000000</color>
     <color name="blue">#3949ab</color>
     <color name="add_member_line">#e4e9ec</color>
     <color name="shadow">#3b99fc</color>

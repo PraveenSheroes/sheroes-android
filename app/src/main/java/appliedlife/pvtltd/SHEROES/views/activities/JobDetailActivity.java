@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
@@ -38,6 +39,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
@@ -52,7 +54,7 @@ import butterknife.OnClick;
  * Created by SHEROES-TECH on 20-02-2017.
  */
 
-public class JobDetailActivity extends BaseActivity implements CommentReactionFragment.HomeActivityIntractionListner {
+public class JobDetailActivity extends BaseActivity implements CommentReactionFragment.HomeActivityIntractionListner,JobDetailFragment.JobDetailActivityIntractionListner {
     private final String TAG = LogUtils.makeLogTag(ArticleDetailActivity.class);
     @Bind(R.id.app_bar_article_detail)
     AppBarLayout mAppBarLayout;
@@ -62,6 +64,7 @@ public class JobDetailActivity extends BaseActivity implements CommentReactionFr
     TextView mTvJobDetailBookmark;
     @Bind(R.id.view_pager_job_detail)
     ViewPager mViewPagerJobDetail;
+    ViewPagerAdapter mViewPagerAdapter;
     @Bind(R.id.toolbar_article_detail)
     Toolbar mToolbarArticleDetail;
     @Bind(R.id.tv_job_title)
@@ -75,7 +78,6 @@ public class JobDetailActivity extends BaseActivity implements CommentReactionFr
     private FeedDetail mFeedDetail;
     public View mArticlePopUp;
     TextView mTvFeedArticleDetailUserReaction;
-
     private FragmentOpen mFragmentOpen;
     String mdefaultCoverImage;
     int mlogoflag=0;
@@ -130,9 +132,9 @@ public class JobDetailActivity extends BaseActivity implements CommentReactionFr
             mCustomCollapsingToolbarLayout.setSubtitle(mFeedDetail.getAuthorName());
             mTv_job_comp_nm.setText(mFeedDetail.getAuthorName());
             mTv_job_title.setText(mFeedDetail.getNameOrTitle());
-            ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-            viewPagerAdapter.addFragment(JobDetailFragment.createInstance(mFeedDetail), getString(R.string.ID_FEATURED));
-            mViewPagerJobDetail.setAdapter(viewPagerAdapter);
+            mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+            mViewPagerAdapter.addFragment(JobDetailFragment.createInstance(mFeedDetail), getString(R.string.ID_FEATURED));
+            mViewPagerJobDetail.setAdapter(mViewPagerAdapter);
             if(StringUtil.isNotNullOrEmptyString(mFeedDetail.getAuthorImageUrl()))
             {
                 mlogoflag=1;
@@ -440,5 +442,26 @@ public class JobDetailActivity extends BaseActivity implements CommentReactionFr
             finish();
         }
     }
-
+    @OnClick(R.id.tv_job_detail_bookmark)
+    public void onBookMarkClick() {
+        mFeedDetail.setItemPosition(0);
+        bookmarkCall();
+    }
+    private void bookmarkCall() {
+        Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPagerJobDetail, 0);
+        if (AppUtils.isFragmentUIActive(fragment)) {
+            ((JobDetailFragment) fragment).bookMarkForDetailCard(mFeedDetail);
+        }
+    }
+    @Override
+    public void onJobBookmarkClick(FeedDetail feedDetail) {
+        if (!feedDetail.isBookmarked()) {
+            feedDetail.setBookmarked(true);
+            mTvJobDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_active, 0, 0, 0);
+        } else {
+            feedDetail.setBookmarked(false);
+            mTvJobDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_in_active, 0, 0, 0);
+        }
+        mFeedDetail=feedDetail;
+    }
 }

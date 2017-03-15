@@ -156,14 +156,7 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
         }
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getCreatedDate())) {
             long createdDate = mDateUtil.getTimeInMillis(mFeedDetail.getCreatedDate(), AppConstants.DATE_FORMAT);
-            long minuts = mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate);
-            if (minuts < 60) {
-                tvArticleDetailTime.setText(String.valueOf((int) minuts) + AppConstants.SPACE + mContext.getString(R.string.ID_MINUTS));
-            } else {
-                int hour = (int) minuts / 60;
-                tvArticleDetailTime.setText(String.valueOf(hour) + AppConstants.SPACE + mContext.getString(R.string.ID_HOURS));
-            }
-
+            tvArticleDetailTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
         }
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getDescription())) {
             String description = mFeedDetail.getDescription().trim();

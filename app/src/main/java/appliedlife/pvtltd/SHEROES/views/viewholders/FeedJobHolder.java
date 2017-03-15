@@ -99,13 +99,7 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getCreatedDate())) {
             long createdDate = mDateUtil.getTimeInMillis(dataItem.getCreatedDate(), AppConstants.DATE_FORMAT);
-            long minuts = mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate);
-            if (minuts < 60) {
-                tvFeedJobDateTime.setText(String.valueOf((int) minuts) + AppConstants.SPACE + mContext.getString(R.string.ID_MINUTS));
-            } else {
-                int hour = (int) minuts / 60;
-                tvFeedJobDateTime.setText(String.valueOf(hour) + AppConstants.SPACE + mContext.getString(R.string.ID_HOURS));
-            }
+            tvFeedJobDateTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
         }
         if (StringUtil.isNotEmptyCollection(dataItem.getSearchTextJobEmpTypes())) {
             List<String> jobTypes = dataItem.getSearchTextJobEmpTypes();

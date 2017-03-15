@@ -92,6 +92,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.ProfileItems;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 
 
@@ -1620,7 +1621,15 @@ public class AppUtils {
         editText.setLongClickable(false);
         editText.setTextIsSelectable(false);
     }
-
+    public static LoginRequest loginRequestBuilder() {
+        LoginRequest loginRequest = new LoginRequest();
+        AppUtils appUtils = AppUtils.getInstance();
+        loginRequest.setAdvertisementid("string");
+        loginRequest.setDeviceid(appUtils.getDeviceId());
+        loginRequest.setDevicetype(appUtils.getDeviceModel());
+        loginRequest.setGcmorapnsid("string");
+        return loginRequest;
+    }
     /**
      * Request for feed api
      */

@@ -85,7 +85,6 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
 
         mAboutCommunityOwnerRecyclerView.setLayoutManager(mLayoutManager);
         mAboutCommunityOwnerRecyclerView.setAdapter(mAdapter);
-        mOwnerPresenter.getCommunityList();
 
 
        // Fabric.with(getActivity(), new Crashlytics());

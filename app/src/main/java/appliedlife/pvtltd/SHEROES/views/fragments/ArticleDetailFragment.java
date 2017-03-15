@@ -132,8 +132,17 @@ public class ArticleDetailFragment extends BaseFragment {
     }
 
     protected void articleBookMarkSuccess(String success) {
-        if (success.equalsIgnoreCase(AppConstants.SUCCESS) && null != mFeedDetail) {
-            mArticleDetailActivityIntractionListner.onBookmarkClick(mFeedDetail);
+        if (null != mFeedDetail) {
+            switch (success) {
+                case AppConstants.SUCCESS:
+                    mArticleDetailActivityIntractionListner.onBookmarkClick(mFeedDetail);
+                    break;
+                case AppConstants.FAILED:
+                    showError(getString(R.string.ID_ALREADY_BOOKMARK));
+                    break;
+                default:
+                    showError(AppConstants.HTTP_401_UNAUTHORIZED);
+            }
         }
     }
 

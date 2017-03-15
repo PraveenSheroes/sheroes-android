@@ -16,14 +16,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
-import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItemResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleListResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.CommunitiesResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.Feature;
 import appliedlife.pvtltd.SHEROES.preferences.SessionUser;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import rx.Observable;
@@ -51,6 +46,7 @@ public class HomeModel {
         this.gson= gson;
     }
     public Observable<FeedResponsePojo> getFeedFromModel(FeedRequestPojo  feedRequestPojo){
+        LogUtils.info(TAG,"*******************"+new Gson().toJson(feedRequestPojo));
         return sheroesAppServiceApi.getFeedFromApi(feedRequestPojo)
                 .map(new Func1<FeedResponsePojo, FeedResponsePojo>() {
                     @Override
@@ -62,6 +58,7 @@ public class HomeModel {
                 .observeOn(AndroidSchedulers.mainThread());
     }
     public Observable<FeedResponsePojo> getBookMarkFromModel(FeedRequestPojo feedRequestPojo){
+        LogUtils.info(TAG,"*******************"+new Gson().toJson(feedRequestPojo));
         return sheroesAppServiceApi.getBookMarkFromApi(feedRequestPojo)
                 .map(new Func1<FeedResponsePojo, FeedResponsePojo>() {
                     @Override
@@ -73,6 +70,7 @@ public class HomeModel {
                 .observeOn(AndroidSchedulers.mainThread());
     }
     public Observable<BookmarkResponsePojo> addBookmarkFromModel(BookmarkRequestPojo bookmarkRequestPojo,boolean isBookmarked){
+        LogUtils.info(TAG,"*******************"+new Gson().toJson(bookmarkRequestPojo));
         if(!isBookmarked) {
             return sheroesAppServiceApi.addBookMarkToApi(bookmarkRequestPojo)
                     .map(new Func1<BookmarkResponsePojo, BookmarkResponsePojo>() {
@@ -99,6 +97,7 @@ public class HomeModel {
     }
 
     public Observable<LikeResponse> getLikesFromModel(LikeRequestPojo  likeRequestPojo){
+        LogUtils.info(TAG,"*******************"+new Gson().toJson(likeRequestPojo));
         return sheroesAppServiceApi.getLikesFromApi(likeRequestPojo)
                 .map(new Func1<LikeResponse, LikeResponse>() {
                     @Override
@@ -110,6 +109,7 @@ public class HomeModel {
                 .observeOn(AndroidSchedulers.mainThread());
     }
     public Observable<LikeResponse> getUnLikesFromModel(LikeRequestPojo  likeRequestPojo){
+        LogUtils.info(TAG,"*******************"+new Gson().toJson(likeRequestPojo));
         return sheroesAppServiceApi.getUnLikesFromApi(likeRequestPojo)
                 .map(new Func1<LikeResponse, LikeResponse>() {
                     @Override
@@ -123,6 +123,7 @@ public class HomeModel {
 
 
     public Observable<CommentReactionResponsePojo> editCommentListFromModel(CommentReactionRequestPojo commentReactionRequestPojo){
+        LogUtils.info(TAG,"*******************"+new Gson().toJson(commentReactionRequestPojo));
         return sheroesAppServiceApi.editCommentFromApi(commentReactionRequestPojo)
                 .map(new Func1<CommentReactionResponsePojo, CommentReactionResponsePojo>() {
                     @Override
@@ -134,6 +135,7 @@ public class HomeModel {
                 .observeOn(AndroidSchedulers.mainThread());
     }
     public Observable<CommunityResponse> communityJoinFromModel(CommunityRequest communityRequest){
+        LogUtils.info(TAG,"*******************"+new Gson().toJson(communityRequest));
         return sheroesAppServiceApi.getCommunityJoinResponse(communityRequest)
                 .map(new Func1<CommunityResponse, CommunityResponse>() {
                     @Override
@@ -144,51 +146,7 @@ public class HomeModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-    public Observable<CommunityResponse> ApproveJoiningRequestFromModel(CommunityRequest communityRequest){
-        return sheroesAppServiceApi.getApproveJoinResponse(communityRequest)
-                .map(new Func1<CommunityResponse, CommunityResponse>() {
-                    @Override
-                    public CommunityResponse call(CommunityResponse communityResponse) {
-                        return communityResponse;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
 
-    public Observable<HomeSpinnerItemResponse>getSpinnerListFromModel(){
-        return sheroesAppServiceApi.getHomeSpinnerList()
-                .map(new Func1<HomeSpinnerItemResponse, HomeSpinnerItemResponse>() {
-                    @Override
-                    public HomeSpinnerItemResponse call(HomeSpinnerItemResponse homeSpinnerItemResponse) {
-                        return homeSpinnerItemResponse;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
-    public Observable<ArticleListResponse> getHomeModelArticleList(ArticleCardResponse articleCardResponse){
-        return sheroesAppServiceApi.getAricleList(articleCardResponse)
-                .map(new Func1<ArticleListResponse, ArticleListResponse>() {
-                    @Override
-                    public ArticleListResponse call(ArticleListResponse articleListResponse) {
-                        return articleListResponse;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
-    public Observable<CommunitiesResponse> getHomeModelCommnutiesList(Feature feature){
-        return sheroesAppServiceApi.getAllCommunities(feature)
-                .map(new Func1<CommunitiesResponse, CommunitiesResponse>() {
-                    @Override
-                    public CommunitiesResponse call(CommunitiesResponse communitiesResponse1) {
-                        return communitiesResponse1;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
     public Observable<LoginResponse> getAuthTokenRefreshFromModel() {
         return sheroesAppServiceApi.getRefreshToken()
                 .map(new Func1<LoginResponse, LoginResponse>() {

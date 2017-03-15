@@ -8,6 +8,7 @@ import javax.inject.Singleton;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
@@ -24,6 +25,7 @@ import rx.schedulers.Schedulers;
  */
 @Singleton
 public class LoginModel {
+    private final String TAG = LogUtils.makeLogTag(LoginModel.class);
     private final SheroesAppServiceApi sheroesAppServiceApi;
     Gson gson;
 
@@ -34,6 +36,7 @@ public class LoginModel {
     }
 
     public Observable<LoginResponse> getLoginAuthTokenFromModel(LoginRequest loginRequest, boolean isSignUp) {
+        LogUtils.info(TAG,"*******************"+new Gson().toJson(loginRequest));
         if (isSignUp) {
             return sheroesAppServiceApi.getFbSignUpToken(loginRequest)
                     .map(new Func1<LoginResponse, LoginResponse>() {

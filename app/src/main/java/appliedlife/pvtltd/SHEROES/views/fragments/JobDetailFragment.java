@@ -18,7 +18,6 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobDetailPojo;
@@ -47,10 +46,11 @@ public class JobDetailFragment extends BaseFragment implements HomeView {
     ProgressBar mProgressBar;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
-    private HomeActivityIntractionListner mHomeActivityIntractionListner;
     private FeedDetail mFeedDetail;
     private FragmentListRefreshData mFragmentListRefreshData;
+    private JobDetailActivityIntractionListner mJobDetailActivityIntractionListner;
     private AppUtils mAppUtils;
+
     public static JobDetailFragment createInstance(FeedDetail feedDetail) {
         JobDetailFragment jobDetailFragment = new JobDetailFragment();
         Bundle bundle = new Bundle();
@@ -63,21 +63,22 @@ public class JobDetailFragment extends BaseFragment implements HomeView {
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            if (getActivity() instanceof HomeActivityIntractionListner) {
-                mHomeActivityIntractionListner = (HomeActivityIntractionListner) getActivity();
+            if (getActivity() instanceof JobDetailActivityIntractionListner) {
+                mJobDetailActivityIntractionListner = (JobDetailActivityIntractionListner) getActivity();
             }
         } catch (InstantiationException exception) {
             LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
         }
     }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(null!=getArguments())
-        {
-            mFeedDetail =getArguments().getParcelable(AppConstants.JOB_DETAIL);
+        if (null != getArguments()) {
+            mFeedDetail = getArguments().getParcelable(AppConstants.JOB_DETAIL);
         }
     }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -85,20 +86,21 @@ public class JobDetailFragment extends BaseFragment implements HomeView {
         View view = inflater.inflate(R.layout.fragment_job_details, container, false);
         ButterKnife.bind(this, view);
         mAppUtils = AppUtils.getInstance();
-        mFragmentListRefreshData=new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.JOB_DETAIL,mFeedDetail.getId());
+        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.JOB_DETAIL, mFeedDetail.getId());
         mHomePresenter.attachView(this);
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new GenericRecyclerViewAdapter(getContext(), (JobDetailActivity) getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
-        mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_JOB, mFragmentListRefreshData.getPageNo(),mFragmentListRefreshData.getIdFeedDetail()));
+        super.setAllInitializationForFeeds(mFragmentListRefreshData, mAdapter, mLayoutManager, mFeedDetail, mRecyclerView, 0, 0, false, mHomePresenter, mAppUtils, mProgressBar);
+        mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_JOB, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getIdFeedDetail()));
         return view;
     }
 
     @Override
     public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
-        if(StringUtil.isNotEmptyCollection(feedDetailList)&&mAdapter!=null) {
+        if (StringUtil.isNotEmptyCollection(feedDetailList) && mAdapter != null) {
             List<JobDetailPojo> joblist = new ArrayList<>();
             JobDetailPojo jobDetailPojo = new JobDetailPojo();
             jobDetailPojo.setId(AppConstants.ONE_CONSTANT);
@@ -110,40 +112,6 @@ public class JobDetailFragment extends BaseFragment implements HomeView {
         }
     }
 
-    @Override
-    public void getSuccessForAllResponse(String success, int successFrom) {
-
-    }
-
-
-    @Override
-    public void getDB(List<RecentSearchData> recentSearchDatas) {
-
-    }
-
-
-
-
-    @Override
-    public void startProgressBar() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mProgressBar.bringToFront();
-    }
-
-    @Override
-    public void stopProgressBar() {
-        mProgressBar.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void showError(String errorMsg) {
-        mAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void startNextScreen() {
-
-    }
 
     @Override
     public void onDestroyView() {
@@ -151,25 +119,39 @@ public class JobDetailFragment extends BaseFragment implements HomeView {
         mHomePresenter.detachView();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
+    public void bookMarkForDetailCard(FeedDetail feedDetail) {
+        super.bookMarkForCard(feedDetail);
+    }
+
+
+    public interface JobDetailActivityIntractionListner {
+        void onJobBookmarkClick(FeedDetail feedDetail);
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-
+    public void getSuccessForAllResponse(String success, int successFrom) {
+        switch (successFrom) {
+            case AppConstants.THREE_CONSTANT:
+                jobDetailBookMarkSuccess(success);
+                break;
+            default:
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + successFrom);
+        }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+    protected void jobDetailBookMarkSuccess(String success) {
+        if (null != mFeedDetail) {
+            switch (success) {
+                case AppConstants.SUCCESS:
+                    mJobDetailActivityIntractionListner.onJobBookmarkClick(mFeedDetail);
+                    break;
+                case AppConstants.FAILED:
+                    showError(getString(R.string.ID_ALREADY_BOOKMARK));
+                    break;
+                default:
+                    showError(AppConstants.HTTP_401_UNAUTHORIZED);
+            }
+        }
     }
-
-    public interface HomeActivityIntractionListner {
-        void onErrorOccurence();
-    }
-
 }
 

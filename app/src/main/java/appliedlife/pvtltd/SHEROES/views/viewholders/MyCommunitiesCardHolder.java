@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -97,8 +98,9 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
         {
             tvCommunityJoin.setVisibility(View.GONE);
         }
+        //TODO:: change for UI
         if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
-            tvCommunityCardTitle.setText(dataItem.getNameOrTitle());
+            tvCommunityCardTitle.setText(dataItem.getNameOrTitle()+dataItem.getId());
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getCommunityType())) {
             tvCommunityTime.setText(dataItem.getCommunityType());
@@ -141,9 +143,10 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
         String imageUrl = dataItem.getImageUrl();
         if (StringUtil.isNotNullOrEmptyString(imageUrl)) {
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View child = layoutInflater.inflate(R.layout.feed_article_single_image, null);
-            final ImageView ivFirstLandscape = (ImageView) child.findViewById(R.id.iv_feed_article_single_image);
-            final TextView tvTotalViews = (TextView) child.findViewById(R.id.tv_feed_article_total_views);
+            View backgroundImage = layoutInflater.inflate(R.layout.feed_article_single_image, null);
+            final ImageView ivFirstLandscape = (ImageView) backgroundImage.findViewById(R.id.iv_feed_article_single_image);
+            final TextView tvTotalViews = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_total_views);
+            final RelativeLayout rlFeedArticleViews = (RelativeLayout) backgroundImage.findViewById(R.id.rl_gradiant);
             //   tvFeedArticleTotalViews.setText(dataItem.getTotalViews() + AppConstants.SPACE + context.getString(R.string.ID_VIEWS));
             Glide.with(mContext)
                     .load(imageUrl).asBitmap()
@@ -153,10 +156,10 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
                         @Override
                         public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
                             ivFirstLandscape.setImageBitmap(profileImage);
-                            tvTotalViews.setVisibility(View.VISIBLE);
+                            rlFeedArticleViews.setVisibility(View.VISIBLE);
                         }
                     });
-            liCoverImage.addView(child);
+            liCoverImage.addView(backgroundImage);
         } else {
             liCoverImage.setBackgroundResource(R.drawable.ic_image_holder);
         }

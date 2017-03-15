@@ -128,9 +128,6 @@ public class LoginFragment extends BaseFragment implements LoginView {
         if (Build.VERSION.SDK_INT >= 23) {
             getPermissionToReadUserContacts();
 
-        } else { //permission is automatically granted on sdk<23 upon installation
-            LogUtils.info("testing", "Permission is already granted");
-
         }
         fbSignIn();
         return view;
@@ -174,8 +171,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
             mProgressBar.setVisibility(View.GONE);
             mLoginActivityIntractionListner.onLoginAuthToken();
             Snackbar.make(mEmailView, R.string.ID_APP_NAME, Snackbar.LENGTH_SHORT).show();
-        }else
-        {
+        } else {
             LoginManager.getInstance().logOut();
             mLoginActivityIntractionListner.onErrorOccurence(loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA));
         }
@@ -190,6 +186,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
 
     public interface LoginActivityIntractionListner {
         void onErrorOccurence(String errorMessage);
+
         void onLoginAuthToken();
     }
 
@@ -216,13 +213,13 @@ public class LoginFragment extends BaseFragment implements LoginView {
         View focusView = null;
         // Check for a valid password, if the user entered one.
         if (!StringUtil.isNotNullOrEmptyString(password)) {
-            mPasswordView.setError(getString(R.string.ID_ERROR_FIELD_REQUIRED));
+            mPasswordView.setError(getString(R.string.ID_ERROR_INVALID_PASSWORD));
             focusView = mPasswordView;
             cancel = true;
         }
         // Check for a valid email address.
         if (!mAppUtils.checkEmail(email)) {
-            mEmailView.setError(getString(R.string.ID_ERROR_FIELD_REQUIRED));
+            mEmailView.setError(getString(R.string.ID_ERROR_INVALID_EMAIL));
             focusView = mEmailView;
             cancel = true;
         } else if (!mAppUtils.checkEmail(email)) {
@@ -238,11 +235,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
         } else {
 
             mProgressBar.setVisibility(View.VISIBLE);
-            LoginRequest loginRequest = new LoginRequest();
-            loginRequest.setAdvertisementid("string");
-            loginRequest.setDeviceid("string");
-            loginRequest.setDevicetype("string");
-            loginRequest.setGcmorapnsid("string");
+            LoginRequest loginRequest = AppUtils.loginRequestBuilder();
             loginRequest.setUsername(email);
             loginRequest.setPassword(password);
             mLoginPresenter.getLoginAuthTokeInPresenter(loginRequest, false);
@@ -261,26 +254,14 @@ public class LoginFragment extends BaseFragment implements LoginView {
                     new GraphRequest.GraphJSONObjectCallback() {
                         @Override
                         public void onCompleted(JSONObject object, GraphResponse response) {
-                            // Insert your code here
-                            //  String gettok = "" + AccessToken.getCurrentAccessToken();
-
-                              /*  String user_email = object.getString("email");
-                                Log.e("showinguser-emailid", user_email);
-                                String user_id = object.getString("id");
-                                String user_gender = object.getString("gender");
-                                String user_fname = object.getString("first_name");
-                                String user_lname = object.getString("last_name");*/
                             if (null != accessToken && StringUtil.isNotNullOrEmptyString(accessToken.getToken())) {
-                                LoginRequest loginRequest = new LoginRequest();
+                                LoginRequest loginRequest = AppUtils.loginRequestBuilder();
                                 loginRequest.setAccessToken(accessToken.getToken());
-                                loginRequest.setAdvertisementid("string");
-                                loginRequest.setAppVersion("String");
+                                AppUtils appUtils=AppUtils.getInstance();
+                                loginRequest.setAppVersion(appUtils.getAppVersionName());
                                 loginRequest.setCloudMessagingId("string");
-                                loginRequest.setDeviceUniqueId("string");
-                                loginRequest.setDeviceid("string");
-                                loginRequest.setDevicetype("string");
-                                loginRequest.setGcmorapnsid("string");
-                               mLoginPresenter.getLoginAuthTokeInPresenter(loginRequest, true);
+                                loginRequest.setDeviceUniqueId(appUtils.getDeviceId());
+                                mLoginPresenter.getLoginAuthTokeInPresenter(loginRequest, true);
                             }
 
                         }

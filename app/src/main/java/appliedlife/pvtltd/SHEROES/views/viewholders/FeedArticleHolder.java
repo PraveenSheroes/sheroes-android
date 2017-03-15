@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -52,8 +53,8 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     DateUtil mDateUtil;
     private static final String LEFT_HTML_TAG_FOR_COLOR = "<b><font color='#323940'>";
     private static final String RIGHT_HTML_TAG_FOR_COLOR = "</font></b>";
-    private static final String LEFT_HTML_VEIW_TAG_FOR_COLOR = "<font color='#50e3c2'>";
-    private static final String RIGHT_HTML_VIEW_TAG_FOR_COLOR = "</font>";
+    private static final String LEFT_VIEW_MORE = "<font color='#323840'>";
+    private static final String RIGHT_VIEW_MORE = "</font>";
     @Bind(R.id.li_feed_article_images)
     LinearLayout liFeedArticleImages;
     @Bind(R.id.li_feed_article_user_comments)
@@ -104,10 +105,11 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     FrameLayout flFeedArticleNoReactionComment;
     @Bind(R.id.tv_feed_article_user_comment_post_menu)
     TextView tvFeedArticleUserCommentPostMenu;
+    @Bind(R.id.tv_feed_article_view_more)
+    TextView tvFeedArticleView;
     BaseHolderInterface viewInterface;
     private FeedDetail dataItem;
     Context mContext;
-    String mViewMore,mLess;
     String mViewMoreDescription;
     public FeedArticleHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
@@ -120,42 +122,36 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     public void bindData(FeedDetail item, final Context context, int position) {
         this.dataItem = item;
         this.mContext = context;
-        mViewMore = context.getString(R.string.ID_VIEW_MORE);
-        mLess = context.getString(R.string.ID_LESS);
-        tvFeedArticleHeaderLebel.setTag(mViewMore);
         imageOperations(context);
         allTextViewStringOperations(context);
     }
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void allTextViewStringOperations(Context context) {
+        String dots = LEFT_VIEW_MORE + AppConstants.DOTS + RIGHT_VIEW_MORE;
+        if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+            tvFeedArticleView.setText(Html.fromHtml(dots +mContext.getString(R.string.ID_VIEW_MORE), 0)); // for 24 api and more
+        } else {
+            tvFeedArticleView.setText(Html.fromHtml(dots +mContext.getString(R.string.ID_VIEW_MORE) ));// or for older api
+        }
+        //TODO:: change for UI
         if (StringUtil.isNotNullOrEmptyString(dataItem.getAuthorName())) {
-            tvFeedArticleCardTitle.setText(dataItem.getAuthorName());
+            String id=dataItem.getId();
+            tvFeedArticleCardTitle.setText(dataItem.getAuthorName()+id);
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getCreatedDate())) {
             long createdDate = mDateUtil.getTimeInMillis(dataItem.getCreatedDate(), AppConstants.DATE_FORMAT);
-            long minuts = mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate);
-            if (minuts < 60) {
-                tvFeedArticleTitleLabel.setText(String.valueOf((int) minuts) + AppConstants.SPACE + mContext.getString(R.string.ID_MINUTS));
-            } else {
-                int hour = (int) minuts / 60;
-                tvFeedArticleTitleLabel.setText(String.valueOf(hour) + AppConstants.SPACE + mContext.getString(R.string.ID_HOURS));
-            }
-
+            tvFeedArticleTitleLabel.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
             tvFeedArticleHeader.setText(dataItem.getNameOrTitle());
         }
         mViewMoreDescription = dataItem.getListDescription();
         if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
-            if (mViewMoreDescription.length() > AppConstants.WORD_LENGTH) {
-                mViewMoreDescription = mViewMoreDescription.substring(0, AppConstants.WORD_COUNT);
-            }
-            String viewMore = LEFT_HTML_VEIW_TAG_FOR_COLOR + mViewMore + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                tvFeedArticleHeaderLebel.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + viewMore, 0)); // for 24 api and more
+                tvFeedArticleHeaderLebel.setText(Html.fromHtml(mViewMoreDescription , 0)); // for 24 api and more
             } else {
-                tvFeedArticleHeaderLebel.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + viewMore));// or for older api
+                tvFeedArticleHeaderLebel.setText(Html.fromHtml(mViewMoreDescription ));// or for older api
             }
         }
         if (dataItem.isBookmarked()) {
@@ -291,6 +287,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             final ImageView ivFirstLandscape = (ImageView) backgroundImage.findViewById(R.id.iv_feed_article_single_image);
             final TextView tvFeedArticleTimeLabel = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_time_label);
             final TextView tvFeedArticleTotalViews = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_total_views);
+            final RelativeLayout rlFeedArticleViews = (RelativeLayout) backgroundImage.findViewById(R.id.rl_gradiant);
             tvFeedArticleTotalViews.setText(dataItem.getNoOfViews() + AppConstants.SPACE + context.getString(R.string.ID_VIEWS));
             Glide.with(mContext)
                     .load(backgrndImageUrl).asBitmap()
@@ -300,8 +297,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
                         @Override
                         public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
                             ivFirstLandscape.setImageBitmap(profileImage);
-                            tvFeedArticleTimeLabel.setVisibility(View.VISIBLE);
-                            tvFeedArticleTotalViews.setVisibility(View.VISIBLE);
+                            rlFeedArticleViews.setVisibility(View.VISIBLE);
                         }
                     });
             liFeedArticleImages.addView(backgroundImage);
@@ -340,6 +336,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_feed_article_user_bookmark)
     public void isBookMarkClick() {
+
         dataItem.setItemPosition(getAdapterPosition());
         if (dataItem.isBookmarked()) {
             viewInterface.handleOnClick(dataItem, tvFeedArticleUserBookmark);
@@ -388,32 +385,9 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         viewInterface.handleOnClick(dataItem, tvFeedArticleUserReaction);
         return true;
     }
-    @TargetApi(AppConstants.ANDROID_SDK_24)
-    @OnClick(R.id.tv_feed_article_header_lebel)
+    @OnClick(R.id.article_card)
     public void viewMoreClick() {
-        if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
-            if (tvFeedArticleHeaderLebel.getTag().toString().equalsIgnoreCase(mViewMore)) {
-                String lessWithColor = LEFT_HTML_VEIW_TAG_FOR_COLOR + mLess + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
-                mViewMoreDescription = dataItem.getListDescription();
-                if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                    tvFeedArticleHeaderLebel.setText(Html.fromHtml(mViewMoreDescription  + AppConstants.SPACE + lessWithColor, 0)); // for 24 api and more
-                } else {
-                    tvFeedArticleHeaderLebel.setText(Html.fromHtml(mViewMoreDescription + AppConstants.SPACE + lessWithColor));// or for older api
-                }
-                tvFeedArticleHeaderLebel.setTag(mLess);
-            } else {
-                tvFeedArticleHeaderLebel.setTag(mViewMore);
-                if (mViewMoreDescription.length() > AppConstants.WORD_LENGTH) {
-                    mViewMoreDescription = mViewMoreDescription.substring(0, AppConstants.WORD_COUNT);
-                }
-                String viewMore = LEFT_HTML_VEIW_TAG_FOR_COLOR + mViewMore + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
-                if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                    tvFeedArticleHeaderLebel.setText(Html.fromHtml(mViewMoreDescription+ AppConstants.DOTS + AppConstants.SPACE + viewMore, 0)); // for 24 api and more
-                } else {
-                    tvFeedArticleHeaderLebel.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + viewMore));// or for older api
-                }
-            }
-        }
+        viewInterface.handleOnClick(dataItem, liFeedArticleImages);
     }
 
     @Override

@@ -28,7 +28,7 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
     HomePresenter mHomePresenter;
     RecyclerView mRecyclerView;
     private LinearLayoutManager mManager;
-    private int previousTotal = 0;
+    private int  previousTotal = 0;
     private boolean loading = true;
     private int visibleThreshold = 1;
     private int firstVisibleItem, visibleItemCount, totalItemCount;
@@ -56,7 +56,6 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
         int firstVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
-
         dismissReactions();
         if (firstVisibleItem == 0) {
             if(!mControlsVisible) {
@@ -79,7 +78,11 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
         }
         visibleItemCount = mRecyclerView.getChildCount();
         totalItemCount = mManager.getItemCount();
-
+        if(mFragmentListRefreshData.getSwipeToRefresh()==AppConstants.ONE_CONSTANT)
+        {
+            previousTotal=totalItemCount;
+            mFragmentListRefreshData.setSwipeToRefresh(AppConstants.TWO_CONSTANT);
+        }
         if (loading) {
             if (totalItemCount > previousTotal) {
                 loading = false;

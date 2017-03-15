@@ -121,7 +121,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
         mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                LogUtils.info("swipe", "*****************end called");
+                setListLoadFlag(false);
                 mPullRefreshList.setPullToRefresh(true);
                 mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo()));
             }

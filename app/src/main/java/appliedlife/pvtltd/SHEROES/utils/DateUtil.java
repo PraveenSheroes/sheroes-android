@@ -48,12 +48,44 @@ public class DateUtil {
     /**
      * @return absolute rounded off difference in days
      */
-    public long getRoundedDifferenceInHours(long timeOne, long timeTwo) {
-        long Millis24Hrs = 24 * 60 * 60 * 1000;
-        double difference = timeOne - timeTwo;
-        long  seconds =(long)difference % 60;
-        difference=(long)difference/60;
-        long minutes =(long)difference % 60;
-        return minutes;
+    public String getRoundedDifferenceInHours(long timeOne, long timeTwo) {
+
+        //long Millis24Hrs = 24 * 60 * 60 * 1000;
+        long differenceInMinutes = Math.round((timeOne - timeTwo)/(60 * 1000));
+        //long  seconds =(long)difference % 60;
+        //difference=(long)difference/60;
+        int day = (int)(differenceInMinutes/(24*60));
+        differenceInMinutes = differenceInMinutes - (day * 24 * 60);
+        int hour = (int)(differenceInMinutes/60);
+        differenceInMinutes = differenceInMinutes - (hour * 60);
+        StringBuilder sb = new StringBuilder();
+        if(day>0) {
+            sb.append(day);
+            if(day==1) {
+                sb.append(" day ");
+            } else {
+                sb.append(" days ");
+            }
+        }
+        if(hour>0) {
+            sb.append(hour);
+            if(hour==1) {
+                sb.append(" hour ");
+            } else {
+                sb.append(" hours ");
+            }
+        }
+        if(differenceInMinutes>0) {
+            sb.append(differenceInMinutes);
+            if(differenceInMinutes==1) {
+                sb.append(" minute ");
+            } else {
+                sb.append(" minutes ");
+            }
+        }
+        if(sb.length()>0) {
+            sb.append(" ago");
+        }
+        return sb.toString();
     }
 }
