@@ -226,7 +226,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     private void allTextViewStringOperations(Context context) {
         if (StringUtil.isNotNullOrEmptyString(dataItem.getAuthorName())) {
             String feedTitle = dataItem.getAuthorName()+AppConstants.SPACE+mContext.getString(R.string.ID_POSTED_IN);
-            String feedCommunityName = dataItem.getNameOrTitle();
+            //TODO:: change for UI
+            String feedCommunityName = dataItem.getNameOrTitle()+dataItem.getId();//dataItem.getNameOrTitle();
             String coloredFeedCommunityName = LEFT_HTML_COMMUNITY_TITLE_FOR_COLOR + feedCommunityName + RIGHT_HTML_COMMUNITY_TITLE_FOR_COLOR;
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                 tvFeedCommunityPostCardTitle.setText(Html.fromHtml(feedTitle + AppConstants.SPACE + coloredFeedCommunityName)); // for 24 api and more
@@ -236,13 +237,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getCreatedDate())) {
             long createdDate = mDateUtil.getTimeInMillis(dataItem.getCreatedDate(), AppConstants.DATE_FORMAT);
-            long minuts = mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate);
-            if (minuts < 60) {
-                tvFeedCommunityPostTime.setText(String.valueOf((int) minuts) + AppConstants.SPACE + mContext.getString(R.string.ID_MINUTS));
-            } else {
-                int hour = (int) minuts / 60;
-                tvFeedCommunityPostTime.setText(String.valueOf(hour) + AppConstants.SPACE + mContext.getString(R.string.ID_HOURS));
-            }
+            tvFeedCommunityPostTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
         }
         mViewMoreDescription = dataItem.getListDescription();
         if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {

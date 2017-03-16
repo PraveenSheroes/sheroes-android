@@ -81,7 +81,7 @@ import butterknife.OnClick;
 public class HomeActivity extends BaseActivity implements SettingView, JobFragment.HomeActivityIntractionListner, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, CommentReactionFragment.HomeActivityIntractionListner, ImageFullViewAdapter.HomeActivityIntraction {
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
     @Inject
-    Preference<LoginResponse> userPreference;
+    Preference<LoginResponse> mUserPreference;
     @Bind(R.id.iv_drawer_profile_circle_icon)
     RoundedImageView ivDrawerProfileCircleIcon;
     @Bind(R.id.tv_user_name)
@@ -131,7 +131,6 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
     private HomeSpinnerFragment mHomeSpinnerFragment;
     private FragmentOpen mFragmentOpen;
     private CustiomActionBarToggle mCustiomActionBarToggle;
-    public View mArticlePopUp, mCommunityPopUp, mCommunityPostPopUp;
     private FeedDetail mFeedDetail;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -157,15 +156,15 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
         initHomeViewPagerAndTabs();
         mHomeSpinnerItemList = CustomeDataList.makeSpinnerListRequest();
         assignNavigationRecyclerListView();
-        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getPhotoUrl())) {
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
             //TODO: this data to be removed
-            String profile = userPreference.get().getUserSummary().getPhotoUrl(); //"https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAhNAAAAJDYwZWIyZTg5LWFmOTItNGIwYS05YjQ5LTM2YTRkNGQ2M2JlNw.jpg";
+            String profile = mUserPreference.get().getUserSummary().getPhotoUrl(); //"https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAhNAAAAJDYwZWIyZTg5LWFmOTItNGIwYS05YjQ5LTM2YTRkNGQ2M2JlNw.jpg";
             Glide.with(this)
                     .load(profile)
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .skipMemoryCache(true)
                     .into(ivDrawerProfileCircleIcon);
-            mTvUserName.setText(userPreference.get().getUserSummary().getFirstName() + AppConstants.SPACE + userPreference.get().getUserSummary().getLastName());
+            mTvUserName.setText(mUserPreference.get().getUserSummary().getFirstName() + AppConstants.SPACE + mUserPreference.get().getUserSummary().getLastName());
             //mTvUserLocation.setText("Delhi, India");
             Glide.with(this)
                     .load(profile).asBitmap()
@@ -630,7 +629,7 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
             mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.NO_REACTION_CONSTANT);
         }else
         {
-           this.finish();
+            finish();
         }
     }
 
@@ -798,8 +797,8 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
 
 
             case R.id.tv_logout:
-                if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getPhotoUrl())) {
-                    userPreference.delete();
+                if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
+                    mUserPreference.delete();
                 }
                     Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(intent);

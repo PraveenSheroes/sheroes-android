@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -159,8 +160,12 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
         mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                // Refresh items
-                mPullRefreshList.setPullToRefresh(false);
+                setListLoadFlag(false);
+                mPullRefreshList.setPullToRefresh(true);
+                mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
+                mPullRefreshList = new SwipPullRefreshList();
+                setRefreshList(mPullRefreshList);
+                mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
                 if (mFragmentOpen.isCommentList()) {
                     mCommentReactionPresenter.getAllCommentListFromPresenter(mAppUtils.getCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId(), mFragmentListRefreshData.getPageNo()), mFragmentOpen.isReactionList(), AppConstants.NO_REACTION_CONSTANT);
                 } else if (mFragmentOpen.isReactionList()) {
@@ -404,6 +409,9 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
             mEtUserCommentDescription.setText(mCommentReactionDoc.getComment());
             mEtUserCommentDescription.setSelection(mCommentReactionDoc.getComment().length());
             mEtUserCommentDescription.setTextColor(ContextCompat.getColor(getActivity(), R.color.feed_article_label));
+            AppUtils.showKeyboard(mEtUserCommentDescription,  TAG);
+            mEtUserCommentDescription.setRawInputType(InputType.TYPE_CLASS_TEXT);
+            mEtUserCommentDescription.setTextIsSelectable(true);
         }
         setAdapterData();
     }

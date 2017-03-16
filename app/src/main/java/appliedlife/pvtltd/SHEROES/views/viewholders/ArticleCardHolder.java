@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -105,13 +106,8 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getCreatedDate())) {
             long createdDate = mDateUtil.getTimeInMillis(dataItem.getCreatedDate(), AppConstants.DATE_FORMAT);
-            long minuts = mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate);
-            if (minuts < 60) {
-                tvArticleTime.setText(String.valueOf((int) minuts) + AppConstants.SPACE + mContext.getString(R.string.ID_MINUTS));
-            } else {
-                int hour = (int) minuts / 60;
-                tvArticleTime.setText(String.valueOf(hour) + AppConstants.SPACE + mContext.getString(R.string.ID_HOURS));
-            }
+            tvArticleTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
+
 
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
@@ -148,6 +144,7 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
             final ImageView ivFirstLandscape = (ImageView) backgroundImage.findViewById(R.id.iv_feed_article_single_image);
             final TextView tvFeedArticleTimeLabel = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_time_label);
             final TextView tvFeedArticleTotalViews = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_total_views);
+            final RelativeLayout rlFeedArticleViews = (RelativeLayout) backgroundImage.findViewById(R.id.rl_gradiant);
             tvFeedArticleTotalViews.setText(dataItem.getNoOfViews() + AppConstants.SPACE + context.getString(R.string.ID_VIEWS));
             Glide.with(mContext)
                     .load(backgrndImageUrl).asBitmap()
@@ -157,8 +154,7 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
                         @Override
                         public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
                             ivFirstLandscape.setImageBitmap(profileImage);
-                            tvFeedArticleTimeLabel.setVisibility(View.VISIBLE);
-                            tvFeedArticleTotalViews.setVisibility(View.VISIBLE);
+                            rlFeedArticleViews.setVisibility(View.VISIBLE);
                         }
                     });
             liArticleCoverImage.addView(backgroundImage);

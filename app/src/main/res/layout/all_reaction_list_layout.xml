@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:paddingLeft="@dimen/dp_size_10"
-                android:text="@string/ID_ERROR_INVALID_EMAIL"
+                android:layout_marginTop="@dimen/dp_size_5"
                 android:textColor="@color/detail_page_text"
                 android:textSize="@dimen/sp_size_13"
                 android:textStyle="bold" />
@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:paddingLeft="@dimen/dp_size_10"
-                android:text="@string/ID_ERROR_INVALID_EMAIL"
+                android:visibility="gone"
                 android:textColor="@color/searchbox_text_color"
                 android:textSize="@dimen/sp_size_12"
                 android:textStyle="bold" />

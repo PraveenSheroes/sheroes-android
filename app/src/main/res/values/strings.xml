@@ -15,8 +15,7 @@
     <string name="ID_PROMPT_PASSWORD">Password</string>
     <string name="ID_ACTION_LOG_IN_SHORT">Login</string>
     <string name="ID_ERROR_INVALID_EMAIL">This email address is invalid</string>
-    <string name="ID_ERROR_INVALID_PASSWORD">This password is too short</string>
-    <string name="ID_ERROR_FIELD_REQUIRED">This field is required</string>
+    <string name="ID_ERROR_INVALID_PASSWORD">Enter password</string>
     <string name="ID_POSTED_IN">posted in</string>
     <!--String related in home page-->
 
@@ -48,7 +47,6 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_SEARCH_IN_COMMUNITIES">Search Communities</string>
     <string name="ID_SEARCH_IN_ARTICLES">Search Articles</string>
     <string name="ID_SEARCH_IN_JOBS">Search Jobs</string>
-    <string name="ID_DASHBOARD"> Working women have it hard enough – managing a 9 to 6 job along with family, friends, and the demand…View More</string>
     <string name="ID_TRENDING">Trending</string>
     <string name="ID_CHOOSE_CATEGORY">Choose Category</string>
     <string name="ID_DONE">Done</string>

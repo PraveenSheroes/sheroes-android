@@ -26,7 +26,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:orientation="horizontal"
-            android:layout_margin="@dimen/dp_size_12"
+            android:layout_margin="@dimen/dp_size_16"
             android:weightSum="1">
 
             <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
@@ -39,7 +39,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginLeft="@dimen/dp_size_12"
+                android:layout_marginLeft="@dimen/dp_size_16"
                 android:orientation="vertical">
 
                 <TextView
@@ -47,9 +47,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@string/ID_ROBOTO_BOLD"
-                    android:text="@string/ID_ERROR_FIELD_REQUIRED"
                     android:textColor="@color/feed_article_label"
-                    android:textSize="@dimen/sp_size_14"
+                    android:textSize="@dimen/sp_size_15"
                     android:textStyle="bold" />
 
                 <TextView
@@ -73,11 +72,10 @@
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:lineSpacingExtra="@dimen/dp_size_3"
             android:layout_marginTop="@dimen/dp_size_12"
-            android:layout_marginLeft="@dimen/dp_size_12"
-            android:layout_marginRight="@dimen/dp_size_12"
-            android:text="@string/ID_DASHBOARD"
+            android:layout_marginLeft="@dimen/dp_size_16"
+            android:layout_marginRight="@dimen/dp_size_16"
             android:textColor="@color/feed_article_label"
-            android:textSize="@dimen/sp_size_13" />
+            android:textSize="@dimen/sp_size_14" />
 
         <LinearLayout
             android:id="@+id/li_feature_tags"
@@ -85,24 +83,23 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:weightSum="@integer/int_value_for_line_1"
-            android:layout_marginLeft="@dimen/dp_size_12"
-            android:layout_marginRight="@dimen/dp_size_12"
-            android:layout_marginTop="@dimen/dp_size_15">
+            android:layout_marginLeft="@dimen/dp_size_16"
+            android:layout_marginRight="@dimen/dp_size_16"
+            android:layout_marginTop="@dimen/dp_size_20">
 
             <TextView
                 android:id="@+id/tv_community_tag_lable"
                 android:layout_width="0dp"
-                android:layout_weight=".8"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="Tags: Health,Education"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:textColor="@color/feed_article_label"
                 android:textSize="@dimen/sp_size_12" />
 
             <TextView
                 android:id="@+id/tv_community_join"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/dp_size_35"
-                android:layout_weight=".2"
+                android:layout_width="@dimen/dp_size_80"
+                android:layout_height="@dimen/dp_size_30"
                 android:background="@drawable/rectangle_community_invite"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:gravity="center"

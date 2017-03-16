@@ -312,5 +312,4 @@ public class CommunitiesDetailActivity extends BaseActivity implements Community
     public void onBackClick() {
         finish();
     }
-
 }

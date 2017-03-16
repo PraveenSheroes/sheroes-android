@@ -114,9 +114,13 @@ public class BookmarksFragment extends BaseFragment {
         mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                // Refresh items
+                setListLoadFlag(false);
                 mPullRefreshList.setPullToRefresh(true);
-               mHomePresenter.getBookMarkFromPresenter(mAppUtils.getBookMarks(mFragmentListRefreshData.getPageNo()));
+                mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
+                mPullRefreshList=new SwipPullRefreshList();
+                setRefreshList(mPullRefreshList);
+                mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
+                mHomePresenter.getBookMarkFromPresenter(mAppUtils.getBookMarks(mFragmentListRefreshData.getPageNo()));
             }
         });
         return view;

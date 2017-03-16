@@ -95,6 +95,7 @@ public class HomeFragment extends BaseFragment {
         mPullRefreshList.setPullToRefresh(false);
         mHomePresenter.attachView(this);
         mLayoutManager = new LinearLayoutManager(getContext());
+        mLayoutManager.setInitialPrefetchItemCount(1);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new GenericRecyclerViewAdapter(getContext(), (HomeActivity) getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -136,21 +137,15 @@ public class HomeFragment extends BaseFragment {
             }
         });
         super.setAllInitializationForFeeds(mFragmentListRefreshData, mPullRefreshList, mAdapter, mLayoutManager, mPageNo, mSwipeView, mLiNoResult, mFeedDetail, mRecyclerView, mPosition, mPressedEmoji, mListLoad, mIsEdit, mHomePresenter, mAppUtils, mProgressBar);
-       if(null==mUserPreference || !StringUtil.isNotNullOrEmptyString(mUserPreference.get().getToken()))
-       {
-           Intent intent=new Intent(getActivity(),LoginActivity.class);
-           startActivity(intent);
-           getActivity().finish();
-       }
-        else
-        {
-            long daysDifference=System.currentTimeMillis()-mUserPreference.get().getTokenTime();
-            if(daysDifference>=AppConstants.SAVED_DAYS_TIME)
-            {
+        if (null == mUserPreference || !StringUtil.isNotNullOrEmptyString(mUserPreference.get().getToken())) {
+            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            startActivity(intent);
+            getActivity().finish();
+        } else {
+            long daysDifference = System.currentTimeMillis() - mUserPreference.get().getTokenTime();
+            if (daysDifference >= AppConstants.SAVED_DAYS_TIME) {
                 mHomePresenter.getAuthTokenRefreshPresenter();
-            }
-            else
-            {
+            } else {
                 mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
             }
         }
@@ -160,7 +155,11 @@ public class HomeFragment extends BaseFragment {
             public void onRefresh() {
                 setListLoadFlag(false);
                 mPullRefreshList.setPullToRefresh(true);
-                mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
+                mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
+                mPullRefreshList=new SwipPullRefreshList();
+                setRefreshList(mPullRefreshList);
+                mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
+                mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE,  mFragmentListRefreshData.getPageNo()));
             }
         });
         return view;
@@ -211,6 +210,7 @@ public class HomeFragment extends BaseFragment {
         super.onDestroyView();
         mHomePresenter.detachView();
     }
+
     @Override
     public void getLogInResponse(LoginResponse loginResponse) {
         if (null != loginResponse && StringUtil.isNotNullOrEmptyString(loginResponse.getToken())) {

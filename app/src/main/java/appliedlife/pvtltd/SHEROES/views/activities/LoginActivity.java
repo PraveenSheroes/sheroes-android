@@ -37,6 +37,7 @@ public class LoginActivity extends BaseActivity implements LoginFragment.LoginAc
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getToken())) {
             Intent homeIntent = new Intent(this, HomeActivity.class);
             startActivity(homeIntent);
+            finish();
 
         } else {
             renderLoginFragmentView();
@@ -63,7 +64,7 @@ public class LoginActivity extends BaseActivity implements LoginFragment.LoginAc
     @Override
     public void onLoginAuthToken() {
         Intent homeIntent = new Intent(this, HomeActivity.class);
-        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NO_HISTORY);
+        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(homeIntent);
         finish();
     }

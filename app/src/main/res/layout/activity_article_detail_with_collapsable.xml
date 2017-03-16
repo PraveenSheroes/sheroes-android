@@ -47,7 +47,6 @@
                     android:drawableLeft="@drawable/ic_timer_icon"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:paddingLeft="@dimen/dp_size_5"
-                    android:text="@string/ID_ERROR_FIELD_REQUIRED"
                     android:textColor="@color/white"
                     android:textSize="@dimen/sp_size_12" />
 

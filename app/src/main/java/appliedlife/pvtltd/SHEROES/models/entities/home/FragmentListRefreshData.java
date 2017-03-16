@@ -10,6 +10,7 @@ public class FragmentListRefreshData {
     String idFeedDetail;
     boolean isReactionList;
     long enitityOrParticpantid;
+    int swipeToRefresh;
 
     public FragmentListRefreshData(int pageNo, String callFromFragment, String idFeedDetail) {
         this.pageNo = pageNo;
@@ -62,5 +63,13 @@ public class FragmentListRefreshData {
 
     public void setEnitityOrParticpantid(long enitityOrParticpantid) {
         this.enitityOrParticpantid = enitityOrParticpantid;
+    }
+
+    public int getSwipeToRefresh() {
+        return swipeToRefresh;
+    }
+
+    public void setSwipeToRefresh(int swipeToRefresh) {
+        this.swipeToRefresh = swipeToRefresh;
     }
 }

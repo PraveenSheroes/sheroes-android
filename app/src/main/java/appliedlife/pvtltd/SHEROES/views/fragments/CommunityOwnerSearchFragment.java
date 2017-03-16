@@ -87,7 +87,6 @@ public class CommunityOwnerSearchFragment extends BaseFragment implements Invite
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mAdapter);
-        mSearchModPresenter.getFeedFromPresenter(new ListOfInviteSearch());
         return view;
     }
 

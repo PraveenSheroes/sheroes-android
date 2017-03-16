@@ -100,7 +100,6 @@ public class CommunitySearchTagsFragment extends BaseFragment implements Communi
         mAdapter = new GenericRecyclerViewAdapter(getActivity(), this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
-        mcommunityListPresenter.getCommunityList();
         mEt_search_edit_text.setHint("Search Tags");
         mTv_no_of_tags.setVisibility(View.GONE);
         tv_community_tag_submit.setVisibility(View.GONE);

@@ -1,34 +1,18 @@
 package appliedlife.pvtltd.SHEROES.basecomponents;
 
 
-import java.util.List;
-
-import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.Response;
-import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionResponsePojo;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityTagsListResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.InviteSearchResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.ListOfInviteSearch;
-import appliedlife.pvtltd.SHEROES.models.entities.community.MemberListResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.RequestedListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
-import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItemResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleCardResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleListResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.CommunitiesResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.Feature;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingDeActivateRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingDeActivateResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingFeedbackRequest;
@@ -81,44 +65,6 @@ public interface SheroesAppServiceApi {
     Observable<LoginResponse> getRefreshToken();
     @POST("participant/community/join")
     Observable<CommunityResponse> getCommunityJoinResponse(@Body CommunityRequest communityRequest);
-    @POST("participant/community/approve_joining_request")
-    Observable<CommunityResponse> getApproveJoinResponse(@Body CommunityRequest communityRequest);
-
-
-
-
-    @GET("v2/587877da0f0000231d0d49b1")
-    Observable<HomeSpinnerItemResponse> getHomeSpinnerList();
-
-    @GET("/v2/587fb45c270000490af0dd7a")
-    Observable<CommunityListResponse> getCommunityList();
-    @GET("/v2/587fb45c270000490af0dd7a")
-    Observable<CommunityTagsListResponse> getCommunityTagList();
-
-    @GET("/v2/587fb45c270000490af0dd7a")
-    Observable<OwnerListResponse> getOwnerList();
-
-    @GET("/v2/587fb45c270000490af0dd7a")
-    Observable<MemberListResponse> getMemberList();
-
-    @GET("/v2/587fb45c270000490af0dd7a")
-    Observable<RequestedListResponse> getRequestList();
-
-
-    @POST("v2/588eef663f00007412dde331")
-    Observable<ArticleListResponse> getAricleList(@Body ArticleCardResponse articleCardResponse);
-    @POST("v2/588eef663f00007412dde331")
-    Observable<ArticleListResponse> getOnlyArticleList(@Body ArticleCardResponse articleCardResponse);
-    @POST("v2/588eef663f00007412dde331")
-    Observable<ArticleListResponse> getOnlyJobList(@Body ArticleCardResponse articleCardResponse);
-    @POST("v2/587fc963270000010df0ddac")
-    Observable<Feature> getFeature(@Body Feature articleRequest );
-    @POST("v2/588f43133f0000d81adde412")
-    Observable<CommunitiesResponse> getAllCommunities(@Body Feature feature );
-    @GET("v2/589874931100000e07038a52")
-    Observable<Response<List<RecentSearchData>>> getMasterData();
-    @POST("v2/58940613260000a11200a97f")
-    Observable<InviteSearchResponse> getInviteSearchResponseFromApi(@Body ListOfInviteSearch listOfInviteSearch );
     @POST("participant/settings/save_feedback")
     Observable<SettingFeedbackResponce> getSettingAuthToken(@Body SettingFeedbackRequest feedbackRequest);
     @POST("participant/settings/save_rating")

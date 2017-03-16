@@ -138,7 +138,9 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     public void setListLoadFlag(boolean mListLoad) {
         this.mListLoad = mListLoad;
     }
-
+    public void setRefreshList(SwipPullRefreshList mPullRefreshList) {
+        this.mPullRefreshList = mPullRefreshList;
+    }
     public void callFragment(int layout, Fragment fragment) {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -171,6 +173,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     @Override
     public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
+            mLiNoResult.setVisibility(View.GONE);
             mPageNo = mFragmentListRefreshData.getPageNo();
             mFragmentListRefreshData.setPageNo(++mPageNo);
             mPullRefreshList.allListData(feedDetailList);
@@ -362,6 +365,10 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     @Override
     public void showError(String errorMsg) {
         stopProgressBar();
+        if(null!=mLiNoResult)
+        {
+            mLiNoResult.setVisibility(View.VISIBLE);
+        }
         mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(errorMsg);
     }
 

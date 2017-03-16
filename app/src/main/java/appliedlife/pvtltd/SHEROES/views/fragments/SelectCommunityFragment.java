@@ -32,7 +32,7 @@ import butterknife.ButterKnife;
 /**
  * Created by SHEROES-TECH on 24-01-2017.
  */
-public class SelectCommunityFragment extends DialogFragment implements CommunityView,BaseHolderInterface {
+public class SelectCommunityFragment extends DialogFragment implements CommunityView, BaseHolderInterface {
     @Inject
     CommunityListPresenter mcommunityListPresenter;
     @Bind(R.id.rv_home_list)
@@ -42,14 +42,16 @@ public class SelectCommunityFragment extends DialogFragment implements Community
     private final String TAG = LogUtils.makeLogTag(SelectCommunityFragment.class);
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
     }
-     SelectCommunityFragment(CreateCommunityPostFragment context) {
+
+    SelectCommunityFragment(CreateCommunityPostFragment context) {
         try {
             if (context instanceof MyDialogFragmentListener) {
-                mHomeActivityIntractionListner = (MyDialogFragmentListener)context;
+                mHomeActivityIntractionListner = (MyDialogFragmentListener) context;
             }
         } catch (Fragment.InstantiationException exception) {
             LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
@@ -65,10 +67,9 @@ public class SelectCommunityFragment extends DialogFragment implements Community
         mcommunityListPresenter.attachView(this);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new GenericRecyclerViewAdapter(getActivity(),this);
+        mAdapter = new GenericRecyclerViewAdapter(getActivity(), this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
-        mcommunityListPresenter.getCommunityList();
 
         return v;
     }
@@ -97,13 +98,12 @@ public class SelectCommunityFragment extends DialogFragment implements Community
     }
 
 
-
     @Override
     public void handleOnClick(BaseResponse sheroesListDataItem, View view) {
         if (sheroesListDataItem instanceof CommunityList) {
             CommunityList communityList = (CommunityList) sheroesListDataItem;
-          //  getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, getActivity().getIntent());
-            mHomeActivityIntractionListner.onAddFriendSubmit(communityList.getName(),communityList.getBackground());
+            //  getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, getActivity().getIntent());
+            mHomeActivityIntractionListner.onAddFriendSubmit(communityList.getName(), communityList.getBackground());
         }
         getActivity().getFragmentManager().popBackStack();
 
@@ -155,6 +155,7 @@ public class SelectCommunityFragment extends DialogFragment implements Community
 
     public interface MyDialogFragmentListener {
         void onErrorOccurence();
+
         void onAddFriendSubmit(String communitynm, String image);
     }
 }
