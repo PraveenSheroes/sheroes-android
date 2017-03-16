@@ -308,6 +308,7 @@ public class FeedCommunityHolder extends BaseViewHolder<FeedDetail> {
             final TextView tvFeedCommunityTotalViews = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_total_views);
             final RelativeLayout rlFeedArticleViews = (RelativeLayout) backgroundImage.findViewById(R.id.rl_gradiant);
             tvFeedCommunityTotalViews.setText(dataItem.getNoOfViews() + AppConstants.SPACE + context.getString(R.string.ID_VIEWS));
+            tvFeedCommunityTimeLabel.setText(dataItem.getCharCount()+ AppConstants.SPACE + context.getString(R.string.ID_MIN_READ));
             Glide.with(mContext)
                     .load(backgroundImageUrl).asBitmap()
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)

@@ -156,7 +156,7 @@ public class CommunityTypeFragment extends BaseDialogFragment implements Communi
     }
 
     @Override
-    public void showError(String s) {
+    public void showError(String s, int errorFor) {
 
     }
 

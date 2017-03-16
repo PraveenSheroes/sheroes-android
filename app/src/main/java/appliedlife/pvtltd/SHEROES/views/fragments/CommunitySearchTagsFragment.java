@@ -262,10 +262,6 @@ public class CommunitySearchTagsFragment extends BaseFragment implements Communi
 
     }
 
-    @Override
-    public void showError(String s) {
-
-    }
 
     public interface MyCommunityTagListener {
         void onErrorOccurence();

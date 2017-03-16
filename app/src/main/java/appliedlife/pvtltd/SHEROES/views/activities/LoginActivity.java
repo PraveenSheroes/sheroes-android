@@ -69,7 +69,7 @@ public class LoginActivity extends BaseActivity implements LoginFragment.LoginAc
         finish();
     }
     @Override
-    public void onShowErrorDialog(String errorReason) {
+    public void onShowErrorDialog(String errorReason,int errorFor) {
         switch (errorReason)
         {
             case AppConstants.CHECK_NETWORK_CONNECTION:

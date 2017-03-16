@@ -14,6 +14,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -94,7 +95,6 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
     @Bind(R.id.li_user_comment_post_type_selection)
     LinearLayout liUserCommentPostTypeSelection;
     private FragmentOpen mFragmentOpen;
-    private String mSearchDataName = AppConstants.EMPTY_STRING;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private HomeActivityIntractionListner mHomeActivityIntractionListner;
@@ -109,7 +109,7 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
     private FeedDetail mFeedDetail;
     boolean mIsAnonymous;
     private List<CommentReactionDoc> mCommentReactionDocList;
-    CommentReactionDoc mCommentReactionDoc;
+    private CommentReactionDoc mCommentReactionDoc;
     private FragmentListRefreshData mFragmentListRefreshData;
     private SwipPullRefreshList mPullRefreshList;
     private int mPageNo = AppConstants.ONE_CONSTANT;
@@ -235,8 +235,12 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
                 mPageNo = mFragmentListRefreshData.getPageNo();
                 mFragmentListRefreshData.setPageNo(++mPageNo);
                 mPullRefreshList.allListData(commentReactionResponsePojo.getCommentReactionDocList());
-                mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
                 mCommentReactionDocList = mPullRefreshList.getFeedResponses();
+                if (mFeedDetail.isTrending()) {
+                    menuItemDeleteOrEdit();
+                    mFeedDetail.setTrending(false);
+                }
+                mAdapter.setSheroesGenericListData(mCommentReactionDocList);
                 mAdapter.notifyDataSetChanged();
                 if (!mPullRefreshList.isPullToRefresh()) {
                     mLayoutManager.scrollToPositionWithOffset(mPullRefreshList.getFeedResponses().size() - commentReactionResponsePojo.getCommentReactionDocList().size(), 0);
@@ -257,6 +261,51 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
 
         }
     }
+  private void menuItemDeleteOrEdit()
+  {
+      int editOrDelete=mFeedDetail.getExperienceFromI();
+      switch (editOrDelete)
+      {
+          case AppConstants.ONE_CONSTANT:
+              List<LastComment> lastCommentList = mFeedDetail.getLastComments();
+              if (StringUtil.isNotEmptyCollection(lastCommentList)) {
+                  int commentId = lastCommentList.get(mFeedDetail.getItemPosition()).getId();
+                  for (CommentReactionDoc commentReactionDoc : mCommentReactionDocList) {
+                      if (commentId == commentReactionDoc.getId()) {
+                          mEtUserCommentDescription.setText(commentReactionDoc.getComment());
+                          mEtUserCommentDescription.setSelection(commentReactionDoc.getComment().length());
+                          mEtUserCommentDescription.setTextColor(ContextCompat.getColor(getActivity(), R.color.feed_article_label));
+                          mCommentReactionDocList.remove(commentReactionDoc);
+                          AppUtils.showKeyboard(mEtUserCommentDescription, TAG);
+                          mEtUserCommentDescription.setRawInputType(InputType.TYPE_CLASS_TEXT);
+                          mEtUserCommentDescription.setTextIsSelectable(true);
+                          commentReactionDoc.setActive(true);
+                          commentReactionDoc.setEdit(true);
+                          mCommentReactionDoc = commentReactionDoc;
+                          break;
+                      }
+                  }
+              }
+              break;
+          case AppConstants.TWO_CONSTANT:
+              List<LastComment> lastDeleteCommentList = mFeedDetail.getLastComments();
+              if (StringUtil.isNotEmptyCollection(lastDeleteCommentList)) {
+                  int commentId = lastDeleteCommentList.get(mFeedDetail.getItemPosition()).getId();
+                  for (CommentReactionDoc commentReactionDoc : mCommentReactionDocList) {
+                      if (commentId == commentReactionDoc.getId()) {
+                          commentReactionDoc.setActive(false);
+                          mCommentReactionPresenter.editCommentListFromPresenter(mAppUtils.editCommentRequestBuilder(commentReactionDoc.getEntityId(), commentReactionDoc.getComment(), mFeedDetail.isAnonymous(), commentReactionDoc.isActive(), commentReactionDoc.getId()), AppConstants.TWO_CONSTANT);
+                          mCommentReactionDocList.remove(commentReactionDoc);
+                          AppUtils.showKeyboard(mEtUserCommentDescription, TAG);
+                          mEtUserCommentDescription.setRawInputType(InputType.TYPE_CLASS_TEXT);
+                          mEtUserCommentDescription.setTextIsSelectable(true);
+                          break;
+                      }
+                  }
+              }
+              break;
+      }
+  }
 
     private void setAdapterData() {
         mAdapter.setSheroesGenericListData(mCommentReactionDocList);
@@ -359,6 +408,11 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
 
     @OnClick(R.id.tv_user_comment_close)
     public void dismissCommentDialog() {
+        View view = mEtUserCommentDescription;
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
         mHomeActivityIntractionListner.onDialogDissmiss(mFragmentOpen, mFeedDetail);
     }
 
@@ -409,7 +463,7 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
             mEtUserCommentDescription.setText(mCommentReactionDoc.getComment());
             mEtUserCommentDescription.setSelection(mCommentReactionDoc.getComment().length());
             mEtUserCommentDescription.setTextColor(ContextCompat.getColor(getActivity(), R.color.feed_article_label));
-            AppUtils.showKeyboard(mEtUserCommentDescription,  TAG);
+            AppUtils.showKeyboard(mEtUserCommentDescription, TAG);
             mEtUserCommentDescription.setRawInputType(InputType.TYPE_CLASS_TEXT);
             mEtUserCommentDescription.setTextIsSelectable(true);
         }

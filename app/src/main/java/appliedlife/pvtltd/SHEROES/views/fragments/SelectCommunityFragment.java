@@ -149,9 +149,10 @@ public class SelectCommunityFragment extends DialogFragment implements Community
     }
 
     @Override
-    public void showError(String s) {
+    public void showError(String s, int errorFor) {
 
     }
+
 
     public interface MyDialogFragmentListener {
         void onErrorOccurence();

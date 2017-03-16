@@ -50,7 +50,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
 
     public void getLoginAuthTokeInPresenter(LoginRequest loginRequest,boolean isSignUp) {
         if (!NetworkUtil.isConnected(sheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,AppConstants.ONE_CONSTANT);
             return;
         }
         getMvpView().startProgressBar();
@@ -62,7 +62,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage());
+                getMvpView().showError(e.getMessage(),AppConstants.ONE_CONSTANT);
             }
 
             @Override

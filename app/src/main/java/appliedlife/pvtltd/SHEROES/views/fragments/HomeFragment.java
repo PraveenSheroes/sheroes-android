@@ -40,6 +40,7 @@ import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Praveen Singh on 29/12/2016.
@@ -186,8 +187,6 @@ public class HomeFragment extends BaseFragment {
     public void getSuccessForAllResponse(String success, int successFrom) {
         super.getSuccessForAllResponse(success, successFrom);
     }
-
-
     public void commentListRefresh(FeedDetail feedDetail) {
         super.commentListRefresh(feedDetail);
     }
@@ -219,5 +218,11 @@ public class HomeFragment extends BaseFragment {
             mUserPreference.set(loginResponse);
             mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
         }
+    }
+    @OnClick(R.id.tv_no_result_try_again)
+    public void onClickTryAgainOnError()
+    {
+        mLiNoResult.setVisibility(View.GONE);
+        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE,  mFragmentListRefreshData.getPageNo()));
     }
 }

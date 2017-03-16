@@ -43,6 +43,7 @@ android {
             signingConfig signingConfigs.debug
         }
         release {
+           // buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
             buildConfigField "String", "BASE_URL", "\"http://34.193.138.177/\""
            minifyEnabled false
            shrinkResources true

@@ -268,11 +268,6 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
     }
 
     @Override
-    public void showError(String s) {
-
-    }
-
-    @Override
     public void onFinishEditDialog(String inputText) {
 
         LogUtils.info("value", inputText);

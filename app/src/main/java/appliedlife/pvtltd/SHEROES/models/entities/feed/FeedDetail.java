@@ -22,15 +22,26 @@ public class FeedDetail extends BaseResponse implements Parcelable {
      /*Community post*/
 
     @SerializedName("search_id_post_image")
+    @Expose
     private List<Long> imagesIds;
     @SerializedName("display_text_image_url")
+    @Expose
     private List<String> imageUrls;
     @SerializedName("community_i")
+    @Expose
     public long communityId;
     @SerializedName("is_commumity_post_b")
+    @Expose
     public boolean isCommunityPost;
     @SerializedName("is_anonymous_b")
+    @Expose
     public boolean isAnonymous;
+    @SerializedName("solr_ignore_post_community_name")
+    @Expose
+    private String postCommunityName;
+    @SerializedName("solr_ignore_is_closed")
+    @Expose
+    private boolean postCommunityClosed;
 
     /*Job*/
     @SerializedName("company_profile_id_l")
@@ -77,15 +88,15 @@ public class FeedDetail extends BaseResponse implements Parcelable {
     @SerializedName("search_text_job_emp_types")
     @Expose
     private List<String> searchTextJobEmpTypes = null;
-    @SerializedName("search_id_job_skills")
-    @Expose
-    private List<Integer> searchIdJobSkills = null;
+
 
     /*Community*/
     @SerializedName("community_type_s")
+    @Expose
     public String communityType;
 
     @SerializedName("community_type_l")
+    @Expose
     public String communityTypeL;
 
     /*Article*/
@@ -118,78 +129,114 @@ public class FeedDetail extends BaseResponse implements Parcelable {
 
     /*User*/
     @SerializedName("total_exp_i")
+    @Expose
     private int totalExperienceUser;
     @SerializedName("id_city_l")
+    @Expose
     private Long cityId;
     @SerializedName("city_name_s")
+    @Expose
     private String cityName;
-    @SerializedName("search_id_skills")
-    private List<Long> skillIds;
-    @SerializedName("search_text_skills")
-    private List<String> searchTextSkills;
+    @SerializedName("search_id_job_skills")
+    @Expose
+    private List<Long> skillJobIds;
+    @SerializedName("search_text_job_skills")
+    @Expose
+    private List<String> searchTextJobSkills;
     @SerializedName("search_id_opportunities")
+    @Expose
     private List<Long> opportunityTypeIds;
     @SerializedName("search_text_opportunities")
+    @Expose
     private List<String> searchIdOpportunityTypes;
     @SerializedName("search_id_can_help_in")
+    @Expose
     private List<Long> canHelpInIds;
     @SerializedName("search_text_can_help_in")
+    @Expose
     private List<String> canHelpIns;
     @SerializedName("search_id_experience")
+    @Expose
     private List<Long> experienceIds;
     @SerializedName("search_text_experience_title")
+    @Expose
     private List<String> experienceTitles;
     @SerializedName("search_id_experience_company")
+    @Expose
     private List<Long> experienceCompanyIds;
     @SerializedName("search_text_experience_company")
+    @Expose
     private List<String> experienceCompanyNames;
     @SerializedName("display_id_curr_experience")
+    @Expose
     private List<Long> currExperienceIds;
     @SerializedName("display_text_curr_experience_title")
+    @Expose
     private List<String> currExperienceTitles;
     @SerializedName("display_id_curr_experience_company")
+    @Expose
     private List<Long> currExperienceCompanyIds;
     @SerializedName("display_text_curr_experience_company")
+    @Expose
     private List<String> currExperienceCompanyNames;
     @SerializedName("search_id_education_id")
+    @Expose
     private List<Long> educationIds;
     @SerializedName("search_id_education_school")
+    @Expose
     private List<Long> educationSchoolIds;
     @SerializedName("search_text_education_school_name")
+    @Expose
     private List<String> educationSchoolNames;
     @SerializedName("search_id_education_degree")
+    @Expose
     private List<Long> educationDegreeIds;
     @SerializedName("search_text_education_degree_name")
+    @Expose
     private List<String> educationDegreeNames;
     @SerializedName("search_id_field_of_study_master")
+    @Expose
     private List<Long> fieldOfStudyMasterIds;
     @SerializedName("search_text_field_of_study_master_name")
+    @Expose
     private List<String> fieldOfStudyMasterNames;
     @SerializedName("gender_s")
+    @Expose
     private String gender;
     @SerializedName("currently_l")
+    @Expose
     private long currently_id;
     @SerializedName("profile_id_l")
+    @Expose
     private long profileId;
     @SerializedName("currently_s")
+    @Expose
     private String currently;
     @SerializedName("no_of_children_i")
+    @Expose
     private int noOfChildren;
     @SerializedName("interest_ls")
+    @Expose
     private List<Long> interestId;
     @SerializedName("ineterest_ss")
+    @Expose
     private List<String> interestNames;
     @SerializedName("functional_area_ls")
+    @Expose
     private List<Long> functionalAreaIds;
     @SerializedName("functional_area_ss")
+    @Expose
     private List<String> functionalAreaNames;
     @SerializedName("last_activity_date_dt")
+    @Expose
     private List<String> lastActivityDate;
 
-   /*Common*/
-   @SerializedName("id")
-   private String id;
+    /*Common*/
+    @SerializedName("id")
+    @Expose
+    private String id;
     @SerializedName("entity_or_participant_id")
+    @Expose
     private long entityOrParticipantId;
     @SerializedName("entity_or_participant_type_id_i")
     @Expose
@@ -198,70 +245,103 @@ public class FeedDetail extends BaseResponse implements Parcelable {
     @Expose
     private String displayIdProfileId;
     @SerializedName("created_by_l")
+    @Expose
     private long createdBy;
     @SerializedName("id_of_entity_or_participant")
+    @Expose
     private long idOfEntityOrParticipant;
     @SerializedName("type")
+    @Expose
     private String type;
     @SerializedName("sub_type")
+    @Expose
     private String subType;
     @SerializedName("name")
+    @Expose
     private String nameOrTitle;
     @SerializedName("image_url")
+    @Expose
     private String imageUrl;
     @SerializedName("thumbnail_image_url")
+    @Expose
     private String thumbnailImageUrl;
     @SerializedName("short_description")
+    @Expose
     private String shortDescription;
     @SerializedName("description")
+    @Expose
     private String description;
     @SerializedName("list_short_description")
+    @Expose
     private String listShortDescription;
     @SerializedName("list_description")
+    @Expose
     private String listDescription;
     @SerializedName("tag_names")
+    @Expose
     private List<String> tags;
     @SerializedName("tag_ids")
+    @Expose
     private List<Long> tag_ids;
     @SerializedName("p_is_deleted")
+    @Expose
     private boolean isDeleted;
     @SerializedName("p_is_active")
+    @Expose
     private boolean isActive;
     @SerializedName("p_crdt")
+    @Expose
     private String createdDate;
     @SerializedName("posting_date_dt")
+    @Expose
     private String postingDate;
     @SerializedName("posting_date_only_dt")
+    @Expose
     private String postingDateOnly;
     @SerializedName("is_expired")
+    @Expose
     private boolean isExpired;
     @SerializedName("p_last_modified_on")
+    @Expose
     private String lastModifiedDate;
     @SerializedName("author_participant_id")
+    @Expose
     private long authorParticipantId;
     @SerializedName("author_id")
+    @Expose
     private long authorId;
     @SerializedName("is_author_confidential")
+    @Expose
     private boolean isAuthorConfidential;
     @SerializedName("author_participant_type")
+    @Expose
     private String authorParticipantType;
     @SerializedName("author_first_name")
+    @Expose
     private String authorFirstName;
     @SerializedName("author_last_name")
+    @Expose
     private String authorLastName;
     @SerializedName("author_name")
+    @Expose
     private String authorName;
     @SerializedName("author_image_url")
+    @Expose
     private String authorImageUrl;
     @SerializedName("is_author_image_public")
+    @Expose
     private boolean isAuthorImagePublic;
     @SerializedName("author_city_id")
+    @Expose
     private String authorCityId;
     @SerializedName("author_city_name")
+    @Expose
     private String authorCityName;
     @SerializedName("author_short_description")
+    @Expose
     private String authorShortDescription;
     @SerializedName("is_featured")
+    @Expose
     private boolean isFeatured;
     /*Like and comment*/
     @SerializedName("solr_ignore_reacted_value")
@@ -275,7 +355,7 @@ public class FeedDetail extends BaseResponse implements Parcelable {
     private int noOfComments;
     @SerializedName("solr_ignore_last_comments")
     @Expose
-    private List<LastComment> lastComments= null;;
+    private List<LastComment> lastComments = null;
     @SerializedName("solr_ignore_no_of_views")
     @Expose
     private int noOfViews;
@@ -288,6 +368,14 @@ public class FeedDetail extends BaseResponse implements Parcelable {
     @SerializedName("solr_ignore_no_of_applies")
     @Expose
     private int noOfApplied;
+
+    @SerializedName("solr_ignore_is_viewed")
+    @Expose
+    private boolean isViewed;
+    @SerializedName("char_count_i")
+    @Expose
+    private int charCount;
+
 
     @SerializedName("is_closed_b")
     @Expose
@@ -325,92 +413,92 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         isLongPress = longPress;
     }
 
-    public String getPublishedInS() {
-        return publishedInS;
+    public boolean isTrending() {
+        return isTrending;
     }
 
-    public void setPublishedInS(String publishedInS) {
-        this.publishedInS = publishedInS;
+    public void setTrending(boolean trending) {
+        isTrending = trending;
     }
 
-    public String getMetaDescriptionS() {
-        return metaDescriptionS;
+    public boolean isFromHome() {
+        return isFromHome;
     }
 
-    public void setMetaDescriptionS(String metaDescriptionS) {
-        this.metaDescriptionS = metaDescriptionS;
+    public void setFromHome(boolean fromHome) {
+        isFromHome = fromHome;
     }
 
-    public String getMetaTitleS() {
-        return metaTitleS;
+    public List<Long> getImagesIds() {
+        return imagesIds;
     }
 
-    public void setMetaTitleS(String metaTitleS) {
-        this.metaTitleS = metaTitleS;
+    public void setImagesIds(List<Long> imagesIds) {
+        this.imagesIds = imagesIds;
     }
 
-    public String getArticleStatusI() {
-        return articleStatusI;
+    public List<String> getImageUrls() {
+        return imageUrls;
     }
 
-    public void setArticleStatusI(String articleStatusI) {
-        this.articleStatusI = articleStatusI;
+    public void setImageUrls(List<String> imageUrls) {
+        this.imageUrls = imageUrls;
     }
 
-    public String getThirdPartyIdS() {
-        return thirdPartyIdS;
+    public long getCommunityId() {
+        return communityId;
     }
 
-    public void setThirdPartyIdS(String thirdPartyIdS) {
-        this.thirdPartyIdS = thirdPartyIdS;
+    public void setCommunityId(long communityId) {
+        this.communityId = communityId;
     }
 
-    public String getArticleCategoryNameS() {
-        return articleCategoryNameS;
+    public boolean isCommunityPost() {
+        return isCommunityPost;
     }
 
-    public void setArticleCategoryNameS(String articleCategoryNameS) {
-        this.articleCategoryNameS = articleCategoryNameS;
+    public void setCommunityPost(boolean communityPost) {
+        isCommunityPost = communityPost;
     }
 
-    public int getArticleCategoryL() {
-        return articleCategoryL;
+    public boolean isAnonymous() {
+        return isAnonymous;
     }
 
-    public void setArticleCategoryL(int articleCategoryL) {
-        this.articleCategoryL = articleCategoryL;
+    public void setAnonymous(boolean anonymous) {
+        isAnonymous = anonymous;
     }
 
-    public String getSlugS() {
-        return slugS;
+    public String getPostCommunityName() {
+        return postCommunityName;
     }
 
-    public void setSlugS(String slugS) {
-        this.slugS = slugS;
+    public void setPostCommunityName(String postCommunityName) {
+        this.postCommunityName = postCommunityName;
     }
 
-    public int getEntityOrParticipantTypeIdI() {
-        return entityOrParticipantTypeIdI;
+    public boolean isPostCommunityClosed() {
+        return postCommunityClosed;
     }
 
-    public void setEntityOrParticipantTypeIdI(int entityOrParticipantTypeIdI) {
-        this.entityOrParticipantTypeIdI = entityOrParticipantTypeIdI;
+    public void setPostCommunityClosed(boolean postCommunityClosed) {
+        this.postCommunityClosed = postCommunityClosed;
     }
 
-    public String getDisplayIdProfileId() {
-        return displayIdProfileId;
+    public int getCompanyProfileIdL() {
+        return companyProfileIdL;
     }
 
-    public void setDisplayIdProfileId(String displayIdProfileId) {
-        this.displayIdProfileId = displayIdProfileId;
+    public void setCompanyProfileIdL(int companyProfileIdL) {
+        this.companyProfileIdL = companyProfileIdL;
     }
 
-    public int getNoOfViews() {
-        return noOfViews;
+    public String getTopCompanyTagLinkIdL() {
+        return topCompanyTagLinkIdL;
     }
 
-    public void setNoOfViews(int noOfViews) {
-        this.noOfViews = noOfViews;
+    public void setTopCompanyTagLinkIdL(String topCompanyTagLinkIdL) {
+        this.topCompanyTagLinkIdL = topCompanyTagLinkIdL;
     }
 
     public int getSectorIdL() {
@@ -501,7 +589,6 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         this.searchIdJobOppTypes = searchIdJobOppTypes;
     }
 
-
     public List<String> getSearchTextJobEmpTypes() {
         return searchTextJobEmpTypes;
     }
@@ -510,63 +597,6 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         this.searchTextJobEmpTypes = searchTextJobEmpTypes;
     }
 
-    public List<Integer> getSearchIdJobSkills() {
-        return searchIdJobSkills;
-    }
-
-    public void setSearchIdJobSkills(List<Integer> searchIdJobSkills) {
-        this.searchIdJobSkills = searchIdJobSkills;
-    }
-
-
-    public String getTopCompanyTagLinkIdL() {
-        return topCompanyTagLinkIdL;
-    }
-
-    public void setTopCompanyTagLinkIdL(String topCompanyTagLinkIdL) {
-        this.topCompanyTagLinkIdL = topCompanyTagLinkIdL;
-    }
-
-    public int getCompanyProfileIdL() {
-        return companyProfileIdL;
-    }
-
-    public void setCompanyProfileIdL(int companyProfileIdL) {
-        this.companyProfileIdL = companyProfileIdL;
-    }
-
-
-    public boolean isBookmarked() {
-        return isBookmarked;
-    }
-
-    public void setBookmarked(boolean bookmarked) {
-        isBookmarked = bookmarked;
-    }
-
-    public boolean isApplied() {
-        return isApplied;
-    }
-
-    public void setApplied(boolean applied) {
-        isApplied = applied;
-    }
-
-    public List<Long> getImagesIds() {
-        return imagesIds;
-    }
-
-    public void setImagesIds(List<Long> imagesIds) {
-        this.imagesIds = imagesIds;
-    }
-
-    public List<String> getImageUrls() {
-        return imageUrls;
-    }
-
-    public void setImageUrls(List<String> imageUrls) {
-        this.imageUrls = imageUrls;
-    }
 
     public String getCommunityType() {
         return communityType;
@@ -584,136 +614,77 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         this.communityTypeL = communityTypeL;
     }
 
-
-    public String getCreatedDate() {
-        return createdDate;
+    public String getSlugS() {
+        return slugS;
     }
 
-    public void setCreatedDate(String createdDate) {
-        this.createdDate = createdDate;
+    public void setSlugS(String slugS) {
+        this.slugS = slugS;
     }
 
-    public boolean isExpired() {
-        return isExpired;
+    public String getPublishedInS() {
+        return publishedInS;
     }
 
-    public void setExpired(boolean expired) {
-        isExpired = expired;
+    public void setPublishedInS(String publishedInS) {
+        this.publishedInS = publishedInS;
     }
 
-    public String getLastModifiedDate() {
-        return lastModifiedDate;
+    public String getMetaDescriptionS() {
+        return metaDescriptionS;
     }
 
-    public void setLastModifiedDate(String lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
+    public void setMetaDescriptionS(String metaDescriptionS) {
+        this.metaDescriptionS = metaDescriptionS;
     }
 
-    public long getAuthorParticipantId() {
-        return authorParticipantId;
+    public String getMetaTitleS() {
+        return metaTitleS;
     }
 
-    public void setAuthorParticipantId(long authorParticipantId) {
-        this.authorParticipantId = authorParticipantId;
+    public void setMetaTitleS(String metaTitleS) {
+        this.metaTitleS = metaTitleS;
     }
 
-    public long getAuthorId() {
-        return authorId;
+    public String getArticleStatusI() {
+        return articleStatusI;
     }
 
-    public void setAuthorId(long authorId) {
-        this.authorId = authorId;
+    public void setArticleStatusI(String articleStatusI) {
+        this.articleStatusI = articleStatusI;
     }
 
-    public boolean isAuthorConfidential() {
-        return isAuthorConfidential;
+    public String getThirdPartyIdS() {
+        return thirdPartyIdS;
     }
 
-    public void setAuthorConfidential(boolean authorConfidential) {
-        isAuthorConfidential = authorConfidential;
+    public void setThirdPartyIdS(String thirdPartyIdS) {
+        this.thirdPartyIdS = thirdPartyIdS;
     }
 
-    public String getAuthorParticipantType() {
-        return authorParticipantType;
+    public String getArticleCategoryNameS() {
+        return articleCategoryNameS;
     }
 
-    public void setAuthorParticipantType(String authorParticipantType) {
-        this.authorParticipantType = authorParticipantType;
+    public void setArticleCategoryNameS(String articleCategoryNameS) {
+        this.articleCategoryNameS = articleCategoryNameS;
     }
 
-    public String getAuthorFirstName() {
-        return authorFirstName;
+    public int getArticleCategoryL() {
+        return articleCategoryL;
     }
 
-    public void setAuthorFirstName(String authorFirstName) {
-        this.authorFirstName = authorFirstName;
+    public void setArticleCategoryL(int articleCategoryL) {
+        this.articleCategoryL = articleCategoryL;
     }
 
-    public String getAuthorLastName() {
-        return authorLastName;
+    public int getTotalExperienceUser() {
+        return totalExperienceUser;
     }
 
-    public void setAuthorLastName(String authorLastName) {
-        this.authorLastName = authorLastName;
+    public void setTotalExperienceUser(int totalExperienceUser) {
+        this.totalExperienceUser = totalExperienceUser;
     }
-
-    public String getAuthorName() {
-        return authorName;
-    }
-
-    public void setAuthorName(String authorName) {
-        this.authorName = authorName;
-    }
-
-    public String getAuthorImageUrl() {
-        return authorImageUrl;
-    }
-
-    public void setAuthorImageUrl(String authorImageUrl) {
-        this.authorImageUrl = authorImageUrl;
-    }
-
-    public boolean isAuthorImagePublic() {
-        return isAuthorImagePublic;
-    }
-
-    public void setAuthorImagePublic(boolean authorImagePublic) {
-        isAuthorImagePublic = authorImagePublic;
-    }
-
-    public String getAuthorCityId() {
-        return authorCityId;
-    }
-
-    public void setAuthorCityId(String authorCityId) {
-        this.authorCityId = authorCityId;
-    }
-
-    public String getAuthorCityName() {
-        return authorCityName;
-    }
-
-    public void setAuthorCityName(String authorCityName) {
-        this.authorCityName = authorCityName;
-    }
-
-    public String getAuthorShortDescription() {
-        return authorShortDescription;
-    }
-
-    public void setAuthorShortDescription(String authorShortDescription) {
-        this.authorShortDescription = authorShortDescription;
-    }
-
-    public boolean isFeatured() {
-        return isFeatured;
-    }
-
-    public void setFeatured(boolean featured) {
-        isFeatured = featured;
-    }
-
-
 
     public Long getCityId() {
         return cityId;
@@ -731,20 +702,20 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         this.cityName = cityName;
     }
 
-    public List<Long> getSkillIds() {
-        return skillIds;
+    public List<Long> getSkillJobIds() {
+        return skillJobIds;
     }
 
-    public void setSkillIds(List<Long> skillIds) {
-        this.skillIds = skillIds;
+    public void setSkillJobIds(List<Long> skillJobIds) {
+        this.skillJobIds = skillJobIds;
     }
 
-    public List<String> getSearchTextSkills() {
-        return searchTextSkills;
+    public List<String> getSearchTextJobSkills() {
+        return searchTextJobSkills;
     }
 
-    public void setSearchTextSkills(List<String> searchTextSkills) {
-        this.searchTextSkills = searchTextSkills;
+    public void setSearchTextJobSkills(List<String> searchTextJobSkills) {
+        this.searchTextJobSkills = searchTextJobSkills;
     }
 
     public List<Long> getOpportunityTypeIds() {
@@ -883,6 +854,22 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         this.educationDegreeNames = educationDegreeNames;
     }
 
+    public List<Long> getFieldOfStudyMasterIds() {
+        return fieldOfStudyMasterIds;
+    }
+
+    public void setFieldOfStudyMasterIds(List<Long> fieldOfStudyMasterIds) {
+        this.fieldOfStudyMasterIds = fieldOfStudyMasterIds;
+    }
+
+    public List<String> getFieldOfStudyMasterNames() {
+        return fieldOfStudyMasterNames;
+    }
+
+    public void setFieldOfStudyMasterNames(List<String> fieldOfStudyMasterNames) {
+        this.fieldOfStudyMasterNames = fieldOfStudyMasterNames;
+    }
+
     public String getGender() {
         return gender;
     }
@@ -891,12 +878,20 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         this.gender = gender;
     }
 
-    public Long getCurrently_id() {
+    public long getCurrently_id() {
         return currently_id;
     }
 
-    public void setCurrently_id(Long currently_id) {
+    public void setCurrently_id(long currently_id) {
         this.currently_id = currently_id;
+    }
+
+    public long getProfileId() {
+        return profileId;
+    }
+
+    public void setProfileId(long profileId) {
+        this.profileId = profileId;
     }
 
     public String getCurrently() {
@@ -955,38 +950,6 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         this.lastActivityDate = lastActivityDate;
     }
 
-    public int getReactionValue() {
-        return reactionValue;
-    }
-
-    public void setReactionValue(int reactionValue) {
-        this.reactionValue = reactionValue;
-    }
-
-    public int getNoOfLikes() {
-        return noOfLikes;
-    }
-
-    public void setNoOfLikes(int noOfLikes) {
-        this.noOfLikes = noOfLikes;
-    }
-
-    public int getNoOfComments() {
-        return noOfComments;
-    }
-
-    public void setNoOfComments(int noOfComments) {
-        this.noOfComments = noOfComments;
-    }
-
-    public List<LastComment> getLastComments() {
-        return lastComments;
-    }
-
-    public void setLastComments(List<LastComment> lastComments) {
-        this.lastComments = lastComments;
-    }
-
     public String getId() {
         return id;
     }
@@ -1001,6 +964,30 @@ public class FeedDetail extends BaseResponse implements Parcelable {
 
     public void setEntityOrParticipantId(long entityOrParticipantId) {
         this.entityOrParticipantId = entityOrParticipantId;
+    }
+
+    public int getEntityOrParticipantTypeIdI() {
+        return entityOrParticipantTypeIdI;
+    }
+
+    public void setEntityOrParticipantTypeIdI(int entityOrParticipantTypeIdI) {
+        this.entityOrParticipantTypeIdI = entityOrParticipantTypeIdI;
+    }
+
+    public String getDisplayIdProfileId() {
+        return displayIdProfileId;
+    }
+
+    public void setDisplayIdProfileId(String displayIdProfileId) {
+        this.displayIdProfileId = displayIdProfileId;
+    }
+
+    public long getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(long createdBy) {
+        this.createdBy = createdBy;
     }
 
     public long getIdOfEntityOrParticipant() {
@@ -1107,84 +1094,20 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         isDeleted = deleted;
     }
 
-
-    public FeedDetail() {
-    }
-
-    public long getCommunityId() {
-        return communityId;
-    }
-
-    public void setCommunityId(long communityId) {
-        this.communityId = communityId;
-    }
-
-    public boolean isCommunityPost() {
-        return isCommunityPost;
-    }
-
-    public void setCommunityPost(boolean communityPost) {
-        isCommunityPost = communityPost;
-    }
-
-    public boolean isAnonymous() {
-        return isAnonymous;
-    }
-
-    public void setAnonymous(boolean anonymous) {
-        isAnonymous = anonymous;
-    }
-
-    public int getTotalExperienceUser() {
-        return totalExperienceUser;
-    }
-
-    public void setTotalExperienceUser(int totalExperienceUser) {
-        this.totalExperienceUser = totalExperienceUser;
-    }
-
-    public List<Long> getFieldOfStudyMasterIds() {
-        return fieldOfStudyMasterIds;
-    }
-
-    public void setFieldOfStudyMasterIds(List<Long> fieldOfStudyMasterIds) {
-        this.fieldOfStudyMasterIds = fieldOfStudyMasterIds;
-    }
-
-    public List<String> getFieldOfStudyMasterNames() {
-        return fieldOfStudyMasterNames;
-    }
-
-    public void setFieldOfStudyMasterNames(List<String> fieldOfStudyMasterNames) {
-        this.fieldOfStudyMasterNames = fieldOfStudyMasterNames;
-    }
-
-    public void setCurrently_id(long currently_id) {
-        this.currently_id = currently_id;
-    }
-
-    public long getProfileId() {
-        return profileId;
-    }
-
-    public void setProfileId(long profileId) {
-        this.profileId = profileId;
-    }
-
-    public long getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(long createdBy) {
-        this.createdBy = createdBy;
-    }
-
     public boolean isActive() {
         return isActive;
     }
 
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    public String getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(String createdDate) {
+        this.createdDate = createdDate;
     }
 
     public String getPostingDate() {
@@ -1203,6 +1126,182 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         this.postingDateOnly = postingDateOnly;
     }
 
+    public boolean isExpired() {
+        return isExpired;
+    }
+
+    public void setExpired(boolean expired) {
+        isExpired = expired;
+    }
+
+    public String getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public void setLastModifiedDate(String lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public long getAuthorParticipantId() {
+        return authorParticipantId;
+    }
+
+    public void setAuthorParticipantId(long authorParticipantId) {
+        this.authorParticipantId = authorParticipantId;
+    }
+
+    public long getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(long authorId) {
+        this.authorId = authorId;
+    }
+
+    public boolean isAuthorConfidential() {
+        return isAuthorConfidential;
+    }
+
+    public void setAuthorConfidential(boolean authorConfidential) {
+        isAuthorConfidential = authorConfidential;
+    }
+
+    public String getAuthorParticipantType() {
+        return authorParticipantType;
+    }
+
+    public void setAuthorParticipantType(String authorParticipantType) {
+        this.authorParticipantType = authorParticipantType;
+    }
+
+    public String getAuthorFirstName() {
+        return authorFirstName;
+    }
+
+    public void setAuthorFirstName(String authorFirstName) {
+        this.authorFirstName = authorFirstName;
+    }
+
+    public String getAuthorLastName() {
+        return authorLastName;
+    }
+
+    public void setAuthorLastName(String authorLastName) {
+        this.authorLastName = authorLastName;
+    }
+
+    public String getAuthorName() {
+        return authorName;
+    }
+
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
+    }
+
+    public String getAuthorImageUrl() {
+        return authorImageUrl;
+    }
+
+    public void setAuthorImageUrl(String authorImageUrl) {
+        this.authorImageUrl = authorImageUrl;
+    }
+
+    public boolean isAuthorImagePublic() {
+        return isAuthorImagePublic;
+    }
+
+    public void setAuthorImagePublic(boolean authorImagePublic) {
+        isAuthorImagePublic = authorImagePublic;
+    }
+
+    public String getAuthorCityId() {
+        return authorCityId;
+    }
+
+    public void setAuthorCityId(String authorCityId) {
+        this.authorCityId = authorCityId;
+    }
+
+    public String getAuthorCityName() {
+        return authorCityName;
+    }
+
+    public void setAuthorCityName(String authorCityName) {
+        this.authorCityName = authorCityName;
+    }
+
+    public String getAuthorShortDescription() {
+        return authorShortDescription;
+    }
+
+    public void setAuthorShortDescription(String authorShortDescription) {
+        this.authorShortDescription = authorShortDescription;
+    }
+
+    public boolean isFeatured() {
+        return isFeatured;
+    }
+
+    public void setFeatured(boolean featured) {
+        isFeatured = featured;
+    }
+
+    public int getReactionValue() {
+        return reactionValue;
+    }
+
+    public void setReactionValue(int reactionValue) {
+        this.reactionValue = reactionValue;
+    }
+
+    public int getNoOfLikes() {
+        return noOfLikes;
+    }
+
+    public void setNoOfLikes(int noOfLikes) {
+        this.noOfLikes = noOfLikes;
+    }
+
+    public int getNoOfComments() {
+        return noOfComments;
+    }
+
+    public void setNoOfComments(int noOfComments) {
+        this.noOfComments = noOfComments;
+    }
+
+    public List<LastComment> getLastComments() {
+        return lastComments;
+    }
+
+    public void setLastComments(List<LastComment> lastComments) {
+        this.lastComments = lastComments;
+    }
+
+    public int getNoOfViews() {
+        return noOfViews;
+    }
+
+    public void setNoOfViews(int noOfViews) {
+        this.noOfViews = noOfViews;
+    }
+
+    public boolean isApplied() {
+        return isApplied;
+    }
+
+    public void setApplied(boolean applied) {
+        isApplied = applied;
+    }
+
+    public boolean isBookmarked() {
+        return isBookmarked;
+    }
+
+    public void setBookmarked(boolean bookmarked) {
+        isBookmarked = bookmarked;
+    }
+
     public int getNoOfApplied() {
         return noOfApplied;
     }
@@ -1211,20 +1310,20 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         this.noOfApplied = noOfApplied;
     }
 
-    public boolean isTrending() {
-        return isTrending;
+    public boolean isViewed() {
+        return isViewed;
     }
 
-    public void setTrending(boolean trending) {
-        isTrending = trending;
+    public void setViewed(boolean viewed) {
+        isViewed = viewed;
     }
 
-    public boolean isFromHome() {
-        return isFromHome;
+    public int getCharCount() {
+        return charCount;
     }
 
-    public void setFromHome(boolean fromHome) {
-        isFromHome = fromHome;
+    public void setCharCount(int charCount) {
+        this.charCount = charCount;
     }
 
     public boolean isClosedCommunity() {
@@ -1275,6 +1374,9 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         isRequestPending = requestPending;
     }
 
+    public FeedDetail() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -1291,6 +1393,8 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         dest.writeLong(this.communityId);
         dest.writeByte(this.isCommunityPost ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isAnonymous ? (byte) 1 : (byte) 0);
+        dest.writeString(this.postCommunityName);
+        dest.writeByte(this.postCommunityClosed ? (byte) 1 : (byte) 0);
         dest.writeInt(this.companyProfileIdL);
         dest.writeString(this.topCompanyTagLinkIdL);
         dest.writeInt(this.sectorIdL);
@@ -1305,7 +1409,6 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         dest.writeInt(this.experienceToI);
         dest.writeList(this.searchIdJobOppTypes);
         dest.writeStringList(this.searchTextJobEmpTypes);
-        dest.writeList(this.searchIdJobSkills);
         dest.writeString(this.communityType);
         dest.writeString(this.communityTypeL);
         dest.writeString(this.slugS);
@@ -1319,8 +1422,8 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         dest.writeInt(this.totalExperienceUser);
         dest.writeValue(this.cityId);
         dest.writeString(this.cityName);
-        dest.writeList(this.skillIds);
-        dest.writeStringList(this.searchTextSkills);
+        dest.writeList(this.skillJobIds);
+        dest.writeStringList(this.searchTextJobSkills);
         dest.writeList(this.opportunityTypeIds);
         dest.writeStringList(this.searchIdOpportunityTypes);
         dest.writeList(this.canHelpInIds);
@@ -1395,6 +1498,8 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         dest.writeByte(this.isApplied ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isBookmarked ? (byte) 1 : (byte) 0);
         dest.writeInt(this.noOfApplied);
+        dest.writeByte(this.isViewed ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.charCount);
         dest.writeByte(this.isClosedCommunity ? (byte) 1 : (byte) 0);
         dest.writeInt(this.noOfMembers);
         dest.writeInt(this.noOfPendingRequest);
@@ -1414,6 +1519,8 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         this.communityId = in.readLong();
         this.isCommunityPost = in.readByte() != 0;
         this.isAnonymous = in.readByte() != 0;
+        this.postCommunityName = in.readString();
+        this.postCommunityClosed = in.readByte() != 0;
         this.companyProfileIdL = in.readInt();
         this.topCompanyTagLinkIdL = in.readString();
         this.sectorIdL = in.readInt();
@@ -1429,8 +1536,6 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         this.searchIdJobOppTypes = new ArrayList<Integer>();
         in.readList(this.searchIdJobOppTypes, Integer.class.getClassLoader());
         this.searchTextJobEmpTypes = in.createStringArrayList();
-        this.searchIdJobSkills = new ArrayList<Integer>();
-        in.readList(this.searchIdJobSkills, Integer.class.getClassLoader());
         this.communityType = in.readString();
         this.communityTypeL = in.readString();
         this.slugS = in.readString();
@@ -1444,9 +1549,9 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         this.totalExperienceUser = in.readInt();
         this.cityId = (Long) in.readValue(Long.class.getClassLoader());
         this.cityName = in.readString();
-        this.skillIds = new ArrayList<Long>();
-        in.readList(this.skillIds, Long.class.getClassLoader());
-        this.searchTextSkills = in.createStringArrayList();
+        this.skillJobIds = new ArrayList<Long>();
+        in.readList(this.skillJobIds, Long.class.getClassLoader());
+        this.searchTextJobSkills = in.createStringArrayList();
         this.opportunityTypeIds = new ArrayList<Long>();
         in.readList(this.opportunityTypeIds, Long.class.getClassLoader());
         this.searchIdOpportunityTypes = in.createStringArrayList();
@@ -1534,6 +1639,8 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         this.isApplied = in.readByte() != 0;
         this.isBookmarked = in.readByte() != 0;
         this.noOfApplied = in.readInt();
+        this.isViewed = in.readByte() != 0;
+        this.charCount = in.readInt();
         this.isClosedCommunity = in.readByte() != 0;
         this.noOfMembers = in.readInt();
         this.noOfPendingRequest = in.readInt();

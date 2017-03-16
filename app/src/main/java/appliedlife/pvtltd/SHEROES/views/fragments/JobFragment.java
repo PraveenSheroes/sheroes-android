@@ -22,7 +22,6 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
@@ -78,7 +77,6 @@ public class JobFragment extends BaseFragment {
         }
     }
 
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -131,7 +129,7 @@ public class JobFragment extends BaseFragment {
                 setListLoadFlag(false);
                 mPullRefreshList.setPullToRefresh(true);
                 mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
-                mPullRefreshList=new SwipPullRefreshList();
+                mPullRefreshList = new SwipPullRefreshList();
                 setRefreshList(mPullRefreshList);
                 mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
                 mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_JOB, mFragmentListRefreshData.getPageNo()));
@@ -181,36 +179,11 @@ public class JobFragment extends BaseFragment {
         super.bookMarkForCard(feedDetail);
     }
 
-    public void likeAndUnlikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-        super.likeAndUnlikeRequest(baseResponse, reactionValue, position);
-    }
 
     @Override
     public void getSuccessForAllResponse(String success, int successFrom) {
-        switch (successFrom) {
-            case AppConstants.ONE_CONSTANT:
-                likeSuccess(success);
-                break;
-            case AppConstants.TWO_CONSTANT:
-                break;
-            case AppConstants.THREE_CONSTANT:
-                bookMarkSuccess(success);
-                break;
-            default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + successFrom);
-        }
-
+        super.getSuccessForAllResponse(success, successFrom);
     }
-
-    protected void bookMarkSuccess(String success) {
-        super.bookMarkSuccess(success);
-
-    }
-
-    protected void likeSuccess(String success) {
-        super.likeSuccess(success);
-    }
-
 
     @Override
     public void onDestroyView() {
@@ -220,6 +193,7 @@ public class JobFragment extends BaseFragment {
 
     public interface HomeActivityIntractionListner {
         void onErrorOccurence();
+
         void openFilter();
     }
 

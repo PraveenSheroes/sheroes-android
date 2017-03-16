@@ -52,7 +52,7 @@ public class AllSearchFragment extends BaseFragment implements HomeView {
     @Bind(R.id.pb_search_progress_bar)
     ProgressBar mProgressBar;
     @Bind(R.id.li_no_search_result)
-    LinearLayout liNoSearchResult;
+    LinearLayout mLiNoSearchResult;
     @Bind(R.id.tv_search_result)
     TextView tvSearchResult;
     private String mSearchDataName = AppConstants.EMPTY_STRING;
@@ -80,7 +80,7 @@ public class AllSearchFragment extends BaseFragment implements HomeView {
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mAdapter);
         super.setAllInitializationForFeeds(mFragmentListRefreshData,  mAdapter, manager, mRecyclerView, mHomePresenter, mAppUtils, mProgressBar);
-        liNoSearchResult.setVisibility(View.VISIBLE);
+        mLiNoSearchResult.setVisibility(View.VISIBLE);
         return view;
     }
 
@@ -88,17 +88,24 @@ public class AllSearchFragment extends BaseFragment implements HomeView {
     @Override
     public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
         if(StringUtil.isNotEmptyCollection(feedDetailList)&&mAdapter!=null) {
+            mLiNoSearchResult.setVisibility(View.GONE);
             mAdapter.setCallForRecycler(AppConstants.ALL_SEARCH);
             mAdapter.setSheroesGenericListData(feedDetailList);
             mAdapter.notifyDataSetChanged();
         }
         else
         {
-            liNoSearchResult.setVisibility(View.VISIBLE);
-            tvSearchResult.setText(getString(R.string.ID_NO_RESULT_FOUND));
+            mLiNoSearchResult.setVisibility(View.VISIBLE);
+            tvSearchResult.setText(getString(R.string.ID_SEARCH));
         }
     }
-
+    public void setEditText(String stringForSearch)
+    {
+        mSearchDataName = stringForSearch;
+        /**hitting the servers to get data if length is greater than threshold defined **/
+        mHandler.removeCallbacks(mFilterTask);
+        mHandler.postDelayed(mFilterTask, AppConstants.SEARCH_CONSTANT_DELAY);
+    }
     public void saveRecentSearchData(FeedDetail feedDetail)
     {
         List<RecentSearchData> recentSearchData= new ArrayList<>();
@@ -145,15 +152,10 @@ public class AllSearchFragment extends BaseFragment implements HomeView {
 
             @Override
             public void afterTextChanged(Editable inputSearch) {
-                /**As soon as user starts typing take the scroll to top **/
-             /*   mSearchDataName = inputSearch.toString();
-                if (!((HomeSearchActivity) getActivity()).mIsDestroyed) {
-                    mAdapter.getFilter().filter(mSearchDataName);
-                }*/
 
                 if (StringUtil.isNotNullOrEmptyString(inputSearch.toString())&&inputSearch.toString().length()>AppConstants.THREE_CONSTANT)
                 {
-                    liNoSearchResult.setVisibility(View.GONE);
+                    mLiNoSearchResult.setVisibility(View.GONE);
                     mSearchDataName = inputSearch.toString();
                     /**hitting the servers to get data if length is greater than threshold defined **/
                     mHandler.removeCallbacks(mFilterTask);

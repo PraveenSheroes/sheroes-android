@@ -20,18 +20,14 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.crashlytics.android.Crashlytics;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -46,12 +42,10 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CreateCommunityView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by Ajit Kumar on 11-01-2017.
@@ -135,7 +129,7 @@ public class CreateCommunityFragment extends BaseFragment implements CreateCommu
         getActivity().setRequestedOrientation(
                 ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         getExternalStoragePermission();
-        Fabric.with(getActivity(), new Crashlytics());
+//        Fabric.with(getActivity(), new Crashlytics());
         return view;
     }
     @OnClick(R.id.iv_create_community_cross)
@@ -300,11 +294,6 @@ public class CreateCommunityFragment extends BaseFragment implements CreateCommu
 
     @Override
     public void startNextScreen() {
-
-    }
-
-    @Override
-    public void showError(String s) {
 
     }
 

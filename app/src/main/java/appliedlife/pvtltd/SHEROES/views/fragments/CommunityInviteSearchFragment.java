@@ -119,10 +119,6 @@ public class CommunityInviteSearchFragment extends BaseFragment implements Invit
         mProgressBar.setVisibility(View.GONE);
     }
 
-    @Override
-    public void showError(String errorMsg) {
-        mAdapter.notifyDataSetChanged();
-    }
 
     @Override
     public void startNextScreen() {

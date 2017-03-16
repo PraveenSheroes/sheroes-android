@@ -76,6 +76,7 @@
     <dimen name="dp_size_330">330dp</dimen>
     <dimen name="dp_size_282">282dp</dimen>
     <dimen name="dp_size_150">150dp</dimen>
+    <dimen name="dp_size_140">140dp</dimen>
     <dimen name="dp_size_158">158dp</dimen>
     <!--Text sizes for SHEROES-->
     <dimen name="sp_size_16">16sp</dimen>

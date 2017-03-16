@@ -146,10 +146,10 @@ public class JobDetailFragment extends BaseFragment implements HomeView {
                     mJobDetailActivityIntractionListner.onJobBookmarkClick(mFeedDetail);
                     break;
                 case AppConstants.FAILED:
-                    showError(getString(R.string.ID_ALREADY_BOOKMARK));
+                    showError(getString(R.string.ID_ALREADY_BOOKMARK),AppConstants.TWO_CONSTANT);
                     break;
                 default:
-                    showError(AppConstants.HTTP_401_UNAUTHORIZED);
+                    showError(AppConstants.HTTP_401_UNAUTHORIZED,AppConstants.TWO_CONSTANT);
             }
         }
     }

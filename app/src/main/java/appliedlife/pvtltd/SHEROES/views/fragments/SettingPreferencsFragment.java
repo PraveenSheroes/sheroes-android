@@ -112,9 +112,4 @@ public class SettingPreferencsFragment extends BaseFragment  implements SettingV
     public void startNextScreen() {
 
     }
-
-    @Override
-    public void showError(String s) {
-
-    }
 }

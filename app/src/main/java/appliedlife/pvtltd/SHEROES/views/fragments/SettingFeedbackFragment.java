@@ -15,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import javax.inject.Inject;
 
@@ -31,7 +30,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.setting.UserpreferenseResponse
 import appliedlife.pvtltd.SHEROES.presenters.SettingFeedbackPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.Feedback_ThankyouActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SettingFeedbackView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SettingView;
@@ -248,11 +246,6 @@ public class SettingFeedbackFragment extends BaseFragment implements SettingFeed
 
     @Override
     public void startNextScreen() {
-
-    }
-
-    @Override
-    public void showError(String s) {
 
     }
 

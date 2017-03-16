@@ -179,6 +179,7 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
             final TextView tvTotalViews = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_total_views);
             final RelativeLayout rlFeedArticleViews = (RelativeLayout) backgroundImage.findViewById(R.id.rl_gradiant);
             //  tvFeedArticleTotalViews.setText(dataItem.getTotalViews() + AppConstants.SPACE + context.getString(R.string.ID_VIEWS));
+
             Glide.with(mContext)
                     .load(imageUrl).asBitmap()
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)

@@ -261,10 +261,12 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
                     ProfileActicity.navigate(this, view, profile);
                     break;
                 case AppConstants.TWO_CONSTANT:
+                    initHomeViewPagerAndTabs();
                     checkForAllOpenFragments();
                     openArticleFragment();
                     break;
                 case AppConstants.THREE_CONSTANT:
+                    initHomeViewPagerAndTabs();
                     checkForAllOpenFragments();
                     openJobFragment();
                     break;
@@ -381,6 +383,10 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
         if (mFragmentOpen.isBookmarkFragment()) {
             onBackPressed();
             mFragmentOpen.setBookmarkFragment(false);
+        }
+        if (mFragmentOpen.isJobFragment()) {
+            onBackPressed();
+            mFragmentOpen.setJobFragment(false);
         }
         if (mFragmentOpen.isSettingFragment()) {
             onBackPressed();
@@ -525,7 +531,7 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
         liHomeCommunityButtonLayout.setVisibility(View.GONE);
         mFlHomeFooterList.setVisibility(View.VISIBLE);
         mToolbar.setVisibility(View.VISIBLE);
-        mFragmentOpen.setArticleFragment(true);
+        mFragmentOpen.setJobFragment(true);
         mViewPager.setVisibility(View.GONE);
         mTabLayout.setVisibility(View.GONE);
         flFeedFullView.setVisibility(View.GONE);
@@ -534,18 +540,14 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
         mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_unselected_icon), null, null);
         mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_unselected_icon), null, null);
         mTvCommunities.setText(AppConstants.EMPTY_STRING);
-        JobFragment articlesFragment = new JobFragment();
-        Bundle bundleArticle = new Bundle();
-        articlesFragment.setArguments(bundleArticle);
+        setAllValues(mFragmentOpen);
+        JobFragment jobFragment = new JobFragment();
+        Bundle jobBookMarks = new Bundle();
+        jobBookMarks.putParcelable(AppConstants.JOB_FRAGMENT, mFeedDetail);
+        jobFragment.setArguments(jobBookMarks);
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
-                .replace(R.id.fl_article_card_view, articlesFragment, JobFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+                .replace(R.id.fl_article_card_view, jobFragment, JobFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
         mTvSpinnerIcon.setVisibility(View.GONE);
-
-
-
-
-       /* Intent intent = new Intent(getApplicationContext(), JobFilterActivity.class);
-        startActivity(intent);*/
     }
 
     public void openJobLocationFragment() {
@@ -624,6 +626,11 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
             initHomeViewPagerAndTabs();
             setHomeFeedCommunityData();
             mFragmentOpen.setBookmarkFragment(false);
+        } else if (mFragmentOpen.isJobFragment()) {
+            getSupportFragmentManager().popBackStackImmediate();
+            initHomeViewPagerAndTabs();
+            setHomeFeedCommunityData();
+            mFragmentOpen.setJobFragment(false);
         } else if(mFragmentOpen.getOpenCommentReactionFragmentFor()==AppConstants.FOURTH_CONSTANT) {
             getSupportFragmentManager().popBackStackImmediate();
             mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.NO_REACTION_CONSTANT);
@@ -707,6 +714,8 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
 
     @Override
     public void onDialogDissmiss(FragmentOpen isFragmentOpen) {
+        mFragmentOpen = isFragmentOpen;
+        onBackPressed();
 
     }
 
@@ -827,11 +836,11 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
 
     }
     @Override
-    public void onShowErrorDialog(String errorReason) {
+    public void onShowErrorDialog(String errorReason,int errorFor) {
         switch (errorReason)
         {
             case AppConstants.CHECK_NETWORK_CONNECTION:
-                showNetworkTimeoutDoalog(true,false,getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
+               showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
                 break;
             default:
                 showNetworkTimeoutDoalog(true,false,getString(R.string.ID_GENERIC_ERROR));
@@ -839,7 +848,7 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
 
     }
     @Override
-    public void showError(String s) {
+    public void showError(String s,int e) {
 
     }
 }

@@ -128,9 +128,11 @@ public class CommunityJoinRegionDialogFragment extends BaseDialogFragment implem
     }
 
     @Override
-    public void showError(String s) {
+    public void showError(String s, int errorFor) {
 
     }
+
+
 
     public interface CloseListener {
         void onErrorOccurence();

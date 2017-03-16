@@ -100,7 +100,7 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
         }
         //TODO:: change for UI
         if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
-            tvCommunityCardTitle.setText(dataItem.getNameOrTitle()+dataItem.getId());
+            tvCommunityCardTitle.setText(dataItem.getNameOrTitle());
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getCommunityType())) {
             tvCommunityTime.setText(dataItem.getCommunityType());

@@ -154,6 +154,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
 
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
+
         if (baseResponse instanceof FeedDetail) {
             articleDetailHandled(view, baseResponse);
         }else if (baseResponse instanceof CommentReactionDoc) {
@@ -162,7 +163,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
     }
 
     private void articleDetailHandled(View view, BaseResponse baseResponse) {
-        FeedDetail feedDetail = (FeedDetail) baseResponse;
+        mFeedDetail = (FeedDetail) baseResponse;
         int id = view.getId();
         switch (id) {
             case R.id.tv_article_detail_user_comment_post_menu:
@@ -177,14 +178,12 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
             case R.id.li_article_detail_join_conversation:
                 mFragmentOpen.setCommentList(true);
                 mFragmentOpen.setReactionList(false);
-                mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.TWO_CONSTANT);
-                openCommentReactionFragment(feedDetail);
+                openCommentReactionFragment(mFeedDetail);
                 break;
             case R.id.tv_article_detail_total_reactions:
                 mFragmentOpen.setCommentList(false);
                 mFragmentOpen.setReactionList(true);
-                mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.TWO_CONSTANT);
-                openCommentReactionFragment(feedDetail);
+                openCommentReactionFragment(mFeedDetail);
                 break;
             case R.id.tv_article_detail_user_reaction:
                 mArticlePopUp = findViewById(R.id.li_article_detail_emoji_pop_up);
@@ -216,6 +215,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
 
     protected void openCommentReactionFragment(FeedDetail feedDetail) {
         if (null != feedDetail && null != mFragmentOpen) {
+            mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.TWO_CONSTANT);
             CommentReactionFragment commentReactionFragmentForArticle = new CommentReactionFragment();
             Bundle bundleArticle = new Bundle();
             bundleArticle.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, mFragmentOpen);
@@ -409,6 +409,8 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
                     if (null != mFeedDetail) {
                         mFragmentOpen.setOpen(true);
                         mFragmentOpen.setCommentList(true);
+                        mFeedDetail.setTrending(true);
+                        mFeedDetail.setExperienceFromI(AppConstants.ONE_CONSTANT);
                         openCommentReactionFragment(mFeedDetail);
                     }
                 }
@@ -429,6 +431,8 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
                     if (null != mFeedDetail) {
                         mFragmentOpen.setOpen(true);
                         mFragmentOpen.setCommentList(true);
+                        mFeedDetail.setTrending(true);
+                        mFeedDetail.setExperienceFromI(AppConstants.TWO_CONSTANT);
                         openCommentReactionFragment(mFeedDetail);
                     }
                 }
@@ -452,6 +456,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
     }
     @OnClick(R.id.tv_article_detail_bookmark)
     public void onBookMarkClick() {
+        mTvArticleDetailBookmark.setEnabled(false);
         mFeedDetail.setItemPosition(0);
         bookmarkCall();
     }
@@ -482,6 +487,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
 
     @Override
     public void onBookmarkClick(FeedDetail feedDetail) {
+        mTvArticleDetailBookmark.setEnabled(true);
         if (!feedDetail.isBookmarked()) {
             feedDetail.setBookmarked(true);
           mTvArticleDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_active, 0, 0, 0);

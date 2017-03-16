@@ -137,11 +137,6 @@ public class ProfileFullViewFragment extends BaseFragment implements HomeView {
     }
 
     @Override
-    public void showError(String errorMsg) {
-        mAdapter.notifyDataSetChanged();
-    }
-
-    @Override
     public void startNextScreen() {
 
     }

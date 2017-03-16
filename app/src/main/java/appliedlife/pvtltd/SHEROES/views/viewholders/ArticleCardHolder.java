@@ -39,8 +39,8 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
     private final String TAG = LogUtils.makeLogTag(ArticleCardHolder.class);
     @Inject
     DateUtil mDateUtil;
-    private static final String LEFT_HTML_TAG_FOR_COLOR = "<b><font color='#50e3c2'>";
-    private static final String RIGHT_HTML_TAG_FOR_COLOR = "</font></b>";
+    private static final String LEFT_VIEW_MORE = "<font color='#323840'>";
+    private static final String RIGHT_VIEW_MORE = "</font>";
     private static final String LEFT_HTML_TAG = "<font color='#333333'>";
     private static final String RIGHT_HTML_TAG = "</font>";
     @Bind(R.id.li_article_cover_image)
@@ -66,8 +66,9 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
     BaseHolderInterface viewInterface;
     private FeedDetail dataItem;
     Context mContext;
-    String mViewMore,mLess;
     String mViewMoreDescription;
+    @Bind(R.id.tv_article_view_more)
+    TextView tvArticleView;
     public ArticleCardHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
@@ -79,11 +80,15 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
     public void bindData(FeedDetail item, final Context context, int position) {
         this.dataItem = item;
         mContext = context;
-        mViewMore = context.getString(R.string.ID_VIEW_MORE);
-        mLess = context.getString(R.string.ID_LESS);
-        tvArticleDescriptionText.setTag(mViewMore);
         liArticleCoverImage.removeAllViews();
         liArticleCoverImage.removeAllViewsInLayout();
+        tvArticleBookmark.setEnabled(true);
+        String dots = LEFT_VIEW_MORE + AppConstants.DOTS + RIGHT_VIEW_MORE;
+        if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+            tvArticleView.setText(Html.fromHtml(dots +mContext.getString(R.string.ID_VIEW_MORE), 0)); // for 24 api and more
+        } else {
+            tvArticleView.setText(Html.fromHtml(dots +mContext.getString(R.string.ID_VIEW_MORE) ));// or for older api
+        }
 
         if(dataItem.isTrending())
         {
@@ -146,6 +151,7 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
             final TextView tvFeedArticleTotalViews = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_total_views);
             final RelativeLayout rlFeedArticleViews = (RelativeLayout) backgroundImage.findViewById(R.id.rl_gradiant);
             tvFeedArticleTotalViews.setText(dataItem.getNoOfViews() + AppConstants.SPACE + context.getString(R.string.ID_VIEWS));
+            tvFeedArticleTimeLabel.setText(dataItem.getCharCount()+ AppConstants.SPACE + context.getString(R.string.ID_MIN_READ));
             Glide.with(mContext)
                     .load(backgrndImageUrl).asBitmap()
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
@@ -162,14 +168,10 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
 
         mViewMoreDescription = dataItem.getListDescription();
         if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
-            if (mViewMoreDescription.length() > AppConstants.WORD_LENGTH) {
-                mViewMoreDescription = mViewMoreDescription.substring(0, AppConstants.WORD_COUNT);
-            }
-            String viewMore = LEFT_HTML_TAG_FOR_COLOR + mViewMore + RIGHT_HTML_TAG_FOR_COLOR;
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                tvArticleDescriptionText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + viewMore, 0)); // for 24 api and more
+                tvArticleDescriptionText.setText(Html.fromHtml(mViewMoreDescription, 0)); // for 24 api and more
             } else {
-                tvArticleDescriptionText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + viewMore));// or for older api
+                tvArticleDescriptionText.setText(Html.fromHtml(mViewMoreDescription));// or for older api
             }
         }
     }
@@ -188,13 +190,14 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
     public void articleCoverImageClick() {
         viewInterface.handleOnClick(dataItem, liArticleCoverImage);
     }
-    @OnClick(R.id.card_article)
+    @OnClick(R.id.li_article_decription)
     public void articleCardClick() {
         viewInterface.handleOnClick(dataItem, liArticleCoverImage);
     }
 
     @OnClick(R.id.tv_article_bookmark)
     public void tvBookMarkClick() {
+        tvArticleBookmark.setEnabled(false);
         dataItem.setItemPosition(getAdapterPosition());
         if (dataItem.isBookmarked()) {
             viewInterface.handleOnClick(dataItem, tvArticleBookmark);
@@ -203,33 +206,6 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
         }
     }
 
-    @TargetApi(AppConstants.ANDROID_SDK_24)
-    @OnClick(R.id.tv_article_description_text)
-    public void viewMoreClick() {
-        if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
-            if (tvArticleDescriptionText.getTag().toString().equalsIgnoreCase(mViewMore)) {
-                String lessWithColor = LEFT_HTML_TAG_FOR_COLOR + mLess + RIGHT_HTML_TAG_FOR_COLOR;
-                mViewMoreDescription = dataItem.getListDescription();
-                if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                    tvArticleDescriptionText.setText(Html.fromHtml(mViewMoreDescription  + AppConstants.SPACE + lessWithColor, 0)); // for 24 api and more
-                } else {
-                    tvArticleDescriptionText.setText(Html.fromHtml(mViewMoreDescription  + AppConstants.SPACE + lessWithColor));// or for older api
-                }
-                tvArticleDescriptionText.setTag(mLess);
-            } else {
-                tvArticleDescriptionText.setTag(mViewMore);
-                if (mViewMoreDescription.length() > AppConstants.WORD_LENGTH) {
-                    mViewMoreDescription = mViewMoreDescription.substring(0, AppConstants.WORD_COUNT);
-                }
-                String viewMore = LEFT_HTML_TAG_FOR_COLOR + mViewMore + RIGHT_HTML_TAG_FOR_COLOR;
-                if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                    tvArticleDescriptionText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + viewMore, 0)); // for 24 api and more
-                } else {
-                    tvArticleDescriptionText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + viewMore));// or for older api
-                }
-            }
-        }
-    }
 
 
     @Override

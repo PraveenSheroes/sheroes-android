@@ -30,7 +30,6 @@
             android:drawableLeft="@drawable/ic_timer_icon"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:paddingLeft="@dimen/dp_size_5"
-            android:text="1 Min Read"
             android:textColor="@color/white"
             android:textSize="@dimen/sp_size_12" />
 

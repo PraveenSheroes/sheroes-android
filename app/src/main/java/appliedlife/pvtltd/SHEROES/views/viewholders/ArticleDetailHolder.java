@@ -60,6 +60,8 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
     TextView tvArticleDetailDescription;
     @Bind(R.id.tv_article_detail_user_reaction)
     TextView tvArticleDetailUserReaction;
+    @Bind(R.id.tv_feed_article_detail_reaction_text)
+    TextView tvArticleDetailUserReactionText;
     @Bind(R.id.tv_article_detail_user_comment)
     TextView tvArticleDetailUserComment;
     @Bind(R.id.tv_article_detail_total_reactions)
@@ -118,6 +120,7 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
         this.dataItem = item;
         this.mContext = context;
         mFeedDetail = dataItem.getFeedDetail();
+        tvArticleDetailUserReaction.setEnabled(true);
         if (null != mFeedDetail) {
             imageOperations(context);
             allTextViewStringOperations(context);
@@ -181,13 +184,13 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
             case AppConstants.ONE_CONSTANT:
                 flArticleDetailNoReactionComment.setVisibility(View.VISIBLE);
                 tvArticleDetailTotalReaction.setText(String.valueOf(mFeedDetail.getNoOfLikes()) + AppConstants.SPACE + context.getString(R.string.ID_REACTION));
-                tvArticleDetailUserReaction.setText(AppConstants.EMPTY_STRING);
+                tvArticleDetailUserReactionText.setText(AppConstants.EMPTY_STRING);
                 userLike();
                 break;
             default:
                 flArticleDetailNoReactionComment.setVisibility(View.VISIBLE);
                 tvArticleDetailTotalReaction.setText(String.valueOf(mFeedDetail.getNoOfLikes()) + AppConstants.SPACE + context.getString(R.string.ID_REACTION) + AppConstants.S);
-                tvArticleDetailUserReaction.setText(AppConstants.EMPTY_STRING);
+                tvArticleDetailUserReactionText.setText(AppConstants.EMPTY_STRING);
                 userLike();
         }
         userComments();
@@ -198,27 +201,27 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
         switch (mFeedDetail.getReactionValue()) {
             case AppConstants.NO_REACTION_CONSTANT:
                 tvArticleDetailUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
-                tvArticleDetailUserReaction.setText(AppConstants.EMPTY_STRING);
+                tvArticleDetailUserReactionText.setText(AppConstants.EMPTY_STRING);
                 break;
             case AppConstants.HEART_REACTION_CONSTANT:
                 tvArticleDetailUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
-                tvArticleDetailUserReaction.setText(mContext.getString(R.string.ID_LOVE));
+                tvArticleDetailUserReactionText.setText(mContext.getString(R.string.ID_LOVE));
                 break;
             case AppConstants.EMOJI_FIRST_REACTION_CONSTANT:
                 tvArticleDetailUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_emoji3_whistel, 0, 0, 0);
-                tvArticleDetailUserReaction.setText(mContext.getString(R.string.ID_WISHTLE));
+                tvArticleDetailUserReactionText.setText(mContext.getString(R.string.ID_WISHTLE));
                 break;
             case AppConstants.EMOJI_SECOND_REACTION_CONSTANT:
                 tvArticleDetailUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_emoji_xo_xo, 0, 0, 0);
-                tvArticleDetailUserReaction.setText(mContext.getString(R.string.ID_XOXO));
+                tvArticleDetailUserReactionText.setText(mContext.getString(R.string.ID_XOXO));
                 break;
             case AppConstants.EMOJI_THIRD_REACTION_CONSTANT:
                 tvArticleDetailUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_emoji2_with_you, 0, 0, 0);
-                tvArticleDetailUserReaction.setText(mContext.getString(R.string.ID_LIKE));
+                tvArticleDetailUserReactionText.setText(mContext.getString(R.string.ID_LIKE));
                 break;
             case AppConstants.EMOJI_FOURTH_REACTION_CONSTANT:
                 tvArticleDetailUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_emoji4_face_palm, 0, 0, 0);
-                tvArticleDetailUserReaction.setText(mContext.getString(R.string.ID_FACE_PALM));
+                tvArticleDetailUserReactionText.setText(mContext.getString(R.string.ID_FACE_PALM));
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + mFeedDetail.getReactionValue());
@@ -337,6 +340,7 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
 
     @OnLongClick(R.id.tv_article_detail_user_reaction)
     public boolean userReactionLongClick() {
+        tvArticleDetailUserReaction.setEnabled(false);
         mFeedDetail.setItemPosition(getAdapterPosition());
         mFeedDetail.setLongPress(true);
         viewInterface.handleOnClick(mFeedDetail, tvArticleDetailUserReaction);
@@ -389,19 +393,19 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
 
     @OnClick(R.id.tv_article_detail_user_comment_post_menu)
     public void menuClick() {
-        mFeedDetail.setItemPosition(getAdapterPosition());
+        mFeedDetail.setItemPosition(AppConstants.NO_REACTION_CONSTANT);
         viewInterface.handleOnClick(mFeedDetail, tvArticleDetailUserCommentPostMenu);
     }
 
     @OnClick(R.id.tv_article_detail_user_comment_post_menu_second)
     public void menuSecondClick() {
-        mFeedDetail.setItemPosition(getAdapterPosition());
+        mFeedDetail.setItemPosition(AppConstants.ONE_CONSTANT);
         viewInterface.handleOnClick(mFeedDetail, tvArticleDetailUserCommentPostMenuSecond);
     }
 
     @OnClick(R.id.tv_article_detail_user_comment_post_menu_third)
     public void menuThirdClick() {
-        mFeedDetail.setItemPosition(getAdapterPosition());
+        mFeedDetail.setItemPosition(AppConstants.TWO_CONSTANT);
         viewInterface.handleOnClick(mFeedDetail, tvArticleDetailUserCommentPostMenuThird);
     }
 

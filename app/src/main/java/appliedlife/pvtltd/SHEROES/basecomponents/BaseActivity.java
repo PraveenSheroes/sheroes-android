@@ -33,7 +33,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.JobDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.errorview.NetworkTimeoutDialog;
 import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
@@ -43,6 +42,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityJoinRegionDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ImageFullViewFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.JobFragment;
 
 /**
  * Created by Praveen Singh on 29/12/2016.
@@ -52,7 +52,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ImageFullViewFragment;
  * @since 29/12/2016.
  * Title: Base activity for all activities.
  */
-public class BaseActivity extends AppCompatActivity implements BaseHolderInterface,FragmentIntractionWithActivityListner,View.OnTouchListener, View.OnClickListener {
+public class BaseActivity extends AppCompatActivity implements BaseHolderInterface, FragmentIntractionWithActivityListner, View.OnTouchListener, View.OnClickListener {
     private final String TAG = LogUtils.makeLogTag(BaseActivity.class);
     protected boolean mIsSavedInstance;
     public boolean mIsDestroyed;
@@ -61,6 +61,8 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
     private FeedDetail mFeedDetail;
     public View mArticlePopUp, mCommunityPopUp, mCommunityPostPopUp;
     private Fragment mFragment;
+    private View popupView;
+    private PopupWindow popupWindow;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -97,7 +99,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
      *                                     pass false:- to just dismiss the dialog on try again and or press of back key in case you want to handle it your self say a retry
      * @return
      */
-    public DialogFragment showNetworkTimeoutDoalog(boolean finishParentOnBackOrTryagain,boolean isCancellable,String errorMessage) {
+    public DialogFragment showNetworkTimeoutDoalog(boolean finishParentOnBackOrTryagain, boolean isCancellable, String errorMessage) {
         NetworkTimeoutDialog fragment = (NetworkTimeoutDialog) getFragmentManager().findFragmentByTag(AppConstants.NETWORK_TIMEOUT);
         if (fragment == null) {
             fragment = new NetworkTimeoutDialog();
@@ -146,9 +148,6 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
         if (this.getClass().getSimpleName().equals(currActivityName))
             mSheroesApplication.setCurrentActivityName(null);
     }
-    @Override
-    public void onShowErrorDialog(String errorReason) {
-    }
 
     @Override
     public void startActivityFromHolder(Intent intent) {
@@ -191,6 +190,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
         }
         return fragment;
     }
+
     protected void feedCardsHandled(View view, BaseResponse baseResponse) {
         mFeedDetail = (FeedDetail) baseResponse;
         int id = view.getId();
@@ -232,6 +232,13 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 clickMenuItem(view, baseResponse, false);
                 break;
             case R.id.tv_feed_article_user_comment_post_menu:
+               /* if(popupView.getVisibility()==View.VISIBLE)
+                {
+                    popupWindow.dismiss();
+                }
+                else {
+
+                }*/
                 clickMenuItem(view, baseResponse, false);
                 break;
             case R.id.tv_feed_article_total_reactions:
@@ -281,7 +288,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 CommunitiesDetailActivity.navigate(this, view, mFeedDetail);
                 break;
             case R.id.li_feed_job_card:
-                JobDetailActivity.navigateFromJob(this, view, mFeedDetail);
+              //  JobDetailActivity.navigateFromJob(this, view, mFeedDetail);
                 break;
             case R.id.li_article_cover_image:
                 ArticleDetailActivity.navigateFromArticle(this, view, mFeedDetail);
@@ -373,6 +380,11 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 if (AppUtils.isFragmentUIActive(fragmentBookMark)) {
                     ((BookmarksFragment) fragmentBookMark).bookMarkForCard(mFeedDetail);
                 }
+            } else if (mFragmentOpen.isJobFragment()) {
+                Fragment fragmentBookMark = getSupportFragmentManager().findFragmentByTag(JobFragment.class.getName());
+                if (AppUtils.isFragmentUIActive(fragmentBookMark)) {
+                    ((JobFragment) fragmentBookMark).bookMarkForCard(mFeedDetail);
+                }
             } else {
                 Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
                 if (AppUtils.isFragmentUIActive(fragment)) {
@@ -391,8 +403,8 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
 
     protected void clickMenuItem(View view, final BaseResponse baseResponse, final boolean isCommentReaction) {
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final View popupView = layoutInflater.inflate(R.layout.menu_option_layout, null);
-        final PopupWindow popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupView = layoutInflater.inflate(R.layout.menu_option_layout, null);
+        popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         popupWindow.setBackgroundDrawable(new BitmapDrawable());
         popupWindow.setOutsideTouchable(true);
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
@@ -406,7 +418,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
         final TextView tvShare = (TextView) popupView.findViewById(R.id.tv_article_menu_share);
         final TextView tvReport = (TextView) popupView.findViewById(R.id.tv_article_menu_report);
         final Fragment fragmentCommentReaction = getSupportFragmentManager().findFragmentByTag(CommentReactionFragment.class.getName());
-        popupWindow.showAsDropDown(view);
+        popupWindow.showAsDropDown(view, -140, 0);
         tvEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -422,6 +434,8 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 } else {
                     if (null != mFeedDetail) {
                         mFragmentOpen.setCommentList(true);
+                        mFeedDetail.setTrending(true);
+                        mFeedDetail.setExperienceFromI(AppConstants.ONE_CONSTANT);
                         openCommentReactionFragment(mFeedDetail);
                     }
                 }
@@ -442,8 +456,9 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                     if (null != mFeedDetail) {
                         mFragmentOpen.setCommentList(true);
                         mFragmentOpen.setCommentList(true);
+                        mFeedDetail.setTrending(true);
+                        mFeedDetail.setExperienceFromI(AppConstants.TWO_CONSTANT);
                         openCommentReactionFragment(mFeedDetail);
-                        // editDeleteComment(mFeedDetail,false);
                     }
                 }
                 popupWindow.dismiss();
@@ -779,4 +794,8 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
         userCommentLikeRequest(mFeedDetail, AppConstants.EMOJI_FIRST_REACTION_CONSTANT, mFeedDetail.getItemPosition());
     }
 
+    @Override
+    public void onShowErrorDialog(String errorReason, int errorFor) {
+
+    }
 }
