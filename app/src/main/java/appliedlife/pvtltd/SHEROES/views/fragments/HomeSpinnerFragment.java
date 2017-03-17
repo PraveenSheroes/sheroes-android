@@ -110,9 +110,6 @@ public class HomeSpinnerFragment extends BaseFragment implements HomeView {
         mProgressBar.setVisibility(View.GONE);
     }
 
-    @Override
-    public void showError(String errorMsg) {
-    }
 
     @Override
     public void startNextScreen() {

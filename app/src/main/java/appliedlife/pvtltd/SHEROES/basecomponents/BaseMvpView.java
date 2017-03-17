@@ -13,5 +13,5 @@ public interface BaseMvpView {
     void startProgressBar();
     void stopProgressBar();
     void startNextScreen();
-    void showError(String s);
+    void showError(String s,int errorFor);
 }

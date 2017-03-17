@@ -35,7 +35,7 @@ public class AppConstants {
     public static final String S="s";
     public static final String SHARE_MENU_TYPE= "text/plain";
     public static final String FOR_ALL= "all";
-    public static final String FEED_SUB_TYPE= "A";
+    public static final String FEED_SUB_TYPE= "F";
     public static final String USER_SUB_TYPE= "U";
     public static final String FEED_COMMUNITY = "C";
     public static final String FEED_JOB = "J";
@@ -60,7 +60,7 @@ public class AppConstants {
     public static final String ALL_SEARCH= "search";
     public static final String NETWORK_TIMEOUT= "network_timout";
     public static final String SHARE= "Share";
-    public static final int WORD_COUNT = 92;
+    public static final int WORD_COUNT = 85;
     public static final int WORD_LENGTH = 80;
     public static final String IMAGE_FULL_VIEW = "image_view";
     public static final String BACK_SLASH="/";

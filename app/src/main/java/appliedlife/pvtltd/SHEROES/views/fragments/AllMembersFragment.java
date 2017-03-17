@@ -162,10 +162,6 @@ public void communityClosePress()
 
     }
 
-    @Override
-    public void showError(String s) {
-
-    }
 
 
     public interface MembersHomeActivityIntractionListner {

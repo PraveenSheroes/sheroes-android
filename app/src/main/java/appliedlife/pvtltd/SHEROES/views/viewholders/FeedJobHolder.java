@@ -1,6 +1,9 @@
 package appliedlife.pvtltd.SHEROES.views.viewholders;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
+import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -33,6 +36,8 @@ import butterknife.OnClick;
 
 public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
     private final String TAG = LogUtils.makeLogTag(FeedJobHolder.class);
+    private static final String LEFT_NEW = "<b><font color='#1c2024'>";
+    private static final String RIGHT_NEW = "</font></b>";
     @Bind(R.id.iv_feed_job_icon)
     RoundedImageView ivFeedJobCircleIcon;
     @Bind(R.id.tv_feed_job_user_bookmark)
@@ -74,6 +79,7 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
     public void bindData(FeedDetail item, final Context context, int position) {
         this.dataItem = item;
         this.mContext = context;
+        tvFeedJobUserBookmark.setEnabled(true);
         imageOperations(context);
         allTextViewStringOperations(context);
     }
@@ -90,9 +96,21 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
 
     }
 
+    @TargetApi(AppConstants.ANDROID_SDK_24)
     private void allTextViewStringOperations(Context context) {
         if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
-            tvFeedJobCardTitle.setText(dataItem.getNameOrTitle());
+            String nameTitleWithData;
+            String newTag =  mContext.getString(R.string.ID_NEW);
+            if (!dataItem.isApplied() && !dataItem.isViewed()) {
+                nameTitleWithData =LEFT_NEW + dataItem.getNameOrTitle() + RIGHT_NEW+AppConstants.SPACE+newTag;
+            } else {
+                nameTitleWithData = LEFT_NEW + dataItem.getNameOrTitle() + RIGHT_NEW;
+            }
+            if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                tvFeedJobCardTitle.setText(Html.fromHtml(nameTitleWithData, 0)); // for 24 api and more
+            } else {
+                tvFeedJobCardTitle.setText(Html.fromHtml(nameTitleWithData));// or for older api
+            }
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getAuthorName())) {
             tvFeedJobGroupName.setText(dataItem.getAuthorName());
@@ -107,10 +125,10 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
             for (String jobType : jobTypes) {
                 mergeJobTypes += jobType + AppConstants.PIPE;
             }
-            tvFeedJobType.setText(mergeJobTypes.substring(0,mergeJobTypes.length()-1));
+            tvFeedJobType.setText(mergeJobTypes.substring(0, mergeJobTypes.length() - 1));
         }
-        if (StringUtil.isNotEmptyCollection(dataItem.getSearchTextSkills())) {
-            List<String> jobSkills = dataItem.getSearchTextSkills();
+        if (StringUtil.isNotEmptyCollection(dataItem.getSearchTextJobSkills())) {
+            List<String> jobSkills = dataItem.getSearchTextJobSkills();
             String mergeJobSkills = AppConstants.EMPTY_STRING;
             for (String skill : jobSkills) {
                 mergeJobSkills += skill + AppConstants.COMMA;
@@ -123,6 +141,10 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
         if (dataItem.isApplied()) {
             tvFeedJobApplied.setVisibility(View.VISIBLE);
         }
+        else
+        {
+            tvFeedJobApplied.setVisibility(View.INVISIBLE);
+        }
         if (dataItem.isBookmarked()) {
             tvFeedJobUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_active, 0);
         } else {
@@ -134,6 +156,7 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_feed_job_user_bookmark)
     public void isBookMarkClick() {
+        tvFeedJobUserBookmark.setEnabled(false);
         dataItem.setItemPosition(getAdapterPosition());
         if (dataItem.isBookmarked()) {
             viewInterface.handleOnClick(dataItem, tvFeedJobUserBookmark);

@@ -226,10 +226,10 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                     }
                     break;
                 case AppConstants.FAILED:
-                    showError(getString(R.string.ID_ALREADY_BOOKMARK));
+                    showError(getString(R.string.ID_ALREADY_BOOKMARK),AppConstants.TWO_CONSTANT);
                     break;
                 default:
-                    showError(AppConstants.HTTP_401_UNAUTHORIZED);
+                    showError(AppConstants.HTTP_401_UNAUTHORIZED,AppConstants.TWO_CONSTANT);
             }
         }
     }
@@ -258,10 +258,10 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                     }
                     break;
                 case AppConstants.FAILED:
-                    showError(getString(R.string.ID_ALREADY_BOOKMARK));
+                    showError(getString(R.string.ID_ALREADY_BOOKMARK),AppConstants.TWO_CONSTANT);
                     break;
                 default:
-                    showError(AppConstants.HTTP_401_UNAUTHORIZED);
+                    showError(AppConstants.HTTP_401_UNAUTHORIZED,AppConstants.TWO_CONSTANT);
             }
         }
     }
@@ -297,10 +297,11 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                     }
                     break;
                 case AppConstants.FAILED:
-                    showError(getString(R.string.ID_ALREADY_BOOKMARK));
+                    showError(getString(R.string.ID_ALREADY_BOOKMARK),AppConstants.TWO_CONSTANT);
                     break;
                 default:
-                    showError(AppConstants.HTTP_401_UNAUTHORIZED);
+                    showError(AppConstants.HTTP_401_UNAUTHORIZED,AppConstants.TWO_CONSTANT);
+
             }
         }
 
@@ -363,13 +364,22 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     }
 
     @Override
-    public void showError(String errorMsg) {
-        stopProgressBar();
-        if(null!=mLiNoResult)
+    public void showError(String errorMsg,int errorFor) {
+        if(errorFor==AppConstants.ONE_CONSTANT)
         {
-            mLiNoResult.setVisibility(View.VISIBLE);
+            if(null!=mLiNoResult)
+            {
+                mLiNoResult.setVisibility(View.VISIBLE);
+            }
+        }else {
+            mAdapter.notifyDataSetChanged();
+            if (mRecyclerView.getItemAnimator() instanceof SimpleItemAnimator) {
+                ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+                ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setAddDuration(AppConstants.NO_REACTION_CONSTANT);
+            }
         }
-        mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(errorMsg);
+        stopProgressBar();
+        mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(errorMsg,errorFor);
     }
 
     @Override

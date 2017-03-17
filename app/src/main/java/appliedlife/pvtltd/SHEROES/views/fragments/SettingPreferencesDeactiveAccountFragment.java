@@ -2,7 +2,6 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -27,7 +26,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.setting.UserpreferenseResponse
 import appliedlife.pvtltd.SHEROES.presenters.SettingFeedbackPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.SettingPreferencesActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SettingFeedbackView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SettingView;
@@ -498,10 +496,6 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
 
     }
 
-    @Override
-    public void showError(String s) {
-
-    }
 
 
     interface SettingPreferences_DeactiveAccounActivitytLisIntractionListener {

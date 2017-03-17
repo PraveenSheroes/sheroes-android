@@ -164,11 +164,6 @@ public class CommunityRequestedFragment extends BaseFragment implements Requeste
 
     }
 
-    @Override
-    public void showError(String s) {
-
-    }
-
 
     public interface RequestHomeActivityIntractionListner {
         void onErrorOccurence();

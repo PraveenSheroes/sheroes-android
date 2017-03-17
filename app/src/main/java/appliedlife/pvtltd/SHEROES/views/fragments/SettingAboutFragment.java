@@ -94,11 +94,6 @@ public class SettingAboutFragment extends BaseFragment implements SettingView {
     public void startNextScreen() {
 
     }
-
-    @Override
-    public void showError(String s) {
-
-    }
     public interface settingFragmentCallBack
     {
         void callBackSettingActivity(int id);

@@ -26,7 +26,6 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -302,11 +301,6 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
 
     @Override
     public void startNextScreen() {
-
-    }
-
-    @Override
-    public void showError(String s) {
 
     }
 

@@ -67,7 +67,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
     }
     public void getAuthTokenRefreshPresenter() {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,AppConstants.THREE_CONSTANT);
             return;
         }
         getMvpView().startProgressBar();
@@ -79,7 +79,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage());
+                getMvpView().showError(e.getMessage(),AppConstants.THREE_CONSTANT);
             }
 
             @Override
@@ -93,7 +93,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
     public void getFeedFromPresenter(final FeedRequestPojo feedRequestPojo) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,AppConstants.ONE_CONSTANT);
             return;
         }
         getMvpView().startProgressBar();
@@ -106,7 +106,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage());
+                getMvpView().showError(e.getMessage(),AppConstants.ONE_CONSTANT);
             }
 
             @Override
@@ -126,7 +126,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
     public void getBookMarkFromPresenter(FeedRequestPojo feedRequestPojo) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,AppConstants.TWO_CONSTANT);
             return;
         }
         getMvpView().startProgressBar();
@@ -139,7 +139,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage());
+                getMvpView().showError(e.getMessage(),AppConstants.TWO_CONSTANT);
             }
 
             @Override
@@ -153,7 +153,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
     public void getLikesFromPresenter(LikeRequestPojo likeRequestPojo) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,AppConstants.TWO_CONSTANT);
             return;
         }
         getMvpView().startProgressBar();
@@ -179,7 +179,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
     }
     public void getUnLikesFromPresenter(LikeRequestPojo likeRequestPojo) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,AppConstants.TWO_CONSTANT);
             return;
         }
         getMvpView().startProgressBar();
@@ -206,7 +206,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
     public void addBookMarkFromPresenter(BookmarkRequestPojo bookmarkRequestPojo,boolean isBookmarked) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,AppConstants.TWO_CONSTANT);
             return;
         }
         getMvpView().startProgressBar();
@@ -234,7 +234,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
     public void editCommentListFromPresenter(CommentReactionRequestPojo commentReactionRequestPojo) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,AppConstants.TWO_CONSTANT);
             return;
         }
         getMvpView().startProgressBar();
@@ -246,7 +246,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage());
+                getMvpView().showError(e.getMessage(),AppConstants.TWO_CONSTANT);
             }
             @Override
             public void onNext(CommentReactionResponsePojo commentResponsePojo) {
@@ -258,7 +258,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
     }
     public void communityJoinFromPresenter(CommunityRequest communityRequest) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,AppConstants.FOURTH_CONSTANT);
             return;
         }
         getMvpView().startProgressBar();
@@ -270,7 +270,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage());
+                getMvpView().showError(e.getMessage(),AppConstants.FOURTH_CONSTANT);
             }
             @Override
             public void onNext(CommunityResponse communityResponse) {
@@ -293,7 +293,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage());
+                getMvpView().showError(e.getMessage(),AppConstants.FOURTH_CONSTANT);
             }
 
             @Override
@@ -316,7 +316,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
 
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage());
+                getMvpView().showError(e.getMessage(),AppConstants.FOURTH_CONSTANT);
             }
 
             @Override

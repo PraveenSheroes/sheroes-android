@@ -29,10 +29,14 @@
         android:background="@color/white"
         android:orientation="vertical">
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_no_result_try_again"
+            android:layout_width="@dimen/dp_size_350"
             android:layout_height="wrap_content"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-            android:textColor="@color/detail_page_text"
+            android:textColor="@color/footer_icon_text"
+            android:padding="@dimen/dp_size_20"
+            android:textAlignment="center"
+            android:textSize="@dimen/sp_size_14"
             android:layout_gravity="center"
             android:text="@string/ID_NO_RESULT_FOUND"/>
     </LinearLayout>

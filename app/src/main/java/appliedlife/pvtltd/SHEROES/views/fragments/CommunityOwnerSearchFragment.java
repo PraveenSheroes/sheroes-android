@@ -120,7 +120,7 @@ public class CommunityOwnerSearchFragment extends BaseFragment implements Invite
     }
 
     @Override
-    public void showError(String errorMsg) {
+    public void showError(String errorMsg,int errorFor) {
         mAdapter.notifyDataSetChanged();
     }
 

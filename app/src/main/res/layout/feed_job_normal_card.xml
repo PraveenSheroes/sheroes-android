@@ -43,18 +43,15 @@
                     android:id="@+id/tv_feed_job_card_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-                    android:text="Marketing Product Manager Business Developer New"
-                    android:textColor="@color/searchbox_hint_text_color"
-                    android:textSize="@dimen/sp_size_15"
-                    android:textStyle="bold" />
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:textColor="@color/feed_job_card_new"
+                    android:textSize="@dimen/sp_size_15" />
 
                 <TextView
                     android:id="@+id/tv_feed_job_group_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:text="Company.com"
                     android:layout_marginTop="@dimen/dp_size_3"
                     android:textColor="@color/dashboard_fed_text"
                     android:textSize="@dimen/sp_size_12" />
@@ -83,7 +80,6 @@
                 android:drawableLeft="@drawable/ic_job_type"
                 android:drawablePadding="@dimen/dp_size_10"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                android:text="Work from home | Part Time"
                 android:textColor="@color/searchbox_hint_text_color"
                 android:textSize="@dimen/sp_size_12" />
 
@@ -97,7 +93,6 @@
                 android:ellipsize="end"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:lines="1"
-                android:text="@string/IDS_STR_NETWORK_TIME_OUT_DESCRIPTION"
                 android:textColor="@color/searchbox_hint_text_color"
                 android:textSize="@dimen/sp_size_12" />
 
@@ -115,7 +110,6 @@
                     android:drawableLeft="@drawable/ic_job_date_time"
                     android:drawablePadding="@dimen/dp_size_10"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:text="31 Jan 2017"
                     android:textColor="@color/searchbox_hint_text_color"
                     android:textSize="@dimen/sp_size_12" />
 
@@ -129,7 +123,6 @@
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:lines="1"
                     android:layout_marginLeft="@dimen/dp_size_15"
-                    android:text="Gurgaon India"
                     android:textColor="@color/searchbox_hint_text_color"
                     android:textSize="@dimen/sp_size_12" />
             </LinearLayout>
@@ -169,6 +162,7 @@
                 android:drawableRight="@drawable/ic_bookmark_in_active"
                 android:drawablePadding="@dimen/dp_size_15"
                 android:paddingTop="@dimen/dp_size_10"
+                android:layout_marginRight="@dimen/dp_size_20"
                 android:paddingBottom="@dimen/dp_size_10"
                 android:paddingRight="@dimen/dp_size_20"/>
 
@@ -176,10 +170,10 @@
                 android:id="@+id/tv_feed_job_user_menu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawablePadding="@dimen/dp_size_30"
                 android:paddingTop="@dimen/dp_size_10"
                 android:paddingBottom="@dimen/dp_size_10"
                 android:paddingRight="@dimen/dp_size_10"
+                android:paddingLeft="@dimen/dp_size_10"
                 android:drawableRight="@drawable/ic_menu_dashboard" />
 
         </LinearLayout>

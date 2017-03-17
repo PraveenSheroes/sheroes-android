@@ -1,22 +1,12 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.RatingBar;
-import android.widget.ScrollView;
 import android.widget.TextView;
-
-import java.util.HashMap;
 
 import javax.inject.Inject;
 
@@ -27,28 +17,17 @@ import appliedlife.pvtltd.SHEROES.models.entities.setting.PrivilegesList;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.RelationshipStatus;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.Segments;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingDeActivateResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingFeedbackRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingFeedbackResponce;
-import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingRatingRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingRatingResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.setting.Setting_Education;
-import appliedlife.pvtltd.SHEROES.models.entities.setting.Setting_PrivilegesList_1;
-import appliedlife.pvtltd.SHEROES.models.entities.setting.Setting_Privileges_List;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.Setting_basic_details;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.UserPreferenceRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.UserpreferenseResponse;
 import appliedlife.pvtltd.SHEROES.presenters.SettingFeedbackPresenter;
-import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.Feedback_ThankyouActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SettingFeedbackView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SettingView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
-
-import static appliedlife.pvtltd.SHEROES.R.id.view;
 
 /**
  * Created by priyanka
@@ -197,10 +176,6 @@ public class SettingFragment extends BaseFragment implements SettingFeedbackView
 
     }
 
-    @Override
-    public void showError(String s) {
-
-    }
 
     public interface settingFragmentCallBack {
 

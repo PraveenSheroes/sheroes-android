@@ -59,9 +59,6 @@ public class ArticlesFragment extends BaseFragment {
     private FragmentListRefreshData mFragmentListRefreshData;
     private int mPageNo = AppConstants.ONE_CONSTANT;
     private List<FeedDetail> mTrendingFeedDetail = new ArrayList<>();
-    private FeedDetail mFeedDetail;
-    private int mPosition;
-    private int mPressedEmoji;
     private boolean mListLoad = true;
     private boolean mIsEdit = false;
 
@@ -96,7 +93,7 @@ public class ArticlesFragment extends BaseFragment {
 
             }
         });
-        super.setAllInitializationForFeeds(mFragmentListRefreshData, mPullRefreshList, mAdapter, mLayoutManager, mPageNo, mSwipeView, mLiNoResult, mFeedDetail, mRecyclerView, mPosition, mPressedEmoji, mListLoad, mIsEdit, mHomePresenter, mAppUtils, mProgressBar);
+        super.setAllInitializationForFeeds(mFragmentListRefreshData, mPullRefreshList, mAdapter, mLayoutManager, mPageNo, mSwipeView, mLiNoResult, null, mRecyclerView, 0, 0, mListLoad, mIsEdit, mHomePresenter, mAppUtils, mProgressBar);
         mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo()));
         mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

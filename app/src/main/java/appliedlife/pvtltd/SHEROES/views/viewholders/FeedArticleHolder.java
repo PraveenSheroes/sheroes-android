@@ -99,6 +99,8 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     TextView tvFeedArticleUserMenu;
     @Bind(R.id.tv_feed_article_user_reaction)
     TextView tvFeedArticleUserReaction;
+    @Bind(R.id.tv_feed_article_user_reaction_text)
+    TextView tvFeedArticleUserReactionText;
     @Bind(R.id.tv_feed_article_user_comment)
     TextView tvFeedArticleUserComment;
     @Bind(R.id.fl_feed_article_no_reaction_comments)
@@ -123,6 +125,8 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         this.dataItem = item;
         this.mContext = context;
         imageOperations(context);
+        tvFeedArticleUserBookmark.setEnabled(true);
+        tvFeedArticleUserReaction.setEnabled(true);
         allTextViewStringOperations(context);
     }
 
@@ -136,8 +140,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         }
         //TODO:: change for UI
         if (StringUtil.isNotNullOrEmptyString(dataItem.getAuthorName())) {
-            String id=dataItem.getId();
-            tvFeedArticleCardTitle.setText(dataItem.getAuthorName()+id);
+            tvFeedArticleCardTitle.setText(dataItem.getAuthorName());
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getCreatedDate())) {
             long createdDate = mDateUtil.getTimeInMillis(dataItem.getCreatedDate(), AppConstants.DATE_FORMAT);
@@ -159,6 +162,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         } else {
             tvFeedArticleUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_in_active, 0);
         }
+
         if (dataItem.getNoOfLikes() < AppConstants.ONE_CONSTANT && dataItem.getNoOfComments() < AppConstants.ONE_CONSTANT) {
             tvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
             flFeedArticleNoReactionComment.setVisibility(View.GONE);
@@ -174,14 +178,14 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
                 tvFeedArticleTotalReactions.setVisibility(View.VISIBLE);
                 flFeedArticleNoReactionComment.setVisibility(View.VISIBLE);
                 tvFeedArticleTotalReactions.setText(AppConstants.ONE_CONSTANT + AppConstants.SPACE + context.getString(R.string.ID_REACTION));
-                tvFeedArticleUserReaction.setText(AppConstants.EMPTY_STRING);
+                tvFeedArticleUserReactionText.setText(AppConstants.EMPTY_STRING);
                 userLike();
                 break;
             default:
                 tvFeedArticleTotalReactions.setVisibility(View.VISIBLE);
                 flFeedArticleNoReactionComment.setVisibility(View.VISIBLE);
                 tvFeedArticleTotalReactions.setText(String.valueOf(dataItem.getNoOfLikes()) + AppConstants.SPACE + context.getString(R.string.ID_REACTION) + AppConstants.S);
-                tvFeedArticleUserReaction.setText(AppConstants.EMPTY_STRING);
+                tvFeedArticleUserReactionText.setText(AppConstants.EMPTY_STRING);
                 userLike();
         }
 
@@ -207,27 +211,27 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         switch (dataItem.getReactionValue()) {
             case AppConstants.NO_REACTION_CONSTANT:
                 tvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
-                tvFeedArticleUserReaction.setText(AppConstants.EMPTY_STRING);
+                tvFeedArticleUserReactionText.setText(AppConstants.EMPTY_STRING);
                 break;
             case AppConstants.HEART_REACTION_CONSTANT:
                 tvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
-                tvFeedArticleUserReaction.setText(mContext.getString(R.string.ID_LOVE));
+                tvFeedArticleUserReactionText.setText(mContext.getString(R.string.ID_LOVE));
                 break;
             case AppConstants.EMOJI_FIRST_REACTION_CONSTANT:
                 tvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_emoji3_whistel, 0, 0, 0);
-                tvFeedArticleUserReaction.setText(mContext.getString(R.string.ID_WISHTLE));
+                tvFeedArticleUserReactionText.setText(mContext.getString(R.string.ID_WISHTLE));
                 break;
             case AppConstants.EMOJI_SECOND_REACTION_CONSTANT:
                 tvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_emoji_xo_xo, 0, 0, 0);
-                tvFeedArticleUserReaction.setText(mContext.getString(R.string.ID_XOXO));
+                tvFeedArticleUserReactionText.setText(mContext.getString(R.string.ID_XOXO));
                 break;
             case AppConstants.EMOJI_THIRD_REACTION_CONSTANT:
                 tvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_emoji2_with_you, 0, 0, 0);
-                tvFeedArticleUserReaction.setText(mContext.getString(R.string.ID_LIKE));
+                tvFeedArticleUserReactionText.setText(mContext.getString(R.string.ID_LIKE));
                 break;
             case AppConstants.EMOJI_FOURTH_REACTION_CONSTANT:
                 tvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_emoji4_face_palm, 0, 0, 0);
-                tvFeedArticleUserReaction.setText(mContext.getString(R.string.ID_FACE_PALM));
+                tvFeedArticleUserReactionText.setText(mContext.getString(R.string.ID_FACE_PALM));
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + dataItem.getReactionValue());
@@ -289,6 +293,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             final TextView tvFeedArticleTotalViews = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_total_views);
             final RelativeLayout rlFeedArticleViews = (RelativeLayout) backgroundImage.findViewById(R.id.rl_gradiant);
             tvFeedArticleTotalViews.setText(dataItem.getNoOfViews() + AppConstants.SPACE + context.getString(R.string.ID_VIEWS));
+            tvFeedArticleTimeLabel.setText(dataItem.getCharCount()+ AppConstants.SPACE + context.getString(R.string.ID_MIN_READ));
             Glide.with(mContext)
                     .load(backgrndImageUrl).asBitmap()
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
@@ -311,7 +316,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_feed_article_user_menu)
     public void menuItemClick() {
-        dataItem.setItemPosition(getAdapterPosition());
+        dataItem.setItemPosition(AppConstants.NO_REACTION_CONSTANT);
         viewInterface.handleOnClick(dataItem, tvFeedArticleUserMenu);
     }
 
@@ -336,7 +341,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_feed_article_user_bookmark)
     public void isBookMarkClick() {
-
+        tvFeedArticleUserBookmark.setEnabled(false);
         dataItem.setItemPosition(getAdapterPosition());
         if (dataItem.isBookmarked()) {
             viewInterface.handleOnClick(dataItem, tvFeedArticleUserBookmark);
@@ -364,6 +369,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_feed_article_user_reaction)
     public void userReactionClick() {
+        tvFeedArticleUserReaction.setEnabled(false);
         dataItem.setLongPress(false);
         dataItem.setItemPosition(getAdapterPosition());
         if (dataItem.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
@@ -385,7 +391,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         viewInterface.handleOnClick(dataItem, tvFeedArticleUserReaction);
         return true;
     }
-    @OnClick(R.id.article_card)
+    @OnClick(R.id.tv_feed_article_header_lebel)
     public void viewMoreClick() {
         viewInterface.handleOnClick(dataItem, liFeedArticleImages);
     }

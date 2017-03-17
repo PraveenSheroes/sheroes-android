@@ -5,5 +5,5 @@ package appliedlife.pvtltd.SHEROES.views.fragmentlistner;
  */
 
 public interface FragmentIntractionWithActivityListner {
-    void onShowErrorDialog(String errorReason);
+    void onShowErrorDialog(String errorReason,int errorFor);
 }

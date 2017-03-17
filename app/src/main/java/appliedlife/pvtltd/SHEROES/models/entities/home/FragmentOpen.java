@@ -14,6 +14,7 @@ public class FragmentOpen implements Parcelable {
     boolean commentList;
     boolean feedOpen;
     boolean articleFragment;
+    boolean jobFragment;
     boolean communityOpen;
     boolean settingFragment;
     boolean bookmarkFragment;
@@ -104,6 +105,14 @@ public class FragmentOpen implements Parcelable {
         this.openCommentReactionFragmentFor = openCommentReactionFragmentFor;
     }
 
+    public boolean isJobFragment() {
+        return jobFragment;
+    }
+
+    public void setJobFragment(boolean jobFragment) {
+        this.jobFragment = jobFragment;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -116,6 +125,7 @@ public class FragmentOpen implements Parcelable {
         dest.writeByte(this.commentList ? (byte) 1 : (byte) 0);
         dest.writeByte(this.feedOpen ? (byte) 1 : (byte) 0);
         dest.writeByte(this.articleFragment ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.jobFragment ? (byte) 1 : (byte) 0);
         dest.writeByte(this.communityOpen ? (byte) 1 : (byte) 0);
         dest.writeByte(this.settingFragment ? (byte) 1 : (byte) 0);
         dest.writeByte(this.bookmarkFragment ? (byte) 1 : (byte) 0);
@@ -129,6 +139,7 @@ public class FragmentOpen implements Parcelable {
         this.commentList = in.readByte() != 0;
         this.feedOpen = in.readByte() != 0;
         this.articleFragment = in.readByte() != 0;
+        this.jobFragment = in.readByte() != 0;
         this.communityOpen = in.readByte() != 0;
         this.settingFragment = in.readByte() != 0;
         this.bookmarkFragment = in.readByte() != 0;

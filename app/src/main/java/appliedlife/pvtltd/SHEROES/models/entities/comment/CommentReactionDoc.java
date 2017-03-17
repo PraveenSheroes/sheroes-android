@@ -13,6 +13,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
  */
 
 public class CommentReactionDoc extends BaseResponse implements Parcelable {
+    int byDefaultMenuOpen;
     boolean isEdit;
     int itemPosition;
     @SerializedName("comment")
@@ -188,6 +189,14 @@ public class CommentReactionDoc extends BaseResponse implements Parcelable {
         this.myOwnParticipation = myOwnParticipation;
     }
 
+    public int getByDefaultMenuOpen() {
+        return byDefaultMenuOpen;
+    }
+
+    public void setByDefaultMenuOpen(int byDefaultMenuOpen) {
+        this.byDefaultMenuOpen = byDefaultMenuOpen;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -195,6 +204,7 @@ public class CommentReactionDoc extends BaseResponse implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.byDefaultMenuOpen);
         dest.writeByte(this.isEdit ? (byte) 1 : (byte) 0);
         dest.writeInt(this.itemPosition);
         dest.writeString(this.comment);
@@ -214,6 +224,7 @@ public class CommentReactionDoc extends BaseResponse implements Parcelable {
     }
 
     protected CommentReactionDoc(Parcel in) {
+        this.byDefaultMenuOpen = in.readInt();
         this.isEdit = in.readByte() != 0;
         this.itemPosition = in.readInt();
         this.comment = in.readString();

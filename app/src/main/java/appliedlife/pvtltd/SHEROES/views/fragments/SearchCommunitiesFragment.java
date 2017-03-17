@@ -87,6 +87,7 @@ public class SearchCommunitiesFragment extends BaseFragment implements HomeView 
     @Override
     public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
         if(StringUtil.isNotEmptyCollection(feedDetailList)&&mAdapter!=null) {
+            mLiNoSearchResult.setVisibility(View.GONE);
             mAdapter.setCallForRecycler(AppConstants.ALL_SEARCH);
             mAdapter.setSheroesGenericListData(feedDetailList);
             mAdapter.notifyDataSetChanged();
@@ -94,8 +95,15 @@ public class SearchCommunitiesFragment extends BaseFragment implements HomeView 
         else
         {
             mLiNoSearchResult.setVisibility(View.VISIBLE);
-            mTvSearchResult.setText(getString(R.string.ID_NO_RESULT_FOUND));
+            mTvSearchResult.setText(getString(R.string.ID_SEARCH));
         }
+    }
+    public void setEditText(String stringForSearch)
+    {
+        mSearchDataName = stringForSearch;
+        /**hitting the servers to get data if length is greater than threshold defined **/
+        mHandler.removeCallbacks(mFilterTask);
+        mHandler.postDelayed(mFilterTask, AppConstants.SEARCH_CONSTANT_DELAY);
     }
     public void saveRecentSearchData(FeedDetail feedDetail)
     {
@@ -142,11 +150,6 @@ public class SearchCommunitiesFragment extends BaseFragment implements HomeView 
 
             @Override
             public void afterTextChanged(Editable inputSearch) {
-                /**As soon as user starts typing take the scroll to top **/
-             /*   mSearchDataName = inputSearch.toString();
-                if (!((HomeSearchActivity) getActivity()).mIsDestroyed) {
-                    mAdapter.getFilter().filter(mSearchDataName);
-                }*/
 
                 if (StringUtil.isNotNullOrEmptyString(inputSearch.toString())&&inputSearch.toString().length()>AppConstants.THREE_CONSTANT)
                 {

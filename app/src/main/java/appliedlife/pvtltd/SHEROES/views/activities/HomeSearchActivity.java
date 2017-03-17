@@ -181,6 +181,11 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
         if (fragment instanceof AllSearchFragment) {
             mSearchEditText.setHint(getString(R.string.ID_SEARCH_IN_FEED));
             mSearchEditText.setEnabled(true);
+            if (AppUtils.isFragmentUIActive(fragment)) {
+                if (fragment instanceof AllSearchFragment) {
+                    ((AllSearchFragment) fragment).setEditText(mSearchEditText.getText().toString());
+                }
+            }
         } else if (fragment instanceof SearchRecentFragment) {
             mSearchEditText.setHint(getString(R.string.ID_RECENT_SEARCH));
             mSearchEditText.setEnabled(false);
@@ -189,14 +194,29 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
             String string = getString(R.string.ID_SEARCH) + AppConstants.SPACE + getString(R.string.ID_ARTICLE);
             mSearchEditText.setHint(string);
             mSearchEditText.setEnabled(true);
+            if (AppUtils.isFragmentUIActive(fragment)) {
+                if (fragment instanceof SearchArticleFragment) {
+                    ((SearchArticleFragment) fragment).setEditText(mSearchEditText.getText().toString());
+                }
+            }
         } else if (fragment instanceof SearchCommunitiesFragment) {
             String string = getString(R.string.ID_SEARCH) + AppConstants.SPACE + getString(R.string.ID_COMMUNITIES) ;
             mSearchEditText.setHint(string);
             mSearchEditText.setEnabled(true);
+            if (AppUtils.isFragmentUIActive(fragment)) {
+                if (fragment instanceof SearchCommunitiesFragment) {
+                    ((SearchCommunitiesFragment) fragment).setEditText(mSearchEditText.getText().toString());
+                }
+            }
         } else if (fragment instanceof SearchJobFragment) {
             String string = getString(R.string.ID_SEARCH) + AppConstants.SPACE + getString(R.string.ID_JOB) + AppConstants.S;
             mSearchEditText.setHint(string);
             mSearchEditText.setEnabled(true);
+            if (AppUtils.isFragmentUIActive(fragment)) {
+                if (fragment instanceof SearchJobFragment) {
+                    ((SearchJobFragment) fragment).setEditText(mSearchEditText.getText().toString());
+                }
+            }
         }
 
     }
