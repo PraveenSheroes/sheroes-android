@@ -52,6 +52,8 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private SwipPullRefreshList mPullRefreshList;
+    @Bind(R.id.progress_bar_first_load)
+    ProgressBar mProgressBarFirstLoad;
     @Inject
     AppUtils mAppUtils;
     private int mPageNo =AppConstants.ONE_CONSTANT;
@@ -110,6 +112,7 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
 
     @Override
     public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
+        mProgressBarFirstLoad.setVisibility(View.GONE);
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
             mPageNo =mFragmentListRefreshData.getPageNo();
             mFragmentListRefreshData.setPageNo(++mPageNo);

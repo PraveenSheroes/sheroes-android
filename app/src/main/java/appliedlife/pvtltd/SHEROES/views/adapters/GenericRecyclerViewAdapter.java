@@ -47,14 +47,15 @@ public class GenericRecyclerViewAdapter<T extends BaseResponse> extends Recycler
     public void setCallForRecycler(String callFromType) {
         this.mCallFromType = callFromType;
     }
+    public void removeDataOnPosition(FeedDetail feedDetail,int position) {
+        this.filterListData.remove(position);
+    }
     public void addAllDataForList(List<T> data) {
         this.filterListData.addAll(data);
     }
     public void setDataOnPosition(FeedDetail feedDetail,int position) {
+        this.filterListData.remove(position);
         this.filterListData.add(position,(T)feedDetail);
-    }
-    public void removeDataOnPosition(FeedDetail feedDetail,int position) {
-        this.filterListData.remove((T)feedDetail);
     }
     public void clearAllDataForList() {
         this.filterListData.clear();

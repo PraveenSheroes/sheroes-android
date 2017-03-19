@@ -23,6 +23,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
+import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -62,7 +63,8 @@ public class BookmarksFragment extends BaseFragment {
     private int mPressedEmoji;
     private boolean mListLoad = true;
     private boolean mIsEdit = false;
-
+    @Bind(R.id.progress_bar_first_load)
+    ProgressBar mProgressBarFirstLoad;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -127,6 +129,7 @@ public class BookmarksFragment extends BaseFragment {
     }
     @Override
     public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
+        mProgressBarFirstLoad.setVisibility(View.GONE);
       super.getFeedListSuccess(feedDetailList);
     }
 
@@ -141,7 +144,8 @@ public class BookmarksFragment extends BaseFragment {
         mHomePresenter.detachView();
     }
 
-    public void bookMarkForCard(FeedDetail feedDetail) {
+    public void bookMarkForCard(FeedDetail feedDetail, FragmentOpen fragmentOpen) {
+        setFragmentData(fragmentOpen);
        super.bookMarkForCard(feedDetail);
     }
 
@@ -154,7 +158,7 @@ public class BookmarksFragment extends BaseFragment {
     }
 
 
-    public void commentListRefresh(FeedDetail feedDetail) {
-     super.commentListRefresh(feedDetail);
+    public void commentListRefresh(FeedDetail feedDetail,int callFrom) {
+     super.commentListRefresh(feedDetail,callFrom);
     }
 }

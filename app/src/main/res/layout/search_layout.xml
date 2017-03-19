@@ -10,6 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left|center"
+        android:padding="@dimen/dp_size_10"
         android:background="@drawable/ic_search_icon"
         android:importantForAccessibility="no" />
     <EditText
@@ -23,7 +24,5 @@
         android:inputType="text"
         android:textSize="@dimen/sp_size_15"
         android:padding="@dimen/dp_size_15" />
-
-
 </LinearLayout>
 

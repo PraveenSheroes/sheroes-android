@@ -56,6 +56,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:alpha=".8"
+                    android:visibility="gone"
                     android:background="@drawable/rectangle_detail_round"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:paddingBottom="@dimen/dp_size_5"

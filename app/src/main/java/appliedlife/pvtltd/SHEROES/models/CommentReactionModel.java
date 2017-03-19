@@ -30,6 +30,7 @@ public class CommentReactionModel {
         this.gson= gson;
     }
     public Observable<CommentReactionResponsePojo> getAllCommentListFromModel(CommentReactionRequestPojo commentReactionRequestPojo,boolean isReaction){
+        LogUtils.info(TAG,"*******************"+new Gson().toJson(commentReactionRequestPojo));
         if(!isReaction) {
             return sheroesAppServiceApi.getCommentFromApi(commentReactionRequestPojo)
                     .map(new Func1<CommentReactionResponsePojo, CommentReactionResponsePojo>() {

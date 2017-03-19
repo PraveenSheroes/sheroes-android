@@ -78,9 +78,11 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
         }
         visibleItemCount = mRecyclerView.getChildCount();
         totalItemCount = mManager.getItemCount();
+        int lastVisibleItem = mManager.findLastVisibleItemPosition();
         if(mFragmentListRefreshData.getSwipeToRefresh()==AppConstants.ONE_CONSTANT)
         {
             previousTotal=totalItemCount;
+            loading=false;
             mFragmentListRefreshData.setSwipeToRefresh(AppConstants.TWO_CONSTANT);
         }
         if (loading) {
@@ -89,7 +91,6 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                 previousTotal = totalItemCount;
             }
         }
-        int lastVisibleItem = mManager.findLastVisibleItemPosition();
 
         if (totalItemCount>visibleThreshold&&!loading && totalItemCount <=(lastVisibleItem + visibleThreshold)) {
             if(null!=mFragmentListRefreshData&& StringUtil.isNotNullOrEmptyString(mFragmentListRefreshData.getCallFromFragment())) {

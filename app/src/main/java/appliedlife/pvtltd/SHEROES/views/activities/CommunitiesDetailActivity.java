@@ -253,9 +253,8 @@ public class CommunitiesDetailActivity extends BaseActivity implements Community
     public void onBackPressed() {
         if (mFragmentOpen.isCommentList()) {
             getSupportFragmentManager().popBackStackImmediate();
-
             if (AppUtils.isFragmentUIActive(mFragment)) {
-                ((CommunitiesDetailFragment) mFragment).commentListRefresh(mFeedDetail);
+                ((CommunitiesDetailFragment) mFragment).commentListRefresh(mFeedDetail,AppConstants.TWO_CONSTANT);
             }
             mFragmentOpen.setCommentList(false);
         } else if (mFragmentOpen.isReactionList()) {

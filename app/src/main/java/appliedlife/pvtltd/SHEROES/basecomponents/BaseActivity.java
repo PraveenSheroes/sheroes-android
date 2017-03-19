@@ -32,7 +32,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleDetailActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.errorview.NetworkTimeoutDialog;
 import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
@@ -278,24 +277,30 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 communityPostUserReaction();
                 break;
             case R.id.li_feed_article_images:
-                ArticleDetailActivity.navigateFromArticle(this, view, mFeedDetail);
-                finish();
+                Intent intent = new Intent(this, ArticleDetailActivity.class);
+                intent.putExtra(AppConstants.ARTICLE_DETAIL, mFeedDetail);
+                startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
+                overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
+              //  ArticleDetailActivity.navigateFromArticle(this, view, mFeedDetail);
                 break;
             case R.id.li_feed_community_images:
-                CommunitiesDetailActivity.navigate(this, view, mFeedDetail);
+              //  CommunitiesDetailActivity.navigate(this, view, mFeedDetail);
                 break;
             case R.id.li_feed_community_user_post_images:
-                CommunitiesDetailActivity.navigate(this, view, mFeedDetail);
+             //   CommunitiesDetailActivity.navigate(this, view, mFeedDetail);
                 break;
             case R.id.li_feed_job_card:
               //  JobDetailActivity.navigateFromJob(this, view, mFeedDetail);
                 break;
             case R.id.li_article_cover_image:
-                ArticleDetailActivity.navigateFromArticle(this, view, mFeedDetail);
-                finish();
+                Intent intentArticle = new Intent(this, ArticleDetailActivity.class);
+                intentArticle.putExtra(AppConstants.ARTICLE_DETAIL, mFeedDetail);
+                startActivityForResult(intentArticle, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
+                overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
+               // ArticleDetailActivity.navigateFromArticle(this, view, mFeedDetail);
                 break;
             case R.id.li_community_images:
-                CommunitiesDetailActivity.navigate(this, view, mFeedDetail);
+              //  CommunitiesDetailActivity.navigate(this, view, mFeedDetail);
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
@@ -378,7 +383,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
             if (mFragmentOpen.isBookmarkFragment()) {
                 Fragment fragmentBookMark = getSupportFragmentManager().findFragmentByTag(BookmarksFragment.class.getName());
                 if (AppUtils.isFragmentUIActive(fragmentBookMark)) {
-                    ((BookmarksFragment) fragmentBookMark).bookMarkForCard(mFeedDetail);
+                    ((BookmarksFragment) fragmentBookMark).bookMarkForCard(mFeedDetail,mFragmentOpen);
                 }
             } else if (mFragmentOpen.isJobFragment()) {
                 Fragment fragmentBookMark = getSupportFragmentManager().findFragmentByTag(JobFragment.class.getName());
@@ -798,4 +803,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
     public void onShowErrorDialog(String errorReason, int errorFor) {
 
     }
+
+
+
 }

@@ -137,6 +137,11 @@ public class CommunitiesDetailFragment extends BaseFragment {
                 FeedDetail feedDetail = new FeedDetail();
                 //TODO:: Please remove this or correct
                 feedDetail.setSubType(AppConstants.MY_COMMUNITIES_HEADER);
+                feedDetail.setNameOrTitle(mFeedDetail.getNameOrTitle());
+                feedDetail.setCommunityType(mFeedDetail.getCommunityType());
+                feedDetail.setMember(mFeedDetail.isMember());
+                feedDetail.setOwner(mFeedDetail.isOwner());
+                feedDetail.setRequestPending(mFeedDetail.isRequestPending());
                 feedDetailList.add(0, feedDetail);
             }
             mFragmentListRefreshData.setPageNo(++mPageNo);
@@ -176,8 +181,8 @@ public class CommunitiesDetailFragment extends BaseFragment {
         super.likeAndUnlikeRequest(baseResponse, reactionValue, position);
     }
 
-    public void commentListRefresh(FeedDetail feedDetail) {
-        super.commentListRefresh(feedDetail);
+    public void commentListRefresh(FeedDetail feedDetail,int callFrom) {
+        super.commentListRefresh(feedDetail,callFrom);
     }
 
 }

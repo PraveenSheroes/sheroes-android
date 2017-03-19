@@ -55,7 +55,7 @@
         android:background="@drawable/ic_notification"
         android:importantForAccessibility="no"
         android:padding="@dimen/dp_size_10"
-        android:layout_marginRight="@dimen/dp_size_10"
+        android:layout_marginRight="@dimen/dp_size_20"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />

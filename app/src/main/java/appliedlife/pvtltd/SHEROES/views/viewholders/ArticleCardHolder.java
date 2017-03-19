@@ -17,6 +17,9 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -79,15 +82,39 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
     @Override
     public void bindData(FeedDetail item, final Context context, int position) {
         this.dataItem = item;
+        dataItem.setItemPosition(position);
         mContext = context;
-        liArticleCoverImage.removeAllViews();
-        liArticleCoverImage.removeAllViewsInLayout();
         tvArticleBookmark.setEnabled(true);
+        if(!dataItem.isLongPress()) {
+            imageOperations(context);
+        }
+        textRelatedOperation();
+    }
+    @TargetApi(AppConstants.ANDROID_SDK_24)
+    private void textRelatedOperation()
+    {
         String dots = LEFT_VIEW_MORE + AppConstants.DOTS + RIGHT_VIEW_MORE;
-        if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-            tvArticleView.setText(Html.fromHtml(dots +mContext.getString(R.string.ID_VIEW_MORE), 0)); // for 24 api and more
-        } else {
-            tvArticleView.setText(Html.fromHtml(dots +mContext.getString(R.string.ID_VIEW_MORE) ));// or for older api
+        mViewMoreDescription = dataItem.getListDescription();
+        if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
+            Document documentString = Jsoup.parse(mViewMoreDescription);
+            tvArticleView.setVisibility(View.VISIBLE);
+            tvArticleDescriptionText.setVisibility(View.VISIBLE);
+            if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                tvArticleView.setText(Html.fromHtml(dots +mContext.getString(R.string.ID_VIEW_MORE), 0)); // for 24 api and more
+            } else {
+                tvArticleView.setText(Html.fromHtml(dots +mContext.getString(R.string.ID_VIEW_MORE) ));// or for older api
+            }
+
+            if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                tvArticleDescriptionText.setText(Html.fromHtml(documentString.text(), 0)); // for 24 api and more
+            } else {
+                tvArticleDescriptionText.setText(Html.fromHtml(documentString.text()));// or for older api
+            }
+        }
+        else
+        {
+            tvArticleView.setVisibility(View.GONE);
+            tvArticleDescriptionText.setVisibility(View.GONE);
         }
 
         if(dataItem.isTrending())
@@ -124,18 +151,18 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
             for (String tag : tags) {
                 mergeTags += tag + AppConstants.COMMA;
             }
-            String tagHeader = LEFT_HTML_TAG + context.getString(R.string.ID_TAGS) + RIGHT_HTML_TAG;
+            String tagHeader = LEFT_HTML_TAG + mContext.getString(R.string.ID_TAGS) + RIGHT_HTML_TAG;
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                 tvArticleTag.setText(Html.fromHtml(tagHeader + AppConstants.COLON + AppConstants.SPACE + mergeTags, 0)); // for 24 api and more
             } else {
                 tvArticleTag.setText(Html.fromHtml(tagHeader + AppConstants.COLON + AppConstants.SPACE + mergeTags));// or for older api
             }
         }
-        imageOperations(context);
     }
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void imageOperations(Context context) {
-
+        liArticleCoverImage.removeAllViews();
+        liArticleCoverImage.removeAllViewsInLayout();
         if (StringUtil.isNotNullOrEmptyString(dataItem.getAuthorImageUrl())) {
             String feedCircleIconUrl = dataItem.getAuthorImageUrl();
             ivArticleCircleIcon.setCircularImage(true);
@@ -166,14 +193,6 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
             liArticleCoverImage.addView(backgroundImage);
         }
 
-        mViewMoreDescription = dataItem.getListDescription();
-        if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
-            if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                tvArticleDescriptionText.setText(Html.fromHtml(mViewMoreDescription, 0)); // for 24 api and more
-            } else {
-                tvArticleDescriptionText.setText(Html.fromHtml(mViewMoreDescription));// or for older api
-            }
-        }
     }
 
     @Override
@@ -197,6 +216,7 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_article_bookmark)
     public void tvBookMarkClick() {
+        dataItem.setLongPress(true);
         tvArticleBookmark.setEnabled(false);
         dataItem.setItemPosition(getAdapterPosition());
         if (dataItem.isBookmarked()) {

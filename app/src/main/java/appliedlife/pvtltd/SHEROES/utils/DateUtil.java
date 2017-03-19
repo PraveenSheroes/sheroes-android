@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.utils;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -23,17 +24,6 @@ public class DateUtil {
         SimpleDateFormat sdf = new SimpleDateFormat(format);
         return sdf.format(time);
     }
-    public long getTimeInMillis(String dateString, String format) {
-        long time = 0;
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.US);
-            time = sdf.parse(dateString).getTime();
-        } catch (Exception e) {
-            LogUtils.error(TAG, e);
-        }
-
-        return time;
-    }
     /**
      * @return absolute rounded off difference in days
      */
@@ -44,6 +34,17 @@ public class DateUtil {
             difference *= -1;
         }
         return (int) ((difference / Millis24Hrs) + 0.5);
+    }
+    public long getTimeInMillis(String dateString, String format) {
+        long time = 0;
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.US);
+            time = sdf.parse(dateString).getTime();
+        } catch (Exception e) {
+            LogUtils.error(TAG, e);
+        }
+
+        return time;
     }
     /**
      * @return absolute rounded off difference in days
@@ -62,30 +63,34 @@ public class DateUtil {
         if(day>0) {
             sb.append(day);
             if(day==1) {
-                sb.append(" day ");
+                sb.append("day ");
             } else {
-                sb.append(" days ");
+                sb.append("days ");
             }
-        }
+        }else
         if(hour>0) {
             sb.append(hour);
             if(hour==1) {
-                sb.append(" hour ");
+                sb.append("hour ");
             } else {
-                sb.append(" hours ");
+                sb.append("hours ");
             }
-        }
+        }else
         if(differenceInMinutes>0) {
             sb.append(differenceInMinutes);
             if(differenceInMinutes==1) {
-                sb.append(" minute ");
+                sb.append("minute ");
             } else {
-                sb.append(" minutes ");
+                sb.append("minutes ");
             }
         }
         if(sb.length()>0) {
-            sb.append(" ago");
+            sb.append("ago");
         }
         return sb.toString();
+    }
+    public static String getDateWithFormat(Date date, String format) {
+        SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.US);
+        return sdf.format(date);
     }
 }

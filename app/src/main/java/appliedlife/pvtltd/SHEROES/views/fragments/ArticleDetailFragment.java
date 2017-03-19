@@ -105,6 +105,9 @@ public class ArticleDetailFragment extends BaseFragment {
             articleDetailPojo = new ArticleDetailPojo();
             articleDetailPojo.setId(AppConstants.ONE_CONSTANT);
             articleDetailPojo.setFeedDetail(feedDetailList.get(0));
+            mFeedDetail.setNoOfViews(feedDetailList.get(0).getNoOfViews());
+            ((ArticleDetailActivity) getActivity()).mTvArticleDetailTotalViews.setVisibility(View.VISIBLE);
+            ((ArticleDetailActivity) getActivity()).mTvArticleDetailTotalViews.setText(mFeedDetail.getNoOfViews() + AppConstants.SPACE + getActivity().getString(R.string.ID_VIEWS));
             articleList.add(articleDetailPojo);
             mAdapter.setSheroesGenericListData(articleList);
             mAdapter.notifyDataSetChanged();
@@ -112,6 +115,8 @@ public class ArticleDetailFragment extends BaseFragment {
                 ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
                 ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setAddDuration(AppConstants.NO_REACTION_CONSTANT);
             }
+
+            mArticleDetailActivityIntractionListner.onBookmarkClick(mFeedDetail, AppConstants.TWO_CONSTANT);
         }
     }
 
@@ -135,13 +140,25 @@ public class ArticleDetailFragment extends BaseFragment {
         if (null != mFeedDetail) {
             switch (success) {
                 case AppConstants.SUCCESS:
-                    mArticleDetailActivityIntractionListner.onBookmarkClick(mFeedDetail);
+                    if (!mFeedDetail.isBookmarked()) {
+                        mFeedDetail.setBookmarked(true);
+                        articleDetailPojo.setFeedDetail(mFeedDetail);
+                        mFeedDetail.setBookmarked(false);
+                    } else {
+                        mFeedDetail.setBookmarked(false);
+                        articleDetailPojo.setFeedDetail(mFeedDetail);
+                        mFeedDetail.setBookmarked(true);
+                    }
+                    articleList.clear();
+                    articleList.add(articleDetailPojo);
+                    mAdapter.notifyDataSetChanged();
+                    mArticleDetailActivityIntractionListner.onBookmarkClick(mFeedDetail, AppConstants.ONE_CONSTANT);
                     break;
                 case AppConstants.FAILED:
-                    showError(getString(R.string.ID_ALREADY_BOOKMARK),AppConstants.TWO_CONSTANT);
+                    showError(getString(R.string.ID_ALREADY_BOOKMARK), AppConstants.TWO_CONSTANT);
                     break;
                 default:
-                    showError(AppConstants.HTTP_401_UNAUTHORIZED,AppConstants.TWO_CONSTANT);
+                    showError(AppConstants.HTTP_401_UNAUTHORIZED, AppConstants.TWO_CONSTANT);
             }
         }
     }
@@ -176,6 +193,7 @@ public class ArticleDetailFragment extends BaseFragment {
                 ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
                 ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setAddDuration(AppConstants.NO_REACTION_CONSTANT);
             }
+            mArticleDetailActivityIntractionListner.onBookmarkClick(mFeedDetail, AppConstants.TWO_CONSTANT);
         }
     }
 
@@ -217,7 +235,7 @@ public class ArticleDetailFragment extends BaseFragment {
     }
 
     public interface ArticleDetailActivityIntractionListner {
-        void onBookmarkClick(FeedDetail feedDetail);
+        void onBookmarkClick(FeedDetail feedDetail, int successFrom);
     }
 
 

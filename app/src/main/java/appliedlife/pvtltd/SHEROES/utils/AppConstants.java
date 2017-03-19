@@ -14,6 +14,7 @@ public class AppConstants {
     public static final int READ_TIME_OUT = 180;
     public static final int CONNECTION_TIME_OUT = 60;
     public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+    public static final String DATE_FORMAT_FOR_JOB = "dd MMM, yyyy";
     public static final String SPACE=" ";
     public static final String SHEROES_AUTH_TOKEN = "sheroes_auth_token";
     public static final String SHEROES_USER_SESSION = "sheroes_user_session";
@@ -49,6 +50,8 @@ public class AppConstants {
     public static final String NO_REACTION="no_reaction";
     public static final String HEART_REACTION="heart";
     public static final String HOME_FRAGMENT="home";
+    public static final String FEED_RESPONSE_CALL_BACK="feed_response";
+    public static final int REQUEST_CODE_FOR_ARTICLE_DETAIL = 1001;
     public static final String JOB_FRAGMENT="job";
     public static final String PROFILE_FRAGMENT="profile";
     public static final String FEATURE_FRAGMENT="feature";
@@ -60,8 +63,8 @@ public class AppConstants {
     public static final String ALL_SEARCH= "search";
     public static final String NETWORK_TIMEOUT= "network_timout";
     public static final String SHARE= "Share";
-    public static final int WORD_COUNT = 85;
-    public static final int WORD_LENGTH = 80;
+    public static final int WORD_COUNT = 91;
+    public static final int WORD_LENGTH = 91;
     public static final String IMAGE_FULL_VIEW = "image_view";
     public static final String BACK_SLASH="/";
     public static final String ARTICLE_DETAIL = "article_detail";
