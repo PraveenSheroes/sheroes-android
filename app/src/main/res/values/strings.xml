@@ -66,7 +66,7 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_NO_REACTION">No reaction</string>
     <string name="ID_APPLIED">Applied</string>
     <string name="ID_VIEWS">Views</string>
-    <string name="ID_MIN_READ">Min Read</string>
+    <string name="ID_MIN_READ">Mins Read</string>
     <string name="ID_JOIN_CONVERSATION">Join the conversation...</string>
     <string name="ID_EMPTY_TEXT">Please enter comment</string>
     <string name="ID_WISHTLE">Whistle</string>
@@ -89,7 +89,7 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_EDIT">Edit</string>
     <string name="ID_DELETE">Delete</string>
     <string name="ID_REPORT">Report as spam</string>
-    <string name="ID_NO_RESULT_FOUND">No Result found or Connection Error,Please Click For Try again</string>
+    <string name="ID_NO_RESULT_FOUND">No Result found ,Please Click For Try again</string>
     <string name="ID_SUGGESTED">Suggested communities</string>
     <string name="ID_GROUP">Group</string>
     <string name="ID_SEE_MORE">See more like this</string>

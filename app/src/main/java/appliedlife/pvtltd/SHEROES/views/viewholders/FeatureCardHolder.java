@@ -43,6 +43,8 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
     private static final String RIGHT_HTML_VIEW_TAG_FOR_COLOR = "</font>";
     private static final String LEFT_HTML_TAG = "<font color='#333333'>";
     private static final String RIGHT_HTML_TAG = "</font>";
+    private static final String LEFT_VIEW_MORE = "<font color='#323840'>";
+    private static final String RIGHT_VIEW_MORE = "</font>";
     @Bind(R.id.li_featured_community_images)
     LinearLayout liFeaturedCoverImage;
     @Bind(R.id.iv_featured_community_card_circle_icon)
@@ -53,6 +55,8 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
     TextView tvFeaturedCommunityTime;
     @Bind(R.id.tv_featured_community_text)
     TextView tvFeaturedDescriptionText;
+    @Bind(R.id.tv_featured_view_more)
+    TextView tvFeaturedViewMore;
     @Bind(R.id.tv_featured_community_join)
     TextView tvFeaturedCommunityJoin;
     @Bind(R.id.tv_featured_community_tag_lable)
@@ -121,6 +125,10 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
             tvFeaturedCommunityJoin.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
             tvFeaturedCommunityJoin.setVisibility(View.VISIBLE);
         }
+        else
+        {
+            tvFeaturedCommunityJoin.setVisibility(View.GONE);
+        }
         //TODO:: change for UI
         if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle()))
         {
@@ -134,16 +142,25 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
 
         mViewMoreDescription = dataItem.getListDescription();
         if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription))
-
         {
             if (mViewMoreDescription.length() > AppConstants.WORD_LENGTH) {
                 mViewMoreDescription = mViewMoreDescription.substring(0, AppConstants.WORD_COUNT);
+                tvFeaturedViewMore.setVisibility(View.VISIBLE);
             }
-            String changeDate = LEFT_HTML_VEIW_TAG_FOR_COLOR + context.getString(R.string.ID_VIEW_MORE) + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
+            else
+            {
+                tvFeaturedViewMore.setVisibility(View.GONE);
+            }
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                tvFeaturedDescriptionText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.SPACE + changeDate, 0)); // for 24 api and more
+                tvFeaturedDescriptionText.setText(Html.fromHtml(mViewMoreDescription, 0)); // for 24 api and more
             } else {
-                tvFeaturedDescriptionText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.SPACE + changeDate));// or for older api
+                tvFeaturedDescriptionText.setText(Html.fromHtml(mViewMoreDescription));// or for older api
+            }
+            String dots = LEFT_VIEW_MORE + AppConstants.DOTS + RIGHT_VIEW_MORE;
+            if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                tvFeaturedViewMore.setText(Html.fromHtml(dots + mContext.getString(R.string.ID_VIEW_MORE), 0)); // for 24 api and more
+            } else {
+                tvFeaturedViewMore.setText(Html.fromHtml(dots + mContext.getString(R.string.ID_VIEW_MORE)));// or for older api
             }
         }
         if (StringUtil.isNotEmptyCollection(dataItem.getTags()))
@@ -198,9 +215,17 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
 
     }
 
-    @TargetApi(AppConstants.ANDROID_SDK_24)
+    @OnClick(R.id.tv_featured_view_more)
+    public void viewMoreTextClick() {
+        viewText();
+    }
     @OnClick(R.id.tv_featured_community_text)
     public void viewMoreClick() {
+        viewText();
+    }
+    @TargetApi(AppConstants.ANDROID_SDK_24)
+    private void viewText()
+    {
         if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
             if (tvFeaturedDescriptionText.getTag().toString().equalsIgnoreCase(mViewMore)) {
                 String lessWithColor = LEFT_HTML_VEIW_TAG_FOR_COLOR + mLess + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
@@ -211,16 +236,27 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
                     tvFeaturedDescriptionText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.SPACE + AppConstants.SPACE + lessWithColor));// or for older api
                 }
                 tvFeaturedDescriptionText.setTag(mLess);
+                tvFeaturedViewMore.setVisibility(View.GONE);
             } else {
                 tvFeaturedDescriptionText.setTag(mViewMore);
                 if (mViewMoreDescription.length() > AppConstants.WORD_LENGTH) {
                     mViewMoreDescription = mViewMoreDescription.substring(0, AppConstants.WORD_COUNT);
+                    tvFeaturedViewMore.setVisibility(View.VISIBLE);
                 }
-                String viewMore = LEFT_HTML_VEIW_TAG_FOR_COLOR + mViewMore + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
+                else
+                {
+                    tvFeaturedViewMore.setVisibility(View.GONE);
+                }
                 if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                    tvFeaturedDescriptionText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + viewMore, 0)); // for 24 api and more
+                    tvFeaturedDescriptionText.setText(Html.fromHtml(mViewMoreDescription , 0)); // for 24 api and more
                 } else {
-                    tvFeaturedDescriptionText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.DOTS + AppConstants.SPACE + viewMore));// or for older api
+                    tvFeaturedDescriptionText.setText(Html.fromHtml(mViewMoreDescription));// or for older api
+                }
+                String dots = LEFT_VIEW_MORE + AppConstants.DOTS + RIGHT_VIEW_MORE;
+                if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                    tvFeaturedViewMore.setText(Html.fromHtml(dots + mContext.getString(R.string.ID_VIEW_MORE), 0)); // for 24 api and more
+                } else {
+                    tvFeaturedViewMore.setText(Html.fromHtml(dots + mContext.getString(R.string.ID_VIEW_MORE)));// or for older api
                 }
             }
         }

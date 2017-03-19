@@ -42,12 +42,20 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
     private final String TAG = LogUtils.makeLogTag(ArticleCardHolder.class);
     private static final String LEFT_HTML_TAG_FOR_COLOR = "<b><font color='#323940'>";
     private static final String RIGHT_HTML_TAG_FOR_COLOR = "</font></b>";
+    private static final String LEFT_HTML_TAG = "<font color='#333333'>";
+    private static final String RIGHT_HTML_TAG = "</font>";
     @Inject
     Preference<LoginResponse> userPreference;
     @Inject
     DateUtil mDateUtil;
     @Bind(R.id.iv_article_detail_card_circle_icon)
     CircleImageView ivArticleDetailCardCircleIcon;
+    @Bind(R.id.tv_article_detail_reaction1)
+    TextView tvFeedArticleDetailReaction1;
+    @Bind(R.id.tv_article_detail_reaction2)
+    TextView tvFeedArticleDetailReaction2;
+    @Bind(R.id.tv_article_detail_reaction3)
+    TextView tvFeedArticleDetailReaction3;
     @Bind(R.id.tv_html_data)
     TextView tvHtmlData;
     @Bind(R.id.tv_article_detail_tag)
@@ -150,6 +158,19 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void allTextViewStringOperations(Context context) {
+        if (StringUtil.isNotEmptyCollection(mFeedDetail.getTags())) {
+            List<String> tags = mFeedDetail.getTags();
+            String mergeTags = AppConstants.EMPTY_STRING;
+            for (String tag : tags) {
+                mergeTags += tag + AppConstants.COMMA;
+            }
+            String tagHeader = LEFT_HTML_TAG + mContext.getString(R.string.ID_TAGS) + RIGHT_HTML_TAG;
+            if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                tvArticleDetailTag.setText(Html.fromHtml(tagHeader + AppConstants.COLON + AppConstants.SPACE + mergeTags, 0)); // for 24 api and more
+            } else {
+                tvArticleDetailTag.setText(Html.fromHtml(tagHeader + AppConstants.COLON + AppConstants.SPACE + mergeTags));// or for older api
+            }
+        }
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getAuthorName())) {
             tvArticleDetailIconName.setText(mFeedDetail.getAuthorName());
         }
@@ -161,8 +182,8 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
             long createdDate = mDateUtil.getTimeInMillis(mFeedDetail.getCreatedDate(), AppConstants.DATE_FORMAT);
             tvArticleDetailTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
         }
-        if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getDescription())) {
-            String description = mFeedDetail.getDescription().trim();
+        if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getAuthorShortDescription())) {
+            String description = mFeedDetail.getAuthorShortDescription().trim();
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                 tvArticleDetailDescription.setText(Html.fromHtml(description, 0)); // for 24 api and more
             } else {
@@ -172,13 +193,23 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
         if (mFeedDetail.getNoOfLikes() < AppConstants.ONE_CONSTANT && mFeedDetail.getNoOfComments() < AppConstants.ONE_CONSTANT) {
             tvArticleDetailUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
             flArticleDetailNoReactionComment.setVisibility(View.GONE);
-        } else if (mFeedDetail.getNoOfLikes() < AppConstants.ONE_CONSTANT) {
-            flArticleDetailNoReactionComment.setVisibility(View.GONE);
-            tvArticleDetailTotalReaction.setVisibility(View.GONE);
         }
+        tvFeedArticleDetailReaction1.setVisibility(View.VISIBLE);
+        tvFeedArticleDetailReaction2.setVisibility(View.VISIBLE);
+        tvFeedArticleDetailReaction3.setVisibility(View.VISIBLE);
 
         switch (mFeedDetail.getNoOfLikes()) {
             case AppConstants.NO_REACTION_CONSTANT:
+                if (mFeedDetail.getNoOfComments() > AppConstants.NO_REACTION_CONSTANT) {
+                    flArticleDetailNoReactionComment.setVisibility(View.VISIBLE);
+                    tvArticleDetailTotalReaction.setVisibility(View.GONE);
+                    tvFeedArticleDetailReaction1.setVisibility(View.INVISIBLE);
+                    tvFeedArticleDetailReaction2.setVisibility(View.INVISIBLE);
+                    tvFeedArticleDetailReaction3.setVisibility(View.INVISIBLE);
+                    tvArticleDetailTotalReplies.setVisibility(View.VISIBLE);
+                } else {
+                    flArticleDetailNoReactionComment.setVisibility(View.GONE);
+                }
                 userLike();
                 break;
             case AppConstants.ONE_CONSTANT:
@@ -193,7 +224,32 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
                 tvArticleDetailUserReactionText.setText(AppConstants.EMPTY_STRING);
                 userLike();
         }
-        userComments();
+        switch (mFeedDetail.getNoOfComments()) {
+            case AppConstants.NO_REACTION_CONSTANT:
+                if (mFeedDetail.getNoOfLikes() > AppConstants.NO_REACTION_CONSTANT) {
+                    flArticleDetailNoReactionComment.setVisibility(View.VISIBLE);
+                    tvArticleDetailTotalReaction.setVisibility(View.VISIBLE);
+                    tvFeedArticleDetailReaction1.setVisibility(View.VISIBLE);
+                    tvFeedArticleDetailReaction2.setVisibility(View.VISIBLE);
+                    tvFeedArticleDetailReaction3.setVisibility(View.VISIBLE);
+                    tvArticleDetailTotalReplies.setVisibility(View.INVISIBLE);
+                } else {
+                    flArticleDetailNoReactionComment.setVisibility(View.GONE);
+                }
+                userComments();
+                break;
+            case AppConstants.ONE_CONSTANT:
+                tvArticleDetailTotalReplies.setText(String.valueOf(mFeedDetail.getNoOfComments()) + AppConstants.SPACE + context.getString(R.string.ID_REPLY));
+                tvArticleDetailTotalReplies.setVisibility(View.VISIBLE);
+                liArticleDetailUserComments.setVisibility(View.VISIBLE);
+                userComments();
+                break;
+            default:
+                tvArticleDetailTotalReplies.setText(String.valueOf(mFeedDetail.getNoOfComments()) + AppConstants.SPACE + context.getString(R.string.ID_REPLIES));
+                tvArticleDetailTotalReplies.setVisibility(View.VISIBLE);
+                liArticleDetailUserComments.setVisibility(View.VISIBLE);
+                userComments();
+        }
     }
 
     private void userLike() {

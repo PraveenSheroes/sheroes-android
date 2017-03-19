@@ -121,7 +121,7 @@
                 android:drawableLeft="@drawable/ic_heart_in_active" />
             <TextView
                 android:id="@+id/tv_feed_article_detail_reaction_text"
-                android:layout_width="@dimen/dp_size_120"
+                android:layout_width="@dimen/dp_size_100"
                 android:layout_height="match_parent"
                 android:gravity="center|left"
                 android:fontFamily="@string/ID_ROBOTO_MEDIUM"

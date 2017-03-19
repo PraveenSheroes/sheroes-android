@@ -47,11 +47,12 @@
             android:layout_width="@dimen/dp_size_350"
             android:layout_height="wrap_content"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-            android:textColor="@color/footer_icon_text"
+            android:textColor="@color/feed_article_comment"
             android:padding="@dimen/dp_size_20"
             android:textAlignment="center"
+            android:textSize="@dimen/sp_size_14"
             android:layout_gravity="center"
-            android:text="@string/ID_NO_RESULT_FOUND"/>
+            android:text="@string/ID_NO_REPLIES"/>
     </LinearLayout>
     <include
         layout="@layout/user_comment_section_layout"

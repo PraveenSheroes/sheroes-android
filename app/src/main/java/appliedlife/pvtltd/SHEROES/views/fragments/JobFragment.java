@@ -64,7 +64,8 @@ public class JobFragment extends BaseFragment {
     private int mPressedEmoji;
     private boolean mListLoad = true;
     private int mPageNo = AppConstants.ONE_CONSTANT;
-
+    @Bind(R.id.progress_bar_first_load)
+    ProgressBar mProgressBarFirstLoad;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -157,7 +158,9 @@ public class JobFragment extends BaseFragment {
 
     @Override
     public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
+        mProgressBarFirstLoad.setVisibility(View.GONE);
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
+            mLiNoResult.setVisibility(View.GONE);
             mPageNo = mFragmentListRefreshData.getPageNo();
             mFragmentListRefreshData.setPageNo(++mPageNo);
             mPullRefreshList.allListData(feedDetailList);
@@ -193,7 +196,6 @@ public class JobFragment extends BaseFragment {
 
     public interface HomeActivityIntractionListner {
         void onErrorOccurence();
-
         void openFilter();
     }
 

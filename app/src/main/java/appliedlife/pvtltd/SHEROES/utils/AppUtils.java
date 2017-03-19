@@ -1731,7 +1731,8 @@ public class AppUtils {
         //TODO:: change rquest data
         commentReactionRequestPojo.setCloudMessagingId(AppConstants.ALL_SEARCH);
         commentReactionRequestPojo.setPageNo(pageNo);
-        commentReactionRequestPojo.setPageSize(AppConstants.PAGE_SIZE);
+        //Page size for comment list
+        commentReactionRequestPojo.setPageSize(AppConstants.WORD_LENGTH);
         commentReactionRequestPojo.setEntityId(entityId);
         return commentReactionRequestPojo;
     }

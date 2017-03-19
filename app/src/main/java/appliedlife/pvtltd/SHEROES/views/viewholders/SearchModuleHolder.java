@@ -49,24 +49,24 @@ public class SearchModuleHolder extends BaseViewHolder<FeedDetail> {
             switch (item.getSubType()) {
                 case AppConstants.FEED_ARTICLE:
                     mTvHeaderText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_feed_article_top_left, 0, 0, 0);
-                    mTvHeaderText.setText(dataItem.getAuthorName()+dataItem.getId());
+                    mTvHeaderText.setText(dataItem.getAuthorName());
                     rlSearchModuleList.setTag(AppConstants.FEED_ARTICLE);
                     break;
                 case AppConstants.FEED_COMMUNITY:
                     mTvHeaderText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search_group_icon, 0, 0, 0);
-                    mTvLabelText.setText(item.getCommunityType()+dataItem.getId());
+                    mTvLabelText.setText(item.getCommunityType());
                     mTvLabelText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_lock, 0);
                     rlSearchModuleList.setTag(AppConstants.FEED_COMMUNITY);
                     break;
                 case AppConstants.FEED_COMMUNITY_POST:
                     mTvHeaderText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search_group_icon, 0, 0, 0);
-                    mTvHeaderText.setText(item.getNameOrTitle()+dataItem.getId());
+                    mTvHeaderText.setText(item.getNameOrTitle());
                     mTvLabelText.setText(item.getCommunityType());
                     rlSearchModuleList.setTag(AppConstants.FEED_COMMUNITY_POST);
                     break;
                 case AppConstants.FEED_JOB:
                     mTvHeaderText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search_proffesion_icon, 0, 0, 0);
-                    mTvHeaderText.setText(item.getNameOrTitle()+dataItem.getId());
+                    mTvHeaderText.setText(item.getNameOrTitle());
                     mTvLabelText.setText(item.getAuthorCityName());
                     rlSearchModuleList.setTag(AppConstants.FEED_JOB);
                     break;

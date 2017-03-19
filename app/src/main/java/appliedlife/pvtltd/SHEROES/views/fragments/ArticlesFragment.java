@@ -61,7 +61,8 @@ public class ArticlesFragment extends BaseFragment {
     private List<FeedDetail> mTrendingFeedDetail = new ArrayList<>();
     private boolean mListLoad = true;
     private boolean mIsEdit = false;
-
+    @Bind(R.id.progress_bar_first_load)
+    ProgressBar mProgressBarFirstLoad;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -113,7 +114,9 @@ public class ArticlesFragment extends BaseFragment {
 
     @Override
     public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
+        mProgressBarFirstLoad.setVisibility(View.GONE);
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
+            mLiNoResult.setVisibility(View.GONE);
             mPageNo = mFragmentListRefreshData.getPageNo();
             if (mPageNo == AppConstants.ONE_CONSTANT) {
                 for (FeedDetail feedDetail : feedDetailList) {

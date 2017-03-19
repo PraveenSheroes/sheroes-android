@@ -10,20 +10,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="@dimen/dp_size_10"
+        android:layout_marginLeft="@dimen/dp_size_12"
+        android:layout_marginRight="@dimen/dp_size_20"
+        android:layout_marginTop="@dimen/dp_size_9"
         android:weightSum="1">
 
         <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
             android:id="@+id/iv_reaction_profile_pic"
-            android:layout_width="@dimen/dp_size_27"
-            android:layout_height="@dimen/dp_size_27"
+            android:layout_width="@dimen/dp_size_30"
+            android:layout_height="@dimen/dp_size_30"
             android:layout_gravity="center"
             android:gravity="center"
             android:src="@drawable/ic_footer_button_icon" />
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight=".9"
+            android:layout_weight="1"
+            android:layout_marginLeft="@dimen/dp_size_13"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 

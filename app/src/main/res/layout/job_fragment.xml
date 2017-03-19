@@ -22,13 +22,23 @@
         android:layout_gravity="bottom|end"
         android:background="@color/blue"
         android:src="@drawable/ic_fab_icon"
+        android:visibility="gone"
         android:layout_marginBottom="@dimen/dp_size_65"
         android:layout_marginRight="@dimen/dp_size_20"/>
     <ProgressBar
         android:id="@+id/pb_job_progress_bar"
+        android:layout_width="@dimen/dp_size_30"
+        android:layout_height="@dimen/dp_size_30"
+        android:background="@drawable/ripple_button"
+        android:backgroundTint="@color/grey2"
+        android:indeterminateTint="@color/white"
+        android:layout_gravity="bottom|center"/>
+    <ProgressBar
+        android:id="@+id/progress_bar_first_load"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center" />
+        android:backgroundTint="@color/added_member_text"
+        android:layout_gravity="center"/>
     <LinearLayout
         android:id="@+id/li_no_job_result"
         android:layout_width="match_parent"

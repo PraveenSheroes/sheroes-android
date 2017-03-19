@@ -80,7 +80,9 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
         this.dataItem = item;
         this.mContext = context;
         tvFeedJobUserBookmark.setEnabled(true);
-        imageOperations(context);
+        if(!dataItem.isTrending()) {
+            imageOperations(context);
+        }
         allTextViewStringOperations(context);
     }
 
@@ -117,7 +119,7 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getCreatedDate())) {
             long createdDate = mDateUtil.getTimeInMillis(dataItem.getCreatedDate(), AppConstants.DATE_FORMAT);
-            tvFeedJobDateTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
+            tvFeedJobDateTime.setText(mDateUtil.getDateFromMillisecondsWithFormat(createdDate,AppConstants.DATE_FORMAT_FOR_JOB));
         }
         if (StringUtil.isNotEmptyCollection(dataItem.getSearchTextJobEmpTypes())) {
             List<String> jobTypes = dataItem.getSearchTextJobEmpTypes();
@@ -135,8 +137,8 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
             }
             tvFeedJobName.setText(mergeJobSkills);
         }
-        if (StringUtil.isNotNullOrEmptyString(dataItem.getCityName())) {
-            tvFeedJobLocation.setText(dataItem.getCityName());
+        if (StringUtil.isNotNullOrEmptyString(dataItem.getAuthorCityName())) {
+            tvFeedJobLocation.setText(dataItem.getAuthorCityName());
         }
         if (dataItem.isApplied()) {
             tvFeedJobApplied.setVisibility(View.VISIBLE);
@@ -156,6 +158,7 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_feed_job_user_bookmark)
     public void isBookMarkClick() {
+        dataItem.setTrending(true);
         tvFeedJobUserBookmark.setEnabled(false);
         dataItem.setItemPosition(getAdapterPosition());
         if (dataItem.isBookmarked()) {

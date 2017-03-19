@@ -46,8 +46,8 @@
         android:id="@+id/iv_footer_button_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="@dimen/dp_size_30"
+        android:layout_gravity="center_horizontal|center"
         android:background="@drawable/ic_footer_button_icon"
-        android:layout_gravity="center_horizontal|center"/>
+        android:padding="@dimen/dp_size_30" />
 </FrameLayout>
 

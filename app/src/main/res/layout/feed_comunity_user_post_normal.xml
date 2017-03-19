@@ -29,7 +29,7 @@
                     android:id="@+id/iv_feed_community_post_circle_icon"
                     android:layout_width="@dimen/feed_profile_icon_size"
                     android:layout_height="@dimen/feed_profile_icon_size"
-                    android:src="@drawable/ic_footer_button_icon" />
+                    android:src="@drawable/ic_about_me" />
 
                 <ImageView
                     android:id="@+id/iv_feed_community_post_circle_icon_verified"
@@ -86,6 +86,20 @@
             android:lineSpacingExtra="@dimen/dp_size_3"
             android:textColor="@color/feed_article_label"
             android:textSize="@dimen/sp_size_14" />
+        <TextView
+            android:id="@+id/tv_feed_community_post_view_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_size_16"
+            android:layout_marginRight="@dimen/dp_size_25"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:layout_gravity="right"
+            android:background="@color/white"
+            android:gravity="right"
+            android:layout_marginTop="@dimen/dp_size_minus_22"
+            android:textColor="@color/feed_job_card_new"
+            android:text="@string/ID_VIEW_MORE"
+            android:textSize="@dimen/sp_size_14" />
 
 
         <FrameLayout
@@ -133,7 +147,7 @@
 
             <TextView
                 android:id="@+id/tv_feed_community_post_user_reaction_text"
-                android:layout_width="@dimen/dp_size_90"
+                android:layout_width="@dimen/dp_size_70"
                 android:layout_height="match_parent"
                 android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:gravity="center|left"
@@ -151,7 +165,7 @@
                 android:id="@+id/tv_feed_community_post_user_bookmark"
                 android:layout_width="@dimen/dp_size_50"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/dp_size_45"
+                android:layout_marginLeft="@dimen/dp_size_85"
                 android:drawableRight="@drawable/ic_bookmark_in_active"
                 android:paddingRight="@dimen/dp_size_20" />
 
@@ -161,7 +175,7 @@
                 android:layout_width="@dimen/dp_size_20"
                 android:layout_height="match_parent"
                 android:layout_gravity="right"
-                android:layout_marginLeft="@dimen/dp_size_50"
+                android:layout_marginLeft="@dimen/dp_size_30"
                 android:drawableRight="@drawable/ic_menu_dashboard"
                 android:paddingRight="@dimen/dp_size_10" />
         </LinearLayout>
@@ -302,7 +316,7 @@
                 android:layout_width="@dimen/dp_size_27"
                 android:layout_height="@dimen/dp_size_28"
                 android:layout_margin="@dimen/dp_size_8"
-                android:src="@drawable/ic_footer_button_icon" />
+                android:src="@drawable/ic_about_me" />
 
             <TextView
                 android:id="@+id/tv_feed_community_post_register_user_comment"

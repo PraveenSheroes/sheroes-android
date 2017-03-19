@@ -20,7 +20,7 @@
 
     <application
         android:name="appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@drawable/appicon"
         android:label="@string/ID_APP_NAME"
         android:supportsRtl="true"

@@ -77,9 +77,8 @@ public class HomeFragment extends BaseFragment {
     private boolean mListLoad = true;
     private boolean mIsEdit = false;
     private int mPageNo = AppConstants.ONE_CONSTANT;
-
-
-    @Nullable
+    @Bind(R.id.progress_bar_first_load)
+    ProgressBar mProgressBarFirstLoad;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -91,6 +90,11 @@ public class HomeFragment extends BaseFragment {
         //  GoogleAnalyticsTracing.screenNameTracking(getActivity(),SCREEN_NAME);
 
         ButterKnife.bind(this, view);
+        Bundle bundle = getArguments();
+        if (bundle != null)
+        {
+           mFeedDetail= bundle.getParcelable(AppConstants.HOME_FRAGMENT);
+        }
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.HOME_FRAGMENT, AppConstants.EMPTY_STRING);
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
@@ -180,15 +184,16 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
+        mProgressBarFirstLoad.setVisibility(View.GONE);
         super.getFeedListSuccess(feedDetailList);
-    }
 
+    }
     @Override
     public void getSuccessForAllResponse(String success, int successFrom) {
         super.getSuccessForAllResponse(success, successFrom);
     }
-    public void commentListRefresh(FeedDetail feedDetail) {
-        super.commentListRefresh(feedDetail);
+    public void commentListRefresh(FeedDetail feedDetail,int callFrom) {
+        super.commentListRefresh(feedDetail,callFrom);
     }
 
     public void bookMarkForCard(FeedDetail feedDetail) {

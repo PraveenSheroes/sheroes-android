@@ -26,6 +26,7 @@ import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LastComment;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
+import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.presenters.CommentReactionPresenter;
@@ -68,6 +69,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     private AppUtils mAppUtils;
     private ProgressBar mProgressBar;
     private FragmentIntractionWithActivityListner mHomeSearchActivityFragmentIntractionWithActivityListner;
+    private FragmentOpen mFragmentOpen = new FragmentOpen();
 
     @Nullable
     @Override
@@ -75,6 +77,10 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         return super.onCreateView(inflater, container, savedInstanceState);
 
+    }
+
+    public void setFragmentData(FragmentOpen fragmentOpen) {
+        this.mFragmentOpen = fragmentOpen;
     }
 
     public void setProgressBar(ProgressBar mProgressBar) {
@@ -138,9 +144,11 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     public void setListLoadFlag(boolean mListLoad) {
         this.mListLoad = mListLoad;
     }
+
     public void setRefreshList(SwipPullRefreshList mPullRefreshList) {
         this.mPullRefreshList = mPullRefreshList;
     }
+
     public void callFragment(int layout, Fragment fragment) {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -180,8 +188,12 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
             mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
             mAdapter.setCallForRecycler(AppConstants.FEED_SUB_TYPE);
             mAdapter.notifyDataSetChanged();
+            if (mRecyclerView.getItemAnimator() instanceof SimpleItemAnimator) {
+                ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+                ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setAddDuration(AppConstants.NO_REACTION_CONSTANT);
+            }
             if (!mPullRefreshList.isPullToRefresh()) {
-                mLayoutManager.scrollToPositionWithOffset(mPullRefreshList.getFeedResponses().size() - feedDetailList.size(), 0);
+                mLayoutManager.scrollToPosition(mPullRefreshList.getFeedResponses().size() - feedDetailList.size());
             } else {
                 mLayoutManager.scrollToPositionWithOffset(0, 0);
             }
@@ -218,28 +230,22 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                         lastCommentList.remove(lastComment);
                         mFeedDetail.setLastComments(lastCommentList);
                     }
-                    mAdapter.setDataOnPosition(mFeedDetail, mFeedDetail.getItemPosition());
                     mAdapter.notifyDataSetChanged();
-                    if (mRecyclerView.getItemAnimator() instanceof SimpleItemAnimator) {
-                        ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
-                        ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setAddDuration(AppConstants.NO_REACTION_CONSTANT);
-                    }
                     break;
                 case AppConstants.FAILED:
-                    showError(getString(R.string.ID_ALREADY_BOOKMARK),AppConstants.TWO_CONSTANT);
+                    showError(getString(R.string.ID_ALREADY_BOOKMARK), AppConstants.TWO_CONSTANT);
                     break;
                 default:
-                    showError(AppConstants.HTTP_401_UNAUTHORIZED,AppConstants.TWO_CONSTANT);
+                    showError(AppConstants.HTTP_401_UNAUTHORIZED, AppConstants.TWO_CONSTANT);
             }
         }
     }
 
-    public void commentListRefresh(FeedDetail feedDetail) {
-        mAdapter.notifyDataSetChanged();
-        if (mRecyclerView.getItemAnimator() instanceof SimpleItemAnimator) {
-            ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
-            ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setAddDuration(AppConstants.NO_REACTION_CONSTANT);
+    public void commentListRefresh(FeedDetail feedDetail, int callFrom) {
+        if (callFrom == AppConstants.TWO_CONSTANT) {
+            mAdapter.setDataOnPosition(feedDetail, feedDetail.getItemPosition());
         }
+        mAdapter.notifyDataSetChanged();
     }
 
     protected void bookMarkSuccess(String success) {
@@ -251,17 +257,22 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                     } else {
                         mFeedDetail.setBookmarked(false);
                     }
-                    mAdapter.notifyDataSetChanged();
+                    if (mFragmentOpen.isBookmarkFragment()) {
+                        mAdapter.removeDataOnPosition(mFeedDetail, mFeedDetail.getItemPosition());
+
+                    }
+                    mAdapter.notifyItemChanged(mFeedDetail.getItemPosition());
                     if (mRecyclerView.getItemAnimator() instanceof SimpleItemAnimator) {
                         ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
                         ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setAddDuration(AppConstants.NO_REACTION_CONSTANT);
                     }
+
                     break;
                 case AppConstants.FAILED:
-                    showError(getString(R.string.ID_ALREADY_BOOKMARK),AppConstants.TWO_CONSTANT);
+                    showError(getString(R.string.ID_ALREADY_BOOKMARK), AppConstants.TWO_CONSTANT);
                     break;
                 default:
-                    showError(AppConstants.HTTP_401_UNAUTHORIZED,AppConstants.TWO_CONSTANT);
+                    showError(AppConstants.HTTP_401_UNAUTHORIZED, AppConstants.TWO_CONSTANT);
             }
         }
     }
@@ -289,18 +300,17 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                             mFeedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
                         }
                     }
-                    mAdapter.setDataOnPosition(mFeedDetail, mPosition);
-                    mAdapter.notifyDataSetChanged();
+                    mAdapter.notifyItemChanged(mFeedDetail.getItemPosition());
                     if (mRecyclerView.getItemAnimator() instanceof SimpleItemAnimator) {
                         ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
                         ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setAddDuration(AppConstants.NO_REACTION_CONSTANT);
                     }
                     break;
                 case AppConstants.FAILED:
-                    showError(getString(R.string.ID_ALREADY_BOOKMARK),AppConstants.TWO_CONSTANT);
+                    showError(getString(R.string.ID_ALREADY_BOOKMARK), AppConstants.TWO_CONSTANT);
                     break;
                 default:
-                    showError(AppConstants.HTTP_401_UNAUTHORIZED,AppConstants.TWO_CONSTANT);
+                    showError(AppConstants.HTTP_401_UNAUTHORIZED, AppConstants.TWO_CONSTANT);
 
             }
         }
@@ -347,10 +357,8 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
 
     @Override
     public void startProgressBar() {
-        if (mListLoad) {
-            mProgressBar.setVisibility(View.VISIBLE);
-            mProgressBar.bringToFront();
-        }
+        mProgressBar.setVisibility(View.VISIBLE);
+        mProgressBar.bringToFront();
     }
 
     @Override
@@ -364,22 +372,17 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     }
 
     @Override
-    public void showError(String errorMsg,int errorFor) {
-        if(errorFor==AppConstants.ONE_CONSTANT)
-        {
-            if(null!=mLiNoResult)
-            {
+    public void showError(String errorMsg, int errorFor) {
+        if (errorFor == AppConstants.ONE_CONSTANT) {
+            if (null != mLiNoResult) {
                 mLiNoResult.setVisibility(View.VISIBLE);
             }
-        }else {
+        } else {
             mAdapter.notifyDataSetChanged();
-            if (mRecyclerView.getItemAnimator() instanceof SimpleItemAnimator) {
-                ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
-                ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setAddDuration(AppConstants.NO_REACTION_CONSTANT);
-            }
+
         }
         stopProgressBar();
-        mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(errorMsg,errorFor);
+        mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(errorMsg, errorFor);
     }
 
     @Override

@@ -68,7 +68,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
     @Bind(R.id.collapsing_toolbar_article_detail)
     public CustomCollapsingToolbarLayout mCollapsingToolbarLayout;
     @Bind(R.id.tv_article_detail_total_views)
-    TextView mTvArticleDetailTotalViews;
+   public TextView mTvArticleDetailTotalViews;
     @Bind(R.id.tv_article_detail_bookmark)
     TextView mTvArticleDetailBookmark;
     private FeedDetail mFeedDetail;
@@ -116,7 +116,6 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
             }
             mCollapsingToolbarLayout.setTitle(mFeedDetail.getNameOrTitle());
             mCollapsingToolbarLayout.setSubtitle(mFeedDetail.getAuthorName());
-            mTvArticleDetailTotalViews.setText(mFeedDetail.getNoOfViews() + AppConstants.SPACE + getString(R.string.ID_VIEWS));
             viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
             viewPagerAdapter.addFragment(ArticleDetailFragment.createInstance(mFeedDetail), getString(R.string.ID_ARTICLE));
             mViewPagerArticleDetail.setAdapter(viewPagerAdapter);
@@ -154,7 +153,6 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
 
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
-
         if (baseResponse instanceof FeedDetail) {
             articleDetailHandled(view, baseResponse);
         }else if (baseResponse instanceof CommentReactionDoc) {
@@ -394,7 +392,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
         final TextView tvShare = (TextView) popupView.findViewById(R.id.tv_article_menu_share);
         final TextView tvReport = (TextView) popupView.findViewById(R.id.tv_article_menu_report);
         final Fragment fragmentCommentReaction = getSupportFragmentManager().findFragmentByTag(CommentReactionFragment.class.getName());
-        popupWindow.showAsDropDown(view);
+        popupWindow.showAsDropDown(view, -140, 0);
         tvEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -457,7 +455,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
     @OnClick(R.id.tv_article_detail_bookmark)
     public void onBookMarkClick() {
         mTvArticleDetailBookmark.setEnabled(false);
-        mFeedDetail.setItemPosition(0);
+        mFeedDetail.setItemPosition(AppConstants.NO_REACTION_CONSTANT);
         bookmarkCall();
     }
     private void bookmarkCall() {
@@ -470,8 +468,11 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
     public void onBackClick() {
 
         if (!mFeedDetail.isFromHome()) {
-            Intent intent = new Intent(this, HomeActivity.class);
-            startActivity(intent);
+            Intent intent = new Intent();
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(AppConstants.HOME_FRAGMENT, mFeedDetail);
+            intent.putExtras(bundle);
+            setResult(RESULT_OK, intent);
         }
         finish();
         overridePendingTransition(R.anim.fade_in_dialog, R.anim.fade_out_dialog);
@@ -486,14 +487,16 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
     }
 
     @Override
-    public void onBookmarkClick(FeedDetail feedDetail) {
-        mTvArticleDetailBookmark.setEnabled(true);
-        if (!feedDetail.isBookmarked()) {
-            feedDetail.setBookmarked(true);
-          mTvArticleDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_active, 0, 0, 0);
-        } else {
-            feedDetail.setBookmarked(false);
-         mTvArticleDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_in_active, 0, 0, 0);
+    public void onBookmarkClick(FeedDetail feedDetail,int successFrom) {
+        if(successFrom==AppConstants.ONE_CONSTANT) {
+            mTvArticleDetailBookmark.setEnabled(true);
+            if (!feedDetail.isBookmarked()) {
+                feedDetail.setBookmarked(true);
+                mTvArticleDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_active, 0, 0, 0);
+            } else {
+                feedDetail.setBookmarked(false);
+                mTvArticleDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_in_active, 0, 0, 0);
+            }
         }
         mFeedDetail=feedDetail;
     }
