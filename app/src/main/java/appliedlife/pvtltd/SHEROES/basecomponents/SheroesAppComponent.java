@@ -9,6 +9,7 @@ import appliedlife.pvtltd.SHEROES.presenters.CommunityTagsPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.InvitePresenter;
 import appliedlife.pvtltd.SHEROES.presenters.MembersPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.OwnerPresenter;
+import appliedlife.pvtltd.SHEROES.presenters.ProfilePersenter;
 import appliedlife.pvtltd.SHEROES.presenters.RequestedPresenter;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
@@ -26,6 +27,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.ProfessionalWorkExperienceAct
 import appliedlife.pvtltd.SHEROES.views.activities.Professional_WorkExperience_Activity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActicity;
 import appliedlife.pvtltd.SHEROES.views.activities.SettingPreferencesActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.VisitingCardActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.WelcomeActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.AllMembersFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.AllSearchFragment;
@@ -69,6 +71,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ProfileCityWorkFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileFullViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileOtherFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileTravelClientFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProfileVisitingCardView;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileWorkExperienceFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileWorkExperienceSelfEmploymentFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SearchArticleFragment;
@@ -87,6 +90,10 @@ import appliedlife.pvtltd.SHEROES.views.fragments.SettingPreferencsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SettingTermsAndConditionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareCommunityFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SheroesHelpYouFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeScreen1Fragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeScreen2Fragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeScreen3Fragment;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleDetailHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleDetailSuggestedHolder;
@@ -282,7 +289,7 @@ public interface SheroesAppComponent {
     void inject(ProfileHorListHolder profileHorListHolder);
     void inject(ProfileWorkExperienceSelfEmploymentFragment profileWorkExperienceSelfEmploymentFragment);
     void inject(IntroFragment introFragment);
-    void inject(WelcomeActivity welcomeActivity);
+
 
     void inject(InviteCommunityMember inviteCommunityMember);
     void inject(InviteCommunityOwner inviteCommunityMember);
@@ -291,4 +298,12 @@ public interface SheroesAppComponent {
     void inject(OwnerRemoveDialog ownerRemoveDialog);
     void inject(OnboardingWorkExperience onboardingWorkExperience);
     void inject(TagSearchHolder tagSearchHolder);
+    void inject(VisitingCardActivity visitingCardActivity);
+    void inject(ProfileVisitingCardView profileVisitingCardView);
+    void inject(ProfilePersenter profilePersenter);
+    void inject(WelcomeFragment welcomeFragment);
+    void inject(WelcomeActivity welcomeActivity);
+    void inject(WelcomeScreen3Fragment welcomeScreen3Fragment);
+    void inject(WelcomeScreen2Fragment welcomeScreen2Fragment);
+    void inject(WelcomeScreen1Fragment welcomeScreen1Fragment);
 }

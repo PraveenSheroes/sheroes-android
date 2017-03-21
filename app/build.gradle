@@ -15,6 +15,7 @@ android {
     buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "appliedlife.pvtltd.SHEROES"
+        multiDexEnabled true
         minSdkVersion 16
         targetSdkVersion 25
         versionCode 30

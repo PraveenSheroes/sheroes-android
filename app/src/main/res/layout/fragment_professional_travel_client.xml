@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/r1_add_work_relative"
@@ -10,19 +10,13 @@
         android:layout_height="wrap_content"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/home_toolbar"
+        <include
+
+            layout="@layout/setting_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+            android:layout_gravity="start|top" />
 
-            <include
-                layout="@layout/setting_header"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start|top" />
-
-        </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
 
@@ -30,8 +24,8 @@
         android:id="@+id/add_city_scrool"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
         android:layout_below="@+id/r1_add_work_relative"
+        android:background="@color/white"
         android:isScrollContainer="false">
 
         <LinearLayout
@@ -40,111 +34,105 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_travel_heading"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/ID_TRAVEL_LIKE"
-            android:textColor="@color/blue"
-            android:textSize="@dimen/sp_size_15"
-            android:padding="@dimen/dp_size_35"/>
+            <TextView
+                android:id="@+id/tv_travel_heading"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/dp_size_35"
+                android:text="@string/ID_TRAVEL_LIKE"
+                android:textColor="@color/blue"
+                android:textSize="@dimen/sp_size_15" />
 
-        <RelativeLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/tv_no"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:drawableLeft="@drawable/ic_circle_inactive"
-                android:drawablePadding="@dimen/dp_size_10"
-                android:text="@string/ID_NO"
-                android:textColor="@color/text_color_work_list"
-                android:textSize="@dimen/sp_size_13"
-                android:padding="@dimen/dp_size_35"/>
+                <TextView
+                    android:id="@+id/tv_no"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:drawableLeft="@drawable/ic_circle_inactive"
+                    android:drawablePadding="@dimen/dp_size_10"
+                    android:padding="@dimen/dp_size_35"
+                    android:text="@string/ID_NO"
+                    android:textColor="@color/text_color_work_list"
+                    android:textSize="@dimen/sp_size_13" />
 
-            <TextView
+                <TextView
 
-                android:id="@+id/tv_yes"
-                android:layout_toRightOf="@+id/tv_no"
-                android:drawableLeft="@drawable/ic_circle_inactive"
-                android:drawablePadding="@dimen/dp_size_10"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="@string/ID_YES"
-                android:textColor="@color/text_color_work_list"
-                android:textSize="@dimen/sp_size_13"
-                android:padding="@dimen/dp_size_35"
-                />
+                    android:id="@+id/tv_yes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_toRightOf="@+id/tv_no"
+                    android:drawableLeft="@drawable/ic_circle_inactive"
+                    android:drawablePadding="@dimen/dp_size_10"
+                    android:padding="@dimen/dp_size_35"
+                    android:text="@string/ID_YES"
+                    android:textColor="@color/text_color_work_list"
+                    android:textSize="@dimen/sp_size_13" />
 
 
             </RelativeLayout>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/ID_YES_THEN"
-            android:paddingLeft="@dimen/dp_size_35"
-            android:textSize="@dimen/dp_size_13"
-            android:textColor="@color/text_color_work_list"
-            />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/dp_size_35"
+                android:text="@string/ID_YES_THEN"
+                android:textColor="@color/text_color_work_list"
+                android:textSize="@dimen/dp_size_13" />
 
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_circle_inactive"
+                android:drawablePadding="@dimen/dp_size_5"
+                android:paddingLeft="@dimen/dp_size_35"
+                android:paddingTop="@dimen/dp_size_15"
                 android:text="@string/ID_LOCAL"
-                android:paddingLeft="@dimen/dp_size_35"
-                android:paddingTop="@dimen/dp_size_15"
-                android:textSize="@dimen/dp_size_13"
-                android:drawablePadding="@dimen/dp_size_5"
                 android:textColor="@color/text_color_work_list"
-                />
+                android:textSize="@dimen/dp_size_13" />
 
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_circle_inactive"
+                android:drawablePadding="@dimen/dp_size_5"
+                android:paddingLeft="@dimen/dp_size_35"
+                android:paddingTop="@dimen/dp_size_15"
                 android:text="@string/ID_MY_COUNTRY"
-                android:paddingLeft="@dimen/dp_size_35"
-                android:drawablePadding="@dimen/dp_size_5"
-                android:drawableLeft="@drawable/ic_circle_inactive"
-                android:paddingTop="@dimen/dp_size_15"
-                android:textSize="@dimen/dp_size_13"
                 android:textColor="@color/text_color_work_list"
-                />
+                android:textSize="@dimen/dp_size_13" />
 
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/ID_WORDSIDE"
-                android:paddingLeft="@dimen/dp_size_35"
-                android:paddingTop="@dimen/dp_size_15"
-                android:textSize="@dimen/dp_size_13"
                 android:drawableLeft="@drawable/ic_circle_inactive"
                 android:drawablePadding="@dimen/dp_size_5"
+                android:paddingLeft="@dimen/dp_size_35"
+                android:paddingTop="@dimen/dp_size_15"
+                android:text="@string/ID_WORDSIDE"
                 android:textColor="@color/text_color_work_list"
-                />
+                android:textSize="@dimen/dp_size_13" />
 
 
         </LinearLayout>
 
     </ScrollView>
 
-    <Button
+    <Button xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/bt_save_cities"
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/ID_SAVE"
+        android:layout_alignParentBottom="true"
         android:background="@color/red"
-        android:textColor="@color/white"
-        android:textSize="@dimen/dp_size_13"
         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-        android:layout_alignParentBottom="true"/>
+        android:text="@string/ID_SAVE"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dp_size_13" />
 
 
 </RelativeLayout>

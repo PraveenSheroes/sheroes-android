@@ -1,13 +1,10 @@
 
 package appliedlife.pvtltd.SHEROES.models.entities.setting;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Setting_basic_details implements Parcelable {
+public class Setting_basic_details {
 
     @SerializedName("id")
     @Expose
@@ -44,13 +41,5 @@ public class Setting_basic_details implements Parcelable {
         this.privilegesList = privilegesList;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
 
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-
-    }
 }

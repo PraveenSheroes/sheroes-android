@@ -1,76 +1,75 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:isScrollContainer="false"
+    android:orientation="vertical">
 
-    <ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:background="@color/white"
-        android:isScrollContainer="false"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tv_setting_feedback"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:layout_gravity="center"
+            android:background="@drawable/setting_selector_background"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:padding="@dimen/dp_size_25"
+            android:text="@string/ID_FEEDBACK"
+            android:textColor="@color/searchbox_text_color"
+            android:textSize="@dimen/dp_size_13" />
 
         <TextView
-        android:id="@+id/tv_setting_feedback"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/ID_FEEDBACK"
-        android:textSize="@dimen/dp_size_13"
-        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-        android:background="@drawable/setting_selector_background"
-        android:padding="@dimen/dp_size_25"
-        android:textColor="@color/searchbox_text_color"/>
-
-   <!-- <TextView
-        android:id="@+id/tv_setting_preferences"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/ID_PREFERENCES"
-        android:textSize="@dimen/dp_size_13"
-        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-        android:layout_gravity="center"
-        android:background="@drawable/setting_selector_background"
-        android:padding="@dimen/dp_size_25"
-        android:textColor="@color/searchbox_text_color"/>-->
-
-    <TextView
-        android:id="@+id/tv_setting_about"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-        android:background="@drawable/setting_selector_background"
-        android:layout_gravity="center"
-        android:text="@string/ID_ABOUT"
-        android:textSize="@dimen/dp_size_13"
-        android:padding="@dimen/dp_size_25"
-        android:textColor="@color/searchbox_text_color"/>
-    <TextView
-        android:id="@+id/tv_setting_terms_and_condition"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/ID_TERMS_AND_CONDITIONS"
-        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-        android:layout_gravity="center"
-        android:background="@drawable/setting_selector_background"
-        android:textSize="@dimen/dp_size_13"
-        android:padding="@dimen/dp_size_25"
-        android:textColor="@color/searchbox_text_color"/>
+            android:id="@+id/tv_setting_preferences"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/setting_selector_background"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:padding="@dimen/dp_size_25"
+            android:text="@string/ID_PREFERENCES"
+            android:textColor="@color/searchbox_text_color"
+            android:textSize="@dimen/dp_size_13" />
 
         <TextView
-        android:id="@+id/tv_logout"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-        android:layout_gravity="center"
-        android:text="@string/ID_LOGOUT"
-        android:background="@drawable/setting_selector_background"
-        android:textSize="@dimen/dp_size_13"
-        android:padding="@dimen/dp_size_25"
-        android:textColor="@color/searchbox_text_color"/>
+            android:id="@+id/tv_setting_about"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/setting_selector_background"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:padding="@dimen/dp_size_25"
+            android:text="@string/ID_ABOUT"
+            android:textColor="@color/searchbox_text_color"
+            android:textSize="@dimen/dp_size_13" />
 
-   </LinearLayout>
-    </ScrollView>
+        <TextView
+            android:id="@+id/tv_setting_terms_and_condition"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/setting_selector_background"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:padding="@dimen/dp_size_25"
+            android:text="@string/ID_TERMS_AND_CONDITIONS"
+            android:textColor="@color/searchbox_text_color"
+            android:textSize="@dimen/dp_size_13" />
+
+        <TextView
+            android:id="@+id/tv_logout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/setting_selector_background"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:padding="@dimen/dp_size_25"
+            android:text="@string/ID_LOGOUT"
+            android:textColor="@color/searchbox_text_color"
+            android:textSize="@dimen/dp_size_13" />
+
+    </LinearLayout>
+</ScrollView>

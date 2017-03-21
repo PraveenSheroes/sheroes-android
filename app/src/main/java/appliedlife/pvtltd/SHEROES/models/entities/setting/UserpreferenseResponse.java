@@ -4,6 +4,8 @@ package appliedlife.pvtltd.SHEROES.models.entities.setting;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class UserpreferenseResponse {
 
     @SerializedName("status")
@@ -12,9 +14,12 @@ public class UserpreferenseResponse {
     @SerializedName("fieldErrorMessageMap")
     @Expose
     private FieldErrorMessageMap fieldErrorMessageMap;
-    @SerializedName("segments")
+    @SerializedName("screen_name")
     @Expose
-    private Segments segments;
+    private Object screenName;
+    @SerializedName("sections")
+    @Expose
+    private List<Section> sections = null;
 
     public String getStatus() {
         return status;
@@ -25,7 +30,6 @@ public class UserpreferenseResponse {
     }
 
     public FieldErrorMessageMap getFieldErrorMessageMap() {
-
         return fieldErrorMessageMap;
     }
 
@@ -33,12 +37,20 @@ public class UserpreferenseResponse {
         this.fieldErrorMessageMap = fieldErrorMessageMap;
     }
 
-    public Segments getSegments() {
-        return segments;
+    public Object getScreenName() {
+        return screenName;
     }
 
-    public void setSegments(Segments segments) {
-        this.segments = segments;
+    public void setScreenName(Object screenName) {
+        this.screenName = screenName;
+    }
+
+    public List<Section> getSections() {
+        return sections;
+    }
+
+    public void setSections(List<Section> sections) {
+        this.sections = sections;
     }
 
 }

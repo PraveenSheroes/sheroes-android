@@ -95,4 +95,17 @@ public class AppConstants {
     public static final int SEARCH_CONSTANT_DELAY= 500;
     public static final String SELECT_ALL_QUERY= "Select * from ";
 
+
+    public static final String PDF_PATH= "application/pdf";
+    public static final String PDF_VISITING_CARD= "visiting_card.pdf";
+    public static final String VISITING_CARD_URL="http://www.princexml.com/howcome/2016/samples/magic6/magic.pdf";
+
+
+    public static final String ERROR_MESSAGE_OF_PDF_DOWNLOAD="PDF Reader application is not installed in your device";
+    public static final String STARTING_PDF_DOWNLOAD="Starting PDF download...";
+    public static final String DOWNLOAD_COMPLETE="Download Complete. Open PDF Application installed in the device.";
+    public static final String ERROR_OCCUR="Some error occured. Press back and try again.";
+    public static final String DOWNLOAD_COMPLETED_IMAGE="Failed to download image. Please check your internet connection.";
+
+
 }

@@ -5,7 +5,7 @@
     android:background="@drawable/welcome_gradiant_color"
     android:orientation="vertical">
     <TextView
-        android:id="@+id/tv_grow_with_sheroes"
+        android:id="@+id/tv_all_for_sheroes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@string/ID_ROBOTO_REGULAR"
@@ -47,14 +47,12 @@
             android:text="@string/ID_CLICK_TO_JOIN"
             android:textColor="@color/white"
             android:textSize="@dimen/sp_size_10" />
-
         <include
+            android:id="@+id/intro_footer"
             layout="@layout/welcome_footer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone" />
 
     </RelativeLayout>
-
-
 </LinearLayout>

@@ -5,6 +5,8 @@ import com.google.gson.Gson;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
+import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingChangeUserPreferenceRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingChangeUserPreferenseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingDeActivateRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingDeActivateResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingFeedbackRequest;
@@ -13,6 +15,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingRatingRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingRatingResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.UserPreferenceRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.UserpreferenseResponse;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
@@ -90,11 +93,12 @@ public class SettingFeedbackModel {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-
-
     /*for User_User_Prefence */
-
     public Observable<UserpreferenseResponse> getUserUserPreferenceAuthTokenFromModel(UserPreferenceRequest preferenceRequest) {
+
+
+        LogUtils.error("user_get_preference_request req: ",gson.toJson(preferenceRequest));
+
 
         return sheroesAppServiceApi.getUserPreferenceAuthToken(preferenceRequest)
 
@@ -103,6 +107,8 @@ public class SettingFeedbackModel {
                     @Override
                     public UserpreferenseResponse call(UserpreferenseResponse userpreferenseResponse) {
 
+                        LogUtils.error("user_get_preference_response req: ",gson.toJson(userpreferenseResponse));
+
                         return userpreferenseResponse;
                     }
                 })
@@ -110,6 +116,35 @@ public class SettingFeedbackModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
+
+
+    /*for User_Change_Prefence */
+    public Observable<SettingChangeUserPreferenseResponse> getUserChangePreferenceAuthTokenFromModel(SettingChangeUserPreferenceRequest changeUserPreferenceRequest) {
+
+
+        LogUtils.error("user_get_preference_request req: ",gson.toJson(changeUserPreferenceRequest));
+
+
+        return sheroesAppServiceApi.getUserChangePreferenceAuthToken(changeUserPreferenceRequest)
+
+                .map(new Func1<SettingChangeUserPreferenseResponse, SettingChangeUserPreferenseResponse>() {
+
+                    @Override
+                    public SettingChangeUserPreferenseResponse call(SettingChangeUserPreferenseResponse settingChangeUserPreferenseResponse) {
+
+                        LogUtils.error("user_get_preference_response req: ",gson.toJson(settingChangeUserPreferenseResponse));
+
+                        return settingChangeUserPreferenseResponse;
+                    }
+                })
+
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+
+
 
 
 }

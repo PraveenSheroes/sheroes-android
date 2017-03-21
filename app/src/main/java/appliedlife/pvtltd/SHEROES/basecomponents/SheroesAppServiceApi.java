@@ -33,6 +33,10 @@ import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.EducationResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.GetUserDetailsRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingChangeUserPreferenceRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingChangeUserPreferenseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingDeActivateRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingDeActivateResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingFeedbackRequest;
@@ -85,14 +89,7 @@ public interface SheroesAppServiceApi {
     Observable<LoginResponse> getRefreshToken();
     @POST("participant/community/join")
     Observable<CommunityResponse> getCommunityJoinResponse(@Body CommunityRequest communityRequest);
-    @POST("participant/settings/save_feedback")
-    Observable<SettingFeedbackResponce> getSettingAuthToken(@Body SettingFeedbackRequest feedbackRequest);
-    @POST("participant/settings/save_rating")
-    Observable<SettingRatingResponse> getUserRatingAuthToken(@Body SettingRatingRequest ratingRequest);
-    @POST("participant/settings/deactivate_account")
-    Observable<SettingDeActivateResponse> getUserDeactiveAuthToken(@Body SettingDeActivateRequest deActivateRequest);
-    @POST("participant/settings/get_user_preferences")
-    Observable<UserpreferenseResponse>getUserPreferenceAuthToken(@Body UserPreferenceRequest userPreferenceRequest);
+
 
 
     @POST("participant/community/create")
@@ -122,4 +119,20 @@ public interface SheroesAppServiceApi {
 
     @POST("entity/master/get_data")
     Observable<GetAllData> getTagFromApi(@Body GetAllDataRequest getAllDataRequest );
+
+
+
+    @POST("participant/settings/save_feedback")
+    Observable<SettingFeedbackResponce> getSettingAuthToken(@Body SettingFeedbackRequest feedbackRequest);
+    @POST("participant/settings/save_rating")
+    Observable<SettingRatingResponse> getUserRatingAuthToken(@Body SettingRatingRequest ratingRequest);
+    @POST("participant/settings/deactivate_account")
+    Observable<SettingDeActivateResponse> getUserDeactiveAuthToken(@Body SettingDeActivateRequest deActivateRequest);
+    @POST("participant/settings/get_user_preferences")
+    Observable<UserpreferenseResponse>getUserPreferenceAuthToken(@Body UserPreferenceRequest userPreferenceRequest);
+    @POST("participant/settings/change_user_preference")
+    Observable<SettingChangeUserPreferenseResponse>getUserChangePreferenceAuthToken(@Body SettingChangeUserPreferenceRequest settingChangeUserPreferenceRequest);
+    @POST("participant/user/get_details\n")
+    Observable<EducationResponse>getEducationAuthToken(@Body GetUserDetailsRequest getUserDetailsRequest);
+
 }

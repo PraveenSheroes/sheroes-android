@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -13,137 +12,126 @@
         android:layout_height="wrap_content"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/home_toolbar"
+
+        <include
+            layout="@layout/setting_header"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_size_65"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|top" />
 
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-
-            <include
-                layout="@layout/setting_header"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start|top" />
-
-        </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
-<ScrollView
-    android:id="@+id/sc1"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/back_ground_color"
-    android:layout_below="@+id/r1_feedback_relative"
-    android:isScrollContainer="false"
-    >
 
+    <ScrollView
+        android:id="@+id/sc1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/r1_feedback_relative"
+        android:background="@color/back_ground_color"
+        android:isScrollContainer="false">
 
-
-    <LinearLayout
-        android:id="@+id/l1_setting_feedback_page"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@color/white">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/dp_size_16"
-            android:layout_marginTop="@dimen/dp_size_16"
-            android:fontFamily="@string/ID_ROBOTO_BOLD"
-            android:textSize="@dimen/dp_size_16"
-            android:padding="@dimen/dp_size_10"
-            android:textColor="@color/black"
-            android:text="@string/ID_THOUGHTS" />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/dp_size_10"
-            android:textSize="@dimen/dp_size_14"
-            android:fontFamily="@string/ID_ROBOTO_LIGHT"
-            android:text="@string/ID_TYING_MESSAGE"
-            />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="@dimen/dp_size_1"
-            android:background="@color/line_color"
-            android:layout_marginTop="@dimen/dp_size_13"
-            />
-
-        <RatingBar
-            android:id="@+id/dialog_ratingbar"
-            android:layout_marginTop="@dimen/dp_size_13"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:layout_gravity="center"
-            android:numStars="5"
-            android:stepSize=".0"
-            android:rating="0"
-            android:isIndicator="false"/>
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="@dimen/dp_size_1"
-            android:background="@color/line_color"
-            android:padding="@dimen/dp_size_10"
-            />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:id="@+id/l1_setting_feedback_page"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@color/back_ground_color">
+            android:background="@color/white"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_skip"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/dp_size_10"
-            android:gravity="center"
-            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-            android:layout_centerHorizontal="true"
-            android:textColor="@color/skip_textcolor"
-            android:text="@string/ID_TEXT_OPTIONAL"
-            android:layout_centerVertical="true"
-            android:textSize="@dimen/sp_size_12"
-            />
-
-            <EditText
-                android:id="@+id/et_write_comment"
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@string/ID_ROBOTO_LIGHT"
-                android:hint="@string/ID_COMMENT"
-                android:textColorHint="@color/back_ground_color"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
+                android:layout_marginRight="@dimen/dp_size_16"
+                android:layout_marginTop="@dimen/dp_size_16"
+                android:fontFamily="@string/ID_ROBOTO_BOLD"
                 android:padding="@dimen/dp_size_10"
-                android:textSize="@dimen/sp_size_12"
-                android:visibility="gone"
-                android:textColor="@color/text_color"
-                android:background="@color/white"
-                />
+                android:text="@string/ID_THOUGHTS"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dp_size_16" />
 
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@string/ID_ROBOTO_LIGHT"
+                android:padding="@dimen/dp_size_10"
+                android:text="@string/ID_TYING_MESSAGE"
+                android:textSize="@dimen/dp_size_14" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/dp_size_1"
+                android:layout_marginTop="@dimen/dp_size_13"
+                android:background="@color/line_color" />
+
+            <RatingBar
+                android:id="@+id/dialog_ratingbar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/dp_size_13"
+                android:backgroundTint="@color/colorPrimary"
+                android:clickable="true"
+                android:isIndicator="false"
+                android:numStars="5"
+                android:rating="0"
+                android:stepSize=".0"
+                android:theme="@style/RatingBar" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/dp_size_1"
+                android:background="@color/line_color"
+                android:padding="@dimen/dp_size_10" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/back_ground_color"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_skip"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                    android:gravity="center"
+                    android:padding="@dimen/dp_size_10"
+                    android:text="@string/ID_TEXT_OPTIONAL"
+                    android:textColor="@color/skip_textcolor"
+                    android:textSize="@dimen/sp_size_12" />
+
+                <EditText
+                    android:id="@+id/et_write_comment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:background="@color/white"
+                    android:focusable="true"
+                    android:fontFamily="@string/ID_ROBOTO_LIGHT"
+                    android:hint="@string/ID_COMMENT"
+                    android:padding="@dimen/dp_size_10"
+                    android:textColor="@color/comment_text_color"
+                    android:textColorHint="@color/back_ground_color"
+                    android:textSize="@dimen/sp_size_20"
+                    android:visibility="gone">
+
+                    <requestFocus />
+                </EditText>
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-</ScrollView>
+    </ScrollView>
 
-
-
-    <Button
+    <Button xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/preferences_deactiveaccount_button"
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/ID_SUBMIT"
-        android:textColor="@color/white"
+        android:layout_alignParentBottom="true"
         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-        android:layout_alignParentBottom="true"/>
+        android:text="@string/ID_SUBMIT"
+        android:textColor="@color/white" />
 
 
-    </RelativeLayout>
+</RelativeLayout>

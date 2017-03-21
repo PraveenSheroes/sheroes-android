@@ -2,121 +2,122 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.design.widget.CoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+   <android.support.design.widget.CoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
 
-        <android.support.design.widget.AppBarLayout
-            android:id="@+id/al_community_open_about"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+      <android.support.design.widget.AppBarLayout
+          android:id="@+id/a1_profile_workexperiences"
+          android:layout_width="match_parent"
+          android:layout_height="200dp"
+          android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-            <android.support.design.widget.CollapsingToolbarLayout
-                android:id="@+id/cl_profile_education"
+         <android.support.design.widget.CollapsingToolbarLayout
+             android:id="@+id/cl_community_open_about"
+             android:layout_width="match_parent"
+             android:layout_height="@dimen/dp_size_200"
+             app:contentScrim="?attr/colorPrimary"
+             app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_size_200"
-                app:contentScrim="?attr/colorPrimary"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+                android:layout_height="match_parent">
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+               <ImageView
+                   android:id="@+id/iv_community_cover_img"
+                   android:layout_width="match_parent"
+                   android:layout_height="@dimen/dp_size_200"
+                   android:background="@color/back_colo_aboutme_head"
+                   android:fitsSystemWindows="true"
+                   android:scaleType="centerCrop"
+                   app:layout_collapseMode="parallax" />
 
-                    <ImageView
-                        android:id="@+id/iv_profile_education_cover_img"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp_size_200"
-                        android:background="@color/back_colo_aboutme_head"
-                        android:fitsSystemWindows="true"
-                        android:scaleType="centerCrop"
-                        app:layout_collapseMode="parallax" />
+               <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
+                   android:id="@+id/iv_profile_image"
+                   android:layout_width="@dimen/dp_size_46"
+                   android:layout_height="@dimen/dp_size_46"
+                   android:layout_centerHorizontal="true"
+                   android:layout_centerInParent="true"
+                   android:background="@drawable/ic_work_experience" />
 
-                    <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
-                        android:id="@+id/iv_profile_image"
-                        android:layout_width="@dimen/dp_size_46"
-                        android:layout_height="@dimen/dp_size_46"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerInParent="true"
-                        android:background="@drawable/ic_education" />
+               <TextView
+                   android:id="@+id/tv_Education_tittle"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_below="@+id/iv_profile_image"
+                   android:layout_centerInParent="true"
+                   android:textAllCaps="true"
+                   android:gravity="center"
+                   android:paddingTop="@dimen/dp_size_16"
+                   android:text="@string/ID_EDUCATION"
+                   android:textSize="@dimen/dp_size_24" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/iv_profile_image"
-                        android:layout_centerInParent="true"
-                        android:gravity="center"
-                        android:paddingTop="@dimen/dp_size_16"
-                        android:text="@string/ID_EDUCATION"
-                        android:textAllCaps="true"
-                        android:textSize="@dimen/dp_size_24" />
+            </RelativeLayout>
 
-
-                </RelativeLayout>
-
-                <android.support.v7.widget.Toolbar
-                    android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    app:layout_collapseMode="pin">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">  
-
-                        <TextView
-                            android:id="@+id/tv_profile_education_back"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/dp_size_10"
-                            android:drawableLeft="@drawable/ic_back_white"
-                            android:fontFamily="@string/ID_ROBOTO_LIGHT" />
-
-                        <TextView
-                            android:id="@+id/tv_education_tittle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:padding="@dimen/dp_size_16"
-                            android:text="@string/ID_EDUCATION"
-                            android:textAllCaps="true"
-
-                            />
-
-                    </RelativeLayout>
-
-                </android.support.v7.widget.Toolbar>
-
-            </android.support.design.widget.CollapsingToolbarLayout>
-
-        </android.support.design.widget.AppBarLayout>
-
-        <android.support.v4.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/background"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-
-            <include
-                layout="@layout/professional_education_card"
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start|top" />
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin">
 
-        </android.support.v4.widget.NestedScrollView>
-    </android.support.design.widget.CoordinatorLayout>
+               <RelativeLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent">  
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_add_other_education"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_margin="@dimen/fab_margin"
-        android:backgroundTint="@color/blue"
-        android:src="@android:drawable/ic_input_add"/>
+                  <TextView
+                      android:id="@+id/tv_profile_education_back"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_centerVertical="true"
+                      android:layout_marginTop="@dimen/dp_size_10"
+                      android:drawableLeft="@drawable/ic_back_white"
+                      android:fontFamily="@string/ID_ROBOTO_LIGHT" />
+
+                  <TextView
+                      android:id="@+id/tv_education"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_centerHorizontal="true"
+                      android:padding="@dimen/dp_size_16"
+                      android:textAllCaps="true"
+                      android:text="@string/ID_EDUCATION"
+
+                      />
+
+               </RelativeLayout>
+
+            </android.support.v7.widget.Toolbar>
+
+         </android.support.design.widget.CollapsingToolbarLayout>
+
+      </android.support.design.widget.AppBarLayout>
+
+      <android.support.v4.widget.NestedScrollView
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:background="@color/background"
+          app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 
+         <include
+             layout="@layout/professional_education_edit"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_gravity="start|top" />
+
+
+      </android.support.v4.widget.NestedScrollView>
+
+   </android.support.design.widget.CoordinatorLayout>
+
+
+   <android.support.design.widget.FloatingActionButton
+       android:id="@+id/fab_add_other_education"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_alignParentBottom="true"
+       android:layout_alignParentRight="true"
+       android:layout_margin="@dimen/fab_margin"
+       android:src="@android:drawable/ic_input_add" />
 
 </RelativeLayout>

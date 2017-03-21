@@ -34,7 +34,7 @@ public class SettingTermsAndConditionFragment extends BaseFragment {
     SettingView settingViewlistener;
 
     @Override
-    public void onAttach(Context context){
+    public void onAttach(Context context) {
 
 
         super.onAttach(context);
@@ -59,15 +59,13 @@ public class SettingTermsAndConditionFragment extends BaseFragment {
     //Open setting_preferences_Activity
     @OnClick(R.id.iv_back_setting)
 
-    public void onBackClick()
-    {
-        settingViewlistener.backListener(R.id.iv_back_setting,null);
+    public void onBackClick() {
+        settingViewlistener.backListener(R.id.iv_back_setting);
 
     }
 
 
-    public interface settingFragmentCallBack
-    {
+    public interface settingFragmentCallBack {
         void callBackSettingActivity(int id);
     }
 

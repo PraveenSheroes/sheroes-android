@@ -22,7 +22,7 @@ String[] item_text;
 int[] item_icon;
 
 
-public CustomSpinnerAdapter(Context ctx, int txtViewResourceId, String[] objects,int[] item_icon) {
+public CustomSpinnerAdapter(Context ctx, int txtViewResourceId, String[] objects, int[] item_icon) {
         super(ctx, txtViewResourceId, objects);
     item_text=objects;
     this.item_icon=item_icon;
@@ -45,6 +45,7 @@ public View getCustomView(int position, View convertView, ViewGroup parent) {
     TextView main_text = (TextView) mySpinner.findViewById(R.id.text_set);
 
     main_text.setText(item_text[position]);
+
     ImageView left_icon = (ImageView) mySpinner.findViewById(R.id.icon);
     left_icon.setImageResource(item_icon[position]);
 

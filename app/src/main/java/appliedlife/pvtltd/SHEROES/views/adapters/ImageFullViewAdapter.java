@@ -56,6 +56,8 @@ public class ImageFullViewAdapter extends PagerAdapter {
 
     @Override
     public boolean isViewFromObject(View view, Object object) {
+
+
         return view == ((RelativeLayout) object);
     }
 

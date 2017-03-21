@@ -9,13 +9,16 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfilePersonalViewList;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileViewList;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.EditNameDialogListener;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+import static com.facebook.login.widget.ProfilePictureView.TAG;
+
 /**
- * Created by sheroes on 02/03/17.
+ * Created by priyanka on 02/03/17.
  */
 
 public class Visiting_card_holder1 extends BaseViewHolder<ProfilePersonalViewList> {
@@ -47,7 +50,7 @@ public class Visiting_card_holder1 extends BaseViewHolder<ProfilePersonalViewLis
     public void bindData(ProfilePersonalViewList obj, Context context, int position) {
 
         this.dataItem = obj;
-        mTv_contacct_my_card.setOnClickListener(this);
+        mtv_download_my_card.setOnClickListener(this);
         mTv_contacct_my_card.setText(dataItem.getTag());
         mtv_download_my_card.setText(dataItem.getItem1());
     }
@@ -57,12 +60,17 @@ public class Visiting_card_holder1 extends BaseViewHolder<ProfilePersonalViewLis
 
     }
 
-
     @Override
     public void onClick(View view) {
 
-        //viewInterface.handleOnClick(this.dataItem,view);
+        switch (view.getId()) {
 
+            case R.id.tv_download_my_card:
 
+                viewInterface.handleOnClick(this.dataItem,mtv_download_my_card);
+                break;
+            default:
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + view.getId());
+        }
     }
 }

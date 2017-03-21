@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseMvpView;
+import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingChangeUserPreferenseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingDeActivateResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingFeedbackResponce;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingRatingResponse;
@@ -13,18 +14,10 @@ import appliedlife.pvtltd.SHEROES.models.entities.setting.UserpreferenseResponse
 public interface SettingFeedbackView extends BaseMvpView {
 
     void getFeedbackResponse(SettingFeedbackResponce feedbackResponce);
-
     void getUserRatingResponse(SettingRatingResponse ratingResponse);
-
     void getUserDeactiveResponse(SettingDeActivateResponse deActivateResponse);
-
     void getUserPreferenceResponse(UserpreferenseResponse userpreferenseResponse);
-
+    void getUserChangePreferenceResponse(SettingChangeUserPreferenseResponse settingChangeUserPreferenseResponse);
     void showNwError();
-
-
-
-
-
 
 }

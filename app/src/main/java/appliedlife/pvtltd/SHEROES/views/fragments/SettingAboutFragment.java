@@ -8,10 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.util.List;
+
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.setting.Segments;
+import appliedlife.pvtltd.SHEROES.models.entities.setting.Section;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SettingView;
@@ -35,7 +38,7 @@ public class SettingAboutFragment extends BaseFragment implements SettingView {
     SettingView settingViewlistener;
 
     @Override
-    public void onAttach(Context context){
+    public void onAttach(Context context) {
 
 
         super.onAttach(context);
@@ -60,9 +63,8 @@ public class SettingAboutFragment extends BaseFragment implements SettingView {
 
     //Open setting_preferences_Activity
     @OnClick(R.id.iv_back_setting)
-    public void onBackClick()
-    {
-        settingViewlistener.backListener(R.id.iv_back_setting,null);
+    public void onBackClick() {
+        settingViewlistener.backListener(R.id.iv_back_setting);
 
     }
 
@@ -73,11 +75,14 @@ public class SettingAboutFragment extends BaseFragment implements SettingView {
     }
 
     @Override
-    public void backListener(int id, Segments segments) {
+    public void backListener(int id) {
 
     }
 
+    @Override
+    public void settingpreference(int id, List<Section> sections) {
 
+    }
 
 
     @Override
@@ -94,8 +99,11 @@ public class SettingAboutFragment extends BaseFragment implements SettingView {
     public void startNextScreen() {
 
     }
-    public interface settingFragmentCallBack
-    {
+
+
+
+
+    public interface settingFragmentCallBack {
         void callBackSettingActivity(int id);
     }
 }

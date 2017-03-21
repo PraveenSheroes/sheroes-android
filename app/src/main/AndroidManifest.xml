@@ -54,7 +54,7 @@
             android:noHistory="true">
         </activity>
         <activity
-            android:name="appliedlife.pvtltd.SHEROES.views.activities.Professional_WorkExperience_Activity"
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.ProfessionalWorkExperienceActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden">
         </activity>
@@ -109,6 +109,12 @@
             android:name="appliedlife.pvtltd.SHEROES.views.activities.ArticleDetailActivity"
             android:theme="@style/AppTheme"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.ProfessionalAddEducationActivity"
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"/>
+
+
     </application>
 
 </manifest>

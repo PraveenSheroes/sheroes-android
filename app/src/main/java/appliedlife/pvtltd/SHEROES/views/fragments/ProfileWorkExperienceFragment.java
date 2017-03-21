@@ -14,7 +14,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfessionalWorkExperienceActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
-import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -28,12 +27,6 @@ public class ProfileWorkExperienceFragment  extends BaseFragment {
     private final String SCREEN_NAME = "Profile_work_experience_screen";
     ProfileView profileViewlistener;
 
-
-    public static ProfileWorkExperienceFragment createInstance(int itemsCount) {
-
-        ProfileWorkExperienceFragment profileWorkExperienceFragment = new ProfileWorkExperienceFragment();
-        return profileWorkExperienceFragment;
-    }
 
     @Override
     public void onAttach(Context context) {

@@ -21,6 +21,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingChangeUserPreferenseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingDeActivateResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingFeedbackRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingFeedbackResponce;
@@ -30,6 +31,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.setting.UserpreferenseResponse
 import appliedlife.pvtltd.SHEROES.presenters.SettingFeedbackPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.Feedback_ThankyouActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SettingFeedbackView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SettingView;
@@ -72,7 +74,7 @@ public class SettingFeedbackFragment extends BaseFragment implements SettingFeed
 
 
     @Override
-    public void onAttach(Context context){
+    public void onAttach(Context context) {
 
         super.onAttach(context);
         try {
@@ -93,6 +95,7 @@ public class SettingFeedbackFragment extends BaseFragment implements SettingFeed
         ButterKnife.bind(this, view);
         mtv_setting_tittle.setText(R.string.ID_FEEDBACK);
         mSettingFeedbackPresenter.attachView(this);
+        mEt_write_comment.setFocusable(true);
 
 
         //on tuch star...
@@ -106,7 +109,7 @@ public class SettingFeedbackFragment extends BaseFragment implements SettingFeed
                     float touchPositionX = event.getX();
                     float width = Mdialog_ratingbar.getWidth();
                     float starsf = (touchPositionX / width) * 5.0f;
-                    stars = (int)starsf + 1;
+                    stars = (int) starsf + 1;
                     Mdialog_ratingbar.setRating(stars);
                     userRating_Value(stars);
                     // Toast.makeText(getActivity(), String.valueOf(Mdialog_ratingbar.getRating()), Toast.LENGTH_SHORT).show();
@@ -122,20 +125,16 @@ public class SettingFeedbackFragment extends BaseFragment implements SettingFeed
                 Mtextviewskip.setVisibility(View.GONE);
                 Msc1.setBackgroundColor(Color.WHITE);
                 mEt_write_comment.setVisibility(View.VISIBLE);
-                mEt_write_comment.setFocusable(true);
 
 
                 return true;
-            }});
+            }
+        });
         return view;
     }
 
 
-
-
-
-    private void userRating_Value(int starvalue)
-    {
+    private void userRating_Value(int starvalue) {
 
         //Store values at the time of the User_rating btn attempt.
 
@@ -151,8 +150,7 @@ public class SettingFeedbackFragment extends BaseFragment implements SettingFeed
 
     }
 
-    private void userfeedback()
-    {
+    private void userfeedback() {
 
         // Store values at the time of the User_feedback btn attempt.
 
@@ -170,33 +168,30 @@ public class SettingFeedbackFragment extends BaseFragment implements SettingFeed
     @OnClick(R.id.preferences_deactiveaccount_button)
 
 
-    public void onSubmitPress()
-    {
+    public void onSubmitPress() {
 
-        feebackvalue= mEt_write_comment.getText().toString();
+        feebackvalue = mEt_write_comment.getText().toString();
 
-        if (null !=feebackvalue) {
+        if (StringUtil.isNotNullOrEmptyString(feebackvalue)) {
             userfeedback();
-            Intent intent=new Intent(getActivity(), Feedback_ThankyouActivity.class);
+            Intent intent = new Intent(getActivity(), Feedback_ThankyouActivity.class);
             startActivity(intent);
 
-        }
+        } else {
 
-        else {
-
-            Intent intent=new Intent(getActivity(), Feedback_ThankyouActivity.class);
+            Intent intent = new Intent(getActivity(), Feedback_ThankyouActivity.class);
             startActivity(intent);
 
         }
 
 
     }
+
     @OnClick(R.id.iv_back_setting)
 
-    public void onBackClick()
-    {
+    public void onBackClick() {
 
-        settingViewlistener.backListener(R.id.iv_back_setting,null);
+        settingViewlistener.backListener(R.id.iv_back_setting);
     }
 
 
@@ -204,16 +199,10 @@ public class SettingFeedbackFragment extends BaseFragment implements SettingFeed
     public void getFeedbackResponse(SettingFeedbackResponce feedbackResponce) {
 
 
-
-
-
-
     }
 
     @Override
     public void getUserRatingResponse(SettingRatingResponse ratingResponse) {
-
-
 
 
     }
@@ -225,6 +214,11 @@ public class SettingFeedbackFragment extends BaseFragment implements SettingFeed
 
     @Override
     public void getUserPreferenceResponse(UserpreferenseResponse userpreferenseResponse) {
+
+    }
+
+    @Override
+    public void getUserChangePreferenceResponse(SettingChangeUserPreferenseResponse settingChangeUserPreferenseResponse) {
 
     }
 
@@ -249,9 +243,15 @@ public class SettingFeedbackFragment extends BaseFragment implements SettingFeed
 
     }
 
-    public interface settingFragmentCallBack
-    {
+
+
+
+    public interface settingFragmentCallBack {
+
+
         void callBackSettingActivity(int id);
+
+
     }
 
 }

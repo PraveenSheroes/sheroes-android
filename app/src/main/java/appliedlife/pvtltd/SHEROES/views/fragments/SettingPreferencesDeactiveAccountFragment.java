@@ -18,15 +18,15 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingChangeUserPreferenseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingDeActivateRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingDeActivateResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingFeedbackResponce;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingRatingResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.UserpreferenseResponse;
 import appliedlife.pvtltd.SHEROES.presenters.SettingFeedbackPresenter;
-import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.views.activities.SettingPreferencesActivity;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SettingFeedbackView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SettingView;
 import butterknife.Bind;
@@ -38,7 +38,6 @@ import butterknife.OnClick;
  * Created by priyanka
  * Setting_Preferences_DeactiveAccount_Screen
  */
-
 
 
 public class SettingPreferencesDeactiveAccountFragment extends BaseFragment implements SettingFeedbackView {
@@ -72,6 +71,13 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
     TextView tv_reson;
     @Bind(R.id.preferences_deactiveaccount_button)
     Button mpreferences_deactiveaccount_button;
+    @Bind(R.id.tv_setting_tittle)
+    TextView mtv_setting_tittle;
+    @Bind(R.id.tv_setting_tittle1)
+    TextView mtv_setting_tittle1;
+    @Bind(R.id.iv_back_setting)
+    ImageView miv_back_setting;
+
     int flag = 0;
     String value;
     @Inject
@@ -80,36 +86,23 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
 
 
     public SettingPreferences_DeactiveAccounActivitytLisIntractionListener settingPreferences_deactiveAccounActivitytLisIntractionListener;
-    ImageView miv_back_setting;
-
-    public SettingPreferencesDeactiveAccountFragment(TextView mtv_setting_tittle, TextView mtv_setting_tittle1, ImageView miv_back_setting) {
-        mtv_setting_tittle.setText(R.string.ID_DEACTIVEACCOUNT);
-        mtv_setting_tittle1.setText(R.string.ID_PREFERENCES);
-        this.miv_back_setting = miv_back_setting;
-
-    }
-
-
-
 
 
     @Override
-    public void onAttach(Context context){
+    public void onAttach(Context context) {
 
         super.onAttach(context);
         try {
-            if (getActivity() instanceof SettingFeedbackView) {
+            if (getActivity() instanceof SettingView) {
 
                 settingViewlistener = (SettingView) getActivity();
+
             }
-        } catch (InstantiationException exception) {
-            LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
+        } catch (Exception e) {
+
+
         }
-
     }
-
-
-
 
 
     @Override
@@ -119,8 +112,23 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
         ButterKnife.bind(this, view);
         mSettingFeedbackPresenter.attachView(this);
 
+        mtv_setting_tittle.setText(R.string.ID_DEACTIVEACCOUNT);
+        mtv_setting_tittle1.setText(R.string.ID_PREFERENCES);
+
         //Open setting_preferences_Activity
         miv_back_setting.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                settingViewlistener.backListener(R.id.iv_back_setting);
+
+             /*   Intent intent = new Intent(getActivity(), SettingPreferencesActivity.class);
+                startActivity(intent);*/
+
+
+            }
+        });
+       /* miv_back_setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -128,7 +136,8 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
                 startActivity(i);
                 getActivity().finish();
             }
-        });
+        });*/
+
         return view;
     }
 
@@ -186,7 +195,6 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
         mtvdeactive_text1d.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
 
 
-
     }
 
     //click on deactive_text2
@@ -231,7 +239,6 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
         mtvdeactive_text1b.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
         mtvdeactive_text1c.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
         mtvdeactive_text1d.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
-
 
 
     }
@@ -343,9 +350,6 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
         mtvdeactive_text1c.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
 
 
-
-
-
     }
 
 
@@ -367,7 +371,6 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
         mtvdeactive_text1a.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
         mtvdeactive_text1b.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
         mtvdeactive_text1c.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
-
 
 
     }
@@ -418,7 +421,7 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
 
             String reson_value = mEditText_reson.getText().toString();
 
-            if (null!= reson_value) {
+            if (StringUtil.isNotNullOrEmptyString(reson_value)) {
 
                 tv_reson.setVisibility(View.VISIBLE);
                 SettingDeActivateRequest deActivateRequest = new SettingDeActivateRequest();
@@ -432,10 +435,10 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
                 Intent i = new Intent(getActivity(), PreferencesDeactiveAccountDialogFragment.class);
                 startActivity(i);
 
-            }else {
+            } else {
 
 
-         }
+            }
 
 
         } else {
@@ -450,8 +453,6 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
 
 
         }
-
-
 
 
     }
@@ -477,6 +478,11 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
     }
 
     @Override
+    public void getUserChangePreferenceResponse(SettingChangeUserPreferenseResponse settingChangeUserPreferenseResponse) {
+
+    }
+
+    @Override
     public void showNwError() {
 
     }
@@ -495,6 +501,7 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
     public void startNextScreen() {
 
     }
+
 
 
 

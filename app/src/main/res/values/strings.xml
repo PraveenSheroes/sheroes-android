@@ -412,6 +412,15 @@ etur adipiscing elit,sed do eiusmod tempor incididunt ut…</string>
     <string name="ID_WELCOME_TEXT4">OTHER LOGIN OPTIONS (ONLY FOR EXISTING USERS)</string>
 
 
+    <!--string related client travel page-->
+
+    <string name="ID_TRAVEL_FLEXIBILITY">TRAVEL FLEXIBILITY</string>
+    <!--string related work locationpage-->
+
+
+    <string name="ID_PREFERRED_WORK_LOCATION">PREFERRED WORK LOCATION</string>
+
+
 
 
 
@@ -456,7 +465,7 @@ etur adipiscing elit,sed do eiusmod tempor incididunt ut…</string>
 
 
 
-
+    <string name="ID_ERROR_FIELD_REQUIRED">This field is required</string>
 
     <string name="ID_COMMUNITY_NAME">COMMUNITY NAME</string>
     <string name="ID_CHOOSE_COMMUNITY">CHOOSE COMMUNITY</string>

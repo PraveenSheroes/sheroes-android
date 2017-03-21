@@ -8,10 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.List;
+
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.setting.Segments;
+import appliedlife.pvtltd.SHEROES.models.entities.setting.Section;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SettingView;
 import butterknife.Bind;
@@ -21,7 +23,7 @@ import butterknife.ButterKnife;
  * Created by priyanka.
  */
 
-public class SettingPreferencsFragment extends BaseFragment  implements SettingView,View.OnClickListener{
+public class SettingPreferencsFragment extends BaseFragment implements SettingView, View.OnClickListener {
 
     private final String TAG = LogUtils.makeLogTag(SettingPreferencsFragment.class);
     private final String SCREEN_NAME = "Setting_preferences_screen";
@@ -37,19 +39,14 @@ public class SettingPreferencsFragment extends BaseFragment  implements SettingV
     settingPreferencesCallBack msettingPreferencesCallBack;
 
     @Override
-    public void onAttach(Context context){
+    public void onAttach(Context context) {
 
         super.onAttach(context);
         try {
-            if(getActivity() instanceof settingPreferencesCallBack)
-            {
-                msettingPreferencesCallBack=(settingPreferencesCallBack)getActivity();
+            if (getActivity() instanceof settingPreferencesCallBack) {
+                msettingPreferencesCallBack = (settingPreferencesCallBack) getActivity();
             }
-        }
-        catch (Exception e)
-        {
-
-
+        } catch (Exception e) {
         }
     }
 
@@ -65,7 +62,6 @@ public class SettingPreferencsFragment extends BaseFragment  implements SettingV
         return view;
     }
 
-
     @Override
     public void onClick(View view) {
         int id = view.getId();
@@ -73,17 +69,11 @@ public class SettingPreferencsFragment extends BaseFragment  implements SettingV
     }
 
 
-
-    public interface settingPreferencesCallBack
-    {
+    public interface settingPreferencesCallBack {
 
         void callBackSettingPreferenceActivity(int id);
 
     }
-
-
-
-
 
     @Override
     public void showNwError() {
@@ -91,11 +81,14 @@ public class SettingPreferencsFragment extends BaseFragment  implements SettingV
     }
 
     @Override
-    public void backListener(int id, Segments segments) {
+    public void backListener(int id) {
 
     }
 
+    @Override
+    public void settingpreference(int id, List<Section> sections) {
 
+    }
 
 
     @Override
@@ -112,4 +105,5 @@ public class SettingPreferencsFragment extends BaseFragment  implements SettingV
     public void startNextScreen() {
 
     }
+
 }

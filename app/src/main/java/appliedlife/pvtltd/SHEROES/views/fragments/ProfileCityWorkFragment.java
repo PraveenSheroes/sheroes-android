@@ -25,36 +25,52 @@ import butterknife.OnClick;
 public class ProfileCityWorkFragment extends BaseFragment {
 
     private final String TAG = LogUtils.makeLogTag(ProfileCityWorkFragment.class);
+    private ProfileWorkLocationFragmentListener profileWorkLocationFragmentListener;
     private final String SCREEN_NAME = "Profile_City_Work_screen";
-
-    public static ProfileCityWorkFragment createInstance(int itemsCount) {
-
-        ProfileCityWorkFragment profilecityworkFragment = new ProfileCityWorkFragment();
-
-        return profilecityworkFragment;
-    }
-
+    @Bind(R.id.tv_setting_tittle)
+    TextView mTv_setting_tittle;
 
     @Override
     public void onAttach(Context context) {
 
-
         super.onAttach(context);
+
+        try {
+            if (getActivity() instanceof
+                    ProfileWorkLocationFragmentListener) {
+
+                profileWorkLocationFragmentListener = (ProfileCityWorkFragment.ProfileWorkLocationFragmentListener) getActivity();
+
+            }
+        } catch (Exception e) {
+
+
+        }
+
 
     }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
-        View view = inflater.inflate(R.layout.fragment_professional_travel_client, container, false);
+        View view = inflater.inflate(R.layout.fragment_professional_choose_city, container, false);
         ButterKnife.bind(this, view);
+        mTv_setting_tittle.setText(R.string.ID_PREFERRED_WORK_LOCATION);
+
         return view;
     }
 
-    @Override
-    public void onClick(View view) {
-        int id = view.getId();
+    @OnClick(R.id.iv_back_setting)
+    public void callBack()
+    {
+        profileWorkLocationFragmentListener.locationBack();
+    }
 
+    public interface ProfileWorkLocationFragmentListener {
+
+        void onErrorOccurence();
+
+        void locationBack();
     }
 
 }

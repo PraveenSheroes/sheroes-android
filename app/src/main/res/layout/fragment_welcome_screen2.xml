@@ -6,7 +6,7 @@
     android:background="@drawable/welcome_gradient2_color">
 
     <TextView
-        android:id="@+id/tv_grow_with_sheroes"
+        android:id="@+id/tv_join_community_sheroes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/ID_JOIN_COMMUNITIES"
@@ -40,6 +40,7 @@
             android:layout_marginBottom="@dimen/dp_size_10"
             android:layout_centerHorizontal="true"/>
         <TextView
+            android:id="@+id/tv_click_to_join"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/dp_size_35"
@@ -52,7 +53,8 @@
             android:layout_marginBottom="@dimen/dp_size_40"
             android:layout_centerHorizontal="true"/>
         <include layout="@layout/welcome_footer"
-            android:layout_height="match_parent"
+            android:id="@+id/intro_footer"
+            android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:visibility="gone"
             />
@@ -60,3 +62,4 @@
     </RelativeLayout>
 
 </LinearLayout>
+

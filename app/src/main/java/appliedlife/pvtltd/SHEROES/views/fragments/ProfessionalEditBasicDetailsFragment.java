@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import appliedlife.pvtltd.SHEROES.R;
@@ -62,6 +61,6 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment {
 
     public  void Onback_Click()
     {
-        profileViewlistener.backListener(R.id.tv_profile_education_back);
+        //profileViewlistener.backListener(R.id.tv_profile_education_back);
     }
 }

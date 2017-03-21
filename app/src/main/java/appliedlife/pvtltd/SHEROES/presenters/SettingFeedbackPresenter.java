@@ -8,6 +8,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.SettingFeedbackModel;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingChangeUserPreferenceRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingChangeUserPreferenseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingDeActivateRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingDeActivateResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingFeedbackRequest;
@@ -74,7 +76,8 @@ public class SettingFeedbackPresenter extends BasePresenter<SettingFeedbackView>
 
             @Override
             public void onError(Throwable e) {
-                getMvpView().showError(AppConstants.HTTP_401_UNAUTHORIZED,AppConstants.TWO_CONSTANT);
+                getMvpView().showError(AppConstants.HTTP_401_UNAUTHORIZED,0);
+                getMvpView().showNwError();
                 getMvpView().stopProgressBar();
             }
 
@@ -111,7 +114,7 @@ public class SettingFeedbackPresenter extends BasePresenter<SettingFeedbackView>
 
             @Override
             public void onError(Throwable e) {
-                getMvpView().showError(AppConstants.HTTP_401_UNAUTHORIZED,AppConstants.TWO_CONSTANT);
+                getMvpView().showError(AppConstants.HTTP_401_UNAUTHORIZED,0);
                 getMvpView().showNwError();
                 getMvpView().stopProgressBar();
             }
@@ -146,7 +149,7 @@ public class SettingFeedbackPresenter extends BasePresenter<SettingFeedbackView>
 
             @Override
             public void onError(Throwable e) {
-                getMvpView().showError(AppConstants.HTTP_401_UNAUTHORIZED,AppConstants.TWO_CONSTANT);
+                getMvpView().showError(AppConstants.HTTP_401_UNAUTHORIZED,0);
                 getMvpView().showNwError();
                 getMvpView().stopProgressBar();
             }
@@ -159,10 +162,6 @@ public class SettingFeedbackPresenter extends BasePresenter<SettingFeedbackView>
         });
         registerSubscription(subscription);
     }
-
-
-
-
 
       /*function for User_Get_Preferences */
 
@@ -188,8 +187,9 @@ public class SettingFeedbackPresenter extends BasePresenter<SettingFeedbackView>
 
             @Override
             public void onError(Throwable e) {
+                getMvpView().showError(AppConstants.HTTP_401_UNAUTHORIZED,0);
+                getMvpView().showNwError();
                 getMvpView().stopProgressBar();
-                getMvpView().showError(AppConstants.HTTP_401_UNAUTHORIZED,AppConstants.TWO_CONSTANT);
             }
 
             @Override
@@ -200,6 +200,51 @@ public class SettingFeedbackPresenter extends BasePresenter<SettingFeedbackView>
         });
         registerSubscription(subscription);
     }
+
+
+
+
+
+
+
+
+
+
+    public void getUserChangePreferenceAuthTokeInPresenter(SettingChangeUserPreferenceRequest settingChangeUserPreferenceRequest) {
+
+        if (!NetworkUtil.isConnected(sheroesApplication)) {
+
+
+            getMvpView().showNwError();
+
+            return;
+        }
+
+
+        Subscription subscription = mSettingFeedbackModel.getUserChangePreferenceAuthTokenFromModel(settingChangeUserPreferenceRequest).subscribe(new Subscriber<SettingChangeUserPreferenseResponse>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                getMvpView().showError(AppConstants.HTTP_401_UNAUTHORIZED,0);
+                getMvpView().showNwError();
+            }
+
+            @Override
+            public void onNext(SettingChangeUserPreferenseResponse settingChangeUserPreferenseResponse) {
+
+                getMvpView().getUserChangePreferenceResponse(settingChangeUserPreferenseResponse);
+
+
+            }
+        });
+        registerSubscription(subscription);
+    }
+
+
 
 
 

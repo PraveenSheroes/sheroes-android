@@ -39,6 +39,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.EducationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileHorList;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfilePersonalViewList;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileViewList;
@@ -55,6 +56,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ProfileAddOtherFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileCityWorkFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileOtherFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileTravelClientFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProfileVisitingCardView;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileWorkExperienceFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
 import butterknife.Bind;
@@ -65,7 +67,7 @@ import butterknife.OnClick;
  * Created by Praveen_Singh on 13-02-2017.
  */
 
-public class ProfileActicity extends BaseActivity implements ProfileView,BaseHolderInterface,AppBarLayout.OnOffsetChangedListener {
+public class ProfileActicity extends BaseActivity implements ProfileView,BaseHolderInterface,AppBarLayout.OnOffsetChangedListener,ProfileTravelClientFragment.ProfileTravelClientFragmentListener,ProfileCityWorkFragment.ProfileWorkLocationFragmentListener {
     private final String TAG = LogUtils.makeLogTag(ProfileActicity.class);
     private static final String EXTRA_IMAGE = "extraImage";
     private static final String DECRIPTION = "desc";
@@ -314,7 +316,7 @@ public class ProfileActicity extends BaseActivity implements ProfileView,BaseHol
 
             case R.id.tv_edit_other_textline:
                 flprofile_container.setVisibility(View.VISIBLE);
-                 ProfileOtherFragment  profileOtherFragment= new ProfileOtherFragment();
+                 ProfileOtherFragment profileOtherFragment= new ProfileOtherFragment();
                 Bundle bundleOther = new Bundle();
                 ButterKnife.bind(this);
                 profileOtherFragment.setArguments(bundleOther);
@@ -347,9 +349,21 @@ public class ProfileActicity extends BaseActivity implements ProfileView,BaseHol
 
                 break;
 
+            case R.id.tv_download_my_card:
+
+                flprofile_container.setVisibility(View.VISIBLE);
+                ProfileVisitingCardView profileVisitingCardView= new ProfileVisitingCardView();
+                Bundle bundleProfileVisitingCardFragment = new Bundle();
+                ButterKnife.bind(this);
+                profileVisitingCardView.setArguments(bundleProfileVisitingCardFragment);
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
+                        .replace(R.id.profile_container, profileVisitingCardView, ProfileVisitingCardView.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+
+                break;
 
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
+
 
         }
     }
@@ -399,13 +413,14 @@ public class ProfileActicity extends BaseActivity implements ProfileView,BaseHol
     public void backOnclick()
     {
         finish();
-        overridePendingTransition(R.anim.top_to_bottom_exit,R.anim.top_bottom_exit_anim);
+        overridePendingTransition(R.anim.top_to_bottom_exit, R.anim.top_bottom_exit_anim);
     }
 
     @Override
     public void backListener(int id) {
 
         getSupportFragmentManager().popBackStack();
+
     }
 
     @Override
@@ -434,5 +449,47 @@ public class ProfileActicity extends BaseActivity implements ProfileView,BaseHol
 
         }
 
+    }
+
+    @Override
+    public void getEducationResponse(EducationResponse educationResponse) {
+
+    }
+
+    @Override
+    public void startProgressBar() {
+
+    }
+
+    @Override
+    public void stopProgressBar() {
+
+    }
+
+    @Override
+    public void startNextScreen() {
+
+    }
+
+    @Override
+    public void showError(String s, int errorFor) {
+
+    }
+
+
+    @Override
+    public void onErrorOccurence() {
+
+    }
+
+    @Override
+    public void locationBack() {
+        getSupportFragmentManager().popBackStack();
+
+    }
+
+    @Override
+    public void clintBack() {
+        getSupportFragmentManager().popBackStack();
     }
 }

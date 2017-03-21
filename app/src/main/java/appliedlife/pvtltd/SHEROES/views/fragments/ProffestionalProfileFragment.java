@@ -31,6 +31,9 @@ public class ProffestionalProfileFragment extends BaseFragment {
     private final String TAG = LogUtils.makeLogTag(ProffestionalProfileFragment.class);
     @Bind(R.id.rv_profile_spinner_list)
     RecyclerView mRecyclerView;
+
+
+
     GenericRecyclerViewAdapter mAdapter;
     private HomeActivityIntractionWithProffestionalProfile mHomeActivityIntractionWithProffestionalProfile;
     List<ProfileViewList> profileList = new ArrayList<ProfileViewList>();
@@ -65,11 +68,18 @@ public class ProffestionalProfileFragment extends BaseFragment {
         mRecyclerView.setAdapter(mAdapter);
         setListValue();
         mAdapter.setSheroesGenericListData(profileList);
-      //  checkForSpinnerItemSelection();
+
+        //  checkForSpinnerItemSelection();
         return view;
     }
 
+
+
     private void checkForSpinnerItemSelection() {
+
+
+
+
         /*if (StringUtil.isNotEmptyCollection(AppUtils.profileDetail())) {
             mAdapter.setSheroesGenericListData(AppUtils.profileDetail());
         }*/

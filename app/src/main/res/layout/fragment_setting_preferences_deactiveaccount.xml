@@ -1,216 +1,220 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-<ScrollView
+    <include
+        android:id="@+id/rl_setting_header"
+        layout="@layout/setting_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|top" />
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
-        android:isScrollContainer="false"
-        android:background="@color/white">
+        android:layout_below="@+id/rl_setting_header"
+        android:background="@color/white"
+        android:isScrollContainer="false">
 
-    <LinearLayout android:id="@+id/li_spinner_iten"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:weightSum="1">
-    <TextView
-    android:id="@+id/ID_tvreason"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:text="@string/ID_ERROR_REASION"
-    android:fontFamily="@string/ID_ROBOTO_REGULAR"
-    android:background="@color/setting_errormessage_backgroung"
-    android:gravity="center"
-    android:visibility="gone"
-    android:textColor="@color/white"
-    android:textSize="@dimen/dp_size_12"/>
+        <LinearLayout
+            android:id="@+id/li_spinner_iten"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:weightSum="1">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+            <TextView
+                android:id="@+id/ID_tvreason"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/setting_errormessage_backgroung"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:gravity="center"
+                android:text="@string/ID_ERROR_REASION"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dp_size_12"
+                android:visibility="gone" />
 
-        <TextView
-            android:id="@+id/deactive_text1"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/ID_DEACTIVATE"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:background="@drawable/setting_selector_background"
-            android:padding="@dimen/dp_size_25"
-            android:gravity="center_vertical"
-            android:textColor="@color/searchbox_hint_text_color"
-            android:textSize="@dimen/sp_size_13"
-            />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        <CheckBox
-            android:id="@+id/deactive_check_box1"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:padding="@dimen/dp_size_15"
-            style="@style/CheckBoxStyle"
+                <TextView
+                    android:id="@+id/deactive_text1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/setting_selector_background"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/dp_size_25"
+                    android:text="@string/ID_DEACTIVATE"
+                    android:textColor="@color/searchbox_hint_text_color"
+                    android:textSize="@dimen/sp_size_13" />
 
-        />
+                <CheckBox
+                    android:id="@+id/deactive_check_box1"
+                    style="@style/CheckBoxStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/dp_size_15"
 
-</RelativeLayout>
+                    />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
-        <TextView
-            android:id="@+id/deactive_text1a"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/ID_NOTFINDTEXT"
-            android:textColor="@color/searchbox_hint_text_color"
-            android:background="@drawable/setting_selector_background"
-            android:textSize="@dimen/sp_size_13"
-            android:padding="@dimen/dp_size_25"/>
+            </RelativeLayout>
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-
-        <CheckBox
-            android:id="@+id/deactive_check_box1a"
-            android:layout_alignParentRight="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:gravity="center_vertical"
-            android:padding="@dimen/dp_size_15"
-            style="@style/CheckBoxStyle"/>
+                <TextView
+                    android:id="@+id/deactive_text1a"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/setting_selector_background"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:padding="@dimen/dp_size_25"
+                    android:text="@string/ID_NOTFINDTEXT"
+                    android:textColor="@color/searchbox_hint_text_color"
+                    android:textSize="@dimen/sp_size_13" />
 
 
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
-        >
-
-        <TextView
-            android:id="@+id/deactive_text1b"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/ID_SPAMMED"
-            android:textColor="@color/searchbox_hint_text_color"
-            android:background="@drawable/setting_selector_background"
-            android:textSize="@dimen/sp_size_13"
-            android:padding="@dimen/dp_size_25"/>
+                <CheckBox
+                    android:id="@+id/deactive_check_box1a"
+                    style="@style/CheckBoxStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/dp_size_15" />
 
 
-        <CheckBox
-            android:id="@+id/deactive_check_box1b"
-            android:layout_alignParentRight="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:gravity="center_vertical"
-            android:padding="@dimen/dp_size_15"
-            style="@style/CheckBoxStyle"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                >
+
+                <TextView
+                    android:id="@+id/deactive_text1b"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/setting_selector_background"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:padding="@dimen/dp_size_25"
+                    android:text="@string/ID_SPAMMED"
+                    android:textColor="@color/searchbox_hint_text_color"
+                    android:textSize="@dimen/sp_size_13" />
 
 
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
-        >
-        <TextView
-            android:id="@+id/deactive_text1c"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/ID_PRIVACY"
-            android:textColor="@color/searchbox_hint_text_color"
-            android:background="@drawable/setting_selector_background"
-
-            android:textSize="@dimen/sp_size_13"
-            android:padding="@dimen/dp_size_25"/>
+                <CheckBox
+                    android:id="@+id/deactive_check_box1b"
+                    style="@style/CheckBoxStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/dp_size_15" />
 
 
-        <CheckBox
-            android:id="@+id/deactive_check_box1c"
-            android:layout_alignParentRight="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:gravity="center_vertical"
-            android:padding="@dimen/dp_size_15"
-            style="@style/CheckBoxStyle"/>
+            </RelativeLayout>
 
-    </RelativeLayout>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
 
-        >
-        <TextView
-            android:id="@+id/deactive_text1d"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/ID_OTHER"
-            android:textColor="@color/searchbox_hint_text_color"
-            android:background="@drawable/setting_selector_background"
+                >
 
-            android:textSize="@dimen/sp_size_13"
-            android:padding="@dimen/dp_size_25"/>
+                <TextView
+                    android:id="@+id/deactive_text1c"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/setting_selector_background"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:padding="@dimen/dp_size_25"
+                    android:text="@string/ID_PRIVACY"
 
-        <CheckBox
-            android:id="@+id/deactive_check_box1d"
-            android:layout_alignParentRight="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:gravity="center_vertical"
-            android:padding="@dimen/dp_size_15"
-            style="@style/CheckBoxStyle"/>
+                    android:textColor="@color/searchbox_hint_text_color"
+                    android:textSize="@dimen/sp_size_13" />
 
 
+                <CheckBox
+                    android:id="@+id/deactive_check_box1c"
+                    style="@style/CheckBoxStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/dp_size_15" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                >
+
+                <TextView
+                    android:id="@+id/deactive_text1d"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/setting_selector_background"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:padding="@dimen/dp_size_25"
+                    android:text="@string/ID_OTHER"
+
+                    android:textColor="@color/searchbox_hint_text_color"
+                    android:textSize="@dimen/sp_size_13" />
+
+                <CheckBox
+                    android:id="@+id/deactive_check_box1d"
+                    style="@style/CheckBoxStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/dp_size_15" />
 
 
+            </RelativeLayout>
 
 
-    </RelativeLayout>
+            <EditText
+                android:id="@+id/et_edit_text_reson"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/ID_WRITE_RESON"
+                android:paddingBottom="@dimen/dp_size_10"
+                android:paddingLeft="@dimen/dp_size_20"
+                android:paddingRight="@dimen/dp_size_20"
+                android:textColorHint="@color/text_color_contactdetails_page"
+                android:textSize="@dimen/dp_size_14"
+                android:visibility="gone" />
 
+        </LinearLayout>
 
-    <EditText
-        android:id="@+id/et_edit_text_reson"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingRight="@dimen/dp_size_20"
-        android:paddingLeft="@dimen/dp_size_20"
-        android:hint="@string/ID_WRITE_RESON"
-        android:paddingBottom="@dimen/dp_size_10"
-        android:visibility="gone"
-        android:textSize="@dimen/dp_size_14"
-        android:textColorHint="@color/text_color_contactdetails_page"/>
+    </ScrollView>
 
-    </LinearLayout>
-
-</ScrollView>
-
-    <Button
+    <Button xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/preferences_deactiveaccount_button"
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/ID_SUBMIT"
-        android:textColor="@color/white"
-        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
         android:layout_alignParentBottom="true"
-        />
+        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+        android:text="@string/ID_SUBMIT"
+        android:textColor="@color/white" />
 
 </RelativeLayout>

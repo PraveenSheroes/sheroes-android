@@ -46,6 +46,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.DrawerItems;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.setting.Section;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.Segments;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -81,6 +82,7 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
     @Inject
     Preference<LoginResponse> mUserPreference;
+
     @Bind(R.id.iv_drawer_profile_circle_icon)
     RoundedImageView ivDrawerProfileCircleIcon;
     @Bind(R.id.tv_user_name)
@@ -753,9 +755,13 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
     }
 
     @Override
-    public void backListener(int id, Segments segments) {
+    public void backListener(int id) {
+        getSupportFragmentManager().popBackStack();
 
+    }
 
+    @Override
+    public void settingpreference(int id, List<Section> sections) {
 
         switch (id) {
             case R.id.tv_setting_feedback:
@@ -764,41 +770,35 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
                         .replace(R.id.fl_feed_comments, articlesFragment).addToBackStack(null).commitAllowingStateLoss();
                 break;
 
+            case R.id.tv_setting_preferences:
 
-         /*   case R.id.tv_setting_preferences:
-
-                *//* Setting_basic_details setting_basic_details=segments.get1();
-                PrivilegesList privilegesList=setting_basic_details.getPrivilegesList();
-                RelationshipStatus relationshipStatus=privilegesList.getRelationshipStatus();
-                String privacy_type= relationshipStatus.getPrivacySettingType();*//*
+              /*  Gson gson = new Gson();
+                String jsonSections = gson.toJson(sections);
+                intent.putExtra("Setting_preferences",jsonSections);*/
 
                 Intent intent = new Intent(this, SettingPreferencesActivity.class);
-                intent.putExtra("Segment",segments);
                 startActivity(intent);
 
-                break;*/
 
 
+                break;
             case R.id.tv_setting_terms_and_condition:
-
                 SettingTermsAndConditionFragment settingTermsAndConditionFragment = new SettingTermsAndConditionFragment();
                 getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
                         .replace(R.id.fl_feed_comments, settingTermsAndConditionFragment).addToBackStack(null).commitAllowingStateLoss();
                 break;
             case R.id.tv_setting_about:
-
                 SettingAboutFragment settingAboutFragmentFragment = new SettingAboutFragment();
                 getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
                         .replace(R.id.fl_feed_comments, settingAboutFragmentFragment).addToBackStack(null).commitAllowingStateLoss();
                 break;
 
-
             case R.id.tv_logout:
                 if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
                     mUserPreference.delete();
                 }
-                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                startActivity(intent);
+                Intent intent1 = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(intent1);
                 finish();
                 break;
 
@@ -806,7 +806,9 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
                 getSupportFragmentManager().popBackStack();
 
         }
+
     }
+
 
 
     @Override

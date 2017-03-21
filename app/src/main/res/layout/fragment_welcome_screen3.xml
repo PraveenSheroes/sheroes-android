@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@drawable/welcome_gradient1">
+
     <TextView
         android:id="@+id/tv_grow_with_sheroes"
         android:layout_width="match_parent"
@@ -16,10 +17,10 @@
         android:gravity="center" />
 
     <ImageView
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_size_25"
-       android:background="@drawable/welcome_img1"/>
+        android:background="@drawable/welcome_img1"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -39,6 +40,7 @@
             android:layout_centerHorizontal="true"/>
 
         <TextView
+            android:id="@+id/tv_click_to_join"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/dp_size_35"
@@ -51,7 +53,8 @@
             android:layout_marginBottom="@dimen/dp_size_40"
             android:layout_centerHorizontal="true"/>
         <include layout="@layout/welcome_footer"
-            android:layout_height="match_parent"
+            android:id="@+id/intro_footer"
+            android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:visibility="gone"
             />
