@@ -68,7 +68,7 @@ public class InviteMemberHolder extends BaseViewHolder<FeedDetail> {
         }else
         {
             dataItem.setLongPress(false);
-            tvAddInvite.setText(mContext.getString(R.string.ID_ADD));
+            tvAddInvite.setText(mContext.getString(R.string.ID_ADDED));
             tvAddInvite.setBackgroundResource(R.drawable.select_purpose_btn_shap);
             tvAddInvite.setTextColor(ContextCompat.getColor(mContext, R.color.blue));
         }

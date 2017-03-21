@@ -39,6 +39,7 @@ public class JobDetailHolder extends BaseViewHolder<JobDetailPojo> {
     public void bindData(JobDetailPojo obj, Context context, int position) {
         dataItem = obj;
         mFeedDetail = dataItem.getFeedDetail();
+
         if (null != mFeedDetail) {
 
             String description = mFeedDetail.getListDescription();

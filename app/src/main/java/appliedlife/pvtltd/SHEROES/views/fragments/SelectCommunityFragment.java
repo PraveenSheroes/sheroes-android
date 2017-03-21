@@ -19,24 +19,40 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityList;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
+import appliedlife.pvtltd.SHEROES.models.entities.community.Member;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerList;
+import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.presenters.CommunityListPresenter;
+import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CommunityView;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
- * Created by SHEROES-TECH on 24-01-2017.
+ * Created by Ajit Kumar on 24-01-2017.
  */
-public class SelectCommunityFragment extends DialogFragment implements CommunityView, BaseHolderInterface {
+public class SelectCommunityFragment extends DialogFragment implements CommunityView, BaseHolderInterface, HomeView {
     @Inject
-    CommunityListPresenter mcommunityListPresenter;
+    HomePresenter mHomePresenter;
     @Bind(R.id.rv_home_list)
     RecyclerView mRecyclerView;
+    @Inject
+    AppUtils mAppUtils;
+    private FragmentListRefreshData mFragmentListRefreshData;
 
     private MyDialogFragmentListener mHomeActivityIntractionListner;
     private final String TAG = LogUtils.makeLogTag(SelectCommunityFragment.class);
@@ -47,8 +63,8 @@ public class SelectCommunityFragment extends DialogFragment implements Community
     public void onAttach(Context context) {
         super.onAttach(context);
     }
-
     SelectCommunityFragment(CreateCommunityPostFragment context) {
+
         try {
             if (context instanceof MyDialogFragmentListener) {
                 mHomeActivityIntractionListner = (MyDialogFragmentListener) context;
@@ -64,12 +80,14 @@ public class SelectCommunityFragment extends DialogFragment implements Community
         SheroesApplication.getAppComponent(getActivity()).inject(this);
         View v = inflater.inflate(R.layout.community_list, container, false);
         ButterKnife.bind(this, v);
-        mcommunityListPresenter.attachView(this);
+        mHomePresenter.attachView(this);
+
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new GenericRecyclerViewAdapter(getActivity(), this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
+        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY_POST, 1));
 
         return v;
     }
@@ -82,7 +100,22 @@ public class SelectCommunityFragment extends DialogFragment implements Community
     }
 
     @Override
-    public void getOwnerListSuccess(List<OwnerList> data) {
+    public void getOwnerListSuccess(List<Member> ownerListResponse) {
+
+    }
+
+    @Override
+    public void postCreateCommunitySuccess(CreateCommunityResponse createCommunityResponse) {
+
+    }
+
+    @Override
+    public void getOwnerListDeactivateSuccess(DeactivateOwnerResponse deactivateOwnerResponse) {
+
+    }
+
+    @Override
+    public void postCreateCommunityOwnerSuccess(CreateCommunityOwnerResponse createCommunityOwnerResponse) {
 
     }
 
@@ -104,6 +137,8 @@ public class SelectCommunityFragment extends DialogFragment implements Community
             CommunityList communityList = (CommunityList) sheroesListDataItem;
             //  getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, getActivity().getIntent());
             mHomeActivityIntractionListner.onAddFriendSubmit(communityList.getName(), communityList.getBackground());
+            //  getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, getActivity().getIntent());
+            mHomeActivityIntractionListner.onAddFriendSubmit(communityList.getName(),communityList.getBackground());
         }
         getActivity().getFragmentManager().popBackStack();
 
@@ -150,6 +185,34 @@ public class SelectCommunityFragment extends DialogFragment implements Community
 
     @Override
     public void showError(String s, int errorFor) {
+
+    }
+
+    @Override
+    public void getLogInResponse(LoginResponse loginResponse) {
+
+    }
+
+    @Override
+    public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
+
+        mAdapter.setSheroesGenericListData(feedDetailList);
+        mAdapter.setCallForRecycler(AppConstants.COMMUNITY_NAME_SUB_TYPE);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void getTagListSuccess(List<Doc> feedDetailList) {
+
+    }
+
+    @Override
+    public void getSuccessForAllResponse(String success, int successFrom) {
+
+    }
+
+    @Override
+    public void getDB(List<RecentSearchData> recentSearchDatas) {
 
     }
 

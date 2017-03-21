@@ -18,7 +18,12 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityList;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityType;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.Member;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerList;
+import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.adapters.CommunityTypeAdapter;
@@ -47,9 +52,6 @@ public class CommunityTypeFragment extends BaseDialogFragment implements Communi
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-    }
-
-    CommunityTypeFragment(CreateCommunityFragment context) {
         try {
             if (context instanceof MyDialogFragmentListener) {
                 mHomeActivityIntractionListner = (MyDialogFragmentListener) context;
@@ -58,6 +60,10 @@ public class CommunityTypeFragment extends BaseDialogFragment implements Communi
             LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
         }
     }
+/*
+    CommunityTypeFragment(CreateCommunityFragment context) {
+
+    }*/
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -123,7 +129,24 @@ public class CommunityTypeFragment extends BaseDialogFragment implements Communi
     }
 
     @Override
-    public void getOwnerListSuccess(List<OwnerList> data) {
+    public void getOwnerListSuccess(List<Member> ownerListResponse) {
+
+    }
+
+
+
+    @Override
+    public void postCreateCommunitySuccess(CreateCommunityResponse createCommunityResponse) {
+
+    }
+
+    @Override
+    public void getOwnerListDeactivateSuccess(DeactivateOwnerResponse deactivateOwnerResponse) {
+
+    }
+
+    @Override
+    public void postCreateCommunityOwnerSuccess(CreateCommunityOwnerResponse createCommunityOwnerResponse) {
 
     }
 

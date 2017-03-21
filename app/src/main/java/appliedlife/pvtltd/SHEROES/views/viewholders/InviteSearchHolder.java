@@ -57,6 +57,7 @@ public class InviteSearchHolder extends BaseViewHolder<FeedDetail> {
             case R.id.tv_add_invite:
                 tv_add_invite.setBackgroundResource(R.drawable.selected_add_btn_shap);
                 tv_add_invite.setTextColor((Color.parseColor("#FFFFFF")));
+                tv_add_invite.setText(R.string.ID_ADDED);
                 break;
             default:
                 LogUtils.error("", AppConstants.CASE_NOT_HANDLED + " " + " " + " " + id);

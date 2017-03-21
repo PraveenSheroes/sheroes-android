@@ -19,6 +19,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
+import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
@@ -99,6 +100,11 @@ public class CommunityJoinRegionDialogFragment extends BaseDialogFragment implem
 
     @Override
     public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
+
+    }
+
+    @Override
+    public void getTagListSuccess(List<Doc> feedDetailList) {
 
     }
 

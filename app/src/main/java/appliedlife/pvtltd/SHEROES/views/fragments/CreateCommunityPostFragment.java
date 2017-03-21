@@ -90,6 +90,14 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
     TextView mTvcreate_community_post;
     @Bind(R.id.tv_close_community)
     TextView mTvcreate_community_post_close;
+    @Bind(R.id.lnr_community_post)
+    LinearLayout lnr_community_post;
+    @Bind(R.id.lnr_community_post1)
+    LinearLayout lnr_community_post1;
+    @Bind(R.id.lnr_community_post2)
+    LinearLayout lnr_community_post2;
+
+
     int mImgcount=0,mCount=0;
     String mValue = "";
     private CreateCommunityActivityPostIntractionListner mCreatecommunityPostIntractionListner;
@@ -143,10 +151,11 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
                 ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         mTvcreate_community_post.setText(R.string.ID_CREATEPOST);
+
         checkStoragePermission();
 
 
-        Fabric.with(getActivity(), new Crashlytics());
+//        Fabric.with(getActivity(), new Crashlytics());
 
         return view;
     }
@@ -191,6 +200,24 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
 
         }
     }
+    @OnClick(R.id.lnr_community_post)
+    public void postAsName()
+    {
+        mTv_community_post_submit.setText("POST AS NAME");
+        mTv_community_post_submit.setVisibility(View.VISIBLE);
+    }
+    @OnClick(R.id.lnr_community_post1)
+    public void postAsOwner()
+    {
+        mTv_community_post_submit.setText("POST AS OWNER");
+        mTv_community_post_submit.setVisibility(View.VISIBLE);
+    }
+    @OnClick(R.id.lnr_community_post2)
+    public void postAsAnonomous()
+    {
+        mTv_community_post_submit.setText("POST AS ANONOMOUS");
+        mTv_community_post_submit.setVisibility(View.VISIBLE);
+    }
     @OnClick(R.id.tv_close_community)
     public void onCloseClick()
     {
@@ -199,14 +226,14 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
     @OnClick(R.id.tv_add_more_community_post_image)
     public void addMoreClick()
     {
-       checkCameraPermission();
+        checkCameraPermission();
         selectImageOption();
 
     }
     @OnClick(R.id.fl_camera_btn_for_post_images)
     public void camerabtnClick()
     {
-       checkCameraPermission();
+        checkCameraPermission();
         selectImageOption();
 
     }
@@ -240,7 +267,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
     @OnClick(R.id.txt_choose_community_spinner)
     public void spnOnClick()
     {
-       // showSelectCommunityDilog(true);
+        // showSelectCommunityDilog(true);
         showDialog();
     }
 
@@ -278,12 +305,12 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
     public void closeDialog(String dialogType,Context cn) {
         LogUtils.info("click",dialogType);
         Toast.makeText(cn,dialogType,Toast.LENGTH_LONG).show();
-       mValue=dialogType;
+        mValue=dialogType;
    /*     SharedPreferences sharedpreferences = getActivity().getSharedPreferences("ins", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedpreferences.edit();
         editor.putString("newins", "1");
         editor.commit();*/
-      //  onResume();
+        //  onResume();
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.detach(this).attach(this).commit();
 
@@ -425,30 +452,30 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
                 if (mOutPutFile.exists()) {
                     Bitmap photo = decodeFile(mOutPutFile);
                     mRoundBitmap = getRoundedCroppedBitmap(photo, 500);
-                  //  btn_profile_pic.setImageBitmap(photo);//**********************set image on imageview
-                   // profilepic.setImageBitmap(photo);
-                   // profile.setImageBitmap(photo);//**********************set image on imageview
+                    //  btn_profile_pic.setImageBitmap(photo);//**********************set image on imageview
+                    // profilepic.setImageBitmap(photo);
+                    // profile.setImageBitmap(photo);//**********************set image on imageview
                     View layout2 = LayoutInflater.from(getActivity()).inflate(R.layout.imagevie_with_cross, mHor_scroll_for_community_post_images, false);
-                   // View layout3 = LayoutInflater.from(getActivity()).inflate(R.layout.addimage, mhor_scroll_for_community_post_images, false);
+                    // View layout3 = LayoutInflater.from(getActivity()).inflate(R.layout.addimage, mhor_scroll_for_community_post_images, false);
                     mIv_camera_btn_for_post_images.setVisibility(View.GONE);
                     mFl_camera_btn_for_post_images.setVisibility(View.GONE);
                     mTv_add_more_community_post_image.setVisibility(View.VISIBLE);
                     if(mImgcount==4)
-                     mTv_add_more_community_post_image.setVisibility(View.GONE);
+                        mTv_add_more_community_post_image.setVisibility(View.GONE);
                     mHor_scroll_for_community_post_images.setVisibility(View.VISIBLE);
                     mHor_scroll_for_community_post_images.setHorizontalScrollBarEnabled(false);
 
-                         mImg[mImgcount] = (ImageView) layout2.findViewById(R.id.customView);
+                    mImg[mImgcount] = (ImageView) layout2.findViewById(R.id.customView);
                     mBtncross[mImgcount]= (Button) layout2.findViewById(R.id.button1);
                     mImg[mImgcount].setScaleType(ImageView.ScaleType.CENTER_CROP);
-                        mImg[mImgcount].setImageBitmap(photo);
+                    mImg[mImgcount].setImageBitmap(photo);
                     mBtncross[mImgcount].setTag("Img"+mImgcount);
                     mBtncross[mImgcount].setOnClickListener(mCorkyListener);
 
                     mVg_image_container.addView(layout2);
 
-                   // layout2.setOnClickListener(myClickListner);
-                   // mygallery.addView(layout3);
+                    // layout2.setOnClickListener(myClickListner);
+                    // mygallery.addView(layout3);
                     mImgcount++;
                     byte[] buffer = new byte[4096];
 
@@ -513,9 +540,9 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
         if (size == 0) {
             try {
                 Bitmap photo = decodeFile(mOutPutFile1);
-              //  btn_profile_pic.setImageBitmap(photo);
-               // profilepic.setImageBitmap(photo);
-               // profile.setImageBitmap(photo);
+                //  btn_profile_pic.setImageBitmap(photo);
+                // profilepic.setImageBitmap(photo);
+                // profile.setImageBitmap(photo);
                 mVg_image_container.setVisibility(View.VISIBLE);
                 ImageView imageView = new ImageView(getActivity());
                 imageView.setLayoutParams(new LinearLayout.LayoutParams(220, 220));
@@ -556,10 +583,10 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
             } else {
                 Bitmap bmp = BitmapFactory.decodeFile(String.valueOf(mImageCaptureUri));
                 //  btn_profile_pic.setImageBitmap(bmp);
-                 // roundBitmap = getRoundedCroppedBitmap(bmp, 500);
-               // btn_profile_pic.setImageBitmap(bmp);//**********************set image on imageview
-               // profile.setImageBitmap(bmp);//**********************set image on imageview
-               // profilepic.setImageBitmap(bmp);
+                // roundBitmap = getRoundedCroppedBitmap(bmp, 500);
+                // btn_profile_pic.setImageBitmap(bmp);//**********************set image on imageview
+                // profile.setImageBitmap(bmp);//**********************set image on imageview
+                // profilepic.setImageBitmap(bmp);
                 mVg_image_container.setVisibility(View.VISIBLE);
                 ImageView imageView = new ImageView(getActivity());
                 imageView.setLayoutParams(new LinearLayout.LayoutParams(220, 220));
@@ -567,7 +594,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
                 imageView.setImageBitmap(bmp);
                 imageView.setImageBitmap(bmp);
                 mVg_image_container.addView(imageView);
-              //  imageView.setImageBitmap(bmp);
+                //  imageView.setImageBitmap(bmp);
             }
 
         }

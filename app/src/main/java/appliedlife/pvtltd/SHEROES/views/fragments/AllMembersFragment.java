@@ -18,7 +18,10 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.community.Member;
+import appliedlife.pvtltd.SHEROES.models.entities.community.MemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MembersList;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.presenters.MembersPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -48,6 +51,7 @@ public class AllMembersFragment extends BaseFragment implements AllMembersView {
     private String mSearchDataName = AppConstants.EMPTY_STRING;
     private GenericRecyclerViewAdapter mAdapter;
     private MembersHomeActivityIntractionListner mHomeActivityIntractionListner;
+    FeedDetail mFeedDetail;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -66,53 +70,34 @@ public class AllMembersFragment extends BaseFragment implements AllMembersView {
         View view = inflater.inflate(R.layout.fragment_members, container, false);
         ButterKnife.bind(this, view);
         mmemberpresenter.attachView(this);
+        if(null!=getArguments())
+        {
+            mFeedDetail =getArguments().getParcelable(AppConstants.COMMUNITY_DETAIL);
+        }
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new GenericRecyclerViewAdapter(getContext(), (CommunitiesDetailActivity) getActivity());
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mAdapter);
 
+        MemberRequest memberRequest=new MemberRequest();
+        memberRequest.setAppVersion("String");
+        memberRequest.setCloudMessagingId("String");
+        memberRequest.setCommunityId(mFeedDetail.getIdOfEntityOrParticipant());
+        memberRequest.setDeviceUniqueId("String");
+        memberRequest.setLastScreenName("String");
+        memberRequest.setScreenName("String");
+        mmemberpresenter.getAllMembers(memberRequest);
 
 
 
         return view;
     }
-@OnClick(R.id.fmCommunityMembersClose)
-public void communityClosePress()
-{
-    mHomeActivityIntractionListner.closeMembersFragment();
-}
-   /* @Override
-    public void getAllCommentsAndReactions(List<CommentsList> data) {
-        if(mAdapter!=null) {
-            mTvUserCommentHeaderText.setText(getString(R.string.ID_REPLIES)+getString(R.string.ID_OPEN_BRACKET)+String.valueOf(data.size())+getString(R.string.ID_CLOSE_BRACKET));
-            mAdapter.setSheroesGenericListData(data);
-            mAdapter.notifyDataSetChanged();
-        }
+    @OnClick(R.id.fmCommunityMembersClose)
+    public void communityClosePress()
+    {
+        mHomeActivityIntractionListner.closeMembersFragment();
     }
-
-    @Override
-    public void getAllReactions(List<ReactionList> data) {
-        if(mAdapter!=null) {
-            mTvUserCommentHeaderText.setText(getString(R.string.ID_REACTION)+getString(R.string.ID_OPEN_BRACKET)+String.valueOf(data.size())+getString(R.string.ID_CLOSE_BRACKET));
-            mAdapter.setSheroesGenericListData(data);
-            mAdapter.notifyDataSetChanged();
-        }
-    }
-
-    @Override
-    public void showNwError() {
-        mHomeActivityIntractionListner.onErrorOccurence();
-    }
-
-
-    @Override
-    public void startProgressBar() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mProgressBar.bringToFront();
-    }
-*/
-
     @Override
     public void startProgressBar() {
         mProgressBar.setVisibility(View.VISIBLE);
@@ -144,6 +129,7 @@ public void communityClosePress()
     public void onResume() {
         super.onResume();
     }
+
 
     @Override
     public void getAllMembers(List<MembersList> data) {

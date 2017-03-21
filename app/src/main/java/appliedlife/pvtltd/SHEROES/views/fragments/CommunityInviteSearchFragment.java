@@ -56,10 +56,10 @@ public class CommunityInviteSearchFragment extends BaseFragment implements Invit
     private GenericRecyclerViewAdapter mAdapter;
     private InviteSearchActivityIntractionListner mHomeSearchActivityIntractionListner;
 
-    public static CommunityInviteSearchFragment createInstance(int itemsCount) {
+   /* public static CommunityInviteSearchFragment createInstance(int itemsCount) {
         CommunityInviteSearchFragment communityInviteSearch = new CommunityInviteSearchFragment();
         return communityInviteSearch;
-    }
+    }*/
 
     @Override
     public void onAttach(Context context) {

@@ -1,59 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <TextView
-        android:layout_width="wrap_content"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:fontFamily="@string/ID_ROBOTO_BOLD"
-        android:paddingTop="@dimen/dp_size_30"
-        android:text="@string/ID_USER_NAME"
-        android:textSize="@dimen/sp_size_13"
-        android:textStyle="bold" />
-
-    <TextView
-        android:layout_width="@dimen/dp_size_282"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="@dimen/dp_size_20"
-        android:layout_marginTop="@dimen/dp_size_20"
-        android:fontFamily="@string/ID_ROBOTO_REGULAR"
-        android:gravity="center"
-        android:paddingBottom="@dimen/dp_size_5"
-        android:paddingTop="@dimen/dp_size_5"
-        android:text="@string/ID_COMMUNITY_REMOVE_OWNER" />
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-
-        >
-
+        android:layout_centerVertical="true"
+        android:orientation="vertical">
         <TextView
-            android:id="@+id/tvcancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/dp_size_80"
-            android:paddingBottom="@dimen/dp_size_23"
-            android:paddingTop="@dimen/dp_size_5"
-            android:text="No"
-            android:textColor="#3949ab"
-            android:textSize="@dimen/sp_size_12" />
+            android:layout_gravity="center_horizontal"
+            android:fontFamily="@string/ID_ROBOTO_BOLD"
+            android:paddingTop="@dimen/dp_size_10"
+            android:text="@string/ID_USER_NAME"
+            android:textSize="@dimen/sp_size_13"
+            android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/tv_continue"
+            android:layout_width="@dimen/dp_size_282"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/dp_size_20"
+            android:layout_marginTop="@dimen/dp_size_20"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:gravity="center"
+            android:paddingBottom="@dimen/dp_size_5"
+            android:paddingTop="@dimen/dp_size_5"
+            android:text="@string/ID_COMMUNITY_REMOVE_OWNER" />
+
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/dp_size_50"
-            android:layout_toRightOf="@+id/tvcancel"
-            android:paddingBottom="@dimen/dp_size_23"
-            android:paddingTop="@dimen/dp_size_5"
-            android:text="Yes"
-            android:textColor="#3949ab"
-            android:textSize="@dimen/sp_size_12" />
-    </RelativeLayout>
-</LinearLayout>
+            android:layout_gravity="end"
+
+            >
+
+            <TextView
+                android:id="@+id/tvcancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/dp_size_80"
+                android:paddingBottom="@dimen/dp_size_23"
+                android:paddingTop="@dimen/dp_size_5"
+                android:text="No"
+                android:textColor="#3949ab"
+                android:textSize="@dimen/sp_size_12" />
+
+            <TextView
+                android:id="@+id/tv_continue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/dp_size_50"
+                android:layout_toRightOf="@+id/tvcancel"
+                android:paddingBottom="@dimen/dp_size_23"
+                android:paddingTop="@dimen/dp_size_5"
+                android:text="Yes"
+                android:textColor="#3949ab"
+                android:textSize="@dimen/sp_size_12" />
+        </RelativeLayout>
+    </LinearLayout>
+</RelativeLayout>

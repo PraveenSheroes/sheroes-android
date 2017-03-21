@@ -18,6 +18,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequest
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllData;
+import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
@@ -123,6 +126,38 @@ public class HomePresenter extends BasePresenter<HomeView> {
         });
         registerSubscription(subscription);
     }
+    public void getTagFromPresenter(final GetAllDataRequest getAllDataRequest) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,AppConstants.ONE_CONSTANT);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = mHomeModel.getTagFromModel(getAllDataRequest).subscribe(new Subscriber<GetAllData>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                getMvpView().stopProgressBar();
+                getMvpView().showError(e.getMessage(),AppConstants.ONE_CONSTANT);
+            }
+
+            @Override
+            public void onNext(GetAllData getAllData) {
+                getMvpView().stopProgressBar();
+                if(null!=getAllDataRequest&& StringUtil.isNotEmptyCollection(getAllData.getDocs())&&getAllData.getDocs().size()>AppConstants.ONE_CONSTANT)
+                {
+                    getMvpView().getTagListSuccess(getAllData.getDocs());
+                }else
+                {
+                    getMvpView().getTagListSuccess(getAllData.getDocs());
+                }
+            }
+        });
+        registerSubscription(subscription);
+    }
 
     public void getBookMarkFromPresenter(FeedRequestPojo feedRequestPojo) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
@@ -172,7 +207,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onNext(LikeResponse likeResponse) {
                 getMvpView().stopProgressBar();
-               getMvpView().getSuccessForAllResponse(likeResponse.getStatus(),AppConstants.ONE_CONSTANT);
+                getMvpView().getSuccessForAllResponse(likeResponse.getStatus(),AppConstants.ONE_CONSTANT);
             }
         });
         registerSubscription(subscription);
@@ -281,6 +316,30 @@ public class HomePresenter extends BasePresenter<HomeView> {
         registerSubscription(subscription);
     }
 
+    public void communityOwnerAdd(CommunityRequest communityRequest) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.ERROR_APP_CLOSE,0);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = mHomeModel.communityOwnerFromModel(communityRequest).subscribe(new Subscriber<CommunityResponse>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+            @Override
+            public void onError(Throwable e) {
+                getMvpView().stopProgressBar();
+                getMvpView().showError(AppConstants.ERROR_APP_CLOSE,0);
+            }
+            @Override
+            public void onNext(CommunityResponse communityResponse) {
+                getMvpView().stopProgressBar();
+                getMvpView().getSuccessForAllResponse(communityResponse.getStatus(),AppConstants.ONE_CONSTANT);
+            }
+        });
+        registerSubscription(subscription);
+    }
 
     public void saveMasterDataTypes(List<RecentSearchData> recentSearchData, long entitiyOrParticipantID) {
         getMvpView().startProgressBar();
@@ -299,7 +358,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onNext(List<RecentSearchData> masterDatas) {
                 getMvpView().stopProgressBar();
-               // getMvpView().getDB(masterDatas);
+                // getMvpView().getDB(masterDatas);
             }
         });
         registerSubscription(subscription);

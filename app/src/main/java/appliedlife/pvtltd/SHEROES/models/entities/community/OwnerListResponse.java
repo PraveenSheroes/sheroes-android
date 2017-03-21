@@ -12,67 +12,48 @@ import java.util.List;
 
 public class OwnerListResponse {
 
-    @SerializedName("data")
+    @SerializedName("fieldErrorMessageMap")
     @Expose
-    private List<OwnerList> data = new ArrayList<OwnerList>();
-    @SerializedName("message")
+    private FieldErrorMessageMap fieldErrorMessageMap;
+    @SerializedName("members")
     @Expose
-    private String message;
+    private List<Member> members = null;
+    @SerializedName("screen_name")
+    @Expose
+    private String screenName;
     @SerializedName("status")
     @Expose
-    private int status;
+    private String status;
 
-    /**
-     *
-     * @return
-     * The data
-     */
-    public List<OwnerList> getData() {
-        return data;
+    public FieldErrorMessageMap getFieldErrorMessageMap() {
+        return fieldErrorMessageMap;
     }
 
-    /**
-     *
-     * @param data
-     * The data
-     */
-    public void setData(List<OwnerList> data) {
-        this.data = data;
+    public void setFieldErrorMessageMap(FieldErrorMessageMap fieldErrorMessageMap) {
+        this.fieldErrorMessageMap = fieldErrorMessageMap;
     }
 
-    /**
-     *
-     * @return
-     * The message
-     */
-    public String getMessage() {
-        return message;
+    public List<Member> getMembers() {
+        return members;
     }
 
-    /**
-     *
-     * @param message
-     * The message
-     */
-    public void setMessage(String message) {
-        this.message = message;
+    public void setMembers(List<Member> members) {
+        this.members = members;
     }
 
-    /**
-     *
-     * @return
-     * The status
-     */
-    public int getStatus() {
+    public String getScreenName() {
+        return screenName;
+    }
+
+    public void setScreenName(String screenName) {
+        this.screenName = screenName;
+    }
+
+    public String getStatus() {
         return status;
     }
 
-    /**
-     *
-     * @param status
-     * The status
-     */
-    public void setStatus(int status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 }

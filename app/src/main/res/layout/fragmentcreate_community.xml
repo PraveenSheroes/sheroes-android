@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:baselineAligned="false"
     android:gravity="center_horizontal"
     android:background="@color/white"
     tools:context="appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityActivity">
@@ -50,8 +49,8 @@
 
     <ScrollView
         android:id="@+id/scroll_fragment_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:layout_below="@+id/r1"
         android:isScrollContainer="false">
 
@@ -127,6 +126,7 @@
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:hint="@string/ID_COMMUNITY_NAME"
                     android:imeOptions="actionUnspecified"
+                    android:paddingTop="@dimen/dp_size_10"
                     android:inputType="text"
                     android:maxLines="1"
                     android:textSize="@dimen/sp_size_12"/>
@@ -155,7 +155,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/edittext_style"
-                    android:drawableRight="@drawable/drop_down_shap"
                     android:focusable="false"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:hint="@string/COMMUNITY_TYPE"
@@ -165,7 +164,13 @@
                     android:textSize="@dimen/sp_size_12"/>
 
             </android.support.design.widget.TextInputLayout>
-
+            <ProgressBar
+                android:id="@+id/pb_create_community_progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                android:backgroundTint="@color/search_box"/>
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -203,8 +208,11 @@
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:hint="@string/ID_DESCRIPTION"
                     android:imeOptions="actionUnspecified"
-                    android:inputType="text"
-                    android:maxLines="1"
+                    android:inputType="textMultiLine"
+                    android:lines="20"
+                    android:minLines="1"
+                    android:scrollbars="vertical"
+                    android:maxLines="20"
                     android:textSize="@dimen/sp_size_12"/>
 
             </android.support.design.widget.TextInputLayout>
@@ -212,7 +220,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="@dimen/dp_size_80"
+                android:layout_marginBottom="@dimen/dp_size_200"
                 android:layout_marginLeft="@dimen/dp_size_15"
                 android:layout_marginRight="@dimen/dp_size_15"
                 android:paddingTop="@dimen/dp_size_30">
@@ -251,10 +259,10 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_size_48"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="@dimen/dp_size_30"
         android:background="@drawable/rect_btn"
         android:gravity="center"
         android:paddingBottom="@dimen/dp_size_10"
+        android:textAllCaps="true"
         android:paddingTop="@dimen/dp_size_10"
         android:text="CREATE"
         android:textColor="@color/white"

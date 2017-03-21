@@ -46,6 +46,8 @@ import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeSpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ImageFullViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.IntroFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.InviteCommunityMember;
+import appliedlife.pvtltd.SHEROES.views.fragments.InviteCommunityOwner;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobFilterFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobFragment;
@@ -55,6 +57,8 @@ import appliedlife.pvtltd.SHEROES.views.fragments.LoginFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunitiesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunityInviteMemberFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.OnboardingFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.OnboardingWorkExperience;
+import appliedlife.pvtltd.SHEROES.views.fragments.OwnerRemoveDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.PersonalProfileFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfessionalEditBasicDetailsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProffestionalProfileFragment;
@@ -109,6 +113,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.JobLocationHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MemberHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MyCommunitiesCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OnBoardingHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.OwnerHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OwnerListHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ProfileAboutMeHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ProfileBasicDetailsHolder;
@@ -129,7 +134,9 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.ReactionHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.RequestedHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.SearchModuleHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.SelectDilogHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.TagSearchHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.TagsHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.UserHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.VisitingCardholder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.Visiting_card_holder1;
 import dagger.Component;
@@ -277,5 +284,11 @@ public interface SheroesAppComponent {
     void inject(IntroFragment introFragment);
     void inject(WelcomeActivity welcomeActivity);
 
-
+    void inject(InviteCommunityMember inviteCommunityMember);
+    void inject(InviteCommunityOwner inviteCommunityMember);
+    void inject(UserHolder userHolder);
+    void inject(OwnerHolder ownerHolder);
+    void inject(OwnerRemoveDialog ownerRemoveDialog);
+    void inject(OnboardingWorkExperience onboardingWorkExperience);
+    void inject(TagSearchHolder tagSearchHolder);
 }

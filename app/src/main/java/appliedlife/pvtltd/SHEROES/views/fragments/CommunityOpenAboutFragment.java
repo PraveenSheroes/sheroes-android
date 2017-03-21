@@ -5,13 +5,21 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,16 +30,28 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityList;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.Member;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerList;
+import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.presenters.OwnerPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CommunityView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CreateCommunityView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.EditNameDialogListener;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -49,16 +69,32 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
     RecyclerView mAboutCommunityOwnerRecyclerView;
     @Bind(R.id.sp_about_community)
     Spinner mSpaboutCommunityspn;
+    @Bind(R.id.iv_community_cover_img)
+    ImageView miv_community_cover_img;
+    @Bind(R.id.tv_about_community_des)
+    TextView mtv_about_community_des;
+    @Bind(R.id.tv_community_name)
+    TextView mtv_community_name;
+    @Bind(R.id.tv_community_tags)
+    TextView mtv_community_tags;
+    @Bind(R.id.tv_community_members)
+    TextView mtv_community_members;
+    @Bind(R.id.tv_community_requested)
+    TextView mtv_community_requested;
     List<String> mSpinnerMenuItems;
     @Inject
     OwnerPresenter mOwnerPresenter;
+
+    FeedDetail mFeedDetail;
+    private FragmentListRefreshData mFragmentListRefreshData;
     int iCurrentSelection;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
-    public static CommunityOpenAboutFragment createInstance(int itemsCount) {
+    Long mcommunityid;
+   /* public static CommunityOpenAboutFragment createInstance(int itemsCount) {
         CommunityOpenAboutFragment communitiesDetailFragment = new CommunityOpenAboutFragment();
         return communitiesDetailFragment;
-    }
+    }*/
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -79,6 +115,25 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
         ButterKnife.bind(this, view);
         //  mcreate_community_post.setText(R.string.ID_SHARE_COMMUNITY);
         mOwnerPresenter.attachView(this);
+        if(null!=getArguments())
+        {
+            mFeedDetail =getArguments().getParcelable(AppConstants.COMMUNITY_DETAIL);
+            mcommunityid=mFeedDetail.getIdOfEntityOrParticipant();
+            Glide.with(this)
+                    .load(mFeedDetail.getImageUrl())
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .skipMemoryCache(true)
+                    .into(miv_community_cover_img);
+            if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getListDescription())) {
+                mtv_about_community_des.setText(mFeedDetail.getListDescription());
+            }
+            if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getNameOrTitle())) {
+                mtv_community_name.setText(mFeedDetail.getNameOrTitle());
+            }
+            int count=mFeedDetail.getNoOfMembers();
+            mtv_community_members.setText(""+count+" Members");
+            mtv_community_requested.setText(mFeedDetail.getNoOfPendingRequest()+" Requested");
+        }
         mLayoutManager = new LinearLayoutManager(getActivity());
         mAboutCommunityOwnerRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new GenericRecyclerViewAdapter(getContext(), (CommunitiesDetailActivity) getActivity());
@@ -86,8 +141,16 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
         mAboutCommunityOwnerRecyclerView.setLayoutManager(mLayoutManager);
         mAboutCommunityOwnerRecyclerView.setAdapter(mAdapter);
 
+        OwnerListRequest ownerListRequest=new OwnerListRequest();
+        ownerListRequest.setAppVersion("String");
+        ownerListRequest.setCloudMessagingId("String");
+        ownerListRequest.setCommunityId(mcommunityid);
+        ownerListRequest.setDeviceUniqueId("String");
+        ownerListRequest.setLastScreenName("String");
+        ownerListRequest.setScreenName("String");
+        mOwnerPresenter.getCommunityOwnerList(ownerListRequest);
 
-       // Fabric.with(getActivity(), new Crashlytics());
+        // Fabric.with(getActivity(), new Crashlytics());
 
         mSpinnerMenuItems=new ArrayList();
         mSpinnerMenuItems.add(getActivity().getString(R.string.ID_EDIT));
@@ -98,10 +161,10 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
 
         mSpaboutCommunityspn.setAdapter(spinClockInWorkSiteAdapter);
         mSpaboutCommunityspn.setOnItemSelectedListener(this);
-         spinClockInWorkSiteAdapter = new ArrayAdapter(getActivity(), R.layout.about_community_spinner_row_back, mSpinnerMenuItems);
+        spinClockInWorkSiteAdapter = new ArrayAdapter(getActivity(), R.layout.about_community_spinner_row_back, mSpinnerMenuItems);
 
         mSpaboutCommunityspn.setAdapter(spinClockInWorkSiteAdapter);
-         iCurrentSelection = mSpaboutCommunityspn.getSelectedItemPosition();
+        iCurrentSelection = mSpaboutCommunityspn.getSelectedItemPosition();
         mSpaboutCommunityspn.setSelection(2);
 
         mSpaboutCommunityspn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -131,6 +194,7 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
 
             }
         });
+
         return view;
     }
     @OnClick(R.id.tv_about_community_back)
@@ -237,9 +301,23 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
     }
 
     @Override
-    public void getOwnerListSuccess(List<OwnerList> data) {
-        mAdapter.setSheroesGenericListData(data);
+    public void getOwnerListSuccess(List<Member> ownerListResponse) {
+        mAdapter.setSheroesGenericListData(ownerListResponse);
         mAdapter.notifyDataSetChanged();
+    }
+    @Override
+    public void postCreateCommunitySuccess(CreateCommunityResponse createCommunityResponse) {
+
+    }
+
+    @Override
+    public void getOwnerListDeactivateSuccess(DeactivateOwnerResponse deactivateOwnerResponse) {
+
+    }
+
+    @Override
+    public void postCreateCommunityOwnerSuccess(CreateCommunityOwnerResponse createCommunityOwnerResponse) {
+
     }
 
     @Override

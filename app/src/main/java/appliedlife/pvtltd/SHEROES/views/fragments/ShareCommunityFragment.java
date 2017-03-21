@@ -42,9 +42,6 @@ public class ShareCommunityFragment extends BaseFragment implements CreateCommun
     public ShareCommunityFragment() {
 
     }
-    public ShareCommunityFragment(String name) {
-
-    }
 
 
 
@@ -66,7 +63,7 @@ public class ShareCommunityFragment extends BaseFragment implements CreateCommun
         View view = inflater.inflate(R.layout.community_share_fragment, container, false);
         ButterKnife.bind(this, view);
         mTvCreatecommunitypost.setText(R.string.ID_SHARE_COMMUNITY);
-        Fabric.with(getActivity(), new Crashlytics());
+        //Fabric.with(getActivity(), new Crashlytics());
 
         return view;
     }

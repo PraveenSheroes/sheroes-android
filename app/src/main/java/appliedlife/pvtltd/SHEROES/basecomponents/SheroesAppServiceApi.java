@@ -7,8 +7,28 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequest
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityTagsListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.EditCommunityRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllData;
+import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.InviteSearchResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.ListOfInviteSearch;
+import appliedlife.pvtltd.SHEROES.models.entities.community.MemberListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.MemberRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.RequestedListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItemResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobApplyRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobApplyResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
@@ -75,6 +95,31 @@ public interface SheroesAppServiceApi {
     Observable<UserpreferenseResponse>getUserPreferenceAuthToken(@Body UserPreferenceRequest userPreferenceRequest);
 
 
+    @POST("participant/community/create")
+    Observable<CreateCommunityResponse> postCreateCommunity(@Body CreateCommunityRequest createCommunityRequest);
+
+    @POST("participant/community/edit")
+    Observable<CreateCommunityResponse> postEditCommunity(@Body EditCommunityRequest editCommunityRequest);
+
+    @POST("participant/community/create_owner")
+    Observable<CreateCommunityOwnerResponse> postCreateCommunityOwner(@Body CreateCommunityOwnerRequest createCommunityOwnerRequest);
+
+    @POST("participant/community/owners_list")
+    Observable<OwnerListResponse> getOwnerList(@Body OwnerListRequest ownerListResponse);
+
+    @POST("participant/community/deactivate_owner")
+    Observable<DeactivateOwnerResponse> getOwnerDeactivate(@Body DeactivateOwnerRequest deactivateOwnerRequest);
 
 
+    @POST("participant/community/member_list")
+    Observable<MemberListResponse> getMemberList(@Body MemberRequest membersList);
+
+    @POST("participant/job/apply")
+    Observable<JobApplyResponse> getJobApply(@Body JobApplyRequest jobApplyRequest);
+
+    @POST("participant/community/pending_request")
+    Observable<RequestedListResponse> getRequestList(@Body MemberRequest memberRequest);
+
+    @POST("entity/master/get_data")
+    Observable<GetAllData> getTagFromApi(@Body GetAllDataRequest getAllDataRequest );
 }

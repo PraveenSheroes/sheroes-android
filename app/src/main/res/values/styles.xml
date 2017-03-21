@@ -12,7 +12,19 @@
         <item name="android:windowEnterAnimation">@anim/fade_in_dialog</item>
         <item name="android:windowExitAnimation">@anim/fade_out_dialog</item>
     </style>
+    <style name="AlertDialogPositivCustom" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:buttonBarPositiveButtonStyle">@style/positive</item>
+        <item name="android:buttonBarNegativeButtonStyle">@style/positive</item>
+        <item name="android:paddingTop">@dimen/dp_size_5</item>
+        <item name="android:paddingBottom">@dimen/dp_size_5</item>
 
+
+    </style>
+    <style name="positive">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:fontFamily">@string/ID_ROBOTO_MEDIUM</item>
+        <item name="android:background">@color/fully_transparent</item>
+    </style>
     <style name="SheroesActionButton" parent="Base.Widget.AppCompat.Button">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/dp_size_48</item>

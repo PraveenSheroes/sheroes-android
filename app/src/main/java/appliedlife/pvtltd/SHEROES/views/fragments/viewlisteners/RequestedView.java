@@ -4,6 +4,7 @@ import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseMvpView;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MembersList;
+import appliedlife.pvtltd.SHEROES.models.entities.community.PandingMember;
 import appliedlife.pvtltd.SHEROES.models.entities.community.RequestedList;
 
 /**
@@ -11,6 +12,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.RequestedList;
  */
 
 public interface RequestedView extends BaseMvpView {
-    void getAllRequest(List<RequestedList> data);
+    void getAllRequest(List<PandingMember> data);
     void showNwError();
 }

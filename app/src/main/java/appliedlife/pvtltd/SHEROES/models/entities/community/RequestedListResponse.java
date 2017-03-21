@@ -11,67 +11,50 @@ import java.util.List;
  */
 
 public class RequestedListResponse {
-    @SerializedName("data")
-    @Expose
-    private List<RequestedList> data = new ArrayList<RequestedList>();
-    @SerializedName("message")
-    @Expose
-    private String message;
+
     @SerializedName("status")
     @Expose
-    private int status;
+    private String status;
+    @SerializedName("fieldErrorMessageMap")
+    @Expose
+    private FieldErrorMessageMap fieldErrorMessageMap;
+    @SerializedName("screen_name")
+    @Expose
+    private Object screenName;
+    @SerializedName("members")
+    @Expose
+    private List<PandingMember> members = null;
 
-    /**
-     *
-     * @return
-     * The data
-     */
-    public List<RequestedList> getData() {
-        return data;
-    }
-
-    /**
-     *
-     * @param data
-     * The data
-     */
-    public void setData(List<RequestedList> data) {
-        this.data = data;
-    }
-
-    /**
-     *
-     * @return
-     * The message
-     */
-    public String getMessage() {
-        return message;
-    }
-
-    /**
-     *
-     * @param message
-     * The message
-     */
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    /**
-     *
-     * @return
-     * The status
-     */
-    public int getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    /**
-     *
-     * @param status
-     * The status
-     */
-    public void setStatus(int status) {
+    public void setStatus(String status) {
         this.status = status;
     }
+
+    public FieldErrorMessageMap getFieldErrorMessageMap() {
+        return fieldErrorMessageMap;
+    }
+
+    public void setFieldErrorMessageMap(FieldErrorMessageMap fieldErrorMessageMap) {
+        this.fieldErrorMessageMap = fieldErrorMessageMap;
+    }
+
+    public Object getScreenName() {
+        return screenName;
+    }
+
+    public void setScreenName(Object screenName) {
+        this.screenName = screenName;
+    }
+
+    public List<PandingMember> getMembers() {
+        return members;
+    }
+
+    public void setMembers(List<PandingMember> members) {
+        this.members = members;
+    }
+
 }

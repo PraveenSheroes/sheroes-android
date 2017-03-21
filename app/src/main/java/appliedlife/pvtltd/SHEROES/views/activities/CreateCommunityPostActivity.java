@@ -16,6 +16,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityList;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
 import appliedlife.pvtltd.SHEROES.views.fragments.CreateCommunityPostFragment;
 import butterknife.ButterKnife;
@@ -23,14 +25,14 @@ import butterknife.ButterKnife;
 
 public class CreateCommunityPostActivity extends BaseActivity implements CreateCommunityPostFragment.CreateCommunityActivityPostIntractionListner,BaseHolderInterface, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener{
     String data="";
+    private FeedDetail mFeedDetail;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
+
         renderLoginFragmentView();
-
-
-
     }
     public void renderLoginFragmentView() {
          data= getIntent().getStringExtra("value");
@@ -49,7 +51,7 @@ public class CreateCommunityPostActivity extends BaseActivity implements CreateC
         setContentView(R.layout.activity_create_community_post);
         ButterKnife.bind(this);
         CreateCommunityPostFragment frag = new CreateCommunityPostFragment(data);
-        callFirstFragment(R.id.fl_fragment_container, frag);
+        callFirstFragment(R.id.create_community_post_container, frag);
 
     }
 

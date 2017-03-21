@@ -10,7 +10,7 @@
         android:divider="@color/fully_transparent" />
 
     <ProgressBar
-        android:id="@+id/pb_article_progress_bar"
+        android:id="@+id/pb_job_progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center" />

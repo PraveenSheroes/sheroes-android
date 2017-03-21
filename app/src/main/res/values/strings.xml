@@ -551,5 +551,9 @@ etur adipiscing elit,sed do eiusmod tempor incididunt ut…</string>
 
     <string name="ID_HOURS">hours ago</string>
     <string name="ID_MINUTS">minutes ago</string>
+    <string name="ID_EXP_TEXT">What Is Your Total Work Experience?</string>
+    <string name="ok">DONE</string>
+    <string name="ID_SEARCH_USER">Search Users</string>
+    <string name="ID_NAME">Name</string>
 
 </resources>

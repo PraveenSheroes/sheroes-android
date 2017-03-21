@@ -41,7 +41,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
     <TextView
-        android:id="@+id/tvcancel"
+        android:id="@+id/tv_change_community_cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -51,10 +51,10 @@
         android:textColor="#3949ab"
         android:text="CANCEL"/>
     <TextView
-        android:id="@+id/tv_continue"
+        android:id="@+id/tv_change_community_continue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/tvcancel"
+        android:layout_toRightOf="@+id/tv_change_community_cancel"
         android:paddingLeft="24dp"
         android:paddingTop="25.3dp"
         android:paddingBottom="23.2dp"

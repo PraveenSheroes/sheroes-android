@@ -29,7 +29,7 @@ public class OwnerListHolder extends BaseViewHolder<OwnerList> {
     TextView tv_owner;
     @Bind(R.id.img1)
     CircleImageView background;
-    @Bind(R.id.cross)
+    @Bind(R.id.tv_owner_cross)
     TextView mTvownerclose;
     BaseHolderInterface viewInterface;
     private OwnerList dataItem;
@@ -73,11 +73,13 @@ public class OwnerListHolder extends BaseViewHolder<OwnerList> {
 
         int id = view.getId();
         switch (id) {
-            case R.id.cross:
+            case R.id.tv_owner_cross:
                 HashMap<String,Object> map = new HashMap<String,Object>();
                 //   map.put("collection name",dataItem.getTitle());
                 map.put("collection id",dataItem.getId());
 //    map.put("collection type",dataItem.getType());
+                mTvownerclose.setBackgroundResource(R.drawable.selected_add_btn_shap);
+
                 viewInterface.handleOnClick(this.dataItem,view);
                 break;
             default:

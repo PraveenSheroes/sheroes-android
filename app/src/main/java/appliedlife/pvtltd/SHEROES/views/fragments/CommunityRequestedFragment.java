@@ -18,7 +18,10 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.community.MemberRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.PandingMember;
 import appliedlife.pvtltd.SHEROES.models.entities.community.RequestedList;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.presenters.RequestedPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -38,9 +41,9 @@ public class CommunityRequestedFragment extends BaseFragment implements Requeste
     private final String TAG = LogUtils.makeLogTag(CommentReactionFragment.class);
     @Inject
     RequestedPresenter requestedPresenter;
-    @Bind(R.id.rv_comment_reaction_list)
+    @Bind(R.id.rv_community_requested_list)
     RecyclerView mRecyclerView;
-    @Bind(R.id.pb_comment_reaction_progress_bar)
+    @Bind(R.id.pb_community_requested_progress_bar)
     ProgressBar mProgressBar;
     @Bind(R.id.fmCommunityMembersClose)
     FrameLayout fmCommunityMembersClose;
@@ -48,6 +51,7 @@ public class CommunityRequestedFragment extends BaseFragment implements Requeste
     private String mSearchDataName = AppConstants.EMPTY_STRING;
     private GenericRecyclerViewAdapter mAdapter;
     private RequestHomeActivityIntractionListner mHomeActivityIntractionListner;
+    FeedDetail mFeedDetail;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -65,12 +69,25 @@ public class CommunityRequestedFragment extends BaseFragment implements Requeste
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_request, container, false);
         ButterKnife.bind(this, view);
+
+        if(null!=getArguments())
+        {
+            mFeedDetail =getArguments().getParcelable(AppConstants.COMMUNITY_DETAIL);
+        }
         requestedPresenter.attachView(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new GenericRecyclerViewAdapter(getContext(), (CommunitiesDetailActivity) getActivity());
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mAdapter);
+        MemberRequest memberRequest=new MemberRequest();
+        memberRequest.setDeviceUniqueId("String");
+        memberRequest.setScreenName("String");
+        memberRequest.setLastScreenName("String");
+        memberRequest.setCloudMessagingId("String");
+        memberRequest.setAppVersion("String");
+        memberRequest.setCommunityId(mFeedDetail.getIdOfEntityOrParticipant());
+        requestedPresenter.getAllMembers(memberRequest);
 
 
 
@@ -145,10 +162,8 @@ public class CommunityRequestedFragment extends BaseFragment implements Requeste
         super.onResume();
     }
 
-
-
     @Override
-    public void getAllRequest(List<RequestedList> data) {
+    public void getAllRequest(List<PandingMember> data) {
         mAdapter.setSheroesGenericListData(data);
         mAdapter.notifyDataSetChanged();
     }

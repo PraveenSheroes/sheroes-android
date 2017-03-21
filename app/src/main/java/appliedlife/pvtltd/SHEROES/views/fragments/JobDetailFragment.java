@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +22,11 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
+import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobApplyRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobApplyResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobDetailPojo;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
+import appliedlife.pvtltd.SHEROES.presenters.JobPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -29,21 +34,27 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.JobDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.JobView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
- * Created by SHEROES-TECH on 20-02-2017.
+ * Created by Ajit Kumar on 20-02-2017.
  */
 
-public class JobDetailFragment extends BaseFragment implements HomeView {
+public class JobDetailFragment extends BaseFragment implements HomeView, JobView {
     private final String TAG = LogUtils.makeLogTag(JobDetailFragment.class);
     @Inject
     HomePresenter mHomePresenter;
+    @Inject
+    JobPresenter mJobpresenter;
     @Bind(R.id.rv_job_detail_list)
     RecyclerView mRecyclerView;
-    @Bind(R.id.pb_article_progress_bar)
+    @Bind(R.id.pb_job_progress_bar)
     ProgressBar mProgressBar;
+    @Bind(R.id.tv_apply_job)
+    TextView mtv_apply_job;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private FeedDetail mFeedDetail;
@@ -88,6 +99,7 @@ public class JobDetailFragment extends BaseFragment implements HomeView {
         mAppUtils = AppUtils.getInstance();
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.JOB_DETAIL, mFeedDetail.getId());
         mHomePresenter.attachView(this);
+        mJobpresenter.attachView(this);
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new GenericRecyclerViewAdapter(getContext(), (JobDetailActivity) getActivity());
@@ -96,6 +108,21 @@ public class JobDetailFragment extends BaseFragment implements HomeView {
         super.setAllInitializationForFeeds(mFragmentListRefreshData, mAdapter, mLayoutManager, mFeedDetail, mRecyclerView, 0, 0, false, mHomePresenter, mAppUtils, mProgressBar);
         mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_JOB, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getIdFeedDetail()));
         return view;
+    }
+
+    @OnClick(R.id.tv_apply_job)
+    public void clickApplyButton() {
+        Long jobid = mFeedDetail.getIdOfEntityOrParticipant();
+        JobApplyRequest jobApplyRequest = new JobApplyRequest();
+        jobApplyRequest.setAppVersion("String");
+        jobApplyRequest.setCloudMessagingId("String");
+        jobApplyRequest.setLastScreenName("String");
+        jobApplyRequest.setCoverNote("String");
+        /*jobApplyRequest.setId(mFeedDetail.getId());*/
+        jobApplyRequest.setScreenName("String");
+        jobApplyRequest.setDeviceUniqueId("String");
+        jobApplyRequest.setJobId(jobid);
+        mJobpresenter.getJobApply(jobApplyRequest);
     }
 
     @Override
@@ -109,6 +136,7 @@ public class JobDetailFragment extends BaseFragment implements HomeView {
             joblist.add(jobDetailPojo);
             mAdapter.setSheroesGenericListData(joblist);
             mAdapter.notifyDataSetChanged();
+
         }
     }
 
@@ -121,6 +149,16 @@ public class JobDetailFragment extends BaseFragment implements HomeView {
 
     public void bookMarkForDetailCard(FeedDetail feedDetail) {
         super.bookMarkForCard(feedDetail);
+    }
+
+    @Override
+    public void getJobApplySuccess(JobApplyResponse jobApplyRequests) {
+
+    }
+
+    @Override
+    public void showNwError() {
+
     }
 
 
@@ -146,12 +184,11 @@ public class JobDetailFragment extends BaseFragment implements HomeView {
                     mJobDetailActivityIntractionListner.onJobBookmarkClick(mFeedDetail);
                     break;
                 case AppConstants.FAILED:
-                    showError(getString(R.string.ID_ALREADY_BOOKMARK),AppConstants.TWO_CONSTANT);
+                    showError(getString(R.string.ID_ALREADY_BOOKMARK), AppConstants.TWO_CONSTANT);
                     break;
                 default:
-                    showError(AppConstants.HTTP_401_UNAUTHORIZED,AppConstants.TWO_CONSTANT);
+                    showError(AppConstants.HTTP_401_UNAUTHORIZED, AppConstants.TWO_CONSTANT);
             }
         }
     }
 }
-

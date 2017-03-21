@@ -89,6 +89,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllData;
+import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.ProfileItems;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
@@ -1693,6 +1695,21 @@ public class AppUtils {
         feedRequestPojo.setScreenName(screenName);
         return feedRequestPojo;
     }
+    public static GetAllDataRequest getAllDataRequestBuilder(String typeOfData, String queryName, String screenName) {
+        AppUtils appUtils = AppUtils.getInstance();
+        GetAllDataRequest getAllDataRequest = new GetAllDataRequest();
+        getAllDataRequest.setAppVersion(appUtils.getAppVersionName());
+        getAllDataRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        //TODO:: change rquest data
+        getAllDataRequest.setCloudMessagingId(AppConstants.ALL_SEARCH);
+        getAllDataRequest.setMasterDataType(typeOfData);
+        getAllDataRequest.setQ(queryName);
+        getAllDataRequest.setScreenName(screenName);
+        getAllDataRequest.setSource("string");
+        getAllDataRequest.setLastScreenName("string");
+        return getAllDataRequest;
+    }
+
 
     /**
      * Request for feed api

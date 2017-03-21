@@ -14,6 +14,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequest
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllData;
+import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
@@ -52,6 +54,18 @@ public class HomeModel {
                     @Override
                     public FeedResponsePojo call(FeedResponsePojo feedResponsePojo) {
                         return feedResponsePojo;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+    public Observable<GetAllData> getTagFromModel(GetAllDataRequest getAllDataRequest){
+        LogUtils.info(TAG,"TAG FRom*******************"+new Gson().toJson(getAllDataRequest));
+        return sheroesAppServiceApi.getTagFromApi(getAllDataRequest)
+                .map(new Func1<GetAllData, GetAllData>() {
+                    @Override
+                    public GetAllData call(GetAllData getAllData) {
+                        return getAllData;
                     }
                 })
                 .subscribeOn(Schedulers.io())
@@ -146,8 +160,21 @@ public class HomeModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+    public Observable<CommunityResponse> communityOwnerFromModel(CommunityRequest communityRequest){
+        LogUtils.error("Community Join req: ",gson.toJson(communityRequest));
 
-    public Observable<LoginResponse> getAuthTokenRefreshFromModel() {
+        return sheroesAppServiceApi.getCommunityJoinResponse(communityRequest)
+                .map(new Func1<CommunityResponse, CommunityResponse>() {
+                    @Override
+                    public CommunityResponse call(CommunityResponse communityResponse) {
+                        LogUtils.error("Community Join res: ",gson.toJson(communityResponse));
+                        return communityResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+     public Observable<LoginResponse> getAuthTokenRefreshFromModel() {
         return sheroesAppServiceApi.getRefreshToken()
                 .map(new Func1<LoginResponse, LoginResponse>() {
                     @Override

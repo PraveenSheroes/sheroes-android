@@ -9,40 +9,73 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
  * Created by Ajit Kumar on 03-02-2017.
  */
 
-public class MemberRequest extends BaseRequest {
-    @SerializedName("userId")
+public class MemberRequest {
+
+    @SerializedName("appVersion")
     @Expose
-    private int userId;
-    @SerializedName("id")
+    private String appVersion;
+    @SerializedName("cloudMessagingId")
     @Expose
-    private int id;
-    @SerializedName("comment")
+    private String cloudMessagingId;
+    @SerializedName("community_id")
     @Expose
-    private String comment;
+    private long communityId;
+    @SerializedName("deviceUniqueId")
+    @Expose
+    private String deviceUniqueId;
+    @SerializedName("last_screen_name")
+    @Expose
+    private String lastScreenName;
+    @SerializedName("screen_name")
+    @Expose
+    private String screenName;
 
-
-    public int getUserId() {
-        return userId;
+    public String getAppVersion() {
+        return appVersion;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setAppVersion(String appVersion) {
+        this.appVersion = appVersion;
     }
 
-    public int getId() {
-        return id;
+    public String getCloudMessagingId() {
+        return cloudMessagingId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setCloudMessagingId(String cloudMessagingId) {
+        this.cloudMessagingId = cloudMessagingId;
     }
 
-    public String getComment() {
-        return comment;
+    public long getCommunityId() {
+        return communityId;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setCommunityId(long communityId) {
+        this.communityId = communityId;
+    }
+
+    public String getDeviceUniqueId() {
+        return deviceUniqueId;
+    }
+
+    public void setDeviceUniqueId(String deviceUniqueId) {
+        this.deviceUniqueId = deviceUniqueId;
+    }
+
+    public String getLastScreenName() {
+        return lastScreenName;
+    }
+
+    public void setLastScreenName(String lastScreenName) {
+        this.lastScreenName = lastScreenName;
+    }
+
+    public String getScreenName() {
+        return screenName;
+    }
+
+    public void setScreenName(String screenName) {
+        this.screenName = screenName;
     }
 
 

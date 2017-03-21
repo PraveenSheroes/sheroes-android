@@ -7,6 +7,7 @@ import android.view.View;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.views.fragments.ChangeCommunityPrivacyDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitySearchTagsFragment;
@@ -54,12 +55,16 @@ public class CreateCommunityActivity extends BaseActivity implements CreateCommu
     public void onTagsSubmit(String[] tagsval) {
 
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(CreateCommunityFragment.class.getName());
+        Bundle bundle = new Bundle();
+        bundle.putStringArray(AppConstants.TAG_LIST, tagsval);
+        CreateCommunityFragment frag = new CreateCommunityFragment();
+        frag.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.create_community_container, frag,CreateCommunityFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+
+              //  ((CreateCommunityFragment) fragment).showTagResult();
 
 
-                ((CreateCommunityFragment) fragment).showTagResult(tagsval);
-
-
-        getSupportFragmentManager().popBackStack();
 
 
     }
@@ -82,7 +87,7 @@ public class CreateCommunityActivity extends BaseActivity implements CreateCommu
 
         CommunitySearchTagsFragment frag=new CommunitySearchTagsFragment();
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
-                .replace(R.id.fl_fragment_container, frag).addToBackStack(null).commitAllowingStateLoss();
+                .replace(R.id.create_community_container, frag).addToBackStack(null).commitAllowingStateLoss();
 
 
          //ChangeCommunityPrivacyDialogFragment frag1 = new ChangeCommunityPrivacyDialogFragment();

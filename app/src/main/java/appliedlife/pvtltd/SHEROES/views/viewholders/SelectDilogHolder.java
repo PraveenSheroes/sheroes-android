@@ -11,6 +11,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityList;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.EditNameDialogListener;
 import butterknife.Bind;
@@ -20,13 +21,13 @@ import butterknife.ButterKnife;
  * Created by Ajit Kumar on 22-01-2017.
  */
 
-public class SelectDilogHolder extends BaseViewHolder<CommunityList> {
+public class SelectDilogHolder extends BaseViewHolder<FeedDetail> {
     @Bind(R.id.textView1)
     TextView tvCity;
     @Bind(R.id.img1)
     CircleImageView background;
     BaseHolderInterface viewInterface;
-    private CommunityList dataItem;
+    private FeedDetail dataItem;
     private int position;
 
     public SelectDilogHolder(View itemView, BaseHolderInterface baseHolderInterface) {
@@ -42,20 +43,19 @@ public class SelectDilogHolder extends BaseViewHolder<CommunityList> {
     }
 
 
+
     @Override
-    public void bindData(CommunityList item, Context context, int position) {
-        this.dataItem = item;
+    public void bindData(FeedDetail obj, Context context, int position) {
+        this.dataItem = obj;
         itemView.setOnClickListener(this);
 
-        tvCity.setText(dataItem.getName());
+        tvCity.setText(dataItem.getNameOrTitle());
 
-        String images = dataItem.getBackground();
+       /* String images = dataItem.getThumbnailImageUrl();
 
         background.setCircularImage(true);
-        background.bindImage(images);
+        background.bindImage(images);*/
     }
-
-
 
     @Override
     public void viewRecycled() {

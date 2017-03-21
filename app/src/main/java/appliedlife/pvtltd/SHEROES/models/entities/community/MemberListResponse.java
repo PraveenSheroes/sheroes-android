@@ -11,67 +11,48 @@ import java.util.List;
  */
 
 public class MemberListResponse {
-    @SerializedName("data")
+    @SerializedName("fieldErrorMessageMap")
     @Expose
-    private List<MembersList> data = new ArrayList<MembersList>();
-    @SerializedName("message")
+    private FieldErrorMessageMap fieldErrorMessageMap;
+    @SerializedName("members")
     @Expose
-    private String message;
+    private List<MembersList> members = null;
+    @SerializedName("screen_name")
+    @Expose
+    private String screenName;
     @SerializedName("status")
     @Expose
-    private int status;
+    private String status;
 
-    /**
-     *
-     * @return
-     * The data
-     */
-    public List<MembersList> getData() {
-        return data;
+    public FieldErrorMessageMap getFieldErrorMessageMap() {
+        return fieldErrorMessageMap;
     }
 
-    /**
-     *
-     * @param data
-     * The data
-     */
-    public void setData(List<MembersList> data) {
-        this.data = data;
+    public void setFieldErrorMessageMap(FieldErrorMessageMap fieldErrorMessageMap) {
+        this.fieldErrorMessageMap = fieldErrorMessageMap;
     }
 
-    /**
-     *
-     * @return
-     * The message
-     */
-    public String getMessage() {
-        return message;
+    public List<MembersList> getMembers() {
+        return members;
     }
 
-    /**
-     *
-     * @param message
-     * The message
-     */
-    public void setMessage(String message) {
-        this.message = message;
+    public void setMembers(List<MembersList> members) {
+        this.members = members;
     }
 
-    /**
-     *
-     * @return
-     * The status
-     */
-    public int getStatus() {
+    public String getScreenName() {
+        return screenName;
+    }
+
+    public void setScreenName(String screenName) {
+        this.screenName = screenName;
+    }
+
+    public String getStatus() {
         return status;
     }
 
-    /**
-     *
-     * @param status
-     * The status
-     */
-    public void setStatus(int status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 }

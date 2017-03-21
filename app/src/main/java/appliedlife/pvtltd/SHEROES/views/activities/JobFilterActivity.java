@@ -39,7 +39,7 @@ public class JobFilterActivity extends BaseActivity implements JobLocationFilter
         ButterKnife.bind(this);
         JobFilterFragment frag = new JobFilterFragment();
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
-                .replace(R.id.create_community_container, frag,CreateCommunityFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+                .replace(R.id.job_filter_container, frag,CreateCommunityFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
 
     }
 
@@ -76,7 +76,7 @@ public class JobFilterActivity extends BaseActivity implements JobLocationFilter
         Bundle bundle = new Bundle();
         articlesFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
-                .replace(R.id.fl_fragment_container, articlesFragment).addToBackStack(null).commitAllowingStateLoss();
+                .replace(R.id.job_filter_container, articlesFragment).addToBackStack(null).commitAllowingStateLoss();
     }
     public void openJobFunctionalAreaFragment()
     {
@@ -84,7 +84,7 @@ public class JobFilterActivity extends BaseActivity implements JobLocationFilter
         Bundle bundle = new Bundle();
         articlesFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
-                .replace(R.id.fl_fragment_container, articlesFragment).addToBackStack(null).commitAllowingStateLoss();
+                .replace(R.id.job_filter_container, articlesFragment).addToBackStack(null).commitAllowingStateLoss();
     }
     @Override
     public void dataOperationOnClick(BaseResponse baseResponse) {

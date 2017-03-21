@@ -37,7 +37,11 @@ public class AppConstants {
     public static final String SHARE_MENU_TYPE= "text/plain";
     public static final String FOR_ALL= "all";
     public static final String FEED_SUB_TYPE= "F";
+    public static final String ALL_DATA_SUB_TYPE= "T";
     public static final String USER_SUB_TYPE= "U";
+    public static final String TAG_SUB_TYPE= "tags";
+    public static final String OWNER_SUB_TYPE= "O";
+    public static final String COMMUNITY_NAME_SUB_TYPE= "CN";
     public static final String FEED_COMMUNITY = "C";
     public static final String FEED_JOB = "J";
     public static final String FEED_ARTICLE= "A";
@@ -70,6 +74,8 @@ public class AppConstants {
     public static final String ARTICLE_DETAIL = "article_detail";
     public static final String JOB_DETAIL = "job_detail";
     public static final String COMMUNITY_DETAIL = "community_detail";
+    public static final String TAG_LIST = "tag_list";
+    public static final String MEMBER = "Member_detail";
     public static final String SETTING = "setting";
     public static final String PIPE="|";
     public static final String SUCCESS= "SUCCESS";
@@ -88,4 +94,5 @@ public class AppConstants {
     public static final int EMOJI_FOURTH_REACTION_CONSTANT= 50;
     public static final int SEARCH_CONSTANT_DELAY= 500;
     public static final String SELECT_ALL_QUERY= "Select * from ";
+
 }

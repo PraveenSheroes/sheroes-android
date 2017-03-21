@@ -20,9 +20,10 @@
             android:id="@+id/iv_community_post_icon"
             android:layout_width="60dp"
             android:layout_gravity="center"
+            android:padding="@dimen/dp_size_15"
+
             android:layout_height="60dp"
             android:layout_marginTop="@dimen/dp_size_45"
-
             android:background="@drawable/ripple_button"
             android:src="@drawable/ic_post_icon" />
 
@@ -40,7 +41,7 @@
             android:layout_marginTop="@dimen/dp_size_25"
 
             android:gravity="center"
-            android:textSize="@dimen/sp_size_12"
+            android:textSize="@dimen/sp_size_14"
             android:maxLines="1" />
 
 
@@ -109,7 +110,7 @@
             android:id="@+id/et_share_community_post_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/ID_SHARE"
+            android:hint="@string/ID_SHARE_WITH_COMMUNITY"
             android:background="@drawable/edit_text_create_community_style"
             android:windowSoftInputMode="stateHidden"
             android:layout_marginTop="@dimen/dp_size_45"
@@ -117,8 +118,9 @@
             android:layout_marginLeft="@dimen/dp_size_38"
             android:imeOptions="actionUnspecified"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:inputType="text"
-
+            android:inputType="textMultiLine"
+            android:lines="20"
+            android:minLines="1"
             android:textSize="@dimen/sp_size_12"
             android:maxLines="1" />
 
@@ -140,45 +142,86 @@
         android:textStyle="bold"
         android:textColor="@color/text_color_close"
         android:textSize="@dimen/sp_size_12"/>
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:orientation="horizontal"
-        android:layout_gravity="center"
         android:layout_marginTop= "@dimen/dp_size_30"
-        android:weightSum="3">
+        >
 
-
-        <FrameLayout
+        <LinearLayout
+            android:id="@+id/lnr_community_post"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:background="@drawable/ripple_button">
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="@dimen/dp_size_37"
 
-            <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
-                android:id="@+id/iv_community_user"
-                android:layout_width="@dimen/dp_size_35"
-                android:layout_height="@dimen/dp_size_35"
-                android:layout_weight="1"
-                />
+            android:orientation="vertical"
 
-        </FrameLayout>
+            >
 
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@drawable/ripple_button">
 
-        <FrameLayout
+                <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
+                    android:id="@+id/iv_community_user"
+                    android:layout_width="@dimen/dp_size_35"
+                    android:layout_height="@dimen/dp_size_35" />
+
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/tv_community_poster_user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ID_NAME"
+                android:textAllCaps="true"
+                android:textSize="@dimen/sp_size_12" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lnr_community_post1"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:background="@drawable/ripple_button"
-            android:layout_marginLeft="@dimen/dp_size_77"
-            android:layout_marginRight="@dimen/dp_size_77">
-            <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
-                android:id="@+id/iv_community_owner"
-                android:layout_width="@dimen/dp_size_35"
-                android:layout_height="@dimen/dp_size_35"
-                android:layout_weight="1"
-                />
-        </FrameLayout>
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@drawable/ripple_button">
 
+                <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
+                    android:id="@+id/iv_community_owner"
+                    android:layout_width="@dimen/dp_size_35"
+                    android:layout_height="@dimen/dp_size_35" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/tv_community_owner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ID_COMMUNITIES"
+                android:textAllCaps="true"
+                android:textColor="@color/searchbox_text_color"
+                android:textSize="@dimen/sp_size_12" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/lnr_community_post2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:gravity="center"
+            android:layout_marginRight="@dimen/dp_size_37"
+            android:layout_marginEnd="@dimen/dp_size_37"
+
+            android:orientation="vertical"
+            >
         <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -189,52 +232,22 @@
                 android:layout_width="@dimen/dp_size_35"
                 android:layout_height="@dimen/dp_size_35"
                 android:background="@drawable/ic_anonomous"
-                android:layout_weight="1"
                 />
 
         </FrameLayout>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center"
-        android:layout_marginTop= "@dimen/dp_size_10"
-        android:weightSum="3">
+         <TextView
+                android:id="@+id/tv_community_anonomous"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ID_ANONYMOUS"
+                android:textAllCaps="true"
+                android:textSize="@dimen/sp_size_12"
+                android:gravity="center"
+                android:textColor="@color/searchbox_text_color"
+                />
+        </LinearLayout>
+    </RelativeLayout>
 
-        <TextView
-            android:id="@+id/tv_community_poster_user"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/searchbox_text_color"
-            android:layout_weight="1"
-            android:text="Name     "
-            android:textSize="@dimen/sp_size_12"
-            />
-
-        <TextView
-            android:id="@+id/tv_community_owner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/ID_COMMUNITIES"
-            android:textSize="@dimen/sp_size_12"
-            android:layout_marginLeft="@dimen/dp_size_30"
-            android:layout_marginRight="@dimen/dp_size_30"
-            android:textColor="@color/searchbox_text_color"
-            android:layout_weight="1"
-            />
-
-        <TextView
-            android:id="@+id/tv_community_anonymous"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/sp_size_12"
-            android:layout_weight="1"
-            android:text="Anonymous"
-            android:textColor="@color/searchbox_text_color"
-            />
-
-    </LinearLayout>
 <TextView
     android:id="@+id/tv_community_post_submit"
     android:gravity="center"
@@ -246,7 +259,8 @@
     android:layout_marginBottom="@dimen/dp_size_20"
     android:textAllCaps="true"
     android:background="@drawable/rectangle_btn"
-    android:textColor="#FFFFFF"
+    android:visibility="gone"
+    android:textColor="@color/white"
     android:text="Post As Deepika"/>
 </LinearLayout>
 

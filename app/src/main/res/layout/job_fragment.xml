@@ -21,6 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:background="@color/blue"
+        app:backgroundTint="@color/blue"
         android:src="@drawable/ic_fab_icon"
         android:visibility="gone"
         android:layout_marginBottom="@dimen/dp_size_65"

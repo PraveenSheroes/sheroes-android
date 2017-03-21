@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_size_60"
+    android:id="@+id/rl_tag">
+
+    <TextView
+        android:id="@+id/tv_tag_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text_color_follow"
+        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+        android:textSize="@dimen/sp_size_13"
+        android:layout_marginTop="@dimen/dp_size_10"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/dp_size_42"
+        />
+
+
+</RelativeLayout>

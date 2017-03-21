@@ -434,9 +434,10 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
 
     @OnClick(R.id.iv_footer_button_icon)
     public void commingOnClick() {
-         Snackbar.make(mCLMainLayout, "Comming soon", Snackbar.LENGTH_SHORT).show();
-      //  Intent intent = new Intent(getApplicationContext(), CreateCommunityPostActivity.class);
-       // startActivity(intent);
+        // Snackbar.make(mCLMainLayout, "Comming soon", Snackbar.LENGTH_SHORT).show();
+        Intent intent = new Intent(getApplicationContext(), CreateCommunityPostActivity.class);
+
+        startActivity(intent);
     }
 
 

@@ -12,7 +12,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionDoc;
 import appliedlife.pvtltd.SHEROES.models.entities.communities.CommunitySuggestion;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityList;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityTags;
+import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
 import appliedlife.pvtltd.SHEROES.models.entities.community.ListOfInviteSearch;
+import appliedlife.pvtltd.SHEROES.models.entities.community.Member;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MembersList;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerList;
 import appliedlife.pvtltd.SHEROES.models.entities.community.RequestedList;
@@ -50,6 +52,12 @@ public enum HolderMapping {
             return new FeedJobHolder(view, viewInterface);
         }
     },
+    FEED_USER(R.layout.owner_list) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new UserHolder(view, viewInterface);
+        }
+    },
     FEED_ARTICLE(R.layout.feed_article_card_normal) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
@@ -82,10 +90,22 @@ public enum HolderMapping {
             return new SearchModuleHolder(view, viewInterface);
         }
     },
+    MEMBER_MODULE(R.layout.community_open_about_owner_list) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new OwnerHolder(view, viewInterface);
+        }
+    },
     INVITE_MEMBER_MODULE(R.layout.initvite_member_list_item) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new InviteMemberHolder(view, viewInterface);
+        }
+    },
+    COMMUNITY_TAG_SEARCH(R.layout.community_tag_search) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new TagSearchHolder(view, viewInterface);
         }
     },
     INVITE_SEARCH_MODULE(R.layout.invitesearch_item) {
@@ -334,9 +354,26 @@ public enum HolderMapping {
                             returnView = INVITE_MEMBER_MODULE.ordinal();
                             break;
                         default:
+
                     }
                 }
-            } else if (callFromType.equalsIgnoreCase(AppConstants.ALL_SEARCH)) {
+            }
+            else if(callFromType.equalsIgnoreCase(AppConstants.OWNER_SUB_TYPE))
+            {
+                returnView = FEED_USER.ordinal();
+
+            }
+            else if(callFromType.equalsIgnoreCase(AppConstants.COMMUNITY_NAME_SUB_TYPE))
+            {
+                    returnView = SELECTDILOG.ordinal();
+            }
+            else if(callFromType.equalsIgnoreCase(AppConstants.ALL_DATA_SUB_TYPE))
+            {
+                returnView = COMMUNITY_TAG_SEARCH.ordinal();
+
+            }
+
+            else if (callFromType.equalsIgnoreCase(AppConstants.ALL_SEARCH)) {
                 if (item instanceof FeedDetail) {
                     returnView = SEARCH_MODULE.ordinal();
                 }
@@ -367,10 +404,13 @@ public enum HolderMapping {
                         case AppConstants.MY_COMMUNITIES_HEADER:
                             returnView = COMMUNITY_DETAIL_HEADER.ordinal();
                             break;
+
                         default:
 
+
                     }
-                } else if (item instanceof DrawerItems) {
+                }
+                else if (item instanceof DrawerItems) {
                     returnView = DRAWER_ITEMS.ordinal();
                 } else if (item instanceof CommentReactionDoc) {
                     CommentReactionDoc commentReactionDoc = ((CommentReactionDoc) item);
@@ -445,9 +485,14 @@ public enum HolderMapping {
 
                     }
 
-                } else if (item instanceof ListOfInviteSearch) {
+                }
+                else if (item instanceof ListOfInviteSearch) {
                     return INVITE_SEARCH_MODULE.ordinal();
-                } else if (item instanceof OnBoardingData) {
+                }
+                else if (item instanceof Member) {
+                    return MEMBER_MODULE.ordinal();
+                }
+                else if (item instanceof OnBoardingData) {
                     return ON_BOARDING_HOLDER.ordinal();
                 } else if (item instanceof RequestedList) {
                     return REQUESTLIST.ordinal();

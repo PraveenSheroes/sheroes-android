@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -26,11 +27,13 @@ public class ChangeCommunityPrivacyDialogFragment extends BaseDialogFragment {
     private boolean finishParent;
     private CloseListener mHomeActivityIntractionListner;
     private final String TAG = LogUtils.makeLogTag(SelectCommunityFragment.class);
-    @Bind(R.id.tvcancel)
+    @Bind(R.id.tv_change_community_cancel)
     TextView tv_cance;
-    @Bind(R.id.tv_continue)
+    @Bind(R.id.tv_change_community_continue)
     TextView tvContinue;
-    ChangeCommunityPrivacyDialogFragment(CreateCommunityFragment context) {
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
         try {
             if (context instanceof CloseListener) {
                 mHomeActivityIntractionListner = (CloseListener)context;
@@ -39,6 +42,15 @@ public class ChangeCommunityPrivacyDialogFragment extends BaseDialogFragment {
             LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
         }
     }
+  /*  ChangeCommunityPrivacyDialogFragment(CreateCommunityFragment context) {
+        try {
+            if (context instanceof CloseListener) {
+                mHomeActivityIntractionListner = (CloseListener)context;
+            }
+        } catch (Fragment.InstantiationException exception) {
+            LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
+        }
+    }*/
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -74,13 +86,13 @@ public class ChangeCommunityPrivacyDialogFragment extends BaseDialogFragment {
             }
         };
     }
-    @OnClick(R.id.tvcancel)
+    @OnClick(R.id.tv_change_community_cancel)
     public void cancelClick()
     {
         getDialog().cancel();
        // mHomeActivityIntractionListner.onClose();
     }
-    @OnClick(R.id.tv_continue)
+    @OnClick(R.id.tv_change_community_continue)
     public void continueClick()
     {
         getDialog().cancel();

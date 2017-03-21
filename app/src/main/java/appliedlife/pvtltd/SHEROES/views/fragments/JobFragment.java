@@ -166,6 +166,8 @@ public class JobFragment extends BaseFragment {
             mPullRefreshList.allListData(feedDetailList);
             mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
             mAdapter.setCallForRecycler(AppConstants.FEED_SUB_TYPE);
+            mAdapter.setCallForRecycler(AppConstants.FEED_SUB_TYPE);
+            mAdapter.notifyDataSetChanged();
             if (!mPullRefreshList.isPullToRefresh()) {
                 mLayoutManager.scrollToPositionWithOffset(mPullRefreshList.getFeedResponses().size() - feedDetailList.size(), 0);
             } else {

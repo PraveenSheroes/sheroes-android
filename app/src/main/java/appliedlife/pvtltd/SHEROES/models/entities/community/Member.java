@@ -4,10 +4,17 @@ package appliedlife.pvtltd.SHEROES.models.entities.community;
  * Created by Praveen_Singh on 12-03-2017.
  */
 
+import android.os.Parcelable;
+
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Member {
+public class Member extends BaseResponse implements Parcelable {
 
     @SerializedName("approved_date")
     @Expose
@@ -87,6 +94,33 @@ public class Member {
     @SerializedName("users_id")
     @Expose
     private Integer usersId;
+
+    public Member(Parcel in) {
+        approvedDate = in.readString();
+        comLogoUrl = in.readString();
+        comName = in.readString();
+        comType = in.readString();
+        communityUserCityName = in.readString();
+        communityUserEmailid = in.readString();
+        communityUserFirstName = in.readString();
+        communityUserLastName = in.readString();
+        communityUserMobile = in.readString();
+        communityUserPhotoUrlPath = in.readString();
+        id = in.readString();
+        typeS = in.readString();
+    }
+
+    public static final Creator<Member> CREATOR = new Creator<Member>() {
+        @Override
+        public Member createFromParcel(Parcel in) {
+            return new Member(in);
+        }
+
+        @Override
+        public Member[] newArray(int size) {
+            return new Member[size];
+        }
+    };
 
     public String getApprovedDate() {
         return approvedDate;
@@ -296,4 +330,24 @@ public class Member {
         this.usersId = usersId;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(approvedDate);
+        dest.writeString(comLogoUrl);
+        dest.writeString(comName);
+        dest.writeString(comType);
+        dest.writeString(communityUserCityName);
+        dest.writeString(communityUserEmailid);
+        dest.writeString(communityUserFirstName);
+        dest.writeString(communityUserLastName);
+        dest.writeString(communityUserMobile);
+        dest.writeString(communityUserPhotoUrlPath);
+        dest.writeString(id);
+        dest.writeString(typeS);
+    }
 }

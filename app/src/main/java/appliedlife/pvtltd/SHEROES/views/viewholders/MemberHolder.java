@@ -21,10 +21,10 @@ import butterknife.ButterKnife;
  */
 
 public class MemberHolder extends BaseViewHolder<MembersList> {
-    @Bind(R.id.textView1)
-    TextView tvCity;
-    @Bind(R.id.tv_owner)
-    TextView tv_owner;
+    @Bind(R.id.tv_member_city)
+    TextView tv_member_city;
+    @Bind(R.id.tv_member_name)
+    TextView tv_member_name;
     @Bind(R.id.img1)
     CircleImageView background;
     BaseHolderInterface viewInterface;
@@ -48,12 +48,11 @@ public class MemberHolder extends BaseViewHolder<MembersList> {
     @Override
     public void bindData(MembersList obj, Context context, int position) {
         this.dataItem = obj;
-       // itemView.setOnClickListener(this);
+        // itemView.setOnClickListener(this);
 
-        tvCity.setText(dataItem.getName());
-        int pos=position+1;
-        tv_owner.setText("Admin"+pos);
-        String images = dataItem.getBackground();
+        tv_member_city.setText(dataItem.getCommunityUserCityName());
+        tv_member_name.setText(dataItem.getCommunityUserFirstName());
+        String images = dataItem.getCommunityUserPhotoUrlPath();
 
         background.setCircularImage(true);
         background.bindImage(images);
