@@ -18,6 +18,7 @@ public class OnBoardingData extends BaseResponse {
     @SerializedName("name")
     @Expose
     private String name;
+
     private List<String> boardingDataList;
 
     public String getId() {

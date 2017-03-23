@@ -47,14 +47,12 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.Section;
-import appliedlife.pvtltd.SHEROES.models.entities.setting.Segments;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.CustomeDataList;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
-import appliedlife.pvtltd.SHEROES.views.adapters.ImageFullViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.BlurrImage;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
@@ -65,6 +63,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeSpinnerFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ImageFullViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobLocationFilter;
 import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunitiesFragment;
@@ -78,7 +77,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class HomeActivity extends BaseActivity implements SettingView, JobFragment.HomeActivityIntractionListner, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, CommentReactionFragment.HomeActivityIntractionListner, ImageFullViewAdapter.HomeActivityIntraction {
+public class HomeActivity extends BaseActivity implements SettingView, JobFragment.HomeActivityIntractionListner, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, CommentReactionFragment.HomeActivityIntractionListner, ImageFullViewFragment.HomeActivityIntraction {
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
     @Inject
     Preference<LoginResponse> mUserPreference;
@@ -133,6 +132,8 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
     private FragmentOpen mFragmentOpen;
     private CustiomActionBarToggle mCustiomActionBarToggle;
     private FeedDetail mFeedDetail;
+    private String profile;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -159,7 +160,7 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
         assignNavigationRecyclerListView();
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
             //TODO: this data to be removed
-            String profile = mUserPreference.get().getUserSummary().getPhotoUrl(); //"https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAhNAAAAJDYwZWIyZTg5LWFmOTItNGIwYS05YjQ5LTM2YTRkNGQ2M2JlNw.jpg";
+            profile = mUserPreference.get().getUserSummary().getPhotoUrl(); //"https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAhNAAAAJDYwZWIyZTg5LWFmOTItNGIwYS05YjQ5LTM2YTRkNGQ2M2JlNw.jpg";
             Glide.with(this)
                     .load(profile)
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
@@ -175,7 +176,7 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
                         @Override
                         public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
 
-                            Bitmap blurred = BlurrImage.blurRenderScript(HomeActivity.this, profileImage, 10);
+                            Bitmap blurred = BlurrImage.blurRenderScript(HomeActivity.this, profileImage, 20);
                             mIvSideDrawerProfileBlurBackground.setImageBitmap(blurred);
                         }
                     });
@@ -214,11 +215,10 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
             mFeedDetail = (FeedDetail) baseResponse;
             int id = view.getId();
             if (id == R.id.tv_community_join) {
-              //  openInviteSearch(mFeedDetail);
+                //  openInviteSearch(mFeedDetail);
                 showCommunityJoinReason(mFeedDetail);
-            }else if(id==R.id.tv_add_invite)
-            {
-                if(null!=mFeedDetail) {
+            } else if (id == R.id.tv_add_invite) {
+                if (null != mFeedDetail) {
                     Fragment fragmentMyCommunityInviteMember = getSupportFragmentManager().findFragmentByTag(MyCommunityInviteMemberFragment.class.getName());
                     if (AppUtils.isFragmentUIActive(fragmentMyCommunityInviteMember)) {
                         ((MyCommunityInviteMemberFragment) fragmentMyCommunityInviteMember).onAddMemberClick(mFeedDetail);
@@ -258,33 +258,33 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
             }
             switch (drawerItem) {
                 case AppConstants.ONE_CONSTANT:
-                    String profile = "https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAhNAAAAJDYwZWIyZTg5LWFmOTItNGIwYS05YjQ5LTM2YTRkNGQ2M2JlNw.jpg";
                     ProfileActicity.navigate(this, view, profile);
                     break;
                 case AppConstants.TWO_CONSTANT:
-                 //   initHomeViewPagerAndTabs();
+                    //   initHomeViewPagerAndTabs();
                     checkForAllOpenFragments();
                     openArticleFragment();
                     break;
                 case AppConstants.THREE_CONSTANT:
-                  //  initHomeViewPagerAndTabs();
+                    //  initHomeViewPagerAndTabs();
                     checkForAllOpenFragments();
                     openJobFragment();
                     break;
                 case AppConstants.FOURTH_CONSTANT:
-                  //  initHomeViewPagerAndTabs();
+                    //  initHomeViewPagerAndTabs();
                     checkForAllOpenFragments();
                     openBookMarkFragment();
                     break;
                 default:
-                 //   checkForAllOpenFragments();
+                    //   checkForAllOpenFragments();
                     openSettingFragment();
             }
         } else if (baseResponse instanceof CommunitySuggestion) {
 
         } else if (baseResponse instanceof CommentReactionDoc) {
             setAllValues(mFragmentOpen);
-            super.clickMenuItem(view, baseResponse, true);
+             /* Comment fragment list  comment menu option edit,delete */
+            super.clickMenuItem(view, baseResponse, AppConstants.ONE_CONSTANT);
         }
     }
 
@@ -467,7 +467,7 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
     }
 
     private void openInviteSearch(FeedDetail feedDetail) {
-        mFragmentOpen=new FragmentOpen();
+        mFragmentOpen = new FragmentOpen();
         mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.FOURTH_CONSTANT);
         mFlHomeFooterList.setVisibility(View.VISIBLE);
         mTvSpinnerIcon.setVisibility(View.GONE);
@@ -580,26 +580,26 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
     @Override
     public void onBackPressed() {
         if (mFragmentOpen.isOpen()) {
-            getSupportFragmentManager().popBackStackImmediate();
             mFragmentOpen.setOpen(false);
+            getSupportFragmentManager().popBackStackImmediate();
         } else if (mFragmentOpen.isCommentList()) {
+            mFragmentOpen.setCommentList(false);
             getSupportFragmentManager().popBackStackImmediate();
             if (mFragmentOpen.isBookmarkFragment()) {
                 Fragment fragment = getSupportFragmentManager().findFragmentByTag(BookmarksFragment.class.getName());
                 if (AppUtils.isFragmentUIActive(fragment)) {
-                    ((BookmarksFragment) fragment).commentListRefresh(mFeedDetail,AppConstants.ONE_CONSTANT);
+                    ((BookmarksFragment) fragment).commentListRefresh(mFeedDetail, AppConstants.ONE_CONSTANT);
                 }
             } else {
                 Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
                 if (AppUtils.isFragmentUIActive(fragment)) {
-                    ((HomeFragment) fragment).commentListRefresh(mFeedDetail,AppConstants.ONE_CONSTANT);
+                    ((HomeFragment) fragment).commentListRefresh(mFeedDetail, AppConstants.ONE_CONSTANT);
                 }
             }
-            mFragmentOpen.setCommentList(false);
         } else if (mFragmentOpen.isReactionList()) {
-            getSupportFragmentManager().popBackStackImmediate();
             mFragmentOpen.setReactionList(false);
             mFragmentOpen.setCommentList(true);
+            getSupportFragmentManager().popBackStackImmediate();
         } else if (mFragmentOpen.isArticleFragment()) {
             getSupportFragmentManager().popBackStackImmediate();
             initHomeViewPagerAndTabs();
@@ -621,11 +621,10 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
             initHomeViewPagerAndTabs();
             setHomeFeedCommunityData();
             mFragmentOpen.setJobFragment(false);
-        } else if(mFragmentOpen.getOpenCommentReactionFragmentFor()==AppConstants.FOURTH_CONSTANT) {
+        } else if (mFragmentOpen.getOpenCommentReactionFragmentFor() == AppConstants.FOURTH_CONSTANT) {
             getSupportFragmentManager().popBackStackImmediate();
             mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.NO_REACTION_CONSTANT);
-        }else
-        {
+        } else {
             finish();
         }
     }
@@ -780,7 +779,6 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
                 startActivity(intent);
 
 
-
                 break;
             case R.id.tv_setting_terms_and_condition:
                 SettingTermsAndConditionFragment settingTermsAndConditionFragment = new SettingTermsAndConditionFragment();
@@ -810,7 +808,6 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
     }
 
 
-
     @Override
     public void startProgressBar() {
 
@@ -825,40 +822,38 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
     public void startNextScreen() {
 
     }
+
     @Override
-    public void onShowErrorDialog(String errorReason,int errorFor) {
-        switch (errorReason)
-        {
+    public void onShowErrorDialog(String errorReason, int errorFor) {
+        switch (errorReason) {
             case AppConstants.CHECK_NETWORK_CONNECTION:
-               showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
+                showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
                 break;
             default:
-                showNetworkTimeoutDoalog(true,false,getString(R.string.ID_GENERIC_ERROR));
+                showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
         }
 
     }
+
     @Override
-    public void showError(String s,int e) {
+    public void showError(String s, int e) {
 
     }
+
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent)
-    {
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        if (requestCode == AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL && null != intent)
-        {
+        if (requestCode == AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL && null != intent) {
             mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.HOME_FRAGMENT);
-            if(mFragmentOpen.isArticleFragment())
-            {
+            if (mFragmentOpen.isArticleFragment()) {
                 Fragment fragmentArticle = getSupportFragmentManager().findFragmentByTag(ArticlesFragment.class.getName());
                 if (AppUtils.isFragmentUIActive(fragmentArticle)) {
-                    ((ArticlesFragment) fragmentArticle).commentListRefresh(mFeedDetail,AppConstants.TWO_CONSTANT);
+                    ((ArticlesFragment) fragmentArticle).commentListRefresh(mFeedDetail, AppConstants.TWO_CONSTANT);
                 }
-            }else
-            {
+            } else {
                 Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
                 if (AppUtils.isFragmentUIActive(fragment)) {
-                    ((HomeFragment) fragment).commentListRefresh(mFeedDetail,AppConstants.TWO_CONSTANT);
+                    ((HomeFragment) fragment).commentListRefresh(mFeedDetail, AppConstants.TWO_CONSTANT);
                 }
             }
 

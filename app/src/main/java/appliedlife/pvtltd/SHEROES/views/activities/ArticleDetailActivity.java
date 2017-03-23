@@ -55,7 +55,7 @@ import butterknife.OnClick;
  * Created by Praveen_Singh on 07-02-2017.
  */
 
-public class ArticleDetailActivity extends BaseActivity implements CommentReactionFragment.HomeActivityIntractionListner,ArticleDetailFragment.ArticleDetailActivityIntractionListner {
+public class ArticleDetailActivity extends BaseActivity implements CommentReactionFragment.HomeActivityIntractionListner, ArticleDetailFragment.ArticleDetailActivityIntractionListner {
     private final String TAG = LogUtils.makeLogTag(ArticleDetailActivity.class);
     @Bind(R.id.app_bar_article_detail)
     AppBarLayout mAppBarLayout;
@@ -68,7 +68,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
     @Bind(R.id.collapsing_toolbar_article_detail)
     public CustomCollapsingToolbarLayout mCollapsingToolbarLayout;
     @Bind(R.id.tv_article_detail_total_views)
-   public TextView mTvArticleDetailTotalViews;
+    public TextView mTvArticleDetailTotalViews;
     @Bind(R.id.tv_article_detail_bookmark)
     TextView mTvArticleDetailBookmark;
     private FeedDetail mFeedDetail;
@@ -107,11 +107,9 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
         mCollapsingToolbarLayout.setExpandedSubTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
         mCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
         if (null != mFeedDetail) {
-            if(mFeedDetail.isBookmarked()) {
+            if (mFeedDetail.isBookmarked()) {
                 mTvArticleDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_active, 0, 0, 0);
-            }
-            else
-            {
+            } else {
                 mTvArticleDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_in_active, 0, 0, 0);
             }
             mCollapsingToolbarLayout.setTitle(mFeedDetail.getNameOrTitle());
@@ -138,6 +136,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
             }
         }
     }
+
     private void initActivityTransitions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Slide transition = new Slide();
@@ -155,7 +154,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
     public void handleOnClick(BaseResponse baseResponse, View view) {
         if (baseResponse instanceof FeedDetail) {
             articleDetailHandled(view, baseResponse);
-        }else if (baseResponse instanceof CommentReactionDoc) {
+        } else if (baseResponse instanceof CommentReactionDoc) {
             clickMenuItem(view, baseResponse, true);
         }
     }
@@ -165,13 +164,13 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
         int id = view.getId();
         switch (id) {
             case R.id.tv_article_detail_user_comment_post_menu:
-                clickMenuItem(view, baseResponse,false);
+                clickMenuItem(view, baseResponse, false);
                 break;
             case R.id.tv_article_detail_user_comment_post_menu_second:
-                clickMenuItem(view, baseResponse,false);
+                clickMenuItem(view, baseResponse, false);
                 break;
             case R.id.tv_article_detail_user_comment_post_menu_third:
-                clickMenuItem(view, baseResponse,false);
+                clickMenuItem(view, baseResponse, false);
                 break;
             case R.id.li_article_detail_join_conversation:
                 mFragmentOpen.setCommentList(true);
@@ -184,31 +183,37 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
                 openCommentReactionFragment(mFeedDetail);
                 break;
             case R.id.tv_article_detail_user_reaction:
-                mArticlePopUp = findViewById(R.id.li_article_detail_emoji_pop_up);
-                if (mArticlePopUp.getVisibility() == View.VISIBLE) {
-                    mArticlePopUp.setVisibility(View.GONE);
-                    dismissUserReactionOption(mArticlePopUp);
-                } else {
-                    mTvFeedArticleDetailUserReaction = (TextView) findViewById(R.id.tv_article_detail_user_reaction);
-                    TextView tvArticleReaction = (TextView) mArticlePopUp.findViewById(R.id.tv_reaction);
-                    TextView tvArticleReaction1 = (TextView) mArticlePopUp.findViewById(R.id.tv_reaction1);
-                    TextView tvArticleReaction2 = (TextView) mArticlePopUp.findViewById(R.id.tv_reaction2);
-                    TextView tvArticleReaction3 = (TextView) mArticlePopUp.findViewById(R.id.tv_reaction3);
-                    TextView tvArticleReaction4 = (TextView) mArticlePopUp.findViewById(R.id.tv_reaction4);
-                    mArticlePopUp.setOnTouchListener(this);
-                    tvArticleReaction.setOnClickListener(this);
-                    tvArticleReaction1.setOnClickListener(this);
-                    tvArticleReaction2.setOnClickListener(this);
-                    tvArticleReaction3.setOnClickListener(this);
-                    tvArticleReaction4.setOnClickListener(this);
-                    mArticlePopUp.setVisibility(View.VISIBLE);
-                    showUserReactionOption(mArticlePopUp);
-                }
+                userReactionDialogLongPress(view);
                 break;
 
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
         }
+    }
+
+    private void userReactionDialogLongPress(View view) {
+        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        popupView = layoutInflater.inflate(R.layout.emoji_reaction_layout, null);
+        popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                popupWindow.dismiss();
+            }
+        });
+        TextView tvCommunityReaction = (TextView) popupView.findViewById(R.id.tv_reaction);
+        TextView tvCommunityReaction1 = (TextView) popupView.findViewById(R.id.tv_reaction1);
+        TextView tvCommunityReaction2 = (TextView) popupView.findViewById(R.id.tv_reaction2);
+        TextView tvCommunityReaction3 = (TextView) popupView.findViewById(R.id.tv_reaction3);
+        TextView tvCommunityReaction4 = (TextView) popupView.findViewById(R.id.tv_reaction4);
+        tvCommunityReaction.setOnClickListener(this);
+        tvCommunityReaction1.setOnClickListener(this);
+        tvCommunityReaction2.setOnClickListener(this);
+        tvCommunityReaction3.setOnClickListener(this);
+        tvCommunityReaction4.setOnClickListener(this);
+        popupWindow.showAsDropDown(view, 0, -250);
+        popupView.setOnTouchListener(this);
     }
 
     protected void openCommentReactionFragment(FeedDetail feedDetail) {
@@ -253,49 +258,27 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
         int id = view.getId();
         switch (id) {
             case R.id.tv_reaction:
-                if (null != mTvFeedArticleDetailUserReaction) {
-                    if (null != mArticlePopUp) {
-                        mArticlePopUp.setVisibility(View.GONE);
-                        dismissUserReactionOption(mArticlePopUp);
-                    }
-                }
                 userCommentLikeRequest(mFeedDetail, AppConstants.HEART_REACTION_CONSTANT, mFeedDetail.getItemPosition());
+                popupWindow.dismiss();
                 break;
             case R.id.tv_reaction1:
-                if (null != mTvFeedArticleDetailUserReaction) {
-                    if (null != mArticlePopUp) {
-                        mArticlePopUp.setVisibility(View.GONE);
-                        dismissUserReactionOption(mArticlePopUp);
-                    }
-                }
                 userCommentLikeRequest(mFeedDetail, AppConstants.EMOJI_FIRST_REACTION_CONSTANT, mFeedDetail.getItemPosition());
+                popupWindow.dismiss();
                 break;
             case R.id.tv_reaction2:
-                if (null != mTvFeedArticleDetailUserReaction) {
-                    if (null != mArticlePopUp) {
-                        mArticlePopUp.setVisibility(View.GONE);
-                        dismissUserReactionOption(mArticlePopUp);
-                    }
-                }
+
                 userCommentLikeRequest(mFeedDetail, AppConstants.EMOJI_SECOND_REACTION_CONSTANT, mFeedDetail.getItemPosition());
+                popupWindow.dismiss();
                 break;
             case R.id.tv_reaction3:
-                if (null != mTvFeedArticleDetailUserReaction) {
-                    if (null != mArticlePopUp) {
-                        mArticlePopUp.setVisibility(View.GONE);
-                        dismissUserReactionOption(mArticlePopUp);
-                    }
-                }
+
                 userCommentLikeRequest(mFeedDetail, AppConstants.EMOJI_THIRD_REACTION_CONSTANT, mFeedDetail.getItemPosition());
+                popupWindow.dismiss();
                 break;
             case R.id.tv_reaction4:
-                if (null != mTvFeedArticleDetailUserReaction) {
-                    if (null != mArticlePopUp) {
-                        mArticlePopUp.setVisibility(View.GONE);
-                        dismissUserReactionOption(mArticlePopUp);
-                    }
-                }
+
                 userCommentLikeRequest(mFeedDetail, AppConstants.EMOJI_FOURTH_REACTION_CONSTANT, mFeedDetail.getItemPosition());
+                popupWindow.dismiss();
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + "  " + TAG + " " + id);
@@ -313,18 +296,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
      */
     @Override
     public boolean onTouch(View view, MotionEvent event) {
-        int id = view.getId();
-        switch (id) {
-            case R.id.li_feed_article_card_emoji_pop_up:
-                if (null != mArticlePopUp) {
-                    mArticlePopUp.setVisibility(View.GONE);
-                    dismissUserReactionOption(mArticlePopUp);
-                }
-                break;
-
-            default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + "  " + TAG + " " + id);
-        }
+        popupWindow.dismiss();
         return true;
     }
 
@@ -375,7 +347,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
         }
     }
 
-    protected void clickMenuItem(View view, final BaseResponse baseResponse,final boolean isCommentReaction) {
+    protected void clickMenuItem(View view, final BaseResponse baseResponse, final boolean isCommentReaction) {
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View popupView = layoutInflater.inflate(R.layout.menu_option_layout, null);
         final PopupWindow popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -452,18 +424,21 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
         tvEdit.setVisibility(View.VISIBLE);
         tvDelete.setVisibility(View.VISIBLE);
     }
+
     @OnClick(R.id.tv_article_detail_bookmark)
     public void onBookMarkClick() {
         mTvArticleDetailBookmark.setEnabled(false);
         mFeedDetail.setItemPosition(AppConstants.NO_REACTION_CONSTANT);
         bookmarkCall();
     }
+
     private void bookmarkCall() {
         Fragment fragment = viewPagerAdapter.getActiveFragment(mViewPagerArticleDetail, 0);
         if (AppUtils.isFragmentUIActive(fragment)) {
             ((ArticleDetailFragment) fragment).bookMarkForCard(mFeedDetail);
         }
     }
+
     @OnClick(R.id.iv_article_detail_back)
     public void onBackClick() {
 
@@ -477,18 +452,19 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
         finish();
         overridePendingTransition(R.anim.fade_in_dialog, R.anim.fade_out_dialog);
     }
+
     @OnClick(R.id.tv_article_detail_share)
     public void shareOnClick() {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
         intent.putExtra(Intent.EXTRA_TEXT, "Testing Text From SHEROES2.0");
         intent.putExtra(Intent.EXTRA_SUBJECT, "Check out this site!");
-        startActivity(Intent.createChooser(intent,AppConstants.SHARE));
+        startActivity(Intent.createChooser(intent, AppConstants.SHARE));
     }
 
     @Override
-    public void onBookmarkClick(FeedDetail feedDetail,int successFrom) {
-        if(successFrom==AppConstants.ONE_CONSTANT) {
+    public void onBookmarkClick(FeedDetail feedDetail, int successFrom) {
+        if (successFrom == AppConstants.ONE_CONSTANT) {
             mTvArticleDetailBookmark.setEnabled(true);
             if (!feedDetail.isBookmarked()) {
                 feedDetail.setBookmarked(true);
@@ -498,6 +474,6 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
                 mTvArticleDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_in_active, 0, 0, 0);
             }
         }
-        mFeedDetail=feedDetail;
+        mFeedDetail = feedDetail;
     }
 }

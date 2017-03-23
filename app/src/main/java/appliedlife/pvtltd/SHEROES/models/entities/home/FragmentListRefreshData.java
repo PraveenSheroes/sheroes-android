@@ -11,7 +11,9 @@ public class FragmentListRefreshData {
     boolean isReactionList;
     long enitityOrParticpantid;
     int swipeToRefresh;
+    public FragmentListRefreshData() {
 
+    }
     public FragmentListRefreshData(int pageNo, String callFromFragment, String idFeedDetail) {
         this.pageNo = pageNo;
         this.callFromFragment = callFromFragment;

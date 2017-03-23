@@ -12,7 +12,7 @@
             android:id="@+id/rv_home_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:divider="@color/fully_transparent"/>
+            android:divider="@color/feed_background"/>
 
     </android.support.v4.widget.SwipeRefreshLayout>
     <ProgressBar

@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/dp_size_5"
-    app:cardElevation="@dimen/dp_size_2">
+    android:layout_marginBottom="@dimen/dp_size_10">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,15 +16,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="@dimen/dp_size_16"
+            android:layout_marginLeft="@dimen/dp_size_16"
+            android:layout_marginTop="@dimen/dp_size_11"
+            android:layout_marginBottom="@dimen/dp_size_11"
+            android:layout_marginRight="@dimen/dp_size_12"
             android:gravity="center"
             android:weightSum="1">
 
             <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
                 android:id="@+id/iv_article_circle_icon"
-                android:layout_width="@dimen/feed_profile_icon_size"
-                android:layout_height="@dimen/feed_profile_icon_size"
-                android:src="@drawable/ic_footer_button_icon" />
+                android:layout_width="@dimen/comment_icon"
+                android:layout_height="@dimen/comment_icon"
+                android:src="@drawable/ic_anonomous" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -40,16 +42,15 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                     android:textColor="@color/feed_article_label"
-                    android:textSize="@dimen/sp_size_12"
-                    android:textStyle="bold" />
+                    android:textSize="@dimen/sp_size_12" />
 
                 <TextView
                     android:id="@+id/tv_article_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_size_3"
+                    android:layout_marginTop="@dimen/dp_size_1"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:textColor="@color/feed_article_label"
+                    android:textColor="@color/button_color"
                     android:textSize="@dimen/sp_size_12" />
             </LinearLayout>
 
@@ -62,6 +63,7 @@
                 android:paddingTop="@dimen/dp_size_12"
                 android:text="@string/ID_TRENDING"
                 android:textAllCaps="true"
+                android:layout_marginRight="@dimen/dp_size_10"
                 android:textColor="@color/dashboard_label"
                 android:textSize="@dimen/sp_size_14"
                 android:textStyle="italic" />
@@ -70,12 +72,11 @@
                 android:id="@+id/tv_article_bookmark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawablePadding="@dimen/dp_size_15"
+                android:drawablePadding="@dimen/dp_size_10"
                 android:drawableRight="@drawable/ic_bookmark_in_active"
                 android:fontFamily="@string/ID_ROBOTO_BOLD"
                 android:paddingBottom="@dimen/dp_size_12"
-                android:layout_marginRight="@dimen/dp_size_10"
-                android:paddingRight="@dimen/dp_size_12"
+                android:paddingRight="@dimen/dp_size_15"
                 android:paddingTop="@dimen/dp_size_12" />
 
 
@@ -100,7 +101,6 @@
             android:id="@+id/li_article_decription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/dp_size_16"
             android:orientation="vertical">
 
             <TextView
@@ -108,10 +108,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                android:layout_marginLeft="@dimen/dp_size_16"
+                android:layout_marginTop="@dimen/dp_size_16"
+                android:layout_marginRight="@dimen/dp_size_16"
                 android:lines="@integer/int_value_for_line_1"
                 android:textColor="@color/dashboard_text"
-                android:textSize="@dimen/sp_size_16"
-                android:textStyle="bold" />
+                android:textSize="@dimen/sp_size_16" />
 
             <TextView
                 android:id="@+id/tv_article_description_text"
@@ -121,6 +123,8 @@
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:lineSpacingExtra="@dimen/dp_size_5"
                 android:lines="@integer/int_value_for_line_2"
+                android:layout_marginLeft="@dimen/dp_size_16"
+                android:layout_marginRight="@dimen/dp_size_16"
                 android:textColor="@color/dashboard_fed_text"
                 android:textSize="@dimen/sp_size_12" />
             <TextView
@@ -128,6 +132,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_size_16"
+                android:layout_marginRight="@dimen/dp_size_16"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:layout_gravity="right"
                 android:background="@color/white"
@@ -141,6 +146,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_size_0.5"
                 android:layout_marginTop="@dimen/dp_size_10"
+                android:layout_marginLeft="@dimen/dp_size_13"
+                android:layout_marginRight="@dimen/dp_size_13"
                 android:background="@color/search_tab_unselected_text" />
 
             <TextView
@@ -149,7 +156,9 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:textColor="@color/feed_article_label"
-                android:layout_marginTop="@dimen/dp_size_11"
+                android:layout_marginTop="@dimen/dp_size_10"
+                android:layout_marginLeft="@dimen/dp_size_16"
+                android:layout_marginBottom="@dimen/dp_size_10"
                 android:textSize="@dimen/sp_size_12" />
 
 

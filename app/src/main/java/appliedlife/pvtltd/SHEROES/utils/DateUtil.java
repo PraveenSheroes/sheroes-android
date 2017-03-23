@@ -1,4 +1,4 @@
-package appliedlife.pvtltd.SHEROES.utils;
+ package appliedlife.pvtltd.SHEROES.utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -63,29 +63,29 @@ public class DateUtil {
         if(day>0) {
             sb.append(day);
             if(day==1) {
-                sb.append("day ");
+                sb.append(AppConstants.DAY);
             } else {
-                sb.append("days ");
+                sb.append(AppConstants.DAY+AppConstants.S);
             }
         }else
         if(hour>0) {
             sb.append(hour);
             if(hour==1) {
-                sb.append("hour ");
+                sb.append(AppConstants.HOUR);
             } else {
-                sb.append("hours ");
+                sb.append(AppConstants.HOUR+AppConstants.S);
             }
         }else
         if(differenceInMinutes>0) {
             sb.append(differenceInMinutes);
             if(differenceInMinutes==1) {
-                sb.append("minute ");
+                sb.append(AppConstants.MINUT);
             } else {
-                sb.append("minutes ");
+                sb.append(AppConstants.MINUT+AppConstants.S);
             }
         }
         if(sb.length()>0) {
-            sb.append("ago");
+            sb.append(AppConstants.AGO);
         }
         return sb.toString();
     }

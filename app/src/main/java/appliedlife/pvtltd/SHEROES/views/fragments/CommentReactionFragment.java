@@ -213,10 +213,12 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
         mRecyclerView.addOnScrollListener(new HidingScrollListener(mCommentReactionPresenter, mRecyclerView, mLayoutManager, mFragmentListRefreshData) {
             @Override
             public void onHide() {
+               // mFlCommentReaction.setVisibility(View.GONE);
             }
 
             @Override
             public void onShow() {
+              //  mFlCommentReaction.setVisibility(View.VISIBLE);
             }
 
             @Override

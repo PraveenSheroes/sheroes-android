@@ -6,14 +6,14 @@
 
     <ImageView
         android:id="@+id/iv_feed_community_post_first"
-        android:layout_width="@dimen/dp_size_180"
-        android:layout_height="@dimen/dp_size_180"
-        android:scaleType="fitXY" />
+        android:layout_width="@dimen/two_image_rectangle"
+        android:layout_height="@dimen/two_image_rectangle"
+        android:scaleType="centerCrop" />
 
     <ImageView
         android:id="@+id/iv_feed_comunity_post_second"
-        android:layout_width="@dimen/dp_size_180"
-        android:layout_height="@dimen/dp_size_180"
+        android:layout_width="@dimen/two_image_rectangle"
+        android:layout_height="@dimen/two_image_rectangle"
         android:layout_marginLeft="@dimen/dp_size_2"
-        android:scaleType="fitXY" />
+        android:scaleType="centerCrop" />
 </LinearLayout>

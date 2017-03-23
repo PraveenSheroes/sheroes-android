@@ -17,7 +17,7 @@
     <string name="ID_ERROR_INVALID_EMAIL">This email address is invalid</string>
     <string name="ID_ERROR_INVALID_PASSWORD">Enter password</string>
     <string name="ID_POSTED_IN">posted in</string>
-    <string name="ID_NEW">New</string>
+    <string name="ID_NEW">NEW</string>
     <!--String related in home page-->
 
     <string name="ID_NAVIGATION_DRAWER_OPEN">Open navigation drawer</string>
@@ -53,6 +53,7 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_DONE">Done</string>
     <string name="ID_CANCEL">Cancel</string>
     <string name="ID_VIEW_MORE">View More</string>
+    <string name="ID_VIEW_MORE_COMMENT">View More comments</string>
     <string name="ID_JOIN">Join</string>
     <string name="ID_REQUESTED">Requested</string>
     <string name="ID_JOINED">Joined</string>
@@ -103,6 +104,8 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_PROFESSIONAL">PROFESSIONAL</string>
     <string name="ID_BOOKMARKS">Bookmarks</string>
     <string name="ID_DAILOG">dialog</string>
+    <string name="ID_TELL_US_ABOUT">Tell Us About</string>
+    <string name="ID_YOURSHELF">Yourself</string>
 
     <!--string set  through priyanka-->
 

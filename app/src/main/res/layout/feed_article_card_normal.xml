@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/article_card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/dp_size_5"
-    app:cardElevation="@dimen/dp_size_2">
+    android:layout_marginBottom="@dimen/dp_size_10">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,7 +24,7 @@
                 android:id="@+id/iv_feed_article_card_circle_icon"
                 android:layout_width="@dimen/feed_profile_icon_size"
                 android:layout_height="@dimen/feed_profile_icon_size"
-                android:src="@drawable/ic_about_me" />
+                android:layout_gravity="top" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -39,10 +37,9 @@
                     android:id="@+id/tv_feed_article_card_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@string/ID_ROBOTO_BOLD"
+                    android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                     android:textColor="@color/footer_icon_text"
-                    android:textSize="@dimen/sp_size_15"
-                    android:textStyle="bold" />
+                    android:textSize="@dimen/sp_size_15" />
 
                 <TextView
                     android:id="@+id/tv_feed_article_title_label"
@@ -58,7 +55,9 @@
                 android:id="@+id/iv_feed_article_menu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="top"
                 android:layout_marginRight="@dimen/dp_size_5"
+                android:layout_marginTop="@dimen/dp_size_13"
                 android:background="@drawable/ic_feed_article_top_left" />
         </LinearLayout>
 
@@ -80,48 +79,37 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_size_16"
             android:layout_marginRight="@dimen/dp_size_16"
-            android:paddingRight="@dimen/dp_size_16"
             android:layout_marginTop="@dimen/dp_size_5"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:lines="@integer/int_value_for_line_2"
             android:lineSpacingExtra="@dimen/dp_size_3"
+            android:lines="@integer/int_value_for_line_2"
+            android:paddingRight="@dimen/dp_size_16"
             android:textColor="@color/feed_article_label"
             android:textSize="@dimen/sp_size_14" />
+
         <TextView
             android:id="@+id/tv_feed_article_view_more"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="right"
             android:layout_marginLeft="@dimen/dp_size_16"
             android:layout_marginRight="@dimen/dp_size_25"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:layout_gravity="right"
-            android:background="@color/white"
-            android:gravity="right"
             android:layout_marginTop="@dimen/dp_size_minus_22"
-            android:textColor="@color/feed_job_card_new"
+            android:background="@color/white"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:gravity="right"
             android:text="@string/ID_VIEW_MORE"
+            android:textColor="@color/feed_job_card_new"
             android:textSize="@dimen/sp_size_14" />
 
-        <FrameLayout
+        <LinearLayout
+            android:id="@+id/li_feed_article_images"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_size_13">
-            <LinearLayout
-                android:id="@+id/li_feed_article_images"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_size_180"
-                android:background="@drawable/ic_image_holder"
-                android:orientation="vertical" />
-            <include
-                android:id="@+id/li_feed_article_card_emoji_pop_up"
-                layout="@layout/emoji_reaction_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|bottom"
-                android:visibility="gone"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            android:layout_height="@dimen/dp_size_180"
+            android:layout_marginTop="@dimen/dp_size_13"
+            android:background="@drawable/ic_image_holder"
+            android:orientation="vertical" />
 
-        </FrameLayout>
 
         <LinearLayout
             android:id="@+id/li_feed_article_user_reactions"
@@ -129,59 +117,57 @@
             android:layout_height="@dimen/dp_size_35"
             android:layout_marginLeft="@dimen/dp_size_6"
             android:layout_marginRight="@dimen/dp_size_6"
-            android:layout_marginTop="@dimen/dp_size_18"
+            android:layout_marginTop="@dimen/dp_size_7"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/tv_feed_article_user_reaction"
                 android:layout_width="@dimen/dp_size_40"
                 android:layout_height="match_parent"
-                android:gravity="center|left"
-                android:drawablePadding="@dimen/dp_size_5"
-                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-                android:textSize="@dimen/sp_size_11"
-                android:paddingLeft="@dimen/dp_size_10"
-                android:drawableLeft="@drawable/ic_heart_in_active" />
+                android:layout_gravity="center"
+                android:drawableLeft="@drawable/ic_heart_in_active"
+                android:paddingLeft="@dimen/dp_size_11" />
+
             <TextView
                 android:id="@+id/tv_feed_article_user_reaction_text"
-                android:layout_width="@dimen/dp_size_70"
+                android:layout_width="@dimen/dp_size_60"
                 android:layout_height="match_parent"
-                android:gravity="center|left"
                 android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-                android:textSize="@dimen/sp_size_11"
-                android:textColor="@color/emoji_text" />
+                android:gravity="center|left"
+                android:textColor="@color/emoji_text"
+                android:textSize="@dimen/sp_size_11" />
 
             <TextView
                 android:id="@+id/tv_feed_article_user_comment"
-                android:layout_width="@dimen/dp_size_50"
+                android:layout_width="@dimen/dp_size_40"
                 android:layout_height="match_parent"
-                android:paddingLeft="@dimen/dp_size_10"
-                android:drawableLeft="@drawable/ic_comment_icon" />
+                android:drawableLeft="@drawable/ic_comment_icon"
+                android:paddingLeft="@dimen/dp_size_10" />
 
             <TextView
                 android:id="@+id/tv_feed_article_user_bookmark"
-                android:layout_width="@dimen/dp_size_50"
+                android:layout_width="@dimen/dp_size_40"
                 android:layout_height="match_parent"
-                android:paddingRight="@dimen/dp_size_20"
-                android:layout_marginLeft="@dimen/dp_size_85"
-                android:drawableRight="@drawable/ic_bookmark_in_active" />
+                android:layout_marginLeft="@dimen/dp_size_100"
+                android:drawableRight="@drawable/ic_bookmark_in_active"
+                android:paddingRight="@dimen/dp_size_20" />
 
             <TextView
                 android:id="@+id/tv_feed_article_user_menu"
                 android:layout_width="@dimen/dp_size_20"
                 android:layout_height="match_parent"
                 android:layout_gravity="right"
-                android:paddingRight="@dimen/dp_size_10"
-                android:layout_marginLeft="@dimen/dp_size_30"
-                android:drawableRight="@drawable/ic_menu_dashboard" />
+                android:layout_marginLeft="@dimen/dp_size_40"
+                android:drawableRight="@drawable/ic_menu_dashboard"
+                android:paddingRight="@dimen/dp_size_10" />
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_size_0.5"
-            android:layout_marginLeft="@dimen/dp_size_12"
-            android:layout_marginRight="@dimen/dp_size_12"
-            android:layout_marginTop="@dimen/dp_size_16"
+            android:layout_marginLeft="@dimen/dp_size_13"
+            android:layout_marginRight="@dimen/dp_size_13"
+            android:layout_marginTop="@dimen/dp_size_7"
             android:background="@color/search_tab_unselected_text" />
 
 
@@ -192,7 +178,8 @@
             android:layout_gravity="right"
             android:layout_marginLeft="@dimen/dp_size_17"
             android:layout_marginRight="@dimen/dp_size_17"
-            android:layout_marginTop="@dimen/dp_size_11">
+            android:layout_marginTop="@dimen/dp_size_10">
+
             <TextView
                 android:id="@+id/tv_feed_article_reaction1"
                 android:layout_width="wrap_content"
@@ -219,19 +206,19 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:layout_marginLeft="@dimen/dp_size_15"
-                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:gravity="right"
-               android:visibility="gone"
                 android:textColor="@color/feed_article_comment"
-                android:textSize="@dimen/sp_size_12" />
+                android:textSize="@dimen/sp_size_12"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/tv_feed_article_total_reactions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:layout_marginRight="@dimen/dp_size_74"
+                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:gravity="center"
                 android:textColor="@color/feed_article_comment"
                 android:textSize="@dimen/sp_size_12" />
@@ -244,16 +231,15 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_size_16"
             android:layout_marginRight="@dimen/dp_size_10"
-            android:visibility="gone"
             android:layout_marginTop="@dimen/dp_size_20"
             android:orientation="horizontal"
+            android:visibility="gone"
             android:weightSum="@integer/int_value_for_line_1">
 
             <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
                 android:id="@+id/iv_feed_article_user_pic"
-                android:layout_width="@dimen/dp_size_27"
-                android:layout_height="@dimen/dp_size_28"
-                android:layout_margin="@dimen/dp_size_8"
+                android:layout_width="@dimen/comment_icon"
+                android:layout_height="@dimen/comment_icon"
                 android:src="@drawable/ic_footer_button_icon" />
 
             <TextView
@@ -262,10 +248,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="@integer/int_value_for_line_1"
-                android:lines="@integer/int_value_for_line_2"
-                android:gravity="center|left"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:gravity="center|left"
                 android:lineSpacingExtra="@dimen/dp_size_3"
+                android:lines="@integer/int_value_for_line_2"
                 android:textColor="@color/feed_conversation"
                 android:textSize="@dimen/sp_size_12" />
 
@@ -274,36 +260,37 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="right"
+                android:drawableRight="@drawable/ic_menu_dashboard"
                 android:paddingLeft="@dimen/dp_size_10"
-                android:visibility="gone"
                 android:paddingRight="@dimen/dp_size_10"
-                android:drawableRight="@drawable/ic_menu_dashboard" />
-               </LinearLayout>
+                android:visibility="gone" />
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/li_feed_article_join_conversation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_size_15"
-            android:layout_marginRight="@dimen/dp_size_18"
-            android:layout_marginTop="@dimen/dp_size_10"
             android:layout_marginBottom="@dimen/dp_size_12"
+            android:layout_marginLeft="@dimen/dp_size_16"
+            android:layout_marginRight="@dimen/dp_size_16"
+            android:layout_marginTop="@dimen/dp_size_10"
             android:background="@drawable/rectangle_comment_background"
             android:weightSum="1">
 
             <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
                 android:id="@+id/iv_feed_article_register_user_pic"
-                android:layout_width="@dimen/dp_size_27"
-                android:layout_height="@dimen/dp_size_28"
-                android:layout_margin="@dimen/dp_size_8"
-                android:src="@drawable/ic_about_me" />
+                android:layout_width="@dimen/comment_icon"
+                android:layout_height="@dimen/comment_icon"
+                android:layout_marginBottom="@dimen/dp_size_4"
+                android:layout_marginLeft="@dimen/dp_size_4"
+                android:layout_marginTop="@dimen/dp_size_4" />
 
             <TextView
                 android:id="@+id/tv_feed_article_register_user_comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginLeft="@dimen/dp_size_12"
+                android:layout_marginLeft="@dimen/dp_size_10"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:text="@string/ID_JOIN_CONVERSATION"
                 android:textColor="@color/feed_conversation"

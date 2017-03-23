@@ -53,7 +53,6 @@ public class LoginActivity extends BaseActivity implements LoginFragment.LoginAc
 
     @Override
     public void onErrorOccurence(String errorMessage) {
-         mIsSavedInstance=false;
         if(!StringUtil.isNotNullOrEmptyString(errorMessage))
         {
             errorMessage = getString(R.string.ID_GENERIC_ERROR);

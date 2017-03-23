@@ -10,54 +10,48 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginLeft="@dimen/dp_size_12"
-        android:layout_marginRight="@dimen/dp_size_20"
-        android:layout_marginTop="@dimen/dp_size_9"
+        android:layout_margin="@dimen/dp_size_10"
         android:weightSum="1">
 
         <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
             android:id="@+id/iv_reaction_profile_pic"
-            android:layout_width="@dimen/dp_size_30"
-            android:layout_height="@dimen/dp_size_30"
+            android:layout_width="@dimen/comment_icon"
+            android:layout_height="@dimen/comment_icon"
             android:layout_gravity="center"
-            android:gravity="center"
-            android:src="@drawable/ic_footer_button_icon" />
+            android:gravity="center" />
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_marginLeft="@dimen/dp_size_13"
+            android:layout_gravity="center"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tv_user_name"
+                android:id="@+id/tv_user_name_reaction"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-                android:paddingLeft="@dimen/dp_size_10"
+                android:layout_marginLeft="@dimen/dp_size_10"
                 android:layout_marginTop="@dimen/dp_size_5"
                 android:textColor="@color/detail_page_text"
-                android:textSize="@dimen/sp_size_13"
-                android:textStyle="bold" />
+                android:textSize="@dimen/sp_size_13" />
 
             <TextView
                 android:id="@+id/tv_user_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                android:paddingLeft="@dimen/dp_size_10"
-                android:visibility="gone"
+                android:layout_marginLeft="@dimen/dp_size_10"
                 android:textColor="@color/searchbox_text_color"
-                android:textSize="@dimen/sp_size_12"
-                android:textStyle="bold" />
+                android:textSize="@dimen/sp_size_12"/>
 
         </LinearLayout>
         <ImageView
             android:id="@+id/iv_user_reaction_emoji"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_emoji3_whistel"
+            android:layout_marginRight="@dimen/dp_size_10"
             android:layout_gravity="center|right"
            />
     </LinearLayout>
@@ -65,7 +59,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_size_0.1"
-        android:layout_marginLeft="@dimen/dp_size_10"
+        android:layout_marginLeft="@dimen/dp_size_50"
         android:layout_marginRight="@dimen/dp_size_10"
         android:background="@color/line_color" />
 

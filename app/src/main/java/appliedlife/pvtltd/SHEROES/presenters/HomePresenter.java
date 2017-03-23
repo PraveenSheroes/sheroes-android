@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.presenters;
 
 
 import com.f2prateek.rx.preferences.Preference;
+import com.google.gson.Gson;
 
 import java.util.List;
 
@@ -108,12 +109,14 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
             @Override
             public void onError(Throwable e) {
+                LogUtils.info(TAG,"*******************"+e.getMessage());
                 getMvpView().stopProgressBar();
                 getMvpView().showError(e.getMessage(),AppConstants.ONE_CONSTANT);
             }
 
             @Override
             public void onNext(FeedResponsePojo feedResponsePojo) {
+                LogUtils.info(TAG,"*******************"+new Gson().toJson(feedResponsePojo));
                 getMvpView().stopProgressBar();
                 if(null!=feedRequestPojo&& StringUtil.isNotEmptyCollection(feedResponsePojo.getFeaturedDocs())&&feedResponsePojo.getFeaturedDocs().size()>AppConstants.ONE_CONSTANT)
                 {

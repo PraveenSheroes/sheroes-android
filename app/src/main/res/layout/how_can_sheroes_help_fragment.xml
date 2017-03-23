@@ -1,109 +1,12 @@
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/al_community_open_about"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
-        <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/cl_community_open_about"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_size_200"
-            app:contentScrim="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
-
-            <ImageView
-                android:id="@+id/iv_community_cover_img"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_size_200"
-                android:background="@drawable/community"
-                android:fitsSystemWindows="true"
-
-                android:scaleType="centerCrop"
-                app:layout_collapseMode="parallax" />
-
-            <TextView
-                android:layout_width="@dimen/dp_size_150"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal|center_vertical"
-                android:gravity="center"
-                android:text="How can SHEROES help you?"
-                android:textColor="@color/white"
-                android:textSize="@dimen/sp_size_16" />
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@color/white"
-                app:layout_collapseMode="pin">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/tv_about_community_back"
-
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:layout_marginTop="@dimen/dp_size_10"
-                        android:fontFamily="@string/ID_ROBOTO_LIGHT"
-                        android:paddingBottom="@dimen/dp_size_1"
-                        android:paddingRight="@dimen/dp_size_10"
-                        android:paddingTop="@dimen/dp_size_1"
-                        android:textColor="@color/text_color_about"
-                        android:textSize="@dimen/sp_size_24" />
-                </RelativeLayout>
-            </android.support.v7.widget.Toolbar>
-
-        </android.support.design.widget.CollapsingToolbarLayout>
-
-    </android.support.design.widget.AppBarLayout>
-
-    <android.support.v4.widget.NestedScrollView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_how_can_sheroes_help_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#ffe5e5e5"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:divider="@color/fully_transparent" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:paddingTop="@dimen/dp_size_4">
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-
-                android:layout_marginTop="@dimen/dp_size_30">
-
-            </FrameLayout>
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginTop="@dimen/dp_size_12">
-
-            </FrameLayout>
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_how_can_sheroes_help_list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/dp_size_17"
-                android:divider="@color/fully_transparent" />
-
-        </LinearLayout>
-
-
-    </android.support.v4.widget.NestedScrollView>
-
-</android.support.design.widget.CoordinatorLayout>
+</FrameLayout>

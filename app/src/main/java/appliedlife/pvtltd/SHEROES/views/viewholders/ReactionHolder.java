@@ -27,7 +27,7 @@ public class ReactionHolder  extends BaseViewHolder<CommentReactionDoc> {
     LinearLayout liReaction;
     @Bind(R.id.iv_reaction_profile_pic)
     CircleImageView ivReactionProfilePic;
-    @Bind(R.id.tv_user_name)
+    @Bind(R.id.tv_user_name_reaction)
     TextView tvUserName;
     @Bind(R.id.tv_user_location)
     TextView tvUserLoaction;

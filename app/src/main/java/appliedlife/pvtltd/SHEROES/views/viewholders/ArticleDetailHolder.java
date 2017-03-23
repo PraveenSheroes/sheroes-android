@@ -50,6 +50,8 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
     DateUtil mDateUtil;
     @Bind(R.id.iv_article_detail_card_circle_icon)
     CircleImageView ivArticleDetailCardCircleIcon;
+    @Bind(R.id.tv_article_detail_header)
+    TextView tvArticleDetailHeader;
     @Bind(R.id.tv_article_detail_reaction1)
     TextView tvFeedArticleDetailReaction1;
     @Bind(R.id.tv_article_detail_reaction2)
@@ -82,8 +84,6 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
     CircleImageView ivArticleDetailRegisterUserPic;
     @Bind(R.id.iv_article_detail_user_pic)
     CircleImageView ivArticleDetailUserPic;
-    @Bind(R.id.li_article_detail_emoji_pop_up)
-    LinearLayout liArticleDetailEmojiPopUp;
     @Bind(R.id.tv_article_detail_view_more)
     TextView tvArticleDetailViewMore;
     @Bind(R.id.tv_article_detail_user_comment_post_menu)
@@ -129,6 +129,7 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
         this.mContext = context;
         mFeedDetail = dataItem.getFeedDetail();
         tvArticleDetailUserReaction.setEnabled(true);
+        tvArticleDetailUserReactionText.setEnabled(true);
         if (null != mFeedDetail) {
             imageOperations(context);
             allTextViewStringOperations(context);
@@ -158,6 +159,9 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void allTextViewStringOperations(Context context) {
+        if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getNameOrTitle())) {
+            tvArticleDetailHeader.setText(mFeedDetail.getNameOrTitle());
+        }
         if (StringUtil.isNotEmptyCollection(mFeedDetail.getTags())) {
             List<String> tags = mFeedDetail.getTags();
             String mergeTags = AppConstants.EMPTY_STRING;
@@ -193,6 +197,14 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
         if (mFeedDetail.getNoOfLikes() < AppConstants.ONE_CONSTANT && mFeedDetail.getNoOfComments() < AppConstants.ONE_CONSTANT) {
             tvArticleDetailUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
             flArticleDetailNoReactionComment.setVisibility(View.GONE);
+        }
+        if(mFeedDetail.getNoOfComments()>AppConstants.THREE_CONSTANT)
+        {
+            tvArticleDetailViewMore.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            tvArticleDetailViewMore.setVisibility(View.GONE);
         }
         tvFeedArticleDetailReaction1.setVisibility(View.VISIBLE);
         tvFeedArticleDetailReaction2.setVisibility(View.VISIBLE);
@@ -396,15 +408,33 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
 
     @OnLongClick(R.id.tv_article_detail_user_reaction)
     public boolean userReactionLongClick() {
-        tvArticleDetailUserReaction.setEnabled(false);
+        userReactionLongPress();
+        return true;
+    }
+    @OnLongClick(R.id.tv_feed_article_detail_reaction_text)
+    public boolean userReactionLongByTextClick() {
+        userReactionLongPress();
+        return true;
+    }
+    private void userReactionLongPress()
+    {
         mFeedDetail.setItemPosition(getAdapterPosition());
         mFeedDetail.setLongPress(true);
         viewInterface.handleOnClick(mFeedDetail, tvArticleDetailUserReaction);
-        return true;
     }
-
     @OnClick(R.id.tv_article_detail_user_reaction)
     public void userReactionClick() {
+        userReactionWithoutLong();
+    }
+    @OnClick(R.id.tv_feed_article_detail_reaction_text)
+    public void userReactionByTextClick() {
+        userReactionWithoutLong();
+    }
+
+    private void userReactionWithoutLong()
+    {
+        tvArticleDetailUserReaction.setEnabled(false);
+        tvArticleDetailUserReactionText.setEnabled(false);
         mFeedDetail.setLongPress(false);
         mFeedDetail.setItemPosition(getAdapterPosition());
         if (mFeedDetail.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
@@ -412,11 +442,7 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
         } else {
             viewInterface.userCommentLikeRequest(mFeedDetail, AppConstants.HEART_REACTION_CONSTANT, getAdapterPosition());
         }
-        if (liArticleDetailEmojiPopUp.getVisibility() == View.VISIBLE) {
-            viewInterface.handleOnClick(mFeedDetail, tvArticleDetailUserReaction);
-        }
     }
-
     @OnClick(R.id.tv_article_detail_user_comment)
     public void userCommentClick() {
         mFeedDetail.setItemPosition(getAdapterPosition());

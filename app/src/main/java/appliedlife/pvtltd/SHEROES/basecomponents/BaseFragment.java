@@ -194,7 +194,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                 ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setAddDuration(AppConstants.NO_REACTION_CONSTANT);
             }
             if (!mPullRefreshList.isPullToRefresh()) {
-                mLayoutManager.scrollToPosition(mPullRefreshList.getFeedResponses().size() - feedDetailList.size());
+                mLayoutManager.scrollToPosition(mPullRefreshList.getFeedResponses().size() - feedDetailList.size()-1);
             } else {
                 mLayoutManager.scrollToPositionWithOffset(0, 0);
             }
@@ -265,9 +265,10 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                     }
                     if (mFragmentOpen.isBookmarkFragment()) {
                         mAdapter.removeDataOnPosition(mFeedDetail, mFeedDetail.getItemPosition());
-
+                        mAdapter.notifyDataSetChanged();
+                    }else {
+                        mAdapter.notifyItemChanged(mFeedDetail.getItemPosition(), mFeedDetail);
                     }
-                    mAdapter.notifyItemChanged(mFeedDetail.getItemPosition());
                     if (mRecyclerView.getItemAnimator() instanceof SimpleItemAnimator) {
                         ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
                         ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setAddDuration(AppConstants.NO_REACTION_CONSTANT);
@@ -306,7 +307,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                             mFeedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
                         }
                     }
-                    mAdapter.notifyItemChanged(mFeedDetail.getItemPosition());
+                    mAdapter.notifyItemChanged(mFeedDetail.getItemPosition(), mFeedDetail);
                     if (mRecyclerView.getItemAnimator() instanceof SimpleItemAnimator) {
                         ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
                         ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setAddDuration(AppConstants.NO_REACTION_CONSTANT);

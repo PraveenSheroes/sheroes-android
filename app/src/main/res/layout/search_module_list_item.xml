@@ -11,7 +11,7 @@
         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
         android:textSize="@dimen/sp_size_13"
         android:paddingLeft="@dimen/dp_size_10"
-        android:paddingTop="@dimen/dp_size_20"
+        android:layout_marginTop="@dimen/dp_size_8"
         android:drawablePadding="@dimen/dp_size_10"
         android:drawableLeft="@drawable/ic_search_group_icon"/>
 

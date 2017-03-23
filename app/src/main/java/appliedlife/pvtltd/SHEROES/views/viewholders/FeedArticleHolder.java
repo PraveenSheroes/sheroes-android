@@ -64,8 +64,6 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     LinearLayout liFeedArticleUserComments;
     @Bind(R.id.li_feed_article_join_conversation)
     LinearLayout liFeedArticleJoinConversation;
-    @Bind(R.id.li_feed_article_card_emoji_pop_up)
-    LinearLayout liFeedArticlCardEmojiPopUp;
     @Bind(R.id.iv_feed_article_card_circle_icon)
     CircleImageView ivFeedArticleCircleIcon;
     @Bind(R.id.iv_feed_article_user_pic)
@@ -131,6 +129,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         this.mContext = context;
         tvFeedArticleUserBookmark.setEnabled(true);
         tvFeedArticleUserReaction.setEnabled(true);
+        tvFeedArticleUserReactionText.setEnabled(true);
         dataItem.setItemPosition(position);
         allTextViewStringOperations(context);
         if (!dataItem.isTrending()) {
@@ -405,7 +404,17 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_feed_article_user_reaction)
     public void userReactionClick() {
+        userReactionWithOutLongPress();
+    }
+    @OnClick(R.id.tv_feed_article_user_reaction_text)
+    public void userReactionByText()
+    {
+        userReactionWithOutLongPress();
+    }
+   private void userReactionWithOutLongPress()
+    {
         dataItem.setTrending(true);
+        tvFeedArticleUserReactionText.setEnabled(false);
         tvFeedArticleUserReaction.setEnabled(false);
         dataItem.setLongPress(false);
         if (dataItem.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
@@ -413,21 +422,26 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         } else {
             viewInterface.userCommentLikeRequest(dataItem, AppConstants.HEART_REACTION_CONSTANT, getAdapterPosition());
         }
-        if (liFeedArticlCardEmojiPopUp.getVisibility() == View.VISIBLE) {
-            viewInterface.handleOnClick(dataItem, tvFeedArticleUserReaction);
-        }
     }
-
     @OnLongClick(R.id.tv_feed_article_user_reaction)
     public boolean userReactionLongClick() {
+        userReactionLongPress();
+        return true;
+    }
+    @OnLongClick(R.id.tv_feed_article_user_reaction_text)
+    public boolean userReactionLongPressByText()
+    {
+        userReactionLongPress();
+        return true;
+    }
+    private void userReactionLongPress()
+    {
         dataItem.setTrending(true);
         Vibrator vibe = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
         vibe.vibrate(100);
         dataItem.setLongPress(true);
         viewInterface.handleOnClick(dataItem, tvFeedArticleUserReaction);
-        return true;
     }
-
     @OnClick(R.id.tv_feed_article_header_lebel)
     public void viewMoreClick() {
         viewInterface.handleOnClick(dataItem, liFeedArticleImages);

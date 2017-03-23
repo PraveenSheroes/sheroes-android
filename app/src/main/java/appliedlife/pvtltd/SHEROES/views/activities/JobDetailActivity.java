@@ -18,7 +18,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.transition.Slide;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -55,7 +54,7 @@ import butterknife.OnClick;
  */
 
 public class JobDetailActivity extends BaseActivity implements CommentReactionFragment.HomeActivityIntractionListner,JobDetailFragment.JobDetailActivityIntractionListner {
-    private final String TAG = LogUtils.makeLogTag(ArticleDetailActivity.class);
+    private final String TAG = LogUtils.makeLogTag(JobDetailActivity.class);
     @Bind(R.id.app_bar_article_detail)
     AppBarLayout mAppBarLayout;
     @Bind(R.id.iv_job_detail)
@@ -175,10 +174,10 @@ public class JobDetailActivity extends BaseActivity implements CommentReactionFr
             }
             else
             {
-                ivJobDetail.setImageDrawable(getResources().getDrawable(R.drawable.job_default_cover));
+                ivJobDetail.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.job_default_cover));
                 mTv_job_title.setText(mFeedDetail.getNameOrTitle());
                 if(mlogoflag==0)
-                mIv_job_comp_logo.setImageDrawable(getResources().getDrawable(R.drawable.appicon));
+                mIv_job_comp_logo.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.appicon));
                 supportStartPostponedEnterTransition();
             }
         }
@@ -240,28 +239,6 @@ public class JobDetailActivity extends BaseActivity implements CommentReactionFr
             case R.id.tv_article_detail_total_replies:
                 openCommentReactionFragment();
                 break;
-            case R.id.tv_article_detail_user_reaction:
-                mArticlePopUp = findViewById(R.id.li_article_detail_emoji_pop_up);
-                if (mArticlePopUp.getVisibility() == View.VISIBLE) {
-                    mArticlePopUp.setVisibility(View.GONE);
-                    dismissUserReactionOption(mArticlePopUp);
-                } else {
-                    mTvFeedArticleDetailUserReaction = (TextView) findViewById(R.id.tv_article_detail_user_reaction);
-                    TextView tvArticleReaction = (TextView) mArticlePopUp.findViewById(R.id.tv_reaction);
-                    TextView tvArticleReaction1 = (TextView) mArticlePopUp.findViewById(R.id.tv_reaction1);
-                    TextView tvArticleReaction2 = (TextView) mArticlePopUp.findViewById(R.id.tv_reaction2);
-                    TextView tvArticleReaction3 = (TextView) mArticlePopUp.findViewById(R.id.tv_reaction3);
-                    TextView tvArticleReaction4 = (TextView) mArticlePopUp.findViewById(R.id.tv_reaction4);
-                    mArticlePopUp.setOnTouchListener(this);
-                    tvArticleReaction.setOnClickListener(this);
-                    tvArticleReaction1.setOnClickListener(this);
-                    tvArticleReaction2.setOnClickListener(this);
-                    tvArticleReaction3.setOnClickListener(this);
-                    tvArticleReaction4.setOnClickListener(this);
-                    mArticlePopUp.setVisibility(View.VISIBLE);
-                    showUserReactionOption(mArticlePopUp);
-                }
-                break;
 
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
@@ -312,95 +289,6 @@ public class JobDetailActivity extends BaseActivity implements CommentReactionFr
         return null;
     }
 
-    /**
-     * Called when a view has been clicked.
-     *
-     * @param view The view that was clicked.
-     */
-    @Override
-    public void onClick(View view) {
-        int id = view.getId();
-        switch (id) {
-            case R.id.tv_reaction:
-                if (null != mTvFeedArticleDetailUserReaction) {
-                    mTvFeedArticleDetailUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_heart_active), null, null, null);
-                    if (null != mArticlePopUp) {
-                        mArticlePopUp.setVisibility(View.GONE);
-                        dismissUserReactionOption(mArticlePopUp);
-                    }
-                }
-
-                break;
-            case R.id.tv_reaction1:
-                if (null != mTvFeedArticleDetailUserReaction) {
-                    mTvFeedArticleDetailUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji3_whistel), null, null, null);
-                    if (null != mArticlePopUp) {
-                        mArticlePopUp.setVisibility(View.GONE);
-                        dismissUserReactionOption(mArticlePopUp);
-                    }
-                }
-
-                break;
-            case R.id.tv_reaction2:
-                if (null != mTvFeedArticleDetailUserReaction) {
-                    mTvFeedArticleDetailUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji_xo_xo), null, null, null);
-                    if (null != mArticlePopUp) {
-                        mArticlePopUp.setVisibility(View.GONE);
-                        dismissUserReactionOption(mArticlePopUp);
-                    }
-                }
-
-                break;
-            case R.id.tv_reaction3:
-                if (null != mTvFeedArticleDetailUserReaction) {
-                    mTvFeedArticleDetailUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji2_with_you), null, null, null);
-                    if (null != mArticlePopUp) {
-                        mArticlePopUp.setVisibility(View.GONE);
-                        dismissUserReactionOption(mArticlePopUp);
-                    }
-                }
-
-                break;
-            case R.id.tv_reaction4:
-                if (null != mTvFeedArticleDetailUserReaction) {
-                    mTvFeedArticleDetailUserReaction.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_emoji4_face_palm), null, null, null);
-                    if (null != mArticlePopUp) {
-                        mArticlePopUp.setVisibility(View.GONE);
-                        dismissUserReactionOption(mArticlePopUp);
-                    }
-                }
-
-                break;
-            default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + "  " + TAG + " " + id);
-        }
-    }
-
-    /**
-     * Called when a touch event is dispatched to a view. This allows listeners to
-     * get a chance to respond before the target view.
-     *
-     * @param view  The view the touch event has been dispatched to.
-     * @param event The MotionEvent object containing full information about
-     *              the event.
-     * @return True if the listener has consumed the event, false otherwise.
-     */
-    @Override
-    public boolean onTouch(View view, MotionEvent event) {
-        int id = view.getId();
-        switch (id) {
-            case R.id.li_feed_article_card_emoji_pop_up:
-                if (null != mArticlePopUp) {
-                    mArticlePopUp.setVisibility(View.GONE);
-                    dismissUserReactionOption(mArticlePopUp);
-                }
-                break;
-
-            default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + "  " + TAG + " " + id);
-        }
-        return true;
-    }
 
     @Override
     public void onErrorOccurence() {

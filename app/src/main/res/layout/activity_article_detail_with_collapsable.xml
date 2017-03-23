@@ -82,8 +82,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="left|top"
                     android:layout_marginRight="@dimen/dp_size_25"
-                    android:background="@drawable/ic_back_white"
-                    android:padding="@dimen/dp_size_10" />
+                    android:background="@drawable/ic_back_white" />
 
                 <TextView
                     android:id="@+id/tv_article_detail_share"
@@ -91,6 +90,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:drawableLeft="@drawable/ic_share_icon"
+                    app:cardElevation="@dimen/dp_size_10"
                     android:drawablePadding="@dimen/dp_size_10"
                     android:paddingBottom="@dimen/dp_size_10"
                     android:paddingTop="@dimen/dp_size_5" />
@@ -103,6 +103,7 @@
                     android:drawableLeft="@drawable/ic_bookmark_in_active"
                     android:drawablePadding="@dimen/dp_size_10"
                     android:paddingBottom="@dimen/dp_size_10"
+                    app:cardElevation="@dimen/dp_size_10"
                     android:paddingLeft="@dimen/dp_size_10"
                     android:paddingRight="@dimen/dp_size_18"
                     android:paddingTop="@dimen/dp_size_5" />

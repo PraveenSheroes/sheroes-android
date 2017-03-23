@@ -142,20 +142,24 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
     }
 
     private void imageOperations(Context context) {
-        String authorImageUrl = dataItem.getAuthorImageUrl();
+       // dataItem.setAuthorImageUrl("https://img.sheroes.in/img/uploads/forumbloggallary/14845475641484547564.png");
+        String authorImageUrl = dataItem.getThumbnailImageUrl();
         if (StringUtil.isNotNullOrEmptyString(authorImageUrl)) {
 
             ivCommunityCircleIcon.setCircularImage(true);
             ivCommunityCircleIcon.bindImage(authorImageUrl);
         }
+      //  dataItem.setImageUrl("https://img.sheroes.in/img/uploads/forumbloggallary/14845475641484547564.png");
         String imageUrl = dataItem.getImageUrl();
         if (StringUtil.isNotNullOrEmptyString(imageUrl)) {
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View backgroundImage = layoutInflater.inflate(R.layout.feed_article_single_image, null);
             final ImageView ivFirstLandscape = (ImageView) backgroundImage.findViewById(R.id.iv_feed_article_single_image);
-            final TextView tvTotalViews = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_total_views);
+            final TextView tvTotalMember = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_total_views);
+            final TextView time = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_time_label);
+            time.setVisibility(View.INVISIBLE);
             final RelativeLayout rlFeedArticleViews = (RelativeLayout) backgroundImage.findViewById(R.id.rl_gradiant);
-            //   tvFeedArticleTotalViews.setText(dataItem.getTotalViews() + AppConstants.SPACE + context.getString(R.string.ID_VIEWS));
+            tvTotalMember.setText(2 + AppConstants.SPACE + context.getString(R.string.ID_MEMBERS));
             Glide.with(mContext)
                     .load(imageUrl).asBitmap()
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)

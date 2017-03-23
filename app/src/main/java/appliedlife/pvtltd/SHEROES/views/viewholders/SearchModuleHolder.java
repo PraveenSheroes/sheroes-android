@@ -54,6 +54,7 @@ public class SearchModuleHolder extends BaseViewHolder<FeedDetail> {
                     break;
                 case AppConstants.FEED_COMMUNITY:
                     mTvHeaderText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search_group_icon, 0, 0, 0);
+                    mTvHeaderText.setText(item.getNameOrTitle());
                     mTvLabelText.setText(item.getCommunityType());
                     mTvLabelText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_lock, 0);
                     rlSearchModuleList.setTag(AppConstants.FEED_COMMUNITY);

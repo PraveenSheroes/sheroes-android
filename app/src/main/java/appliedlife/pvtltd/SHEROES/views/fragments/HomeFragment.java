@@ -9,8 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
@@ -79,6 +77,7 @@ public class HomeFragment extends BaseFragment {
     private int mPageNo = AppConstants.ONE_CONSTANT;
     @Bind(R.id.progress_bar_first_load)
     ProgressBar mProgressBarFirstLoad;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -91,9 +90,8 @@ public class HomeFragment extends BaseFragment {
 
         ButterKnife.bind(this, view);
         Bundle bundle = getArguments();
-        if (bundle != null)
-        {
-           mFeedDetail= bundle.getParcelable(AppConstants.HOME_FRAGMENT);
+        if (bundle != null) {
+            mFeedDetail = bundle.getParcelable(AppConstants.HOME_FRAGMENT);
         }
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.HOME_FRAGMENT, AppConstants.EMPTY_STRING);
         mPullRefreshList = new SwipPullRefreshList();
@@ -121,23 +119,8 @@ public class HomeFragment extends BaseFragment {
 
             @Override
             public void dismissReactions() {
-                if (null != ((HomeActivity) getActivity()).mArticlePopUp) {
-                    ((HomeActivity) getActivity()).mArticlePopUp.setVisibility(View.GONE);
-                    Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_out);
-                    ((HomeActivity) getActivity()).mArticlePopUp.clearAnimation();
-                    animation.setFillAfter(false);
-                }
-                if (null != ((HomeActivity) getActivity()).mCommunityPopUp) {
-                    ((HomeActivity) getActivity()).mCommunityPopUp.setVisibility(View.GONE);
-                    Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_out);
-                    ((HomeActivity) getActivity()).mCommunityPopUp.clearAnimation();
-                    animation.setFillAfter(false);
-                }
-                if (null != ((HomeActivity) getActivity()).mCommunityPostPopUp) {
-                    ((HomeActivity) getActivity()).mCommunityPostPopUp.setVisibility(View.GONE);
-                    Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_out);
-                    ((HomeActivity) getActivity()).mCommunityPostPopUp.clearAnimation();
-                    animation.setFillAfter(false);
+                if (null != ((HomeActivity) getActivity()).popupWindow) {
+                    ((HomeActivity) getActivity()).popupWindow.dismiss();
                 }
             }
         });
@@ -161,10 +144,10 @@ public class HomeFragment extends BaseFragment {
                 setListLoadFlag(false);
                 mPullRefreshList.setPullToRefresh(true);
                 mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
-                mPullRefreshList=new SwipPullRefreshList();
+                mPullRefreshList = new SwipPullRefreshList();
                 setRefreshList(mPullRefreshList);
                 mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
-                mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE,  mFragmentListRefreshData.getPageNo()));
+                mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
             }
         });
         return view;
@@ -188,12 +171,14 @@ public class HomeFragment extends BaseFragment {
         super.getFeedListSuccess(feedDetailList);
 
     }
+
     @Override
     public void getSuccessForAllResponse(String success, int successFrom) {
         super.getSuccessForAllResponse(success, successFrom);
     }
-    public void commentListRefresh(FeedDetail feedDetail,int callFrom) {
-        super.commentListRefresh(feedDetail,callFrom);
+
+    public void commentListRefresh(FeedDetail feedDetail, int callFrom) {
+        super.commentListRefresh(feedDetail, callFrom);
     }
 
     public void bookMarkForCard(FeedDetail feedDetail) {
@@ -224,10 +209,10 @@ public class HomeFragment extends BaseFragment {
             mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
         }
     }
+
     @OnClick(R.id.tv_no_result_try_again)
-    public void onClickTryAgainOnError()
-    {
+    public void onClickTryAgainOnError() {
         mLiNoResult.setVisibility(View.GONE);
-        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE,  mFragmentListRefreshData.getPageNo()));
+        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
     }
 }

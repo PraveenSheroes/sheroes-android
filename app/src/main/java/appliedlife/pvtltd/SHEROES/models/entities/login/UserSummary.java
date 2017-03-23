@@ -5,6 +5,9 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
+
 /**
  * Created by Praveen Singh on 29/12/2016.
  *
@@ -33,6 +36,22 @@ public class UserSummary implements Parcelable {
     @SerializedName("photo_url")
     @Expose
     private String photoUrl;
+
+    @SerializedName("user_details")
+    @Expose
+    private  UserBO userBO;
+
+    @SerializedName("educations")
+    @Expose
+    private  List<EducationEntityBO> educationBO;
+
+    @SerializedName("experiences")
+    @Expose
+    private  List<ExprienceEntityBO> exprienceBO;
+
+    @SerializedName("projects")
+    @Expose
+    private  List<ProjectEntityBO> projectsBO;
 
     public int getUserId() {
         return userId;
@@ -82,6 +101,41 @@ public class UserSummary implements Parcelable {
         this.photoUrl = photoUrl;
     }
 
+    public UserSummary() {
+    }
+
+    public UserBO getUserBO() {
+        return userBO;
+    }
+
+    public void setUserBO(UserBO userBO) {
+        this.userBO = userBO;
+    }
+
+    public List<EducationEntityBO> getEducationBO() {
+        return educationBO;
+    }
+
+    public void setEducationBO(List<EducationEntityBO> educationBO) {
+        this.educationBO = educationBO;
+    }
+
+    public List<ExprienceEntityBO> getExprienceBO() {
+        return exprienceBO;
+    }
+
+    public void setExprienceBO(List<ExprienceEntityBO> exprienceBO) {
+        this.exprienceBO = exprienceBO;
+    }
+
+    public List<ProjectEntityBO> getProjectsBO() {
+        return projectsBO;
+    }
+
+    public void setProjectsBO(List<ProjectEntityBO> projectsBO) {
+        this.projectsBO = projectsBO;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -95,9 +149,10 @@ public class UserSummary implements Parcelable {
         dest.writeString(this.firstName);
         dest.writeString(this.lastName);
         dest.writeString(this.photoUrl);
-    }
-
-    public UserSummary() {
+        dest.writeParcelable(this.userBO, flags);
+        dest.writeTypedList(this.educationBO);
+        dest.writeTypedList(this.exprienceBO);
+        dest.writeTypedList(this.projectsBO);
     }
 
     protected UserSummary(Parcel in) {
@@ -107,9 +162,13 @@ public class UserSummary implements Parcelable {
         this.firstName = in.readString();
         this.lastName = in.readString();
         this.photoUrl = in.readString();
+        this.userBO = in.readParcelable(UserBO.class.getClassLoader());
+        this.educationBO = in.createTypedArrayList(EducationEntityBO.CREATOR);
+        this.exprienceBO = in.createTypedArrayList(ExprienceEntityBO.CREATOR);
+        this.projectsBO = in.createTypedArrayList(ProjectEntityBO.CREATOR);
     }
 
-    public static final Parcelable.Creator<UserSummary> CREATOR = new Parcelable.Creator<UserSummary>() {
+    public static final Creator<UserSummary> CREATOR = new Creator<UserSummary>() {
         @Override
         public UserSummary createFromParcel(Parcel source) {
             return new UserSummary(source);

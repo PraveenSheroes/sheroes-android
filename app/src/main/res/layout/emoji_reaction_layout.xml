@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/dp_size_60"
     android:background="@drawable/ic_reaction_strip_background"
-    android:alpha="1"
     android:orientation="horizontal">
     <TextView
         android:id="@+id/tv_reaction"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/dp_size_72"
         android:layout_height="wrap_content"
         android:drawableTop="@drawable/ic_heart_emoji"
         android:fontFamily="@string/ID_ROBOTO_REGULAR"
@@ -16,15 +15,13 @@
         android:textSize="@dimen/sp_size_12"
         android:gravity="center"
         android:layout_gravity="center"
-        android:drawablePadding="@dimen/dp_size_8"
-        android:paddingLeft="@dimen/dp_size_28"
-        android:paddingTop="@dimen/dp_size_12"
-        android:paddingRight="@dimen/dp_size_14"
-        android:paddingBottom="@dimen/dp_size_15"
+        android:drawablePadding="@dimen/dp_size_4"
+        android:paddingBottom="@dimen/dp_size_5"
+        android:paddingTop="@dimen/dp_size_5"
         />
     <TextView
         android:id="@+id/tv_reaction1"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/dp_size_72"
         android:layout_height="wrap_content"
         android:drawableTop="@drawable/ic_whistle"
         android:fontFamily="@string/ID_ROBOTO_REGULAR"
@@ -33,16 +30,14 @@
         android:textSize="@dimen/sp_size_12"
         android:gravity="center"
         android:layout_gravity="center"
-        android:drawablePadding="@dimen/dp_size_8"
-        android:paddingLeft="@dimen/dp_size_14"
-        android:paddingTop="@dimen/dp_size_12"
-        android:paddingRight="@dimen/dp_size_14"
-        android:paddingBottom="@dimen/dp_size_15"
+        android:drawablePadding="@dimen/dp_size_4"
+        android:paddingBottom="@dimen/dp_size_5"
+        android:paddingTop="@dimen/dp_size_5"
         />
 
     <TextView
         android:id="@+id/tv_reaction2"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/dp_size_72"
         android:layout_height="wrap_content"
         android:drawableTop="@drawable/ic_xoxo"
         android:fontFamily="@string/ID_ROBOTO_REGULAR"
@@ -51,16 +46,14 @@
         android:textColor="@color/white"
         android:gravity="center"
         android:layout_gravity="center"
-        android:drawablePadding="@dimen/dp_size_8"
-        android:paddingLeft="@dimen/dp_size_14"
-        android:paddingTop="@dimen/dp_size_12"
-        android:paddingRight="@dimen/dp_size_14"
-        android:paddingBottom="@dimen/dp_size_15"/>
+        android:drawablePadding="@dimen/dp_size_4"
+        android:paddingBottom="@dimen/dp_size_5"
+        android:paddingTop="@dimen/dp_size_5"/>
 
 
     <TextView
         android:id="@+id/tv_reaction3"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/dp_size_72"
         android:layout_height="wrap_content"
         android:drawableTop="@drawable/ic_with_you"
         android:fontFamily="@string/ID_ROBOTO_REGULAR"
@@ -69,14 +62,12 @@
         android:textColor="@color/white"
         android:gravity="center"
         android:layout_gravity="center"
-        android:drawablePadding="@dimen/dp_size_8"
-        android:paddingLeft="@dimen/dp_size_15"
-        android:paddingTop="@dimen/dp_size_12"
-        android:paddingRight="@dimen/dp_size_15"
-        android:paddingBottom="@dimen/dp_size_15"/>
+        android:drawablePadding="@dimen/dp_size_4"
+        android:paddingBottom="@dimen/dp_size_5"
+        android:paddingTop="@dimen/dp_size_5"/>
     <TextView
         android:id="@+id/tv_reaction4"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/dp_size_72"
         android:layout_height="wrap_content"
         android:drawableTop="@drawable/ic_facepalm"
         android:fontFamily="@string/ID_ROBOTO_REGULAR"
@@ -85,10 +76,8 @@
         android:textColor="@color/white"
         android:gravity="center"
         android:layout_gravity="center"
-        android:drawablePadding="@dimen/dp_size_8"
-        android:paddingLeft="@dimen/dp_size_12"
-        android:paddingTop="@dimen/dp_size_12"
-        android:paddingRight="@dimen/dp_size_12"
-        android:paddingBottom="@dimen/dp_size_15"/>
+        android:drawablePadding="@dimen/dp_size_4"
+        android:paddingBottom="@dimen/dp_size_5"
+        android:paddingTop="@dimen/dp_size_5"/>
 
 </LinearLayout>

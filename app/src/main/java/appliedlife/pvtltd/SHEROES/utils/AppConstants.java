@@ -72,6 +72,7 @@ public class AppConstants {
     public static final String IMAGE_FULL_VIEW = "image_view";
     public static final String BACK_SLASH="/";
     public static final String ARTICLE_DETAIL = "article_detail";
+    public static final String HOW_SHEROES_CAN_HELP = "how_can_sheroes";
     public static final String JOB_DETAIL = "job_detail";
     public static final String COMMUNITY_DETAIL = "community_detail";
     public static final String TAG_LIST = "tag_list";
@@ -94,6 +95,28 @@ public class AppConstants {
     public static final int EMOJI_FOURTH_REACTION_CONSTANT= 50;
     public static final int SEARCH_CONSTANT_DELAY= 500;
     public static final String SELECT_ALL_QUERY= "Select * from ";
+
+    /*Master data keys for pages*/
+    public static final String MASTER_DATA_ARTICLE_KEY = "ARTICLE_CATEGORY";//article category drop down
+    public static final String MASTER_DATA_INTEREST_KEY = "INTEREST"; //interest
+    public static final String MASTER_DATA_OPPORTUNITY_KEY = "OPPORTUNITY";// looking_for
+    public static final String MASTER_DATA_JOB_TAG_KEY = "JOB_TAG";// currently
+    public static final String MASTER_DATA_EMP_TYPE_KEY = "EMP_TYPE";
+    public static final String MASTER_DATA_JOB_FUNCTION_KEY = "JOB_FUNCTION";
+    public static final String MASTER_DATA_SKILL_KEY = "SKILL"; // job at
+    public static final String MASTER_DATA_CAN_HELP_IN_KEY = "CAN_HELP_IN"; //first lable//
+    public static final String MASTER_DATA_SECTOR_KEY = "SECTOR";
+
+    public static final String MASTER_DATA_COMMUNITY_TYPE_KEY = "COMMUNITY_TYPE";
+    public static final String MASTER_DATA_TAGS_KEY = "TAGS";
+    public static final String MASTER_DATA_FUNCTIONAL_AREA_KEY = "FUNCTIONAL_AREA";
+/**/
+    public static final String MASTER_DATA_DEFAULT_CATEGORY = "DEFAULT"; // on second map lavele key
+    public static final String DAY= " day";
+    public static final String HOUR = " hour";
+    public static final String MINUT = " minute";
+    public static final String AGO = " ago";
+
 
 
     public static final String PDF_PATH= "application/pdf";

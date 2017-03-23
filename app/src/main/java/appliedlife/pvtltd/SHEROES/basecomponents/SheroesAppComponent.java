@@ -58,7 +58,8 @@ import appliedlife.pvtltd.SHEROES.views.fragments.JobLocationFilter;
 import appliedlife.pvtltd.SHEROES.views.fragments.LoginFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunitiesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunityInviteMemberFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.OnboardingFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingHowCanSheroesHelpYouFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingTellUsAboutFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.OnboardingWorkExperience;
 import appliedlife.pvtltd.SHEROES.views.fragments.OwnerRemoveDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.PersonalProfileFragment;
@@ -89,7 +90,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.SettingPreferencesWorkExperien
 import appliedlife.pvtltd.SHEROES.views.fragments.SettingPreferencsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SettingTermsAndConditionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareCommunityFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.SheroesHelpYouFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeScreen1Fragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeScreen2Fragment;
@@ -270,8 +270,8 @@ public interface SheroesAppComponent {
     void inject(JobDetailFragment jobDetailFragment);
     void inject(JobDetailHolder jobDetailHolder);
     void inject(OnboardingActivity onboardingActivity);
-    void inject(OnboardingFragment onboardingFragment);
-    void inject(SheroesHelpYouFragment sheroesHelpYouFragment);
+    void inject(OnBoardingTellUsAboutFragment onBoardingTellUsAboutFragment);
+    void inject(OnBoardingHowCanSheroesHelpYouFragment onBoardingHowCanSheroesHelpYouFragment);
     void inject(OnBoardingHolder onBoardingHolder);
     void inject(ProfileTravelClientFragment profileTravelClientFragment);
     void inject(ProfileCityWorkFragment profileCityWorkFragment);
