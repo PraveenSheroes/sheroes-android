@@ -77,7 +77,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class HomeActivity extends BaseActivity implements SettingView, JobFragment.HomeActivityIntractionListner, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, CommentReactionFragment.HomeActivityIntractionListner, ImageFullViewFragment.HomeActivityIntraction {
+public class HomeActivity extends BaseActivity implements SettingView, JobFragment.HomeActivityIntractionListner, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, CommentReactionFragment.HomeActivityIntractionListner {
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
     @Inject
     Preference<LoginResponse> mUserPreference;
@@ -705,13 +705,6 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
         Snackbar.make(mCLMainLayout, "Work in progress", Snackbar.LENGTH_SHORT).show();
     }
 
-
-    @Override
-    public void onDialogDissmiss(FragmentOpen isFragmentOpen) {
-        mFragmentOpen = isFragmentOpen;
-        onBackPressed();
-
-    }
 
     @OnClick(R.id.tv_drawer_navigation)
     public void drawerNavigationClick() {

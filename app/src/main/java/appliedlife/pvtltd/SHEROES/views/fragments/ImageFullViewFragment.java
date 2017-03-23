@@ -16,6 +16,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.ImageFullViewAdapter;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -25,28 +26,15 @@ import butterknife.OnClick;
  * Created by Praveen_Singh on 07-02-2017.
  */
 
-public class ImageFullViewFragment extends BaseFragment implements ImageFullViewAdapter.HomeActivityIntraction  {
+public class ImageFullViewFragment extends BaseFragment implements ViewPager.OnPageChangeListener {
     private final String TAG = LogUtils.makeLogTag(ImageFullViewFragment.class);
     @Bind(R.id.vp_full_image_view)
     ViewPager viewPagerFullImageView;
     @Bind(R.id.tv_total_image)
-    public  TextView tvTotalImage;
+    TextView tvTotalImage;
     private ImageFullViewAdapter mImageFullViewAdapter;
     private FeedDetail mFeedDetail;
     private FragmentOpen mFragmentOpen;
-    private HomeActivityIntraction mHomeActivityIntraction;
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            if (getActivity() instanceof HomeActivityIntraction) {
-                mHomeActivityIntraction = (HomeActivityIntraction) getActivity();
-            }
-        } catch (InstantiationException exception) {
-            LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -57,31 +45,35 @@ public class ImageFullViewFragment extends BaseFragment implements ImageFullView
             mFeedDetail = getArguments().getParcelable(AppConstants.IMAGE_FULL_VIEW);
             mFragmentOpen = getArguments().getParcelable(AppConstants.FRAGMENT_FLAG_CHECK);
         }
-        mImageFullViewAdapter = new ImageFullViewAdapter(getActivity(), mFeedDetail, mFragmentOpen,this);
+        mImageFullViewAdapter = new ImageFullViewAdapter(getActivity(), mFeedDetail, mFragmentOpen);
         viewPagerFullImageView.setAdapter(mImageFullViewAdapter);
-
+        viewPagerFullImageView.setCurrentItem(mFeedDetail.getItemPosition());
+        viewPagerFullImageView.addOnPageChangeListener(this);
+        setIndex(viewPagerFullImageView.getCurrentItem());
         return view;
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        //Nothing to do here
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        setIndex(position);
+    }
+
+    private void setIndex(int position) {
+        tvTotalImage.setText(String.valueOf(position + 1) + AppConstants.BACK_SLASH + String.valueOf(mFeedDetail.getImageUrls() != null ? mFeedDetail.getImageUrls().size() : 0));
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+        //Nothing to do here
     }
 
     @OnClick(R.id.iv_full_image_back)
     public void dismissCommentDialog() {
-        mHomeActivityIntraction.onDialogDissmiss(mFragmentOpen);
+        ((HomeActivity) getActivity()).onBackPressed();
     }
-
-    @Override
-    public void onSetText(int value) {
-        if(value==3)
-        {
-            tvTotalImage.setVisibility(View.GONE);
-        }
-        else
-        {
-            tvTotalImage.setVisibility(View.VISIBLE);
-        }
-    }
-
-    public interface HomeActivityIntraction {
-        void onDialogDissmiss(FragmentOpen isFragmentOpen);
-    }
-
 }

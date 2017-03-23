@@ -33,18 +33,16 @@ public class ImageFullViewAdapter extends PagerAdapter {
     private List<String> mTotalCoverImages = new ArrayList<>();
     private LayoutInflater inflater;
     public TextView tvTotalImage;
-    private HomeActivityIntraction mHomeActivityIntraction;
-    public ImageFullViewAdapter(Context context, FeedDetail feedDetail, FragmentOpen fragmentOpen,HomeActivityIntraction mHomeActivityIntraction) {
+    public ImageFullViewAdapter(Context context, FeedDetail feedDetail, FragmentOpen fragmentOpen) {
         this.mContext = context;
         this.mFeedDetail = feedDetail;
         this.mFragmentOpen = fragmentOpen;
-        this.mHomeActivityIntraction=mHomeActivityIntraction;
         mTotalCoverImages = mFeedDetail.getImageUrls();
     }
 
     @Override
     public int getCount() {
-        return this.mTotalCoverImages.size();
+        return mTotalCoverImages != null ? mTotalCoverImages.size() : 0;
     }
 
     @Override
@@ -60,8 +58,6 @@ public class ImageFullViewAdapter extends PagerAdapter {
         View viewLayout = inflater.inflate(R.layout.layout_fullscreen_image, container, false);
         ButterKnife.bind(this, viewLayout);
         if (StringUtil.isNotEmptyCollection(mTotalCoverImages)) {
-            int pos=position;
-            mHomeActivityIntraction.onSetText(pos);
             Glide.with(mContext)
                     .load(mTotalCoverImages.get(position))
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
@@ -78,6 +74,6 @@ public class ImageFullViewAdapter extends PagerAdapter {
     }
 
     public interface HomeActivityIntraction {
-        void onSetText(int value);
+        void onDialogDissmiss(FragmentOpen isFragmentOpen);
     }
 }

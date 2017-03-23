@@ -707,60 +707,92 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     public void onClick(View view) {
         int id = view.getId();
         switch (id) {
-            case R.id.iv_feed_community_post_first:
-                dataItem.setItemPosition(AppConstants.NO_REACTION_CONSTANT);
+            case R.id.iv_feed_community_post_first: {
+                dataItem.setItemPosition(0);
+                viewInterface.dataOperationOnClick(dataItem);
                 break;
-            case R.id.iv_feed_comunity_post_second:
-                dataItem.setItemPosition(AppConstants.ONE_CONSTANT);
+            }
+            case R.id.iv_feed_comunity_post_second: {
+                dataItem.setItemPosition(1);
+                viewInterface.dataOperationOnClick(dataItem);
                 break;
-            case R.id.iv_feed_community_post_first_portrait:
-                dataItem.setItemPosition(AppConstants.NO_REACTION_CONSTANT);
+            }
+            case R.id.iv_feed_community_post_first_portrait: {
+                dataItem.setItemPosition(0);
+                viewInterface.dataOperationOnClick(dataItem);
                 break;
-            case R.id.iv_feed_community_post_second_portrait:
-                dataItem.setItemPosition(AppConstants.ONE_CONSTANT);
+            }
+            case R.id.iv_feed_community_post_second_portrait: {
+                dataItem.setItemPosition(1);
+                viewInterface.dataOperationOnClick(dataItem);
                 break;
-            case R.id.iv_feed_community_post_third_portrait:
-                dataItem.setItemPosition(AppConstants.TWO_CONSTANT);
+            }
+            case R.id.iv_feed_community_post_third_portrait: {
+                dataItem.setItemPosition(2);
+                viewInterface.dataOperationOnClick(dataItem);
                 break;
-            case R.id.iv_feed_community_post_fourth_portrait:
-                dataItem.setItemPosition(AppConstants.THREE_CONSTANT);
+            }
+            case R.id.iv_feed_community_post_fourth_portrait: {
+                dataItem.setItemPosition(3);
+                viewInterface.dataOperationOnClick(dataItem);
                 break;
-            case R.id.iv_feed_community_post_first_portrait_side_two_image:
-                dataItem.setItemPosition(AppConstants.NO_REACTION_CONSTANT);
+            }
+            case R.id.iv_feed_community_post_first_portrait_side_two_image: {
+                dataItem.setItemPosition(0);
+                viewInterface.dataOperationOnClick(dataItem);
                 break;
-            case R.id.iv_feed_community_post_second_portrait_side_two_image:
-                dataItem.setItemPosition(AppConstants.ONE_CONSTANT);
+            }
+            case R.id.iv_feed_community_post_second_portrait_side_two_image: {
+                dataItem.setItemPosition(1);
+                viewInterface.dataOperationOnClick(dataItem);
                 break;
-            case R.id.iv_feed_community_post_third_portrait_side_two_image:
-                dataItem.setItemPosition(AppConstants.TWO_CONSTANT);
+            }
+            case R.id.iv_feed_community_post_third_portrait_side_two_image: {
+                dataItem.setItemPosition(2);
+                viewInterface.dataOperationOnClick(dataItem);
                 break;
-            case R.id.iv_feed_community_post_first_landscape_with_two_images:
-                dataItem.setItemPosition(AppConstants.NO_REACTION_CONSTANT);
+            }
+            case R.id.iv_feed_community_post_first_landscape_with_two_images: {
+                dataItem.setItemPosition(0);
+                viewInterface.dataOperationOnClick(dataItem);
                 break;
-            case R.id.iv_feed_community_post_second_image_landscape_with_two_images:
-                dataItem.setItemPosition(AppConstants.ONE_CONSTANT);
+            }
+            case R.id.iv_feed_community_post_second_image_landscape_with_two_images: {
+                dataItem.setItemPosition(1);
+                viewInterface.dataOperationOnClick(dataItem);
                 break;
-            case R.id.iv_feed_community_post_third_image_landscape_with_two_images:
-                dataItem.setItemPosition(AppConstants.TWO_CONSTANT);
+            }
+            case R.id.iv_feed_community_post_third_image_landscape_with_two_images: {
+                dataItem.setItemPosition(2);
+                viewInterface.dataOperationOnClick(dataItem);
                 break;
-            case R.id.iv_feed_community_post_first_landscape:
-                dataItem.setItemPosition(AppConstants.NO_REACTION_CONSTANT);
+            }
+            case R.id.iv_feed_community_post_first_landscape: {
+                dataItem.setItemPosition(0);
+                viewInterface.dataOperationOnClick(dataItem);
                 break;
-            case R.id.iv_feed_community_post_second_image_landscape:
-                dataItem.setItemPosition(AppConstants.ONE_CONSTANT);
+            }
+            case R.id.iv_feed_community_post_second_image_landscape: {
+                dataItem.setItemPosition(1);
+                viewInterface.dataOperationOnClick(dataItem);
                 break;
-            case R.id.iv_feed_community_post_third_image_landscape:
-                dataItem.setItemPosition(AppConstants.TWO_CONSTANT);
+            }
+            case R.id.iv_feed_community_post_third_image_landscape: {
+                dataItem.setItemPosition(2);
+                viewInterface.dataOperationOnClick(dataItem);
                 break;
-            case R.id.iv_feed_community_post_fourth_image_landscape:
-                dataItem.setItemPosition(AppConstants.THREE_CONSTANT);
+            }
+            case R.id.iv_feed_community_post_fourth_image_landscape: {
+                dataItem.setItemPosition(3);
+                viewInterface.dataOperationOnClick(dataItem);
                 break;
-            default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE+ id);
+            }
+            default: {
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
+                break;
+            }
         }
-        viewInterface.dataOperationOnClick(dataItem);
     }
-
 
 
     @OnClick(R.id.tv_feed_community_post_user_bookmark)
