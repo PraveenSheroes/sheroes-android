@@ -7,6 +7,7 @@
         android:id="@+id/rv_how_can_sheroes_help_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@color/fully_transparent" />
+        android:alpha=".8"
+        android:divider="@color/white" />
 
 </FrameLayout>

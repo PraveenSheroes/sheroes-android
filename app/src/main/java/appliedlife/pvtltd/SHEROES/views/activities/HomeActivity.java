@@ -624,7 +624,12 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
         } else if (mFragmentOpen.getOpenCommentReactionFragmentFor() == AppConstants.FOURTH_CONSTANT) {
             getSupportFragmentManager().popBackStackImmediate();
             mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.NO_REACTION_CONSTANT);
-        } else {
+        }if(mFragmentOpen.isOpenImageViewer())
+        {
+            mFragmentOpen.setOpenImageViewer(false);
+            getSupportFragmentManager().popBackStackImmediate();
+        }
+        else {
             finish();
         }
     }

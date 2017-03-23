@@ -1,6 +1,5 @@
 package appliedlife.pvtltd.SHEROES.models;
 
-import com.f2prateek.rx.preferences.Preference;
 import com.google.gson.Gson;
 
 import javax.inject.Inject;
@@ -11,7 +10,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwner
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.EditCommunityRequest;
-import appliedlife.pvtltd.SHEROES.preferences.SessionUser;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -25,7 +23,6 @@ import rx.schedulers.Schedulers;
 public class CommunityModel {
     private final SheroesAppServiceApi sheroesAppServiceApi;
     Gson gson;
-    Preference<SessionUser> userPreference;
     @Inject
     public CommunityModel(SheroesAppServiceApi sheroesAppServiceApi, Gson gson) {
         this.sheroesAppServiceApi = sheroesAppServiceApi;

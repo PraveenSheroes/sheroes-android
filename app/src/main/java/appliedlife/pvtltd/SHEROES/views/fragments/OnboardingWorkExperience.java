@@ -27,13 +27,13 @@ import butterknife.OnClick;
  */
 
 public class OnboardingWorkExperience extends BaseFragment implements DayPickerDialog.MyDayPickerListener,DatePickerDialog.OnDateSetListener {
-   @Bind(R.id.et_exp_month)
+    private final String TAG = LogUtils.makeLogTag(OnboardingWorkExperience.class);
+    @Bind(R.id.et_exp_month)
     EditText met_exp_month;
     @Bind(R.id.et_exp_year)
     EditText met_exp_year;
     View view;
     OnBoardingWorkExpActivityIntractionListner mOnboardingIntractionListner;
-    private final String mTAG = LogUtils.makeLogTag(SheroesHelpYouFragment.class);
     private TextView tvDisplayDate;
     private DatePicker dpresult;
     private Button btnChangeDate;
@@ -50,7 +50,7 @@ public class OnboardingWorkExperience extends BaseFragment implements DayPickerD
                 mOnboardingIntractionListner = (OnBoardingWorkExpActivityIntractionListner) getActivity();
             }
         } catch (InstantiationException exception) {
-            LogUtils.error(mTAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + mTAG + AppConstants.SPACE + exception.getMessage());
+            LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
         }
     }
     @Nullable

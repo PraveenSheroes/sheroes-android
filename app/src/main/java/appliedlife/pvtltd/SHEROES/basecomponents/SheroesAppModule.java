@@ -18,8 +18,8 @@ import javax.inject.Singleton;
 
 import appliedlife.pvtltd.SHEROES.BuildConfig;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.preferences.GsonPreferenceAdapter;
-import appliedlife.pvtltd.SHEROES.preferences.SessionUser;
 import appliedlife.pvtltd.SHEROES.utils.AnnotationExclusionStrategy;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -118,8 +118,8 @@ public class SheroesAppModule {
 
     @Singleton
     @Provides
-    public Preference<SessionUser> provideSessionUserPref(RxSharedPreferences rxSharedPreferences, Gson gson) {
-        return rxSharedPreferences.getObject(AppConstants.SHEROES_USER_SESSION, new GsonPreferenceAdapter<>(gson, SessionUser.class));
+    public Preference<MasterDataResponse> provideSessionUserPref(RxSharedPreferences rxSharedPreferences, Gson gson) {
+        return rxSharedPreferences.getObject(AppConstants.MASTER_DATA, new GsonPreferenceAdapter<>(gson, MasterDataResponse.class));
     }
 
 

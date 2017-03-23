@@ -20,7 +20,7 @@ public class FragmentOpen implements Parcelable {
     boolean bookmarkFragment;
     boolean isImageBlur;
     int openCommentReactionFragmentFor;
-
+    boolean isOpenImageViewer;
 
     public FragmentOpen() {
     }
@@ -113,6 +113,14 @@ public class FragmentOpen implements Parcelable {
         this.jobFragment = jobFragment;
     }
 
+    public boolean isOpenImageViewer() {
+        return isOpenImageViewer;
+    }
+
+    public void setOpenImageViewer(boolean openImageViewer) {
+        isOpenImageViewer = openImageViewer;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -131,6 +139,7 @@ public class FragmentOpen implements Parcelable {
         dest.writeByte(this.bookmarkFragment ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isImageBlur ? (byte) 1 : (byte) 0);
         dest.writeInt(this.openCommentReactionFragmentFor);
+        dest.writeByte(this.isOpenImageViewer ? (byte) 1 : (byte) 0);
     }
 
     protected FragmentOpen(Parcel in) {
@@ -145,6 +154,7 @@ public class FragmentOpen implements Parcelable {
         this.bookmarkFragment = in.readByte() != 0;
         this.isImageBlur = in.readByte() != 0;
         this.openCommentReactionFragmentFor = in.readInt();
+        this.isOpenImageViewer = in.readByte() != 0;
     }
 
     public static final Creator<FragmentOpen> CREATOR = new Creator<FragmentOpen>() {

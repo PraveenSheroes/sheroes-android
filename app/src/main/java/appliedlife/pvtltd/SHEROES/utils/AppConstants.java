@@ -17,7 +17,7 @@ public class AppConstants {
     public static final String DATE_FORMAT_FOR_JOB = "dd MMM, yyyy";
     public static final String SPACE=" ";
     public static final String SHEROES_AUTH_TOKEN = "sheroes_auth_token";
-    public static final String SHEROES_USER_SESSION = "sheroes_user_session";
+    public static final String MASTER_DATA = "master_data";
     public static final String SHEROES_PREFERENCE = "sheroes_preference";
     public static final String HTTP_401_UNAUTHORIZED = "HTTP 401 Unauthorized";
     public static final String INAVLID_DATA= "INVALID_DATA";

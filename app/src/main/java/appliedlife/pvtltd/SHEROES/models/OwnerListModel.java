@@ -1,6 +1,5 @@
 package appliedlife.pvtltd.SHEROES.models;
 
-import com.f2prateek.rx.preferences.Preference;
 import com.google.gson.Gson;
 
 import javax.inject.Inject;
@@ -10,7 +9,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerReque
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
-import appliedlife.pvtltd.SHEROES.preferences.SessionUser;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -24,7 +22,6 @@ import rx.schedulers.Schedulers;
 public class OwnerListModel {
     private final SheroesAppServiceApi sheroesAppServiceApi;
     Gson gson;
-    Preference<SessionUser> userPreference;
     @Inject
     public OwnerListModel(SheroesAppServiceApi sheroesAppServiceApi, Gson gson) {
         this.sheroesAppServiceApi = sheroesAppServiceApi;

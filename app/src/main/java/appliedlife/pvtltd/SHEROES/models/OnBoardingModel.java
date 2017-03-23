@@ -1,6 +1,5 @@
 package appliedlife.pvtltd.SHEROES.models;
 
-import com.f2prateek.rx.preferences.Preference;
 import com.google.gson.Gson;
 
 import javax.inject.Inject;
@@ -8,7 +7,6 @@ import javax.inject.Singleton;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
-import appliedlife.pvtltd.SHEROES.preferences.SessionUser;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -23,7 +21,6 @@ public class OnBoardingModel {
     private final String TAG = LogUtils.makeLogTag(OnBoardingModel.class);
     private final SheroesAppServiceApi sheroesAppServiceApi;
     Gson gson;
-    Preference<SessionUser> userPreference;
     @Inject
     public OnBoardingModel(SheroesAppServiceApi sheroesAppServiceApi,Gson gson) {
         this.sheroesAppServiceApi = sheroesAppServiceApi;

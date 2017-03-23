@@ -545,7 +545,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
     private void openImageFullViewFragment(FeedDetail feedDetail) {
         ImageFullViewFragment imageFullViewFragment = new ImageFullViewFragment();
         Bundle bundle = new Bundle();
-        mFragmentOpen.setCommentList(true);
+        mFragmentOpen.setOpenImageViewer(true);
         bundle.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, mFragmentOpen);
         bundle.putParcelable(AppConstants.IMAGE_FULL_VIEW, feedDetail);
         imageFullViewFragment.setArguments(bundle);

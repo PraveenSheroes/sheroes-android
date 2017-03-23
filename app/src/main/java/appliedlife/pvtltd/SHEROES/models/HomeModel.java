@@ -1,7 +1,6 @@
 package appliedlife.pvtltd.SHEROES.models;
 
 
-import com.f2prateek.rx.preferences.Preference;
 import com.google.gson.Gson;
 
 import javax.inject.Inject;
@@ -21,7 +20,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.preferences.SessionUser;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -41,7 +39,6 @@ public class HomeModel {
     private final String TAG = LogUtils.makeLogTag(HomeModel.class);
     private final SheroesAppServiceApi sheroesAppServiceApi;
     Gson gson;
-    Preference<SessionUser> userPreference;
     @Inject
     public HomeModel(SheroesAppServiceApi sheroesAppServiceApi,Gson gson) {
         this.sheroesAppServiceApi = sheroesAppServiceApi;

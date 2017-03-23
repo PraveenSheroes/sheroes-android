@@ -27,7 +27,7 @@
             android:layout_width="@dimen/multiple_image_rectangle"
             android:layout_height="@dimen/multiple_image_rectangle"
             android:layout_marginLeft="@dimen/dp_size_3"
-            android:scaleType="centerCrop"/>
+            android:scaleType="centerCrop" />
 
         <FrameLayout
             android:layout_width="@dimen/multiple_image_rectangle"
@@ -39,25 +39,26 @@
                 android:layout_width="@dimen/multiple_image_rectangle"
                 android:layout_height="@dimen/multiple_image_rectangle"
                 android:scaleType="centerCrop" />
+
             <TextView
                 android:id="@+id/tv_feed_community_image_more"
                 android:layout_width="@dimen/multiple_image_rectangle"
                 android:layout_height="@dimen/multiple_image_rectangle"
                 android:alpha=".7"
-                android:visibility="gone"
+                android:background="@color/black"
                 android:gravity="center"
-                android:background="@color/black"/>
+                android:visibility="gone" />
+
             <TextView
                 android:id="@+id/tv_feed_community_post_landscape_total_images"
                 android:layout_width="@dimen/multiple_image_rectangle"
                 android:layout_height="@dimen/multiple_image_rectangle"
-                android:text="@string/ID_TOTAL_IMAGES"
                 android:fontFamily="@string/ID_ROBOTO_LIGHT"
-                android:visibility="gone"
-                android:textColor="@color/white"
                 android:gravity="center"
+                android:text="@string/ID_TOTAL_IMAGES"
+                android:textColor="@color/white"
                 android:textSize="@dimen/sp_size_35"
-                />
+                android:visibility="gone" />
         </FrameLayout>
     </LinearLayout>
 </LinearLayout>

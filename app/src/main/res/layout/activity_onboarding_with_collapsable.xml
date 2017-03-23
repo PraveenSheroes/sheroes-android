@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:fitsSystemWindows="true"
                 android:scaleType="centerCrop"
-                android:background="@drawable/community"
+                android:background="@drawable/gradiant_background"
                 app:layout_collapseMode="pin" />
 
             <android.support.v7.widget.Toolbar

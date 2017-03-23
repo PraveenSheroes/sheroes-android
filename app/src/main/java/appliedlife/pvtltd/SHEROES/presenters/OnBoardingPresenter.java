@@ -7,7 +7,6 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.OnBoardingModel;
-import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -24,14 +23,12 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
     private final String TAG = LogUtils.makeLogTag(OnBoardingPresenter.class);
     OnBoardingModel onBoardingModel;
     SheroesApplication mSheroesApplication;
+    Preference<MasterDataResponse> mUserPreferenceMasterData;
     @Inject
-    Preference<LoginResponse> mUserPreference;
-
-    @Inject
-    public OnBoardingPresenter(OnBoardingModel homeModel, SheroesApplication sheroesApplication, Preference<LoginResponse> userPreference) {
+    public OnBoardingPresenter(OnBoardingModel homeModel, SheroesApplication sheroesApplication,Preference<MasterDataResponse> mUserPreferenceMasterData) {
         this.onBoardingModel = homeModel;
         this.mSheroesApplication = sheroesApplication;
-        this.mUserPreference = userPreference;
+        this.mUserPreferenceMasterData = mUserPreferenceMasterData;
     }
 
     @Override
@@ -65,6 +62,7 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
             @Override
             public void onNext(MasterDataResponse masterDataResponse) {
                 getMvpView().stopProgressBar();
+                mUserPreferenceMasterData.set(masterDataResponse);
                 getMvpView().getMasterDataResponse(masterDataResponse.getData());
             }
         });
