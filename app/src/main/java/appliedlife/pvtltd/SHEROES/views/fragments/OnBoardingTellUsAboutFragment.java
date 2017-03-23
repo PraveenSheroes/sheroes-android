@@ -3,7 +3,6 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,8 +31,6 @@ import butterknife.OnClick;
 
 public class OnBoardingTellUsAboutFragment extends BaseFragment  implements OnBoardingView {
     private final String mTAG = LogUtils.makeLogTag(OnBoardingTellUsAboutFragment.class);
-    @Bind(R.id.fab_next)
-    FloatingActionButton fabnext;
     @Bind(R.id.pb_boarding_progress_bar)
     ProgressBar mProgressBar;
     @Inject

@@ -50,6 +50,7 @@
     <dimen name="dp_size_37">37dp</dimen>
     <dimen name="dp_size_38">38dp</dimen>
     <dimen name="dp_size_40">40dp</dimen>
+    <dimen name="dp_size_221">221dp</dimen>
     <dimen name="dp_size_60">60dp</dimen>
     <dimen name="dp_size_105">105dp</dimen>
     <dimen name="dp_size_233">233dp</dimen>
@@ -100,6 +101,7 @@
     <dimen name="sp_size_13">13sp</dimen>
     <dimen name="sp_size_10">10sp</dimen>
     <dimen name="sp_size_24">24sp</dimen>
+    <dimen name="sp_size_23">23sp</dimen>
     <dimen name="sp_size_35">35sp</dimen>
     <dimen name="sp_size_20">20sp</dimen>
     <dimen name="sp_size_30">30sp</dimen>
@@ -140,9 +142,10 @@
     <dimen name="comment_icon">30dp</dimen>
     <dimen name="multiple_image_rectangle">118dp</dimen>
     <dimen name="two_image_rectangle">180dp</dimen>
-
-
-
+    <dimen name="two_image_rectangle_first_one">175dp</dimen>
+    <dimen name="two_image_rectangle_second_one">185dp</dimen>
+    <dimen name="tell_us_image_width">316dp</dimen>
+    <dimen name="tell_us_image_height">207dp</dimen>
 
     <!--Text sizes for SHEROES-->
     <!-- Default screen margins, per the Android Design guidelines. -->

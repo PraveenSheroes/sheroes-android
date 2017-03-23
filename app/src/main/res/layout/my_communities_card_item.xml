@@ -73,15 +73,15 @@
             android:id="@+id/tv_my_community_view_more"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
             android:layout_marginLeft="@dimen/dp_size_16"
-            android:layout_marginRight="@dimen/dp_size_22"
-            android:layout_marginTop="@dimen/dp_size_minus_22"
-            android:background="@color/white"
+            android:layout_marginRight="@dimen/dp_size_25"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:layout_gravity="right"
+            android:background="@color/white"
             android:gravity="right"
-            android:text="@string/ID_VIEW_MORE"
+            android:layout_marginTop="@dimen/dp_size_minus_22"
             android:textColor="@color/feed_job_card_new"
+            android:text="@string/ID_VIEW_MORE"
             android:textSize="@dimen/sp_size_14" />
         <View
             android:layout_width="match_parent"
@@ -107,7 +107,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="tag : testincsnd"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:textColor="@color/feed_article_label"
                 android:textSize="@dimen/sp_size_12" />

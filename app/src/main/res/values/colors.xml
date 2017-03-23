@@ -20,6 +20,8 @@
     <color name="add_member_line">#e4e9ec</color>
     <color name="shadow">#3b99fc</color>
     <color name="searchbox_text_color">#9b9b9b</color>
+    <color name="selected_on_boarding">#eaecf6</color>
+
     <!-- Text color of the search box hint text  -->
     <color name="forgot_password">#838a9c</color>
     <color name="searchbox_hint_text_color">#1c2024</color>

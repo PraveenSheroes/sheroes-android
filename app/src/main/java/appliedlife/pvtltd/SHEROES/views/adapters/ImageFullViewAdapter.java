@@ -73,7 +73,4 @@ public class ImageFullViewAdapter extends PagerAdapter {
         (container).removeView((RelativeLayout) object);
     }
 
-    public interface HomeActivityIntraction {
-        void onDialogDissmiss(FragmentOpen isFragmentOpen);
-    }
 }

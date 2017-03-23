@@ -100,16 +100,16 @@ public class RoundedImageView extends ImageView {
     }
 
     float cornerRadiusOverride =
-        a.getDimensionPixelSize(R.styleable.RoundedImageView_riv_corner_radius, -1);
+        a.getDimensionPixelSize(R.styleable.RoundedImageView_riv_corner_radius, 3);
 
     mCornerRadii[Corner.TOP_LEFT] =
-        a.getDimensionPixelSize(R.styleable.RoundedImageView_riv_corner_radius_top_left, -1);
+        a.getDimensionPixelSize(R.styleable.RoundedImageView_riv_corner_radius_top_left, 3);
     mCornerRadii[Corner.TOP_RIGHT] =
-        a.getDimensionPixelSize(R.styleable.RoundedImageView_riv_corner_radius_top_right, -1);
+        a.getDimensionPixelSize(R.styleable.RoundedImageView_riv_corner_radius_top_right, 3);
     mCornerRadii[Corner.BOTTOM_RIGHT] =
-        a.getDimensionPixelSize(R.styleable.RoundedImageView_riv_corner_radius_bottom_right, -1);
+        a.getDimensionPixelSize(R.styleable.RoundedImageView_riv_corner_radius_bottom_right, 3);
     mCornerRadii[Corner.BOTTOM_LEFT] =
-        a.getDimensionPixelSize(R.styleable.RoundedImageView_riv_corner_radius_bottom_left, -1);
+        a.getDimensionPixelSize(R.styleable.RoundedImageView_riv_corner_radius_bottom_left, 3);
 
     boolean any = false;
     for (int i = 0, len = mCornerRadii.length; i < len; i++) {

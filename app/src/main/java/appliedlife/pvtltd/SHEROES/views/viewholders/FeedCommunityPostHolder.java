@@ -146,8 +146,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     }
 
     private void multipleImageURLs() {
-        liFeedCommunityUserPostImages.removeAllViews();
-        liFeedCommunityUserPostImages.removeAllViewsInLayout();
         if (StringUtil.isNotEmptyCollection(dataItem.getImageUrls())) {
             lineForNoImage.setVisibility(View.GONE);
             List<String> coverImageList = dataItem.getImageUrls();
@@ -160,18 +158,25 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             int listSize = coverImageList.size();
             if (listSize > AppConstants.NO_REACTION_CONSTANT) {
                 switch (listSize) {
+
                     case AppConstants.ONE_CONSTANT:
+                        liFeedCommunityUserPostImages.removeAllViews();
+                        liFeedCommunityUserPostImages.removeAllViewsInLayout();
                         if (StringUtil.isNotEmptyCollection(coverImageList) && StringUtil.isNotNullOrEmptyString(coverImageList.get(0))) {
                             oneImagesSetting(mContext, coverImageList.get(0));
                         }
 
                         break;
                     case AppConstants.TWO_CONSTANT:
+                        liFeedCommunityUserPostImages.removeAllViews();
+                        liFeedCommunityUserPostImages.removeAllViewsInLayout();
                         if (StringUtil.isNotEmptyCollection(coverImageList) && StringUtil.isNotNullOrEmptyString(coverImageList.get(0)) && StringUtil.isNotNullOrEmptyString(coverImageList.get(1))) {
                             twoImagesSetting(mContext, coverImageList.get(0), coverImageList.get(1));
                         }
                         break;
                     case AppConstants.THREE_CONSTANT:
+                        liFeedCommunityUserPostImages.removeAllViews();
+                        liFeedCommunityUserPostImages.removeAllViewsInLayout();
                         if (StringUtil.isNotEmptyCollection(coverImageList) && StringUtil.isNotNullOrEmptyString(coverImageList.get(0)) && StringUtil.isNotNullOrEmptyString(coverImageList.get(1)) && StringUtil.isNotNullOrEmptyString(coverImageList.get(2))) {
                             boolean isHeightGreater = getCoverImageHeightWidth(coverImageList.get(0));
                            /* if (isHeightGreater) {
@@ -179,10 +184,13 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                             } else {
                                 feedFirstLandscapWIthTwoImageModeSetting(mContext, coverImageList.get(0), coverImageList.get(1), coverImageList.get(2));
                             }*/
+                            //feedFirstPortraitWithTwoImageModeSetting(mContext, coverImageList.get(0), coverImageList.get(1), coverImageList.get(2));
                             feedFirstLandscapWIthTwoImageModeSetting(mContext, coverImageList.get(0), coverImageList.get(1), coverImageList.get(2));
                         }
                         break;
                     case AppConstants.FOURTH_CONSTANT:
+                        liFeedCommunityUserPostImages.removeAllViews();
+                        liFeedCommunityUserPostImages.removeAllViewsInLayout();
                         if (StringUtil.isNotEmptyCollection(coverImageList) && StringUtil.isNotNullOrEmptyString(coverImageList.get(0)) && StringUtil.isNotNullOrEmptyString(coverImageList.get(1)) && StringUtil.isNotNullOrEmptyString(coverImageList.get(2)) && StringUtil.isNotNullOrEmptyString(coverImageList.get(3))) {
                             boolean isHeightGreater = getCoverImageHeightWidth(coverImageList.get(0));
                             /*if (isHeightGreater) {
@@ -194,6 +202,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                         }
                         break;
                     default:
+                        liFeedCommunityUserPostImages.removeAllViews();
+                        liFeedCommunityUserPostImages.removeAllViewsInLayout();
                         if (StringUtil.isNotEmptyCollection(coverImageList) && StringUtil.isNotNullOrEmptyString(coverImageList.get(0)) && StringUtil.isNotNullOrEmptyString(coverImageList.get(1)) && StringUtil.isNotNullOrEmptyString(coverImageList.get(2)) && StringUtil.isNotNullOrEmptyString(coverImageList.get(3))) {
                             boolean isHeightGreater = getCoverImageHeightWidth(coverImageList.get(0));
                          /*   if (isHeightGreater) {
@@ -208,6 +218,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         }
         else
         {
+            liFeedCommunityUserPostImages.removeAllViews();
+            liFeedCommunityUserPostImages.removeAllViewsInLayout();
             lineForNoImage.setVisibility(View.VISIBLE);
         }
 

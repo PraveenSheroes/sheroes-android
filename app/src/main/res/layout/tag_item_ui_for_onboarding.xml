@@ -7,11 +7,12 @@
         android:id="@+id/tv_tag_data"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dp_size_12"
-        android:background="@drawable/on_boarding_tag_border_rectangle"
-        android:padding="@dimen/dp_size_10"
+        android:layout_margin="@dimen/dp_size_11"
+        android:background="@drawable/on_boarding_tag_border_ractangle_selected"
+        android:padding="@dimen/dp_size_9"
         android:text="@string/ID_APP_NAME"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
         android:textColor="@color/blue"
-        android:textSize="@dimen/sp_size_12"
-        android:textStyle="bold" />
+        android:textAllCaps="true"
+        android:textSize="@dimen/sp_size_12" />
 </LinearLayout>

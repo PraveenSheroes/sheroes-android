@@ -82,8 +82,8 @@ public class OnBoardingHowCanSheroesHelpYouFragment extends BaseFragment{
     }
 
     private void setFilterValues() {
-        HashMap<String, ArrayList<LabelValue>> hashMap = mMasterDataResult.get(AppConstants.MASTER_DATA_CAN_HELP_IN_KEY);
-        List<LabelValue> labelValueArrayList = hashMap.get(AppConstants.MASTER_DATA_DEFAULT_CATEGORY);
+        //HashMap<String, ArrayList<LabelValue>> hashMap = mMasterDataResult.get(AppConstants.MASTER_DATA_CAN_HELP_IN_KEY);
+       // List<LabelValue> labelValueArrayList = hashMap.get(AppConstants.MASTER_DATA_DEFAULT_CATEGORY);
 
         OnBoardingData filterList = new OnBoardingData();
         filterList.setName("JobAt");

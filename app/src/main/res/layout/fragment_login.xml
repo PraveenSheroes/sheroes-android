@@ -45,7 +45,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
-                    android:text="minu@sheroes.in" />
+                    android:text="amleshsinha@gmail.com" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -61,7 +61,7 @@
                     android:imeOptions="actionUnspecified"
                     android:inputType="textPassword"
                     android:maxLines="1"
-                    android:text="tester" />
+                    android:text="amlesh" />
 
             </android.support.design.widget.TextInputLayout>
             <!-- Login progress -->

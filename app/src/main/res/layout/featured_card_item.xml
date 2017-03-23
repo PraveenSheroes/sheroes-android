@@ -1,22 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/dp_size_5"
-    app:cardElevation="@dimen/dp_size_2">
+    android:layout_marginBottom="@dimen/dp_size_10">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/dp_size_12"
         android:background="@color/white"
         android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/li_featured_community_images"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_size_160"
+            android:layout_height="wrap_content"
             android:background="@color/white"
             android:orientation="vertical" />
 
@@ -26,8 +23,7 @@
             android:layout_gravity="center"
             android:layout_margin="@dimen/dp_size_16"
             android:gravity="center"
-            android:orientation="horizontal"
-            android:weightSum="1">
+            android:orientation="horizontal">
 
             <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
                 android:id="@+id/iv_featured_community_card_circle_icon"
@@ -36,20 +32,18 @@
                 android:src="@drawable/ic_footer_button_icon" />
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_size_16"
-                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/tv_featured_community_card_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@string/ID_ROBOTO_BOLD"
+                    android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                     android:textColor="@color/feed_article_label"
-                    android:textSize="@dimen/sp_size_15"
-                    android:textStyle="bold" />
+                    android:textSize="@dimen/sp_size_14" />
 
                 <TextView
                     android:id="@+id/tv_featured_community_time"
@@ -74,31 +68,41 @@
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:lineSpacingExtra="@dimen/dp_size_3"
             android:textColor="@color/feed_article_label"
-            android:textSize="@dimen/sp_size_14" />
+            android:textSize="@dimen/sp_size_12" />
+
         <TextView
             android:id="@+id/tv_featured_view_more"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="right"
             android:layout_marginLeft="@dimen/dp_size_16"
             android:layout_marginRight="@dimen/dp_size_25"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:layout_gravity="right"
-            android:background="@color/white"
-            android:gravity="right"
             android:layout_marginTop="@dimen/dp_size_minus_22"
-            android:textColor="@color/feed_job_card_new"
+            android:background="@color/white"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:gravity="right"
             android:text="@string/ID_VIEW_MORE"
+            android:textColor="@color/feed_job_card_new"
             android:textSize="@dimen/sp_size_14" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_size_0.5"
+            android:layout_marginLeft="@dimen/dp_size_13"
+            android:layout_marginRight="@dimen/dp_size_13"
+            android:layout_marginTop="@dimen/dp_size_10"
+            android:background="@color/search_tab_unselected_text" />
 
         <LinearLayout
             android:id="@+id/li_featured_community_tags"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp_size_12"
             android:layout_marginLeft="@dimen/dp_size_16"
             android:layout_marginRight="@dimen/dp_size_16"
-            android:layout_marginTop="@dimen/dp_size_20"
+            android:layout_marginTop="@dimen/dp_size_10"
             android:orientation="horizontal"
-            android:weightSum="1">
+            android:weightSum="@integer/int_value_for_line_1">
 
             <TextView
                 android:id="@+id/tv_featured_community_tag_lable"
@@ -106,6 +110,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:text="tag : testincsnd"
                 android:textColor="@color/feed_article_label"
                 android:textSize="@dimen/sp_size_12" />
 
@@ -114,15 +119,14 @@
                 android:layout_width="@dimen/dp_size_80"
                 android:layout_height="@dimen/dp_size_30"
                 android:background="@drawable/rectangle_feed_commnity_join"
-                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:gravity="center"
                 android:text="@string/ID_JOIN"
-                android:visibility="gone"
                 android:textColor="@color/footer_icon_text"
-                android:textSize="@dimen/sp_size_12" />
+                android:textSize="@dimen/sp_size_12"
+                android:visibility="gone" />
 
         </LinearLayout>
-
 
     </LinearLayout>
 </android.support.v7.widget.CardView>

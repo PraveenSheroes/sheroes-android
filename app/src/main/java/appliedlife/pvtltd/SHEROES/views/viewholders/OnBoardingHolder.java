@@ -133,7 +133,7 @@ public class OnBoardingHolder extends BaseViewHolder<OnBoardingData> {
                 }
 
             } else if (lengthString >= 5 && lengthString < 10) {
-                if (column<0) {
+                if (column<1) {
                     passedRow += 1;
                     return passedRow;
                 } else {

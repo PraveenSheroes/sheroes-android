@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/how_can_sheroes_help"
     android:fitsSystemWindows="true">
 
     <android.support.design.widget.AppBarLayout
@@ -26,15 +27,6 @@
             app:expandedTitleTextAppearance="@style/title.expanded"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <appliedlife.pvtltd.SHEROES.views.cutomeviews.SquareImageView
-                android:id="@+id/iv_onboarding"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fitsSystemWindows="true"
-                android:scaleType="centerCrop"
-                android:background="@drawable/gradiant_background"
-                app:layout_collapseMode="pin" />
-
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar_onboarding"
                 android:layout_width="match_parent"
@@ -45,48 +37,86 @@
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
             </android.support.v7.widget.Toolbar>
-            <TextView
-                android:id="@+id/tv__how_can_help_search_box"
+
+            <appliedlife.pvtltd.SHEROES.views.cutomeviews.BoardingSquareImageView
+                android:id="@+id/iv_onboarding"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_size_65"
-                android:layout_marginLeft="@dimen/dp_size_10"
-                android:layout_marginRight="@dimen/dp_size_10"
-                android:background="@drawable/rectangle_search_bar"
-                android:backgroundTint="@color/white"
-                android:hint="@string/ID_JOIN_CONVERSATION"
-                android:textColorHint="@color/black"
-                android:drawableLeft="@drawable/ic_search_box_icon"
-                android:drawablePadding="@dimen/dp_size_18"
+                android:fitsSystemWindows="true"
+                android:scaleType="centerCrop"
+                app:layout_collapseMode="pin" />
+
+            <TextView
+                android:id="@+id/tv_how_can_sheroes_text"
+                android:layout_width="@dimen/dp_size_200"
+                android:layout_height="@dimen/dp_size_70"
+                android:layout_gravity="center|top"
+                android:layout_marginTop="@dimen/dp_size_35"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                android:paddingTop="@dimen/dp_size_20"
-                android:paddingLeft="@dimen/dp_size_12"
-                android:paddingBottom="@dimen/dp_size_20"
-                android:textColor="@color/black"
-                android:textSize="@dimen/sp_size_12" />
+                android:lineSpacingExtra="@dimen/dp_size_10"
+                android:text="@string/ID_HOW_CAN_SHEROES"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp_size_23" />
 
             <LinearLayout
-                android:id="@+id/tv_strip_for_add_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:visibility="gone"
                 android:layout_gravity="bottom"
-                android:background="@color/gray_shap"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/tv_tag_data"
-                    android:layout_width="wrap_content"
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/dp_size_12"
-                    android:background="@drawable/on_boarding_tag_border_rectangle"
-                    android:padding="@dimen/dp_size_10"
-                    android:text="@string/ID_APP_NAME"
-                    android:textColor="@color/blue"
-                    android:textSize="@dimen/sp_size_12"
-                    android:textStyle="bold" />
+                    android:layout_marginBottom="@dimen/dp_size_5"
+                    android:layout_marginLeft="@dimen/dp_size_10"
+                    android:layout_marginRight="@dimen/dp_size_10">
+
+                    <TextView
+                        android:id="@+id/tv__how_can_help_search_box"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/white"
+                        android:drawableLeft="@drawable/ic_search_box_icon"
+                        android:drawablePadding="@dimen/dp_size_12"
+                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                        android:paddingBottom="@dimen/dp_size_14"
+                        android:paddingLeft="@dimen/dp_size_12"
+                        android:paddingTop="@dimen/dp_size_14"
+                        android:text="@string/ID_JOIN_CONVERSATION"
+                        android:textColor="@color/suggested_text"
+                        android:textSize="@dimen/sp_size_14" />
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dp_size_5">
+
+                    <LinearLayout
+                        android:id="@+id/tv_strip_for_add_item"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/white"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tv_tag_data"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/dp_size_12"
+                            android:background="@drawable/on_boarding_tag_border_ractangle_selected"
+                            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                            android:padding="@dimen/dp_size_9"
+                            android:text="@string/ID_APP_NAME"
+                            android:textColor="@color/blue"
+                            android:textAllCaps="true"
+                            android:textSize="@dimen/sp_size_12" />
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
             </LinearLayout>
+
 
         </appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.CustomCollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
@@ -95,6 +125,8 @@
         android:id="@+id/view_pager_onboarding"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:alpha=".9"
+        android:background="@color/white"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 

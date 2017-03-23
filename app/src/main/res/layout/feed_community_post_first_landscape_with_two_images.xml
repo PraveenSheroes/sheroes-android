@@ -12,18 +12,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_size_3"
-        android:visibility="gone"
         android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/iv_feed_community_post_second_image_landscape_with_two_images"
-            android:layout_width="@dimen/two_image_rectangle"
+            android:layout_width="@dimen/two_image_rectangle_first_one"
             android:layout_height="@dimen/two_image_rectangle"
             android:scaleType="centerCrop"/>
 
         <ImageView
             android:id="@+id/iv_feed_community_post_third_image_landscape_with_two_images"
-            android:layout_width="@dimen/two_image_rectangle"
+            android:layout_width="@dimen/two_image_rectangle_second_one"
             android:layout_height="@dimen/two_image_rectangle"
             android:layout_marginLeft="@dimen/dp_size_3"
             android:scaleType="centerCrop"/>

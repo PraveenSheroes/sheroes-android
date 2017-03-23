@@ -73,7 +73,7 @@ public class OnboardingActivity extends BaseActivity implements OnBoardingTellUs
         mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         mViewPagerAdapter.addFragment(OnBoardingHowCanSheroesHelpYouFragment.createInstance(mMasterDataResult), getString(R.string.ID_TELL_US_ABOUT));
         mViewPagerOnBoarding.setAdapter(mViewPagerAdapter);
-        ivOnBoarding.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.job_default_cover));
+       // ivOnBoarding.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.how_can_sheroes_help));
         supportStartPostponedEnterTransition();
     }
 
