@@ -113,4 +113,9 @@
     <color name="text_color_profile_hor">#1c2024</color>
     <color name="text_color_profile_hor_txt">#757e87</color>
     <color name="user_comment_text">#88888b</color>
+    <color name="image_upload_bg_color">#d9000000</color>
+    <color name="image_upload_camera_txt_color">#d0d0d0</color>
+    <color name="image_upload_gallery_txt_color">#156167</color>
+    <color name="camera_bg_start_color">#092E35</color>
+    <color name="camera_bg_end_color">#15636A</color>
 </resources>

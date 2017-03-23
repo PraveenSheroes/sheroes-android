@@ -51,6 +51,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -227,15 +228,13 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
     public void addMoreClick()
     {
         checkCameraPermission();
-        selectImageOption();
-
+        openImageOption();
     }
     @OnClick(R.id.fl_camera_btn_for_post_images)
     public void camerabtnClick()
     {
         checkCameraPermission();
-        selectImageOption();
-
+        openImageOption();
     }
     @OnClick(R.id.tv_community_post_submit)
     public void communityPostSubmitClick()
@@ -391,6 +390,36 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
             return null;
         }
     }
+
+    private void openImageOption() {
+        ImageUploadFragment imageUploadFragment = new ImageUploadFragment();
+        ((BaseActivity) getActivity()).replaceFragment(imageUploadFragment, R.id.create_community_post_container, null, true);
+    }
+
+    public void selectImageFrmCamera() {
+        try {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            File f = new File(Environment.getExternalStorageDirectory(), "temp1.jpg");
+            mImageCaptureUri = Uri.fromFile(f);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
+            startActivityForResult(intent, mCAMERA_CODE);
+        } catch (Exception e) {
+            Toast.makeText(getActivity(), "Permission Required", Toast.LENGTH_LONG).show();
+            checkCameraPermission();
+        }
+    }
+
+    public void selectImageFrmGallery() {
+        try {
+            Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(i, mGALLERY_CODE);
+        } catch (Exception e) {
+            Toast.makeText(getActivity(), "Permission Required", Toast.LENGTH_LONG).show();
+            checkCameraPermission();
+        }
+    }
+
+    @Deprecated
     private void selectImageOption() {
         final CharSequence[] items = {"Take Selfie", "Choose from Gallery"};
 

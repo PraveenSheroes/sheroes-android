@@ -111,6 +111,26 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
         return fragment;
     }
 
+    /**
+     * Replace Fragment
+     *
+     * @param fragment       Fragment Object
+     * @param bundle         Bundle to pass to the Fragment
+     * @param addToBackStack boolean
+     */
+    public void replaceFragment(Fragment fragment, int resId, Bundle bundle, boolean addToBackStack) {
+        if (fragment != null && !fragment.isAdded()) {
+            fragment.setArguments(bundle);
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction ft = fragmentManager.beginTransaction();
+            if (addToBackStack) ft.addToBackStack(fragment.getClass().getSimpleName());
+            LogUtils.info(TAG, "Fragment TAG given->" + fragment.getClass().getSimpleName());
+            if (resId == 0 && findViewById(R.id.container) != null)
+                ft.replace(R.id.container, fragment, fragment.getClass().getSimpleName());
+            else ft.add(resId, fragment, fragment.getClass().getSimpleName());
+            ft.commitAllowingStateLoss();
+        }
+    }
     @Override
     protected void onDestroy() {
         mIsDestroyed = true;

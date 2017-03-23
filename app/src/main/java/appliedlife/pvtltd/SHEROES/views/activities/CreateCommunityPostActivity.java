@@ -17,15 +17,17 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityList;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
 import appliedlife.pvtltd.SHEROES.views.fragments.CreateCommunityPostFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ImageUploadFragment;
 import butterknife.ButterKnife;
 
 
-public class CreateCommunityPostActivity extends BaseActivity implements CreateCommunityPostFragment.CreateCommunityActivityPostIntractionListner,BaseHolderInterface, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener{
-    String data="";
+public class CreateCommunityPostActivity extends BaseActivity implements CreateCommunityPostFragment.CreateCommunityActivityPostIntractionListner, BaseHolderInterface, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, ImageUploadFragment.ImageUploadCallable {
+    String data = "";
     private FeedDetail mFeedDetail;
+
+    private CreateCommunityPostFragment mCommunityFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,24 +36,21 @@ public class CreateCommunityPostActivity extends BaseActivity implements CreateC
 
         renderLoginFragmentView();
     }
+
     public void renderLoginFragmentView() {
-         data= getIntent().getStringExtra("value");
-        try
-        {
-            if(null !=data)
-            {}
-            else
-                data="";
-        }
-        catch (Exception e)
-        {
-            data="";
+        data = getIntent().getStringExtra("value");
+        try {
+            if (null != data) {
+            } else
+                data = "";
+        } catch (Exception e) {
+            data = "";
         }
 
         setContentView(R.layout.activity_create_community_post);
         ButterKnife.bind(this);
-        CreateCommunityPostFragment frag = new CreateCommunityPostFragment(data);
-        callFirstFragment(R.id.create_community_post_container, frag);
+        mCommunityFragment = new CreateCommunityPostFragment(data);
+        callFirstFragment(R.id.create_community_post_container, mCommunityFragment);
 
     }
 
@@ -66,25 +65,23 @@ public class CreateCommunityPostActivity extends BaseActivity implements CreateC
     }
 
 
-
     @Override
     public void handleOnClick(BaseResponse sheroesListDataItem, View view) {
-       // Toast.makeText(getApplicationContext(),sheroesListDataItem+"hello",Toast.LENGTH_LONG).show();
+        // Toast.makeText(getApplicationContext(),sheroesListDataItem+"hello",Toast.LENGTH_LONG).show();
 
-       if (sheroesListDataItem instanceof CommunityList) {
+        if (sheroesListDataItem instanceof CommunityList) {
             CommunityList communityList = (CommunityList) sheroesListDataItem;
 
 
+            //  Toast.makeText(getApplicationContext(),communityList.getId(),Toast.LENGTH_LONG).show();
 
-           //  Toast.makeText(getApplicationContext(),communityList.getId(),Toast.LENGTH_LONG).show();
-
-           // DetailActivity.navigate(this, view, communityList);
+            // DetailActivity.navigate(this, view, communityList);
         }
 
 
         FragmentManager fm = getFragmentManager();
-        fm .popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-      //  getSupportFragmentManager().popBackStack();
+        fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        //  getSupportFragmentManager().popBackStack();
 
     }
 
@@ -130,5 +127,15 @@ public class CreateCommunityPostActivity extends BaseActivity implements CreateC
     @Override
     public void onClose() {
         finish();
+    }
+
+    @Override
+    public void onCameraSelection() {
+        mCommunityFragment.selectImageFrmCamera();
+    }
+
+    @Override
+    public void onGallerySelection() {
+        mCommunityFragment.selectImageFrmGallery();
     }
 }

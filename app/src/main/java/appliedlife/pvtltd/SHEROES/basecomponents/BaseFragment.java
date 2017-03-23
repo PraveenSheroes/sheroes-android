@@ -395,4 +395,11 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     @Override
     public void getLogInResponse(LoginResponse loginResponse) {
     }
+
+    /**
+     * this method will be use for fragment pop
+     */
+    protected void onBackPress() {
+        getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+    }
 }

@@ -267,4 +267,9 @@
         android:text="CREATE"
         android:textColor="@color/white"
         android:textSize="@dimen/sp_size_12" />
+
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </RelativeLayout>

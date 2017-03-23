@@ -12,6 +12,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.views.fragments.ChangeCommunityPrivacyDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitySearchTagsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CreateCommunityFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ImageUploadFragment;
 import butterknife.ButterKnife;
 
 /** Created by Ajit Kumar on 11/01/2017.
@@ -21,28 +22,28 @@ import butterknife.ButterKnife;
  * @since 11/01/2017.
  * Title: Create community screen for Create community.
  */
-public class CreateCommunityActivity extends BaseActivity implements CreateCommunityFragment.CreateCommunityActivityIntractionListner,CommunitySearchTagsFragment.MyCommunityTagListener {
+public class CreateCommunityActivity extends BaseActivity implements CreateCommunityFragment.CreateCommunityActivityIntractionListner,CommunitySearchTagsFragment.MyCommunityTagListener ,ImageUploadFragment.ImageUploadCallable{
+
+    private CreateCommunityFragment mCommunityFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
         renderLoginFragmentView();
-
-
     }
+
     public void renderLoginFragmentView() {
         setContentView(R.layout.activity_create_community);
         ButterKnife.bind(this);
-        CreateCommunityFragment frag = new CreateCommunityFragment();
+        mCommunityFragment = new CreateCommunityFragment();
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
-                .replace(R.id.create_community_container, frag,CreateCommunityFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+                .replace(R.id.create_community_container, mCommunityFragment, CreateCommunityFragment.class.getName()).commitAllowingStateLoss();
 
     }
 
     @Override
     public void close() {
-
         finish();
     }
 
@@ -52,48 +53,41 @@ public class CreateCommunityActivity extends BaseActivity implements CreateCommu
     }
 
     @Override
-    public void onTagsSubmit(String[] tagsval) {
+    public void onCameraSelection() {
+        mCommunityFragment.selectImageFrmCamera();
+    }
 
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(CreateCommunityFragment.class.getName());
+    @Override
+    public void onGallerySelection() {
+         mCommunityFragment.selectImageFrmGallery();
+    }
+
+    @Override
+    public void onTagsSubmit(String[] tagsval) {
         Bundle bundle = new Bundle();
         bundle.putStringArray(AppConstants.TAG_LIST, tagsval);
-        CreateCommunityFragment frag = new CreateCommunityFragment();
-        frag.setArguments(bundle);
+        mCommunityFragment = new CreateCommunityFragment();
+        mCommunityFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.create_community_container, frag,CreateCommunityFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
-
-              //  ((CreateCommunityFragment) fragment).showTagResult();
-
-
-
-
+                .add(R.id.create_community_container, mCommunityFragment,CreateCommunityFragment.class.getName()).addToBackStack(CreateCommunityFragment.class.getSimpleName()).commitAllowingStateLoss();
     }
 
     @Override
     public void onBackPress() {
         getSupportFragmentManager().popBackStack();
-      //  finish();
-
     }
 
     @Override
     public void onBackPressed() {
-    finish();
+        super.onBackPressed();
     }
 
     @Override
     public void callCommunityTagPage() {
         getSupportFragmentManager().popBackStack();
-
         CommunitySearchTagsFragment frag=new CommunitySearchTagsFragment();
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
                 .replace(R.id.create_community_container, frag).addToBackStack(null).commitAllowingStateLoss();
-
-
-         //ChangeCommunityPrivacyDialogFragment frag1 = new ChangeCommunityPrivacyDialogFragment();
-        //callFirstFragment(R.id.fl_fragment_container, frag1);
-
-
     }
 
 }

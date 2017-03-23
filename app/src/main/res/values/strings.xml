@@ -568,4 +568,6 @@ etur adipiscing elit,sed do eiusmod tempor incididunt ut…</string>
     <string name="ID_SEARCH_USER">Search Users</string>
     <string name="ID_NAME">Name</string>
 
+    <string name="camera">CAMERA</string>
+    <string name="gallery">GALLERY</string>
 </resources>
