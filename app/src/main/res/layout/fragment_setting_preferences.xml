@@ -13,7 +13,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/id_setting_preferences_basicdetails"
+            android:id="@+id/tv_setting_preferences_basicdetails"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/setting_selector_background"
@@ -26,7 +26,7 @@
             android:textStyle="normal" />
 
         <TextView
-            android:id="@+id/id_setting_preferences_education_details"
+            android:id="@+id/tv_setting_preferences_education_details"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/setting_selector_background"
@@ -37,7 +37,7 @@
             android:textSize="@dimen/dp_size_13" />
 
         <TextView
-            android:id="@+id/id_setting_preferences_work_experience"
+            android:id="@+id/tv_setting_preferences_work_experience"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/setting_selector_background"
@@ -48,7 +48,7 @@
             android:textSize="@dimen/dp_size_13" />
 
         <TextView
-            android:id="@+id/id_setting_preferences_deactive_account"
+            android:id="@+id/tv_setting_preferences_deactive_account"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/setting_selector_background"

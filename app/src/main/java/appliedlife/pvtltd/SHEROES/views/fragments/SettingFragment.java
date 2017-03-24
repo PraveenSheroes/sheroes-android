@@ -1,7 +1,9 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.inject.Inject;
 
@@ -24,6 +28,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingRatingResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.UserPreferenceRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.UserpreferenseResponse;
 import appliedlife.pvtltd.SHEROES.presenters.SettingFeedbackPresenter;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SettingFeedbackView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SettingView;
@@ -52,6 +57,8 @@ public class SettingFragment extends BaseFragment implements SettingFeedbackView
     TextView mTv_setting_terms_and_condition;
     SettingView msettingFragmentCallBack;
     Integer prrference_ids;
+TextView textView;
+    final Handler handler_interact=new Handler();
 
     @Inject
     SettingFeedbackPresenter mSettingFeedbackPresenter;
@@ -111,26 +118,69 @@ public class SettingFragment extends BaseFragment implements SettingFeedbackView
         msettingFragmentCallBack.settingpreference(prrference_ids, null);
 
 
-        /*switch (prrference_ids) {
 
 
 
 
+        switch (prrference_ids) {
+
+            case R.id.tv_setting_feedback:
+                mTv_setting_feedback.setTextColor(getResources().getColor(R.color.search_tab_text));
+                textView=mTv_setting_feedback;
+                settextcolor();
+                break;
             case R.id.tv_setting_preferences:
-
-                get_user_preference();
+                mTv_preferences.setTextColor(getResources().getColor(R.color.search_tab_text));
+                textView=mTv_preferences;
+                settextcolor();
+                break;
+            case R.id.tv_setting_about:
+                mTv_setting_about.setTextColor(getResources().getColor(R.color.search_tab_text));
+                textView=mTv_setting_about;
+                settextcolor();
+                break;
+            case R.id.tv_setting_terms_and_condition:
+                mTv_setting_terms_and_condition.setTextColor(getResources().getColor(R.color.search_tab_text));
+                textView=mTv_setting_terms_and_condition;
+                settextcolor();
 
                 break;
 
             default:
 
-               msettingFragmentCallBack.settingpreference(prrference_ids,null);
-
 
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + prrference_ids);
 
-        }*/
+        }
     }
+
+
+    public void settextcolor()
+    {
+
+        Timer timer_interact=new Timer();
+        timer_interact.schedule(new TimerTask() {
+            @Override
+            public void run() {UpdateGUI();}
+        }, 200);
+    }
+    private void UpdateGUI() {
+
+
+        handler_interact.post(runnable_interact);
+    }
+    //creating runnable
+    final Runnable runnable_interact = new Runnable() {
+        public void run() {
+
+
+            textView.setTextColor(getResources().getColor(R.color.searchbox_text_color));
+        }
+    };
+
+
+
+
 
     @Override
     public void getFeedbackResponse(SettingFeedbackResponce feedbackResponce) {
@@ -191,6 +241,8 @@ public class SettingFragment extends BaseFragment implements SettingFeedbackView
 
 
         void callBackSettingActivity(int id);
+
+
     }
 
 

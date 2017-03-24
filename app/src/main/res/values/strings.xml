@@ -107,6 +107,7 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_DAILOG">dialog</string>
     <string name="ID_TELL_US_ABOUT">  Tell Us About Yourself</string>
 
+    <string name="ID_APPRECIATE_FROM_LIFE">SHEROES</string>
     <!--string set  through priyanka-->
 
     <!--text related setting_dashboard page-->
@@ -123,8 +124,9 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_LOCATION">Location</string>
     <!--string setting_feedback page-->
     <string name="ID_THOUGHTS">THOUGHTS?</string>
-    <string name="ID_COMMENT">It is a really nice app. Must try atleast once, if needed.</string>
+    <string name="ID_COMMENT">Enter comment</string>
     <string name="ID_BUTTON">BUTTON</string>
+    <string name="Lke_Text_APP">We Appreciate You</string>
     <string name="ID_TYING_MESSAGE">We are actively trying to improve SHEROES to better cater to your needs. Tap a star to rate. Leave us a note too, if you can!</string>
 
     <!-- String related to preferences_dashboard page-->
@@ -132,7 +134,7 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_BASICDETAILS">Basic Details</string>
     <string name="ID_EDUCATIONDETAILS">EDUCATION DETAILS</string>
     <string name="ID_WORKEXPERIENCEDETAILS">WORK EXPERIENCE DETAILS</string>
-    <string name="ID_DEACTIVEACCOUNT">DEACTIVE ACCOUNT</string>
+    <string name="ID_DEACTIVEACCOUNT">DEACTIVATE ACCOUNT</string>
 
 
     <!--string related to setting_deactive account page-->
@@ -205,12 +207,13 @@ Our website www.sheroes.in offers services for certain products and services. By
 
     <!--String related setting_preferences_deactiveaccount page -->
 
-    <string name="ID_DEACTIVATE">Why do you want to deactivate</string>
+    <string name="ID_DEACTIVATE">Why do you want to deactivate?</string>
     <string name="ID_NOTFINDTEXT">I don’t find SHEROES useful</string>
     <string name="ID_SPAMMED">I feel spammed</string>
     <string name="ID_PRIVACY">I have privacy issues</string>
     <string name="ID_OTHER">Other</string>
     <string name="ID_WRITE_RESON">Write reason</string>
+    <string name="ID_CONFIRM">confirm</string>
 
 
     <!-- String related to setting_feedback page-->

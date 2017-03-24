@@ -497,11 +497,11 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
         mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_unselected_icon), null, null);
         mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_unselected_icon), null, null);
         mTvCommunities.setText(AppConstants.EMPTY_STRING);
-        SettingFragment articlesFragment = new SettingFragment();
+        SettingFragment settingFragment = new SettingFragment();
         Bundle bundle = new Bundle();
-        articlesFragment.setArguments(bundle);
+        settingFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
-                .replace(R.id.fl_article_card_view, articlesFragment).addToBackStack(null).commitAllowingStateLoss();
+                .replace(R.id.fl_article_card_view, settingFragment).addToBackStack(null).commitAllowingStateLoss();
         mTvSpinnerIcon.setVisibility(View.GONE);
     }
 
@@ -755,6 +755,7 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
     public void backListener(int id) {
         getSupportFragmentManager().popBackStack();
 
+
     }
 
     @Override
@@ -762,6 +763,7 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
 
         switch (id) {
             case R.id.tv_setting_feedback:
+                TextView tv_setting_feedback;
                 SettingFeedbackFragment articlesFragment = new SettingFeedbackFragment();
                 getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
                         .replace(R.id.fl_feed_comments, articlesFragment).addToBackStack(null).commitAllowingStateLoss();
@@ -772,7 +774,6 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
               /*  Gson gson = new Gson();
                 String jsonSections = gson.toJson(sections);
                 intent.putExtra("Setting_preferences",jsonSections);*/
-
                 Intent intent = new Intent(this, SettingPreferencesActivity.class);
                 startActivity(intent);
 

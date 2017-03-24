@@ -8,7 +8,7 @@
 
 
     <ImageView
-        android:id="@+id/iv_back_setting"
+        android:id="@+id/iv_back_profile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
@@ -18,7 +18,7 @@
         android:src="@drawable/ic_back_white"/>
 
     <TextView
-        android:id="@+id/tv_setting_tittle"
+        android:id="@+id/tv_profile_tittle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@string/ID_ROBOTO_BOLD"

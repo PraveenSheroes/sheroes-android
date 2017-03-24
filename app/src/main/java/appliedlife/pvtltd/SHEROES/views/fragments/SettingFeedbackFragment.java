@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -47,7 +48,6 @@ import butterknife.OnClick;
 public class SettingFeedbackFragment extends BaseFragment implements SettingFeedbackView {
     private final String TAG = LogUtils.makeLogTag(SettingFeedbackFragment.class);
     private final String SCREEN_NAME = "Setting_feedback_page";
-
 
     @Bind(R.id.tv_skip)
     TextView Mtextviewskip;
@@ -95,15 +95,17 @@ public class SettingFeedbackFragment extends BaseFragment implements SettingFeed
         ButterKnife.bind(this, view);
         mtv_setting_tittle.setText(R.string.ID_FEEDBACK);
         mSettingFeedbackPresenter.attachView(this);
-        mEt_write_comment.setFocusable(true);
-
 
         //on tuch star...
         Mdialog_ratingbar.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
-                    mpreferences_deactiveaccount_button.setClickable(true);
+                    mpreferences_deactiveaccount_button.setEnabled(true);
+
+                    mEt_write_comment.setCursorVisible(true);
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
                     mpreferences_deactiveaccount_button.setBackgroundColor(getResources().getColor(R.color.red));
                     mtv_setting_tittle.setVisibility(View.VISIBLE);
                     float touchPositionX = event.getX();
@@ -118,7 +120,6 @@ public class SettingFeedbackFragment extends BaseFragment implements SettingFeed
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     v.setPressed(false);
                 }
-
                 if (event.getAction() == MotionEvent.ACTION_CANCEL) {
                     v.setPressed(false);
                 }

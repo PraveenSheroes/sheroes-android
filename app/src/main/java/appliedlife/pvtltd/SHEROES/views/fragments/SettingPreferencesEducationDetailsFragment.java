@@ -54,11 +54,11 @@ public class SettingPreferencesEducationDetailsFragment extends BaseFragment imp
     @Bind(R.id.spinner_educationdetail)
     Spinner mSpinner_educationdetail;
     @Bind(R.id.tv_setting_tittle)
-    TextView mtv_setting_tittle;
+    TextView mTv_setting_tittle;
     @Bind(R.id.tv_setting_tittle1)
-    TextView mtv_setting_tittle1;
+    TextView mTv_setting_tittle1;
     @Bind(R.id.iv_back_setting)
-    ImageView miv_back_setting;
+    ImageView mIv_back_setting;
 
     @Inject
     SettingFeedbackPresenter mSettingFeedbackPresenter;
@@ -96,8 +96,10 @@ public class SettingPreferencesEducationDetailsFragment extends BaseFragment imp
         View view = inflater.inflate(R.layout.fragment_setting_preferences_educationdetails, container, false);
         mSettingFeedbackPresenter.attachView(this);
         ButterKnife.bind(this, view);
-        mtv_setting_tittle.setText(R.string.ID_EDUCATIONDETAILS);
-        mtv_setting_tittle1.setText(R.string.ID_PREFERENCES);
+        mTv_setting_tittle.setText(R.string.ID_EDUCATIONDETAILS);
+        mTv_setting_tittle1.setText(R.string.ID_PREFERENCES);
+        mTv_setting_tittle.setTextSize(14);
+        mTv_setting_tittle1.setTextSize(12);
         mSpinner_educationdetail.setAdapter(new CustomSpinnerAdapter(getActivity(), R.layout.setting_spinner, total_iteam, total_images));
         if (null != getArguments()) {
             strtext = getArguments().getString("Section list_value");
@@ -167,7 +169,7 @@ public class SettingPreferencesEducationDetailsFragment extends BaseFragment imp
 
         mSpinner_educationdetail.setOnItemSelectedListener(countrySelectedListener);
         //Open setting_preferences_Activity
-        miv_back_setting.setOnClickListener(new View.OnClickListener() {
+        mIv_back_setting.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {

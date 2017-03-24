@@ -3,6 +3,7 @@
     <!-- Dimensions Core values. -->
     <dimen name="dp_size_3">3dp</dimen>
     <dimen name="dp_size_4">4dp</dimen>
+
     <dimen name="dp_size_21">21dp</dimen>
     <dimen name="dp_size_23">23dp</dimen>
     <dimen name="dp_size_25">25dp</dimen>

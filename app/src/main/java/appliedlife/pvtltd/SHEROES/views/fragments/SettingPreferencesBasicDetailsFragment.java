@@ -63,11 +63,11 @@ public class SettingPreferencesBasicDetailsFragment extends BaseFragment impleme
     @Bind(R.id.spinner4)
     Spinner mSpinner4;
     @Bind(R.id.tv_setting_tittle)
-    TextView mtv_setting_tittle;
+    TextView mTv_setting_tittle;
     @Bind(R.id.tv_setting_tittle1)
-    TextView mtv_setting_tittle1;
+    TextView mTv_setting_tittle1;
     @Bind(R.id.iv_back_setting)
-    ImageView miv_back_setting;
+    ImageView mIv_back_setting;
     SettingView settingViewlistener;
 
 
@@ -109,8 +109,10 @@ public class SettingPreferencesBasicDetailsFragment extends BaseFragment impleme
         mSpinner3.setAdapter(new CustomSpinnerAdapter(getActivity(), R.layout.setting_spinner, total_iteam, total_images));
         mSpinner4.setAdapter(new CustomSpinnerAdapter(getActivity(), R.layout.setting_spinner, total_iteam, total_images));
 
-        mtv_setting_tittle.setText(R.string.ID_BASICDETAILS);
-        mtv_setting_tittle1.setText(R.string.ID_PREFERENCES);
+        mTv_setting_tittle.setText(R.string.ID_BASICDETAILS);
+        mTv_setting_tittle1.setText(R.string.ID_PREFERENCES);
+        mTv_setting_tittle.setTextSize(14);
+        mTv_setting_tittle1.setTextSize(12);
 
 
         if (null != getArguments()) {
@@ -334,7 +336,7 @@ public class SettingPreferencesBasicDetailsFragment extends BaseFragment impleme
         mSpinner4.setOnItemSelectedListener(countrySelectedListener3);
 
         //Open setting_preferences_Activity
-        miv_back_setting.setOnClickListener(new View.OnClickListener() {
+        mIv_back_setting.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {

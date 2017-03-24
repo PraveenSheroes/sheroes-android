@@ -47,8 +47,8 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
 
     @Bind(R.id.deactive_text1)
     TextView mtvdeactive_text1;
-    @Bind(R.id.deactive_check_box1)
-    CheckBox mdeactive_check_box1;
+    /*  @Bind(R.id.deactive_check_box1)
+      CheckBox mdeactive_check_box1;*/
     @Bind(R.id.deactive_text1a)
     TextView mtvdeactive_text1a;
     @Bind(R.id.deactive_check_box1a)
@@ -72,11 +72,14 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
     @Bind(R.id.preferences_deactiveaccount_button)
     Button mpreferences_deactiveaccount_button;
     @Bind(R.id.tv_setting_tittle)
-    TextView mtv_setting_tittle;
+    TextView mTv_setting_tittle;
     @Bind(R.id.tv_setting_tittle1)
-    TextView mtv_setting_tittle1;
+    TextView mTv_setting_tittle1;
     @Bind(R.id.iv_back_setting)
-    ImageView miv_back_setting;
+    ImageView mIv_back_setting;
+    String mDeactivateReson_value;
+    @Bind(R.id.tv_reson_line)
+    TextView mTv_reson_line;
 
     int flag = 0;
     String value;
@@ -112,11 +115,15 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
         ButterKnife.bind(this, view);
         mSettingFeedbackPresenter.attachView(this);
 
-        mtv_setting_tittle.setText(R.string.ID_DEACTIVEACCOUNT);
-        mtv_setting_tittle1.setText(R.string.ID_PREFERENCES);
+        mTv_setting_tittle.setText(R.string.ID_DEACTIVEACCOUNT);
+        mTv_setting_tittle1.setText(R.string.ID_PREFERENCES);
+        mTv_setting_tittle.setTextSize(14);
 
+        mTv_setting_tittle1.setTextSize(12);
+
+        mTv_reson_line.setVisibility(View.GONE);
         //Open setting_preferences_Activity
-        miv_back_setting.setOnClickListener(new View.OnClickListener() {
+        mIv_back_setting.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
@@ -140,63 +147,6 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
 
         return view;
     }
-
-    //click on deactive_text1
-
-    @OnClick(R.id.preferences_deactiveaccount_button)
-
-    public void ondeactive_buttonclick() {
-
-        PreferencesDeactiveAccountDialogFragment newFragment = new PreferencesDeactiveAccountDialogFragment(this);
-        newFragment.show(getActivity().getFragmentManager(), "dialog");
-
-    }
-
-    //click on deactive_text1
-
-    @OnClick(R.id.deactive_text1)
-
-    public void ondeactivetext1click() {
-
-        setcolorontextview(mtvdeactive_text1, mdeactive_check_box1);
-        value = mtvdeactive_text1.getText().toString();
-
-        mdeactive_check_box1.setChecked(true);
-        mdeactive_check_box1a.setChecked(false);
-        mdeactive_check_box1c.setChecked(false);
-        mdeactive_check_box1b.setChecked(false);
-        mdeactive_check_box1d.setChecked(false);
-
-
-        mtvdeactive_text1.setTextColor(getResources().getColor(R.color.blue));
-        mtvdeactive_text1a.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
-        mtvdeactive_text1b.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
-        mtvdeactive_text1c.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
-        mtvdeactive_text1d.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
-
-    }
-
-//click on check_1
-
-    @OnClick(R.id.deactive_check_box1)
-
-    public void ondeactivecheck1click() {
-
-        setcolorontextview(mtvdeactive_text1, mdeactive_check_box1);
-        mdeactive_check_box1.setChecked(true);
-        mdeactive_check_box1a.setChecked(false);
-        mdeactive_check_box1b.setChecked(false);
-        mdeactive_check_box1c.setChecked(false);
-        mdeactive_check_box1d.setChecked(false);
-        mtvdeactive_text1.setTextColor(getResources().getColor(R.color.blue));
-        mtvdeactive_text1a.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
-        mtvdeactive_text1b.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
-        mtvdeactive_text1c.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
-        mtvdeactive_text1d.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
-
-
-    }
-
     //click on deactive_text2
 
     @OnClick(R.id.deactive_text1a)
@@ -207,10 +157,15 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
         value = mtvdeactive_text1a.getText().toString();
 
         mdeactive_check_box1a.setChecked(true);
-        mdeactive_check_box1.setChecked(false);
         mdeactive_check_box1b.setChecked(false);
         mdeactive_check_box1c.setChecked(false);
         mdeactive_check_box1d.setChecked(false);
+        mEditText_reson.setVisibility(View.GONE);
+        mTv_reson_line.setVisibility(View.GONE);
+        tv_reson.setVisibility(View.GONE);
+
+
+        mpreferences_deactiveaccount_button.setEnabled(true);
         mtvdeactive_text1a.setTextColor(getResources().getColor(R.color.blue));
         mtvdeactive_text1.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
         mtvdeactive_text1b.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
@@ -230,10 +185,14 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
         setcolorontextview(mtvdeactive_text1a, mdeactive_check_box1a);
 
         mdeactive_check_box1a.setChecked(true);
-        mdeactive_check_box1.setChecked(false);
         mdeactive_check_box1b.setChecked(false);
         mdeactive_check_box1c.setChecked(false);
         mdeactive_check_box1d.setChecked(false);
+        mEditText_reson.setVisibility(View.GONE);
+        mTv_reson_line.setVisibility(View.GONE);
+        tv_reson.setVisibility(View.GONE);
+
+        mpreferences_deactiveaccount_button.setEnabled(true);
         mtvdeactive_text1a.setTextColor(getResources().getColor(R.color.blue));
         mtvdeactive_text1.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
         mtvdeactive_text1b.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
@@ -253,10 +212,14 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
         setcolorontextview(mtvdeactive_text1b, mdeactive_check_box1b);
         value = mtvdeactive_text1b.getText().toString();
         mdeactive_check_box1b.setChecked(true);
-        mdeactive_check_box1.setChecked(false);
         mdeactive_check_box1a.setChecked(false);
         mdeactive_check_box1c.setChecked(false);
         mdeactive_check_box1d.setChecked(false);
+        mTv_reson_line.setVisibility(View.GONE);
+        tv_reson.setVisibility(View.GONE);
+
+        mEditText_reson.setVisibility(View.GONE);
+        mpreferences_deactiveaccount_button.setEnabled(true);
         mtvdeactive_text1b.setTextColor(getResources().getColor(R.color.blue));
         mtvdeactive_text1.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
         mtvdeactive_text1a.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
@@ -274,10 +237,14 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
 
         setcolorontextview(mtvdeactive_text1b, mdeactive_check_box1b);
         mdeactive_check_box1b.setChecked(true);
-        mdeactive_check_box1.setChecked(false);
         mdeactive_check_box1a.setChecked(false);
         mdeactive_check_box1c.setChecked(false);
         mdeactive_check_box1d.setChecked(false);
+        mEditText_reson.setVisibility(View.GONE);
+        mTv_reson_line.setVisibility(View.GONE);
+        tv_reson.setVisibility(View.GONE);
+
+        mpreferences_deactiveaccount_button.setEnabled(true);
         mtvdeactive_text1b.setTextColor(getResources().getColor(R.color.blue));
         mtvdeactive_text1.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
         mtvdeactive_text1a.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
@@ -298,10 +265,14 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
         value = mtvdeactive_text1c.getText().toString();
 
         mdeactive_check_box1c.setChecked(true);
-        mdeactive_check_box1.setChecked(false);
         mdeactive_check_box1a.setChecked(false);
         mdeactive_check_box1b.setChecked(false);
         mdeactive_check_box1d.setChecked(false);
+        mEditText_reson.setVisibility(View.GONE);
+        mTv_reson_line.setVisibility(View.GONE);
+        tv_reson.setVisibility(View.GONE);
+
+        mpreferences_deactiveaccount_button.setEnabled(true);
         mtvdeactive_text1c.setTextColor(getResources().getColor(R.color.blue));
         mtvdeactive_text1.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
         mtvdeactive_text1a.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
@@ -318,10 +289,14 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
 
         setcolorontextview(mtvdeactive_text1c, mdeactive_check_box1c);
         mdeactive_check_box1c.setChecked(true);
-        mdeactive_check_box1.setChecked(false);
         mdeactive_check_box1a.setChecked(false);
         mdeactive_check_box1b.setChecked(false);
         mdeactive_check_box1d.setChecked(false);
+        mEditText_reson.setVisibility(View.GONE);
+        mTv_reson_line.setVisibility(View.GONE);
+        tv_reson.setVisibility(View.GONE);
+
+        mpreferences_deactiveaccount_button.setEnabled(true);
         mtvdeactive_text1c.setTextColor(getResources().getColor(R.color.blue));
         mtvdeactive_text1.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
         mtvdeactive_text1a.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
@@ -339,10 +314,14 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
         setcolorontextview(mtvdeactive_text1d, mdeactive_check_box1d);
         value = mtvdeactive_text1d.getText().toString();
         mdeactive_check_box1d.setChecked(true);
-        mdeactive_check_box1.setChecked(false);
         mdeactive_check_box1a.setChecked(false);
         mdeactive_check_box1b.setChecked(false);
         mdeactive_check_box1c.setChecked(false);
+        mEditText_reson.setVisibility(View.VISIBLE);
+        mTv_reson_line.setVisibility(View.VISIBLE);
+        tv_reson.setVisibility(View.GONE);
+
+        mpreferences_deactiveaccount_button.setEnabled(true);
         mtvdeactive_text1d.setTextColor(getResources().getColor(R.color.blue));
         mtvdeactive_text1.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
         mtvdeactive_text1a.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
@@ -353,19 +332,27 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
     }
 
 
-    //click on deactive_check_5
+    //click on deactive_checkbox_5
 
     @OnClick(R.id.deactive_check_box1d)
 
     public void ondeactivecheck5click() {
+        mTv_reson_line.setVisibility(View.VISIBLE);
 
         setcolorontextview(mtvdeactive_text1d, mdeactive_check_box1d);
 
-        mdeactive_check_box1.setChecked(false);
+
         mdeactive_check_box1a.setChecked(false);
         mdeactive_check_box1b.setChecked(false);
         mdeactive_check_box1c.setChecked(false);
         mdeactive_check_box1d.setChecked(true);
+        mEditText_reson.setVisibility(View.VISIBLE);
+        tv_reson.setVisibility(View.GONE);
+        mTv_reson_line.setVisibility(View.VISIBLE);
+
+
+
+        mpreferences_deactiveaccount_button.setEnabled(true);
         mtvdeactive_text1d.setTextColor(getResources().getColor(R.color.blue));
         mtvdeactive_text1.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
         mtvdeactive_text1a.setTextColor(getResources().getColor(R.color.searchbox_hint_text_color));
@@ -385,12 +372,18 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
         {
             textview.setTextColor(getResources().getColor(R.color.search_tab_text));
             mpreferences_deactiveaccount_button.setBackgroundColor(getResources().getColor(R.color.red));
+            mpreferences_deactiveaccount_button.setEnabled(true);
+
+
             checkbox.setChecked(true);
 
             if (textview.getText().equals(getResources().getString(R.string.ID_OTHER))) {
                 mEditText_reson.setVisibility(View.VISIBLE);
-
                 mpreferences_deactiveaccount_button.setBackgroundColor(getResources().getColor(R.color.red));
+                mpreferences_deactiveaccount_button.setEnabled(true);
+                mTv_reson_line.setVisibility(View.VISIBLE);
+
+
 
             }
 
@@ -403,13 +396,17 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
             if (textview.getText().equals(getResources().getString(R.string.ID_OTHER))) {
                 mEditText_reson.setVisibility(View.GONE);
                 tv_reson.setVisibility(View.GONE);
-                mpreferences_deactiveaccount_button.setBackgroundColor(getResources().getColor(R.color.grey2));
+                mTv_reson_line.setVisibility(View.GONE);
+
+
+
             }
             flag = 0;
         }
 
 
     }
+
 
     @OnClick(R.id.preferences_deactiveaccount_button)
 
@@ -419,25 +416,34 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
 
         if (value.equals("Other")) {
 
-            String reson_value = mEditText_reson.getText().toString();
+            mDeactivateReson_value = mEditText_reson.getText().toString();
 
-            if (StringUtil.isNotNullOrEmptyString(reson_value)) {
+            if (StringUtil.isNotNullOrEmptyString(mDeactivateReson_value) && mDeactivateReson_value.length() > 10) {
 
-                tv_reson.setVisibility(View.VISIBLE);
+                tv_reson.setVisibility(View.GONE);
                 SettingDeActivateRequest deActivateRequest = new SettingDeActivateRequest();
                 deActivateRequest.setAppVersion("string");
                 deActivateRequest.setCloudMessagingId("string");
                 deActivateRequest.setDeviceUniqueId("string");
-                deActivateRequest.setReasonForInactive(reson_value);
+                deActivateRequest.setReasonForInactive(mDeactivateReson_value);
                 deActivateRequest.setLastScreenName("string");
                 deActivateRequest.setScreenName("string");
                 mSettingFeedbackPresenter.getUserDeactiveAuthTokeInPresenter(deActivateRequest);
-                Intent i = new Intent(getActivity(), PreferencesDeactiveAccountDialogFragment.class);
-                startActivity(i);
+                PreferencesDeactiveAccountDialogFragment newFragment = new PreferencesDeactiveAccountDialogFragment();
+                newFragment.setListener(this);
+                newFragment.show(getActivity().getFragmentManager(), "dialog");
 
+
+
+
+
+                 /*  Intent i = new Intent(getActivity(), PreferencesDeactiveAccountDialogFragment.class);
+                   startActivity(i);
+*/
             } else {
 
-
+                tv_reson.setVisibility(View.VISIBLE);
+                mTv_reson_line.setBackgroundColor(getResources().getColor(R.color.red));
             }
 
 
@@ -470,6 +476,7 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
     @Override
     public void getUserDeactiveResponse(SettingDeActivateResponse deActivateResponse) {
 
+
     }
 
     @Override
@@ -501,8 +508,6 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
     public void startNextScreen() {
 
     }
-
-
 
 
     interface SettingPreferences_DeactiveAccounActivitytLisIntractionListener {

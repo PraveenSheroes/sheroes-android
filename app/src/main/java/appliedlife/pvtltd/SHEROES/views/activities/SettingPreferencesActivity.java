@@ -16,13 +16,11 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.setting.RelationshipStatus;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.Section;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingChangeUserPreferenseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingDeActivateResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingFeedbackResponce;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingRatingResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.setting.Setting_basic_details;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.UserPreferenceRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.UserpreferenseResponse;
 import appliedlife.pvtltd.SHEROES.presenters.SettingFeedbackPresenter;
@@ -58,8 +56,7 @@ public class SettingPreferencesActivity extends BaseActivity implements SettingF
     @Bind(R.id.lnr_setting)
     RelativeLayout mlnr_setting;
 
-    Setting_basic_details setting_basic_details;
-    RelationshipStatus relationshipStatus;
+
     String privacy_type;
     String SettingListAsString;
 
@@ -139,7 +136,7 @@ public class SettingPreferencesActivity extends BaseActivity implements SettingF
         mid = id;
         switch (id) {
 
-            case R.id.id_setting_preferences_basicdetails:
+            case R.id.tv_setting_preferences_basicdetails:
                 mlnr_setting.setVisibility(View.GONE);
                 SettingPreferencesBasicDetailsFragment settingPreferencesBasicDetailsFragment = new SettingPreferencesBasicDetailsFragment();
                 Gson gson = new Gson();
@@ -152,7 +149,7 @@ public class SettingPreferencesActivity extends BaseActivity implements SettingF
 
 
                 break;
-            case R.id.id_setting_preferences_education_details:
+            case R.id.tv_setting_preferences_education_details:
                 mlnr_setting.setVisibility(View.GONE);
                 SettingPreferencesEducationDetailsFragment settingPreferencesEducationDetailsFragment = new SettingPreferencesEducationDetailsFragment();
                 Gson gson1 = new Gson();
@@ -173,7 +170,7 @@ public class SettingPreferencesActivity extends BaseActivity implements SettingF
                 frag1.setArguments(bundle1);
                 callFirstFragment(R.id.fl_prefrences_container, frag1);*/
                 break;
-            case R.id.id_setting_preferences_work_experience:
+            case R.id.tv_setting_preferences_work_experience:
                 mlnr_setting.setVisibility(View.GONE);
                 SettingPreferencesWorkExperienceFragment settingPreferencesWorkExperienceFragment = new SettingPreferencesWorkExperienceFragment();
                 Gson gson2 = new Gson();
@@ -186,7 +183,7 @@ public class SettingPreferencesActivity extends BaseActivity implements SettingF
 
 
                 break;
-            case R.id.id_setting_preferences_deactive_account:
+            case R.id.tv_setting_preferences_deactive_account:
                 mlnr_setting.setVisibility(View.GONE);
                 SettingPreferencesDeactiveAccountFragment settingPreferencesDeactiveAccountFragment = new SettingPreferencesDeactiveAccountFragment();
                 Gson gson3 = new Gson();
@@ -215,6 +212,7 @@ public class SettingPreferencesActivity extends BaseActivity implements SettingF
         //   mThome_toolbar.setVisibility(View.VISIBLE);
 
         getSupportFragmentManager().popBackStack();
+
         finish();
 
 

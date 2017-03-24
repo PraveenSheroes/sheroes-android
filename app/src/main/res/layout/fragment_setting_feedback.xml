@@ -44,18 +44,22 @@
                 android:layout_marginRight="@dimen/dp_size_16"
                 android:layout_marginTop="@dimen/dp_size_16"
                 android:fontFamily="@string/ID_ROBOTO_BOLD"
-                android:padding="@dimen/dp_size_10"
+                android:layout_marginLeft="@dimen/dp_size_8"
+                android:padding="@dimen/dp_size_8"
                 android:text="@string/ID_THOUGHTS"
                 android:textColor="@color/black"
-                android:textSize="@dimen/dp_size_16" />
+                android:textSize="@dimen/dp_size_14" />
 
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@string/ID_ROBOTO_LIGHT"
-                android:padding="@dimen/dp_size_10"
+                android:padding="@dimen/dp_size_5"
+                android:layout_marginLeft="@dimen/dp_size_11"
+                android:layout_marginRight="@dimen/dp_size_16"
+                android:lineSpacingExtra="@dimen/dp_size_4"
                 android:text="@string/ID_TYING_MESSAGE"
-                android:textSize="@dimen/dp_size_14" />
+                android:textSize="@dimen/dp_size_12" />
 
             <TextView
                 android:layout_width="fill_parent"
@@ -68,13 +72,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/dp_size_13"
-                android:backgroundTint="@color/colorPrimary"
+                android:paddingTop="@dimen/dp_size_10"
+                android:progressBackgroundTint="@color/grey2"
+                android:backgroundTint="@color/rating_color"
+                android:progressTint="@color/rating_color"
+                android:secondaryProgressTint="@color/rating_color"
                 android:clickable="true"
                 android:isIndicator="false"
                 android:numStars="5"
+                android:scaleX="0.9"
+                android:scaleY="0.9"
                 android:rating="0"
-                android:stepSize=".0"
+
                 android:theme="@style/RatingBar" />
 
             <TextView
@@ -109,14 +118,16 @@
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
                     android:background="@color/white"
-                    android:focusable="true"
-                    android:fontFamily="@string/ID_ROBOTO_LIGHT"
+                    android:cursorVisible="true"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:hint="@string/ID_COMMENT"
                     android:padding="@dimen/dp_size_10"
-                    android:textColor="@color/comment_text_color"
+                    android:textColor="@color/black"
                     android:textColorHint="@color/back_ground_color"
-                    android:textSize="@dimen/sp_size_20"
-                    android:visibility="gone">
+                    android:textSize="@dimen/sp_size_14"
+                    android:visibility="gone"
+
+                    >
 
                     <requestFocus />
                 </EditText>
@@ -128,6 +139,8 @@
         android:id="@+id/preferences_deactiveaccount_button"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:background="@color/grey2"
+        android:enabled="false"
         android:layout_alignParentBottom="true"
         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
         android:text="@string/ID_SUBMIT"

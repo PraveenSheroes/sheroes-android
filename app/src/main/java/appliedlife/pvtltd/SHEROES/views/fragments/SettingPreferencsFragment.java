@@ -28,14 +28,14 @@ public class SettingPreferencsFragment extends BaseFragment implements SettingVi
     private final String TAG = LogUtils.makeLogTag(SettingPreferencsFragment.class);
     private final String SCREEN_NAME = "Setting_preferences_screen";
 
-    @Bind(R.id.id_setting_preferences_basicdetails)
-    TextView mid_setting_preferences_basicdetails;
-    @Bind(R.id.id_setting_preferences_education_details)
-    TextView mid_setting_preferences_education_details;
-    @Bind(R.id.id_setting_preferences_work_experience)
-    TextView mid_setting_preferences_work_experience;
-    @Bind(R.id.id_setting_preferences_deactive_account)
-    TextView mid_setting_preferences_deactive_account;
+    @Bind(R.id.tv_setting_preferences_basicdetails)
+    TextView mT_setting_preferences_basicdetails;
+    @Bind(R.id.tv_setting_preferences_education_details)
+    TextView mT_setting_preferences_education_details;
+    @Bind(R.id.tv_setting_preferences_work_experience)
+    TextView mT_setting_preferences_work_experience;
+    @Bind(R.id.tv_setting_preferences_deactive_account)
+    TextView mTv_setting_preferences_deactive_account;
     settingPreferencesCallBack msettingPreferencesCallBack;
 
     @Override
@@ -55,10 +55,10 @@ public class SettingPreferencsFragment extends BaseFragment implements SettingVi
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_setting_preferences, container, false);
         ButterKnife.bind(this, view);
-        mid_setting_preferences_basicdetails.setOnClickListener(this);
-        mid_setting_preferences_education_details.setOnClickListener(this);
-        mid_setting_preferences_work_experience.setOnClickListener(this);
-        mid_setting_preferences_deactive_account.setOnClickListener(this);
+        mT_setting_preferences_basicdetails.setOnClickListener(this);
+        mT_setting_preferences_education_details.setOnClickListener(this);
+        mT_setting_preferences_work_experience.setOnClickListener(this);
+        mTv_setting_preferences_deactive_account.setOnClickListener(this);
         return view;
     }
 

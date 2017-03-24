@@ -45,7 +45,7 @@
                 android:paddingTop="@dimen/dp_size_21"
                 android:text="@string/ID_TERMS_AND_COND"
                 android:textColor="@color/text_color_about"
-                android:textSize="@dimen/sp_size_13" />
+                android:textSize="@dimen/sp_size_14" />
 
 
         </LinearLayout>

@@ -56,12 +56,11 @@ public class SettingPreferencesWorkExperienceFragment extends BaseFragment imple
     @Bind(R.id.spinner_workexp1)
     Spinner mSpinner_workexp1;
     @Bind(R.id.tv_setting_tittle)
-    TextView mtv_setting_tittle;
+    TextView mTv_setting_tittle;
     @Bind(R.id.tv_setting_tittle1)
-    TextView mtv_setting_tittle1;
+    TextView mTv_setting_tittle1;
     @Bind(R.id.iv_back_setting)
-    ImageView miv_back_setting;
-
+    ImageView mIv_back_setting;
     SettingView settingViewlistener;
 
 
@@ -80,8 +79,6 @@ public class SettingPreferencesWorkExperienceFragment extends BaseFragment imple
 
         }
     }
-
-
     private static final String[] total_iteam = {
 
             "ONLY ME", "PUBLIC"
@@ -97,8 +94,10 @@ public class SettingPreferencesWorkExperienceFragment extends BaseFragment imple
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_setting_preferences_workexperience, container, false);
         ButterKnife.bind(this, view);
-        mtv_setting_tittle.setText(R.string.ID_WORKEXPERIENCEDETAILS);
-        mtv_setting_tittle1.setText(R.string.ID_PREFERENCES);
+        mTv_setting_tittle.setText(R.string.ID_WORKEXPERIENCEDETAILS);
+        mTv_setting_tittle1.setText(R.string.ID_PREFERENCES);
+        mTv_setting_tittle.setTextSize(14);
+        mTv_setting_tittle1.setTextSize(12);
         mSettingFeedbackPresenter.attachView(this);
         mSpinner_workexp.setAdapter(new CustomSpinnerAdapter(getActivity(), R.layout.setting_spinner, total_iteam, total_images));
         mSpinner_workexp1.setAdapter(new CustomSpinnerAdapter(getActivity(), R.layout.setting_spinner, total_iteam, total_images));
@@ -232,7 +231,7 @@ public class SettingPreferencesWorkExperienceFragment extends BaseFragment imple
 
         //Open setting_preferences_Activity
 
-        miv_back_setting.setOnClickListener(new View.OnClickListener() {
+        mIv_back_setting.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {

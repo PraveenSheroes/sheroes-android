@@ -4,7 +4,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
     <include
         android:id="@+id/rl_setting_header"
@@ -24,6 +25,7 @@
             android:id="@+id/li_spinner_iten"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+
             android:orientation="vertical"
             android:weightSum="1">
 
@@ -48,14 +50,14 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/setting_selector_background"
-                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                     android:gravity="center_vertical"
                     android:padding="@dimen/dp_size_25"
                     android:text="@string/ID_DEACTIVATE"
                     android:textColor="@color/searchbox_hint_text_color"
                     android:textSize="@dimen/sp_size_13" />
 
-                <CheckBox
+              <!-- <CheckBox
                     android:id="@+id/deactive_check_box1"
                     style="@style/CheckBoxStyle"
                     android:layout_width="wrap_content"
@@ -65,7 +67,7 @@
                     android:gravity="center_vertical"
                     android:padding="@dimen/dp_size_15"
 
-                    />
+                    />-->
 
             </RelativeLayout>
 
@@ -178,6 +180,8 @@
                     android:textColor="@color/searchbox_hint_text_color"
                     android:textSize="@dimen/sp_size_13" />
 
+
+
                 <CheckBox
                     android:id="@+id/deactive_check_box1d"
                     style="@style/CheckBoxStyle"
@@ -198,11 +202,25 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/ID_WRITE_RESON"
                 android:paddingBottom="@dimen/dp_size_10"
-                android:paddingLeft="@dimen/dp_size_20"
-                android:paddingRight="@dimen/dp_size_20"
-                android:textColorHint="@color/text_color_contactdetails_page"
-                android:textSize="@dimen/dp_size_14"
-                android:visibility="gone" />
+                android:layout_marginLeft="@dimen/dp_size_16"
+                android:layout_marginRight="@dimen/dp_size_16"
+                android:textColorHint="@color/button_color"
+                android:background="@drawable/edit_text_create_community_style"
+                android:visibility="gone"
+                android:textSize="@dimen/dp_size_12"
+                android:maxLines="7"
+                android:maxHeight="@dimen/dp_size_200"
+                android:lineSpacingExtra="@dimen/dp_size_16"
+                />
+
+            <TextView
+                android:id="@+id/tv_reson_line"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_size_1"
+                android:layout_marginLeft="@dimen/dp_size_16"
+                android:layout_marginRight="@dimen/dp_size_16"
+                android:background="@color/grey2"/>
+
 
         </LinearLayout>
 
@@ -211,10 +229,13 @@
     <Button xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/preferences_deactiveaccount_button"
         android:layout_width="fill_parent"
+        android:background="@color/grey2"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-        android:text="@string/ID_SUBMIT"
+        android:text="@string/ID_CONFIRM"
+        android:enabled="false"
+
         android:textColor="@color/white" />
 
 </RelativeLayout>
