@@ -29,7 +29,7 @@ public class Feedback_ThankyouActivity extends BaseActivity
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
-        setContentView(R.layout.setting_feedback_thankyuo);
+        setContentView(R.layout.setting_feedback_thankyou);
         ButterKnife.bind(this);
         mtv_terms.setText(R.string.ID_FEEDBACK);
 

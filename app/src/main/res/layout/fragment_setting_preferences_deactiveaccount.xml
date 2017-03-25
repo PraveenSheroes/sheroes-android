@@ -81,6 +81,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/setting_selector_background"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:layout_marginLeft="@dimen/dp_size_16"
                     android:padding="@dimen/dp_size_25"
                     android:text="@string/ID_NOTFINDTEXT"
                     android:textColor="@color/searchbox_hint_text_color"
@@ -89,6 +90,7 @@
 
                 <CheckBox
                     android:id="@+id/deactive_check_box1a"
+                    android:layout_marginRight="@dimen/dp_size_16"
                     style="@style/CheckBoxStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -112,6 +114,8 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/setting_selector_background"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:layout_marginLeft="@dimen/dp_size_16"
+
                     android:padding="@dimen/dp_size_25"
                     android:text="@string/ID_SPAMMED"
                     android:textColor="@color/searchbox_hint_text_color"
@@ -123,6 +127,8 @@
                     style="@style/CheckBoxStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/dp_size_16"
+
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:gravity="center_vertical"
@@ -145,6 +151,8 @@
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:padding="@dimen/dp_size_25"
                     android:text="@string/ID_PRIVACY"
+                    android:layout_marginLeft="@dimen/dp_size_16"
+
 
                     android:textColor="@color/searchbox_hint_text_color"
                     android:textSize="@dimen/sp_size_13" />
@@ -156,6 +164,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
+                    android:layout_marginRight="@dimen/dp_size_16"
+
                     android:layout_centerVertical="true"
                     android:gravity="center_vertical"
                     android:padding="@dimen/dp_size_15" />
@@ -176,7 +186,7 @@
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:padding="@dimen/dp_size_25"
                     android:text="@string/ID_OTHER"
-
+                    android:layout_marginLeft="@dimen/dp_size_16"
                     android:textColor="@color/searchbox_hint_text_color"
                     android:textSize="@dimen/sp_size_13" />
 
@@ -188,6 +198,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
+                    android:layout_marginRight="@dimen/dp_size_16"
+
                     android:layout_centerVertical="true"
                     android:gravity="center_vertical"
                     android:padding="@dimen/dp_size_15" />
@@ -202,8 +214,9 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/ID_WRITE_RESON"
                 android:paddingBottom="@dimen/dp_size_10"
-                android:layout_marginLeft="@dimen/dp_size_16"
-                android:layout_marginRight="@dimen/dp_size_16"
+                android:layout_marginLeft="@dimen/dp_size_35"
+
+                android:layout_marginRight="@dimen/dp_size_35"
                 android:textColorHint="@color/button_color"
                 android:background="@drawable/edit_text_create_community_style"
                 android:visibility="gone"
@@ -217,8 +230,8 @@
                 android:id="@+id/tv_reson_line"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_size_1"
-                android:layout_marginLeft="@dimen/dp_size_16"
-                android:layout_marginRight="@dimen/dp_size_16"
+                android:layout_marginLeft="@dimen/dp_size_38"
+                android:layout_marginRight="@dimen/dp_size_38"
                 android:background="@color/grey2"/>
 
 

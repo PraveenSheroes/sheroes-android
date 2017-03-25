@@ -63,6 +63,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingTellUsAboutFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.OnboardingWorkExperience;
 import appliedlife.pvtltd.SHEROES.views.fragments.OwnerRemoveDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.PersonalProfileFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.PreferencesDeactiveAccountDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfessionalEditBasicDetailsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProffestionalProfileFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileAboutMeFragment;
@@ -306,4 +307,5 @@ public interface SheroesAppComponent {
     void inject(WelcomeScreen3Fragment welcomeScreen3Fragment);
     void inject(WelcomeScreen2Fragment welcomeScreen2Fragment);
     void inject(WelcomeScreen1Fragment welcomeScreen1Fragment);
+    void inject(PreferencesDeactiveAccountDialogFragment preferencesDeactiveAccountDialogFragment);
 }
