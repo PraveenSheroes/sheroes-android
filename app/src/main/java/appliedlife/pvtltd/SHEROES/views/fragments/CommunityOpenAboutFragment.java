@@ -1,25 +1,25 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,16 +34,12 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwner
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Member;
-import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerList;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.presenters.OwnerPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
-import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
@@ -51,7 +47,6 @@ import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CommunityView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CreateCommunityView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.EditNameDialogListener;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -60,15 +55,13 @@ import butterknife.OnClick;
  * Created by Ajit Kumar on 01-02-2017.
  */
 
-public class CommunityOpenAboutFragment extends BaseFragment implements CommunityView, AdapterView.OnItemClickListener, AdapterView.OnItemSelectedListener, CreateCommunityView, EditNameDialogListener {
+public class CommunityOpenAboutFragment extends BaseFragment implements CommunityView, AdapterView.OnItemClickListener, AdapterView.OnItemSelectedListener, CreateCommunityView, EditNameDialogListener{
 
     private AboutCommunityActivityIntractionListner mShareCommunityIntractionListner;
     private final String TAG = LogUtils.makeLogTag(CommunityOpenAboutFragment.class);
     private String[] marraySpinner;
     @Bind(R.id.rv_about_community_owner_list)
     RecyclerView mAboutCommunityOwnerRecyclerView;
-    @Bind(R.id.sp_about_community)
-    Spinner mSpaboutCommunityspn;
     @Bind(R.id.iv_community_cover_img)
     ImageView miv_community_cover_img;
     @Bind(R.id.tv_about_community_des)
@@ -81,9 +74,10 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
     TextView mtv_community_members;
     @Bind(R.id.tv_community_requested)
     TextView mtv_community_requested;
-    List<String> mSpinnerMenuItems;
     @Inject
     OwnerPresenter mOwnerPresenter;
+    @Bind(R.id.iv_about_community)
+    ImageView mOptionIv;
 
     FeedDetail mFeedDetail;
     private FragmentListRefreshData mFragmentListRefreshData;
@@ -91,10 +85,12 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     Long mcommunityid;
-   /* public static CommunityOpenAboutFragment createInstance(int itemsCount) {
-        CommunityOpenAboutFragment communitiesDetailFragment = new CommunityOpenAboutFragment();
-        return communitiesDetailFragment;
-    }*/
+    private PopupWindow popupWindow;
+
+    /* public static CommunityOpenAboutFragment createInstance(int itemsCount) {
+         CommunityOpenAboutFragment communitiesDetailFragment = new CommunityOpenAboutFragment();
+         return communitiesDetailFragment;
+     }*/
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -115,10 +111,9 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
         ButterKnife.bind(this, view);
         //  mcreate_community_post.setText(R.string.ID_SHARE_COMMUNITY);
         mOwnerPresenter.attachView(this);
-        if(null!=getArguments())
-        {
-            mFeedDetail =getArguments().getParcelable(AppConstants.COMMUNITY_DETAIL);
-            mcommunityid=mFeedDetail.getIdOfEntityOrParticipant();
+        if (null != getArguments()) {
+            mFeedDetail = getArguments().getParcelable(AppConstants.COMMUNITY_DETAIL);
+            mcommunityid = mFeedDetail.getIdOfEntityOrParticipant();
             Glide.with(this)
                     .load(mFeedDetail.getImageUrl())
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
@@ -130,9 +125,9 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
             if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getNameOrTitle())) {
                 mtv_community_name.setText(mFeedDetail.getNameOrTitle());
             }
-            int count=mFeedDetail.getNoOfMembers();
-            mtv_community_members.setText(""+count+" Members");
-            mtv_community_requested.setText(mFeedDetail.getNoOfPendingRequest()+" Requested");
+            int count = mFeedDetail.getNoOfMembers();
+            mtv_community_members.setText("" + count + " Members");
+            mtv_community_requested.setText(mFeedDetail.getNoOfPendingRequest() + " Requested");
         }
         mLayoutManager = new LinearLayoutManager(getActivity());
         mAboutCommunityOwnerRecyclerView.setLayoutManager(mLayoutManager);
@@ -141,7 +136,7 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
         mAboutCommunityOwnerRecyclerView.setLayoutManager(mLayoutManager);
         mAboutCommunityOwnerRecyclerView.setAdapter(mAdapter);
 
-        OwnerListRequest ownerListRequest=new OwnerListRequest();
+        OwnerListRequest ownerListRequest = new OwnerListRequest();
         ownerListRequest.setAppVersion("String");
         ownerListRequest.setCloudMessagingId("String");
         ownerListRequest.setCommunityId(mcommunityid);
@@ -149,83 +144,82 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
         ownerListRequest.setLastScreenName("String");
         ownerListRequest.setScreenName("String");
         mOwnerPresenter.getCommunityOwnerList(ownerListRequest);
-
-        // Fabric.with(getActivity(), new Crashlytics());
-
-        mSpinnerMenuItems=new ArrayList();
-        mSpinnerMenuItems.add(getActivity().getString(R.string.ID_EDIT));
-        mSpinnerMenuItems.add(getActivity().getString(R.string.ID_LEAVE));
-        mSpinnerMenuItems.add(AppConstants.SPACE);
-
-        ArrayAdapter spinClockInWorkSiteAdapter = new ArrayAdapter(getActivity(), R.layout.about_community_spinner_row, mSpinnerMenuItems);
-
-        mSpaboutCommunityspn.setAdapter(spinClockInWorkSiteAdapter);
-        mSpaboutCommunityspn.setOnItemSelectedListener(this);
-        spinClockInWorkSiteAdapter = new ArrayAdapter(getActivity(), R.layout.about_community_spinner_row_back, mSpinnerMenuItems);
-
-        mSpaboutCommunityspn.setAdapter(spinClockInWorkSiteAdapter);
-        iCurrentSelection = mSpaboutCommunityspn.getSelectedItemPosition();
-        mSpaboutCommunityspn.setSelection(2);
-
-        mSpaboutCommunityspn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-            @Override
-            public void onItemSelected(AdapterView<?> arg0, View arg1,
-                                       int arg2, long arg3) {
-                // TODO Auto-generated method stub
-                if (null != arg1) {
-                    String msupplier = mSpaboutCommunityspn.getItemAtPosition(arg2).toString();
-                    ((TextView) arg1).setTextSize(16);
-                    ((TextView) arg1).setTextColor(
-                            getResources().getColorStateList(R.color.fully_transparent));
-                    LogUtils.info("Selected item : ", msupplier);
-                    if(msupplier.equals("Edit"))
-                    {
-                        mShareCommunityIntractionListner.createCommunityClick();
-                    }
-
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> arg0) {
-                // TODO Auto-generated method stub
-                LogUtils.info("Selected item : ", "nothing");
-
-            }
-        });
-
         return view;
     }
+
     @OnClick(R.id.tv_about_community_back)
-    public void clickBackButton()
-    {
+    public void clickBackButton() {
         mShareCommunityIntractionListner.onClose();
     }
+
     @OnClick(R.id.tv_about_community_share)
-    public void clickCommunityShare()
-    {
+    public void clickCommunityShare() {
         mShareCommunityIntractionListner.shareClick();
     }
+
     @OnClick(R.id.tv_community_requested)
-    public void requestClick()
-    {
+    public void requestClick() {
         mShareCommunityIntractionListner.requestClick();
     }
+
     @OnClick(R.id.tv_community_members)
     public void membersClick() {
         mShareCommunityIntractionListner.memberClick();
     }
+
     @OnClick(R.id.tv_community_invite)
     public void inviteMembersClick() {
         mShareCommunityIntractionListner.inviteClick();
     }
+
     @OnClick(R.id.tv_community_add_more)
-    public void addMoreClick()
-    {
+    public void addMoreClick() {
         mShareCommunityIntractionListner.ownerClick();
     }
-  /*  @OnClick(R.id.tv_community_menu)
+
+    @OnClick(R.id.iv_about_community)
+    void onOptionClick() {
+        clickMenuItem(mOptionIv);
+    }
+
+    private void clickMenuItem(View view) {
+        LayoutInflater layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final View popupView = layoutInflater.inflate(R.layout.menu_option_layout, null);
+        popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                popupWindow.dismiss();
+            }
+        });
+        final TextView tvEdit = (TextView) popupView.findViewById(R.id.tv_article_menu_edit);
+        final TextView tvLeave = (TextView) popupView.findViewById(R.id.tv_article_menu_delete);
+        tvLeave.setText(getActivity().getString(R.string.ID_LEAVE));
+        tvEdit.setVisibility(View.VISIBLE);
+        tvLeave.setVisibility(View.VISIBLE);
+        popupWindow.showAsDropDown(view, -180, 0);
+        tvEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mShareCommunityIntractionListner.createCommunityClick(mFeedDetail);
+                popupWindow.dismiss();
+            }
+        });
+        tvLeave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupWindow.dismiss();
+            }
+        });
+    }
+
+    public void dismissPopup() {
+        if (popupWindow != null) popupWindow.dismiss();
+    }
+
+/*  @OnClick(R.id.tv_community_menu)
     public void menueClick()
     {
         PopupMenu popup = new PopupMenu(getActivity(), mCommunityMenu);
@@ -284,11 +278,17 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
 
     public interface AboutCommunityActivityIntractionListner {
         void memberClick();
+
         void inviteClick();
+
         void ownerClick();
+
         void requestClick();
-        void createCommunityClick();
+
+        void createCommunityClick(FeedDetail feedDetail);
+
         void shareClick();
+
         void onErrorOccurence();
 
         void onClose();

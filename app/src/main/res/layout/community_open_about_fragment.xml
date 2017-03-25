@@ -93,7 +93,6 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-
                 android:layout_marginTop="@dimen/dp_size_30">
                 <TextView
                     android:id="@+id/tv_community_name"
@@ -108,20 +107,14 @@
                     android:textSize="@dimen/sp_size_12"
                     android:maxLines="2" />
 
-                <Spinner android:id="@+id/sp_about_community"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/dp_size_25"
-                    android:layout_marginRight="@dimen/dp_size_18"
-                    android:background="@color/fully_transparent"
-                    android:dropDownSelector="@color/fully_transparent"
-                    android:layout_gravity="right"/>
                 <ImageView
                     android:id="@+id/iv_about_community"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:padding="@dimen/dp_size_5"
                     android:layout_gravity="right"
                     android:layout_marginRight="@dimen/dp_size_20"
-                    android:background="@drawable/ic_menu_dashboard"/>
+                    android:src="@drawable/ic_menu_dashboard"/>
             </FrameLayout>
             <TextView
                 android:id="@+id/tv_community_organisation"
