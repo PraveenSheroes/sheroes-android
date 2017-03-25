@@ -42,7 +42,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
-import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.CustomCollapsingToolbarLayout;
 import appliedlife.pvtltd.SHEROES.views.fragments.AllMembersFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
@@ -53,7 +52,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOwnerSearchFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityRequestedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.InviteCommunityMember;
 import appliedlife.pvtltd.SHEROES.views.fragments.InviteCommunityOwner;
-import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunityInviteMemberFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.OwnerRemoveDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareCommunityFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.InviteFragmentListener;
@@ -83,6 +81,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements InviteFra
     CommunityRequest communityRequest = new CommunityRequest();
     List<Long> muser_ids = new ArrayList<>();
     Long mcommunity_id;
+    private CommunityOpenAboutFragment communityOpenAboutFragment;
 
     public static void navigate(AppCompatActivity activity, View transitionImage, FeedDetail feedDetail) {
         Intent intent = new Intent(activity, CommunitiesDetailActivity.class);
@@ -224,15 +223,10 @@ public class CommunitiesDetailActivity extends BaseActivity implements InviteFra
             mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.THREE_CONSTANT);
             setAllValues(mFragmentOpen);
             super.feedCardsHandled(view, baseResponse);
-
-            setFragment(mFragment);
-            mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.THREE_CONSTANT);
-            setAllValues(mFragmentOpen);
-            super.feedCardsHandled(view, baseResponse);
             switch (id) {
                 case R.id.card_community_detail:
                     if (null != mFeedDetail) {
-                        CommunityOpenAboutFragment communityOpenAboutFragment = new CommunityOpenAboutFragment();
+                         communityOpenAboutFragment = new CommunityOpenAboutFragment();
                         Bundle bundleCommunity = new Bundle();
                         bundleCommunity.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
 
@@ -319,10 +313,10 @@ public class CommunitiesDetailActivity extends BaseActivity implements InviteFra
     }
 
     @Override
-    public void createCommunityClick() {
+    public void createCommunityClick(FeedDetail feedDetail) {
         Intent intent = new Intent(this, CreateCommunityActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, mFeedDetail);
+        bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, feedDetail);
         intent.putExtras(bundle);
         startActivity(intent);
     }
@@ -332,7 +326,6 @@ public class CommunitiesDetailActivity extends BaseActivity implements InviteFra
         ShareCommunityFragment frag = new ShareCommunityFragment();
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.bottom_to_top_slide_reverse_anim)
                 .replace(R.id.about_community_container, frag).addToBackStack(null).commitAllowingStateLoss();
-
     }
 
     @Override
@@ -423,7 +416,8 @@ public class CommunitiesDetailActivity extends BaseActivity implements InviteFra
 
     @OnClick(R.id.iv_community_detail_back)
     public void onBackClick() {
-        finish();
+        super.onBackPressed();
+        if (communityOpenAboutFragment != null) communityOpenAboutFragment.dismissPopup();
     }
 
     @Override

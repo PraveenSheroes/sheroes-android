@@ -7,6 +7,7 @@ import android.view.View;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.views.fragments.ChangeCommunityPrivacyDialogFragment;
@@ -25,10 +26,14 @@ import butterknife.ButterKnife;
 public class CreateCommunityActivity extends BaseActivity implements CreateCommunityFragment.CreateCommunityActivityIntractionListner,CommunitySearchTagsFragment.MyCommunityTagListener ,ImageUploadFragment.ImageUploadCallable{
 
     private CreateCommunityFragment mCommunityFragment;
+    private FeedDetail mFeedDetail;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getIntent() != null && getIntent().getExtras() != null) {
+            mFeedDetail = getIntent().getExtras().getParcelable(AppConstants.COMMUNITIES_DETAIL);
+        }
         SheroesApplication.getAppComponent(this).inject(this);
         renderLoginFragmentView();
     }
@@ -37,9 +42,11 @@ public class CreateCommunityActivity extends BaseActivity implements CreateCommu
         setContentView(R.layout.activity_create_community);
         ButterKnife.bind(this);
         mCommunityFragment = new CreateCommunityFragment();
+        Bundle bundle=new Bundle();
+        bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, mFeedDetail);
+        mCommunityFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
                 .replace(R.id.create_community_container, mCommunityFragment, CreateCommunityFragment.class.getName()).commitAllowingStateLoss();
-
     }
 
     @Override

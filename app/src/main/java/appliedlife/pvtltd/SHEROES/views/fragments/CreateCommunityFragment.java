@@ -20,7 +20,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Base64;
@@ -34,10 +33,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.crashlytics.android.Crashlytics;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -59,18 +54,12 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityRespo
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.EditCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Member;
-import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerList;
-import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.presenters.CreateCommunityPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
-import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CommunityView;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CreateCommunityView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -174,12 +163,13 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
             createCommunityPresenter.attachView(this);
 
             if (null != getArguments()) {
-                mFeedDetail = getArguments().getParcelable(AppConstants.COMMUNITY_DETAIL);
+                mFeedDetail = getArguments().getParcelable(AppConstants.COMMUNITIES_DETAIL);
                 if (null != mFeedDetail) {
                     met_create_community_name.setText(mFeedDetail.getNameOrTitle());
                     met_create_community_description.setText(mFeedDetail.getListDescription());
                     mTv_create.setText(R.string.ID_EDIT);
                     mtv_create_community_title.setText("EDIT COMMUNITY");
+                    setCommunityStatus();
                 }
                 if (null != getArguments().getStringArray(AppConstants.TAG_LIST)) {
                     String[] tagsval = getArguments().getStringArray(AppConstants.TAG_LIST);
@@ -189,8 +179,6 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
                     }
                     mEt_create_community_tags.setText(tagval);
                 }
-
-
             }
             getActivity().setRequestedOrientation(
                     ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -216,6 +204,19 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
             });
         }
         return view;
+    }
+
+    /**
+     * set checkbox true/false based on close community
+     */
+    private void setCommunityStatus() {
+        if (mFeedDetail.isClosedCommunity()) {
+            mCbclose_community.setChecked(true);
+            mCbopen_community.setChecked(false);
+        } else {
+            mCbopen_community.setChecked(true);
+            mCbclose_community.setChecked(false);
+        }
     }
 
     @OnClick(R.id.iv_create_community_cross)
