@@ -108,6 +108,8 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_TELL_US_ABOUT">  Tell Us About Yourself</string>
 
     <string name="ID_APPRECIATE_FROM_LIFE">SHEROES</string>
+    <string name="ID_I_ENJOY">I Enjoy</string>
+    <string name="ID_I_AM_JOB_AT">I Am Good At</string>
     <!--string set  through priyanka-->
 
     <!--text related setting_dashboard page-->

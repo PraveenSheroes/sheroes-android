@@ -2,7 +2,6 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -26,8 +25,9 @@ import butterknife.OnClick;
  * Created by Ajit Kumar on 27-02-2017.
  */
 
-public class OnboardingWorkExperience extends BaseFragment implements DayPickerDialog.MyDayPickerListener,DatePickerDialog.OnDateSetListener {
-    private final String TAG = LogUtils.makeLogTag(OnboardingWorkExperience.class);
+public class OnBoardingWorkExperienceFragment extends BaseFragment implements DayPickerDialog.MyDayPickerListener,DatePickerDialog.OnDateSetListener {
+    private final String TAG = LogUtils.makeLogTag(OnBoardingWorkExperienceFragment.class);
+    private static final int DATE_DIALOG_ID = 999;
     @Bind(R.id.et_exp_month)
     EditText met_exp_month;
     @Bind(R.id.et_exp_year)
@@ -37,11 +37,7 @@ public class OnboardingWorkExperience extends BaseFragment implements DayPickerD
     private TextView tvDisplayDate;
     private DatePicker dpresult;
     private Button btnChangeDate;
-
-
-
-    static final int DATE_DIALOG_ID = 999;
-    int monthOfYear,dayOfMonth,year;
+    private int monthOfYear,dayOfMonth,year;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -53,15 +49,11 @@ public class OnboardingWorkExperience extends BaseFragment implements DayPickerD
             LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
         }
     }
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         view = inflater.inflate(R.layout.onboarding_work_exp, container, false);
         ButterKnife.bind(this, view);
-        getActivity().setRequestedOrientation(
-                ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
         return view;
     }
     @OnClick(R.id.et_exp_year)
@@ -75,14 +67,14 @@ public class OnboardingWorkExperience extends BaseFragment implements DayPickerD
     @OnClick(R.id.et_exp_month)
     public void clickMonth() {
 
-        DayPickerDialog pd = new DayPickerDialog(this);
+        DayPickerDialog pd = new DayPickerDialog();
         pd.setListener(this);
         pd.show(getActivity().getFragmentManager(), "MonthYearPickerDialog");
 
     }
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        met_exp_year.setText(year+"");
+        met_exp_year.setText(year+AppConstants.EMPTY_STRING);
 
        }
 

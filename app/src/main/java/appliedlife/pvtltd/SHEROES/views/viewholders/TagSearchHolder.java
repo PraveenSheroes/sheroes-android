@@ -1,7 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -10,26 +9,23 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by Ajit Kumar on 19-03-2017.
  */
 
-public class TagSearchHolder extends BaseViewHolder<Doc> {
+public class TagSearchHolder extends BaseViewHolder<GetAllDataDocument> {
 
     @Bind(R.id.tv_tag_name)
     TextView tvTagrName;
     @Bind(R.id.rl_tag)
     RelativeLayout rl_tag;
     BaseHolderInterface viewInterface;
-    private Doc dataItem;
+    private GetAllDataDocument dataItem;
     private Context mContext;
     public TagSearchHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
@@ -41,7 +37,7 @@ public class TagSearchHolder extends BaseViewHolder<Doc> {
 
 
     @Override
-    public void bindData(Doc obj, Context context, int position) {
+    public void bindData(GetAllDataDocument obj, Context context, int position) {
         this.dataItem = obj;
         tvTagrName.setOnClickListener(this);
         mContext = context;

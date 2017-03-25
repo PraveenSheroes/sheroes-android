@@ -1,5 +1,10 @@
 package appliedlife.pvtltd.SHEROES.basecomponents;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
+
 /**
  * Created by Praveen Singh on 29/12/2016.
  *
@@ -14,4 +19,5 @@ public interface BaseMvpView {
     void stopProgressBar();
     void startNextScreen();
     void showError(String s,int errorFor);
+    void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult);
 }

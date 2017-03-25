@@ -56,6 +56,18 @@ public class HomeModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+    public Observable<FeedResponsePojo> getMyCommunityFromModel(FeedRequestPojo  feedRequestPojo){
+        LogUtils.info(TAG,"*******************"+new Gson().toJson(feedRequestPojo));
+        return sheroesAppServiceApi.getMyCommunityFromApi(feedRequestPojo)
+                .map(new Func1<FeedResponsePojo, FeedResponsePojo>() {
+                    @Override
+                    public FeedResponsePojo call(FeedResponsePojo feedResponsePojo) {
+                        return feedResponsePojo;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
     public Observable<GetAllData> getTagFromModel(GetAllDataRequest getAllDataRequest){
         LogUtils.info(TAG,"TAG FRom*******************"+new Gson().toJson(getAllDataRequest));
         return sheroesAppServiceApi.getTagFromApi(getAllDataRequest)

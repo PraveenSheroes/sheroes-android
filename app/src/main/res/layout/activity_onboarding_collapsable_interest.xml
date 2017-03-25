@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/your_interest"
+    android:fitsSystemWindows="true">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar_onboarding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/fully_transparent"
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.CustomCollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar_onboarding"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:collapsedSubtitleAppearance="@style/subtitle_collapsed"
+            app:collapsedTitleTextAppearance="@style/title.collapsed"
+            app:contentScrim="@color/colorAccent"
+            app:expandedSubtitleAppearance="@style/subtitle"
+            app:expandedTitleGravity="bottom|center_horizontal"
+            app:expandedTitleTextAppearance="@style/title.expanded"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar_onboarding"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_gravity="right"
+                android:gravity="right"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+            </android.support.v7.widget.Toolbar>
+
+            <appliedlife.pvtltd.SHEROES.views.cutomeviews.BoardingSquareImageView
+                android:id="@+id/iv_onboarding"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fitsSystemWindows="true"
+                android:scaleType="centerCrop"
+                app:layout_collapseMode="pin" />
+
+            <TextView
+                android:id="@+id/tv_your_interest"
+                android:layout_width="@dimen/dp_size_200"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|top"
+                android:gravity="center"
+                android:layout_marginTop="@dimen/dp_size_80"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:text="@string/ID_I_ENJOY"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp_size_23" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dp_size_5"
+                    android:layout_marginLeft="@dimen/dp_size_10"
+                    android:layout_marginRight="@dimen/dp_size_10">
+
+                    <TextView
+                        android:id="@+id/tv__how_can_help_search_box"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/white"
+                        android:drawableLeft="@drawable/ic_search_box_icon"
+                        android:drawablePadding="@dimen/dp_size_12"
+                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                        android:paddingBottom="@dimen/dp_size_14"
+                        android:paddingLeft="@dimen/dp_size_12"
+                        android:paddingTop="@dimen/dp_size_14"
+                        android:text="@string/ID_JOIN_CONVERSATION"
+                        android:textColor="@color/suggested_text"
+                        android:textSize="@dimen/sp_size_14" />
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dp_size_5">
+
+                    <LinearLayout
+                        android:id="@+id/tv_strip_for_add_item"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/white"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tv_tag_data"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/dp_size_12"
+                            android:background="@drawable/on_boarding_tag_border_ractangle_selected"
+                            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                            android:padding="@dimen/dp_size_9"
+                            android:text="@string/ID_APP_NAME"
+                            android:textColor="@color/blue"
+                            android:textAllCaps="true"
+                            android:textSize="@dimen/sp_size_12" />
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
+
+
+        </appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.CustomCollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+    <include
+        android:id="@+id/fl_your_interest"
+        layout="@layout/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha=".9"
+        android:background="@color/white"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+    <ImageView
+        android:id="@+id/iv_help_interest_next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_gravity="bottom|end"
+        android:layout_marginRight="@dimen/dp_size_20"
+        android:layout_marginBottom="@dimen/dp_size_30"
+        android:src="@drawable/ic_next" />
+</android.support.design.widget.CoordinatorLayout>

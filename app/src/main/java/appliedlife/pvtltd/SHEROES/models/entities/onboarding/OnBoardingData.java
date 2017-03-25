@@ -19,7 +19,7 @@ public class OnBoardingData extends BaseResponse {
     @Expose
     private String name;
 
-    private List<String> boardingDataList;
+    private List<LabelValue> boardingDataList;
 
     public String getId() {
         return id;
@@ -37,11 +37,11 @@ public class OnBoardingData extends BaseResponse {
         this.name = name;
     }
 
-    public List<String> getBoardingDataList() {
+    public List<LabelValue> getBoardingDataList() {
         return boardingDataList;
     }
 
-    public void setBoardingDataList(List<String> boardingDataList) {
+    public void setBoardingDataList(List<LabelValue> boardingDataList) {
         this.boardingDataList = boardingDataList;
     }
 }

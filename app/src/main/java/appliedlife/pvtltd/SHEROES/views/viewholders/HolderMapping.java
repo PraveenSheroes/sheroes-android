@@ -12,7 +12,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionDoc;
 import appliedlife.pvtltd.SHEROES.models.entities.communities.CommunitySuggestion;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityList;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityTags;
-import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
+import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
 import appliedlife.pvtltd.SHEROES.models.entities.community.ListOfInviteSearch;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Member;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MembersList;
@@ -25,6 +25,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.ProfileItems;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.FilterList;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobDetailPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobLocationList;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.OnBoardingData;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileHorList;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfilePersonalViewList;
@@ -156,6 +157,12 @@ public enum HolderMapping {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new OnBoardingHolder(view, viewInterface);
+        }
+
+    }, CURRENT_STATUS_HOLDER(R.layout.current_status_list_item) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new CurrentStatusHolder(view, viewInterface);
         }
 
     }, COMMUNITY_DETAIL_HEADER(R.layout.community_detail_header_holder) {
@@ -312,7 +319,12 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new BlankHolder(view, viewInterface);
         }
-    },;
+    }, GET_ALL_DATA_BOARDING_SEARCH(R.layout.get_all_data_boarding_search_list_item) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new GetAllDataBoardingSearchHolder(view, viewInterface);
+        }
+    };
     public Object object;
     public int layout;
 
@@ -357,23 +369,15 @@ public enum HolderMapping {
 
                     }
                 }
-            }
-            else if(callFromType.equalsIgnoreCase(AppConstants.OWNER_SUB_TYPE))
-            {
+            } else if (callFromType.equalsIgnoreCase(AppConstants.OWNER_SUB_TYPE)) {
                 returnView = FEED_USER.ordinal();
 
-            }
-            else if(callFromType.equalsIgnoreCase(AppConstants.COMMUNITY_NAME_SUB_TYPE))
-            {
-                    returnView = SELECTDILOG.ordinal();
-            }
-            else if(callFromType.equalsIgnoreCase(AppConstants.ALL_DATA_SUB_TYPE))
-            {
+            } else if (callFromType.equalsIgnoreCase(AppConstants.COMMUNITY_NAME_SUB_TYPE)) {
+                returnView = SELECTDILOG.ordinal();
+            } else if (callFromType.equalsIgnoreCase(AppConstants.ALL_DATA_SUB_TYPE)) {
                 returnView = COMMUNITY_TAG_SEARCH.ordinal();
 
-            }
-
-            else if (callFromType.equalsIgnoreCase(AppConstants.ALL_SEARCH)) {
+            } else if (callFromType.equalsIgnoreCase(AppConstants.ALL_SEARCH)) {
                 if (item instanceof FeedDetail) {
                     returnView = SEARCH_MODULE.ordinal();
                 }
@@ -390,8 +394,7 @@ public enum HolderMapping {
                             if (isFeatured) {
                                 returnView = FEATURE_CARD.ordinal();
                                 //   return SUGGESTED_CARD_HOLDER.ordinal();
-                            }
-                            else {
+                            } else {
                                 returnView = MY_COMMUNITIES_CARD.ordinal();
                             }
                             break;
@@ -409,8 +412,7 @@ public enum HolderMapping {
 
 
                     }
-                }
-                else if (item instanceof DrawerItems) {
+                } else if (item instanceof DrawerItems) {
                     returnView = DRAWER_ITEMS.ordinal();
                 } else if (item instanceof CommentReactionDoc) {
                     CommentReactionDoc commentReactionDoc = ((CommentReactionDoc) item);
@@ -485,15 +487,16 @@ public enum HolderMapping {
 
                     }
 
-                }
-                else if (item instanceof ListOfInviteSearch) {
+                } else if (item instanceof ListOfInviteSearch) {
                     return INVITE_SEARCH_MODULE.ordinal();
-                }
-                else if (item instanceof Member) {
+                } else if (item instanceof Member) {
                     return MEMBER_MODULE.ordinal();
-                }
-                else if (item instanceof OnBoardingData) {
+                } else if (item instanceof OnBoardingData) {
                     return ON_BOARDING_HOLDER.ordinal();
+                } else if (item instanceof LabelValue) {
+                    return CURRENT_STATUS_HOLDER.ordinal();
+                } else if (item instanceof GetAllDataDocument) {
+                    return GET_ALL_DATA_BOARDING_SEARCH.ordinal();
                 } else if (item instanceof RequestedList) {
                     return REQUESTLIST.ordinal();
                 } else if (item instanceof OwnerList) {

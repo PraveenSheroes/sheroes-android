@@ -7,8 +7,10 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.LoginModel;
+import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
@@ -27,16 +29,24 @@ import rx.Subscription;
 public class LoginPresenter extends BasePresenter<LoginView> {
     private final String TAG = LogUtils.makeLogTag(LoginPresenter.class);
     LoginModel mLoginModel;
-    SheroesApplication sheroesApplication;
+    SheroesApplication mSheroesApplication;
     @Inject
     Preference<LoginResponse> userPreference;
+    MasterDataModel mMasterDataModel;
     @Inject
-    public LoginPresenter(LoginModel mLoginModel, SheroesApplication sheroesApplication, Preference<LoginResponse> userPreference) {
+    Preference<MasterDataResponse> mUserPreferenceMasterData;
+    @Inject
+    public LoginPresenter(MasterDataModel masterDataModel,LoginModel mLoginModel, SheroesApplication mSheroesApplication, Preference<LoginResponse> userPreference, Preference<MasterDataResponse> mUserPreferenceMasterData) {
+      this.mMasterDataModel=masterDataModel;
         this.mLoginModel = mLoginModel;
-        this.sheroesApplication=sheroesApplication;
+        this.mSheroesApplication = mSheroesApplication;
         this.userPreference=userPreference;
+        this.mUserPreferenceMasterData = mUserPreferenceMasterData;
     }
 
+    public void getMasterDataToPresenter() {
+        super.getMasterDataToAllPresenter(mSheroesApplication,mMasterDataModel,mUserPreferenceMasterData);
+    }
     @Override
     public void detachView() {
         super.detachView();
@@ -49,7 +59,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
 
 
     public void getLoginAuthTokeInPresenter(LoginRequest loginRequest,boolean isSignUp) {
-        if (!NetworkUtil.isConnected(sheroesApplication)) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,AppConstants.ONE_CONSTANT);
             return;
         }

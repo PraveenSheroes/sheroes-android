@@ -16,7 +16,7 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import java.util.Calendar;
-
+import java.lang.reflect.Field;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -35,8 +35,6 @@ public class DayPickerDialog extends DialogFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-    }
-    DayPickerDialog(OnboardingWorkExperience context) {
         try {
             if (context instanceof MyDayPickerListener) {
                 myDayPickerListener = (MyDayPickerListener) context;
@@ -45,6 +43,7 @@ public class DayPickerDialog extends DialogFragment {
             LogUtils.error(mTAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + mTAG + AppConstants.SPACE + exception.getMessage());
         }
     }
+
     public void setListener(DatePickerDialog.OnDateSetListener listener) {
         this.listener = listener;
     }
@@ -85,8 +84,8 @@ public class DayPickerDialog extends DialogFragment {
     }
     private void setDividerColor (NumberPicker picker) {
 
-        java.lang.reflect.Field[] pickerFields = NumberPicker.class.getDeclaredFields();
-        for (java.lang.reflect.Field pf : pickerFields) {
+        Field[] pickerFields = NumberPicker.class.getDeclaredFields();
+        for (Field pf : pickerFields) {
             if (pf.getName().equals("mSelectionDivider")) {
                 pf.setAccessible(true);
                 try {

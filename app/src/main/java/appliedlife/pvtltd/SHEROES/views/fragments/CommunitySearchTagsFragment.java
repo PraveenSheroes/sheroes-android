@@ -26,7 +26,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityTags;
-import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
+import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.presenters.CommunityTagsPresenter;
@@ -159,7 +159,7 @@ public class CommunitySearchTagsFragment extends BaseFragment implements Communi
     }
 
     @Override
-    public void getTagListSuccess(List<Doc> tagDetailList) {
+    public void getTagListSuccess(List<GetAllDataDocument> tagDetailList) {
         mAdapter.setCallForRecycler(AppConstants.ALL_DATA_SUB_TYPE);
         mAdapter.setSheroesGenericListData(tagDetailList);
         mAdapter.notifyDataSetChanged();
@@ -230,12 +230,12 @@ public class CommunitySearchTagsFragment extends BaseFragment implements Communi
         {
             mTag7.setVisibility(View.VISIBLE);
         }
-        if (sheroesListDataItem instanceof Doc) {
+        if (sheroesListDataItem instanceof GetAllDataDocument) {
             mtv_tag_text.setVisibility(View.VISIBLE);
             mtv_tag_title.setVisibility(View.VISIBLE);
             mTv_no_of_tags.setVisibility(View.VISIBLE);
             ll_indecator.setVisibility(View.VISIBLE);
-            Doc communityTags = (Doc) sheroesListDataItem;
+            GetAllDataDocument communityTags = (GetAllDataDocument) sheroesListDataItem;
             if (mCount<=3) {
                 mTags[mCount] = communityTags.getTitle();
                 if (mCount == 2) {

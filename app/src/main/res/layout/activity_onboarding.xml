@@ -8,8 +8,19 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
-    <include layout="@layout/activity_onboarding_with_collapsable" />
-
+    <include
+        android:id="@+id/how_can_sheroes"
+        layout="@layout/activity_onboarding_collapsable_how_can_sheroes"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    <include android:id="@+id/interest"
+        layout="@layout/activity_onboarding_collapsable_interest"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    <include android:id="@+id/job_at"
+        layout="@layout/activity_onboarding_collapsable_job_at"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
     <include
         android:id="@+id/fl_onboarding_fragment"
         layout="@layout/fragment_container"

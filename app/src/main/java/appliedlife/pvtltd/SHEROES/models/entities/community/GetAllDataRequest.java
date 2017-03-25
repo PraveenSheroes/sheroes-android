@@ -1,70 +1,29 @@
 package appliedlife.pvtltd.SHEROES.models.entities.community;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
 
 /**
  * Created by SHEROES-TECH on 19-03-2017.
  */
 
-public class GetAllDataRequest {
-
-    @SerializedName("appVersion")
-    @Expose
-    private String appVersion;
-    @SerializedName("cloudMessagingId")
-    @Expose
-    private String cloudMessagingId;
-    @SerializedName("deviceUniqueId")
-    @Expose
-    private String deviceUniqueId;
-    @SerializedName("last_screen_name")
-    @Expose
-    private String lastScreenName;
+public class GetAllDataRequest extends BaseRequest implements Parcelable {
     @SerializedName("master_data_type")
     @Expose
     private String masterDataType;
     @SerializedName("q")
     @Expose
     private String q;
-    @SerializedName("screen_name")
-    @Expose
-    private String screenName;
+
     @SerializedName("source")
     @Expose
     private String source;
 
-    public String getAppVersion() {
-        return appVersion;
-    }
-
-    public void setAppVersion(String appVersion) {
-        this.appVersion = appVersion;
-    }
-
-    public String getCloudMessagingId() {
-        return cloudMessagingId;
-    }
-
-    public void setCloudMessagingId(String cloudMessagingId) {
-        this.cloudMessagingId = cloudMessagingId;
-    }
-
-    public String getDeviceUniqueId() {
-        return deviceUniqueId;
-    }
-
-    public void setDeviceUniqueId(String deviceUniqueId) {
-        this.deviceUniqueId = deviceUniqueId;
-    }
-
-    public String getLastScreenName() {
-        return lastScreenName;
-    }
-
-    public void setLastScreenName(String lastScreenName) {
-        this.lastScreenName = lastScreenName;
-    }
 
     public String getMasterDataType() {
         return masterDataType;
@@ -82,14 +41,6 @@ public class GetAllDataRequest {
         this.q = q;
     }
 
-    public String getScreenName() {
-        return screenName;
-    }
-
-    public void setScreenName(String screenName) {
-        this.screenName = screenName;
-    }
-
     public String getSource() {
         return source;
     }
@@ -97,4 +48,37 @@ public class GetAllDataRequest {
     public void setSource(String source) {
         this.source = source;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.masterDataType);
+        dest.writeString(this.q);
+        dest.writeString(this.source);
+    }
+
+    public GetAllDataRequest() {
+    }
+
+    protected GetAllDataRequest(Parcel in) {
+        this.masterDataType = in.readString();
+        this.q = in.readString();
+        this.source = in.readString();
+    }
+
+    public static final Parcelable.Creator<GetAllDataRequest> CREATOR = new Parcelable.Creator<GetAllDataRequest>() {
+        @Override
+        public GetAllDataRequest createFromParcel(Parcel source) {
+            return new GetAllDataRequest(source);
+        }
+
+        @Override
+        public GetAllDataRequest[] newArray(int size) {
+            return new GetAllDataRequest[size];
+        }
+    };
 }

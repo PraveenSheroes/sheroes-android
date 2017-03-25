@@ -34,7 +34,7 @@
             android:value="07aa242372597565df80681a25002e6e25e6ef0e" />
 
         <activity
-            android:name="appliedlife.pvtltd.SHEROES.views.activities.OnboardingActivity"
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.OnBoardingActivity"
             android:windowSoftInputMode="stateHidden">
         </activity>
         <activity

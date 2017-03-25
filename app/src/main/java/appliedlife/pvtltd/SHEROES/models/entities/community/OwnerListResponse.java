@@ -3,7 +3,6 @@ package appliedlife.pvtltd.SHEROES.models.entities.community;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,9 +11,7 @@ import java.util.List;
 
 public class OwnerListResponse {
 
-    @SerializedName("fieldErrorMessageMap")
-    @Expose
-    private FieldErrorMessageMap fieldErrorMessageMap;
+
     @SerializedName("members")
     @Expose
     private List<Member> members = null;
@@ -25,13 +22,7 @@ public class OwnerListResponse {
     @Expose
     private String status;
 
-    public FieldErrorMessageMap getFieldErrorMessageMap() {
-        return fieldErrorMessageMap;
-    }
 
-    public void setFieldErrorMessageMap(FieldErrorMessageMap fieldErrorMessageMap) {
-        this.fieldErrorMessageMap = fieldErrorMessageMap;
-    }
 
     public List<Member> getMembers() {
         return members;

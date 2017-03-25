@@ -1,6 +1,5 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
@@ -72,7 +71,7 @@ public class ImageFullViewFragment extends BaseFragment implements ViewPager.OnP
         //Nothing to do here
     }
 
-    @OnClick(R.id.iv_full_image_back)
+    @OnClick(R.id.tv_full_image_back)
     public void dismissCommentDialog() {
         ((HomeActivity) getActivity()).onBackPressed();
     }

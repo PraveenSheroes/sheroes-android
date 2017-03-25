@@ -6,6 +6,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
+import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllData;
+import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import rx.Observable;
@@ -26,12 +28,23 @@ public class OnBoardingModel {
         this.sheroesAppServiceApi = sheroesAppServiceApi;
         this.gson= gson;
     }
-    public Observable<MasterDataResponse> getOnBoardingFromModel(){
-        return sheroesAppServiceApi.getOnBoardingFromApi()
+    public Observable<MasterDataResponse> getOnBoardingMasterDataFromModel(){
+        return sheroesAppServiceApi.getOnBoardingMasterDataFromApi()
                 .map(new Func1<MasterDataResponse, MasterDataResponse>() {
                     @Override
                     public MasterDataResponse call(MasterDataResponse masterDataResponse) {
                         return masterDataResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+    public Observable<GetAllData> getOnBoardingFromModel(GetAllDataRequest getAllDataRequest){
+        return sheroesAppServiceApi.getOnBoardingSearchFromApi(getAllDataRequest)
+                .map(new Func1<GetAllData, GetAllData>() {
+                    @Override
+                    public GetAllData call(GetAllData getAllData) {
+                        return getAllData;
                     }
                 })
                 .subscribeOn(Schedulers.io())

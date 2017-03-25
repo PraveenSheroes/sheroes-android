@@ -8,9 +8,7 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class DeactivateOwnerResponse {
-    @SerializedName("fieldErrorMessageMap")
-    @Expose
-    private FieldErrorMessageMap fieldErrorMessageMap;
+
     @SerializedName("screen_name")
     @Expose
     private String screenName;
@@ -18,13 +16,7 @@ public class DeactivateOwnerResponse {
     @Expose
     private String status;
 
-    public FieldErrorMessageMap getFieldErrorMessageMap() {
-        return fieldErrorMessageMap;
-    }
 
-    public void setFieldErrorMessageMap(FieldErrorMessageMap fieldErrorMessageMap) {
-        this.fieldErrorMessageMap = fieldErrorMessageMap;
-    }
 
     public String getScreenName() {
         return screenName;

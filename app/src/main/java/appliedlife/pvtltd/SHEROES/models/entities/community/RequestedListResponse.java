@@ -3,7 +3,6 @@ package appliedlife.pvtltd.SHEROES.models.entities.community;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,9 +14,7 @@ public class RequestedListResponse {
     @SerializedName("status")
     @Expose
     private String status;
-    @SerializedName("fieldErrorMessageMap")
-    @Expose
-    private FieldErrorMessageMap fieldErrorMessageMap;
+
     @SerializedName("screen_name")
     @Expose
     private Object screenName;
@@ -33,13 +30,7 @@ public class RequestedListResponse {
         this.status = status;
     }
 
-    public FieldErrorMessageMap getFieldErrorMessageMap() {
-        return fieldErrorMessageMap;
-    }
 
-    public void setFieldErrorMessageMap(FieldErrorMessageMap fieldErrorMessageMap) {
-        this.fieldErrorMessageMap = fieldErrorMessageMap;
-    }
 
     public Object getScreenName() {
         return screenName;

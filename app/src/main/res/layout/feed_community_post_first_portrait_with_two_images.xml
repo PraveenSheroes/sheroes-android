@@ -9,7 +9,7 @@
         android:id="@+id/iv_feed_community_post_first_portrait_side_two_image"
         android:layout_width="@dimen/dp_size_200"
         android:layout_height="@dimen/dp_size_330"
-        android:scaleType="fitXY" />
+        android:scaleType="centerCrop" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -21,14 +21,14 @@
             android:id="@+id/iv_feed_community_post_second_portrait_side_two_image"
             android:layout_width="@dimen/dp_size_160"
             android:layout_height="@dimen/dp_size_165"
-            android:scaleType="fitXY"/>
+            android:scaleType="centerCrop"/>
 
         <ImageView
             android:id="@+id/iv_feed_community_post_third_portrait_side_two_image"
             android:layout_width="@dimen/dp_size_160"
             android:layout_height="@dimen/dp_size_165"
             android:layout_marginTop="@dimen/dp_size_1"
-            android:scaleType="fitXY" />
+            android:scaleType="centerCrop" />
 
     </LinearLayout>
 </LinearLayout>

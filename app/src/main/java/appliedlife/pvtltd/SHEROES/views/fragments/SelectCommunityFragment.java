@@ -1,6 +1,5 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +15,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -24,14 +24,11 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityList;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
+import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Member;
-import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerList;
-import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.presenters.CommunityListPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -45,7 +42,7 @@ import butterknife.ButterKnife;
 /**
  * Created by Ajit Kumar on 24-01-2017.
  */
-public class SelectCommunityFragment extends DialogFragment implements CommunityView, BaseHolderInterface, HomeView {
+public class SelectCommunityFragment extends BaseDialogFragment implements CommunityView, BaseHolderInterface, HomeView {
     @Inject
     HomePresenter mHomePresenter;
     @Bind(R.id.rv_home_list)
@@ -202,7 +199,7 @@ public class SelectCommunityFragment extends DialogFragment implements Community
     }
 
     @Override
-    public void getTagListSuccess(List<Doc> feedDetailList) {
+    public void getTagListSuccess(List<GetAllDataDocument> feedDetailList) {
 
     }
 

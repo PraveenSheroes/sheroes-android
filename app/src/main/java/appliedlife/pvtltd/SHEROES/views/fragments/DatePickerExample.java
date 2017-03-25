@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,23 +20,24 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 
+import java.lang.reflect.Field;
 import java.util.Calendar;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 
 public class DatePickerExample extends DialogFragment {
-
+    private final String TAG = LogUtils.makeLogTag(DatePickerExample.class);
     private static final int MAX_YEAR = 50;
     private OnDateSetListener listener;
-    private final String mTAG = LogUtils.makeLogTag(DatePickerExample.class);
-
+    private Context mContext;
     public void setListener(OnDateSetListener listener) {
         this.listener = listener;
     }
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        mContext=context;
     }
 
     @Override
@@ -75,14 +77,14 @@ public class DatePickerExample extends DialogFragment {
     }
     private void setDividerColor (NumberPicker picker) {
 
-        java.lang.reflect.Field[] pickerFields = NumberPicker.class.getDeclaredFields();
-        for (java.lang.reflect.Field pf : pickerFields) {
+        Field[] pickerFields = NumberPicker.class.getDeclaredFields();
+        for (Field pf : pickerFields) {
             if (pf.getName().equals("mSelectionDivider")) {
                 pf.setAccessible(true);
                 try {
                     //pf.set(picker, getResources().getColor(R.color.my_orange));
                     //Log.v(TAG,"here");
-                    pf.set(picker, getResources().getDrawable(R.drawable.blank_image));
+                    pf.set(picker, ContextCompat.getDrawable(mContext, R.drawable.blank_image));
                 } catch (IllegalArgumentException e) {
                     e.printStackTrace();
                 } catch (Resources.NotFoundException e) {

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/how_can_sheroes_help"
+    android:background="@drawable/job_at"
     android:fitsSystemWindows="true">
 
     <android.support.design.widget.AppBarLayout
@@ -49,12 +49,12 @@
             <TextView
                 android:id="@+id/tv_how_can_sheroes_text"
                 android:layout_width="@dimen/dp_size_200"
-                android:layout_height="@dimen/dp_size_70"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center|top"
-                android:layout_marginTop="@dimen/dp_size_35"
+                android:gravity="center"
+                android:layout_marginTop="@dimen/dp_size_80"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                android:lineSpacingExtra="@dimen/dp_size_10"
-                android:text="@string/ID_HOW_CAN_SHEROES"
+                android:text="@string/ID_I_AM_JOB_AT"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sp_size_23" />
@@ -120,14 +120,23 @@
 
         </appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.CustomCollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/view_pager_onboarding"
+    <include
+        android:id="@+id/fl_i_am_job_at"
+        layout="@layout/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:alpha=".9"
         android:background="@color/white"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-
+    <ImageView
+        android:id="@+id/iv_job_at_next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_gravity="bottom|end"
+        android:layout_marginRight="@dimen/dp_size_20"
+        android:layout_marginBottom="@dimen/dp_size_30"
+        android:src="@drawable/ic_next" />
 </android.support.design.widget.CoordinatorLayout>

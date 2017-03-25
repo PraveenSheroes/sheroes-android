@@ -35,7 +35,7 @@ public class LoginActivity extends BaseActivity implements LoginFragment.LoginAc
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getToken())) {
-            Intent homeIntent = new Intent(this, OnboardingActivity.class);
+            Intent homeIntent = new Intent(this, HomeActivity.class);
             startActivity(homeIntent);
             finish();
 

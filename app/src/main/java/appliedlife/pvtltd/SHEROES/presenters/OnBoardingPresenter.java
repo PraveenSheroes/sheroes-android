@@ -6,7 +6,10 @@ import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
 import appliedlife.pvtltd.SHEROES.models.OnBoardingModel;
+import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllData;
+import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -23,9 +26,12 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
     private final String TAG = LogUtils.makeLogTag(OnBoardingPresenter.class);
     OnBoardingModel onBoardingModel;
     SheroesApplication mSheroesApplication;
-    Preference<MasterDataResponse> mUserPreferenceMasterData;
     @Inject
-    public OnBoardingPresenter(OnBoardingModel homeModel, SheroesApplication sheroesApplication,Preference<MasterDataResponse> mUserPreferenceMasterData) {
+    Preference<MasterDataResponse> mUserPreferenceMasterData;
+    MasterDataModel mMasterDataModel;
+    @Inject
+    public OnBoardingPresenter(MasterDataModel masterDataModel,OnBoardingModel homeModel, SheroesApplication sheroesApplication, Preference<MasterDataResponse> mUserPreferenceMasterData) {
+       this.mMasterDataModel=masterDataModel;
         this.onBoardingModel = homeModel;
         this.mSheroesApplication = sheroesApplication;
         this.mUserPreferenceMasterData = mUserPreferenceMasterData;
@@ -41,13 +47,16 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
         return super.isViewAttached();
     }
 
-    public void getOnBoardingMasterDataToPresenter() {
+    public void getMasterDataToPresenter() {
+     super.getMasterDataToAllPresenter(mSheroesApplication,mMasterDataModel,mUserPreferenceMasterData);
+    }
+    public void getOnBoardingSearchToPresenter(GetAllDataRequest getAllDataRequest) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, AppConstants.THREE_CONSTANT);
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = onBoardingModel.getOnBoardingFromModel().subscribe(new Subscriber<MasterDataResponse>() {
+        Subscription subscription = onBoardingModel.getOnBoardingFromModel(getAllDataRequest).subscribe(new Subscriber<GetAllData>() {
             @Override
             public void onCompleted() {
                 getMvpView().stopProgressBar();
@@ -60,10 +69,9 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
             }
 
             @Override
-            public void onNext(MasterDataResponse masterDataResponse) {
+            public void onNext(GetAllData getAllData) {
                 getMvpView().stopProgressBar();
-                mUserPreferenceMasterData.set(masterDataResponse);
-                getMvpView().getMasterDataResponse(masterDataResponse.getData());
+                getMvpView().getAllDataResponse(getAllData);
             }
         });
         registerSubscription(subscription);

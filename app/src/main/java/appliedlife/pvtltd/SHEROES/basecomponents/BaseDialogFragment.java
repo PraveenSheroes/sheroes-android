@@ -3,7 +3,11 @@ package appliedlife.pvtltd.SHEROES.basecomponents;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 
 
@@ -15,7 +19,7 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
  * @since 29/12/2016.
  * Title: Base Dialog class handling fadein and fadeout animations
  */
-public class BaseDialogFragment extends DialogFragment {
+public class BaseDialogFragment extends DialogFragment implements BaseMvpView {
     private final String TAG = LogUtils.makeLogTag(BaseDialogFragment.class);
     public static final String DISMISS_PARENT_ON_OK_OR_BACK = "DISMISS_PARENT_ON_OK_OR_BACK";
     public static final String IS_CANCELABLE = "is_cancelable";
@@ -49,4 +53,28 @@ public class BaseDialogFragment extends DialogFragment {
     }
 
 
+    @Override
+    public void startProgressBar() {
+
+    }
+
+    @Override
+    public void stopProgressBar() {
+
+    }
+
+    @Override
+    public void startNextScreen() {
+
+    }
+
+    @Override
+    public void showError(String s, int errorFor) {
+
+    }
+
+    @Override
+    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
+
+    }
 }

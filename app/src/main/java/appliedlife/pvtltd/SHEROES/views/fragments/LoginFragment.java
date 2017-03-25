@@ -129,6 +129,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
             getPermissionToReadUserContacts();
 
         }
+        mLoginPresenter.getMasterDataToPresenter();
         fbSignIn();
         return view;
     }

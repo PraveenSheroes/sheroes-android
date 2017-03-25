@@ -1,6 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!-- Dimensions Core values. -->
+    <dimen name="dp_size_300">300dp</dimen>
+    <dimen name="dp_size_320">320dp</dimen>
     <dimen name="dp_size_3">3dp</dimen>
     <dimen name="dp_size_4">4dp</dimen>
 
@@ -126,7 +128,7 @@
     <dimen name="dp_size_45">45dp</dimen>
     <dimen name="dp_size_42">42dp</dimen>
     <dimen name="dp_size_49">49dp</dimen>
-
+    <dimen name="dp_size_640">640dp</dimen>
     <dimen name="dp_size_9">9dp</dimen>
     <dimen name="dp_size_7">7dp</dimen>
 
@@ -144,8 +146,6 @@
     <dimen name="comment_icon">30dp</dimen>
     <dimen name="multiple_image_rectangle">118dp</dimen>
     <dimen name="two_image_rectangle">180dp</dimen>
-    <dimen name="two_image_rectangle_first_one">175dp</dimen>
-    <dimen name="two_image_rectangle_second_one">185dp</dimen>
     <dimen name="tell_us_image_width">316dp</dimen>
     <dimen name="tell_us_image_height">207dp</dimen>
 

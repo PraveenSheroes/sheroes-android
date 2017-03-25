@@ -89,7 +89,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllData;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.ProfileItems;
@@ -1677,7 +1676,22 @@ public class AppUtils {
         feedRequestPojo.setPageSize(AppConstants.PAGE_SIZE);
         return feedRequestPojo;
     }
-
+    /**
+     * Request for feed api
+     */
+    public static GetAllDataRequest onBoardingSearchRequestBuilder(String queryName,  String masterDataTypeSkill) {
+        AppUtils appUtils = AppUtils.getInstance();
+        GetAllDataRequest getAllDataRequest = new GetAllDataRequest();
+        getAllDataRequest.setAppVersion(appUtils.getAppVersionName());
+        getAllDataRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        //TODO:: change rquest data
+        getAllDataRequest.setCloudMessagingId(AppConstants.ALL_SEARCH);
+        getAllDataRequest.setQ(queryName);
+        getAllDataRequest.setMasterDataType(masterDataTypeSkill);
+        //TODO:: change rquest data
+        getAllDataRequest.setSource(AppConstants.BOARDING_SEARCH);
+        return getAllDataRequest;
+    }
     /**
      * Request for feed api
      */

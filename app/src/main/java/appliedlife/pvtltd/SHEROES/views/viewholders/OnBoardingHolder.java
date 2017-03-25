@@ -13,8 +13,8 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.OnBoardingData;
-import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import butterknife.Bind;
@@ -34,7 +34,6 @@ public class OnBoardingHolder extends BaseViewHolder<OnBoardingData> {
     private OnBoardingData dataItem;
     private Context mContext;
     int mCurrentIndex = 0;
-    TextView mTvTagData;
     int first,second,third,fourth;
     public OnBoardingHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
@@ -72,15 +71,15 @@ public class OnBoardingHolder extends BaseViewHolder<OnBoardingData> {
         }
     }
 
-    private int cloumnViewTwo(LinearLayout liRow, int passedRow, int column, List<String> stringList) {
+    private int cloumnViewTwo(LinearLayout liRow, int passedRow, int column, List<LabelValue> stringList) {
 
         if (mCurrentIndex < stringList.size()) {
-            int lengthString = stringList.get(mCurrentIndex).length();
+            int lengthString = stringList.get(mCurrentIndex).getLabel().length();
             if(first==1&&second==1)
             {
                 passedRow += 1;
                 return passedRow;
-            }else if(second==2)
+            }else if(second==2||third==2)
             {
                 passedRow += 1;
                 return passedRow;
@@ -88,7 +87,8 @@ public class OnBoardingHolder extends BaseViewHolder<OnBoardingData> {
             {
                 passedRow += 1;
                 return passedRow;
-            }else if(fourth==1&&second==1)
+            }
+            else if(fourth==1&&second==1)
             {
                 passedRow += 1;
                 return passedRow;
@@ -148,27 +148,25 @@ public class OnBoardingHolder extends BaseViewHolder<OnBoardingData> {
         return passedRow;
     }
 
-    private void inflateTagData(LinearLayout liRow, List<String> stringList) {
+    private void inflateTagData(LinearLayout liRow, List<LabelValue> stringList) {
         LayoutInflater columnInflate = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         LinearLayout liTagLable = (LinearLayout) columnInflate.inflate(R.layout.tag_item_ui_for_onboarding, null);
-        mTvTagData = (TextView) liTagLable.findViewById(R.id.tv_tag_data);
-        mTvTagData.setText(stringList.get(mCurrentIndex));
-        mTvTagData.setOnClickListener(this);
+        final TextView mTvTagData = (TextView) liTagLable.findViewById(R.id.tv_tag_data);
+        mTvTagData.setText(stringList.get(mCurrentIndex).getLabel());
+        mTvTagData.setTag(stringList.get(mCurrentIndex));
+        mTvTagData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewInterface.handleOnClick(dataItem, mTvTagData);
+                LabelValue labelValue=(LabelValue)mTvTagData.getTag();
+                Toast.makeText(mContext,"Clicked--->"+labelValue.getLabel(),Toast.LENGTH_SHORT).show();
+            }
+        });
         liRow.addView(liTagLable);
     }
-
-
     @Override
     public void onClick(View view) {
-        int id = view.getId();
-        switch (id) {
-            case R.id.tv_tag_data:
-                Toast.makeText(mContext,"Clicked->"+getAdapterPosition(),Toast.LENGTH_SHORT).show();
-                viewInterface.handleOnClick(dataItem, mTvTagData);
-                break;
-            default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + id);
-        }
+
     }
 
 }

@@ -106,7 +106,7 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                         mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEATURED_COMMUNITY,pageNo));
                         break;
                     case AppConstants.MY_COMMUNITIES_FRAGMENT:
-                        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY,pageNo));
+                        mHomePresenter.getMyCommunityFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY,pageNo));
                         break;
                     case AppConstants.HOME_FRAGMENT:
                        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE,pageNo));

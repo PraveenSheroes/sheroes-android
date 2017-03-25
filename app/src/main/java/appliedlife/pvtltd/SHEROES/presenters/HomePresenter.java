@@ -21,7 +21,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllData;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
@@ -129,6 +128,40 @@ public class HomePresenter extends BasePresenter<HomeView> {
         });
         registerSubscription(subscription);
     }
+    public void getMyCommunityFromPresenter(final FeedRequestPojo feedRequestPojo) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,AppConstants.ONE_CONSTANT);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = mHomeModel.getMyCommunityFromModel(feedRequestPojo).subscribe(new Subscriber<FeedResponsePojo>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                LogUtils.info(TAG,"*******************"+e.getMessage());
+                getMvpView().stopProgressBar();
+                getMvpView().showError(e.getMessage(),AppConstants.ONE_CONSTANT);
+            }
+
+            @Override
+            public void onNext(FeedResponsePojo feedResponsePojo) {
+                LogUtils.info(TAG,"*******************"+new Gson().toJson(feedResponsePojo));
+                getMvpView().stopProgressBar();
+                if(null!=feedRequestPojo&& StringUtil.isNotEmptyCollection(feedResponsePojo.getFeaturedDocs())&&feedResponsePojo.getFeaturedDocs().size()>AppConstants.ONE_CONSTANT)
+                {
+                    getMvpView().getFeedListSuccess(feedResponsePojo.getFeaturedDocs());
+                }else
+                {
+                    getMvpView().getFeedListSuccess(feedResponsePojo.getFeedDetails());
+                }
+            }
+        });
+        registerSubscription(subscription);
+    }
     public void getTagFromPresenter(final GetAllDataRequest getAllDataRequest) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,AppConstants.ONE_CONSTANT);
@@ -150,12 +183,12 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onNext(GetAllData getAllData) {
                 getMvpView().stopProgressBar();
-                if(null!=getAllDataRequest&& StringUtil.isNotEmptyCollection(getAllData.getDocs())&&getAllData.getDocs().size()>AppConstants.ONE_CONSTANT)
+                if(null!=getAllDataRequest&& StringUtil.isNotEmptyCollection(getAllData.getGetAllDataDocuments())&&getAllData.getGetAllDataDocuments().size()>AppConstants.ONE_CONSTANT)
                 {
-                    getMvpView().getTagListSuccess(getAllData.getDocs());
+                    getMvpView().getTagListSuccess(getAllData.getGetAllDataDocuments());
                 }else
                 {
-                    getMvpView().getTagListSuccess(getAllData.getDocs());
+                    getMvpView().getTagListSuccess(getAllData.getGetAllDataDocuments());
                 }
             }
         });

@@ -1,81 +1,59 @@
 package appliedlife.pvtltd.SHEROES.models.entities.community;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+
 /**
  * Created by Ajit Kumar on 19-03-2017.
  */
 
-public class GetAllData {
-
-    @SerializedName("status")
-    @Expose
-    private String status;
-    @SerializedName("fieldErrorMessageMap")
-    @Expose
-    private FieldErrorMessageMap fieldErrorMessageMap;
-    @SerializedName("numFound")
-    @Expose
-    private Integer numFound;
-    @SerializedName("start")
-    @Expose
-    private Integer start;
+public class GetAllData extends BaseResponse implements Parcelable {
     @SerializedName("docs")
     @Expose
-    private List<Doc> docs = null;
-    @SerializedName("screen_name")
-    @Expose
-    private Object screenName;
+    private List<GetAllDataDocument> getAllDataDocuments = null;
 
-    public String getStatus() {
-        return status;
+
+    public List<GetAllDataDocument> getGetAllDataDocuments() {
+        return getAllDataDocuments;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setGetAllDataDocuments(List<GetAllDataDocument> getAllDataDocuments) {
+        this.getAllDataDocuments = getAllDataDocuments;
     }
 
-    public FieldErrorMessageMap getFieldErrorMessageMap() {
-        return fieldErrorMessageMap;
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
-    public void setFieldErrorMessageMap(FieldErrorMessageMap fieldErrorMessageMap) {
-        this.fieldErrorMessageMap = fieldErrorMessageMap;
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeTypedList(this.getAllDataDocuments);
     }
 
-    public Integer getNumFound() {
-        return numFound;
+    public GetAllData() {
     }
 
-    public void setNumFound(Integer numFound) {
-        this.numFound = numFound;
+    protected GetAllData(Parcel in) {
+        this.getAllDataDocuments = in.createTypedArrayList(GetAllDataDocument.CREATOR);
     }
 
-    public Integer getStart() {
-        return start;
-    }
+    public static final Creator<GetAllData> CREATOR = new Creator<GetAllData>() {
+        @Override
+        public GetAllData createFromParcel(Parcel source) {
+            return new GetAllData(source);
+        }
 
-    public void setStart(Integer start) {
-        this.start = start;
-    }
-
-    public List<Doc> getDocs() {
-        return docs;
-    }
-
-    public void setDocs(List<Doc> docs) {
-        this.docs = docs;
-    }
-
-    public Object getScreenName() {
-        return screenName;
-    }
-
-    public void setScreenName(Object screenName) {
-        this.screenName = screenName;
-    }
-
+        @Override
+        public GetAllData[] newArray(int size) {
+            return new GetAllData[size];
+        }
+    };
 }
