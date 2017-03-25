@@ -130,5 +130,6 @@ public class AppConstants {
     public static final String ERROR_OCCUR="Some error occured. Press back and try again.";
     public static final String DOWNLOAD_COMPLETED_IMAGE="Failed to download image. Please check your internet connection.";
 
-
+    //Community
+    public static final int MAX_WORD_COUNTER = 4000;
 }

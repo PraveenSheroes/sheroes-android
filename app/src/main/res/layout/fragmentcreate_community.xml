@@ -200,22 +200,44 @@
                 android:layout_marginRight="@dimen/dp_size_15"
                 android:paddingTop="@dimen/dp_size_30">
 
-                <EditText
-                    android:id="@+id/et_create_community_description"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/edittext_style"
-                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:hint="@string/ID_DESCRIPTION"
-                    android:imeOptions="actionUnspecified"
-                    android:inputType="textMultiLine"
-                    android:lines="20"
-                    android:minLines="1"
-                    android:scrollbars="vertical"
-                    android:maxLines="20"
-                    android:textSize="@dimen/sp_size_12"/>
+                    android:layout_height="wrap_content">
 
+                    <EditText
+                        android:id="@+id/et_create_community_description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                        android:hint="@string/ID_DESCRIPTION"
+                        android:imeOptions="actionUnspecified"
+                        android:maxLength="4000"
+                        android:inputType="textMultiLine"
+                        android:scrollbars="vertical"
+                        android:textSize="@dimen/sp_size_12" />
+
+                    <TextView
+                        android:id="@+id/txt_counter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@+id/et_create_community_description"
+                        android:fontFamily="@string/ID_ROBOTO_LIGHT"
+                        android:textColor="@color/dashboard_fed_text"
+                        android:textSize="@dimen/sp_size_10"
+                        android:visibility="gone" />
+                </RelativeLayout>
             </android.support.design.widget.TextInputLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_size_0.7"
+                android:layout_marginLeft="@dimen/dp_size_15"
+                android:layout_marginRight="@dimen/dp_size_15"
+                android:layout_marginTop="@dimen/dp_size_2"
+                android:background="@color/grey2" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -270,6 +292,7 @@
 
     <FrameLayout
         android:id="@+id/container"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </RelativeLayout>

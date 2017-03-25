@@ -31,6 +31,7 @@
     <dimen name="dp_size_35">35dp</dimen>
     <dimen name="dp_size_10">10dp</dimen>
     <dimen name="dp_size_16">16dp</dimen>
+    <dimen name="dp_size_0.7">0.7dp</dimen>
     <dimen name="dp_size_0.5">0.5dp</dimen>
     <dimen name="dp_size_0.1">0.1dp</dimen>
     <dimen name="dp_size_5">5dp</dimen>

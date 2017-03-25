@@ -21,6 +21,8 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -122,6 +124,8 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
 
     @Bind(R.id.et_create_community_description)
     EditText met_create_community_description;
+    @Bind(R.id.txt_counter)
+    TextView mCounterTxt;
 
     @Bind(R.id.et_create_community_name)
     EditText met_create_community_name;
@@ -191,7 +195,25 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
             getActivity().setRequestedOrientation(
                     ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             getExternalStoragePermission();
-//        Fabric.with(getActivity(), new Crashlytics());
+            met_create_community_description.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
+
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int aft) {
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (s.length() > 0) {
+                        mCounterTxt.setVisibility(View.VISIBLE);
+                        mCounterTxt.setText(String.valueOf(AppConstants.MAX_WORD_COUNTER - s.toString().length()));
+                    } else {
+                        mCounterTxt.setVisibility(View.GONE);
+                    }
+                }
+            });
         }
         return view;
     }

@@ -105,33 +105,47 @@
         android:layout_marginLeft="@dimen/dp_size_38"
         android:text="@string/ID_ADDMORE"/>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_size_38"
+        android:layout_marginRight="@dimen/dp_size_38"
+        android:layout_marginTop="@dimen/dp_size_45">
 
         <EditText
             android:id="@+id/et_share_community_post_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/ID_SHARE_WITH_COMMUNITY"
-            android:background="@drawable/edit_text_create_community_style"
-            android:windowSoftInputMode="stateHidden"
-            android:layout_marginTop="@dimen/dp_size_45"
-            android:layout_marginRight="@dimen/dp_size_38"
-            android:layout_marginLeft="@dimen/dp_size_38"
-            android:imeOptions="actionUnspecified"
+            android:background="@android:color/transparent"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:hint="@string/ID_SHARE_WITH_COMMUNITY"
+            android:imeOptions="actionUnspecified"
             android:inputType="textMultiLine"
-            android:lines="20"
-            android:minLines="1"
+            android:maxLength="4000"
             android:textSize="@dimen/sp_size_12"
-            android:maxLines="1" />
+            android:windowSoftInputMode="stateHidden" />
 
+        <TextView
+            android:id="@+id/txt_counter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/et_share_community_post_text"
+            android:fontFamily="@string/ID_ROBOTO_LIGHT"
+            android:textColor="@color/dashboard_fed_text"
+            android:textSize="@dimen/sp_size_10"
+            android:visibility="gone" />
+    </RelativeLayout>
 
     <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="@dimen/dp_size_1"
-        android:layout_marginTop="@dimen/dp_size_12"
-        android:layout_marginRight="@dimen/dp_size_38"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_size_0.7"
         android:layout_marginLeft="@dimen/dp_size_38"
-        android:background="@color/line_color" />
+        android:layout_marginRight="@dimen/dp_size_38"
+        android:layout_marginTop="@dimen/dp_size_5"
+        android:background="@color/grey2" />
+
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

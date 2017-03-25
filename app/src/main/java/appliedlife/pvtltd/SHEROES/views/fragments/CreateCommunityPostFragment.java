@@ -26,10 +26,14 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
@@ -97,7 +101,10 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
     LinearLayout lnr_community_post1;
     @Bind(R.id.lnr_community_post2)
     LinearLayout lnr_community_post2;
-
+    @Bind(R.id.et_share_community_post_text)
+    EditText mPostEt;
+    @Bind(R.id.txt_counter)
+    TextView mCounterTxt;
 
     int mImgcount=0,mCount=0;
     String mValue = "";
@@ -154,10 +161,25 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
         mTvcreate_community_post.setText(R.string.ID_CREATEPOST);
 
         checkStoragePermission();
+        mPostEt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
 
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int aft) {
+            }
 
-//        Fabric.with(getActivity(), new Crashlytics());
-
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() > 0) {
+                    mCounterTxt.setVisibility(View.VISIBLE);
+                    mCounterTxt.setText(String.valueOf(AppConstants.MAX_WORD_COUNTER - s.toString().length()));
+                } else {
+                    mCounterTxt.setVisibility(View.GONE);
+                }
+            }
+        });
         return view;
     }
     public void checkStoragePermission()
