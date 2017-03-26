@@ -109,10 +109,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_search_group_icon"
+        app:backgroundTint="@color/blue"
         app:layout_anchor="@id/app_bar_coomunities_detail"
         app:layout_anchorGravity="bottom|center"
         app:fabSize="auto"
-        app:backgroundTint="@color/colorPrimary"
         app:borderWidth="@dimen/dp_size_4"
         app:pressedTranslationZ="@dimen/dp_size_12"
         app:rippleColor="@color/colorPrimary"/>

@@ -124,15 +124,14 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
             tvFeaturedCommunityJoin.setText(mContext.getString(R.string.ID_JOINED));
             tvFeaturedCommunityJoin.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
             tvFeaturedCommunityJoin.setVisibility(View.VISIBLE);
-        }
-        else
-        {
-            tvFeaturedCommunityJoin.setVisibility(View.GONE);
+        } else {
+            tvFeaturedCommunityJoin.setBackgroundResource(R.drawable.rectangle_community_invite);
+            tvFeaturedCommunityJoin.setText(mContext.getString(R.string.ID_INVITE));
+            tvFeaturedCommunityJoin.setTextColor(ContextCompat.getColor(mContext, R.color.white));
         }
         //TODO:: change for UI
-        if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle()))
-        {
-            tvFeaturedCommunityCardTitle.setText(dataItem.getNameOrTitle()+dataItem.getId());
+        if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
+            tvFeaturedCommunityCardTitle.setText(dataItem.getNameOrTitle() + dataItem.getId());
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getCommunityType()))
 
@@ -141,14 +140,11 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
         }
 
         mViewMoreDescription = dataItem.getListDescription();
-        if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription))
-        {
+        if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
             if (mViewMoreDescription.length() > AppConstants.WORD_LENGTH) {
                 mViewMoreDescription = mViewMoreDescription.substring(0, AppConstants.WORD_COUNT);
                 tvFeaturedViewMore.setVisibility(View.VISIBLE);
-            }
-            else
-            {
+            } else {
                 tvFeaturedViewMore.setVisibility(View.GONE);
             }
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
@@ -219,13 +215,14 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
     public void viewMoreTextClick() {
         viewText();
     }
+
     @OnClick(R.id.tv_featured_community_text)
     public void viewMoreClick() {
         viewText();
     }
+
     @TargetApi(AppConstants.ANDROID_SDK_24)
-    private void viewText()
-    {
+    private void viewText() {
         if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
             if (tvFeaturedDescriptionText.getTag().toString().equalsIgnoreCase(mViewMore)) {
                 String lessWithColor = LEFT_HTML_VEIW_TAG_FOR_COLOR + mLess + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
@@ -242,13 +239,11 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
                 if (mViewMoreDescription.length() > AppConstants.WORD_LENGTH) {
                     mViewMoreDescription = mViewMoreDescription.substring(0, AppConstants.WORD_COUNT);
                     tvFeaturedViewMore.setVisibility(View.VISIBLE);
-                }
-                else
-                {
+                } else {
                     tvFeaturedViewMore.setVisibility(View.GONE);
                 }
                 if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                    tvFeaturedDescriptionText.setText(Html.fromHtml(mViewMoreDescription , 0)); // for 24 api and more
+                    tvFeaturedDescriptionText.setText(Html.fromHtml(mViewMoreDescription, 0)); // for 24 api and more
                 } else {
                     tvFeaturedDescriptionText.setText(Html.fromHtml(mViewMoreDescription));// or for older api
                 }
@@ -264,7 +259,17 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_featured_community_join)
     public void joinClick() {
-            viewInterface.handleOnClick(dataItem, tvFeaturedCommunityJoin);
+        viewInterface.handleOnClick(dataItem, tvFeaturedCommunityJoin);
+    }
+
+    @OnClick(R.id.li_featured_community_images)
+    public void detailImageClick() {
+        viewInterface.handleOnClick(dataItem, liFeaturedCoverImage);
+    }
+
+    @OnClick(R.id.card_feature_communities)
+    public void featureClick() {
+        viewInterface.handleOnClick(dataItem, liFeaturedCoverImage);
     }
 
     @Override

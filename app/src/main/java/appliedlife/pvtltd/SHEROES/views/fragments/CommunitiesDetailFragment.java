@@ -1,7 +1,9 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,6 +23,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
@@ -54,6 +57,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
     private SwipPullRefreshList mPullRefreshList;
     @Bind(R.id.tv_join_view)
     TextView mTvJoinView;
+
     @Inject
     AppUtils mAppUtils;
     @Bind(R.id.li_no_result)
@@ -65,12 +69,11 @@ public class CommunitiesDetailFragment extends BaseFragment {
     private int mPressedEmoji;
     private boolean mListLoad = true;
     private boolean mIsEdit = false;
+    private CommunityEnum communityEnum = null;
 
-    public static CommunitiesDetailFragment createInstance(FeedDetail feedDetail) {
+    public static CommunitiesDetailFragment createInstance(Intent intent) {
         CommunitiesDetailFragment communitiesDetailFragment = new CommunitiesDetailFragment();
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, feedDetail);
-        communitiesDetailFragment.setArguments(bundle);
+        communitiesDetailFragment.setArguments(intent.getExtras());
         return communitiesDetailFragment;
     }
 
@@ -82,7 +85,9 @@ public class CommunitiesDetailFragment extends BaseFragment {
         ButterKnife.bind(this, view);
         if (null != getArguments()) {
             mFeedDetail = getArguments().getParcelable(AppConstants.COMMUNITY_DETAIL);
+            communityEnum = (CommunityEnum) getArguments().getSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT);
         }
+        mTvJoinView.setEnabled(true);
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.COMMUNITY_POST_FRAGMENT, mFeedDetail.getId());
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
@@ -92,9 +97,51 @@ public class CommunitiesDetailFragment extends BaseFragment {
         mAdapter = new GenericRecyclerViewAdapter(getContext(), (CommunitiesDetailActivity) getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
+        switch (communityEnum) {
+            case SEARCH_COMMUNITY:
+
+                break;
+            case FEATURE_COMMUNITY:
+                if (mFeedDetail.isClosedCommunity()) {
+                    if (!mFeedDetail.isMember() && !mFeedDetail.isOwner() && !mFeedDetail.isRequestPending()) {
+                        mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.footer_icon_text));
+                        mTvJoinView.setText(getString(R.string.ID_JOIN));
+                        mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
+                    } else if (mFeedDetail.isRequestPending()) {
+                        mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+                        mTvJoinView.setText(getString(R.string.ID_REQUESTED));
+                        mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_community_requested);
+                        mTvJoinView.setEnabled(false);
+                    } else if (mFeedDetail.isOwner() || mFeedDetail.isMember()) {
+
+                    } else {
+                        mTvJoinView.setBackgroundResource(R.drawable.rectangle_community_invite);
+                        mTvJoinView.setText(getString(R.string.ID_INVITE));
+                        mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+                    }
+                } else {
+                    mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+                    mTvJoinView.setText(getString(R.string.ID_JOINED));
+                    mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
+                    mTvJoinView.setVisibility(View.VISIBLE);
+                    mTvJoinView.setEnabled(false);
+                }
+                break;
+            case MY_COMMUNITY:
+                mTvJoinView.setBackgroundResource(R.drawable.rectangle_community_invite);
+                mTvJoinView.setText(getString(R.string.ID_INVITE));
+                mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+                break;
+            default:
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + communityEnum);
+        }
         mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager, mFragmentListRefreshData) {
             @Override
             public void onHide() {
+                if (mTvJoinView.getVisibility() == View.GONE) {
+                    mTvJoinView.setVisibility(View.VISIBLE);
+                    mTvJoinView.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+                }
                 if (mTvJoinView.getVisibility() == View.GONE) {
                     mTvJoinView.setVisibility(View.VISIBLE);
                     mTvJoinView.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
@@ -181,8 +228,8 @@ public class CommunitiesDetailFragment extends BaseFragment {
         super.likeAndUnlikeRequest(baseResponse, reactionValue, position);
     }
 
-    public void commentListRefresh(FeedDetail feedDetail,int callFrom) {
-        super.commentListRefresh(feedDetail,callFrom);
+    public void commentListRefresh(FeedDetail feedDetail, int callFrom) {
+        super.commentListRefresh(feedDetail, callFrom);
     }
 
 }

@@ -3,7 +3,6 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -60,16 +59,7 @@ public class SelectCommunityFragment extends BaseDialogFragment implements Commu
     public void onAttach(Context context) {
         super.onAttach(context);
     }
-    SelectCommunityFragment(CreateCommunityPostFragment context) {
 
-        try {
-            if (context instanceof MyDialogFragmentListener) {
-                mHomeActivityIntractionListner = (MyDialogFragmentListener) context;
-            }
-        } catch (Fragment.InstantiationException exception) {
-            LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

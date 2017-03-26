@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_size_22"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_size_40"
+                android:fontFamily="@string/ID_ROBOTO_LIGHT"
+                android:text="@string/ID_ABOUT"
+                android:textColor="@color/text_color_follow"
+                android:textSize="@dimen/sp_size_18" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_size_40"
+                android:layout_marginTop="@dimen/dp_size_15"
+                android:fontFamily="@string/ID_ROBOTO_LIGHT"
+                android:text="@string/ID_APP_NAME"
+                android:textColor="@color/blue"
+                android:textSize="@dimen/sp_size_30" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_size_40"
+                android:layout_marginTop="@dimen/dp_size_40"
+                android:fontFamily="@string/ID_ROBOTO_LIGHT"
+                android:text="@string/ID_APP_NAME"
+                android:textColor="@color/text_color_follow"
+                android:textSize="@dimen/sp_size_18" />
+
+        </LinearLayout>
+    </FrameLayout>
+
+    <ImageView
+        android:id="@+id/iv_hey_success_next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_size_150"
+        android:src="@drawable/ic_next"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+</RelativeLayout>

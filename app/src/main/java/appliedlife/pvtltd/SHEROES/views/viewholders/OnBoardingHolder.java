@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -34,7 +33,8 @@ public class OnBoardingHolder extends BaseViewHolder<OnBoardingData> {
     private OnBoardingData dataItem;
     private Context mContext;
     int mCurrentIndex = 0;
-    int first,second,third,fourth;
+    int first, second, third, fourth;
+
     public OnBoardingHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
@@ -46,7 +46,9 @@ public class OnBoardingHolder extends BaseViewHolder<OnBoardingData> {
     public void bindData(OnBoardingData onBoardingData, Context context, int position) {
         dataItem = onBoardingData;
         mContext = context;
-        renderOnBoardingView();
+        if(null!=dataItem) {
+            renderOnBoardingView();
+        }
     }
 
     @Override
@@ -61,7 +63,7 @@ public class OnBoardingHolder extends BaseViewHolder<OnBoardingData> {
             tvTagHeader.setText(dataItem.getName());
             int row = 0;
             for (int index = 0; index <= row; index++) {
-                first=second=third=fourth=0;
+                first = second = third = fourth = 0;
                 LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 LinearLayout liRow = (LinearLayout) layoutInflater.inflate(R.layout.tags_onboarding_ui_layout, null);
                 int column = 3;
@@ -75,25 +77,19 @@ public class OnBoardingHolder extends BaseViewHolder<OnBoardingData> {
 
         if (mCurrentIndex < stringList.size()) {
             int lengthString = stringList.get(mCurrentIndex).getLabel().length();
-            if(first==1&&second==1)
-            {
+            if (first == 1 && second == 1) {
                 passedRow += 1;
                 return passedRow;
-            }else if(second==2||third==2)
-            {
+            } else if (second == 2 || third == 2) {
                 passedRow += 1;
                 return passedRow;
-            }else if(second==1&&third==1)
-            {
+            } else if (second == 1 && third == 1) {
                 passedRow += 1;
                 return passedRow;
-            }
-            else if(fourth==1&&second==1)
-            {
+            } else if (fourth == 1 && second == 1) {
                 passedRow += 1;
                 return passedRow;
-            }else if(fourth>=1&&lengthString>30)
-            {
+            } else if (fourth >= 1 && lengthString > 30) {
                 passedRow += 1;
                 return passedRow;
             }
@@ -108,7 +104,7 @@ public class OnBoardingHolder extends BaseViewHolder<OnBoardingData> {
                     mCurrentIndex++;
                 }
 
-            } else if (lengthString <= 30 && lengthString >15) {
+            } else if (lengthString <= 30 && lengthString > 15) {
 
                 if (column < 2) {
                     passedRow += 1;
@@ -120,7 +116,7 @@ public class OnBoardingHolder extends BaseViewHolder<OnBoardingData> {
                     passedRow = cloumnViewTwo(liRow, passedRow, column - 1, stringList);
                 }
 
-            } else if (lengthString >= 10 && lengthString <=15) {
+            } else if (lengthString >= 10 && lengthString <= 15) {
 
                 if (column < 1) {
                     passedRow += 1;
@@ -133,7 +129,7 @@ public class OnBoardingHolder extends BaseViewHolder<OnBoardingData> {
                 }
 
             } else if (lengthString >= 5 && lengthString < 10) {
-                if (column<1) {
+                if (column < 1) {
                     passedRow += 1;
                     return passedRow;
                 } else {
@@ -157,13 +153,13 @@ public class OnBoardingHolder extends BaseViewHolder<OnBoardingData> {
         mTvTagData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dataItem.setName(TAG);
                 viewInterface.handleOnClick(dataItem, mTvTagData);
-                LabelValue labelValue=(LabelValue)mTvTagData.getTag();
-                Toast.makeText(mContext,"Clicked--->"+labelValue.getLabel(),Toast.LENGTH_SHORT).show();
             }
         });
         liRow.addView(liTagLable);
     }
+
     @Override
     public void onClick(View view) {
 

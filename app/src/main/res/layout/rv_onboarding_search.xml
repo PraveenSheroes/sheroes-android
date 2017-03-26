@@ -8,8 +8,8 @@
         android:id="@+id/pb_onboarding_search_progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/li_onboarding_no_search_result"
@@ -17,8 +17,8 @@
         android:layout_height="match_parent"
         android:background="@color/white"
         android:gravity="center"
-        android:visibility="gone"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/tv_onboarding_search_result"

@@ -8,7 +8,7 @@ import javax.inject.Singleton;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllData;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.GetInterestJobResponse;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -28,17 +28,6 @@ public class OnBoardingModel {
         this.sheroesAppServiceApi = sheroesAppServiceApi;
         this.gson= gson;
     }
-    public Observable<MasterDataResponse> getOnBoardingMasterDataFromModel(){
-        return sheroesAppServiceApi.getOnBoardingMasterDataFromApi()
-                .map(new Func1<MasterDataResponse, MasterDataResponse>() {
-                    @Override
-                    public MasterDataResponse call(MasterDataResponse masterDataResponse) {
-                        return masterDataResponse;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
     public Observable<GetAllData> getOnBoardingFromModel(GetAllDataRequest getAllDataRequest){
         return sheroesAppServiceApi.getOnBoardingSearchFromApi(getAllDataRequest)
                 .map(new Func1<GetAllData, GetAllData>() {
@@ -50,4 +39,16 @@ public class OnBoardingModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+    public Observable<GetInterestJobResponse> getInterestjobFromModel(GetAllDataRequest getAllDataRequest){
+        return sheroesAppServiceApi.getInterestJobSearchFromApi(getAllDataRequest)
+                .map(new Func1<GetInterestJobResponse, GetInterestJobResponse>() {
+                    @Override
+                    public GetInterestJobResponse call(GetInterestJobResponse getAllData) {
+                        return getAllData;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
 }

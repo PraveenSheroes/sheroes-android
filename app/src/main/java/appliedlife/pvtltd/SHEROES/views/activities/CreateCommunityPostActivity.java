@@ -49,7 +49,7 @@ public class CreateCommunityPostActivity extends BaseActivity implements CreateC
 
         setContentView(R.layout.activity_create_community_post);
         ButterKnife.bind(this);
-        mCommunityFragment = new CreateCommunityPostFragment(data);
+        mCommunityFragment = new CreateCommunityPostFragment();
         callFirstFragment(R.id.create_community_post_container, mCommunityFragment);
 
     }

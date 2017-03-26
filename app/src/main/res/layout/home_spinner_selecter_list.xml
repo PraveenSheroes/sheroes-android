@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/li_spinner_iten"
+    android:id="@+id/li_article_spinner_iten"
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:orientation="horizontal"
-    android:background="@color/white"
+    android:background="@drawable/current_status_selector"
     android:weightSum="1">
 
     <TextView

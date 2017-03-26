@@ -14,9 +14,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 
 public class HomeSpinnerItem extends BaseResponse implements Parcelable {
 
-    @SerializedName("id")
-    @Expose
-    private String id;
+    private long id;
     @SerializedName("name")
     @Expose
     private String name;
@@ -31,11 +29,12 @@ public class HomeSpinnerItem extends BaseResponse implements Parcelable {
     List<Integer> categoryId;
     private boolean isDone;
     private int itemPostion;
-    public String getId() {
+
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -63,7 +62,20 @@ public class HomeSpinnerItem extends BaseResponse implements Parcelable {
         isChecked = checked;
     }
 
-    public HomeSpinnerItem() {
+    public int getCategoryIdItem() {
+        return categoryIdItem;
+    }
+
+    public void setCategoryIdItem(int categoryIdItem) {
+        this.categoryIdItem = categoryIdItem;
+    }
+
+    public List<Integer> getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(List<Integer> categoryId) {
+        this.categoryId = categoryId;
     }
 
     public boolean isDone() {
@@ -82,24 +94,6 @@ public class HomeSpinnerItem extends BaseResponse implements Parcelable {
         this.itemPostion = itemPostion;
     }
 
-
-
-    public void setCategoryId(List<Integer> categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    public int getCategoryIdItem() {
-        return categoryIdItem;
-    }
-
-    public void setCategoryIdItem(int categoryIdItem) {
-        this.categoryIdItem = categoryIdItem;
-    }
-
-    public List<Integer> getCategoryId() {
-        return categoryId;
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -107,7 +101,7 @@ public class HomeSpinnerItem extends BaseResponse implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.id);
+        dest.writeLong(this.id);
         dest.writeString(this.name);
         dest.writeString(this.description);
         dest.writeByte(this.isChecked ? (byte) 1 : (byte) 0);
@@ -117,8 +111,11 @@ public class HomeSpinnerItem extends BaseResponse implements Parcelable {
         dest.writeInt(this.itemPostion);
     }
 
+    public HomeSpinnerItem() {
+    }
+
     protected HomeSpinnerItem(Parcel in) {
-        this.id = in.readString();
+        this.id = in.readLong();
         this.name = in.readString();
         this.description = in.readString();
         this.isChecked = in.readByte() != 0;

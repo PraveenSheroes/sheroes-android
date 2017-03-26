@@ -36,7 +36,6 @@ public class OnBoardingHowCanSheroesHelpYouFragment extends BaseFragment {
     private final String TAG = LogUtils.makeLogTag(OnBoardingHowCanSheroesHelpYouFragment.class);
     @Bind(R.id.rv_how_can_sheroes_help_list)
     RecyclerView mRecyclerView;
-
     private GenericRecyclerViewAdapter mAdapter;
     private HashMap<String, HashMap<String, ArrayList<LabelValue>>> mMasterDataResult;
 
@@ -88,6 +87,7 @@ public class OnBoardingHowCanSheroesHelpYouFragment extends BaseFragment {
                 Set<String> lookingForSet = hashMap.keySet();
                 for (String lookingFor : lookingForSet) {
                     OnBoardingData boardingData = new OnBoardingData();
+                    boardingData.setFragmentName(AppConstants.HOW_SHEROES_CAN_HELP);
                     boardingData.setName(lookingFor);
                     boardingData.setBoardingDataList(hashMap.get(lookingFor));
                     listBoardingList.add(boardingData);
@@ -97,4 +97,5 @@ public class OnBoardingHowCanSheroesHelpYouFragment extends BaseFragment {
         }
         return null;
     }
+
 }

@@ -6,6 +6,8 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,11 +24,13 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllData;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.GetInterestJobResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.presenters.OnBoardingPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.OnBoardingView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -43,9 +47,11 @@ public class OnBoardingTellUsAboutFragment extends BaseFragment  implements OnBo
     @Bind(R.id.tv_location)
     TextView mLocation;
     @Bind(R.id.tv_mobile_number)
-    TextView mMobileNumber;
+    EditText mMobileNumber;
     @Bind(R.id.tv_current_status_spinner)
     TextView mCurrentStatus;
+    @Bind( R.id.iv_tell_us_next)
+    ImageView mIvNext;
     @Inject
     OnBoardingPresenter mOnBoardingPresenter;
     @Inject
@@ -96,10 +102,21 @@ public class OnBoardingTellUsAboutFragment extends BaseFragment  implements OnBo
         Toast.makeText(getContext(),"*******"+getAllDataDocument.getTitle(),Toast.LENGTH_SHORT).show();
         mLocation.setText(getAllDataDocument.getTitle());
     }
-    @OnClick(R.id.fab_next)
+    @OnClick(R.id.iv_tell_us_next)
     public void nextClick()
     {
-        mOnboardingIntractionListner.onSheroesHelpYouFragmentOpen(mMasterDataResult,AppConstants.ONE_CONSTANT);
+        if(StringUtil.isNotNullOrEmptyString(mCurrentStatus.getText().toString())&&StringUtil.isNotNullOrEmptyString(mLocation.getText().toString())&&StringUtil.isNotNullOrEmptyString(mMobileNumber.getText().toString())) {
+          if(mMobileNumber.getText().toString().length()==10) {
+              mOnboardingIntractionListner.onSheroesHelpYouFragmentOpen(mMasterDataResult, AppConstants.ONE_CONSTANT);
+          }
+          else
+          {
+              Toast.makeText(getContext(), "Enter valid mobile number", Toast.LENGTH_SHORT).show();
+          }
+        }else
+        {
+            Toast.makeText(getContext(), "Pleas select Data", Toast.LENGTH_SHORT).show();
+        }
     }
     @OnClick(R.id.tv_current_status_spinner)
     public void onCurrentStatusClick()
@@ -124,6 +141,11 @@ public class OnBoardingTellUsAboutFragment extends BaseFragment  implements OnBo
 
     @Override
     public void getAllDataResponse(GetAllData getAllData) {
+
+    }
+
+    @Override
+    public void getIntersetJobResponse(GetInterestJobResponse getInterestJobResponse) {
 
     }
 

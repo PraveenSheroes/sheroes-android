@@ -26,7 +26,6 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -40,8 +39,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.crashlytics.android.Crashlytics;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -67,7 +64,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.EditNameDialogLi
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by Ajit Kumar on 20-01-2017.
@@ -118,7 +114,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
     Button mBtncross[]=new Button[6];
     Bitmap mRoundBitmap;
 
-    public CreateCommunityPostFragment() {
+   /* public CreateCommunityPostFragment() {
 
     }
     public CreateCommunityPostFragment(String name) {
@@ -129,9 +125,9 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
 
 
         return createCommunityPostFragment;
-    }
+    }*/
     void showDialog() {
-        SelectCommunityFragment newFragment =new SelectCommunityFragment(this);
+        SelectCommunityFragment newFragment =new SelectCommunityFragment();
         newFragment.show(getActivity().getFragmentManager(), "dialog");
     }
 
@@ -645,7 +641,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
                 imageView.setImageBitmap(bmp);
                 imageView.setImageBitmap(bmp);
                 mVg_image_container.addView(imageView);
-                //  imageView.setImageBitmap(bmp);
+                //  imageView3.setImageBitmap(bmp);
             }
 
         }

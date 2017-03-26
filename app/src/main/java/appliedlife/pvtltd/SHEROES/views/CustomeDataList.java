@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.models.entities.home.DrawerItems;
-import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 
 /**
  * Created by Praveen_Singh on 30-01-2017.
@@ -41,57 +40,5 @@ public class CustomeDataList {
         drawerItemsList.add(fourthDrawerItem);
         drawerItemsList.add(fifthDrawerItem);
         return  drawerItemsList;
-    }
-    public static List<HomeSpinnerItem> makeSpinnerListRequest()
-    {
-        List<HomeSpinnerItem> homeSpinnerItems=new ArrayList<>();
-        HomeSpinnerItem homeSpinnerItem1=new HomeSpinnerItem();
-        homeSpinnerItem1.setId("1");
-        homeSpinnerItem1.setName("All ");
-        homeSpinnerItem1.setDescription("All");
-        homeSpinnerItem1.setChecked(false);
-
-        HomeSpinnerItem homeSpinnerItem2=new HomeSpinnerItem();
-        homeSpinnerItem2.setId("2");
-        homeSpinnerItem2.setName("Buisness ");
-        homeSpinnerItem2.setDescription("From");
-        homeSpinnerItem2.setChecked(false);
-        homeSpinnerItem2.setCategoryIdItem(35);
-
-        HomeSpinnerItem homeSpinnerItem3=new HomeSpinnerItem();
-        homeSpinnerItem3.setId("3");
-        homeSpinnerItem3.setName("Technology");
-        homeSpinnerItem3.setDescription("This third mock city discription");
-        homeSpinnerItem3.setChecked(false);
-        homeSpinnerItem3.setCategoryIdItem(36);
-
-        HomeSpinnerItem homeSpinnerItem4=new HomeSpinnerItem();
-        homeSpinnerItem4.setId("4");
-        homeSpinnerItem4.setName("story of the day");
-        homeSpinnerItem4.setDescription("This fourth mock city discription");
-        homeSpinnerItem4.setChecked(false);
-        homeSpinnerItem4.setCategoryIdItem(37);
-
-        HomeSpinnerItem homeSpinnerItem5=new HomeSpinnerItem();
-        homeSpinnerItem5.setId("5");
-        homeSpinnerItem5.setName("womens of the day");
-        homeSpinnerItem5.setDescription("This fifth mock city discription");
-        homeSpinnerItem5.setChecked(false);
-        homeSpinnerItem5.setCategoryIdItem(38);
-
-        HomeSpinnerItem homeSpinnerItem6=new HomeSpinnerItem();
-        homeSpinnerItem6.setId("6");
-        homeSpinnerItem6.setName("footer");
-        homeSpinnerItem6.setDescription("This fifth mock city discription");
-        homeSpinnerItem6.setChecked(false);
-        homeSpinnerItem6.setCategoryIdItem(6);
-
-        homeSpinnerItems.add(homeSpinnerItem1);
-        homeSpinnerItems.add(homeSpinnerItem2);
-        homeSpinnerItems.add(homeSpinnerItem3);
-        homeSpinnerItems.add(homeSpinnerItem4);
-        homeSpinnerItems.add(homeSpinnerItem5);
-        homeSpinnerItems.add(homeSpinnerItem6);
-        return  homeSpinnerItems;
     }
 }

@@ -25,6 +25,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.ProfileItems;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.FilterList;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobDetailPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobLocationList;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingInterestJobSearch;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.OnBoardingData;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileHorList;
@@ -324,6 +325,17 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new GetAllDataBoardingSearchHolder(view, viewInterface);
         }
+    },INTEREST_SEARCH(R.layout.interest_job_search_list_item) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new InterestSearchHolder(view, viewInterface);
+        }
+    }
+    ,JOB_SEARCH(R.layout.interest_job_search_list_item) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new InterestSearchHolder(view, viewInterface);
+        }
     };
     public Object object;
     public int layout;
@@ -368,8 +380,13 @@ public enum HolderMapping {
                         default:
 
                     }
+                }else if (item instanceof BoardingInterestJobSearch) {
+                    return INTEREST_SEARCH.ordinal();
                 }
-            } else if (callFromType.equalsIgnoreCase(AppConstants.OWNER_SUB_TYPE)) {
+            }else if (item instanceof BoardingInterestJobSearch) {
+                return JOB_SEARCH.ordinal();
+            }
+            else if (callFromType.equalsIgnoreCase(AppConstants.OWNER_SUB_TYPE)) {
                 returnView = FEED_USER.ordinal();
 
             } else if (callFromType.equalsIgnoreCase(AppConstants.COMMUNITY_NAME_SUB_TYPE)) {
@@ -422,12 +439,13 @@ public enum HolderMapping {
                         returnView = COMMENT.ordinal();
                     }
                 } else if (item instanceof HomeSpinnerItem) {
-                    String id = ((HomeSpinnerItem) item).getId();
-                    if (id.equalsIgnoreCase(String.valueOf(totalCount))) {
+                  /*  String name = ((HomeSpinnerItem) item).getName();
+                    if (name.equalsIgnoreCase(AppConstants.HOME_SPINNER_FRAGMENT)) {
                         return HOME_SPINNER_FOOTER.ordinal();
                     } else {
-                        return HOME_SPINNER_ITEMS.ordinal();
-                    }
+
+                    }*/
+                    return HOME_SPINNER_ITEMS.ordinal();
                 } else if (item instanceof ArticleDetailPojo) {
                     returnView = ARTICLE_DETAIL_HOLDER.ordinal();//TODO: Home related changes
                 } else if (item instanceof ProfileHorList) {
@@ -497,7 +515,8 @@ public enum HolderMapping {
                     return CURRENT_STATUS_HOLDER.ordinal();
                 } else if (item instanceof GetAllDataDocument) {
                     return GET_ALL_DATA_BOARDING_SEARCH.ordinal();
-                } else if (item instanceof RequestedList) {
+                }
+                else if (item instanceof RequestedList) {
                     return REQUESTLIST.ordinal();
                 } else if (item instanceof OwnerList) {
                     return OWNERLIST.ordinal();

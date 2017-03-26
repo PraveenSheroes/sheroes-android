@@ -1639,7 +1639,7 @@ public class AppUtils {
         return feedRequestPojo;
     }
 
-    public static FeedRequestPojo articleCategoryRequestBuilder(String typeOfFeed, int pageNo, List<Integer> categoryIds) {
+    public static FeedRequestPojo articleCategoryRequestBuilder(String typeOfFeed, int pageNo, List<Long> categoryIds) {
         FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, pageNo);
         feedRequestPojo.setCategoryIds(categoryIds);
         return feedRequestPojo;

@@ -9,7 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
+import com.f2prateek.rx.preferences.Preference;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -17,17 +22,19 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 
 /**
@@ -43,77 +50,49 @@ public class HomeSpinnerFragment extends BaseFragment implements HomeView {
     @Bind(R.id.pb_spinner_progress_bar)
     ProgressBar mProgressBar;
     GenericRecyclerViewAdapter mAdapter;
-    private List<HomeSpinnerItem> mHomeSpinnerItemList;
+    @Bind(R.id.tv_cancel)
+    TextView mTvCancel;
+    @Bind(R.id.tv_done)
+    TextView mTvDone;
+    List<HomeSpinnerItem> mHomeSpinnerItemList;
+    @Inject
+    Preference<MasterDataResponse> mUserPreferenceMasterData;
+    private HomeSpinnerFragmentListner homeSpinnerFragmentListner;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        try {
+            if (mActivity instanceof HomeSpinnerFragmentListner) {
+                homeSpinnerFragmentListner = (HomeSpinnerFragmentListner) getActivity();
+            }
+        } catch (InstantiationException exception) {
+            LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
+        }
     }
-
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_home_spinner_layout, container, false);
         ButterKnife.bind(this, view);
         mHomePresenter.attachView(this);
+        setProgressBar(mProgressBar);
         Bundle bundle = getArguments();
-        if (bundle != null)
-        {
-            mHomeSpinnerItemList =bundle.getParcelableArrayList(AppConstants.HOME_SPINNER_FRAGMENT);
+        if (bundle != null) {
+            mHomeSpinnerItemList = bundle.getParcelableArrayList(AppConstants.HOME_SPINNER_FRAGMENT);
         }
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(manager);
         mAdapter = new GenericRecyclerViewAdapter(getContext(), (HomeActivity) getActivity());
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mAdapter);
-        checkForSpinnerItemSelection();
+        if (StringUtil.isNotEmptyCollection(mHomeSpinnerItemList)) {
+            mAdapter.setSheroesGenericListData(mHomeSpinnerItemList);
+            mAdapter.notifyDataSetChanged();
+        } else {
+            mHomePresenter.getMasterDataToPresenter();
+        }
         return view;
-    }
-
-     private void checkForSpinnerItemSelection()
-     {
-         if(mHomeSpinnerItemList!=null)
-         {
-
-             mAdapter.setSheroesGenericListData(mHomeSpinnerItemList);
-         }
-     }
-
-
-
-    @Override
-    public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
-
-    }
-
-    @Override
-    public void getSuccessForAllResponse(String success, int successFrom) {
-
-    }
-
-
-    @Override
-    public void getDB(List<RecentSearchData> recentSearchDatas) {
-
-    }
-
-
-
-    @Override
-    public void startProgressBar() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mProgressBar.bringToFront();
-    }
-
-    @Override
-    public void stopProgressBar() {
-        mProgressBar.setVisibility(View.GONE);
-    }
-
-
-    @Override
-    public void startNextScreen() {
-
     }
 
     @Override
@@ -123,19 +102,46 @@ public class HomeSpinnerFragment extends BaseFragment implements HomeView {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
+        setArticleCategoryFilterValues();
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-
+    @OnClick(R.id.tv_cancel)
+    public void onCancelClick() {
+        homeSpinnerFragmentListner.onCancelDone(AppConstants.NO_REACTION_CONSTANT);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+    @OnClick(R.id.tv_done)
+    public void onDoneClick() {
+        homeSpinnerFragmentListner.onCancelDone(AppConstants.ONE_CONSTANT);
     }
 
+    public interface HomeSpinnerFragmentListner {
+        void onCancelDone(int pressedEvent);
+    }
+
+    private void setArticleCategoryFilterValues() {
+        if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && null != mUserPreferenceMasterData.get().getData()) {
+            HashMap<String, HashMap<String, ArrayList<LabelValue>>> masterDataResult = mUserPreferenceMasterData.get().getData();
+            if (null != masterDataResult && null != masterDataResult.get(AppConstants.MASTER_DATA_ARTICLE_KEY)) {
+                {
+                    HashMap<String, ArrayList<LabelValue>> hashMap = masterDataResult.get(AppConstants.MASTER_DATA_ARTICLE_KEY);
+                    List<LabelValue> labelValueArrayList = hashMap.get(AppConstants.MASTER_DATA_DEFAULT_CATEGORY);
+                    if (StringUtil.isNotEmptyCollection(labelValueArrayList)) {
+                        List<HomeSpinnerItem> homeSpinnerItemList = new ArrayList<>();
+                        for (LabelValue lookingFor : labelValueArrayList) {
+
+                            HomeSpinnerItem homeSpinnerItem = new HomeSpinnerItem();
+                            homeSpinnerItem.setId(lookingFor.getValue());
+                            homeSpinnerItem.setName(lookingFor.getLabel());
+                            homeSpinnerItemList.add(homeSpinnerItem);
+                        }
+                        mHomeSpinnerItemList = homeSpinnerItemList;
+                    }
+                    mAdapter.setSheroesGenericListData(mHomeSpinnerItemList);
+                    mAdapter.notifyDataSetChanged();
+                }
+            }
+        }
+    }
 }

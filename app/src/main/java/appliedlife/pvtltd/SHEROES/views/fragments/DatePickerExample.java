@@ -12,7 +12,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -82,9 +81,10 @@ public class DatePickerExample extends DialogFragment {
             if (pf.getName().equals("mSelectionDivider")) {
                 pf.setAccessible(true);
                 try {
+
                     //pf.set(picker, getResources().getColor(R.color.my_orange));
                     //Log.v(TAG,"here");
-                    pf.set(picker, ContextCompat.getDrawable(mContext, R.drawable.blank_image));
+                    pf.set(picker, getResources().getDrawable(R.drawable.blank_image));
                 } catch (IllegalArgumentException e) {
                     e.printStackTrace();
                 } catch (Resources.NotFoundException e) {

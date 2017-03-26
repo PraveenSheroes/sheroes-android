@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
@@ -20,6 +21,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.OnBoardingData;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.OnBoardingActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
@@ -52,9 +54,11 @@ public class OnBoardingShareYourInterestFragment extends BaseFragment {
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mAdapter);
-        setFilterValues();
-        mAdapter.setSheroesGenericListData(listFeelter);
-        mAdapter.notifyDataSetChanged();
+        if (StringUtil.isNotEmptyCollection(setFilterValues())) {
+            mAdapter.setSheroesGenericListData(setFilterValues());
+            mAdapter.notifyDataSetChanged();
+        }
+
         mRecyclerView.addOnScrollListener(new HidingScrollListener(mRecyclerView, manager, new FragmentListRefreshData()) {
             @Override
             public void onHide() {
@@ -75,12 +79,22 @@ public class OnBoardingShareYourInterestFragment extends BaseFragment {
         return view;
     }
 
-    private void setFilterValues() {
-        //HashMap<String, ArrayList<LabelValue>> hashMap = mMasterDataResult.get(AppConstants.MASTER_DATA_CAN_HELP_IN_KEY);
-        // List<LabelValue> labelValueArrayList = hashMap.get(AppConstants.MASTER_DATA_DEFAULT_CATEGORY);
+    private List<OnBoardingData> setFilterValues() {
+        if (null != mMasterDataResult && null != mMasterDataResult.get(AppConstants.MASTER_DATA_INTEREST_KEY)) {
+            HashMap<String, ArrayList<LabelValue>> hashMap = mMasterDataResult.get(AppConstants.MASTER_DATA_INTEREST_KEY);
 
-        OnBoardingData filterList = new OnBoardingData();
-
+            List<OnBoardingData> listBoardingList = new ArrayList<>();
+            Set<String> lookingForSet = hashMap.keySet();
+            for (String lookingFor : lookingForSet) {
+                OnBoardingData boardingData = new OnBoardingData();
+                boardingData.setFragmentName(AppConstants.YOUR_INTEREST);
+                boardingData.setName(lookingFor);
+                boardingData.setBoardingDataList(hashMap.get(lookingFor));
+                listBoardingList.add(boardingData);
+            }
+            return listBoardingList;
+        }
+        return null;
     }
 
 }

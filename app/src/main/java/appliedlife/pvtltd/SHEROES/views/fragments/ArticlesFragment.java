@@ -63,57 +63,87 @@ public class ArticlesFragment extends BaseFragment {
     private boolean mIsEdit = false;
     @Bind(R.id.progress_bar_first_load)
     ProgressBar mProgressBarFirstLoad;
+    private List<HomeSpinnerItem> mHomeSpinnerItemList = new ArrayList<>();
+    private int articleCategory;
+    private View view;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
-        ButterKnife.bind(this, view);
-        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ARTICLE_FRAGMENT, AppConstants.EMPTY_STRING);
-        mPullRefreshList = new SwipPullRefreshList();
-        mPullRefreshList.setPullToRefresh(false);
-        mHomePresenter.attachView(this);
-        mLayoutManager = new LinearLayoutManager(getContext());
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new GenericRecyclerViewAdapter(getContext(), (HomeActivity) getActivity());
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(mAdapter);
-
-        mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager, mFragmentListRefreshData) {
-            @Override
-            public void onHide() {
-                ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.INVISIBLE);
+        if (view == null) {
+            view = inflater.inflate(R.layout.fragment_home, container, false);
+            ButterKnife.bind(this, view);
+            mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ARTICLE_FRAGMENT, AppConstants.EMPTY_STRING);
+            mPullRefreshList = new SwipPullRefreshList();
+            mPullRefreshList.setPullToRefresh(false);
+            mHomePresenter.attachView(this);
+            if (getArguments() != null) {
+                articleCategory = getArguments().getInt(AppConstants.MASTER_DATA_ARTICLE_KEY);
+                mHomeSpinnerItemList = getArguments().getParcelableArrayList(AppConstants.ARTICLE_FRAGMENT);
             }
+            mLayoutManager = new LinearLayoutManager(getContext());
+            mRecyclerView.setLayoutManager(mLayoutManager);
+            mAdapter = new GenericRecyclerViewAdapter(getContext(), (HomeActivity) getActivity());
+            mRecyclerView.setLayoutManager(mLayoutManager);
+            mRecyclerView.setAdapter(mAdapter);
 
-            @Override
-            public void onShow() {
-                ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
-            }
+            mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager, mFragmentListRefreshData) {
+                @Override
+                public void onHide() {
+                    ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.INVISIBLE);
+                }
 
-            @Override
-            public void dismissReactions() {
+                @Override
+                public void onShow() {
+                    ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
+                }
 
-            }
-        });
-        super.setAllInitializationForFeeds(mFragmentListRefreshData, mPullRefreshList, mAdapter, mLayoutManager, mPageNo, mSwipeView, mLiNoResult, null, mRecyclerView, 0, 0, mListLoad, mIsEdit, mHomePresenter, mAppUtils, mProgressBar);
-        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo()));
-        mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                setListLoadFlag(false);
-                mPullRefreshList.setPullToRefresh(true);
-                mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
-                mPullRefreshList=new SwipPullRefreshList();
-                setRefreshList(mPullRefreshList);
-                mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
-                mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo()));
-            }
-        });
+                @Override
+                public void dismissReactions() {
+
+                }
+            });
+            super.setAllInitializationForFeeds(mFragmentListRefreshData, mPullRefreshList, mAdapter, mLayoutManager, mPageNo, mSwipeView, mLiNoResult, null, mRecyclerView, 0, 0, mListLoad, mIsEdit, mHomePresenter, mAppUtils, mProgressBar);
+      /*  switch (articleCategory) {
+            case AppConstants.ONE_CONSTANT:
+                break;
+            case AppConstants.TWO_CONSTANT:
+                break;
+            default:
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE+ TAG + AppConstants.SPACE + articleCategory);
+        }*/
+            mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo()));
+            mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    setListLoadFlag(false);
+                    mPullRefreshList.setPullToRefresh(true);
+                    mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
+                    mPullRefreshList = new SwipPullRefreshList();
+                    setRefreshList(mPullRefreshList);
+                    mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
+                    mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo()));
+                }
+            });
+        }
         return view;
     }
 
+    public void categoryArticleFilter(final List<Long> categoryIds) {
+        mHomePresenter.attachView(this);
+        setProgressBar(mProgressBar);
+        mPullRefreshList.setPullToRefresh(true);
+        mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
+        mPullRefreshList = new SwipPullRefreshList();
+        setRefreshList(mPullRefreshList);
+        mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
+        mHomePresenter.getFeedFromPresenter(mAppUtils.articleCategoryRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo(), categoryIds));
+
+    }
 
     @Override
     public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
+
         mProgressBarFirstLoad.setVisibility(View.GONE);
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
             mLiNoResult.setVisibility(View.GONE);
@@ -154,10 +184,6 @@ public class ArticlesFragment extends BaseFragment {
     @Override
     public void getSuccessForAllResponse(String success, int successFrom) {
         super.getSuccessForAllResponse(success, successFrom);
-    }
-
-    public void categorySearchInArticle(HomeSpinnerItem homeSpinnerItem) {
-        mHomePresenter.getFeedFromPresenter(mAppUtils.articleCategoryRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo(), homeSpinnerItem.getCategoryId()));
     }
 
     public void bookMarkForCard(FeedDetail feedDetail) {

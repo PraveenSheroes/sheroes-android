@@ -29,6 +29,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.GetInterestJobResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.EducationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.GetUserDetailsRequest;
@@ -134,6 +135,8 @@ public interface SheroesAppServiceApi {
     Observable<MasterDataResponse> getOnBoardingMasterDataFromApi();
     @POST("entity/master/get_data")
     Observable<GetAllData> getOnBoardingSearchFromApi(@Body GetAllDataRequest getAllDataRequest);
+    @POST("entity/master/get_data")
+    Observable<GetInterestJobResponse> getInterestJobSearchFromApi(@Body GetAllDataRequest getAllDataRequest);
 
     @POST("participant/settings/change_user_preference")
     Observable<SettingChangeUserPreferenseResponse>getUserChangePreferenceAuthToken(@Body SettingChangeUserPreferenceRequest settingChangeUserPreferenceRequest);

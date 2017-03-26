@@ -7,13 +7,10 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.transition.Slide;
@@ -77,14 +74,6 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
     private FragmentOpen mFragmentOpen;
     ViewPagerAdapter viewPagerAdapter;
 
-    public static void navigateFromArticle(AppCompatActivity activity, View transitionImage, FeedDetail feedDetail) {
-        Intent intent = new Intent(activity, ArticleDetailActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(AppConstants.ARTICLE_DETAIL, feedDetail);
-        intent.putExtras(bundle);
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, transitionImage, AppConstants.ARTICLE_DETAIL);
-        ActivityCompat.startActivity(activity, intent, options.toBundle());
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -441,7 +430,6 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
 
     @OnClick(R.id.iv_article_detail_back)
     public void onBackClick() {
-
         if (!mFeedDetail.isFromHome()) {
             Intent intent = new Intent();
             Bundle bundle = new Bundle();

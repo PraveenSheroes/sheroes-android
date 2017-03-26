@@ -770,7 +770,7 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
                 }
 
                 //  mIvlogo.setImageBitmap(bmp);
-                //  imageView.setImageBitmap(bmp);
+                //  imageView3.setImageBitmap(bmp);
             }
 
         }

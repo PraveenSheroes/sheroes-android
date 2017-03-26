@@ -10,20 +10,20 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.home.AdapterHolder;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
-import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Praveen_Singh on 13-01-2017.
  */
 
-public class HomeSpinnerSelectorHolder extends BaseViewHolder<HomeSpinnerItem>{
+public class HomeSpinnerSelectorHolder extends BaseViewHolder<HomeSpinnerItem> {
     private final String TAG = LogUtils.makeLogTag(HomeSpinnerSelectorHolder.class);
-    @Bind(R.id.li_spinner_iten)
+    @Bind(R.id.li_article_spinner_iten)
     LinearLayout liSpinnerItem;
     @Bind(R.id.tv_spinner)
     TextView tvSpinner;
@@ -31,9 +31,10 @@ public class HomeSpinnerSelectorHolder extends BaseViewHolder<HomeSpinnerItem>{
     CheckBox cbSpinner;
     BaseHolderInterface viewInterface;
     private HomeSpinnerItem dataItem;
+
     public HomeSpinnerSelectorHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
-        ButterKnife.bind(this,itemView);
+        ButterKnife.bind(this, itemView);
         this.viewInterface = baseHolderInterface;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
     }
@@ -41,14 +42,10 @@ public class HomeSpinnerSelectorHolder extends BaseViewHolder<HomeSpinnerItem>{
     @Override
     public void bindData(HomeSpinnerItem item, Context context, int position) {
         this.dataItem = item;
-        String spinnerItemName=item.getName();
-        tvSpinner.setText(spinnerItemName);
-        tvSpinner.setText(spinnerItemName);
-        cbSpinner.setChecked(dataItem.isChecked());
-        AdapterHolder adapterHolder = new AdapterHolder();
-        adapterHolder.setPosition(position);
-        tvSpinner.setTag(adapterHolder);
-        liSpinnerItem.setOnClickListener(this);
+        if(StringUtil.isNotNullOrEmptyString(dataItem.getName())) {
+            tvSpinner.setText( dataItem.getName());
+            cbSpinner.setChecked(dataItem.isChecked());
+        }
     }
 
     @Override
@@ -56,20 +53,18 @@ public class HomeSpinnerSelectorHolder extends BaseViewHolder<HomeSpinnerItem>{
 
     }
 
+    @OnClick(R.id.li_article_spinner_iten)
+    public void checkBoxClick() {
+        dataItem.setChecked(!cbSpinner.isChecked());
+        cbSpinner.setChecked(!cbSpinner.isChecked());
+        liSpinnerItem.setBackgroundResource(R.drawable.rectangle_grey_round_corner);
+        viewInterface.setListData(dataItem, cbSpinner.isChecked());
+    }
+
 
     @Override
     public void onClick(View view) {
-        int id = view.getId();
-        switch (id) {
-            case R.id.li_spinner_iten:
-                dataItem.setChecked(!cbSpinner.isChecked());
-                cbSpinner.setChecked(!cbSpinner.isChecked());
-                liSpinnerItem.setBackgroundResource(R.drawable.rectangle_grey_round_corner);
-                viewInterface.setListData(dataItem,cbSpinner.isChecked());
-                break;
-            default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
-        }
+
     }
 
 }

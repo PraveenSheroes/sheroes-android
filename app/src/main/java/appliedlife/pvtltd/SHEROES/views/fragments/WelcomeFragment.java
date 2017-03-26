@@ -13,7 +13,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.views.adapters.IntroViewPagerAdapter;
+import appliedlife.pvtltd.SHEROES.views.adapters.WelcomeViewPagerAdapter;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -37,7 +37,7 @@ public class WelcomeFragment extends BaseFragment {
     ViewPager _mViewPager;
     int i=0;
 
-    private IntroViewPagerAdapter _adapter;
+    private WelcomeViewPagerAdapter _adapter;
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -50,7 +50,6 @@ public class WelcomeFragment extends BaseFragment {
     }
 
 
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -86,9 +85,7 @@ public class WelcomeFragment extends BaseFragment {
 
 
     private void setUpView() {
-
-
-        _adapter = new IntroViewPagerAdapter(getActivity(), getFragmentManager());
+        _adapter = new WelcomeViewPagerAdapter(getFragmentManager());
         _mViewPager.setAdapter(_adapter);
         _mViewPager.setCurrentItem(0);
 

@@ -87,7 +87,7 @@
 
 
     <!--colors close trough priyanka-->
-
+    <color name="facebook_design">#ccffff</color>
     <color name="com_post_share_textcolor1">#757e87</color>
     <color name="com_post_share_textcolor">#323940</color>
     <color name="com_share_post_text_color">#1e2226</color>

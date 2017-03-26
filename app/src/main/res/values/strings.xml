@@ -54,10 +54,12 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_DONE">Done</string>
     <string name="ID_CANCEL">Cancel</string>
     <string name="ID_VIEW_MORE">View More</string>
+    <string name="ID_CELL_PHONE_NUMBER">CELL PHONE NUMBER</string>
     <string name="ID_VIEW_MORE_COMMENT">View More comments</string>
     <string name="ID_JOIN">Join</string>
     <string name="ID_REQUESTED">Requested</string>
     <string name="ID_JOINED">Joined</string>
+    <string name="ID_VIEW">View</string>
     <string name="ID_REPLIES">Replies</string>
     <string name="ID_NO_REPLIES">No replies</string>
     <string name="ID_REPLY">Reply</string>
@@ -92,6 +94,7 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_DELETE">Delete</string>
     <string name="ID_REPORT">Report as spam</string>
     <string name="ID_NO_RESULT_FOUND">No Result found ,Please Click For Try again</string>
+    <string name="ID_POPULAR">Popular</string>
     <string name="ID_SUGGESTED">Suggested communities</string>
     <string name="ID_GROUP">Group</string>
     <string name="ID_SEE_MORE">See more like this</string>

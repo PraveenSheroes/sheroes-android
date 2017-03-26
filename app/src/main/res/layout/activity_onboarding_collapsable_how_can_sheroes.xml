@@ -58,61 +58,23 @@
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sp_size_23" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:orientation="vertical">
-
-                <android.support.v7.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/dp_size_5"
-                    android:layout_marginLeft="@dimen/dp_size_10"
-                    android:layout_marginRight="@dimen/dp_size_10">
-
-                    <TextView
-                        android:id="@+id/tv__how_can_help_search_box"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@color/white"
-                        android:drawableLeft="@drawable/ic_search_box_icon"
-                        android:drawablePadding="@dimen/dp_size_12"
-                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                        android:paddingBottom="@dimen/dp_size_14"
-                        android:paddingLeft="@dimen/dp_size_12"
-                        android:paddingTop="@dimen/dp_size_14"
-                        android:text="@string/ID_JOIN_CONVERSATION"
-                        android:textColor="@color/suggested_text"
-                        android:textSize="@dimen/sp_size_14" />
-                </android.support.v7.widget.CardView>
-
                 <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/dp_size_5">
 
                     <LinearLayout
-                        android:id="@+id/tv_strip_for_add_item"
+                        android:id="@+id/li_how_sheroes_strip_for_add_item"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@color/white"
                         android:gravity="center"
                         android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/tv_tag_data"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/dp_size_12"
-                            android:background="@drawable/on_boarding_tag_border_ractangle_selected"
-                            android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                            android:padding="@dimen/dp_size_9"
-                            android:text="@string/ID_APP_NAME"
-                            android:textColor="@color/blue"
-                            android:textAllCaps="true"
-                            android:textSize="@dimen/sp_size_12" />
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
             </LinearLayout>
@@ -128,6 +90,7 @@
         android:alpha=".9"
         android:background="@color/white"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
     <ImageView
         android:id="@+id/iv_how_can_help_next"
         android:layout_width="wrap_content"
@@ -135,8 +98,9 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:layout_gravity="bottom|end"
-        android:layout_marginRight="@dimen/dp_size_20"
+        android:layout_gravity="bottom|right"
         android:layout_marginBottom="@dimen/dp_size_30"
-        android:src="@drawable/ic_next" />
+        android:visibility="gone"
+        android:layout_marginRight="@dimen/dp_size_20"
+        android:src="@drawable/ic_next"/>
 </android.support.design.widget.CoordinatorLayout>

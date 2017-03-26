@@ -57,6 +57,7 @@ public class AppConstants {
     public static final String MASTER_SKILL = "master_data_skill";
     public static final String FEED_RESPONSE_CALL_BACK = "feed_response";
     public static final int REQUEST_CODE_FOR_ARTICLE_DETAIL = 1001;
+    public static final int REQUEST_CODE_FOR_COMMUNITY_DETAIL = 2001;
     public static final String JOB_FRAGMENT = "job";
     public static final String PROFILE_FRAGMENT = "profile";
     public static final String FEATURE_FRAGMENT = "feature";
@@ -116,6 +117,8 @@ public class AppConstants {
     public static final String MASTER_DATA_FUNCTIONAL_AREA_KEY = "FUNCTIONAL_AREA";
     /*Get all data keys*/
     public static final String LOCATION_CITY_GET_ALL_DATA_KEY = "city";
+    public static final String INTEREST_GET_ALL_DATA_KEY = "interest";
+    public static final String JOB_AT_GET_ALL_DATA_KEY = "skill";
 /**/
 
     public static final String MASTER_DATA_DEFAULT_CATEGORY = "DEFAULT"; // on second map lavele key
@@ -138,4 +141,10 @@ public class AppConstants {
 
     //Community
     public static final int MAX_WORD_COUNTER = 4000;
+
+    public static final String WORK_FROM_HOME = "Work from home";
+    public static final String OFFICE_JOB = "Office job";
+    public static final String FREELANCING = "Freelancing";
+    public static final String INTERNSHIP = "Internship";
+    public static final String RETURN_FROM_BREAK = "Return from a break";
 }

@@ -18,7 +18,7 @@ public class OnBoardingData extends BaseResponse {
     @SerializedName("name")
     @Expose
     private String name;
-
+    private String fragmentName;
     private List<LabelValue> boardingDataList;
 
     public String getId() {
@@ -43,5 +43,13 @@ public class OnBoardingData extends BaseResponse {
 
     public void setBoardingDataList(List<LabelValue> boardingDataList) {
         this.boardingDataList = boardingDataList;
+    }
+
+    public String getFragmentName() {
+        return fragmentName;
+    }
+
+    public void setFragmentName(String fragmentName) {
+        this.fragmentName = fragmentName;
     }
 }

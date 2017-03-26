@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -93,10 +94,13 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
         } else {
             tvCommunityTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         }
-        if (dataItem.isOwner() || dataItem.isMember()) {
+        if (dataItem.isOwner() && dataItem.isMember()) {
             tvCommunityJoin.setVisibility(View.VISIBLE);
-        } else {
-            tvCommunityJoin.setVisibility(View.GONE);
+        } else if (dataItem.isMember()&&!dataItem.isOwner()) {
+            tvCommunityJoin.setVisibility(View.VISIBLE);
+            tvCommunityJoin.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+            tvCommunityJoin.setText(mContext.getString(R.string.ID_VIEW));
+            tvCommunityJoin.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
         }
         //TODO:: change for UI
         if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
@@ -142,14 +146,14 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
     }
 
     private void imageOperations(Context context) {
-       // dataItem.setAuthorImageUrl("https://img.sheroes.in/img/uploads/forumbloggallary/14845475641484547564.png");
+        // dataItem.setAuthorImageUrl("https://img.sheroes.in/img/uploads/forumbloggallary/14845475641484547564.png");
         String authorImageUrl = dataItem.getThumbnailImageUrl();
         if (StringUtil.isNotNullOrEmptyString(authorImageUrl)) {
 
             ivCommunityCircleIcon.setCircularImage(true);
             ivCommunityCircleIcon.bindImage(authorImageUrl);
         }
-      //  dataItem.setImageUrl("https://img.sheroes.in/img/uploads/forumbloggallary/14845475641484547564.png");
+        //  dataItem.setImageUrl("https://img.sheroes.in/img/uploads/forumbloggallary/14845475641484547564.png");
         String imageUrl = dataItem.getImageUrl();
         if (StringUtil.isNotNullOrEmptyString(imageUrl)) {
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -187,6 +191,10 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
         viewInterface.handleOnClick(dataItem, liCoverImage);
     }
 
+    @OnClick(R.id.card_my_communities)
+    public void myCardClick() {
+        viewInterface.handleOnClick(dataItem, liCoverImage);
+    }
     @OnClick(R.id.tv_my_community_view_more)
     public void viewMoreTextClick() {
         viewMoreText();
@@ -235,7 +243,13 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_community_join)
     public void joinClick() {
-        viewInterface.handleOnClick(dataItem, tvCommunityJoin);
+        if(tvCommunityJoin.getText().toString().equalsIgnoreCase(mContext.getString(R.string.ID_VIEW)))
+        {
+            viewInterface.handleOnClick(dataItem, liCoverImage);
+        }
+        else {
+            viewInterface.handleOnClick(dataItem, tvCommunityJoin);
+        }
     }
 
     @Override

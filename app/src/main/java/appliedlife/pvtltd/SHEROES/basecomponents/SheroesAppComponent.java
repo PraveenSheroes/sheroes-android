@@ -44,10 +44,10 @@ import appliedlife.pvtltd.SHEROES.views.fragments.CommunitySearchTagsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CreateCommunityFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CreateCommunityPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.FirstSplashScreenFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeSpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ImageFullViewFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.IntroFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.InviteCommunityMember;
 import appliedlife.pvtltd.SHEROES.views.fragments.InviteCommunityOwner;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobDetailFragment;
@@ -95,9 +95,9 @@ import appliedlife.pvtltd.SHEROES.views.fragments.SettingPreferencsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SettingTermsAndConditionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareCommunityFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeScreen1Fragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeScreen2Fragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeScreen3Fragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeScreenFirstFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeScreenSecondFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeScreenThirdFragment;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleDetailHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleDetailSuggestedHolder;
@@ -119,10 +119,12 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.FooterViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.GetAllDataBoardingSearchHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HomeSpinnerFooterHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HomeSpinnerSelectorHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.InterestSearchHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.InviteMemberHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.InviteSearchHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.JobDetailHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.JobLocationHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.JobSearchHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MemberHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MyCommunitiesCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OnBoardingHolder;
@@ -208,6 +210,8 @@ public interface SheroesAppComponent {
     void inject(ArticleDetailWithInSuggestedHolder articleDetailWithInSuggestedHolder);
     void inject(ProfileViewHolder profileViewHolder);
     void inject(InviteMemberHolder inviteMemberHolder);
+    void inject(InterestSearchHolder interestSearchHolder);
+    void inject(JobSearchHolder jobSearchHolder);
 
 
     void inject(ProfileWorkExperienceHolder profileWorkExperienceHolder);
@@ -299,7 +303,7 @@ public interface SheroesAppComponent {
     void inject(ProfileBasicDetailsHolder profileBasicDetailsHolder);
     void inject(ProfileHorListHolder profileHorListHolder);
     void inject(ProfileWorkExperienceSelfEmploymentFragment profileWorkExperienceSelfEmploymentFragment);
-    void inject(IntroFragment introFragment);
+    void inject(FirstSplashScreenFragment firstSplashScreenFragment);
 
 
     void inject(InviteCommunityMember inviteCommunityMember);
@@ -314,8 +318,8 @@ public interface SheroesAppComponent {
     void inject(ProfilePersenter profilePersenter);
     void inject(WelcomeFragment welcomeFragment);
     void inject(WelcomeActivity welcomeActivity);
-    void inject(WelcomeScreen3Fragment welcomeScreen3Fragment);
-    void inject(WelcomeScreen2Fragment welcomeScreen2Fragment);
-    void inject(WelcomeScreen1Fragment welcomeScreen1Fragment);
+    void inject(WelcomeScreenThirdFragment welcomeScreenThirdFragment);
+    void inject(WelcomeScreenSecondFragment welcomeScreenSecondFragment);
+    void inject(WelcomeScreenFirstFragment welcomeScreenFirstFragment);
     void inject(PreferencesDeactiveAccountDialogFragment preferencesDeactiveAccountDialogFragment);
 }

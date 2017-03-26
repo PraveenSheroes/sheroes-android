@@ -23,6 +23,7 @@ import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionDoc;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
@@ -292,12 +293,6 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
                 overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
                 break;
-            case R.id.li_feed_community_images:
-                CommunitiesDetailActivity.navigate(this, view, mFeedDetail);
-                break;
-            case R.id.li_feed_community_user_post_images:
-                CommunitiesDetailActivity.navigate(this, view, mFeedDetail);
-                break;
             case R.id.li_feed_job_card:
                 JobDetailActivity.navigateFromJob(this, view, mFeedDetail);
                 break;
@@ -308,10 +303,26 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
                 break;
             case R.id.li_community_images:
-                CommunitiesDetailActivity.navigate(this, view, mFeedDetail);
+               // CommunitiesDetailActivity.navigate(this, view, mFeedDetail);
+                Intent intentMyCommunity = new Intent(this, CommunitiesDetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
+                bundle.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT,CommunityEnum.MY_COMMUNITY);
+                intentMyCommunity.putExtras(bundle);
+                startActivityForResult(intentMyCommunity, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+                overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
+                break;
+            case R.id.li_featured_community_images:
+                Intent intetFeature = new Intent(this, CommunitiesDetailActivity.class);
+                Bundle bundleFeature = new Bundle();
+                bundleFeature.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
+                bundleFeature.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT,CommunityEnum.FEATURE_COMMUNITY);
+                intetFeature.putExtras(bundleFeature);
+                startActivityForResult(intetFeature, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+                overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
                 break;
             default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE+ TAG + AppConstants.SPACE + id);
         }
     }
 
@@ -525,6 +536,8 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 FeedDetail feedPostDetail = (FeedDetail) baseResponse;
                 tvShare.setVisibility(View.VISIBLE);
                 tvDelete.setVisibility(View.VISIBLE);
+                tvEdit.setVisibility(View.VISIBLE);
+                tvReport.setVisibility(View.VISIBLE);
               /*  if(null!=feedPostDetail)
                 {
                     //If creator then

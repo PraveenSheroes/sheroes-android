@@ -197,7 +197,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                 ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setAddDuration(AppConstants.NO_REACTION_CONSTANT);
             }
             if (!mPullRefreshList.isPullToRefresh()) {
-                mLayoutManager.scrollToPosition(mPullRefreshList.getFeedResponses().size() - feedDetailList.size()-1);
+                mLayoutManager.scrollToPosition(mPullRefreshList.getFeedResponses().size() - feedDetailList.size() - 1);
             } else {
                 mLayoutManager.scrollToPositionWithOffset(0, 0);
             }
@@ -250,6 +250,8 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
         }
     }
 
+    /*1:- If pass one from home activity means its comments section changes
+    2:- If two Home activity means its Detail section changes of activity*/
     public void commentListRefresh(FeedDetail feedDetail, int callFrom) {
         if (callFrom == AppConstants.TWO_CONSTANT) {
             mAdapter.setDataOnPosition(feedDetail, feedDetail.getItemPosition());
@@ -269,7 +271,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                     if (mFragmentOpen.isBookmarkFragment()) {
                         mAdapter.removeDataOnPosition(mFeedDetail, mFeedDetail.getItemPosition());
                         mAdapter.notifyDataSetChanged();
-                    }else {
+                    } else {
                         mAdapter.notifyItemChanged(mFeedDetail.getItemPosition(), mFeedDetail);
                     }
                     if (mRecyclerView.getItemAnimator() instanceof SimpleItemAnimator) {

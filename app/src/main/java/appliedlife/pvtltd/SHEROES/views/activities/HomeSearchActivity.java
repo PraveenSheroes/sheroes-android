@@ -112,7 +112,7 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
                     }
                 }
                 mFragmenOpen.setImageBlur(true);
-               ArticleDetailActivity.navigateFromArticle(this, view, feedDetail);
+             //   ArticleDetailActivity.navigateFromArticle(this, view, feedDetail);
                 break;
             case AppConstants.FEED_COMMUNITY:
                 fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.THREE_CONSTANT);
@@ -128,7 +128,7 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
                     }
                 }
                 mFragmenOpen.setImageBlur(true);
-                CommunitiesDetailActivity.navigate(this, view, feedDetail);
+            //    CommunitiesDetailActivity.navigate(this, view, feedDetail);
                 break;
             case AppConstants.FEED_COMMUNITY_POST:
                 fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.THREE_CONSTANT);
@@ -144,7 +144,7 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
                     }
                 }
                 mFragmenOpen.setImageBlur(true);
-                CommunitiesDetailActivity.navigate(this, view, feedDetail);
+               // CommunitiesDetailActivity.navigate(this, view, feedDetail);
                 break;
             case AppConstants.FEED_JOB:
                 fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.FOURTH_CONSTANT);

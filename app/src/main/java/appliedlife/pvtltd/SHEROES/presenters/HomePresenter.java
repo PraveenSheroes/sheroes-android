@@ -12,6 +12,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
 import appliedlife.pvtltd.SHEROES.models.HomeModel;
+import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
 import appliedlife.pvtltd.SHEROES.models.RecentSearchDataModel;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
@@ -26,6 +27,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
@@ -49,16 +51,22 @@ public class HomePresenter extends BasePresenter<HomeView> {
     @Inject
     Preference<LoginResponse> mUserPreference;
     RecentSearchDataModel mRecentSearchDataModel;
-
     @Inject
-    public HomePresenter(HomeModel homeModel, SheroesApplication sheroesApplication, Preference<LoginResponse> userPreference, RecentSearchDataModel recentSearchDataModel) {
+    Preference<MasterDataResponse> mUserPreferenceMasterData;
+    MasterDataModel mMasterDataModel;
+    @Inject
+    public HomePresenter(MasterDataModel masterDataModel,HomeModel homeModel, SheroesApplication sheroesApplication, Preference<LoginResponse> userPreference, RecentSearchDataModel recentSearchDataModel, Preference<MasterDataResponse> mUserPreferenceMasterData) {
         this.mHomeModel = homeModel;
         this.mSheroesApplication = sheroesApplication;
         this.mUserPreference = userPreference;
         this.mRecentSearchDataModel = recentSearchDataModel;
+        this.mMasterDataModel=masterDataModel;
+        this.mUserPreferenceMasterData = mUserPreferenceMasterData;
 
     }
-
+    public void getMasterDataToPresenter() {
+        super.getMasterDataToAllPresenter(mSheroesApplication,mMasterDataModel,mUserPreferenceMasterData);
+    }
     @Override
     public void detachView() {
         super.detachView();
@@ -103,6 +111,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
         Subscription subscription = mHomeModel.getFeedFromModel(feedRequestPojo).subscribe(new Subscriber<FeedResponsePojo>() {
             @Override
             public void onCompleted() {
+                LogUtils.info(TAG,"****************complete***");
                 getMvpView().stopProgressBar();
             }
 
@@ -117,7 +126,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onNext(FeedResponsePojo feedResponsePojo) {
                 LogUtils.info(TAG,"*******************"+new Gson().toJson(feedResponsePojo));
                 getMvpView().stopProgressBar();
-                if(null!=feedRequestPojo&& StringUtil.isNotEmptyCollection(feedResponsePojo.getFeaturedDocs())&&feedResponsePojo.getFeaturedDocs().size()>AppConstants.ONE_CONSTANT)
+                if(null!=feedResponsePojo&& StringUtil.isNotEmptyCollection(feedResponsePojo.getFeaturedDocs())&&feedResponsePojo.getFeaturedDocs().size()>AppConstants.ONE_CONSTANT)
                 {
                     getMvpView().getFeedListSuccess(feedResponsePojo.getFeaturedDocs());
                 }else

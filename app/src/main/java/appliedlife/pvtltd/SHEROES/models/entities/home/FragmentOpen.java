@@ -3,6 +3,8 @@ package appliedlife.pvtltd.SHEROES.models.entities.home;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.List;
+
 /**
  * Created by Praveen_Singh on 13-01-2017.
  */
@@ -21,9 +23,10 @@ public class FragmentOpen implements Parcelable {
     boolean isImageBlur;
     int openCommentReactionFragmentFor;
     boolean isOpenImageViewer;
-
+    List<HomeSpinnerItem> homeSpinnerItemList;
     public FragmentOpen() {
     }
+
 
     public boolean isOpen() {
         return isOpen;
@@ -65,6 +68,14 @@ public class FragmentOpen implements Parcelable {
         this.articleFragment = articleFragment;
     }
 
+    public boolean isJobFragment() {
+        return jobFragment;
+    }
+
+    public void setJobFragment(boolean jobFragment) {
+        this.jobFragment = jobFragment;
+    }
+
     public boolean isCommunityOpen() {
         return communityOpen;
     }
@@ -81,20 +92,20 @@ public class FragmentOpen implements Parcelable {
         this.settingFragment = settingFragment;
     }
 
-    public boolean isImageBlur() {
-        return isImageBlur;
-    }
-
-    public void setImageBlur(boolean imageBlur) {
-        isImageBlur = imageBlur;
-    }
-
     public boolean isBookmarkFragment() {
         return bookmarkFragment;
     }
 
     public void setBookmarkFragment(boolean bookmarkFragment) {
         this.bookmarkFragment = bookmarkFragment;
+    }
+
+    public boolean isImageBlur() {
+        return isImageBlur;
+    }
+
+    public void setImageBlur(boolean imageBlur) {
+        isImageBlur = imageBlur;
     }
 
     public int getOpenCommentReactionFragmentFor() {
@@ -105,20 +116,20 @@ public class FragmentOpen implements Parcelable {
         this.openCommentReactionFragmentFor = openCommentReactionFragmentFor;
     }
 
-    public boolean isJobFragment() {
-        return jobFragment;
-    }
-
-    public void setJobFragment(boolean jobFragment) {
-        this.jobFragment = jobFragment;
-    }
-
     public boolean isOpenImageViewer() {
         return isOpenImageViewer;
     }
 
     public void setOpenImageViewer(boolean openImageViewer) {
         isOpenImageViewer = openImageViewer;
+    }
+
+    public List<HomeSpinnerItem> getHomeSpinnerItemList() {
+        return homeSpinnerItemList;
+    }
+
+    public void setHomeSpinnerItemList(List<HomeSpinnerItem> homeSpinnerItemList) {
+        this.homeSpinnerItemList = homeSpinnerItemList;
     }
 
     @Override
@@ -140,6 +151,7 @@ public class FragmentOpen implements Parcelable {
         dest.writeByte(this.isImageBlur ? (byte) 1 : (byte) 0);
         dest.writeInt(this.openCommentReactionFragmentFor);
         dest.writeByte(this.isOpenImageViewer ? (byte) 1 : (byte) 0);
+        dest.writeTypedList(this.homeSpinnerItemList);
     }
 
     protected FragmentOpen(Parcel in) {
@@ -155,6 +167,7 @@ public class FragmentOpen implements Parcelable {
         this.isImageBlur = in.readByte() != 0;
         this.openCommentReactionFragmentFor = in.readInt();
         this.isOpenImageViewer = in.readByte() != 0;
+        this.homeSpinnerItemList = in.createTypedArrayList(HomeSpinnerItem.CREATOR);
     }
 
     public static final Creator<FragmentOpen> CREATOR = new Creator<FragmentOpen>() {

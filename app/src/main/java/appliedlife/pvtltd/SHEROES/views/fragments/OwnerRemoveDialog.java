@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +28,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.Member;
 import appliedlife.pvtltd.SHEROES.presenters.OwnerPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CommunityView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -52,17 +50,6 @@ public class OwnerRemoveDialog extends BaseDialogFragment implements CommunityVi
     Member members;
     Long community_id;
     Context context;
-
-    public OwnerRemoveDialog(CommunitiesDetailActivity context) {
-        try {
-            this.context=context;
-            if (context instanceof CommunitiesDetailActivity) {
-                mHomeActivityIntractionListner = (CloseListener)getActivity();
-            }
-        } catch (Fragment.InstantiationException exception) {
-            LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
-        }
-    }
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,@Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(context).inject(this);

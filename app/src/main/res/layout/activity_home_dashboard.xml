@@ -48,7 +48,7 @@
             app:tabTextColor="@color/search_tab_unselected_text" />
 
         <TextView
-            android:id="@+id/tv_spinner_icon"
+            android:id="@+id/tv_article_spinner_icon"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="right"

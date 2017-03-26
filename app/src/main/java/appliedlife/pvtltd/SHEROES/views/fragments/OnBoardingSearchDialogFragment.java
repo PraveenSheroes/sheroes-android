@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -30,6 +31,8 @@ import appliedlife.pvtltd.SHEROES.enums.OnBoardingEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllData;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingInterestJobSearch;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.GetInterestJobResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.presenters.OnBoardingPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -80,29 +83,47 @@ public class OnBoardingSearchDialogFragment extends BaseDialogFragment implement
         }
         mOnBoardingPresenter.attachView(this);
         editTextWatcher();
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new GenericRecyclerViewAdapter(getActivity(), (OnBoardingActivity) getActivity());
-        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(manager);
-        mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.addOnScrollListener(new HidingScrollListener(mRecyclerView, manager, new FragmentListRefreshData()) {
-            @Override
-            public void onHide() {
-            }
 
-            @Override
-            public void onShow() {
-            }
+        switch (SEARCH_TYPE) {
+            case LOCATION:
+                LinearLayoutManager manager = new LinearLayoutManager(getActivity());
+                mRecyclerView.setLayoutManager(manager);
+                mRecyclerView.setAdapter(mAdapter);
+                mRecyclerView.addOnScrollListener(new HidingScrollListener(mRecyclerView, manager, new FragmentListRefreshData()) {
+                    @Override
+                    public void onHide() {
+                    }
 
-            @Override
-            public void dismissReactions() {
+                    @Override
+                    public void onShow() {
+                    }
 
-            }
-        });
+                    @Override
+                    public void dismissReactions() {
+
+                    }
+                });
+                break;
+            case INTEREST_SEARCH:
+                StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, 1);
+                mRecyclerView.setLayoutManager(staggeredGridLayoutManager);
+                mRecyclerView.setAdapter(mAdapter);
+                break;
+            case JOB_AT_SEARCH:
+                StaggeredGridLayoutManager job = new StaggeredGridLayoutManager(2, 1);
+                mRecyclerView.setLayoutManager(job);
+                mRecyclerView.setAdapter(mAdapter);
+                break;
+            default:
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + SEARCH_TYPE);
+
+        }
 
         setCancelable(true);
         return view;
     }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -167,7 +188,21 @@ public class OnBoardingSearchDialogFragment extends BaseDialogFragment implement
             if (!isDetached()) {
                 mSearchDataName = mSearchDataName.trim().replaceAll(AppConstants.SPACE, AppConstants.EMPTY_STRING);
                 if (StringUtil.isNotNullOrEmptyString(mMasterDataSkill)) {
-                    mOnBoardingPresenter.getOnBoardingSearchToPresenter(mAppUtils.onBoardingSearchRequestBuilder(mSearchDataName, mMasterDataSkill));
+                    switch (SEARCH_TYPE) {
+                        case LOCATION:
+                            mOnBoardingPresenter.getOnBoardingSearchToPresenter(mAppUtils.onBoardingSearchRequestBuilder(mSearchDataName, mMasterDataSkill));
+                            break;
+                        case INTEREST_SEARCH:
+                            mOnBoardingPresenter.getInterestJobSearchToPresenter(mAppUtils.onBoardingSearchRequestBuilder(mSearchDataName, mMasterDataSkill));
+                            break;
+                        case JOB_AT_SEARCH:
+                            mOnBoardingPresenter.getInterestJobSearchToPresenter(mAppUtils.onBoardingSearchRequestBuilder(mSearchDataName, mMasterDataSkill));
+                            break;
+                        default:
+                            LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + SEARCH_TYPE);
+
+                    }
+
                 }
             }
         }
@@ -180,23 +215,37 @@ public class OnBoardingSearchDialogFragment extends BaseDialogFragment implement
 
     @Override
     public void getAllDataResponse(GetAllData getAllData) {
-        if (null != getAllData && null != SEARCH_TYPE) {
-            switch (SEARCH_TYPE) {
-                case LOCATION:
-                    List<GetAllDataDocument> getAllDataDocuments = getAllData.getGetAllDataDocuments();
-                    if (StringUtil.isNotEmptyCollection(getAllDataDocuments)) {
-                        mAdapter.setSheroesGenericListData(getAllDataDocuments);
-                        mAdapter.notifyDataSetChanged();
-                    }
-                    break;
-                case INTEREST_SEARCH:
-                    break;
-                case JOB_AT_SEARCH:
-                    break;
-                default:
-                    LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + SEARCH_TYPE);
-
+        if (null != getAllData) {
+            List<GetAllDataDocument> getAllDataDocuments = getAllData.getGetAllDataDocuments();
+            if (StringUtil.isNotEmptyCollection(getAllDataDocuments)) {
+                mAdapter.setSheroesGenericListData(getAllDataDocuments);
+                mAdapter.notifyDataSetChanged();
             }
+
+        }
+    }
+
+    @Override
+    public void getIntersetJobResponse(GetInterestJobResponse getInterestJobResponse) {
+        if (null != getInterestJobResponse) {
+
+            List<BoardingInterestJobSearch> getAllDataDocuments = getInterestJobResponse.getGetBoardingInterestJobSearches();
+            if (StringUtil.isNotEmptyCollection(getAllDataDocuments)) {
+                switch (SEARCH_TYPE) {
+                    case INTEREST_SEARCH:
+                        mAdapter.setSheroesGenericListData(getAllDataDocuments);
+                        mAdapter.setCallForRecycler(AppConstants.FEED_SUB_TYPE);
+                        break;
+                    case JOB_AT_SEARCH:
+                        mAdapter.setSheroesGenericListData(getAllDataDocuments);
+                        break;
+                    default:
+                        LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + SEARCH_TYPE);
+
+                }
+                mAdapter.notifyDataSetChanged();
+            }
+
         }
     }
 

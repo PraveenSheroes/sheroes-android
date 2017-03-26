@@ -11,6 +11,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -39,7 +40,7 @@ public class GetAllDataBoardingSearchHolder extends BaseViewHolder<GetAllDataDoc
     public void bindData(GetAllDataDocument item, final Context context, int position) {
         dataItem = item;
         mContext = context;
-        if(null!=dataItem)
+        if(null!=dataItem&& StringUtil.isNotNullOrEmptyString(dataItem.getTitle()))
         {
             tvCityName.setText(dataItem.getTitle());
         }
