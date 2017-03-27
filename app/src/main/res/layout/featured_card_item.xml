@@ -79,6 +79,7 @@
             android:layout_marginLeft="@dimen/dp_size_16"
             android:layout_marginRight="@dimen/dp_size_25"
             android:layout_marginTop="@dimen/dp_size_minus_22"
+            android:visibility="gone"
             android:background="@color/white"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:gravity="right"

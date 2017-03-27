@@ -82,8 +82,7 @@ public class CommunityJoinRegionDialogFragment extends BaseDialogFragment implem
         return new Dialog(getActivity(), getTheme()) {
             @Override
             public void onBackPressed() {
-                dismissAllowingStateLoss();//dismiss dialog on back button press
-                getDialog().dismiss();
+                dismiss();
             }
         };
     }
@@ -131,27 +130,6 @@ public class CommunityJoinRegionDialogFragment extends BaseDialogFragment implem
     public void getDB(List<RecentSearchData> recentSearchDatas) {
 
     }
-
-    @Override
-    public void startProgressBar() {
-
-    }
-
-    @Override
-    public void stopProgressBar() {
-
-    }
-
-    @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
-    public void showError(String s, int errorFor) {
-
-    }
-
 
 
     public interface CloseListener {

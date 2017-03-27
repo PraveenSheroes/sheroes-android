@@ -59,8 +59,8 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
     TextView tvMyCommunityViewMore;
     @Bind(R.id.tv_community_tag_lable)
     TextView tvCommunityTag;
-    @Bind(R.id.tv_community_join)
-    TextView tvCommunityJoin;
+    @Bind(R.id.tv_community_detail_invite)
+    TextView tvCommunityInvite;
     BaseHolderInterface viewInterface;
     private FeedDetail dataItem;
     String mViewMoreDescription;
@@ -95,12 +95,18 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
             tvCommunityTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         }
         if (dataItem.isOwner() && dataItem.isMember()) {
-            tvCommunityJoin.setVisibility(View.VISIBLE);
+            tvCommunityInvite.setVisibility(View.VISIBLE);
         } else if (dataItem.isMember()&&!dataItem.isOwner()) {
-            tvCommunityJoin.setVisibility(View.VISIBLE);
-            tvCommunityJoin.setTextColor(ContextCompat.getColor(mContext, R.color.white));
-            tvCommunityJoin.setText(mContext.getString(R.string.ID_VIEW));
-            tvCommunityJoin.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
+            tvCommunityInvite.setVisibility(View.VISIBLE);
+            tvCommunityInvite.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+            tvCommunityInvite.setText(mContext.getString(R.string.ID_VIEW));
+            tvCommunityInvite.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
+        }else
+        {
+            tvCommunityInvite.setVisibility(View.VISIBLE);
+            tvCommunityInvite.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+            tvCommunityInvite.setText(mContext.getString(R.string.ID_INVITE));
+            tvCommunityInvite.setBackgroundResource(R.drawable.rectangle_community_invite);
         }
         //TODO:: change for UI
         if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
@@ -163,7 +169,8 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
             final TextView time = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_time_label);
             time.setVisibility(View.INVISIBLE);
             final RelativeLayout rlFeedArticleViews = (RelativeLayout) backgroundImage.findViewById(R.id.rl_gradiant);
-            tvTotalMember.setText(2 + AppConstants.SPACE + context.getString(R.string.ID_MEMBERS));
+            //TODO: Need to change members
+            tvTotalMember.setText( AppConstants.SPACE + context.getString(R.string.ID_MEMBERS));
             Glide.with(mContext)
                     .load(imageUrl).asBitmap()
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
@@ -241,14 +248,14 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
         }
     }
 
-    @OnClick(R.id.tv_community_join)
+    @OnClick(R.id.tv_community_detail_invite)
     public void joinClick() {
-        if(tvCommunityJoin.getText().toString().equalsIgnoreCase(mContext.getString(R.string.ID_VIEW)))
+        if(tvCommunityInvite.getText().toString().equalsIgnoreCase(mContext.getString(R.string.ID_VIEW)))
         {
-            viewInterface.handleOnClick(dataItem, liCoverImage);
+
         }
         else {
-            viewInterface.handleOnClick(dataItem, tvCommunityJoin);
+            viewInterface.handleOnClick(dataItem, tvCommunityInvite);
         }
     }
 

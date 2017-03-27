@@ -195,7 +195,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
     }
 
     protected DialogFragment showCommunityJoinReason(FeedDetail feedDetail) {
-        CommunityJoinRegionDialogFragment fragment = (CommunityJoinRegionDialogFragment) getFragmentManager().findFragmentByTag(AppConstants.FEATURED_COMMUNITY);
+        CommunityJoinRegionDialogFragment fragment = (CommunityJoinRegionDialogFragment) getFragmentManager().findFragmentByTag(CommunityJoinRegionDialogFragment.class.getName());
         if (fragment == null) {
             fragment = new CommunityJoinRegionDialogFragment();
             Bundle b = new Bundle();
@@ -203,7 +203,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
             fragment.setArguments(b);
         }
         if (!fragment.isVisible() && !fragment.isAdded() && !isFinishing() && !mIsDestroyed) {
-            fragment.show(getFragmentManager(), AppConstants.FEATURED_COMMUNITY);
+            fragment.show(getFragmentManager(),CommunityJoinRegionDialogFragment.class.getName());
         }
         return fragment;
     }

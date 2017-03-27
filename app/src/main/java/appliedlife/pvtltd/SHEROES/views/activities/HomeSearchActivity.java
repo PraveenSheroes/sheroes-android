@@ -1,5 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
@@ -46,14 +48,15 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
     @Bind(R.id.et_search_edit_text)
     public EditText mSearchEditText;
     private ViewPagerAdapter mViewPagerAdapter;
-    private FragmentOpen mFragmenOpen;
+    private FragmentOpen mFragmentOpen;
+    private FeedDetail mFeedDetail;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
         if (null != getIntent() && null != getIntent().getExtras()) {
-            mFragmenOpen = getIntent().getParcelableExtra(AppConstants.ALL_SEARCH);
+            mFragmentOpen = getIntent().getParcelableExtra(AppConstants.ALL_SEARCH);
         }
         renderSearchFragmentView();
     }
@@ -66,7 +69,7 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
 
     private void initHomeViewPagerAndTabs() {
         mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        if (mFragmenOpen.isFeedOpen()) {
+        if (mFragmentOpen.isFeedOpen()) {
             String search = getString(R.string.ID_SEARCH_IN_FEED);
             mSearchEditText.setHint(search);
             mViewPagerAdapter.addFragment(AllSearchFragment.createInstance(), getString(R.string.ID_ALL));
@@ -81,9 +84,19 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
         }
         mViewPager.setAdapter(mViewPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
+        setFragmentLocation();
         mViewPager.addOnPageChangeListener(this);
     }
 
+    private void setFragmentLocation() {
+        if (mFragmentOpen.isArticleFragment()) {
+            mViewPager.setCurrentItem(AppConstants.TWO_CONSTANT);
+        } else if (mFragmentOpen.isJobFragment()) {
+            mViewPager.setCurrentItem(AppConstants.FOURTH_CONSTANT);
+        } else {
+            mViewPager.setCurrentItem(AppConstants.NO_REACTION_CONSTANT);
+        }
+    }
 
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
@@ -111,8 +124,11 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
                         ((AllSearchFragment) fragment).saveRecentSearchData(feedDetail);
                     }
                 }
-                mFragmenOpen.setImageBlur(true);
-             //   ArticleDetailActivity.navigateFromArticle(this, view, feedDetail);
+                mFragmentOpen.setImageBlur(true);
+                Intent intentArticle = new Intent(this, ArticleDetailActivity.class);
+                intentArticle.putExtra(AppConstants.ARTICLE_DETAIL, feedDetail);
+                startActivityForResult(intentArticle, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
+                overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
                 break;
             case AppConstants.FEED_COMMUNITY:
                 fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.THREE_CONSTANT);
@@ -127,8 +143,14 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
                         ((AllSearchFragment) fragment).saveRecentSearchData(feedDetail);
                     }
                 }
-                mFragmenOpen.setImageBlur(true);
-                CommunitiesDetailActivity.navigate(this, view, feedDetail);
+                mFragmentOpen.setImageBlur(true);
+                Intent intetFeature = new Intent(this, CommunitiesDetailActivity.class);
+                Bundle bundleFeature = new Bundle();
+                bundleFeature.putParcelable(AppConstants.COMMUNITY_DETAIL, feedDetail);
+                bundleFeature.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.SEARCH_COMMUNITY);
+                intetFeature.putExtras(bundleFeature);
+                startActivityForResult(intetFeature, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+                overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
                 break;
             case AppConstants.FEED_COMMUNITY_POST:
                 fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.THREE_CONSTANT);
@@ -143,8 +165,7 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
                         ((AllSearchFragment) fragment).saveRecentSearchData(feedDetail);
                     }
                 }
-                mFragmenOpen.setImageBlur(true);
-                CommunitiesDetailActivity.navigate(this, view, feedDetail);
+                mFragmentOpen.setImageBlur(true);
                 break;
             case AppConstants.FEED_JOB:
                 fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.FOURTH_CONSTANT);
@@ -159,14 +180,13 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
                         ((AllSearchFragment) fragment).saveRecentSearchData(feedDetail);
                     }
                 }
-                mFragmenOpen.setImageBlur(true);
-               JobDetailActivity.navigateFromJob(this, view, feedDetail);
+                mFragmentOpen.setImageBlur(true);
+                JobDetailActivity.navigateFromJob(this, view, feedDetail);
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + searchTag);
         }
     }
-
 
 
     @Override
@@ -200,7 +220,7 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
                 }
             }
         } else if (fragment instanceof SearchCommunitiesFragment) {
-            String string = getString(R.string.ID_SEARCH) + AppConstants.SPACE + getString(R.string.ID_COMMUNITIES) ;
+            String string = getString(R.string.ID_SEARCH) + AppConstants.SPACE + getString(R.string.ID_COMMUNITIES);
             mSearchEditText.setHint(string);
             mSearchEditText.setEnabled(true);
             if (AppUtils.isFragmentUIActive(fragment)) {
@@ -231,4 +251,23 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
         finish();
         overridePendingTransition(R.anim.fade_in_dialog, R.anim.fade_out_dialog);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+         /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
+        if (requestCode == AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL && null != intent) {
+            mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.HOME_FRAGMENT);
+            if (mFragmentOpen.isArticleFragment()) {
+                Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.TWO_CONSTANT);
+            } else {
+
+            }
+        } else if (requestCode == AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL && null != intent) {
+            mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITIES_DETAIL);
+        }
+
+    }
+
+
 }

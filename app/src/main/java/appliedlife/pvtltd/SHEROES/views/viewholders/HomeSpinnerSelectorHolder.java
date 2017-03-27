@@ -57,7 +57,13 @@ public class HomeSpinnerSelectorHolder extends BaseViewHolder<HomeSpinnerItem> {
     public void checkBoxClick() {
         dataItem.setChecked(!cbSpinner.isChecked());
         cbSpinner.setChecked(!cbSpinner.isChecked());
-        liSpinnerItem.setBackgroundResource(R.drawable.rectangle_grey_round_corner);
+        if(cbSpinner.isChecked()) {
+            liSpinnerItem.setBackgroundResource(R.drawable.rectangle_grey_round_corner);
+        }
+        else
+        {
+            liSpinnerItem.setBackgroundResource(R.color.white);
+        }
         viewInterface.setListData(dataItem, cbSpinner.isChecked());
     }
 

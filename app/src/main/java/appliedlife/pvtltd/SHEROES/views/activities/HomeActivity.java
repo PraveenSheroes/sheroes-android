@@ -243,7 +243,7 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
         if (baseResponse instanceof FeedDetail) {
             mFeedDetail = (FeedDetail) baseResponse;
             int id = view.getId();
-            if (id == R.id.tv_community_join) {
+            if (id == R.id.tv_community_invite) {
                 //  openInviteSearch(mFeedDetail);
                 showCommunityJoinReason(mFeedDetail);
             } else if (id == R.id.tv_add_invite) {

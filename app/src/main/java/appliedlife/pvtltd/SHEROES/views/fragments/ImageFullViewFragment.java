@@ -15,7 +15,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.ImageFullViewAdapter;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -63,7 +62,7 @@ public class ImageFullViewFragment extends BaseFragment implements ViewPager.OnP
     }
 
     private void setIndex(int position) {
-        tvTotalImage.setText(String.valueOf(position + 1) + AppConstants.BACK_SLASH + String.valueOf(mFeedDetail.getImageUrls() != null ? mFeedDetail.getImageUrls().size() : 0));
+        tvTotalImage.setText(String.valueOf(position + AppConstants.ONE_CONSTANT) + AppConstants.BACK_SLASH + String.valueOf(mFeedDetail.getImageUrls() != null ? mFeedDetail.getImageUrls().size() : 0));
     }
 
     @Override
@@ -73,6 +72,6 @@ public class ImageFullViewFragment extends BaseFragment implements ViewPager.OnP
 
     @OnClick(R.id.tv_full_image_back)
     public void dismissCommentDialog() {
-        ((HomeActivity) getActivity()).onBackPressed();
+        (getActivity()).onBackPressed();
     }
 }

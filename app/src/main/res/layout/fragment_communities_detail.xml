@@ -31,6 +31,7 @@
         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
         android:gravity="center"
         android:padding="@dimen/dp_size_15"
+        android:visibility="gone"
         android:text="@string/ID_JOIN"
         android:textColor="@color/footer_icon_text"
         android:textSize="@dimen/sp_size_15" />

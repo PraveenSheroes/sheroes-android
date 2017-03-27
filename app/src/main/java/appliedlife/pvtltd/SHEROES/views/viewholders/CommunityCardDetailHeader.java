@@ -53,40 +53,30 @@ public class CommunityCardDetailHeader extends BaseViewHolder<FeedDetail> {
         if (StringUtil.isNotNullOrEmptyString(dataItem.getCommunityType())) {
             tvCommunityRelated.setText(dataItem.getCommunityType());
         }
-        if (!dataItem.isMember() && !dataItem.isOwner() && !dataItem.isRequestPending()) {
 
-           /* if(dataItem.isClosedCommunity())
-            {
-                tvFeaturedCommunityJoin.setTextColor(ContextCompat.getColor(mContext, R.color.white));
-                tvFeaturedCommunityJoin.setText(mContext.getString(R.string.ID_REQUESTED));
-                tvFeaturedCommunityJoin.setBackgroundResource(R.drawable.rectangle_feed_community_requested);
-                tvFeaturedCommunityJoin.setVisibility(View.VISIBLE);
-            }
-            else
-            {
-                tvFeaturedCommunityJoin.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
-                tvFeaturedCommunityJoin.setText(mContext.getString(R.string.ID_JOIN));
-                tvFeaturedCommunityJoin.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
-                tvFeaturedCommunityJoin.setVisibility(View.VISIBLE);
-            }*/
+        if (!dataItem.isMember() && !dataItem.isOwner() && !dataItem.isRequestPending()) {
             tvJoin.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
             tvJoin.setText(mContext.getString(R.string.ID_JOIN));
             tvJoin.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
-            tvJoin.setVisibility(View.VISIBLE);
         } else if (dataItem.isRequestPending()) {
             tvJoin.setTextColor(ContextCompat.getColor(mContext, R.color.white));
             tvJoin.setText(mContext.getString(R.string.ID_REQUESTED));
             tvJoin.setBackgroundResource(R.drawable.rectangle_feed_community_requested);
-            tvJoin.setVisibility(View.VISIBLE);
+            tvJoin.setEnabled(false);
         } else if (dataItem.isOwner() || dataItem.isMember()) {
+            tvJoin.setBackgroundResource(R.drawable.rectangle_community_invite);
+            tvJoin.setText(mContext.getString(R.string.ID_INVITE));
+            tvJoin.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+            tvJoin.setVisibility(View.VISIBLE);
+            tvJoin.setEnabled(false);
+        } else {
             tvJoin.setTextColor(ContextCompat.getColor(mContext, R.color.white));
             tvJoin.setText(mContext.getString(R.string.ID_JOINED));
             tvJoin.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
-            tvJoin.setVisibility(View.VISIBLE);
         }
-        else {
-            tvJoin.setVisibility(View.GONE);
-        }
+
+
+
     }
 
     @OnClick(R.id.card_community_detail)

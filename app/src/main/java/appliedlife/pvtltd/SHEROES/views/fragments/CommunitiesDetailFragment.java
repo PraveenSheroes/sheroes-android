@@ -102,7 +102,6 @@ public class CommunitiesDetailFragment extends BaseFragment {
 
                 break;
             case FEATURE_COMMUNITY:
-                if (mFeedDetail.isClosedCommunity()) {
                     if (!mFeedDetail.isMember() && !mFeedDetail.isOwner() && !mFeedDetail.isRequestPending()) {
                         mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.footer_icon_text));
                         mTvJoinView.setText(getString(R.string.ID_JOIN));
@@ -113,19 +112,16 @@ public class CommunitiesDetailFragment extends BaseFragment {
                         mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_community_requested);
                         mTvJoinView.setEnabled(false);
                     } else if (mFeedDetail.isOwner() || mFeedDetail.isMember()) {
-
+                        mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+                        mTvJoinView.setText(getString(R.string.ID_JOINED));
+                        mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
+                        mTvJoinView.setVisibility(View.VISIBLE);
+                        mTvJoinView.setEnabled(false);
                     } else {
                         mTvJoinView.setBackgroundResource(R.drawable.rectangle_community_invite);
                         mTvJoinView.setText(getString(R.string.ID_INVITE));
                         mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
                     }
-                } else {
-                    mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
-                    mTvJoinView.setText(getString(R.string.ID_JOINED));
-                    mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
-                    mTvJoinView.setVisibility(View.VISIBLE);
-                    mTvJoinView.setEnabled(false);
-                }
                 break;
             case MY_COMMUNITY:
                 mTvJoinView.setBackgroundResource(R.drawable.rectangle_community_invite);
@@ -189,6 +185,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
                 feedDetail.setMember(mFeedDetail.isMember());
                 feedDetail.setOwner(mFeedDetail.isOwner());
                 feedDetail.setRequestPending(mFeedDetail.isRequestPending());
+                feedDetail.setClosedCommunity(mFeedDetail.isClosedCommunity());
                 feedDetailList.add(0, feedDetail);
             }
             mFragmentListRefreshData.setPageNo(++mPageNo);

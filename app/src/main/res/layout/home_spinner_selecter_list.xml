@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:orientation="horizontal"
-    android:background="@drawable/current_status_selector"
+    android:background="@drawable/article_spinner_selecter"
     android:weightSum="1">
 
     <TextView

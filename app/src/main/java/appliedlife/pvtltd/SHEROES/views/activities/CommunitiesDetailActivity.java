@@ -60,7 +60,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
-public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemoveDialog.OwnerRemoveCloseListener,InviteFragmentListener,CommunityOwnerSearchFragment.InviteOwnerActivityIntractionListner, InviteCommunityOwner.InviteOwnerDoneIntractionListner,ShareCommunityFragment.ShareCommunityActivityIntractionListner, CommunityInviteSearchFragment.InviteSearchActivityIntractionListner, CommunityRequestedFragment.RequestHomeActivityIntractionListner, AllMembersFragment.MembersHomeActivityIntractionListner, CommunityOpenAboutFragment.AboutCommunityActivityIntractionListner, CommentReactionFragment.HomeActivityIntractionListner {
+public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemoveDialog.OwnerRemoveCloseListener, InviteFragmentListener, CommunityOwnerSearchFragment.InviteOwnerActivityIntractionListner, InviteCommunityOwner.InviteOwnerDoneIntractionListner, ShareCommunityFragment.ShareCommunityActivityIntractionListner, CommunityInviteSearchFragment.InviteSearchActivityIntractionListner, CommunityRequestedFragment.RequestHomeActivityIntractionListner, AllMembersFragment.MembersHomeActivityIntractionListner, CommunityOpenAboutFragment.AboutCommunityActivityIntractionListner, CommentReactionFragment.HomeActivityIntractionListner {
     private final String TAG = LogUtils.makeLogTag(CommunitiesDetailActivity.class);
     @Bind(R.id.app_bar_coomunities_detail)
     AppBarLayout mAppBarLayout;
@@ -121,10 +121,6 @@ public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemo
             viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
             viewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(getIntent()), getString(R.string.ID_COMMUNITIES));
             mViewPagerCommunitiesDetail.setAdapter(viewPagerAdapter);
-            if(StringUtil.isNotNullOrEmptyString(mFeedDetail.getImageUrl()))
-            {}
-            else
-                mFeedDetail.setImageUrl("http://www.hotel-r.net/im/hotel/bg/paris-hotel-21.jpg");
             if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getImageUrl())) {
                 Glide.with(this)
                         .load(mFeedDetail.getImageUrl()).asBitmap()
@@ -137,39 +133,15 @@ public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemo
                                 Palette.from(resource).generate(new Palette.PaletteAsyncListener() {
                                     public void onGenerated(Palette palette) {
                                         supportStartPostponedEnterTransition();
-                                        // updateBackground(palette);
-                                        // ivCommunitiesDetail.setImageDrawable(getResources().getDrawable(R.drawable.community));
-                                        // updateBackground(mFloatingActionButton, palette);
-
-                                        supportStartPostponedEnterTransition();
                                     }
                                 });
                             }
                         });
-                Glide.with(this)
-                        .load(mFeedDetail.getThumbnailImageUrl()).asBitmap()
-                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                        .skipMemoryCache(true)
-                        .into(new SimpleTarget<Bitmap>() {
-                            @Override
-                            public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
-                                mFloatingActionButton.setImageBitmap(resource);
-                                Palette.from(resource).generate(new Palette.PaletteAsyncListener() {
-                                    public void onGenerated(Palette palette) {
-                                        supportStartPostponedEnterTransition();
-
-                                        // updateBackground(palette);
-                                    }
-                                });
-                            }
-                        });
-
             } else {
-                //  ivCommunitiesDetail.setImageDrawable(getResources().getDrawable(R.drawable.community));
+                ivCommunitiesDetail.setImageDrawable(getResources().getDrawable(R.drawable.blank_image));
                 mFloatingActionButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_community_icon));
                 supportStartPostponedEnterTransition();
             }
-
         }
     }
 
@@ -237,7 +209,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemo
 
                     communityOpenAboutFragment.setArguments(bundleCommunity);
                     getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.bottom_to_top_slide_reverse_anim)
-                            .replace(R.id.about_community_container, communityOpenAboutFragment,CommunityOpenAboutFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+                            .replace(R.id.about_community_container, communityOpenAboutFragment, CommunityOpenAboutFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
                 }
             case R.id.tv_add_invite:
                 if (null != baseResponse) {
@@ -257,8 +229,8 @@ public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemo
         }
 
     }
-    void CallCommunityOwnerSearchFragment(int id)
-    {
+
+    void CallCommunityOwnerSearchFragment(int id) {
 
         final Fragment fragmentCommunityOwnerSearch = getSupportFragmentManager().findFragmentByTag(InviteCommunityOwner.class.getName());
         if (AppUtils.isFragmentUIActive(fragmentCommunityOwnerSearch)) {
@@ -294,7 +266,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemo
 
     @Override
     public void ownerClick() {
-        if(null !=mFeedDetail) {
+        if (null != mFeedDetail) {
             InviteCommunityOwner myCommunityInviteMemberFragment = new InviteCommunityOwner();
             Bundle bundleInvite = new Bundle();
             bundleInvite.putParcelable(AppConstants.COMMUNITIES_DETAIL, mFeedDetail);
@@ -374,7 +346,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemo
         if (mFragmentOpen.isCommentList()) {
             getSupportFragmentManager().popBackStackImmediate();
             if (AppUtils.isFragmentUIActive(mFragment)) {
-                ((CommunitiesDetailFragment) mFragment).commentListRefresh(mFeedDetail,AppConstants.TWO_CONSTANT);
+                ((CommunitiesDetailFragment) mFragment).commentListRefresh(mFeedDetail, AppConstants.TWO_CONSTANT);
             }
             mFragmentOpen.setCommentList(false);
         } else if (mFragmentOpen.isReactionList()) {
@@ -437,7 +409,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemo
     public void callInviteMembers() {
         final Fragment fragmentCommunityMember = getSupportFragmentManager().findFragmentByTag(InviteCommunityMember.class.getName());
         if (AppUtils.isFragmentUIActive(fragmentCommunityMember)) {
-            ((InviteCommunityMember) fragmentCommunityMember).callAddMember(muser_ids,mcommunity_id);
+            ((InviteCommunityMember) fragmentCommunityMember).callAddMember(muser_ids, mcommunity_id);
         }
     }
 

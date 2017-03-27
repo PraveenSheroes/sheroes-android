@@ -21,8 +21,6 @@
                 android:layout_height="@dimen/dp_size_200"
                 android:scaleType="centerCrop"
                 android:fitsSystemWindows="true"
-                android:background="@drawable/community"
-
                 android:id="@+id/iv_community_cover_img"
                 app:layout_collapseMode="parallax" />
 
