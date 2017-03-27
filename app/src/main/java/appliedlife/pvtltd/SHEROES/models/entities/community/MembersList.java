@@ -18,10 +18,10 @@ public class MembersList extends BaseResponse implements Parcelable{
     private String approvedDate;
     @SerializedName("city_master_id")
     @Expose
-    private Integer cityMasterId;
+    private int cityMasterId;
     @SerializedName("com_id")
     @Expose
-    private Integer comId;
+    private int comId;
     @SerializedName("com_logo_url")
     @Expose
     private String comLogoUrl;
@@ -45,13 +45,13 @@ public class MembersList extends BaseResponse implements Parcelable{
     private Boolean commIsFeatured;
     @SerializedName("community_id")
     @Expose
-    private Integer communityId;
+    private int communityId;
     @SerializedName("community_member_id")
     @Expose
-    private Integer communityMemberId;
+    private int communityMemberId;
     @SerializedName("community_user_city_id")
     @Expose
-    private Integer communityUserCityId;
+    private int communityUserCityId;
     @SerializedName("community_user_city_name")
     @Expose
     private String communityUserCityName;
@@ -63,7 +63,7 @@ public class MembersList extends BaseResponse implements Parcelable{
     private String communityUserFirstName;
     @SerializedName("community_user_id")
     @Expose
-    private Integer communityUserId;
+    private int communityUserId;
     @SerializedName("community_user_last_name")
     @Expose
     private String communityUserLastName;
@@ -72,7 +72,7 @@ public class MembersList extends BaseResponse implements Parcelable{
     private String communityUserMobile;
     @SerializedName("community_user_participant_id")
     @Expose
-    private Integer communityUserParticipantId;
+    private int communityUserParticipantId;
     @SerializedName("community_user_photo_url_path")
     @Expose
     private String communityUserPhotoUrlPath;
@@ -90,7 +90,7 @@ public class MembersList extends BaseResponse implements Parcelable{
     private String typeS;
     @SerializedName("users_id")
     @Expose
-    private Integer usersId;
+    private int usersId;
 
     public MembersList(Parcel in) {
         approvedDate = in.readString();
@@ -107,7 +107,7 @@ public class MembersList extends BaseResponse implements Parcelable{
         typeS = in.readString();
     }
 
-    public static final Parcelable.Creator<Member> CREATOR = new Parcelable.Creator<Member>() {
+    public static final Creator<Member> CREATOR = new Creator<Member>() {
         @Override
         public Member createFromParcel(Parcel in) {
             return new Member(in);
@@ -119,6 +119,8 @@ public class MembersList extends BaseResponse implements Parcelable{
         }
     };
 
+
+
     public String getApprovedDate() {
         return approvedDate;
     }
@@ -127,19 +129,19 @@ public class MembersList extends BaseResponse implements Parcelable{
         this.approvedDate = approvedDate;
     }
 
-    public Integer getCityMasterId() {
+    public int getCityMasterId() {
         return cityMasterId;
     }
 
-    public void setCityMasterId(Integer cityMasterId) {
+    public void setCityMasterId(int cityMasterId) {
         this.cityMasterId = cityMasterId;
     }
 
-    public Integer getComId() {
+    public int getComId() {
         return comId;
     }
 
-    public void setComId(Integer comId) {
+    public void setComId(int comId) {
         this.comId = comId;
     }
 
@@ -199,27 +201,27 @@ public class MembersList extends BaseResponse implements Parcelable{
         this.commIsFeatured = commIsFeatured;
     }
 
-    public Integer getCommunityId() {
+    public int getCommunityId() {
         return communityId;
     }
 
-    public void setCommunityId(Integer communityId) {
+    public void setCommunityId(int communityId) {
         this.communityId = communityId;
     }
 
-    public Integer getCommunityMemberId() {
+    public int getCommunityMemberId() {
         return communityMemberId;
     }
 
-    public void setCommunityMemberId(Integer communityMemberId) {
+    public void setCommunityMemberId(int communityMemberId) {
         this.communityMemberId = communityMemberId;
     }
 
-    public Integer getCommunityUserCityId() {
+    public int getCommunityUserCityId() {
         return communityUserCityId;
     }
 
-    public void setCommunityUserCityId(Integer communityUserCityId) {
+    public void setCommunityUserCityId(int communityUserCityId) {
         this.communityUserCityId = communityUserCityId;
     }
 
@@ -247,11 +249,11 @@ public class MembersList extends BaseResponse implements Parcelable{
         this.communityUserFirstName = communityUserFirstName;
     }
 
-    public Integer getCommunityUserId() {
+    public int getCommunityUserId() {
         return communityUserId;
     }
 
-    public void setCommunityUserId(Integer communityUserId) {
+    public void setCommunityUserId(int communityUserId) {
         this.communityUserId = communityUserId;
     }
 
@@ -271,11 +273,11 @@ public class MembersList extends BaseResponse implements Parcelable{
         this.communityUserMobile = communityUserMobile;
     }
 
-    public Integer getCommunityUserParticipantId() {
+    public int getCommunityUserParticipantId() {
         return communityUserParticipantId;
     }
 
-    public void setCommunityUserParticipantId(Integer communityUserParticipantId) {
+    public void setCommunityUserParticipantId(int communityUserParticipantId) {
         this.communityUserParticipantId = communityUserParticipantId;
     }
 
@@ -319,11 +321,11 @@ public class MembersList extends BaseResponse implements Parcelable{
         this.typeS = typeS;
     }
 
-    public Integer getUsersId() {
+    public int getUsersId() {
         return usersId;
     }
 
-    public void setUsersId(Integer usersId) {
+    public void setUsersId(int usersId) {
         this.usersId = usersId;
     }
 

@@ -134,7 +134,7 @@ if(mcount<=3)
 {
         switch (id) {
             case R.id.tv_tags:
-                    tvTags.setBackgroundResource(R.drawable.selected_tag_shap);
+                    tvTags.setBackgroundResource(R.drawable.select_tag_shap);
                     tvTags.setTextColor((Color.parseColor("#3949ab")));
                 //tvTags.Typeface.createFromAsset(this, R.string.ID_ROBOTO_MEDIUM));
                 tvTags.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));

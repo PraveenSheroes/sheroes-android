@@ -12,11 +12,13 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionDoc;
 import appliedlife.pvtltd.SHEROES.models.entities.communities.CommunitySuggestion;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityList;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityTags;
+import appliedlife.pvtltd.SHEROES.models.entities.community.Docs;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
 import appliedlife.pvtltd.SHEROES.models.entities.community.ListOfInviteSearch;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Member;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MembersList;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerList;
+import appliedlife.pvtltd.SHEROES.models.entities.community.PopularTag;
 import appliedlife.pvtltd.SHEROES.models.entities.community.RequestedList;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.DrawerItems;
@@ -160,7 +162,15 @@ public enum HolderMapping {
             return new OnBoardingHolder(view, viewInterface);
         }
 
-    }, CURRENT_STATUS_HOLDER(R.layout.current_status_list_item) {
+    },
+    POPULAR_TAG_HOLDER(R.layout.popular_tag_list) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new PopularTagHolder(view, viewInterface);
+        }
+
+    },
+    CURRENT_STATUS_HOLDER(R.layout.current_status_list_item) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new CurrentStatusHolder(view, viewInterface);
@@ -429,7 +439,12 @@ public enum HolderMapping {
 
 
                     }
-                } else if (item instanceof DrawerItems) {
+                }
+                else if(item instanceof Docs)
+                {
+                    returnView = SELECTDILOG.ordinal();
+                }
+                else if (item instanceof DrawerItems) {
                     returnView = DRAWER_ITEMS.ordinal();
                 } else if (item instanceof CommentReactionDoc) {
                     CommentReactionDoc commentReactionDoc = ((CommentReactionDoc) item);
@@ -511,7 +526,11 @@ public enum HolderMapping {
                     return MEMBER_MODULE.ordinal();
                 } else if (item instanceof OnBoardingData) {
                     return ON_BOARDING_HOLDER.ordinal();
-                } else if (item instanceof LabelValue) {
+                }
+                else if (item instanceof PopularTag) {
+                    return POPULAR_TAG_HOLDER.ordinal();
+                }
+                else if (item instanceof LabelValue) {
                     return CURRENT_STATUS_HOLDER.ordinal();
                 } else if (item instanceof GetAllDataDocument) {
                     return GET_ALL_DATA_BOARDING_SEARCH.ordinal();

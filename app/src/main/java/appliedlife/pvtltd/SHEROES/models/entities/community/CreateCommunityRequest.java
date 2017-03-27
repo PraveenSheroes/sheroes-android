@@ -49,7 +49,15 @@ public class CreateCommunityRequest {
     @SerializedName("tags")
     @Expose
     private List<Integer> tags = null;
-
+    @SerializedName("type")
+    @Expose
+    private String type;
+    @SerializedName("cover_image")
+    @Expose
+    private String cover;
+    @SerializedName("logo_image")
+    @Expose
+    private String logo;
 
     public String getAppVersion() {
         return appVersion;
@@ -67,11 +75,11 @@ public class CreateCommunityRequest {
         this.cloudMessagingId = cloudMessagingId;
     }
 
-    public Integer getCommunityTypeId() {
+    public int getCommunityTypeId() {
         return communityTypeId;
     }
 
-    public void setCommunityTypeId(Integer communityTypeId) {
+    public void setCommunityTypeId(int communityTypeId) {
         this.communityTypeId = communityTypeId;
     }
 
@@ -122,6 +130,31 @@ public class CreateCommunityRequest {
     public void setLogoUrl(String logoUrl) {
         this.logoUrl = logoUrl;
     }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getCover() {
+        return cover;
+    }
+
+    public void setCover(String cover) {
+        this.cover = cover;
+    }
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
+    }
+
 
     public String getName() {
         return name;

@@ -7,11 +7,15 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.CommunityModel;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.EditCommunityRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.SelectCommunityRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.SelectedCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -103,6 +107,68 @@ public class CreateCommunityPresenter extends BasePresenter<CommunityView> {
                 getMvpView().postCreateCommunitySuccess(createCommunityResponse);
             }
 
+        });
+        registerSubscription(subscription);
+    }
+    public void postEditCommunityList(CommunityPostCreateRequest communityPostCreateRequest) {
+        if (!NetworkUtil.isConnected(sheroesApplication)) {
+            getMvpView().showNwError();
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = communityModel.addPostCommunity(communityPostCreateRequest).subscribe(new Subscriber<CommunityPostCreateResponse>() {
+
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                try {
+                    getMvpView().showError(e.getMessage(), AppConstants.TWO_CONSTANT);
+                    getMvpView().showNwError();
+                    getMvpView().stopProgressBar();
+                }
+                catch (Exception e1)
+                {}
+            }
+
+            @Override
+            public void onNext(CommunityPostCreateResponse communityPostCreateResponse) {
+                getMvpView().stopProgressBar();
+                getMvpView().addPostCreateCommunitySuccess(communityPostCreateResponse);
+            }
+
+        });
+        registerSubscription(subscription);
+    }
+
+    public void getSelectCommunityFromPresenter(SelectCommunityRequest selectCommunityRequest) {
+        if (!NetworkUtil.isConnected(sheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,AppConstants.ONE_CONSTANT);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = communityModel.getSelectedFromModel(selectCommunityRequest).subscribe(new Subscriber<SelectedCommunityResponse>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                getMvpView().stopProgressBar();
+                getMvpView().showError(e.getMessage(),AppConstants.ONE_CONSTANT);
+            }
+
+            @Override
+            public void onNext(SelectedCommunityResponse selectedcommunityresponse) {
+                getMvpView().stopProgressBar();
+                getMvpView().getSelectedCommunityListSuccess(selectedcommunityresponse.getDocs());
+
+
+            }
         });
         registerSubscription(subscription);
     }

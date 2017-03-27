@@ -384,6 +384,7 @@ public class SettingPreferencesBasicDetailsFragment extends BaseFragment impleme
 
     }
 
+
     public interface SettingPreferencesBasicDetailsIntractionListener {
 
         void onErrorOccurence();

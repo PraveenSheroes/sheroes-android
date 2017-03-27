@@ -9,7 +9,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
+import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -18,14 +18,14 @@ import butterknife.ButterKnife;
  * Created by Ajit Kumar on 19-03-2017.
  */
 
-public class TagSearchHolder extends BaseViewHolder<GetAllDataDocument> {
+public class TagSearchHolder extends BaseViewHolder<Doc> {
 
     @Bind(R.id.tv_tag_name)
     TextView tvTagrName;
     @Bind(R.id.rl_tag)
     RelativeLayout rl_tag;
     BaseHolderInterface viewInterface;
-    private GetAllDataDocument dataItem;
+    private Doc dataItem;
     private Context mContext;
     public TagSearchHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
@@ -37,7 +37,7 @@ public class TagSearchHolder extends BaseViewHolder<GetAllDataDocument> {
 
 
     @Override
-    public void bindData(GetAllDataDocument obj, Context context, int position) {
+    public void bindData(Doc obj, Context context, int position) {
         this.dataItem = obj;
         tvTagrName.setOnClickListener(this);
         mContext = context;

@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -18,7 +19,9 @@ import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
+import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -34,21 +37,29 @@ import butterknife.OnClick;
  */
 
 public class CommunityJoinRegionDialogFragment extends BaseDialogFragment implements HomeView {
+    @Inject
+    Preference<LoginResponse> userPreference;
     private final String TAG = LogUtils.makeLogTag(CommunityJoinRegionDialogFragment.class);
     private FeedDetail mFeedDetail;
     private CloseListener mHomeActivityIntractionListner;
     @Inject
     HomePresenter mHomePresenter;
-    @Inject
-    Preference<LoginResponse> userPreference;
+    Context context;
+
     @Inject
     AppUtils mAppUtils;
+    public void setListener(CommunityOpenAboutFragment communityOpenAboutFragment)
+    {
+        this.context = communityOpenAboutFragment.getContext();
 
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        SheroesApplication.getAppComponent(context).inject(this);
 
         View view = inflater.inflate(R.layout.join_community_region_dialog, container, false);
         ButterKnife.bind(this, view);
+        mHomePresenter.attachView(this);
         mFeedDetail = getArguments().getParcelable(DISMISS_PARENT_ON_OK_OR_BACK);
         setCancelable(true);
         return view;
@@ -79,7 +90,7 @@ public class CommunityJoinRegionDialogFragment extends BaseDialogFragment implem
 
     @OnClick(R.id.tv_higly_intreseted)
     public void highlyOnClick() {
-        Toast.makeText(getActivity(), "highly ", Toast.LENGTH_SHORT).show();
+        // Toast.makeText(getActivity(), "highly ", Toast.LENGTH_SHORT).show();
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
             List<Long> userIdList = new ArrayList();
             userIdList.add((long) userPreference.get().getUserSummary().getUserId());
@@ -104,12 +115,15 @@ public class CommunityJoinRegionDialogFragment extends BaseDialogFragment implem
     }
 
     @Override
-    public void getTagListSuccess(List<GetAllDataDocument> feedDetailList) {
+    public void getTagListSuccess(List<Doc> feedDetailList) {
 
     }
 
+
     @Override
     public void getSuccessForAllResponse(String success, int successFrom) {
+        Toast.makeText(context,success,Toast.LENGTH_LONG).show();
+        getDialog().cancel();
 
     }
 
@@ -146,3 +160,4 @@ public class CommunityJoinRegionDialogFragment extends BaseDialogFragment implem
         void onClose();
     }
 }
+

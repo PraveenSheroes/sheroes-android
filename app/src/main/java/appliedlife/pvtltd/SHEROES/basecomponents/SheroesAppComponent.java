@@ -5,6 +5,7 @@ import javax.inject.Singleton;
 
 import appliedlife.pvtltd.SHEROES.models.InviteSearchModel;
 import appliedlife.pvtltd.SHEROES.models.RequestedListModel;
+import appliedlife.pvtltd.SHEROES.models.entities.community.PopularTag;
 import appliedlife.pvtltd.SHEROES.presenters.CommunityTagsPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.InvitePresenter;
 import appliedlife.pvtltd.SHEROES.presenters.MembersPresenter;
@@ -37,10 +38,12 @@ import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityInviteSearchFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.CommunityJoinRegionDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOpenAboutFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOwnerSearchFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityRequestedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitySearchTagsFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.CommunityTypeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CreateCommunityFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CreateCommunityPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
@@ -130,6 +133,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.MyCommunitiesCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OnBoardingHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OwnerHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OwnerListHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.PopularTagHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ProfileAboutMeHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ProfileBasicDetailsHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ProfileEducationHolder;
@@ -322,4 +326,9 @@ public interface SheroesAppComponent {
     void inject(WelcomeScreenSecondFragment welcomeScreenSecondFragment);
     void inject(WelcomeScreenFirstFragment welcomeScreenFirstFragment);
     void inject(PreferencesDeactiveAccountDialogFragment preferencesDeactiveAccountDialogFragment);
+    void inject(CommunityTypeFragment communityTypeFragment);
+    void inject(CommunityJoinRegionDialogFragment communityJoinRegionDialogFragment);
+    void inject(PopularTagHolder popularTagHolder);
+
+
 }

@@ -1,9 +1,9 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import javax.inject.Inject;
@@ -25,8 +26,10 @@ import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingFeedbackResponc
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingRatingResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.UserpreferenseResponse;
 import appliedlife.pvtltd.SHEROES.presenters.SettingFeedbackPresenter;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SettingFeedbackView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SettingView;
 import butterknife.Bind;
@@ -76,6 +79,9 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
     @Bind(R.id.tv_setting_tittle1)
     TextView mTv_setting_tittle1;
     @Bind(R.id.iv_back_setting)
+    ImageView miv_back_setting;
+    @Bind(R.id.progress_bar_first_load)
+    ProgressBar mProgressBarFirstLoad;
     ImageView mIv_back_setting;
     String mDeactivateReson_value;
     @Bind(R.id.tv_reson_line)
@@ -86,6 +92,7 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
     @Inject
     SettingFeedbackPresenter mSettingFeedbackPresenter;
     SettingView settingViewlistener;
+    private FragmentIntractionWithActivityListner mHomeSearchActivityFragmentIntractionWithActivityListner;
 
 
     public SettingPreferences_DeactiveAccounActivitytLisIntractionListener settingPreferences_deactiveAccounActivitytLisIntractionListener;
@@ -93,17 +100,22 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
 
     @Override
     public void onAttach(Context context) {
-
         super.onAttach(context);
         try {
             if (getActivity() instanceof SettingView) {
 
                 settingViewlistener = (SettingView) getActivity();
-
             }
         } catch (Exception e) {
 
 
+        }
+        try {
+            if (mActivity instanceof FragmentIntractionWithActivityListner) {
+                mHomeSearchActivityFragmentIntractionWithActivityListner = (FragmentIntractionWithActivityListner) getActivity();
+            }
+        } catch (Fragment.InstantiationException exception) {
+            LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
         }
     }
 
@@ -114,6 +126,7 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
         View view = inflater.inflate(R.layout.fragment_setting_preferences_deactiveaccount, container, false);
         ButterKnife.bind(this, view);
         mSettingFeedbackPresenter.attachView(this);
+        mProgressBarFirstLoad.setVisibility(View.GONE);
 
         mTv_setting_tittle.setText(R.string.ID_DEACTIVEACCOUNT);
         mTv_setting_tittle1.setText(R.string.ID_PREFERENCES);
@@ -440,6 +453,9 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
                  /*  Intent i = new Intent(getActivity(), PreferencesDeactiveAccountDialogFragment.class);
                    startActivity(i);
 */
+              /*  Intent i = new Intent(getActivity(), PreferencesDeactiveAccountDialogFragment.class);
+                startActivity(i);*/
+
             } else {
 
                 tv_reson.setVisibility(View.VISIBLE);
@@ -475,6 +491,7 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
 
     @Override
     public void getUserDeactiveResponse(SettingDeActivateResponse deActivateResponse) {
+        mProgressBarFirstLoad.setVisibility(View.GONE);
 
 
     }
@@ -493,6 +510,14 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
     public void showNwError() {
 
     }
+
+    @Override
+    public void showError(String errorMsg, int errorFor) {
+
+        mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(errorMsg, errorFor);
+    }
+
+
 
     @Override
     public void startProgressBar() {

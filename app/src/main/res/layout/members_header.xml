@@ -9,11 +9,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@string/ID_ROBOTO_LIGHT"
-        android:padding="@dimen/dp_size_30"
+        android:paddingTop="@dimen/dp_size_30"
+        android:paddingLeft="@dimen/dp_size_30"
+        android:paddingBottom="@dimen/dp_size_30"
+
+
         android:drawablePadding="@dimen/dp_size_25"
         android:text="@string/ID_MEMBERS"
         android:textSize="@dimen/sp_size_24"
         android:textColor="@color/searchbox_hint_text_color"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="(0)"
+        android:layout_toRightOf="@+id/tv_user_comment_header_text"
+        android:textSize="@dimen/sp_size_24"
+        android:paddingBottom="@dimen/dp_size_30"
+        android:paddingTop="@dimen/dp_size_30"
+        android:paddingLeft="@dimen/dp_size_10"
+
+        android:id="@+id/tv_member_count"
         />
     <FrameLayout
         android:id="@+id/fmCommunityMembersClose"

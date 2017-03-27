@@ -46,6 +46,8 @@
                 android:paddingTop="@dimen/dp_size_5"
                 android:text="No"
                 android:textColor="#3949ab"
+                android:textAllCaps="true"
+                android:fontFamily="@string/ID_ROBOTO_BOLD"
                 android:textSize="@dimen/sp_size_12" />
 
             <TextView
@@ -56,6 +58,8 @@
                 android:layout_toRightOf="@+id/tvcancel"
                 android:paddingBottom="@dimen/dp_size_23"
                 android:paddingTop="@dimen/dp_size_5"
+                android:textAllCaps="true"
+                android:fontFamily="@string/ID_ROBOTO_BOLD"
                 android:text="Yes"
                 android:textColor="#3949ab"
                 android:textSize="@dimen/sp_size_12" />

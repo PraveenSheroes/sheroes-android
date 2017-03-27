@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/text_color_follow"
         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+        android:background="@drawable/select_tag_shap"
         android:textSize="@dimen/sp_size_13"
         android:layout_marginTop="@dimen/dp_size_10"
         android:layout_centerVertical="true"

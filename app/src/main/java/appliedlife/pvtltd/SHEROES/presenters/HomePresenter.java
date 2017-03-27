@@ -22,6 +22,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllData;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
@@ -177,7 +178,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = mHomeModel.getTagFromModel(getAllDataRequest).subscribe(new Subscriber<GetAllData>() {
+        Subscription subscription = mHomeModel.getTagFromModel(getAllDataRequest).subscribe(new Subscriber<GetTagData>() {
             @Override
             public void onCompleted() {
                 getMvpView().stopProgressBar();
@@ -190,14 +191,14 @@ public class HomePresenter extends BasePresenter<HomeView> {
             }
 
             @Override
-            public void onNext(GetAllData getAllData) {
+            public void onNext(GetTagData getAllData) {
                 getMvpView().stopProgressBar();
-                if(null!=getAllDataRequest&& StringUtil.isNotEmptyCollection(getAllData.getGetAllDataDocuments())&&getAllData.getGetAllDataDocuments().size()>AppConstants.ONE_CONSTANT)
+                if(null!=getAllDataRequest&& StringUtil.isNotEmptyCollection(getAllData.getDocs())&&getAllData.getDocs().size()>AppConstants.ONE_CONSTANT)
                 {
-                    getMvpView().getTagListSuccess(getAllData.getGetAllDataDocuments());
+                    getMvpView().getTagListSuccess(getAllData.getDocs());
                 }else
                 {
-                    getMvpView().getTagListSuccess(getAllData.getGetAllDataDocuments());
+                    getMvpView().getTagListSuccess(getAllData.getDocs());
                 }
             }
         });

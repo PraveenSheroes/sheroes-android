@@ -4,7 +4,6 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="right"
-    android:paddingTop="@dimen/dp_size_5"
     android:paddingLeft="@dimen/dp_size_1"
     android:paddingRight="@dimen/dp_size_1"
     android:paddingBottom="@dimen/dp_size_5"

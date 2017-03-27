@@ -9,14 +9,15 @@
 
     <ImageView
         android:id="@+id/customView"
-        android:layout_width="100dp"
-        android:layout_height="140dp"
+        android:layout_width="@dimen/dp_size_60"
+        android:layout_height="@dimen/dp_size_80"
+        android:scaleType="fitXY"
          />
 
     <Button
         android:id="@+id/button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/dp_size_18"
+        android:layout_height="@dimen/dp_size_18"
         android:layout_marginRight="@dimen/dp_size_5"
         android:layout_marginTop="@dimen/dp_size_5"
         android:padding="@dimen/dp_size_5"

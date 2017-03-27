@@ -20,10 +20,12 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityList;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.Docs;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Member;
 import appliedlife.pvtltd.SHEROES.presenters.OwnerPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -41,7 +43,7 @@ public class OwnerRemoveDialog extends BaseDialogFragment implements CommunityVi
     @Inject
     OwnerPresenter mOwnerPresenter;
     private boolean finishParent;
-    private CloseListener mHomeActivityIntractionListner;
+    private OwnerRemoveCloseListener mHomeActivityIntractionListner;
     private final String TAG = LogUtils.makeLogTag(SelectCommunityFragment.class);
     @Bind(R.id.tvcancel)
     TextView mTv_cancel;
@@ -50,9 +52,14 @@ public class OwnerRemoveDialog extends BaseDialogFragment implements CommunityVi
     Member members;
     Long community_id;
     Context context;
+
+    public  void setListener(OwnerRemoveCloseListener context)
+    {
+        this.mHomeActivityIntractionListner=context;
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,@Nullable Bundle savedInstanceState) {
-        SheroesApplication.getAppComponent(context).inject(this);
+        SheroesApplication.getAppComponent(getActivity()).inject(this);
 
         if(null!=getArguments()) {
             members=getArguments().getParcelable(AppConstants.MEMBER);
@@ -95,6 +102,9 @@ public class OwnerRemoveDialog extends BaseDialogFragment implements CommunityVi
         deactivateOwnerRequest.setCloudMessagingId("String");
         deactivateOwnerRequest.setUserId(members.getCommunityUserParticipantId());
         mOwnerPresenter.getCommunityOwnerDeactive(deactivateOwnerRequest);
+        mHomeActivityIntractionListner.onOwnerClose();
+        getDialog().cancel();
+
     }
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -137,6 +147,11 @@ public class OwnerRemoveDialog extends BaseDialogFragment implements CommunityVi
     }
 
     @Override
+    public void getSelectedCommunityListSuccess(List<Docs> selected_community_response) {
+
+    }
+
+    @Override
     public void getOwnerListSuccess(List<Member> ownerListResponse) {
 
     }
@@ -145,6 +160,12 @@ public class OwnerRemoveDialog extends BaseDialogFragment implements CommunityVi
     public void postCreateCommunitySuccess(CreateCommunityResponse createCommunityResponse) {
 
     }
+
+    @Override
+    public void addPostCreateCommunitySuccess(CommunityPostCreateResponse createCommunityResponse) {
+
+    }
+
 
     @Override
     public void getOwnerListDeactivateSuccess(DeactivateOwnerResponse deactivateOwnerResp)
@@ -161,7 +182,6 @@ public class OwnerRemoveDialog extends BaseDialogFragment implements CommunityVi
 
     @Override
     public void showNwError() {
-        getDialog().cancel();
 
     }
 
@@ -180,8 +200,8 @@ public class OwnerRemoveDialog extends BaseDialogFragment implements CommunityVi
          void onErrorOccurence();
          void onClose();
      }*/
-    public interface CloseListener {
+    public interface OwnerRemoveCloseListener {
         void onErrorOccurence();
-        void onClose();
+        void onOwnerClose();
     }
 }

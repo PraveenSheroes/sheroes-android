@@ -11,19 +11,32 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.f2prateek.rx.preferences.Preference;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityList;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityType;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
+import appliedlife.pvtltd.SHEROES.models.entities.community.Docs;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Member;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerList;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.PopularTag;
+import appliedlife.pvtltd.SHEROES.models.entities.community.SelectedCommunityResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.adapters.CommunityTypeAdapter;
@@ -37,6 +50,8 @@ import butterknife.OnClick;
  */
 
 public class CommunityTypeFragment extends BaseDialogFragment implements CommunityView, CommunityTypeAdapter.CommunityTypeAdapterCallback {
+    @Inject
+    Preference<MasterDataResponse> mUserPreferenceMasterData;
     @Bind(R.id.tv_community_type_submit)
     TextView mcommunity_type_submit;
     @Bind(R.id.lv_community_type_listview)
@@ -48,25 +63,34 @@ public class CommunityTypeFragment extends BaseDialogFragment implements Communi
     List<CommunityType> rowItem;
     private MyDialogFragmentListener mHomeActivityIntractionListner;
     private final String TAG = LogUtils.makeLogTag(CommunityTypeFragment.class);
+    HashMap<String, HashMap<String, ArrayList<LabelValue>>> data = new HashMap<>();
+    private List<PopularTag> listFeelter = new ArrayList<PopularTag>();
+    Context context;
+    List<String> jobAtList = new ArrayList<>();
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        try {
+       /* try {
+            this.context=context;
             if (context instanceof MyDialogFragmentListener) {
                 mHomeActivityIntractionListner = (MyDialogFragmentListener) context;
             }
         } catch (InstantiationException exception) {
             LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
-        }
+        }*/
     }
 /*
     CommunityTypeFragment(CreateCommunityFragment context) {
 
     }*/
 
+    public void setListener(MyDialogFragmentListener listener) {
+        this.mHomeActivityIntractionListner =  listener;
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        SheroesApplication.getAppComponent(getActivity()).inject(this);
 
         View view = inflater.inflate(R.layout.community_type, container, false);
         ButterKnife.bind(this, view);
@@ -78,6 +102,26 @@ public class CommunityTypeFragment extends BaseDialogFragment implements Communi
         setCancelable(true);
 
 
+        if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && null != mUserPreferenceMasterData.get().getData() ) {
+            data= mUserPreferenceMasterData.get().getData();
+            LogUtils.error("Master Data",data+"");
+            HashMap<String, ArrayList<LabelValue>> hashMap=data.get(AppConstants.MASTER_DATA_COMMUNITY_TYPE_KEY);
+            List<LabelValue> labelValueArrayList = hashMap.get(AppConstants.MASTER_DATA_DEFAULT_CATEGORY);
+            PopularTag filterList = new PopularTag();
+            filterList.setName("Community Type");
+
+            for(int i=0;i<labelValueArrayList.size();i++)
+            {
+                String abc=labelValueArrayList.get(i).getLabel();
+
+                jobAtList.add(abc);
+            }
+            filterList.setBoardingDataList(jobAtList);
+            listFeelter.add(filterList);
+
+        }
+
+
         rowItem = new ArrayList<CommunityType>();
         ItemName = getResources().getStringArray(R.array.name);
 
@@ -86,7 +130,7 @@ public class CommunityTypeFragment extends BaseDialogFragment implements Communi
             rowItem.add(itm);
         }
 
-        madapter = new CommunityTypeAdapter(getActivity(), rowItem, mcommunity_type_submit);
+        madapter = new CommunityTypeAdapter(getActivity(), jobAtList, mcommunity_type_submit);
         madapter.setCallback(this);
         mCommunityTypelistView.setAdapter(madapter);
 
@@ -129,6 +173,11 @@ public class CommunityTypeFragment extends BaseDialogFragment implements Communi
     }
 
     @Override
+    public void getSelectedCommunityListSuccess(List<Docs> selected_community_response) {
+
+    }
+
+    @Override
     public void getOwnerListSuccess(List<Member> ownerListResponse) {
 
     }
@@ -137,6 +186,11 @@ public class CommunityTypeFragment extends BaseDialogFragment implements Communi
 
     @Override
     public void postCreateCommunitySuccess(CreateCommunityResponse createCommunityResponse) {
+
+    }
+
+    @Override
+    public void addPostCreateCommunitySuccess(CommunityPostCreateResponse createCommunityResponse) {
 
     }
 

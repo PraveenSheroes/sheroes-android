@@ -16,6 +16,11 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.f2prateek.rx.preferences.Preference;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -26,9 +31,14 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityTags;
-import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
+import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
+import appliedlife.pvtltd.SHEROES.models.entities.community.PopularTag;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.OnBoardingData;
 import appliedlife.pvtltd.SHEROES.presenters.CommunityTagsPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -52,6 +62,8 @@ public class CommunitySearchTagsFragment extends BaseFragment implements Communi
     HomePresenter mHomePresenter;
     @Inject
     AppUtils mAppUtils;
+    @Inject
+    Preference<MasterDataResponse> mUserPreferenceMasterData;
     @Bind(R.id.rv_home_list)
     RecyclerView mRecyclerView;
     @Bind(R.id.tv_selected_tag1)
@@ -88,6 +100,10 @@ public class CommunitySearchTagsFragment extends BaseFragment implements Communi
     TextView mtv_tag_title;
     @Bind(R.id.ll_indecator)
     LinearLayout ll_indecator;
+    private List<PopularTag> listFeelter = new ArrayList<PopularTag>();
+
+    private HashMap<String, HashMap<String, ArrayList<LabelValue>>> mMasterDataResult;
+
 
     int mCount=1;
     private Handler mHandler = new Handler();
@@ -99,6 +115,7 @@ public class CommunitySearchTagsFragment extends BaseFragment implements Communi
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private final String mTAG = LogUtils.makeLogTag(CreateCommunityFragment.class);
+    HashMap<String, HashMap<String, ArrayList<LabelValue>>> data = new HashMap<>();
 
     @Override
     public void onAttach(Context context) {
@@ -123,12 +140,42 @@ public class CommunitySearchTagsFragment extends BaseFragment implements Communi
         mHomePresenter.attachView(this);
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ALL_SEARCH, AppConstants.EMPTY_STRING);
 
+
+
+
         mcommunityListPresenter.attachView(this);
+
+        if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && null != mUserPreferenceMasterData.get().getData() ) {
+            data= mUserPreferenceMasterData.get().getData();
+            LogUtils.error("Master Data",data+"");
+            HashMap<String, ArrayList<LabelValue>> hashMap=data.get(AppConstants.MASTER_DATA_TAGS_KEY);
+            List<LabelValue> labelValueArrayList = hashMap.get(AppConstants.MASTER_DATA_DEFAULT_CATEGORY);
+            PopularTag filterList = new PopularTag();
+            filterList.setName("Popular Tag");
+            List<String> jobAtList = new ArrayList<>();
+
+            for(int i=0;i<labelValueArrayList.size();i++)
+            {
+                String abc=labelValueArrayList.get(i).getLabel();
+
+                jobAtList.add(abc);
+            }
+            filterList.setBoardingDataList(jobAtList);
+            listFeelter.add(filterList);
+
+        }
+
+
+
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new GenericRecyclerViewAdapter(getActivity(), this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
+
+        mAdapter.setSheroesGenericListData(listFeelter);
+        mAdapter.notifyDataSetChanged();
+
         mEt_search_edit_text.setHint("Search Tags");
         editTextWatcher();
         mTv_no_of_tags.setVisibility(View.GONE);
@@ -159,7 +206,7 @@ public class CommunitySearchTagsFragment extends BaseFragment implements Communi
     }
 
     @Override
-    public void getTagListSuccess(List<GetAllDataDocument> tagDetailList) {
+    public void getTagListSuccess(List<Doc> tagDetailList) {
         mAdapter.setCallForRecycler(AppConstants.ALL_DATA_SUB_TYPE);
         mAdapter.setSheroesGenericListData(tagDetailList);
         mAdapter.notifyDataSetChanged();
@@ -194,11 +241,20 @@ public class CommunitySearchTagsFragment extends BaseFragment implements Communi
     }
 
 
+
     @Override
     public void handleOnClick(BaseResponse sheroesListDataItem, View view) {
+        TextView  textView=(TextView) view.findViewById(R.id.tv_community_tag_data);
+        // textView.setBackgroundResource(R.drawable.selected_tag_shap);
+
+        // getActivity().getFragmentManager().popBackStack();
+
+        //   getDialog().cancel();
         mAdapter = new GenericRecyclerViewAdapter(getActivity(), this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
+        mAdapter.setSheroesGenericListData(listFeelter);
+
         mAdapter.notifyDataSetChanged();
 
         mTv_no_of_tags.setVisibility(View.VISIBLE);
@@ -230,93 +286,92 @@ public class CommunitySearchTagsFragment extends BaseFragment implements Communi
         {
             mTag7.setVisibility(View.VISIBLE);
         }
-        if (sheroesListDataItem instanceof GetAllDataDocument) {
-            mtv_tag_text.setVisibility(View.VISIBLE);
-            mtv_tag_title.setVisibility(View.VISIBLE);
-            mTv_no_of_tags.setVisibility(View.VISIBLE);
-            ll_indecator.setVisibility(View.VISIBLE);
-            GetAllDataDocument communityTags = (GetAllDataDocument) sheroesListDataItem;
-            if (mCount<=3) {
-                mTags[mCount] = communityTags.getTitle();
-                if (mCount == 2) {
-                    mTv_no_of_tags.setText("2/3");
+        mtv_tag_text.setVisibility(View.VISIBLE);
+        mtv_tag_title.setVisibility(View.VISIBLE);
+        mTv_no_of_tags.setVisibility(View.VISIBLE);
+        ll_indecator.setVisibility(View.VISIBLE);
+        if (mCount<=3) {
+            if(sheroesListDataItem instanceof Doc)
+            {
+                mTags[mCount] = ((Doc) sheroesListDataItem).getTitle();
 
-                    mVindecator1.setBackgroundColor((getResources().getColor(R.color.popular_tag_color)));
+            }
+            else {
+                mTags[mCount] = textView.getText().toString();
+            }
+            if (mCount == 2) {
+                mTv_no_of_tags.setText("2/3");
 
-                    if (mTags[mCount - 1].length() > 25) {
+                mVindecator1.setBackgroundColor((getResources().getColor(R.color.popular_tag_color)));
+
+                if (mTags[mCount - 1].length() > 25) {
+                    mTag4.setVisibility(View.VISIBLE);
+                    mTag4.setText(mTags[mCount]);
+                } else if (mTags[mCount - 1].length() < 25) {
+                    if (mTags[mCount].length() > 25) {
                         mTag4.setVisibility(View.VISIBLE);
+
                         mTag4.setText(mTags[mCount]);
-                    } else if (mTags[mCount - 1].length() < 25) {
-                        if (mTags[mCount].length() > 25) {
-                            mTag4.setVisibility(View.VISIBLE);
-
-                            mTag4.setText(mTags[mCount]);
-                        }
-                        else {
-                            mTag2.setVisibility(View.VISIBLE);
-
-                            mTag2.setText(mTags[mCount]);
-                        }
                     }
+                    else {
+                        mTag2.setVisibility(View.VISIBLE);
 
-                } else if (mCount == 3) {
-                    mTv_no_of_tags.setText("3/3");
-                    tv_community_tag_submit.setVisibility(View.VISIBLE);
-                    mVindecator2.setBackgroundColor((getResources().getColor(R.color.popular_tag_color)));
+                        mTag2.setText(mTags[mCount]);
+                    }
+                }
 
-                    if (mTags[mCount - 1].length() + mTags[mCount - 2].length() > 30) {
-                        if (mTag4.getText().equals("")) {
-                            mTag4.setVisibility(View.VISIBLE);
+            } else if (mCount == 3) {
+                mTv_no_of_tags.setText("3/3");
+                tv_community_tag_submit.setVisibility(View.VISIBLE);
+                mVindecator2.setBackgroundColor((getResources().getColor(R.color.popular_tag_color)));
 
-                            mTag4.setText(mTags[mCount]);
-                        }
-                        else if (mTags[mCount].length() > 25) {
+                if (mTags[mCount - 1].length() + mTags[mCount - 2].length() > 30) {
+                    if (mTag4.getText().equals("")) {
+                        mTag4.setVisibility(View.VISIBLE);
+
+                        mTag4.setText(mTags[mCount]);
+                    }
+                    else if (mTags[mCount].length() > 25) {
+                        mTag7.setText(mTags[mCount]);
+                        mTag7.setVisibility(View.VISIBLE);
+
+                    }
+                    else {
+                        if((mTags[mCount-1].length() > 25))
+                        {
                             mTag7.setText(mTags[mCount]);
                             mTag7.setVisibility(View.VISIBLE);
-
                         }
                         else {
-                            if((mTags[mCount-1].length() > 25))
-                            {
-                                mTag7.setText(mTags[mCount]);
-                                mTag7.setVisibility(View.VISIBLE);
-                            }
-                            else {
-                                mTag5.setVisibility(View.VISIBLE);
+                            mTag5.setVisibility(View.VISIBLE);
 
-                                mTag5.setText(mTags[mCount]);
-                            }
+                            mTag5.setText(mTags[mCount]);
                         }
-
-                    } else {
-                         if (mTags[mCount].length() > 25) {
-                            mTag4.setText(mTags[mCount]);
-                            mTag4.setVisibility(View.VISIBLE);
-
-                        }
-                        else {
-                             mTag3.setVisibility(View.VISIBLE);
-
-                             mTag3.setText(mTags[mCount]);
-                         }
                     }
-                } else if (mCount == 1) {
-                    mTv_no_of_tags.setText("1/3");
 
-                    mTag1.setVisibility(View.VISIBLE);
-                    mVindecator.setBackgroundColor((getResources().getColor(R.color.popular_tag_color)));
-                    mTag1.setText(mTags[mCount]);
+                } else {
+                    if (mTags[mCount].length() > 25) {
+                        mTag4.setText(mTags[mCount]);
+                        mTag4.setVisibility(View.VISIBLE);
 
+                    }
+                    else {
+                        mTag3.setVisibility(View.VISIBLE);
+
+                        mTag3.setText(mTags[mCount]);
+                    }
                 }
-                mCount++;
+            } else if (mCount == 1) {
+                mTv_no_of_tags.setText("1/3");
+
+                mTag1.setVisibility(View.VISIBLE);
+                mVindecator.setBackgroundColor((getResources().getColor(R.color.popular_tag_color)));
+                mTag1.setText(mTags[mCount]);
+
             }
-
-            //  getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, getActivity().getIntent());
-            //mHomeActivityIntractionListner.onAddFriendSubmit(communityList.getName(), communityList.getBackground());
+            mCount++;
         }
-       // getActivity().getFragmentManager().popBackStack();
 
-     //   getDialog().cancel();
 
 
     }
@@ -360,7 +415,7 @@ public class CommunitySearchTagsFragment extends BaseFragment implements Communi
         @Override
         public void run() {
             if (!isDetached()) {
-               // mSearchDataName = mSearchDataName.trim().replaceAll(AppConstants.SPACE, AppConstants.EMPTY_STRING);
+                // mSearchDataName = mSearchDataName.trim().replaceAll(AppConstants.SPACE, AppConstants.EMPTY_STRING);
                 mHomePresenter.getTagFromPresenter(mAppUtils.getAllDataRequestBuilder(AppConstants.TAG_SUB_TYPE, mSearchDataName, AppConstants.ALL_SEARCH));
             }
         }
@@ -385,6 +440,7 @@ public class CommunitySearchTagsFragment extends BaseFragment implements Communi
     public List getListData() {
         return null;
     }
+
 
     @Override
     public void startProgressBar() {

@@ -18,6 +18,7 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,8 +27,10 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,8 +40,11 @@ import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.f2prateek.rx.preferences.Preference;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -51,14 +57,28 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityList;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.Docs;
+import appliedlife.pvtltd.SHEROES.models.entities.community.Member;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
+import appliedlife.pvtltd.SHEROES.presenters.CreateCommunityPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CommunityView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CreateCommunityView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.EditNameDialogListener;
 import butterknife.Bind;
@@ -69,8 +89,12 @@ import butterknife.OnClick;
  * Created by Ajit Kumar on 20-01-2017.
  */
 
-public class CreateCommunityPostFragment extends BaseFragment implements CreateCommunityView,EditNameDialogListener,SelectCommunityFragment.MyDialogFragmentListener {
+public class CreateCommunityPostFragment extends BaseFragment implements CreateCommunityView,EditNameDialogListener,SelectCommunityFragment.MyDialogFragmentListener, CommunityView {
 
+    /*@Inject
+    Preference<CommunityPostCreateRequest> mUserPreference;*/
+    @Inject
+    Preference<LoginResponse> mUserPreference;
     @Bind(R.id.txt_choose_community_spinner)
     TextView mEtchoosecommunity;
     @Bind(R.id.lnr_image_container)
@@ -98,7 +122,25 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
     @Bind(R.id.lnr_community_post2)
     LinearLayout lnr_community_post2;
     @Bind(R.id.et_share_community_post_text)
-    EditText mPostEt;
+    EditText met_share_community_post_text;
+    @Bind(R.id.iv_community_owner)
+    ImageView iv_community_owner;
+    @Bind(R.id.iv_community_anonymous)
+    ImageView iv_community_anonymous;
+    @Bind(R.id.iv_community_user)
+    ImageView iv_community_user;
+    @Bind(R.id.tv_community_owner)
+    TextView tv_community_owner;
+    @Bind(R.id.tv_community_poster_user)
+    TextView tv_community_poster_user;
+    @Bind(R.id.tv_community_anonomous)
+    TextView tv_community_anonomous;
+    @Bind(R.id.scroll_community_post)
+    ScrollView scroll_community_post;
+    String encCoverImage;
+    private int mCommunityId=0;
+    private String mCreaterType;
+
     @Bind(R.id.txt_counter)
     TextView mCounterTxt;
 
@@ -113,21 +155,13 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
     ImageView mImg[]=new ImageView[6];
     Button mBtncross[]=new Button[6];
     Bitmap mRoundBitmap;
+    float alpha=0.7f;
+    @Inject
+    CreateCommunityPresenter createCommunityPresenter;
 
-   /* public CreateCommunityPostFragment() {
-
-    }
-    public CreateCommunityPostFragment(String name) {
-
-    }
-    public static CreateCommunityPostFragment createInstance(int itemsCount) {
-        CreateCommunityPostFragment createCommunityPostFragment = new CreateCommunityPostFragment("");
-
-
-        return createCommunityPostFragment;
-    }*/
     void showDialog() {
         SelectCommunityFragment newFragment =new SelectCommunityFragment();
+        newFragment.setListener(this);
         newFragment.show(getActivity().getFragmentManager(), "dialog");
     }
 
@@ -153,11 +187,17 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
         mOutPutFile1 = new File(Environment.getExternalStorageDirectory(), "temp1.jpg");
         getActivity().setRequestedOrientation(
                 ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
+        iv_community_owner.setAlpha(alpha);
+        iv_community_user.setAlpha(alpha);
+        iv_community_anonymous.setAlpha(alpha);
         mTvcreate_community_post.setText(R.string.ID_CREATEPOST);
+        createCommunityPresenter.attachView(this);
+        CommunityPostCreateRequest communityPostCreateRequest=new CommunityPostCreateRequest();
+      /*  communityPostCreateRequest.set
+        mUserPreference.set(co);*/
 
         checkStoragePermission();
-        mPostEt.addTextChangedListener(new TextWatcher() {
+        met_share_community_post_text.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
@@ -222,20 +262,61 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
     @OnClick(R.id.lnr_community_post)
     public void postAsName()
     {
+        iv_community_user.setAlpha(1.0f);
+        tv_community_poster_user.setTextColor(ContextCompat.getColor(getActivity(), R.color.red));
+        tv_community_anonomous.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey2));
+        tv_community_owner.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey2));
+        iv_community_owner.setAlpha(alpha);
+        iv_community_anonymous.setAlpha(alpha);
+
+        scroll_community_post.fullScroll(ScrollView.FOCUS_DOWN);
+        scroll_community_post.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
         mTv_community_post_submit.setText("POST AS NAME");
         mTv_community_post_submit.setVisibility(View.VISIBLE);
+        if(null !=mUserPreference)
+        {
+            LoginResponse loginResponse=mUserPreference.get();
+            UserSummary userSummary=loginResponse.getUserSummary();
+            if(null !=userSummary)
+            mCreaterType=userSummary.getFirstName();
+
+        }
+        mCreaterType="USER";
+
     }
     @OnClick(R.id.lnr_community_post1)
     public void postAsOwner()
     {
+        tv_community_owner.setTextColor(ContextCompat.getColor(getActivity(), R.color.red));
+        iv_community_owner.setAlpha(1.0f);
+
+        tv_community_anonomous.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey2));
+        tv_community_poster_user.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey2));
+        tv_community_poster_user.setAlpha(alpha);
+        iv_community_anonymous.setAlpha(alpha);
+        scroll_community_post.fullScroll(ScrollView.FOCUS_DOWN);
+
+        scroll_community_post.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
+
         mTv_community_post_submit.setText("POST AS OWNER");
         mTv_community_post_submit.setVisibility(View.VISIBLE);
+        mCreaterType="COMMUNITY_OWNER";
     }
     @OnClick(R.id.lnr_community_post2)
     public void postAsAnonomous()
     {
+        tv_community_anonomous.setTextColor(ContextCompat.getColor(getActivity(), R.color.red));
+        scroll_community_post.fullScroll(ScrollView.FOCUS_DOWN);
+        scroll_community_post.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
+        tv_community_owner.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey2));
+        tv_community_poster_user.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey2));
+        tv_community_poster_user.setAlpha(alpha);
+        iv_community_owner.setAlpha(alpha);
+        iv_community_anonymous.setAlpha(1.0f);
         mTv_community_post_submit.setText("POST AS ANONOMOUS");
         mTv_community_post_submit.setVisibility(View.VISIBLE);
+        mCreaterType="ANONYMOUS";
+
     }
     @OnClick(R.id.tv_close_community)
     public void onCloseClick()
@@ -257,8 +338,45 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
     @OnClick(R.id.tv_community_post_submit)
     public void communityPostSubmitClick()
     {
-        Toast.makeText(getActivity(),"Posted",Toast.LENGTH_LONG).show();
-        mCreatecommunityPostIntractionListner.onClose();
+        if(mCommunityId>0 && null !=mCreaterType && StringUtil.isNotNullOrEmptyString(mCreaterType) && null !=met_share_community_post_text.getText().toString()
+                && StringUtil.isNotNullOrEmptyString(met_share_community_post_text.getText().toString())) {
+            String mDescription = "";
+            List<String> imag = new ArrayList<>();
+
+            Toast.makeText(getActivity(), "Posted", Toast.LENGTH_LONG).show();
+
+            CommunityPostCreateRequest communityPostCreateRequest = new CommunityPostCreateRequest();
+            communityPostCreateRequest.setDeviceUniqueId("string");
+            communityPostCreateRequest.setAppVersion("string");
+            communityPostCreateRequest.setCloudMessagingId("string");
+            communityPostCreateRequest.setCommunityId(mCommunityId);
+            communityPostCreateRequest.setCreatorType(mCreaterType);
+
+            mDescription = met_share_community_post_text.getText().toString();
+
+            communityPostCreateRequest.setDescription(mDescription);
+            communityPostCreateRequest.setLastScreenName("string");
+            communityPostCreateRequest.setScreenName("string");
+            communityPostCreateRequest.setSource("string");
+
+            for (int i = 0; i < mImg.length; i++) {
+                if (null != mImg[i]) {
+                    Bitmap bitmap = ((BitmapDrawable) mImg[i].getDrawable()).getBitmap();
+                    byte[] buffer = new byte[4096];
+                    buffer = getBytesFromBitmap(bitmap);
+                    encCoverImage = Base64.encodeToString(buffer, Base64.DEFAULT);
+                    if (StringUtil.isNotNullOrEmptyString(encCoverImage)) {
+                        imag.add(encCoverImage);
+                    }
+                }
+            }
+
+            communityPostCreateRequest.setImages(imag);
+            createCommunityPresenter.postEditCommunityList(communityPostCreateRequest);
+
+        }
+        else
+            Toast.makeText(getActivity(),"Please fill all the details",Toast.LENGTH_LONG).show();
         /*Intent intent = new Intent(getActivity(), ShareCommunityActivity.class);
         startActivity(intent);*/
     }
@@ -266,7 +384,6 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
     public void onResume() {
         LogUtils.info("DEBUG", "onResume of LoginFragment");
         super.onResume();
-
     }
 
 
@@ -294,17 +411,54 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
     }
 
     @Override
-    public void onAddFriendSubmit(String communitynm,String logoimg) {
-        // Do stuff
-        mEtchoosecommunity.setText(communitynm);
+    public void onAddCommunityDetailSubmit(Docs docs) {
+        mEtchoosecommunity.setText(docs.getTitle());
 
-        mIvcommunity_post_icon.setCircularImage(true);
-        mIvcommunity_post_icon.bindImage(logoimg);
+        mCommunityId=Integer.parseInt(docs.getId());
+        String images = docs.getLogo();
+       mIvcommunity_post_icon.setCircularImage(true);
+        mIvcommunity_post_icon.bindImage(images);
+    }
+
+
+    @Override
+    public void getCreateCommunityResponse(LoginResponse loginResponse) {
 
     }
 
     @Override
-    public void getCreateCommunityResponse(LoginResponse loginResponse) {
+    public void getityCommunityListSuccess(List<CommunityList> data) {
+
+    }
+
+    @Override
+    public void getSelectedCommunityListSuccess(List<Docs> selected_community_response) {
+
+    }
+
+    @Override
+    public void getOwnerListSuccess(List<Member> ownerListResponse) {
+
+    }
+
+    @Override
+    public void postCreateCommunitySuccess(CreateCommunityResponse createCommunityResponse) {
+
+    }
+
+    @Override
+    public void addPostCreateCommunitySuccess(CommunityPostCreateResponse createCommunityResponse) {
+        mCreatecommunityPostIntractionListner.onClose();
+
+    }
+
+    @Override
+    public void getOwnerListDeactivateSuccess(DeactivateOwnerResponse deactivateOwnerResponse) {
+        LogUtils.error("Message",deactivateOwnerResponse.getStatus());
+    }
+
+    @Override
+    public void postCreateCommunityOwnerSuccess(CreateCommunityOwnerResponse createCommunityOwnerResponse) {
 
     }
 
@@ -608,11 +762,11 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
             return;
         } else {
             intent.setData(mImageCaptureUri);
-            intent.putExtra("outputX", 512);
+            /*intent.putExtra("outputX", 512);
             intent.putExtra("outputY", 512);
             intent.putExtra("aspectX", 1);
             intent.putExtra("aspectY", 1);
-            intent.putExtra("scale", true);
+            intent.putExtra("scale", true);*/
 
             //TODO: don't use return-data tag_item_ui_for_onboarding because it's not return large image data and crash not given any message
             //intent.putExtra("return-data", true);
@@ -641,7 +795,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
                 imageView.setImageBitmap(bmp);
                 imageView.setImageBitmap(bmp);
                 mVg_image_container.addView(imageView);
-                //  imageView3.setImageBitmap(bmp);
+                //  imageView.setImageBitmap(bmp);
             }
 
         }

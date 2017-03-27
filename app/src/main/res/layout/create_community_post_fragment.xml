@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scroll_community_post"
     android:layout_width="fill_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
@@ -20,7 +21,7 @@
             android:id="@+id/iv_community_post_icon"
             android:layout_width="60dp"
             android:layout_gravity="center"
-            android:padding="@dimen/dp_size_15"
+            android:padding="@dimen/dp_size_5"
 
             android:layout_height="60dp"
             android:layout_marginTop="@dimen/dp_size_45"
@@ -74,8 +75,8 @@
                 android:orientation="horizontal"
                 android:layout_marginRight="@dimen/dp_size_20"
 
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
 
                 />
         </HorizontalScrollView>
@@ -160,6 +161,7 @@
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:orientation="horizontal"
+        android:layout_gravity="center"
         android:layout_marginTop= "@dimen/dp_size_30"
         >
 
@@ -169,7 +171,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_marginLeft="@dimen/dp_size_37"
 
             android:orientation="vertical"
 
@@ -200,8 +201,9 @@
             android:id="@+id/lnr_community_post1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:gravity="center_horizontal"
+            android:layout_toRightOf="@+id/lnr_community_post"
+            android:layout_marginLeft="@dimen/dp_size_50"
+            android:gravity="center"
             android:orientation="vertical">
 
             <FrameLayout
@@ -224,15 +226,15 @@
                 android:textColor="@color/searchbox_text_color"
                 android:textSize="@dimen/sp_size_12" />
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/lnr_community_post2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
+            android:layout_toRightOf="@+id/lnr_community_post1"
+            android:layout_marginLeft="@dimen/dp_size_50"
+
             android:gravity="center"
-            android:layout_marginRight="@dimen/dp_size_37"
-            android:layout_marginEnd="@dimen/dp_size_37"
 
             android:orientation="vertical"
             >
@@ -260,6 +262,7 @@
                 android:textColor="@color/searchbox_text_color"
                 />
         </LinearLayout>
+
     </RelativeLayout>
 
 <TextView

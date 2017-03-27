@@ -15,6 +15,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllData;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
@@ -69,12 +70,12 @@ public class HomeModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-    public Observable<GetAllData> getTagFromModel(GetAllDataRequest getAllDataRequest){
+    public Observable<GetTagData> getTagFromModel(GetAllDataRequest getAllDataRequest){
         LogUtils.info(TAG,"TAG FRom*******************"+new Gson().toJson(getAllDataRequest));
         return sheroesAppServiceApi.getTagFromApi(getAllDataRequest)
-                .map(new Func1<GetAllData, GetAllData>() {
+                .map(new Func1<GetTagData, GetTagData>() {
                     @Override
-                    public GetAllData call(GetAllData getAllData) {
+                    public GetTagData call(GetTagData getAllData) {
                         return getAllData;
                     }
                 })

@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -18,7 +19,6 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.community.Member;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MembersList;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -47,6 +47,8 @@ public class AllMembersFragment extends BaseFragment implements AllMembersView {
     ProgressBar mProgressBar;
     @Bind(R.id.fmCommunityMembersClose)
     FrameLayout fmCommunityMembersClose;
+    @Bind(R.id.tv_member_count)
+    TextView tv_member_count;
     private FragmentOpen mFragmentOpen;
     private String mSearchDataName = AppConstants.EMPTY_STRING;
     private GenericRecyclerViewAdapter mAdapter;
@@ -135,6 +137,9 @@ public class AllMembersFragment extends BaseFragment implements AllMembersView {
     public void getAllMembers(List<MembersList> data) {
         mAdapter.setSheroesGenericListData(data);
         mAdapter.notifyDataSetChanged();
+        if(null !=data) {
+            tv_member_count.setText("(" + data.size() + ")");
+        }
     }
 
     @Override

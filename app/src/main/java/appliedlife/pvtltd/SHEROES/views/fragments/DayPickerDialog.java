@@ -15,10 +15,10 @@ import android.view.ViewGroup;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
-import java.util.Calendar;
 import java.lang.reflect.Field;
+import java.util.Calendar;
+
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 
 /**
@@ -35,6 +35,8 @@ public class DayPickerDialog extends DialogFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+    }
+   /* DayPickerDialog(OnboardingWorkExperience context) {
         try {
             if (context instanceof MyDayPickerListener) {
                 myDayPickerListener = (MyDayPickerListener) context;
@@ -44,6 +46,7 @@ public class DayPickerDialog extends DialogFragment {
         }
     }
 
+    }*/
     public void setListener(DatePickerDialog.OnDateSetListener listener) {
         this.listener = listener;
     }

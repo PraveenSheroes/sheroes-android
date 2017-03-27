@@ -7,9 +7,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.transition.Slide;
@@ -56,7 +60,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
-public class CommunitiesDetailActivity extends BaseActivity implements InviteFragmentListener,CommunityOwnerSearchFragment.InviteOwnerActivityIntractionListner, InviteCommunityOwner.InviteOwnerDoneIntractionListner,ShareCommunityFragment.ShareCommunityActivityIntractionListner, CommunityInviteSearchFragment.InviteSearchActivityIntractionListner, CommunityRequestedFragment.RequestHomeActivityIntractionListner, AllMembersFragment.MembersHomeActivityIntractionListner, CommunityOpenAboutFragment.AboutCommunityActivityIntractionListner, CommentReactionFragment.HomeActivityIntractionListner {
+public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemoveDialog.OwnerRemoveCloseListener,InviteFragmentListener,CommunityOwnerSearchFragment.InviteOwnerActivityIntractionListner, InviteCommunityOwner.InviteOwnerDoneIntractionListner,ShareCommunityFragment.ShareCommunityActivityIntractionListner, CommunityInviteSearchFragment.InviteSearchActivityIntractionListner, CommunityRequestedFragment.RequestHomeActivityIntractionListner, AllMembersFragment.MembersHomeActivityIntractionListner, CommunityOpenAboutFragment.AboutCommunityActivityIntractionListner, CommentReactionFragment.HomeActivityIntractionListner {
     private final String TAG = LogUtils.makeLogTag(CommunitiesDetailActivity.class);
     @Bind(R.id.app_bar_coomunities_detail)
     AppBarLayout mAppBarLayout;
@@ -79,6 +83,15 @@ public class CommunitiesDetailActivity extends BaseActivity implements InviteFra
     Long mcommunity_id;
     private CommunityOpenAboutFragment communityOpenAboutFragment;
 
+    public static void navigate(AppCompatActivity activity, View transitionImage, FeedDetail feedDetail) {
+        Intent intent = new Intent(activity, CommunitiesDetailActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, feedDetail);
+        intent.putExtras(bundle);
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, transitionImage, AppConstants.COMMUNITY_DETAIL);
+        ActivityCompat.startActivity(activity, intent, options.toBundle());
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,13 +101,16 @@ public class CommunitiesDetailActivity extends BaseActivity implements InviteFra
         initActivityTransitions();
         setContentView(R.layout.activity_communities_detail);
         ButterKnife.bind(this);
-        if (null != getIntent() && null != getIntent().getExtras()) {
+        if (null != getIntent()) {
             mFeedDetail = getIntent().getParcelableExtra(AppConstants.COMMUNITY_DETAIL);
         }
         setPagerAndLayouts();
     }
 
     private void setPagerAndLayouts() {
+        ViewCompat.setTransitionName(mAppBarLayout, AppConstants.COMMUNITY_DETAIL);
+        supportPostponeEnterTransition();
+
         setSupportActionBar(mToolbarCommunitiesDetail);
         mCollapsingToolbarLayout.setExpandedSubTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
         mCollapsingToolbarLayout.setExpandedTitleMarginStart(200);
@@ -105,7 +121,10 @@ public class CommunitiesDetailActivity extends BaseActivity implements InviteFra
             viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
             viewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(getIntent()), getString(R.string.ID_COMMUNITIES));
             mViewPagerCommunitiesDetail.setAdapter(viewPagerAdapter);
-           // mFeedDetail.setImageUrl("http://www.hotel-r.net/im/hotel/bg/paris-hotel-21.jpg");
+            if(StringUtil.isNotNullOrEmptyString(mFeedDetail.getImageUrl()))
+            {}
+            else
+                mFeedDetail.setImageUrl("http://www.hotel-r.net/im/hotel/bg/paris-hotel-21.jpg");
             if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getImageUrl())) {
                 Glide.with(this)
                         .load(mFeedDetail.getImageUrl()).asBitmap()
@@ -119,15 +138,15 @@ public class CommunitiesDetailActivity extends BaseActivity implements InviteFra
                                     public void onGenerated(Palette palette) {
                                         supportStartPostponedEnterTransition();
                                         // updateBackground(palette);
-                                        ivCommunitiesDetail.setImageDrawable(getResources().getDrawable(R.drawable.community));
-                                        updateBackground(mFloatingActionButton, palette);
+                                        // ivCommunitiesDetail.setImageDrawable(getResources().getDrawable(R.drawable.community));
+                                        // updateBackground(mFloatingActionButton, palette);
 
                                         supportStartPostponedEnterTransition();
                                     }
                                 });
                             }
                         });
-               /* Glide.with(this)
+                Glide.with(this)
                         .load(mFeedDetail.getThumbnailImageUrl()).asBitmap()
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                         .skipMemoryCache(true)
@@ -139,14 +158,14 @@ public class CommunitiesDetailActivity extends BaseActivity implements InviteFra
                                     public void onGenerated(Palette palette) {
                                         supportStartPostponedEnterTransition();
 
-                                        updateBackground(palette);
+                                        // updateBackground(palette);
                                     }
                                 });
                             }
-                        });*/
+                        });
 
             } else {
-                ivCommunitiesDetail.setImageDrawable(getResources().getDrawable(R.drawable.community));
+                //  ivCommunitiesDetail.setImageDrawable(getResources().getDrawable(R.drawable.community));
                 mFloatingActionButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_community_icon));
                 supportStartPostponedEnterTransition();
             }
@@ -179,9 +198,11 @@ public class CommunitiesDetailActivity extends BaseActivity implements InviteFra
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
         if (baseResponse instanceof FeedDetail) {
+
             communityDetailHandled(view, baseResponse);
         } else if (baseResponse instanceof OwnerList) {
             OwnerRemoveDialog newFragment = new OwnerRemoveDialog();
+            newFragment.setListener(this);
             newFragment.show(this.getFragmentManager(), getString(R.string.ID_DAILOG));
         } else if (baseResponse instanceof Member) {
             Member member = (Member) baseResponse;
@@ -190,6 +211,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements InviteFra
             bundleCommunity.putParcelable(AppConstants.MEMBER, member);
             bundleCommunity.putLong(AppConstants.COMMUNITY_DETAIL, mFeedDetail.getIdOfEntityOrParticipant());
             newFragment.setArguments(bundleCommunity);
+            newFragment.setListener(this);
 
             newFragment.show(this.getFragmentManager(), getString(R.string.ID_DAILOG));
         }
@@ -201,38 +223,38 @@ public class CommunitiesDetailActivity extends BaseActivity implements InviteFra
 
         int id = view.getId();
 
-            mFragment = viewPagerAdapter.getActiveFragment(mViewPagerCommunitiesDetail, AppConstants.NO_REACTION_CONSTANT);
-            setFragment(mFragment);
-            mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.THREE_CONSTANT);
-            setAllValues(mFragmentOpen);
-            super.feedCardsHandled(view, baseResponse);
-            switch (id) {
-                case R.id.card_community_detail:
-                    if (null != mFeedDetail) {
-                         communityOpenAboutFragment = new CommunityOpenAboutFragment();
-                        Bundle bundleCommunity = new Bundle();
-                        bundleCommunity.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
+        mFragment = viewPagerAdapter.getActiveFragment(mViewPagerCommunitiesDetail, AppConstants.NO_REACTION_CONSTANT);
+        setFragment(mFragment);
+        mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.THREE_CONSTANT);
+        setAllValues(mFragmentOpen);
+        super.feedCardsHandled(view, baseResponse);
+        switch (id) {
+            case R.id.card_community_detail:
+                if (null != mFeedDetail) {
+                    communityOpenAboutFragment = new CommunityOpenAboutFragment();
+                    Bundle bundleCommunity = new Bundle();
+                    bundleCommunity.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
 
-                        communityOpenAboutFragment.setArguments(bundleCommunity);
-                        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.bottom_to_top_slide_reverse_anim)
-                                .replace(R.id.about_community_container, communityOpenAboutFragment).addToBackStack(null).commitAllowingStateLoss();
-                    }
-                case R.id.tv_add_invite:
-                    if (null != baseResponse) {
+                    communityOpenAboutFragment.setArguments(bundleCommunity);
+                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.bottom_to_top_slide_reverse_anim)
+                            .replace(R.id.about_community_container, communityOpenAboutFragment,CommunityOpenAboutFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+                }
+            case R.id.tv_add_invite:
+                if (null != baseResponse) {
 
-                        muser_ids.add(((FeedDetail) baseResponse).getIdOfEntityOrParticipant());
-                        mcommunity_id = mFeedDetail.getIdOfEntityOrParticipant();
-                    }
-                    break;
-                case R.id.tv_owner_cross:
-                    if (baseResponse instanceof FeedDetail)
-                        CallCommunityOwnerSearchFragment((int) callAddOwner.getIdOfEntityOrParticipant());
-                    LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
+                    muser_ids.add(((FeedDetail) baseResponse).getIdOfEntityOrParticipant());
+                    mcommunity_id = mFeedDetail.getIdOfEntityOrParticipant();
+                }
+                break;
+            case R.id.tv_owner_cross:
+                if (baseResponse instanceof FeedDetail)
+                    CallCommunityOwnerSearchFragment((int) callAddOwner.getIdOfEntityOrParticipant());
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
 
-                    break;
-                default:
-                    LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
-            }
+                break;
+            default:
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
+        }
 
     }
     void CallCommunityOwnerSearchFragment(int id)
@@ -287,7 +309,9 @@ public class CommunitiesDetailActivity extends BaseActivity implements InviteFra
         CommunityRequestedFragment frag = new CommunityRequestedFragment();
         Bundle bundleCommunity = new Bundle();
         bundleCommunity.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
+
         frag.setArguments(bundleCommunity);
+
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.bottom_to_top_slide_reverse_anim)
                 .replace(R.id.about_community_container, frag).addToBackStack(null).commitAllowingStateLoss();
 
@@ -311,6 +335,14 @@ public class CommunitiesDetailActivity extends BaseActivity implements InviteFra
 
     @Override
     public void onErrorOccurence() {
+    }
+
+    @Override
+    public void onOwnerClose() {
+        final Fragment fragmentCommunityOwnerSearch = getSupportFragmentManager().findFragmentByTag(CommunityOpenAboutFragment.class.getName());
+        if (AppUtils.isFragmentUIActive(fragmentCommunityOwnerSearch)) {
+            ((CommunityOpenAboutFragment) fragmentCommunityOwnerSearch).callRemoveOwner(mFeedDetail.getIdOfEntityOrParticipant());
+        }
     }
 
     @Override
@@ -392,20 +424,13 @@ public class CommunitiesDetailActivity extends BaseActivity implements InviteFra
         mToolbarCommunitiesDetail.setVisibility(View.VISIBLE);
         mFloatingActionButton.setVisibility(View.VISIBLE);
         getSupportFragmentManager().popBackStack();
+
     }
 
     @OnClick(R.id.iv_community_detail_back)
     public void onBackClick() {
-        if (!mFeedDetail.isFromHome()) {
-            Intent intent = new Intent();
-            Bundle bundle = new Bundle();
-            bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, mFeedDetail);
-            intent.putExtras(bundle);
-            setResult(RESULT_OK, intent);
-        }
+        super.onBackPressed();
         if (communityOpenAboutFragment != null) communityOpenAboutFragment.dismissPopup();
-        finish();
-        overridePendingTransition(R.anim.fade_in_dialog, R.anim.fade_out_dialog);
     }
 
     @Override

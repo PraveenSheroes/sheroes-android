@@ -1,7 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -219,6 +218,7 @@ TextView textView;
     public void showNwError() {
 
     }
+
 
     @Override
     public void startProgressBar() {

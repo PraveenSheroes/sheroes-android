@@ -51,6 +51,10 @@ public class InviteMemberHolder extends BaseViewHolder<FeedDetail> {
         {
             tvCity.setText(dataItem.getCityName());
         }
+        String images = dataItem.getImageUrl();
+
+        ivCircleProfilePic.setCircularImage(true);
+        ivCircleProfilePic.bindImage(images);
     }
 
     @Override

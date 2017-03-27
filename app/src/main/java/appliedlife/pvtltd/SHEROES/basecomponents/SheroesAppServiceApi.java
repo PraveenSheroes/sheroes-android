@@ -5,6 +5,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerRequest;
@@ -16,11 +18,14 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerRespo
 import appliedlife.pvtltd.SHEROES.models.entities.community.EditCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllData;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MemberListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.RequestedListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.SelectCommunityRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.SelectedCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobApplyRequest;
@@ -95,8 +100,14 @@ public interface SheroesAppServiceApi {
     @POST("participant/community/create")
     Observable<CreateCommunityResponse> postCreateCommunity(@Body CreateCommunityRequest createCommunityRequest);
 
+    @POST("entity/master/suggest_community")
+    Observable<SelectedCommunityResponse> postCreateCommunity(@Body SelectCommunityRequest selectCommunityRequest);
+
     @POST("participant/community/edit")
     Observable<CreateCommunityResponse> postEditCommunity(@Body EditCommunityRequest editCommunityRequest);
+
+    @POST("participation/post/add")
+    Observable<CommunityPostCreateResponse> createCommunityPost(@Body CommunityPostCreateRequest communityPostCreateRequest);
 
     @POST("participant/community/create_owner")
     Observable<CreateCommunityOwnerResponse> postCreateCommunityOwner(@Body CreateCommunityOwnerRequest createCommunityOwnerRequest);
@@ -111,6 +122,7 @@ public interface SheroesAppServiceApi {
     @POST("participant/community/member_list")
     Observable<MemberListResponse> getMemberList(@Body MemberRequest membersList);
 
+
     @POST("participant/job/apply")
     Observable<JobApplyResponse> getJobApply(@Body JobApplyRequest jobApplyRequest);
 
@@ -118,7 +130,7 @@ public interface SheroesAppServiceApi {
     Observable<RequestedListResponse> getRequestList(@Body MemberRequest memberRequest);
 
     @POST("entity/master/get_data")
-    Observable<GetAllData> getTagFromApi(@Body GetAllDataRequest getAllDataRequest );
+    Observable<GetTagData> getTagFromApi(@Body GetAllDataRequest getAllDataRequest );
 
 
 

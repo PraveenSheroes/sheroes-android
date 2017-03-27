@@ -13,10 +13,12 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityType;
+import appliedlife.pvtltd.SHEROES.models.entities.community.PopularTag;
 
 /**
  * Created by Ajit Kumar on 17-01-2017.
@@ -25,17 +27,19 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityType;
 public class CommunityTypeAdapter extends BaseAdapter {
 
     Context mContext;
-    List<CommunityType> mRowItem;
+    //List<CommunityType> ;
+    //private List<PopularTag> mRowItem = new ArrayList<PopularTag>();
+    List<String> mRowItem = new ArrayList<>();
     String mItemsnm;
     View mListView;
     boolean mCheckState[];
     int mPos=-1,mFlag=0;
-String mCommunityType;
+    String mCommunityType;
     ViewHolder mHolder;
     TextView mDone;
     private CommunityTypeAdapterCallback mCallback;
 
-    public CommunityTypeAdapter(Context mContext, List<CommunityType> mRowItem, TextView done) {
+    public CommunityTypeAdapter(Context mContext, List<String> mRowItem, TextView done) {
 
         this.mContext = mContext;
         this.mRowItem = mRowItem;
@@ -79,7 +83,7 @@ String mCommunityType;
         final TextView tv_emloyee_branding,tv_customer_review,tv_associate_emloyee_engagement,tv_product_promotion;
 
         mHolder = new ViewHolder();
-        final CommunityType itm = mRowItem.get(position);
+        // final PopularTag itm = mRowItem.get(position);
         LayoutInflater layoutInflater = (LayoutInflater) mContext
                 .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         mListView = new View(mContext);
@@ -95,7 +99,7 @@ String mCommunityType;
             }
             else {
                 mListView.setBackgroundColor(Color.WHITE);
-               // holder.tvItemName.setTextColor((Color.parseColor("#000000")));
+                // holder.tvItemName.setTextColor((Color.parseColor("#000000")));
 
 
             }
@@ -162,27 +166,33 @@ String mCommunityType;
             mHolder = (ViewHolder) mListView.getTag();
 
         }
-        mItemsnm=itm.getItems();
-        mHolder.tvItemName.setText(mItemsnm);
+        mItemsnm=mRowItem.get(position);
+
+        // List<String> stringList=mRowItem.getBoardingDataList();
+
+
+        mHolder.tvItemName.setText(mRowItem.get(position));
+
+
         final TextView finalTvItemName = mHolder.tvItemName;
 
-        boolean isSelected = itm.getSelected();
+        boolean isSelected = false;
 
         if(position ==mPos) {
             mListView.setBackgroundColor((Color.parseColor("#f5f5f5")));
-           // tvItemName.setTextColor((Color.parseColor("#3949ab")));
+            // tvItemName.setTextColor((Color.parseColor("#3949ab")));
 
         }
         else {
             mListView.setBackgroundColor(Color.WHITE);
-           // holder.tvItemName.setTextColor((Color.parseColor("#000000")));
+            // holder.tvItemName.setTextColor((Color.parseColor("#000000")));
 
 
         }
         mDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // CommunityTypeFragment.doneClick();
+                // CommunityTypeFragment.doneClick();
                 mCallback.communityType(mCommunityType);
             }
         });
@@ -219,7 +229,7 @@ String mCommunityType;
         mHolder.tvItemName.setSelected(mCheckState[position]);
         if(mHolder.tvItemName.isSelected())
         {
-            mCommunityType=mRowItem.get(position).getItems().toString();
+            mCommunityType=mRowItem.get(position);
             mHolder.tvItemName.setTextColor((Color.parseColor("#3949ab")));
             mHolder.tvItemName.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
 

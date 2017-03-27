@@ -5,11 +5,15 @@ import com.google.gson.Gson;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.EditCommunityRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.SelectCommunityRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.SelectedCommunityResponse;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -43,6 +47,21 @@ public class CommunityModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+    public Observable<SelectedCommunityResponse> getSelectedFromModel(SelectCommunityRequest selectCommunityRequest){
+        LogUtils.error("Create Community req: ",gson.toJson(selectCommunityRequest));
+        return sheroesAppServiceApi.postCreateCommunity(selectCommunityRequest)
+                .map(new Func1<SelectedCommunityResponse, SelectedCommunityResponse>() {
+                    @Override
+                    public SelectedCommunityResponse call(SelectedCommunityResponse selectedCommunityResponse) {
+                        LogUtils.error("Create Community req: ",gson.toJson(selectedCommunityResponse));
+
+                        return selectedCommunityResponse;
+
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
     public Observable<CreateCommunityResponse> postEditCommunity(EditCommunityRequest editCommunityRequest){
         LogUtils.error("Edit Community req: ",gson.toJson(editCommunityRequest));
 
@@ -58,6 +77,22 @@ public class CommunityModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+    public Observable<CommunityPostCreateResponse> addPostCommunity(CommunityPostCreateRequest communityPostCreateRequest){
+        LogUtils.error("Edit Community req: ",gson.toJson(communityPostCreateRequest));
+
+        return sheroesAppServiceApi.createCommunityPost(communityPostCreateRequest)
+                .map(new Func1<CommunityPostCreateResponse, CommunityPostCreateResponse>() {
+                    @Override
+                    public CommunityPostCreateResponse call(CommunityPostCreateResponse communityTagsListResponse) {
+                        LogUtils.error("Edit Community res: ",gson.toJson(communityTagsListResponse));
+
+                        return communityTagsListResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
     public Observable<CreateCommunityOwnerResponse> postCreateCommunityOwner(CreateCommunityOwnerRequest createCommunityOwnerRequest){
         LogUtils.error("Create Community owner req: ",gson.toJson(createCommunityOwnerRequest));
 

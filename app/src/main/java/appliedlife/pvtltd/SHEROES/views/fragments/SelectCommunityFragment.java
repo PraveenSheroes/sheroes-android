@@ -20,15 +20,19 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityList;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
+import appliedlife.pvtltd.SHEROES.models.entities.community.Docs;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Member;
+import appliedlife.pvtltd.SHEROES.models.entities.community.SelectCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
+import appliedlife.pvtltd.SHEROES.presenters.CreateCommunityPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -43,7 +47,7 @@ import butterknife.ButterKnife;
  */
 public class SelectCommunityFragment extends BaseDialogFragment implements CommunityView, BaseHolderInterface, HomeView {
     @Inject
-    HomePresenter mHomePresenter;
+    CreateCommunityPresenter mHomePresenter;
     @Bind(R.id.rv_home_list)
     RecyclerView mRecyclerView;
     @Inject
@@ -58,9 +62,13 @@ public class SelectCommunityFragment extends BaseDialogFragment implements Commu
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
     }
 
 
+    public void setListener(MyDialogFragmentListener listener) {
+        this.mHomeActivityIntractionListner =  listener;
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -74,7 +82,12 @@ public class SelectCommunityFragment extends BaseDialogFragment implements Commu
         mAdapter = new GenericRecyclerViewAdapter(getActivity(), this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
-        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY_POST, 1));
+        SelectCommunityRequest selectCommunityRequest=new SelectCommunityRequest();
+        selectCommunityRequest.setAppVersion("string");
+        selectCommunityRequest.setCloudMessagingId("string");
+        selectCommunityRequest.setDeviceUniqueId("string");
+        selectCommunityRequest.setMasterDataType("skill");
+        mHomePresenter.getSelectCommunityFromPresenter(selectCommunityRequest);
 
         return v;
     }
@@ -87,12 +100,23 @@ public class SelectCommunityFragment extends BaseDialogFragment implements Commu
     }
 
     @Override
+    public void getSelectedCommunityListSuccess(List<Docs> selected_community_response) {
+        mAdapter.setSheroesGenericListData( selected_community_response);
+        mAdapter.setCallForRecycler(AppConstants.COMMUNITY_NAME_SUB_TYPE);
+        mAdapter.notifyDataSetChanged();
+    }
+    @Override
     public void getOwnerListSuccess(List<Member> ownerListResponse) {
 
     }
 
     @Override
     public void postCreateCommunitySuccess(CreateCommunityResponse createCommunityResponse) {
+
+    }
+
+    @Override
+    public void addPostCreateCommunitySuccess(CommunityPostCreateResponse createCommunityResponse) {
 
     }
 
@@ -120,12 +144,12 @@ public class SelectCommunityFragment extends BaseDialogFragment implements Commu
 
     @Override
     public void handleOnClick(BaseResponse sheroesListDataItem, View view) {
-        if (sheroesListDataItem instanceof CommunityList) {
-            CommunityList communityList = (CommunityList) sheroesListDataItem;
+        if (sheroesListDataItem instanceof Docs) {
+            Docs docs = (Docs) sheroesListDataItem;
             //  getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, getActivity().getIntent());
-            mHomeActivityIntractionListner.onAddFriendSubmit(communityList.getName(), communityList.getBackground());
+            mHomeActivityIntractionListner.onAddCommunityDetailSubmit(docs);
             //  getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, getActivity().getIntent());
-            mHomeActivityIntractionListner.onAddFriendSubmit(communityList.getName(),communityList.getBackground());
+           // mHomeActivityIntractionListner.onAddFriendSubmit(communityList.getName(),communityList.getBackground());
         }
         getActivity().getFragmentManager().popBackStack();
 
@@ -155,6 +179,8 @@ public class SelectCommunityFragment extends BaseDialogFragment implements Commu
         return null;
     }
 
+
+
     @Override
     public void startProgressBar() {
 
@@ -183,15 +209,14 @@ public class SelectCommunityFragment extends BaseDialogFragment implements Commu
     @Override
     public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
 
-        mAdapter.setSheroesGenericListData(feedDetailList);
-        mAdapter.setCallForRecycler(AppConstants.COMMUNITY_NAME_SUB_TYPE);
-        mAdapter.notifyDataSetChanged();
+
     }
 
     @Override
-    public void getTagListSuccess(List<GetAllDataDocument> feedDetailList) {
+    public void getTagListSuccess(List<Doc> feedDetailList) {
 
     }
+
 
     @Override
     public void getSuccessForAllResponse(String success, int successFrom) {
@@ -207,6 +232,6 @@ public class SelectCommunityFragment extends BaseDialogFragment implements Commu
     public interface MyDialogFragmentListener {
         void onErrorOccurence();
 
-        void onAddFriendSubmit(String communitynm, String image);
+        void onAddCommunityDetailSubmit(Docs docs);
     }
 }

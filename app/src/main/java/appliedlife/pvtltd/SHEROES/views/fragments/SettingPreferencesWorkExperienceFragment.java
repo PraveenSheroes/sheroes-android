@@ -278,6 +278,7 @@ public class SettingPreferencesWorkExperienceFragment extends BaseFragment imple
 
     }
 
+
     public interface Preferences_WorkexperienceFctivityLisIntractionListener {
 
         void onErrorOccurence();

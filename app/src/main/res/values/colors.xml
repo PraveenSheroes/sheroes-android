@@ -121,4 +121,6 @@
     <color name="image_upload_gallery_txt_color">#156167</color>
     <color name="camera_bg_start_color">#092E35</color>
     <color name="camera_bg_end_color">#15636A</color>
+    <color name="community_tag_color">#788189</color>
+
 </resources>

@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Singleton;
 
 import appliedlife.pvtltd.SHEROES.BuildConfig;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.preferences.GsonPreferenceAdapter;
@@ -115,7 +116,11 @@ public class SheroesAppModule {
         return rxSharedPreferences.getObject(AppConstants.SHEROES_AUTH_TOKEN, new GsonPreferenceAdapter<>(gson, LoginResponse.class));
     }
 
-
+    @Singleton
+    @Provides
+    public Preference<CreateCommunityRequest> provideCommunityPref(RxSharedPreferences rxSharedPreferences, Gson gson) {
+        return rxSharedPreferences.getObject(AppConstants.COMMUNITY_DETAIL, new GsonPreferenceAdapter<>(gson, CreateCommunityRequest.class));
+    }
     @Singleton
     @Provides
     public Preference<MasterDataResponse> provideSessionUserPref(RxSharedPreferences rxSharedPreferences, Gson gson) {

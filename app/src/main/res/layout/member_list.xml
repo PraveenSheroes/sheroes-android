@@ -7,7 +7,7 @@
         android:id="@+id/img1"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:layout_marginLeft="@dimen/dp_size_15"
 
         />
@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/img1"
         android:layout_marginLeft="18dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:textSize="@dimen/sp_size_13"
         android:layout_marginBottom="@dimen/dp_size_3"
         android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -30,22 +30,18 @@
         android:layout_toRightOf="@+id/img1"
         android:layout_marginLeft="18dp"
         android:text="Owner"
+        android:layout_marginTop="5dp"
+
 
         />
-    <TextView
-        android:id="@+id/tv_add_member"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="@dimen/dp_size_20"
-        android:background="@drawable/ic_cross" />
+
     <View
         android:layout_width="fill_parent"
         android:layout_height="@dimen/sp_size_1"
         android:layout_below="@+id/tv_member_city"
-        android:layout_marginTop="@dimen/dp_size_10"
+        android:layout_marginTop="@dimen/dp_size_2"
         android:layout_marginRight="@dimen/dp_size_13"
+
         android:layout_marginLeft="@dimen/dp_size_68"
         android:background="@color/grey2"/>
 </RelativeLayout>
