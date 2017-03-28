@@ -44,8 +44,8 @@ public class ProfileProfessionalBasicDetailsHolder extends BaseViewHolder<Profil
     TextView mTv_tot_language_value;
     BaseHolderInterface viewInterface;
     private ProfileViewList dataItem;
-    @Bind(R.id.tv_edit_basic_details)
-    TextView mTv_edit_basic_details;
+    @Bind(R.id.tv_professional_edit_basic_details)
+    TextView mTv_professional_edit_basic_details;
 
     public ProfileProfessionalBasicDetailsHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
@@ -61,7 +61,7 @@ public class ProfileProfessionalBasicDetailsHolder extends BaseViewHolder<Profil
     @Override
     public void bindData(ProfileViewList obj, Context context, int position) {
         this.dataItem = obj;
-        mTv_edit_basic_details.setOnClickListener(this);
+        mTv_professional_edit_basic_details.setOnClickListener(this);
         mTv_profile_basic_details.setText(dataItem.getTag());
         mTv_current_status.setText(dataItem.getItem1());
         mTv_current_status_value.setText(dataItem.getItem2());
@@ -85,9 +85,9 @@ public class ProfileProfessionalBasicDetailsHolder extends BaseViewHolder<Profil
 
         switch (view.getId()) {
 
-            case R.id.tv_edit_basic_details:
+            case R.id.tv_professional_edit_basic_details:
 
-                viewInterface.handleOnClick(this.dataItem,mTv_edit_basic_details);
+                viewInterface.handleOnClick(this.dataItem,mTv_professional_edit_basic_details);
                 break;
 
             default:

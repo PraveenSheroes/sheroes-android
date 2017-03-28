@@ -174,6 +174,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
             Snackbar.make(mEmailView, R.string.ID_APP_NAME, Snackbar.LENGTH_SHORT).show();
         } else {
             LoginManager.getInstance().logOut();
+
             mLoginActivityIntractionListner.onErrorOccurence(loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA));
         }
     }

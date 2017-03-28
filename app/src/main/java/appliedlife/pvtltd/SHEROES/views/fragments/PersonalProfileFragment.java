@@ -128,8 +128,9 @@ public class PersonalProfileFragment extends BaseFragment {
         personalprofile.setItem14("");
         personalprofileList.add(personalprofile);
 
+//currently this is not need
 
-        ProfilePersonalViewList personalprofile1=new ProfilePersonalViewList();
+       /* ProfilePersonalViewList personalprofile1=new ProfilePersonalViewList();
         personalprofile1.setId("2");
         personalprofile1.setTag("I Can Help With");
         personalprofile1.setItem1("Trends & Insights");
@@ -146,7 +147,7 @@ public class PersonalProfileFragment extends BaseFragment {
         personalprofile.setItem12("");
         personalprofile.setItem13("");
         personalprofile.setItem14("");
-        personalprofileList.add(personalprofile1);
+        personalprofileList.add(personalprofile1);*/
 
 
         ProfilePersonalViewList personalprofile2=new ProfilePersonalViewList();
@@ -172,8 +173,8 @@ public class PersonalProfileFragment extends BaseFragment {
         ProfilePersonalViewList personalprofile3=new ProfilePersonalViewList();
         personalprofile3.setId("4");
         personalprofile3.setTag("Basic Details");
-        personalprofile3.setItem1("Date of Birth");
-        personalprofile3.setItem2("11 JUL 1992");
+        //personalprofile3.setItem1("Date of Birth");
+       // personalprofile3.setItem2("11 JUL 1992");
         personalprofile3.setItem3("Current Location");
         personalprofile3.setItem4("Saket, Delhi, India");
         personalprofile3.setItem5("Hometown");

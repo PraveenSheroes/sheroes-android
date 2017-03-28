@@ -11,9 +11,13 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfilePersonalViewList;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.EditNameDialogListener;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
+import static com.facebook.login.widget.ProfilePictureView.TAG;
 
 /**
  * Created by priyanka on 19/02/17.
@@ -31,6 +35,8 @@ public class ProfileIAmInterestingInHolder extends BaseViewHolder<ProfilePersona
     TextView mTv_interesting_text3;
     @Bind(R.id.tv_interesting_text4)
     TextView mTv_interesting_text4;
+    @Bind(R.id.tv_add_interest_details)
+     TextView mTv_add_interest_details;
 
 
     BaseHolderInterface viewInterface;
@@ -54,8 +60,7 @@ public class ProfileIAmInterestingInHolder extends BaseViewHolder<ProfilePersona
     @Override
     public void bindData(ProfilePersonalViewList obj, Context context, int position) {
         this.dataItem = obj;
-        itemView.setOnClickListener(this);
-
+        mTv_add_interest_details.setOnClickListener(this);
         mTv_interesting_number.setText(dataItem.getTag());
         mTv_interesting_text1.setText(dataItem.getItem1());
         mTv_interesting_text2.setText(dataItem.getItem2());
@@ -73,8 +78,16 @@ public class ProfileIAmInterestingInHolder extends BaseViewHolder<ProfilePersona
     public void onClick(View view) {
         int id = Integer.parseInt(dataItem.getId());
 
-        //viewInterface.handleOnClick(this.dataItem,view);
+        switch (view.getId()) {
 
+            case R.id.tv_add_interest_details:
+
+                viewInterface.handleOnClick(this.dataItem,mTv_add_interest_details);
+                break;
+            default:
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + view.getId());
+        }
 
     }
-}
+    }
+

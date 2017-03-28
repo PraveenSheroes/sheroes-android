@@ -19,6 +19,7 @@ import butterknife.OnClick;
 
 /**
  * Created by priyanka on 01/03/17.
+ *  profile professional Add_education screen.
  */
 
 
@@ -26,6 +27,7 @@ public class ProfileAddEducationFragment extends BaseFragment {
 
     private final String TAG = LogUtils.makeLogTag(ProfileAddEducationFragment.class);
     private final String SCREEN_NAME = "Profile_add_education_screen";
+
     ProfileView profileViewlistener;
 
     private ProfileActivityIntractionListner mProfileActivityIntractionListner;
@@ -47,8 +49,7 @@ public class ProfileAddEducationFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
-
-       View view = inflater.inflate(R.layout.fragment_profile_education, container, false);
+        View view = inflater.inflate(R.layout.fragment_profile_education, container, false);
         ButterKnife.bind(this, view);
         return view;
 
@@ -84,7 +85,9 @@ public  void Onback_Click()
 
 
     public interface ProfileActivityIntractionListner {
+
         void onErrorOccurence(String errorMessage);
+
         void onLoginAuthToken();
     }
 

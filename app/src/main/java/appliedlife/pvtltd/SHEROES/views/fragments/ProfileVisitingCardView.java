@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,7 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
+import android.widget.Toast;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -19,10 +20,21 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import javax.inject.Inject;
+
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.EducationResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.PersonalBasicDetailsResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfessionalBasicDetailsResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCardResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfilePreferredWorkLocationResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTravelFlexibilityResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryResponse;
+import appliedlife.pvtltd.SHEROES.presenters.ProfilePersenter;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -31,7 +43,10 @@ import butterknife.OnClick;
  * Created by priyanka on 14/03/17.
  */
 
-public class ProfileVisitingCardView extends BaseFragment {
+
+
+
+public class ProfileVisitingCardView extends BaseFragment implements ProfileView{
 
     private final String TAG = LogUtils.makeLogTag(ProfileVisitingCardView.class);
     private final String SCREEN_NAME = "Profile_Visiting_card_screen";
@@ -41,13 +56,61 @@ public class ProfileVisitingCardView extends BaseFragment {
     float per = 0;
     @Bind(R.id.tv_download_visiting_card)
     TextView mTv_download_visiting_card;
+    @Bind(R.id.tv_edit_visiting_card)
+    TextView mTv_edit_visiting_card;
+    @Bind(R.id.tv_user_fullname)
+    TextView mTv_user_fullname;
+    @Bind(R.id.tv_designation)
+    TextView mTv_designation;
+    @Bind(R.id.tv_interesting_text1)
+    TextView mTv_interesting_text1;
+    @Bind(R.id.tv_interesting_text2)
+    TextView mTv_interesting_text2;
+    @Bind(R.id.tv_user_location)
+    TextView mTv_user_location;
+    @Bind(R.id.tv_mobile_no)
+    TextView mTv_mobile_no;
+    @Bind(R.id.tv_email_text)
+     TextView mTv_email_text;
+    @Bind(R.id.tv_user_address)
+     TextView mTv_user_address;
 
+
+
+    ProfileEditVisitingCardResponse profileEditVisitingCardResponse=new ProfileEditVisitingCardResponse();
+
+
+
+
+    ProfileView mProfileVisitingCardFragmentCallBack;
+    @Inject
+    ProfilePersenter mProfilePresenter;
+
+    @Override
+    public void onAttach(Context context) {
+
+
+        super.onAttach(context);
+        try {
+            if (getActivity() instanceof ProfileView) {
+
+                mProfileVisitingCardFragmentCallBack = (ProfileView) getActivity();
+
+            }
+
+        } catch (Exception e) {
+        }
+    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_profile_visiting_card, container, false);
         ButterKnife.bind(this, view);
+        mProfilePresenter.attachView(this);
+
+        mProfilePresenter.getEditVisitingCardDetailsAuthTokeInPresenter();
+
 
         return view;
     }
@@ -134,14 +197,115 @@ public class ProfileVisitingCardView extends BaseFragment {
         return file;
     }
 
+
+    @OnClick(R.id.tv_edit_visiting_card)
+
+  public void Edit_VisitingCard()
+
+  {
+
+     mProfileVisitingCardFragmentCallBack.visitingCardOpen(profileEditVisitingCardResponse);
+
+/*  ProfileEditVisitingCardFragment profileVisitingCardView= new ProfileEditVisitingCardFragment();
+      Bundle bundleProfileVisitingCardFragment = new Bundle();
+      ButterKnife.bind(getActivity());
+
+      profileVisitingCardView.setArguments(bundleProfileVisitingCardFragment);
+      getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
+              .replace(R.id.profile_container, profileVisitingCardView, ProfileVisitingCardView.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+
+*/
+      /*
+      Intent myIntent = new Intent(getActivity(), ProfileEditVisitingCardFragment.class);
+      startActivity(myIntent);*/
+
+
+  }
+
+
+
     @OnClick(R.id.tv_download_visiting_card)
+
     protected  void  ClickOnTexview()
     {
 
-      downloadAndOpenPDF();
+     // downloadAndOpenPDF();
       /*Intent myIntent = new Intent(getActivity(), VisitingCardActivity.class);
       startActivity(myIntent);*/
 
     }
 
+    @Override
+    public void backListener(int id) {
+
+    }
+
+    @Override
+    public void visitingCardOpen(ProfileEditVisitingCardResponse profileEditVisitingCardResponse) {
+
+    }
+
+    @Override
+    public void callFragment(int id) {
+
+    }
+
+    @Override
+    public void getEducationResponse(EducationResponse educationResponse) {
+
+    }
+
+    @Override
+    public void getPersonalBasicDetailsResponse(PersonalBasicDetailsResponse personalBasicDetailsResponse) {
+
+    }
+
+    @Override
+    public void getprofiletracelflexibilityResponse(ProfileTravelFlexibilityResponse profileTravelFlexibilityResponse) {
+
+    }
+
+    @Override
+    public void getUserSummaryResponse(UserSummaryResponse userSummaryResponse) {
+
+    }
+
+    @Override
+    public void getProfessionalBasicDetailsResponse(ProfessionalBasicDetailsResponse professionalBasicDetailsResponse) {
+
+    }
+
+    @Override
+    public void getProfessionalWorkLocationResponse(ProfilePreferredWorkLocationResponse profilePreferredWorkLocationResponse) {
+
+    }
+
+    @Override
+    public void getProfileVisitingCardResponse(ProfileEditVisitingCardResponse profileEditVisitingCardResponse) {
+
+
+        profileEditVisitingCardResponse.getFirstName();
+        profileEditVisitingCardResponse.getLastName();
+        profileEditVisitingCardResponse.getEmailid();
+        profileEditVisitingCardResponse.getAboutMe();
+        profileEditVisitingCardResponse.getMobile();
+        profileEditVisitingCardResponse.getCurrentCompany();
+        profileEditVisitingCardResponse.getCurrentDesignation();
+
+        mTv_user_fullname.setText(profileEditVisitingCardResponse.getFirstName()+" "+ profileEditVisitingCardResponse.getLastName());
+        mTv_mobile_no.setText(profileEditVisitingCardResponse.getMobile());
+        mTv_designation.setText(profileEditVisitingCardResponse.getCurrentDesignation());
+        mTv_user_address.setText(profileEditVisitingCardResponse.getCurrentDesignation());
+        mTv_user_location.setText(profileEditVisitingCardResponse.getCurrentLocation());
+        mTv_email_text.setText(profileEditVisitingCardResponse.getEmailid());
+
+
+        this.profileEditVisitingCardResponse=profileEditVisitingCardResponse;
+
+
+
+
+
+
+    }
 }

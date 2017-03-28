@@ -19,11 +19,52 @@
             android:layout_height="@dimen/dp_size_65"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-            <include
-                layout="@layout/setting_header"
+         <!--   <include
+                layout="@layout/profile_header_section"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start|top" />
+                android:layout_gravity="start|top" />-->
+
+
+
+
+            <ImageView
+                android:id="@+id/iv_back_visiting_card"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:padding="@dimen/dp_size_15"
+                android:layout_gravity="center|left"
+                android:background="@drawable/header_backimage"
+                android:src="@drawable/ic_back_white"/>
+
+            <TextView
+                android:id="@+id/tv_profile_tittle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@string/ID_ROBOTO_BOLD"
+                android:drawablePadding="@dimen/dp_size_12"
+                android:textAllCaps="true"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:layerType="software"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp_size_19"
+                />
+
+            <TextView
+                android:id="@+id/tv_profile_tittle1"
+                android:layout_below="@+id/tv_setting_tittle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_size_25"
+                android:fontFamily="@string/ID_ROBOTO_LIGHT"
+                android:layout_centerHorizontal="true"
+                android:layerType="software"
+                android:textColor="@color/text_color_setting_header"
+                android:textSize="@dimen/sp_size_14"
+                android:layout_marginBottom="@dimen/dp_size_7"
+                />
 
         </android.support.v7.widget.Toolbar>
 
@@ -61,7 +102,9 @@
         android:id="@+id/et_first_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
             <EditText
+            android:id="@+id/et_visiting_first_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
@@ -94,7 +137,7 @@
 
 
         <EditText
-            android:id="@+id/et_last_name"
+            android:id="@+id/et_visiting_last_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
@@ -119,6 +162,8 @@
         android:paddingLeft="@dimen/dp_size_16"
         android:layout_height="wrap_content">
         <EditText
+
+            android:id="@+id/et_visiting_mobile_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
@@ -150,6 +195,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <EditText
+            android:id="@+id/et_visiting_email_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
@@ -170,6 +216,7 @@
         android:layout_height="wrap_content">
 
         <EditText
+            android:id="@+id/et_visiting_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
@@ -196,7 +243,7 @@
         android:paddingLeft="@dimen/dp_size_16">
 
         <EditText
-            android:id="@+id/et_degree"
+            android:id="@+id/et_visiting_degree"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
@@ -245,6 +292,7 @@
         android:paddingLeft="@dimen/dp_size_16"
         android:layout_height="wrap_content">
         <EditText
+            android:id="@+id/et_visiting_designation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
@@ -263,7 +311,7 @@
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/et_company_name"
+            android:id="@+id/et_visiting_company_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
@@ -297,6 +345,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <EditText
+            android:id="@+id/et_visiting_goot_at"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
@@ -344,6 +393,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:background="@color/grey2"
         android:text="@string/ID_SUBMIT"
         android:textColor="@color/white"
         android:fontFamily="@string/ID_ROBOTO_MEDIUM"

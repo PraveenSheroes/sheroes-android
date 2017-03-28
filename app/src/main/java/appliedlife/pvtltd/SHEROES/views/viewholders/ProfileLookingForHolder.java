@@ -11,9 +11,13 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfilePersonalViewList;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.EditNameDialogListener;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
+import static com.facebook.login.widget.ProfilePictureView.TAG;
 
 /**
  * Created by priyanka on 17/02/17.
@@ -28,6 +32,8 @@ public class ProfileLookingForHolder extends BaseViewHolder<ProfilePersonalViewL
     TextView mTv_lookingfor_text2;
     @Bind(R.id.tv_looking_more)
     TextView mTv_looking_more;
+    @Bind(R.id.tv_looking_for)
+     TextView mTv_looking_for;
     BaseHolderInterface viewInterface;
 
     private ProfilePersonalViewList dataItem;
@@ -51,8 +57,7 @@ public class ProfileLookingForHolder extends BaseViewHolder<ProfilePersonalViewL
     public void bindData(ProfilePersonalViewList obj, Context context, int position) {
 
         this.dataItem = obj;
-        itemView.setOnClickListener(this);
-
+        mTv_looking_for.setOnClickListener(this);
         mTv_lookinfor_number.setText(dataItem.getTag());
         mTv_lookingfor_text1.setText(dataItem.getItem1());
         mTv_lookingfor_text2.setText(dataItem.getItem2());
@@ -68,8 +73,15 @@ public class ProfileLookingForHolder extends BaseViewHolder<ProfilePersonalViewL
     @Override
     public void onClick(View view) {
 
-       // viewInterface.handleOnClick(this.dataItem,view);
+        switch (view.getId()) {
 
+            case R.id.tv_looking_for:
+
+                viewInterface.handleOnClick(this.dataItem,mTv_looking_for);
+                break;
+            default:
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + view.getId());
+        }
 
     }
 }

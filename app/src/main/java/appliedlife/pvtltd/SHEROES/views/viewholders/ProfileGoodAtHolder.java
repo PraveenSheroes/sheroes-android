@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.HashMap;
@@ -11,9 +12,13 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileViewList;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.EditNameDialogListener;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
+import static com.facebook.GraphRequest.TAG;
 
 /**
  * Created by priyanka on 15-02-2017.
@@ -30,6 +35,8 @@ public class ProfileGoodAtHolder extends BaseViewHolder<ProfileViewList> {
     TextView mTv_interesting_text3;
     @Bind(R.id.tv_interesting_text4)
     TextView mTv_interesting_text4;
+    @Bind(R.id.tv_add_good_at)
+    TextView mTv_add_good_at;
     BaseHolderInterface viewInterface;
     private ProfileViewList dataItem;
 
@@ -50,8 +57,7 @@ public class ProfileGoodAtHolder extends BaseViewHolder<ProfileViewList> {
     @Override
     public void bindData(ProfileViewList obj, Context context, int position) {
         this.dataItem = obj;
-        itemView.setOnClickListener(this);
-
+        mTv_add_good_at.setOnClickListener(this);
         mTv_interesting_number.setText(dataItem.getTag());
         mTv_interesting_text1.setText(dataItem.getItem1());
         mTv_interesting_text2.setText(dataItem.getItem2());
@@ -68,7 +74,19 @@ public class ProfileGoodAtHolder extends BaseViewHolder<ProfileViewList> {
     @Override
     public void onClick(View view) {
 
-       // viewInterface.handleOnClick(this.dataItem,view);
+
+
+        switch (view.getId()) {
+
+            case R.id.tv_add_good_at:
+
+                viewInterface.handleOnClick(this.dataItem,mTv_add_good_at);
+                break;
+            default:
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + view.getId());
+        }
+
+
 
 
     }

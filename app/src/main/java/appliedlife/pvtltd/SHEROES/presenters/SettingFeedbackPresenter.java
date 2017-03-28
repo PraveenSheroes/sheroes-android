@@ -102,6 +102,7 @@ public class SettingFeedbackPresenter extends BasePresenter<SettingFeedbackView>
     public void getUserRatingAuthTokeInPresenter(SettingRatingRequest ratingRequest) {
 
         if (!NetworkUtil.isConnected(sheroesApplication)) {
+
             getMvpView().showNwError();
             return;
         }
@@ -245,16 +246,6 @@ public class SettingFeedbackPresenter extends BasePresenter<SettingFeedbackView>
         });
         registerSubscription(subscription);
     }
-
-
-
-
-
-
-
-
-
-
 
     public void onStop() {
 

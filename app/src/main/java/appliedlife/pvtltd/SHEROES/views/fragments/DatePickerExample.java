@@ -31,6 +31,8 @@ public class DatePickerExample extends DialogFragment {
     private OnDateSetListener listener;
     private Context mContext;
     public void setListener(OnDateSetListener listener) {
+
+
         this.listener = listener;
     }
     @Override

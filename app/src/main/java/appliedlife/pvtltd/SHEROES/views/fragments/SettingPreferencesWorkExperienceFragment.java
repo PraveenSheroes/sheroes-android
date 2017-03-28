@@ -94,7 +94,7 @@ public class SettingPreferencesWorkExperienceFragment extends BaseFragment imple
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_setting_preferences_workexperience, container, false);
         ButterKnife.bind(this, view);
-        mTv_setting_tittle.setText(R.string.ID_WORKEXPERIENCEDETAILS);
+        mTv_setting_tittle.setText(R.string.ID_WORK_EXPERIENCE);
         mTv_setting_tittle1.setText(R.string.ID_PREFERENCES);
         mTv_setting_tittle.setTextSize(14);
         mTv_setting_tittle1.setTextSize(12);
@@ -140,15 +140,14 @@ public class SettingPreferencesWorkExperienceFragment extends BaseFragment imple
 
                         }
 
-
                     }
-
 
                 }
 
             }
-
         }
+
+
         AdapterView.OnItemSelectedListener countrySelectedListener = new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> spinner, View container,

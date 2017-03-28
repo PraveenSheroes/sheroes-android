@@ -97,8 +97,8 @@ public class ProfilePersonalBasicDetailsHolder extends BaseViewHolder<ProfilePer
 
         this.dataItem = obj;
         mTv_edit_basic_details.setOnClickListener(this);
-        MTv_date_of_birth.setVisibility(View.VISIBLE);
-        mTv_date_of_birth_value.setVisibility(View.VISIBLE);
+      //  MTv_date_of_birth.setVisibility(View.VISIBLE);
+       // mTv_date_of_birth_value.setVisibility(View.VISIBLE);
         mTv_current_location.setVisibility(View.VISIBLE);
         mTv_current_location_value.setVisibility(View.VISIBLE);
         mTv_home_town.setVisibility(View.VISIBLE);
@@ -112,8 +112,8 @@ public class ProfilePersonalBasicDetailsHolder extends BaseViewHolder<ProfilePer
         mTv_child_no.setVisibility(View.VISIBLE);
         mTv_child_value.setVisibility(View.VISIBLE);
         mTv_profile_basic_details.setText(dataItem.getTag());
-        MTv_date_of_birth.setText(dataItem.getItem1());
-        mTv_date_of_birth_value.setText(dataItem.getItem2());
+        //MTv_date_of_birth.setText(dataItem.getItem1());
+        //mTv_date_of_birth_value.setText(dataItem.getItem2());
         mTv_current_location.setText(dataItem.getItem3());
         mTv_current_location_value.setText(dataItem.getItem4());
         mTv_home_town.setText(dataItem.getItem5());
@@ -148,6 +148,7 @@ public class ProfilePersonalBasicDetailsHolder extends BaseViewHolder<ProfilePer
     public void onClick(View view) {
 
         switch (view.getId()) {
+
             case R.id.tv_edit_basic_details:
                 viewInterface.handleOnClick(this.dataItem,mTv_edit_basic_details);
                 break;

@@ -2,6 +2,8 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -14,12 +16,22 @@ import com.f2prateek.rx.preferences.Preference;
 
 import javax.inject.Inject;
 
+import com.f2prateek.rx.preferences.Preference;
+
+import javax.inject.Inject;
+
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.activities.LoginActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.LoginActivity;
+import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 

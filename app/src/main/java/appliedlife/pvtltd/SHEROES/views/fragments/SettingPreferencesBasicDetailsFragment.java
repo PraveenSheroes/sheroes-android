@@ -117,10 +117,13 @@ public class SettingPreferencesBasicDetailsFragment extends BaseFragment impleme
 
         if (null != getArguments()) {
 
+
             strtext = getArguments().getString("Section list_value");
             Gson gson = new Gson();
             Type type = new TypeToken<List<Section>>() {
             }.getType();
+
+
             sectionList = gson.fromJson(strtext, type);
 
             if (null != sectionList) {

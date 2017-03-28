@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import javax.inject.Inject;
 
@@ -148,13 +149,14 @@ public class SettingFeedbackFragment extends BaseFragment implements SettingFeed
         ratingRequest.setScreenName("string");
         mSettingFeedbackPresenter.getUserRatingAuthTokeInPresenter(ratingRequest);
 
+        Toast.makeText(getActivity(),"Thankyou for Rating us", Toast.LENGTH_LONG).show();
+
 
     }
 
     private void userfeedback() {
 
         // Store values at the time of the User_feedback btn attempt.
-
         SettingFeedbackRequest feedbackRequest = new SettingFeedbackRequest();
         feedbackRequest.setAppVersion("string");
         feedbackRequest.setCloudMessagingId("string");
@@ -164,7 +166,11 @@ public class SettingFeedbackFragment extends BaseFragment implements SettingFeed
         feedbackRequest.setScreenName("string");
         mSettingFeedbackPresenter.getFeedbackAuthTokeInPresenter(feedbackRequest);
 
-    }
+       }
+
+
+
+
 
     @OnClick(R.id.preferences_deactiveaccount_button)
 
@@ -173,15 +179,18 @@ public class SettingFeedbackFragment extends BaseFragment implements SettingFeed
 
         feebackvalue = mEt_write_comment.getText().toString();
 
-        if (StringUtil.isNotNullOrEmptyString(feebackvalue)) {
+        if (StringUtil.isNotNullOrEmptyString(feebackvalue) && feebackvalue.length() > 10 ) {
             userfeedback();
             Intent intent = new Intent(getActivity(), Feedback_ThankyouActivity.class);
             startActivity(intent);
 
         } else {
 
+            Toast.makeText(getActivity(),"Your message is too short", Toast.LENGTH_LONG).show();
+
+/*
             Intent intent = new Intent(getActivity(), Feedback_ThankyouActivity.class);
-            startActivity(intent);
+            startActivity(intent);*/
 
         }
 

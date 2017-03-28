@@ -52,8 +52,10 @@ import butterknife.OnClick;
  */
 public class HomeFragment extends BaseFragment {
     private final String TAG = LogUtils.makeLogTag(HomeFragment.class);
+
     @Inject
     Preference<LoginResponse> mUserPreference;
+
     @Inject
     HomePresenter mHomePresenter;
     @Bind(R.id.rv_home_list)
@@ -125,6 +127,8 @@ public class HomeFragment extends BaseFragment {
                 }
             }
         });
+
+
         super.setAllInitializationForFeeds(mFragmentListRefreshData, mPullRefreshList, mAdapter, mLayoutManager, mPageNo, mSwipeView, mLiNoResult, mFeedDetail, mRecyclerView, mPosition, mPressedEmoji, mListLoad, mIsEdit, mHomePresenter, mAppUtils, mProgressBar);
         if (null == mUserPreference || !StringUtil.isNotNullOrEmptyString(mUserPreference.get().getToken())) {
             Intent intent = new Intent(getActivity(), LoginActivity.class);
@@ -203,6 +207,7 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     public void getLogInResponse(LoginResponse loginResponse) {
+
         if (null != loginResponse && StringUtil.isNotNullOrEmptyString(loginResponse.getToken())) {
             loginResponse.setTokenTime(System.currentTimeMillis());
             loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);

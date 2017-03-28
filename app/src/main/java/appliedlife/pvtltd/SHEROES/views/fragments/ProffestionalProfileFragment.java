@@ -184,7 +184,7 @@ public class ProffestionalProfileFragment extends BaseFragment {
         listProfile4.setItem10("");
         profileList.add(listProfile4);
 
-        ProfileViewList listProfile5=new ProfileViewList();
+       /* ProfileViewList listProfile5=new ProfileViewList();
         listProfile5.setId("6");
         listProfile5.setTag("OTHER");
         listProfile5.setItem1("");
@@ -197,7 +197,7 @@ public class ProffestionalProfileFragment extends BaseFragment {
         listProfile5.setItem8("");
         listProfile5.setItem9("");
         listProfile5.setItem10("");
-        profileList.add(listProfile5);
+        profileList.add(listProfile5);*/
 
 
 

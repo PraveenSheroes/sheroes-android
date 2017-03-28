@@ -77,6 +77,7 @@ public class AppConstants {
     public static final String ARTICLE_DETAIL = "article_detail";
     public static final String HOW_SHEROES_CAN_HELP = "how_can_sheroes";
     public static final String YOUR_INTEREST = "your_interest";
+    public static final String INTEREST = "INTEREST";
     public static final String JOB_AT = "job_at";
     public static final String JOB_DETAIL = "job_detail";
     public static final String COMMUNITY_DETAIL = "community_detail";
@@ -120,6 +121,8 @@ public class AppConstants {
     public static final String INTEREST_GET_ALL_DATA_KEY = "interest";
     public static final String JOB_AT_GET_ALL_DATA_KEY = "skill";
 /**/
+
+    public static final String MASTER_DATA_OPRTUNITY = "Opportunities"; // on second map lavele key
 
     public static final String MASTER_DATA_DEFAULT_CATEGORY = "DEFAULT"; // on second map lavele key
     public static final String DAY = " day";

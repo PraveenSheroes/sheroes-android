@@ -1,10 +1,8 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.TextView;
-import javax.inject.Inject;
+
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -22,8 +20,7 @@ public class Feedback_ThankyouActivity extends BaseActivity
 {
     private final String TAG = LogUtils.makeLogTag(Feedback_ThankyouActivity.class);
     @Bind(R.id.tv_setting_tittle)
-    TextView mtv_terms;
-
+    TextView mTv_terms;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -31,13 +28,13 @@ public class Feedback_ThankyouActivity extends BaseActivity
         SheroesApplication.getAppComponent(this).inject(this);
         setContentView(R.layout.setting_feedback_thankyou);
         ButterKnife.bind(this);
-        mtv_terms.setText(R.string.ID_FEEDBACK);
+        mTv_terms.setText(R.string.ID_FEEDBACK);
 
     }
 
-
     @OnClick(R.id.iv_back_setting)
     public void onbacklick() {
+
         finish();
     }
 

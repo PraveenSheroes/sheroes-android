@@ -26,16 +26,17 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
@@ -44,13 +45,20 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.EducationResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.PersonalBasicDetailsResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfessionalBasicDetailsResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCardResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileHorList;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfilePersonalViewList;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfilePreferredWorkLocationResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTravelFlexibilityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileViewList;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView;
+import appliedlife.pvtltd.SHEROES.views.fragments.PersonalBasicDetailsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.PersonalProfileFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfessionalEditBasicDetailsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProffestionalProfileFragment;
@@ -58,7 +66,11 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ProfileAboutMeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileAddEducationFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileAddOtherFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileCityWorkFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProfileEditVisitingCardFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProfileGoodAtFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProfileOpportunityTypeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileOtherFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProfileShareYourIntrestFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileTravelClientFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileVisitingCardView;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileWorkExperienceFragment;
@@ -239,11 +251,6 @@ public class ProfileActicity extends BaseActivity implements ProfileView,BaseHol
     public void startActivityFromHolder(Intent intent) {
 
     }
-
-
-
-
-
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
 
@@ -356,6 +363,7 @@ public class ProfileActicity extends BaseActivity implements ProfileView,BaseHol
             case R.id.tv_download_my_card:
 
                 flprofile_container.setVisibility(View.VISIBLE);
+
                 ProfileVisitingCardView profileVisitingCardView= new ProfileVisitingCardView();
                 Bundle bundleProfileVisitingCardFragment = new Bundle();
                 ButterKnife.bind(this);
@@ -363,6 +371,42 @@ public class ProfileActicity extends BaseActivity implements ProfileView,BaseHol
                 getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
                         .replace(R.id.profile_container, profileVisitingCardView, ProfileVisitingCardView.class.getName()).addToBackStack(null).commitAllowingStateLoss();
 
+                break;
+
+
+            case R.id.tv_edit_basic_details:
+
+                flprofile_container.setVisibility(View.VISIBLE);
+                PersonalBasicDetailsFragment personalBasicDetailsFragment= new PersonalBasicDetailsFragment();
+                Bundle bundlePersonalBasicDetailsFragment = new Bundle();
+                ButterKnife.bind(this);
+                personalBasicDetailsFragment.setArguments(bundlePersonalBasicDetailsFragment);
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
+                        .replace(R.id.profile_container, personalBasicDetailsFragment, PersonalBasicDetailsFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+                break;
+
+
+
+            case R.id.tv_add_good_at:
+                flprofile_container.setVisibility(View.VISIBLE);
+                ProfileGoodAtFragment profileGoodAtFragment= new ProfileGoodAtFragment();
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
+                        .replace(R.id.profile_container, profileGoodAtFragment, ProfileGoodAtFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+                break;
+
+            case R.id.tv_looking_for:
+                flprofile_container.setVisibility(View.VISIBLE);
+                ProfileOpportunityTypeFragment profileOpportunityTypeFragment= new ProfileOpportunityTypeFragment();
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
+                        .replace(R.id.profile_container, profileOpportunityTypeFragment, ProfileOpportunityTypeFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+                break;
+
+
+            case R.id.tv_add_interest_details:
+                flprofile_container.setVisibility(View.VISIBLE);
+                ProfileShareYourIntrestFragment profileShareYourIntrestFragment= new ProfileShareYourIntrestFragment();
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
+                        .replace(R.id.profile_container, profileShareYourIntrestFragment, ProfileShareYourIntrestFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
                 break;
 
             default:
@@ -420,10 +464,53 @@ public class ProfileActicity extends BaseActivity implements ProfileView,BaseHol
         overridePendingTransition(R.anim.top_to_bottom_exit, R.anim.top_bottom_exit_anim);
     }
 
+
+
+
     @Override
     public void backListener(int id) {
 
-        getSupportFragmentManager().popBackStack();
+
+ /*       switch (id) {
+
+            case R.id.tv_edit_visiting_card:
+
+                Toast.makeText(getApplicationContext(), "click_button", Toast.LENGTH_SHORT).show();
+                flprofile_container.setVisibility(View.VISIBLE);
+
+                ProfileEditVisitingCardFragment profileEditVisitingCardFragment= new ProfileEditVisitingCardFragment();
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
+                        .replace(R.id.profile_container, profileEditVisitingCardFragment, ProfileEditVisitingCardFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+                break;
+
+            default:
+
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
+
+        }*/
+
+
+        //   getSupportFragmentManager().popBackStack();
+
+    }
+
+    @Override
+    public void visitingCardOpen(ProfileEditVisitingCardResponse profileEditVisitingCardResponse) {
+
+
+
+        flprofile_container.setVisibility(View.VISIBLE);
+
+        Gson gson1 = new Gson();
+        String jsonSections1 = gson1.toJson(profileEditVisitingCardResponse);
+        Bundle bundle1 = new Bundle();
+        bundle1.putString("user_visiting_card_value", jsonSections1);
+
+        ProfileEditVisitingCardFragment profileEditVisitingCardFragment= new ProfileEditVisitingCardFragment();
+        profileEditVisitingCardFragment.setArguments(bundle1);
+        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
+                .replace(R.id.profile_container, profileEditVisitingCardFragment, ProfileEditVisitingCardFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+
 
     }
 
@@ -450,13 +537,42 @@ public class ProfileActicity extends BaseActivity implements ProfileView,BaseHol
                         .replace(R.id.profile_container, profileEditOtherFragment, ProfileAddOtherFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
                 break;
 
-
         }
 
     }
 
     @Override
     public void getEducationResponse(EducationResponse educationResponse) {
+
+    }
+
+    @Override
+    public void getPersonalBasicDetailsResponse(PersonalBasicDetailsResponse personalBasicDetailsResponse) {
+
+    }
+
+    @Override
+    public void getprofiletracelflexibilityResponse(ProfileTravelFlexibilityResponse profileTravelFlexibilityResponse) {
+
+    }
+
+    @Override
+    public void getUserSummaryResponse(UserSummaryResponse userSummaryResponse) {
+
+    }
+
+    @Override
+    public void getProfessionalBasicDetailsResponse(ProfessionalBasicDetailsResponse professionalBasicDetailsResponse) {
+
+    }
+
+    @Override
+    public void getProfessionalWorkLocationResponse(ProfilePreferredWorkLocationResponse profilePreferredWorkLocationResponse) {
+
+    }
+
+    @Override
+    public void getProfileVisitingCardResponse(ProfileEditVisitingCardResponse profileEditVisitingCardResponse) {
 
     }
 

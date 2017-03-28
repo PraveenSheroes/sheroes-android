@@ -121,12 +121,13 @@ public class SheroesAppModule {
     public Preference<CreateCommunityRequest> provideCommunityPref(RxSharedPreferences rxSharedPreferences, Gson gson) {
         return rxSharedPreferences.getObject(AppConstants.COMMUNITY_DETAIL, new GsonPreferenceAdapter<>(gson, CreateCommunityRequest.class));
     }
+
+
     @Singleton
     @Provides
     public Preference<MasterDataResponse> provideSessionUserPref(RxSharedPreferences rxSharedPreferences, Gson gson) {
         return rxSharedPreferences.getObject(AppConstants.MASTER_DATA, new GsonPreferenceAdapter<>(gson, MasterDataResponse.class));
     }
-
 
     @Provides
     @Singleton

@@ -31,7 +31,6 @@ public class VisitingCardActivity extends BaseActivity {
 
     @Bind(R.id.tv_download_visiting_card)
     TextView mTv_loading;
-
     private String dest_file_path = AppConstants.PDF_VISITING_CARD;
     int downloadedSize = 0, totalsize;
     String download_file_url = AppConstants.VISITING_CARD_URL;

@@ -118,7 +118,6 @@ public class SettingPreferencesActivity extends BaseActivity implements SettingF
 
     }
 
-
     public void get_user_preference()
 
     {

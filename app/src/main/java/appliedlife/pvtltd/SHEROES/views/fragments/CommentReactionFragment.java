@@ -275,8 +275,10 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
                     int commentId = lastCommentList.get(mFeedDetail.getItemPosition()).getId();
                     for (CommentReactionDoc commentReactionDoc : mCommentReactionDocList) {
                         if (commentId == commentReactionDoc.getId()) {
+
                             mEtUserCommentDescription.setText(commentReactionDoc.getComment());
                             mEtUserCommentDescription.setSelection(commentReactionDoc.getComment().length());
+
                             mEtUserCommentDescription.setTextColor(ContextCompat.getColor(getActivity(), R.color.feed_article_label));
                             mCommentReactionDocList.remove(commentReactionDoc);
                             AppUtils.showKeyboard(mEtUserCommentDescription, TAG);
@@ -384,6 +386,7 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
             LastComment lastComment = new LastComment();
             lastComment.setId(mCommentReactionDocList.get(i).getId());
             lastComment.setAnonymous(mCommentReactionDocList.get(i).isAnonymous());
+
             lastComment.setComment(mCommentReactionDocList.get(i).getComment());
             lastComment.setParticipantImageUrl(mCommentReactionDocList.get(i).getParticipantImageUrl());
             lastComment.setParticipantName(mCommentReactionDocList.get(i).getParticipantName());
@@ -463,8 +466,10 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
         mCommentReactionDoc = commentReactionDoc;
         if (null != mCommentReactionDoc && mCommentReactionDoc.isEdit()) {
             mCommentReactionDocList.remove(mCommentReactionDoc.getItemPosition());
+
             mEtUserCommentDescription.setText(mCommentReactionDoc.getComment());
             mEtUserCommentDescription.setSelection(mCommentReactionDoc.getComment().length());
+
             mEtUserCommentDescription.setTextColor(ContextCompat.getColor(getActivity(), R.color.feed_article_label));
             AppUtils.showKeyboard(mEtUserCommentDescription, TAG);
             mEtUserCommentDescription.setRawInputType(InputType.TYPE_CLASS_TEXT);

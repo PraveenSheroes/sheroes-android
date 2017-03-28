@@ -45,6 +45,4 @@
         android:layout_marginBottom="@dimen/dp_size_7"
         />
 
-
-
 </RelativeLayout>

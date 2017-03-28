@@ -71,6 +71,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     private SwipeRefreshLayout mSwipeView;
     private LinearLayout mLiNoResult;
     private FeedDetail mFeedDetail;
+
     private RecyclerView mRecyclerView;
     private int mPosition;
     private int mPressedEmoji;
@@ -409,7 +410,10 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
 
     @Override
     public void stopProgressBar() {
+
         mProgressBar.setVisibility(View.GONE);
+
+
     }
 
     @Override

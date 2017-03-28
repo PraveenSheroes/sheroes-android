@@ -33,6 +33,8 @@ import butterknife.ButterKnife;
  */
 
 public class ProfileFullViewFragment extends BaseFragment implements HomeView {
+
+
     private final String TAG = LogUtils.makeLogTag(ProfileFullViewFragment.class);
     @Inject
     HomePresenter mHomePresenter;

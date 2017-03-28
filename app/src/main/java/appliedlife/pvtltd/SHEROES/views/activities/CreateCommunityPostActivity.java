@@ -51,6 +51,8 @@ public class CreateCommunityPostActivity extends BaseActivity implements CreateC
         ButterKnife.bind(this);
         mCommunityFragment = new CreateCommunityPostFragment();
         callFirstFragment(R.id.create_community_post_container, mCommunityFragment);
+        CreateCommunityPostFragment frag = new CreateCommunityPostFragment();
+        callFirstFragment(R.id.create_community_post_container, frag);
 
     }
 

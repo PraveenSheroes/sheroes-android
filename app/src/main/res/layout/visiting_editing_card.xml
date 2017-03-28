@@ -34,7 +34,8 @@
           android:textSize="@dimen/sp_size_18"
           />
 
-      <ImageView
+
+      <TextView
           android:id="@+id/tv_edit_visiting_card"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
@@ -43,6 +44,7 @@
           android:layout_centerVertical="true"
           android:layout_marginRight="@dimen/dp_size_16"
           />
+
 
     </RelativeLayout>
 

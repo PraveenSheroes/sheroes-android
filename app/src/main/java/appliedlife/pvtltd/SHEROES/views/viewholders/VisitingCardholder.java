@@ -60,6 +60,9 @@ public class VisitingCardholder  extends BaseViewHolder<ProfileViewList> {
 
     }
 
+
+
+
     @Override
     public void onClick(View view) {
 
@@ -73,4 +76,8 @@ public class VisitingCardholder  extends BaseViewHolder<ProfileViewList> {
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + view.getId());
         }
     }
+
+
+
+
 }

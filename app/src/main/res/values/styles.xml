@@ -140,4 +140,7 @@
         <item name="android:windowMinWidthMinor">0dip</item>
         <item name="android:windowMinWidthMajor">0dip</item>
     </style>
+    <style name="MyTextInputLayout" parent="AppTheme">
+        <item name="colorAccent">@color/colorPrimary</item>
+    </style>
 </resources>

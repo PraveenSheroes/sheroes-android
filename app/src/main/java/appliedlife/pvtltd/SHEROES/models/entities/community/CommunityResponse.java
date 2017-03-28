@@ -7,19 +7,20 @@ import java.util.HashMap;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.FieldErrorMessageMap;
 
 /**
  * Created by Praveen_Singh on 10-03-2017.
  */
 
 public class CommunityResponse extends BaseResponse {
-    @Override
-    public HashMap<String, String> getFieldErrorMessageMap() {
-        return super.getFieldErrorMessageMap();
-    }
+
 
     @Override
     public void setFieldErrorMessageMap(HashMap<String, String> fieldErrorMessageMap) {
+
+
+
         super.setFieldErrorMessageMap(fieldErrorMessageMap);
     }
     @SerializedName("members")

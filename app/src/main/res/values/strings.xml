@@ -220,7 +220,6 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_WRITE_RESON">Write reason</string>
     <string name="ID_CONFIRM">confirm</string>
 
-
     <!-- String related to setting_feedback page-->
 
     <string name="ID_THANK_YOU">THANK YOU</string>
@@ -241,7 +240,6 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_COMPANY_NAME_HINT">COMPANY/ORGANIZATION</string>
     <string name="ID_GOOD_AT_HINT">GOOD AT</string>
 
-
     <!--String Related personal BASIC details page-->
     <string name="ID_CONTACT_NO_HINT">CONTACT NO.</string>
     <string name="ID_CURRENT_LOCATION_HINT">CURRENT LOCATION</string>
@@ -257,7 +255,6 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_CHAR_COUNT">456 Characters</string>
 
     <!--String Related personal other details page-->
-
     <string name="ID_ADITIONAL">ADD ADITIONAL ACTIVITIES AND ACHIEVEMENTS</string>
 
 
@@ -384,7 +381,7 @@ etur adipiscing elit,sed do eiusmod tempor incididunt ut…</string>
 
     <!--string related of personal lokking_for card-->
 
-    <string name="ID_LOOKING_FOR">Looking FOR</string>
+    <string name="ID_LOOKING_FOR">Looking For</string>
     <string name="ID_OPP_SEARCh">Opportunity Search</string>
     <string name="ID_OPP_SEARCH_1">Business and Entrepreneurship</string>
 
@@ -432,6 +429,16 @@ etur adipiscing elit,sed do eiusmod tempor incididunt ut…</string>
 
 
     <string name="ID_PREFERRED_WORK_LOCATION">PREFERRED WORK LOCATION</string>
+
+
+    <!--String related good at-->
+    <string name="ID_GOOD_AT">GOOD AT</string>
+
+    <!--string relates looking_for-->
+
+
+
+
 
 
 

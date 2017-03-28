@@ -30,6 +30,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobLocationList;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingInterestJobSearch;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.OnBoardingData;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.GoodAt;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileHorList;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfilePersonalViewList;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileViewList;
@@ -228,18 +229,18 @@ public enum HolderMapping {
             return new ProfileHorizontalViewHolder(view, viewInterface);
         }
     },
-    PROFILE_BASIC_DETAILS(R.layout.profile_basicdetails_card) {
+    PROFILE_BASIC_DETAILS(R.layout.professional_basic_details_card) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new ProfileProfessionalBasicDetailsHolder(view, viewInterface);
         }
     },
-    PROFILE_OTHER(R.layout.professional_other_card) {
+   /* PROFILE_OTHER(R.layout.professional_other_card) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new ProfileOtherHolder(view, viewInterface);
         }
-    },
+    },*/
 
     PROFILE_LOOK_IN_FOR(R.layout.personal_lookingfor_card) {
         @Override
@@ -247,12 +248,12 @@ public enum HolderMapping {
             return new ProfileLookingForHolder(view, viewInterface);
         }
     },
-    PROFILE_I_CAN_HELP(R.layout.personal_lookingfor_card) {
+  /*  PROFILE_I_CAN_HELP(R.layout.personal_lookingfor_card) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new ProfileICanHelpWithHolder(view, viewInterface);
         }
-    }, PROFILE_ABOUTME(R.layout.personal_lookingfor_card) {
+    },*/ PROFILE_ABOUTME(R.layout.profile_about_me_card) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new ProfileAboutMeHolder(view, viewInterface);
@@ -282,6 +283,13 @@ public enum HolderMapping {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new FilterHolder(view, viewInterface);
+        }
+    }
+    ,
+    GOODAT(R.layout.ggodat_card) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new GoodAtHolder(view, viewInterface);
         }
     },
     JOBLOCATIONLIST(R.layout.joblocationlist) {
@@ -431,8 +439,6 @@ public enum HolderMapping {
                             break;
 
                         default:
-
-
                     }
                 }
                 else if(item instanceof Docs)
@@ -471,10 +477,10 @@ public enum HolderMapping {
                         return PROFILE_HORIZONTAL_RECYCLER_LIST.ordinal();
                     } else if (tagType.equals("BASIC DETAILS")) {
                         return PROFILE_BASIC_DETAILS.ordinal();
-                    } else if (tagType.equals("OTHER")) {
+                    } /*else if (tagType.equals("OTHER")) {
                         return PROFILE_OTHER.ordinal();
 
-                    } else if (tagType.equals("My Contact Card")) {
+                    }*/ else if (tagType.equals("My Contact Card")) {
                         return PROFFESTIONAL_VISITINGCARD.ordinal();
                     }
 
@@ -491,11 +497,11 @@ public enum HolderMapping {
 
                         return PROFILE_LOOK_IN_FOR.ordinal();
 
-                    } else if (tagType.equals("I Can Help With")) {
+                    } /*else if (tagType.equals("I Can Help With")) {
 
                         return PROFILE_I_CAN_HELP.ordinal();
 
-                    } else if (tagType.equals("About Me")) {
+                    }*/ else if (tagType.equals("About Me")) {
 
                         return PROFILE_ABOUTME.ordinal();
 
@@ -509,7 +515,11 @@ public enum HolderMapping {
 
                     }
 
-                } else if (item instanceof ListOfInviteSearch) {
+                }
+                else if (item instanceof GoodAt) {
+                    return GOODAT.ordinal();
+                }
+                    else if (item instanceof ListOfInviteSearch) {
                     return INVITE_SEARCH_MODULE.ordinal();
                 } else if (item instanceof Member) {
                     return MEMBER_MODULE.ordinal();

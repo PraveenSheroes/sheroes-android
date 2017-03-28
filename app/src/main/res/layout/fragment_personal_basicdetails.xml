@@ -1,150 +1,169 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white">
+
     <android.support.design.widget.AppBarLayout
         android:id="@+id/r1_personal_basicdetails"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/home_toolbar"
+
+        <include
+            layout="@layout/profile_header_section"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_size_65"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|top" />
 
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-
-            <include
-                layout="@layout/setting_header"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start|top" />
-
-        </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
 
 
     <ScrollView
 
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/r1_personal_basicdetails"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+        android:fadeScrollbars="false">
 
         <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="@dimen/dp_size_13"
-        android:orientation="vertical">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dp_size_16"
+            android:layout_marginRight="@dimen/dp_size_16"
+            android:layout_marginTop="@dimen/dp_size_16"
+            android:orientation="vertical">
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/et_first_name_basic_details"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <EditText
+                    android:id="@+id/et_first_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:focusableInTouchMode="true"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:hint="@string/ID_FIRST_NAME_HINT"
-                    android:textColorHint="@color/text_color_setting_preference_basicdetails"
                     android:textColor="@color/text_color_contactdetails_page"
-                    android:focusableInTouchMode="true"
-                    android:textSize="@dimen/sp_size_13" />
+                    android:textColorHint="@color/text_color_setting_preference_basicdetails"
+                    android:textSize="@dimen/sp_size_13"
+                    android:theme="@style/AppTheme" />
 
             </android.support.design.widget.TextInputLayout>
-
 
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/et_last_name_basic_details"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/dp_size_16">
+
                 <EditText
+                    android:id="@+id/et_last_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:focusableInTouchMode="true"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:hint="@string/ID_LAST_NAME_HINT"
-                    android:textColorHint="@color/text_color_setting_preference_basicdetails"
                     android:textColor="@color/text_color_contactdetails_page"
-                    android:focusableInTouchMode="true"
+                    android:textColorHint="@color/text_color_setting_preference_basicdetails"
                     android:textSize="@dimen/sp_size_13" />
 
             </android.support.design.widget.TextInputLayout>
 
-
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/et_last_contactno_basicdetails"
+            <TextView
+                android:id="@+id/tv_mobile_number"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:hint="@string/ID_CONTACT_NO_HINT"
-                    android:inputType="number"
-                    android:textColorHint="@color/text_color_setting_preference_basicdetails"
-                    android:textColor="@color/text_color_contactdetails_page"
-                    android:focusableInTouchMode="true"
-                    android:textSize="@dimen/sp_size_13" />
+                android:layout_height="wrap_content"
+                android:focusableInTouchMode="true"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:hint="@string/ID_CONTACT_NO_HINT"
+                android:paddingTop="@dimen/dp_size_16"
+                android:textColor="@color/text_color_contactdetails_page"
+                android:textColorHint="@color/text_color_setting_preference_basicdetails"
+                android:textSize="@dimen/sp_size_13" />
 
-            </android.support.design.widget.TextInputLayout>
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/et_emailid_basicdetails"
+            <TextView
+                android:id="@+id/tv_mobile_value"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:hint="@string/ID_EMAIL_ID_HINT"
-                    android:textColorHint="@color/text_color_setting_preference_basicdetails"
-                    android:textColor="@color/text_color_contactdetails_page"
-                    android:focusableInTouchMode="true"
-                    android:textSize="@dimen/sp_size_13" />
+                android:layout_height="wrap_content"
+                android:focusableInTouchMode="true"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:paddingTop="@dimen/dp_size_16"
+                android:text="8447775406"
+                android:textColor="@color/text_color_contactdetails_page"
+                android:textSize="@dimen/sp_size_13" />
 
-            </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tv_user_email_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusableInTouchMode="true"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:hint="@string/ID_EMAIL_ID_HINT"
+                android:paddingTop="@dimen/dp_size_16"
+                android:textColor="@color/text_color_contactdetails_page"
+                android:textColorHint="@color/text_color_setting_preference_basicdetails"
+                android:textSize="@dimen/sp_size_13" />
+
+            <TextView
+                android:id="@+id/tv_email_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusableInTouchMode="true"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:paddingTop="@dimen/dp_size_16"
+                android:text="priyankacse2013@gmail.com"
+                android:textColor="@color/text_color_contactdetails_page"
+                android:textSize="@dimen/sp_size_13" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:paddingTop="@dimen/dp_size_16">
+
                 <ImageView
                     android:id="@+id/iv_infoicon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/dp_size_10"
-                    android:background="@drawable/ic_heart_active"/>
+                    android:background="@drawable/ic_heart_active"
+                    android:padding="@dimen/dp_size_10" />
 
                 <TextView
+                    android:id="@+id/tv_link_to_setting_section"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="@dimen/dp_size_10"
                     android:layout_toRightOf="@+id/iv_infoicon"
-                    android:textSize="@dimen/sp_size_12"
-                     android:text="@string/ID_GOFOR_SETTING_LINK"
-                    android:textColor="@color/line_color_personal" />
+                    android:paddingLeft="@dimen/dp_size_10"
+                    android:text="@string/ID_GOFOR_SETTING_LINK"
+                    android:textColor="@color/line_color_personal"
+                    android:textSize="@dimen/sp_size_12" />
 
             </LinearLayout>
-
-
 
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/et_currntlocation_basicdetails"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/dp_size_16">
+
                 <EditText
+                    android:id="@+id/et_currnt_location"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:focusableInTouchMode="true"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:hint="@string/ID_CURRENT_LOCATION_HINT"
-                    android:textColorHint="@color/text_color_setting_preference_basicdetails"
                     android:textColor="@color/text_color_contactdetails_page"
-                    android:focusableInTouchMode="true"
+                    android:textColorHint="@color/text_color_setting_preference_basicdetails"
                     android:textSize="@dimen/sp_size_13" />
 
             </android.support.design.widget.TextInputLayout>
@@ -153,39 +172,38 @@
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical">
+                android:layout_gravity="center_vertical"
+                android:paddingTop="@dimen/dp_size_16">
 
 
-                    <TextView
-                        android:id="@+id/tv_relation"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                        android:hint="@string/ID_RELACTIONSHIP_HINT"
-                        android:gravity="center_vertical"
-                        android:textColorHint="@color/text_color_setting_preference_basicdetails"
-                        android:textColor="@color/text_color_contactdetails_page"
-                        android:focusableInTouchMode="true"
-                        android:textSize="@dimen/sp_size_13" />
+                <TextView
+                    android:id="@+id/tv_relation_status"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusableInTouchMode="true"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:gravity="center_vertical"
+                    android:hint="@string/ID_RELACTIONSHIP_HINT"
+                    android:textColor="@color/text_color_contactdetails_page"
+                    android:textColorHint="@color/text_color_setting_preference_basicdetails"
+                    android:textSize="@dimen/sp_size_13" />
 
                 <Spinner
-                    android:id="@+id/spinner_educationdetail"
+                    android:id="@+id/spinner_relation_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
-                    />
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true" />
 
 
                 <TextView
                     android:layout_width="100dp"
                     android:layout_height="@dimen/dp_size_1"
-                    android:layout_marginTop="@dimen/dp_size_10"
-                    android:background="@color/line_color_personal"
-                    android:layout_below="@+id/tv_relation"
                     android:layout_alignParentRight="true"
-                    />
+                    android:layout_below="@+id/tv_relation_status"
+                    android:layout_marginTop="@dimen/dp_size_10"
+                    android:background="@color/line_color_personal" />
 
             </RelativeLayout>
 
@@ -193,37 +211,38 @@
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/et_childno_basicdetails"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/dp_size_16">
+
                 <EditText
+                    android:id="@+id/et_child_number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:focusableInTouchMode="true"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:hint="@string/ID_CHILDREN_HINT"
                     android:inputType="number"
-                    android:textColorHint="@color/text_color_setting_preference_basicdetails"
                     android:textColor="@color/text_color_contactdetails_page"
-                    android:focusableInTouchMode="true"
+                    android:textColorHint="@color/text_color_setting_preference_basicdetails"
                     android:textSize="@dimen/sp_size_13" />
 
             </android.support.design.widget.TextInputLayout>
 
         </LinearLayout>
 
-</ScrollView>
+    </ScrollView>
 
 
-
-
-    <Button
-        android:id="@+id/preferences_deactiveaccount_button"
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <Button xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/btn_personal_basic_details_save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/ID_SAVE"
-        android:textColor="@color/white"
-        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
         android:layout_alignParentBottom="true"
-        />
+        android:background="@color/grey2"
+        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+        android:gravity="center"
+        android:text="@string/ID_SAVE"
+        android:textColor="@color/white" />
 
 
 </RelativeLayout>

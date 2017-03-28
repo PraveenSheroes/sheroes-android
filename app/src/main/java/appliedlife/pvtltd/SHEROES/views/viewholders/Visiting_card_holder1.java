@@ -51,6 +51,7 @@ public class Visiting_card_holder1 extends BaseViewHolder<ProfilePersonalViewLis
 
         this.dataItem = obj;
         mtv_download_my_card.setOnClickListener(this);
+
         mTv_contacct_my_card.setText(dataItem.getTag());
         mtv_download_my_card.setText(dataItem.getItem1());
     }
@@ -73,4 +74,8 @@ public class Visiting_card_holder1 extends BaseViewHolder<ProfilePersonalViewLis
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + view.getId());
         }
     }
+
+
+
+
 }

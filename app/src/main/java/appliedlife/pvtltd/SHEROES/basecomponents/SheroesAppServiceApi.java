@@ -37,7 +37,19 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.GetInterestJobResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.EducationResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.GetUserDetailsRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.GetUserVisitingCardRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.PersonalBasicDetailsRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.PersonalBasicDetailsResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfessionalBasicDetailsRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfessionalBasicDetailsResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCardRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCardResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfilePreferredWorkLocationRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfilePreferredWorkLocationResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTravelFLexibilityRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTravelFlexibilityResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingChangeUserPreferenceRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingChangeUserPreferenseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingDeActivateRequest;
@@ -125,10 +137,8 @@ public interface SheroesAppServiceApi {
 
     @POST("participant/job/apply")
     Observable<JobApplyResponse> getJobApply(@Body JobApplyRequest jobApplyRequest);
-
     @POST("participant/community/pending_request")
     Observable<RequestedListResponse> getRequestList(@Body MemberRequest memberRequest);
-
     @POST("entity/master/get_data")
     Observable<GetTagData> getTagFromApi(@Body GetAllDataRequest getAllDataRequest );
 
@@ -153,6 +163,35 @@ public interface SheroesAppServiceApi {
     @POST("participant/settings/change_user_preference")
     Observable<SettingChangeUserPreferenseResponse>getUserChangePreferenceAuthToken(@Body SettingChangeUserPreferenceRequest settingChangeUserPreferenceRequest);
     @POST("participant/user/get_details\n")
-    Observable<EducationResponse>getEducationAuthToken(@Body GetUserDetailsRequest getUserDetailsRequest);
+    Observable<EducationResponse>getEducationAuthToken(@Body PersonalBasicDetailsRequest personalBasicDetailsRequest);
+
+
+    @POST("participant/user/add_or_edit")
+    Observable<PersonalBasicDetailsResponse>getPersonalBasicDetailsAuthToken(@Body PersonalBasicDetailsRequest personalBasicDetailsRequest);
+    @POST("participant/user/add_or_edit")
+    Observable<ProfileTravelFlexibilityResponse>getProfessionalTravelDetailsAuthToken(@Body ProfileTravelFLexibilityRequest profileTravelFLexibilityRequest);
+    @POST("participant/user/add_or_edit")
+    Observable<UserSummaryResponse>getPersonalUserSummaryDetailsAuthToken(@Body UserSummaryRequest userSummaryRequest);
+    @POST("participant/user/add_or_edit")
+    Observable<ProfessionalBasicDetailsResponse>getProfessionalDetailsAuthToken(@Body ProfessionalBasicDetailsRequest professionalBasicDetailsRequest);
+
+
+    @POST("participant/user/add_or_edit")
+    Observable<ProfilePreferredWorkLocationResponse>getWorkLocationDetailsAuthToken(@Body ProfilePreferredWorkLocationRequest profilePreferredWorkLocationRequest);
+
+
+
+    @POST("participant/user/get_visiting_card_details")
+    Observable<ProfileEditVisitingCardResponse>getEditVisitingCardDetailsAuthToken();
+
+
+
+    @POST("participant/user/getSaveVisitingCardDetailsAuthToken")
+    Observable<ProfileEditVisitingCardResponse>getSaveVisitingCardDetailsAuthToken(@Body GetUserVisitingCardRequest getUserVisitingCardRequest);
+
+
+
+
+
 
 }
