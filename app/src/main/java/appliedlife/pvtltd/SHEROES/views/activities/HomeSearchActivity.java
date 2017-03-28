@@ -107,23 +107,10 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
 
     private void searchCardsHandled(View view, BaseResponse baseResponse) {
         FeedDetail feedDetail = (FeedDetail) baseResponse;
-        feedDetail.setFromHome(true);
         Fragment fragment;
         String searchTag = (String) view.getTag();
         switch (searchTag) {
             case AppConstants.FEED_ARTICLE:
-                fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.TWO_CONSTANT);
-                if (AppUtils.isFragmentUIActive(fragment)) {
-                    if (fragment instanceof SearchArticleFragment) {
-                        ((SearchArticleFragment) fragment).saveRecentSearchData(feedDetail);
-                    }
-                }
-                fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
-                if (AppUtils.isFragmentUIActive(fragment)) {
-                    if (fragment instanceof AllSearchFragment) {
-                        ((AllSearchFragment) fragment).saveRecentSearchData(feedDetail);
-                    }
-                }
                 mFragmentOpen.setImageBlur(true);
                 Intent intentArticle = new Intent(this, ArticleDetailActivity.class);
                 intentArticle.putExtra(AppConstants.ARTICLE_DETAIL, feedDetail);
@@ -258,10 +245,17 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
          /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
         if (requestCode == AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL && null != intent) {
             mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.HOME_FRAGMENT);
-            if (mFragmentOpen.isArticleFragment()) {
-                Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.TWO_CONSTANT);
-            } else {
-
+            Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.TWO_CONSTANT);
+            if (AppUtils.isFragmentUIActive(fragment)) {
+                if (fragment instanceof SearchArticleFragment) {
+                    ((SearchArticleFragment) fragment).saveRecentSearchData(mFeedDetail);
+                }
+            }
+            fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
+            if (AppUtils.isFragmentUIActive(fragment)) {
+                if (fragment instanceof AllSearchFragment) {
+                    ((AllSearchFragment) fragment).saveRecentSearchData(mFeedDetail);
+                }
             }
         } else if (requestCode == AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL && null != intent) {
             mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITIES_DETAIL);

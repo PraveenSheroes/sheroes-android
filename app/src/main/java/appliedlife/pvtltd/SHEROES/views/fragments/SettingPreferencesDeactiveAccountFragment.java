@@ -19,6 +19,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingChangeUserPreferenseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingDeActivateRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingDeActivateResponse;
@@ -512,9 +513,9 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
     }
 
     @Override
-    public void showError(String errorMsg, int errorFor) {
+    public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
 
-        mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(errorMsg, errorFor);
+        mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(errorMsg, feedParticipationEnum);
     }
 
 

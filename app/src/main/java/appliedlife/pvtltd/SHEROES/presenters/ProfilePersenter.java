@@ -17,6 +17,8 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
 import rx.Subscriber;
 import rx.Subscription;
 
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_AUTH_TOKEN;
+
 /**
  * Created by priyanka on 19/03/17.
  */
@@ -57,7 +59,7 @@ public class ProfilePersenter extends BasePresenter<ProfileView> {
 
     public void getUserDetailsAuthTokeInPresenter(GetUserDetailsRequest getUserDetailsRequest) {
         if (!NetworkUtil.isConnected(sheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,0);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
             return;
         }
         getMvpView().startProgressBar();
@@ -70,7 +72,7 @@ public class ProfilePersenter extends BasePresenter<ProfileView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(),0);
+                getMvpView().showError(e.getMessage(),ERROR_AUTH_TOKEN);
             }
 
             @Override

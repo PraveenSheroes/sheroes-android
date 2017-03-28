@@ -17,6 +17,8 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.RequestedView;
 import rx.Subscriber;
 import rx.Subscription;
 
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_REQUESTED;
+
 /**
  * Created by Ajit Kumar on 08-02-2017.
  */
@@ -47,7 +49,7 @@ public class RequestedPresenter extends BasePresenter<RequestedView> {
 
     public void getAllMembers(MemberRequest memberRequest) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showNwError();
+            getMvpView().showError(AppConstants.ERROR_APP_CLOSE,ERROR_REQUESTED);
             return;
         }
         getMvpView().startProgressBar();
@@ -58,7 +60,7 @@ public class RequestedPresenter extends BasePresenter<RequestedView> {
             }
             @Override
             public void onError(Throwable e) {
-                getMvpView().showError(AppConstants.ERROR_APP_CLOSE,0);
+                getMvpView().showError(AppConstants.ERROR_APP_CLOSE,ERROR_REQUESTED);
                 getMvpView().showNwError();
                 getMvpView().stopProgressBar();
             }

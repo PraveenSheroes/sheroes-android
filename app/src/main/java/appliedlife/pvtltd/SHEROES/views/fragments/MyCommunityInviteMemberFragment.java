@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
@@ -166,16 +168,16 @@ public class MyCommunityInviteMemberFragment extends BaseFragment {
             }
         }
     };
-
     @Override
-    public void getSuccessForAllResponse(String success, int successFrom) {
-        switch (successFrom) {
-            case AppConstants.ONE_CONSTANT:
+    public void getSuccessForAllResponse(String success, FeedParticipationEnum feedParticipationEnum) {
+        switch (feedParticipationEnum) {
+            case JOIN_INVITE:
                 //ToDO:; need to verify dialog;
+                Toast.makeText(getContext(), "Add members", Toast.LENGTH_SHORT).show();
                 inviteSearchBack();
                 break;
             default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + successFrom);
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
         }
     }
 
@@ -187,7 +189,7 @@ public class MyCommunityInviteMemberFragment extends BaseFragment {
     @OnClick(R.id.tv_invite_post_submit)
     public void inviteSubmit() {
         if (StringUtil.isNotEmptyCollection(mUserIdForAddMember) && null != mFeedDetail) {
-            mHomePresenter.communityJoinFromPresenter(mAppUtils.communityRequestBuilder(mUserIdForAddMember, mFeedDetail.getIdOfEntityOrParticipant()));
+            mHomePresenter.communityJoinFromPresenter(mAppUtils.communityRequestBuilder(mUserIdForAddMember, mFeedDetail.getIdOfEntityOrParticipant(),AppConstants.OPEN_COMMUNITY));
         }
     }
 

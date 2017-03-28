@@ -91,8 +91,6 @@ import butterknife.OnClick;
 
 public class CreateCommunityPostFragment extends BaseFragment implements CreateCommunityView,EditNameDialogListener,SelectCommunityFragment.MyDialogFragmentListener, CommunityView {
 
-    /*@Inject
-    Preference<CommunityPostCreateRequest> mUserPreference;*/
     @Inject
     Preference<LoginResponse> mUserPreference;
     @Bind(R.id.txt_choose_community_spinner)
@@ -158,14 +156,6 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
     float alpha=0.7f;
     @Inject
     CreateCommunityPresenter createCommunityPresenter;
-
-    void showDialog() {
-        SelectCommunityFragment newFragment =new SelectCommunityFragment();
-        newFragment.setListener(this);
-        newFragment.show(getActivity().getFragmentManager(), "dialog");
-    }
-
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -192,10 +182,6 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
         iv_community_anonymous.setAlpha(alpha);
         mTvcreate_community_post.setText(R.string.ID_CREATEPOST);
         createCommunityPresenter.attachView(this);
-        CommunityPostCreateRequest communityPostCreateRequest=new CommunityPostCreateRequest();
-      /*  communityPostCreateRequest.set
-        mUserPreference.set(co);*/
-
         checkStoragePermission();
         met_share_community_post_text.addTextChangedListener(new TextWatcher() {
             @Override
@@ -353,7 +339,6 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
             communityPostCreateRequest.setCreatorType(mCreaterType);
 
             mDescription = met_share_community_post_text.getText().toString();
-
             communityPostCreateRequest.setDescription(mDescription);
             communityPostCreateRequest.setLastScreenName("string");
             communityPostCreateRequest.setScreenName("string");
@@ -832,5 +817,11 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
         return null;
     }
 
+
+    void showDialog() {
+        SelectCommunityFragment newFragment =new SelectCommunityFragment();
+        newFragment.setListener(this);
+        newFragment.show(getActivity().getFragmentManager(), "dialog");
+    }
 
 }

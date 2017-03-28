@@ -25,6 +25,8 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SettingFeedbackV
 import rx.Subscriber;
 import rx.Subscription;
 
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_SETTING;
+
 /**
  * Created by priyanka on 20/02/17.
  */
@@ -76,7 +78,7 @@ public class SettingFeedbackPresenter extends BasePresenter<SettingFeedbackView>
 
             @Override
             public void onError(Throwable e) {
-                getMvpView().showError(AppConstants.HTTP_401_UNAUTHORIZED,0);
+                getMvpView().showError(AppConstants.HTTP_401_UNAUTHORIZED,ERROR_SETTING);
                 getMvpView().showNwError();
                 getMvpView().stopProgressBar();
             }
@@ -114,7 +116,7 @@ public class SettingFeedbackPresenter extends BasePresenter<SettingFeedbackView>
 
             @Override
             public void onError(Throwable e) {
-                getMvpView().showError(AppConstants.HTTP_401_UNAUTHORIZED,0);
+                getMvpView().showError(AppConstants.HTTP_401_UNAUTHORIZED,ERROR_SETTING);
                 getMvpView().showNwError();
                 getMvpView().stopProgressBar();
             }
@@ -149,7 +151,7 @@ public class SettingFeedbackPresenter extends BasePresenter<SettingFeedbackView>
 
             @Override
             public void onError(Throwable e) {
-                getMvpView().showError(AppConstants.HTTP_401_UNAUTHORIZED,0);
+                getMvpView().showError(AppConstants.HTTP_401_UNAUTHORIZED,ERROR_SETTING);
                 getMvpView().showNwError();
                 getMvpView().stopProgressBar();
             }
@@ -187,7 +189,7 @@ public class SettingFeedbackPresenter extends BasePresenter<SettingFeedbackView>
 
             @Override
             public void onError(Throwable e) {
-                getMvpView().showError(AppConstants.HTTP_401_UNAUTHORIZED,0);
+                getMvpView().showError(AppConstants.HTTP_401_UNAUTHORIZED,ERROR_SETTING);
                 getMvpView().showNwError();
                 getMvpView().stopProgressBar();
             }
@@ -229,7 +231,7 @@ public class SettingFeedbackPresenter extends BasePresenter<SettingFeedbackView>
 
             @Override
             public void onError(Throwable e) {
-                getMvpView().showError(AppConstants.HTTP_401_UNAUTHORIZED,0);
+                getMvpView().showError(AppConstants.HTTP_401_UNAUTHORIZED,ERROR_SETTING);
                 getMvpView().showNwError();
             }
 

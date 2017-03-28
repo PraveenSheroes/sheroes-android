@@ -70,8 +70,8 @@ public class AppConstants {
     public static final String ALL_SEARCH = "search";
     public static final String NETWORK_TIMEOUT = "network_timout";
     public static final String SHARE = "Share";
-    public static final int WORD_COUNT = 91;
-    public static final int WORD_LENGTH = 91;
+    public static final int WORD_COUNT = 106;
+    public static final int WORD_LENGTH = 106;
     public static final String IMAGE_FULL_VIEW = "image_view";
     public static final String BACK_SLASH = "/";
     public static final String ARTICLE_DETAIL = "article_detail";
@@ -147,4 +147,6 @@ public class AppConstants {
     public static final String FREELANCING = "Freelancing";
     public static final String INTERNSHIP = "Internship";
     public static final String RETURN_FROM_BREAK = "Return from a break";
+
+    public static final String OPEN_COMMUNITY = "open community for join";
 }

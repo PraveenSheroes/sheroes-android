@@ -80,6 +80,7 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
         this.mContext = context;
         mViewMore = context.getString(R.string.ID_VIEW_MORE);
         mLess = context.getString(R.string.ID_LESS);
+        dataItem.setItemPosition(position);
         tvFeaturedDescriptionText.setTag(mViewMore);
         liFeaturedCoverImage.removeAllViews();
         liFeaturedCoverImage.removeAllViewsInLayout();
@@ -143,7 +144,7 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
         if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
             if (mViewMoreDescription.length() > AppConstants.WORD_LENGTH) {
                 mViewMoreDescription = mViewMoreDescription.substring(0, AppConstants.WORD_COUNT);
-                tvFeaturedViewMore.setVisibility(View.VISIBLE);
+               tvFeaturedViewMore.setVisibility(View.VISIBLE);
             } else {
                 tvFeaturedViewMore.setVisibility(View.GONE);
             }
@@ -259,7 +260,7 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_featured_community_join)
     public void joinClick() {
-        viewInterface.handleOnClick(dataItem, tvFeaturedCommunityJoin);
+            viewInterface.handleOnClick(dataItem, tvFeaturedCommunityJoin);
     }
 
     @OnClick(R.id.li_featured_community_images)

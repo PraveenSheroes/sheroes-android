@@ -83,11 +83,6 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new HomeSpinnerSelectorHolder(view, viewInterface);
         }
-    }, HOME_SPINNER_FOOTER(R.layout.spinner_footer) {
-        @Override
-        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new HomeSpinnerFooterHolder(view, viewInterface);
-        }
     }, SEARCH_MODULE(R.layout.search_module_list_item) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
@@ -454,13 +449,7 @@ public enum HolderMapping {
                         returnView = COMMENT.ordinal();
                     }
                 } else if (item instanceof HomeSpinnerItem) {
-                  /*  String name = ((HomeSpinnerItem) item).getName();
-                    if (name.equalsIgnoreCase(AppConstants.HOME_SPINNER_FRAGMENT)) {
-                        return HOME_SPINNER_FOOTER.ordinal();
-                    } else {
-
-                    }*/
-                    return HOME_SPINNER_ITEMS.ordinal();
+                                return HOME_SPINNER_ITEMS.ordinal();
                 } else if (item instanceof ArticleDetailPojo) {
                     returnView = ARTICLE_DETAIL_HOLDER.ordinal();//TODO: Home related changes
                 } else if (item instanceof ProfileHorList) {

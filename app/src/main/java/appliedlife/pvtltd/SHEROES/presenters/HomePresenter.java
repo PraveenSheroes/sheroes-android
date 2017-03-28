@@ -20,7 +20,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequest
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllData;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
@@ -36,6 +35,23 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import rx.Subscriber;
 import rx.Subscription;
+
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.BOOKMARK_UNBOOKMARK;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.COMMENT_REACTION;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.COMMUNITY_OWNER;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_AUTH_TOKEN;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_BOOKMARK_UNBOOKMARK;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_BOOK_MARK_LIST;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_COMMENT_REACTION;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_COMMUNITY_OWNER;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_RESPONSE;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_LIKE_UNLIKE;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MY_COMMUNITIES;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_SEARCH_DATA;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.JOIN_INVITE;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.LIKE_UNLIKE;
 
 /**
  * Created by Praveen Singh on 29/12/2016.
@@ -79,7 +95,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
     }
     public void getAuthTokenRefreshPresenter() {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,AppConstants.THREE_CONSTANT);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
             return;
         }
         getMvpView().startProgressBar();
@@ -91,7 +107,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(),AppConstants.THREE_CONSTANT);
+                getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
             }
 
             @Override
@@ -105,7 +121,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
     public void getFeedFromPresenter(final FeedRequestPojo feedRequestPojo) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,AppConstants.ONE_CONSTANT);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_FEED_RESPONSE);
             return;
         }
         getMvpView().startProgressBar();
@@ -120,14 +136,14 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 LogUtils.info(TAG,"*******************"+e.getMessage());
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(),AppConstants.ONE_CONSTANT);
+                getMvpView().showError(e.getMessage(), ERROR_FEED_RESPONSE);
             }
 
             @Override
             public void onNext(FeedResponsePojo feedResponsePojo) {
                 LogUtils.info(TAG,"*******************"+new Gson().toJson(feedResponsePojo));
                 getMvpView().stopProgressBar();
-                if(null!=feedResponsePojo&& StringUtil.isNotEmptyCollection(feedResponsePojo.getFeaturedDocs())&&feedResponsePojo.getFeaturedDocs().size()>AppConstants.ONE_CONSTANT)
+                if(null!=feedResponsePojo&& StringUtil.isNotEmptyCollection(feedResponsePojo.getFeaturedDocs()))
                 {
                     getMvpView().getFeedListSuccess(feedResponsePojo.getFeaturedDocs());
                 }else
@@ -140,7 +156,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
     }
     public void getMyCommunityFromPresenter(final FeedRequestPojo feedRequestPojo) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,AppConstants.ONE_CONSTANT);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_MY_COMMUNITIES);
             return;
         }
         getMvpView().startProgressBar();
@@ -154,7 +170,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 LogUtils.info(TAG,"*******************"+e.getMessage());
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(),AppConstants.ONE_CONSTANT);
+                getMvpView().showError(e.getMessage(), ERROR_MY_COMMUNITIES);
             }
 
             @Override
@@ -174,7 +190,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
     }
     public void getTagFromPresenter(final GetAllDataRequest getAllDataRequest) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,AppConstants.ONE_CONSTANT);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_TAG);
             return;
         }
         getMvpView().startProgressBar();
@@ -187,7 +203,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(),AppConstants.ONE_CONSTANT);
+                getMvpView().showError(e.getMessage(), ERROR_TAG);
             }
 
             @Override
@@ -207,7 +223,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
     public void getBookMarkFromPresenter(FeedRequestPojo feedRequestPojo) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,AppConstants.TWO_CONSTANT);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_BOOK_MARK_LIST);
             return;
         }
         getMvpView().startProgressBar();
@@ -220,7 +236,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(),AppConstants.TWO_CONSTANT);
+                getMvpView().showError(e.getMessage(),ERROR_BOOK_MARK_LIST);
             }
 
             @Override
@@ -234,7 +250,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
     public void getLikesFromPresenter(LikeRequestPojo likeRequestPojo) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,AppConstants.TWO_CONSTANT);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_LIKE_UNLIKE);
             return;
         }
         getMvpView().startProgressBar();
@@ -247,20 +263,20 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().getSuccessForAllResponse(e.getMessage(),AppConstants.ONE_CONSTANT);
+                getMvpView().getSuccessForAllResponse(e.getMessage(), ERROR_LIKE_UNLIKE);
             }
 
             @Override
             public void onNext(LikeResponse likeResponse) {
                 getMvpView().stopProgressBar();
-                getMvpView().getSuccessForAllResponse(likeResponse.getStatus(),AppConstants.ONE_CONSTANT);
+                getMvpView().getSuccessForAllResponse(likeResponse.getStatus(),LIKE_UNLIKE);
             }
         });
         registerSubscription(subscription);
     }
     public void getUnLikesFromPresenter(LikeRequestPojo likeRequestPojo) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,AppConstants.TWO_CONSTANT);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_LIKE_UNLIKE);
             return;
         }
         getMvpView().startProgressBar();
@@ -273,13 +289,13 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().getSuccessForAllResponse(e.getMessage(),AppConstants.ONE_CONSTANT);
+                getMvpView().getSuccessForAllResponse(e.getMessage(),ERROR_LIKE_UNLIKE);
             }
 
             @Override
             public void onNext(LikeResponse likeResponse) {
                 getMvpView().stopProgressBar();
-                getMvpView().getSuccessForAllResponse(likeResponse.getStatus(),AppConstants.ONE_CONSTANT);
+                getMvpView().getSuccessForAllResponse(likeResponse.getStatus(),LIKE_UNLIKE);
             }
         });
         registerSubscription(subscription);
@@ -287,7 +303,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
     public void addBookMarkFromPresenter(BookmarkRequestPojo bookmarkRequestPojo,boolean isBookmarked) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,AppConstants.TWO_CONSTANT);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_BOOKMARK_UNBOOKMARK);
             return;
         }
         getMvpView().startProgressBar();
@@ -300,13 +316,13 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().getSuccessForAllResponse(e.getMessage(),AppConstants.THREE_CONSTANT);
+                getMvpView().getSuccessForAllResponse(e.getMessage(),ERROR_BOOKMARK_UNBOOKMARK);
             }
 
             @Override
             public void onNext(BookmarkResponsePojo bookmarkResponsePojo) {
                 getMvpView().stopProgressBar();
-                getMvpView().getSuccessForAllResponse(bookmarkResponsePojo.getStatus(),AppConstants.THREE_CONSTANT);
+                getMvpView().getSuccessForAllResponse(bookmarkResponsePojo.getStatus(),BOOKMARK_UNBOOKMARK);
             }
         });
         registerSubscription(subscription);
@@ -315,7 +331,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
     public void editCommentListFromPresenter(CommentReactionRequestPojo commentReactionRequestPojo) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,AppConstants.TWO_CONSTANT);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_COMMENT_REACTION);
             return;
         }
         getMvpView().startProgressBar();
@@ -327,19 +343,19 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(),AppConstants.TWO_CONSTANT);
+                getMvpView().showError(e.getMessage(),ERROR_COMMENT_REACTION);
             }
             @Override
             public void onNext(CommentReactionResponsePojo commentResponsePojo) {
                 getMvpView().stopProgressBar();
-                getMvpView().getSuccessForAllResponse(commentResponsePojo.getStatus(),AppConstants.TWO_CONSTANT);
+                getMvpView().getSuccessForAllResponse(commentResponsePojo.getStatus(),COMMENT_REACTION);
             }
         });
         registerSubscription(subscription);
     }
     public void communityJoinFromPresenter(CommunityRequest communityRequest) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,AppConstants.FOURTH_CONSTANT);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_JOIN_INVITE);
             return;
         }
         getMvpView().startProgressBar();
@@ -351,12 +367,12 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(),AppConstants.FOURTH_CONSTANT);
+                getMvpView().showError(e.getMessage(),ERROR_JOIN_INVITE);
             }
             @Override
             public void onNext(CommunityResponse communityResponse) {
                 getMvpView().stopProgressBar();
-                getMvpView().getSuccessForAllResponse(communityResponse.getStatus(),AppConstants.ONE_CONSTANT);
+                getMvpView().getSuccessForAllResponse(communityResponse.getStatus(),JOIN_INVITE);
             }
         });
         registerSubscription(subscription);
@@ -364,7 +380,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
     public void communityOwnerAdd(CommunityRequest communityRequest) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.ERROR_APP_CLOSE,0);
+            getMvpView().showError(AppConstants.ERROR_APP_CLOSE,ERROR_COMMUNITY_OWNER);
             return;
         }
         getMvpView().startProgressBar();
@@ -376,12 +392,12 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(AppConstants.ERROR_APP_CLOSE,0);
+                getMvpView().showError(AppConstants.ERROR_APP_CLOSE,ERROR_COMMUNITY_OWNER);
             }
             @Override
             public void onNext(CommunityResponse communityResponse) {
                 getMvpView().stopProgressBar();
-                getMvpView().getSuccessForAllResponse(communityResponse.getStatus(),AppConstants.ONE_CONSTANT);
+                getMvpView().getSuccessForAllResponse(communityResponse.getStatus(),COMMUNITY_OWNER);
             }
         });
         registerSubscription(subscription);
@@ -398,13 +414,13 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(),AppConstants.FOURTH_CONSTANT);
+                getMvpView().showError(e.getMessage(),ERROR_SEARCH_DATA);
             }
 
             @Override
             public void onNext(List<RecentSearchData> masterDatas) {
                 getMvpView().stopProgressBar();
-                // getMvpView().getDB(masterDatas);
+                 getMvpView().getDB(masterDatas);
             }
         });
         registerSubscription(subscription);
@@ -421,7 +437,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
 
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(),AppConstants.FOURTH_CONSTANT);
+                getMvpView().showError(e.getMessage(),ERROR_SEARCH_DATA);
             }
 
             @Override

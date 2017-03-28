@@ -9,11 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.crashlytics.android.Crashlytics;
-
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -22,7 +21,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.EditNameDialogLi
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by Ajit Kumar on 30-01-2017.
@@ -151,7 +149,7 @@ public class ShareCommunityFragment extends BaseFragment implements CreateCommun
     }
 
     @Override
-    public void showError(String s,int errorFor) {
+    public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
 
     }
 

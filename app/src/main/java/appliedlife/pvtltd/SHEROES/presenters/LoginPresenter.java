@@ -18,6 +18,8 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.LoginView;
 import rx.Subscriber;
 import rx.Subscription;
 
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_AUTH_TOKEN;
+
 /**
  * Created by Praveen_Singh on 04-01-2017.
  * @author Praveen Singh
@@ -60,7 +62,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
 
     public void getLoginAuthTokeInPresenter(LoginRequest loginRequest,boolean isSignUp) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,AppConstants.ONE_CONSTANT);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
             return;
         }
         getMvpView().startProgressBar();
@@ -72,7 +74,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(),AppConstants.ONE_CONSTANT);
+                getMvpView().showError(e.getMessage(),ERROR_AUTH_TOKEN);
             }
 
             @Override

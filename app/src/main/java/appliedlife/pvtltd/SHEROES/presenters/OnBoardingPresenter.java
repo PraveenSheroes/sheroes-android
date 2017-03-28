@@ -19,6 +19,8 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.OnBoardingView;
 import rx.Subscriber;
 import rx.Subscription;
 
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_ON_ONBOARDING;
+
 /**
  * Created by Praveen_Singh on 19-03-2017.
  */
@@ -53,7 +55,7 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
     }
     public void getOnBoardingSearchToPresenter(GetAllDataRequest getAllDataRequest) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, AppConstants.THREE_CONSTANT);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_ON_ONBOARDING);
             return;
         }
         getMvpView().startProgressBar();
@@ -66,7 +68,7 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), AppConstants.THREE_CONSTANT);
+                getMvpView().showError(e.getMessage(), ERROR_ON_ONBOARDING);
             }
 
             @Override
@@ -79,7 +81,7 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
     }
     public void getInterestJobSearchToPresenter(GetAllDataRequest getAllDataRequest) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, AppConstants.THREE_CONSTANT);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_ON_ONBOARDING);
             return;
         }
         getMvpView().startProgressBar();
@@ -92,7 +94,7 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), AppConstants.THREE_CONSTANT);
+                getMvpView().showError(e.getMessage(), ERROR_ON_ONBOARDING);
             }
 
             @Override

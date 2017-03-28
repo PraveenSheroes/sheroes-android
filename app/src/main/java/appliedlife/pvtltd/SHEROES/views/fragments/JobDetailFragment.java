@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +19,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobApplyRequest;
@@ -38,6 +38,8 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.JobView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_BOOKMARK_UNBOOKMARK;
 
 /**
  * Created by Ajit Kumar on 20-02-2017.
@@ -165,15 +167,14 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
     public interface JobDetailActivityIntractionListner {
         void onJobBookmarkClick(FeedDetail feedDetail);
     }
-
     @Override
-    public void getSuccessForAllResponse(String success, int successFrom) {
-        switch (successFrom) {
-            case AppConstants.THREE_CONSTANT:
+    public void getSuccessForAllResponse(String success, FeedParticipationEnum feedParticipationEnum) {
+        switch (feedParticipationEnum) {
+            case BOOKMARK_UNBOOKMARK:
                 jobDetailBookMarkSuccess(success);
                 break;
             default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + successFrom);
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
         }
     }
 
@@ -184,10 +185,10 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
                     mJobDetailActivityIntractionListner.onJobBookmarkClick(mFeedDetail);
                     break;
                 case AppConstants.FAILED:
-                    showError(getString(R.string.ID_ALREADY_BOOKMARK), AppConstants.TWO_CONSTANT);
+                    showError(getString(R.string.ID_ALREADY_BOOKMARK), ERROR_BOOKMARK_UNBOOKMARK);
                     break;
                 default:
-                    showError(AppConstants.HTTP_401_UNAUTHORIZED, AppConstants.TWO_CONSTANT);
+                    showError(AppConstants.HTTP_401_UNAUTHORIZED,ERROR_BOOKMARK_UNBOOKMARK);
             }
         }
     }

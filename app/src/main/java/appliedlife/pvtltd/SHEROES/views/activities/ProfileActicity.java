@@ -41,6 +41,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.EducationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileHorList;
@@ -475,7 +476,7 @@ public class ProfileActicity extends BaseActivity implements ProfileView,BaseHol
     }
 
     @Override
-    public void showError(String s, int errorFor) {
+    public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
 
     }
 

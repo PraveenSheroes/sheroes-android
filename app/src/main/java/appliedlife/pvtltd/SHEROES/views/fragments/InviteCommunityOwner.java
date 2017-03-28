@@ -25,6 +25,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityList;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerRequest;
@@ -135,8 +136,8 @@ public class InviteCommunityOwner extends BaseFragment implements CommunityView 
 
 
     @Override
-    public void showError(String errorMsg,int i) {
-        mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(errorMsg,i);
+    public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
+        mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(errorMsg,feedParticipationEnum);
     }
 
     @Override
@@ -216,15 +217,15 @@ public class InviteCommunityOwner extends BaseFragment implements CommunityView 
         createCommunityPresenter.postCreateCommunityOwner(createCommunityOwnerRequest);
     }
     @Override
-    public void getSuccessForAllResponse(String success, int successFrom) {
-        switch (successFrom) {
-            case AppConstants.ONE_CONSTANT:
+    public void getSuccessForAllResponse(String success, FeedParticipationEnum feedParticipationEnum) {
+        switch (feedParticipationEnum) {
+            case JOIN_INVITE:
                 //ToDO:; need to verify dialog;
                 Toast.makeText(getContext(), "Add members", Toast.LENGTH_SHORT).show();
                 inviteSearchBack();
                 break;
             default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + successFrom);
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
         }
     }
 

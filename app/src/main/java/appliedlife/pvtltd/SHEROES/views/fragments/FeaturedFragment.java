@@ -1,5 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -11,6 +12,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
+import com.f2prateek.rx.preferences.Preference;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -21,6 +25,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -33,12 +38,16 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FOR_REFRESH_FRAGMENT_LIST;
+
 /**
  * Created by Praveen_Singh on 29-01-2017.
  */
 
 public class FeaturedFragment extends BaseFragment implements HomeView {
     private final String TAG = LogUtils.makeLogTag(FeaturedFragment.class);
+    @Inject
+    Preference<LoginResponse> userPreference;
     @Inject
     HomePresenter mHomePresenter;
     @Bind(R.id.rv_home_list)
@@ -58,13 +67,10 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
     AppUtils mAppUtils;
     private int mPageNo =AppConstants.ONE_CONSTANT;
     private FragmentListRefreshData mFragmentListRefreshData;
-    public static FeaturedFragment createInstance() {
-        FeaturedFragment featuredFragment = new FeaturedFragment();
-        return featuredFragment;
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
     }
-
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -129,12 +135,22 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
             mLiNoResult.setVisibility(View.VISIBLE);
         }
     }
-
+    public void joinRequestForOpenCommunity(FeedDetail feedDetail)
+    {
+        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
+            List<Long> userIdList = new ArrayList();
+            userIdList.add((long) userPreference.get().getUserSummary().getUserId());
+            setFeedDetail(feedDetail);
+            mHomePresenter.communityJoinFromPresenter(mAppUtils.communityRequestBuilder(userIdList, feedDetail.getIdOfEntityOrParticipant(),AppConstants.OPEN_COMMUNITY));
+        }
+    }
+    public void setJoinStatus(String status,FeedDetail feedDetail)
+    {
+        commentListRefresh(feedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+    }
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         mHomePresenter.detachView();
     }
-
-
 }

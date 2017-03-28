@@ -67,7 +67,6 @@ public class CommunityCardDetailHeader extends BaseViewHolder<FeedDetail> {
             tvJoin.setBackgroundResource(R.drawable.rectangle_community_invite);
             tvJoin.setText(mContext.getString(R.string.ID_INVITE));
             tvJoin.setTextColor(ContextCompat.getColor(mContext, R.color.white));
-            tvJoin.setVisibility(View.VISIBLE);
             tvJoin.setEnabled(false);
         } else {
             tvJoin.setTextColor(ContextCompat.getColor(mContext, R.color.white));

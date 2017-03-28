@@ -25,6 +25,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
@@ -35,7 +36,6 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
-import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.InviteFragmentListener;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -152,7 +152,7 @@ public class InviteCommunityMember extends BaseFragment {
 
 
     @Override
-    public void showError(String errorMsg,int i) {
+    public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
         mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog();
     }
 
@@ -220,18 +220,17 @@ public class InviteCommunityMember extends BaseFragment {
     };
 
     @Override
-    public void getSuccessForAllResponse(String success, int successFrom) {
-        switch (successFrom) {
-            case AppConstants.ONE_CONSTANT:
+    public void getSuccessForAllResponse(String success, FeedParticipationEnum feedParticipationEnum) {
+        switch (feedParticipationEnum) {
+            case JOIN_INVITE:
                 //ToDO:; need to verify dialog;
                 Toast.makeText(getContext(), "Add members", Toast.LENGTH_SHORT).show();
                 inviteSearchBack();
                 break;
             default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + successFrom);
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
         }
     }
-
     @OnClick(R.id.tv_back_community)
     public void inviteSearchBack() {
         getActivity().getSupportFragmentManager().popBackStack();

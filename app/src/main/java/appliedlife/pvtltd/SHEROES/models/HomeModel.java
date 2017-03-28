@@ -13,7 +13,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequest
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllData;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
@@ -172,13 +171,13 @@ public class HomeModel {
                 .observeOn(AndroidSchedulers.mainThread());
     }
     public Observable<CommunityResponse> communityOwnerFromModel(CommunityRequest communityRequest){
-        LogUtils.error("Community Join req: ",gson.toJson(communityRequest));
+        LogUtils.info("Community Join req: ",gson.toJson(communityRequest));
 
         return sheroesAppServiceApi.getCommunityJoinResponse(communityRequest)
                 .map(new Func1<CommunityResponse, CommunityResponse>() {
                     @Override
                     public CommunityResponse call(CommunityResponse communityResponse) {
-                        LogUtils.error("Community Join res: ",gson.toJson(communityResponse));
+                        LogUtils.info("Community Join res: ",gson.toJson(communityResponse));
                         return communityResponse;
                     }
                 })

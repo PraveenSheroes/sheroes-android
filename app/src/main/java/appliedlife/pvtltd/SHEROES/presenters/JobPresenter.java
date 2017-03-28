@@ -17,6 +17,8 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.JobView;
 import rx.Subscriber;
 import rx.Subscription;
 
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_RESPONSE;
+
 /**
  * Created by Ajit Kumar on 11-03-2017.
  */
@@ -58,7 +60,7 @@ public class JobPresenter extends BasePresenter<JobView> {
             }
             @Override
             public void onError(Throwable e) {
-                getMvpView().showError(AppConstants.ERROR_APP_CLOSE,0);
+                getMvpView().showError(AppConstants.ERROR_APP_CLOSE, ERROR_FEED_RESPONSE);
                 getMvpView().showNwError();
                 getMvpView().stopProgressBar();
             }

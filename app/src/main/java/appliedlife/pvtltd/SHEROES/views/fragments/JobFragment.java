@@ -22,6 +22,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
@@ -179,15 +180,14 @@ public class JobFragment extends BaseFragment {
         }
 
     }
-
     public void bookMarkForCard(FeedDetail feedDetail) {
         super.bookMarkForCard(feedDetail);
     }
 
 
     @Override
-    public void getSuccessForAllResponse(String success, int successFrom) {
-        super.getSuccessForAllResponse(success, successFrom);
+    public void getSuccessForAllResponse(String success, FeedParticipationEnum feedParticipationEnum) {
+        super.getSuccessForAllResponse(success, feedParticipationEnum);
     }
 
     @Override

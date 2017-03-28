@@ -25,8 +25,8 @@ import java.util.List;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
+import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
-import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LastComment;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
@@ -43,6 +43,12 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
+
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_BOOKMARK_UNBOOKMARK;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_COMMENT_REACTION;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_RESPONSE;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_LIKE_UNLIKE;
 
 /**
  * Created by Praveen Singh on 29/12/2016.
@@ -149,7 +155,9 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     public void setListLoadFlag(boolean mListLoad) {
         this.mListLoad = mListLoad;
     }
-
+    public void setFeedDetail(FeedDetail feedDetail) {
+        this.mFeedDetail = feedDetail;
+    }
     public void setRefreshList(SwipPullRefreshList mPullRefreshList) {
         this.mPullRefreshList = mPullRefreshList;
     }
@@ -209,26 +217,42 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     }
 
 
-
     @Override
     public void getTagListSuccess(List<Doc> feedDetailList) {
 
     }
 
     @Override
-    public void getSuccessForAllResponse(String success, int successFrom) {
-        switch (successFrom) {
-            case AppConstants.ONE_CONSTANT:
+    public void getSuccessForAllResponse(String success, FeedParticipationEnum feedParticipationEnum) {
+        switch (feedParticipationEnum) {
+            case LIKE_UNLIKE:
                 likeSuccess(success);
                 break;
-            case AppConstants.TWO_CONSTANT:
+            case COMMENT_REACTION:
                 recentCommentEditDelete(success);
                 break;
-            case AppConstants.THREE_CONSTANT:
+            case BOOKMARK_UNBOOKMARK:
                 bookMarkSuccess(success);
                 break;
+            case JOIN_INVITE:
+                joinInviteResponse(success);
+                break;
             default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + successFrom);
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
+        }
+    }
+
+    public void joinInviteResponse(String success) {
+        switch (success) {
+            case AppConstants.SUCCESS:
+                mFeedDetail.setRequestPending(true);
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onSuccessResult(success, mFeedDetail);
+                break;
+            case AppConstants.FAILED:
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_JOIN_INVITE);
+                break;
+            default:
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_JOIN_INVITE);
         }
     }
 
@@ -245,19 +269,26 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                     mAdapter.notifyDataSetChanged();
                     break;
                 case AppConstants.FAILED:
-                    showError(getString(R.string.ID_ALREADY_BOOKMARK), AppConstants.TWO_CONSTANT);
+                    showError(getString(R.string.ID_ALREADY_BOOKMARK),ERROR_COMMENT_REACTION);
                     break;
                 default:
-                    showError(AppConstants.HTTP_401_UNAUTHORIZED, AppConstants.TWO_CONSTANT);
+                    showError(AppConstants.HTTP_401_UNAUTHORIZED,ERROR_COMMENT_REACTION);
             }
         }
     }
 
     /*1:- If pass one from home activity means its comments section changes
-    2:- If two Home activity means its Detail section changes of activity*/
-    public void commentListRefresh(FeedDetail feedDetail, int callFrom) {
-        if (callFrom == AppConstants.TWO_CONSTANT) {
-            mAdapter.setDataOnPosition(feedDetail, feedDetail.getItemPosition());
+    2:- If two Home activity means its Detail section changes of activity,and refresh particular card*/
+    public void commentListRefresh(FeedDetail feedDetail,FeedParticipationEnum feedParticipationEnum) {
+
+        switch (feedParticipationEnum) {
+            case ACTIVITY_FOR_REFRESH_FRAGMENT_LIST:
+                mAdapter.setDataOnPosition(feedDetail, feedDetail.getItemPosition());
+                break;
+            case COMMENT_REACTION:
+                break;
+            default:
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
         }
         mAdapter.notifyDataSetChanged();
     }
@@ -284,10 +315,10 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
 
                     break;
                 case AppConstants.FAILED:
-                    showError(getString(R.string.ID_ALREADY_BOOKMARK), AppConstants.TWO_CONSTANT);
+                    showError(getString(R.string.ID_ALREADY_BOOKMARK), ERROR_BOOKMARK_UNBOOKMARK);
                     break;
                 default:
-                    showError(AppConstants.HTTP_401_UNAUTHORIZED, AppConstants.TWO_CONSTANT);
+                    showError(AppConstants.HTTP_401_UNAUTHORIZED,ERROR_BOOKMARK_UNBOOKMARK);
             }
         }
     }
@@ -322,10 +353,10 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                     }
                     break;
                 case AppConstants.FAILED:
-                    showError(getString(R.string.ID_ALREADY_BOOKMARK), AppConstants.TWO_CONSTANT);
+                    showError(getString(R.string.ID_ALREADY_BOOKMARK),ERROR_LIKE_UNLIKE);
                     break;
                 default:
-                    showError(AppConstants.HTTP_401_UNAUTHORIZED, AppConstants.TWO_CONSTANT);
+                    showError(AppConstants.HTTP_401_UNAUTHORIZED,ERROR_LIKE_UNLIKE);
 
             }
         }
@@ -387,8 +418,8 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     }
 
     @Override
-    public void showError(String errorMsg, int errorFor) {
-        if (errorFor == AppConstants.ONE_CONSTANT) {
+    public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
+        if (feedParticipationEnum == ERROR_FEED_RESPONSE) {
             if (null != mLiNoResult) {
                 mLiNoResult.setVisibility(View.VISIBLE);
             }
@@ -397,7 +428,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
 
         }
         stopProgressBar();
-        mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(errorMsg, errorFor);
+        mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(errorMsg, feedParticipationEnum);
     }
 
     @Override
@@ -415,4 +446,5 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     protected void onBackPress() {
         getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
+
 }

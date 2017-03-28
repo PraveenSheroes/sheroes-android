@@ -19,6 +19,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
@@ -117,8 +118,8 @@ public class BookmarksFragment extends BaseFragment {
     }
 
     @Override
-    public void getSuccessForAllResponse(String success, int successFrom) {
-    super.getSuccessForAllResponse(success,successFrom);
+    public void getSuccessForAllResponse(String success,FeedParticipationEnum feedParticipationEnum) {
+    super.getSuccessForAllResponse(success,feedParticipationEnum);
     }
 
     @Override
@@ -141,7 +142,7 @@ public class BookmarksFragment extends BaseFragment {
     }
 
 
-    public void commentListRefresh(FeedDetail feedDetail,int callFrom) {
-     super.commentListRefresh(feedDetail,callFrom);
+    public void commentListRefresh(FeedDetail feedDetail, FeedParticipationEnum feedParticipationEnum) {
+     super.commentListRefresh(feedDetail,feedParticipationEnum);
     }
 }

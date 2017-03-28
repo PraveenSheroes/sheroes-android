@@ -58,10 +58,6 @@ public class MyCommunitiesFragment  extends BaseFragment implements HomeView {
     AppUtils mAppUtils;
     private FragmentListRefreshData mFragmentListRefreshData;
     int mPageNo =AppConstants.ONE_CONSTANT;
-    public static MyCommunitiesFragment createInstance() {
-        MyCommunitiesFragment myCommunitiesFragment = new MyCommunitiesFragment();
-        return myCommunitiesFragment;
-    }
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);

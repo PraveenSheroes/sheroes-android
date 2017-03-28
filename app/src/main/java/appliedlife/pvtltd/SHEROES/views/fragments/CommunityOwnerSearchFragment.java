@@ -26,7 +26,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
+import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityList;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerRequest;
@@ -206,7 +206,7 @@ public class CommunityOwnerSearchFragment extends BaseFragment implements Commun
     }
 
     @Override
-    public void showError(String errorMsg,int errorFor) {
+    public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
         mAdapter.notifyDataSetChanged();
     }
 
@@ -304,17 +304,6 @@ public class CommunityOwnerSearchFragment extends BaseFragment implements Commun
         createCommunityOwnerRequest.setUserId(userid);
         createCommunityPresenter.postCreateCommunityOwner(createCommunityOwnerRequest);
     }
-    @Override
-    public void getSuccessForAllResponse(String success, int successFrom) {
-
-    }
-
-    @Override
-    public void getDB(List<RecentSearchData> recentSearchDatas) {
-
-    }
-
-
 
     public interface InviteOwnerActivityIntractionListner {
         void onErrorOccurence();

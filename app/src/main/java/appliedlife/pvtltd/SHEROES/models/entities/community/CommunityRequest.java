@@ -13,6 +13,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
 public class CommunityRequest extends BaseRequest {
     @SerializedName("community_id")
     private long communityId;
+    @SerializedName("reason_to_join")
+    private String reasonToJoin;
     @SerializedName("user_ids")
     private List<Long> userId;
 
@@ -30,5 +32,13 @@ public class CommunityRequest extends BaseRequest {
 
     public void setCommunityId(long communityId) {
         this.communityId = communityId;
+    }
+
+    public String getReasonToJoin() {
+        return reasonToJoin;
+    }
+
+    public void setReasonToJoin(String reasonToJoin) {
+        this.reasonToJoin = reasonToJoin;
     }
 }

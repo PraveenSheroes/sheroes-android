@@ -94,15 +94,12 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
         } else {
             tvCommunityTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         }
-        if (dataItem.isOwner() && dataItem.isMember()) {
-            tvCommunityInvite.setVisibility(View.VISIBLE);
-        } else if (dataItem.isMember()&&!dataItem.isOwner()) {
+        if (dataItem.isMember() && !dataItem.isOwner()) {
             tvCommunityInvite.setVisibility(View.VISIBLE);
             tvCommunityInvite.setTextColor(ContextCompat.getColor(mContext, R.color.white));
             tvCommunityInvite.setText(mContext.getString(R.string.ID_VIEW));
             tvCommunityInvite.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
-        }else
-        {
+        } else {
             tvCommunityInvite.setVisibility(View.VISIBLE);
             tvCommunityInvite.setTextColor(ContextCompat.getColor(mContext, R.color.white));
             tvCommunityInvite.setText(mContext.getString(R.string.ID_INVITE));
@@ -170,7 +167,7 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
             time.setVisibility(View.INVISIBLE);
             final RelativeLayout rlFeedArticleViews = (RelativeLayout) backgroundImage.findViewById(R.id.rl_gradiant);
             //TODO: Need to change members
-            tvTotalMember.setText( AppConstants.SPACE + context.getString(R.string.ID_MEMBERS));
+            tvTotalMember.setText(AppConstants.SPACE + context.getString(R.string.ID_MEMBERS));
             Glide.with(mContext)
                     .load(imageUrl).asBitmap()
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
@@ -202,6 +199,7 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
     public void myCardClick() {
         viewInterface.handleOnClick(dataItem, liCoverImage);
     }
+
     @OnClick(R.id.tv_my_community_view_more)
     public void viewMoreTextClick() {
         viewMoreText();
@@ -250,11 +248,9 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_community_detail_invite)
     public void joinClick() {
-        if(tvCommunityInvite.getText().toString().equalsIgnoreCase(mContext.getString(R.string.ID_VIEW)))
-        {
-
-        }
-        else {
+        if (tvCommunityInvite.getText().toString().equalsIgnoreCase(mContext.getString(R.string.ID_VIEW))) {
+            viewInterface.handleOnClick(dataItem, liCoverImage);
+        } else {
             viewInterface.handleOnClick(dataItem, tvCommunityInvite);
         }
     }

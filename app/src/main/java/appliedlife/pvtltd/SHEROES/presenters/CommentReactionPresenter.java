@@ -17,6 +17,8 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.AllCommentReacti
 import rx.Subscriber;
 import rx.Subscription;
 
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_COMMENT_REACTION;
+
 /**
  * Created by Praveen_Singh on 24-01-2017.
  */
@@ -47,7 +49,7 @@ public class CommentReactionPresenter extends BasePresenter<AllCommentReactionVi
 
     public void getAllCommentListFromPresenter(CommentReactionRequestPojo commentReactionRequestPojo,boolean isReaction,final int addEditOperation) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.HTTP_401_UNAUTHORIZED,AppConstants.TWO_CONSTANT);
+            getMvpView().showError(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_COMMENT_REACTION);
             return;
         }
         getMvpView().startProgressBar();
@@ -59,7 +61,7 @@ public class CommentReactionPresenter extends BasePresenter<AllCommentReactionVi
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(AppConstants.HTTP_401_UNAUTHORIZED,AppConstants.TWO_CONSTANT);
+                getMvpView().showError(AppConstants.HTTP_401_UNAUTHORIZED,ERROR_COMMENT_REACTION);
             }
 
             @Override
@@ -73,7 +75,7 @@ public class CommentReactionPresenter extends BasePresenter<AllCommentReactionVi
 
     public void addCommentListFromPresenter(CommentReactionRequestPojo commentReactionRequestPojo,final int operationId) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.HTTP_401_UNAUTHORIZED,AppConstants.TWO_CONSTANT);
+            getMvpView().showError(AppConstants.HTTP_401_UNAUTHORIZED,ERROR_COMMENT_REACTION);
             return;
         }
         getMvpView().startProgressBar();
@@ -84,7 +86,7 @@ public class CommentReactionPresenter extends BasePresenter<AllCommentReactionVi
             }
             @Override
             public void onError(Throwable e) {
-                getMvpView().showError(AppConstants.HTTP_401_UNAUTHORIZED,AppConstants.TWO_CONSTANT);
+                getMvpView().showError(AppConstants.HTTP_401_UNAUTHORIZED,ERROR_COMMENT_REACTION);
             }
 
             @Override
@@ -97,7 +99,7 @@ public class CommentReactionPresenter extends BasePresenter<AllCommentReactionVi
     }
     public void editCommentListFromPresenter(CommentReactionRequestPojo commentReactionRequestPojo, final int editDeleteId) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.HTTP_401_UNAUTHORIZED,AppConstants.TWO_CONSTANT);
+            getMvpView().showError(AppConstants.HTTP_401_UNAUTHORIZED,ERROR_COMMENT_REACTION);
             return;
         }
         getMvpView().startProgressBar();
@@ -109,7 +111,7 @@ public class CommentReactionPresenter extends BasePresenter<AllCommentReactionVi
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(AppConstants.HTTP_401_UNAUTHORIZED,AppConstants.TWO_CONSTANT);
+                getMvpView().showError(AppConstants.HTTP_401_UNAUTHORIZED,ERROR_COMMENT_REACTION);
             }
             @Override
             public void onNext(CommentReactionResponsePojo commentResponsePojo) {

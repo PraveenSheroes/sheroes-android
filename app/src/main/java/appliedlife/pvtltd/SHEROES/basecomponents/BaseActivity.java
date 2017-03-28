@@ -24,6 +24,7 @@ import java.util.List;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
+import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionDoc;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
@@ -40,6 +41,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityJoinRegionDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ImageFullViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobFragment;
@@ -133,6 +135,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
             ft.commitAllowingStateLoss();
         }
     }
+
     @Override
     protected void onDestroy() {
         mIsDestroyed = true;
@@ -203,7 +206,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
             fragment.setArguments(b);
         }
         if (!fragment.isVisible() && !fragment.isAdded() && !isFinishing() && !mIsDestroyed) {
-            fragment.show(getFragmentManager(),CommunityJoinRegionDialogFragment.class.getName());
+            fragment.show(getFragmentManager(), CommunityJoinRegionDialogFragment.class.getName());
         }
         return fragment;
     }
@@ -213,7 +216,14 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
         int id = view.getId();
         switch (id) {
             case R.id.tv_featured_community_join:
-                showCommunityJoinReason(mFeedDetail);
+                if (mFeedDetail.isClosedCommunity()) {
+                    showCommunityJoinReason(mFeedDetail);
+                } else {
+                    if (AppUtils.isFragmentUIActive(mFragment)) {
+                        ((FeaturedFragment) mFragment).joinRequestForOpenCommunity(mFeedDetail);
+                    }
+
+                }
                 break;
             case R.id.tv_feed_article_user_bookmark:
                 bookmarkCall();
@@ -231,26 +241,26 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
             case R.id.tv_feed_community_user_menu:
                 break;
             case R.id.tv_feed_community_post_user_menu:
-                clickMenuItem(view, baseResponse,  AppConstants.THREE_CONSTANT);
+                clickMenuItem(view, baseResponse, AppConstants.THREE_CONSTANT);
                 break;
             case R.id.tv_feed_article_user_menu:
-                clickMenuItem(view, baseResponse,  AppConstants.THREE_CONSTANT);
+                clickMenuItem(view, baseResponse, AppConstants.THREE_CONSTANT);
                 break;
             case R.id.tv_feed_job_user_menu:
-                clickMenuItem(view, baseResponse,  AppConstants.THREE_CONSTANT);
+                clickMenuItem(view, baseResponse, AppConstants.THREE_CONSTANT);
                 break;
             case R.id.tv_article_menu:
-                clickMenuItem(view, baseResponse,  AppConstants.THREE_CONSTANT);
+                clickMenuItem(view, baseResponse, AppConstants.THREE_CONSTANT);
                 break;
             /* All user comment menu option edit,delete */
             case R.id.tv_feed_community_post_user_comment_post_menu:
-                clickMenuItem(view, baseResponse,  AppConstants.TWO_CONSTANT);
+                clickMenuItem(view, baseResponse, AppConstants.TWO_CONSTANT);
                 break;
             case R.id.tv_feed_community_user_comment_post_menu:
-                clickMenuItem(view, baseResponse,  AppConstants.TWO_CONSTANT);
+                clickMenuItem(view, baseResponse, AppConstants.TWO_CONSTANT);
                 break;
             case R.id.tv_feed_article_user_comment_post_menu:
-                clickMenuItem(view, baseResponse,  AppConstants.TWO_CONSTANT);
+                clickMenuItem(view, baseResponse, AppConstants.TWO_CONSTANT);
                 break;
             case R.id.tv_feed_article_total_reactions:
                 mFragmentOpen.setCommentList(false);
@@ -303,11 +313,11 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
                 break;
             case R.id.li_community_images:
-               // CommunitiesDetailActivity.navigate(this, view, mFeedDetail);
+                // CommunitiesDetailActivity.navigate(this, view, mFeedDetail);
                 Intent intentMyCommunity = new Intent(this, CommunitiesDetailActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
-                bundle.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT,CommunityEnum.MY_COMMUNITY);
+                bundle.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.MY_COMMUNITY);
                 intentMyCommunity.putExtras(bundle);
                 startActivityForResult(intentMyCommunity, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
                 overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
@@ -316,13 +326,13 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 Intent intetFeature = new Intent(this, CommunitiesDetailActivity.class);
                 Bundle bundleFeature = new Bundle();
                 bundleFeature.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
-                bundleFeature.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT,CommunityEnum.FEATURE_COMMUNITY);
+                bundleFeature.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.FEATURE_COMMUNITY);
                 intetFeature.putExtras(bundleFeature);
                 startActivityForResult(intetFeature, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
                 overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
                 break;
             default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE+ TAG + AppConstants.SPACE + id);
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + id);
         }
     }
 
@@ -347,7 +357,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
         tvCommunityReaction2.setOnClickListener(this);
         tvCommunityReaction3.setOnClickListener(this);
         tvCommunityReaction4.setOnClickListener(this);
-        popupWindow.showAsDropDown(view, 0,-200);
+        popupWindow.showAsDropDown(view, 0, -200);
         popupView.setOnTouchListener(this);
     }
 
@@ -360,7 +370,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
             if (mFragmentOpen.isBookmarkFragment()) {
                 Fragment fragmentBookMark = getSupportFragmentManager().findFragmentByTag(BookmarksFragment.class.getName());
                 if (AppUtils.isFragmentUIActive(fragmentBookMark)) {
-                    ((BookmarksFragment) fragmentBookMark).bookMarkForCard(mFeedDetail,mFragmentOpen);
+                    ((BookmarksFragment) fragmentBookMark).bookMarkForCard(mFeedDetail, mFragmentOpen);
                 }
             } else if (mFragmentOpen.isJobFragment()) {
                 Fragment fragmentBookMark = getSupportFragmentManager().findFragmentByTag(JobFragment.class.getName());
@@ -404,7 +414,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
         tvEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (menuItemCallFor==AppConstants.ONE_CONSTANT) {
+                if (menuItemCallFor == AppConstants.ONE_CONSTANT) {
                     CommentReactionDoc commentReactionDoc = (CommentReactionDoc) baseResponse;
                     if (null != commentReactionDoc) {
                         if (AppUtils.isFragmentUIActive(fragmentCommentReaction)) {
@@ -413,15 +423,14 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                             ((CommentReactionFragment) fragmentCommentReaction).editCommentInList(commentReactionDoc);
                         }
                     }
-                } else  if (menuItemCallFor==AppConstants.TWO_CONSTANT){
+                } else if (menuItemCallFor == AppConstants.TWO_CONSTANT) {
                     if (null != mFeedDetail) {
                         mFragmentOpen.setCommentList(true);
                         mFeedDetail.setTrending(true);
                         mFeedDetail.setExperienceFromI(AppConstants.ONE_CONSTANT);
                         openCommentReactionFragment(mFeedDetail);
                     }
-                }else if (menuItemCallFor==AppConstants.THREE_CONSTANT)
-                {
+                } else if (menuItemCallFor == AppConstants.THREE_CONSTANT) {
                     if (null != mFeedDetail) {
                         mFeedDetail.setTrending(true);
                     }
@@ -432,14 +441,14 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
         tvDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (menuItemCallFor==AppConstants.ONE_CONSTANT) {
+                if (menuItemCallFor == AppConstants.ONE_CONSTANT) {
                     CommentReactionDoc commentReactionDoc = (CommentReactionDoc) baseResponse;
                     if (AppUtils.isFragmentUIActive(fragmentCommentReaction)) {
                         commentReactionDoc.setActive(false);
                         commentReactionDoc.setEdit(false);
                         ((CommentReactionFragment) fragmentCommentReaction).deleteCommentFromList(commentReactionDoc);
                     }
-                } else if (menuItemCallFor==AppConstants.TWO_CONSTANT) {
+                } else if (menuItemCallFor == AppConstants.TWO_CONSTANT) {
                     if (null != mFeedDetail) {
                         mFragmentOpen.setCommentList(true);
                         mFragmentOpen.setCommentList(true);
@@ -447,21 +456,20 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                         mFeedDetail.setExperienceFromI(AppConstants.TWO_CONSTANT);
                         openCommentReactionFragment(mFeedDetail);
                     }
-                }else if (menuItemCallFor==AppConstants.THREE_CONSTANT)
-                {
+                } else if (menuItemCallFor == AppConstants.THREE_CONSTANT) {
                     if (null != mFeedDetail) {
                         mFeedDetail.setActive(false);
                         if (mFragmentOpen.isBookmarkFragment()) {
                             Fragment fragmentBookMark = getSupportFragmentManager().findFragmentByTag(BookmarksFragment.class.getName());
                             if (AppUtils.isFragmentUIActive(fragmentBookMark)) {
-                                ((BookmarksFragment) fragmentBookMark).bookMarkForCard(mFeedDetail,mFragmentOpen);
+                                ((BookmarksFragment) fragmentBookMark).bookMarkForCard(mFeedDetail, mFragmentOpen);
                             }
-                        }else {
-                        Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-                        if (AppUtils.isFragmentUIActive(fragment)) {
-                            ((HomeFragment) fragment).bookMarkForCard(mFeedDetail);
+                        } else {
+                            Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+                            if (AppUtils.isFragmentUIActive(fragment)) {
+                                ((HomeFragment) fragment).bookMarkForCard(mFeedDetail);
+                            }
                         }
-                    }
                     }
                 }
                 popupWindow.dismiss();
@@ -630,6 +638,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                     .replace(R.id.fl_feed_comments, commentReactionFragmentForArticle, CommentReactionFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
         }
     }
+
     @Override
     public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
         if (AppUtils.isFragmentUIActive(mFragment)) {
@@ -689,10 +698,12 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
     }
 
     @Override
-    public void onShowErrorDialog(String errorReason, int errorFor) {
+    public void onShowErrorDialog(String errorReason, FeedParticipationEnum feedParticipationEnum) {
 
     }
 
+    @Override
+    public void onSuccessResult(String result, FeedDetail feedDetail) {
 
-
+    }
 }

@@ -5,7 +5,6 @@ import javax.inject.Singleton;
 
 import appliedlife.pvtltd.SHEROES.models.InviteSearchModel;
 import appliedlife.pvtltd.SHEROES.models.RequestedListModel;
-import appliedlife.pvtltd.SHEROES.models.entities.community.PopularTag;
 import appliedlife.pvtltd.SHEROES.presenters.CommunityTagsPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.InvitePresenter;
 import appliedlife.pvtltd.SHEROES.presenters.MembersPresenter;
@@ -120,7 +119,6 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.FeedJobHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FilterHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FooterViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.GetAllDataBoardingSearchHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.HomeSpinnerFooterHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HomeSpinnerSelectorHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.InterestSearchHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.InviteMemberHolder;
@@ -200,7 +198,6 @@ public interface SheroesAppComponent {
     void inject(FooterViewHolder footerViewHolder);
     void inject(DrawerViewHolder drawerViewHolder);
     void inject(HomeSpinnerSelectorHolder homeSpinnerSelectorHolder);
-    void inject(HomeSpinnerFooterHolder homeSpinnerFooterHolder);
     void inject(SearchModuleHolder searchModuleHolder);
     void inject(FeatureCardHolder featureCardHolder);
     void inject(FeedCommunityPostHolder feedCommunityPostHolder);

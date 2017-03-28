@@ -175,7 +175,7 @@
                     android:gravity="center"
                     android:layout_gravity="center_vertical|center_horizontal" />
                 <TextView
-                    android:id="@+id/tv_community_invite"
+                    android:id="@+id/tv_community_join_invite"
                     android:layout_width="@dimen/dp_size_81"
                     android:layout_height="@dimen/dp_size_35"
                     android:layout_gravity="right|center_vertical"

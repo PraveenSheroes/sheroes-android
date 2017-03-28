@@ -24,6 +24,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
+import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
@@ -97,39 +98,67 @@ public class CommunitiesDetailFragment extends BaseFragment {
         mAdapter = new GenericRecyclerViewAdapter(getContext(), (CommunitiesDetailActivity) getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
+        if(null!=communityEnum)
+        {
         switch (communityEnum) {
-            case SEARCH_COMMUNITY:
 
+            case SEARCH_COMMUNITY:
+                mTvJoinView.setVisibility(View.VISIBLE);
+                if (!mFeedDetail.isMember() && !mFeedDetail.isOwner() && !mFeedDetail.isRequestPending()) {
+                    mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.footer_icon_text));
+                    mTvJoinView.setText(getString(R.string.ID_JOIN));
+                    mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
+                } else if (mFeedDetail.isRequestPending()) {
+                    mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+                    mTvJoinView.setText(getString(R.string.ID_REQUESTED));
+                    mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_community_requested);
+                    mTvJoinView.setEnabled(false);
+                } else if (mFeedDetail.isOwner() || mFeedDetail.isMember()) {
+                    mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+                    mTvJoinView.setText(getString(R.string.ID_JOINED));
+                    mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
+                    mTvJoinView.setEnabled(false);
+                } else {
+                    mTvJoinView.setBackgroundResource(R.drawable.rectangle_community_invite);
+                    mTvJoinView.setText(getString(R.string.ID_INVITE));
+                    mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+                }
                 break;
             case FEATURE_COMMUNITY:
-                    if (!mFeedDetail.isMember() && !mFeedDetail.isOwner() && !mFeedDetail.isRequestPending()) {
-                        mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.footer_icon_text));
-                        mTvJoinView.setText(getString(R.string.ID_JOIN));
-                        mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
-                    } else if (mFeedDetail.isRequestPending()) {
-                        mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
-                        mTvJoinView.setText(getString(R.string.ID_REQUESTED));
-                        mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_community_requested);
-                        mTvJoinView.setEnabled(false);
-                    } else if (mFeedDetail.isOwner() || mFeedDetail.isMember()) {
-                        mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
-                        mTvJoinView.setText(getString(R.string.ID_JOINED));
-                        mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
-                        mTvJoinView.setVisibility(View.VISIBLE);
-                        mTvJoinView.setEnabled(false);
-                    } else {
-                        mTvJoinView.setBackgroundResource(R.drawable.rectangle_community_invite);
-                        mTvJoinView.setText(getString(R.string.ID_INVITE));
-                        mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
-                    }
+                mTvJoinView.setVisibility(View.VISIBLE);
+                if (!mFeedDetail.isMember() && !mFeedDetail.isOwner() && !mFeedDetail.isRequestPending()) {
+                    mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.footer_icon_text));
+                    mTvJoinView.setText(getString(R.string.ID_JOIN));
+                    mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
+                } else if (mFeedDetail.isRequestPending()) {
+                    mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+                    mTvJoinView.setText(getString(R.string.ID_REQUESTED));
+                    mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_community_requested);
+                    mTvJoinView.setEnabled(false);
+                } else if (mFeedDetail.isOwner() || mFeedDetail.isMember()) {
+                    mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+                    mTvJoinView.setText(getString(R.string.ID_JOINED));
+                    mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
+                    mTvJoinView.setVisibility(View.VISIBLE);
+                    mTvJoinView.setEnabled(false);
+                }
                 break;
             case MY_COMMUNITY:
-                mTvJoinView.setBackgroundResource(R.drawable.rectangle_community_invite);
-                mTvJoinView.setText(getString(R.string.ID_INVITE));
-                mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+                mTvJoinView.setVisibility(View.VISIBLE);
+                if (mFeedDetail.isMember() && !mFeedDetail.isOwner()) {
+                    mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+                    mTvJoinView.setText(getString(R.string.ID_VIEW));
+                    mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
+                }
+                else {
+                    mTvJoinView.setBackgroundResource(R.drawable.rectangle_community_invite);
+                    mTvJoinView.setText(getString(R.string.ID_INVITE));
+                    mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+                }
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + communityEnum);
+        }
         }
         mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager, mFragmentListRefreshData) {
             @Override
@@ -209,8 +238,8 @@ public class CommunitiesDetailFragment extends BaseFragment {
 
 
     @Override
-    public void getSuccessForAllResponse(String success, int successFrom) {
-        super.getSuccessForAllResponse(success, successFrom);
+    public void getSuccessForAllResponse(String success, FeedParticipationEnum feedParticipationEnum) {
+        super.getSuccessForAllResponse(success, feedParticipationEnum);
     }
 
     public void bookMarkForCard(FeedDetail feedDetail) {
@@ -225,8 +254,8 @@ public class CommunitiesDetailFragment extends BaseFragment {
         super.likeAndUnlikeRequest(baseResponse, reactionValue, position);
     }
 
-    public void commentListRefresh(FeedDetail feedDetail, int callFrom) {
-        super.commentListRefresh(feedDetail, callFrom);
+    public void commentListRefresh(FeedDetail feedDetail, FeedParticipationEnum feedParticipationEnum) {
+        super.commentListRefresh(feedDetail, feedParticipationEnum);
     }
 
 }

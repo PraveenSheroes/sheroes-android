@@ -11,6 +11,8 @@ import rx.Subscriber;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MASTER_DATA;
+
 /**
  * Created by Praveen Singh on 29/12/2016.
  *
@@ -66,7 +68,7 @@ public class BasePresenter<T extends BaseMvpView> implements SheroesPresenter<T>
 
     public void getMasterDataToAllPresenter(SheroesApplication mSheroesApplication, MasterDataModel masterDataModel, final  Preference<MasterDataResponse> mUserPreferenceMasterData) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, AppConstants.THREE_CONSTANT);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_MASTER_DATA);
             return;
         }
         getMvpView().startProgressBar();
@@ -79,7 +81,7 @@ public class BasePresenter<T extends BaseMvpView> implements SheroesPresenter<T>
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), AppConstants.THREE_CONSTANT);
+                getMvpView().showError(e.getMessage(),ERROR_MASTER_DATA);
             }
 
             @Override

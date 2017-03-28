@@ -18,6 +18,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.Section;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingChangeUserPreferenseResponse;
@@ -289,7 +290,7 @@ public class SettingPreferencesActivity extends BaseActivity implements SettingF
     }
 
     @Override
-    public void showError(String s, int errorFor) {
+    public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
 
     }
 

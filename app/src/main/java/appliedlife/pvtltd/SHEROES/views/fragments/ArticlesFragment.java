@@ -19,6 +19,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
@@ -135,6 +136,7 @@ public class ArticlesFragment extends BaseFragment {
         mPullRefreshList.setPullToRefresh(true);
         mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
         mPullRefreshList = new SwipPullRefreshList();
+        mTrendingFeedDetail.clear();
         setRefreshList(mPullRefreshList);
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
         mHomePresenter.getFeedFromPresenter(mAppUtils.articleCategoryRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo(), categoryIds));
@@ -182,14 +184,13 @@ public class ArticlesFragment extends BaseFragment {
     }
 
     @Override
-    public void getSuccessForAllResponse(String success, int successFrom) {
-        super.getSuccessForAllResponse(success, successFrom);
+    public void getSuccessForAllResponse(String success, FeedParticipationEnum feedParticipationEnum) {
+        super.getSuccessForAllResponse(success, feedParticipationEnum);
     }
 
     public void bookMarkForCard(FeedDetail feedDetail) {
         super.bookMarkForCard(feedDetail);
     }
-
 
     @Override
     public void onDestroyView() {

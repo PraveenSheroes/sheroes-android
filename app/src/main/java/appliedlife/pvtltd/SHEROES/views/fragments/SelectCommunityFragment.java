@@ -19,6 +19,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
+import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityList;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
@@ -26,7 +27,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityRespo
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Docs;
-import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Member;
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -169,37 +169,15 @@ public class SelectCommunityFragment extends BaseDialogFragment implements Commu
     }
 
     @Override
-    public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-
-    }
-
-
-    @Override
     public List getListData() {
         return null;
     }
 
-
-
     @Override
-    public void startProgressBar() {
+    public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
 
     }
 
-    @Override
-    public void stopProgressBar() {
-
-    }
-
-    @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
-    public void showError(String s, int errorFor) {
-
-    }
 
     @Override
     public void getLogInResponse(LoginResponse loginResponse) {
@@ -217,9 +195,8 @@ public class SelectCommunityFragment extends BaseDialogFragment implements Commu
 
     }
 
-
     @Override
-    public void getSuccessForAllResponse(String success, int successFrom) {
+    public void getSuccessForAllResponse(String success, FeedParticipationEnum feedParticipationEnum) {
 
     }
 

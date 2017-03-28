@@ -259,15 +259,4 @@ public class OnBoardingSearchDialogFragment extends BaseDialogFragment implement
     public void stopProgressBar() {
         mProgressBar.setVisibility(View.GONE);
     }
-
-
-    @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
-    public void showError(String s, int errorFor) {
-
-    }
 }

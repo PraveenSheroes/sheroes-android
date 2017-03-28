@@ -17,6 +17,8 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.AllMembersView;
 import rx.Subscriber;
 import rx.Subscription;
 
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MEMBER;
+
 /**
  * Created by Ajit Kumar on 03-02-2017.
  */
@@ -47,7 +49,7 @@ public class MembersPresenter extends BasePresenter<AllMembersView> {
 
     public void getAllMembers(MemberRequest memberRequest) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showNwError();
+            getMvpView().showError(AppConstants.ERROR_APP_CLOSE, ERROR_MEMBER);
             return;
         }
         getMvpView().startProgressBar();
@@ -58,7 +60,7 @@ public class MembersPresenter extends BasePresenter<AllMembersView> {
             }
             @Override
             public void onError(Throwable e) {
-                getMvpView().showError(AppConstants.ERROR_APP_CLOSE,0);
+                getMvpView().showError(AppConstants.ERROR_APP_CLOSE, ERROR_MEMBER);
                 getMvpView().showNwError();
                 getMvpView().stopProgressBar();
             }

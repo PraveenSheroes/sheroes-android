@@ -59,6 +59,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FOR_REFRESH_FRAGMENT_LIST;
+
 
 public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemoveDialog.OwnerRemoveCloseListener, InviteFragmentListener, CommunityOwnerSearchFragment.InviteOwnerActivityIntractionListner, InviteCommunityOwner.InviteOwnerDoneIntractionListner, ShareCommunityFragment.ShareCommunityActivityIntractionListner, CommunityInviteSearchFragment.InviteSearchActivityIntractionListner, CommunityRequestedFragment.RequestHomeActivityIntractionListner, AllMembersFragment.MembersHomeActivityIntractionListner, CommunityOpenAboutFragment.AboutCommunityActivityIntractionListner, CommentReactionFragment.HomeActivityIntractionListner {
     private final String TAG = LogUtils.makeLogTag(CommunitiesDetailActivity.class);
@@ -204,10 +206,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemo
             case R.id.card_community_detail:
                 if (null != mFeedDetail) {
                     communityOpenAboutFragment = new CommunityOpenAboutFragment();
-                    Bundle bundleCommunity = new Bundle();
-                    bundleCommunity.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
-
-                    communityOpenAboutFragment.setArguments(bundleCommunity);
+                    communityOpenAboutFragment.setArguments(getIntent().getExtras());
                     getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.bottom_to_top_slide_reverse_anim)
                             .replace(R.id.about_community_container, communityOpenAboutFragment, CommunityOpenAboutFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
                 }
@@ -253,15 +252,17 @@ public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemo
     }
 
     @Override
-    public void inviteClick() {
-
-        InviteCommunityMember myCommunityInviteMemberFragment = new InviteCommunityMember();
-        Bundle bundleInvite = new Bundle();
-        bundleInvite.putParcelable(AppConstants.COMMUNITIES_DETAIL, mFeedDetail);
-        myCommunityInviteMemberFragment.setArguments(bundleInvite);
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
-                .replace(R.id.about_community_container, myCommunityInviteMemberFragment, InviteCommunityMember.class.getName()).addToBackStack(null).commitAllowingStateLoss();
-
+    public void inviteJoinEventClick(String pressedEventName, FeedDetail feedDetail) {
+        if (pressedEventName.equals(getString(R.string.ID_JOIN))) {
+            showCommunityJoinReason(feedDetail);
+        } else {
+            InviteCommunityMember myCommunityInviteMemberFragment = new InviteCommunityMember();
+            Bundle bundleInvite = new Bundle();
+            bundleInvite.putParcelable(AppConstants.COMMUNITIES_DETAIL, mFeedDetail);
+            myCommunityInviteMemberFragment.setArguments(bundleInvite);
+            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
+                    .replace(R.id.about_community_container, myCommunityInviteMemberFragment, InviteCommunityMember.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+        }
     }
 
     @Override
@@ -346,7 +347,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemo
         if (mFragmentOpen.isCommentList()) {
             getSupportFragmentManager().popBackStackImmediate();
             if (AppUtils.isFragmentUIActive(mFragment)) {
-                ((CommunitiesDetailFragment) mFragment).commentListRefresh(mFeedDetail, AppConstants.TWO_CONSTANT);
+                ((CommunitiesDetailFragment) mFragment).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
             }
             mFragmentOpen.setCommentList(false);
         } else if (mFragmentOpen.isReactionList()) {
