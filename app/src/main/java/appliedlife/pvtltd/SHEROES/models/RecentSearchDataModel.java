@@ -11,6 +11,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
 import appliedlife.pvtltd.SHEROES.database.dbtables.RecentSearchDataTable;
 import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
@@ -25,45 +26,15 @@ public class RecentSearchDataModel {
         this.sheroesAppServiceApi = sheroesAppServiceApi;
         this.storIOSQLite = storIOSQLite;
     }
-
-    public boolean isCached() {
-        return storIOSQLite.get()
-                .numberOfResults()
-                .withQuery(RecentSearchDataTable.getAllQuery())
-                .prepare()
-                .executeAsBlocking() > 0;
-    }
-
-
-   /* public Observable<List<RecentSearchData>> saveRecentSearchTypes(final List<RecentSearchData> recentSearchPassedDataList, final long entitiyOrParticipantID) {
-        return getAllRecentSearch().flatMap(new Func1<List<RecentSearchData>, Observable<List<RecentSearchData>>>() {
-            @Override
-            public Observable<List<RecentSearchData>> call(List<RecentSearchData> recentSearchDataList) {
-                if (StringUtil.isNotEmptyCollection(recentSearchDataList)) {
-                    for (RecentSearchData recentSearchData : recentSearchDataList) {
-                        if (recentSearchData.getEntityOrParticipantId() != entitiyOrParticipantID) {
-                            recentSearchPassedDataList.add(recentSearchData);
-                        }
-                    }
-                }
-                return saveRecentSearch(recentSearchPassedDataList);
-            }
-        }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
-*/
-   public Observable<List<RecentSearchData>> saveRecentSearchTypes(final List<RecentSearchData> recentSearchPassedDataList, final long entitiyOrParticipantID) {
-       return  saveRecentSearch(recentSearchPassedDataList);
-   }
     public Observable<List<RecentSearchData>> getAllRecentSearch() {
         return storIOSQLite.get()
                 .listOfObjects(RecentSearchData.class)
                 .withQuery(RecentSearchDataTable.getQueryForList())
                 .prepare()
-                .asRxObservable().subscribeOn(Schedulers.io());
+                .asRxObservable().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<List<RecentSearchData>> saveRecentSearch(final List<RecentSearchData> recentSearchDatas) {
+    public Observable<List<RecentSearchData>> saveRecentSearchTypes(final List<RecentSearchData> recentSearchDatas) {
         return storIOSQLite.put()
                 .objects(recentSearchDatas)
                 .useTransaction(true)
@@ -74,7 +45,7 @@ public class RecentSearchDataModel {
                     public Observable<List<RecentSearchData>> call(PutResults<RecentSearchData> results) {
                         return Observable.just(recentSearchDatas);
                     }
-                });
+                }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
 }

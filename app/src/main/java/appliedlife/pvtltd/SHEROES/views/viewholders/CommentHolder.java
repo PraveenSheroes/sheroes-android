@@ -44,6 +44,8 @@ public class CommentHolder extends BaseViewHolder<CommentReactionDoc> {
     TextView tvUserComment;
     @Bind(R.id.tv_user_comment_list_menu)
     TextView tvUserCommentListMenu;
+    @Bind(R.id.tv_list_user_comment_time)
+    TextView tvListCommentTime;
     Context mContext;
     BaseHolderInterface viewInterface;
     private CommentReactionDoc dataItem;
@@ -60,6 +62,12 @@ public class CommentHolder extends BaseViewHolder<CommentReactionDoc> {
     public void bindData(CommentReactionDoc item, final Context context, int position) {
         this.dataItem = item;
         this.mContext = context;
+        if(StringUtil.isNotNullOrEmptyString(dataItem.getCreatedOn()))
+        {
+         //   String dateTime= DateUtil.getInstance().getDateWithFormat(dataItem.getCreatedOn(),AppConstants.COMMENT_DATE_TIME);
+            tvListCommentTime.setText(dataItem.getCreatedOn());
+        }
+
         if (dataItem.isMyOwnParticipation()) {
             tvUserCommentListMenu.setVisibility(View.VISIBLE);
         }

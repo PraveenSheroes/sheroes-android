@@ -73,7 +73,7 @@
             android:layout_marginLeft="@dimen/dp_size_16"
             android:layout_marginRight="@dimen/dp_size_12"
             android:layout_marginTop="@dimen/dp_size_20"
-            android:src="@drawable/ic_footer_button_icon" />
+            android:src="@drawable/ic_createc_ommunity_icon" />
 
         <TextView
             android:id="@+id/tv_article_detail_icon_name"
@@ -227,7 +227,7 @@
                 android:id="@+id/iv_article_detail_user_pic"
                 android:layout_width="@dimen/dp_size_27"
                 android:layout_height="@dimen/dp_size_28"
-                android:src="@drawable/ic_footer_button_icon" />
+                android:src="@drawable/ic_createc_ommunity_icon" />
 
 
             <TextView
@@ -267,7 +267,7 @@
                 android:id="@+id/iv_article_detail_user_pic_second"
                 android:layout_width="@dimen/dp_size_27"
                 android:layout_height="@dimen/dp_size_28"
-                android:src="@drawable/ic_footer_button_icon" />
+                android:src="@drawable/ic_createc_ommunity_icon" />
 
 
             <TextView
@@ -308,7 +308,7 @@
                 android:id="@+id/iv_article_detail_user_pic_third"
                 android:layout_width="@dimen/dp_size_27"
                 android:layout_height="@dimen/dp_size_28"
-                android:src="@drawable/ic_footer_button_icon" />
+                android:src="@drawable/ic_createc_ommunity_icon" />
 
 
             <TextView
@@ -363,7 +363,7 @@
                 android:id="@+id/iv_article_detail_register_user_pic"
                 android:layout_width="@dimen/comment_icon"
                 android:layout_height="@dimen/comment_icon"
-                android:src="@drawable/ic_footer_button_icon"
+                android:src="@drawable/ic_createc_ommunity_icon"
                 android:layout_marginBottom="@dimen/dp_size_4"
                 android:layout_marginLeft="@dimen/dp_size_4"
                 android:layout_marginTop="@dimen/dp_size_4" />

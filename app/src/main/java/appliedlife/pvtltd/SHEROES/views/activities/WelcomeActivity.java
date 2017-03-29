@@ -27,7 +27,6 @@ public class WelcomeActivity extends BaseActivity implements WelcomeScreenThirdF
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
-        SheroesApplication.getAppComponent(this).inject(this);
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getToken())) {
             Intent homeIntent = new Intent(this, HomeActivity.class);
             startActivity(homeIntent);
@@ -67,7 +66,6 @@ public class WelcomeActivity extends BaseActivity implements WelcomeScreenThirdF
             default:
                 showNetworkTimeoutDoalog(true,false,getString(R.string.ID_GENERIC_ERROR));
         }
-        //getSupportFragmentManager().popBackStack();
     }
 }
 

@@ -35,6 +35,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerRespo
 import appliedlife.pvtltd.SHEROES.models.entities.community.Docs;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Member;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.presenters.CreateCommunityPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
@@ -123,7 +124,8 @@ public class InviteCommunityOwner extends BaseFragment implements CommunityView 
     }
 
     @Override
-    public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
+    public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
+        List<FeedDetail> feedDetailList=feedResponsePojo.getFeedDetails();
         if (StringUtil.isNotEmptyCollection(feedDetailList) && mAdapter != null) {
             liInviteMember.setVisibility(View.GONE);
             mAdapter.setCallForRecycler(AppConstants.OWNER_SUB_TYPE);

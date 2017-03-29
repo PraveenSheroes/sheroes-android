@@ -53,7 +53,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.AllCommentReacti
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnFocusChange;
 
 /**
  * Created by Praveen_Singh on 24-01-2017.
@@ -213,12 +212,12 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
         mRecyclerView.addOnScrollListener(new HidingScrollListener(mCommentReactionPresenter, mRecyclerView, mLayoutManager, mFragmentListRefreshData) {
             @Override
             public void onHide() {
-               // mFlCommentReaction.setVisibility(View.GONE);
+                // mFlCommentReaction.setVisibility(View.GONE);
             }
 
             @Override
             public void onShow() {
-              //  mFlCommentReaction.setVisibility(View.VISIBLE);
+                //  mFlCommentReaction.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -428,11 +427,6 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
         mHomeActivityIntractionListner.onClickReactionList(mFragmentOpen, mFeedDetail);
     }
 
-    @OnFocusChange(R.id.et_user_comment_description)
-    public void editTextForComment() {
-        liUserCommentPostTypeSelection.setVisibility(View.VISIBLE);
-    }
-
     @OnClick(R.id.tv_user_name_for_post)
     public void userNamePostForComment() {
         mIsAnonymous = false;
@@ -502,10 +496,12 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
             @Override
             public void afterTextChanged(Editable inputSearch) {
                 if (StringUtil.isNotNullOrEmptyString(inputSearch.toString())) {
+                    liUserCommentPostTypeSelection.setVisibility(View.VISIBLE);
                     if (tvPostComment.getVisibility() == View.GONE)
                         tvPostComment.setVisibility(View.VISIBLE);
                 } else {
                     tvPostComment.setVisibility(View.GONE);
+                    liUserCommentPostTypeSelection.setVisibility(View.GONE);
                 }
             }
         };

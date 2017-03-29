@@ -28,6 +28,7 @@ import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LastComment;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
@@ -44,6 +45,7 @@ import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FOR_REFRESH_FRAGMENT_LIST;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_BOOKMARK_UNBOOKMARK;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_COMMENT_REACTION;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_RESPONSE;
@@ -156,9 +158,11 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     public void setListLoadFlag(boolean mListLoad) {
         this.mListLoad = mListLoad;
     }
+
     public void setFeedDetail(FeedDetail feedDetail) {
         this.mFeedDetail = feedDetail;
     }
+
     public void setRefreshList(SwipPullRefreshList mPullRefreshList) {
         this.mPullRefreshList = mPullRefreshList;
     }
@@ -193,7 +197,8 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
 
 
     @Override
-    public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
+    public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
+        List<FeedDetail> feedDetailList=feedResponsePojo.getFeedDetails();
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
             mLiNoResult.setVisibility(View.GONE);
             mPageNo = mFragmentListRefreshData.getPageNo();
@@ -211,10 +216,10 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
             } else {
                 mLayoutManager.scrollToPositionWithOffset(0, 0);
             }
-            mSwipeView.setRefreshing(false);
         } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
             mLiNoResult.setVisibility(View.VISIBLE);
         }
+        mSwipeView.setRefreshing(false);
     }
 
 
@@ -246,8 +251,14 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     public void joinInviteResponse(String success) {
         switch (success) {
             case AppConstants.SUCCESS:
-                mFeedDetail.setRequestPending(true);
-                mHomeSearchActivityFragmentIntractionWithActivityListner.onSuccessResult(success, mFeedDetail);
+                if (mFeedDetail.isClosedCommunity()) {
+                    mFeedDetail.setRequestPending(true);
+
+                } else {
+                    mFeedDetail.setOwner(true);
+                    mFeedDetail.setMember(true);
+                }
+                commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
                 break;
             case AppConstants.FAILED:
                 mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_JOIN_INVITE);
@@ -270,18 +281,17 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                     mAdapter.notifyDataSetChanged();
                     break;
                 case AppConstants.FAILED:
-                    showError(getString(R.string.ID_ALREADY_BOOKMARK),ERROR_COMMENT_REACTION);
+                    showError(getString(R.string.ID_ALREADY_BOOKMARK), ERROR_COMMENT_REACTION);
                     break;
                 default:
-                    showError(AppConstants.HTTP_401_UNAUTHORIZED,ERROR_COMMENT_REACTION);
+                    showError(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_COMMENT_REACTION);
             }
         }
     }
 
     /*1:- If pass one from home activity means its comments section changes
     2:- If two Home activity means its Detail section changes of activity,and refresh particular card*/
-    public void commentListRefresh(FeedDetail feedDetail,FeedParticipationEnum feedParticipationEnum) {
-
+    public void commentListRefresh(FeedDetail feedDetail, FeedParticipationEnum feedParticipationEnum) {
         switch (feedParticipationEnum) {
             case ACTIVITY_FOR_REFRESH_FRAGMENT_LIST:
                 mAdapter.setDataOnPosition(feedDetail, feedDetail.getItemPosition());
@@ -319,7 +329,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                     showError(getString(R.string.ID_ALREADY_BOOKMARK), ERROR_BOOKMARK_UNBOOKMARK);
                     break;
                 default:
-                    showError(AppConstants.HTTP_401_UNAUTHORIZED,ERROR_BOOKMARK_UNBOOKMARK);
+                    showError(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_BOOKMARK_UNBOOKMARK);
             }
         }
     }
@@ -354,10 +364,10 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                     }
                     break;
                 case AppConstants.FAILED:
-                    showError(getString(R.string.ID_ALREADY_BOOKMARK),ERROR_LIKE_UNLIKE);
+                    showError(getString(R.string.ID_ALREADY_BOOKMARK), ERROR_LIKE_UNLIKE);
                     break;
                 default:
-                    showError(AppConstants.HTTP_401_UNAUTHORIZED,ERROR_LIKE_UNLIKE);
+                    showError(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_LIKE_UNLIKE);
 
             }
         }

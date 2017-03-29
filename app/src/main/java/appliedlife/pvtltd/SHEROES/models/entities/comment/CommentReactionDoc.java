@@ -46,10 +46,10 @@ public class CommentReactionDoc extends BaseResponse implements Parcelable {
     @SerializedName("participant_id")
     @Expose
     private long participantId;
-    @SerializedName("participant_image_url")
+    @SerializedName("solr_ignore_participant_image_url")
     @Expose
     private String participantImageUrl;
-    @SerializedName("participant_name")
+    @SerializedName("solr_ignore_participant_name")
     @Expose
     private String participantName;
     @SerializedName("participation_type_id")

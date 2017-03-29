@@ -22,6 +22,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleDetailPojo;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
@@ -102,7 +103,8 @@ public class ArticleDetailFragment extends BaseFragment {
     }
 
     @Override
-    public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
+    public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
+        List<FeedDetail> feedDetailList=feedResponsePojo.getFeedDetails();
         if (StringUtil.isNotEmptyCollection(feedDetailList) && mAdapter != null) {
             articleList = new ArrayList<>();
             articleDetailPojo = new ArticleDetailPojo();

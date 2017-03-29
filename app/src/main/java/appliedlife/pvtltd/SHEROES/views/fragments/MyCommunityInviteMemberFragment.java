@@ -26,6 +26,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -94,7 +95,8 @@ public class MyCommunityInviteMemberFragment extends BaseFragment {
     }
 
     @Override
-    public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
+    public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
+        List<FeedDetail> feedDetailList=feedResponsePojo.getFeedDetails();
         if (StringUtil.isNotEmptyCollection(feedDetailList) && mAdapter != null) {
             liInviteMember.setVisibility(View.GONE);
             mAdapter.setCallForRecycler(AppConstants.FEED_SUB_TYPE);

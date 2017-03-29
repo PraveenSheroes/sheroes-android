@@ -71,19 +71,22 @@ public class HomePresenter extends BasePresenter<HomeView> {
     @Inject
     Preference<MasterDataResponse> mUserPreferenceMasterData;
     MasterDataModel mMasterDataModel;
+
     @Inject
-    public HomePresenter(MasterDataModel masterDataModel,HomeModel homeModel, SheroesApplication sheroesApplication, Preference<LoginResponse> userPreference, RecentSearchDataModel recentSearchDataModel, Preference<MasterDataResponse> mUserPreferenceMasterData) {
+    public HomePresenter(MasterDataModel masterDataModel, HomeModel homeModel, SheroesApplication sheroesApplication, Preference<LoginResponse> userPreference, RecentSearchDataModel recentSearchDataModel, Preference<MasterDataResponse> mUserPreferenceMasterData) {
         this.mHomeModel = homeModel;
         this.mSheroesApplication = sheroesApplication;
         this.mUserPreference = userPreference;
         this.mRecentSearchDataModel = recentSearchDataModel;
-        this.mMasterDataModel=masterDataModel;
+        this.mMasterDataModel = masterDataModel;
         this.mUserPreferenceMasterData = mUserPreferenceMasterData;
 
     }
+
     public void getMasterDataToPresenter() {
-        super.getMasterDataToAllPresenter(mSheroesApplication,mMasterDataModel,mUserPreferenceMasterData);
+        super.getMasterDataToAllPresenter(mSheroesApplication, mMasterDataModel, mUserPreferenceMasterData);
     }
+
     @Override
     public void detachView() {
         super.detachView();
@@ -93,6 +96,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
     public boolean isViewAttached() {
         return super.isViewAttached();
     }
+
     public void getAuthTokenRefreshPresenter() {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
@@ -104,6 +108,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onCompleted() {
                 getMvpView().stopProgressBar();
             }
+
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
@@ -121,42 +126,39 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
     public void getFeedFromPresenter(final FeedRequestPojo feedRequestPojo) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_FEED_RESPONSE);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);
             return;
         }
         getMvpView().startProgressBar();
         Subscription subscription = mHomeModel.getFeedFromModel(feedRequestPojo).subscribe(new Subscriber<FeedResponsePojo>() {
             @Override
             public void onCompleted() {
-                LogUtils.info(TAG,"****************complete***");
+                LogUtils.info(TAG, "****************complete***");
                 getMvpView().stopProgressBar();
             }
 
             @Override
             public void onError(Throwable e) {
-                LogUtils.info(TAG,"*******************"+e.getMessage());
+                LogUtils.info(TAG, "*******************" + e.getMessage());
                 getMvpView().stopProgressBar();
                 getMvpView().showError(e.getMessage(), ERROR_FEED_RESPONSE);
             }
 
             @Override
             public void onNext(FeedResponsePojo feedResponsePojo) {
-                LogUtils.info(TAG,"*******************"+new Gson().toJson(feedResponsePojo));
+                LogUtils.info(TAG, "*******************" + new Gson().toJson(feedResponsePojo));
                 getMvpView().stopProgressBar();
-                if(null!=feedResponsePojo&& StringUtil.isNotEmptyCollection(feedResponsePojo.getFeaturedDocs()))
-                {
-                    getMvpView().getFeedListSuccess(feedResponsePojo.getFeaturedDocs());
-                }else
-                {
-                    getMvpView().getFeedListSuccess(feedResponsePojo.getFeedDetails());
+                if (null != feedResponsePojo) {
+                    getMvpView().getFeedListSuccess(feedResponsePojo);
                 }
             }
         });
         registerSubscription(subscription);
     }
+
     public void getMyCommunityFromPresenter(final FeedRequestPojo feedRequestPojo) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_MY_COMMUNITIES);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_MY_COMMUNITIES);
             return;
         }
         getMvpView().startProgressBar();
@@ -168,29 +170,26 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
             @Override
             public void onError(Throwable e) {
-                LogUtils.info(TAG,"*******************"+e.getMessage());
+                LogUtils.info(TAG, "*******************" + e.getMessage());
                 getMvpView().stopProgressBar();
                 getMvpView().showError(e.getMessage(), ERROR_MY_COMMUNITIES);
             }
 
             @Override
             public void onNext(FeedResponsePojo feedResponsePojo) {
-                LogUtils.info(TAG,"*******************"+new Gson().toJson(feedResponsePojo));
+                LogUtils.info(TAG, "*******************" + new Gson().toJson(feedResponsePojo));
                 getMvpView().stopProgressBar();
-                if(null!=feedRequestPojo&& StringUtil.isNotEmptyCollection(feedResponsePojo.getFeaturedDocs())&&feedResponsePojo.getFeaturedDocs().size()>AppConstants.ONE_CONSTANT)
-                {
-                    getMvpView().getFeedListSuccess(feedResponsePojo.getFeaturedDocs());
-                }else
-                {
-                    getMvpView().getFeedListSuccess(feedResponsePojo.getFeedDetails());
+                if (null != feedResponsePojo ) {
+                    getMvpView().getFeedListSuccess(feedResponsePojo);
                 }
             }
         });
         registerSubscription(subscription);
     }
+
     public void getTagFromPresenter(final GetAllDataRequest getAllDataRequest) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_TAG);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
             return;
         }
         getMvpView().startProgressBar();
@@ -209,11 +208,9 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onNext(GetTagData getAllData) {
                 getMvpView().stopProgressBar();
-                if(null!=getAllDataRequest&& StringUtil.isNotEmptyCollection(getAllData.getDocs())&&getAllData.getDocs().size()>AppConstants.ONE_CONSTANT)
-                {
+                if (null != getAllData && StringUtil.isNotEmptyCollection(getAllData.getDocs()) && getAllData.getDocs().size() > AppConstants.ONE_CONSTANT) {
                     getMvpView().getTagListSuccess(getAllData.getDocs());
-                }else
-                {
+                } else {
                     getMvpView().getTagListSuccess(getAllData.getDocs());
                 }
             }
@@ -236,13 +233,15 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(),ERROR_BOOK_MARK_LIST);
+                getMvpView().showError(e.getMessage(), ERROR_BOOK_MARK_LIST);
             }
 
             @Override
             public void onNext(FeedResponsePojo feedResponsePojo) {
                 getMvpView().stopProgressBar();
-                getMvpView().getFeedListSuccess(feedResponsePojo.getFeedDetails());
+                if (null != feedResponsePojo) {
+                    getMvpView().getFeedListSuccess(feedResponsePojo);
+                }
             }
         });
         registerSubscription(subscription);
@@ -250,7 +249,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
     public void getLikesFromPresenter(LikeRequestPojo likeRequestPojo) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_LIKE_UNLIKE);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_LIKE_UNLIKE);
             return;
         }
         getMvpView().startProgressBar();
@@ -269,14 +268,15 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onNext(LikeResponse likeResponse) {
                 getMvpView().stopProgressBar();
-                getMvpView().getSuccessForAllResponse(likeResponse.getStatus(),LIKE_UNLIKE);
+                getMvpView().getSuccessForAllResponse(likeResponse.getStatus(), LIKE_UNLIKE);
             }
         });
         registerSubscription(subscription);
     }
+
     public void getUnLikesFromPresenter(LikeRequestPojo likeRequestPojo) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_LIKE_UNLIKE);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_LIKE_UNLIKE);
             return;
         }
         getMvpView().startProgressBar();
@@ -289,25 +289,25 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().getSuccessForAllResponse(e.getMessage(),ERROR_LIKE_UNLIKE);
+                getMvpView().getSuccessForAllResponse(e.getMessage(), ERROR_LIKE_UNLIKE);
             }
 
             @Override
             public void onNext(LikeResponse likeResponse) {
                 getMvpView().stopProgressBar();
-                getMvpView().getSuccessForAllResponse(likeResponse.getStatus(),LIKE_UNLIKE);
+                getMvpView().getSuccessForAllResponse(likeResponse.getStatus(), LIKE_UNLIKE);
             }
         });
         registerSubscription(subscription);
     }
 
-    public void addBookMarkFromPresenter(BookmarkRequestPojo bookmarkRequestPojo,boolean isBookmarked) {
+    public void addBookMarkFromPresenter(BookmarkRequestPojo bookmarkRequestPojo, boolean isBookmarked) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_BOOKMARK_UNBOOKMARK);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_BOOKMARK_UNBOOKMARK);
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = mHomeModel.addBookmarkFromModel(bookmarkRequestPojo,isBookmarked).subscribe(new Subscriber<BookmarkResponsePojo>() {
+        Subscription subscription = mHomeModel.addBookmarkFromModel(bookmarkRequestPojo, isBookmarked).subscribe(new Subscriber<BookmarkResponsePojo>() {
             @Override
             public void onCompleted() {
                 getMvpView().stopProgressBar();
@@ -316,13 +316,13 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().getSuccessForAllResponse(e.getMessage(),ERROR_BOOKMARK_UNBOOKMARK);
+                getMvpView().getSuccessForAllResponse(e.getMessage(), ERROR_BOOKMARK_UNBOOKMARK);
             }
 
             @Override
             public void onNext(BookmarkResponsePojo bookmarkResponsePojo) {
                 getMvpView().stopProgressBar();
-                getMvpView().getSuccessForAllResponse(bookmarkResponsePojo.getStatus(),BOOKMARK_UNBOOKMARK);
+                getMvpView().getSuccessForAllResponse(bookmarkResponsePojo.getStatus(), BOOKMARK_UNBOOKMARK);
             }
         });
         registerSubscription(subscription);
@@ -331,7 +331,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
     public void editCommentListFromPresenter(CommentReactionRequestPojo commentReactionRequestPojo) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_COMMENT_REACTION);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMENT_REACTION);
             return;
         }
         getMvpView().startProgressBar();
@@ -340,22 +340,25 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onCompleted() {
                 getMvpView().stopProgressBar();
             }
+
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(),ERROR_COMMENT_REACTION);
+                getMvpView().showError(e.getMessage(), ERROR_COMMENT_REACTION);
             }
+
             @Override
             public void onNext(CommentReactionResponsePojo commentResponsePojo) {
                 getMvpView().stopProgressBar();
-                getMvpView().getSuccessForAllResponse(commentResponsePojo.getStatus(),COMMENT_REACTION);
+                getMvpView().getSuccessForAllResponse(commentResponsePojo.getStatus(), COMMENT_REACTION);
             }
         });
         registerSubscription(subscription);
     }
+
     public void communityJoinFromPresenter(CommunityRequest communityRequest) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_JOIN_INVITE);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_JOIN_INVITE);
             return;
         }
         getMvpView().startProgressBar();
@@ -364,15 +367,17 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onCompleted() {
                 getMvpView().stopProgressBar();
             }
+
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(),ERROR_JOIN_INVITE);
+                getMvpView().showError(e.getMessage(), ERROR_JOIN_INVITE);
             }
+
             @Override
             public void onNext(CommunityResponse communityResponse) {
                 getMvpView().stopProgressBar();
-                getMvpView().getSuccessForAllResponse(communityResponse.getStatus(),JOIN_INVITE);
+                getMvpView().getSuccessForAllResponse(communityResponse.getStatus(), JOIN_INVITE);
             }
         });
         registerSubscription(subscription);
@@ -380,7 +385,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
     public void communityOwnerAdd(CommunityRequest communityRequest) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.ERROR_APP_CLOSE,ERROR_COMMUNITY_OWNER);
+            getMvpView().showError(AppConstants.ERROR_APP_CLOSE, ERROR_COMMUNITY_OWNER);
             return;
         }
         getMvpView().startProgressBar();
@@ -389,41 +394,24 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onCompleted() {
                 getMvpView().stopProgressBar();
             }
+
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(AppConstants.ERROR_APP_CLOSE,ERROR_COMMUNITY_OWNER);
+                getMvpView().showError(AppConstants.ERROR_APP_CLOSE, ERROR_COMMUNITY_OWNER);
             }
+
             @Override
             public void onNext(CommunityResponse communityResponse) {
                 getMvpView().stopProgressBar();
-                getMvpView().getSuccessForAllResponse(communityResponse.getStatus(),COMMUNITY_OWNER);
+                getMvpView().getSuccessForAllResponse(communityResponse.getStatus(), COMMUNITY_OWNER);
             }
         });
         registerSubscription(subscription);
     }
 
-    public void saveMasterDataTypes(List<RecentSearchData> recentSearchData, long entitiyOrParticipantID) {
-        getMvpView().startProgressBar();
-        Subscription subscription = mRecentSearchDataModel.saveRecentSearchTypes(recentSearchData,entitiyOrParticipantID).subscribe(new Subscriber<List<RecentSearchData>>() {
-            @Override
-            public void onCompleted() {
-                getMvpView().stopProgressBar();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(),ERROR_SEARCH_DATA);
-            }
-
-            @Override
-            public void onNext(List<RecentSearchData> masterDatas) {
-                getMvpView().stopProgressBar();
-                 getMvpView().getDB(masterDatas);
-            }
-        });
-        registerSubscription(subscription);
+    public void saveMasterDataTypes(List<RecentSearchData> recentSearchData) {
+        mRecentSearchDataModel.saveRecentSearchTypes(recentSearchData);
     }
 
 
@@ -437,7 +425,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
 
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(),ERROR_SEARCH_DATA);
+                getMvpView().showError(e.getMessage(), ERROR_SEARCH_DATA);
             }
 
             @Override

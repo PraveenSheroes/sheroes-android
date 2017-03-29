@@ -74,10 +74,10 @@ public class CircleImageView extends ImageView {
     if(!isCircularImage) {
       if (imageUrl != null && !imageUrl.isEmpty()) {
         if(errorPlaceHolderDrawableId == 0){
-          errorPlaceHolderDrawableId = R.drawable.ic_footer_button_icon;
+          errorPlaceHolderDrawableId = R.drawable.ic_createc_ommunity_icon;
         }
         if(placeHolderDrawableId == 0){
-          placeHolderDrawableId = R.drawable.ic_footer_button_icon;
+          placeHolderDrawableId = R.drawable.ic_createc_ommunity_icon;
         }
         Glide.with(this.getContext()).load(imageUrl)
             .dontAnimate()
@@ -87,7 +87,7 @@ public class CircleImageView extends ImageView {
             .into(this);
       } else {
         if(errorPlaceHolderDrawableId == 0){
-          errorPlaceHolderDrawableId = R.drawable.ic_footer_button_icon;
+          errorPlaceHolderDrawableId = R.drawable.ic_createc_ommunity_icon;
         }
         Glide.with(this.getContext())
             .load(errorPlaceHolderDrawableId)
@@ -96,10 +96,10 @@ public class CircleImageView extends ImageView {
     }else{
       if (imageUrl != null && !imageUrl.isEmpty()) {
         if(errorPlaceHolderDrawableId == 0){
-          errorPlaceHolderDrawableId = R.drawable.ic_footer_button_icon;
+          errorPlaceHolderDrawableId = R.drawable.ic_createc_ommunity_icon;
         }
         if(placeHolderDrawableId == 0){
-          placeHolderDrawableId = R.drawable.ic_footer_button_icon;
+          placeHolderDrawableId = R.drawable.ic_createc_ommunity_icon;
         }
           Glide.with(this.getContext())
                   .load(imageUrl)
@@ -117,10 +117,10 @@ public class CircleImageView extends ImageView {
                   });
       } else {
         if(placeHolderDrawableId==0){
-          placeHolderDrawableId = R.drawable.ic_footer_button_icon;
+          placeHolderDrawableId = R.drawable.ic_createc_ommunity_icon;
         }
         if(errorPlaceHolderDrawableId == 0){
-          errorPlaceHolderDrawableId = R.drawable.ic_footer_button_icon;
+          errorPlaceHolderDrawableId = R.drawable.ic_createc_ommunity_icon;
         }
         Glide.with(this.getContext()).load(placeHolderDrawableId).error(errorPlaceHolderDrawableId)
             .into(this);

@@ -21,6 +21,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobApplyRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobApplyResponse;
@@ -128,7 +129,8 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
     }
 
     @Override
-    public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
+    public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
+        List<FeedDetail> feedDetailList=feedResponsePojo.getFeedDetails();
         if (StringUtil.isNotEmptyCollection(feedDetailList) && mAdapter != null) {
             List<JobDetailPojo> joblist = new ArrayList<>();
             JobDetailPojo jobDetailPojo = new JobDetailPojo();

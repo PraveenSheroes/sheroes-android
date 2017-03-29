@@ -16,7 +16,7 @@
             android:id="@+id/iv_list_comment_profile_pic"
             android:layout_width="@dimen/comment_icon"
             android:layout_height="@dimen/comment_icon"
-            android:src="@drawable/ic_footer_button_icon" />
+            android:src="@drawable/ic_createc_ommunity_icon" />
 
         <LinearLayout
             android:layout_width="@dimen/dp_size_295"
@@ -40,7 +40,6 @@
                 android:layout_marginLeft="@dimen/dp_size_8"
                 android:layout_marginTop="@dimen/dp_size_5"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                android:text=" Yesterday 4:00 pm"
                 android:layout_gravity="top"
                 android:textColor="@color/detail_page_text"
                 android:textSize="@dimen/sp_size_10" />

@@ -29,7 +29,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Docs;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Member;
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectCommunityRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.presenters.CreateCommunityPresenter;
@@ -185,10 +185,10 @@ public class SelectCommunityFragment extends BaseDialogFragment implements Commu
     }
 
     @Override
-    public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
-
+    public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
 
     }
+
 
     @Override
     public void getTagListSuccess(List<Doc> feedDetailList) {

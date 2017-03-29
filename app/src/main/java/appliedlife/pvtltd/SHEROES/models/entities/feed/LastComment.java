@@ -45,10 +45,10 @@ public class LastComment implements Parcelable {
     @SerializedName("comment")
     @Expose
     private String comment;
-    @SerializedName("participant_name")
+    @SerializedName("solr_ignore_participant_name")
     @Expose
     private String participantName;
-    @SerializedName("participant_image_url")
+    @SerializedName("solr_ignore_participant_image_url")
     @Expose
     private String participantImageUrl;
 

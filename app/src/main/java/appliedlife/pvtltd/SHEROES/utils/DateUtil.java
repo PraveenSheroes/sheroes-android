@@ -1,8 +1,9 @@
  package appliedlife.pvtltd.SHEROES.utils;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+ import java.text.ParseException;
+ import java.text.SimpleDateFormat;
+ import java.util.Date;
+ import java.util.Locale;
 
 /**
  * Created by Praveen_Singh on 19-02-2017.
@@ -89,8 +90,15 @@ public class DateUtil {
         }
         return sb.toString();
     }
-    public static String getDateWithFormat(Date date, String format) {
+    public static String getDateWithFormat(String dateString, String format) {
         SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.US);
-        return sdf.format(date);
+        try {
+            Date date = sdf.parse(dateString);
+            String stringDate = sdf.format(date);
+            return stringDate;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

@@ -11,8 +11,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
@@ -21,6 +19,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
@@ -112,9 +111,9 @@ public class BookmarksFragment extends BaseFragment {
         return view;
     }
     @Override
-    public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
+    public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
         mProgressBarFirstLoad.setVisibility(View.GONE);
-      super.getFeedListSuccess(feedDetailList);
+      super.getFeedListSuccess(feedResponsePojo);
     }
 
     @Override

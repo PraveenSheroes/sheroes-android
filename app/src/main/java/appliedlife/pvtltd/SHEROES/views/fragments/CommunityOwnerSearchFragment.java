@@ -37,6 +37,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.Docs;
 import appliedlife.pvtltd.SHEROES.models.entities.community.ListOfInviteSearch;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Member;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -277,7 +278,8 @@ public class CommunityOwnerSearchFragment extends BaseFragment implements Commun
     }
 
     @Override
-    public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
+    public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
+        List<FeedDetail> feedDetailList=feedResponsePojo.getFeedDetails();
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
             mPullRefreshList.allListData(feedDetailList);
             mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());

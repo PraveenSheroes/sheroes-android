@@ -20,7 +20,6 @@ import com.f2prateek.rx.preferences.Preference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -33,12 +32,10 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityTags;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
 import appliedlife.pvtltd.SHEROES.models.entities.community.PopularTag;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
-import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.OnBoardingData;
 import appliedlife.pvtltd.SHEROES.presenters.CommunityTagsPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -197,7 +194,8 @@ public class CommunitySearchTagsFragment extends BaseFragment implements Communi
 
     }
     @Override
-    public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
+    public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
+       // List<FeedDetail> feedDetailList=feedResponsePojo.getFeedDetails();
         /*if (StringUtil.isNotEmptyCollection(feedDetailList) && mAdapter != null) {
             mAdapter.setCallForRecycler(AppConstants.FEED_SUB_TYPE);
             mAdapter.setSheroesGenericListData(feedDetailList);

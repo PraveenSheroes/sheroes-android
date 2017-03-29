@@ -21,6 +21,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
@@ -144,8 +145,13 @@ public class ArticlesFragment extends BaseFragment {
     }
 
     @Override
-    public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
-
+    public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
+        List<FeedDetail> feedDetailList;
+        if (null != feedResponsePojo && StringUtil.isNotEmptyCollection(feedResponsePojo.getFeaturedDocs())) {
+            feedDetailList = feedResponsePojo.getFeaturedDocs();
+        } else {
+            feedDetailList = feedResponsePojo.getFeedDetails();
+        }
         mProgressBarFirstLoad.setVisibility(View.GONE);
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
             mLiNoResult.setVisibility(View.GONE);
@@ -177,10 +183,10 @@ public class ArticlesFragment extends BaseFragment {
             } else {
                 mLayoutManager.scrollToPositionWithOffset(0, 0);
             }
-            mSwipeView.setRefreshing(false);
         } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
             mLiNoResult.setVisibility(View.VISIBLE);
         }
+        mSwipeView.setRefreshing(false);
     }
 
     @Override

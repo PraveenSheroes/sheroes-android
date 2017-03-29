@@ -61,7 +61,6 @@
                     android:paddingLeft="@dimen/dp_size_15"
                     android:paddingRight="@dimen/dp_size_15"
                     android:paddingTop="@dimen/dp_size_5"
-                    android:text="@string/ID_APP_NAME"
                     android:textColor="@color/white"
                     android:textSize="@dimen/sp_size_10" />
             </FrameLayout>
@@ -110,7 +109,6 @@
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_search_group_icon"
         app:layout_anchor="@id/app_bar_coomunities_detail"
         app:layout_anchorGravity="bottom|center"
         android:scaleType="fitXY"

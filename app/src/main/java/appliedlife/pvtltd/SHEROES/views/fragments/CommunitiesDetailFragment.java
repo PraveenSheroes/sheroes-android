@@ -26,6 +26,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
@@ -35,6 +36,7 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -58,7 +60,8 @@ public class CommunitiesDetailFragment extends BaseFragment {
     private SwipPullRefreshList mPullRefreshList;
     @Bind(R.id.tv_join_view)
     TextView mTvJoinView;
-
+    @Bind(R.id.iv_logo)
+    CircleImageView mIvLogo;
     @Inject
     AppUtils mAppUtils;
     @Bind(R.id.li_no_result)
@@ -71,6 +74,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
     private boolean mListLoad = true;
     private boolean mIsEdit = false;
     private CommunityEnum communityEnum = null;
+    String mScreenName;
 
     public static CommunitiesDetailFragment createInstance(Intent intent) {
         CommunitiesDetailFragment communitiesDetailFragment = new CommunitiesDetailFragment();
@@ -88,77 +92,81 @@ public class CommunitiesDetailFragment extends BaseFragment {
             mFeedDetail = getArguments().getParcelable(AppConstants.COMMUNITY_DETAIL);
             communityEnum = (CommunityEnum) getArguments().getSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT);
         }
-        mTvJoinView.setEnabled(true);
-        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.COMMUNITY_POST_FRAGMENT, mFeedDetail.getId());
-        mPullRefreshList = new SwipPullRefreshList();
-        mPullRefreshList.setPullToRefresh(false);
-        mHomePresenter.attachView(this);
-        mLayoutManager = new LinearLayoutManager(getContext());
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new GenericRecyclerViewAdapter(getContext(), (CommunitiesDetailActivity) getActivity());
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(mAdapter);
-        if(null!=communityEnum)
-        {
-        switch (communityEnum) {
-
-            case SEARCH_COMMUNITY:
-                mTvJoinView.setVisibility(View.VISIBLE);
-                if (!mFeedDetail.isMember() && !mFeedDetail.isOwner() && !mFeedDetail.isRequestPending()) {
-                    mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.footer_icon_text));
-                    mTvJoinView.setText(getString(R.string.ID_JOIN));
-                    mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
-                } else if (mFeedDetail.isRequestPending()) {
-                    mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
-                    mTvJoinView.setText(getString(R.string.ID_REQUESTED));
-                    mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_community_requested);
-                    mTvJoinView.setEnabled(false);
-                } else if (mFeedDetail.isOwner() || mFeedDetail.isMember()) {
-                    mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
-                    mTvJoinView.setText(getString(R.string.ID_JOINED));
-                    mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
-                    mTvJoinView.setEnabled(false);
-                } else {
-                    mTvJoinView.setBackgroundResource(R.drawable.rectangle_community_invite);
-                    mTvJoinView.setText(getString(R.string.ID_INVITE));
-                    mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+        if (mFeedDetail != null) {
+            String imageLogo = mFeedDetail.getThumbnailImageUrl();
+            if (StringUtil.isNotNullOrEmptyString(imageLogo)) {
+                mIvLogo.setCircularImage(true);
+                mIvLogo.bindImage(imageLogo);
+            }
+            mTvJoinView.setEnabled(true);
+            mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.USER_COMMUNITY_POST_FRAGMENT, mFeedDetail.getId());
+            mFragmentListRefreshData.setCommunityId(mFeedDetail.getIdOfEntityOrParticipant());
+            mPullRefreshList = new SwipPullRefreshList();
+            mPullRefreshList.setPullToRefresh(false);
+            mHomePresenter.attachView(this);
+            mLayoutManager = new LinearLayoutManager(getContext());
+            mRecyclerView.setLayoutManager(mLayoutManager);
+            mAdapter = new GenericRecyclerViewAdapter(getContext(), (CommunitiesDetailActivity) getActivity());
+            mRecyclerView.setLayoutManager(mLayoutManager);
+            mRecyclerView.setAdapter(mAdapter);
+            if (null != communityEnum) {
+                switch (communityEnum) {
+                    case SEARCH_COMMUNITY:
+                        mScreenName = AppConstants.ALL_SEARCH;
+                        if (!mFeedDetail.isMember() && !mFeedDetail.isOwner() && !mFeedDetail.isRequestPending()) {
+                            mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.footer_icon_text));
+                            mTvJoinView.setText(getString(R.string.ID_JOIN));
+                            mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
+                        } else if (mFeedDetail.isRequestPending()) {
+                            mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+                            mTvJoinView.setText(getString(R.string.ID_REQUESTED));
+                            mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_community_requested);
+                            mTvJoinView.setEnabled(false);
+                        } else if (mFeedDetail.isOwner() || mFeedDetail.isMember()) {
+                            mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+                            mTvJoinView.setText(getString(R.string.ID_JOINED));
+                            mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
+                            mTvJoinView.setEnabled(false);
+                        } else {
+                            mTvJoinView.setBackgroundResource(R.drawable.rectangle_community_invite);
+                            mTvJoinView.setText(getString(R.string.ID_INVITE));
+                            mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+                        }
+                        break;
+                    case FEATURE_COMMUNITY:
+                        mScreenName = AppConstants.FEATURE_FRAGMENT;
+                        if (!mFeedDetail.isMember() && !mFeedDetail.isOwner() && !mFeedDetail.isRequestPending()) {
+                            mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.footer_icon_text));
+                            mTvJoinView.setText(getString(R.string.ID_JOIN));
+                            mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
+                        } else if (mFeedDetail.isRequestPending()) {
+                            mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+                            mTvJoinView.setText(getString(R.string.ID_REQUESTED));
+                            mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_community_requested);
+                            mTvJoinView.setEnabled(false);
+                        } else if (mFeedDetail.isOwner() || mFeedDetail.isMember()) {
+                            mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+                            mTvJoinView.setText(getString(R.string.ID_JOINED));
+                            mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
+                            mTvJoinView.setEnabled(false);
+                        }
+                        break;
+                    case MY_COMMUNITY:
+                        mScreenName = AppConstants.MY_COMMUNITIES_FRAGMENT;
+                        if (mFeedDetail.isMember() && !mFeedDetail.isOwner()) {
+                            mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+                            mTvJoinView.setText(getString(R.string.ID_VIEW));
+                            mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
+                        } else {
+                            mTvJoinView.setBackgroundResource(R.drawable.rectangle_community_invite);
+                            mTvJoinView.setText(getString(R.string.ID_INVITE));
+                            mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+                        }
+                        break;
+                    default:
+                        LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + communityEnum);
                 }
-                break;
-            case FEATURE_COMMUNITY:
-                mTvJoinView.setVisibility(View.VISIBLE);
-                if (!mFeedDetail.isMember() && !mFeedDetail.isOwner() && !mFeedDetail.isRequestPending()) {
-                    mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.footer_icon_text));
-                    mTvJoinView.setText(getString(R.string.ID_JOIN));
-                    mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
-                } else if (mFeedDetail.isRequestPending()) {
-                    mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
-                    mTvJoinView.setText(getString(R.string.ID_REQUESTED));
-                    mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_community_requested);
-                    mTvJoinView.setEnabled(false);
-                } else if (mFeedDetail.isOwner() || mFeedDetail.isMember()) {
-                    mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
-                    mTvJoinView.setText(getString(R.string.ID_JOINED));
-                    mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
-                    mTvJoinView.setVisibility(View.VISIBLE);
-                    mTvJoinView.setEnabled(false);
-                }
-                break;
-            case MY_COMMUNITY:
-                mTvJoinView.setVisibility(View.VISIBLE);
-                if (mFeedDetail.isMember() && !mFeedDetail.isOwner()) {
-                    mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
-                    mTvJoinView.setText(getString(R.string.ID_VIEW));
-                    mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
-                }
-                else {
-                    mTvJoinView.setBackgroundResource(R.drawable.rectangle_community_invite);
-                    mTvJoinView.setText(getString(R.string.ID_INVITE));
-                    mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
-                }
-                break;
-            default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + communityEnum);
-        }
+            }
         }
         mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager, mFragmentListRefreshData) {
             @Override
@@ -167,14 +175,12 @@ public class CommunitiesDetailFragment extends BaseFragment {
                     mTvJoinView.setVisibility(View.VISIBLE);
                     mTvJoinView.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
                 }
-                if (mTvJoinView.getVisibility() == View.GONE) {
-                    mTvJoinView.setVisibility(View.VISIBLE);
-                    mTvJoinView.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
-                }
+                mIvLogo.setVisibility(View.GONE);
             }
 
             @Override
             public void onShow() {
+                mIvLogo.setVisibility(View.VISIBLE);
                 if (mTvJoinView.getVisibility() == View.VISIBLE) {
                     mTvJoinView.setVisibility(View.GONE);
                     mTvJoinView.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
@@ -187,23 +193,27 @@ public class CommunitiesDetailFragment extends BaseFragment {
             }
         });
         super.setAllInitializationForFeeds(mFragmentListRefreshData, mPullRefreshList, mAdapter, mLayoutManager, mPageNo, mSwipeView, mLiNoResult, mFeedDetail, mRecyclerView, mPosition, mPressedEmoji, mListLoad, mIsEdit, mHomePresenter, mAppUtils, mProgressBar);
-        if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getId())) {
-            mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo()));
-        }
+        mHomePresenter.getFeedFromPresenter(mAppUtils.userCommunityPostRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCommunityId()));
         mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 setListLoadFlag(false);
                 mPullRefreshList.setPullToRefresh(true);
-                mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo()));
+                mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
+                mPullRefreshList = new SwipPullRefreshList();
+                setRefreshList(mPullRefreshList);
+                mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
+                mHomePresenter.getFeedFromPresenter(mAppUtils.userCommunityPostRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCommunityId()));
             }
         });
         return view;
     }
 
     @Override
-    public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
+    public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
+        List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
+            mLiNoResult.setVisibility(View.GONE);
             mPageNo = mFragmentListRefreshData.getPageNo();
             if (mPageNo == AppConstants.ONE_CONSTANT) {
                 FeedDetail feedDetail = new FeedDetail();
@@ -215,17 +225,20 @@ public class CommunitiesDetailFragment extends BaseFragment {
                 feedDetail.setOwner(mFeedDetail.isOwner());
                 feedDetail.setRequestPending(mFeedDetail.isRequestPending());
                 feedDetail.setClosedCommunity(mFeedDetail.isClosedCommunity());
+                feedDetail.setScreenName(mScreenName);
                 feedDetailList.add(0, feedDetail);
             }
             mFragmentListRefreshData.setPageNo(++mPageNo);
             mPullRefreshList.allListData(feedDetailList);
             mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
             if (!mPullRefreshList.isPullToRefresh()) {
-                mLayoutManager.scrollToPositionWithOffset(mPullRefreshList.getFeedResponses().size() - feedDetailList.size(), 0);
+                mLayoutManager.scrollToPosition(mPullRefreshList.getFeedResponses().size() - feedDetailList.size() - 1);
             } else {
                 mLayoutManager.scrollToPositionWithOffset(0, 0);
             }
             mSwipeView.setRefreshing(false);
+        } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
+            mLiNoResult.setVisibility(View.VISIBLE);
         }
     }
 

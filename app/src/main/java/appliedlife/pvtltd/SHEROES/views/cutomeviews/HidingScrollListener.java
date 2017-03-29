@@ -126,6 +126,9 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                     case AppConstants.COMMENT_REACTION_FRAGMENT:
                        mCommentReactionPresenter.getAllCommentListFromPresenter(mAppUtils.getCommentRequestBuilder(mFragmentListRefreshData.getEnitityOrParticpantid(),pageNo), mFragmentListRefreshData.isReactionList(),AppConstants.NO_REACTION_CONSTANT);
                         break;
+                    case AppConstants.USER_COMMUNITY_POST_FRAGMENT:
+                        mHomePresenter.getFeedFromPresenter(mAppUtils.userCommunityPostRequestBuilder(AppConstants.FEED_COMMUNITY_POST,pageNo,mFragmentListRefreshData.getCommunityId()));
+                        break;
                     default:
                         LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + mFragmentListRefreshData.getCallFromFragment());
                 }

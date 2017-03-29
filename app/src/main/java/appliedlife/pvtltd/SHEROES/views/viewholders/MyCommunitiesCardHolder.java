@@ -166,8 +166,7 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
             final TextView time = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_time_label);
             time.setVisibility(View.INVISIBLE);
             final RelativeLayout rlFeedArticleViews = (RelativeLayout) backgroundImage.findViewById(R.id.rl_gradiant);
-            //TODO: Need to change members
-            tvTotalMember.setText(AppConstants.SPACE + context.getString(R.string.ID_MEMBERS));
+            tvTotalMember.setText(dataItem.getNoOfMembers()+AppConstants.SPACE + context.getString(R.string.ID_MEMBERS));
             Glide.with(mContext)
                     .load(imageUrl).asBitmap()
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)

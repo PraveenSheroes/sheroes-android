@@ -83,6 +83,7 @@ import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FOR_REFRESH_FRAGMENT_LIST;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.COMMENT_REACTION;
+import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MENU;
 
 public class HomeActivity extends BaseActivity implements SettingView, JobFragment.HomeActivityIntractionListner, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, CommentReactionFragment.HomeActivityIntractionListner, HomeSpinnerFragment.HomeSpinnerFragmentListner {
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
@@ -144,6 +145,7 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
     Preference<MasterDataResponse> mUserPreferenceMasterData;
     private ArticlesFragment articlesFragment;
     private ViewPagerAdapter mViewPagerAdapter;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -259,6 +261,7 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
             } else {
                 mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.ONE_CONSTANT);
                 setAllValues(mFragmentOpen);
+                setViewPagerAndViewAdapter(mViewPagerAdapter, mViewPager);
                 super.feedCardsHandled(view, baseResponse);
             }
         } else if (baseResponse instanceof DrawerItems) {
@@ -292,7 +295,7 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
         } else if (baseResponse instanceof CommentReactionDoc) {
             setAllValues(mFragmentOpen);
              /* Comment mCurrentStatusDialog list  comment menu option edit,delete */
-            super.clickMenuItem(view, baseResponse, AppConstants.ONE_CONSTANT);
+            super.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU);
         }
     }
 
@@ -340,8 +343,7 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
         bundle.putParcelable(AppConstants.HOME_FRAGMENT, mFeedDetail);
         homeFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_feed_full_view, homeFragment, HomeFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-        setFragment(fragment);
+
     }
 
     private void initCommunityViewPagerAndTabs() {
@@ -446,8 +448,7 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
         mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_selected_icon), null, null);
         mTvArticleSpinnerIcon.setVisibility(View.GONE);
         initCommunityViewPagerAndTabs();
-        Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
-        setFragment(fragment);
+
     }
 
     @OnClick(R.id.iv_footer_button_icon)
@@ -482,8 +483,7 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
                 .replace(R.id.fl_article_card_view, articlesFragment, ArticlesFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
         mTvArticleSpinnerIcon.setVisibility(View.VISIBLE);
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(ArticlesFragment.class.getName());
-        setFragment(fragment);
+
     }
 
     private void openInviteSearch(FeedDetail feedDetail) {
@@ -497,8 +497,7 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
         myCommunityInviteMemberFragment.setArguments(bundleInvite);
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
                 .replace(R.id.fl_feed_comments, myCommunityInviteMemberFragment, MyCommunityInviteMemberFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(MyCommunityInviteMemberFragment.class.getName());
-        setFragment(fragment);
+
     }
 
 
@@ -525,8 +524,7 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
                 .replace(R.id.fl_article_card_view, settingFragment).addToBackStack(null).commitAllowingStateLoss();
         mTvArticleSpinnerIcon.setVisibility(View.GONE);
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(SettingFragment.class.getName());
-        setFragment(fragment);
+
     }
 
     private void openBookMarkFragment() {
@@ -552,8 +550,7 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
                 .replace(R.id.fl_article_card_view, bookmarksFragment, BookmarksFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
         mTvArticleSpinnerIcon.setVisibility(View.GONE);
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(BookmarksFragment.class.getName());
-        setFragment(fragment);
+
     }
 
     public void openJobFragment() {
@@ -578,8 +575,7 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
                 .replace(R.id.fl_article_card_view, jobFragment, JobFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
         mTvArticleSpinnerIcon.setVisibility(View.GONE);
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(JobFragment.class.getName());
-        setFragment(fragment);
+
     }
 
     public void openJobLocationFragment() {
@@ -620,7 +616,7 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
             if (mFragmentOpen.isBookmarkFragment()) {
                 Fragment fragment = getSupportFragmentManager().findFragmentByTag(BookmarksFragment.class.getName());
                 if (AppUtils.isFragmentUIActive(fragment)) {
-                    ((BookmarksFragment) fragment).commentListRefresh(mFeedDetail,COMMENT_REACTION);
+                    ((BookmarksFragment) fragment).commentListRefresh(mFeedDetail, COMMENT_REACTION);
                 }
             } else {
                 Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
@@ -922,14 +918,10 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
             onBackPressed();
         }
     }
+
     @Override
-    public void onSuccessResult(String result,FeedDetail feedDetail) {
-        Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
-        if (AppUtils.isFragmentUIActive(fragment)) {
-            if (fragment instanceof FeaturedFragment) {
-                ((FeaturedFragment) fragment).setJoinStatus(result,feedDetail);
-            }
-        }
+    public void onSuccessResult(String result, FeedDetail feedDetail) {
+
     }
 
 }

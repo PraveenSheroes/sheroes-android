@@ -25,10 +25,14 @@ public class FeedRequestPojo extends BaseRequest {
 
     @SerializedName("article_categories")
     @Expose
-    private List<String> articleCategories ;
+    private List<String> articleCategories;
     @SerializedName("category_ids")
     @Expose
     private List<Long> categoryIds;
+
+    @SerializedName("community_id")
+    @Expose
+    public long communityId;
 
     public String getSubType() {
         return subType;
@@ -69,5 +73,13 @@ public class FeedRequestPojo extends BaseRequest {
 
     public void setCategoryIds(List<Long> categoryIds) {
         this.categoryIds = categoryIds;
+    }
+
+    public long getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(long communityId) {
+        this.communityId = communityId;
     }
 }

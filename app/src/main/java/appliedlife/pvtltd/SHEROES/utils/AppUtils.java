@@ -94,6 +94,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.ProfileItems;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 
 
@@ -1631,6 +1632,11 @@ public class AppUtils {
         loginRequest.setGcmorapnsid("string");
         return loginRequest;
     }
+    public static FeedRequestPojo userCommunityPostRequestBuilder(String typeOfFeed, int pageNo, long communityId) {
+        FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, pageNo);
+        feedRequestPojo.setCommunityId(communityId);
+        return feedRequestPojo;
+    }
     /**
      * Request for feed api
      */
@@ -1663,6 +1669,16 @@ public class AppUtils {
         feedRequestPojo.setPageSize(AppConstants.PAGE_SIZE);
         feedRequestPojo.setSubType(typeOfFeed);
         return feedRequestPojo;
+    }
+    private static DeleteCommunityPostRequest deleteCommunityPostRequest(String typeOfFeed,long idOfEntityParticipant) {
+        AppUtils appUtils = AppUtils.getInstance();
+        DeleteCommunityPostRequest deleteCommunityPostRequest = new DeleteCommunityPostRequest();
+        deleteCommunityPostRequest.setAppVersion(appUtils.getAppVersionName());
+        deleteCommunityPostRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        //TODO:: change rquest data
+        deleteCommunityPostRequest.setCloudMessagingId(AppConstants.ALL_SEARCH);
+        deleteCommunityPostRequest.setIdOfEntityOrParticipant(idOfEntityParticipant);
+        return deleteCommunityPostRequest;
     }
 
     public static FeedRequestPojo getBookMarks(int pageNo) {

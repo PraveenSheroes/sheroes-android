@@ -26,6 +26,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -87,7 +88,8 @@ public class SearchArticleFragment extends BaseFragment implements HomeView {
 
 
     @Override
-    public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
+    public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
+        List<FeedDetail> feedDetailList=feedResponsePojo.getFeedDetails();
         if(StringUtil.isNotEmptyCollection(feedDetailList)&&mAdapter!=null) {
             mLiNoSearchResult.setVisibility(View.GONE);
             mAdapter.setCallForRecycler(AppConstants.ALL_SEARCH);
@@ -109,7 +111,7 @@ public class SearchArticleFragment extends BaseFragment implements HomeView {
         String feedObject=gson.toJson(feedDetail, FeedDetail.class);
         masterData.setRecentSearchFeed(feedObject);
         recentSearchData.add(masterData);
-        mHomePresenter.saveMasterDataTypes(recentSearchData,feedDetail.getEntityOrParticipantId());
+        mHomePresenter.saveMasterDataTypes(recentSearchData);
     }
     @Override
     public void onDestroyView() {

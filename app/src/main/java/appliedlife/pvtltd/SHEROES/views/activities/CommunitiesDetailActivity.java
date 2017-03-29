@@ -118,6 +118,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemo
         mCollapsingToolbarLayout.setExpandedTitleMarginStart(200);
         mCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
         if (null != mFeedDetail) {
+            mFloatingActionButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_community_icon));
             mCollapsingToolbarLayout.setTitle(mFeedDetail.getNameOrTitle());
             mCollapsingToolbarLayout.setSubtitle(mFeedDetail.getNameOrTitle());
             viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -141,7 +142,6 @@ public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemo
                         });
             } else {
                 ivCommunitiesDetail.setImageDrawable(getResources().getDrawable(R.drawable.blank_image));
-                mFloatingActionButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_community_icon));
                 supportStartPostponedEnterTransition();
             }
         }
@@ -172,7 +172,6 @@ public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemo
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
         if (baseResponse instanceof FeedDetail) {
-
             communityDetailHandled(view, baseResponse);
         } else if (baseResponse instanceof OwnerList) {
             OwnerRemoveDialog newFragment = new OwnerRemoveDialog();
@@ -186,7 +185,6 @@ public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemo
             bundleCommunity.putLong(AppConstants.COMMUNITY_DETAIL, mFeedDetail.getIdOfEntityOrParticipant());
             newFragment.setArguments(bundleCommunity);
             newFragment.setListener(this);
-
             newFragment.show(this.getFragmentManager(), getString(R.string.ID_DAILOG));
         }
     }

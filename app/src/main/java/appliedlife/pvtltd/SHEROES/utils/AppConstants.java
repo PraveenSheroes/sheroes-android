@@ -15,6 +15,7 @@ public class AppConstants {
     public static final int CONNECTION_TIME_OUT = 60;
     public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
     public static final String DATE_FORMAT_FOR_JOB = "dd MMM, yyyy";
+    public static final String COMMENT_DATE_TIME = "dd MMM, yyyy h:mm a";
     public static final String SPACE = " ";
     public static final String SHEROES_AUTH_TOKEN = "sheroes_auth_token";
     public static final String MASTER_DATA = "master_data";
@@ -64,6 +65,7 @@ public class AppConstants {
     public static final String MY_COMMUNITIES_FRAGMENT = "my_communities";
     public static final String ARTICLE_FRAGMENT = "article";
     public static final String COMMUNITY_POST_FRAGMENT = "community_post_fragment";
+    public static final String USER_COMMUNITY_POST_FRAGMENT = "user_community_post_fragment";
     public static final String MY_COMMUNITIES_HEADER = "COMMUNITY_HEADER";
     public static final String COMMUNITIES_DETAIL = "community_detail";
     public static final String BOARDING_SEARCH = "boarding_Search";

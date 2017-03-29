@@ -118,18 +118,6 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
                 overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
                 break;
             case AppConstants.FEED_COMMUNITY:
-                fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.THREE_CONSTANT);
-                if (AppUtils.isFragmentUIActive(fragment)) {
-                    if (fragment instanceof SearchCommunitiesFragment) {
-                        ((SearchCommunitiesFragment) fragment).saveRecentSearchData(feedDetail);
-                    }
-                }
-                fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
-                if (AppUtils.isFragmentUIActive(fragment)) {
-                    if (fragment instanceof AllSearchFragment) {
-                        ((AllSearchFragment) fragment).saveRecentSearchData(feedDetail);
-                    }
-                }
                 mFragmentOpen.setImageBlur(true);
                 Intent intetFeature = new Intent(this, CommunitiesDetailActivity.class);
                 Bundle bundleFeature = new Bundle();
@@ -259,6 +247,18 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
             }
         } else if (requestCode == AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL && null != intent) {
             mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITIES_DETAIL);
+            Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.THREE_CONSTANT);
+            if (AppUtils.isFragmentUIActive(fragment)) {
+                if (fragment instanceof SearchCommunitiesFragment) {
+                    ((SearchCommunitiesFragment) fragment).saveRecentSearchData(mFeedDetail);
+                }
+            }
+            fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
+            if (AppUtils.isFragmentUIActive(fragment)) {
+                if (fragment instanceof AllSearchFragment) {
+                    ((AllSearchFragment) fragment).saveRecentSearchData(mFeedDetail);
+                }
+            }
         }
 
     }

@@ -27,7 +27,7 @@
                     android:id="@+id/iv_feed_community_post_circle_icon"
                     android:layout_width="@dimen/feed_profile_icon_size"
                     android:layout_height="@dimen/feed_profile_icon_size"
-                    android:layout_gravity="top" />
+                    android:layout_gravity="top"/>
 
                 <ImageView
                     android:id="@+id/iv_feed_community_post_circle_icon_verified"
@@ -253,7 +253,7 @@
                 <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
                     android:id="@+id/iv_feed_community_post_user_pic"
                     android:layout_width="@dimen/comment_icon"
-                    android:layout_height="@dimen/comment_icon" />
+                    android:layout_height="@dimen/comment_icon"/>
 
                 <ImageView
                     android:id="@+id/iv_feed_community_post_user_icon_verified"

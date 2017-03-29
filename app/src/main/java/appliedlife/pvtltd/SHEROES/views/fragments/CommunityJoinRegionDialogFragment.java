@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.f2prateek.rx.preferences.Preference;
 
@@ -23,6 +22,7 @@ import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -89,7 +89,6 @@ public class CommunityJoinRegionDialogFragment extends BaseDialogFragment implem
     @OnClick(R.id.tv_already_member)
     public void alreadyOnClick() {
         joinNewUser(getString(R.string.ID_COMMUNITY_JOIN_REGION2));
-        getDialog().cancel();
 
     }
 
@@ -107,9 +106,10 @@ public class CommunityJoinRegionDialogFragment extends BaseDialogFragment implem
     }
 
     @Override
-    public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
+    public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
 
     }
+
 
     @Override
     public void getTagListSuccess(List<Doc> feedDetailList) {
@@ -118,7 +118,7 @@ public class CommunityJoinRegionDialogFragment extends BaseDialogFragment implem
 
     @Override
     public void getSuccessForAllResponse(String success, FeedParticipationEnum feedParticipationEnum) {
-        Toast.makeText(getActivity(), success, Toast.LENGTH_LONG).show();
+        getDialog().dismiss();
         switch (success) {
             case AppConstants.SUCCESS:
                 mFeedDetail.setRequestPending(true);
@@ -130,8 +130,6 @@ public class CommunityJoinRegionDialogFragment extends BaseDialogFragment implem
             default:
                 mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_JOIN_INVITE);
         }
-        getDialog().cancel();
-
     }
 
     @Override

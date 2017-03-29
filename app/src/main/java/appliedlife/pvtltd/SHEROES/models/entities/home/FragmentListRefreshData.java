@@ -11,6 +11,7 @@ public class FragmentListRefreshData {
     boolean isReactionList;
     long enitityOrParticpantid;
     int swipeToRefresh;
+    long communityId;
     public FragmentListRefreshData() {
 
     }
@@ -73,5 +74,13 @@ public class FragmentListRefreshData {
 
     public void setSwipeToRefresh(int swipeToRefresh) {
         this.swipeToRefresh = swipeToRefresh;
+    }
+
+    public long getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(long communityId) {
+        this.communityId = communityId;
     }
 }

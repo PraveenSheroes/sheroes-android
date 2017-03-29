@@ -6,6 +6,7 @@
     <color name="colorAccent">#3F51B5</color>
     <color name="white">#ffffff</color>
     <color name="grey8">#fafafa</color>
+    <color name="spinner">#f1f1f1</color>
     <color name="grey2">#b7b7b7</color>
     <color name="red">#d50000</color>
     <color name="added_member">#56596b</color>

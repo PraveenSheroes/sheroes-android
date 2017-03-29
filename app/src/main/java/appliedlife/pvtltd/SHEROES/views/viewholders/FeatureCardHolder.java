@@ -82,10 +82,13 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
         mLess = context.getString(R.string.ID_LESS);
         dataItem.setItemPosition(position);
         tvFeaturedDescriptionText.setTag(mViewMore);
-        liFeaturedCoverImage.removeAllViews();
-        liFeaturedCoverImage.removeAllViewsInLayout();
-        imageOperations(context);
         textViewOperation(context);
+        if (!dataItem.isTrending()) {
+            liFeaturedCoverImage.removeAllViews();
+            liFeaturedCoverImage.removeAllViewsInLayout();
+            imageOperations(context);
+        }
+
     }
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
@@ -144,7 +147,7 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
         if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
             if (mViewMoreDescription.length() > AppConstants.WORD_LENGTH) {
                 mViewMoreDescription = mViewMoreDescription.substring(0, AppConstants.WORD_COUNT);
-               tvFeaturedViewMore.setVisibility(View.VISIBLE);
+                tvFeaturedViewMore.setVisibility(View.VISIBLE);
             } else {
                 tvFeaturedViewMore.setVisibility(View.GONE);
             }
@@ -179,7 +182,7 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
     }
 
     private void imageOperations(Context context) {
-        String authorImageUrl = dataItem.getAuthorImageUrl();
+        String authorImageUrl = dataItem.getThumbnailImageUrl();
         if (StringUtil.isNotNullOrEmptyString(authorImageUrl)) {
 
             ivFeaturedCommunityCircleIcon.setCircularImage(true);
@@ -190,10 +193,11 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View backgroundImage = layoutInflater.inflate(R.layout.feed_article_single_image, null);
             final ImageView ivFirstLandscape = (ImageView) backgroundImage.findViewById(R.id.iv_feed_article_single_image);
-            final TextView tvTotalViews = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_total_views);
+            final TextView time = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_time_label);
+            time.setVisibility(View.INVISIBLE);
+            final TextView tvTotalMember = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_total_views);
             final RelativeLayout rlFeedArticleViews = (RelativeLayout) backgroundImage.findViewById(R.id.rl_gradiant);
-            //  tvFeedArticleTotalViews.setText(dataItem.getTotalViews() + AppConstants.SPACE + context.getString(R.string.ID_VIEWS));
-
+            tvTotalMember.setText(dataItem.getNoOfMembers() + AppConstants.SPACE + context.getString(R.string.ID_MEMBERS));
             Glide.with(mContext)
                     .load(imageUrl).asBitmap()
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
@@ -260,7 +264,11 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_featured_community_join)
     public void joinClick() {
+        dataItem.setTrending(true);
+        if (tvFeaturedCommunityJoin.getText().toString().equalsIgnoreCase(mContext.getString(R.string.ID_JOIN))) {
             viewInterface.handleOnClick(dataItem, tvFeaturedCommunityJoin);
+        }
+
     }
 
     @OnClick(R.id.li_featured_community_images)

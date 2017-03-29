@@ -23,6 +23,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -117,7 +118,8 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
 
 
     @Override
-    public void getFeedListSuccess(List<FeedDetail> feedDetailList) {
+    public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
+        List<FeedDetail> feedDetailList=feedResponsePojo.getFeedDetails();
         mProgressBarFirstLoad.setVisibility(View.GONE);
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
             mPageNo =mFragmentListRefreshData.getPageNo();
@@ -130,10 +132,10 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
             } else {
                 mLayoutManager.scrollToPositionWithOffset(0, 0);
             }
-            mSwipeView.setRefreshing(false);
         } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
             mLiNoResult.setVisibility(View.VISIBLE);
         }
+        mSwipeView.setRefreshing(false);
     }
     public void joinRequestForOpenCommunity(FeedDetail feedDetail)
     {

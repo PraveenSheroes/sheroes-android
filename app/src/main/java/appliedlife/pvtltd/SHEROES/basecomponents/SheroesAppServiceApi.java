@@ -36,6 +36,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.GetInterestJobResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.EducationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.GetUserVisitingCardRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.PersonalBasicDetailsRequest;
@@ -107,7 +109,10 @@ public interface SheroesAppServiceApi {
     @POST("participant/community/join")
     Observable<CommunityResponse> getCommunityJoinResponse(@Body CommunityRequest communityRequest);
 
-
+    @POST("participation/post/delete")
+    Observable<DeleteCommunityPostResponse> getCommunityPostDeleteResponse(@Body DeleteCommunityPostRequest deleteCommunityPostRequest);
+    @POST("participation/reaction/mark_spam")
+    Observable<BookmarkResponsePojo> markAsSpam(@Body BookmarkRequestPojo bookmarkResponsePojo );
 
     @POST("participant/community/create")
     Observable<CreateCommunityResponse> postCreateCommunity(@Body CreateCommunityRequest createCommunityRequest);

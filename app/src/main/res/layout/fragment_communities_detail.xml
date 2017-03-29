@@ -31,10 +31,17 @@
         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
         android:gravity="center"
         android:padding="@dimen/dp_size_15"
-        android:visibility="gone"
         android:text="@string/ID_JOIN"
+        android:visibility="gone"
         android:textColor="@color/footer_icon_text"
         android:textSize="@dimen/sp_size_15" />
+       <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
+        android:id="@+id/iv_logo"
+        android:layout_width="@dimen/detail_page_icon"
+        android:layout_height="@dimen/detail_page_icon"
+        android:layout_gravity="center|top"
+        android:layout_marginLeft="@dimen/dp_size_30"
+        android:layout_marginRight="@dimen/dp_size_30" />
 
     <LinearLayout
         android:id="@+id/li_no_result"
