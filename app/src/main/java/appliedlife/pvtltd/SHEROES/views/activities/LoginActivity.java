@@ -17,6 +17,7 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.LoginFragment;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 
 /**
@@ -81,6 +82,11 @@ public class LoginActivity extends BaseActivity implements LoginFragment.LoginAc
             default:
                 showNetworkTimeoutDoalog(true,false,getString(R.string.ID_GENERIC_ERROR));
         }
+    }
+    @OnClick(R.id.iv_login_back)
+    public void backOnClick()
+    {
+        super.onBackPressed();
     }
 }
 

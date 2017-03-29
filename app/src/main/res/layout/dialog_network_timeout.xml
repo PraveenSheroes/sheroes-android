@@ -50,7 +50,6 @@
         android:paddingBottom="@dimen/dp_size_16"
         android:paddingTop="@dimen/dp_size_15"
         android:layout_marginTop="@dimen/dp_size_20"
-        android:text="@string/IDS_STR_TRY_AGAIN_TEXT"
         android:textAllCaps="true"
         android:textColor="@color/red"
         android:textSize="@dimen/sp_size_14"

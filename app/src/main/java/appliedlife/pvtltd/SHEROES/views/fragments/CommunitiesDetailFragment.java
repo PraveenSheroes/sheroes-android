@@ -36,7 +36,6 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
-import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -60,8 +59,6 @@ public class CommunitiesDetailFragment extends BaseFragment {
     private SwipPullRefreshList mPullRefreshList;
     @Bind(R.id.tv_join_view)
     TextView mTvJoinView;
-    @Bind(R.id.iv_logo)
-    CircleImageView mIvLogo;
     @Inject
     AppUtils mAppUtils;
     @Bind(R.id.li_no_result)
@@ -93,11 +90,6 @@ public class CommunitiesDetailFragment extends BaseFragment {
             communityEnum = (CommunityEnum) getArguments().getSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT);
         }
         if (mFeedDetail != null) {
-            String imageLogo = mFeedDetail.getThumbnailImageUrl();
-            if (StringUtil.isNotNullOrEmptyString(imageLogo)) {
-                mIvLogo.setCircularImage(true);
-                mIvLogo.bindImage(imageLogo);
-            }
             mTvJoinView.setEnabled(true);
             mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.USER_COMMUNITY_POST_FRAGMENT, mFeedDetail.getId());
             mFragmentListRefreshData.setCommunityId(mFeedDetail.getIdOfEntityOrParticipant());
@@ -175,12 +167,10 @@ public class CommunitiesDetailFragment extends BaseFragment {
                     mTvJoinView.setVisibility(View.VISIBLE);
                     mTvJoinView.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
                 }
-                mIvLogo.setVisibility(View.GONE);
             }
 
             @Override
             public void onShow() {
-                mIvLogo.setVisibility(View.VISIBLE);
                 if (mTvJoinView.getVisibility() == View.VISIBLE) {
                     mTvJoinView.setVisibility(View.GONE);
                     mTvJoinView.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();

@@ -118,7 +118,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemo
         mCollapsingToolbarLayout.setExpandedTitleMarginStart(200);
         mCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
         if (null != mFeedDetail) {
-            mFloatingActionButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_community_icon));
+            mFloatingActionButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_feed_article_top_left));
             mCollapsingToolbarLayout.setTitle(mFeedDetail.getNameOrTitle());
             mCollapsingToolbarLayout.setSubtitle(mFeedDetail.getNameOrTitle());
             viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());

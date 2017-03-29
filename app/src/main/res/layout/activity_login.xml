@@ -42,6 +42,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="left|top"
                     android:layout_marginLeft="@dimen/dp_size_40"
+                    android:padding="@dimen/dp_size_5"
                     android:background="@drawable/ic_back_black"/>
                 <TextView
                     android:id="@+id/tv_login_lable"

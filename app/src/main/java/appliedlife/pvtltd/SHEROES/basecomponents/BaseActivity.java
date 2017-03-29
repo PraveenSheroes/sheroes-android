@@ -18,9 +18,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.f2prateek.rx.preferences.Preference;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -30,6 +33,7 @@ import appliedlife.pvtltd.SHEROES.enums.MenuEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionDoc;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -70,7 +74,9 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
     public View popupView;
     public PopupWindow popupWindow;
     private ViewPagerAdapter mViewPagerAdapter;
-    ViewPager mViewPager;
+    private ViewPager mViewPager;
+    @Inject
+    Preference<LoginResponse> userPreference;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -467,7 +473,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
         tvReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "You Clicked : " + tvReport.getText(), Toast.LENGTH_SHORT).show();
+                markAsSpam(menuEnum, baseResponse, fragmentCommentReaction);
                 popupWindow.dismiss();
             }
         });
@@ -510,14 +516,16 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 tvShare.setVisibility(View.VISIBLE);
                 break;
             case R.id.tv_feed_community_post_user_menu:
-                FeedDetail feedPostDetail = (FeedDetail) baseResponse;
-                if (feedPostDetail.isOwner()) {
-                    tvShare.setVisibility(View.VISIBLE);
-                    tvDelete.setVisibility(View.VISIBLE);
-                    tvEdit.setVisibility(View.VISIBLE);
-                } else {
-                    tvShare.setVisibility(View.VISIBLE);
-                    tvReport.setVisibility(View.VISIBLE);
+                mFeedDetail = (FeedDetail) baseResponse;
+                if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
+                    if (mFeedDetail.getAuthorId() ==userPreference.get().getUserSummary().getUserId() ) {
+                        tvShare.setVisibility(View.VISIBLE);
+                        tvDelete.setVisibility(View.VISIBLE);
+                        tvEdit.setVisibility(View.VISIBLE);
+                    } else {
+                        tvShare.setVisibility(View.VISIBLE);
+                        tvReport.setVisibility(View.VISIBLE);
+                    }
                 }
                 break;
             case R.id.tv_feed_community_user_menu:
@@ -541,7 +549,26 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + id);
         }
     }
+    private void markAsSpam(MenuEnum menuEnum, BaseResponse baseResponse, Fragment fragmentCommentReaction) {
+        switch (menuEnum) {
+            case FEED_CARD_MENU:
+                if (null != mFeedDetail) {
+                    if (mFragmentOpen.isBookmarkFragment()) {
+                        Fragment fragmentBookMark = getSupportFragmentManager().findFragmentByTag(BookmarksFragment.class.getName());
+                        if (AppUtils.isFragmentUIActive(fragmentBookMark)) {
+                            ((BookmarksFragment) fragmentBookMark).markAsSpamCommunityPost(mFeedDetail);
+                        }
+                    } else {
+                        Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+                        if (AppUtils.isFragmentUIActive(fragment)) {
+                            ((HomeFragment) fragment).markAsSpamCommunityPost(mFeedDetail);
+                        }
+                    }
+                }
+                break;
 
+        }
+    }
     private void editOperationOnMenu(MenuEnum menuEnum, BaseResponse baseResponse, Fragment fragmentCommentReaction) {
         switch (menuEnum) {
             case USER_COMMENT_ON_CARD_MENU:
@@ -564,7 +591,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 break;
             case FEED_CARD_MENU:
                 if (null != mFeedDetail) {
-                    mFeedDetail.setTrending(true);
+
                 }
                 break;
 
@@ -592,16 +619,15 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 break;
             case FEED_CARD_MENU:
                 if (null != mFeedDetail) {
-                    mFeedDetail.setActive(false);
                     if (mFragmentOpen.isBookmarkFragment()) {
                         Fragment fragmentBookMark = getSupportFragmentManager().findFragmentByTag(BookmarksFragment.class.getName());
                         if (AppUtils.isFragmentUIActive(fragmentBookMark)) {
-                            ((BookmarksFragment) fragmentBookMark).bookMarkForCard(mFeedDetail, mFragmentOpen);
+                            ((BookmarksFragment) fragmentBookMark).deleteCommunityPost(mFeedDetail);
                         }
                     } else {
                         Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
                         if (AppUtils.isFragmentUIActive(fragment)) {
-                            ((HomeFragment) fragment).bookMarkForCard(mFeedDetail);
+                            ((HomeFragment) fragment).deleteCommunityPost(mFeedDetail);
                         }
                     }
                 }

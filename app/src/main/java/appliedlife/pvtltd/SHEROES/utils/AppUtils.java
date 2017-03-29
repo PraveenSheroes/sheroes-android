@@ -71,7 +71,6 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -91,7 +90,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequest
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
-import appliedlife.pvtltd.SHEROES.models.entities.home.ProfileItems;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
@@ -1670,7 +1668,7 @@ public class AppUtils {
         feedRequestPojo.setSubType(typeOfFeed);
         return feedRequestPojo;
     }
-    private static DeleteCommunityPostRequest deleteCommunityPostRequest(String typeOfFeed,long idOfEntityParticipant) {
+    public static DeleteCommunityPostRequest deleteCommunityPostRequest(long idOfEntityParticipant) {
         AppUtils appUtils = AppUtils.getInstance();
         DeleteCommunityPostRequest deleteCommunityPostRequest = new DeleteCommunityPostRequest();
         deleteCommunityPostRequest.setAppVersion(appUtils.getAppVersionName());
@@ -1838,29 +1836,6 @@ public class AppUtils {
         return communityRequest;
     }
 
-    /**
-     * Profile data
-     */
-    public static List<ProfileItems> profileDetail() {
-        List<ProfileItems> profileItemsList = new ArrayList<>();
-        ProfileItems profileItems = new ProfileItems();
-        profileItemsList.add(profileItems);
-        profileItemsList.add(profileItems);
-        profileItemsList.add(profileItems);
-        profileItemsList.add(profileItems);
-        profileItemsList.add(profileItems);
-        profileItemsList.add(profileItems);
-        profileItemsList.add(profileItems);
-        profileItemsList.add(profileItems);
-        profileItemsList.add(profileItems);
-        profileItemsList.add(profileItems);
-        profileItemsList.add(profileItems);
-        profileItemsList.add(profileItems);
-        profileItemsList.add(profileItems);
-        profileItemsList.add(profileItems);
-        profileItemsList.add(profileItems);
-        profileItemsList.add(profileItems);
-        return profileItemsList;
-    }
+
 
 }

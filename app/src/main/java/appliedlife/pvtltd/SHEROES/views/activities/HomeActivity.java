@@ -824,6 +824,9 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
             case AppConstants.CHECK_NETWORK_CONNECTION:
                 showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
                 break;
+            case AppConstants.MARK_AS_SPAM:
+                showNetworkTimeoutDoalog(true, false,errorReason);
+                break;
             default:
                 showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
         }

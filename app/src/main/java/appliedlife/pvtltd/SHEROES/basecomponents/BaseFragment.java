@@ -51,6 +51,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_COMME
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_RESPONSE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_LIKE_UNLIKE;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.MARK_AS_SPAM;
 
 /**
  * Created by Praveen Singh on 29/12/2016.
@@ -243,11 +244,28 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
             case JOIN_INVITE:
                 joinInviteResponse(success);
                 break;
+            case DELETE_COMMUNITY_POST:
+                deleteCommunityPostRespose(success);
+                break;
+            case MARK_AS_SPAM:
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.MARK_AS_SPAM, MARK_AS_SPAM);
+                break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
         }
     }
-
+    public void deleteCommunityPostRespose(String success) {
+        switch (success) {
+            case AppConstants.SUCCESS:
+                  commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+                break;
+            case AppConstants.FAILED:
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_JOIN_INVITE);
+                break;
+            default:
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_JOIN_INVITE);
+        }
+    }
     public void joinInviteResponse(String success) {
         switch (success) {
             case AppConstants.SUCCESS:
@@ -373,7 +391,16 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
         }
 
     }
-
+    public void markAsSpamCommunityPost(FeedDetail feedDetail) {
+        mListLoad = false;
+        mFeedDetail = feedDetail;
+        mHomePresenter.markAsSpamFromPresenter(mAppUtils.bookMarkRequestBuilder(feedDetail.getEntityOrParticipantId()));
+    }
+    public void deleteCommunityPost(FeedDetail feedDetail) {
+        mListLoad = false;
+        mFeedDetail = feedDetail;
+        mHomePresenter.deleteCommunityPostFromPresenter(mAppUtils.deleteCommunityPostRequest(feedDetail.getIdOfEntityOrParticipant()));
+    }
     public void bookMarkForCard(FeedDetail feedDetail) {
         mListLoad = false;
         mFeedDetail = feedDetail;

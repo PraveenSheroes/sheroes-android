@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -22,6 +23,8 @@ import butterknife.OnClick;
 public class NetworkTimeoutDialog extends BaseDialogFragment {
     @Bind(R.id.tv_no_conn_desc)
     TextView mTvNoConnDesc;
+    @Bind(R.id.tv_try_again)
+    TextView mTvTryAgain;
     private boolean finishParent;
     private boolean isCancellable;
     private String errorMessage;
@@ -34,6 +37,13 @@ public class NetworkTimeoutDialog extends BaseDialogFragment {
         finishParent = getArguments().getBoolean(DISMISS_PARENT_ON_OK_OR_BACK);
         isCancellable = getArguments().getBoolean(IS_CANCELABLE);
         errorMessage = getArguments().getString(ERROR_MESSAGE);
+        if(AppConstants.MARK_AS_SPAM.equalsIgnoreCase(errorMessage))
+        {
+            mTvTryAgain.setText(getString(R.string.ID_DONE));
+        }else
+        {
+            mTvTryAgain.setText(getString(R.string.IDS_STR_TRY_AGAIN_TEXT));
+        }
         if(StringUtil.isNotNullOrEmptyString(errorMessage)) {
             mTvNoConnDesc.setText(errorMessage);
         }

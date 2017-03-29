@@ -20,6 +20,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -165,6 +167,30 @@ public class HomeModel {
                     @Override
                     public CommunityResponse call(CommunityResponse communityResponse) {
                         return communityResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+    public Observable<DeleteCommunityPostResponse> deleteCommunityPostFromModel(DeleteCommunityPostRequest deleteCommunityPostRequest){
+        LogUtils.info(TAG,"*******************"+new Gson().toJson(deleteCommunityPostRequest));
+        return sheroesAppServiceApi.getCommunityPostDeleteResponse(deleteCommunityPostRequest)
+                .map(new Func1<DeleteCommunityPostResponse, DeleteCommunityPostResponse>() {
+                    @Override
+                    public DeleteCommunityPostResponse call(DeleteCommunityPostResponse deleteCommunityPostResponse) {
+                        return deleteCommunityPostResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+    public Observable<BookmarkResponsePojo> markAsSpamFromModel(BookmarkRequestPojo bookmarkResponsePojo){
+        LogUtils.info(TAG,"*******************"+new Gson().toJson(bookmarkResponsePojo));
+        return sheroesAppServiceApi.markAsSpam(bookmarkResponsePojo)
+                .map(new Func1<BookmarkResponsePojo, BookmarkResponsePojo>() {
+                    @Override
+                    public BookmarkResponsePojo call(BookmarkResponsePojo bookmarkResponsePojo1) {
+                        return bookmarkResponsePojo1;
                     }
                 })
                 .subscribeOn(Schedulers.io())

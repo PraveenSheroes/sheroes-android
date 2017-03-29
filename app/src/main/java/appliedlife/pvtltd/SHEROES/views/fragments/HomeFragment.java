@@ -121,7 +121,7 @@ public class HomeFragment extends BaseFragment {
 
             @Override
             public void dismissReactions() {
-                if (null != ((HomeActivity) getActivity()).popupWindow) {
+                if (null != (((HomeActivity) getActivity()).popupWindow)) {
                     ((HomeActivity) getActivity()).popupWindow.dismiss();
                 }
             }
@@ -184,7 +184,12 @@ public class HomeFragment extends BaseFragment {
     public void commentListRefresh(FeedDetail feedDetail,FeedParticipationEnum feedParticipationEnum) {
         super.commentListRefresh(feedDetail, feedParticipationEnum);
     }
-
+    public void markAsSpamCommunityPost(FeedDetail feedDetail) {
+        super.markAsSpamCommunityPost(feedDetail);
+    }
+    public void deleteCommunityPost(FeedDetail feedDetail) {
+        super.deleteCommunityPost(feedDetail);
+    }
     public void bookMarkForCard(FeedDetail feedDetail) {
         super.bookMarkForCard(feedDetail);
     }

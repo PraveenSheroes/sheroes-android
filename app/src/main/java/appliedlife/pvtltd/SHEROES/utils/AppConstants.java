@@ -88,6 +88,7 @@ public class AppConstants {
     public static final String SETTING = "setting";
     public static final String PIPE = "|";
     public static final String SUCCESS = "SUCCESS";
+    public static final String MARK_AS_SPAM = "Mark as spam successfully";
     public static final String FAILED = "FAILED";
     public static final long SAVED_DAYS_TIME = 86400000;
     public static final int ONE_CONSTANT = 1;

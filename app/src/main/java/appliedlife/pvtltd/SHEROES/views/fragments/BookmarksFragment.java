@@ -126,7 +126,12 @@ public class BookmarksFragment extends BaseFragment {
         super.onDestroyView();
         mHomePresenter.detachView();
     }
-
+    public void markAsSpamCommunityPost(FeedDetail feedDetail) {
+        super.markAsSpamCommunityPost(feedDetail);
+    }
+    public void deleteCommunityPost(FeedDetail feedDetail) {
+        super.deleteCommunityPost(feedDetail);
+    }
     public void bookMarkForCard(FeedDetail feedDetail, FragmentOpen fragmentOpen) {
         setFragmentData(fragmentOpen);
        super.bookMarkForCard(feedDetail);
