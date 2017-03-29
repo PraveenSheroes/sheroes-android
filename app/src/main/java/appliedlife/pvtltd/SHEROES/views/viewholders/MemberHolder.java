@@ -27,6 +27,8 @@ public class MemberHolder extends BaseViewHolder<MembersList> {
     TextView tv_member_name;
     @Bind(R.id.img1)
     CircleImageView background;
+    @Bind(R.id.tv_member_cross)
+    TextView tv_member_cross;
     BaseHolderInterface viewInterface;
     private MembersList dataItem;
     private int position;
@@ -49,13 +51,20 @@ public class MemberHolder extends BaseViewHolder<MembersList> {
     public void bindData(MembersList obj, Context context, int position) {
         this.dataItem = obj;
         // itemView.setOnClickListener(this);
-
+        tv_member_cross.setOnClickListener(this);
         tv_member_city.setText(dataItem.getCommunityUserCityName());
         tv_member_name.setText(dataItem.getCommunityUserFirstName());
         String images = dataItem.getCommunityUserPhotoUrlPath();
-
         background.setCircularImage(true);
         background.bindImage(images);
+        dataItem.setPosition(position);
+        if(dataItem.getIsOwner())
+        {
+            tv_member_cross.setVisibility(View.VISIBLE);
+        }
+        else
+            tv_member_cross.setVisibility(View.GONE);
+
     }
 
     @Override
@@ -75,4 +84,5 @@ public class MemberHolder extends BaseViewHolder<MembersList> {
 
 
     }
+
 }

@@ -162,7 +162,7 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
             SheroesApplication.getAppComponent(getContext()).inject(this);
             view = inflater.inflate(R.layout.fragmentcreate_community, container, false);
             ButterKnife.bind(this, view);
-
+            mCbopen_community.setChecked(true);
             mOutPutFile = new File(Environment.getExternalStorageDirectory(), "temp.jpg");
             mOutPutFile1 = new File(Environment.getExternalStorageDirectory(), "temp1.jpg");
             mEt_create_community_tags.setText("Community Tag");
@@ -192,7 +192,6 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
 
                         }
                     }
-                    mUserPreference.delete();
 
                 }
 
@@ -213,6 +212,7 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
                     for (int i = 1; i < tagsval.length; i++) {
                         tagval = tagval + " " + tagsval[i];
                     }
+                    tagval=tagval.replaceAll("null","");
                     mEt_create_community_tags.setText(tagval);
                 }
             }
@@ -257,6 +257,8 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
 
     @OnClick(R.id.iv_create_community_cross)
     public void backClick() {
+        mUserPreference.delete();
+
         mCreatecommunityIntractionListner.close();
 
     }
@@ -303,7 +305,7 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
         }
         if(StringUtil.isNotNullOrEmptyString(met_create_community_description.getText().toString()))
         {
-            createCommunityRequest.setLogoUrl(encImage);
+            createCommunityRequest.setDescription(met_create_community_description.getText().toString());
 
         }
         if(StringUtil.isNotNullOrEmptyString(mEt_community_type.getText().toString()))
@@ -396,11 +398,14 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
         List<Integer> tags = new ArrayList<>();
         tags.add(1);
         tags.add(2);
+
+        CreateCommunityRequest createCommunityRequest1 = new CreateCommunityRequest();
+        createCommunityRequest1 = mUserPreference.get();
         CreateCommunityRequest createCommunityRequest = new CreateCommunityRequest();
 
-        createCommunityRequest.setCoverImageUrl(encCoverImage);
+        createCommunityRequest.setCoverImageUrl(createCommunityRequest1.getCover());
 
-        createCommunityRequest.setLogoUrl(encImage);
+        createCommunityRequest.setLogoUrl(createCommunityRequest1.getLogo());
 
         createCommunityRequest.setAppVersion("String");
 
@@ -433,6 +438,9 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
         createCommunityRequest.setTags(tags);
 
         createCommunityPresenter.postCreateCommunityList(createCommunityRequest);
+
+        mUserPreference.delete();
+
     }
 
     public void checkStoragePermission() {
@@ -673,6 +681,7 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
     public void selectImageFrmGallery() {
         try {
             Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            i.setType("image/*");
             startActivityForResult(i, mGALLERY_CODE);
         } catch (Exception e) {
             Toast.makeText(getActivity(), "Permission Required", Toast.LENGTH_LONG).show();

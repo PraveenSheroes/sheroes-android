@@ -21,7 +21,9 @@ public class OwnerListResponse {
     @SerializedName("status")
     @Expose
     private String status;
-
+    @SerializedName("is_owner")
+    @Expose
+    private boolean isOWner;
 
 
     public List<Member> getMembers() {
@@ -46,6 +48,14 @@ public class OwnerListResponse {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public boolean getIsOWner() {
+        return isOWner;
+    }
+
+    public void setStatus(boolean isOWner) {
+        this.isOWner = isOWner;
     }
 }
 

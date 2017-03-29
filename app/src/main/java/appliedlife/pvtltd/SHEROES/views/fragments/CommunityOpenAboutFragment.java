@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -27,6 +28,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
+import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityList;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
@@ -44,6 +46,7 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
+import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CommunityView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CreateCommunityView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.EditNameDialogListener;
@@ -55,7 +58,7 @@ import butterknife.OnClick;
  * Created by Ajit Kumar on 01-02-2017.
  */
 
-public class CommunityOpenAboutFragment extends BaseFragment implements CommunityView, AdapterView.OnItemClickListener, AdapterView.OnItemSelectedListener, CreateCommunityView, EditNameDialogListener {
+public class CommunityOpenAboutFragment extends BaseFragment implements FragmentIntractionWithActivityListner,CommunityView, AdapterView.OnItemClickListener, AdapterView.OnItemSelectedListener, CreateCommunityView, EditNameDialogListener {
     private AboutCommunityActivityIntractionListner mShareCommunityIntractionListner;
     private final String TAG = LogUtils.makeLogTag(CommunityOpenAboutFragment.class);
     private String[] marraySpinner;
@@ -83,6 +86,12 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
 
     @Bind(R.id.tv_community_join_invite)
     TextView mTvJoinInviteView;
+
+    @Bind(R.id.tv_community_add_more)
+    TextView tv_community_add_more;
+
+    @Bind(R.id.pb_communities_open_about_progress_bar)
+    ProgressBar mProgressbar;
     FeedDetail mFeedDetail;
     private FragmentListRefreshData mFragmentListRefreshData;
     int iCurrentSelection;
@@ -112,7 +121,7 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
         ButterKnife.bind(this, view);
         mtv_community_requested.setVisibility(View.GONE);
         mOwnerPresenter.attachView(this);
-
+        setProgressBar(mProgressbar);
         if (null != getArguments()) {
             communityEnum = (CommunityEnum) getArguments().getSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT);
             mFeedDetail = getArguments().getParcelable(AppConstants.COMMUNITY_DETAIL);
@@ -182,7 +191,12 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
                         mTvJoinInviteView.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
                         mTvJoinInviteView.setVisibility(View.VISIBLE);
                         mTvJoinInviteView.setEnabled(false);
-                    } else {
+                    }
+                    else if(mFeedDetail.isOwner())
+                    {
+                        tv_community_add_more.setVisibility(View.VISIBLE);
+                    }
+                    else {
                         mTvJoinInviteView.setBackgroundResource(R.drawable.rectangle_community_invite);
                         mTvJoinInviteView.setText(getString(R.string.ID_INVITE));
                         mTvJoinInviteView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
@@ -205,6 +219,10 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
                         mTvJoinInviteView.setVisibility(View.VISIBLE);
                         mTvJoinInviteView.setEnabled(false);
                     }
+                    else if(mFeedDetail.isOwner())
+                    {
+                        tv_community_add_more.setVisibility(View.VISIBLE);
+                    }
                     break;
                 case MY_COMMUNITY:
                     if (mFeedDetail.isMember() && !mFeedDetail.isOwner()) {
@@ -212,11 +230,16 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
                         mTvJoinInviteView.setText(getString(R.string.ID_VIEW));
                         mTvJoinInviteView.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
                     }
+                    else if(mFeedDetail.isOwner())
+                    {
+                        tv_community_add_more.setVisibility(View.VISIBLE);
+                    }
                     else {
                         mTvJoinInviteView.setText(getActivity().getString(R.string.ID_INVITE));
                         mTvJoinInviteView.setBackgroundResource(R.drawable.rectangle_community_invite);
                         mTvJoinInviteView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
                     }
+
                     break;
                 default:
                     LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + communityEnum);
@@ -272,7 +295,12 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
         mOwnerPresenter.getCommunityOwnerList(ownerListRequest);
 
     }
+    public void refreshData(int size)
+    {
 
+        mtv_community_members.setText("5" + AppConstants.SPACE + getString(R.string.ID_MEMBERS));
+
+    }
     private void clickMenuItem(View view) {
         LayoutInflater layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View popupView = layoutInflater.inflate(R.layout.menu_option_layout, null);
@@ -336,6 +364,16 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
         }
     }
 
+    @Override
+    public void onShowErrorDialog(String errorReason, FeedParticipationEnum feedParticipationEnum) {
+
+    }
+
+    @Override
+    public void onSuccessResult(String result, FeedDetail feedDetail) {
+        mTvJoinInviteView.setText("Joined");
+    }
+
 
     public interface AboutCommunityActivityIntractionListner {
         void memberClick();
@@ -368,8 +406,13 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
 
     @Override
     public void getOwnerListSuccess(List<Member> ownerListResponse) {
-        mAdapter.setSheroesGenericListData(ownerListResponse);
-        mAdapter.notifyDataSetChanged();
+        if(null !=ownerListResponse && ownerListResponse.size()>0) {
+            for (int i = 0; i < ownerListResponse.size(); i++)
+                if(mFeedDetail.isOwner())
+                ownerListResponse.get(i).setIsOwner(true);
+            mAdapter.setSheroesGenericListData(ownerListResponse);
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override

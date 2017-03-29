@@ -97,6 +97,8 @@ public class CommunityJoinRegionDialogFragment extends BaseDialogFragment implem
             List<Long> userIdList = new ArrayList();
             userIdList.add((long) userPreference.get().getUserSummary().getUserId());
             mHomePresenter.communityJoinFromPresenter(mAppUtils.communityRequestBuilder(userIdList, mFeedDetail.getIdOfEntityOrParticipant(), reasonToJoin));
+            getDialog().cancel();
+
         }
     }
 
@@ -130,6 +132,7 @@ public class CommunityJoinRegionDialogFragment extends BaseDialogFragment implem
             default:
                 mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_JOIN_INVITE);
         }
+
     }
 
     @Override

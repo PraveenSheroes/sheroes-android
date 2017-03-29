@@ -53,6 +53,15 @@ public class InviteMemberHolder extends BaseViewHolder<FeedDetail> {
         }
         String images = dataItem.getImageUrl();
 
+        if(dataItem.isOwner() || dataItem.isMember())
+        {
+            tvAddInvite.setText(mContext.getString(R.string.ID_ADDED));
+            tvAddInvite.setBackgroundResource(R.drawable.select_inivite_button_added_color);
+            tvAddInvite.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+
+        }
+
+
         ivCircleProfilePic.setCircularImage(true);
         ivCircleProfilePic.bindImage(images);
     }

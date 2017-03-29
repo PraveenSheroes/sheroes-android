@@ -89,6 +89,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.MemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
@@ -1781,7 +1782,22 @@ public class AppUtils {
         commentReactionRequestPojo.setEntityId(entityId);
         return commentReactionRequestPojo;
     }
+    public static MemberRequest getMemberRequestBuilder(long entityId, int pageNo) {
 
+
+        MemberRequest memberRequest=new MemberRequest();
+        memberRequest.setAppVersion("String");
+        memberRequest.setCloudMessagingId("String");
+        memberRequest.setCommunityId(entityId);
+        memberRequest.setDeviceUniqueId("String");
+        memberRequest.setLastScreenName("String");
+        memberRequest.setPageNo(pageNo);
+        memberRequest.setScreenName("String");
+        memberRequest.setPageSize(AppConstants.MEMBER_PAGE_SIZE);
+
+
+        return memberRequest;
+    }
     public static BookmarkRequestPojo bookMarkRequestBuilder(long entityId) {
         AppUtils appUtils = AppUtils.getInstance();
         BookmarkRequestPojo bookmarkRequestPojo = new BookmarkRequestPojo();

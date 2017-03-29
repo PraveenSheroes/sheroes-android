@@ -19,7 +19,7 @@ public class EditCommunityRequest {
     @SerializedName("community_type_id")
     @Expose
     private Integer communityTypeId;
-    @SerializedName("cover_image_url")
+    @SerializedName("cover_image")
     @Expose
     private String coverImageUrl;
     @SerializedName("description")
@@ -40,7 +40,7 @@ public class EditCommunityRequest {
     @SerializedName("last_screen_name")
     @Expose
     private String lastScreenName;
-    @SerializedName("logo_url")
+    @SerializedName("logo_image")
     @Expose
     private String logoUrl;
     @SerializedName("name")

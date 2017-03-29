@@ -54,6 +54,15 @@ public class OwnerHolder extends BaseViewHolder<Member> {
             ivFeedUserCircleIcon.setCircularImage(true);
             ivFeedUserCircleIcon.bindImage(dataItem.getCommunityUserPhotoUrlPath());
         }
+        if(dataItem.getIsOwner())
+        {
+            mTvownerclose.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            mTvownerclose.setVisibility(View.GONE);
+
+        }
     }
 
 

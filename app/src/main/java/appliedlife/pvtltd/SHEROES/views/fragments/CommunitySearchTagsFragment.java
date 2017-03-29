@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.f2prateek.rx.preferences.Preference;
 
@@ -97,6 +98,7 @@ public class CommunitySearchTagsFragment extends BaseFragment implements Communi
     TextView mtv_tag_title;
     @Bind(R.id.ll_indecator)
     LinearLayout ll_indecator;
+    String tag1,tag2;
     private List<PopularTag> listFeelter = new ArrayList<PopularTag>();
 
     private HashMap<String, HashMap<String, ArrayList<LabelValue>>> mMasterDataResult;
@@ -300,68 +302,77 @@ public class CommunitySearchTagsFragment extends BaseFragment implements Communi
             if (mCount == 2) {
                 mTv_no_of_tags.setText("2/3");
 
-                mVindecator1.setBackgroundColor((getResources().getColor(R.color.popular_tag_color)));
+                if(mTags[mCount].equals(mTags[mCount-1]))
+                {
+                    mCount=mCount-1;
+                    Toast.makeText(getActivity(),"Already Selected Please Select Another One",Toast.LENGTH_LONG).show();
+                }
+                else {
+                    mVindecator1.setBackgroundColor((getResources().getColor(R.color.popular_tag_color)));
 
-                if (mTags[mCount - 1].length() > 25) {
-                    mTag4.setVisibility(View.VISIBLE);
-                    mTag4.setText(mTags[mCount]);
-                } else if (mTags[mCount - 1].length() < 25) {
-                    if (mTags[mCount].length() > 25) {
+                    if (mTags[mCount - 1].length() > 25) {
                         mTag4.setVisibility(View.VISIBLE);
-
                         mTag4.setText(mTags[mCount]);
-                    }
-                    else {
-                        mTag2.setVisibility(View.VISIBLE);
+                    } else if (mTags[mCount - 1].length() < 25) {
+                        if (mTags[mCount].length() > 25) {
+                            mTag4.setVisibility(View.VISIBLE);
 
-                        mTag2.setText(mTags[mCount]);
+                            mTag4.setText(mTags[mCount]);
+                        } else {
+                            mTag2.setVisibility(View.VISIBLE);
+
+                            mTag2.setText(mTags[mCount]);
+                        }
                     }
                 }
-
             } else if (mCount == 3) {
                 mTv_no_of_tags.setText("3/3");
-                tv_community_tag_submit.setVisibility(View.VISIBLE);
-                mVindecator2.setBackgroundColor((getResources().getColor(R.color.popular_tag_color)));
+                tag1=mTags[mCount];
+                tag2=mTags[mCount-2];
 
-                if (mTags[mCount - 1].length() + mTags[mCount - 2].length() > 30) {
-                    if (mTag4.getText().equals("")) {
-                        mTag4.setVisibility(View.VISIBLE);
+                if((mTags[mCount].equals(mTags[mCount-1])) || (tag1.equals(tag2)))
+                {
+                    mCount=mCount-1;
+                    Toast.makeText(getActivity(),"Already Selected Please Select Another One",Toast.LENGTH_LONG).show();
+                }
+                else {
+                    mVindecator2.setBackgroundColor((getResources().getColor(R.color.popular_tag_color)));
 
-                        mTag4.setText(mTags[mCount]);
-                    }
-                    else if (mTags[mCount].length() > 25) {
-                        mTag7.setText(mTags[mCount]);
-                        mTag7.setVisibility(View.VISIBLE);
+                    if (mTags[mCount - 1].length() + mTags[mCount - 2].length() > 30) {
+                        if (mTag4.getText().equals("")) {
+                            mTag4.setVisibility(View.VISIBLE);
 
-                    }
-                    else {
-                        if((mTags[mCount-1].length() > 25))
-                        {
+                            mTag4.setText(mTags[mCount]);
+                        } else if (mTags[mCount].length() > 25) {
                             mTag7.setText(mTags[mCount]);
                             mTag7.setVisibility(View.VISIBLE);
+
+                        } else {
+                            if ((mTags[mCount - 1].length() > 25)) {
+                                mTag7.setText(mTags[mCount]);
+                                mTag7.setVisibility(View.VISIBLE);
+                            } else {
+                                mTag5.setVisibility(View.VISIBLE);
+
+                                mTag5.setText(mTags[mCount]);
+                            }
                         }
-                        else {
-                            mTag5.setVisibility(View.VISIBLE);
 
-                            mTag5.setText(mTags[mCount]);
+                    } else {
+                        if (mTags[mCount].length() > 25) {
+                            mTag4.setText(mTags[mCount]);
+                            mTag4.setVisibility(View.VISIBLE);
+
+                        } else {
+                            mTag3.setVisibility(View.VISIBLE);
+
+                            mTag3.setText(mTags[mCount]);
                         }
-                    }
-
-                } else {
-                    if (mTags[mCount].length() > 25) {
-                        mTag4.setText(mTags[mCount]);
-                        mTag4.setVisibility(View.VISIBLE);
-
-                    }
-                    else {
-                        mTag3.setVisibility(View.VISIBLE);
-
-                        mTag3.setText(mTags[mCount]);
                     }
                 }
             } else if (mCount == 1) {
                 mTv_no_of_tags.setText("1/3");
-
+                tv_community_tag_submit.setVisibility(View.VISIBLE);
                 mTag1.setVisibility(View.VISIBLE);
                 mVindecator.setBackgroundColor((getResources().getColor(R.color.popular_tag_color)));
                 mTag1.setText(mTags[mCount]);

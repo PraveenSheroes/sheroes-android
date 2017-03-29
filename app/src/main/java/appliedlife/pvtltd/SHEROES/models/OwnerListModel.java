@@ -44,6 +44,8 @@ public class OwnerListModel {
                 .observeOn(AndroidSchedulers.mainThread());
     }
     public Observable<DeactivateOwnerResponse> getCommunityOwnerDeactivate(DeactivateOwnerRequest deactivateOwnerRequest){
+        LogUtils.error("Community Deactivate Owner list req: ",gson.toJson(deactivateOwnerRequest));
+
         return sheroesAppServiceApi.getOwnerDeactivate(deactivateOwnerRequest)
                 .map(new Func1<DeactivateOwnerResponse, DeactivateOwnerResponse>() {
                     @Override

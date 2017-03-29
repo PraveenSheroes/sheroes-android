@@ -19,7 +19,7 @@ public class CreateCommunityRequest {
     @SerializedName("community_type_id")
     @Expose
     private Integer communityTypeId;
-    @SerializedName("cover_image_url")
+    @SerializedName("cover_image")
     @Expose
     private String coverImageUrl;
     @SerializedName("description")
@@ -34,7 +34,7 @@ public class CreateCommunityRequest {
     @SerializedName("last_screen_name")
     @Expose
     private String lastScreenName;
-    @SerializedName("logo_url")
+    @SerializedName("logo_image")
     @Expose
     private String logoUrl;
     @SerializedName("name")
@@ -52,10 +52,10 @@ public class CreateCommunityRequest {
     @SerializedName("type")
     @Expose
     private String type;
-    @SerializedName("cover_image")
+    @SerializedName("cover_image_url")
     @Expose
     private String cover;
-    @SerializedName("logo_image")
+    @SerializedName("logo_url")
     @Expose
     private String logo;
 

@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.transition.Slide;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -34,6 +35,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Member;
+import appliedlife.pvtltd.SHEROES.models.entities.community.MembersList;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerList;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
@@ -174,8 +176,9 @@ public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemo
         if (baseResponse instanceof FeedDetail) {
             communityDetailHandled(view, baseResponse);
         } else if (baseResponse instanceof OwnerList) {
+            OwnerList ownerList=(OwnerList) baseResponse;
             OwnerRemoveDialog newFragment = new OwnerRemoveDialog();
-            newFragment.setListener(this);
+            newFragment.setListener(this,ownerList.getName());
             newFragment.show(this.getFragmentManager(), getString(R.string.ID_DAILOG));
         } else if (baseResponse instanceof Member) {
             Member member = (Member) baseResponse;
@@ -184,8 +187,15 @@ public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemo
             bundleCommunity.putParcelable(AppConstants.MEMBER, member);
             bundleCommunity.putLong(AppConstants.COMMUNITY_DETAIL, mFeedDetail.getIdOfEntityOrParticipant());
             newFragment.setArguments(bundleCommunity);
-            newFragment.setListener(this);
+            newFragment.setListener(this,member.getCommunityUserFirstName());
+
             newFragment.show(this.getFragmentManager(), getString(R.string.ID_DAILOG));
+        }
+        else if (baseResponse instanceof MembersList) {
+            MembersList membersList=(MembersList) baseResponse;
+
+            CallCommunityMemberRemoveFragment(membersList.getUsersId(),membersList.getCommunityId(),membersList.getPosition());
+
         }
     }
 
@@ -235,7 +245,14 @@ public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemo
         }
 
     }
+    void CallCommunityMemberRemoveFragment(Long userId, Long communityId,int position) {
 
+        final Fragment frgmentAllMember = getSupportFragmentManager().findFragmentByTag(AllMembersFragment.class.getName());
+        if (AppUtils.isFragmentUIActive(frgmentAllMember)) {
+            ((AllMembersFragment) frgmentAllMember).callRemoveMember(userId,communityId, position);
+        }
+
+    }
     @Override
     public void memberClick() {
 
@@ -245,7 +262,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemo
 
         frag.setArguments(bundleCommunity);
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.bottom_to_top_slide_reverse_anim)
-                .replace(R.id.about_community_container, frag).addToBackStack(null).commitAllowingStateLoss();
+                .replace(R.id.about_community_container, frag,AllMembersFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
 
     }
 
@@ -379,15 +396,23 @@ public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemo
     }
 
     @Override
-    public void closeMembersFragment() {
-        getSupportFragmentManager().popBackStack();
+    public void onClickReactionList(FragmentOpen isFragmentOpen) {
 
     }
 
     @Override
-    public void onClickReactionList(FragmentOpen isFragmentOpen) {
+    public void closeMembersFragment(int size) {
+        getSupportFragmentManager().popBackStack();
+            final Fragment frgmentAllMember = getSupportFragmentManager().findFragmentByTag(CommunityOpenAboutFragment.class.getName());
+            if (AppUtils.isFragmentUIActive(frgmentAllMember)) {
+            }
+            ((CommunityOpenAboutFragment) frgmentAllMember).refreshData(size);
+     }
 
-    }
+
+
+
+
 
     @Override
     public void onClose() {
@@ -408,7 +433,9 @@ public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemo
     public void callInviteMembers() {
         final Fragment fragmentCommunityMember = getSupportFragmentManager().findFragmentByTag(InviteCommunityMember.class.getName());
         if (AppUtils.isFragmentUIActive(fragmentCommunityMember)) {
-            ((InviteCommunityMember) fragmentCommunityMember).callAddMember(muser_ids, mcommunity_id);
+            ((InviteCommunityMember) fragmentCommunityMember).callAddMember(muser_ids,mcommunity_id);
+            muser_ids.clear();
+
         }
     }
 

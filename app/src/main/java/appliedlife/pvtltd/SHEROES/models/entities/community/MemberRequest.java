@@ -30,6 +30,13 @@ public class MemberRequest {
     @Expose
     private String screenName;
 
+    @SerializedName("page_no")
+    @Expose
+    private int pageNo;
+    @SerializedName("page_size")
+    @Expose
+    private int pageSize;
+
     public String getAppVersion() {
         return appVersion;
     }
@@ -76,6 +83,24 @@ public class MemberRequest {
 
     public void setScreenName(String screenName) {
         this.screenName = screenName;
+    }
+
+
+
+    public int getPageNo() {
+        return pageNo;
+    }
+
+    public void setPageNo(int pageNo) {
+        this.pageNo = pageNo;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
     }
 
 

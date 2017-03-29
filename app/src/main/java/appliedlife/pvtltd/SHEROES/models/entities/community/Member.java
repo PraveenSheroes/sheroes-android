@@ -95,6 +95,11 @@ public class Member extends BaseResponse implements Parcelable {
     @Expose
     private Integer usersId;
 
+    @SerializedName("is_owner")
+    @Expose
+    private boolean isOwner;
+
+
     public Member(Parcel in) {
         approvedDate = in.readString();
         comLogoUrl = in.readString();
@@ -121,6 +126,10 @@ public class Member extends BaseResponse implements Parcelable {
             return new Member[size];
         }
     };
+
+    public Member() {
+
+    }
 
     public String getApprovedDate() {
         return approvedDate;
@@ -328,6 +337,14 @@ public class Member extends BaseResponse implements Parcelable {
 
     public void setUsersId(Integer usersId) {
         this.usersId = usersId;
+    }
+
+    public boolean getIsOwner() {
+        return isOwner;
+    }
+
+    public void setIsOwner(boolean isOwner) {
+        this.isOwner = isOwner;
     }
 
     @Override

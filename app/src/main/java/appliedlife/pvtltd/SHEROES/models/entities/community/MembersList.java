@@ -45,10 +45,10 @@ public class MembersList extends BaseResponse implements Parcelable{
     private Boolean commIsFeatured;
     @SerializedName("community_id")
     @Expose
-    private int communityId;
+    private Long communityId;
     @SerializedName("community_member_id")
     @Expose
-    private int communityMemberId;
+    private Long communityMemberId;
     @SerializedName("community_user_city_id")
     @Expose
     private int communityUserCityId;
@@ -90,7 +90,15 @@ public class MembersList extends BaseResponse implements Parcelable{
     private String typeS;
     @SerializedName("users_id")
     @Expose
-    private int usersId;
+    private Long usersId;
+    @SerializedName("is_owner")
+    @Expose
+    private boolean isOwner;
+
+    @SerializedName("position")
+    @Expose
+    private int position;
+
 
     public MembersList(Parcel in) {
         approvedDate = in.readString();
@@ -201,19 +209,27 @@ public class MembersList extends BaseResponse implements Parcelable{
         this.commIsFeatured = commIsFeatured;
     }
 
-    public int getCommunityId() {
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    public Long getCommunityId() {
         return communityId;
     }
 
-    public void setCommunityId(int communityId) {
+    public void setCommunityId(Long communityId) {
         this.communityId = communityId;
     }
 
-    public int getCommunityMemberId() {
+    public Long getCommunityMemberId() {
         return communityMemberId;
     }
 
-    public void setCommunityMemberId(int communityMemberId) {
+    public void setCommunityMemberId(Long communityMemberId) {
         this.communityMemberId = communityMemberId;
     }
 
@@ -321,13 +337,22 @@ public class MembersList extends BaseResponse implements Parcelable{
         this.typeS = typeS;
     }
 
-    public int getUsersId() {
+    public long getUsersId() {
         return usersId;
     }
 
-    public void setUsersId(int usersId) {
+    public void setUsersId(Long usersId) {
         this.usersId = usersId;
     }
+
+    public boolean getIsOwner() {
+        return isOwner;
+    }
+
+    public void setIsOwner(boolean isOwner) {
+        this.isOwner = isOwner;
+    }
+
 
     @Override
     public int describeContents() {

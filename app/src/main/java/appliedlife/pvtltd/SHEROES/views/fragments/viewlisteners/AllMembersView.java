@@ -12,5 +12,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.MembersList;
 
 public interface AllMembersView extends BaseMvpView {
     void getAllMembers(List<MembersList> data);
+    void removeMember(String data);
     void showNwError();
 }

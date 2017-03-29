@@ -37,6 +37,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.presenters.CommentReactionPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
+import appliedlife.pvtltd.SHEROES.presenters.MembersPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -74,13 +75,13 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     private SwipeRefreshLayout mSwipeView;
     private LinearLayout mLiNoResult;
     private FeedDetail mFeedDetail;
-
     private RecyclerView mRecyclerView;
     private int mPosition;
     private int mPressedEmoji;
     private boolean mListLoad = true;
     private boolean mIsEdit;
     private HomePresenter mHomePresenter;
+    private MembersPresenter mMemberpresenter;
     private AppUtils mAppUtils;
     private ProgressBar mProgressBar;
     private FragmentIntractionWithActivityListner mHomeSearchActivityFragmentIntractionWithActivityListner;
@@ -159,11 +160,9 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     public void setListLoadFlag(boolean mListLoad) {
         this.mListLoad = mListLoad;
     }
-
     public void setFeedDetail(FeedDetail feedDetail) {
         this.mFeedDetail = feedDetail;
     }
-
     public void setRefreshList(SwipPullRefreshList mPullRefreshList) {
         this.mPullRefreshList = mPullRefreshList;
     }
@@ -447,10 +446,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
 
     @Override
     public void stopProgressBar() {
-
         mProgressBar.setVisibility(View.GONE);
-
-
     }
 
     @Override
@@ -486,6 +482,18 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
      */
     protected void onBackPress() {
         getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+    }
+
+    public void setAllInitializationForMember(FragmentListRefreshData mFragmentListRefreshData, SwipPullRefreshList mPullRefreshList, GenericRecyclerViewAdapter mAdapter, LinearLayoutManager manager, int mPageNo, FeedDetail mFeedDetails, RecyclerView mRecyclerView, int i, int i1, MembersPresenter mmemberpresenter, AppUtils mAppUtils, ProgressBar mProgressBar) {
+        this.mFragmentListRefreshData = mFragmentListRefreshData;
+        this.mPullRefreshList = mPullRefreshList;
+        this.mAdapter = mAdapter;
+        this.mLayoutManager = manager;
+        this.mPageNo = mPageNo;
+        this.mRecyclerView = mRecyclerView;
+        this.mMemberpresenter = mmemberpresenter;
+        this.mAppUtils = mAppUtils;
+        this.mProgressBar = mProgressBar;
     }
 
 }

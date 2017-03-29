@@ -15,24 +15,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.profile.FieldErrorMessageMap;
 
 public class CommunityResponse extends BaseResponse {
 
-
-    @Override
-    public void setFieldErrorMessageMap(HashMap<String, String> fieldErrorMessageMap) {
-
-
-
-        super.setFieldErrorMessageMap(fieldErrorMessageMap);
-    }
     @SerializedName("members")
     @Expose
     private List<Member> members;
-    @Override
-    public String getStatus() {
-        return super.getStatus();
-    }
 
-    @Override
-    public void setStatus(String status) {
-        super.setStatus(status);
-    }
+
 }

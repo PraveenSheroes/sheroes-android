@@ -85,6 +85,8 @@ public class AppConstants {
     public static final String COMMUNITY_DETAIL = "community_detail";
     public static final String TAG_LIST = "tag_list";
     public static final String MEMBER = "Member_detail";
+    public static final String MEMBER_LIST = "Member_List";
+    public static final String MEMBER_FRAGMENT = "MemberFragment";
     public static final String SETTING = "setting";
     public static final String PIPE = "|";
     public static final String SUCCESS = "SUCCESS";
@@ -96,6 +98,7 @@ public class AppConstants {
     public static final int THREE_CONSTANT = 3;
     public static final int FOURTH_CONSTANT = 4;
     public static final int PAGE_SIZE = 10;
+    public static final int MEMBER_PAGE_SIZE = 100;
     public static final int NO_REACTION_CONSTANT = 0;
     public static final int HEART_REACTION_CONSTANT = 10;
     public static final int EMOJI_FIRST_REACTION_CONSTANT = 20;

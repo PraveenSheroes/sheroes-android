@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.presenters.CommentReactionPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
+import appliedlife.pvtltd.SHEROES.presenters.MembersPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -26,6 +27,7 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
     @Inject
     AppUtils mAppUtils;
     HomePresenter mHomePresenter;
+    MembersPresenter mMembersPresenter;
     RecyclerView mRecyclerView;
     private LinearLayoutManager mManager;
     private int  previousTotal = 0;
@@ -36,6 +38,12 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
     private CommentReactionPresenter mCommentReactionPresenter;
     public HidingScrollListener(HomePresenter homePresenter, RecyclerView recyclerView, LinearLayoutManager manager, FragmentListRefreshData fragmentListRefreshData) {
         mHomePresenter=homePresenter;
+        mRecyclerView=recyclerView;
+        mManager=manager;
+        this.mFragmentListRefreshData=fragmentListRefreshData;
+    }
+    public HidingScrollListener(MembersPresenter membersPresenter, RecyclerView recyclerView, LinearLayoutManager manager, FragmentListRefreshData fragmentListRefreshData) {
+        mMembersPresenter=membersPresenter;
         mRecyclerView=recyclerView;
         mManager=manager;
         this.mFragmentListRefreshData=fragmentListRefreshData;
@@ -125,6 +133,9 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                         break;
                     case AppConstants.COMMENT_REACTION_FRAGMENT:
                        mCommentReactionPresenter.getAllCommentListFromPresenter(mAppUtils.getCommentRequestBuilder(mFragmentListRefreshData.getEnitityOrParticpantid(),pageNo), mFragmentListRefreshData.isReactionList(),AppConstants.NO_REACTION_CONSTANT);
+                        break;
+                    case AppConstants.MEMBER_FRAGMENT:
+                        mMembersPresenter.getAllMembers(mAppUtils.getMemberRequestBuilder(mFragmentListRefreshData.getEnitityOrParticpantid(),pageNo));
                         break;
                     case AppConstants.USER_COMMUNITY_POST_FRAGMENT:
                         mHomePresenter.getFeedFromPresenter(mAppUtils.userCommunityPostRequestBuilder(AppConstants.FEED_COMMUNITY_POST,pageNo,mFragmentListRefreshData.getCommunityId()));

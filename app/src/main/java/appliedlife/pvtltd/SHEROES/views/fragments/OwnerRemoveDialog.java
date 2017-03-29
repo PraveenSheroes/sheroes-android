@@ -53,15 +53,19 @@ public class OwnerRemoveDialog extends BaseDialogFragment implements CommunityVi
     Member members;
     Long community_id;
     Context context;
+    String name;
+    @Bind(R.id.tv_owner_name)
+    TextView tv_owner_name;
 
-    public  void setListener(OwnerRemoveCloseListener context)
+    public  void setListener(OwnerRemoveCloseListener context,String ownerNm)
     {
         this.mHomeActivityIntractionListner=context;
+        this.name=ownerNm;
+
     }
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,@Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getActivity()).inject(this);
-
         if(null!=getArguments()) {
             members=getArguments().getParcelable(AppConstants.MEMBER);
             community_id=getArguments().getLong(AppConstants.COMMUNITY_DETAIL);
@@ -70,6 +74,7 @@ public class OwnerRemoveDialog extends BaseDialogFragment implements CommunityVi
 
         ButterKnife.bind(this, view);
         mOwnerPresenter.attachView(this);
+        tv_owner_name.setText(name);
 
         //  finishParent = getArguments().getBoolean(DISMISS_PARENT_ON_OK_OR_BACK, false);
         setCancelable(true);

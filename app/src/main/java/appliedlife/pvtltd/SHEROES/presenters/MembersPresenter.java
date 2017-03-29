@@ -9,6 +9,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.MemberListModel;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MemberListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MemberRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMember;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -74,6 +75,36 @@ public class MembersPresenter extends BasePresenter<AllMembersView> {
         registerSubscription(subscription);
 
     }
+
+    public void unJoinedApi(RemoveMember removeMember) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.ERROR_APP_CLOSE, ERROR_MEMBER);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = mCommentReactionModel.removeMember(removeMember).subscribe(new Subscriber<MemberListResponse>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+            @Override
+            public void onError(Throwable e) {
+                getMvpView().showError(AppConstants.ERROR_APP_CLOSE, ERROR_MEMBER);
+                getMvpView().showNwError();
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onNext(MemberListResponse memberListResponse) {
+                getMvpView().stopProgressBar();
+                getMvpView().removeMember(memberListResponse.getStatus());
+            }
+        });
+        registerSubscription(subscription);
+
+    }
+
+
     public void onStop() {
         detachView();
     }

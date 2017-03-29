@@ -185,6 +185,12 @@
                     android:textColor="@color/white"
                     android:text="@string/ID_INVITE"/>
             </FrameLayout>
+            <ProgressBar
+                android:id="@+id/pb_communities_open_about_progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_gravity="center" />
             <View
                 android:layout_width="fill_parent"
                 android:layout_height="1dp"
@@ -263,6 +269,7 @@
                     android:textSize="@dimen/sp_size_12"
                     android:textColor="@color/teg_text_color"
                     android:layout_gravity="center"
+                    android:textAllCaps="true"
                     android:layout_marginLeft="@dimen/dp_size_12"
                     android:layout_marginRight="@dimen/dp_size_12"
                     android:gravity="center"
@@ -271,6 +278,7 @@
                     android:id="@+id/tv_community_add_more"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     android:background="@drawable/ic_community_owner_more"
                     android:layout_gravity="right|center_vertical"
                     android:layout_marginRight="@dimen/dp_size_17"
