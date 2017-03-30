@@ -315,9 +315,16 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Fragment
         });
         final TextView tvEdit = (TextView) popupView.findViewById(R.id.tv_article_menu_edit);
         final TextView tvLeave = (TextView) popupView.findViewById(R.id.tv_article_menu_delete);
+
+
         tvLeave.setText(getActivity().getString(R.string.ID_LEAVE));
-        tvEdit.setVisibility(View.VISIBLE);
-        tvLeave.setVisibility(View.VISIBLE);
+        if(mFeedDetail.isOwner()) {
+            tvEdit.setVisibility(View.VISIBLE);
+            tvLeave.setVisibility(View.VISIBLE);
+        }
+        else
+            tvLeave.setVisibility(View.VISIBLE);
+
         popupWindow.showAsDropDown(view, -180, 0);
         tvEdit.setOnClickListener(new View.OnClickListener() {
             @Override

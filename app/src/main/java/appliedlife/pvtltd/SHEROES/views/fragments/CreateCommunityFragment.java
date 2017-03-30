@@ -59,10 +59,12 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.EditCommunityRequest
 import appliedlife.pvtltd.SHEROES.models.entities.community.Member;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.presenters.CreateCommunityPresenter;
+import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CommunityView;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -76,7 +78,8 @@ import butterknife.OnClick;
  * Title: Create Community fragment within Create Community activity perform all the UI operation .
  * Fragment will have all UI components and operate with activity .
  */
-public class CreateCommunityFragment extends BaseFragment implements CommunityView, ChangeCommunityPrivacyDialogFragment.CloseListener, CommunityTypeFragment.MyDialogFragmentListener {
+public class CreateCommunityFragment extends BaseFragment implements CommunityView, ChangeCommunityPrivacyDialogFragment.CloseListener, CommunityTypeFragment.MyDialogFragmentListener,HomeView{
+
 
     @Bind(R.id.cb_create_community_open_check)
     CheckBox mCbopen_community;
@@ -197,6 +200,7 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
 
 
             }
+
             if (null != getArguments()) {
                 mFeedDetail = getArguments().getParcelable(AppConstants.COMMUNITIES_DETAIL);
                 if (null != mFeedDetail) {
@@ -215,6 +219,7 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
                     tagval=tagval.replaceAll("null","");
                     mEt_create_community_tags.setText(tagval);
                 }
+
             }
            // getActivity().setRequestedOrientation(
                   //  ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);

@@ -145,35 +145,19 @@ public class CommunitySearchTagsFragment extends BaseFragment implements Communi
         mcommunityListPresenter.attachView(this);
 
         if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && null != mUserPreferenceMasterData.get().getData() ) {
-            data= mUserPreferenceMasterData.get().getData();
-            LogUtils.error("Master Data",data+"");
-            HashMap<String, ArrayList<LabelValue>> hashMap=data.get(AppConstants.MASTER_DATA_TAGS_KEY);
-            List<LabelValue> labelValueArrayList = hashMap.get(AppConstants.MASTER_DATA_DEFAULT_CATEGORY);
-            PopularTag filterList = new PopularTag();
-            filterList.setName("Popular Tag");
-            List<String> jobAtList = new ArrayList<>();
+            setMasterData(mUserPreferenceMasterData.get().getData());
+         }
+         else
+         {
+                mHomePresenter.getMasterDataToPresenter();
 
-            for(int i=0;i<labelValueArrayList.size();i++)
-            {
-                String abc=labelValueArrayList.get(i).getLabel();
-
-                jobAtList.add(abc);
-            }
-            filterList.setBoardingDataList(jobAtList);
-            listFeelter.add(filterList);
-
-        }
+         }
 
 
 
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new GenericRecyclerViewAdapter(getActivity(), this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(mAdapter);
 
-        mAdapter.setSheroesGenericListData(listFeelter);
-        mAdapter.notifyDataSetChanged();
+
+
 
         mEt_search_edit_text.setHint("Search Tags");
         editTextWatcher();
@@ -195,6 +179,40 @@ public class CommunitySearchTagsFragment extends BaseFragment implements Communi
         mHomeActivityIntractionListner.onTagsSubmit(mTags);
 
     }
+    private void setMasterData(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult)
+    {
+
+
+            LogUtils.error("Master Data",data+"");
+            HashMap<String, ArrayList<LabelValue>> hashMap=mapOfResult.get(AppConstants.MASTER_DATA_TAGS_KEY);
+            List<LabelValue> labelValueArrayList = hashMap.get(AppConstants.MASTER_DATA_DEFAULT_CATEGORY);
+            PopularTag filterList = new PopularTag();
+            filterList.setName("Popular Tag");
+            List<String> jobAtList = new ArrayList<>();
+            if (StringUtil.isNotEmptyCollection(labelValueArrayList)) {
+                for (int i = 0; i < labelValueArrayList.size(); i++) {
+                    String abc = labelValueArrayList.get(i).getLabel();
+
+                    jobAtList.add(abc);
+                }
+                filterList.setBoardingDataList(jobAtList);
+                listFeelter.add(filterList);
+            }
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mAdapter = new GenericRecyclerViewAdapter(getActivity(), this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
+
+        mAdapter.setSheroesGenericListData(listFeelter);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
+        setMasterData(mapOfResult);
+    }
+
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
        // List<FeedDetail> feedDetailList=feedResponsePojo.getFeedDetails();
@@ -239,7 +257,6 @@ public class CommunitySearchTagsFragment extends BaseFragment implements Communi
     public void startActivityFromHolder(Intent intent) {
 
     }
-
 
 
     @Override
@@ -300,7 +317,6 @@ public class CommunitySearchTagsFragment extends BaseFragment implements Communi
                 mTags[mCount] = textView.getText().toString();
             }
             if (mCount == 2) {
-                mTv_no_of_tags.setText("2/3");
 
                 if(mTags[mCount].equals(mTags[mCount-1]))
                 {
@@ -308,6 +324,8 @@ public class CommunitySearchTagsFragment extends BaseFragment implements Communi
                     Toast.makeText(getActivity(),"Already Selected Please Select Another One",Toast.LENGTH_LONG).show();
                 }
                 else {
+                    mTv_no_of_tags.setText("2/3");
+
                     mVindecator1.setBackgroundColor((getResources().getColor(R.color.popular_tag_color)));
 
                     if (mTags[mCount - 1].length() > 25) {
@@ -326,7 +344,6 @@ public class CommunitySearchTagsFragment extends BaseFragment implements Communi
                     }
                 }
             } else if (mCount == 3) {
-                mTv_no_of_tags.setText("3/3");
                 tag1=mTags[mCount];
                 tag2=mTags[mCount-2];
 
@@ -336,6 +353,8 @@ public class CommunitySearchTagsFragment extends BaseFragment implements Communi
                     Toast.makeText(getActivity(),"Already Selected Please Select Another One",Toast.LENGTH_LONG).show();
                 }
                 else {
+                    mTv_no_of_tags.setText("3/3");
+
                     mVindecator2.setBackgroundColor((getResources().getColor(R.color.popular_tag_color)));
 
                     if (mTags[mCount - 1].length() + mTags[mCount - 2].length() > 30) {
