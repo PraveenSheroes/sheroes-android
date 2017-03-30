@@ -298,7 +298,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_size_12"
-            android:layout_marginRight="@dimen/dp_size_15"
             android:layout_marginTop="@dimen/dp_size_20"
             android:orientation="horizontal"
             android:visibility="gone"
@@ -332,7 +331,7 @@
                 android:layout_gravity="right"
                 android:drawableRight="@drawable/ic_menu_dashboard"
                 android:paddingLeft="@dimen/dp_size_10"
-                android:paddingRight="@dimen/dp_size_12" />
+                android:paddingRight="@dimen/dp_size_12"/>
         </LinearLayout>
 
         <TextView

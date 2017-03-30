@@ -1,16 +1,19 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import butterknife.Bind;
+import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -19,30 +22,34 @@ import butterknife.OnClick;
  */
 
 public class WelcomeScreenFirstFragment extends BaseFragment {
-    private final String TAG = LogUtils.makeLogTag(WelcomeFragment.class);
-    private final String SCREEN_NAME = "WelcomeScreenFirstFragment";
-
-
-    @Bind(R.id.tv_click_to_join)
-    TextView mtv_click_to_join;
-    @Bind(R.id.intro_footer)
-    LinearLayout ll_intro_footer;
-
-
+    private final String TAG = LogUtils.makeLogTag(WelcomeScreenFirstFragment.class);
+    private FragmentIntractionWithActivityListner mHomeSearchActivityFragmentIntractionWithActivityListner;
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-      View view= inflater.inflate(R.layout.fragment_welcome_screen1, container, false);
-        ButterKnife.bind(this,view);
-        return view;
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (getActivity() != null) {
+            mActivity = getActivity();
+        }
+        try {
+            if (mActivity instanceof FragmentIntractionWithActivityListner) {
+                mHomeSearchActivityFragmentIntractionWithActivityListner = (FragmentIntractionWithActivityListner) getActivity();
+            }
+        } catch (Fragment.InstantiationException exception) {
+            LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
+        }
     }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        SheroesApplication.getAppComponent(getContext()).inject(this);
+        View view = inflater.inflate(R.layout.welcome_screen_first_fragment, container, false);
+        ButterKnife.bind(this, view);
+        return view;
+    }
     @OnClick(R.id.tv_click_to_join)
-    public void onJoinClick()
+    public void clickToJoin()
     {
-
-        ll_intro_footer.setVisibility(View.VISIBLE);
+        mHomeSearchActivityFragmentIntractionWithActivityListner.onSuccessResult(AppConstants.SUCCESS,null);
     }
 
 }

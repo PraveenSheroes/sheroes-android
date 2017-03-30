@@ -201,6 +201,13 @@ public class AppUtils {
             return "";
         }
     }
+    public String getCloudMessaging() {
+        if (getPackageInfo(0) != null) {
+            return getPackageInfo(0).versionName;
+        } else {
+            return "";
+        }
+    }
 
 
     public String getApplicationDisplayName() {

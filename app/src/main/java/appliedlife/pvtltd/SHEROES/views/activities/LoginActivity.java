@@ -22,6 +22,7 @@ import butterknife.OnClick;
 
 /**
  * Created by Praveen Singh on 04/01/2017.
+ *
  * @author Praveen Singh
  * @version 5.0
  * @since 04/01/2017.
@@ -37,10 +38,18 @@ public class LoginActivity extends BaseActivity implements LoginFragment.LoginAc
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getToken())) {
+          /*  if (userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.FEED_SCREEN)) {
+                Intent homeIntent = new Intent(this, HomeActivity.class);
+                startActivity(homeIntent);
+                finish();
+            } else {
+                Intent homeIntent = new Intent(this, OnBoardingActivity.class);
+                startActivity(homeIntent);
+                finish();
+            }*/
             Intent homeIntent = new Intent(this, HomeActivity.class);
             startActivity(homeIntent);
             finish();
-
         } else {
             renderLoginFragmentView();
         }
@@ -55,37 +64,36 @@ public class LoginActivity extends BaseActivity implements LoginFragment.LoginAc
 
     @Override
     public void onErrorOccurence(String errorMessage) {
-        if(!StringUtil.isNotNullOrEmptyString(errorMessage))
-        {
+        if (!StringUtil.isNotNullOrEmptyString(errorMessage)) {
             errorMessage = getString(R.string.ID_GENERIC_ERROR);
         }
-        showNetworkTimeoutDoalog(true,false,errorMessage);
+        showNetworkTimeoutDoalog(true, false, errorMessage);
     }
 
     @Override
     public void onLoginAuthToken() {
         Intent homeIntent = new Intent(this, HomeActivity.class);
-        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NO_HISTORY);
+        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(homeIntent);
         finish();
     }
+
     @Override
     public void onShowErrorDialog(String errorReason, FeedParticipationEnum feedParticipationEnum) {
-        switch (errorReason)
-        {
+        switch (errorReason) {
             case AppConstants.CHECK_NETWORK_CONNECTION:
-                showNetworkTimeoutDoalog(true,false,getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
+                showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
                 break;
             case AppConstants.HTTP_401_UNAUTHORIZED:
-                showNetworkTimeoutDoalog(true,false,getString(R.string.IDS_INVALID_USER_PASSWORD));
+                showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_INVALID_USER_PASSWORD));
                 break;
             default:
-                showNetworkTimeoutDoalog(true,false,getString(R.string.ID_GENERIC_ERROR));
+                showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
         }
     }
+
     @OnClick(R.id.iv_login_back)
-    public void backOnClick()
-    {
+    public void backOnClick() {
         super.onBackPressed();
     }
 }

@@ -49,7 +49,7 @@ public class SearchModuleHolder extends BaseViewHolder<FeedDetail> {
             switch (item.getSubType()) {
                 case AppConstants.FEED_ARTICLE:
                     mTvHeaderText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_feed_article_top_left, 0, 0, 0);
-                    mTvHeaderText.setText(dataItem.getAuthorName());
+                    mTvHeaderText.setText(dataItem.getNameOrTitle());
                     rlSearchModuleList.setTag(AppConstants.FEED_ARTICLE);
                     break;
                 case AppConstants.FEED_COMMUNITY:

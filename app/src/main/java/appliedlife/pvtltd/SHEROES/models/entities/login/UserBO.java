@@ -19,6 +19,16 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
  *
  */
 public class UserBO implements Parcelable {
+
+	@SerializedName("home_town")
+	@Expose
+	private String homeTown;
+	@SerializedName("home_town_id")
+	@Expose
+	private long homeTownId;
+	@SerializedName("language_id")
+	@Expose
+	private long languageId;
 	@SerializedName("id")
 	@Expose
 	private long id;
@@ -904,6 +914,33 @@ public class UserBO implements Parcelable {
 		this.longitude = longitude;
 	}
 
+	public UserBO() {
+	}
+
+	public String getHomeTown() {
+		return homeTown;
+	}
+
+	public void setHomeTown(String homeTown) {
+		this.homeTown = homeTown;
+	}
+
+	public long getHomeTownId() {
+		return homeTownId;
+	}
+
+	public void setHomeTownId(long homeTownId) {
+		this.homeTownId = homeTownId;
+	}
+
+	public long getLanguageId() {
+		return languageId;
+	}
+
+	public void setLanguageId(long languageId) {
+		this.languageId = languageId;
+	}
+
 	@Override
 	public int describeContents() {
 		return 0;
@@ -911,6 +948,9 @@ public class UserBO implements Parcelable {
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(this.homeTown);
+		dest.writeLong(this.homeTownId);
+		dest.writeLong(this.languageId);
 		dest.writeLong(this.id);
 		dest.writeLong(this.participantId);
 		dest.writeInt(this.userTypeId);
@@ -970,10 +1010,10 @@ public class UserBO implements Parcelable {
 		dest.writeInt(this.clientSideVisitPreference);
 	}
 
-	public UserBO() {
-	}
-
 	protected UserBO(Parcel in) {
+		this.homeTown = in.readString();
+		this.homeTownId = in.readLong();
+		this.languageId = in.readLong();
 		this.id = in.readLong();
 		this.participantId = in.readLong();
 		this.userTypeId = in.readInt();
@@ -1033,7 +1073,7 @@ public class UserBO implements Parcelable {
 		this.clientSideVisitPreference = in.readInt();
 	}
 
-	public static final Parcelable.Creator<UserBO> CREATOR = new Parcelable.Creator<UserBO>() {
+	public static final Creator<UserBO> CREATOR = new Creator<UserBO>() {
 		@Override
 		public UserBO createFromParcel(Parcel source) {
 			return new UserBO(source);

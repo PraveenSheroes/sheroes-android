@@ -8,7 +8,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -163,19 +162,41 @@ public class LoginFragment extends BaseFragment implements LoginView {
      */
     @Override
     public void getLogInResponse(LoginResponse loginResponse) {
-        mProgressBar.setVisibility(View.GONE);
-
-        if (null != loginResponse && StringUtil.isNotNullOrEmptyString(loginResponse.getToken())) {
-            loginResponse.setTokenTime(System.currentTimeMillis());
-            loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
-            mUserPreference.set(loginResponse);
-            mProgressBar.setVisibility(View.GONE);
-            mLoginActivityIntractionListner.onLoginAuthToken();
-            Snackbar.make(mEmailView, R.string.ID_APP_NAME, Snackbar.LENGTH_SHORT).show();
-        } else {
-            LoginManager.getInstance().logOut();
-
-            mLoginActivityIntractionListner.onErrorOccurence(loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA));
+        if (null != loginResponse) {
+            if (StringUtil.isNotNullOrEmptyString(loginResponse.getStatus())) {
+                switch (loginResponse.getStatus()) {
+                    case AppConstants.SUCCESS:
+                        loginResponse.setTokenTime(System.currentTimeMillis());
+                        loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
+                        mUserPreference.set(loginResponse);
+                        mProgressBar.setVisibility(View.GONE);
+                        mLoginActivityIntractionListner.onLoginAuthToken();
+                        break;
+                    case AppConstants.FAILED:
+                        mLoginActivityIntractionListner.onErrorOccurence(loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA));
+                        break;
+                }
+            } else {
+                if (StringUtil.isNotNullOrEmptyString(loginResponse.getToken()) && null != loginResponse.getUserSummary()) {
+                  /*  if (loginResponse.getUserSummary().isFbVerificationRequired()) {
+                        mUserPreference.set(loginResponse);
+                        fbSignIn();
+                    } else {
+                        loginResponse.setTokenTime(System.currentTimeMillis());
+                        loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
+                        mUserPreference.set(loginResponse);
+                        mProgressBar.setVisibility(View.GONE);
+                        mLoginActivityIntractionListner.onLoginAuthToken();
+                    }*/
+                    loginResponse.setTokenTime(System.currentTimeMillis());
+                    loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
+                    mUserPreference.set(loginResponse);
+                    mProgressBar.setVisibility(View.GONE);
+                    mLoginActivityIntractionListner.onLoginAuthToken();
+                } else {
+                    mLoginActivityIntractionListner.onErrorOccurence(loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA));
+                }
+            }
         }
     }
 
@@ -235,7 +256,6 @@ public class LoginFragment extends BaseFragment implements LoginView {
             focusView.requestFocus();
 
         } else {
-
             mProgressBar.setVisibility(View.VISIBLE);
             LoginRequest loginRequest = AppUtils.loginRequestBuilder();
             loginRequest.setUsername(email);
@@ -251,29 +271,44 @@ public class LoginFragment extends BaseFragment implements LoginView {
         public void onSuccess(final LoginResult loginResult) {
             final AccessToken accessToken = loginResult.getAccessToken();
             // Facebook Email address
-            GraphRequest request = GraphRequest.newMeRequest(
-                    accessToken,
-                    new GraphRequest.GraphJSONObjectCallback() {
-                        @Override
-                        public void onCompleted(JSONObject object, GraphResponse response) {
-                            if (null != accessToken && StringUtil.isNotNullOrEmptyString(accessToken.getToken())) {
-                                LoginRequest loginRequest = AppUtils.loginRequestBuilder();
-                                loginRequest.setAccessToken(accessToken.getToken());
-                                AppUtils appUtils=AppUtils.getInstance();
-                                loginRequest.setAppVersion(appUtils.getAppVersionName());
-                                loginRequest.setCloudMessagingId("string");
-                                loginRequest.setDeviceUniqueId(appUtils.getDeviceId());
-                                mLoginPresenter.getLoginAuthTokeInPresenter(loginRequest, true);
-                            }
-
+            GraphRequest request = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
+                @Override
+                public void onCompleted(JSONObject object, GraphResponse response) {
+                    if (null != accessToken && StringUtil.isNotNullOrEmptyString(accessToken.getToken())) {
+                        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getToken())) {
+                            LoginRequest loginRequest = AppUtils.loginRequestBuilder();
+                            loginRequest.setAccessToken(accessToken.getToken());
+                            AppUtils appUtils = AppUtils.getInstance();
+                            loginRequest.setAppVersion(appUtils.getAppVersionName());
+                            //TODO:: Google gcm ID
+                            loginRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+                            loginRequest.setDeviceUniqueId(appUtils.getDeviceId());
+                            mLoginPresenter.getFBVerificationInPresenter(loginRequest);
+                        } else {
+                            LoginRequest loginRequest = AppUtils.loginRequestBuilder();
+                            loginRequest.setAccessToken(accessToken.getToken());
+                            AppUtils appUtils = AppUtils.getInstance();
+                            loginRequest.setAppVersion(appUtils.getAppVersionName());
+                            //TODO:check cloud
+                            loginRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+                            loginRequest.setDeviceUniqueId(appUtils.getDeviceId());
+                            mLoginPresenter.getLoginAuthTokeInPresenter(loginRequest, true);
                         }
-                    });
-            try {
+                    }
+
+                }
+            });
+            try
+
+            {
                 Bundle parameters = new Bundle();
                 parameters.putString("fields", "id,name,email,gender,last_name,first_name");
                 request.setParameters(parameters);
                 request.executeAsync();
-            } catch (Exception e) {
+            } catch (
+                    Exception e)
+
+            {
             }
         }
 

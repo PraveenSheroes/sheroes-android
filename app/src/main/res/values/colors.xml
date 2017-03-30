@@ -8,6 +8,7 @@
     <color name="grey8">#fafafa</color>
     <color name="spinner">#f1f1f1</color>
     <color name="grey2">#b7b7b7</color>
+    <color name="welcome_footer">#ccffffff</color>
     <color name="red">#d50000</color>
     <color name="added_member">#56596b</color>
     <color name="dashboard_text">#323940</color>

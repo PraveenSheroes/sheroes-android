@@ -47,10 +47,12 @@
                     android:drawableLeft="@drawable/ic_timer_icon"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:paddingLeft="@dimen/dp_size_5"
+                    android:visibility="invisible"
                     android:textColor="@color/white"
                     android:textSize="@dimen/sp_size_12" />
 
                 <TextView
+                    android:id="@+id/tv_member"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"

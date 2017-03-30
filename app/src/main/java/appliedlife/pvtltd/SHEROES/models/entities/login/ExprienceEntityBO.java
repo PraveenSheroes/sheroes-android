@@ -7,6 +7,27 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class ExprienceEntityBO implements Parcelable {
+
+	@SerializedName("experience_type_string")
+	@Expose	
+	private String experienceTypeString;
+
+	@SerializedName("organisation_type_string")
+	@Expose
+	private String organisationTypeString;
+	
+	@SerializedName("location")
+	@Expose
+	private String location;
+	
+	@SerializedName("end_day")
+	@Expose
+	private int endDay;
+	@SerializedName("start_day")
+	@Expose
+	private int startDay;
+	
+	
 	@SerializedName("id")
 	@Expose
 	private long id;
@@ -306,4 +327,44 @@ public class ExprienceEntityBO implements Parcelable {
 			return new ExprienceEntityBO[size];
 		}
 	};
+
+	public String getExperienceTypeString() {
+		return experienceTypeString;
+	}
+
+	public void setExperienceTypeString(String experienceTypeString) {
+		this.experienceTypeString = experienceTypeString;
+	}
+
+	public String getOrganisationTypeString() {
+		return organisationTypeString;
+	}
+
+	public void setOrganisationTypeString(String organisationTypeString) {
+		this.organisationTypeString = organisationTypeString;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+	public int getEndDay() {
+		return endDay;
+	}
+
+	public void setEndDay(int endDay) {
+		this.endDay = endDay;
+	}
+
+	public int getStartDay() {
+		return startDay;
+	}
+
+	public void setStartDay(int startDay) {
+		this.startDay = startDay;
+	}
 }

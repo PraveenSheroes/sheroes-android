@@ -15,9 +15,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.f2prateek.rx.preferences.Preference;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
@@ -26,6 +30,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.OnBoardingEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingInterestJobSearch;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.OnBoardingData;
@@ -87,6 +92,9 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
     int mCurrentIndex = 0;
     private List<LabelValue> mSelectedTag = new ArrayList<>();
     OnBoardingDailogHeySuccess onBoardingDailogHeySuccess;
+    @Inject
+    Preference<LoginResponse> userPreference;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,6 +112,36 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
         mCustomCollapsingToolbarLayout.setExpandedTitleMarginStart(200);
         // mCustomCollapsingToolbarLayout.setTitle(mFeedDetail.getNameOrTitle());
         //  mCustomCollapsingToolbarLayout.setSubtitle(mFeedDetail.getAuthorName());
+        if (null != userPreference && userPreference.isSet() && null != userPreference.get()) {
+            if (userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.CURRENT_STATUS_SCREEN)) {
+                tellUsAboutFragment();
+            } else if (userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.HOW_CAN_SHEROES_AKA_LOOKING_FOR_SCREEN)) {
+                mHowCanSheroes.setVisibility(View.VISIBLE);
+                mInterest.setVisibility(View.GONE);
+                mJobAt.setVisibility(View.GONE);
+            } else if (userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.INTEREST_SCREEN)) {
+                mInterest.setVisibility(View.VISIBLE);
+                mHowCanSheroes.setVisibility(View.GONE);
+                mJobAt.setVisibility(View.GONE);
+            } else if (userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.GOOD_AT_SCREEN)) {
+                mInterest.setVisibility(View.GONE);
+                mHowCanSheroes.setVisibility(View.GONE);
+                mJobAt.setVisibility(View.VISIBLE);
+            } else if (userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.TOTAL_WORK_EXPERIENCE_SCREEN)) {
+                mInterest.setVisibility(View.GONE);
+                mHowCanSheroes.setVisibility(View.GONE);
+                mJobAt.setVisibility(View.GONE);
+                setOnWorkExperienceFragment();
+            } else {
+                tellUsAboutFragment();
+            }
+        } else {
+            tellUsAboutFragment();
+        }
+
+    }
+
+    private void tellUsAboutFragment() {
         OnBoardingTellUsAboutFragment onBoardingTellUsAboutFragment = new OnBoardingTellUsAboutFragment();
         Bundle bundleArticle = new Bundle();
         onBoardingTellUsAboutFragment.setArguments(bundleArticle);

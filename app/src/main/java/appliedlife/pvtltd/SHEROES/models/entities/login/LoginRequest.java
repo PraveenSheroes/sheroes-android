@@ -29,7 +29,6 @@ public class LoginRequest extends BaseRequest {
     @SerializedName("username")
     @Expose
     private String username;
-
     public String getAdvertisementid() {
         return advertisementid;
     }

@@ -119,6 +119,7 @@ public class ArticlesFragment extends BaseFragment {
                 @Override
                 public void onRefresh() {
                     setListLoadFlag(false);
+                    setProgressBar(mProgressBar);
                     mPullRefreshList.setPullToRefresh(true);
                     mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
                     mPullRefreshList = new SwipPullRefreshList();

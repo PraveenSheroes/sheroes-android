@@ -177,6 +177,12 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new CommunityCardDetailHeader(view, viewInterface);
         }
+    }
+    , NO_COMMUNITIES(R.layout.no_community_holder) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new NoCommunityHolder(view, viewInterface);
+        }
     }, SUGGESTED_CARD_HOLDER(R.layout.horizontal_suggestion_item) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
@@ -436,6 +442,9 @@ public enum HolderMapping {
                             break;
                         case AppConstants.MY_COMMUNITIES_HEADER:
                             returnView = COMMUNITY_DETAIL_HEADER.ordinal();
+                            break;
+                        case AppConstants.NO_COMMUNITIES:
+                            returnView = NO_COMMUNITIES.ordinal();
                             break;
 
                         default:

@@ -26,6 +26,9 @@ public class LoginResponse extends BaseResponse implements Parcelable {
     private UserSummary userSummary;
     private String tokenType;
     private long tokenTime;
+    @SerializedName("next_screen")
+    @Expose
+    String nextScreen;
     public String getToken() {
         return token;
     }
@@ -92,4 +95,12 @@ public class LoginResponse extends BaseResponse implements Parcelable {
             return new LoginResponse[size];
         }
     };
+
+    public String getNextScreen() {
+        return nextScreen;
+    }
+
+    public void setNextScreen(String nextScreen) {
+        this.nextScreen = nextScreen;
+    }
 }

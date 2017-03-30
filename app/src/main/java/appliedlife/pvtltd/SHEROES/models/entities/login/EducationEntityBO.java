@@ -7,6 +7,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class EducationEntityBO implements Parcelable {
+
 	@SerializedName("id")
 	@Expose
 	private long id;
@@ -43,6 +44,15 @@ public class EducationEntityBO implements Parcelable {
 	@SerializedName("activities")
 	@Expose
 	private String activities;
+	@SerializedName("is_currently_attending")
+	@Expose
+	private boolean isCurrentlyAttending;
+	@SerializedName("is_grade")
+	@Expose
+	private boolean isGrade;
+	@SerializedName("max_grade")
+	@Expose
+	private String maxGrade;
 	@SerializedName("display_order")
 	@Expose
 	private int displayOrder;
@@ -142,6 +152,33 @@ public class EducationEntityBO implements Parcelable {
 		isActive = active;
 	}
 
+	public EducationEntityBO() {
+	}
+
+	public boolean isCurrentlyAttending() {
+		return isCurrentlyAttending;
+	}
+
+	public void setCurrentlyAttending(boolean currentlyAttending) {
+		isCurrentlyAttending = currentlyAttending;
+	}
+
+	public boolean isGrade() {
+		return isGrade;
+	}
+
+	public void setGrade(boolean grade) {
+		isGrade = grade;
+	}
+
+	public String getMaxGrade() {
+		return maxGrade;
+	}
+
+	public void setMaxGrade(String maxGrade) {
+		this.maxGrade = maxGrade;
+	}
+
 	@Override
 	public int describeContents() {
 		return 0;
@@ -161,11 +198,11 @@ public class EducationEntityBO implements Parcelable {
 		dest.writeString(this.grade);
 		dest.writeString(this.description);
 		dest.writeString(this.activities);
+		dest.writeByte(this.isCurrentlyAttending ? (byte) 1 : (byte) 0);
+		dest.writeByte(this.isGrade ? (byte) 1 : (byte) 0);
+		dest.writeString(this.maxGrade);
 		dest.writeInt(this.displayOrder);
 		dest.writeByte(this.isActive ? (byte) 1 : (byte) 0);
-	}
-
-	public EducationEntityBO() {
 	}
 
 	protected EducationEntityBO(Parcel in) {
@@ -181,11 +218,14 @@ public class EducationEntityBO implements Parcelable {
 		this.grade = in.readString();
 		this.description = in.readString();
 		this.activities = in.readString();
+		this.isCurrentlyAttending = in.readByte() != 0;
+		this.isGrade = in.readByte() != 0;
+		this.maxGrade = in.readString();
 		this.displayOrder = in.readInt();
 		this.isActive = in.readByte() != 0;
 	}
 
-	public static final Parcelable.Creator<EducationEntityBO> CREATOR = new Parcelable.Creator<EducationEntityBO>() {
+	public static final Creator<EducationEntityBO> CREATOR = new Creator<EducationEntityBO>() {
 		@Override
 		public EducationEntityBO createFromParcel(Parcel source) {
 			return new EducationEntityBO(source);

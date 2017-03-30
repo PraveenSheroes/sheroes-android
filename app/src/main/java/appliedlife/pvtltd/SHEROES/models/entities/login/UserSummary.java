@@ -53,6 +53,10 @@ public class UserSummary implements Parcelable {
     @Expose
     private  List<ProjectEntityBO> projectsBO;
 
+    @SerializedName("fb_verification_required")
+    @Expose
+    private boolean fbVerificationRequired;
+
     public int getUserId() {
         return userId;
     }
@@ -136,6 +140,14 @@ public class UserSummary implements Parcelable {
         this.projectsBO = projectsBO;
     }
 
+    public boolean isFbVerificationRequired() {
+        return fbVerificationRequired;
+    }
+
+    public void setFbVerificationRequired(boolean fbVerificationRequired) {
+        this.fbVerificationRequired = fbVerificationRequired;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -153,6 +165,7 @@ public class UserSummary implements Parcelable {
         dest.writeTypedList(this.educationBO);
         dest.writeTypedList(this.exprienceBO);
         dest.writeTypedList(this.projectsBO);
+        dest.writeByte(this.fbVerificationRequired ? (byte) 1 : (byte) 0);
     }
 
     protected UserSummary(Parcel in) {
@@ -166,6 +179,7 @@ public class UserSummary implements Parcelable {
         this.educationBO = in.createTypedArrayList(EducationEntityBO.CREATOR);
         this.exprienceBO = in.createTypedArrayList(ExprienceEntityBO.CREATOR);
         this.projectsBO = in.createTypedArrayList(ProjectEntityBO.CREATOR);
+        this.fbVerificationRequired = in.readByte() != 0;
     }
 
     public static final Creator<UserSummary> CREATOR = new Creator<UserSummary>() {

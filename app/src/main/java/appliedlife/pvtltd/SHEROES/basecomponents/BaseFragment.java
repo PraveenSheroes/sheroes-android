@@ -84,7 +84,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     private MembersPresenter mMemberpresenter;
     private AppUtils mAppUtils;
     private ProgressBar mProgressBar;
-    private FragmentIntractionWithActivityListner mHomeSearchActivityFragmentIntractionWithActivityListner;
+    public FragmentIntractionWithActivityListner mHomeSearchActivityFragmentIntractionWithActivityListner;
     private FragmentOpen mFragmentOpen = new FragmentOpen();
 
     @Nullable
@@ -460,11 +460,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
             if (null != mLiNoResult) {
                 mLiNoResult.setVisibility(View.VISIBLE);
             }
-        } else {
-            mAdapter.notifyDataSetChanged();
-
         }
-        stopProgressBar();
         mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(errorMsg, feedParticipationEnum);
     }
 

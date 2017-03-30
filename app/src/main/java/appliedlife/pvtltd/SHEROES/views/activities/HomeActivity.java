@@ -378,7 +378,7 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
             } else if (StringUtil.isNotEmptyCollection(mFragmentOpen.getHomeSpinnerItemList())) {
                 mHomeSpinnerItemList = mFragmentOpen.getHomeSpinnerItemList();
             }
-            mFragmentOpen.setArticleFragment(false);
+            mFragmentOpen.setArticleFragment(true);
             mHomeSpinnerFragment = new HomeSpinnerFragment();
             Bundle bundle = new Bundle();
             bundle.putParcelableArrayList(AppConstants.HOME_SPINNER_FRAGMENT, (ArrayList<? extends Parcelable>) mHomeSpinnerItemList);

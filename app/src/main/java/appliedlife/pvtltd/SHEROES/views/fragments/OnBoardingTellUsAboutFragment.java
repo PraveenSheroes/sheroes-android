@@ -24,6 +24,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllData;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.GetInterestJobResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
@@ -40,7 +41,7 @@ import butterknife.OnClick;
  * Created by Ajit Kumar on 22-02-2017.
  */
 
-public class OnBoardingTellUsAboutFragment extends BaseFragment  implements OnBoardingView {
+public class OnBoardingTellUsAboutFragment extends BaseFragment implements OnBoardingView {
     private final String mTAG = LogUtils.makeLogTag(OnBoardingTellUsAboutFragment.class);
     @Bind(R.id.pb_boarding_progress_bar)
     ProgressBar mProgressBar;
@@ -50,7 +51,7 @@ public class OnBoardingTellUsAboutFragment extends BaseFragment  implements OnBo
     EditText mMobileNumber;
     @Bind(R.id.tv_current_status_spinner)
     TextView mCurrentStatus;
-    @Bind( R.id.iv_tell_us_next)
+    @Bind(R.id.iv_tell_us_next)
     ImageView mIvNext;
     @Inject
     OnBoardingPresenter mOnBoardingPresenter;
@@ -58,6 +59,8 @@ public class OnBoardingTellUsAboutFragment extends BaseFragment  implements OnBo
     Preference<MasterDataResponse> mUserPreferenceMasterData;
     private OnBoardingActivityIntractionListner mOnboardingIntractionListner;
     private HashMap<String, HashMap<String, ArrayList<LabelValue>>> mMasterDataResult;
+    @Inject
+    Preference<LoginResponse> userPreference;
 
     @Override
     public void onAttach(Context context) {
@@ -70,6 +73,7 @@ public class OnBoardingTellUsAboutFragment extends BaseFragment  implements OnBo
             LogUtils.error(mTAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + mTAG + AppConstants.SPACE + exception.getMessage());
         }
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -80,10 +84,12 @@ public class OnBoardingTellUsAboutFragment extends BaseFragment  implements OnBo
         mMobileNumber.setEnabled(false);
         mOnBoardingPresenter.attachView(this);
         super.setProgressBar(mProgressBar);
-        if(null!=mUserPreferenceMasterData&&mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get()&&null!=mUserPreferenceMasterData.get().getData()) {
+        if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && null != mUserPreferenceMasterData.get().getData()) {
             mOnBoardingPresenter.getMasterDataToPresenter();
-        }else
-        {
+        } else {
+            if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
+             //   mCurrentStatus.setText(labelValue.getLabel());
+            }
             mCurrentStatus.setEnabled(true);
             mLocation.setEnabled(true);
             mMobileNumber.setEnabled(true);
@@ -92,46 +98,42 @@ public class OnBoardingTellUsAboutFragment extends BaseFragment  implements OnBo
     }
 
 
-    public void setCurrentStaus(LabelValue labelValue)
-    {
-        Toast.makeText(getContext(),"*******"+labelValue.getLabel(),Toast.LENGTH_SHORT).show();
+    public void setCurrentStaus(LabelValue labelValue) {
+        Toast.makeText(getContext(), "*******" + labelValue.getLabel(), Toast.LENGTH_SHORT).show();
         mCurrentStatus.setText(labelValue.getLabel());
     }
-    public void setLocationData(  GetAllDataDocument getAllDataDocument)
-    {
-        Toast.makeText(getContext(),"*******"+getAllDataDocument.getTitle(),Toast.LENGTH_SHORT).show();
+
+    public void setLocationData(GetAllDataDocument getAllDataDocument) {
+        Toast.makeText(getContext(), "*******" + getAllDataDocument.getTitle(), Toast.LENGTH_SHORT).show();
         mLocation.setText(getAllDataDocument.getTitle());
     }
+
     @OnClick(R.id.iv_tell_us_next)
-    public void nextClick()
-    {
-        if(StringUtil.isNotNullOrEmptyString(mCurrentStatus.getText().toString())&&StringUtil.isNotNullOrEmptyString(mLocation.getText().toString())&&StringUtil.isNotNullOrEmptyString(mMobileNumber.getText().toString())) {
-          if(mMobileNumber.getText().toString().length()==10) {
-              mOnboardingIntractionListner.onSheroesHelpYouFragmentOpen(mMasterDataResult, AppConstants.ONE_CONSTANT);
-          }
-          else
-          {
-              Toast.makeText(getContext(), "Enter valid mobile number", Toast.LENGTH_SHORT).show();
-          }
-        }else
-        {
+    public void nextClick() {
+        if (StringUtil.isNotNullOrEmptyString(mCurrentStatus.getText().toString()) && StringUtil.isNotNullOrEmptyString(mLocation.getText().toString()) && StringUtil.isNotNullOrEmptyString(mMobileNumber.getText().toString())) {
+            if (mMobileNumber.getText().toString().length() == 10) {
+                mOnboardingIntractionListner.onSheroesHelpYouFragmentOpen(mMasterDataResult, AppConstants.ONE_CONSTANT);
+            } else {
+                Toast.makeText(getContext(), "Enter valid mobile number", Toast.LENGTH_SHORT).show();
+            }
+        } else {
             Toast.makeText(getContext(), "Pleas select Data", Toast.LENGTH_SHORT).show();
         }
     }
+
     @OnClick(R.id.tv_current_status_spinner)
-    public void onCurrentStatusClick()
-    {
-        mOnboardingIntractionListner.onSheroesHelpYouFragmentOpen(mMasterDataResult,AppConstants.TWO_CONSTANT);
+    public void onCurrentStatusClick() {
+        mOnboardingIntractionListner.onSheroesHelpYouFragmentOpen(mMasterDataResult, AppConstants.TWO_CONSTANT);
     }
+
     @OnClick(R.id.tv_location)
-    public void onLocationClick()
-    {
-        mOnboardingIntractionListner.onSheroesHelpYouFragmentOpen(mMasterDataResult,AppConstants.THREE_CONSTANT);
+    public void onLocationClick() {
+        mOnboardingIntractionListner.onSheroesHelpYouFragmentOpen(mMasterDataResult, AppConstants.THREE_CONSTANT);
     }
 
     @Override
     public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> masterDataResult) {
-        if(null!=masterDataResult) {
+        if (null != masterDataResult) {
             mCurrentStatus.setEnabled(true);
             mLocation.setEnabled(true);
             mMobileNumber.setEnabled(true);
@@ -152,7 +154,9 @@ public class OnBoardingTellUsAboutFragment extends BaseFragment  implements OnBo
 
     public interface OnBoardingActivityIntractionListner {
         void close();
+
         void onErrorOccurence();
-        void onSheroesHelpYouFragmentOpen(HashMap<String, HashMap<String, ArrayList<LabelValue>>> masterDataResult,int callFor);
+
+        void onSheroesHelpYouFragmentOpen(HashMap<String, HashMap<String, ArrayList<LabelValue>>> masterDataResult, int callFor);
     }
 }

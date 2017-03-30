@@ -24,6 +24,7 @@ public class FragmentOpen implements Parcelable {
     int openCommentReactionFragmentFor;
     boolean isOpenImageViewer;
     List<HomeSpinnerItem> homeSpinnerItemList;
+    boolean isOwner;
     public FragmentOpen() {
     }
 
@@ -132,6 +133,14 @@ public class FragmentOpen implements Parcelable {
         this.homeSpinnerItemList = homeSpinnerItemList;
     }
 
+    public boolean isOwner() {
+        return isOwner;
+    }
+
+    public void setOwner(boolean owner) {
+        isOwner = owner;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -152,6 +161,7 @@ public class FragmentOpen implements Parcelable {
         dest.writeInt(this.openCommentReactionFragmentFor);
         dest.writeByte(this.isOpenImageViewer ? (byte) 1 : (byte) 0);
         dest.writeTypedList(this.homeSpinnerItemList);
+        dest.writeByte(this.isOwner ? (byte) 1 : (byte) 0);
     }
 
     protected FragmentOpen(Parcel in) {
@@ -168,6 +178,7 @@ public class FragmentOpen implements Parcelable {
         this.openCommentReactionFragmentFor = in.readInt();
         this.isOpenImageViewer = in.readByte() != 0;
         this.homeSpinnerItemList = in.createTypedArrayList(HomeSpinnerItem.CREATOR);
+        this.isOwner = in.readByte() != 0;
     }
 
     public static final Creator<FragmentOpen> CREATOR = new Creator<FragmentOpen>() {

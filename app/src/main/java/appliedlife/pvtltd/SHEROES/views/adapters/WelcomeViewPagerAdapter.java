@@ -23,7 +23,7 @@ public class WelcomeViewPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
 
-       Fragment fragment = new android.support.v4.app.Fragment();
+       Fragment fragment = new Fragment();
 
         switch (position) {
             case 0:

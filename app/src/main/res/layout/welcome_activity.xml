@@ -1,7 +1,58 @@
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment"
-    android:name="appliedlife.pvtltd.SHEROES.views.fragments.FirstSplashScreenFragment"
-    tools:layout="@layout/welcome_activity"
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <android.support.v4.view.ViewPager
+            android:id="@+id/welcome_view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/dp_size_100"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/iv_welcome_first"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_circle_red" />
+
+            <ImageView
+                android:id="@+id/iv_welcome_second"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_size_10"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_circle_w" />
+
+            <ImageView
+                android:id="@+id/iv_welcome_third"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dp_size_10"
+                android:src="@drawable/ic_circle_w" />
+        </LinearLayout>
+
+        <include
+            android:id="@+id/fb_welcome_footer"
+            layout="@layout/welcome_footer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_gravity="bottom" />
+
+        <include layout="@layout/progress_bar_login" />
+    </FrameLayout>
+</android.support.design.widget.CoordinatorLayout>

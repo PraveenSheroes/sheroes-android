@@ -260,11 +260,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="right"
+                android:drawableRight="@drawable/ic_menu_dashboard"
                 android:paddingLeft="@dimen/dp_size_10"
-                android:paddingRight="@dimen/dp_size_10"
-                android:drawableRight="@drawable/ic_menu_dashboard" />
-        </LinearLayout>
-                android:visibility="gone" />
+                android:paddingRight="@dimen/dp_size_10" />
         </LinearLayout>
 
         <LinearLayout
@@ -297,4 +295,5 @@
                 android:textColor="@color/feed_conversation"
                 android:textSize="@dimen/sp_size_12" />
         </LinearLayout>
-    </android.support.v7.widget.CardView>
+    </LinearLayout>
+</android.support.v7.widget.CardView>

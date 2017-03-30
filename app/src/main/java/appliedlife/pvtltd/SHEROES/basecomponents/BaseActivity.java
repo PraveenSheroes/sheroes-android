@@ -518,7 +518,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
             case R.id.tv_feed_community_post_user_menu:
                 mFeedDetail = (FeedDetail) baseResponse;
                 if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
-                    if (mFeedDetail.getAuthorId() ==userPreference.get().getUserSummary().getUserId() ) {
+                    if (mFeedDetail.getAuthorId() ==userPreference.get().getUserSummary().getUserId()||mFragmentOpen.isOwner() ) {
                         tvShare.setVisibility(View.VISIBLE);
                         tvDelete.setVisibility(View.VISIBLE);
                         tvEdit.setVisibility(View.VISIBLE);

@@ -85,6 +85,31 @@ public class LoginPresenter extends BasePresenter<LoginView> {
         });
         registerSubscription(subscription);
     }
+    public void getFBVerificationInPresenter(LoginRequest loginRequest) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = mLoginModel.getFBVerificationFromModel(loginRequest).subscribe(new Subscriber<LoginResponse>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+            @Override
+            public void onError(Throwable e) {
+                getMvpView().stopProgressBar();
+                getMvpView().showError(e.getMessage(),ERROR_AUTH_TOKEN);
+            }
+
+            @Override
+            public void onNext(LoginResponse loginResponse) {
+                getMvpView().stopProgressBar();
+                getMvpView().getLogInResponse(loginResponse);
+            }
+        });
+        registerSubscription(subscription);
+    }
 
     public void onStop() {
         detachView();

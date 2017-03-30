@@ -7,6 +7,10 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class ProjectEntityBO implements Parcelable {
+
+	@SerializedName("experience_id")
+	@Expose
+	private Long experienceId;
 	@SerializedName("id")
 	@Expose
 	private long id;
@@ -106,6 +110,17 @@ public class ProjectEntityBO implements Parcelable {
 		isActive = active;
 	}
 
+	public ProjectEntityBO() {
+	}
+
+	public Long getExperienceId() {
+		return experienceId;
+	}
+
+	public void setExperienceId(Long experienceId) {
+		this.experienceId = experienceId;
+	}
+
 	@Override
 	public int describeContents() {
 		return 0;
@@ -113,6 +128,7 @@ public class ProjectEntityBO implements Parcelable {
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeValue(this.experienceId);
 		dest.writeLong(this.id);
 		dest.writeString(this.name);
 		dest.writeInt(this.startDateMonth);
@@ -125,10 +141,8 @@ public class ProjectEntityBO implements Parcelable {
 		dest.writeByte(this.isActive ? (byte) 1 : (byte) 0);
 	}
 
-	public ProjectEntityBO() {
-	}
-
 	protected ProjectEntityBO(Parcel in) {
+		this.experienceId = (Long) in.readValue(Long.class.getClassLoader());
 		this.id = in.readLong();
 		this.name = in.readString();
 		this.startDateMonth = in.readInt();
@@ -141,7 +155,7 @@ public class ProjectEntityBO implements Parcelable {
 		this.isActive = in.readByte() != 0;
 	}
 
-	public static final Parcelable.Creator<ProjectEntityBO> CREATOR = new Parcelable.Creator<ProjectEntityBO>() {
+	public static final Creator<ProjectEntityBO> CREATOR = new Creator<ProjectEntityBO>() {
 		@Override
 		public ProjectEntityBO createFromParcel(Parcel source) {
 			return new ProjectEntityBO(source);

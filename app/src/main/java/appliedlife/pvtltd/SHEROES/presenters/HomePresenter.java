@@ -97,7 +97,8 @@ public class HomePresenter extends BasePresenter<HomeView> {
     }
 
     @Override
-    public boolean isViewAttached() {
+    public boolean isViewAttached()
+    {
         return super.isViewAttached();
     }
 

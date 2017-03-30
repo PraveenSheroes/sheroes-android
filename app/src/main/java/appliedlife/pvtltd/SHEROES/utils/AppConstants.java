@@ -43,6 +43,13 @@ public class AppConstants {
     public static final String TAG_SUB_TYPE = "tags";
     public static final String OWNER_SUB_TYPE = "O";
     public static final String COMMUNITY_NAME_SUB_TYPE = "CN";
+    public static final String FEED_SCREEN = "feed";
+    public static final String CURRENT_STATUS_SCREEN = "current_status";
+    public static final String HOW_CAN_SHEROES_AKA_LOOKING_FOR_SCREEN = "looking_for";
+    public static final String GOOD_AT_SCREEN = "good_at";
+    public static final String TOTAL_WORK_EXPERIENCE_SCREEN = "total_exp";
+    public static final String INTEREST_SCREEN = "interest";
+
     public static final String FEED_COMMUNITY = "C";
     public static final String FEED_JOB = "J";
     public static final String FEED_ARTICLE = "A";
@@ -67,6 +74,7 @@ public class AppConstants {
     public static final String COMMUNITY_POST_FRAGMENT = "community_post_fragment";
     public static final String USER_COMMUNITY_POST_FRAGMENT = "user_community_post_fragment";
     public static final String MY_COMMUNITIES_HEADER = "COMMUNITY_HEADER";
+    public static final String NO_COMMUNITIES = "NO_COMMUNITIES";
     public static final String COMMUNITIES_DETAIL = "community_detail";
     public static final String BOARDING_SEARCH = "boarding_Search";
     public static final String ALL_SEARCH = "search";

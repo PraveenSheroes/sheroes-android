@@ -20,6 +20,7 @@ import android.transition.Slide;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -78,6 +79,11 @@ public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemo
     Toolbar mToolbarCommunitiesDetail;
     @Bind(R.id.collapsing_toolbar_communities_detail)
     CustomCollapsingToolbarLayout mCollapsingToolbarLayout;
+    @Bind(R.id.tv_member)
+    TextView mTvMemebr;
+    @Bind(R.id.tv_communities_time)
+    TextView mTvCommunityTime;
+
     private FeedDetail mFeedDetail;
     private FragmentOpen mFragmentOpen;
     ViewPagerAdapter viewPagerAdapter;
@@ -120,6 +126,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemo
         mCollapsingToolbarLayout.setExpandedTitleMarginStart(200);
         mCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
         if (null != mFeedDetail) {
+            mTvMemebr.setText(mFeedDetail.getNoOfMembers()+AppConstants.SPACE+getString(R.string.ID_MEMBERS));
             mFloatingActionButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_feed_article_top_left));
             mCollapsingToolbarLayout.setTitle(mFeedDetail.getNameOrTitle());
             mCollapsingToolbarLayout.setSubtitle(mFeedDetail.getNameOrTitle());
@@ -208,6 +215,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemo
         mFragment = viewPagerAdapter.getActiveFragment(mViewPagerCommunitiesDetail, AppConstants.NO_REACTION_CONSTANT);
         setFragment(mFragment);
         mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.THREE_CONSTANT);
+        mFragmentOpen.setOwner(mFeedDetail.isOwner());
         setAllValues(mFragmentOpen);
         super.feedCardsHandled(view, baseResponse);
         switch (id) {

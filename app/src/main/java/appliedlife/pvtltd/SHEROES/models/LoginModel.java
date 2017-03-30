@@ -60,5 +60,19 @@ public class LoginModel {
         }
 
     }
+    public Observable<LoginResponse> getFBVerificationFromModel(LoginRequest loginRequest) {
+        LogUtils.info(TAG,"*******************"+new Gson().toJson(loginRequest));
+            return sheroesAppServiceApi.getFBVerification(loginRequest)
+                    .map(new Func1<LoginResponse, LoginResponse>() {
+                        @Override
+                        public LoginResponse call(LoginResponse loginResponse) {
+                            return loginResponse;
+                        }
+                    })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread());
+
+    }
+
 
 }

@@ -23,6 +23,6 @@ public class ImageTwoFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_welcome_screen2, container, false);
+        return inflater.inflate(R.layout.welcome_screen_second_fragment, container, false);
     }
 }

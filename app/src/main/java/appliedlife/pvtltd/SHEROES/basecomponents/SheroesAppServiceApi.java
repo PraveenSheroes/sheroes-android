@@ -45,7 +45,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.profile.PersonalBasicDetailsRe
 import appliedlife.pvtltd.SHEROES.models.entities.profile.PersonalBasicDetailsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfessionalBasicDetailsRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfessionalBasicDetailsResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCardRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCardResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfilePreferredWorkLocationRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfilePreferredWorkLocationResponse;
@@ -103,6 +102,8 @@ public interface SheroesAppServiceApi {
     Observable<BookmarkResponsePojo> UnBookMarkToApi(@Body BookmarkRequestPojo bookmarkResponsePojo );
     @POST("participant/auth/signin")
     Observable<LoginResponse> getLoginAuthToken(@Body LoginRequest loginRequest);
+    @POST("participant/user/fbVerification")
+    Observable<LoginResponse> getFBVerification(@Body LoginRequest loginRequest);
     @POST("participant/user/fbsignup")
     Observable<LoginResponse> getFbSignUpToken(@Body LoginRequest loginRequest);
     @GET("participant/auth/refresh")
