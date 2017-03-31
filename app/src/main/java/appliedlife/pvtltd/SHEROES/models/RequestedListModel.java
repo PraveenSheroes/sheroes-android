@@ -5,7 +5,10 @@ import com.google.gson.Gson;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
+import appliedlife.pvtltd.SHEROES.models.entities.community.ApproveMemberRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.MemberListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MemberRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMember;
 import appliedlife.pvtltd.SHEROES.models.entities.community.RequestedListResponse;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import rx.android.schedulers.AndroidSchedulers;
@@ -40,4 +43,37 @@ public class RequestedListModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+    public rx.Observable<MemberListResponse> removePandingMember(RemoveMember removeMember){
+        LogUtils.error("Community Panding Member Reject req: ",gson.toJson(removeMember));
+
+        return sheroesAppServiceApi.removePandingMember(removeMember)
+                .map(new Func1<MemberListResponse, MemberListResponse>() {
+                    @Override
+                    public MemberListResponse call(MemberListResponse memberListResponse) {
+                        LogUtils.error("Community Panding Member Reject res: ",gson.toJson(memberListResponse));
+
+                        return memberListResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public rx.Observable<MemberListResponse> approvePandingMember(ApproveMemberRequest approveMemberRequest){
+        LogUtils.error("Community Panding Member Reject req: ",gson.toJson(approveMemberRequest));
+
+        return sheroesAppServiceApi.approvePandingMember(approveMemberRequest)
+                .map(new Func1<MemberListResponse, MemberListResponse>() {
+                    @Override
+                    public MemberListResponse call(MemberListResponse memberListResponse) {
+                        LogUtils.error("Community Panding Member Reject res: ",gson.toJson(memberListResponse));
+
+                        return memberListResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+
 }

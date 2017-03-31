@@ -22,10 +22,10 @@ public class PandingMember extends BaseResponse {
     private Object approvedDate;
     @SerializedName("community_id")
     @Expose
-    private Object communityId;
+    private long communityId;
     @SerializedName("users_id")
     @Expose
-    private Object usersId;
+    private long usersId;
     @SerializedName("is_active")
     @Expose
     private Boolean isActive;
@@ -55,7 +55,7 @@ public class PandingMember extends BaseResponse {
     private Object communityUserEmailid;
     @SerializedName("community_user_id")
     @Expose
-    private Object communityUserId;
+    private long communityUserId;
     @SerializedName("community_user_first_name")
     @Expose
     private String communityUserFirstName;
@@ -64,7 +64,7 @@ public class PandingMember extends BaseResponse {
     private String communityUserCityName;
     @SerializedName("community_user_city_id")
     @Expose
-    private Object communityUserCityId;
+    private long communityUserCityId;
     @SerializedName("com_type")
     @Expose
     private Object comType;
@@ -79,16 +79,25 @@ public class PandingMember extends BaseResponse {
     private Object comLogoUrl;
     @SerializedName("com_id")
     @Expose
-    private Object comId;
+    private long comId;
     @SerializedName("comm_is_featured")
     @Expose
     private Object commIsFeatured;
     @SerializedName("com_name")
     @Expose
     private String comName;
+
     @SerializedName("comm_is_closed")
     @Expose
-    private Boolean commIsClosed;
+    private boolean commIsClosed;
+
+    @SerializedName("reason_to_join_s")
+    @Expose
+    private String resoneToJoinS;
+
+    @SerializedName("position")
+    @Expose
+    private int position;
 
     public Object getId() {
         return id;
@@ -114,19 +123,19 @@ public class PandingMember extends BaseResponse {
         this.approvedDate = approvedDate;
     }
 
-    public Object getCommunityId() {
+    public long getCommunityId() {
         return communityId;
     }
 
-    public void setCommunityId(Object communityId) {
+    public void setCommunityId(long communityId) {
         this.communityId = communityId;
     }
 
-    public Object getUsersId() {
+    public long getUsersId() {
         return usersId;
     }
 
-    public void setUsersId(Object usersId) {
+    public void setUsersId(long usersId) {
         this.usersId = usersId;
     }
 
@@ -152,6 +161,14 @@ public class PandingMember extends BaseResponse {
 
     public void setTypeS(String typeS) {
         this.typeS = typeS;
+    }
+
+    public String getResoneToJoinS() {
+        return resoneToJoinS;
+    }
+
+    public void setResoneToJoinS(String resoneToJoinS) {
+        this.resoneToJoinS = resoneToJoinS;
     }
 
     public String getCommunityUserPhotoUrlPath() {
@@ -202,11 +219,11 @@ public class PandingMember extends BaseResponse {
         this.communityUserEmailid = communityUserEmailid;
     }
 
-    public Object getCommunityUserId() {
+    public long getCommunityUserId() {
         return communityUserId;
     }
 
-    public void setCommunityUserId(Object communityUserId) {
+    public void setCommunityUserId(long communityUserId) {
         this.communityUserId = communityUserId;
     }
 
@@ -230,7 +247,7 @@ public class PandingMember extends BaseResponse {
         return communityUserCityId;
     }
 
-    public void setCommunityUserCityId(Object communityUserCityId) {
+    public void setCommunityUserCityId(long communityUserCityId) {
         this.communityUserCityId = communityUserCityId;
     }
 
@@ -266,11 +283,11 @@ public class PandingMember extends BaseResponse {
         this.comLogoUrl = comLogoUrl;
     }
 
-    public Object getComId() {
+    public long getComId() {
         return comId;
     }
 
-    public void setComId(Object comId) {
+    public void setComId(long comId) {
         this.comId = comId;
     }
 
@@ -290,7 +307,15 @@ public class PandingMember extends BaseResponse {
         this.comName = comName;
     }
 
-    public Boolean getCommIsClosed() {
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    public boolean getCommIsClosed() {
         return commIsClosed;
     }
 

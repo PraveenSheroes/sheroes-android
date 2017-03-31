@@ -61,10 +61,11 @@ public class HomeModel {
     }
     public Observable<FeedResponsePojo> getMyCommunityFromModel(MyCommunityRequest myCommunityRequest){
         LogUtils.info(TAG,"*******************"+new Gson().toJson(myCommunityRequest));
-        return sheroesAppServiceApi.getMyCommunityFromApi(myCommunityRequest)
-                .map(new Func1<FeedResponsePojo, FeedResponsePojo>() {
+        return sheroesAppServiceApi.getMyCommunityFromApi(myCommunityRequest).map(new Func1<FeedResponsePojo, FeedResponsePojo>() {
                     @Override
                     public FeedResponsePojo call(FeedResponsePojo feedResponsePojo) {
+                        LogUtils.info("*******************my com response",new Gson().toJson(feedResponsePojo));
+
                         return feedResponsePojo;
                     }
                 })

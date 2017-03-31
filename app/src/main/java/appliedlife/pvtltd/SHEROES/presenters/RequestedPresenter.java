@@ -7,7 +7,10 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.RequestedListModel;
+import appliedlife.pvtltd.SHEROES.models.entities.community.ApproveMemberRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.MemberListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MemberRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMember;
 import appliedlife.pvtltd.SHEROES.models.entities.community.RequestedListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -17,6 +20,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.RequestedView;
 import rx.Subscriber;
 import rx.Subscription;
 
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MEMBER;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_REQUESTED;
 
 /**
@@ -74,6 +78,63 @@ public class RequestedPresenter extends BasePresenter<RequestedView> {
         registerSubscription(subscription);
 
     }
+    public void onRejectMemberApi(RemoveMember removeMember) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.ERROR_APP_CLOSE, ERROR_MEMBER);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = requestedListModel.removePandingMember(removeMember).subscribe(new Subscriber<MemberListResponse>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+            @Override
+            public void onError(Throwable e) {
+                getMvpView().showError(AppConstants.ERROR_APP_CLOSE, ERROR_MEMBER);
+                getMvpView().showNwError();
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onNext(MemberListResponse memberListResponse) {
+                getMvpView().stopProgressBar();
+                getMvpView().removePandingMember(memberListResponse.getStatus());
+            }
+        });
+        registerSubscription(subscription);
+
+    }
+
+    public void onApproveMember(ApproveMemberRequest approveMemberRequest) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.ERROR_APP_CLOSE, ERROR_MEMBER);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = requestedListModel.approvePandingMember(approveMemberRequest).subscribe(new Subscriber<MemberListResponse>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+            @Override
+            public void onError(Throwable e) {
+                getMvpView().showError(AppConstants.ERROR_APP_CLOSE, ERROR_MEMBER);
+                getMvpView().showNwError();
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onNext(MemberListResponse memberListResponse) {
+                getMvpView().stopProgressBar();
+                getMvpView().approvePandingMember(memberListResponse.getStatus());
+            }
+        });
+        registerSubscription(subscription);
+
+    }
+
+
     public void onStop() {
         detachView();
     }

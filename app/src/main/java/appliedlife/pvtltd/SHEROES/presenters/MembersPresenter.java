@@ -105,6 +105,9 @@ public class MembersPresenter extends BasePresenter<AllMembersView> {
     }
 
 
+
+
+
     public void onStop() {
         detachView();
     }

@@ -44,6 +44,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.f2prateek.rx.preferences.Preference;
 
 import java.io.ByteArrayOutputStream;
@@ -184,6 +186,8 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
         mTvcreate_community_post.setText(R.string.ID_CREATEPOST);
         createCommunityPresenter.attachView(this);
         checkStoragePermission();
+
+
         met_share_community_post_text.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -203,6 +207,16 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
                 }
             }
         });
+        String userImage=mUserPreference.get().getUserSummary().getPhotoUrl();
+        Glide.with(this)
+                .load(userImage)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .skipMemoryCache(true)
+                .into(iv_community_user);
+
+        Glide.with(this).load(userImage).transform(new CommunityOpenAboutFragment.CircleTransform(getActivity())).into(iv_community_user);
+
+        // iv_community_user.setImageBitmap(loginResponse);
         return view;
     }
     public void checkStoragePermission()
@@ -362,7 +376,8 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
 
         }
         else
-            Toast.makeText(getActivity(),"Please fill all the details",Toast.LENGTH_LONG).show();
+            mCreatecommunityPostIntractionListner.onErrorOccurence((AppConstants.BLANK_MESSAGE));
+
         /*Intent intent = new Intent(getActivity(), ShareCommunityActivity.class);
         startActivity(intent);*/
     }
@@ -404,6 +419,9 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
         String images = docs.getLogo();
        mIvcommunity_post_icon.setCircularImage(true);
         mIvcommunity_post_icon.bindImage(images);
+
+      //  iv_community_owner.setCircularImage(true);
+      //  iv_community_owner.bindImage(images);
     }
 
 
@@ -494,7 +512,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
     }
 
     public interface CreateCommunityActivityPostIntractionListner {
-        void onErrorOccurence();
+        void onErrorOccurence(String error);
         void onClose();
     }
     public static Bitmap getRoundedCroppedBitmap(Bitmap bitmap, int radius) {

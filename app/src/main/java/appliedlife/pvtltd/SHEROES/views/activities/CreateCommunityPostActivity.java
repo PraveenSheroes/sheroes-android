@@ -17,6 +17,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityList;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
 import appliedlife.pvtltd.SHEROES.views.fragments.CreateCommunityPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ImageUploadFragment;
@@ -122,9 +123,14 @@ public class CreateCommunityPostActivity extends BaseActivity implements CreateC
     }
 
 
-    @Override
-    public void onErrorOccurence() {
 
+    @Override
+    public void onErrorOccurence(String error) {
+        if(!StringUtil.isNotNullOrEmptyString(error))
+        {
+            error = getString(R.string.ID_GENERIC_ERROR);
+        }
+        showNetworkTimeoutDoalog(true,false,error);
     }
 
     @Override

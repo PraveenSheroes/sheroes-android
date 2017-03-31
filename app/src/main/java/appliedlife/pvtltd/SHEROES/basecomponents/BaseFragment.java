@@ -1,8 +1,12 @@
 package appliedlife.pvtltd.SHEROES.basecomponents;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -86,6 +90,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     private ProgressBar mProgressBar;
     public FragmentIntractionWithActivityListner mHomeSearchActivityFragmentIntractionWithActivityListner;
     private FragmentOpen mFragmentOpen = new FragmentOpen();
+    protected GenericFragmentActivityIntractionListner genericFragmentActivityIntractionListner;
 
     @Nullable
     @Override
@@ -189,6 +194,9 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
         try {
             if (mActivity instanceof FragmentIntractionWithActivityListner) {
                 mHomeSearchActivityFragmentIntractionWithActivityListner = (FragmentIntractionWithActivityListner) getActivity();
+            }
+            if(getActivity() instanceof  GenericFragmentActivityIntractionListner) {
+                genericFragmentActivityIntractionListner = (GenericFragmentActivityIntractionListner)getActivity();
             }
         } catch (Fragment.InstantiationException exception) {
             LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
@@ -490,6 +498,48 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
         this.mMemberpresenter = mmemberpresenter;
         this.mAppUtils = mAppUtils;
         this.mProgressBar = mProgressBar;
+    }
+    public void setAllInitializationForPandingMember(FragmentListRefreshData mFragmentListRefreshData, GenericRecyclerViewAdapter mAdapter, LinearLayoutManager manager, int mPageNo, FeedDetail mFeedDetails, RecyclerView mRecyclerView, int i, int i1, MembersPresenter mmemberpresenter, AppUtils mAppUtils, ProgressBar mProgressBar) {
+        this.mFragmentListRefreshData = mFragmentListRefreshData;
+        this.mPullRefreshList = mPullRefreshList;
+        this.mAdapter = mAdapter;
+        this.mLayoutManager = manager;
+        this.mPageNo = mPageNo;
+        this.mRecyclerView = mRecyclerView;
+        this.mMemberpresenter = mmemberpresenter;
+        this.mAppUtils = mAppUtils;
+        this.mProgressBar = mProgressBar;
+    }
+    public interface GenericFragmentActivityIntractionListner {
+        void close();
+        void onBackPress();
+        void onErrorOccurence(String errorMessage);
+
+    }
+    protected void getExternalStoragePermission() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                LogUtils.info("testing", "Permission is granted");
+
+            } else {
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                LogUtils.info("testing", "Permission is revoked");
+
+
+            }
+            if (getActivity().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                LogUtils.info("testing", "Permission is granted");
+
+            } else {
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                LogUtils.info("testing", "Permission is revoked");
+
+            }
+        } else { //permission is automatically granted on sdk<23 upon installation
+            LogUtils.info("testing", "Permission is already granted");
+
+        }
+
     }
 
 }

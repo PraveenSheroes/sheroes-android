@@ -105,7 +105,7 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_GROUP">Group</string>
     <string name="ID_SEE_MORE">See more like this</string>
     <string name="ID_ANONYMOUS">Anonymous</string>
-    <string name="ID_OWNER">Owner</string>
+    <string name="ID_OWNER">Owner (S)</string>
     <string name="ID_LESS">Less</string>
     <string name="ID_RECENT">Recent</string>
     <string name="ID_RELATED_ARTICLES">Related Articles</string>
@@ -522,7 +522,7 @@ etur adipiscing elit,sed do eiusmod tempor incididunt ut…</string>
     <string name="ID_COMMUNITY_MEMBER">200 Members</string>
     <string name="ID_SELECT_PURPOSE">Select Purpose</string>
 
-    <string name="ID_COMMUNITY_REQUESTED">20 Requested</string>
+    <string name="ID_COMMUNITY_REQUESTED">Requests</string>
     <string name="ID_EMPLOYER_BRANDING">Emloyer Branding</string>
     <string name="ID_COSTOMER_REVIEW">Costomer Review</string>
     <string name="ID_ASSOCIATE_EMPLOYEE_ENGAGEMENT">Associate/Employee engagement</string>
@@ -530,6 +530,7 @@ etur adipiscing elit,sed do eiusmod tempor incididunt ut…</string>
     <string name="ID_REQUEST">Requests</string>
     <string name="ID_POPULAR_TAG">Popular Tag</string>
     <string name="ID_TAG_TXT">Choose tags which you’re interested in</string>
+    <string name="ID_JOIN_REGION_TXT">I would like to join because..</string>
     <string name="ID_COMMUNITY_JOIN_TXT">I would like to join because..</string>
     <string name="ID_COMMUNITY_JOIN_REGION1">I am highly interested in joining this community</string>
     <string name="ID_COMMUNITY_JOIN_REGION2">I am already a member of this community outside of SHEROES</string>

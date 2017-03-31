@@ -30,6 +30,10 @@ public class Docs extends BaseResponse {
         @Expose
         private String is_community_closed;
 
+        @SerializedName("is_owner")
+        @Expose
+        private boolean isOwner;
+
     public String getId() {
         return id;
     }
@@ -78,6 +82,14 @@ public class Docs extends BaseResponse {
 
     public void setIs_community_closed(String is_community_closed) {
         this.is_community_closed = is_community_closed;
+    }
+
+    public boolean isOwner() {
+        return isOwner;
+    }
+
+    public void setOwner(boolean owner) {
+        isOwner = owner;
     }
 }
 

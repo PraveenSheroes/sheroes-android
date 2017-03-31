@@ -1,7 +1,8 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/al_community_open_about"
@@ -69,6 +70,7 @@
         </android.support.design.widget.CollapsingToolbarLayout>
 
     </android.support.design.widget.AppBarLayout>
+<!--
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fb_about_community_logo"
         android:layout_width="@dimen/dp_size_60"
@@ -82,10 +84,12 @@
         app:borderWidth="@dimen/dp_size_4"
         app:pressedTranslationZ="@dimen/dp_size_12"
         app:layout_anchorGravity="bottom|center" />
+-->
+
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#ffe5e5e5"
+        android:background="@color/white"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
@@ -93,11 +97,19 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:paddingTop="@dimen/dp_size_4">
-            <FrameLayout
+
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/dp_size_30">
-
+                >
+                <ImageView
+                    android:id="@+id/iv_community_post_icon"
+                    android:layout_width="@dimen/dp_size_60"
+                    android:layout_gravity="left"
+                    android:layout_margin="@dimen/dp_size_16"
+                    android:layout_height="@dimen/dp_size_60"
+                    android:background="@drawable/image_view_shap"
+                     />
                 <TextView
                     android:id="@+id/tv_community_name"
                     android:layout_width="200dp"
@@ -105,34 +117,37 @@
                     android:hint="@string/ID_COMMUNITY_NAME"
                     android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                     android:text="Ranigarh Women’s Empowerment and Development Group"
-                    android:layout_gravity="center"
+                    android:layout_gravity="center_vertical"
+                    android:layout_toRightOf="@+id/iv_community_post_icon"
                     android:minLines="2"
                     android:drawableEnd="@drawable/ic_lock"
                     android:drawableRight="@drawable/ic_lock"
                     android:drawablePadding="@dimen/dp_size_10"
-                    android:layout_marginTop="@dimen/dp_size_3"
-
-                    android:gravity="center"
-                    android:textSize="@dimen/sp_size_12"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/black"
+                    android:gravity="left"
+                    android:textSize="@dimen/sp_size_14"
                     android:maxLines="2" />
-
-
                 <Spinner android:id="@+id/sp_about_community"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/dp_size_25"
                     android:layout_marginRight="@dimen/dp_size_18"
                     android:background="@color/fully_transparent"
                     android:dropDownSelector="@color/fully_transparent"
-                    android:layout_gravity="right"/>
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                   />
                 <ImageView
                     android:id="@+id/iv_about_community"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/dp_size_5"
-                    android:layout_gravity="right"
+                    android:layout_alignParentRight="true"
+
+                    android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/dp_size_20"
                     android:src="@drawable/ic_menu_dashboard"/>
-            </FrameLayout>
+            </RelativeLayout>
             <TextView
                 android:id="@+id/tv_community_organisation"
                 android:layout_width="wrap_content"
@@ -203,6 +218,7 @@
                 android:layout_width="@dimen/dp_size_100"
                 android:layout_height="@dimen/dp_size_20"
                 android:text="@string/ID_TAGS"
+                android:textAllCaps="true"
                 android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:textSize="@dimen/sp_size_12"
                 android:layout_marginTop="@dimen/dp_size_17"
@@ -214,7 +230,7 @@
                 android:id="@+id/tv_community_tags"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/ID_TAG_TEXT"
+                android:text=""
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:textSize="@dimen/sp_size_13"
                 android:layout_gravity="center"
@@ -239,9 +255,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/ID_ABOUT_COMMUNITY_DES"
-                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:textSize="@dimen/sp_size_12"
-                android:textColor="@color/teg_text_color"
+                android:textColor="@color/black"
                 android:layout_marginTop="@dimen/dp_size_7"
                 android:layout_gravity="left"
                 android:layout_marginLeft="@dimen/dp_size_12"

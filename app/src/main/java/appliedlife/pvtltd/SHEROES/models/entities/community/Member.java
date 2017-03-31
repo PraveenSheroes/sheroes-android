@@ -99,6 +99,10 @@ public class Member extends BaseResponse implements Parcelable {
     @Expose
     private boolean isOwner;
 
+    @SerializedName("owner_count")
+    @Expose
+    private Integer ownerCount;
+
 
     public Member(Parcel in) {
         approvedDate = in.readString();
@@ -283,6 +287,8 @@ public class Member extends BaseResponse implements Parcelable {
         this.communityUserMobile = communityUserMobile;
     }
 
+
+
     public Integer getCommunityUserParticipantId() {
         return communityUserParticipantId;
     }
@@ -338,6 +344,15 @@ public class Member extends BaseResponse implements Parcelable {
     public void setUsersId(Integer usersId) {
         this.usersId = usersId;
     }
+
+    public Integer getOwnerCount() {
+        return ownerCount;
+    }
+
+    public void setOwnerCount(Integer ownerCount) {
+        this.ownerCount = ownerCount;
+    }
+
 
     public boolean getIsOwner() {
         return isOwner;

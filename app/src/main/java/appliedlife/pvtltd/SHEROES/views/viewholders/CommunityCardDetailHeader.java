@@ -68,7 +68,9 @@ public class CommunityCardDetailHeader extends BaseViewHolder<FeedDetail> {
                     break;
                 case  AppConstants.FEATURE_FRAGMENT:
                     if (!dataItem.isMember() && !dataItem.isOwner() && !dataItem.isRequestPending()) {
-                        tvJoin.setVisibility(View.VISIBLE);
+                     //   tvJoin.setVisibility(View.VISIBLE);
+                        tvJoin.setVisibility(View.GONE);
+
                         tvJoin.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
                         tvJoin.setText(mContext.getString(R.string.ID_JOIN));
                         tvJoin.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);

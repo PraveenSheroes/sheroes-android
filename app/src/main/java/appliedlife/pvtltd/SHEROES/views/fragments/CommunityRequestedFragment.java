@@ -10,7 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -18,20 +20,28 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.community.ApproveMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.PandingMember;
+import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMember;
 import appliedlife.pvtltd.SHEROES.models.entities.community.RequestedList;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
+import appliedlife.pvtltd.SHEROES.presenters.MembersPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.RequestedPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.RequestedView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.getMemberRequestBuilder;
 
 /**
  * Created by Ajit Kumar on 07-02-2017.
@@ -39,6 +49,8 @@ import butterknife.OnClick;
 
 public class CommunityRequestedFragment extends BaseFragment implements RequestedView {
     private final String TAG = LogUtils.makeLogTag(CommentReactionFragment.class);
+    @Inject
+    MembersPresenter mmemberpresenter;
     @Inject
     RequestedPresenter requestedPresenter;
     @Bind(R.id.rv_community_requested_list)
@@ -52,6 +64,12 @@ public class CommunityRequestedFragment extends BaseFragment implements Requeste
     private GenericRecyclerViewAdapter mAdapter;
     private RequestHomeActivityIntractionListner mHomeActivityIntractionListner;
     FeedDetail mFeedDetail;
+    int position;
+    private FragmentListRefreshData mFragmentListRefreshData;
+    private int mPageNo = AppConstants.ONE_CONSTANT;
+    List<PandingMember> pandingListData=new ArrayList<>();
+    @Inject
+    AppUtils mAppUtils;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -69,6 +87,7 @@ public class CommunityRequestedFragment extends BaseFragment implements Requeste
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_request, container, false);
         ButterKnife.bind(this, view);
+        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MEMBER_FRAGMENT, AppConstants.EMPTY_STRING);
 
         if(null!=getArguments())
         {
@@ -80,20 +99,66 @@ public class CommunityRequestedFragment extends BaseFragment implements Requeste
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mAdapter);
-        MemberRequest memberRequest=new MemberRequest();
+       /* MemberRequest memberRequest=new MemberRequest();
         memberRequest.setDeviceUniqueId("String");
         memberRequest.setScreenName("String");
         memberRequest.setLastScreenName("String");
         memberRequest.setCloudMessagingId("String");
+        memberRequest.setPageSize(200);
+        memberRequest.setPageNo(1);
         memberRequest.setAppVersion("String");
         memberRequest.setCommunityId(mFeedDetail.getIdOfEntityOrParticipant());
-        requestedPresenter.getAllMembers(memberRequest);
+        requestedPresenter.getAllMembers(memberRequest);*/
 
 
+        mRecyclerView.addOnScrollListener(new HidingScrollListener(requestedPresenter, mRecyclerView, manager, mFragmentListRefreshData) {
+            @Override
+            public void onHide() {
+                //((CommunitiesDetailActivity) getActivity()).mFlHomeFooterList.setVisibility(View.INVISIBLE);
+            }
 
+            @Override
+            public void onShow() {
+                // ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void dismissReactions() {
+
+            }
+        });
+        super.setAllInitializationForPandingMember(mFragmentListRefreshData, mAdapter, manager, mPageNo, null, mRecyclerView, 0, 0, mmemberpresenter, mAppUtils, mProgressBar);
+        requestedPresenter.getAllMembers(getMemberRequestBuilder(mFeedDetail.getIdOfEntityOrParticipant(),mFragmentListRefreshData.getPageNo()));
+        mFragmentListRefreshData.setEnitityOrParticpantid(mFeedDetail.getIdOfEntityOrParticipant());
 
         return view;
     }
+    public void removePandingRequest(long userId, long communityId, int position)
+    {
+        this.position=position;
+        RemoveMember removeMember=new RemoveMember();
+        removeMember.setCommunityId((communityId));
+        removeMember.setUserId(userId);
+        removeMember.setCloudMessagingId("string");
+        removeMember.setDeviceUniqueId("string");
+        removeMember.setAppVersion("string");
+        removeMember.setSource("string");
+        requestedPresenter.onRejectMemberApi(removeMember);
+    }
+    public void approvePandingRequest(long userId, long communityId, int position)
+    {
+        this.position=position;
+        ApproveMemberRequest removeMember=new ApproveMemberRequest();
+        removeMember.setCommunityId((communityId));
+        removeMember.setUserId(userId);
+        removeMember.setCloudMessagingId("string");
+        removeMember.setDeviceUniqueId("string");
+        removeMember.setAppVersion("string");
+        removeMember.setSource("string");
+        requestedPresenter.onApproveMember(removeMember);
+    }
+
+
     @OnClick(R.id.fmCommunityMembersClose)
     public void communityClosePress()
     {
@@ -166,7 +231,28 @@ public class CommunityRequestedFragment extends BaseFragment implements Requeste
     public void getAllRequest(List<PandingMember> data) {
         mAdapter.setSheroesGenericListData(data);
         mAdapter.notifyDataSetChanged();
+        if(null !=data) {
+            pandingListData=data;
+            mFragmentListRefreshData.setPageNo(mFragmentListRefreshData.getPageNo()+1);
+        }
     }
+
+    @Override
+    public void removePandingMember(String members) {
+
+        pandingListData.remove(position);
+        mAdapter.setSheroesGenericListData(pandingListData);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void approvePandingMember(String members) {
+        Toast.makeText(getActivity(), members, Toast.LENGTH_SHORT).show();
+        pandingListData.remove(position);
+        mAdapter.setSheroesGenericListData(pandingListData);
+        mAdapter.notifyDataSetChanged();
+    }
+
 
     @Override
     public void showNwError() {

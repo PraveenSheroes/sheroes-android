@@ -13,5 +13,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.RequestedList;
 
 public interface RequestedView extends BaseMvpView {
     void getAllRequest(List<PandingMember> data);
+    void removePandingMember(String members);
+    void approvePandingMember(String members);
     void showNwError();
 }

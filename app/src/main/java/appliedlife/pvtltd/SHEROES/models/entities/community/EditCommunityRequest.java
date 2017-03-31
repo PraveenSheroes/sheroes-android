@@ -57,7 +57,7 @@ public class EditCommunityRequest {
     private String screenName;
     @SerializedName("tags")
     @Expose
-    private List<Integer> tags = null;
+    private List<Long> tags = null;
 
     public String getAppVersion() {
         return appVersion;
@@ -179,11 +179,11 @@ public class EditCommunityRequest {
         this.screenName = screenName;
     }
 
-    public List<Integer> getTags() {
+    public List<Long> getTags() {
         return tags;
     }
 
-    public void setTags(List<Integer> tags) {
+    public void setTags(List<Long> tags) {
         this.tags = tags;
     }
 

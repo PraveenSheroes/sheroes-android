@@ -17,7 +17,7 @@ public class PopularTag extends BaseResponse {
 
     @SerializedName("id")
     @Expose
-    private String id;
+    private int id;
     @SerializedName("name")
     @Expose
     private String name;
@@ -26,11 +26,11 @@ public class PopularTag extends BaseResponse {
     private List<Integer> tagDataPostion;
     private List<String> boardingDataList;
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

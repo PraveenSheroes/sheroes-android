@@ -1891,6 +1891,22 @@ public class AppUtils {
 
         return memberRequest;
     }
+    public static MemberRequest getPandingMemberRequestBuilder(long entityId, int pageNo) {
+        AppUtils appUtils = AppUtils.getInstance();
+
+        MemberRequest memberRequest=new MemberRequest();
+        memberRequest.setAppVersion(appUtils.getAppVersionName());
+        memberRequest.setCloudMessagingId(AppConstants.ALL_SEARCH);
+        memberRequest.setCommunityId(entityId);
+        memberRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        memberRequest.setLastScreenName(AppConstants.COMMUNITY_DETAIL);
+        memberRequest.setPageNo(pageNo);
+        memberRequest.setScreenName(AppConstants.PANDING_MEMBER);
+        memberRequest.setPageSize(AppConstants.MEMBER_PAGE_SIZE);
+
+
+        return memberRequest;
+    }
     public static BookmarkRequestPojo bookMarkRequestBuilder(long entityId) {
         AppUtils appUtils = AppUtils.getInstance();
         BookmarkRequestPojo bookmarkRequestPojo = new BookmarkRequestPojo();

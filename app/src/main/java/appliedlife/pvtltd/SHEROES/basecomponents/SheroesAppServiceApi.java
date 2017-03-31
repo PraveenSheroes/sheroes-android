@@ -5,6 +5,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.community.ApproveMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
@@ -220,5 +221,12 @@ public interface SheroesAppServiceApi {
 
     @POST("participant/community/unjoin")
     Observable<MemberListResponse>removeMember(@Body RemoveMember removeMember);
+
+
+    @POST("participant/community/reject_joining_request")
+    Observable<MemberListResponse>removePandingMember(@Body RemoveMember removeMember);
+
+    @POST("participant/community/approve_joining_request")
+    Observable<MemberListResponse>approvePandingMember(@Body ApproveMemberRequest approveMemberRequest);
 
 }

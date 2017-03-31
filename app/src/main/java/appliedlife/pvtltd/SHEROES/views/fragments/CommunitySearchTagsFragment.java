@@ -22,6 +22,7 @@ import com.f2prateek.rx.preferences.Preference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -33,6 +34,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityTags;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
 import appliedlife.pvtltd.SHEROES.models.entities.community.PopularTag;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
@@ -100,7 +102,7 @@ public class CommunitySearchTagsFragment extends BaseFragment implements Communi
     LinearLayout ll_indecator;
     String tag1,tag2;
     private List<PopularTag> listFeelter = new ArrayList<PopularTag>();
-
+    Map<String,String> myMap;
     private HashMap<String, HashMap<String, ArrayList<LabelValue>>> mMasterDataResult;
 
 
@@ -109,12 +111,16 @@ public class CommunitySearchTagsFragment extends BaseFragment implements Communi
 
     private String mSearchDataName = AppConstants.EMPTY_STRING;
     String []mTags=new String[4];
+
+    long []mTagsid=new long[4];
     private FragmentListRefreshData mFragmentListRefreshData;
     private MyCommunityTagListener mHomeActivityIntractionListner;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private final String mTAG = LogUtils.makeLogTag(CreateCommunityFragment.class);
     HashMap<String, HashMap<String, ArrayList<LabelValue>>> data = new HashMap<>();
+    PopularTag filterList;
+    FeedDetail mFeedDetail;
 
     @Override
     public void onAttach(Context context) {
@@ -139,19 +145,21 @@ public class CommunitySearchTagsFragment extends BaseFragment implements Communi
         mHomePresenter.attachView(this);
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ALL_SEARCH, AppConstants.EMPTY_STRING);
 
-
+        if (null != getArguments()) {
+            mFeedDetail = getArguments().getParcelable(AppConstants.COMMUNITIES_DETAIL);
+        }
 
 
         mcommunityListPresenter.attachView(this);
 
-        if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && null != mUserPreferenceMasterData.get().getData() ) {
+       /* if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && null != mUserPreferenceMasterData.get().getData() ) {
             setMasterData(mUserPreferenceMasterData.get().getData());
          }
          else
-         {
+         {*/
                 mHomePresenter.getMasterDataToPresenter();
 
-         }
+         //}
 
 
 
@@ -170,13 +178,13 @@ public class CommunitySearchTagsFragment extends BaseFragment implements Communi
     @OnClick(R.id.tv_back_community_tag)
     public void communityTagBackClick()
     {
-        mHomeActivityIntractionListner.onBackPress();
+        genericFragmentActivityIntractionListner.onBackPress();
     }
     @OnClick(R.id.tv_community_tag_submit)
     public void tagSubmitPress()
     {
 
-        mHomeActivityIntractionListner.onTagsSubmit(mTags);
+        mHomeActivityIntractionListner.onTagsSubmit(mTags,mTagsid,mFeedDetail);
 
     }
     private void setMasterData(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult)
@@ -186,14 +194,18 @@ public class CommunitySearchTagsFragment extends BaseFragment implements Communi
             LogUtils.error("Master Data",data+"");
             HashMap<String, ArrayList<LabelValue>> hashMap=mapOfResult.get(AppConstants.MASTER_DATA_TAGS_KEY);
             List<LabelValue> labelValueArrayList = hashMap.get(AppConstants.MASTER_DATA_DEFAULT_CATEGORY);
-            PopularTag filterList = new PopularTag();
+             filterList = new PopularTag();
             filterList.setName("Popular Tag");
             List<String> jobAtList = new ArrayList<>();
+      myMap = new HashMap<>();
             if (StringUtil.isNotEmptyCollection(labelValueArrayList)) {
                 for (int i = 0; i < labelValueArrayList.size(); i++) {
                     String abc = labelValueArrayList.get(i).getLabel();
-
+                    String id = ""+labelValueArrayList.get(i).getValue();
+                    myMap.put(abc,id);
                     jobAtList.add(abc);
+
+                    //jobAtList.add(id);
                 }
                 filterList.setBoardingDataList(jobAtList);
                 listFeelter.add(filterList);
@@ -311,10 +323,12 @@ public class CommunitySearchTagsFragment extends BaseFragment implements Communi
             if(sheroesListDataItem instanceof Doc)
             {
                 mTags[mCount] = ((Doc) sheroesListDataItem).getTitle();
+                mTagsid[mCount]=((Doc) sheroesListDataItem).getId();
 
             }
             else {
                 mTags[mCount] = textView.getText().toString();
+                mTagsid[mCount]=Long.parseLong(myMap.get(textView.getText()));
             }
             if (mCount == 2) {
 
@@ -487,8 +501,6 @@ public class CommunitySearchTagsFragment extends BaseFragment implements Communi
 
 
     public interface MyCommunityTagListener {
-        void onErrorOccurence();
-        void onTagsSubmit(String[] tagsval);
-        void onBackPress();
+        void onTagsSubmit(String[] tagsval,long[] tagsid,FeedDetail mFeeddetails);
     }
 }

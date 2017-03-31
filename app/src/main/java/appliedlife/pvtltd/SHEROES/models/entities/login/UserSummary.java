@@ -20,7 +20,7 @@ public class UserSummary implements Parcelable {
 
     @SerializedName("user_id")
     @Expose
-    private int userId;
+    private long userId;
     @SerializedName("email_id")
     @Expose
     private String emailId;
@@ -57,11 +57,11 @@ public class UserSummary implements Parcelable {
     @Expose
     private boolean fbVerificationRequired;
 
-    public int getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 
@@ -155,7 +155,7 @@ public class UserSummary implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.userId);
+        dest.writeLong(this.userId);
         dest.writeString(this.emailId);
         dest.writeString(this.mobile);
         dest.writeString(this.firstName);
@@ -169,7 +169,7 @@ public class UserSummary implements Parcelable {
     }
 
     protected UserSummary(Parcel in) {
-        this.userId = in.readInt();
+        this.userId = in.readLong();
         this.emailId = in.readString();
         this.mobile = in.readString();
         this.firstName = in.readString();

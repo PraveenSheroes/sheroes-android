@@ -33,6 +33,7 @@ public class MemberHolder extends BaseViewHolder<MembersList> {
     private MembersList dataItem;
     private int position;
 
+
     public MemberHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this,itemView);
@@ -52,6 +53,7 @@ public class MemberHolder extends BaseViewHolder<MembersList> {
         this.dataItem = obj;
         // itemView.setOnClickListener(this);
         tv_member_cross.setOnClickListener(this);
+
         tv_member_city.setText(dataItem.getCommunityUserCityName());
         tv_member_name.setText(dataItem.getCommunityUserFirstName());
         String images = dataItem.getCommunityUserPhotoUrlPath();

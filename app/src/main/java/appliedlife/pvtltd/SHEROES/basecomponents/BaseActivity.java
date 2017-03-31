@@ -37,6 +37,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.JobDetailActivity;
@@ -47,7 +48,9 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.CommunityJoinFromeAboutFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityJoinRegionDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOpenAboutFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ImageFullViewFragment;
@@ -64,7 +67,7 @@ import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_REACTION_COMMENT_ME
  * @since 29/12/2016.
  * Title: Base activity for all activities.
  */
-public class BaseActivity extends AppCompatActivity implements BaseHolderInterface, FragmentIntractionWithActivityListner, View.OnTouchListener, View.OnClickListener {
+public class BaseActivity extends AppCompatActivity implements BaseHolderInterface, FragmentIntractionWithActivityListner, View.OnTouchListener, View.OnClickListener, BaseFragment.GenericFragmentActivityIntractionListner {
     private final String TAG = LogUtils.makeLogTag(BaseActivity.class);
     public boolean mIsDestroyed;
     protected SheroesApplication mSheroesApplication;
@@ -222,6 +225,20 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
             Bundle b = new Bundle();
             b.putParcelable(BaseDialogFragment.DISMISS_PARENT_ON_OK_OR_BACK, feedDetail);
             fragment.setArguments(b);
+        }
+        if (!fragment.isVisible() && !fragment.isAdded() && !isFinishing() && !mIsDestroyed) {
+            fragment.show(getFragmentManager(), CommunityJoinRegionDialogFragment.class.getName());
+        }
+        return fragment;
+    }
+    protected DialogFragment showCommunityJoinReasonFromAboutCommunity(FeedDetail feedDetail,CommunityOpenAboutFragment communityOpenAboutFragment) {
+        CommunityJoinFromeAboutFragment fragment = (CommunityJoinFromeAboutFragment) getFragmentManager().findFragmentByTag(CommunityJoinFromeAboutFragment.class.getName());
+        if (fragment == null) {
+            fragment = new CommunityJoinFromeAboutFragment();
+            Bundle b = new Bundle();
+            b.putParcelable(BaseDialogFragment.DISMISS_PARENT_ON_OK_OR_BACK, feedDetail);
+            fragment.setArguments(b);
+            fragment.setListener(communityOpenAboutFragment);
         }
         if (!fragment.isVisible() && !fragment.isAdded() && !isFinishing() && !mIsDestroyed) {
             fragment.show(getFragmentManager(), CommunityJoinRegionDialogFragment.class.getName());
@@ -759,5 +776,29 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
     @Override
     public void onSuccessResult(String result, FeedDetail feedDetail) {
 
+    }
+
+
+    @Override
+    public void close() {
+        finish();
+    }
+
+    @Override
+    public void onErrorOccurence(String errorMessage) {
+        if(!StringUtil.isNotNullOrEmptyString(errorMessage))
+        {
+            errorMessage = getString(R.string.ID_GENERIC_ERROR);
+        }
+        showNetworkTimeoutDoalog(true,false,errorMessage);
+    }
+    @Override
+    public void onBackPress() {
+        getSupportFragmentManager().popBackStack();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

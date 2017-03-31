@@ -212,6 +212,7 @@
                         android:fontFamily="@string/ID_ROBOTO_REGULAR"
                         android:hint="@string/ID_DESCRIPTION"
                         android:imeOptions="actionUnspecified"
+
                         android:maxLength="4000"
                         android:inputType="textMultiLine"
                         android:scrollbars="vertical"

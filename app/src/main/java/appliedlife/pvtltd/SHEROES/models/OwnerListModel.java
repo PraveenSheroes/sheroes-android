@@ -50,6 +50,8 @@ public class OwnerListModel {
                 .map(new Func1<DeactivateOwnerResponse, DeactivateOwnerResponse>() {
                     @Override
                     public DeactivateOwnerResponse call(DeactivateOwnerResponse deactivateOwnerResponse) {
+                        LogUtils.error("Community Deactivate Owner list response: ",gson.toJson(deactivateOwnerResponse));
+
                         return deactivateOwnerResponse;
                     }
                 })

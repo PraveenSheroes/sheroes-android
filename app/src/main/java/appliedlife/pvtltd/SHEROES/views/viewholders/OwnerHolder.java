@@ -35,6 +35,7 @@ public class OwnerHolder extends BaseViewHolder<Member> {
     BaseHolderInterface viewInterface;
     private Member dataItem;
     Context mContext;
+    int mCrossFlag=0;
 
     public OwnerHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
@@ -74,7 +75,15 @@ public class OwnerHolder extends BaseViewHolder<Member> {
         mTvownerclose.setOnClickListener(this);
         allTextViewStringOperations(context);
         tvOwner.setText("Admin "+(position+1));
-       // tvOwner.setTextColor(context.getColor(R.color.red_oval_shap));
+
+        if(null !=dataItem.getOwnerCount()) {
+            if (dataItem.getOwnerCount() > 0) {
+                mTvownerclose.setVisibility(View.VISIBLE);
+            } else
+                mTvownerclose.setVisibility(View.GONE);
+
+        }
+        // tvOwner.setTextColor(context.getColor(R.color.red_oval_shap));
         tvOwner.setTextColor(ContextCompat.getColor(context, R.color.red_oval_shap));
 
 

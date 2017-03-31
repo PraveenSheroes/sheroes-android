@@ -38,6 +38,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Member;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MembersList;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerList;
+import appliedlife.pvtltd.SHEROES.models.entities.community.PandingMember;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -46,6 +47,7 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.CustomCollapsingToolbarLayout;
+import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import appliedlife.pvtltd.SHEROES.views.fragments.AllMembersFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
@@ -65,7 +67,7 @@ import butterknife.OnClick;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FOR_REFRESH_FRAGMENT_LIST;
 
 
-public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemoveDialog.OwnerRemoveCloseListener, InviteFragmentListener, CommunityOwnerSearchFragment.InviteOwnerActivityIntractionListner, InviteCommunityOwner.InviteOwnerDoneIntractionListner, ShareCommunityFragment.ShareCommunityActivityIntractionListner, CommunityInviteSearchFragment.InviteSearchActivityIntractionListner, CommunityRequestedFragment.RequestHomeActivityIntractionListner, AllMembersFragment.MembersHomeActivityIntractionListner, CommunityOpenAboutFragment.AboutCommunityActivityIntractionListner, CommentReactionFragment.HomeActivityIntractionListner {
+public class CommunitiesDetailActivity extends BaseActivity implements FragmentIntractionWithActivityListner,OwnerRemoveDialog.OwnerRemoveCloseListener, InviteFragmentListener, CommunityOwnerSearchFragment.InviteOwnerActivityIntractionListner, InviteCommunityOwner.InviteOwnerDoneIntractionListner, ShareCommunityFragment.ShareCommunityActivityIntractionListner, CommunityInviteSearchFragment.InviteSearchActivityIntractionListner, CommunityRequestedFragment.RequestHomeActivityIntractionListner, AllMembersFragment.MembersHomeActivityIntractionListner, CommunityOpenAboutFragment.AboutCommunityActivityIntractionListner, CommentReactionFragment.HomeActivityIntractionListner {
     private final String TAG = LogUtils.makeLogTag(CommunitiesDetailActivity.class);
     @Bind(R.id.app_bar_coomunities_detail)
     AppBarLayout mAppBarLayout;
@@ -207,6 +209,21 @@ public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemo
             CallCommunityMemberRemoveFragment(membersList.getUsersId(), membersList.getCommunityId(), membersList.getPosition());
 
         }
+        else if (baseResponse instanceof PandingMember) {
+            PandingMember pandingMember = (PandingMember) baseResponse;
+
+            switch (view.getId()){
+                case R.id.tv_panding_member_cross:
+                    CallCommunityPandingMemberRemoveFragment(pandingMember.getUsersId(), pandingMember.getCommunityId(), pandingMember.getPosition());
+
+                    break;
+                case R.id.tv_panding_member_check:
+                    CallCommunityAproveMemberFragment(pandingMember.getUsersId(), pandingMember.getCommunityId(), pandingMember.getPosition());
+
+                    break;
+            }
+
+        }
     }
 
     //private void communityDetailHandled(View view, ) {
@@ -214,12 +231,13 @@ public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemo
         FeedDetail callAddOwner = (FeedDetail) baseResponse;
 
         int id = view.getId();
-
-        mFragment = viewPagerAdapter.getActiveFragment(mViewPagerCommunitiesDetail, AppConstants.NO_REACTION_CONSTANT);
-        setFragment(mFragment);
-        mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.THREE_CONSTANT);
-        mFragmentOpen.setOwner(mFeedDetail.isOwner());
-        setAllValues(mFragmentOpen);
+        if(!mFeedDetail.isClosedCommunity()) {
+            mFragment = viewPagerAdapter.getActiveFragment(mViewPagerCommunitiesDetail, AppConstants.NO_REACTION_CONSTANT);
+            setFragment(mFragment);
+            mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.THREE_CONSTANT);
+            mFragmentOpen.setOwner(mFeedDetail.isOwner());
+            setAllValues(mFragmentOpen);
+        }
         super.feedCardsHandled(view, baseResponse);
         switch (id) {
             case R.id.card_community_detail:
@@ -270,6 +288,26 @@ public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemo
 
     }
 
+    private void CallCommunityPandingMemberRemoveFragment(long userId, long communityId, int position) {
+
+        final Fragment frgmentAllMember = getSupportFragmentManager().findFragmentByTag(CommunityRequestedFragment.class.getName());
+        if (AppUtils.isFragmentUIActive(frgmentAllMember)) {
+            ((CommunityRequestedFragment) frgmentAllMember).removePandingRequest(userId, communityId, position);
+        }
+
+    }
+    private void CallCommunityAproveMemberFragment(long userId, long communityId, int position) {
+
+        final Fragment frgmentAllMember = getSupportFragmentManager().findFragmentByTag(CommunityRequestedFragment.class.getName());
+        if (AppUtils.isFragmentUIActive(frgmentAllMember)) {
+            ((CommunityRequestedFragment) frgmentAllMember).approvePandingRequest(userId, communityId, position);
+        }
+
+    }
+
+
+
+
     @Override
     public void memberClick() {
 
@@ -296,7 +334,24 @@ public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemo
                     .replace(R.id.about_community_container, myCommunityInviteMemberFragment, InviteCommunityMember.class.getName()).addToBackStack(null).commitAllowingStateLoss();
         }
     }
+    @Override
+    public void inviteJoinEventClickFromAboutPage(String pressedEventName, FeedDetail feedDetail,CommunityOpenAboutFragment communityOpenAboutFragment) {
+        if (pressedEventName.equals(getString(R.string.ID_JOIN))) {
+            if(mFeedDetail.isClosedCommunity()) {
+                showCommunityJoinReasonFromAboutCommunity(feedDetail, communityOpenAboutFragment);
+            }
+            else {
 
+            }
+        } else {
+            InviteCommunityMember myCommunityInviteMemberFragment = new InviteCommunityMember();
+            Bundle bundleInvite = new Bundle();
+            bundleInvite.putParcelable(AppConstants.COMMUNITIES_DETAIL, mFeedDetail);
+            myCommunityInviteMemberFragment.setArguments(bundleInvite);
+            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
+                    .replace(R.id.about_community_container, myCommunityInviteMemberFragment, InviteCommunityMember.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+        }
+    }
     @Override
     public void ownerClick() {
         if (null != mFeedDetail) {
@@ -318,7 +373,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemo
         frag.setArguments(bundleCommunity);
 
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.bottom_to_top_slide_reverse_anim)
-                .replace(R.id.about_community_container, frag).addToBackStack(null).commitAllowingStateLoss();
+                .replace(R.id.about_community_container, frag,CommunityRequestedFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
 
     }
 
@@ -434,6 +489,11 @@ public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemo
         mFloatingActionButton.setVisibility(View.VISIBLE);
         getSupportFragmentManager().popBackStack();
 
+    }
+
+    @Override
+    public void onLeaveClick() {
+        finish();
     }
 
     @OnClick(R.id.iv_community_detail_back)

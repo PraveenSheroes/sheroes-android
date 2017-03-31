@@ -38,6 +38,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityInviteSearchFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.CommunityJoinFromeAboutFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityJoinRegionDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOpenAboutFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOwnerSearchFragment;
@@ -139,6 +140,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.NoCommunityHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OnBoardingHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OwnerHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OwnerListHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.PandingRequestHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.PopularTagHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ProfileAboutMeHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ProfileBasicDetailsHolder;
@@ -338,6 +340,9 @@ public interface SheroesAppComponent {
     void inject(ProfileShareYourIntrestFragment profileShareYourIntrestFragment);
     void inject(SearchGoodAt searchGoodAt);
     void inject(GoodAtHolder goodAtHolder);
+
+    void inject(PandingRequestHolder pandingRequestHolder);
+    void inject(CommunityJoinFromeAboutFragment communityJoinFromeAboutFragment);
 
 
 

@@ -28,6 +28,7 @@ import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -35,10 +36,10 @@ import butterknife.OnClick;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
 
 /**
- * Created by SHEROES-TECH on 09-02-2017.
+ * Created by SHEROES-TECH on 01-04-2017.
  */
 
-public class CommunityJoinRegionDialogFragment extends BaseDialogFragment implements HomeView {
+public class CommunityJoinFromeAboutFragment extends BaseDialogFragment implements HomeView {
     @Inject
     Preference<LoginResponse> userPreference;
     private final String TAG = LogUtils.makeLogTag(CommunityJoinRegionDialogFragment.class);
@@ -140,6 +141,8 @@ public class CommunityJoinRegionDialogFragment extends BaseDialogFragment implem
 
     }
 
-
+    public void setListener(CommunityOpenAboutFragment context) {
+        mHomeSearchActivityFragmentIntractionWithActivityListner=context;
+    }
 }
 

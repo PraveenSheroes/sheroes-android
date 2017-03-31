@@ -97,8 +97,7 @@ public class AllMembersFragment extends BaseFragment implements AllMembersView {
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
         mmemberpresenter.attachView(this);
-        if(null!=getArguments())
-        {
+        if(null!=getArguments()) {
             mFeedDetail =getArguments().getParcelable(AppConstants.COMMUNITY_DETAIL);
         }
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -125,36 +124,8 @@ public class AllMembersFragment extends BaseFragment implements AllMembersView {
             }
         });
         super.setAllInitializationForMember(mFragmentListRefreshData, mPullRefreshList, mAdapter, manager, mPageNo, null, mRecyclerView, 0, 0, mmemberpresenter, mAppUtils, mProgressBar);
-      /*  switch (articleCategory) {
-            case AppConstants.ONE_CONSTANT:
-                break;
-            case AppConstants.TWO_CONSTANT:
-                break;
-            default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE+ TAG + AppConstants.SPACE + articleCategory);
-        }*/
-     //   mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo()));
-      /*  mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                setListLoadFlag(false);
-                mPullRefreshList.setPullToRefresh(true);
-                mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
-                mPullRefreshList = new SwipPullRefreshList();
-                setRefreshList(mPullRefreshList);
-                mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
-            //    mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo()));
-            }
-        });*/
-
-
-
         mmemberpresenter.getAllMembers(getMemberRequestBuilder(mFeedDetail.getIdOfEntityOrParticipant(),mFragmentListRefreshData.getPageNo()));
-
-
         mFragmentListRefreshData.setEnitityOrParticpantid(mFeedDetail.getIdOfEntityOrParticipant());
-
-
 
         return view;
     }
@@ -202,10 +173,19 @@ public class AllMembersFragment extends BaseFragment implements AllMembersView {
         memberdata.addAll(data);
         for(int i=0;i<memberdata.size();i++)
         {
-            if(mFeedDetail.isOwner() || mFeedDetail.isMember())
-            memberdata.get(i).setIsOwner(true);
+            if(mFeedDetail.isClosedCommunity()) {
+                if( mFeedDetail.isOwner()) {
+                    memberdata.get(i).setIsOwner(true);
+                }else if(mFeedDetail.isMember()) {
+                    memberdata.get(i).setIsOwner(false);
+                }
+            }
+            else if(mFeedDetail.isOwner() || mFeedDetail.isMember()){
+                memberdata.get(i).setIsOwner(true);
+            }
             else
                 memberdata.get(i).setIsOwner(false);
+
         }
         List<MembersList> tempdata=new ArrayList<>();
             mAdapter.setSheroesGenericListData(memberdata);

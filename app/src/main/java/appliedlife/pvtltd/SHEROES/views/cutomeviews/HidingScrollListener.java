@@ -9,10 +9,13 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.presenters.CommentReactionPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.presenters.MembersPresenter;
+import appliedlife.pvtltd.SHEROES.presenters.RequestedPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.getMemberRequestBuilder;
 
 /*
 * This class is a ScrollListener for RecyclerView that allows to show/hide
@@ -36,6 +39,7 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
     private int firstVisibleItem, visibleItemCount, totalItemCount;
     private FragmentListRefreshData mFragmentListRefreshData;
     private CommentReactionPresenter mCommentReactionPresenter;
+    RequestedPresenter requestedPresenter;
     public HidingScrollListener(HomePresenter homePresenter, RecyclerView recyclerView, LinearLayoutManager manager, FragmentListRefreshData fragmentListRefreshData) {
         mHomePresenter=homePresenter;
         mRecyclerView=recyclerView;
@@ -44,6 +48,12 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
     }
     public HidingScrollListener(MembersPresenter membersPresenter, RecyclerView recyclerView, LinearLayoutManager manager, FragmentListRefreshData fragmentListRefreshData) {
         mMembersPresenter=membersPresenter;
+        mRecyclerView=recyclerView;
+        mManager=manager;
+        this.mFragmentListRefreshData=fragmentListRefreshData;
+    }
+    public HidingScrollListener(RequestedPresenter requestedPresenter, RecyclerView recyclerView, LinearLayoutManager manager, FragmentListRefreshData fragmentListRefreshData) {
+        requestedPresenter=requestedPresenter;
         mRecyclerView=recyclerView;
         mManager=manager;
         this.mFragmentListRefreshData=fragmentListRefreshData;
@@ -139,6 +149,10 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                         break;
                     case AppConstants.MEMBER_FRAGMENT:
                         mMembersPresenter.getAllMembers(mAppUtils.getMemberRequestBuilder(mFragmentListRefreshData.getEnitityOrParticpantid(),pageNo));
+                        break;
+                    case AppConstants.PANDING_MEMBER_FRAGMENT:
+                        requestedPresenter.getAllMembers(mAppUtils.getMemberRequestBuilder(mFragmentListRefreshData.getEnitityOrParticpantid(),pageNo));
+
                         break;
                     case AppConstants.USER_COMMUNITY_POST_FRAGMENT:
                         mHomePresenter.getFeedFromPresenter(mAppUtils.userCommunityPostRequestBuilder(AppConstants.FEED_COMMUNITY_POST,pageNo,mFragmentListRefreshData.getCommunityId()));

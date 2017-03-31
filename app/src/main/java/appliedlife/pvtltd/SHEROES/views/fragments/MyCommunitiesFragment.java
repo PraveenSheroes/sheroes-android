@@ -38,7 +38,7 @@ import butterknife.ButterKnife;
  * Created by Praveen_Singh on 30-01-2017.
  */
 
-public class MyCommunitiesFragment  extends BaseFragment implements HomeView {
+public class MyCommunitiesFragment extends BaseFragment implements HomeView {
     private final String TAG = LogUtils.makeLogTag(MyCommunitiesFragment.class);
     @Inject
     HomePresenter mHomePresenter;
@@ -58,13 +58,14 @@ public class MyCommunitiesFragment  extends BaseFragment implements HomeView {
     @Inject
     AppUtils mAppUtils;
     private FragmentListRefreshData mFragmentListRefreshData;
-    int mPageNo =AppConstants.ONE_CONSTANT;
+    int mPageNo = AppConstants.ONE_CONSTANT;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.bind(this, view);
-        mFragmentListRefreshData=new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MY_COMMUNITIES_FRAGMENT,AppConstants.EMPTY_STRING);
+        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MY_COMMUNITIES_FRAGMENT, AppConstants.EMPTY_STRING);
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
         mHomePresenter.attachView(this);
@@ -74,7 +75,7 @@ public class MyCommunitiesFragment  extends BaseFragment implements HomeView {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
 
-        mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager,mFragmentListRefreshData) {
+        mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager, mFragmentListRefreshData) {
             @Override
             public void onHide() {
                 ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.INVISIBLE);
@@ -97,7 +98,7 @@ public class MyCommunitiesFragment  extends BaseFragment implements HomeView {
             @Override
             public void onRefresh() {
                 // Refresh items
-                LogUtils.info(TAG,"**********Mycommunities fragment on swipe to refre*********");
+                LogUtils.info(TAG, "**********Mycommunities fragment on swipe to refre*********");
                 setListLoadFlag(false);
                 mPullRefreshList.setPullToRefresh(true);
                 mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
@@ -112,10 +113,10 @@ public class MyCommunitiesFragment  extends BaseFragment implements HomeView {
 
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
-        List<FeedDetail> feedDetailList=feedResponsePojo.getFeedDetails();
+        List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
         mProgressBarFirstLoad.setVisibility(View.GONE);
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
-            mPageNo =mFragmentListRefreshData.getPageNo();
+            mPageNo = mFragmentListRefreshData.getPageNo();
             mFragmentListRefreshData.setPageNo(++mPageNo);
             mPullRefreshList.allListData(feedDetailList);
             mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());

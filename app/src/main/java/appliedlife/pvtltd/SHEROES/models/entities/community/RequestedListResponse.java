@@ -5,40 +5,17 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+
 /**
  * Created by Ajit Kumar on 08-02-2017.
  */
 
-public class RequestedListResponse {
+public class RequestedListResponse extends BaseResponse{
 
-    @SerializedName("status")
-    @Expose
-    private String status;
-
-    @SerializedName("screen_name")
-    @Expose
-    private Object screenName;
     @SerializedName("members")
     @Expose
     private List<PandingMember> members = null;
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-
-
-    public Object getScreenName() {
-        return screenName;
-    }
-
-    public void setScreenName(Object screenName) {
-        this.screenName = screenName;
-    }
 
     public List<PandingMember> getMembers() {
         return members;

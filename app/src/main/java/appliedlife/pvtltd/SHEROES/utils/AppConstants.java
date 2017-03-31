@@ -94,6 +94,7 @@ public class AppConstants {
     public static final String BOARDING_SEARCH = "boarding_Search";
     public static final String ALL_SEARCH = "search";
     public static final String MONTH_YEAR_PICKER_DIALOG = "MonthYearPickerDialog";
+    public static final String PANDING_MEMBER = "PandingMember";
     public static final String NETWORK_TIMEOUT = "network_timout";
     public static final String SHARE = "Share";
     public static final int WORD_COUNT = 106;
@@ -108,9 +109,11 @@ public class AppConstants {
     public static final String JOB_DETAIL = "job_detail";
     public static final String COMMUNITY_DETAIL = "community_detail";
     public static final String TAG_LIST = "tag_list";
+    public static final String TAG_ID = "tag_id";
     public static final String MEMBER = "Member_detail";
     public static final String MEMBER_LIST = "Member_List";
     public static final String MEMBER_FRAGMENT = "MemberFragment";
+    public static final String PANDING_MEMBER_FRAGMENT = "PandingMemberFragment";
     public static final String SETTING = "setting";
     public static final String PIPE = "|";
     public static final String SUCCESS = "SUCCESS";
@@ -165,6 +168,8 @@ public class AppConstants {
     public static final String PDF_PATH = "application/pdf";
     public static final String PDF_VISITING_CARD = "visiting_card.pdf";
     public static final String VISITING_CARD_URL = "http://www.princexml.com/howcome/2016/samples/magic6/magic.pdf";
+
+    public static final String BLANK_MESSAGE = "Please fill all the details";
 
 
     public static final String ERROR_MESSAGE_OF_PDF_DOWNLOAD = "PDF Reader application is not installed in your device";

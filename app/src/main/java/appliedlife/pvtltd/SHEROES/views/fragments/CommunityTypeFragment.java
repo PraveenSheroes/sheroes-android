@@ -66,6 +66,7 @@ public class CommunityTypeFragment extends BaseDialogFragment implements Communi
     ListView mCommunityTypelistView;
     CommunityTypeAdapter madapter;
     private boolean finishParent;
+    Long typeId;
     public static final String DISMISS_PARENT_ON_OK_OR_BACK = "DISMISS_PARENT_ON_OK_OR_BACK";
     String[] ItemName;
     List<CommunityType> rowItem;
@@ -75,7 +76,7 @@ public class CommunityTypeFragment extends BaseDialogFragment implements Communi
     private List<PopularTag> listFeelter = new ArrayList<PopularTag>();
     Context context;
     List<String> jobAtList = new ArrayList<>();
-
+    HashMap<String,Long> typeid;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -167,10 +168,11 @@ public class CommunityTypeFragment extends BaseDialogFragment implements Communi
         PopularTag filterList = new PopularTag();
         filterList.setName("Popular Tag");
         List<String> jobAtList = new ArrayList<>();
+        typeid=new HashMap<String, Long>();
         if (StringUtil.isNotEmptyCollection(labelValueArrayList)) {
             for (int i = 0; i < labelValueArrayList.size(); i++) {
                 String abc = labelValueArrayList.get(i).getLabel();
-
+                typeid.put(abc,labelValueArrayList.get(i).getValue());
                 jobAtList.add(abc);
             }
             filterList.setBoardingDataList(jobAtList);
@@ -190,6 +192,7 @@ public class CommunityTypeFragment extends BaseDialogFragment implements Communi
     }
     @OnClick(R.id.tv_community_type_submit)
     public void onDoneClick() {
+        typeId=typeid.get(mCommunityTypelistView.getSelectedItem());
         Toast.makeText(getActivity(), mCommunityTypelistView.getSelectedItem() + "", Toast.LENGTH_LONG).show();
     }
 
@@ -199,9 +202,6 @@ public class CommunityTypeFragment extends BaseDialogFragment implements Communi
 
     }
 
-    public void doneClick(String community_type) {
-        mHomeActivityIntractionListner.onAddFriendSubmit(community_type, "");
-    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -263,7 +263,7 @@ public class CommunityTypeFragment extends BaseDialogFragment implements Communi
     public void communityType(String communitytype) {
         Toast.makeText(getActivity(), communitytype, Toast.LENGTH_LONG).show();
         getDialog().cancel();
-        mHomeActivityIntractionListner.onAddFriendSubmit(communitytype, "");
+        mHomeActivityIntractionListner.onAddFriendSubmit(communitytype, typeId);
 
     }
 
@@ -295,6 +295,6 @@ public class CommunityTypeFragment extends BaseDialogFragment implements Communi
     public interface MyDialogFragmentListener {
         void onErrorOccurence();
 
-        void onAddFriendSubmit(String communitynm, String image);
+        void onAddFriendSubmit(String communitynm, Long typeId);
     }
 }

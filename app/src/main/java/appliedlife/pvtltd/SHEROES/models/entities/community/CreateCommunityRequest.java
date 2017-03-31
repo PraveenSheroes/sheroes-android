@@ -5,75 +5,51 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
+
 /**
  * Created by SHEROES-TECH on 03-03-2017.
  */
 
-public class CreateCommunityRequest {
-    @SerializedName("appVersion")
-    @Expose
-    private String appVersion;
-    @SerializedName("cloudMessagingId")
-    @Expose
-    private String cloudMessagingId;
+public class CreateCommunityRequest extends BaseRequest {
+
     @SerializedName("community_type_id")
     @Expose
-    private Integer communityTypeId;
+    private int communityTypeId;
+
     @SerializedName("cover_image")
     @Expose
-    private String coverImageUrl;
+    private String coverImage;
+
     @SerializedName("description")
     @Expose
     private String description;
-    @SerializedName("deviceUniqueId")
-    @Expose
-    private String deviceUniqueId;
+
     @SerializedName("is_closed")
     @Expose
     private Boolean isClosed;
-    @SerializedName("last_screen_name")
-    @Expose
-    private String lastScreenName;
+
     @SerializedName("logo_image")
-    @Expose
-    private String logoUrl;
-    @SerializedName("name")
-    @Expose
-    private String name;
-    @SerializedName("purpose")
-    @Expose
-    private String purpose;
-    @SerializedName("screen_name")
-    @Expose
-    private String screenName;
-    @SerializedName("tags")
-    @Expose
-    private List<Integer> tags = null;
-    @SerializedName("type")
-    @Expose
-    private String type;
-    @SerializedName("cover_image_url")
-    @Expose
-    private String cover;
-    @SerializedName("logo_url")
     @Expose
     private String logo;
 
-    public String getAppVersion() {
-        return appVersion;
-    }
+    @SerializedName("name")
+    @Expose
+    private String name;
 
-    public void setAppVersion(String appVersion) {
-        this.appVersion = appVersion;
-    }
+    @SerializedName("purpose")
+    @Expose
+    private String purpose;
 
-    public String getCloudMessagingId() {
-        return cloudMessagingId;
-    }
+    @SerializedName("tags")
+    @Expose
+    private List<Long> tags = null;
 
-    public void setCloudMessagingId(String cloudMessagingId) {
-        this.cloudMessagingId = cloudMessagingId;
-    }
+    @SerializedName("type")
+    @Expose
+
+    private String Type;
+
 
     public int getCommunityTypeId() {
         return communityTypeId;
@@ -83,12 +59,12 @@ public class CreateCommunityRequest {
         this.communityTypeId = communityTypeId;
     }
 
-    public String getCoverImageUrl() {
-        return coverImageUrl;
+    public String getCoverImage() {
+        return coverImage;
     }
 
-    public void setCoverImageUrl(String coverImageUrl) {
-        this.coverImageUrl = coverImageUrl;
+    public void setCoverImage(String coverImage) {
+        this.coverImage = coverImage;
     }
 
     public String getDescription() {
@@ -99,52 +75,12 @@ public class CreateCommunityRequest {
         this.description = description;
     }
 
-    public String getDeviceUniqueId() {
-        return deviceUniqueId;
-    }
-
-    public void setDeviceUniqueId(String deviceUniqueId) {
-        this.deviceUniqueId = deviceUniqueId;
-    }
-
-    public Boolean getIsClosed() {
+    public Boolean getClosed() {
         return isClosed;
     }
 
-    public void setIsClosed(Boolean isClosed) {
-        this.isClosed = isClosed;
-    }
-
-    public String getLastScreenName() {
-        return lastScreenName;
-    }
-
-    public void setLastScreenName(String lastScreenName) {
-        this.lastScreenName = lastScreenName;
-    }
-
-    public String getLogoUrl() {
-        return logoUrl;
-    }
-
-    public void setLogoUrl(String logoUrl) {
-        this.logoUrl = logoUrl;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getCover() {
-        return cover;
-    }
-
-    public void setCover(String cover) {
-        this.cover = cover;
+    public void setClosed(Boolean closed) {
+        isClosed = closed;
     }
 
     public String getLogo() {
@@ -154,7 +90,6 @@ public class CreateCommunityRequest {
     public void setLogo(String logo) {
         this.logo = logo;
     }
-
 
     public String getName() {
         return name;
@@ -172,19 +107,19 @@ public class CreateCommunityRequest {
         this.purpose = purpose;
     }
 
-    public String getScreenName() {
-        return screenName;
-    }
-
-    public void setScreenName(String screenName) {
-        this.screenName = screenName;
-    }
-
-    public List<Integer> getTags() {
+    public List<Long> getTags() {
         return tags;
     }
 
-    public void setTags(List<Integer> tags) {
+    public void setTags(List<Long> tags) {
         this.tags = tags;
+    }
+
+    public String getType() {
+        return Type;
+    }
+
+    public void setType(String type) {
+        Type = type;
     }
 }

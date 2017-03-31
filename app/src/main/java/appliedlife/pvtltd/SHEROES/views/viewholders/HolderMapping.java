@@ -18,6 +18,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.ListOfInviteSearch;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Member;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MembersList;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerList;
+import appliedlife.pvtltd.SHEROES.models.entities.community.PandingMember;
 import appliedlife.pvtltd.SHEROES.models.entities.community.PopularTag;
 import appliedlife.pvtltd.SHEROES.models.entities.community.RequestedList;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -202,6 +203,12 @@ public enum HolderMapping {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new MemberHolder(view, viewInterface);
+        }
+    },
+    PANDINGREQUESTLIST(R.layout.panding_list) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new PandingRequestHolder(view, viewInterface);
         }
     },
     PROFILE_GOODAT(R.layout.profile_goodat_card) {
@@ -537,7 +544,11 @@ public enum HolderMapping {
                     return OWNERLIST.ordinal();
                 } else if (item instanceof MembersList) {
                     return MEMBERLIST.ordinal();
-                } else if (item instanceof CommunityList) {
+                }
+                else if (item instanceof PandingMember) {
+                    return PANDINGREQUESTLIST.ordinal();
+                }
+                else if (item instanceof CommunityList) {
                     return SELECTDILOG.ordinal();
                 } else if (item instanceof CommunityTags) {
                     return SEARCHTAGS.ordinal();
