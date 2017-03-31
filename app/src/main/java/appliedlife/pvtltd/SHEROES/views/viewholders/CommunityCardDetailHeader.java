@@ -58,52 +58,26 @@ public class CommunityCardDetailHeader extends BaseViewHolder<FeedDetail> {
             switch (dataItem.getScreenName()) {
                 case AppConstants.ALL_SEARCH:
                     if (!dataItem.isMember() && !dataItem.isOwner() && !dataItem.isRequestPending()) {
+                        tvJoin.setVisibility(View.VISIBLE);
                         tvJoin.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
                         tvJoin.setText(mContext.getString(R.string.ID_JOIN));
                         tvJoin.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
-                    } else if (dataItem.isRequestPending()) {
-                        tvJoin.setTextColor(ContextCompat.getColor(mContext, R.color.white));
-                        tvJoin.setText(mContext.getString(R.string.ID_REQUESTED));
-                        tvJoin.setBackgroundResource(R.drawable.rectangle_feed_community_requested);
-                        tvJoin.setEnabled(false);
-                    } else if (dataItem.isOwner() || dataItem.isMember()) {
-                        tvJoin.setTextColor(ContextCompat.getColor(mContext, R.color.white));
-                        tvJoin.setText(mContext.getString(R.string.ID_JOINED));
-                        tvJoin.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
-                        tvJoin.setEnabled(false);
                     } else {
-                        tvJoin.setBackgroundResource(R.drawable.rectangle_community_invite);
-                        tvJoin.setText(mContext.getString(R.string.ID_INVITE));
-                        tvJoin.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+                        tvJoin.setVisibility(View.GONE);
                     }
                     break;
                 case  AppConstants.FEATURE_FRAGMENT:
                     if (!dataItem.isMember() && !dataItem.isOwner() && !dataItem.isRequestPending()) {
+                        tvJoin.setVisibility(View.VISIBLE);
                         tvJoin.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
                         tvJoin.setText(mContext.getString(R.string.ID_JOIN));
                         tvJoin.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
-                    } else if (dataItem.isRequestPending()) {
-                        tvJoin.setTextColor(ContextCompat.getColor(mContext, R.color.white));
-                        tvJoin.setText(mContext.getString(R.string.ID_REQUESTED));
-                        tvJoin.setBackgroundResource(R.drawable.rectangle_feed_community_requested);
-                        tvJoin.setEnabled(false);
-                    } else if (dataItem.isOwner() || dataItem.isMember()) {
-                        tvJoin.setTextColor(ContextCompat.getColor(mContext, R.color.white));
-                        tvJoin.setText(mContext.getString(R.string.ID_JOINED));
-                        tvJoin.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
-                        tvJoin.setEnabled(false);
+                    } else {
+                        tvJoin.setVisibility(View.GONE);
                     }
                     break;
                 case AppConstants.MY_COMMUNITIES_FRAGMENT:
-                    if (dataItem.isMember() && !dataItem.isOwner()) {
-                        tvJoin.setTextColor(ContextCompat.getColor(mContext, R.color.white));
-                        tvJoin.setText(mContext.getString(R.string.ID_VIEW));
-                        tvJoin.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
-                    } else {
-                        tvJoin.setBackgroundResource(R.drawable.rectangle_community_invite);
-                        tvJoin.setText(mContext.getString(R.string.ID_INVITE));
-                        tvJoin.setTextColor(ContextCompat.getColor(mContext, R.color.white));
-                    }
+                    tvJoin.setVisibility(View.GONE);
                     break;
                 default:
                     LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + dataItem.getScreenName());

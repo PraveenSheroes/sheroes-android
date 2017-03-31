@@ -121,7 +121,6 @@
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:gravity="center"
                 android:text="@string/ID_INVITE"
-                android:visibility="gone"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sp_size_12" />
 

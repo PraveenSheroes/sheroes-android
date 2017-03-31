@@ -67,13 +67,11 @@ public class ArticlesFragment extends BaseFragment {
     ProgressBar mProgressBarFirstLoad;
     private List<HomeSpinnerItem> mHomeSpinnerItemList = new ArrayList<>();
     private int articleCategory;
-    private View view;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
-        if (view == null) {
-            view = inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
             ButterKnife.bind(this, view);
             mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ARTICLE_FRAGMENT, AppConstants.EMPTY_STRING);
             mPullRefreshList = new SwipPullRefreshList();
@@ -128,7 +126,6 @@ public class ArticlesFragment extends BaseFragment {
                     mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo()));
                 }
             });
-        }
         return view;
     }
 

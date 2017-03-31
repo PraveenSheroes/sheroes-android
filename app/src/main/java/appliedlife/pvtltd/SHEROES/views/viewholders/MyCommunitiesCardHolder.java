@@ -95,12 +95,10 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
             tvCommunityTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         }
         if (dataItem.isMember() && !dataItem.isOwner()) {
-            tvCommunityInvite.setVisibility(View.VISIBLE);
             tvCommunityInvite.setTextColor(ContextCompat.getColor(mContext, R.color.white));
             tvCommunityInvite.setText(mContext.getString(R.string.ID_VIEW));
             tvCommunityInvite.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
         } else {
-            tvCommunityInvite.setVisibility(View.VISIBLE);
             tvCommunityInvite.setTextColor(ContextCompat.getColor(mContext, R.color.white));
             tvCommunityInvite.setText(mContext.getString(R.string.ID_INVITE));
             tvCommunityInvite.setBackgroundResource(R.drawable.rectangle_community_invite);

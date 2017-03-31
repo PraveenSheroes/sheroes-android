@@ -94,6 +94,8 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
     OnBoardingDailogHeySuccess onBoardingDailogHeySuccess;
     @Inject
     Preference<LoginResponse> userPreference;
+    ArrayList<String> allOnBoardingData = new ArrayList<>();
+    View mView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -112,7 +114,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
         mCustomCollapsingToolbarLayout.setExpandedTitleMarginStart(200);
         // mCustomCollapsingToolbarLayout.setTitle(mFeedDetail.getNameOrTitle());
         //  mCustomCollapsingToolbarLayout.setSubtitle(mFeedDetail.getAuthorName());
-        if (null != userPreference && userPreference.isSet() && null != userPreference.get()) {
+       /* if (null != userPreference && userPreference.isSet() && null != userPreference.get()) {
             if (userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.CURRENT_STATUS_SCREEN)) {
                 tellUsAboutFragment();
             } else if (userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.HOW_CAN_SHEROES_AKA_LOOKING_FOR_SCREEN)) {
@@ -137,8 +139,8 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
             }
         } else {
             tellUsAboutFragment();
-        }
-
+        }*/
+        tellUsAboutFragment();
     }
 
     private void tellUsAboutFragment() {
@@ -183,7 +185,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
                             mLiInterestStripForAddItem.removeAllViews();
                             mLiInterestStripForAddItem.removeAllViewsInLayout();
                             selectTagOnClick(view);
-                            renderSelectedAddedItem(mLiInterestStripForAddItem);
+                            renderSelectedAddedItem(mLiInterestStripForAddItem, mSelectedTag);
                             break;
                         case JOB_AT_SEARCH:
                             if (mIvJobAtNext.getVisibility() == View.GONE) {
@@ -192,7 +194,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
                             mLiJobAtStripForAddItem.removeAllViews();
                             mLiJobAtStripForAddItem.removeAllViewsInLayout();
                             selectTagOnClick(view);
-                            renderSelectedAddedItem(mLiJobAtStripForAddItem);
+                            renderSelectedAddedItem(mLiJobAtStripForAddItem, mSelectedTag);
                             break;
                         default:
                             LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + onBoardingEnum);
@@ -206,15 +208,6 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
 
     }
 
-    @Override
-    public void close() {
-
-    }
-
-    @Override
-    public void onErrorOccurence() {
-
-    }
 
     private void setTagsForFragment(OnBoardingData boardingData, View view) {
         switch (boardingData.getFragmentName()) {
@@ -224,8 +217,9 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
                 }
                 mLiStripForAddItem.removeAllViews();
                 mLiStripForAddItem.removeAllViewsInLayout();
+                mView = view;
                 selectTagOnClick(view);
-                renderSelectedAddedItem(mLiStripForAddItem);
+                renderSelectedAddedItem(mLiStripForAddItem, mSelectedTag);
                 break;
             case AppConstants.YOUR_INTEREST:
                 if (mIvInterestNext.getVisibility() == View.GONE) {
@@ -234,7 +228,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
                 mLiInterestStripForAddItem.removeAllViews();
                 mLiInterestStripForAddItem.removeAllViewsInLayout();
                 selectTagOnClick(view);
-                renderSelectedAddedItem(mLiInterestStripForAddItem);
+                renderSelectedAddedItem(mLiInterestStripForAddItem, mSelectedTag);
                 break;
             case AppConstants.JOB_AT:
                 if (mIvJobAtNext.getVisibility() == View.GONE) {
@@ -243,7 +237,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
                 mLiJobAtStripForAddItem.removeAllViews();
                 mLiJobAtStripForAddItem.removeAllViewsInLayout();
                 selectTagOnClick(view);
-                renderSelectedAddedItem(mLiJobAtStripForAddItem);
+                renderSelectedAddedItem(mLiJobAtStripForAddItem, mSelectedTag);
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + boardingData.getFragmentName());
@@ -270,6 +264,11 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
         } else {
             mSelectedTag.add(labelValue);
         }
+    }
+
+    @Override
+    public void onCollectUserData(ArrayList<String> stringArrayList) {
+        allOnBoardingData = stringArrayList;
     }
 
     @Override
@@ -452,15 +451,16 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
         return mOnBoardingSearchDialogFragment;
     }
 
-    public void renderSelectedAddedItem(LinearLayout liStripForAddItem) {
-        if (StringUtil.isNotEmptyCollection(mSelectedTag)) {
+    public void renderSelectedAddedItem(LinearLayout liStripForAddItem, List<LabelValue> labelValues) {
+
+        if (StringUtil.isNotEmptyCollection(labelValues)) {
             int row = 0;
             for (int index = 0; index <= row; index++) {
                 first = second = third = fourth = 0;
                 LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 LinearLayout liRow = (LinearLayout) layoutInflater.inflate(R.layout.tags_onboarding_ui_layout, null);
                 int column = 3;
-                row = cloumnViewTwo(liRow, row, column, mSelectedTag);
+                row = cloumnViewTwo(liRow, row, column, labelValues);
                 liStripForAddItem.addView(liRow);
             }
         }
@@ -539,17 +539,29 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
 
     private void inflateTagData(LinearLayout liRow, List<LabelValue> stringList) {
         LayoutInflater columnInflate = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        LinearLayout liTagLable = (LinearLayout) columnInflate.inflate(R.layout.tag_item_ui_for_onboarding, null);
-        final TextView mTvTagData = (TextView) liTagLable.findViewById(R.id.tv_tag_data);
+        LinearLayout liTagLable = (LinearLayout) columnInflate.inflate(R.layout.tag_selected_item_ui, null);
+        final TextView mTvTagData = (TextView) liTagLable.findViewById(R.id.tv_selected);
         mTvTagData.setText(stringList.get(mCurrentIndex).getLabel());
         mTvTagData.setTag(stringList.get(mCurrentIndex));
         mTvTagData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 LabelValue labelValue = (LabelValue) mTvTagData.getTag();
+                mLiStripForAddItem.removeAllViews();
+                mLiStripForAddItem.removeAllViewsInLayout();
+                check(labelValue);
             }
         });
         liRow.addView(liTagLable);
+    }
+
+    private void check(LabelValue labelValue) {
+        List<LabelValue> temp=mSelectedTag;
+        mCurrentIndex = 0;
+        if (StringUtil.isNotEmptyCollection(temp)) {
+            temp.remove(labelValue);
+        }
+        renderSelectedAddedItem(mLiStripForAddItem, temp);
     }
 
     @Override

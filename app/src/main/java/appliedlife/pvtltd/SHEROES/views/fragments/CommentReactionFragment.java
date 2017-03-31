@@ -190,7 +190,9 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
             ivUserCommentProfilePic.bindImage(mUserPreference.get().getUserSummary().getPhotoUrl());
         }
         if (mFragmentOpen.isCommentList()) {
-            mTvUserCommentHeaderText.setText(getString(R.string.ID_REPLIES) + getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mFeedDetail.getNoOfComments()) + getString(R.string.ID_CLOSE_BRACKET));
+            if (mFeedDetail.getNoOfComments() >= 0) {
+                mTvUserCommentHeaderText.setText(getString(R.string.ID_REPLIES) + getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mFeedDetail.getNoOfComments()) + getString(R.string.ID_CLOSE_BRACKET));
+            }
         } else if (mFragmentOpen.isReactionList()) {
             mTvUserCommentHeaderText.setText(getString(R.string.ID_REACTION) + getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mFeedDetail.getNoOfLikes()) + getString(R.string.ID_CLOSE_BRACKET));
         }
@@ -340,7 +342,9 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
                         mCommentReactionDocList.remove(mCommentReactionDoc.getItemPosition());
                     }
                     if (mFragmentOpen.isCommentList()) {
-                        mTvUserCommentHeaderText.setText(getString(R.string.ID_REPLIES) + getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mCommentReactionDocList.size()) + getString(R.string.ID_CLOSE_BRACKET));
+                        if (mCommentReactionDocList.size() >= 0) {
+                            mTvUserCommentHeaderText.setText(getString(R.string.ID_REPLIES) + getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mCommentReactionDocList.size()) + getString(R.string.ID_CLOSE_BRACKET));
+                        }
                     }
                     mTotalComments--;
                     setLastComments();
@@ -372,7 +376,9 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
             mFeedDetail.setNoOfComments(mTotalComments);
             mFeedDetail.setLastComments(lastCommentList);
             if (mFragmentOpen.isCommentList()) {
-                mTvUserCommentHeaderText.setText(getString(R.string.ID_REPLIES) + getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mTotalComments) + getString(R.string.ID_CLOSE_BRACKET));
+                if (mTotalComments >= 0) {
+                    mTvUserCommentHeaderText.setText(getString(R.string.ID_REPLIES) + getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mTotalComments) + getString(R.string.ID_CLOSE_BRACKET));
+                }
             }
         } else {
             mFeedDetail.setNoOfComments(AppConstants.NO_REACTION_CONSTANT);

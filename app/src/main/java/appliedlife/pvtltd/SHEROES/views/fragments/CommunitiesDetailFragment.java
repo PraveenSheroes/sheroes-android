@@ -40,6 +40,7 @@ import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Praveen_Singh on 01-02-2017.
@@ -107,54 +108,33 @@ public class CommunitiesDetailFragment extends BaseFragment {
                     case SEARCH_COMMUNITY:
                         mScreenName = AppConstants.ALL_SEARCH;
                         if (!mFeedDetail.isMember() && !mFeedDetail.isOwner() && !mFeedDetail.isRequestPending()) {
+                            mTvJoinView.setVisibility(View.VISIBLE);
                             mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.footer_icon_text));
                             mTvJoinView.setText(getString(R.string.ID_JOIN));
                             mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
-                        } else if (mFeedDetail.isRequestPending()) {
-                            mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
-                            mTvJoinView.setText(getString(R.string.ID_REQUESTED));
-                            mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_community_requested);
-                            mTvJoinView.setEnabled(false);
-                        } else if (mFeedDetail.isOwner() || mFeedDetail.isMember()) {
-                            mTvJoinView.setBackgroundResource(R.drawable.rectangle_community_invite);
-                            mTvJoinView.setText(getString(R.string.ID_INVITE));
-                            mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
-                            mTvJoinView.setEnabled(false);
+                            mTvJoinView.setTag(true);
                         } else {
-                            mTvJoinView.setBackgroundResource(R.drawable.rectangle_community_invite);
-                            mTvJoinView.setText(getString(R.string.ID_INVITE));
-                            mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+                            mTvJoinView.setVisibility(View.GONE);
+                            mTvJoinView.setTag(false);
                         }
                         break;
                     case FEATURE_COMMUNITY:
                         mScreenName = AppConstants.FEATURE_FRAGMENT;
                         if (!mFeedDetail.isMember() && !mFeedDetail.isOwner() && !mFeedDetail.isRequestPending()) {
+                            mTvJoinView.setVisibility(View.VISIBLE);
                             mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.footer_icon_text));
                             mTvJoinView.setText(getString(R.string.ID_JOIN));
                             mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
-                        } else if (mFeedDetail.isRequestPending()) {
-                            mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
-                            mTvJoinView.setText(getString(R.string.ID_REQUESTED));
-                            mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_community_requested);
-                            mTvJoinView.setEnabled(false);
-                        } else if (mFeedDetail.isOwner() || mFeedDetail.isMember()) {
-                            mTvJoinView.setBackgroundResource(R.drawable.rectangle_community_invite);
-                            mTvJoinView.setText(getString(R.string.ID_INVITE));
-                            mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
-                            mTvJoinView.setEnabled(false);
+                            mTvJoinView.setTag(true);
+                        } else {
+                            mTvJoinView.setVisibility(View.GONE);
+                            mTvJoinView.setTag(false);
                         }
                         break;
                     case MY_COMMUNITY:
                         mScreenName = AppConstants.MY_COMMUNITIES_FRAGMENT;
-                        if (mFeedDetail.isMember() && !mFeedDetail.isOwner()) {
-                            mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
-                            mTvJoinView.setText(getString(R.string.ID_VIEW));
-                            mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
-                        } else {
-                            mTvJoinView.setBackgroundResource(R.drawable.rectangle_community_invite);
-                            mTvJoinView.setText(getString(R.string.ID_INVITE));
-                            mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
-                        }
+                        mTvJoinView.setVisibility(View.GONE);
+                        mTvJoinView.setTag(false);
                         break;
                     default:
                         LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + communityEnum);
@@ -164,17 +144,21 @@ public class CommunitiesDetailFragment extends BaseFragment {
         mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager, mFragmentListRefreshData) {
             @Override
             public void onHide() {
-                if (mTvJoinView.getVisibility() == View.GONE) {
-                    mTvJoinView.setVisibility(View.VISIBLE);
-                    mTvJoinView.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+                if ((boolean) mTvJoinView.getTag()) {
+                    if (mTvJoinView.getVisibility() == View.GONE) {
+                        mTvJoinView.setVisibility(View.VISIBLE);
+                        mTvJoinView.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+                    }
                 }
             }
 
             @Override
             public void onShow() {
-                if (mTvJoinView.getVisibility() == View.VISIBLE) {
-                    mTvJoinView.setVisibility(View.GONE);
-                    mTvJoinView.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+                if ((boolean) mTvJoinView.getTag()) {
+                    if (mTvJoinView.getVisibility() == View.VISIBLE) {
+                        mTvJoinView.setVisibility(View.GONE);
+                        mTvJoinView.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+                    }
                 }
             }
 
@@ -198,6 +182,12 @@ public class CommunitiesDetailFragment extends BaseFragment {
             }
         });
         return view;
+    }
+
+    @OnClick(R.id.tv_join_view)
+    public void joinClick() {
+        String joinTxt = mTvJoinView.getText().toString();
+        ((CommunitiesDetailActivity) getActivity()).inviteJoinEventClick(joinTxt, mFeedDetail);
     }
 
     @Override
@@ -229,7 +219,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
                 mLayoutManager.scrollToPositionWithOffset(0, 0);
             }
         } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
-            List<FeedDetail> noDataList=new ArrayList<>();
+            List<FeedDetail> noDataList = new ArrayList<>();
             FeedDetail feedDetail = new FeedDetail();
             //TODO:: Please remove this or correct
             feedDetail.setSubType(AppConstants.MY_COMMUNITIES_HEADER);
@@ -286,9 +276,11 @@ public class CommunitiesDetailFragment extends BaseFragment {
     public void commentListRefresh(FeedDetail feedDetail, FeedParticipationEnum feedParticipationEnum) {
         super.commentListRefresh(feedDetail, feedParticipationEnum);
     }
+
     public void markAsSpamCommunityPost(FeedDetail feedDetail) {
         super.markAsSpamCommunityPost(feedDetail);
     }
+
     public void deleteCommunityPost(FeedDetail feedDetail) {
         super.deleteCommunityPost(feedDetail);
     }

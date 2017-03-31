@@ -36,7 +36,7 @@ public class AppConstants {
     public static final String DOTS = "...";
     public static final String S = "s";
     public static final String SHARE_MENU_TYPE = "text/plain";
-    public static final String FOR_ALL = "all";
+    public static final String FOR_ALL = "All";
     public static final String FEED_SUB_TYPE = "F";
     public static final String ALL_DATA_SUB_TYPE = "T";
     public static final String USER_SUB_TYPE = "U";
@@ -167,6 +167,7 @@ public class AppConstants {
     public static final String RETURN_FROM_BREAK = "Return from a break";
 
     public static final String OPEN_COMMUNITY = "open community for join";
+
 
 
 

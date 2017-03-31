@@ -41,6 +41,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionDoc;
 import appliedlife.pvtltd.SHEROES.models.entities.communities.CommunitySuggestion;
@@ -143,7 +144,6 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
     private String profile;
     @Inject
     Preference<MasterDataResponse> mUserPreferenceMasterData;
-    private ArticlesFragment articlesFragment;
     private ViewPagerAdapter mViewPagerAdapter;
 
     @Override
@@ -475,7 +475,7 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
         mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_unselected_icon), null, null);
         mTvCommunities.setText(AppConstants.EMPTY_STRING);
         setAllValues(mFragmentOpen);
-        articlesFragment = new ArticlesFragment();
+        ArticlesFragment  articlesFragment = new ArticlesFragment();
         Bundle bundleArticle = new Bundle();
         bundleArticle.putInt(AppConstants.MASTER_DATA_ARTICLE_KEY, articleCategoryList);
         bundleArticle.putParcelableArrayList(AppConstants.ARTICLE_FRAGMENT, (ArrayList<? extends Parcelable>) mHomeSpinnerItemList);
@@ -862,15 +862,23 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
             }
         } else if (requestCode == AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL && null != intent) {
             mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITIES_DETAIL);
-            if (mFragmentOpen.isArticleFragment()) {
-                Fragment fragmentFeature = getSupportFragmentManager().findFragmentByTag(FeaturedFragment.class.getName());
-                if (AppUtils.isFragmentUIActive(fragmentFeature)) {
-                    ((FeaturedFragment) fragmentFeature).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
-                }
-            } else {
-                Fragment fragmentMyCommunity = getSupportFragmentManager().findFragmentByTag(MyCommunitiesFragment.class.getName());
-                if (AppUtils.isFragmentUIActive(fragmentMyCommunity)) {
-                    ((MyCommunitiesFragment) fragmentMyCommunity).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+            CommunityEnum communityEnum = (CommunityEnum)intent.getExtras().get(AppConstants.MY_COMMUNITIES_FRAGMENT);
+            if (null != communityEnum) {
+                switch (communityEnum) {
+                    case FEATURE_COMMUNITY:
+                        Fragment feature = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
+                        if (AppUtils.isFragmentUIActive(feature)) {
+                            ((FeaturedFragment) feature).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+                        }
+                        break;
+                    case MY_COMMUNITY:
+                        Fragment community = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.ONE_CONSTANT);
+                        if (AppUtils.isFragmentUIActive(community)) {
+                            ((MyCommunitiesFragment) community).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+                        }
+                        break;
+                    default:
+                        LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + communityEnum);
                 }
             }
         }
@@ -889,6 +897,7 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
                 for (HomeSpinnerItem homeSpinnerItem : mHomeSpinnerItemList) {
                     if (homeSpinnerItem.isChecked()) {
                         categoryIds.add(homeSpinnerItem.getId());
+                        stringBuilder.append(AppConstants.COMMA);
                         stringBuilder.append(homeSpinnerItem.getName());
                         homeSpinnerItem.setDone(true);
                     } else {
@@ -901,7 +910,10 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
                     mHomeSpinnerItemList.addAll(localList);
                 }
                 mTvArticleSpinnerIcon.setText(stringBuilder.toString());
-                articlesFragment.categoryArticleFilter(categoryIds);
+                Fragment articleFragment = getSupportFragmentManager().findFragmentByTag(ArticlesFragment.class.getName());
+                if (AppUtils.isFragmentUIActive(articleFragment)) {
+                    ((ArticlesFragment) articleFragment).categoryArticleFilter(categoryIds);
+                }
             }
         } else {
             mHomeSpinnerItemList = mFragmentOpen.getHomeSpinnerItemList();

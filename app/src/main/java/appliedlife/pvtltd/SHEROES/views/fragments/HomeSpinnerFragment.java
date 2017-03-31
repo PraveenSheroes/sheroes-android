@@ -87,6 +87,9 @@ public class HomeSpinnerFragment extends BaseFragment implements HomeView {
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mAdapter);
         if (StringUtil.isNotEmptyCollection(mHomeSpinnerItemList)) {
+            HomeSpinnerItem homeSpinnerItem=new HomeSpinnerItem();
+            homeSpinnerItem.setName(AppConstants.FOR_ALL);
+            mHomeSpinnerItemList.add(0,homeSpinnerItem);
             mAdapter.setSheroesGenericListData(mHomeSpinnerItemList);
             mAdapter.notifyDataSetChanged();
         } else {
@@ -138,6 +141,9 @@ public class HomeSpinnerFragment extends BaseFragment implements HomeView {
                         }
                         mHomeSpinnerItemList = homeSpinnerItemList;
                     }
+                    HomeSpinnerItem homeSpinnerFirst=new HomeSpinnerItem();
+                    homeSpinnerFirst.setName(AppConstants.FOR_ALL);
+                    mHomeSpinnerItemList.add(0,homeSpinnerFirst);
                     mAdapter.setSheroesGenericListData(mHomeSpinnerItemList);
                     mAdapter.notifyDataSetChanged();
                 }

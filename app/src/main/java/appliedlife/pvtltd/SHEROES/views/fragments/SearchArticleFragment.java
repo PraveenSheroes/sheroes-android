@@ -180,7 +180,7 @@ public class SearchArticleFragment extends BaseFragment implements HomeView {
         {
             if (!isDetached())
             {
-                mSearchDataName = mSearchDataName.trim().replaceAll(AppConstants.SPACE, AppConstants.EMPTY_STRING);
+                mSearchDataName = mSearchDataName.trim();
                 mHomePresenter.getFeedFromPresenter(mAppUtils.searchRequestBuilder(AppConstants.FEED_ARTICLE,mSearchDataName ,mFragmentListRefreshData.getPageNo(),AppConstants.ALL_SEARCH));
             }
         }

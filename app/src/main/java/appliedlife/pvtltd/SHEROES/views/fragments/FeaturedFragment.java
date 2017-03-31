@@ -104,12 +104,19 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
             }
         });
         super.setAllInitializationForFeeds(mFragmentListRefreshData,  mAdapter, mLayoutManager, mRecyclerView, mHomePresenter, mAppUtils, mProgressBar);
+        LogUtils.info(TAG,"**********Feature fragment on create*********");
         mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEATURED_COMMUNITY,mFragmentListRefreshData.getPageNo()));
         mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 // Refresh items
+                setListLoadFlag(false);
                 mPullRefreshList.setPullToRefresh(true);
+                mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
+                mPullRefreshList = new SwipPullRefreshList();
+                setRefreshList(mPullRefreshList);
+                mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
+                LogUtils.info(TAG,"**********Feature fragment swip to refresh*********");
                 mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEATURED_COMMUNITY,mFragmentListRefreshData.getPageNo()));
             }
         });

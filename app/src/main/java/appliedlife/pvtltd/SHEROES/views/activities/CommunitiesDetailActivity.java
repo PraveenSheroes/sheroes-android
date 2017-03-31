@@ -17,7 +17,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.transition.Slide;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -34,6 +33,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Member;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MembersList;
@@ -92,7 +92,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemo
     List<Long> muser_ids = new ArrayList<>();
     Long mcommunity_id;
     private CommunityOpenAboutFragment communityOpenAboutFragment;
-
+    private CommunityEnum communityEnum = null;
     public static void navigate(AppCompatActivity activity, View transitionImage, FeedDetail feedDetail) {
         Intent intent = new Intent(activity, CommunitiesDetailActivity.class);
         Bundle bundle = new Bundle();
@@ -113,6 +113,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemo
         ButterKnife.bind(this);
         if (null != getIntent()) {
             mFeedDetail = getIntent().getParcelableExtra(AppConstants.COMMUNITY_DETAIL);
+            communityEnum = (CommunityEnum) getIntent().getSerializableExtra(AppConstants.MY_COMMUNITIES_FRAGMENT);
         }
         setPagerAndLayouts();
     }
@@ -126,32 +127,36 @@ public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemo
         mCollapsingToolbarLayout.setExpandedTitleMarginStart(200);
         mCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
         if (null != mFeedDetail) {
-            mTvMemebr.setText(mFeedDetail.getNoOfMembers()+AppConstants.SPACE+getString(R.string.ID_MEMBERS));
-            mFloatingActionButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_feed_article_top_left));
-            mCollapsingToolbarLayout.setTitle(mFeedDetail.getNameOrTitle());
-            mCollapsingToolbarLayout.setSubtitle(mFeedDetail.getNameOrTitle());
-            viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-            viewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(getIntent()), getString(R.string.ID_COMMUNITIES));
-            mViewPagerCommunitiesDetail.setAdapter(viewPagerAdapter);
-            if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getImageUrl())) {
-                Glide.with(this)
-                        .load(mFeedDetail.getImageUrl()).asBitmap()
-                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                        .skipMemoryCache(true)
-                        .into(new SimpleTarget<Bitmap>() {
-                            @Override
-                            public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
-                                ivCommunitiesDetail.setImageBitmap(resource);
-                                Palette.from(resource).generate(new Palette.PaletteAsyncListener() {
-                                    public void onGenerated(Palette palette) {
-                                        supportStartPostponedEnterTransition();
-                                    }
-                                });
-                            }
-                        });
+            if (mFeedDetail.isClosedCommunity()) {
+                communityOpenAboutFragment();
             } else {
-                ivCommunitiesDetail.setImageDrawable(getResources().getDrawable(R.drawable.blank_image));
-                supportStartPostponedEnterTransition();
+                mTvMemebr.setText(mFeedDetail.getNoOfMembers() + AppConstants.SPACE + getString(R.string.ID_MEMBERS));
+                mFloatingActionButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_feed_article_top_left));
+                mCollapsingToolbarLayout.setTitle(mFeedDetail.getNameOrTitle());
+                mCollapsingToolbarLayout.setSubtitle(mFeedDetail.getNameOrTitle());
+                viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+                viewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(getIntent()), getString(R.string.ID_COMMUNITIES));
+                mViewPagerCommunitiesDetail.setAdapter(viewPagerAdapter);
+                if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getImageUrl())) {
+                    Glide.with(this)
+                            .load(mFeedDetail.getImageUrl()).asBitmap()
+                            .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                            .skipMemoryCache(true)
+                            .into(new SimpleTarget<Bitmap>() {
+                                @Override
+                                public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
+                                    ivCommunitiesDetail.setImageBitmap(resource);
+                                    Palette.from(resource).generate(new Palette.PaletteAsyncListener() {
+                                        public void onGenerated(Palette palette) {
+                                            supportStartPostponedEnterTransition();
+                                        }
+                                    });
+                                }
+                            });
+                } else {
+                    ivCommunitiesDetail.setImageDrawable(getResources().getDrawable(R.drawable.blank_image));
+                    supportStartPostponedEnterTransition();
+                }
             }
         }
     }
@@ -183,9 +188,9 @@ public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemo
         if (baseResponse instanceof FeedDetail) {
             communityDetailHandled(view, baseResponse);
         } else if (baseResponse instanceof OwnerList) {
-            OwnerList ownerList=(OwnerList) baseResponse;
+            OwnerList ownerList = (OwnerList) baseResponse;
             OwnerRemoveDialog newFragment = new OwnerRemoveDialog();
-            newFragment.setListener(this,ownerList.getName());
+            newFragment.setListener(this, ownerList.getName());
             newFragment.show(this.getFragmentManager(), getString(R.string.ID_DAILOG));
         } else if (baseResponse instanceof Member) {
             Member member = (Member) baseResponse;
@@ -194,14 +199,12 @@ public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemo
             bundleCommunity.putParcelable(AppConstants.MEMBER, member);
             bundleCommunity.putLong(AppConstants.COMMUNITY_DETAIL, mFeedDetail.getIdOfEntityOrParticipant());
             newFragment.setArguments(bundleCommunity);
-            newFragment.setListener(this,member.getCommunityUserFirstName());
+            newFragment.setListener(this, member.getCommunityUserFirstName());
 
             newFragment.show(this.getFragmentManager(), getString(R.string.ID_DAILOG));
-        }
-        else if (baseResponse instanceof MembersList) {
-            MembersList membersList=(MembersList) baseResponse;
-
-            CallCommunityMemberRemoveFragment(membersList.getUsersId(),membersList.getCommunityId(),membersList.getPosition());
+        } else if (baseResponse instanceof MembersList) {
+            MembersList membersList = (MembersList) baseResponse;
+            CallCommunityMemberRemoveFragment(membersList.getUsersId(), membersList.getCommunityId(), membersList.getPosition());
 
         }
     }
@@ -220,12 +223,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemo
         super.feedCardsHandled(view, baseResponse);
         switch (id) {
             case R.id.card_community_detail:
-                if (null != mFeedDetail) {
-                    communityOpenAboutFragment = new CommunityOpenAboutFragment();
-                    communityOpenAboutFragment.setArguments(getIntent().getExtras());
-                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.bottom_to_top_slide_reverse_anim)
-                            .replace(R.id.about_community_container, communityOpenAboutFragment, CommunityOpenAboutFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
-                }
+                communityOpenAboutFragment();
             case R.id.tv_add_invite:
                 if (null != baseResponse) {
 
@@ -245,7 +243,16 @@ public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemo
 
     }
 
-    void CallCommunityOwnerSearchFragment(int id) {
+    private void communityOpenAboutFragment() {
+        if (null != mFeedDetail) {
+            communityOpenAboutFragment = new CommunityOpenAboutFragment();
+            communityOpenAboutFragment.setArguments(getIntent().getExtras());
+            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.bottom_to_top_slide_reverse_anim)
+                    .replace(R.id.about_community_container, communityOpenAboutFragment, CommunityOpenAboutFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+        }
+    }
+
+    private void CallCommunityOwnerSearchFragment(int id) {
 
         final Fragment fragmentCommunityOwnerSearch = getSupportFragmentManager().findFragmentByTag(InviteCommunityOwner.class.getName());
         if (AppUtils.isFragmentUIActive(fragmentCommunityOwnerSearch)) {
@@ -253,14 +260,16 @@ public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemo
         }
 
     }
-    void CallCommunityMemberRemoveFragment(Long userId, Long communityId,int position) {
+
+    private void CallCommunityMemberRemoveFragment(Long userId, Long communityId, int position) {
 
         final Fragment frgmentAllMember = getSupportFragmentManager().findFragmentByTag(AllMembersFragment.class.getName());
         if (AppUtils.isFragmentUIActive(frgmentAllMember)) {
-            ((AllMembersFragment) frgmentAllMember).callRemoveMember(userId,communityId, position);
+            ((AllMembersFragment) frgmentAllMember).callRemoveMember(userId, communityId, position);
         }
 
     }
+
     @Override
     public void memberClick() {
 
@@ -270,7 +279,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemo
 
         frag.setArguments(bundleCommunity);
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.bottom_to_top_slide_reverse_anim)
-                .replace(R.id.about_community_container, frag,AllMembersFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+                .replace(R.id.about_community_container, frag, AllMembersFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
 
     }
 
@@ -411,15 +420,11 @@ public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemo
     @Override
     public void closeMembersFragment(int size) {
         getSupportFragmentManager().popBackStack();
-            final Fragment frgmentAllMember = getSupportFragmentManager().findFragmentByTag(CommunityOpenAboutFragment.class.getName());
-            if (AppUtils.isFragmentUIActive(frgmentAllMember)) {
-            }
-            ((CommunityOpenAboutFragment) frgmentAllMember).refreshData(size);
-     }
-
-
-
-
+        final Fragment frgmentAllMember = getSupportFragmentManager().findFragmentByTag(CommunityOpenAboutFragment.class.getName());
+        if (AppUtils.isFragmentUIActive(frgmentAllMember)) {
+        }
+        ((CommunityOpenAboutFragment) frgmentAllMember).refreshData(size);
+    }
 
 
     @Override
@@ -433,15 +438,25 @@ public class CommunitiesDetailActivity extends BaseActivity implements OwnerRemo
 
     @OnClick(R.id.iv_community_detail_back)
     public void onBackClick() {
-        super.onBackPressed();
-        if (communityOpenAboutFragment != null) communityOpenAboutFragment.dismissPopup();
+        if (mFeedDetail.isClosedCommunity()) {
+            finish();
+        } else {
+            if (communityOpenAboutFragment != null) communityOpenAboutFragment.dismissPopup();
+            Intent intent = new Intent();
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, mFeedDetail);
+            bundle.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT,communityEnum);
+            intent.putExtras(bundle);
+            setResult(RESULT_OK, intent);
+            super.onBackPressed();
+        }
     }
 
     @Override
     public void callInviteMembers() {
         final Fragment fragmentCommunityMember = getSupportFragmentManager().findFragmentByTag(InviteCommunityMember.class.getName());
         if (AppUtils.isFragmentUIActive(fragmentCommunityMember)) {
-            ((InviteCommunityMember) fragmentCommunityMember).callAddMember(muser_ids,mcommunity_id);
+            ((InviteCommunityMember) fragmentCommunityMember).callAddMember(muser_ids, mcommunity_id);
             muser_ids.clear();
 
         }

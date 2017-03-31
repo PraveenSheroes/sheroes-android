@@ -138,20 +138,18 @@ public class HomePresenter extends BasePresenter<HomeView> {
         Subscription subscription = mHomeModel.getFeedFromModel(feedRequestPojo).subscribe(new Subscriber<FeedResponsePojo>() {
             @Override
             public void onCompleted() {
-                LogUtils.info(TAG, "****************complete***");
                 getMvpView().stopProgressBar();
             }
 
             @Override
             public void onError(Throwable e) {
-                LogUtils.info(TAG, "*******************" + e.getMessage());
                 getMvpView().stopProgressBar();
                 getMvpView().showError(e.getMessage(), ERROR_FEED_RESPONSE);
             }
 
             @Override
             public void onNext(FeedResponsePojo feedResponsePojo) {
-                LogUtils.info(TAG, "*******************" + new Gson().toJson(feedResponsePojo));
+                LogUtils.info(TAG, "********response***********");
                 getMvpView().stopProgressBar();
                 if (null != feedResponsePojo) {
                     getMvpView().getFeedListSuccess(feedResponsePojo);
@@ -175,7 +173,6 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
             @Override
             public void onError(Throwable e) {
-                LogUtils.info(TAG, "*******************" + e.getMessage());
                 getMvpView().stopProgressBar();
                 getMvpView().showError(e.getMessage(), ERROR_MY_COMMUNITIES);
             }

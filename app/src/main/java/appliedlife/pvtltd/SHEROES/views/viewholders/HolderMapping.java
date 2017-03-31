@@ -427,7 +427,7 @@ public enum HolderMapping {
                             break;
                         case AppConstants.FEED_COMMUNITY:
                             boolean isFeatured = feedDetail.isFeatured();
-                            if (isFeatured) {
+                            if (isFeatured && !feedDetail.isOwner() && !feedDetail.isMember()) {
                                 returnView = FEATURE_CARD.ordinal();
                                 //   return SUGGESTED_CARD_HOLDER.ordinal();
                             } else {

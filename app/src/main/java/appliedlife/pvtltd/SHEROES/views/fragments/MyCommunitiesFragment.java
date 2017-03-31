@@ -91,13 +91,19 @@ public class MyCommunitiesFragment  extends BaseFragment implements HomeView {
             }
         });
         super.setAllInitializationForFeeds(mFragmentListRefreshData,  mAdapter, mLayoutManager, mRecyclerView, mHomePresenter, mAppUtils, mProgressBar);
+        LogUtils.info(TAG,"**********Mycommunities fragment on create*********");
         mHomePresenter.getMyCommunityFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY,mFragmentListRefreshData.getPageNo()));
         mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 // Refresh items
-                LogUtils.info("swipe", "*****************end called");
+                LogUtils.info(TAG,"**********Mycommunities fragment on swipe to refre*********");
+                setListLoadFlag(false);
                 mPullRefreshList.setPullToRefresh(true);
+                mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
+                mPullRefreshList = new SwipPullRefreshList();
+                setRefreshList(mPullRefreshList);
+                mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
                 mHomePresenter.getMyCommunityFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY,mFragmentListRefreshData.getPageNo()));
             }
         });

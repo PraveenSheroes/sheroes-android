@@ -52,7 +52,6 @@ public class HomeModel {
                 .map(new Func1<FeedResponsePojo, FeedResponsePojo>() {
                     @Override
                     public FeedResponsePojo call(FeedResponsePojo feedResponsePojo) {
-                        LogUtils.info(TAG,"************feed model*******");
                         return feedResponsePojo;
                     }
                 })

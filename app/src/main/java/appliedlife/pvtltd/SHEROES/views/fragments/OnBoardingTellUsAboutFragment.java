@@ -85,33 +85,49 @@ public class OnBoardingTellUsAboutFragment extends BaseFragment implements OnBoa
         mOnBoardingPresenter.attachView(this);
         super.setProgressBar(mProgressBar);
         if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && null != mUserPreferenceMasterData.get().getData()) {
-            mOnBoardingPresenter.getMasterDataToPresenter();
-        } else {
             if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
-             //   mCurrentStatus.setText(labelValue.getLabel());
+
+                if (null != userPreference.get().getUserSummary().getUserBO() && StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getUserBO().getJobTitle())) {
+                    mCurrentStatus.setText(userPreference.get().getUserSummary().getUserBO().getJobTitle());
+                }
+                if (StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getMobile())) {
+                    mMobileNumber.setText(userPreference.get().getUserSummary().getMobile());
+                }
+
+
             }
+            mMasterDataResult=mUserPreferenceMasterData.get().getData();
             mCurrentStatus.setEnabled(true);
             mLocation.setEnabled(true);
             mMobileNumber.setEnabled(true);
+        } else {
+            mOnBoardingPresenter.getMasterDataToPresenter();
         }
         return view;
     }
 
 
     public void setCurrentStaus(LabelValue labelValue) {
-        Toast.makeText(getContext(), "*******" + labelValue.getLabel(), Toast.LENGTH_SHORT).show();
-        mCurrentStatus.setText(labelValue.getLabel());
+        if (null != labelValue && StringUtil.isNotNullOrEmptyString(labelValue.getLabel())) {
+            mCurrentStatus.setText(labelValue.getLabel());
+        }
     }
 
     public void setLocationData(GetAllDataDocument getAllDataDocument) {
-        Toast.makeText(getContext(), "*******" + getAllDataDocument.getTitle(), Toast.LENGTH_SHORT).show();
-        mLocation.setText(getAllDataDocument.getTitle());
+        if (null != getAllDataDocument && StringUtil.isNotNullOrEmptyString(getAllDataDocument.getTitle())) {
+            mLocation.setText(getAllDataDocument.getTitle());
+        }
     }
 
     @OnClick(R.id.iv_tell_us_next)
     public void nextClick() {
         if (StringUtil.isNotNullOrEmptyString(mCurrentStatus.getText().toString()) && StringUtil.isNotNullOrEmptyString(mLocation.getText().toString()) && StringUtil.isNotNullOrEmptyString(mMobileNumber.getText().toString())) {
             if (mMobileNumber.getText().toString().length() == 10) {
+                ArrayList<String> data=new ArrayList<>();
+                data.add(mCurrentStatus.getText().toString());
+                data.add(mLocation.getText().toString());
+                data.add(mMobileNumber.getText().toString());
+                mOnboardingIntractionListner.onCollectUserData(data);
                 mOnboardingIntractionListner.onSheroesHelpYouFragmentOpen(mMasterDataResult, AppConstants.ONE_CONSTANT);
             } else {
                 Toast.makeText(getContext(), "Enter valid mobile number", Toast.LENGTH_SHORT).show();
@@ -123,12 +139,16 @@ public class OnBoardingTellUsAboutFragment extends BaseFragment implements OnBoa
 
     @OnClick(R.id.tv_current_status_spinner)
     public void onCurrentStatusClick() {
-        mOnboardingIntractionListner.onSheroesHelpYouFragmentOpen(mMasterDataResult, AppConstants.TWO_CONSTANT);
+        if (null != mMasterDataResult) {
+            mOnboardingIntractionListner.onSheroesHelpYouFragmentOpen(mMasterDataResult, AppConstants.TWO_CONSTANT);
+        }
     }
 
     @OnClick(R.id.tv_location)
     public void onLocationClick() {
-        mOnboardingIntractionListner.onSheroesHelpYouFragmentOpen(mMasterDataResult, AppConstants.THREE_CONSTANT);
+        if (null != mMasterDataResult) {
+            mOnboardingIntractionListner.onSheroesHelpYouFragmentOpen(mMasterDataResult, AppConstants.THREE_CONSTANT);
+        }
     }
 
     @Override
@@ -153,10 +173,8 @@ public class OnBoardingTellUsAboutFragment extends BaseFragment implements OnBoa
 
 
     public interface OnBoardingActivityIntractionListner {
-        void close();
 
-        void onErrorOccurence();
-
+        void onCollectUserData(ArrayList<String> stringArrayList);
         void onSheroesHelpYouFragmentOpen(HashMap<String, HashMap<String, ArrayList<LabelValue>>> masterDataResult, int callFor);
     }
 }

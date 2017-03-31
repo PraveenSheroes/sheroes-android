@@ -315,8 +315,6 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Fragment
         });
         final TextView tvEdit = (TextView) popupView.findViewById(R.id.tv_article_menu_edit);
         final TextView tvLeave = (TextView) popupView.findViewById(R.id.tv_article_menu_delete);
-
-
         tvLeave.setText(getActivity().getString(R.string.ID_LEAVE));
         if(mFeedDetail.isOwner()) {
             tvEdit.setVisibility(View.VISIBLE);

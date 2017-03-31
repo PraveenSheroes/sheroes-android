@@ -54,6 +54,7 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_DONE">Done</string>
     <string name="ID_CANCEL">Cancel</string>
     <string name="ID_VIEW_MORE">View More</string>
+    <string name="ID_STD">+91</string>
     <string name="ID_CELL_PHONE_NUMBER">CELL PHONE NUMBER</string>
     <string name="ID_VIEW_MORE_COMMENT">View more replies</string>
     <string name="ID_JOIN">Join</string>
