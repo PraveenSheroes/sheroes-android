@@ -73,6 +73,7 @@ public class SettingPreferencesActivity extends BaseActivity implements SettingF
     SettingFeedbackPresenter mSettingFeedbackPresenter;
 
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

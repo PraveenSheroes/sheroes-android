@@ -41,6 +41,7 @@ public class AppConstants {
     public static final String ALL_DATA_SUB_TYPE = "T";
     public static final String USER_SUB_TYPE = "U";
     public static final String TAG_SUB_TYPE = "tags";
+    public static final String SKILL_SUB_TYPE = "skill";
     public static final String OWNER_SUB_TYPE = "O";
     public static final String COMMUNITY_NAME_SUB_TYPE = "CN";
     public static final String FEED_SCREEN = "feed";
@@ -166,4 +167,22 @@ public class AppConstants {
     public static final String RETURN_FROM_BREAK = "Return from a break";
 
     public static final String OPEN_COMMUNITY = "open community for join";
+
+
+
+    public  static  final String TRAVEL="TRAVEL_FLEXIBILITY";
+    public static final String STRING="string";
+
+
+
+    public static final String SUMMARY="SUMMARY";
+    public static final String USER_SUMMARY_SERVICE="USER_SUMMARY_SERVICE";
+
+
+
+    public static final String VISIT_PREFERENCE="VISIT_PREFERENCE";
+    public static final String CLIENT_SIDE_VISIT_PREFERENCE_SERVICE="CLIENT_SIDE_VISIT_PREFERENCE_SERVICE";
+
+
+
 }

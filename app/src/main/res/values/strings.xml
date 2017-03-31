@@ -252,7 +252,8 @@ Our website www.sheroes.in offers services for certain products and services. By
 
     <!--String Related personal About_me details page-->
     <string name="ID_ABOUT_ME">ABOUT ME</string>
-    <string name="ID_WRITE_REASION">WRITE REASON</string>
+    <string name="ID_ABOUT_WRITE_TITTLE">Describe Youself in a Nutshell</string>
+    <string name="ID_WRITE_REASION">Start typing here... </string>
     <string name="ID_CHAR_COUNT">456 Characters</string>
 
     <!--String Related personal other details page-->
@@ -437,6 +438,7 @@ etur adipiscing elit,sed do eiusmod tempor incididunt ut…</string>
 
     <!--string relates looking_for-->
 
+    <string name="ID_POPULAR_SKILL">Popular</string>
 
 
 

@@ -21,14 +21,14 @@ android:orientation="horizontal">
     android:id="@+id/tv_profile_tittle"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:fontFamily="@string/ID_ROBOTO_BOLD"
+    android:fontFamily="@string/ID_ROBOTO_REGULAR"
     android:drawablePadding="@dimen/dp_size_12"
     android:textAllCaps="true"
     android:layout_centerVertical="true"
     android:layout_centerHorizontal="true"
     android:layerType="software"
     android:textColor="@color/white"
-    android:textSize="@dimen/sp_size_19"
+    android:textSize="@dimen/sp_size_14"
     />
 
 <TextView

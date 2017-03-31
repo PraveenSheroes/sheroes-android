@@ -80,10 +80,11 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
     @Bind(R.id.tv_setting_tittle1)
     TextView mTv_setting_tittle1;
     @Bind(R.id.iv_back_setting)
-    ImageView miv_back_setting;
+    ImageView mIv_back_setting;
+
+
     @Bind(R.id.progress_bar_first_load)
     ProgressBar mProgressBarFirstLoad;
-    ImageView mIv_back_setting;
     String mDeactivateReson_value;
     @Bind(R.id.tv_reson_line)
     TextView mTv_reson_line;
@@ -137,10 +138,13 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
 
         mTv_reson_line.setVisibility(View.GONE);
         //Open setting_preferences_Activity
+
         mIv_back_setting.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
+
+
                 settingViewlistener.backListener(R.id.iv_back_setting);
 
              /*   Intent intent = new Intent(getActivity(), SettingPreferencesActivity.class);

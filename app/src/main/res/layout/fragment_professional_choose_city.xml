@@ -101,6 +101,7 @@
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:paddingLeft="@dimen/dp_size_5"
                 android:text="@string/ID_CITY_text4"
+                android:visibility="gone"
                 android:textColor="@color/text_color_work_list"
                 android:textSize="@dimen/sp_size_14" />
 
@@ -138,6 +139,7 @@
         android:background="@color/red"
         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
         android:gravity="center"
+        android:visibility="gone"
         android:text="@string/ID_SAVE"
         android:textColor="@color/white"
         android:textSize="@dimen/dp_size_13" />

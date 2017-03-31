@@ -83,7 +83,7 @@ import butterknife.OnClick;
  * Created by Praveen_Singh on 13-02-2017.
  */
 
-public class ProfileActicity extends BaseActivity implements ProfileView,BaseHolderInterface,AppBarLayout.OnOffsetChangedListener,ProfileTravelClientFragment.ProfileTravelClientFragmentListener,ProfileCityWorkFragment.ProfileWorkLocationFragmentListener {
+public class ProfileActicity extends BaseActivity implements ProfileView,BaseHolderInterface,AppBarLayout.OnOffsetChangedListener,ProfileTravelClientFragment.ProfileTravelClientFragmentListener,ProfileCityWorkFragment.ProfileWorkLocationFragmentListener,ProfileAboutMeFragment.ProfileAboutMeFragmentListener {
     private final String TAG = LogUtils.makeLogTag(ProfileActicity.class);
     private static final String EXTRA_IMAGE = "extraImage";
     private static final String DECRIPTION = "desc";
@@ -608,7 +608,14 @@ public class ProfileActicity extends BaseActivity implements ProfileView,BaseHol
     }
 
     @Override
+    public void AboutMeBack() {
+
+        getSupportFragmentManager().popBackStack();
+    }
+
+    @Override
     public void locationBack() {
+
         getSupportFragmentManager().popBackStack();
 
     }

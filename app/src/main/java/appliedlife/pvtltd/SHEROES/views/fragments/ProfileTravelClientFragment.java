@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +25,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTravelFLexibili
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTravelFlexibilityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryResponse;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePersenter;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
 import butterknife.Bind;
@@ -40,9 +43,8 @@ public class ProfileTravelClientFragment extends BaseFragment implements Profile
 private final String TAG = LogUtils.makeLogTag(ProfileTravelClientFragment.class);
 private final String SCREEN_NAME = "Profile_Travel_screen";
     private ProfileTravelClientFragmentListener profileTravelClientFragmentListener;
-
-    @Bind(R.id.tv_setting_tittle)
-    TextView mTv_setting_tittle;
+    @Bind(R.id.tv_profile_tittle)
+    TextView mTv_profile_tittle;
     @Bind(R.id.cb_no)
     CheckBox mCb_no;
     @Bind(R.id.cb_yes)
@@ -57,8 +59,11 @@ private final String SCREEN_NAME = "Profile_Travel_screen";
     CheckBox cb_yes3;
     @Inject
     ProfilePersenter mProfilePresenter;
+    @Bind(R.id.bt_save_client_location)
+    Button mBt_save_client_location;
     String num;
     int checkValue=0;
+    int flag;
 
 @Override
 public void onAttach(Context context) {
@@ -85,24 +90,31 @@ public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
         View view = inflater.inflate(R.layout.fragment_professional_travel_client, container, false);
         ButterKnife.bind(this, view);
         mProfilePresenter.attachView(this);
-        mTv_setting_tittle.setText(R.string.ID_TRAVEL_FLEXIBILITY);
+        mTv_profile_tittle.setText(R.string.ID_TRAVEL_FLEXIBILITY);
+        mCb_no.setTextColor(getResources().getColor(R.color.search_tab_text));
+        mBt_save_client_location.setBackgroundColor(getResources().getColor(R.color.red));
         mCb_no.setChecked(true);
+
 
     return view;
         }
+
+
 
     @OnClick(R.id.bt_save_client_location)
     public void save_cities()
     {
         ProfileTravelFLexibilityRequest profileTravelFLexibilityRequest = new ProfileTravelFLexibilityRequest();
-        profileTravelFLexibilityRequest.setAppVersion("string");
-        profileTravelFLexibilityRequest.setCloudMessagingId("string");
-        profileTravelFLexibilityRequest.setDeviceUniqueId("string");
-        profileTravelFLexibilityRequest.setLastScreenName("string");
-        profileTravelFLexibilityRequest.setScreenName("string");
-        profileTravelFLexibilityRequest.setSource("string");
-        profileTravelFLexibilityRequest.setType("TRAVEL_FLEXIBILITY");
-        profileTravelFLexibilityRequest.setSubType("TRAVEL_FLEXIBILITY");
+        AppUtils appUtils=AppUtils.getInstance();
+        profileTravelFLexibilityRequest.setAppVersion(appUtils.getAppVersionName());
+        //TODO:check cloud
+        profileTravelFLexibilityRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+        profileTravelFLexibilityRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        profileTravelFLexibilityRequest.setLastScreenName(AppConstants.STRING);
+        profileTravelFLexibilityRequest.setScreenName(AppConstants.STRING);
+        profileTravelFLexibilityRequest.setSource(AppConstants.STRING);
+        profileTravelFLexibilityRequest.setType(AppConstants.TRAVEL);
+        profileTravelFLexibilityRequest.setSubType(AppConstants.TRAVEL);
         profileTravelFLexibilityRequest.setTravelFlexibility(checkValue);
         mProfilePresenter.getUserTravelDetailsAuthTokeInPresenter(profileTravelFLexibilityRequest);
 
@@ -112,18 +124,43 @@ public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
     public  void checkclick()
     {
         if(mCb_yes.isChecked()) {
+
+
+            mCb_yes.setTextColor(getResources().getColor(R.color.search_tab_text));
+            mBt_save_client_location.setBackgroundColor(getResources().getColor(R.color.red));
+            cb_yes2.setTextColor(getResources().getColor(R.color.grey2));
+            cb_yes1.setTextColor(getResources().getColor(R.color.grey2));
+            cb_yes3.setTextColor(getResources().getColor(R.color.grey2));
+            mCb_no.setTextColor(getResources().getColor(R.color.grey2));
+            mBt_save_client_location.setVisibility(View.VISIBLE);
             mCb_no.setChecked(false);
             mtv_yes_then.setVisibility(View.VISIBLE);
             cb_yes1.setVisibility(View.VISIBLE);
             cb_yes2.setVisibility(View.VISIBLE);
             cb_yes3.setVisibility(View.VISIBLE);
-        }
 
+        }else {
+
+            mBt_save_client_location.setVisibility(View.GONE);
+            mCb_yes.setTextColor(getResources().getColor(R.color.grey2));
+            mtv_yes_then.setVisibility(View.GONE);
+            cb_yes1.setVisibility(View.GONE);
+            cb_yes2.setVisibility(View.GONE);
+            cb_yes3.setVisibility(View.GONE);
+
+
+        }
     }
     @OnClick(R.id.cb_yes1)
     public  void checkclick1()
     {
         if(cb_yes1.isChecked()) {
+
+            cb_yes1.setTextColor(getResources().getColor(R.color.search_tab_text));
+            cb_yes2.setTextColor(getResources().getColor(R.color.grey2));
+            cb_yes3.setTextColor(getResources().getColor(R.color.grey2));
+            mCb_yes.setTextColor(getResources().getColor(R.color.blue));
+            mCb_no.setTextColor(getResources().getColor(R.color.grey2));
             mCb_no.setChecked(false);
             cb_yes2.setChecked(false);
             cb_yes3.setChecked(false);
@@ -135,6 +172,11 @@ public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
     public  void checkclick2()
     {
         if(cb_yes2.isChecked()) {
+            cb_yes2.setTextColor(getResources().getColor(R.color.search_tab_text));
+            cb_yes3.setTextColor(getResources().getColor(R.color.grey2));
+            cb_yes1.setTextColor(getResources().getColor(R.color.grey2));
+            mCb_yes.setTextColor(getResources().getColor(R.color.blue));
+            mCb_no.setTextColor(getResources().getColor(R.color.grey2));
             mCb_no.setChecked(false);
             cb_yes1.setChecked(false);
             cb_yes3.setChecked(false);
@@ -146,6 +188,13 @@ public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
     public  void checkclick3()
     {
         if(cb_yes3.isChecked()) {
+            cb_yes3.setTextColor(getResources().getColor(R.color.search_tab_text));
+
+            cb_yes2.setTextColor(getResources().getColor(R.color.grey2));
+            cb_yes1.setTextColor(getResources().getColor(R.color.grey2));
+            mCb_yes.setTextColor(getResources().getColor(R.color.blue));
+            mCb_no.setTextColor(getResources().getColor(R.color.grey2));
+
             mCb_no.setChecked(false);
             cb_yes1.setChecked(false);
             cb_yes2.setChecked(false);
@@ -154,32 +203,46 @@ public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
     }
 
     @OnClick(R.id.cb_no)
+
     public  void checknoclick()
     {
-        if (cb_yes3.isChecked()||cb_yes2.isChecked()||cb_yes1.isChecked())
+
+
+        if (cb_yes3.isChecked()||cb_yes2.isChecked()||cb_yes1.isChecked()|| mCb_no.isChecked())
         {
+            mCb_no.setTextColor(getResources().getColor(R.color.search_tab_text));
+            mCb_yes.setChecked(false);
+            mBt_save_client_location.setVisibility(View.VISIBLE);
+            mBt_save_client_location.setBackgroundColor(getResources().getColor(R.color.red));
+            cb_yes2.setTextColor(getResources().getColor(R.color.grey2));
+            cb_yes1.setTextColor(getResources().getColor(R.color.grey2));
+            mCb_yes.setTextColor(getResources().getColor(R.color.grey2));
             cb_yes3.setChecked(false);
             cb_yes2.setChecked(false);
             cb_yes1.setChecked(false);
+            mtv_yes_then.setVisibility(View.GONE);
+            cb_yes1.setVisibility(View.GONE);
+            cb_yes2.setVisibility(View.GONE);
+            cb_yes3.setVisibility(View.GONE);
+        }else {
 
-
+            mtv_yes_then.setVisibility(View.GONE);
+            cb_yes1.setVisibility(View.GONE);
+            cb_yes2.setVisibility(View.GONE);
+            cb_yes3.setVisibility(View.GONE);
+            mBt_save_client_location.setVisibility(View.GONE);
+            checkValue = 0;
         }
-
-        mCb_yes.setChecked(false);
-        mtv_yes_then.setVisibility(View.GONE);
-        cb_yes1.setVisibility(View.GONE);
-        cb_yes2.setVisibility(View.GONE);
-        cb_yes3.setVisibility(View.GONE);
-        checkValue=0;
-
-
-
-
-
     }
 
 
-@OnClick(R.id.iv_back_setting)
+
+
+
+
+
+
+@OnClick(R.id.iv_back_profile)
 public void callBack()
 {
 
@@ -211,12 +274,25 @@ public void callBack()
 
     }
 
+
+
+
     @Override
     public void getprofiletracelflexibilityResponse(ProfileTravelFlexibilityResponse profileTravelFlexibilityResponse) {
 
-        //will be change
+        //TODO:check condition
+
         Toast.makeText(getActivity(), profileTravelFlexibilityResponse.getStatus(),
                 Toast.LENGTH_LONG).show();
+
+        //TODO:Change Message
+
+        if(profileTravelFlexibilityResponse.getStatus().equals(AppConstants.SUCCESS)) {
+
+            profileTravelClientFragmentListener.clintBack();
+        }else {
+
+        }
 
     }
 
