@@ -60,7 +60,7 @@ public class InterestSearchHolder extends BaseViewHolder<BoardingInterestJobSear
         dataItem.setOnBoardingEnum(OnBoardingEnum.INTEREST_SEARCH);
         LabelValue labelValue =new LabelValue();
         labelValue.setLabel(dataItem.getTitle());
-        labelValue.setValue(1);
+        labelValue.setValue(Long.parseLong(dataItem.getId()));
         tvInterestJobTag.setTag(labelValue);
         viewInterface.handleOnClick(dataItem, tvInterestJobTag);
     }

@@ -109,12 +109,12 @@ public class OnBoardingSearchDialogFragment extends BaseDialogFragment implement
                 });
                 break;
             case INTEREST_SEARCH:
-                StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, 1);
+                StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(1, 1);
                 mRecyclerView.setLayoutManager(staggeredGridLayoutManager);
                 mRecyclerView.setAdapter(mAdapter);
                 break;
             case JOB_AT_SEARCH:
-                StaggeredGridLayoutManager job = new StaggeredGridLayoutManager(2, 1);
+                StaggeredGridLayoutManager job = new StaggeredGridLayoutManager(1, 1);
                 mRecyclerView.setLayoutManager(job);
                 mRecyclerView.setAdapter(mAdapter);
                 break;

@@ -24,6 +24,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -159,13 +160,13 @@ public class HomePresenter extends BasePresenter<HomeView> {
         registerSubscription(subscription);
     }
 
-    public void getMyCommunityFromPresenter(final FeedRequestPojo feedRequestPojo) {
+    public void getMyCommunityFromPresenter(final MyCommunityRequest myCommunityRequest) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_MY_COMMUNITIES);
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = mHomeModel.getMyCommunityFromModel(feedRequestPojo).subscribe(new Subscriber<FeedResponsePojo>() {
+        Subscription subscription = mHomeModel.getMyCommunityFromModel(myCommunityRequest).subscribe(new Subscriber<FeedResponsePojo>() {
             @Override
             public void onCompleted() {
                 getMvpView().stopProgressBar();

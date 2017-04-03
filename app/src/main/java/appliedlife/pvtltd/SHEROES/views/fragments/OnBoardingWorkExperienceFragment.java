@@ -86,7 +86,6 @@ public class OnBoardingWorkExperienceFragment extends BaseFragment implements Da
     }
     @OnClick(R.id.iv_work_exp_next)
     public void workExpOnClick() {
-        String monthYear= mEtExpMonth.getText().toString()+ mEtExpYear.getText().toString();
         if(StringUtil.isNotNullOrEmptyString(mEtExpMonth.getText().toString())&&StringUtil.isNotNullOrEmptyString(mEtExpYear.getText().toString())) {
             int year = Integer.parseInt(mEtExpYear.getText().toString());
             int month = Integer.parseInt(mEtExpMonth.getText().toString());

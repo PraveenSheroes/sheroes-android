@@ -29,6 +29,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.SelectCommunityReque
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectedCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobApplyRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobApplyResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
@@ -86,7 +87,7 @@ public interface SheroesAppServiceApi {
     @POST("participant/feed/")
     Observable<FeedResponsePojo> getFeedFromApi(@Body FeedRequestPojo feedRequestPojo );
     @POST("participant/feed/my_communities")
-    Observable<FeedResponsePojo> getMyCommunityFromApi(@Body FeedRequestPojo feedRequestPojo );
+    Observable<FeedResponsePojo> getMyCommunityFromApi(@Body MyCommunityRequest myCommunityRequest );
     @POST("participant/feed/get_bookmarked")
     Observable<FeedResponsePojo> getBookMarkFromApi(@Body FeedRequestPojo feedRequestPojo);
     /*Participation*/

@@ -40,10 +40,12 @@ public class LoginActivity extends BaseActivity implements LoginFragment.LoginAc
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getToken())) {
             if (userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.FEED_SCREEN)) {
                 Intent homeIntent = new Intent(this, HomeActivity.class);
+                homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(homeIntent);
                 finish();
             } else {
                 Intent homeIntent = new Intent(this, OnBoardingActivity.class);
+                homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(homeIntent);
                 finish();
             }
@@ -64,7 +66,11 @@ public class LoginActivity extends BaseActivity implements LoginFragment.LoginAc
         if (!StringUtil.isNotNullOrEmptyString(errorMessage)) {
             errorMessage = getString(R.string.ID_GENERIC_ERROR);
         }
-        showNetworkTimeoutDoalog(true, false, errorMessage);
+        if (AppConstants.FACEBOOK_VERIFICATION.equalsIgnoreCase(errorMessage)) {
+            openFaceBookLogin();
+        } else {
+            showNetworkTimeoutDoalog(true, false, errorMessage);
+        }
     }
 
     @Override
@@ -88,10 +94,24 @@ public class LoginActivity extends BaseActivity implements LoginFragment.LoginAc
                 showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
         }
     }
-
     @OnClick(R.id.iv_login_back)
     public void backOnClick() {
         super.onBackPressed();
+    }
+
+
+    private void openFaceBookLogin() {
+        Intent intentArticle = new Intent(this, FaceBookOpenActivity.class);
+        startActivityForResult(intentArticle, AppConstants.REQUEST_CODE_FOR_FACEBOOK);
+        overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if (requestCode == AppConstants.REQUEST_CODE_FOR_FACEBOOK && null != intent) {
+            userPreference.delete();
+        }
     }
 }
 

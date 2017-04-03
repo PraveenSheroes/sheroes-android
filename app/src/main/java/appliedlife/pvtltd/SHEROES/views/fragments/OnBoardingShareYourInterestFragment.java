@@ -68,7 +68,7 @@ public class OnBoardingShareYourInterestFragment extends BaseFragment implements
             Bundle mBusSeatMapDataInBundle = getArguments();
             mMasterDataResult = (HashMap<String, HashMap<String, ArrayList<LabelValue>>>) mBusSeatMapDataInBundle.getSerializable(AppConstants.YOUR_INTEREST);
         }
-        super.setProgressBar(mProgressBar);
+        setProgressBar(mProgressBar);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new GenericRecyclerViewAdapter(getContext(), (OnBoardingActivity) getActivity());
         LinearLayoutManager manager = new LinearLayoutManager(getContext());

@@ -9,12 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.f2prateek.rx.preferences.Preference;
@@ -44,7 +39,6 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
@@ -52,37 +46,22 @@ import appliedlife.pvtltd.SHEROES.presenters.LoginPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.FacebookErrorDialog;
-import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeScreenFirstFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeScreenSecondFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeScreenThirdFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.LoginView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * Created by sheroes on 06/03/17.
+ * Created by Praveen_Singh on 03-04-2017.
  */
 
-public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageChangeListener, LoginView {
+public class FaceBookOpenActivity extends BaseActivity implements LoginView {
     @Inject
     Preference<LoginResponse> userPreference;
     @Inject
     LoginPresenter mLoginPresenter;
-    @Bind(R.id.welcome_view_pager)
-    ViewPager mViewPager;
-    private ViewPagerAdapter mViewPagerAdapter;
-    @Bind(R.id.iv_welcome_first)
-    ImageView ivWelcomeFirst;
-    @Bind(R.id.iv_welcome_second)
-    ImageView ivWelcomeSecond;
-    @Bind(R.id.iv_welcome_third)
-    ImageView ivWelcomeThird;
-    @Bind(R.id.fb_welcome_footer)
-    LinearLayout fbWelcomeFooter;
-    @Bind(R.id.click_to_join)
+    @Bind(R.id.verify_fb_button)
     LoginButton mFbLogin;
     @Bind(R.id.pb_login_progress_bar)
     ProgressBar mProgressBar;
@@ -90,27 +69,20 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     private CallbackManager callbackManager;
     private AccessTokenTracker accessTokenTracker;
     private ProfileTracker profileTracker;
+    @Inject
+    Preference<LoginResponse> mUserPreference;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
-        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getToken())) {
-            openHomeScreen();
-        } else {
-            faceBookInitialization();
-            setContentView(R.layout.welcome_activity);
-            ButterKnife.bind(this);
-            initHomeViewPagerAndTabs();
-        }
+        faceBookInitialization();
+        setContentView(R.layout.facebook_verification);
+        ButterKnife.bind(this);
+        initHomeViewPagerAndTabs();
 
     }
 
-    private void openHomeScreen() {
-        Intent homeIntent = new Intent(this, OnBoardingActivity.class);
-        startActivity(homeIntent);
-        finish();
-    }
 
     private void faceBookInitialization() {
         FacebookSdk.sdkInitialize(getApplicationContext());
@@ -132,38 +104,27 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     }
 
     private void initHomeViewPagerAndTabs() {
-        mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        mViewPagerAdapter.addFragment(new WelcomeScreenFirstFragment(), AppConstants.EMPTY_STRING);
-        mViewPagerAdapter.addFragment(new WelcomeScreenSecondFragment(), AppConstants.EMPTY_STRING);
-        mViewPagerAdapter.addFragment(new WelcomeScreenThirdFragment(), AppConstants.EMPTY_STRING);
-        mViewPager.setAdapter(mViewPagerAdapter);
-        mViewPager.addOnPageChangeListener(this);
         mLoginPresenter.attachView(this);
         if (Build.VERSION.SDK_INT >= 23) {
             getPermissionToReadUserContacts();
         }
-        mLoginPresenter.getMasterDataToPresenter();
         fbSignIn();
     }
 
-    @OnClick(R.id.click_to_join)
+    @OnClick(R.id.verify_fb_button)
     public void fbOnClick() {
         fbSignIn();
     }
-
-    @OnClick(R.id.tv_other_login_option)
-    public void otherLoginOption() {
-        Intent homeIntent = new Intent(this, LoginActivity.class);
-        startActivity(homeIntent);
+    public void closeDialog()
+    {
+        Intent intent = new Intent();
+        setResult(RESULT_OK, intent);
         finish();
     }
-
     private void fbSignIn() {
-        LoginManager.getInstance().logOut();
         mFbLogin.setReadPermissions(Arrays.asList("public_profile", "email", "user_birthday", "user_friends"));
         mFbLogin.registerCallback(callbackManager, callback);
     }
-
 
     @Override
     public void onShowErrorDialog(String errorReason, FeedParticipationEnum feedParticipationEnum) {
@@ -175,67 +136,8 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                 showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_INVALID_USER_PASSWORD));
                 break;
             default:
-                showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
+                showFaceBookError();
         }
-    }
-
-    /**
-     * This method will be invoked when the current page is scrolled, either as part
-     * of a programmatically initiated smooth scroll or a user initiated touch scroll.
-     *
-     * @param position             Position index of the first page currently being displayed.
-     *                             Page position+1 will be visible if positionOffset is nonzero.
-     * @param positionOffset       Value from [0, 1) indicating the offset from the page at position.
-     * @param positionOffsetPixels Value in pixels indicating the offset from position.
-     */
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-    }
-
-    /**
-     * This method will be invoked when a new page becomes selected. Animation is not
-     * necessarily complete.
-     *
-     * @param position Position index of the new selected page.
-     */
-    @Override
-    public void onPageSelected(int position) {
-        switch (position) {
-            case AppConstants.NO_REACTION_CONSTANT:
-                ivWelcomeFirst.setImageResource(R.drawable.ic_circle_red);
-                ivWelcomeSecond.setImageResource(R.drawable.ic_circle_w);
-                ivWelcomeThird.setImageResource(R.drawable.ic_circle_w);
-                fbWelcomeFooter.setVisibility(View.GONE);
-                break;
-            case AppConstants.ONE_CONSTANT:
-                ivWelcomeSecond.setImageResource(R.drawable.ic_circle_red);
-                ivWelcomeFirst.setImageResource(R.drawable.ic_circle_w);
-                ivWelcomeThird.setImageResource(R.drawable.ic_circle_w);
-                fbWelcomeFooter.setVisibility(View.GONE);
-                break;
-            case AppConstants.TWO_CONSTANT:
-                ivWelcomeThird.setImageResource(R.drawable.ic_circle_red);
-                ivWelcomeFirst.setImageResource(R.drawable.ic_circle_w);
-                ivWelcomeSecond.setImageResource(R.drawable.ic_circle_w);
-                fbWelcomeFooter.setVisibility(View.GONE);
-                break;
-        }
-    }
-
-    /**
-     * Called when the scroll state changes. Useful for discovering when the user
-     * begins dragging, when the pager is automatically settling to the current page,
-     * or when it is fully stopped/idle.
-     *
-     * @param state The new scroll state.
-     * @see ViewPager#SCROLL_STATE_IDLE
-     * @see ViewPager#SCROLL_STATE_DRAGGING
-     * @see ViewPager#SCROLL_STATE_SETTLING
-     */
-    @Override
-    public void onPageScrollStateChanged(int state) {
-
     }
 
 
@@ -325,52 +227,26 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
-
-    }
-
-    public DialogFragment showFaceBookError() {
-        FacebookErrorDialog fragment = (FacebookErrorDialog) getFragmentManager().findFragmentByTag(FacebookErrorDialog.class.getName());
-        if (fragment == null) {
-            fragment = new FacebookErrorDialog();
-            Bundle b = new Bundle();
-            b.putInt(AppConstants.FACEBOOK_VERIFICATION, AppConstants.ONE_CONSTANT);
-            fragment.setArguments(b);
-        }
-        if (!fragment.isVisible() && !fragment.isAdded() && !isFinishing() && !mIsDestroyed) {
-            fragment.show(getFragmentManager(), FacebookErrorDialog.class.getName());
-        }
-        return fragment;
     }
 
 
     @Override
     public void getLogInResponse(LoginResponse loginResponse) {
-        switch (loginResponse.getStatus()) {
-            case AppConstants.SUCCESS:
-                if (null != loginResponse && StringUtil.isNotNullOrEmptyString(loginResponse.getToken())) {
-                    loginResponse.setTokenTime(System.currentTimeMillis());
-                    loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
-                    userPreference.set(loginResponse);
-                    openHomeScreen();
-                } else {
-                    userPreference.delete();
-                    LoginManager.getInstance().logOut();
-                    showFaceBookError();
+        if (null != loginResponse) {
+            if (StringUtil.isNotNullOrEmptyString(loginResponse.getStatus())) {
+                switch (loginResponse.getStatus()) {
+                    case AppConstants.SUCCESS:
+                        loginResponse.setTokenTime(System.currentTimeMillis());
+                        loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
+                        mUserPreference.set(loginResponse);
+                        //  ((LoginActivity) getActivity()).onLoginAuthToken();
+                        break;
+                    case AppConstants.FAILED:
+                        LoginManager.getInstance().logOut();
+                        showFaceBookError();
+                        break;
                 }
-                break;
-            case AppConstants.FAILED:
-                userPreference.delete();
-                LoginManager.getInstance().logOut();
-                showFaceBookError();
-              /*  LoginManager.getInstance().logOut();
-                String errorMessage = loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA);
-                if (!StringUtil.isNotNullOrEmptyString(errorMessage)) {
-                    errorMessage = getString(R.string.ID_GENERIC_ERROR);
-                }
-                showNetworkTimeoutDoalog(true, false, errorMessage);*/
-
-
-                break;
+            }
         }
     }
 
@@ -392,7 +268,18 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     @Override
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
-        onShowErrorDialog(errorMsg, feedParticipationEnum);
+        showFaceBookError();
+    }
+
+    public DialogFragment showFaceBookError() {
+        FacebookErrorDialog fragment = (FacebookErrorDialog) getFragmentManager().findFragmentByTag(FacebookErrorDialog.class.getName());
+        if (fragment == null) {
+            fragment = new FacebookErrorDialog();
+        }
+        if (!fragment.isVisible() && !fragment.isAdded() && !isFinishing() && !mIsDestroyed) {
+            fragment.show(getFragmentManager(), FacebookErrorDialog.class.getName());
+        }
+        return fragment;
     }
 
     @Override
@@ -400,17 +287,5 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     }
 
-    private void setCustomAnimation(View viewToAnimate) {
-        Animation animation = AnimationUtils.loadAnimation(this, R.anim.bottom_to_top_slide_anim);
-        viewToAnimate.startAnimation(animation);
-    }
-
-    @Override
-    public void onSuccessResult(String result, FeedDetail feedDetail) {
-        if (result.equalsIgnoreCase(AppConstants.SUCCESS)) {
-            fbWelcomeFooter.setVisibility(View.VISIBLE);
-            setCustomAnimation(fbWelcomeFooter);
-        }
-    }
 }
 

@@ -17,6 +17,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -58,9 +59,9 @@ public class HomeModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-    public Observable<FeedResponsePojo> getMyCommunityFromModel(FeedRequestPojo  feedRequestPojo){
-        LogUtils.info(TAG,"*******************"+new Gson().toJson(feedRequestPojo));
-        return sheroesAppServiceApi.getMyCommunityFromApi(feedRequestPojo)
+    public Observable<FeedResponsePojo> getMyCommunityFromModel(MyCommunityRequest myCommunityRequest){
+        LogUtils.info(TAG,"*******************"+new Gson().toJson(myCommunityRequest));
+        return sheroesAppServiceApi.getMyCommunityFromApi(myCommunityRequest)
                 .map(new Func1<FeedResponsePojo, FeedResponsePojo>() {
                     @Override
                     public FeedResponsePojo call(FeedResponsePojo feedResponsePojo) {

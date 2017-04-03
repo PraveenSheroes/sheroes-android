@@ -128,7 +128,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
             getPermissionToReadUserContacts();
 
         }
-        mLoginPresenter.getMasterDataToPresenter();
+      //  mLoginPresenter.getMasterDataToPresenter();
         fbSignIn();
         return view;
     }
@@ -170,7 +170,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                 }
             } else {
                 if (StringUtil.isNotNullOrEmptyString(loginResponse.getToken()) && null != loginResponse.getUserSummary()) {
-                 /*   if (loginResponse.getUserSummary().isFbVerificationRequired()) {
+                    if (loginResponse.getUserSummary().isFbVerificationRequired()) {
                         mUserPreference.set(loginResponse);
                         setProgressBar(mProgressBar);
                         mLoginActivityIntractionListner.onErrorOccurence(AppConstants.FACEBOOK_VERIFICATION);
@@ -179,12 +179,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                         loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
                         mUserPreference.set(loginResponse);
                         mLoginActivityIntractionListner.onLoginAuthToken();
-                    }*/
-                    loginResponse.setTokenTime(System.currentTimeMillis());
-                    loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
-                    mUserPreference.set(loginResponse);
-                    mLoginActivityIntractionListner.onLoginAuthToken();
-
+                    }
                 } else {
                     LoginManager.getInstance().logOut();
                     mLoginActivityIntractionListner.onErrorOccurence(loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA));

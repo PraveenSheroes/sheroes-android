@@ -49,8 +49,12 @@
 
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.LoginActivity"
-            android:noHistory="true"
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"/>
+        <activity
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.FaceBookOpenActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.ProfessionalWorkExperienceActivity"

@@ -15,7 +15,9 @@ import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import butterknife.Bind;
@@ -35,6 +37,7 @@ public class OnBoardingDailogHeySuccess extends BaseDialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        SheroesApplication.getAppComponent(getActivity()).inject(this);
         View view = inflater.inflate(R.layout.on_boarding_dailog_hey_success, container, false);
         ButterKnife.bind(this, view);
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
@@ -53,6 +56,9 @@ public class OnBoardingDailogHeySuccess extends BaseDialogFragment {
 
     @OnClick(R.id.iv_hey_success_next)
     public void onHeySuccessNext() {
+        LoginResponse loginResponse=userPreference.get();
+        loginResponse.setNextScreen(AppConstants.FEED_SCREEN);
+        userPreference.set(loginResponse);
         Intent homeIntent = new Intent(getActivity(), HomeActivity.class);
         startActivity(homeIntent);
         getActivity().finish();

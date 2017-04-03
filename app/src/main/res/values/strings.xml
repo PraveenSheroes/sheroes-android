@@ -19,7 +19,9 @@
     <string name="ID_ERROR_INVALID_PASSWORD">Enter password</string>
     <string name="ID_POSTED_IN">posted in</string>
     <string name="ID_NEW">NEW</string>
+    <string name="ID_FB_VERIFY_MSG">Please verify account by linking your SHEROES account with your Facebook account.</string>
     <string name="ID_LETS_GET_TO">Let’s get to know each other </string>
+    <string name="ID_FACEBOOK_ERROR">SHEROES is women only platform, Facebook says you are a gentlemen</string>
     <string name="ID_TELL_US_MESSAGE">This will help you connect with other SHEROES and find relevant opportunities</string>
     <!--String related in home page-->
 
@@ -126,6 +128,7 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_COMMUNITES">COMMUNITY</string>
     <string name="ID_PREFERENCES">PREFERENCES</string>
     <string name="ID_ABOUT">ABOUT</string>
+    <string name="ID_VERIFY">Verify your identity </string>
     <string name="ID_HEY">Hey</string>
     <string name="ID_HOW_CAN_SHEROES">How can SHEROES help you? </string>
     <string name="ID_TERMS_AND_CONDITIONS">TERMS AND CONDITIONS</string>
@@ -425,6 +428,7 @@ etur adipiscing elit,sed do eiusmod tempor incididunt ut…</string>
     <string name="ID_WELCOME_TEXT3">Discover things that matter to you Career, Life, Love</string>
     <string name="ID_ALL_OF_YOU">All For You</string>
     <string name="ID_CONTINUE_WITH_FACEBOOK">CONTINUE WITH FACEBOOK</string>
+    <string name="ID_LINK_TO_FACEBOOK">Link to Facebook</string>
     <string name="ID_WELCOME_TEXT4">OTHER LOGIN OPTIONS (ONLY FOR EXISTING USERS)</string>
 
 

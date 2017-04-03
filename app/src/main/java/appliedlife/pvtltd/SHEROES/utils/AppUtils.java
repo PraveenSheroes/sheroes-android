@@ -92,6 +92,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingInterestRequest;
@@ -1724,7 +1725,18 @@ public class AppUtils {
         FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, pageNo);
         return feedRequestPojo;
     }
-
+    public static MyCommunityRequest myCommunityRequestBuilder(String typeOfFeed, int pageNo) {
+        AppUtils appUtils = AppUtils.getInstance();
+        MyCommunityRequest myCommunityRequest = new MyCommunityRequest();
+        myCommunityRequest.setAppVersion(appUtils.getAppVersionName());
+        myCommunityRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        //TODO:: change rquest data
+        myCommunityRequest.setCloudMessagingId(AppConstants.ALL_SEARCH);
+        myCommunityRequest.setPageNo(pageNo);
+        myCommunityRequest.setPageSize(AppConstants.PAGE_SIZE);
+        myCommunityRequest.setSubType(typeOfFeed);
+        return myCommunityRequest;
+    }
     public static FeedRequestPojo articleCategoryRequestBuilder(String typeOfFeed, int pageNo, List<Long> categoryIds) {
         FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, pageNo);
         feedRequestPojo.setCategoryIds(categoryIds);

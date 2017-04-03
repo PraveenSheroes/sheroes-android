@@ -106,6 +106,7 @@
                 android:backgroundTint="@color/search_tab_text"
                 android:drawableLeft="@color/search_tab_text"
                 fb:login_text="@string/ID_CONTINUE_WITH_FACEBOOK"
+                android:visibility="invisible"
                 android:drawablePadding="@dimen/dp_size_15"
                 android:gravity="left|center"
                 android:paddingLeft="@dimen/dp_size_20"

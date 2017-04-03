@@ -38,6 +38,7 @@ public class AppConstants {
     public static final String SHARE_MENU_TYPE = "text/plain";
     public static final String FOR_ALL = "All";
     public static final String FEED_SUB_TYPE = "F";
+    public static final String SEARCH_SUB_TYPE = "S";
     public static final String ALL_DATA_SUB_TYPE = "T";
     public static final String USER_SUB_TYPE = "U";
     public static final String TAG_SUB_TYPE = "tags";
@@ -60,7 +61,7 @@ public class AppConstants {
     public static final String JOB_AT_SKILL_SERVICE_TYPE ="SKILL";
     public static final String INTEREST_TYPE ="INTEREST";
     public static final String INTEREST_SUB_TYPE ="INTEREST_SERVICE";
-    public static final String WORK_EXPERIENCE_SUB_TYPE ="PROFESSIONAL_DETAILS_SERVICE";
+    public static final String WORK_EXPERIENCE_SUB_TYPE ="TOTAL_EXP";
     public static final String WORK_EXPERIENCE_TYPE ="TOTAL_EXP";
     public static final String FEED_COMMUNITY = "C";
     public static final String FEED_JOB = "J";
@@ -79,6 +80,7 @@ public class AppConstants {
     public static final int REQUEST_CODE_FOR_ARTICLE_DETAIL = 1001;
     public static final int REQUEST_CODE_FOR_COMMUNITY_DETAIL = 2001;
     public static final int REQUEST_CODE_FOR_JOB_DETAIL = 3001;
+    public static final int REQUEST_CODE_FOR_FACEBOOK = 4001;
     public static final String JOB_FRAGMENT = "job";
     public static final String PROFILE_FRAGMENT = "profile";
     public static final String FEATURE_FRAGMENT = "feature";

@@ -350,7 +350,7 @@ public enum HolderMapping {
     }, JOB_SEARCH(R.layout.interest_job_search_list_item) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new InterestSearchHolder(view, viewInterface);
+            return new JobSearchHolder(view, viewInterface);
         }
     };
     public Object object;

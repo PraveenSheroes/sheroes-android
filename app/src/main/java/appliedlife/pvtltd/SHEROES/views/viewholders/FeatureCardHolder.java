@@ -128,10 +128,6 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
             tvFeaturedCommunityJoin.setText(mContext.getString(R.string.ID_JOINED));
             tvFeaturedCommunityJoin.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
             tvFeaturedCommunityJoin.setVisibility(View.VISIBLE);
-        } else {
-            tvFeaturedCommunityJoin.setBackgroundResource(R.drawable.rectangle_community_invite);
-            tvFeaturedCommunityJoin.setText(mContext.getString(R.string.ID_INVITE));
-            tvFeaturedCommunityJoin.setTextColor(ContextCompat.getColor(mContext, R.color.white));
         }
         //TODO:: change for UI
         if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {

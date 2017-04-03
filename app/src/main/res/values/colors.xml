@@ -22,6 +22,7 @@
     <color name="blue">#3949ab</color>
     <color name="add_member_line">#e4e9ec</color>
     <color name="shadow">#3b99fc</color>
+    <color name="verify_fb">#2d3340</color>
     <color name="searchbox_text_color">#9b9b9b</color>
     <color name="selected_on_boarding">#eaecf6</color>
 
