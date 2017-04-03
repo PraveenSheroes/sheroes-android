@@ -177,8 +177,7 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new CommunityCardDetailHeader(view, viewInterface);
         }
-    }
-    , NO_COMMUNITIES(R.layout.no_community_holder) {
+    }, NO_COMMUNITIES(R.layout.no_community_holder) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new NoCommunityHolder(view, viewInterface);
@@ -254,12 +253,12 @@ public enum HolderMapping {
             return new ProfileLookingForHolder(view, viewInterface);
         }
     },
-  /*  PROFILE_I_CAN_HELP(R.layout.personal_lookingfor_card) {
-        @Override
-        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new ProfileICanHelpWithHolder(view, viewInterface);
-        }
-    },*/ PROFILE_ABOUTME(R.layout.profile_about_me_card) {
+    /*  PROFILE_I_CAN_HELP(R.layout.personal_lookingfor_card) {
+          @Override
+          public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+              return new ProfileICanHelpWithHolder(view, viewInterface);
+          }
+      },*/ PROFILE_ABOUTME(R.layout.profile_about_me_card) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new ProfileAboutMeHolder(view, viewInterface);
@@ -290,8 +289,7 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new FilterHolder(view, viewInterface);
         }
-    }
-    ,
+    },
     GOODAT(R.layout.ggodat_card) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
@@ -344,13 +342,12 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new GetAllDataBoardingSearchHolder(view, viewInterface);
         }
-    },INTEREST_SEARCH(R.layout.interest_job_search_list_item) {
+    }, INTEREST_SEARCH(R.layout.interest_job_search_list_item) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new InterestSearchHolder(view, viewInterface);
         }
-    }
-    ,JOB_SEARCH(R.layout.interest_job_search_list_item) {
+    }, JOB_SEARCH(R.layout.interest_job_search_list_item) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new InterestSearchHolder(view, viewInterface);
@@ -399,13 +396,12 @@ public enum HolderMapping {
                         default:
 
                     }
-                }else if (item instanceof BoardingInterestJobSearch) {
+                } else if (item instanceof BoardingInterestJobSearch) {
                     return INTEREST_SEARCH.ordinal();
                 }
-            }else if (item instanceof BoardingInterestJobSearch) {
+            } else if (item instanceof BoardingInterestJobSearch) {
                 return JOB_SEARCH.ordinal();
-            }
-            else if (callFromType.equalsIgnoreCase(AppConstants.OWNER_SUB_TYPE)) {
+            } else if (callFromType.equalsIgnoreCase(AppConstants.OWNER_SUB_TYPE)) {
                 returnView = FEED_USER.ordinal();
 
             } else if (callFromType.equalsIgnoreCase(AppConstants.COMMUNITY_NAME_SUB_TYPE)) {
@@ -449,12 +445,9 @@ public enum HolderMapping {
 
                         default:
                     }
-                }
-                else if(item instanceof Docs)
-                {
+                } else if (item instanceof Docs) {
                     returnView = SELECTDILOG.ordinal();
-                }
-                else if (item instanceof DrawerItems) {
+                } else if (item instanceof DrawerItems) {
                     returnView = DRAWER_ITEMS.ordinal();
                 } else if (item instanceof CommentReactionDoc) {
                     CommentReactionDoc commentReactionDoc = ((CommentReactionDoc) item);
@@ -464,7 +457,7 @@ public enum HolderMapping {
                         returnView = COMMENT.ordinal();
                     }
                 } else if (item instanceof HomeSpinnerItem) {
-                                return HOME_SPINNER_ITEMS.ordinal();
+                    return HOME_SPINNER_ITEMS.ordinal();
                 } else if (item instanceof ArticleDetailPojo) {
                     returnView = ARTICLE_DETAIL_HOLDER.ordinal();//TODO: Home related changes
                 } else if (item instanceof ProfileHorList) {
@@ -524,26 +517,21 @@ public enum HolderMapping {
 
                     }
 
-                }
-                else if (item instanceof GoodAt) {
+                } else if (item instanceof GoodAt) {
                     return GOODAT.ordinal();
-                }
-                    else if (item instanceof ListOfInviteSearch) {
+                } else if (item instanceof ListOfInviteSearch) {
                     return INVITE_SEARCH_MODULE.ordinal();
                 } else if (item instanceof Member) {
                     return MEMBER_MODULE.ordinal();
                 } else if (item instanceof OnBoardingData) {
                     return ON_BOARDING_HOLDER.ordinal();
-                }
-                else if (item instanceof PopularTag) {
+                } else if (item instanceof PopularTag) {
                     return POPULAR_TAG_HOLDER.ordinal();
-                }
-                else if (item instanceof LabelValue) {
+                } else if (item instanceof LabelValue) {
                     return CURRENT_STATUS_HOLDER.ordinal();
                 } else if (item instanceof GetAllDataDocument) {
                     return GET_ALL_DATA_BOARDING_SEARCH.ordinal();
-                }
-                else if (item instanceof RequestedList) {
+                } else if (item instanceof RequestedList) {
                     return REQUESTLIST.ordinal();
                 } else if (item instanceof OwnerList) {
                     return OWNERLIST.ordinal();

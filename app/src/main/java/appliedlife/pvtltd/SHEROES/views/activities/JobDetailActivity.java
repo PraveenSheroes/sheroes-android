@@ -8,13 +8,10 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.transition.Slide;
@@ -53,7 +50,7 @@ import butterknife.OnClick;
  * Created by SHEROES-TECH on 20-02-2017.
  */
 
-public class JobDetailActivity extends BaseActivity implements CommentReactionFragment.HomeActivityIntractionListner,JobDetailFragment.JobDetailActivityIntractionListner {
+public class JobDetailActivity extends BaseActivity implements CommentReactionFragment.HomeActivityIntractionListner, JobDetailFragment.JobDetailActivityIntractionListner {
     private final String TAG = LogUtils.makeLogTag(JobDetailActivity.class);
     @Bind(R.id.app_bar_article_detail)
     AppBarLayout mAppBarLayout;
@@ -79,16 +76,7 @@ public class JobDetailActivity extends BaseActivity implements CommentReactionFr
     TextView mTvFeedArticleDetailUserReaction;
     private FragmentOpen mFragmentOpen;
     String mdefaultCoverImage;
-    int mlogoflag=0;
-
-    public static void navigateFromJob(AppCompatActivity activity, View transitionImage, FeedDetail feedDetail) {
-        Intent intent = new Intent(activity, JobDetailActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(AppConstants.JOB_DETAIL, feedDetail);
-        intent.putExtras(bundle);
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, transitionImage, AppConstants.JOB_DETAIL);
-        ActivityCompat.startActivity(activity, intent, options.toBundle());
-    }
+    int mlogoflag = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -103,16 +91,18 @@ public class JobDetailActivity extends BaseActivity implements CommentReactionFr
         }
         setPagerAndLayouts();
     }
+
     @OnClick(R.id.iv_job_detail_back)
     public void onBackClick() {
-
-        if (!mFeedDetail.isFromHome()) {
-            Intent intent = new Intent(this, HomeActivity.class);
-            startActivity(intent);
-        }
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(AppConstants.JOB_FRAGMENT, mFeedDetail);
+        intent.putExtras(bundle);
+        setResult(RESULT_OK, intent);
         finish();
         overridePendingTransition(R.anim.fade_in_dialog, R.anim.fade_out_dialog);
     }
+
     private void setPagerAndLayouts() {
         ViewCompat.setTransitionName(mAppBarLayout, AppConstants.JOB_DETAIL);
         supportPostponeEnterTransition();
@@ -120,11 +110,9 @@ public class JobDetailActivity extends BaseActivity implements CommentReactionFr
         mCustomCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
         mCustomCollapsingToolbarLayout.setExpandedTitleMarginStart(200);
         if (null != mFeedDetail) {
-            if(mFeedDetail.isBookmarked()) {
+            if (mFeedDetail.isBookmarked()) {
                 mTvJobDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_active, 0, 0, 0);
-            }
-            else
-            {
+            } else {
                 mTvJobDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_in_active, 0, 0, 0);
             }
             mCustomCollapsingToolbarLayout.setTitle(mFeedDetail.getNameOrTitle());
@@ -134,9 +122,8 @@ public class JobDetailActivity extends BaseActivity implements CommentReactionFr
             mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
             mViewPagerAdapter.addFragment(JobDetailFragment.createInstance(mFeedDetail), getString(R.string.ID_FEATURED));
             mViewPagerJobDetail.setAdapter(mViewPagerAdapter);
-            if(StringUtil.isNotNullOrEmptyString(mFeedDetail.getAuthorImageUrl()))
-            {
-                mlogoflag=1;
+            if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getAuthorImageUrl())) {
+                mlogoflag = 1;
                 Glide.with(this)
                         .load(mFeedDetail.getAuthorImageUrl()).asBitmap()
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE)
@@ -153,7 +140,7 @@ public class JobDetailActivity extends BaseActivity implements CommentReactionFr
                             }
                         });
             }
-            if(StringUtil.isNotNullOrEmptyString(mFeedDetail.getImageUrl())) {
+            if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getImageUrl())) {
 
                 Glide.with(this)
                         .load(mFeedDetail.getImageUrl()).asBitmap()
@@ -171,28 +158,27 @@ public class JobDetailActivity extends BaseActivity implements CommentReactionFr
                             }
                         });
 
-            }
-            else
-            {
+            } else {
                 ivJobDetail.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.job_default_cover));
                 mTv_job_title.setText(mFeedDetail.getNameOrTitle());
-                if(mlogoflag==0)
-                mIv_job_comp_logo.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.appicon));
+                if (mlogoflag == 0)
+                    mIv_job_comp_logo.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.appicon));
                 supportStartPostponedEnterTransition();
             }
         }
     }
-    public static Bitmap drawableToBitmap (Drawable drawable) {
+
+    public static Bitmap drawableToBitmap(Drawable drawable) {
         Bitmap bitmap = null;
 
         if (drawable instanceof BitmapDrawable) {
             BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
-            if(bitmapDrawable.getBitmap() != null) {
+            if (bitmapDrawable.getBitmap() != null) {
                 return bitmapDrawable.getBitmap();
             }
         }
 
-        if(drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
+        if (drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
             bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
         } else {
             bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
@@ -203,6 +189,7 @@ public class JobDetailActivity extends BaseActivity implements CommentReactionFr
         drawable.draw(canvas);
         return bitmap;
     }
+
     private void initActivityTransitions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Slide transition = new Slide();
@@ -301,7 +288,6 @@ public class JobDetailActivity extends BaseActivity implements CommentReactionFr
     }
 
 
-
     @Override
     public void onClickReactionList(FragmentOpen isFragmentOpen, FeedDetail feedDetail) {
         mFragmentOpen = isFragmentOpen;
@@ -316,7 +302,6 @@ public class JobDetailActivity extends BaseActivity implements CommentReactionFr
     }
 
 
-
     @Override
     public void onBackPressed() {
         if (mFragmentOpen.isCommentList()) {
@@ -327,20 +312,23 @@ public class JobDetailActivity extends BaseActivity implements CommentReactionFr
             mFragmentOpen.setReactionList(false);
             mFragmentOpen.setCommentList(true);
         } else {
-            finish();
+           onBackClick();
         }
     }
+
     @OnClick(R.id.tv_job_detail_bookmark)
     public void onBookMarkClick() {
         mFeedDetail.setItemPosition(0);
         bookmarkCall();
     }
+
     private void bookmarkCall() {
         Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPagerJobDetail, 0);
         if (AppUtils.isFragmentUIActive(fragment)) {
             ((JobDetailFragment) fragment).bookMarkForDetailCard(mFeedDetail);
         }
     }
+
     @Override
     public void onJobBookmarkClick(FeedDetail feedDetail) {
         if (!feedDetail.isBookmarked()) {
@@ -350,6 +338,6 @@ public class JobDetailActivity extends BaseActivity implements CommentReactionFr
             feedDetail.setBookmarked(false);
             mTvJobDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_in_active, 0, 0, 0);
         }
-        mFeedDetail=feedDetail;
+        mFeedDetail = feedDetail;
     }
 }

@@ -35,6 +35,12 @@ import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingInterestRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingJobAtRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingLookingForHowCanRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingTellUsRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingWorkExpRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.GetInterestJobResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
@@ -166,6 +172,16 @@ public interface SheroesAppServiceApi {
     Observable<GetAllData> getOnBoardingSearchFromApi(@Body GetAllDataRequest getAllDataRequest);
     @POST("entity/master/get_data")
     Observable<GetInterestJobResponse> getInterestJobSearchFromApi(@Body GetAllDataRequest getAllDataRequest);
+    @POST("participant/user/add_or_edit")
+    Observable<BoardingDataResponse> getCurrentStatusFromApi(@Body BoardingTellUsRequest boardingTellUsRequest);
+    @POST("participant/user/add_or_edit")
+    Observable<BoardingDataResponse> getLookingForHowCanFromApi(@Body BoardingLookingForHowCanRequest boardingLookingForHowCanRequest);
+    @POST("participant/user/add_or_edit")
+    Observable<BoardingDataResponse> getJobAtFromApi(@Body BoardingJobAtRequest boardingJobAtRequest);
+    @POST("participant/user/add_or_edit")
+    Observable<BoardingDataResponse> getWorkExpFromApi(@Body BoardingWorkExpRequest boardingJobAtRequest);
+    @POST("participant/user/add_or_edit")
+    Observable<BoardingDataResponse> getInterestFromApi(@Body BoardingInterestRequest boardingInterestRequest);
 
     @POST("participant/settings/change_user_preference")
     Observable<SettingChangeUserPreferenseResponse>getUserChangePreferenceAuthToken(@Body SettingChangeUserPreferenceRequest settingChangeUserPreferenceRequest);

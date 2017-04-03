@@ -46,11 +46,22 @@ public class AppConstants {
     public static final String COMMUNITY_NAME_SUB_TYPE = "CN";
     public static final String FEED_SCREEN = "feed";
     public static final String CURRENT_STATUS_SCREEN = "current_status";
+    public static final String SOURCE_NAME = "Android";
+
     public static final String HOW_CAN_SHEROES_AKA_LOOKING_FOR_SCREEN = "looking_for";
     public static final String GOOD_AT_SCREEN = "good_at";
     public static final String TOTAL_WORK_EXPERIENCE_SCREEN = "total_exp";
     public static final String INTEREST_SCREEN = "interest";
-
+    public static final String CURRENT_STATUS_TYPE ="BASIC_PROFILE";
+    public static final String CURRENT_STATUS ="BASIC_USER_PROFILE_SERVICE";
+    public static final String LOOKING_FOR_HOW_CAN ="OPPORTUNITY_SERVICE";
+    public static final String LOOKING_FOR_HOW_CAN_TYPE ="OPPORTUNITY";
+    public static final String JOB_AT_SKILL_SERVICE ="SKILL_SERVICE";
+    public static final String JOB_AT_SKILL_SERVICE_TYPE ="SKILL";
+    public static final String INTEREST_TYPE ="INTEREST";
+    public static final String INTEREST_SUB_TYPE ="INTEREST_SERVICE";
+    public static final String WORK_EXPERIENCE_SUB_TYPE ="PROFESSIONAL_DETAILS_SERVICE";
+    public static final String WORK_EXPERIENCE_TYPE ="TOTAL_EXP";
     public static final String FEED_COMMUNITY = "C";
     public static final String FEED_JOB = "J";
     public static final String FEED_ARTICLE = "A";
@@ -67,6 +78,7 @@ public class AppConstants {
     public static final String FEED_RESPONSE_CALL_BACK = "feed_response";
     public static final int REQUEST_CODE_FOR_ARTICLE_DETAIL = 1001;
     public static final int REQUEST_CODE_FOR_COMMUNITY_DETAIL = 2001;
+    public static final int REQUEST_CODE_FOR_JOB_DETAIL = 3001;
     public static final String JOB_FRAGMENT = "job";
     public static final String PROFILE_FRAGMENT = "profile";
     public static final String FEATURE_FRAGMENT = "feature";
@@ -79,6 +91,7 @@ public class AppConstants {
     public static final String COMMUNITIES_DETAIL = "community_detail";
     public static final String BOARDING_SEARCH = "boarding_Search";
     public static final String ALL_SEARCH = "search";
+    public static final String MONTH_YEAR_PICKER_DIALOG = "MonthYearPickerDialog";
     public static final String NETWORK_TIMEOUT = "network_timout";
     public static final String SHARE = "Share";
     public static final int WORD_COUNT = 106;
@@ -100,6 +113,7 @@ public class AppConstants {
     public static final String PIPE = "|";
     public static final String SUCCESS = "SUCCESS";
     public static final String MARK_AS_SPAM = "Mark as spam successfully";
+    public static final String FACEBOOK_VERIFICATION = "Your account is not facebook verified please click below continue with facebook";
     public static final String FAILED = "FAILED";
     public static final long SAVED_DAYS_TIME = 86400000;
     public static final int ONE_CONSTANT = 1;

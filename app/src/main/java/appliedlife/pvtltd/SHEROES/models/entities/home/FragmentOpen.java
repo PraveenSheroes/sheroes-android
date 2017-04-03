@@ -25,6 +25,13 @@ public class FragmentOpen implements Parcelable {
     boolean isOpenImageViewer;
     List<HomeSpinnerItem> homeSpinnerItemList;
     boolean isOwner;
+
+
+    boolean isTellUsOpen;
+    boolean isLookingForHowCanOpen;
+    boolean isJobAtOpen;
+    boolean isInterestOpen;
+    boolean isWorkingExpOpen;
     public FragmentOpen() {
     }
 
@@ -192,4 +199,44 @@ public class FragmentOpen implements Parcelable {
             return new FragmentOpen[size];
         }
     };
+
+    public boolean isTellUsOpen() {
+        return isTellUsOpen;
+    }
+
+    public void setTellUsOpen(boolean tellUsOpen) {
+        isTellUsOpen = tellUsOpen;
+    }
+
+    public boolean isLookingForHowCanOpen() {
+        return isLookingForHowCanOpen;
+    }
+
+    public void setLookingForHowCanOpen(boolean lookingForHowCanOpen) {
+        isLookingForHowCanOpen = lookingForHowCanOpen;
+    }
+
+    public boolean isJobAtOpen() {
+        return isJobAtOpen;
+    }
+
+    public void setJobAtOpen(boolean jobAtOpen) {
+        isJobAtOpen = jobAtOpen;
+    }
+
+    public boolean isInterestOpen() {
+        return isInterestOpen;
+    }
+
+    public void setInterestOpen(boolean interestOpen) {
+        isInterestOpen = interestOpen;
+    }
+
+    public boolean isWorkingExpOpen() {
+        return isWorkingExpOpen;
+    }
+
+    public void setWorkingExpOpen(boolean workingExpOpen) {
+        isWorkingExpOpen = workingExpOpen;
+    }
 }

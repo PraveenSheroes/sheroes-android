@@ -14,6 +14,7 @@
         android:layout_weight="1"
         android:layout_gravity="start|center_vertical"
         android:ellipsize="marquee"
+        android:layout_marginLeft="@dimen/dp_size_40"
         android:lines="@integer/int_value_for_line_1"
         android:textAllCaps="true"
         android:gravity="center_vertical"
@@ -25,7 +26,5 @@
         android:id="@+id/checkbox_spinner"
         android:layout_width="@dimen/dp_size_45"
         android:layout_height="@dimen/dp_size_45"
-        android:enabled="false"
-        style="@style/CheckBoxStyle"
-        android:padding="@dimen/dp_size_25"/>
+        style="@style/CheckBoxStyle"/>
 </LinearLayout>

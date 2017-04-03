@@ -88,11 +88,18 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingInterestRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingJobAtRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingLookingForHowCanRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingTellUsRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingWorkExpRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 
@@ -1632,11 +1639,78 @@ public class AppUtils {
     public static LoginRequest loginRequestBuilder() {
         LoginRequest loginRequest = new LoginRequest();
         AppUtils appUtils = AppUtils.getInstance();
+        //TODO:: check real data
         loginRequest.setAdvertisementid("string");
         loginRequest.setDeviceid(appUtils.getDeviceId());
         loginRequest.setDevicetype(appUtils.getDeviceModel());
         loginRequest.setGcmorapnsid("string");
         return loginRequest;
+    }
+
+    public static BoardingTellUsRequest boardingTellUsFormDataRequestBuilder(String typeOfBoardingData, String type, LabelValue labelValue, GetAllDataDocument getAllDataDocument) {
+        BoardingTellUsRequest boardingTellUsRequest = new BoardingTellUsRequest();
+        AppUtils appUtils = AppUtils.getInstance();
+        //TODO:: check real data
+        boardingTellUsRequest.setAppVersion(appUtils.getAppVersionName());
+        boardingTellUsRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        boardingTellUsRequest.setSource(AppConstants.SOURCE_NAME);
+        boardingTellUsRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+        boardingTellUsRequest.setSubtype(typeOfBoardingData);
+        boardingTellUsRequest.setType(type);
+        boardingTellUsRequest.setJobTagId(labelValue.getValue());
+        boardingTellUsRequest.setJobTag(labelValue.getLabel());
+        boardingTellUsRequest.setCityMasterId(Long.parseLong(getAllDataDocument.getId()));
+        boardingTellUsRequest.setCityMaster(getAllDataDocument.getTitle());
+        return boardingTellUsRequest;
+    }
+    public static BoardingLookingForHowCanRequest boardingLookingHowCanFormDataRequestBuilder(Set<Long> opportunityids) {
+        BoardingLookingForHowCanRequest boardingLookingForHowCanRequest = new BoardingLookingForHowCanRequest();
+        AppUtils appUtils = AppUtils.getInstance();
+        //TODO:: check real data
+        boardingLookingForHowCanRequest.setAppVersion(appUtils.getAppVersionName());
+        boardingLookingForHowCanRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        boardingLookingForHowCanRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+        boardingLookingForHowCanRequest.setOpportunityIds(opportunityids);
+        boardingLookingForHowCanRequest.setSubtype(AppConstants.LOOKING_FOR_HOW_CAN);
+        boardingLookingForHowCanRequest.setType(AppConstants.LOOKING_FOR_HOW_CAN_TYPE);
+        return boardingLookingForHowCanRequest;
+    }
+    public static BoardingJobAtRequest boardingJobAtRequestBuilder(Set<Long> skillIds) {
+        BoardingJobAtRequest boardingJobAtRequest = new BoardingJobAtRequest();
+        AppUtils appUtils = AppUtils.getInstance();
+        //TODO:: check real data
+        boardingJobAtRequest.setAppVersion(appUtils.getAppVersionName());
+        boardingJobAtRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        boardingJobAtRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+        boardingJobAtRequest.setSkillIds(skillIds);
+        boardingJobAtRequest.setSubtype(AppConstants.JOB_AT_SKILL_SERVICE);
+        boardingJobAtRequest.setType(AppConstants.JOB_AT_SKILL_SERVICE_TYPE);
+        return boardingJobAtRequest;
+    }
+    public static BoardingWorkExpRequest boardingWorkExpRequestBuilder(int totalExpYear, int totalExpMonth) {
+        BoardingWorkExpRequest boardingWorkExpRequest = new BoardingWorkExpRequest();
+        AppUtils appUtils = AppUtils.getInstance();
+        //TODO:: check real data
+        boardingWorkExpRequest.setAppVersion(appUtils.getAppVersionName());
+        boardingWorkExpRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        boardingWorkExpRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+        boardingWorkExpRequest.setTotalExpYear(totalExpYear);
+        boardingWorkExpRequest.setTotalExpMonth(totalExpMonth);
+        boardingWorkExpRequest.setType(AppConstants.WORK_EXPERIENCE_TYPE);
+        boardingWorkExpRequest.setSubtype(AppConstants.WORK_EXPERIENCE_SUB_TYPE);
+        return boardingWorkExpRequest;
+    }
+    public static BoardingInterestRequest boardingInterestRequestBuilder(Set<Long> interestId) {
+        BoardingInterestRequest boardingInterestRequest = new BoardingInterestRequest();
+        AppUtils appUtils = AppUtils.getInstance();
+        //TODO:: check real data
+        boardingInterestRequest.setAppVersion(appUtils.getAppVersionName());
+        boardingInterestRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        boardingInterestRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+        boardingInterestRequest.setInterestIds(interestId);
+        boardingInterestRequest.setSubtype(AppConstants.INTEREST_SUB_TYPE);
+        boardingInterestRequest.setType(AppConstants.INTEREST_TYPE);
+        return boardingInterestRequest;
     }
     public static FeedRequestPojo userCommunityPostRequestBuilder(String typeOfFeed, int pageNo, long communityId) {
         FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, pageNo);
@@ -1711,7 +1785,7 @@ public class AppUtils {
         getAllDataRequest.setQ(queryName);
         getAllDataRequest.setMasterDataType(masterDataTypeSkill);
         //TODO:: change rquest data
-        getAllDataRequest.setSource(AppConstants.BOARDING_SEARCH);
+        getAllDataRequest.setSource(AppConstants.SOURCE_NAME);
         return getAllDataRequest;
     }
     /**
@@ -1741,7 +1815,7 @@ public class AppUtils {
         getAllDataRequest.setMasterDataType(typeOfData);
         getAllDataRequest.setQ(queryName);
         getAllDataRequest.setScreenName(screenName);
-        getAllDataRequest.setSource("string");
+        getAllDataRequest.setSource(AppConstants.SOURCE_NAME);
         getAllDataRequest.setLastScreenName("string");
         return getAllDataRequest;
     }

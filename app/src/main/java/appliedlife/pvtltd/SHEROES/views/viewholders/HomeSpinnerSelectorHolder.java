@@ -55,6 +55,14 @@ public class HomeSpinnerSelectorHolder extends BaseViewHolder<HomeSpinnerItem> {
 
     @OnClick(R.id.li_article_spinner_iten)
     public void checkBoxClick() {
+        setCheckData();
+    }
+    @OnClick(R.id.checkbox_spinner)
+    public void onCheckClick() {
+        setCheckData();
+    }
+    private void setCheckData()
+    {
         dataItem.setChecked(!cbSpinner.isChecked());
         cbSpinner.setChecked(!cbSpinner.isChecked());
         if(cbSpinner.isChecked()) {
@@ -66,8 +74,6 @@ public class HomeSpinnerSelectorHolder extends BaseViewHolder<HomeSpinnerItem> {
         }
         viewInterface.setListData(dataItem, cbSpinner.isChecked());
     }
-
-
     @Override
     public void onClick(View view) {
 

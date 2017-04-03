@@ -10,6 +10,12 @@ import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
 import appliedlife.pvtltd.SHEROES.models.OnBoardingModel;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllData;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingInterestRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingJobAtRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingLookingForHowCanRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingTellUsRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingWorkExpRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.GetInterestJobResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -101,6 +107,138 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
             public void onNext(GetInterestJobResponse getInterestJobResponse) {
                 getMvpView().stopProgressBar();
                 getMvpView().getIntersetJobResponse(getInterestJobResponse);
+            }
+        });
+        registerSubscription(subscription);
+    }
+
+    public void getCurrentDataStatusToPresenter(BoardingTellUsRequest getAllDataRequest) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_ON_ONBOARDING);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = onBoardingModel.getCurrentStatusFromModel(getAllDataRequest).subscribe(new Subscriber<BoardingDataResponse>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                getMvpView().stopProgressBar();
+                getMvpView().showError(e.getMessage(), ERROR_ON_ONBOARDING);
+            }
+
+            @Override
+            public void onNext(BoardingDataResponse boardingDataResponse) {
+                getMvpView().stopProgressBar();
+                getMvpView().getBoardingJobResponse(boardingDataResponse);
+            }
+        });
+        registerSubscription(subscription);
+    }
+    public void getLookingForHowCanToPresenter(BoardingLookingForHowCanRequest boardingLookingForHowCanRequest) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_ON_ONBOARDING);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = onBoardingModel.getLookingForHowCanFromModel(boardingLookingForHowCanRequest).subscribe(new Subscriber<BoardingDataResponse>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                getMvpView().stopProgressBar();
+                getMvpView().showError(e.getMessage(), ERROR_ON_ONBOARDING);
+            }
+
+            @Override
+            public void onNext(BoardingDataResponse boardingDataResponse) {
+                getMvpView().stopProgressBar();
+                getMvpView().getBoardingJobResponse(boardingDataResponse);
+            }
+        });
+        registerSubscription(subscription);
+    }
+
+    public void getJobAtToPresenter(BoardingJobAtRequest boardingJobAtRequest) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_ON_ONBOARDING);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = onBoardingModel.getJobAtFromModel(boardingJobAtRequest).subscribe(new Subscriber<BoardingDataResponse>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                getMvpView().stopProgressBar();
+                getMvpView().showError(e.getMessage(), ERROR_ON_ONBOARDING);
+            }
+
+            @Override
+            public void onNext(BoardingDataResponse boardingDataResponse) {
+                getMvpView().stopProgressBar();
+                getMvpView().getBoardingJobResponse(boardingDataResponse);
+            }
+        });
+        registerSubscription(subscription);
+    }
+    public void getWorkExpToPresenter(BoardingWorkExpRequest boardingWorkExpRequest) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_ON_ONBOARDING);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = onBoardingModel.getWorkExpFromModel(boardingWorkExpRequest).subscribe(new Subscriber<BoardingDataResponse>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                getMvpView().stopProgressBar();
+                getMvpView().showError(e.getMessage(), ERROR_ON_ONBOARDING);
+            }
+
+            @Override
+            public void onNext(BoardingDataResponse boardingDataResponse) {
+                getMvpView().stopProgressBar();
+                getMvpView().getBoardingJobResponse(boardingDataResponse);
+            }
+        });
+        registerSubscription(subscription);
+    }
+    public void getInterestToPresenter(BoardingInterestRequest boardingInterestRequest) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_ON_ONBOARDING);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = onBoardingModel.getInterestFromModel(boardingInterestRequest).subscribe(new Subscriber<BoardingDataResponse>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                getMvpView().stopProgressBar();
+                getMvpView().showError(e.getMessage(), ERROR_ON_ONBOARDING);
+            }
+
+            @Override
+            public void onNext(BoardingDataResponse boardingDataResponse) {
+                getMvpView().stopProgressBar();
+                getMvpView().getBoardingJobResponse(boardingDataResponse);
             }
         });
         registerSubscription(subscription);

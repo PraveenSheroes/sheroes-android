@@ -17,9 +17,10 @@ public class OnBoardingData extends BaseResponse {
     private String id;
     @SerializedName("name")
     @Expose
-    private String name;
+    private String category;
     private String fragmentName;
     private List<LabelValue> boardingDataList;
+
 
     public String getId() {
         return id;
@@ -29,20 +30,12 @@ public class OnBoardingData extends BaseResponse {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getCategory() {
+        return category;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<LabelValue> getBoardingDataList() {
-        return boardingDataList;
-    }
-
-    public void setBoardingDataList(List<LabelValue> boardingDataList) {
-        this.boardingDataList = boardingDataList;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public String getFragmentName() {
@@ -51,5 +44,13 @@ public class OnBoardingData extends BaseResponse {
 
     public void setFragmentName(String fragmentName) {
         this.fragmentName = fragmentName;
+    }
+
+    public List<LabelValue> getBoardingDataList() {
+        return boardingDataList;
+    }
+
+    public void setBoardingDataList(List<LabelValue> boardingDataList) {
+        this.boardingDataList = boardingDataList;
     }
 }

@@ -325,7 +325,10 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
                 break;
             case R.id.li_feed_job_card:
-                JobDetailActivity.navigateFromJob(this, view, mFeedDetail);
+                Intent intentJob = new Intent(this, JobDetailActivity.class);
+                intentJob.putExtra(AppConstants.JOB_DETAIL, mFeedDetail);
+                startActivityForResult(intentJob, AppConstants.REQUEST_CODE_FOR_JOB_DETAIL);
+                overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
                 break;
             case R.id.li_article_cover_image:
                 Intent intentArticle = new Intent(this, ArticleDetailActivity.class);
@@ -334,7 +337,6 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
                 break;
             case R.id.li_community_images:
-                // CommunitiesDetailActivity.navigate(this, view, mFeedDetail);
                 Intent intentMyCommunity = new Intent(this, CommunitiesDetailActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
@@ -431,7 +433,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
         final TextView tvShare = (TextView) popupView.findViewById(R.id.tv_article_menu_share);
         final TextView tvReport = (TextView) popupView.findViewById(R.id.tv_article_menu_report);
         final Fragment fragmentCommentReaction = getSupportFragmentManager().findFragmentByTag(CommentReactionFragment.class.getName());
-        popupWindow.showAsDropDown(view, -210, 0);
+        popupWindow.showAsDropDown(view, -150,-10);
         tvEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

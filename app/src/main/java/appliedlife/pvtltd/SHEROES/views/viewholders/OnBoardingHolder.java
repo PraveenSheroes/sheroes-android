@@ -59,8 +59,8 @@ public class OnBoardingHolder extends BaseViewHolder<OnBoardingData> {
     public void renderOnBoardingView() {
         int mSeatHeight = 100;//(int) mContext.getResources().getDimension(R.dimen.dp_size_48);
         int mSeatWidth = (int) mContext.getResources().getDimension(R.dimen.dp_size_48);
-        if (StringUtil.isNotEmptyCollection(dataItem.getBoardingDataList()) && StringUtil.isNotNullOrEmptyString(dataItem.getName())) {
-            tvTagHeader.setText(dataItem.getName());
+        if (StringUtil.isNotEmptyCollection(dataItem.getBoardingDataList()) && StringUtil.isNotNullOrEmptyString(dataItem.getCategory())) {
+            tvTagHeader.setText(dataItem.getCategory());
             int row = 0;
             for (int index = 0; index <= row; index++) {
                 first = second = third = fourth = 0;
@@ -153,7 +153,6 @@ public class OnBoardingHolder extends BaseViewHolder<OnBoardingData> {
         mTvTagData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dataItem.setName(TAG);
                 viewInterface.handleOnClick(dataItem, mTvTagData);
             }
         });

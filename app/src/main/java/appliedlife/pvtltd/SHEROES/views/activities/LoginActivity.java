@@ -38,7 +38,7 @@ public class LoginActivity extends BaseActivity implements LoginFragment.LoginAc
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getToken())) {
-          /*  if (userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.FEED_SCREEN)) {
+            if (userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.FEED_SCREEN)) {
                 Intent homeIntent = new Intent(this, HomeActivity.class);
                 startActivity(homeIntent);
                 finish();
@@ -46,10 +46,7 @@ public class LoginActivity extends BaseActivity implements LoginFragment.LoginAc
                 Intent homeIntent = new Intent(this, OnBoardingActivity.class);
                 startActivity(homeIntent);
                 finish();
-            }*/
-            Intent homeIntent = new Intent(this, HomeActivity.class);
-            startActivity(homeIntent);
-            finish();
+            }
         } else {
             renderLoginFragmentView();
         }
@@ -72,7 +69,7 @@ public class LoginActivity extends BaseActivity implements LoginFragment.LoginAc
 
     @Override
     public void onLoginAuthToken() {
-        Intent homeIntent = new Intent(this, HomeActivity.class);
+        Intent homeIntent = new Intent(this, OnBoardingActivity.class);
         homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(homeIntent);
         finish();

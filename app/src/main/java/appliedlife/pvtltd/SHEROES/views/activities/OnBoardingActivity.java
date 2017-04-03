@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.app.DialogFragment;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -27,6 +28,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.enums.OnBoardingEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
@@ -52,7 +54,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
-public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUsAboutFragment.OnBoardingActivityIntractionListner, OnBoardingWorkExperienceFragment.OnBoardingWorkExpActivityIntractionListner {
+public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUsAboutFragment.OnBoardingActivityIntractionListner {
     private final String TAG = LogUtils.makeLogTag(OnBoardingActivity.class);
     @Bind(R.id.fl_onboarding_fragment)
     FrameLayout mFlOnBoardingFragment;
@@ -75,7 +77,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
     @Bind(R.id.tv_interest_strip_for_add_item)
     public LinearLayout mLiInterestStripForAddItem;
     @Bind(R.id.iv_how_can_help_next)
-    ImageView mIvHowCanSheroesNext;
+    public ImageView mIvHowCanSheroesNext;
     @Bind(R.id.iv_job_at_next)
     ImageView mIvJobAtNext;
     @Bind(R.id.iv_interest_next)
@@ -94,7 +96,6 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
     OnBoardingDailogHeySuccess onBoardingDailogHeySuccess;
     @Inject
     Preference<LoginResponse> userPreference;
-    ArrayList<String> allOnBoardingData = new ArrayList<>();
     View mView;
 
     @Override
@@ -114,7 +115,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
         mCustomCollapsingToolbarLayout.setExpandedTitleMarginStart(200);
         // mCustomCollapsingToolbarLayout.setTitle(mFeedDetail.getNameOrTitle());
         //  mCustomCollapsingToolbarLayout.setSubtitle(mFeedDetail.getAuthorName());
-       /* if (null != userPreference && userPreference.isSet() && null != userPreference.get()) {
+        if (null != userPreference && userPreference.isSet() && null != userPreference.get()) {
             if (userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.CURRENT_STATUS_SCREEN)) {
                 tellUsAboutFragment();
             } else if (userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.HOW_CAN_SHEROES_AKA_LOOKING_FOR_SCREEN)) {
@@ -135,12 +136,13 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
                 mJobAt.setVisibility(View.GONE);
                 setOnWorkExperienceFragment();
             } else {
-                tellUsAboutFragment();
+                Intent homeIntent = new Intent(this, HomeActivity.class);
+                startActivity(homeIntent);
+                finish();
             }
         } else {
             tellUsAboutFragment();
-        }*/
-        tellUsAboutFragment();
+        }
     }
 
     private void tellUsAboutFragment() {
@@ -267,59 +269,62 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
     }
 
     @Override
-    public void onCollectUserData(ArrayList<String> stringArrayList) {
-        allOnBoardingData = stringArrayList;
-    }
-
-    @Override
-    public void onSheroesHelpYouFragmentOpen(HashMap<String, HashMap<String, ArrayList<LabelValue>>> masterDataResult, int callFor) {
-        switch (callFor) {
-            case AppConstants.ONE_CONSTANT:
+    public void onSheroesHelpYouFragmentOpen(HashMap<String, HashMap<String, ArrayList<LabelValue>>> masterDataResult, OnBoardingEnum onBoardingEnum) {
+        switch (onBoardingEnum) {
+            case TELL_US_ABOUT:
                 mMasterDataResult = masterDataResult;
                 mHowCanSheroes.setVisibility(View.VISIBLE);
                 mInterest.setVisibility(View.GONE);
                 mJobAt.setVisibility(View.GONE);
                 setHowSheroesHelpFragment();
                 break;
-            case AppConstants.TWO_CONSTANT:
+            case CURRENT_STATUS:
                 showCurrentStatusDialog(masterDataResult);
                 break;
-            case AppConstants.THREE_CONSTANT:
+            case LOCATION:
                 mHowCanSheroes.setVisibility(View.GONE);
                 mInterest.setVisibility(View.GONE);
                 mJobAt.setVisibility(View.GONE);
                 searchDataInBoarding(AppConstants.LOCATION_CITY_GET_ALL_DATA_KEY, OnBoardingEnum.LOCATION);
             default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + callFor);
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + onBoardingEnum);
         }
     }
 
     @Override
     public void onBackPressed() {
-        if (mFragmentOpen.isOpen()) {
-            mFragmentOpen.setOpen(false);
-            mHowCanSheroes.setVisibility(View.VISIBLE);
-        } else if (mFragmentOpen.isFeedOpen()) {
-            mFragmentOpen.setFeedOpen(false);
+        if (mFragmentOpen.isLookingForHowCanOpen()) {
+            mFragmentOpen.setLookingForHowCanOpen(false);
+            mFlOnBoardingFragment.setVisibility(View.VISIBLE);
+            mHowCanSheroes.setVisibility(View.GONE);
+        } else if (mFragmentOpen.isInterestOpen()) {
+            mFragmentOpen.setInterestOpen(false);
             mHowCanSheroes.setVisibility(View.VISIBLE);
             mInterest.setVisibility(View.GONE);
-        } else if (mFragmentOpen.isJobFragment()) {
-            mFragmentOpen.setJobFragment(false);
+            getSupportFragmentManager().popBackStack();
+        } else if (mFragmentOpen.isJobAtOpen()) {
+            mFragmentOpen.setJobAtOpen(false);
+            mFragmentOpen.setLookingForHowCanOpen(true);
             mHowCanSheroes.setVisibility(View.VISIBLE);
             mJobAt.setVisibility(View.GONE);
-
-        } else if (mFragmentOpen.isOpenImageViewer()) {
-            mFragmentOpen.setOpenImageViewer(false);
-            mFragmentOpen.setJobFragment(true);
+            getSupportFragmentManager().popBackStack();
+        } else if (mFragmentOpen.isWorkingExpOpen()) {
+            mFragmentOpen.setWorkingExpOpen(false);
+            mFragmentOpen.setJobAtOpen(true);
             mJobAt.setVisibility(View.VISIBLE);
-            getSupportFragmentManager().popBackStackImmediate();
+            getSupportFragmentManager().popBackStack();
         } else {
             finish();
         }
+
+        mSelectedTag.clear();
+        mLiStripForAddItem.removeAllViews();
+        mLiStripForAddItem.removeAllViewsInLayout();
+        renderSelectedAddedItem(mLiStripForAddItem, mSelectedTag);
     }
 
     private void setHowSheroesHelpFragment() {
-        mFragmentOpen.setOpen(true);
+        mFragmentOpen.setLookingForHowCanOpen(true);
         mFlOnBoardingFragment.setVisibility(View.GONE);
         OnBoardingHowCanSheroesHelpYouFragment onBoardingHowCanSheroesHelpYouFragment = new OnBoardingHowCanSheroesHelpYouFragment();
         Bundle bundle = new Bundle();
@@ -329,7 +334,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
     }
 
     private void setOnBoardingInterestFragment() {
-        mFragmentOpen.setFeedOpen(true);
+        mFragmentOpen.setInterestOpen(true);
         mFlOnBoardingFragment.setVisibility(View.GONE);
         mSelectedTag.clear();
         OnBoardingShareYourInterestFragment onBoardingShareYourInterestFragment = new OnBoardingShareYourInterestFragment();
@@ -340,7 +345,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
     }
 
     private void setOnJobAtFragment() {
-        mFragmentOpen.setJobFragment(true);
+        mFragmentOpen.setJobAtOpen(true);
         mFlOnBoardingFragment.setVisibility(View.GONE);
         mSelectedTag.clear();
         OnBoardingJobAtFragment onBoardingJobAtFragment = new OnBoardingJobAtFragment();
@@ -351,14 +356,21 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
     }
 
     private void setOnWorkExperienceFragment() {
-        mFragmentOpen.setOpenImageViewer(true);
+        mFragmentOpen.setWorkingExpOpen(true);
         mFlOnBoardingFragment.setVisibility(View.GONE);
         OnBoardingWorkExperienceFragment onBoardingWorkExperienceFragment = new OnBoardingWorkExperienceFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_work_exp_fragment, onBoardingWorkExperienceFragment, OnBoardingWorkExperienceFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
     }
 
     @OnClick(R.id.iv_how_can_help_next)
-    public void nextClick() {
+    public void onLookingNextClick() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(OnBoardingHowCanSheroesHelpYouFragment.class.getName());
+        if (AppUtils.isFragmentUIActive(fragment)) {
+            ((OnBoardingHowCanSheroesHelpYouFragment) fragment).onLookingForHowCanSheroesRequestClick(mSelectedTag);
+        }
+    }
+
+    public void onLookingForHowCanSheroesNextClick() {
         if (StringUtil.isNotEmptyCollection(mSelectedTag)) {
             boolean flag = false;
             for (LabelValue labelValue : mSelectedTag) {
@@ -370,9 +382,11 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
             mHowCanSheroes.setVisibility(View.GONE);
             if (flag) {
                 mJobAt.setVisibility(View.VISIBLE);
+                mFragmentOpen.setLookingForHowCanOpen(false);
                 setOnJobAtFragment();
             } else {
                 mInterest.setVisibility(View.VISIBLE);
+                mFragmentOpen.setLookingForHowCanOpen(false);
                 setOnBoardingInterestFragment();
             }
         }
@@ -381,6 +395,13 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
 
     @OnClick(R.id.iv_interest_next)
     public void nextInterestClick() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(OnBoardingShareYourInterestFragment.class.getName());
+        if (AppUtils.isFragmentUIActive(fragment)) {
+            ((OnBoardingShareYourInterestFragment) fragment).onInterestNextClick(mSelectedTag);
+        }
+    }
+
+    public void setInterestNextClick() {
         mHowCanSheroes.setVisibility(View.GONE);
         mInterest.setVisibility(View.VISIBLE);
         mJobAt.setVisibility(View.GONE);
@@ -389,9 +410,18 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
 
     @OnClick(R.id.iv_job_at_next)
     public void nextJobAtClick() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(OnBoardingJobAtFragment.class.getName());
+        if (AppUtils.isFragmentUIActive(fragment)) {
+            ((OnBoardingJobAtFragment) fragment).onJobAtNextClick(mSelectedTag);
+        }
+    }
+
+    public void setJobAtNextClick() {
         mHowCanSheroes.setVisibility(View.VISIBLE);
         mInterest.setVisibility(View.GONE);
         mJobAt.setVisibility(View.GONE);
+        mFragmentOpen.setJobAtOpen(false);
+        mFragmentOpen.setLookingForHowCanOpen(false);
         setOnWorkExperienceFragment();
     }
 
@@ -466,10 +496,10 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
         }
     }
 
-    private int cloumnViewTwo(LinearLayout liRow, int passedRow, int column, List<LabelValue> stringList) {
+    private int cloumnViewTwo(LinearLayout liRow, int passedRow, int column, List<LabelValue> labelValueList) {
 
-        if (mCurrentIndex < stringList.size()) {
-            int lengthString = stringList.get(mCurrentIndex).getLabel().length();
+        if (mCurrentIndex < labelValueList.size()) {
+            int lengthString = labelValueList.get(mCurrentIndex).getLabel().length();
             if (first == 1 && second == 1) {
                 passedRow += 1;
                 return passedRow;
@@ -492,7 +522,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
                     return passedRow;
                 } else {
                     first++;
-                    inflateTagData(liRow, stringList);
+                    inflateTagData(liRow, labelValueList);
                     passedRow += 1;
                     mCurrentIndex++;
                 }
@@ -504,9 +534,9 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
                     return passedRow;
                 } else {
                     second++;
-                    inflateTagData(liRow, stringList);
+                    inflateTagData(liRow, labelValueList);
                     mCurrentIndex++;
-                    passedRow = cloumnViewTwo(liRow, passedRow, column - 1, stringList);
+                    passedRow = cloumnViewTwo(liRow, passedRow, column - 1, labelValueList);
                 }
 
             } else if (lengthString >= 10 && lengthString <= 15) {
@@ -516,9 +546,9 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
                     return passedRow;
                 } else {
                     third++;
-                    inflateTagData(liRow, stringList);
+                    inflateTagData(liRow, labelValueList);
                     mCurrentIndex++;
-                    passedRow = cloumnViewTwo(liRow, passedRow, column - 1, stringList);
+                    passedRow = cloumnViewTwo(liRow, passedRow, column - 1, labelValueList);
                 }
 
             } else if (lengthString >= 5 && lengthString < 10) {
@@ -527,9 +557,9 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
                     return passedRow;
                 } else {
                     fourth++;
-                    inflateTagData(liRow, stringList);
+                    inflateTagData(liRow, labelValueList);
                     mCurrentIndex++;
-                    passedRow = cloumnViewTwo(liRow, passedRow, column - 1, stringList);
+                    passedRow = cloumnViewTwo(liRow, passedRow, column - 1, labelValueList);
                 }
             }
 
@@ -556,7 +586,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
     }
 
     private void check(LabelValue labelValue) {
-        List<LabelValue> temp=mSelectedTag;
+        List<LabelValue> temp = mSelectedTag;
         mCurrentIndex = 0;
         if (StringUtil.isNotEmptyCollection(temp)) {
             temp.remove(labelValue);
@@ -564,11 +594,27 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
         renderSelectedAddedItem(mLiStripForAddItem, temp);
     }
 
-    @Override
-    public void onWorkExp(String workExp) {
+    public void onWorkExpSuccess() {
         mHowCanSheroes.setVisibility(View.GONE);
         mInterest.setVisibility(View.GONE);
         mJobAt.setVisibility(View.GONE);
+        mFragmentOpen.setJobAtOpen(false);
+        mFragmentOpen.setLookingForHowCanOpen(false);
+        mFragmentOpen.setWorkingExpOpen(false);
         setOnBoardingInterestFragment();
+    }
+
+    @Override
+    public void onShowErrorDialog(String errorReason, FeedParticipationEnum feedParticipationEnum) {
+        switch (errorReason) {
+            case AppConstants.CHECK_NETWORK_CONNECTION:
+                showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
+                break;
+            case AppConstants.HTTP_401_UNAUTHORIZED:
+                showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_UN_AUTHORIZE));
+                break;
+            default:
+                showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
+        }
     }
 }

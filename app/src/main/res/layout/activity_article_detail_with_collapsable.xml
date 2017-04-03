@@ -82,6 +82,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="left|top"
                     android:layout_marginRight="@dimen/dp_size_25"
+                    android:padding="@dimen/dp_size_10"
                     android:background="@drawable/ic_back_white" />
 
                 <TextView
@@ -100,7 +101,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
-                    android:drawableLeft="@drawable/ic_bookmark_in_active"
+                    android:drawableLeft="@drawable/ic_bookmark_detail_white"
                     android:drawablePadding="@dimen/dp_size_10"
                     android:paddingBottom="@dimen/dp_size_10"
                     app:cardElevation="@dimen/dp_size_10"

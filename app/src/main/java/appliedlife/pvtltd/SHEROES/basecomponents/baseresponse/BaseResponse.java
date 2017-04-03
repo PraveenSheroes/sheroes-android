@@ -1,13 +1,9 @@
 package appliedlife.pvtltd.SHEROES.basecomponents.baseresponse;
 
-import android.widget.FrameLayout;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.HashMap;
-
-import appliedlife.pvtltd.SHEROES.models.entities.profile.FieldErrorMessageMap;
 
 public abstract class BaseResponse
 {

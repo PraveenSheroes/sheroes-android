@@ -18,27 +18,27 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
+import android.widget.TextView;
 
 import java.lang.reflect.Field;
 import java.util.Calendar;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 
 public class DatePickerExample extends DialogFragment {
     private final String TAG = LogUtils.makeLogTag(DatePickerExample.class);
     private static final int MAX_YEAR = 50;
     private OnDateSetListener listener;
-    private Context mContext;
-    public void setListener(OnDateSetListener listener) {
-
-
+    int yearMonthCall;
+    public void setListener(OnDateSetListener listener,int callFor) {
+        yearMonthCall=callFor;
         this.listener = listener;
     }
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mContext=context;
     }
 
     @Override
@@ -51,20 +51,30 @@ public class DatePickerExample extends DialogFragment {
 
         View dialog = inflater.inflate(R.layout.date_picker_dialog, null);
         final NumberPicker yearPicker = (NumberPicker) dialog.findViewById(R.id.picker_year);
+        TextView tvMontnYear=(TextView)dialog.findViewById(R.id.tv_year_month);
+        if(yearMonthCall== AppConstants.ONE_CONSTANT)
+        {
+            tvMontnYear.setText(getString(R.string.ID_YEARS));
+            int year = cal.get(Calendar.YEAR);
+            yearPicker.setMinValue(0);
+            yearPicker.setMaxValue(MAX_YEAR);
+            yearPicker.setValue(year);
+            setDividerColor(yearPicker);
+        }else
+        {
+            tvMontnYear.setText(getString(R.string.ID_MONTHS));
+            yearPicker.setMinValue(1);
+            yearPicker.setMaxValue(12);
+            yearPicker.setValue(cal.get(Calendar.MONTH) + 1);
+            setDividerColor(yearPicker);
+        }
 
-
-
-        int year = cal.get(Calendar.YEAR);
-        yearPicker.setMinValue(0);
-        yearPicker.setMaxValue(MAX_YEAR);
-        yearPicker.setValue(year);
-        setDividerColor(yearPicker);
         builder.setView(dialog)
                 // Add action buttons
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        listener.onDateSet(null, yearPicker.getValue(), yearPicker.getValue(), 0);
+                        listener.onDateSet(null, yearPicker.getValue(), yearPicker.getValue(), yearMonthCall);
                     }
                 });
         final AlertDialog dialog1= builder.create();
@@ -83,7 +93,6 @@ public class DatePickerExample extends DialogFragment {
             if (pf.getName().equals("mSelectionDivider")) {
                 pf.setAccessible(true);
                 try {
-
                     //pf.set(picker, getResources().getColor(R.color.my_orange));
                     //Log.v(TAG,"here");
                     pf.set(picker, getResources().getDrawable(R.drawable.blank_image));

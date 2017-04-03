@@ -156,7 +156,10 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
                     }
                 }
                 mFragmentOpen.setImageBlur(true);
-                JobDetailActivity.navigateFromJob(this, view, feedDetail);
+                Intent intentJob = new Intent(this, JobDetailActivity.class);
+                intentJob.putExtra(AppConstants.JOB_DETAIL, feedDetail);
+                startActivityForResult(intentJob, AppConstants.REQUEST_CODE_FOR_JOB_DETAIL);
+                overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + searchTag);
@@ -251,6 +254,20 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
             if (AppUtils.isFragmentUIActive(fragment)) {
                 if (fragment instanceof SearchCommunitiesFragment) {
                     ((SearchCommunitiesFragment) fragment).saveRecentSearchData(mFeedDetail);
+                }
+            }
+            fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
+            if (AppUtils.isFragmentUIActive(fragment)) {
+                if (fragment instanceof AllSearchFragment) {
+                    ((AllSearchFragment) fragment).saveRecentSearchData(mFeedDetail);
+                }
+            }
+        } else if (requestCode == AppConstants.REQUEST_CODE_FOR_JOB_DETAIL && null != intent) {
+            mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.JOB_FRAGMENT);
+            Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.FOURTH_CONSTANT);
+            if (AppUtils.isFragmentUIActive(fragment)) {
+                if (fragment instanceof SearchJobFragment) {
+                    ((SearchJobFragment) fragment).saveRecentSearchData(mFeedDetail);
                 }
             }
             fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);

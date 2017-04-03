@@ -37,7 +37,7 @@ public class NetworkTimeoutDialog extends BaseDialogFragment {
         finishParent = getArguments().getBoolean(DISMISS_PARENT_ON_OK_OR_BACK);
         isCancellable = getArguments().getBoolean(IS_CANCELABLE);
         errorMessage = getArguments().getString(ERROR_MESSAGE);
-        if(AppConstants.MARK_AS_SPAM.equalsIgnoreCase(errorMessage))
+        if(AppConstants.MARK_AS_SPAM.equalsIgnoreCase(errorMessage)||AppConstants.FACEBOOK_VERIFICATION.equalsIgnoreCase(errorMessage))
         {
             mTvTryAgain.setText(getString(R.string.ID_DONE));
         }else

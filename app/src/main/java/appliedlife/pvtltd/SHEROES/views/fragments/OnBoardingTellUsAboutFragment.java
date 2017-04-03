@@ -22,14 +22,18 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.enums.OnBoardingEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllData;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.GetInterestJobResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.presenters.OnBoardingPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.OnBoardingView;
@@ -37,12 +41,16 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static appliedlife.pvtltd.SHEROES.enums.OnBoardingEnum.CURRENT_STATUS;
+import static appliedlife.pvtltd.SHEROES.enums.OnBoardingEnum.LOCATION;
+import static appliedlife.pvtltd.SHEROES.enums.OnBoardingEnum.TELL_US_ABOUT;
+
 /**
  * Created by Ajit Kumar on 22-02-2017.
  */
 
 public class OnBoardingTellUsAboutFragment extends BaseFragment implements OnBoardingView {
-    private final String mTAG = LogUtils.makeLogTag(OnBoardingTellUsAboutFragment.class);
+    private final String TAG = LogUtils.makeLogTag(OnBoardingTellUsAboutFragment.class);
     @Bind(R.id.pb_boarding_progress_bar)
     ProgressBar mProgressBar;
     @Bind(R.id.tv_location)
@@ -56,12 +64,15 @@ public class OnBoardingTellUsAboutFragment extends BaseFragment implements OnBoa
     @Inject
     OnBoardingPresenter mOnBoardingPresenter;
     @Inject
+    AppUtils mAppUtils;
+    @Inject
     Preference<MasterDataResponse> mUserPreferenceMasterData;
     private OnBoardingActivityIntractionListner mOnboardingIntractionListner;
     private HashMap<String, HashMap<String, ArrayList<LabelValue>>> mMasterDataResult;
     @Inject
     Preference<LoginResponse> userPreference;
-
+    private LabelValue labelValue;
+    private GetAllDataDocument getAllDataDocument;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -70,7 +81,7 @@ public class OnBoardingTellUsAboutFragment extends BaseFragment implements OnBoa
                 mOnboardingIntractionListner = (OnBoardingActivityIntractionListner) getActivity();
             }
         } catch (InstantiationException exception) {
-            LogUtils.error(mTAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + mTAG + AppConstants.SPACE + exception.getMessage());
+            LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
         }
     }
 
@@ -88,13 +99,14 @@ public class OnBoardingTellUsAboutFragment extends BaseFragment implements OnBoa
             if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
 
                 if (null != userPreference.get().getUserSummary().getUserBO() && StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getUserBO().getJobTitle())) {
-                    mCurrentStatus.setText(userPreference.get().getUserSummary().getUserBO().getJobTitle());
+                    mCurrentStatus.setText(userPreference.get().getUserSummary().getUserBO().getJobTag());
+                }
+                if (null != userPreference.get().getUserSummary().getUserBO() && StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getUserBO().getJobTitle())) {
+                    mLocation.setText(userPreference.get().getUserSummary().getUserBO().getCityMaster());
                 }
                 if (StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getMobile())) {
                     mMobileNumber.setText(userPreference.get().getUserSummary().getMobile());
                 }
-
-
             }
             mMasterDataResult=mUserPreferenceMasterData.get().getData();
             mCurrentStatus.setEnabled(true);
@@ -109,12 +121,14 @@ public class OnBoardingTellUsAboutFragment extends BaseFragment implements OnBoa
 
     public void setCurrentStaus(LabelValue labelValue) {
         if (null != labelValue && StringUtil.isNotNullOrEmptyString(labelValue.getLabel())) {
+            this.labelValue=labelValue;
             mCurrentStatus.setText(labelValue.getLabel());
         }
     }
 
     public void setLocationData(GetAllDataDocument getAllDataDocument) {
         if (null != getAllDataDocument && StringUtil.isNotNullOrEmptyString(getAllDataDocument.getTitle())) {
+            this.getAllDataDocument=getAllDataDocument;
             mLocation.setText(getAllDataDocument.getTitle());
         }
     }
@@ -123,12 +137,9 @@ public class OnBoardingTellUsAboutFragment extends BaseFragment implements OnBoa
     public void nextClick() {
         if (StringUtil.isNotNullOrEmptyString(mCurrentStatus.getText().toString()) && StringUtil.isNotNullOrEmptyString(mLocation.getText().toString()) && StringUtil.isNotNullOrEmptyString(mMobileNumber.getText().toString())) {
             if (mMobileNumber.getText().toString().length() == 10) {
-                ArrayList<String> data=new ArrayList<>();
-                data.add(mCurrentStatus.getText().toString());
-                data.add(mLocation.getText().toString());
-                data.add(mMobileNumber.getText().toString());
-                mOnboardingIntractionListner.onCollectUserData(data);
-                mOnboardingIntractionListner.onSheroesHelpYouFragmentOpen(mMasterDataResult, AppConstants.ONE_CONSTANT);
+                if (null != labelValue&&null!=getAllDataDocument) {
+                  mOnBoardingPresenter.getCurrentDataStatusToPresenter(mAppUtils.boardingTellUsFormDataRequestBuilder(AppConstants.CURRENT_STATUS,AppConstants.CURRENT_STATUS_TYPE,labelValue,getAllDataDocument));
+                }
             } else {
                 Toast.makeText(getContext(), "Enter valid mobile number", Toast.LENGTH_SHORT).show();
             }
@@ -140,14 +151,14 @@ public class OnBoardingTellUsAboutFragment extends BaseFragment implements OnBoa
     @OnClick(R.id.tv_current_status_spinner)
     public void onCurrentStatusClick() {
         if (null != mMasterDataResult) {
-            mOnboardingIntractionListner.onSheroesHelpYouFragmentOpen(mMasterDataResult, AppConstants.TWO_CONSTANT);
+            mOnboardingIntractionListner.onSheroesHelpYouFragmentOpen(mMasterDataResult,CURRENT_STATUS);
         }
     }
 
     @OnClick(R.id.tv_location)
     public void onLocationClick() {
         if (null != mMasterDataResult) {
-            mOnboardingIntractionListner.onSheroesHelpYouFragmentOpen(mMasterDataResult, AppConstants.THREE_CONSTANT);
+            mOnboardingIntractionListner.onSheroesHelpYouFragmentOpen(mMasterDataResult,LOCATION);
         }
     }
 
@@ -170,11 +181,30 @@ public class OnBoardingTellUsAboutFragment extends BaseFragment implements OnBoa
     public void getIntersetJobResponse(GetInterestJobResponse getInterestJobResponse) {
 
     }
+    @Override
+    public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
+      //  mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(errorMsg, feedParticipationEnum);
+        mOnboardingIntractionListner.onSheroesHelpYouFragmentOpen(mMasterDataResult,TELL_US_ABOUT);
+    }
+    @Override
+    public void getBoardingJobResponse(BoardingDataResponse boardingDataResponse) {
+        if(null!=boardingDataResponse) {
+            switch (boardingDataResponse.getStatus())
+            {
+                case AppConstants.SUCCESS:
+                    mOnboardingIntractionListner.onSheroesHelpYouFragmentOpen(mMasterDataResult,TELL_US_ABOUT);
+                    break;
+                case AppConstants.FAILED:
+                    mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(boardingDataResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), FeedParticipationEnum.ERROR_ON_ONBOARDING);
+                    break;
+
+            }
+        }
+    }
 
 
     public interface OnBoardingActivityIntractionListner {
 
-        void onCollectUserData(ArrayList<String> stringArrayList);
-        void onSheroesHelpYouFragmentOpen(HashMap<String, HashMap<String, ArrayList<LabelValue>>> masterDataResult, int callFor);
+        void onSheroesHelpYouFragmentOpen(HashMap<String, HashMap<String, ArrayList<LabelValue>>> masterDataResult, OnBoardingEnum onBoardingEnum);
     }
 }

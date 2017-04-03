@@ -112,7 +112,7 @@ public class ProfileShareYourIntrestFragment extends BaseFragment {
             for (String lookingFor : lookingForSet) {
                 OnBoardingData boardingData = new OnBoardingData();
                 boardingData.setFragmentName(AppConstants.YOUR_INTEREST);
-                boardingData.setName(lookingFor);
+                boardingData.setCategory(lookingFor);
                 boardingData.setBoardingDataList(hashMap.get(lookingFor));
                 listBoardingList.add(boardingData);
             }

@@ -21,6 +21,7 @@
             android:layout_marginRight="@dimen/dp_size_20"
             android:layout_marginTop="@dimen/dp_size_30"
             android:background="@drawable/rectangle_search_bar"
+            android:drawableLeft="@color/search_tab_text"
             android:backgroundTint="@color/search_tab_text"
             android:drawablePadding="@dimen/dp_size_15"
             android:gravity="left|center"

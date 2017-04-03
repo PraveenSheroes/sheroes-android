@@ -117,7 +117,7 @@ public class ProfileGoodAtFragment extends BaseFragment {
                 Set<String> lookingForSet = hashMap.keySet();
                 for (String lookingFor : lookingForSet) {
                     OnBoardingData boardingData = new OnBoardingData();
-                    boardingData.setName(lookingFor);
+                    boardingData.setCategory(lookingFor);
                     boardingData.setBoardingDataList(hashMap.get(lookingFor));
                     listBoardingList.add(boardingData);
                 }

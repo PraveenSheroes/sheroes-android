@@ -24,13 +24,11 @@ import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTravelFlexibili
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryResponse;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePersenter;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.views.fragments.DayPickerDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.DayPickerProfile;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnTouch;
 
 
 /**

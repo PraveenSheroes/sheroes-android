@@ -5,13 +5,5 @@ package appliedlife.pvtltd.SHEROES.enums;
  */
 
 public enum  OnBoardingEnum {
-    LOCATION("location"), INTEREST_SEARCH("interest_search"),JOB_AT_SEARCH("job_at_search");
-     String value;
-    OnBoardingEnum(String value){
-        this.value=value;
-    }
-
-    public String getValue() {
-        return value;
-    }
+    CURRENT_STATUS,LOCATION, INTEREST_SEARCH,JOB_AT_SEARCH,TELL_US_ABOUT,LOOKING_FOR_HOW_CAN_SHEROES;
 }

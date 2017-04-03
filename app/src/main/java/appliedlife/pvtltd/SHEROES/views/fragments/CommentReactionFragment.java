@@ -465,13 +465,11 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
     public void editCommentInList(CommentReactionDoc commentReactionDoc) {
         mCommentReactionDoc = commentReactionDoc;
         if (null != mCommentReactionDoc && mCommentReactionDoc.isEdit()) {
+            AppUtils.showKeyboard(mEtUserCommentDescription, TAG);
             mCommentReactionDocList.remove(mCommentReactionDoc.getItemPosition());
-
             mEtUserCommentDescription.setText(mCommentReactionDoc.getComment());
             mEtUserCommentDescription.setSelection(mCommentReactionDoc.getComment().length());
-
             mEtUserCommentDescription.setTextColor(ContextCompat.getColor(getActivity(), R.color.feed_article_label));
-            AppUtils.showKeyboard(mEtUserCommentDescription, TAG);
             mEtUserCommentDescription.setRawInputType(InputType.TYPE_CLASS_TEXT);
             mEtUserCommentDescription.setTextIsSelectable(true);
         }

@@ -133,15 +133,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
         return view;
     }
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-     /*   LoginButton loginButton = (LoginButton) view.findViewById(R.id.login_button);
-        loginButton.setReadPermissions(Arrays.asList("public_profile", "email", "user_birthday", "user_friends"));
-        loginButton.setFragment(this);
-        loginButton.registerCallback(callbackManager, callback);*/
 
-    }
 
     @OnClick(R.id.login_button)
     public void fbOnClick() {
@@ -169,31 +161,32 @@ public class LoginFragment extends BaseFragment implements LoginView {
                         loginResponse.setTokenTime(System.currentTimeMillis());
                         loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
                         mUserPreference.set(loginResponse);
-                        mProgressBar.setVisibility(View.GONE);
                         mLoginActivityIntractionListner.onLoginAuthToken();
                         break;
                     case AppConstants.FAILED:
+                        LoginManager.getInstance().logOut();
                         mLoginActivityIntractionListner.onErrorOccurence(loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA));
                         break;
                 }
             } else {
                 if (StringUtil.isNotNullOrEmptyString(loginResponse.getToken()) && null != loginResponse.getUserSummary()) {
-                  /*  if (loginResponse.getUserSummary().isFbVerificationRequired()) {
+                 /*   if (loginResponse.getUserSummary().isFbVerificationRequired()) {
                         mUserPreference.set(loginResponse);
-                        fbSignIn();
+                        setProgressBar(mProgressBar);
+                        mLoginActivityIntractionListner.onErrorOccurence(AppConstants.FACEBOOK_VERIFICATION);
                     } else {
                         loginResponse.setTokenTime(System.currentTimeMillis());
                         loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
                         mUserPreference.set(loginResponse);
-                        mProgressBar.setVisibility(View.GONE);
                         mLoginActivityIntractionListner.onLoginAuthToken();
                     }*/
                     loginResponse.setTokenTime(System.currentTimeMillis());
                     loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
                     mUserPreference.set(loginResponse);
-                    mProgressBar.setVisibility(View.GONE);
                     mLoginActivityIntractionListner.onLoginAuthToken();
+
                 } else {
+                    LoginManager.getInstance().logOut();
                     mLoginActivityIntractionListner.onErrorOccurence(loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA));
                 }
             }
@@ -256,7 +249,6 @@ public class LoginFragment extends BaseFragment implements LoginView {
             focusView.requestFocus();
 
         } else {
-            mProgressBar.setVisibility(View.VISIBLE);
             LoginRequest loginRequest = AppUtils.loginRequestBuilder();
             loginRequest.setUsername(email);
             loginRequest.setPassword(password);

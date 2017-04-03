@@ -10,6 +10,7 @@
     <string name="IDS_STR_NETWORK_TIME_OUT_DESCRIPTION">No internet connection or connectivity low. Please check your connection and try again.</string>
     <string name="IDS_STR_TRY_AGAIN_TEXT">Try again</string>
     <string name="IDS_INVALID_USER_PASSWORD">Invalid user or password</string>
+    <string name="IDS_UN_AUTHORIZE">The server encountered an error and could not complete your request.</string>
     <!-- Strings related to login -->
     <string name="ID_PROMPT_EMAIL">Email</string>
     <string name="ID_PROMPT_PASSWORD">Password</string>
@@ -18,6 +19,7 @@
     <string name="ID_ERROR_INVALID_PASSWORD">Enter password</string>
     <string name="ID_POSTED_IN">posted in</string>
     <string name="ID_NEW">NEW</string>
+    <string name="ID_LETS_GET_TO">Let’s get to know each other </string>
     <string name="ID_TELL_US_MESSAGE">This will help you connect with other SHEROES and find relevant opportunities</string>
     <!--String related in home page-->
 
@@ -124,6 +126,7 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_COMMUNITES">COMMUNITY</string>
     <string name="ID_PREFERENCES">PREFERENCES</string>
     <string name="ID_ABOUT">ABOUT</string>
+    <string name="ID_HEY">Hey</string>
     <string name="ID_HOW_CAN_SHEROES">How can SHEROES help you? </string>
     <string name="ID_TERMS_AND_CONDITIONS">TERMS AND CONDITIONS</string>
     <string name="ID_LOGOUT">LOGOUT</string>

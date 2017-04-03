@@ -31,6 +31,7 @@ import appliedlife.pvtltd.SHEROES.enums.OnBoardingEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllData;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingInterestJobSearch;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.GetInterestJobResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
@@ -45,6 +46,7 @@ import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.OnBoardingView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Praveen_Singh on 25-03-2017.
@@ -71,6 +73,7 @@ public class OnBoardingSearchDialogFragment extends BaseDialogFragment implement
     private Handler mHandler = new Handler();
     private String mMasterDataSkill = AppConstants.EMPTY_STRING;
     OnBoardingEnum SEARCH_TYPE = null;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getActivity()).inject(this);
@@ -122,6 +125,11 @@ public class OnBoardingSearchDialogFragment extends BaseDialogFragment implement
 
         setCancelable(true);
         return view;
+    }
+
+    @OnClick(R.id.iv_search_back)
+    public void onSearchBack() {
+        dismiss();
     }
 
     @Override
@@ -247,6 +255,11 @@ public class OnBoardingSearchDialogFragment extends BaseDialogFragment implement
             }
 
         }
+    }
+
+    @Override
+    public void getBoardingJobResponse(BoardingDataResponse boardingDataResponse) {
+
     }
 
     @Override

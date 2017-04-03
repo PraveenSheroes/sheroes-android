@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="33px" height="38px" viewBox="0 0 33 38" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
+    <title>ic_saved</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="personal-profile---himanshu" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard" transform="translate(-183.000000, -140.000000)" stroke="#F2403C" stroke-width="0.2" fill="#F2403C">
+            <g id="Bookmark" transform="translate(183.000000, 140.000000)">
+                <path d="M2,5.72488901 C2,4.21997436 3.28249569,3 4.87436048,3 L27.4756053,3 C29.0630707,3 30.3499657,4.22010243 30.3499657,5.72488901 L30.3499657,37 L16.1749829,28.3023256 L2,37 L2,5.72488901 Z" id="ic_saved"></path>
+            </g>
+        </g>
+    </g>
+</svg>
