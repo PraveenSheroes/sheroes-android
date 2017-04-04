@@ -74,6 +74,7 @@ public class OnBoardingHowCanSheroesHelpYouFragment extends BaseFragment impleme
         mRecyclerView.setAdapter(mAdapter);
         if (StringUtil.isNotEmptyCollection(setFilterValues())) {
             mAdapter.setSheroesGenericListData(setFilterValues());
+            manager.scrollToPositionWithOffset(0, 0);
             mAdapter.notifyDataSetChanged();
         }
         mRecyclerView.addOnScrollListener(new HidingScrollListener(mRecyclerView, manager, new FragmentListRefreshData()) {

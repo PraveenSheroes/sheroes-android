@@ -76,6 +76,7 @@ public class OnBoardingShareYourInterestFragment extends BaseFragment implements
         mRecyclerView.setAdapter(mAdapter);
         if (StringUtil.isNotEmptyCollection(setFilterValues())) {
             mAdapter.setSheroesGenericListData(setFilterValues());
+            manager.scrollToPositionWithOffset(0, 0);
             mAdapter.notifyDataSetChanged();
         }
 

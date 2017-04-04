@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp_size_250"
-    android:background="@drawable/ic_reaction_strip_background"
     android:orientation="vertical">
 
     <ImageView
@@ -15,9 +14,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:layout_marginTop="@dimen/dp_size_20"
         android:orientation="vertical">
 
         <appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView
@@ -25,8 +23,9 @@
             android:layout_width="@dimen/drawer_profile_icon_size"
             android:layout_height="@dimen/drawer_profile_icon_size"
             android:layout_gravity="center"
-            app:riv_corner_radius="@dimen/dp_size_10"
-            app:riv_border_width="@dimen/dp_size_5"
+            android:layout_marginTop="@dimen/dp_size_70"
+            app:riv_corner_radius="@dimen/dp_size_12"
+            app:riv_border_width="@dimen/dp_size_6"
             android:scaleType="center"
             app:riv_oval="true"/>
 
@@ -37,8 +36,9 @@
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/dp_size_25"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:textAllCaps="true"
             android:textColor="@color/white"
-            android:textSize="@dimen/dp_size_14" />
+            android:textSize="@dimen/dp_size_15" />
 
         <TextView
             android:id="@+id/tv_user_location"

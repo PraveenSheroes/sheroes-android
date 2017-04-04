@@ -154,7 +154,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     @OnClick(R.id.tv_other_login_option)
     public void otherLoginOption() {
         Intent loginIntent = new Intent(this, LoginActivity.class);
-        loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(loginIntent);
         finish();
     }
@@ -168,6 +167,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     @Override
     public void onShowErrorDialog(String errorReason, FeedParticipationEnum feedParticipationEnum) {
+        LoginManager.getInstance().logOut();
         switch (errorReason) {
             case AppConstants.CHECK_NETWORK_CONNECTION:
                 showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));

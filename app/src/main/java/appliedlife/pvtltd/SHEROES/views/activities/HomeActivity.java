@@ -194,7 +194,7 @@ public class HomeActivity extends BaseActivity implements SettingView, CustiomAc
                         @Override
                         public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
 
-                            Bitmap blurred = BlurrImage.blurRenderScript(HomeActivity.this, profileImage, 20);
+                            Bitmap blurred = BlurrImage.blurRenderScript(HomeActivity.this, profileImage, 10);
                             mIvSideDrawerProfileBlurBackground.setImageBitmap(blurred);
                         }
                     });

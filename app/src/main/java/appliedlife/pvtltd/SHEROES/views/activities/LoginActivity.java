@@ -70,6 +70,7 @@ public class LoginActivity extends BaseActivity implements LoginFragment.LoginAc
         } else {
             showNetworkTimeoutDoalog(true, false, errorMessage);
         }
+
     }
 
     @Override
@@ -100,8 +101,8 @@ public class LoginActivity extends BaseActivity implements LoginFragment.LoginAc
 
 
     private void openFaceBookLogin() {
-        Intent intentArticle = new Intent(this, FaceBookOpenActivity.class);
-        startActivityForResult(intentArticle, AppConstants.REQUEST_CODE_FOR_FACEBOOK);
+        Intent intentFacebook = new Intent(this, FaceBookOpenActivity.class);
+        startActivityForResult(intentFacebook, AppConstants.REQUEST_CODE_FOR_FACEBOOK);
         overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
     }
 
@@ -109,7 +110,17 @@ public class LoginActivity extends BaseActivity implements LoginFragment.LoginAc
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         if (requestCode == AppConstants.REQUEST_CODE_FOR_FACEBOOK && null != intent) {
-            userPreference.delete();
+          int verificationMessageId = intent.getExtras().getInt(AppConstants.HOME_FRAGMENT);
+            if(verificationMessageId==AppConstants.TWO_CONSTANT)
+            {
+                onLoginAuthToken();
+            }else
+            {
+                userPreference.delete();
+                Intent homeIntent = new Intent(this, WelcomeActivity.class);
+                startActivity(homeIntent);
+                finish();
+            }
         }
     }
 }

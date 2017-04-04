@@ -48,6 +48,8 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_COMMUNITIY">Community</string>
     <string name="ID_GENERIC_ERROR"> Oops, something went wrong. We are working on it, we will get it fixed as soon as we can.</string>
     <string name="ID_SEARCH">Search</string>
+    <string name="ID_SEARCH_LOCATION">Search Location</string>
+    <string name="ID_SEARCH_INTEREST">Search Your Interest</string>
     <string name="ID_RECENT_SEARCH">Recent Search</string>
     <string name="ID_SEARCH_IN_FEED">Communities, Articles &amp; Jobs</string>
     <string name="ID_SEARCH_IN_COMMUNITIES">Search Communities</string>
@@ -56,6 +58,7 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_TRENDING">Trending</string>
     <string name="ID_CHOOSE_CATEGORY">Choose Category</string>
     <string name="ID_DONE">Done</string>
+    <string name="ID_OK">Ok</string>
     <string name="ID_CANCEL">Cancel</string>
     <string name="ID_VIEW_MORE">View More</string>
     <string name="ID_STD">+91</string>
@@ -77,8 +80,8 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_VIEWS">Views</string>
     <string name="ID_MIN_READ">Mins Read</string>
     <string name="ID_JOIN_CONVERSATION">Join the conversation...</string>
-    <string name="ID_SHARE_INTEREST">Share your interest</string>
-    <string name="ID_WHAT_GOOD_AT">What are you good at?</string>
+    <string name="ID_SHARE_INTEREST">Share Your Interest</string>
+    <string name="ID_WHAT_GOOD_AT">What Are You Good At?</string>
     <string name="ID_EMPTY_TEXT">Please enter comment</string>
     <string name="ID_WISHTLE">Whistle</string>
     <string name="ID_LOVE">Love</string>
@@ -431,6 +434,7 @@ etur adipiscing elit,sed do eiusmod tempor incididunt ut…</string>
     <string name="ID_WELCOME_TEXT3">Discover things that matter to you Career, Life, Love</string>
     <string name="ID_ALL_OF_YOU">All For You</string>
     <string name="ID_CONTINUE_WITH_FACEBOOK">CONTINUE WITH FACEBOOK</string>
+    <string name="ID_FACEBOOK_LONGING">LOGGING IN</string>
     <string name="ID_LINK_TO_FACEBOOK">Link to Facebook</string>
     <string name="ID_WELCOME_TEXT4">OTHER LOGIN OPTIONS (ONLY FOR EXISTING USERS)</string>
 

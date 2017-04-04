@@ -99,21 +99,6 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
             tvFeaturedCommunityTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         }
         if (!dataItem.isMember() && !dataItem.isOwner() && !dataItem.isRequestPending()) {
-
-           /* if(dataItem.isClosedCommunity())
-            {
-                tvFeaturedCommunityJoin.setTextColor(ContextCompat.getColor(mContext, R.color.white));
-                tvFeaturedCommunityJoin.setText(mContext.getString(R.string.ID_REQUESTED));
-                tvFeaturedCommunityJoin.setBackgroundResource(R.drawable.rectangle_feed_community_requested);
-                tvFeaturedCommunityJoin.setVisibility(View.VISIBLE);
-            }
-            else
-            {
-                tvFeaturedCommunityJoin.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
-                tvFeaturedCommunityJoin.setText(mContext.getString(R.string.ID_JOIN));
-                tvFeaturedCommunityJoin.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
-                tvFeaturedCommunityJoin.setVisibility(View.VISIBLE);
-            }*/
             tvFeaturedCommunityJoin.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
             tvFeaturedCommunityJoin.setText(mContext.getString(R.string.ID_JOIN));
             tvFeaturedCommunityJoin.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);

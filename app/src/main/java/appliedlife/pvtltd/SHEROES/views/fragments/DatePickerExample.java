@@ -11,6 +11,8 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -108,6 +110,21 @@ public class DatePickerExample extends DialogFragment {
             }
         }
         //}
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Dialog dialog = getDialog();
+
+        if (dialog != null) {
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+            dialog.getWindow().setLayout(400,350);
+
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+
+        }
     }
 
 }

@@ -158,7 +158,7 @@ public class AppConstants {
 
     public static final String MASTER_DATA_OPRTUNITY = "Opportunities"; // on second map lavele key
 
-    public static final String MASTER_DATA_DEFAULT_CATEGORY = "DEFAULT"; // on second map lavele key
+    public static final String MASTER_DATA_DEFAULT_CATEGORY = "POPULAR"; // on second map lavele key
     public static final String DAY = " day";
     public static final String HOUR = " hour";
     public static final String MINUT = " minute";

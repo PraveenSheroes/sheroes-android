@@ -20,13 +20,13 @@
             android:layout_marginLeft="@dimen/dp_size_20"
             android:layout_marginRight="@dimen/dp_size_20"
             android:layout_marginTop="@dimen/dp_size_30"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:background="@drawable/rectangle_search_bar"
             android:drawableLeft="@color/search_tab_text"
             android:backgroundTint="@color/search_tab_text"
-            android:drawablePadding="@dimen/dp_size_15"
-            android:gravity="left|center"
-            android:paddingLeft="@dimen/dp_size_20"
+            android:gravity="center"
             fb:login_text="@string/ID_CONTINUE_WITH_FACEBOOK"
+            fb:logout_text="@string/ID_FACEBOOK_LONGING"
             android:textColor="@color/white" />
         <TextView
             android:id="@+id/tv_other_login_option"

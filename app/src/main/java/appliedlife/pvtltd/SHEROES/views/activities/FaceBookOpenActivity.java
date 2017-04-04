@@ -45,6 +45,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.presenters.LoginPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.FacebookErrorDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.LoginView;
@@ -57,6 +58,7 @@ import butterknife.OnClick;
  */
 
 public class FaceBookOpenActivity extends BaseActivity implements LoginView {
+    private final String TAG = LogUtils.makeLogTag(FaceBookOpenActivity.class);
     @Inject
     Preference<LoginResponse> userPreference;
     @Inject
@@ -115,19 +117,34 @@ public class FaceBookOpenActivity extends BaseActivity implements LoginView {
     public void fbOnClick() {
         fbSignIn();
     }
-    public void closeDialog()
+    public void backToLogInActivity()
+    {
+        LogUtils.info(TAG,"********back to loginactivity***********");
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putInt(AppConstants.HOME_FRAGMENT, AppConstants.TWO_CONSTANT);
+        intent.putExtras(bundle);
+        setResult(RESULT_OK, intent);
+        finish();
+    }
+    public void backToWelcome()
     {
         Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putInt(AppConstants.HOME_FRAGMENT, AppConstants.ONE_CONSTANT);
+        intent.putExtras(bundle);
         setResult(RESULT_OK, intent);
         finish();
     }
     private void fbSignIn() {
+        LoginManager.getInstance().logOut();
         mFbLogin.setReadPermissions(Arrays.asList("public_profile", "email", "user_birthday", "user_friends"));
         mFbLogin.registerCallback(callbackManager, callback);
     }
 
     @Override
     public void onShowErrorDialog(String errorReason, FeedParticipationEnum feedParticipationEnum) {
+        LoginManager.getInstance().logOut();
         switch (errorReason) {
             case AppConstants.CHECK_NETWORK_CONNECTION:
                 showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
@@ -154,14 +171,14 @@ public class FaceBookOpenActivity extends BaseActivity implements LoginView {
                         @Override
                         public void onCompleted(JSONObject object, GraphResponse response) {
                             if (null != accessToken && StringUtil.isNotNullOrEmptyString(accessToken.getToken())) {
-                                LoginRequest loginRequest = AppUtils.loginRequestBuilder();
-                                loginRequest.setAccessToken(accessToken.getToken());
-                                AppUtils appUtils = AppUtils.getInstance();
-                                loginRequest.setAppVersion(appUtils.getAppVersionName());
-                                //TODO:: NEED to Change
-                                loginRequest.setCloudMessagingId(appUtils.getCloudMessaging());
-                                loginRequest.setDeviceUniqueId(appUtils.getDeviceId());
-                                mLoginPresenter.getLoginAuthTokeInPresenter(loginRequest, true);
+                                    LoginRequest loginRequest = AppUtils.loginRequestBuilder();
+                                    loginRequest.setAccessToken(accessToken.getToken());
+                                    AppUtils appUtils = AppUtils.getInstance();
+                                    loginRequest.setAppVersion(appUtils.getAppVersionName());
+                                    //TODO:: Google gcm ID
+                                    loginRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+                                    loginRequest.setDeviceUniqueId(appUtils.getDeviceId());
+                                    mLoginPresenter.getFBVerificationInPresenter(loginRequest);
                             }
                         }
                     });
@@ -236,10 +253,7 @@ public class FaceBookOpenActivity extends BaseActivity implements LoginView {
             if (StringUtil.isNotNullOrEmptyString(loginResponse.getStatus())) {
                 switch (loginResponse.getStatus()) {
                     case AppConstants.SUCCESS:
-                        loginResponse.setTokenTime(System.currentTimeMillis());
-                        loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
-                        mUserPreference.set(loginResponse);
-                        //  ((LoginActivity) getActivity()).onLoginAuthToken();
+                        backToLogInActivity();
                         break;
                     case AppConstants.FAILED:
                         LoginManager.getInstance().logOut();
@@ -268,7 +282,16 @@ public class FaceBookOpenActivity extends BaseActivity implements LoginView {
 
     @Override
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
-        showFaceBookError();
+        switch (errorMsg) {
+            case AppConstants.CHECK_NETWORK_CONNECTION:
+                showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
+                break;
+            case AppConstants.HTTP_401_UNAUTHORIZED:
+                showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_INVALID_USER_PASSWORD));
+                break;
+            default:
+                showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
+        }
     }
 
     public DialogFragment showFaceBookError() {
@@ -286,6 +309,5 @@ public class FaceBookOpenActivity extends BaseActivity implements LoginView {
     public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
 
     }
-
 }
 

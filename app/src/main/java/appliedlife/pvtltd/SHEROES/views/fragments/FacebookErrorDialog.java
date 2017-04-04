@@ -21,7 +21,7 @@ import butterknife.OnClick;
  */
 
 public class FacebookErrorDialog extends BaseDialogFragment {
-    @Bind(R.id.tv_cancel)
+    @Bind(R.id.tv_ok)
     TextView mTvCacel;
     int callFor = 0;
 
@@ -38,10 +38,10 @@ public class FacebookErrorDialog extends BaseDialogFragment {
         return view;
     }
 
-    @OnClick(R.id.tv_cancel)
+    @OnClick(R.id.tv_ok)
     public void tryAgainClick() {
         if (callFor == AppConstants.NO_REACTION_CONSTANT) {
-            ((FaceBookOpenActivity) getActivity()).closeDialog();
+            ((FaceBookOpenActivity) getActivity()).backToWelcome();
         } else {
             dismiss();
         }

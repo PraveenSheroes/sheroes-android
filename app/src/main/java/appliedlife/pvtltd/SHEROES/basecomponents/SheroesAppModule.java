@@ -139,7 +139,7 @@ public class SheroesAppModule {
             e.printStackTrace();
         }
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
-             //   .readTimeout(AppConstants.READ_TIME_OUT, TimeUnit.SECONDS)
+                .readTimeout(AppConstants.READ_TIME_OUT, TimeUnit.SECONDS)
                .connectTimeout(AppConstants.CONNECTION_TIME_OUT, TimeUnit.SECONDS)
                 .addInterceptor(interceptor)
                 .cache(cache)

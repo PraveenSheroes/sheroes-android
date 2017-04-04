@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/fully_transparent">
+    android:background="@color/black">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -32,11 +32,11 @@
             android:textSize="@dimen/sp_size_13" />
 
         <TextView
-            android:id="@+id/tv_cancel"
+            android:id="@+id/tv_ok"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@string/ID_ROBOTO_BOLD"
-            android:text="@string/ID_CANCEL"
+            android:text="@string/ID_OK"
             android:layout_gravity="right"
             android:padding="@dimen/dp_size_14"
             android:layout_marginRight="@dimen/dp_size_70"

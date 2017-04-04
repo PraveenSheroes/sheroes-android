@@ -48,14 +48,16 @@
             android:layout_marginLeft="@dimen/dp_size_40"
             android:layout_marginRight="40dp"
             android:layout_marginTop="@dimen/dp_size_60"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:background="@drawable/rectangle_search_bar"
             android:backgroundTint="@color/search_tab_text"
             android:drawableLeft="@drawable/com_facebook_button_icon"
             android:drawablePadding="@dimen/dp_size_15"
-            android:gravity="left|center"
+            android:gravity="center"
             android:paddingLeft="@dimen/dp_size_20"
             android:textColor="@color/white"
-            fb:login_text="@string/ID_LINK_TO_FACEBOOK" />
+            fb:login_text="@string/ID_LINK_TO_FACEBOOK"
+            fb:logout_text="@string/ID_FACEBOOK_LONGING"/>
     </LinearLayout>
 
     <include layout="@layout/progress_bar_login" />

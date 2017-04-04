@@ -90,6 +90,7 @@ public class OnBoardingSearchDialogFragment extends BaseDialogFragment implement
 
         switch (SEARCH_TYPE) {
             case LOCATION:
+                mSearchEditText.setHint(getString(R.string.ID_SEARCH_LOCATION));
                 LinearLayoutManager manager = new LinearLayoutManager(getActivity());
                 mRecyclerView.setLayoutManager(manager);
                 mRecyclerView.setAdapter(mAdapter);
@@ -109,6 +110,7 @@ public class OnBoardingSearchDialogFragment extends BaseDialogFragment implement
                 });
                 break;
             case INTEREST_SEARCH:
+                mSearchEditText.setHint(getString(R.string.ID_SEARCH_INTEREST));
                 StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(1, 1);
                 mRecyclerView.setLayoutManager(staggeredGridLayoutManager);
                 mRecyclerView.setAdapter(mAdapter);

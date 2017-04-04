@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,7 +13,6 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
@@ -71,7 +71,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
     @Inject
     AppUtils mAppUtils;
     @Bind(R.id.email)
-    AutoCompleteTextView mEmailView;
+    EditText mEmailView;
     @Bind(R.id.password)
     EditText mPasswordView;
     @Bind(R.id.pb_login_progress_bar)
@@ -123,13 +123,14 @@ public class LoginFragment extends BaseFragment implements LoginView {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
         ButterKnife.bind(this, view);
         mLoginPresenter.attachView(this);
+        mEmailView.getBackground().setColorFilter(getResources().getColor(R.color.black_gradiant), PorterDuff.Mode.SRC_ATOP);
+        mPasswordView.getBackground().setColorFilter(getResources().getColor(R.color.black_gradiant), PorterDuff.Mode.SRC_ATOP);
         setProgressBar(mProgressBar);
         if (Build.VERSION.SDK_INT >= 23) {
             getPermissionToReadUserContacts();
 
         }
       //  mLoginPresenter.getMasterDataToPresenter();
-        fbSignIn();
         return view;
     }
 

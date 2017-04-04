@@ -150,6 +150,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center|left"
                         android:hint="@string/ID_CELL_PHONE_NUMBER"
+                        android:backgroundTint="@color/fully_transparent"
                         android:inputType="number|phone"
                         android:paddingLeft="@dimen/dp_size_20"
                         android:textColor="@color/text_color_follow"

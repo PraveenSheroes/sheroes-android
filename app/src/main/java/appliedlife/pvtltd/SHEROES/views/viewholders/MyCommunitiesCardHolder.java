@@ -94,14 +94,22 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
         } else {
             tvCommunityTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         }
-        if (dataItem.isMember() && !dataItem.isOwner()) {
+        if(StringUtil.isNotNullOrEmptyString(dataItem.getScreenName())&&dataItem.getScreenName().equalsIgnoreCase(AppConstants.FEATURE_FRAGMENT))
+        {
             tvCommunityInvite.setTextColor(ContextCompat.getColor(mContext, R.color.white));
-            tvCommunityInvite.setText(mContext.getString(R.string.ID_VIEW));
+            tvCommunityInvite.setText(mContext.getString(R.string.ID_JOINED));
             tvCommunityInvite.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
-        } else {
-            tvCommunityInvite.setTextColor(ContextCompat.getColor(mContext, R.color.white));
-            tvCommunityInvite.setText(mContext.getString(R.string.ID_INVITE));
-            tvCommunityInvite.setBackgroundResource(R.drawable.rectangle_community_invite);
+            tvCommunityInvite.setVisibility(View.VISIBLE);
+        }else {
+            if (dataItem.isMember() && !dataItem.isOwner()) {
+                tvCommunityInvite.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+                tvCommunityInvite.setText(mContext.getString(R.string.ID_VIEW));
+                tvCommunityInvite.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
+            } else {
+                tvCommunityInvite.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+                tvCommunityInvite.setText(mContext.getString(R.string.ID_INVITE));
+                tvCommunityInvite.setBackgroundResource(R.drawable.rectangle_community_invite);
+            }
         }
         //TODO:: change for UI
         if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {

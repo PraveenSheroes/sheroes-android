@@ -183,8 +183,7 @@ public class OnBoardingTellUsAboutFragment extends BaseFragment implements OnBoa
     }
     @Override
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
-      //  mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(errorMsg, feedParticipationEnum);
-        mOnboardingIntractionListner.onSheroesHelpYouFragmentOpen(mMasterDataResult,TELL_US_ABOUT);
+       mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(errorMsg, feedParticipationEnum);
     }
     @Override
     public void getBoardingJobResponse(BoardingDataResponse boardingDataResponse) {

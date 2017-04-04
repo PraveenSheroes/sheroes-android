@@ -257,6 +257,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                     if(null!=mViewPagerAdapter) {
                         Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
                         if (AppUtils.isFragmentUIActive(fragment)) {
+                            mFeedDetail.setScreenName(AppConstants.FEATURE_FRAGMENT);
                             ((FeaturedFragment) fragment).joinRequestForOpenCommunity(mFeedDetail);
                         }
                     }

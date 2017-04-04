@@ -101,6 +101,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
     @Inject
     Preference<MasterDataResponse> mUserPreferenceMasterData;
     int position;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,7 +122,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
         mCustomCollapsingToolbarLayout.setExpandedTitleMarginStart(200);
         // mCustomCollapsingToolbarLayout.setTitle(mFeedDetail.getNameOrTitle());
         //  mCustomCollapsingToolbarLayout.setSubtitle(mFeedDetail.getAuthorName());
-        if (null != userPreference && userPreference.isSet() && null != userPreference.get()&&StringUtil.isNotNullOrEmptyString(userPreference.get().getNextScreen())) {
+        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getNextScreen())) {
             if (userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.CURRENT_STATUS_SCREEN)) {
                 tellUsAboutFragment();
             } else if (userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.HOW_CAN_SHEROES_AKA_LOOKING_FOR_SCREEN)) {
@@ -154,7 +155,9 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
                 finish();
             }
         } else {
-            tellUsAboutFragment();
+            Intent homeIntent = new Intent(this, HomeActivity.class);
+            startActivity(homeIntent);
+            finish();
         }
     }
 
@@ -177,7 +180,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
             setTagsForFragment(boardingData, view);
         } else if (baseResponse instanceof LabelValue) {
             LabelValue labelValue = (LabelValue) baseResponse;
-            if(null!=mCurrentStatusDialog) {
+            if (null != mCurrentStatusDialog) {
                 mCurrentStatusDialog.dismiss();
             }
             Fragment tellUsFragment = getSupportFragmentManager().findFragmentByTag(OnBoardingTellUsAboutFragment.class.getName());
@@ -186,7 +189,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
             }
         } else if (baseResponse instanceof GetAllDataDocument) {
             GetAllDataDocument getAllDataDocument = (GetAllDataDocument) baseResponse;
-            if(null!=mOnBoardingSearchDialogFragment) {
+            if (null != mOnBoardingSearchDialogFragment) {
                 mOnBoardingSearchDialogFragment.dismiss();
             }
             Fragment tellUsFragment = getSupportFragmentManager().findFragmentByTag(OnBoardingTellUsAboutFragment.class.getName());
@@ -351,11 +354,11 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
             mHowCanSheroes.setVisibility(View.GONE);
         } else if (mFragmentOpen.isInterestOpen()) {
             mFragmentOpen.setInterestOpen(false);
-            if(mFragmentOpen.isWorkingExpOpen())
-            {
+            if (mFragmentOpen.isWorkingExpOpen()) {
                 mHowCanSheroes.setVisibility(View.GONE);
-            }else {
+            } else {
                 mHowCanSheroes.setVisibility(View.VISIBLE);
+                mFragmentOpen.setLookingForHowCanOpen(true);
             }
             mInterest.setVisibility(View.GONE);
             getSupportFragmentManager().popBackStack();
@@ -728,7 +731,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
     }
 
     public void onWorkExpSuccess() {
-        getSupportFragmentManager().popBackStack();
+        getSupportFragmentManager().popBackStackImmediate();
         mHowCanSheroes.setVisibility(View.GONE);
         mInterest.setVisibility(View.VISIBLE);
         mJobAt.setVisibility(View.GONE);
