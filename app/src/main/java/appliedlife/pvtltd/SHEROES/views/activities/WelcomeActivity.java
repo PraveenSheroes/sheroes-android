@@ -153,8 +153,9 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     @OnClick(R.id.tv_other_login_option)
     public void otherLoginOption() {
-        Intent homeIntent = new Intent(this, LoginActivity.class);
-        startActivity(homeIntent);
+        Intent loginIntent = new Intent(this, LoginActivity.class);
+        loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NO_HISTORY);
+        startActivity(loginIntent);
         finish();
     }
 

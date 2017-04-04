@@ -15,15 +15,17 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-            <ImageView
-                android:id="@+id/iv_search_back"
+            <TextView
+                android:id="@+id/tv_search_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left|top"
                 android:layout_marginLeft="@dimen/dp_size_40"
-                android:padding="@dimen/dp_size_10"
                 android:layout_marginRight="@dimen/dp_size_12"
-                android:background="@drawable/ic_back_black"/>
+                android:paddingLeft="@dimen/dp_size_10"
+                android:paddingTop="@dimen/dp_size_10"
+                android:paddingBottom="@dimen/dp_size_10"
+                android:drawableLeft="@drawable/ic_back_black"/>
             <include layout="@layout/search_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>

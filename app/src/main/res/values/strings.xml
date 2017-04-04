@@ -77,6 +77,8 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_VIEWS">Views</string>
     <string name="ID_MIN_READ">Mins Read</string>
     <string name="ID_JOIN_CONVERSATION">Join the conversation...</string>
+    <string name="ID_SHARE_INTEREST">Share your interest</string>
+    <string name="ID_WHAT_GOOD_AT">What are you good at?</string>
     <string name="ID_EMPTY_TEXT">Please enter comment</string>
     <string name="ID_WISHTLE">Whistle</string>
     <string name="ID_LOVE">Love</string>
@@ -128,6 +130,7 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_COMMUNITES">COMMUNITY</string>
     <string name="ID_PREFERENCES">PREFERENCES</string>
     <string name="ID_ABOUT">ABOUT</string>
+    <string name="ID_I_M_DONE">I’M DONE</string>
     <string name="ID_VERIFY">Verify your identity </string>
     <string name="ID_HEY">Hey</string>
     <string name="ID_HOW_CAN_SHEROES">How can SHEROES help you? </string>
@@ -386,7 +389,7 @@ etur adipiscing elit,sed do eiusmod tempor incididunt ut…</string>
     <string name="ID_GPA">GPA</string>
     <string name="ID_7">7.5</string>
     <string name="ID_8">8</string>
-
+    <string name="ID_FILTERS">Filters</string>
 
     <!--string related of personal lokking_for card-->
 
@@ -542,7 +545,7 @@ etur adipiscing elit,sed do eiusmod tempor incididunt ut…</string>
     <string name="ID_MIN_LEBEL"></string>
     <string name="ID_MAX_LABEL"></string>
     <string name="ID_EXP">Experience</string>
-
+    <string name="ID_OPPORTUNITY_TYPE">Opportunities type</string>
     <string name="ID_WORK_FROM_HOME">Work From Home</string>
     <string name="ID_FREELANCE_RORK">Freelance Work</string>
     <string name="ID_CORPORATE_JOBS">Corporate Jobs</string>

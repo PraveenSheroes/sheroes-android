@@ -397,7 +397,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
         tvCommunityReaction2.setOnClickListener(this);
         tvCommunityReaction3.setOnClickListener(this);
         tvCommunityReaction4.setOnClickListener(this);
-        popupWindow.showAsDropDown(view, 0, -200);
+        popupWindow.showAsDropDown(view, 0,-200);
         popupView.setOnTouchListener(this);
     }
 

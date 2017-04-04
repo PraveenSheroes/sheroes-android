@@ -1,9 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -57,7 +55,6 @@ public class JobFragment extends BaseFragment {
     LinearLayout mLiNoResult;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
-    private HomeActivityIntractionListner mHomeActivityIntractionListner;
     private SwipPullRefreshList mPullRefreshList;
     private AppUtils mAppUtils;
     private FeedDetail mFeedDetail;
@@ -68,18 +65,6 @@ public class JobFragment extends BaseFragment {
     private int mPageNo = AppConstants.ONE_CONSTANT;
     @Bind(R.id.progress_bar_first_load)
     ProgressBar mProgressBarFirstLoad;
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            if (getActivity() instanceof HomeActivityIntractionListner) {
-                mHomeActivityIntractionListner = (HomeActivityIntractionListner) getActivity();
-            }
-        } catch (Fragment.InstantiationException exception) {
-            LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
-        }
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -143,7 +128,6 @@ public class JobFragment extends BaseFragment {
 
     @OnClick(R.id.fab_filter)
     public void clickFilter() {
-        mHomeActivityIntractionListner.openFilter();
     }
 
     private void logUser() {
@@ -196,11 +180,6 @@ public class JobFragment extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         mHomePresenter.detachView();
-    }
-
-    public interface HomeActivityIntractionListner {
-        void onErrorOccurence();
-        void openFilter();
     }
 
 }

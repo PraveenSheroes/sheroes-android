@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:drawableLeft="@drawable/ic_nav_setting"
         android:paddingTop="@dimen/dp_size_10"
+        android:paddingLeft="@dimen/dp_size_5"
         android:paddingBottom="@dimen/dp_size_10"
         android:paddingRight="@dimen/dp_size_10"/>
     <TextView

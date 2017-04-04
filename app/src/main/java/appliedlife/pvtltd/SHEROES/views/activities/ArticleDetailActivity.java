@@ -428,7 +428,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
         }
     }
 
-    @OnClick(R.id.iv_article_detail_back)
+    @OnClick(R.id.tv_article_detail_back)
     public void onBackClick() {
         if (!mFeedDetail.isFromHome()) {
             Intent intent = new Intent();

@@ -88,7 +88,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FO
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.COMMENT_REACTION;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MENU;
 
-public class HomeActivity extends BaseActivity implements SettingView, JobFragment.HomeActivityIntractionListner, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, CommentReactionFragment.HomeActivityIntractionListner, HomeSpinnerFragment.HomeSpinnerFragmentListner {
+public class HomeActivity extends BaseActivity implements SettingView, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, CommentReactionFragment.HomeActivityIntractionListner, HomeSpinnerFragment.HomeSpinnerFragmentListner {
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
     @Inject
     Preference<LoginResponse> mUserPreference;
@@ -247,10 +247,8 @@ public class HomeActivity extends BaseActivity implements SettingView, JobFragme
         //showNetworkTimeoutDoalog(true);
     }
 
-    @Override
-    public void openFilter() {
-        Intent intent = new Intent(getApplicationContext(), JobFilterActivity.class);
-        startActivity(intent);
+    public void openJobFilterFragment() {
+
     }
 
 

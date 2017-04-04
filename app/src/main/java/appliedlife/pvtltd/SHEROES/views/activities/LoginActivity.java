@@ -40,7 +40,6 @@ public class LoginActivity extends BaseActivity implements LoginFragment.LoginAc
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getToken())) {
             if (userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.FEED_SCREEN)) {
                 Intent homeIntent = new Intent(this, HomeActivity.class);
-                homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(homeIntent);
                 finish();
             } else {

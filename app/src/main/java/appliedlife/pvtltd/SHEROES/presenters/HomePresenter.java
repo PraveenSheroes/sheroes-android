@@ -466,7 +466,23 @@ public class HomePresenter extends BasePresenter<HomeView> {
     }
 
     public void saveMasterDataTypes(List<RecentSearchData> recentSearchData) {
-        mRecentSearchDataModel.saveRecentSearchTypes(recentSearchData);
+        Subscription subscribe = mRecentSearchDataModel.saveRecentSearchTypes(recentSearchData).subscribe(new Subscriber<List<RecentSearchData>>() {
+            @Override
+            public void onCompleted() {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                getMvpView().stopProgressBar();
+                getMvpView().showError(e.getMessage(), ERROR_SEARCH_DATA);
+            }
+
+            @Override
+            public void onNext(List<RecentSearchData> masterDatas) {
+                getMvpView().stopProgressBar();
+            }
+        });
+        registerSubscription(subscribe);
     }
 
 

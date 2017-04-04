@@ -76,14 +76,14 @@
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-                <ImageView
-                    android:id="@+id/iv_article_detail_back"
+                <TextView
+                    android:id="@+id/tv_article_detail_back"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left|top"
                     android:layout_marginRight="@dimen/dp_size_25"
                     android:padding="@dimen/dp_size_10"
-                    android:background="@drawable/ic_back_white" />
+                    android:drawableLeft="@drawable/ic_back_white" />
 
                 <TextView
                     android:id="@+id/tv_article_detail_share"

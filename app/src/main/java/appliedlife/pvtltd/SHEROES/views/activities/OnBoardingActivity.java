@@ -101,7 +101,6 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
     @Inject
     Preference<MasterDataResponse> mUserPreferenceMasterData;
     int position;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -151,7 +150,6 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
                 setOnWorkExperienceFragment();
             } else {
                 Intent homeIntent = new Intent(this, HomeActivity.class);
-                homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(homeIntent);
                 finish();
             }
@@ -201,6 +199,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
                         case INTEREST_SEARCH:
                             if (null != mOnBoardingSearchDialogFragment) {
                                 mOnBoardingSearchDialogFragment.dismiss();
+                                AppUtils.showKeyboard(mTvInterestSearchBox, TAG);
                             }
                             if (mIvInterestNext.getVisibility() == View.GONE) {
                                 mIvInterestNext.setVisibility(View.VISIBLE);
@@ -213,6 +212,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
                         case JOB_AT_SEARCH:
                             if (null != mOnBoardingSearchDialogFragment) {
                                 mOnBoardingSearchDialogFragment.dismiss();
+                                AppUtils.showKeyboard(mTvGoodAtSearchBox, TAG);
                             }
                             if (mIvJobAtNext.getVisibility() == View.GONE) {
                                 mIvJobAtNext.setVisibility(View.VISIBLE);
@@ -724,8 +724,9 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
     }
 
     public void onWorkExpSuccess() {
+        getSupportFragmentManager().popBackStack();
         mHowCanSheroes.setVisibility(View.GONE);
-        mInterest.setVisibility(View.GONE);
+        mInterest.setVisibility(View.VISIBLE);
         mJobAt.setVisibility(View.GONE);
         mFragmentOpen.setJobAtOpen(false);
         mFragmentOpen.setLookingForHowCanOpen(false);

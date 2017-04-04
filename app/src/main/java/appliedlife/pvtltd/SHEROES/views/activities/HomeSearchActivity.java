@@ -224,9 +224,9 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
 
     }
 
-    @OnClick(R.id.iv_search_back)
+    @OnClick(R.id.tv_search_back)
     public void searchOnBackClick() {
-        finish();
+      finish();
         overridePendingTransition(R.anim.fade_in_dialog, R.anim.fade_out_dialog);
     }
 
