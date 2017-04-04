@@ -121,7 +121,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
         mCustomCollapsingToolbarLayout.setExpandedTitleMarginStart(200);
         // mCustomCollapsingToolbarLayout.setTitle(mFeedDetail.getNameOrTitle());
         //  mCustomCollapsingToolbarLayout.setSubtitle(mFeedDetail.getAuthorName());
-        if (null != userPreference && userPreference.isSet() && null != userPreference.get()) {
+        if (null != userPreference && userPreference.isSet() && null != userPreference.get()&&StringUtil.isNotNullOrEmptyString(userPreference.get().getNextScreen())) {
             if (userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.CURRENT_STATUS_SCREEN)) {
                 tellUsAboutFragment();
             } else if (userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.HOW_CAN_SHEROES_AKA_LOOKING_FOR_SCREEN)) {
@@ -177,14 +177,18 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
             setTagsForFragment(boardingData, view);
         } else if (baseResponse instanceof LabelValue) {
             LabelValue labelValue = (LabelValue) baseResponse;
-            mCurrentStatusDialog.dismiss();
+            if(null!=mCurrentStatusDialog) {
+                mCurrentStatusDialog.dismiss();
+            }
             Fragment tellUsFragment = getSupportFragmentManager().findFragmentByTag(OnBoardingTellUsAboutFragment.class.getName());
             if (AppUtils.isFragmentUIActive(tellUsFragment)) {
                 ((OnBoardingTellUsAboutFragment) tellUsFragment).setCurrentStaus(labelValue);
             }
         } else if (baseResponse instanceof GetAllDataDocument) {
             GetAllDataDocument getAllDataDocument = (GetAllDataDocument) baseResponse;
-            mOnBoardingSearchDialogFragment.dismiss();
+            if(null!=mOnBoardingSearchDialogFragment) {
+                mOnBoardingSearchDialogFragment.dismiss();
+            }
             Fragment tellUsFragment = getSupportFragmentManager().findFragmentByTag(OnBoardingTellUsAboutFragment.class.getName());
             if (AppUtils.isFragmentUIActive(tellUsFragment)) {
                 ((OnBoardingTellUsAboutFragment) tellUsFragment).setLocationData(getAllDataDocument);

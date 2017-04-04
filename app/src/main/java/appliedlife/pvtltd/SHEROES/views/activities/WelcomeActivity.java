@@ -253,6 +253,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                         @Override
                         public void onCompleted(JSONObject object, GraphResponse response) {
                             if (null != accessToken && StringUtil.isNotNullOrEmptyString(accessToken.getToken())) {
+                                mProgressBar.setVisibility(View.VISIBLE);
                                 LoginRequest loginRequest = AppUtils.loginRequestBuilder();
                                 loginRequest.setAccessToken(accessToken.getToken());
                                 AppUtils appUtils = AppUtils.getInstance();
@@ -346,6 +347,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     @Override
     public void getLogInResponse(LoginResponse loginResponse) {
+        mProgressBar.setVisibility(View.GONE);
         switch (loginResponse.getStatus()) {
             case AppConstants.SUCCESS:
                 if (null != loginResponse && StringUtil.isNotNullOrEmptyString(loginResponse.getToken())) {
@@ -369,8 +371,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                     errorMessage = getString(R.string.ID_GENERIC_ERROR);
                 }
                 showNetworkTimeoutDoalog(true, false, errorMessage);*/
-
-
                 break;
         }
     }

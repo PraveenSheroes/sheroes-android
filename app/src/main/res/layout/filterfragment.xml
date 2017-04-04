@@ -14,6 +14,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/dp_size_42"
             android:background="@color/white"
+            android:layout_marginRight="@dimen/dp_size_30"
             android:orientation="vertical">
 
             <LinearLayout
@@ -41,12 +42,16 @@
                 android:layout_below="@+id/lnr_filter_header"
                 android:layout_marginTop="@dimen/dp_size_10"
                 android:divider="@color/fully_transparent" />
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_size_0.5"
+                android:layout_marginTop="@dimen/dp_size_10"
+                android:background="@color/search_tab_unselected_text" />
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_size_30"
+                android:layout_marginTop="@dimen/dp_size_15"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:text="@string/ID_LOCATION"
                 android:textAllCaps="true"
@@ -62,7 +67,11 @@
                 android:textAllCaps="true"
                 android:textColor="@color/job_filter_desc_color"
                 android:textSize="@dimen/sp_size_12" />
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_size_0.5"
+                android:layout_marginTop="@dimen/dp_size_10"
+                android:background="@color/search_tab_unselected_text" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

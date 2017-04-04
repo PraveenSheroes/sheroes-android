@@ -111,7 +111,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                android:text="tag : testincsnd"
                 android:textColor="@color/feed_article_label"
                 android:textSize="@dimen/sp_size_12" />
 
