@@ -15,7 +15,7 @@
 
     <TextView
         android:id="@+id/tv_owner_title"
-        android:layout_width="250dp"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/iv_user"
         android:layout_marginLeft="18dp"
@@ -27,7 +27,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium" />
     <TextView
         android:id="@+id/tv_owner_city"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_owner_title"
         android:layout_toRightOf="@+id/iv_user"
@@ -35,7 +35,7 @@
         android:textColor="@color/gray_shap"
         android:textSize="@dimen/sp_size_12"
         android:layout_marginLeft="18dp"
-        android:text="Owner"
+        android:text=""
 
         />
     <TextView

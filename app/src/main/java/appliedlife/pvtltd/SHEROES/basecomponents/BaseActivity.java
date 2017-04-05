@@ -358,6 +358,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 Intent intentMyCommunity = new Intent(this, CommunitiesDetailActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
+                LogUtils.error("tagId in base activity=",mFeedDetail.getTag_ids()+"");
                 bundle.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.MY_COMMUNITY);
                 intentMyCommunity.putExtras(bundle);
                 startActivityForResult(intentMyCommunity, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);

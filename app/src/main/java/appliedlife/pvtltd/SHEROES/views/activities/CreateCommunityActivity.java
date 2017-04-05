@@ -5,6 +5,7 @@ import android.os.Bundle;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitySearchTagsFragment;
@@ -57,12 +58,13 @@ public class CreateCommunityActivity extends BaseActivity implements CreateCommu
     }
 
     @Override
-    public void onTagsSubmit(String[] tagsval,long[] tagsid,FeedDetail mFeedDetail) {
+    public void onTagsSubmit(String[] tagsval,long[] tagsid,FeedDetail mFeedDetail,String encimage) {
         getSupportFragmentManager().popBackStack();
         Bundle bundle = new Bundle();
         bundle.putStringArray(AppConstants.TAG_LIST, tagsval);
         bundle.putLongArray(AppConstants.TAG_ID, tagsid);
         bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, mFeedDetail);
+        bundle.putString(AppConstants.COVER_IMAGE, encimage);
         mCommunityFragment = new CreateCommunityFragment();
         mCommunityFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction()
@@ -71,11 +73,12 @@ public class CreateCommunityActivity extends BaseActivity implements CreateCommu
     }
 
     @Override
-    public void callCommunityTagPage(FeedDetail mFeedDetail) {
+    public void callCommunityTagPage(FeedDetail mFeedDetail, String encimage) {
         getSupportFragmentManager().popBackStack();
         CommunitySearchTagsFragment frag=new CommunitySearchTagsFragment();
         Bundle bundle=new Bundle();
         bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, mFeedDetail);
+        bundle.putString(AppConstants.COVER_IMAGE,encimage);
         frag.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
                 .replace(R.id.create_community_container, frag, CommunitySearchTagsFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();

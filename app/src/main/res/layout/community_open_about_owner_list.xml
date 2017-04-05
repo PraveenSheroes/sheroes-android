@@ -35,7 +35,7 @@
         android:textColor="@color/gray_shap"
         android:textSize="@dimen/sp_size_12"
         android:layout_marginLeft="18dp"
-        android:text="Owner"
+        android:text=""
 
         />
     <TextView

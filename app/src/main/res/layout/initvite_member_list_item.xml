@@ -23,7 +23,7 @@
 
     <TextView
         android:id="@+id/tv_member_city"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:textColor="@color/teg_text_color"
         android:layout_below="@+id/tv_member_name"

@@ -187,6 +187,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
     @OnClick(R.id.tv_join_view)
     public void joinClick() {
         String joinTxt = mTvJoinView.getText().toString();
+        mTvJoinView.setText(R.string.ID_REQUESTED);
         ((CommunitiesDetailActivity) getActivity()).inviteJoinEventClick(joinTxt, mFeedDetail);
     }
 

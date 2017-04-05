@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,6 +66,8 @@ public class CommunityTypeFragment extends BaseDialogFragment implements Communi
     @Bind(R.id.lv_community_type_listview)
     ListView mCommunityTypelistView;
     CommunityTypeAdapter madapter;
+    @Bind(R.id.rl_done)
+    RelativeLayout rl_done;
     private boolean finishParent;
     Long typeId;
     public static final String DISMISS_PARENT_ON_OK_OR_BACK = "DISMISS_PARENT_ON_OK_OR_BACK";
@@ -130,7 +133,7 @@ public class CommunityTypeFragment extends BaseDialogFragment implements Communi
             data= mUserPreferenceMasterData.get().getData();
             LogUtils.error("Master Data",data+"");
             HashMap<String, ArrayList<LabelValue>> hashMap=data.get(AppConstants.MASTER_DATA_COMMUNITY_TYPE_KEY);
-            List<LabelValue> labelValueArrayList = hashMap.get(AppConstants.MASTER_DATA_DEFAULT_CATEGORY);
+            List<LabelValue> labelValueArrayList = hashMap.get(AppConstants.MASTER_DATA_POPULAR_CATEGORY);
             PopularTag filterList = new PopularTag();
             filterList.setName("Community Type");
 
@@ -164,7 +167,7 @@ public class CommunityTypeFragment extends BaseDialogFragment implements Communi
 
         LogUtils.error("Master Data",data+"");
         HashMap<String, ArrayList<LabelValue>> hashMap=mapOfResult.get(AppConstants.MASTER_DATA_COMMUNITY_TYPE_KEY);
-        List<LabelValue> labelValueArrayList = hashMap.get(AppConstants.MASTER_DATA_DEFAULT_CATEGORY);
+        List<LabelValue> labelValueArrayList = hashMap.get(AppConstants.MASTER_DATA_POPULAR_CATEGORY);
         PopularTag filterList = new PopularTag();
         filterList.setName("Popular Tag");
         List<String> jobAtList = new ArrayList<>();
@@ -190,7 +193,7 @@ public class CommunityTypeFragment extends BaseDialogFragment implements Communi
     public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
         setMasterData(mapOfResult);
     }
-    @OnClick(R.id.tv_community_type_submit)
+    @OnClick(R.id.rl_done)
     public void onDoneClick() {
         typeId=typeid.get(mCommunityTypelistView.getSelectedItem());
         Toast.makeText(getActivity(), mCommunityTypelistView.getSelectedItem() + "", Toast.LENGTH_LONG).show();
@@ -261,6 +264,9 @@ public class CommunityTypeFragment extends BaseDialogFragment implements Communi
 
     @Override
     public void communityType(String communitytype) {
+
+        typeId=typeid.get(communitytype);
+
         Toast.makeText(getActivity(), communitytype, Toast.LENGTH_LONG).show();
         getDialog().cancel();
         mHomeActivityIntractionListner.onAddFriendSubmit(communitytype, typeId);

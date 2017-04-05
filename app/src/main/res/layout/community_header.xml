@@ -12,6 +12,7 @@
         android:fontFamily="@string/ID_ROBOTO_LIGHT"
         android:text="@string/ID_FILTERS"
         android:textAllCaps="true"
+        android:layout_marginLeft="@dimen/dp_size_20"
         android:textColor="@color/text_color_about"
         android:textSize="@dimen/sp_size_24" />
 
@@ -26,6 +27,7 @@
         android:paddingBottom="@dimen/dp_size_2"
         android:paddingLeft="10dp"
         android:paddingRight="@dimen/dp_size_10"
+        android:layout_marginRight="@dimen/dp_size_20"
         android:paddingTop="@dimen/dp_size_2" />
 
 </RelativeLayout>

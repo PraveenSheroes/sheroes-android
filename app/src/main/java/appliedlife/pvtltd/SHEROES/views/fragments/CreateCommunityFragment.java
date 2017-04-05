@@ -153,6 +153,8 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
     View view;
     long tagId[]=new long[4];
 
+    List<Long> tagsid = new ArrayList<>();
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -183,6 +185,14 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
                 mFeedDetail = getArguments().getParcelable(AppConstants.COMMUNITIES_DETAIL);
                 if (null != mFeedDetail) {
 
+                    if (null !=mFeedDetail.getCommunityType()) {
+                        mEtCommunityType.setText(mFeedDetail.getCommunityType().toString());
+                        typeId=mFeedDetail.getCommunityTypeL();
+                    }
+                    if (null !=mFeedDetail.getTag_ids() && mFeedDetail.getTag_ids().size()>0 ) {
+                        mEtCreateCommunityTags.setText(mFeedDetail.getTags().toString());
+                        tagsid=mFeedDetail.getTag_ids();
+                    }
                     if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getNameOrTitle())) {
                         metCreateCommunityName.setText(mFeedDetail.getNameOrTitle());
                     }
@@ -194,52 +204,84 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
                         mTvCreate.setText(R.string.ID_EDIT);
                         mtvCreateCommunityTitle.setText("EDIT COMMUNITY");
                     }
-                    if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getImageUrl())) {
-                        Glide.with(this)
-                                .load(mFeedDetail.getImageUrl()).asBitmap()
-                                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                                .skipMemoryCache(true)
-                                .into(new SimpleTarget<Bitmap>() {
-                                    @Override
-                                    public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
-                                        mIvCover.setImageBitmap(resource);
-                                        Palette.from(resource).generate(new Palette.PaletteAsyncListener() {
-                                            public void onGenerated(Palette palette) {
-                                                getActivity().supportStartPostponedEnterTransition();
-                                            }
-                                        });
-                                    }
-                                });
+                    if(null != getArguments().getStringArray(AppConstants.TAG_LIST)) {
+
                     }
-                    if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getThumbnailImageUrl())) {
-                        Glide.with(mIvlogo.getContext())
-                                .load((mFeedDetail.getThumbnailImageUrl()))
-                                .asBitmap()
-                                .into(new SimpleTarget<Bitmap>(100,100) {
-                                    @Override
-                                    public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
-                                        mIvlogo.setCompoundDrawablesWithIntrinsicBounds(null, new BitmapDrawable(mIvlogo.getResources(),resource), null, null);
-                                    }
-                                });
-                       // mIvlogo.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                    else {
+                        if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getImageUrl())) {
+                            Glide.with(this)
+                                    .load(mFeedDetail.getImageUrl()).asBitmap()
+                                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                                    .skipMemoryCache(true)
+                                    .into(new SimpleTarget<Bitmap>() {
+                                        @Override
+                                        public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
+                                            mIvCover.setImageBitmap(resource);
+                                            Palette.from(resource).generate(new Palette.PaletteAsyncListener() {
+                                                public void onGenerated(Palette palette) {
+                                                    getActivity().supportStartPostponedEnterTransition();
+                                                }
+                                            });
+                                        }
+                                    });
+                            if (null != mIvCover.getDrawable()) {
+                                Bitmap bitmap = ((BitmapDrawable) mIvCover.getDrawable()).getBitmap();
+                                byte[] buffer = new byte[4096];
+                                buffer = getBytesFromBitmap(bitmap);
+                                encCoverImage = Base64.encodeToString(buffer, Base64.DEFAULT);
+
+                            }
+                        }
+                        if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getThumbnailImageUrl())) {
+                            Glide.with(mIvlogo.getContext())
+                                    .load((mFeedDetail.getThumbnailImageUrl()))
+                                    .asBitmap()
+                                    .into(new SimpleTarget<Bitmap>(100, 100) {
+                                        @Override
+                                        public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
+                                            mIvlogo.setCompoundDrawablesWithIntrinsicBounds(null, new BitmapDrawable(mIvlogo.getResources(), resource), null, null);
+                                        }
+                                    });
+                            if (null != (mIvlogo.getDrawingCache())) {
+                                mIvlogo.buildDrawingCache();
+                                Bitmap bitmap1 = mIvlogo.getDrawingCache();
+                                //  Bitmap bitmap1 = mIvlogo.getDrawingCache();
+                                byte[] buffer = new byte[4096];
+                                buffer = getBytesFromBitmap(bitmap1);
+                                encImage = Base64.encodeToString(buffer, Base64.DEFAULT);
+                            }
+                            // mIvlogo.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                        }
                     }
                     mCbcloseCommunity.setChecked(mFeedDetail.isClosedCommunity());
                     mCbopenCommunity.setChecked(!mFeedDetail.isClosedCommunity());
+                }
+                else{
+                   if(null != getArguments().getStringArray(AppConstants.TAG_LIST)) {
+
+                    }
+                    else{
+                        mUserPreference.delete();
+                    }
                 }
                 if (null != getArguments().getStringArray(AppConstants.TAG_LIST)) {
                     String[] tagsval = getArguments().getStringArray(AppConstants.TAG_LIST);
                     long tagIds[]=getArguments().getLongArray(AppConstants.TAG_ID);
                     tagId=tagIds;
                     String tagval = "";
-                    for (int i = 1; i < tagsval.length; i++) {
+                    for (int i = 1; i < tagsval.length && StringUtil.isNotNullOrEmptyString(tagsval[i]); i++) {
                         if(i==1 )
                         tagval = tagval + " " + tagsval[i];
                         else
-                            tagval = tagval + ", " + tagsval[i];
+                            tagval = tagval + " , " + tagsval[i];
                     }
                     tagval=tagval.replaceAll("null","");
-                    tagval=tagval.substring(0,tagval.length()-1);
+                    tagval=tagval.substring(0,tagval.length());
                     mEtCreateCommunityTags.setText(tagval);
+                }
+                if(null !=getArguments().getString(AppConstants.COVER_IMAGE))
+                {
+                    encCoverImage=getArguments().getString(AppConstants.COVER_IMAGE);
                 }
 
             } else {
@@ -278,8 +320,7 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
     public void backClick() {
         mUserPreference.delete();
 
-        genericFragmentActivityIntractionListner.close();
-
+        getActivity().finish();
     }
 
     @OnClick(R.id.tv_create_community_logo_upload)
@@ -302,9 +343,10 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
         checkCameraPermission();
         openImageOption();
     }
-
+//*********Tag Click**********************//
     @OnClick(R.id.et_create_community_tags)
     public void btnTagClick() {
+        mUserPreference.delete();
         mTagFlag=1;
         CreateCommunityRequest createCommunityRequest=new CreateCommunityRequest();
 
@@ -313,27 +355,27 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
             createCommunityRequest.setName(metCreateCommunityName.getText().toString());
 
         }
+
         if(null !=mIvCover.getDrawable()) {
             Bitmap bitmap = ((BitmapDrawable) mIvCover.getDrawable()).getBitmap();
             byte[] buffer = new byte[4096];
             buffer = getBytesFromBitmap(bitmap);
             encCoverImage = Base64.encodeToString(buffer, Base64.DEFAULT);
-            if (StringUtil.isNotNullOrEmptyString(encCoverImage)) {
                 createCommunityRequest.setCoverImage(encCoverImage);
 
-            }
+
+
         }
+        mIvlogo.buildDrawingCache();
         if(null !=(mIvlogo.getDrawingCache())) {
-            mIvlogo.buildDrawingCache();
             Bitmap bitmap1 = mIvlogo.getDrawingCache();
             //  Bitmap bitmap1 = mIvlogo.getDrawingCache();
             byte[] buffer = new byte[4096];
             buffer = getBytesFromBitmap(bitmap1);
             encImage = Base64.encodeToString(buffer, Base64.DEFAULT);
-            if (StringUtil.isNotNullOrEmptyString(encImage)) {
                 createCommunityRequest.setLogo(encImage);
 
-            }
+
         }
         if(StringUtil.isNotNullOrEmptyString(metCreateCommunityDescription.getText().toString()))
         {
@@ -347,11 +389,11 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
         }
         if(null !=typeId)
         {
-            createCommunityRequest.setCommunityTypeId(2);
+            createCommunityRequest.setCommunityTypeId(typeId);
         }
 
         mUserPreference.set(createCommunityRequest);
-        mCreatecommunityIntractionListner.callCommunityTagPage(mFeedDetail);
+        mCreatecommunityIntractionListner.callCommunityTagPage(mFeedDetail,encCoverImage);
 
         //  CommunitySearchTagsFragment newFragment = new CommunitySearchTagsFragment();
     }
@@ -365,7 +407,7 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
 
     @OnClick(R.id.tv_create_community_submit)
     public void btnCreateClick() {
-        mTvCreate.setVisibility(View.GONE);
+        mTvCreate.setEnabled(false);
        /* Intent intent = new Intent(getActivity(), CreateCommunityPostActivity.class);
         startActivity(intent);*/
         if(StringUtil.isNotNullOrEmptyString(metCreateCommunityDescription.getText().toString()) && StringUtil.isNotNullOrEmptyString(mEtCommunityType.getText().toString()) && StringUtil.isNotNullOrEmptyString(metCreateCommunityName.getText().toString()) && StringUtil.isNotNullOrEmptyString(mEtCreateCommunityTags.getText().toString())) {
@@ -376,6 +418,7 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
             }
         }
         else {
+            mTvCreate.setEnabled(true);
             genericFragmentActivityIntractionListner.onErrorOccurence((AppConstants.BLANK_MESSAGE));
         }
         // mCreatecommunityIntractionListner.close();
@@ -384,13 +427,17 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
     void callEditCommunitySubmit() {
         mProgressBar.setVisibility(View.VISIBLE);
 
-        List<Integer> tags = new ArrayList<>();
-        tags.add(1);
-        tags.add(2);
-        List<Integer> tags1 = new ArrayList<>();
-        tags1.add(1);
-        tags1.add(2);
+        List<Long> tags = new ArrayList<>();
+        for(int i=0;i<tagId.length;i++)
+        {
+            if(tagId[i]>0)
+                tags.add(tagId[i]);
 
+        }
+        if(tags.size()==0)
+        {
+            tags=tagsid;
+        }
         List<Long> tags2 = new ArrayList<>();
         for(int i=0;i<tagId.length;i++)
         {
@@ -400,7 +447,30 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
         }
 
         EditCommunityRequest editCommunityRequest = new EditCommunityRequest();
-        editCommunityRequest.setCoverImageUrl(encCoverImage);
+      //  editCommunityRequest.setCoverImageUrl(encCoverImage);
+
+
+        CreateCommunityRequest createCommunityRequest1 = new CreateCommunityRequest();
+        createCommunityRequest1 = mUserPreference.get();
+        CreateCommunityRequest createCommunityRequest = new CreateCommunityRequest();
+        if(null !=createCommunityRequest1.getCoverImage()) {
+            editCommunityRequest.setCoverImageUrl(createCommunityRequest1.getCoverImage());
+
+        }
+        else {
+            editCommunityRequest.setCoverImageUrl(encCoverImage);
+
+        }
+        if(null !=createCommunityRequest1.getLogo()) {
+            editCommunityRequest.setLogoUrl(createCommunityRequest1.getLogo());
+
+        }
+        else {
+            editCommunityRequest.setLogoUrl(encImage);
+
+        }
+
+
 
         editCommunityRequest.setLogoUrl(encImage);
         editCommunityRequest.setId((int) mFeedDetail.getIdOfEntityOrParticipant());
@@ -411,7 +481,7 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
 
         editCommunityRequest.setCloudMessagingId("String");
 
-        editCommunityRequest.setCommunityTypeId(2);
+        editCommunityRequest.setCommunityTypeId(typeId);
 
         if (null != metCreateCommunityDescription.getText().toString() && StringUtil.isNotNullOrEmptyString(metCreateCommunityDescription.getText().toString())) {
             mDescription = metCreateCommunityDescription.getText().toString();
@@ -434,13 +504,16 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
 
         editCommunityRequest.setScreenName("String");
 
-        editCommunityRequest.setRemovedTags(tags1);
+        editCommunityRequest.setRemovedTags(tagsid);
 
-        editCommunityRequest.setTags(tags2);
+
+        editCommunityRequest.setTags(tags);
         if (StringUtil.isNotNullOrEmptyString(mCommunityName) || StringUtil.isNotNullOrEmptyString(mDescription))
             createCommunityPresenter.postEditCommunityList(editCommunityRequest);
-        else
+        else {
+            mTvCreate.setEnabled(true);
             genericFragmentActivityIntractionListner.onErrorOccurence((AppConstants.INAVLID_DATA));
+        }
 
     }
 
@@ -480,7 +553,7 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
 
         createCommunityRequest.setCloudMessagingId("String");
 
-        createCommunityRequest.setCommunityTypeId(2);
+        createCommunityRequest.setCommunityTypeId(typeId);
         if (null != metCreateCommunityDescription.getText().toString() && StringUtil.isNotNullOrEmptyString(metCreateCommunityDescription.getText().toString())) {
             mDescription = metCreateCommunityDescription.getText().toString();
         }
@@ -528,8 +601,9 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
                         metCreateCommunityDescription.setText(createCommunityRequest.getDescription());
                     if (null != createCommunityRequest.getType())
                         mEtCommunityType.setText(createCommunityRequest.getType());
-                    if (null != createCommunityRequest.getCoverImage()) {
-                        byte[] decodedString = Base64.decode(createCommunityRequest.getCoverImage(), Base64.DEFAULT);
+                    if (null != encCoverImage) {
+                        mIvCover.setImageDrawable(null);
+                        byte[] decodedString = Base64.decode(encCoverImage, Base64.DEFAULT);
                         Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                         mIvCover.setImageBitmap(decodedByte);
                     }
@@ -540,9 +614,9 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
                         mIvlogo.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
 
                     }
-                    if (null != createCommunityRequest.getType()) {
+                    if (null != createCommunityRequest.getCommunityTypeId()) {
 
-                        mEtCommunityType.setText(createCommunityRequest.getType());
+                        typeId=createCommunityRequest.getCommunityTypeId();
 
                     }
                 }
@@ -718,13 +792,13 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
     @Override
     public void postCreateCommunitySuccess(CreateCommunityResponse createCommunityResponse) {
         mProgressBar.setVisibility(View.GONE);
-        mTvCreate.setVisibility(View.GONE);
+        mTvCreate.setEnabled(true);
 
         if (null != createCommunityResponse && StringUtil.isNotNullOrEmptyString(createCommunityResponse.getStatus())) {
 
             Toast.makeText(getActivity(), createCommunityResponse.getStatus(), Toast.LENGTH_LONG).show();
 
-            genericFragmentActivityIntractionListner.close();
+            getActivity().finish();
         }
         else
         {
@@ -776,7 +850,7 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
     }*/
 
     public interface CreateCommunityActivityIntractionListner {
-        void callCommunityTagPage(FeedDetail mfeed);
+        void callCommunityTagPage(FeedDetail mfeed,String createCommunityRequest);
     }
 
     private void openImageOption() {
@@ -871,6 +945,7 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
                     // profilepic.setImageBitmap(photo);
                     // profile.setImageBitmap(photo);//**********************set image on imageview
                     if (mImage_type == 2) {
+                        mIvCover.setImageDrawable(null);
                         mIvCover.setImageBitmap(photo);
                         byte[] buffer = new byte[4096];
                         buffer = getBytesFromBitmap(photo);
@@ -915,8 +990,10 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
                 //  btn_profile_pic.setImageBitmap(photo);
                 // profilepic.setImageBitmap(photo);
                 // profile.setImageBitmap(photo);
-                if (mImage_type == 2)
+                if (mImage_type == 2) {
+                    mIvCover.setImageDrawable(null);
                     mIvCover.setImageBitmap(photo);
+                }
                 else {
                     mIvlogo.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
 
@@ -933,15 +1010,22 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
 */
             return;
         } else {
+
             intent.setData(mImageCaptureUri);
-           /* intent.putExtra("outputX", 512);
+            intent.putExtra("outputX", 512);
             intent.putExtra("outputY", 512);
-            intent.putExtra("aspectX", 1);
-            intent.putExtra("aspectY", 1);
-            intent.putExtra("scale", true);*/
+            if(mImage_type==1){
+                intent.putExtra("aspectX", 1);
+                intent.putExtra("aspectY", 1);
+            }
+            else{
+                intent.putExtra("aspectX", 5);
+                intent.putExtra("aspectY", 2);
+            }
+            intent.putExtra("scale", true);
 
             //TODO: don't use return-data tag_item_ui_for_onboarding because it's not return large image data and crash not given any message
-            //intent.putExtra("return-data", true);
+            intent.putExtra("return-data", true);
 
             //Create output file here
             intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mOutPutFile));
@@ -960,8 +1044,10 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
                 // btn_profile_pic.setImageBitmap(bmp);//**********************set image on imageview
                 // profile.setImageBitmap(bmp);//**********************set image on imageview
                 // profilepic.setImageBitmap(bmp);
-                if (mImage_type == 2)
+                if (mImage_type == 2) {
+                    mIvCover.setImageDrawable(null);
                     mIvCover.setImageBitmap(bmp);
+                }
                 else {
                     mIvlogo.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
 

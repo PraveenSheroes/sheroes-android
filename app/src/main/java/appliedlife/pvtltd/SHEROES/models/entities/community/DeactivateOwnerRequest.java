@@ -29,7 +29,7 @@ public class DeactivateOwnerRequest {
     private String screenName;
     @SerializedName("user_id")
     @Expose
-    private Integer userId;
+    private long userId;
 
     public String getAppVersion() {
         return appVersion;
@@ -79,11 +79,11 @@ public class DeactivateOwnerRequest {
         this.screenName = screenName;
     }
 
-    public Integer getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 }

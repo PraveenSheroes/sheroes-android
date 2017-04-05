@@ -8,7 +8,14 @@
     android:layout_marginBottom="@dimen/dp_size_5"
     app:cardElevation="@dimen/dp_size_2"
     app:layout_anchorGravity="bottom|center">
-
+    <ImageView
+        android:id="@+id/iv_communities_detail"
+        android:layout_width="@dimen/dp_size_60"
+        android:layout_gravity="left"
+        android:layout_margin="@dimen/dp_size_16"
+        android:layout_height="@dimen/dp_size_60"
+        android:background="@drawable/image_view_shap"
+        />
     <TextView
         android:id="@+id/tv_next_icon"
         android:layout_width="wrap_content"
@@ -36,11 +43,11 @@
 
         <TextView
             android:id="@+id/tv_community_name"
-            android:layout_width="match_parent"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_marginTop="@dimen/dp_size_40"
-            android:layout_marginLeft="@dimen/dp_size_30"
+            android:layout_marginLeft="@dimen/dp_size_5"
             android:layout_marginRight="@dimen/dp_size_30"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:gravity="center"
@@ -51,10 +58,10 @@
 
         <TextView
             android:id="@+id/tv_community_related"
-            android:layout_width="match_parent"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_marginLeft="@dimen/dp_size_30"
+            android:layout_marginLeft="@dimen/dp_size_5"
             android:layout_marginRight="@dimen/dp_size_30"
             android:layout_marginTop="@dimen/dp_size_10"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
@@ -74,6 +81,7 @@
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:gravity="center"
             android:padding="@dimen/dp_size_20"
+            android:visibility="gone"
             android:layout_marginBottom="@dimen/dp_size_15"
             android:text="@string/ID_JOIN"
             android:textColor="@color/footer_icon_text"

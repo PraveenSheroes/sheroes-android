@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -75,8 +76,6 @@ public class CommunitiesDetailActivity extends BaseActivity implements FragmentI
     ImageView ivCommunitiesDetail;
     @Bind(R.id.view_pager_communities_detail)
     ViewPager mViewPagerCommunitiesDetail;
-    @Bind(R.id.fab_communities_detail)
-    FloatingActionButton mFloatingActionButton;
     @Bind(R.id.toolbar_communities_detail)
     Toolbar mToolbarCommunitiesDetail;
     @Bind(R.id.collapsing_toolbar_communities_detail)
@@ -85,7 +84,8 @@ public class CommunitiesDetailActivity extends BaseActivity implements FragmentI
     TextView mTvMemebr;
     @Bind(R.id.tv_communities_time)
     TextView mTvCommunityTime;
-
+    @Bind(R.id.community_detail_activity)
+    CoordinatorLayout mCommunityDetailActivity;
     private FeedDetail mFeedDetail;
     private FragmentOpen mFragmentOpen;
     ViewPagerAdapter viewPagerAdapter;
@@ -95,6 +95,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements FragmentI
     Long mcommunity_id;
     private CommunityOpenAboutFragment communityOpenAboutFragment;
     private CommunityEnum communityEnum = null;
+
     public static void navigate(AppCompatActivity activity, View transitionImage, FeedDetail feedDetail) {
         Intent intent = new Intent(activity, CommunitiesDetailActivity.class);
         Bundle bundle = new Bundle();
@@ -115,6 +116,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements FragmentI
         ButterKnife.bind(this);
         if (null != getIntent()) {
             mFeedDetail = getIntent().getParcelableExtra(AppConstants.COMMUNITY_DETAIL);
+            LogUtils.error("tagId In detail page=",mFeedDetail.getTag_ids()+"");
             communityEnum = (CommunityEnum) getIntent().getSerializableExtra(AppConstants.MY_COMMUNITIES_FRAGMENT);
         }
         setPagerAndLayouts();
@@ -130,10 +132,12 @@ public class CommunitiesDetailActivity extends BaseActivity implements FragmentI
         mCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
         if (null != mFeedDetail) {
             if (mFeedDetail.isClosedCommunity()) {
+                mCommunityDetailActivity.setVisibility(View.GONE);
                 communityOpenAboutFragment();
             } else {
+                mCommunityDetailActivity.setVisibility(View.VISIBLE);
                 mTvMemebr.setText(mFeedDetail.getNoOfMembers() + AppConstants.SPACE + getString(R.string.ID_MEMBERS));
-                mFloatingActionButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_feed_article_top_left));
+              //  mFloatingActionButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_feed_article_top_left));
                 mCollapsingToolbarLayout.setTitle(mFeedDetail.getNameOrTitle());
                 mCollapsingToolbarLayout.setSubtitle(mFeedDetail.getNameOrTitle());
                 viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -484,10 +488,17 @@ public class CommunitiesDetailActivity extends BaseActivity implements FragmentI
 
     @Override
     public void onClose() {
-        ivCommunitiesDetail.setVisibility(View.VISIBLE);
-        mToolbarCommunitiesDetail.setVisibility(View.VISIBLE);
-        mFloatingActionButton.setVisibility(View.VISIBLE);
-        getSupportFragmentManager().popBackStack();
+        if(mFeedDetail.isClosedCommunity())
+        {
+            finish();
+        }
+        else {
+            mCommunityDetailActivity.setVisibility(View.VISIBLE);
+            ivCommunitiesDetail.setVisibility(View.VISIBLE);
+            mToolbarCommunitiesDetail.setVisibility(View.VISIBLE);
+         //   mFloatingActionButton.setVisibility(View.VISIBLE);
+            getSupportFragmentManager().popBackStack();
+        }
 
     }
 
@@ -525,5 +536,12 @@ public class CommunitiesDetailActivity extends BaseActivity implements FragmentI
     @Override
     public void onShowErrorDialog() {
 
+    }
+
+    @Override
+    public void onInviteDone() {
+       /* final Fragment fragmentCommunityOwnerSearch = getSupportFragmentManager().findFragmentByTag(CommunityOpenAboutFragment.class.getName());
+            ((CommunityOpenAboutFragment) fragmentCommunityOwnerSearch).refreshMemberCount();*/
+        getSupportFragmentManager().popBackStack();
     }
 }

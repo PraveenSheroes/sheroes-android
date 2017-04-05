@@ -121,6 +121,7 @@ public class CommunitySearchTagsFragment extends BaseFragment implements Communi
     HashMap<String, HashMap<String, ArrayList<LabelValue>>> data = new HashMap<>();
     PopularTag filterList;
     FeedDetail mFeedDetail;
+    String encImage;
 
     @Override
     public void onAttach(Context context) {
@@ -147,6 +148,7 @@ public class CommunitySearchTagsFragment extends BaseFragment implements Communi
 
         if (null != getArguments()) {
             mFeedDetail = getArguments().getParcelable(AppConstants.COMMUNITIES_DETAIL);
+            encImage=getArguments().getString(AppConstants.COVER_IMAGE);
         }
 
 
@@ -184,7 +186,7 @@ public class CommunitySearchTagsFragment extends BaseFragment implements Communi
     public void tagSubmitPress()
     {
 
-        mHomeActivityIntractionListner.onTagsSubmit(mTags,mTagsid,mFeedDetail);
+        mHomeActivityIntractionListner.onTagsSubmit(mTags,mTagsid,mFeedDetail,encImage);
 
     }
     private void setMasterData(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult)
@@ -193,7 +195,7 @@ public class CommunitySearchTagsFragment extends BaseFragment implements Communi
 
             LogUtils.error("Master Data",data+"");
             HashMap<String, ArrayList<LabelValue>> hashMap=mapOfResult.get(AppConstants.MASTER_DATA_TAGS_KEY);
-            List<LabelValue> labelValueArrayList = hashMap.get(AppConstants.MASTER_DATA_DEFAULT_CATEGORY);
+            List<LabelValue> labelValueArrayList = hashMap.get(AppConstants.MASTER_DATA_POPULAR_CATEGORY);
              filterList = new PopularTag();
             filterList.setName("Popular Tag");
             List<String> jobAtList = new ArrayList<>();
@@ -219,7 +221,70 @@ public class CommunitySearchTagsFragment extends BaseFragment implements Communi
         mAdapter.setSheroesGenericListData(listFeelter);
         mAdapter.notifyDataSetChanged();
     }
+    @OnClick(R.id.tv_selected_tag1)
+    void onTag1Click()
+    {
+        mTag1.setText("");
+        mCount--;
+        if(StringUtil.isNotNullOrEmptyString(mTag2.getText().toString())) {
+            mTag1.setText(mTag2.getText());
+            mTag2.setVisibility(View.GONE);
+            mTv_no_of_tags.setText("2/3");
 
+            mVindecator1.setBackgroundColor((getResources().getColor(R.color.popular_tag_color)));
+        }
+        if(StringUtil.isNotNullOrEmptyString(mTag3.getText().toString())) {
+            mTag1.setText(mTag1.getText());
+            mTag2.setVisibility(View.VISIBLE);
+            mTag3.setVisibility(View.GONE);
+        }
+        else
+            mTag1.setVisibility(View.GONE);
+
+    }
+    @OnClick(R.id.tv_selected_tag2)
+    void onTag2Click()
+    {
+        mTag2.setText("");
+        mCount--;
+        if(StringUtil.isNotNullOrEmptyString(mTag3.getText().toString())) {
+            mTag2.setText(mTag3.getText());
+            mTag3.setVisibility(View.GONE);
+        }
+        else
+            mTag2.setVisibility(View.GONE);
+
+
+    }
+    @OnClick(R.id.tv_selected_tag3)
+    void onTag3Click()
+    {
+        mTag3.setText("");
+        mCount--;
+            mTag3.setVisibility(View.GONE);
+
+
+    }
+    @OnClick(R.id.tv_selected_tag4)
+    void onTag4Click()
+    {
+        mTag4.setText("");
+        mCount--;
+
+        if(StringUtil.isNotNullOrEmptyString(mTag5.getText().toString())) {
+            mTag4.setText(mTag5.getText());
+            mTag5.setVisibility(View.GONE);
+        }
+        if(StringUtil.isNotNullOrEmptyString(mTag6.getText().toString())) {
+            mTag5.setText(mTag6.getText());
+            mTag5.setVisibility(View.VISIBLE);
+            mTag6.setVisibility(View.GONE);
+        }
+        else
+            mTag4.setVisibility(View.GONE);
+
+
+    }
     @Override
     public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
         setMasterData(mapOfResult);
@@ -501,6 +566,6 @@ public class CommunitySearchTagsFragment extends BaseFragment implements Communi
 
 
     public interface MyCommunityTagListener {
-        void onTagsSubmit(String[] tagsval,long[] tagsid,FeedDetail mFeeddetails);
+        void onTagsSubmit(String[] tagsval,long[] tagsid,FeedDetail mFeeddetails,String coverimage);
     }
 }

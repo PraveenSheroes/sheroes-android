@@ -108,6 +108,7 @@ public class AppConstants {
     public static final String JOB_AT = "job_at";
     public static final String JOB_DETAIL = "job_detail";
     public static final String COMMUNITY_DETAIL = "community_detail";
+    public static final String COVER_IMAGE = "cover_image";
     public static final String TAG_LIST = "tag_list";
     public static final String TAG_ID = "tag_id";
     public static final String MEMBER = "Member_detail";
@@ -158,7 +159,9 @@ public class AppConstants {
 
     public static final String MASTER_DATA_OPRTUNITY = "Opportunities"; // on second map lavele key
 
-    public static final String MASTER_DATA_DEFAULT_CATEGORY = "POPULAR"; // on second map lavele key
+    public static final String MASTER_DATA_DEFAULT_CATEGORY = "DEFAULT"; // on second map lavele key
+    public static final String MASTER_DATA_POPULAR_CATEGORY = "POPULAR"; // on second map lavele key
+
     public static final String DAY = " day";
     public static final String HOUR = " hour";
     public static final String MINUT = " minute";

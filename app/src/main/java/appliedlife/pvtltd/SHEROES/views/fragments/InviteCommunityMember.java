@@ -227,7 +227,8 @@ public class InviteCommunityMember extends BaseFragment {
             case JOIN_INVITE:
                 //ToDO:; need to verify dialog;
                 Toast.makeText(getContext(), "Add members", Toast.LENGTH_SHORT).show();
-                inviteSearchBack();
+                //inviteSearchBack();
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onInviteDone();
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);

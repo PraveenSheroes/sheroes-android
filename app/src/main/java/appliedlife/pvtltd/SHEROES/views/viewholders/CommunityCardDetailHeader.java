@@ -4,7 +4,10 @@ import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
@@ -14,6 +17,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOpenAboutFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -32,9 +36,12 @@ public class CommunityCardDetailHeader extends BaseViewHolder<FeedDetail> {
     TextView tvJoin;
     @Bind(R.id.tv_community_related)
     TextView tvCommunityRelated;
+    @Bind(R.id.iv_communities_detail)
+    ImageView iv_communities_detail;
     BaseHolderInterface viewInterface;
     private FeedDetail dataItem;
     private Context mContext;
+
 
     public CommunityCardDetailHeader(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
@@ -48,6 +55,8 @@ public class CommunityCardDetailHeader extends BaseViewHolder<FeedDetail> {
     public void bindData(FeedDetail item, final Context context, int position) {
         this.dataItem = item;
         this.mContext = context;
+        Glide.with(context).load(item.getThumbnailImageUrl()).transform(new CommunityOpenAboutFragment.CircleTransform(context)).into(iv_communities_detail);
+
         if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
             tvCommunityName.setText(dataItem.getNameOrTitle());
         }

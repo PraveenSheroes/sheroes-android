@@ -106,7 +106,9 @@ public class OwnerRemoveDialog extends BaseDialogFragment implements CommunityVi
         deactivateOwnerRequest.setCommunityId(community_id);
         deactivateOwnerRequest.setAppVersion("5.0");
         deactivateOwnerRequest.setCloudMessagingId("String");
-        deactivateOwnerRequest.setUserId(members.getCommunityUserParticipantId());
+        if(null !=members.getUsersId()) {
+            deactivateOwnerRequest.setUserId(members.getUsersId());
+        }
         mOwnerPresenter.getCommunityOwnerDeactive(deactivateOwnerRequest);
         mHomeActivityIntractionListner.onOwnerClose();
         getDialog().cancel();
@@ -176,7 +178,13 @@ public class OwnerRemoveDialog extends BaseDialogFragment implements CommunityVi
     @Override
     public void getOwnerListDeactivateSuccess(DeactivateOwnerResponse deactivateOwnerResp)
     {
-        Toast.makeText(getActivity(),deactivateOwnerResp.getStatus(),Toast.LENGTH_LONG).show();
+        if(deactivateOwnerResp.getStatus().toString().equals("SUCCESS")) {
+            Toast.makeText(getActivity(), "Owner removed", Toast.LENGTH_LONG).show();
+        }
+        else
+        {
+
+        }
         getDialog().cancel();
 
     }

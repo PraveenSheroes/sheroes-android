@@ -193,6 +193,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/ID_NAME"
+                android:maxLength="10"
+                android:ellipsize="end"
                 android:textAllCaps="true"
                 android:textSize="@dimen/sp_size_12" />
         </LinearLayout>
@@ -224,6 +226,8 @@
                 android:text="@string/ID_COMMUNITIES"
                 android:textAllCaps="true"
                 android:textColor="@color/searchbox_text_color"
+                android:maxLength="10"
+                android:ellipsize="end"
                 android:textSize="@dimen/sp_size_12" />
         </LinearLayout>
 
@@ -257,6 +261,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/ID_ANONYMOUS"
                 android:textAllCaps="true"
+                android:maxLength="10"
+                android:ellipsize="end"
                 android:textSize="@dimen/sp_size_12"
                 android:gravity="center"
                 android:textColor="@color/searchbox_text_color"

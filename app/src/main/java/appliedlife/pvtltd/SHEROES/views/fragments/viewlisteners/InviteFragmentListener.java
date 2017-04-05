@@ -7,5 +7,6 @@ package appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners;
 public interface InviteFragmentListener {
     void callInviteMembers();
     void onShowErrorDialog();
+    void onInviteDone();
 
 }

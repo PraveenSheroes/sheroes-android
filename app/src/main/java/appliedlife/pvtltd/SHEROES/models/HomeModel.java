@@ -60,7 +60,8 @@ public class HomeModel {
                 .observeOn(AndroidSchedulers.mainThread());
     }
     public Observable<FeedResponsePojo> getMyCommunityFromModel(MyCommunityRequest myCommunityRequest){
-        LogUtils.info(TAG,"*******************"+new Gson().toJson(myCommunityRequest));
+        LogUtils.error("My Community req: ",gson.toJson(myCommunityRequest));
+
         return sheroesAppServiceApi.getMyCommunityFromApi(myCommunityRequest).map(new Func1<FeedResponsePojo, FeedResponsePojo>() {
                     @Override
                     public FeedResponsePojo call(FeedResponsePojo feedResponsePojo) {

@@ -147,17 +147,20 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/dp_size_20"
                     android:src="@drawable/ic_menu_dashboard"/>
+                <TextView
+                    android:id="@+id/tv_community_organisation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ID_ORGANISATION"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:textSize="@dimen/sp_size_12"
+                    android:layout_below="@+id/tv_community_name"
+                    android:layout_toRightOf="@+id/iv_community_post_icon"
+                    android:layout_marginTop="@dimen/dp_size_50"
+                    android:textColor="@color/red_oval_shap"
+                    android:maxLines="1" />
             </RelativeLayout>
-            <TextView
-                android:id="@+id/tv_community_organisation"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/ID_ORGANISATION"
-                android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                android:textSize="@dimen/sp_size_12"
-                android:layout_gravity="center_horizontal"
-                android:textColor="@color/red_oval_shap"
-                android:maxLines="1" />
+
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

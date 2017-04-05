@@ -79,6 +79,8 @@ import appliedlife.pvtltd.SHEROES.presenters.CreateCommunityPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.JobFilterActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CommunityView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CreateCommunityView;
@@ -143,6 +145,8 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
 
     @Bind(R.id.txt_counter)
     TextView mCounterTxt;
+
+    String mimages;
 
     int mImgcount=0,mCount=0;
     String mValue = "";
@@ -215,7 +219,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
                 .into(iv_community_user);
 
         Glide.with(this).load(userImage).transform(new CommunityOpenAboutFragment.CircleTransform(getActivity())).into(iv_community_user);
-
+        tv_community_poster_user.setText(mUserPreference.get().getUserSummary().getFirstName());
         // iv_community_user.setImageBitmap(loginResponse);
         return view;
     }
@@ -342,6 +346,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
         if(mCommunityId>0 && null !=mCreaterType && StringUtil.isNotNullOrEmptyString(mCreaterType) && null !=met_share_community_post_text.getText().toString()
                 && StringUtil.isNotNullOrEmptyString(met_share_community_post_text.getText().toString())) {
             String mDescription = "";
+            mTv_community_post_submit.setVisibility(View.GONE);
             List<String> imag = new ArrayList<>();
 
             Toast.makeText(getActivity(), "Posted", Toast.LENGTH_LONG).show();
@@ -416,9 +421,11 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
         mEtchoosecommunity.setText(docs.getTitle());
 
         mCommunityId=Integer.parseInt(docs.getId());
-        String images = docs.getLogo();
+         mimages = docs.getLogo();
        mIvcommunity_post_icon.setCircularImage(true);
-        mIvcommunity_post_icon.bindImage(images);
+        mIvcommunity_post_icon.bindImage(mimages);
+        tv_community_owner.setText(docs.getTitle());
+        Glide.with(this).load(mimages).transform(new CommunityOpenAboutFragment.CircleTransform(getActivity())).into(iv_community_owner);
 
       //  iv_community_owner.setCircularImage(true);
       //  iv_community_owner.bindImage(images);
@@ -452,8 +459,10 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
 
     @Override
     public void addPostCreateCommunitySuccess(CommunityPostCreateResponse createCommunityResponse) {
-        mCreatecommunityPostIntractionListner.onClose();
-
+        mTv_community_post_submit.setVisibility(View.VISIBLE);
+        Intent intent = new Intent(getActivity(), HomeActivity.class);
+        startActivity(intent);
+        getActivity().finish();
     }
 
     @Override
@@ -725,6 +734,10 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
                 //do something else
                 mImgcount--;
 
+            }
+            if(mImgcount==0)
+            {
+                mIv_camera_btn_for_post_images.setImageResource(R.drawable.ic_camera_icon_with_rectangle);
             }
 
             // do something when the button is clicked

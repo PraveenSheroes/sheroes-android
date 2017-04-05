@@ -15,7 +15,7 @@ public class CreateCommunityRequest extends BaseRequest {
 
     @SerializedName("community_type_id")
     @Expose
-    private int communityTypeId;
+    private Long communityTypeId;
 
     @SerializedName("cover_image")
     @Expose
@@ -51,11 +51,11 @@ public class CreateCommunityRequest extends BaseRequest {
     private String Type;
 
 
-    public int getCommunityTypeId() {
+    public Long getCommunityTypeId() {
         return communityTypeId;
     }
 
-    public void setCommunityTypeId(int communityTypeId) {
+    public void setCommunityTypeId(Long communityTypeId) {
         this.communityTypeId = communityTypeId;
     }
 

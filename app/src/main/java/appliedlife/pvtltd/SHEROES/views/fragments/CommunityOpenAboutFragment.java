@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -73,6 +74,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.getMemberRequestBuilder;
 
 /**
  * Created by Ajit Kumar on 01-02-2017.
@@ -88,6 +90,7 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Fragment
     Preference<LoginResponse> mUserPreference;
     @Inject
     HomePresenter mHomePresenter;
+
 
     @Bind(R.id.rv_about_community_owner_list)
     RecyclerView mAboutCommunityOwnerRecyclerView;
@@ -119,7 +122,7 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Fragment
 
     @Bind(R.id.pb_communities_open_about_progress_bar)
     ProgressBar mProgressbar;
-
+    List<Member> ownerListResponse;
      TextView tvLeave;
      TextView tvEdit;
     FeedDetail mFeedDetail;
@@ -154,6 +157,7 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Fragment
         mmemberpresenter.attachView(this);
         mHomePresenter.attachView(this);
         setProgressBar(mProgressbar);
+
         if (null != getArguments()) {
             communityEnum = (CommunityEnum) getArguments().getSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT);
             mFeedDetail = getArguments().getParcelable(AppConstants.COMMUNITY_DETAIL);
@@ -203,7 +207,12 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Fragment
         mOwnerPresenter.getCommunityOwnerList(ownerListRequest);
         return view;
     }
+    public void refreshMemberCount()
+    {
+        Toast.makeText(getActivity(),"click",Toast.LENGTH_LONG).show();
+        mmemberpresenter.getAllMembers(getMemberRequestBuilder(mFeedDetail.getIdOfEntityOrParticipant(),mFragmentListRefreshData.getPageNo()));
 
+    }
     private void displayTabAsCommunityType(FeedDetail mFeedDetail) {
         //   boolean isCommunity=mFeedDetail.isClosedCommunity();
         if (mFeedDetail.isClosedCommunity()) {
@@ -225,8 +234,9 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Fragment
                         mTvJoinInviteView.setEnabled(false);
                     } else if (mFeedDetail.isOwner() || mFeedDetail.isMember()) {
                         mTvJoinInviteView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
-                        mTvJoinInviteView.setText(getString(R.string.ID_JOINED));
-                        mTvJoinInviteView.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
+                        mTvJoinInviteView.setText(getString(R.string.ID_INVITE));
+                        mTvJoinInviteView.setText(getActivity().getString(R.string.ID_INVITE));
+                        mTvJoinInviteView.setBackgroundResource(R.drawable.rectangle_community_invite);
                         mTvJoinInviteView.setVisibility(View.VISIBLE);
                         mTvJoinInviteView.setEnabled(false);
                     }
@@ -390,10 +400,17 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Fragment
         tvLeave.setText(getActivity().getString(R.string.ID_LEAVE));
         if(mFeedDetail.isOwner()) {
             tvEdit.setVisibility(View.VISIBLE);
+            if(ownerListResponse.size()>1) {
+                tvLeave.setVisibility(View.VISIBLE);
+            }
+            else {
+                tvLeave.setVisibility(View.GONE);
+
+            }
+        }
+        else {
             tvLeave.setVisibility(View.VISIBLE);
         }
-        else
-            tvLeave.setVisibility(View.VISIBLE);
 
         popupWindow.showAsDropDown(view, -180, 0);
         tvEdit.setOnClickListener(new View.OnClickListener() {
@@ -526,6 +543,7 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Fragment
 
     @Override
     public void getOwnerListSuccess(List<Member> ownerListResponse) {
+        this.ownerListResponse=ownerListResponse;
         if(null !=ownerListResponse && ownerListResponse.size()>0) {
             for (int i = 0; i < ownerListResponse.size(); i++) {
                 if (mFeedDetail.isOwner())
@@ -534,10 +552,6 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Fragment
                     }
 
 
-            }
-            if(ownerListResponse.size()==1)
-            {
-                tvLeave.setVisibility(View.GONE);
             }
             mAdapter.setSheroesGenericListData(ownerListResponse);
             mAdapter.notifyDataSetChanged();

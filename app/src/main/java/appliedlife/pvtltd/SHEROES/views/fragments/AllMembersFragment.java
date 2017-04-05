@@ -180,7 +180,7 @@ public class AllMembersFragment extends BaseFragment implements AllMembersView {
                     memberdata.get(i).setIsOwner(false);
                 }
             }
-            else if(mFeedDetail.isOwner() || mFeedDetail.isMember()){
+            else if(mFeedDetail.isOwner()){
                 memberdata.get(i).setIsOwner(true);
             }
             else

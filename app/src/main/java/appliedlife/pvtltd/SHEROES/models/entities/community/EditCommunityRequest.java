@@ -18,7 +18,7 @@ public class EditCommunityRequest {
     private String cloudMessagingId;
     @SerializedName("community_type_id")
     @Expose
-    private Integer communityTypeId;
+    private Long communityTypeId;
     @SerializedName("cover_image")
     @Expose
     private String coverImageUrl;
@@ -51,7 +51,7 @@ public class EditCommunityRequest {
     private String purpose;
     @SerializedName("removed_tags")
     @Expose
-    private List<Integer> removedTags = null;
+    private List<Long> removedTags = null;
     @SerializedName("screen_name")
     @Expose
     private String screenName;
@@ -75,11 +75,11 @@ public class EditCommunityRequest {
         this.cloudMessagingId = cloudMessagingId;
     }
 
-    public Integer getCommunityTypeId() {
+    public Long getCommunityTypeId() {
         return communityTypeId;
     }
 
-    public void setCommunityTypeId(Integer communityTypeId) {
+    public void setCommunityTypeId(Long communityTypeId) {
         this.communityTypeId = communityTypeId;
     }
 
@@ -163,11 +163,11 @@ public class EditCommunityRequest {
         this.purpose = purpose;
     }
 
-    public List<Integer> getRemovedTags() {
+    public List<Long> getRemovedTags() {
         return removedTags;
     }
 
-    public void setRemovedTags(List<Integer> removedTags) {
+    public void setRemovedTags(List<Long> removedTags) {
         this.removedTags = removedTags;
     }
 
