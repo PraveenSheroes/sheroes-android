@@ -119,7 +119,6 @@ public class FaceBookOpenActivity extends BaseActivity implements LoginView {
     }
     public void backToLogInActivity()
     {
-        LogUtils.info(TAG,"********back to loginactivity***********");
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
         bundle.putInt(AppConstants.HOME_FRAGMENT, AppConstants.TWO_CONSTANT);

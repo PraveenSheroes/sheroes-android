@@ -108,20 +108,22 @@ public class JobFilterFragment extends BaseFragment {
     {
         mHomeActivityIntractionListner.onBackPressJobFilter();
     }
-    @Override
-    public void onStart() {
-        super.onStart();
+
+    @OnClick(R.id.tv_opportunity_type_lable)
+    public void opportunityType()
+    {
     }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
+    @OnClick(R.id.tv_loaction_label)
+    public void locationJob()
+    {
     }
-
-    @Override
-    public void onResume() {
-        super.onResume();
+    @OnClick(R.id.tv_functional_area_lable)
+    public void functionalArea()
+    {
+    }
+    @OnClick(R.id.tv_filter_exp_label)
+    public void filterExperience()
+    {
     }
 
     private void setFilterValues()

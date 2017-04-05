@@ -1,5 +1,7 @@
 package appliedlife.pvtltd.SHEROES.models.entities.home;
 
+import java.util.List;
+
 /**
  * Created by Praveen_Singh on 17-02-2017.
  */
@@ -12,6 +14,7 @@ public class FragmentListRefreshData {
     long enitityOrParticpantid;
     int swipeToRefresh;
     long communityId;
+    List<Long> categoryIdList;
     public FragmentListRefreshData() {
 
     }
@@ -82,5 +85,13 @@ public class FragmentListRefreshData {
 
     public void setCommunityId(long communityId) {
         this.communityId = communityId;
+    }
+
+    public List<Long> getCategoryIdList() {
+        return categoryIdList;
+    }
+
+    public void setCategoryIdList(List<Long> categoryIdList) {
+        this.categoryIdList = categoryIdList;
     }
 }

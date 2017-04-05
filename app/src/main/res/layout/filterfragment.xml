@@ -26,9 +26,12 @@
             </LinearLayout>
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/tv_opportunity_type_lable"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_size_30"
+                android:paddingTop="@dimen/dp_size_15"
+                android:layout_marginTop="@dimen/dp_size_15"
+                android:paddingBottom="@dimen/dp_size_15"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:text="@string/ID_OPPORTUNITY_TYPE"
                 android:textAllCaps="true"
@@ -40,7 +43,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/lnr_filter_header"
-                android:layout_marginTop="@dimen/dp_size_10"
                 android:divider="@color/fully_transparent" />
             <View
                 android:layout_width="match_parent"
@@ -48,10 +50,11 @@
                 android:layout_marginTop="@dimen/dp_size_10"
                 android:background="@color/search_tab_unselected_text" />
             <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
+                android:id="@+id/tv_loaction_label"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_size_15"
+                android:paddingTop="@dimen/dp_size_15"
+                android:paddingBottom="@dimen/dp_size_15"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:text="@string/ID_LOCATION"
                 android:textAllCaps="true"
@@ -62,7 +65,6 @@
                 android:id="@+id/tv_location_data"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_size_10"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:textAllCaps="true"
                 android:textColor="@color/job_filter_desc_color"
@@ -73,9 +75,11 @@
                 android:layout_marginTop="@dimen/dp_size_10"
                 android:background="@color/search_tab_unselected_text" />
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/tv_functional_area_lable"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_size_30"
+                android:paddingTop="@dimen/dp_size_15"
+                android:paddingBottom="@dimen/dp_size_15"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:text="@string/ID_SELF_EMP_FUNCTIONAL_HINT"
                 android:textAllCaps="true"
@@ -86,18 +90,22 @@
                 android:id="@+id/tv_functional_area"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_size_10"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:textAllCaps="true"
                 android:textColor="@color/job_filter_desc_color"
                 android:textSize="@dimen/sp_size_12" />
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_size_0.5"
+                android:layout_marginTop="@dimen/dp_size_10"
+                android:background="@color/search_tab_unselected_text" />
             <TextView
-                android:id="@+id/tv_filter_exp_txt"
-                android:layout_width="wrap_content"
+                android:id="@+id/tv_filter_exp_label"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/rv_filter_list"
-                android:layout_marginTop="@dimen/dp_size_30"
+                android:paddingTop="@dimen/dp_size_15"
+                android:paddingBottom="@dimen/dp_size_15"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:text="@string/ID_EXP"
                 android:textColor="@color/text_color_setting_preference_basicdetails"
@@ -108,17 +116,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_filter_exp_txt"
-                android:layout_marginTop="@dimen/dp_size_10"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:textColor="@color/job_filter_desc_color"
                 android:textSize="@dimen/sp_size_12" />
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_size_0.5"
+                android:layout_marginTop="@dimen/dp_size_10"
+                android:background="@color/search_tab_unselected_text" />
             <appliedlife.pvtltd.SHEROES.utils.RangeSeekBar
                 android:id="@+id/rangeSeekbar"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_filter_exp"
-                android:layout_marginRight="@dimen/dp_size_30" />
+                android:layout_marginTop="@dimen/dp_size_10"
+                android:layout_below="@+id/tv_filter_exp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -128,36 +139,42 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/tv_zero"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="right"
                     android:text="0" />
 
                 <TextView
+                    android:id="@+id/tv_five"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_size_42"
                     android:text="5" />
 
                 <TextView
+                    android:id="@+id/tv_ten"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_size_42"
                     android:text="10" />
 
                 <TextView
+                    android:id="@+id/tv_fifteen"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_size_42"
                     android:text="15" />
 
                 <TextView
+                    android:id="@+id/tv_twenty"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_size_42"
                     android:text="20" />
 
                 <TextView
+                    android:id="@+id/tv_twenty_five"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_size_42"

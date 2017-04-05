@@ -97,7 +97,7 @@ public class FeedDetail extends BaseResponse implements Parcelable {
 
     @SerializedName("community_type_l")
     @Expose
-    public String communityTypeL;
+    public long communityTypeL;
 
     /*Article*/
     @SerializedName("slug_s")
@@ -606,13 +606,7 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         this.communityType = communityType;
     }
 
-    public String getCommunityTypeL() {
-        return communityTypeL;
-    }
 
-    public void setCommunityTypeL(String communityTypeL) {
-        this.communityTypeL = communityTypeL;
-    }
 
     public String getSlugS() {
         return slugS;
@@ -1377,6 +1371,14 @@ public class FeedDetail extends BaseResponse implements Parcelable {
     public FeedDetail() {
     }
 
+    public long getCommunityTypeL() {
+        return communityTypeL;
+    }
+
+    public void setCommunityTypeL(long communityTypeL) {
+        this.communityTypeL = communityTypeL;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -1410,7 +1412,7 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         dest.writeList(this.searchIdJobOppTypes);
         dest.writeStringList(this.searchTextJobEmpTypes);
         dest.writeString(this.communityType);
-        dest.writeString(this.communityTypeL);
+        dest.writeLong(this.communityTypeL);
         dest.writeString(this.slugS);
         dest.writeString(this.publishedInS);
         dest.writeString(this.metaDescriptionS);
@@ -1537,7 +1539,7 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         in.readList(this.searchIdJobOppTypes, Integer.class.getClassLoader());
         this.searchTextJobEmpTypes = in.createStringArrayList();
         this.communityType = in.readString();
-        this.communityTypeL = in.readString();
+        this.communityTypeL = in.readLong();
         this.slugS = in.readString();
         this.publishedInS = in.readString();
         this.metaDescriptionS = in.readString();

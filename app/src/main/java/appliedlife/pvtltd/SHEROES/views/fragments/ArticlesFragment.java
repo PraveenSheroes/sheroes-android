@@ -65,7 +65,6 @@ public class ArticlesFragment extends BaseFragment {
     @Bind(R.id.progress_bar_first_load)
     ProgressBar mProgressBarFirstLoad;
     private List<Long> categoryIdList = new ArrayList<>();
-    private int articleCategory;
     View view;
 
     @Override
@@ -78,7 +77,6 @@ public class ArticlesFragment extends BaseFragment {
         mPullRefreshList.setPullToRefresh(false);
         mHomePresenter.attachView(this);
         if (getArguments() != null) {
-            articleCategory = getArguments().getInt(AppConstants.MASTER_DATA_ARTICLE_KEY);
             categoryIdList = (ArrayList<Long>) getArguments().getSerializable(AppConstants.ARTICLE_FRAGMENT);
         }
         mLayoutManager = new LinearLayoutManager(getContext());
@@ -104,17 +102,8 @@ public class ArticlesFragment extends BaseFragment {
             }
         });
         super.setAllInitializationForFeeds(mFragmentListRefreshData, mPullRefreshList, mAdapter, mLayoutManager, mPageNo, mSwipeView, mLiNoResult, null, mRecyclerView, 0, 0, mListLoad, mIsEdit, mHomePresenter, mAppUtils, mProgressBar);
-        switch (articleCategory) {
-            case AppConstants.ONE_CONSTANT:
-                mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo()));
-                break;
-            case AppConstants.TWO_CONSTANT:
-                if (StringUtil.isNotEmptyCollection(categoryIdList))
-                    mHomePresenter.getFeedFromPresenter(mAppUtils.articleCategoryRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo(), categoryIdList));
-                break;
-            default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + articleCategory);
-        }
+        mFragmentListRefreshData.setCategoryIdList(categoryIdList);
+        mHomePresenter.getFeedFromPresenter(mAppUtils.articleCategoryRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo(), categoryIdList));
 
         mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -126,7 +115,7 @@ public class ArticlesFragment extends BaseFragment {
                 mPullRefreshList = new SwipPullRefreshList();
                 setRefreshList(mPullRefreshList);
                 mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
-                mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo()));
+                mHomePresenter.getFeedFromPresenter(mAppUtils.articleCategoryRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo(), categoryIdList));
             }
         });
         return view;

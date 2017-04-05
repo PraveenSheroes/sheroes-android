@@ -15,8 +15,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 
-import static appliedlife.pvtltd.SHEROES.utils.AppUtils.getMemberRequestBuilder;
-
 /*
 * This class is a ScrollListener for RecyclerView that allows to show/hide
 * views when list is scrolled. It assumes that you have added a header
@@ -113,20 +111,17 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
         if (totalItemCount>(visibleThreshold+1)&&!loading && totalItemCount <=(lastVisibleItem + visibleThreshold)) {
             if(null!=mFragmentListRefreshData&& StringUtil.isNotNullOrEmptyString(mFragmentListRefreshData.getCallFromFragment())) {
                 int pageNo=mFragmentListRefreshData.getPageNo();
-                LogUtils.info(TAG,"********** on scroll*********");
                 switch (mFragmentListRefreshData.getCallFromFragment()) {
                     case AppConstants.ARTICLE_FRAGMENT:
-                        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_ARTICLE,pageNo));
+                        mHomePresenter.getFeedFromPresenter(mAppUtils.articleCategoryRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo(),mFragmentListRefreshData.getCategoryIdList()));
                         break;
                     case AppConstants.COMMUNITY_POST_FRAGMENT:
                         mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY_POST,pageNo));
                         break;
                     case AppConstants.FEATURE_FRAGMENT:
-                        LogUtils.info(TAG,"**********Feature fragment on scrolling*********");
                         mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEATURED_COMMUNITY,pageNo));
                         break;
                     case AppConstants.MY_COMMUNITIES_FRAGMENT:
-                        LogUtils.info(TAG,"**********Mycommunities fragment on scrolling*********");
                         mHomePresenter.getMyCommunityFromPresenter(mAppUtils.myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY,pageNo));
                         break;
                     case AppConstants.HOME_FRAGMENT:

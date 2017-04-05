@@ -248,7 +248,9 @@ public class HomeActivity extends BaseActivity implements SettingView, CustiomAc
     }
 
     public void openJobFilterFragment() {
-
+        getSupportFragmentManager().popBackStack(JobFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        onBackPressed();
+        openJobFragment();
     }
 
 
@@ -283,8 +285,7 @@ public class HomeActivity extends BaseActivity implements SettingView, CustiomAc
                     break;
                 case AppConstants.TWO_CONSTANT:
                     checkForAllOpenFragments();
-                    openArticleFragment(AppConstants.ONE_CONSTANT,null);
-
+                    openArticleFragment(setCategoryIds());
                     break;
                 case AppConstants.THREE_CONSTANT:
                     checkForAllOpenFragments();
@@ -469,7 +470,7 @@ public class HomeActivity extends BaseActivity implements SettingView, CustiomAc
     }
 
 
-    private void openArticleFragment(int articleCategoryList,List<Long> categoryIds) {
+    private void openArticleFragment(List<Long> categoryIds) {
         mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_ARTICLES));
         liHomeCommunityButtonLayout.setVisibility(View.GONE);
         mFlHomeFooterList.setVisibility(View.VISIBLE);
@@ -486,8 +487,7 @@ public class HomeActivity extends BaseActivity implements SettingView, CustiomAc
         setAllValues(mFragmentOpen);
         ArticlesFragment articlesFragment = new ArticlesFragment();
         Bundle bundleArticle = new Bundle();
-        bundleArticle.putInt(AppConstants.MASTER_DATA_ARTICLE_KEY, articleCategoryList);
-        bundleArticle.putSerializable(AppConstants.ARTICLE_FRAGMENT,(ArrayList)categoryIds);
+        bundleArticle.putSerializable(AppConstants.ARTICLE_FRAGMENT, (ArrayList) categoryIds);
         articlesFragment.setArguments(bundleArticle);
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
                 .add(R.id.fl_article_card_view, articlesFragment, ArticlesFragment.class.getName()).addToBackStack(ArticlesFragment.class.getName()).commitAllowingStateLoss();
@@ -579,7 +579,8 @@ public class HomeActivity extends BaseActivity implements SettingView, CustiomAc
         setAllValues(mFragmentOpen);
         JobFragment jobFragment = new JobFragment();
         Bundle jobBookMarks = new Bundle();
-        jobBookMarks.putParcelable(AppConstants.JOB_FRAGMENT, mFeedDetail);
+        // jobBookMarks.putSerializable(AppConstants.JOB_FRAGMENT, (ArrayList) categoryIds);
+        jobFragment.setArguments(jobBookMarks);
         jobFragment.setArguments(jobBookMarks);
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
                 .replace(R.id.fl_article_card_view, jobFragment, JobFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
@@ -587,7 +588,7 @@ public class HomeActivity extends BaseActivity implements SettingView, CustiomAc
 
     }
 
-    public void openJobLocationFragment() {
+    public void openJobLocationFragment(List<Long> skillIds) {
         mFragmentOpen.setSettingFragment(true);
         mViewPager.setVisibility(View.GONE);
         mTabLayout.setVisibility(View.GONE);
@@ -944,8 +945,13 @@ public class HomeActivity extends BaseActivity implements SettingView, CustiomAc
                     mHomeSpinnerItemList.clear();
                     mHomeSpinnerItemList.addAll(localList);
                 }
-                mTvCategoryText.setText(stringBuilder.toString());
-                openArticleFragment(AppConstants.TWO_CONSTANT,categoryIds);
+                if (StringUtil.isNotNullOrEmptyString(stringBuilder.toString())) {
+                    mTvCategoryText.setText(stringBuilder.toString());
+                } else {
+                    mTvCategoryText.setText(AppConstants.EMPTY_STRING);
+                    mTvCategoryChoose.setVisibility(View.VISIBLE);
+                }
+                openArticleFragment(categoryIds);
             }
         } else {
             mHomeSpinnerItemList = mFragmentOpen.getHomeSpinnerItemList();
@@ -965,6 +971,19 @@ public class HomeActivity extends BaseActivity implements SettingView, CustiomAc
             onBackPressed();
         }
     }
+
+    private List<Long> setCategoryIds() {
+        List<Long> categoryIds = new ArrayList<>();
+        if (StringUtil.isNotEmptyCollection(mHomeSpinnerItemList)) {
+            for (HomeSpinnerItem homeSpinnerItem : mHomeSpinnerItemList) {
+                if (homeSpinnerItem.isChecked()) {
+                    categoryIds.add(homeSpinnerItem.getId());
+                }
+            }
+        }
+        return categoryIds;
+    }
+
 
     @Override
     public void onSuccessResult(String result, FeedDetail feedDetail) {
