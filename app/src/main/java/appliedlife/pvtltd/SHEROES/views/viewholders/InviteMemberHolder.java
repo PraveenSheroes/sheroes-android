@@ -3,6 +3,7 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import appliedlife.pvtltd.SHEROES.R;
@@ -21,6 +22,8 @@ import butterknife.OnClick;
  */
 
 public class InviteMemberHolder extends BaseViewHolder<FeedDetail> {
+    @Bind(R.id.rl_invite_member_item)
+    RelativeLayout rlInviteMemberItem;
     @Bind(R.id.tv_member_city)
     TextView tvCity;
     @Bind(R.id.tv_member_name)
@@ -55,13 +58,17 @@ public class InviteMemberHolder extends BaseViewHolder<FeedDetail> {
 
         if(dataItem.isOwner() || dataItem.isMember())
         {
+            rlInviteMemberItem.setVisibility(View.GONE);
             tvAddInvite.setText(mContext.getString(R.string.ID_ADDED));
             tvAddInvite.setBackgroundResource(R.drawable.select_inivite_button_added_color);
             tvAddInvite.setTextColor(ContextCompat.getColor(mContext, R.color.white));
 
+        }else {
+            rlInviteMemberItem.setVisibility(View.VISIBLE);
+            tvAddInvite.setText(mContext.getString(R.string.ID_ADD));
+            tvAddInvite.setBackgroundResource(R.drawable.select_purpose_btn_shap);
+            tvAddInvite.setTextColor(ContextCompat.getColor(mContext, R.color.blue));
         }
-
-
         ivCircleProfilePic.setCircularImage(true);
         ivCircleProfilePic.bindImage(images);
     }

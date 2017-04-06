@@ -49,9 +49,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.CommunityJoinFromeAboutFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.CommunityJoinRegionDialogFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOpenAboutFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOptionJoinDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ImageFullViewFragment;
@@ -220,40 +218,26 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
 
     }
 
-    protected DialogFragment showCommunityJoinReason(FeedDetail feedDetail) {
-        CommunityJoinRegionDialogFragment fragment = (CommunityJoinRegionDialogFragment) getFragmentManager().findFragmentByTag(CommunityJoinRegionDialogFragment.class.getName());
+    public DialogFragment showCommunityJoinReason(FeedDetail feedDetail) {
+        CommunityOptionJoinDialog fragment = (CommunityOptionJoinDialog) getFragmentManager().findFragmentByTag(CommunityOptionJoinDialog.class.getName());
         if (fragment == null) {
-            fragment = new CommunityJoinRegionDialogFragment();
+            fragment = new CommunityOptionJoinDialog();
             Bundle b = new Bundle();
             b.putParcelable(BaseDialogFragment.DISMISS_PARENT_ON_OK_OR_BACK, feedDetail);
             fragment.setArguments(b);
         }
         if (!fragment.isVisible() && !fragment.isAdded() && !isFinishing() && !mIsDestroyed) {
-            fragment.show(getFragmentManager(), CommunityJoinRegionDialogFragment.class.getName());
+            fragment.show(getFragmentManager(), CommunityOptionJoinDialog.class.getName());
         }
         return fragment;
     }
-
-    protected DialogFragment showCommunityJoinReasonFromAboutCommunity(FeedDetail feedDetail, CommunityOpenAboutFragment communityOpenAboutFragment) {
-        CommunityJoinFromeAboutFragment communityJoinFromeAboutFragment = (CommunityJoinFromeAboutFragment) getFragmentManager().findFragmentByTag(CommunityJoinFromeAboutFragment.class.getName());
-        if (communityJoinFromeAboutFragment == null) {
-            communityJoinFromeAboutFragment = new CommunityJoinFromeAboutFragment();
-            Bundle bundle = new Bundle();
-            bundle.putParcelable(BaseDialogFragment.DISMISS_PARENT_ON_OK_OR_BACK, feedDetail);
-            communityJoinFromeAboutFragment.setArguments(bundle);
-        }
-        if (!communityJoinFromeAboutFragment.isVisible() && !communityJoinFromeAboutFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
-            communityJoinFromeAboutFragment.show(getFragmentManager(), CommunityJoinRegionDialogFragment.class.getName());
-        }
-        return communityJoinFromeAboutFragment;
-    }
-
     protected void feedCardsHandled(View view, BaseResponse baseResponse) {
         mFeedDetail = (FeedDetail) baseResponse;
         int id = view.getId();
         switch (id) {
             case R.id.tv_featured_community_join:
                 if (mFeedDetail.isClosedCommunity()) {
+                    mFeedDetail.setScreenName(AppConstants.FEATURE_FRAGMENT);
                     showCommunityJoinReason(mFeedDetail);
                 } else {
                     if (null != mViewPagerAdapter) {
@@ -263,7 +247,6 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                             ((FeaturedFragment) fragment).joinRequestForOpenCommunity(mFeedDetail);
                         }
                     }
-
                 }
                 break;
             case R.id.tv_feed_article_user_bookmark:
@@ -360,7 +343,6 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 Intent intentMyCommunity = new Intent(this, CommunitiesDetailActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
-                LogUtils.error("tagId in base activity=", mFeedDetail.getTag_ids() + "");
                 bundle.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.MY_COMMUNITY);
                 intentMyCommunity.putExtras(bundle);
                 startActivityForResult(intentMyCommunity, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
@@ -616,11 +598,12 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 break;
             case FEED_CARD_MENU:
                 if (null != mFeedDetail) {
-                    Intent intent = new Intent(this, CreateCommunityPostActivity.class);
-                    Bundle bundleFeature = new Bundle();
-                    bundleFeature.putParcelable(AppConstants.COMMUNITY_POST_FRAGMENT, mFeedDetail);
-                    intent.putExtras(bundleFeature);
-                    startActivity(intent);
+                    Intent intetFeature = new Intent(this, CreateCommunityPostActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable(AppConstants.COMMUNITY_POST_FRAGMENT, mFeedDetail);
+                    intetFeature.putExtras(bundle);
+                    startActivityForResult(intetFeature, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST);
+                    overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
                 }
                 break;
 

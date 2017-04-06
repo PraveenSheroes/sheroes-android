@@ -1,5 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
+import android.app.DialogFragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -86,6 +87,7 @@ import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FOR_REFRESH_FRAGMENT_LIST;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.COMMENT_REACTION;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.JOIN_INVITE;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MENU;
 
 public class HomeActivity extends BaseActivity implements ViewPager.OnPageChangeListener, SettingView, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, CommentReactionFragment.HomeActivityIntractionListner, HomeSpinnerFragment.HomeSpinnerFragmentListner {
@@ -152,6 +154,7 @@ public class HomeActivity extends BaseActivity implements ViewPager.OnPageChange
     @Inject
     Preference<MasterDataResponse> mUserPreferenceMasterData;
     private ViewPagerAdapter mViewPagerAdapter;
+    private MyCommunityInviteMemberFragment myCommunityInviteMemberFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -260,12 +263,11 @@ public class HomeActivity extends BaseActivity implements ViewPager.OnPageChange
             mFeedDetail = (FeedDetail) baseResponse;
             int id = view.getId();
             if (id == R.id.tv_community_detail_invite) {
-                openInviteSearch(mFeedDetail);
+                inviteMyCommunityDialog();
             } else if (id == R.id.tv_add_invite) {
                 if (null != mFeedDetail) {
-                    Fragment fragmentMyCommunityInviteMember = getSupportFragmentManager().findFragmentByTag(MyCommunityInviteMemberFragment.class.getName());
-                    if (AppUtils.isFragmentUIActive(fragmentMyCommunityInviteMember)) {
-                        ((MyCommunityInviteMemberFragment) fragmentMyCommunityInviteMember).onAddMemberClick(mFeedDetail);
+                    if (null != myCommunityInviteMemberFragment) {
+                        myCommunityInviteMemberFragment.onAddMemberClick(mFeedDetail);
                     }
                 }
             } else {
@@ -453,14 +455,14 @@ public class HomeActivity extends BaseActivity implements ViewPager.OnPageChange
         mTabLayout.setVisibility(View.VISIBLE);
         mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
         mTvHome.setText(AppConstants.EMPTY_STRING);
-        if (!mFragmentOpen.isCommunityOpen()) {
-            mFragmentOpen.setCommunityOpen(true);
-            initCommunityViewPagerAndTabs();
-        }
+        // if (!mFragmentOpen.isCommunityOpen()) {
+        //     mFragmentOpen.setCommunityOpen(true);
+        initCommunityViewPagerAndTabs();
+        //  }
     }
 
     @OnClick(R.id.iv_footer_button_icon)
-    public void commingOnClick() {
+    public void createCommunityPostOnClick() {
         // Snackbar.make(mCLMainLayout, "Comming soon", Snackbar.LENGTH_SHORT).show();
         Intent intent = new Intent(getApplicationContext(), CreateCommunityPostActivity.class);
         startActivity(intent);
@@ -492,20 +494,30 @@ public class HomeActivity extends BaseActivity implements ViewPager.OnPageChange
 
     }
 
-    private void openInviteSearch(FeedDetail feedDetail) {
-        mFragmentOpen = new FragmentOpen();
-        mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.FOURTH_CONSTANT);
-        mFlHomeFooterList.setVisibility(View.VISIBLE);
-        mliArticleSpinnerIcon.setVisibility(View.GONE);
-        MyCommunityInviteMemberFragment myCommunityInviteMemberFragment = new MyCommunityInviteMemberFragment();
-        Bundle bundleInvite = new Bundle();
-        bundleInvite.putParcelable(AppConstants.COMMUNITIES_DETAIL, feedDetail);
-        myCommunityInviteMemberFragment.setArguments(bundleInvite);
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
-                .replace(R.id.fl_feed_comments, myCommunityInviteMemberFragment, MyCommunityInviteMemberFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
-
+    public DialogFragment inviteMyCommunityDialog() {
+        myCommunityInviteMemberFragment = (MyCommunityInviteMemberFragment) getFragmentManager().findFragmentByTag(MyCommunityInviteMemberFragment.class.getName());
+        if (myCommunityInviteMemberFragment == null) {
+            myCommunityInviteMemberFragment = new MyCommunityInviteMemberFragment();
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, mFeedDetail);
+            myCommunityInviteMemberFragment.setArguments(bundle);
+        }
+        if (!myCommunityInviteMemberFragment.isVisible() && !myCommunityInviteMemberFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
+            myCommunityInviteMemberFragment.show(getFragmentManager(), MyCommunityInviteMemberFragment.class.getName());
+        }
+        return myCommunityInviteMemberFragment;
     }
 
+    public void updateMyCommunitiesFragment(FeedDetail feedDetail) {
+        mFeedDetail = feedDetail;
+        if (null != myCommunityInviteMemberFragment) {
+            myCommunityInviteMemberFragment.dismiss();
+        }
+        Fragment community = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.ONE_CONSTANT);
+        if (AppUtils.isFragmentUIActive(community)) {
+            ((MyCommunitiesFragment) community).commentListRefresh(feedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+        }
+    }
 
     private void openSettingFragment() {
         mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_FEED));
@@ -661,12 +673,6 @@ public class HomeActivity extends BaseActivity implements ViewPager.OnPageChange
             initHomeViewPagerAndTabs();
             setHomeFeedCommunityData();
             mFragmentOpen.setJobFragment(false);
-        } else if (mFragmentOpen.getOpenCommentReactionFragmentFor() == AppConstants.FOURTH_CONSTANT) {
-            mFlHomeFooterList.setVisibility(View.VISIBLE);
-            mliArticleSpinnerIcon.setVisibility(View.GONE);
-            mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.NO_REACTION_CONSTANT);
-            getSupportFragmentManager().popBackStackImmediate();
-
         } else if (mFragmentOpen.isOpenImageViewer()) {
             mFragmentOpen.setOpenImageViewer(false);
             getSupportFragmentManager().popBackStackImmediate();
@@ -838,7 +844,7 @@ public class HomeActivity extends BaseActivity implements ViewPager.OnPageChange
 
     @Override
     public void onShowErrorDialog(String errorReason, FeedParticipationEnum feedParticipationEnum) {
-        if(StringUtil.isNotNullOrEmptyString(errorReason)) {
+        if (StringUtil.isNotNullOrEmptyString(errorReason)) {
             switch (errorReason) {
                 case AppConstants.CHECK_NETWORK_CONNECTION:
                     showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
@@ -849,8 +855,7 @@ public class HomeActivity extends BaseActivity implements ViewPager.OnPageChange
                 default:
                     showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
             }
-        }else
-        {
+        } else {
             showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
         }
 
@@ -891,7 +896,11 @@ public class HomeActivity extends BaseActivity implements ViewPager.OnPageChange
                     case FEATURE_COMMUNITY:
                         Fragment feature = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
                         if (AppUtils.isFragmentUIActive(feature)) {
-                            ((FeaturedFragment) feature).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+                            if (mFeedDetail.isFeatured() && mFeedDetail.isMember()) {
+                                communityOnClick();
+                            } else {
+                                ((FeaturedFragment) feature).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+                            }
                         }
                         break;
                     case MY_COMMUNITY:
@@ -987,9 +996,19 @@ public class HomeActivity extends BaseActivity implements ViewPager.OnPageChange
     }
 
 
-    @Override
-    public void onSuccessResult(String result, FeedDetail feedDetail) {
-
+    public void onJoinEventSuccessResult(String result, FeedDetail feedDetail) {
+        if (StringUtil.isNotNullOrEmptyString(result)) {
+            if (result.equalsIgnoreCase(AppConstants.SUCCESS)) {
+                Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
+                if (fragment instanceof FeaturedFragment) {
+                    if (AppUtils.isFragmentUIActive(fragment)) {
+                        ((FeaturedFragment) fragment).setJoinStatus(result, feedDetail);
+                    }
+                }
+            } else {
+                onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), JOIN_INVITE);
+            }
+        }
     }
 
     /**
@@ -1014,7 +1033,7 @@ public class HomeActivity extends BaseActivity implements ViewPager.OnPageChange
      */
     @Override
     public void onPageSelected(int position) {
-        Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, position);
+      /*  Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, position);
         if (fragment instanceof FeaturedFragment) {
             if (AppUtils.isFragmentUIActive(fragment)) {
                 ((FeaturedFragment) fragment).swipeAndRefreshList();
@@ -1023,7 +1042,7 @@ public class HomeActivity extends BaseActivity implements ViewPager.OnPageChange
             if (AppUtils.isFragmentUIActive(fragment)) {
                 ((MyCommunitiesFragment) fragment).swipeAndRefreshList();
             }
-        }
+        }*/
     }
 
     /**

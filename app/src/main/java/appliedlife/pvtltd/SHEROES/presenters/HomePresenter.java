@@ -19,8 +19,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequest
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
@@ -33,7 +31,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPost
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
-import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import rx.Subscriber;
 import rx.Subscription;
@@ -52,7 +49,6 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_LIKE_UNLIKE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MY_COMMUNITIES;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_SEARCH_DATA;
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.JOIN_INVITE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.LIKE_UNLIKE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.MARK_AS_SPAM;
@@ -187,38 +183,6 @@ public class HomePresenter extends BasePresenter<HomeView> {
         });
         registerSubscription(subscription);
     }
-
-    public void getTagFromPresenter(final GetAllDataRequest getAllDataRequest) {
-        if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
-            return;
-        }
-        getMvpView().startProgressBar();
-        Subscription subscription = mHomeModel.getTagFromModel(getAllDataRequest).subscribe(new Subscriber<GetTagData>() {
-            @Override
-            public void onCompleted() {
-                getMvpView().stopProgressBar();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), ERROR_TAG);
-            }
-
-            @Override
-            public void onNext(GetTagData getAllData) {
-                getMvpView().stopProgressBar();
-                if (null != getAllData && StringUtil.isNotEmptyCollection(getAllData.getDocs()) && getAllData.getDocs().size() > AppConstants.ONE_CONSTANT) {
-                    getMvpView().getTagListSuccess(getAllData.getDocs());
-                } else {
-                    getMvpView().getTagListSuccess(getAllData.getDocs());
-                }
-            }
-        });
-        registerSubscription(subscription);
-    }
-
     public void getBookMarkFromPresenter(FeedRequestPojo feedRequestPojo) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_BOOK_MARK_LIST);
@@ -377,7 +341,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
             @Override
             public void onNext(CommunityResponse communityResponse) {
-                getMvpView().stopProgressBar();
+               getMvpView().stopProgressBar();
                 getMvpView().getSuccessForAllResponse(communityResponse.getStatus(), JOIN_INVITE);
             }
         });

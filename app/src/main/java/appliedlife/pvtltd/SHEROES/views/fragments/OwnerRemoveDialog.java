@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -20,11 +19,11 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Member;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerList;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
@@ -60,6 +59,7 @@ public class OwnerRemoveDialog extends BaseDialogFragment implements CommunityVi
     TextView tv_owner_name;
     @Inject
     AppUtils mAppUtils;
+    boolean isOwner;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getActivity()).inject(this);
@@ -67,7 +67,7 @@ public class OwnerRemoveDialog extends BaseDialogFragment implements CommunityVi
         ButterKnife.bind(this, view);
         mOwnerPresenter.attachView(this);
         if (null != getArguments()) {
-            boolean isOwner = getArguments().getBoolean(AppConstants.COMMUNITY_POST_FRAGMENT);
+            isOwner = getArguments().getBoolean(AppConstants.COMMUNITY_POST_FRAGMENT);
             if (isOwner) {
                 mOwner = getArguments().getParcelable(AppConstants.OWNER_SUB_TYPE);
                 if (null != mOwner) {
@@ -162,14 +162,15 @@ public class OwnerRemoveDialog extends BaseDialogFragment implements CommunityVi
     public void getOwnerListDeactivateSuccess(DeactivateOwnerResponse deactivateOwnerResp) {
         switch (deactivateOwnerResp.getStatus()) {
             case AppConstants.SUCCESS:
-                getDialog().cancel();
                 ((CommunitiesDetailActivity) getActivity()).onOwnerClose();
-                Toast.makeText(getActivity(), getString(R.string.ID_OWNER_REMOVED), Toast.LENGTH_LONG).show();
+                getDialog().cancel();
                 break;
             case AppConstants.FAILED:
-                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_JOIN_INVITE);
+                getDialog().cancel();
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(deactivateOwnerResp.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);
                 break;
             default:
+                getDialog().cancel();
                 mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_JOIN_INVITE);
         }
     }

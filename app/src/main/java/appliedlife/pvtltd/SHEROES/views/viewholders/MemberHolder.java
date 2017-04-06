@@ -4,16 +4,16 @@ import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
 
-import java.util.HashMap;
-
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MembersList;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Ajit Kumar on 03-02-2017.
@@ -35,27 +35,23 @@ public class MemberHolder extends BaseViewHolder<MembersList> {
 
     public MemberHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
-        ButterKnife.bind(this,itemView);
-        this.viewInterface = baseHolderInterface;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
+        ButterKnife.bind(this, itemView);
+        this.viewInterface = baseHolderInterface;
     }
+
     @Override
     public void bindData(MembersList obj, Context context, int position) {
         this.dataItem = obj;
-        // itemView.setOnClickListener(this);
-        tv_member_cross.setOnClickListener(this);
-
         tv_member_city.setText(dataItem.getCommunityUserCityName());
         tv_member_name.setText(dataItem.getCommunityUserFirstName());
         String images = dataItem.getCommunityUserPhotoUrlPath();
         background.setCircularImage(true);
         background.bindImage(images);
         dataItem.setPosition(position);
-        if(dataItem.getIsOwner())
-        {
+        if (dataItem.getIsOwner() && !dataItem.getTypeS().equalsIgnoreCase(AppConstants.OWNER_SUB_TYPE)) {
             tv_member_cross.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             tv_member_cross.setVisibility(View.GONE);
         }
 
@@ -66,16 +62,13 @@ public class MemberHolder extends BaseViewHolder<MembersList> {
 
     }
 
+    @OnClick(R.id.tv_member_cross)
+    public void onRemoveMemberClick() {
+        viewInterface.handleOnClick(dataItem, tv_member_cross);
+    }
 
     @Override
     public void onClick(View view) {
-        HashMap<String,Object> map = new HashMap<String,Object>();
-        //   map.put("collection name",dataItem.getTitle());
-        map.put("collection id",dataItem.getId());
-//    map.put("collection type",dataItem.getType());
-        viewInterface.handleOnClick(this.dataItem,view);
-        //createCommunityViewInterface.closeDialog("communityDialog");
-
 
     }
 

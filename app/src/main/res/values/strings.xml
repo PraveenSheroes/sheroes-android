@@ -72,6 +72,7 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_NO_REPLIES">No replies</string>
     <string name="ID_REPLY">Reply</string>
     <string name="ID_ALREADY_BOOKMARK">Already performed</string>
+    <string name="ID_ALREADY_MEMBER">Already member of this community</string>
     <string name="ID_OPEN_BRACKET">(</string>
     <string name="ID_CLOSE_BRACKET">)</string>
     <string name="ID_REACTION">Reaction</string>
@@ -528,7 +529,6 @@ etur adipiscing elit,sed do eiusmod tempor incididunt ut…</string>
     <string name="ID_ORGANISATION">Organization</string>
     <string name="ID_TAG_TEXT">Helth, Education, Family Welfare</string>
     <string name="ID_ABOUT_COMMUNITY">ABOUT COMMUNITY</string>
-    <string name="ID_ABOUT_COMMUNITY_DES">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolorem agna aliqua. Utenim ad minim veniam, quis nostrud exercitation ullamco laboris. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolorem agna aliqua. Utenim ad minim veniam, quis nostrud exercitation ullamco laboris.</string>
     <string name="ID_COMMUNITY_MEMBER">200 Members</string>
     <string name="ID_SELECT_PURPOSE">Select Purpose</string>
 

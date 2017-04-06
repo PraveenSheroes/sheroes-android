@@ -94,7 +94,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMember;
+import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
@@ -1669,17 +1669,6 @@ public class AppUtils {
         ownerListRequest.setCloudMessagingId(appUtils.getCloudMessaging());
         return ownerListRequest;
     }
-
-    public static CommunityRequest communityRequestBuilder(List<Long> muser_id ,Long communityId) {
-        CommunityRequest communityRequest = new CommunityRequest();
-        AppUtils appUtils = AppUtils.getInstance();
-        communityRequest.setDeviceUniqueId(appUtils.getDeviceId());
-        communityRequest.setAppVersion(appUtils.getAppVersionName());
-        communityRequest.setCloudMessagingId(appUtils.getCloudMessaging());
-        communityRequest.setUserId(muser_id);
-        communityRequest.setCommunityId(communityId);
-        return communityRequest;
-    }
     public static CreateCommunityOwnerRequest inviteOwnerRequestBuilder(Long communityId, Long userid) {
         CreateCommunityOwnerRequest createCommunityOwnerRequest = new CreateCommunityOwnerRequest();
         AppUtils appUtils = AppUtils.getInstance();
@@ -1690,17 +1679,17 @@ public class AppUtils {
         createCommunityOwnerRequest.setCommunityId(communityId);
         return createCommunityOwnerRequest;
     }
-    public static RemoveMember removeMemberRequestBuilder(Long communityId,Long userid) {
-        RemoveMember removeMember = new RemoveMember();
+    public static RemoveMemberRequest removeMemberRequestBuilder(Long communityId, Long userid) {
+        RemoveMemberRequest removeMemberRequest = new RemoveMemberRequest();
         AppUtils appUtils = AppUtils.getInstance();
-        removeMember.setCommunityId(communityId);
-        removeMember.setUserId(userid);
-        removeMember.setDeviceUniqueId(appUtils.getDeviceId());
-        removeMember.setCommunityId(communityId);
-        removeMember.setAppVersion(appUtils.getAppVersionName());
-        removeMember.setCloudMessagingId(appUtils.getCloudMessaging());
-        removeMember.setSource(AppConstants.COMMUNITIES_DETAIL);
-        return removeMember;
+        removeMemberRequest.setCommunityId(communityId);
+        removeMemberRequest.setUserId(userid);
+        removeMemberRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        removeMemberRequest.setCommunityId(communityId);
+        removeMemberRequest.setAppVersion(appUtils.getAppVersionName());
+        removeMemberRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+        removeMemberRequest.setSource(AppConstants.COMMUNITIES_DETAIL);
+        return removeMemberRequest;
     }
 
     public static BoardingTellUsRequest boardingTellUsFormDataRequestBuilder(String typeOfBoardingData, String type, LabelValue labelValue, GetAllDataDocument getAllDataDocument) {

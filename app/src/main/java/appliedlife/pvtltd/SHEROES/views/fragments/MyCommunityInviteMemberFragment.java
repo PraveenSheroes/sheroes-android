@@ -1,5 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -22,12 +23,14 @@ import java.util.List;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -35,15 +38,18 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
 
 /**
  * Created by Praveen_Singh on 06-03-2017.
  */
 
-public class MyCommunityInviteMemberFragment extends BaseFragment {
+public class MyCommunityInviteMemberFragment  extends BaseDialogFragment implements HomeView{
     private final String TAG = LogUtils.makeLogTag(MyCommunityInviteMemberFragment.class);
     @Inject
     HomePresenter mHomePresenter;
@@ -73,7 +79,7 @@ public class MyCommunityInviteMemberFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        SheroesApplication.getAppComponent(getContext()).inject(this);
+        SheroesApplication.getAppComponent(getActivity()).inject(this);
         View view = inflater.inflate(R.layout.my_community_invite_member, container, false);
         ButterKnife.bind(this, view);
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ALL_SEARCH, AppConstants.EMPTY_STRING);
@@ -84,19 +90,23 @@ public class MyCommunityInviteMemberFragment extends BaseFragment {
         }
         tvInviteText.setText(getString(R.string.ID_SEARCH));
         editTextWatcher();
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mAdapter = new GenericRecyclerViewAdapter(getContext(), (HomeActivity) getActivity());
-        LinearLayoutManager manager = new LinearLayoutManager(getContext());
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mAdapter = new GenericRecyclerViewAdapter(getActivity(), (HomeActivity) getActivity());
+        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mAdapter);
         liInviteMember.setVisibility(View.VISIBLE);
-        super.setAllInitializationForFeeds(mFragmentListRefreshData, mAdapter, manager, mRecyclerView, mHomePresenter, mAppUtils, mProgressBar);
         return view;
     }
 
     @Override
+    public void getLogInResponse(LoginResponse loginResponse) {
+
+    }
+
+    @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
-        List<FeedDetail> feedDetailList=feedResponsePojo.getFeedDetails();
+        List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
         if (StringUtil.isNotEmptyCollection(feedDetailList) && mAdapter != null) {
             liInviteMember.setVisibility(View.GONE);
             mAdapter.setCallForRecycler(AppConstants.FEED_SUB_TYPE);
@@ -106,7 +116,6 @@ public class MyCommunityInviteMemberFragment extends BaseFragment {
             liInviteMember.setVisibility(View.VISIBLE);
         }
     }
-
 
     @Override
     public void onDestroyView() {
@@ -170,13 +179,36 @@ public class MyCommunityInviteMemberFragment extends BaseFragment {
             }
         }
     };
+
     @Override
     public void getSuccessForAllResponse(String success, FeedParticipationEnum feedParticipationEnum) {
+        switch (success) {
+            case AppConstants.SUCCESS:
+                joinSuccess(feedParticipationEnum);
+                break;
+            case AppConstants.FAILED:
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(getString(R.string.ID_ALREADY_MEMBER), ERROR_JOIN_INVITE);
+                break;
+            default:
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_JOIN_INVITE);
+        }
+    }
+
+    @Override
+    public void getDB(List<RecentSearchData> recentSearchDatas) {
+
+    }
+
+    private void joinSuccess(FeedParticipationEnum feedParticipationEnum) {
         switch (feedParticipationEnum) {
             case JOIN_INVITE:
-                //ToDO:; need to verify dialog;
-                Toast.makeText(getContext(), "Add members", Toast.LENGTH_SHORT).show();
-                inviteSearchBack();
+                Toast.makeText(getActivity(),getString(R.string.ID_ADDED), Toast.LENGTH_SHORT).show();
+                if (null != mFeedDetail && StringUtil.isNotEmptyCollection(mUserIdForAddMember)) {
+                    int count = mFeedDetail.getNoOfMembers();
+                    count += mUserIdForAddMember.size();
+                    mFeedDetail.setNoOfMembers(count);
+                    ((HomeActivity) getActivity()).updateMyCommunitiesFragment(mFeedDetail);
+                }
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
@@ -185,13 +217,13 @@ public class MyCommunityInviteMemberFragment extends BaseFragment {
 
     @OnClick(R.id.tv_back_community)
     public void inviteSearchBack() {
-        getActivity().getSupportFragmentManager().popBackStack();
+        dismiss();
     }
 
     @OnClick(R.id.tv_invite_post_submit)
     public void inviteSubmit() {
         if (StringUtil.isNotEmptyCollection(mUserIdForAddMember) && null != mFeedDetail) {
-            mHomePresenter.communityJoinFromPresenter(mAppUtils.communityRequestBuilder(mUserIdForAddMember, mFeedDetail.getIdOfEntityOrParticipant(),AppConstants.OPEN_COMMUNITY));
+            mHomePresenter.communityJoinFromPresenter(mAppUtils.communityRequestBuilder(mUserIdForAddMember, mFeedDetail.getIdOfEntityOrParticipant(), AppConstants.OPEN_COMMUNITY));
         }
     }
 
@@ -201,8 +233,7 @@ public class MyCommunityInviteMemberFragment extends BaseFragment {
         } else {
             mUserIdForAddMember.remove(feedDetail.getIdOfEntityOrParticipant());
         }
-        switch (mUserIdForAddMember.size())
-        {
+        switch (mUserIdForAddMember.size()) {
             case AppConstants.NO_REACTION_CONSTANT:
                 tvAddedMember.setText(AppConstants.SPACE);
                 break;
@@ -212,5 +243,14 @@ public class MyCommunityInviteMemberFragment extends BaseFragment {
             default:
                 tvAddedMember.setText(getString(R.string.ID_ADDED) + AppConstants.SPACE + mUserIdForAddMember.size() + AppConstants.SPACE + getString(R.string.ID_MEMBERS));
         }
+    }
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        return new Dialog(getActivity(), R.style.Theme_Material_Light_Dialog_NoMinWidth) {
+            @Override
+            public void onBackPressed() {
+                dismiss();
+            }
+        };
     }
 }

@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -38,7 +37,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
-import com.f2prateek.rx.preferences.Preference;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -53,11 +51,11 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.EditCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -65,6 +63,7 @@ import appliedlife.pvtltd.SHEROES.presenters.CreateCommunityPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CommunityView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.Bind;
@@ -81,12 +80,11 @@ import butterknife.OnClick;
  * Fragment will have all UI components and operate with activity .
  */
 public class CreateCommunityFragment extends BaseFragment implements CommunityView,CommunityTypeFragment.MyDialogFragmentListener,HomeView{
-
+    private final String TAG = LogUtils.makeLogTag(CreateCommunityFragment.class);
 
     @Bind(R.id.cb_create_community_open_check)
     CheckBox mCbopenCommunity;
-    @Inject
-    Preference<CreateCommunityRequest> mUserPreference;
+
     @Inject
     CreateCommunityPresenter createCommunityPresenter;
 
@@ -138,8 +136,6 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
 
     Long typeId;
     String encCoverImage;
-    private final String mTAG = LogUtils.makeLogTag(CreateCommunityFragment.class);
-    private CreateCommunityActivityIntractionListner mCreatecommunityIntractionListner;
     private int mImage_type = 0;
     private static final int mCAMERA_CODE = 101, mGALLERY_CODE = 201, mCROPING_CODE = 301;
     private Uri mImageCaptureUri;
@@ -153,19 +149,7 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
 
     List<Long> tagsid = new ArrayList<>();
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            if (getActivity() instanceof CreateCommunityActivityIntractionListner) {
-                mCreatecommunityIntractionListner = (CreateCommunityActivityIntractionListner) getActivity();
-            }
-        } catch (InstantiationException exception) {
-            LogUtils.error(mTAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + mTAG + AppConstants.SPACE + exception.getMessage());
-        }
-    }
 
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if(view==null) {
@@ -254,33 +238,9 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
                     mCbcloseCommunity.setChecked(mFeedDetail.isClosedCommunity());
                     mCbopenCommunity.setChecked(!mFeedDetail.isClosedCommunity());
                 }
-                else{
-                   if(null != getArguments().getStringArray(AppConstants.TAG_LIST)) {
 
-                    }
-                    else{
-                        mUserPreference.delete();
-                    }
-                }
-                if (null != getArguments().getStringArray(AppConstants.TAG_LIST)) {
-                    String[] tagsval = getArguments().getStringArray(AppConstants.TAG_LIST);
-                    long tagIds[]=getArguments().getLongArray(AppConstants.TAG_ID);
-                    tagId=tagIds;
-                    String tagval = "";
-                    for (int i = 1; i < tagsval.length && StringUtil.isNotNullOrEmptyString(tagsval[i]); i++) {
-                        if(i==1 )
-                        tagval = tagval + " " + tagsval[i];
-                        else
-                            tagval = tagval + " , " + tagsval[i];
-                    }
-                    tagval=tagval.replaceAll("null","");
-                    tagval=tagval.substring(0,tagval.length());
-                    mEtCreateCommunityTags.setText(tagval);
-                }
-                if(null !=getArguments().getString(AppConstants.COVER_IMAGE))
-                {
-                    encCoverImage=getArguments().getString(AppConstants.COVER_IMAGE);
-                }
+
+
 
             } else {
                 genericFragmentActivityIntractionListner.onErrorOccurence((AppConstants.ERROR_OCCUR));
@@ -309,14 +269,25 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
                 }
             });
         }
-        setPrefrencesValue();
         return view;
     }
 
+    public void setCommunitiyTags(String[] tagsval,long[] tagsid)
+    {
+        tagId=tagsid;
+        StringBuilder stringBuilder=new StringBuilder();
+        if(tagsval.length>0) {
+            for (String tagValue : tagsval) {
+                if(StringUtil.isNotNullOrEmptyString(tagValue)) {
+                    stringBuilder.append(tagValue).append(AppConstants.COMMA);
+                }
+            }
+        }
+        mEtCreateCommunityTags.setText(stringBuilder.substring(0,stringBuilder.length()-1));
+    }
 
     @OnClick(R.id.iv_create_community_cross)
     public void backClick() {
-        mUserPreference.delete();
 
         getActivity().finish();
     }
@@ -344,7 +315,6 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
 //*********Tag Click**********************//
     @OnClick(R.id.et_create_community_tags)
     public void btnTagClick() {
-        mUserPreference.delete();
         mTagFlag=1;
         CreateCommunityRequest createCommunityRequest=new CreateCommunityRequest();
 
@@ -390,10 +360,9 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
             createCommunityRequest.setCommunityTypeId(typeId);
         }
 
-        mUserPreference.set(createCommunityRequest);
-        mCreatecommunityIntractionListner.callCommunityTagPage(mFeedDetail,encCoverImage);
+        ((CreateCommunityActivity)getActivity()).callCommunityTagPage(mFeedDetail);
 
-        //  CommunitySearchTagsFragment newFragment = new CommunitySearchTagsFragment();
+        //  CommunitySearchTagsDialog newFragment = new CommunitySearchTagsDialog();
     }
 
     @OnClick(R.id.tv_create_community_cover_img_upload)
@@ -448,25 +417,15 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
       //  editCommunityRequest.setCoverImageUrl(encCoverImage);
 
 
-        CreateCommunityRequest createCommunityRequest1 = new CreateCommunityRequest();
-        createCommunityRequest1 = mUserPreference.get();
-        CreateCommunityRequest createCommunityRequest = new CreateCommunityRequest();
-        if(null !=createCommunityRequest1.getCoverImage()) {
-            editCommunityRequest.setCoverImageUrl(createCommunityRequest1.getCoverImage());
 
-        }
-        else {
             editCommunityRequest.setCoverImageUrl(encCoverImage);
 
-        }
-        if(null !=createCommunityRequest1.getLogo()) {
-            editCommunityRequest.setLogoUrl(createCommunityRequest1.getLogo());
 
-        }
-        else {
+
+
             editCommunityRequest.setLogoUrl(encImage);
 
-        }
+
 
 
 
@@ -527,25 +486,16 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
         }
         // tags.add(tagIds[0]);
 
-        CreateCommunityRequest createCommunityRequest1 = new CreateCommunityRequest();
-        createCommunityRequest1 = mUserPreference.get();
-        CreateCommunityRequest createCommunityRequest = new CreateCommunityRequest();
-        if(null !=createCommunityRequest1.getCoverImage()) {
-            createCommunityRequest.setCoverImage(createCommunityRequest1.getCoverImage());
 
-        }
-        else {
+        CreateCommunityRequest createCommunityRequest = new CreateCommunityRequest();
+
             createCommunityRequest.setCoverImage(encCoverImage);
 
-        }
-        if(null !=createCommunityRequest1.getLogo()) {
-            createCommunityRequest.setLogo(createCommunityRequest1.getLogo());
 
-        }
-        else {
+
             createCommunityRequest.setLogo(encImage);
 
-        }
+
 
         createCommunityRequest.setAppVersion("String");
 
@@ -582,47 +532,9 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
 
         createCommunityPresenter.postCreateCommunityList(createCommunityRequest);
 
-        mUserPreference.delete();
-
-    }
-    private void setPrefrencesValue()
-    {
-        if(null !=mUserPreference)
-        {
-            if(mTagFlag==0) {
-                CreateCommunityRequest createCommunityRequest = new CreateCommunityRequest();
-                createCommunityRequest = mUserPreference.get();
-                if (null != createCommunityRequest) {
-                    if (null != createCommunityRequest.getName())
-                        metCreateCommunityName.setText(createCommunityRequest.getName());
-                    if (null != createCommunityRequest.getDescription())
-                        metCreateCommunityDescription.setText(createCommunityRequest.getDescription());
-                    if (null != createCommunityRequest.getType())
-                        mEtCommunityType.setText(createCommunityRequest.getType());
-                    if (null != encCoverImage) {
-                        mIvCover.setImageDrawable(null);
-                        byte[] decodedString = Base64.decode(encCoverImage, Base64.DEFAULT);
-                        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                        mIvCover.setImageBitmap(decodedByte);
-                    }
-                    if (null != createCommunityRequest.getLogo()) {
-                        byte[] decodedString = Base64.decode(createCommunityRequest.getLogo(), Base64.DEFAULT);
-                        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                        mIvlogo.setBackground(new BitmapDrawable(getResources(), decodedByte));
-                        mIvlogo.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-
-                    }
-                    if (null != createCommunityRequest.getCommunityTypeId()) {
-
-                        typeId=createCommunityRequest.getCommunityTypeId();
-
-                    }
-                }
-
-            }
 
 
-        }
+
     }
 
     public void checkStoragePermission() {
@@ -672,7 +584,7 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
         if (mCbopenCommunity.isChecked()) {
             ChangeCommunityPrivacyDialogFragment newFragment = new ChangeCommunityPrivacyDialogFragment();
             newFragment.show(getActivity().getFragmentManager(), "dialog");
-      /*      CommunityJoinRegionDialogFragment newFragment = new CommunityJoinRegionDialogFragment(this);
+      /*      CommunityOptionJoinDialog newFragment = new CommunityOptionJoinDialog(this);
             newFragment.show(getActivity().getFragmentManager(), "dialog");*/
         }
 
@@ -777,10 +689,6 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
     @Override
     public void startNextScreen() {
 
-    }
-
-    public interface CreateCommunityActivityIntractionListner {
-        void callCommunityTagPage(FeedDetail mfeed,String createCommunityRequest);
     }
 
     private void openImageOption() {

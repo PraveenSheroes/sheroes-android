@@ -32,6 +32,9 @@ public class FragmentOpen implements Parcelable {
     boolean isJobAtOpen;
     boolean isInterestOpen;
     boolean isWorkingExpOpen;
+    boolean isOpenAboutFragment;
+    boolean isInviteCommunityOwner;
+
     public FragmentOpen() {
     }
 
@@ -238,5 +241,21 @@ public class FragmentOpen implements Parcelable {
 
     public void setWorkingExpOpen(boolean workingExpOpen) {
         isWorkingExpOpen = workingExpOpen;
+    }
+
+    public boolean isOpenAboutFragment() {
+        return isOpenAboutFragment;
+    }
+
+    public void setOpenAboutFragment(boolean openAboutFragment) {
+        isOpenAboutFragment = openAboutFragment;
+    }
+
+    public boolean isInviteCommunityOwner() {
+        return isInviteCommunityOwner;
+    }
+
+    public void setInviteCommunityOwner(boolean inviteCommunityOwner) {
+        isInviteCommunityOwner = inviteCommunityOwner;
     }
 }

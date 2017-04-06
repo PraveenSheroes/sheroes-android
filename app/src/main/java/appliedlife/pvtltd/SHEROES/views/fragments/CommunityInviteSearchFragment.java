@@ -1,9 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -31,7 +29,7 @@ import butterknife.OnClick;
  * Created by Ajit Kumar on 08-02-2017.
  */
 
-public class CommunityInviteSearchFragment extends BaseFragment  {
+public class CommunityInviteSearchFragment extends BaseFragment {
     private final String TAG = LogUtils.makeLogTag(AllSearchFragment.class);
     @Bind(R.id.rv_search_list)
     RecyclerView mRecyclerView;
@@ -45,20 +43,7 @@ public class CommunityInviteSearchFragment extends BaseFragment  {
     LinearLayout mLnr_invite_member;
     private String mSearchDataName = AppConstants.EMPTY_STRING;
     private GenericRecyclerViewAdapter mAdapter;
-    private InviteSearchActivityIntractionListner mHomeSearchActivityIntractionListner;
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            if (getActivity() instanceof InviteSearchActivityIntractionListner) {
-                mHomeSearchActivityIntractionListner = (InviteSearchActivityIntractionListner) getActivity();
-            }
-        } catch (Fragment.InstantiationException exception) {
-            LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
-        }
-    }
 
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -73,10 +58,10 @@ public class CommunityInviteSearchFragment extends BaseFragment  {
         mRecyclerView.setAdapter(mAdapter);
         return view;
     }
+
     @OnClick(R.id.tv_back_community_tag)
-    public void communityTagBack()
-    {
-        mHomeSearchActivityIntractionListner.closeInvite();
+    public void communityTagBack() {
+        ((CommunitiesDetailActivity) getActivity()).getSupportFragmentManager().popBackStackImmediate();
     }
 
     @Override
@@ -153,10 +138,5 @@ public class CommunityInviteSearchFragment extends BaseFragment  {
                 }
             }
         };
-    }
-
-    public interface InviteSearchActivityIntractionListner {
-        void onErrorOccurence();
-        void closeInvite();
     }
 }

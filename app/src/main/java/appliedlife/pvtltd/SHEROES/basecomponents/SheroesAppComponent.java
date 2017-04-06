@@ -37,12 +37,12 @@ import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityInviteSearchFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.CommunityJoinFromeAboutFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.CommunityJoinRegionDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.CommunityJoinFromeAboutDailog;
+import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOptionJoinDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOpenAboutFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOwnerSearchFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityRequestedFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.CommunitySearchTagsFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.CommunitySearchTagsDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityTypeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CreateCommunityFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CreateCommunityPostFragment;
@@ -267,7 +267,7 @@ public interface SheroesAppComponent {
     void inject(MemberHolder memberHolder);
     void inject(MembersPresenter membersPresenter);
     void inject(Feedback_ThankyouActivity feedback_thankyouActivity);
-    void inject(CommunitySearchTagsFragment communitySearchTagsFragment);
+    void inject(CommunitySearchTagsDialog communitySearchTagsDialog);
     void inject(CommunityTagsPresenter communityTagsPresenter);
     void inject(TagsHolder tagsHolder);
     void inject(CommunityRequestedFragment communityRequestedFragment);
@@ -329,7 +329,7 @@ public interface SheroesAppComponent {
     void inject(WelcomeScreenFirstFragment welcomeScreenFirstFragment);
     void inject(PreferencesDeactiveAccountDialogFragment preferencesDeactiveAccountDialogFragment);
     void inject(CommunityTypeFragment communityTypeFragment);
-    void inject(CommunityJoinRegionDialogFragment communityJoinRegionDialogFragment);
+    void inject(CommunityOptionJoinDialog communityOptionJoinDialog);
     void inject(PopularTagHolder popularTagHolder);
     void inject(PersonalBasicDetailsFragment personalBasicDetailsFragment);
     void inject(ProfileEditVisitingCardFragment profileEditVisitingCardFragment);
@@ -340,7 +340,7 @@ public interface SheroesAppComponent {
     void inject(GoodAtHolder goodAtHolder);
 
     void inject(PandingRequestHolder pandingRequestHolder);
-    void inject(CommunityJoinFromeAboutFragment communityJoinFromeAboutFragment);
+    void inject(CommunityJoinFromeAboutDailog communityJoinFromeAboutDailog);
 
 
 

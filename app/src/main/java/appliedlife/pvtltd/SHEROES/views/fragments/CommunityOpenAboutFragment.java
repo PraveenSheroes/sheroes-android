@@ -19,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -37,17 +36,17 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Member;
+import appliedlife.pvtltd.SHEROES.models.entities.community.MemberListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MembersList;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMember;
+import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
@@ -67,7 +66,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
-import static appliedlife.pvtltd.SHEROES.utils.AppUtils.getMemberRequestBuilder;
 
 /**
  * Created by Ajit Kumar on 01-02-2017.
@@ -116,8 +114,6 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
     TextView tvLeave;
     TextView tvEdit;
     FeedDetail mFeedDetail;
-    private FragmentListRefreshData mFragmentListRefreshData;
-    int iCurrentSelection;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     Long mcommunityid;
@@ -147,11 +143,6 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
                     .skipMemoryCache(true)
                     .into(miv_community_cover_img);
             Glide.with(this).load(mFeedDetail.getThumbnailImageUrl()).transform(new CircleTransform(getActivity())).into(mfb_about_community_logo);
-           /* Glide.with(this)
-                    .load(mFeedDetail.getThumbnailImageUrl())
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .skipMemoryCache(true)
-                    .into(mfb_about_community_logo);*/
             if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getListDescription())) {
                 mtv_about_community_des.setText(mFeedDetail.getListDescription());
             }
@@ -179,10 +170,9 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
         return view;
     }
 
-    public void refreshMemberCount() {
-        Toast.makeText(getActivity(), "click", Toast.LENGTH_LONG).show();
-        mMemberpresenter.getAllMembers(getMemberRequestBuilder(mFeedDetail.getIdOfEntityOrParticipant(), mFragmentListRefreshData.getPageNo()));
-
+    public void refreshMemberCount(FeedDetail feedDetail) {
+        mFeedDetail = feedDetail;
+        mtv_community_members.setText(feedDetail.getNoOfMembers() + AppConstants.SPACE + getString(R.string.ID_MEMBERS));
     }
 
     private void displayTabAsCommunityType(FeedDetail mFeedDetail) {
@@ -289,26 +279,28 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
 
     @OnClick(R.id.tv_community_members)
     public void membersClick() {
-        ((CommunitiesDetailActivity) getActivity()).memberClick();
+        ((CommunitiesDetailActivity) getActivity()).openAllMemberFragmentClick();
     }
 
     @OnClick(R.id.tv_community_join_invite)
     public void inviteJoinOnClick() {
         joinTxt = mTvJoinInviteView.getText().toString();
-        if (joinTxt.equalsIgnoreCase(getString(R.string.ID_JOIN))) {
-            if (mFeedDetail.isClosedCommunity())
-                ((CommunitiesDetailActivity) getActivity()).inviteJoinEventClickFromAboutPage(joinTxt, mFeedDetail, this);
-            else {
-                callJoinApi();
+        if (StringUtil.isNotNullOrEmptyString(joinTxt)) {
+            if (joinTxt.equalsIgnoreCase(getString(R.string.ID_JOIN))) {
+                if (mFeedDetail.isClosedCommunity()) {
+                    ((CommunitiesDetailActivity) getActivity()).showCommunityJoinReason(mFeedDetail);
+                } else {
+                    callJoinApi();
+                }
+            } else if (joinTxt.equalsIgnoreCase(getString(R.string.ID_INVITE))) {
+                ((CommunitiesDetailActivity) getActivity()).inviteJoinEventClick(joinTxt, mFeedDetail);
             }
-        } else {
-            ((CommunitiesDetailActivity) getActivity()).inviteJoinEventClick(joinTxt, mFeedDetail);
         }
     }
 
     @OnClick(R.id.tv_community_add_more)
     public void addMoreClick() {
-        ((CommunitiesDetailActivity) getActivity()).ownerClick();
+        ((CommunitiesDetailActivity) getActivity()).addOwnerOnClick();
     }
 
     @OnClick(R.id.iv_about_community)
@@ -321,13 +313,13 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
             List<Long> userIdList = new ArrayList();
             userIdList.add((long) mUserPreference.get().getUserSummary().getUserId());
             mHomePresenter.communityJoinFromPresenter(AppUtils.communityRequestBuilder(userIdList, mFeedDetail.getIdOfEntityOrParticipant(), ""));
-
         }
     }
 
-    public void callRemoveOwner(long community_id) {
-        OwnerListRequest ownerListRequest = mAppUtils.ownerRequestBuilder(mcommunityid);
-        mOwnerPresenter.getCommunityOwnerList(ownerListRequest);
+    public void callRemoveOwner(FeedDetail feedDetail) {
+        mFeedDetail = feedDetail;
+        mtv_community_members.setText(mFeedDetail.getNoOfMembers() + AppConstants.SPACE + getString(R.string.ID_MEMBERS));
+        mOwnerPresenter.getCommunityOwnerList(mAppUtils.ownerRequestBuilder(mcommunityid));
 
     }
 
@@ -349,17 +341,21 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
         });
         tvEdit = (TextView) popupView.findViewById(R.id.tv_article_menu_edit);
         tvLeave = (TextView) popupView.findViewById(R.id.tv_article_menu_delete);
-        popupWindow.showAsDropDown(view, 20, -10);
+        popupWindow.showAsDropDown(view, -50, -10);
         tvLeave.setText(getActivity().getString(R.string.ID_LEAVE));
         if (mFeedDetail.isOwner()) {
-            tvEdit.setVisibility(View.VISIBLE);
-            if (StringUtil.isNotEmptyCollection(ownerListResponse)) {
+            if (StringUtil.isNotEmptyCollection(ownerListResponse) && ownerListResponse.size() > AppConstants.ONE_CONSTANT) {
                 tvLeave.setVisibility(View.VISIBLE);
             } else {
                 tvLeave.setVisibility(View.GONE);
             }
-        } else {
+            tvEdit.setVisibility(View.VISIBLE);
+        } else if (mFeedDetail.isMember()) {
             tvLeave.setVisibility(View.VISIBLE);
+            tvEdit.setVisibility(View.GONE);
+        } else {
+            tvLeave.setVisibility(View.GONE);
+            tvEdit.setVisibility(View.GONE);
         }
 
         popupWindow.showAsDropDown(view, -180, 0);
@@ -385,14 +381,24 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
     public void callRemoveMember() {
         LoginResponse loginResponse = mUserPreference.get();
         UserSummary userSummary = loginResponse.getUserSummary();
-        RemoveMember removeMember = mAppUtils.removeMemberRequestBuilder(mcommunityid, userSummary.getUserId());
-        mMemberpresenter.unJoinedApi(removeMember);
+        RemoveMemberRequest removeMemberRequest = mAppUtils.removeMemberRequestBuilder(mcommunityid, userSummary.getUserId());
+        mMemberpresenter.leaveCommunityAndRemoveMemberToPresenter(removeMemberRequest);
     }
 
-    public void dismissPopup() {
-        if (popupWindow != null) popupWindow.dismiss();
+    public void setStatusOfButton(FeedDetail feedDetail) {
+        if (feedDetail.isRequestPending()) {
+            mTvJoinInviteView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+            mTvJoinInviteView.setText(getString(R.string.ID_REQUESTED));
+            mTvJoinInviteView.setBackgroundResource(R.drawable.rectangle_feed_community_requested);
+            mTvJoinInviteView.setEnabled(false);
+        } else if (feedDetail.isOwner() || feedDetail.isMember()) {
+            mTvJoinInviteView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+            mTvJoinInviteView.setText(getString(R.string.ID_INVITE));
+            mTvJoinInviteView.setText(getActivity().getString(R.string.ID_INVITE));
+            mTvJoinInviteView.setBackgroundResource(R.drawable.rectangle_community_invite);
+            mTvJoinInviteView.setVisibility(View.VISIBLE);
+        }
     }
-
 
     @Override
     public void getSuccessForAllResponse(String success, FeedParticipationEnum feedParticipationEnum) {
@@ -449,7 +455,7 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
         if (StringUtil.isNotEmptyCollection(ownerList)) {
             this.ownerListResponse = ownerList;
             for (Member member : ownerList) {
-                if (mFeedDetail.isOwner() && ownerList.size() > AppConstants.ONE_CONSTANT) {
+                if (ownerList.size() > AppConstants.ONE_CONSTANT) {
                     member.setOwner(true);
                 } else {
                     member.setOwner(false);
@@ -482,8 +488,9 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
     }
 
     @Override
-    public void removeMember(String status) {
-        switch (status) {
+    public void removeMember(MemberListResponse memberListResponse) {
+
+        switch (memberListResponse.getStatus()) {
             case AppConstants.SUCCESS:
                 mTvJoinInviteView.setTextColor(ContextCompat.getColor(getContext(), R.color.footer_icon_text));
                 mTvJoinInviteView.setText(getString(R.string.ID_JOIN));
@@ -491,7 +498,7 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
                 ((CommunitiesDetailActivity) getActivity()).onLeaveClick();
                 break;
             case AppConstants.FAILED:
-                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_JOIN_INVITE);
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(memberListResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);
                 break;
             default:
                 mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_JOIN_INVITE);

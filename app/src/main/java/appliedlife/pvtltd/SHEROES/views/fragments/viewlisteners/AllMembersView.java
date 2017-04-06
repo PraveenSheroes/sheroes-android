@@ -3,6 +3,7 @@ package appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseMvpView;
+import appliedlife.pvtltd.SHEROES.models.entities.community.MemberListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MembersList;
 
 /**
@@ -11,5 +12,5 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.MembersList;
 
 public interface AllMembersView extends BaseMvpView {
     void getAllMembers(List<MembersList> data);
-    void removeMember(String data);
+    void removeMember(MemberListResponse memberListResponse);
 }

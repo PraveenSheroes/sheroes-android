@@ -59,7 +59,7 @@ public class OwnerHolder extends BaseViewHolder<Member> {
             ivFeedUserCircleIcon.setCircularImage(true);
             ivFeedUserCircleIcon.bindImage(dataItem.getCommunityUserPhotoUrlPath());
         }
-        if (dataItem.isOwner() && null != dataItem.getOwnerCount() && dataItem.getOwnerCount() > 0) {
+        if (dataItem.isOwner()) {
             mTvownerclose.setVisibility(View.VISIBLE);
             tvOwner.setText(mContext.getString(R.string.ID_ADMIN) + (position + 1));
             tvOwner.setTextColor(ContextCompat.getColor(context, R.color.red_oval_shap));
@@ -75,7 +75,7 @@ public class OwnerHolder extends BaseViewHolder<Member> {
 
     @OnClick(R.id.tv_owner_cross_from_open_about)
     public void onOwnerCrossClick() {
-        viewInterface.handleOnClick(dataItem, tvOwner);
+        viewInterface.handleOnClick(dataItem, mTvownerclose);
     }
 
     @Override

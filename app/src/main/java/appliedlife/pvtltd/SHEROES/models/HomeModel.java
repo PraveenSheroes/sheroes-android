@@ -13,8 +13,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequest
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
@@ -68,18 +66,6 @@ public class HomeModel {
                         LogUtils.info("*******************my com response",new Gson().toJson(feedResponsePojo));
 
                         return feedResponsePojo;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
-    public Observable<GetTagData> getTagFromModel(GetAllDataRequest getAllDataRequest){
-        LogUtils.info(TAG,"TAG FRom*******************"+new Gson().toJson(getAllDataRequest));
-        return sheroesAppServiceApi.getTagFromApi(getAllDataRequest)
-                .map(new Func1<GetTagData, GetTagData>() {
-                    @Override
-                    public GetTagData call(GetTagData getAllData) {
-                        return getAllData;
                     }
                 })
                 .subscribeOn(Schedulers.io())

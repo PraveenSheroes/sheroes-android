@@ -5,8 +5,6 @@ import android.graphics.Color;
 import android.view.View;
 import android.widget.TextView;
 
-import java.util.HashMap;
-
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
@@ -31,7 +29,7 @@ public class UserHolder extends BaseViewHolder<FeedDetail> {
     TextView tvowOer_title;
     @Bind(R.id.tv_owner_city)
     TextView tv_owner_city;
-    @Bind(R.id.tv_owner_cross)
+    @Bind(R.id.tv_owner_add)
     TextView mTvownerclose;
     BaseHolderInterface viewInterface;
     private FeedDetail dataItem;
@@ -39,36 +37,24 @@ public class UserHolder extends BaseViewHolder<FeedDetail> {
 
     public UserHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
+        SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
         ButterKnife.bind(this, itemView);
         this.viewInterface = baseHolderInterface;
-        SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
+
     }
 
     @Override
     public void bindData(FeedDetail item, final Context context, int position) {
         this.dataItem = item;
         this.mContext = context;
-       // imageOperations(context);
         mTvownerclose.setOnClickListener(this);
+        dataItem.setItemPosition(position);
         allTextViewStringOperations(context);
     }
-
-  /*  private void imageOperations(Context context) {
-        String feedCircleIconUrl = dataItem.getAuthorImageUrl();
-        if (StringUtil.isNotNullOrEmptyString(feedCircleIconUrl)) {
-            Glide.with(context)
-                    .load(feedCircleIconUrl)
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .skipMemoryCache(true)
-                    .into(ivFeedUserCircleIcon);
-        }
-
-    }*/
 
     private void allTextViewStringOperations(Context context) {
         if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
             tvowOer_title.setText(dataItem.getNameOrTitle());
-
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getCityName())) {
             tv_owner_city.setText(dataItem.getCityName());
@@ -77,6 +63,17 @@ public class UserHolder extends BaseViewHolder<FeedDetail> {
 
         ivFeedUserCircleIcon.setCircularImage(true);
         ivFeedUserCircleIcon.bindImage(images);
+        if(dataItem.isTrending())
+        {
+            mTvownerclose.setBackgroundResource(R.drawable.unselected_add_btn_shap);
+            mTvownerclose.setTextColor(Color.WHITE);
+            mTvownerclose.setText(R.string.ID_ADDED);
+        }else
+        {
+            mTvownerclose.setBackgroundResource(R.drawable.select_purpose_btn_shap);
+            mTvownerclose.setTextColor(Color.BLACK);
+            mTvownerclose.setText(R.string.ID_ADD);
+        }
     }
 
 
@@ -89,16 +86,10 @@ public class UserHolder extends BaseViewHolder<FeedDetail> {
 
     @Override
     public void onClick(View view) {
-
         int id = view.getId();
         switch (id) {
-            case R.id.tv_owner_cross:
-                HashMap<String,Object> map = new HashMap<String,Object>();
-                map.put("collection id",dataItem.getId());
-                mTvownerclose.setBackgroundResource(R.drawable.unselected_add_btn_shap);
-                mTvownerclose.setTextColor(Color.WHITE);
-                mTvownerclose.setText(R.string.ID_ADDED);
-                viewInterface.handleOnClick(this.dataItem,view);
+            case R.id.tv_owner_add:
+                viewInterface.handleOnClick(dataItem,view);
                 break;
             default:
                 LogUtils.error("", AppConstants.CASE_NOT_HANDLED + " " + "" + " " + id);

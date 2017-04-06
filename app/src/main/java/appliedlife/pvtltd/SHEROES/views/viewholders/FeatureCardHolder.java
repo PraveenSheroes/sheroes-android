@@ -250,7 +250,6 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
         if (tvFeaturedCommunityJoin.getText().toString().equalsIgnoreCase(mContext.getString(R.string.ID_JOIN))) {
             viewInterface.handleOnClick(dataItem, tvFeaturedCommunityJoin);
         }
-
     }
 
     @OnClick(R.id.li_featured_community_images)

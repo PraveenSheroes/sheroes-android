@@ -232,7 +232,8 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
     }
     @OnClick(R.id.et_user_comment_description)
     public void editTextForComment() {
-        AppUtils.showKeyboard(mEtUserCommentDescription, TAG);
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInputFromInputMethod(mEtUserCommentDescription.getWindowToken(), 0);
     }
     @OnClick(R.id.li_user_comment)
     public void liEditForComment() {
@@ -405,7 +406,6 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
             LastComment lastComment = new LastComment();
             lastComment.setId(mCommentReactionDocList.get(i).getId());
             lastComment.setAnonymous(mCommentReactionDocList.get(i).isAnonymous());
-
             lastComment.setComment(mCommentReactionDocList.get(i).getComment());
             lastComment.setParticipantImageUrl(mCommentReactionDocList.get(i).getParticipantImageUrl());
             lastComment.setParticipantName(mCommentReactionDocList.get(i).getParticipantName());
@@ -423,9 +423,7 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
 
     public interface HomeActivityIntractionListner {
         void onErrorOccurence();
-
         void onDialogDissmiss(FragmentOpen isFragmentOpen, FeedDetail feedDetail);
-
         void onClickReactionList(FragmentOpen isFragmentOpen, FeedDetail feedDetail);
     }
 

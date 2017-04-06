@@ -1,9 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -45,19 +43,6 @@ public class SearchGoodAt extends BaseFragment {
     LinearLayout mLnr_invite_member;
     private String mSearchDataName = AppConstants.EMPTY_STRING;
     private GenericRecyclerViewAdapter mAdapter;
-    private CommunityInviteSearchFragment.InviteSearchActivityIntractionListner mHomeSearchActivityIntractionListner;
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            if (getActivity() instanceof CommunityInviteSearchFragment.InviteSearchActivityIntractionListner) {
-                mHomeSearchActivityIntractionListner = (CommunityInviteSearchFragment.InviteSearchActivityIntractionListner) getActivity();
-            }
-        } catch (Fragment.InstantiationException exception) {
-            LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
-        }
-    }
 
     @Nullable
     @Override
@@ -77,7 +62,7 @@ public class SearchGoodAt extends BaseFragment {
 
     @OnClick(R.id.tv_back_community_tag)
     public void communityTagBack() {
-        mHomeSearchActivityIntractionListner.closeInvite();
+        getActivity().getSupportFragmentManager().popBackStack();
     }
 
     @Override

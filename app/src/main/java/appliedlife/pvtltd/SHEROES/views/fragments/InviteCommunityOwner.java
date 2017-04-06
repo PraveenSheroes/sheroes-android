@@ -1,11 +1,11 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -26,11 +26,10 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
@@ -43,18 +42,20 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
-import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CommunityView;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
 
 /**
  * Created by Ajit Kumar on 11-03-2017.
  */
 
-public class InviteCommunityOwner extends BaseFragment implements CommunityView {
-    private final String TAG = LogUtils.makeLogTag(MyCommunityInviteMemberFragment.class);
+public class InviteCommunityOwner extends BaseFragment implements CommunityView, HomeView {
+    private final String TAG = LogUtils.makeLogTag(InviteCommunityOwner.class);
     @Inject
     HomePresenter mHomePresenter;
     @Inject
@@ -75,28 +76,16 @@ public class InviteCommunityOwner extends BaseFragment implements CommunityView 
     public EditText mSearchEditText;
     @Bind(R.id.tv_added_member)
     TextView tvAddedMember;
+    @Bind(R.id.tv_invite_post_submit)
+    TextView tvInvitePostExit;
     private String mSearchDataName = AppConstants.EMPTY_STRING;
     private GenericRecyclerViewAdapter mAdapter;
-    private FragmentIntractionWithActivityListner mHomeSearchActivityFragmentIntractionWithActivityListner;
     private FragmentListRefreshData mFragmentListRefreshData;
     private Handler mHandler = new Handler();
     private List<Long> mUserIdForAddMember = new ArrayList<>();
     private FeedDetail mFeedDetail;
-    InviteOwnerDoneIntractionListner inviteOwnerDoneIntractionListner;
+    private FeedDetail feedUserObject;
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            if (getActivity() instanceof InviteOwnerDoneIntractionListner) {
-                inviteOwnerDoneIntractionListner = (InviteOwnerDoneIntractionListner) getActivity();
-            }
-        } catch (InstantiationException exception) {
-            LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
-        }
-    }
-
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -110,6 +99,7 @@ public class InviteCommunityOwner extends BaseFragment implements CommunityView 
             mFeedDetail = bundle.getParcelable(AppConstants.COMMUNITIES_DETAIL);
         }
         tvInviteText.setText(getString(R.string.ID_SEARCH));
+        tvInvitePostExit.setText(getString(R.string.ID_CLOSE));
         editTextWatcher();
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new GenericRecyclerViewAdapter(getContext(), (CommunitiesDetailActivity) getActivity());
@@ -123,7 +113,7 @@ public class InviteCommunityOwner extends BaseFragment implements CommunityView 
 
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
-        List<FeedDetail> feedDetailList=feedResponsePojo.getFeedDetails();
+        List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
         if (StringUtil.isNotEmptyCollection(feedDetailList) && mAdapter != null) {
             liInviteMember.setVisibility(View.GONE);
             mAdapter.setCallForRecycler(AppConstants.OWNER_SUB_TYPE);
@@ -137,7 +127,7 @@ public class InviteCommunityOwner extends BaseFragment implements CommunityView 
 
     @Override
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
-        mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(errorMsg,feedParticipationEnum);
+        mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(errorMsg, feedParticipationEnum);
     }
 
     @Override
@@ -202,33 +192,22 @@ public class InviteCommunityOwner extends BaseFragment implements CommunityView 
             }
         }
     };
-    public void callAddOwner(Long userid)
-    {
-        Long communityid=mFeedDetail.getIdOfEntityOrParticipant();
-        CreateCommunityOwnerRequest createCommunityOwnerRequest=mAppUtils.inviteOwnerRequestBuilder(communityid,userid);
-        createCommunityPresenter.postCreateCommunityOwner(createCommunityOwnerRequest);
-    }
-    @Override
-    public void getSuccessForAllResponse(String success, FeedParticipationEnum feedParticipationEnum) {
-        switch (feedParticipationEnum) {
-            case JOIN_INVITE:
-                //ToDO:; need to verify dialog;
-                Toast.makeText(getContext(), "Add members", Toast.LENGTH_SHORT).show();
-                inviteSearchBack();
-                break;
-            default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
-        }
+
+    public void callAddOwner(FeedDetail feedDetail, Long userid) {
+        feedUserObject = feedDetail;
+        Long communityid = mFeedDetail.getIdOfEntityOrParticipant();
+        createCommunityPresenter.postCreateCommunityOwner(mAppUtils.inviteOwnerRequestBuilder(communityid, userid));
     }
 
     @OnClick(R.id.tv_back_community)
     public void inviteSearchBack() {
-        getActivity().getSupportFragmentManager().popBackStack();
+        inviteSubmit();
     }
 
     @OnClick(R.id.tv_invite_post_submit)
     public void inviteSubmit() {
-        inviteOwnerDoneIntractionListner.OwnerAddDone();
+        (getActivity()).getSupportFragmentManager().popBackStack();
+        ((CommunitiesDetailActivity) getActivity()).communityOpenAboutFragment(mFeedDetail);
     }
 
     public void onAddMemberClick(FeedDetail feedDetail) {
@@ -237,8 +216,7 @@ public class InviteCommunityOwner extends BaseFragment implements CommunityView 
         } else {
             mUserIdForAddMember.remove(feedDetail.getIdOfEntityOrParticipant());
         }
-        switch (mUserIdForAddMember.size())
-        {
+        switch (mUserIdForAddMember.size()) {
             case AppConstants.NO_REACTION_CONSTANT:
                 tvAddedMember.setText(AppConstants.SPACE);
                 break;
@@ -279,13 +257,23 @@ public class InviteCommunityOwner extends BaseFragment implements CommunityView 
 
     @Override
     public void postCreateCommunityOwner(CreateCommunityOwnerResponse createCommunityOwnerResponse) {
-        Toast.makeText(getActivity(),createCommunityOwnerResponse.getStatus(),Toast.LENGTH_LONG).show();
-    }
-
-    public interface InviteOwnerDoneIntractionListner {
-        void onErrorOccurence();
-        void OwnerAddDone();
+        switch (createCommunityOwnerResponse.getStatus()) {
+            case AppConstants.SUCCESS:
+                mFeedDetail.setNoOfMembers(mFeedDetail.getNoOfMembers() + 1);
+                feedUserObject.setTrending(true);
+                mAdapter.notifyItemChanged(feedUserObject.getItemPosition(), feedUserObject);
+                if (mRecyclerView.getItemAnimator() instanceof SimpleItemAnimator) {
+                    ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+                    ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setAddDuration(AppConstants.NO_REACTION_CONSTANT);
+                }
+                Toast.makeText(getContext(), getString(R.string.ID_ADDED), Toast.LENGTH_SHORT).show();
+                break;
+            case AppConstants.FAILED:
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(createCommunityOwnerResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);
+                break;
+            default:
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_JOIN_INVITE);
+        }
     }
 }
-
 

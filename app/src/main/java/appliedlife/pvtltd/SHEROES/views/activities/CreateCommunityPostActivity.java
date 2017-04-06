@@ -17,6 +17,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityList;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
 import appliedlife.pvtltd.SHEROES.views.fragments.CreateCommunityPostFragment;
@@ -27,31 +28,31 @@ import butterknife.ButterKnife;
 public class CreateCommunityPostActivity extends BaseActivity implements CreateCommunityPostFragment.CreateCommunityActivityPostIntractionListner, BaseHolderInterface, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, ImageUploadFragment.ImageUploadCallable {
     String data = "";
     private FeedDetail mFeedDetail;
-
     private CreateCommunityPostFragment mCommunityFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
-
+        if (null != getIntent()) {
+            mFeedDetail = getIntent().getParcelableExtra(AppConstants.COMMUNITY_POST_FRAGMENT);
+            data = getIntent().getStringExtra("value");
+            try {
+                if (null != data) {
+                } else
+                    data = "";
+            } catch (Exception e) {
+                data = "";
+            }
+        }
         renderLoginFragmentView();
     }
 
     public void renderLoginFragmentView() {
-        data = getIntent().getStringExtra("value");
-        try {
-            if (null != data) {
-            } else
-                data = "";
-        } catch (Exception e) {
-            data = "";
-        }
-
         setContentView(R.layout.activity_create_community_post);
         ButterKnife.bind(this);
-        getSupportFragmentManager().popBackStack();
         mCommunityFragment=new CreateCommunityPostFragment();
+        mCommunityFragment.setArguments(getIntent().getExtras());
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
                 .replace(R.id.create_community_post_container, mCommunityFragment,CreateCommunityPostFragment.class.getName()).commitAllowingStateLoss();
 

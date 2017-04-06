@@ -225,6 +225,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
             feedDetail.setRequestPending(mFeedDetail.isRequestPending());
             feedDetail.setClosedCommunity(mFeedDetail.isClosedCommunity());
             feedDetail.setScreenName(mScreenName);
+            feedDetail.setThumbnailImageUrl(mFeedDetail.getThumbnailImageUrl());
             noDataList.add(feedDetail);
             FeedDetail feedSecond = new FeedDetail();
             //TODO:: Please remove this or correct
@@ -251,7 +252,6 @@ public class CommunitiesDetailFragment extends BaseFragment {
     }
 
     public void joinRequestForOpenCommunity(FeedDetail feedDetail) {
-
         super.joinRequestForOpenCommunity(feedDetail);
     }
 

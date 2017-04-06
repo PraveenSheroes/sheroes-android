@@ -9,7 +9,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
  * Created by SHEROES-TECH on 28-03-2017.
  */
 
-public class RemoveMember extends BaseRequest{
+public class RemoveMemberRequest extends BaseRequest{
 
     @SerializedName("community_id")
     @Expose

@@ -2,20 +2,15 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.app.DialogFragment;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.transition.Slide;
@@ -28,16 +23,12 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Member;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MembersList;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerList;
@@ -53,7 +44,6 @@ import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.Cu
 import appliedlife.pvtltd.SHEROES.views.fragments.AllMembersFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.CommunityInviteSearchFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOpenAboutFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityRequestedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CurrentStatusDialog;
@@ -61,15 +51,15 @@ import appliedlife.pvtltd.SHEROES.views.fragments.InviteCommunityMember;
 import appliedlife.pvtltd.SHEROES.views.fragments.InviteCommunityOwner;
 import appliedlife.pvtltd.SHEROES.views.fragments.OwnerRemoveDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareCommunityFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.InviteFragmentListener;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FOR_REFRESH_FRAGMENT_LIST;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.JOIN_INVITE;
 
 
-public class CommunitiesDetailActivity extends BaseActivity implements  InviteFragmentListener, InviteCommunityOwner.InviteOwnerDoneIntractionListner, ShareCommunityFragment.ShareCommunityActivityIntractionListner, CommunityInviteSearchFragment.InviteSearchActivityIntractionListner, CommunityRequestedFragment.RequestHomeActivityIntractionListner, CommentReactionFragment.HomeActivityIntractionListner {
+public class CommunitiesDetailActivity extends BaseActivity implements ShareCommunityFragment.ShareCommunityActivityIntractionListner, CommunityRequestedFragment.RequestHomeActivityIntractionListner, CommentReactionFragment.HomeActivityIntractionListner {
     private final String TAG = LogUtils.makeLogTag(CommunitiesDetailActivity.class);
     @Bind(R.id.app_bar_coomunities_detail)
     AppBarLayout mAppBarLayout;
@@ -91,20 +81,11 @@ public class CommunitiesDetailActivity extends BaseActivity implements  InviteFr
     private FragmentOpen mFragmentOpen;
     ViewPagerAdapter viewPagerAdapter;
     private Fragment mFragment;
-    CommunityRequest communityRequest = new CommunityRequest();
-    List<Long> mUserIdsList = new ArrayList<>();
-    Long mCommunityId;
-    private CommunityOpenAboutFragment communityOpenAboutFragment;
+    private CommunityOpenAboutFragment mCommunityOpenAboutFragment;
     private CommunityEnum communityEnum = null;
-
-    public static void navigate(AppCompatActivity activity, View transitionImage, FeedDetail feedDetail) {
-        Intent intent = new Intent(activity, CommunitiesDetailActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, feedDetail);
-        intent.putExtras(bundle);
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, transitionImage, AppConstants.COMMUNITY_DETAIL);
-        ActivityCompat.startActivity(activity, intent, options.toBundle());
-    }
+    private InviteCommunityMember mInviteCommunityMember;
+    private AllMembersFragment mAllMembersFragment;
+    private boolean isMemberRemoveDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -117,7 +98,6 @@ public class CommunitiesDetailActivity extends BaseActivity implements  InviteFr
         ButterKnife.bind(this);
         if (null != getIntent()) {
             mFeedDetail = getIntent().getParcelableExtra(AppConstants.COMMUNITY_DETAIL);
-            LogUtils.error("***********tagId In detail page=", mFeedDetail.getTag_ids() + "");
             communityEnum = (CommunityEnum) getIntent().getSerializableExtra(AppConstants.MY_COMMUNITIES_FRAGMENT);
         }
         setPagerAndLayouts();
@@ -133,7 +113,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements  InviteFr
         if (null != mFeedDetail) {
             if (mFeedDetail.isClosedCommunity()) {
                 mCommunityDetailActivity.setVisibility(View.GONE);
-                communityOpenAboutFragment();
+                communityOpenAboutFragment(mFeedDetail);
             } else {
                 mCommunityDetailActivity.setVisibility(View.VISIBLE);
                 mTvMemebr.setText(mFeedDetail.getNoOfMembers() + AppConstants.SPACE + getString(R.string.ID_MEMBERS));
@@ -176,13 +156,6 @@ public class CommunitiesDetailActivity extends BaseActivity implements  InviteFr
         }
     }
 
-    private void updateBackground(FloatingActionButton fab, Palette palette) {
-        int lightVibrantColor = palette.getLightVibrantColor(getResources().getColor(android.R.color.white));
-        int vibrantColor = palette.getVibrantColor(getResources().getColor(R.color.colorPrimary));
-        fab.setRippleColor(lightVibrantColor);
-        fab.setBackgroundTintList(ColorStateList.valueOf(vibrantColor));
-    }
-
     @Override
     public void startActivityFromHolder(Intent intent) {
 
@@ -191,28 +164,38 @@ public class CommunitiesDetailActivity extends BaseActivity implements  InviteFr
 
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
+        int id = view.getId();
         if (baseResponse instanceof FeedDetail) {
             communityDetailHandled(view, baseResponse);
         } else if (baseResponse instanceof OwnerList) {
             showOwnerRemoveDialog(true, baseResponse);
+
         } else if (baseResponse instanceof Member) {
-            showOwnerRemoveDialog(false, baseResponse);
+            switch (id) {
+                case R.id.tv_owner_cross_from_open_about:
+                    showOwnerRemoveDialog(false, baseResponse);
+                    break;
+                default:
+                    LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + id);
+            }
         } else if (baseResponse instanceof MembersList) {
             MembersList membersList = (MembersList) baseResponse;
-            CallCommunityMemberRemoveFragment(membersList.getUsersId(), membersList.getCommunityId(), membersList.getPosition());
-
+            switch (view.getId()) {
+                case R.id.tv_member_cross:
+                    CallCommunityMemberRemoveFragment(membersList.getUsersId(), membersList.getCommunityId(), membersList.getPosition());
+                    break;
+            }
         } else if (baseResponse instanceof PandingMember) {
             PandingMember pandingMember = (PandingMember) baseResponse;
-
-            switch (view.getId()) {
+            switch (id) {
                 case R.id.tv_panding_member_cross:
                     CallCommunityPandingMemberRemoveFragment(pandingMember.getUsersId(), pandingMember.getCommunityId(), pandingMember.getPosition());
-
                     break;
                 case R.id.tv_panding_member_check:
                     CallCommunityAproveMemberFragment(pandingMember.getUsersId(), pandingMember.getCommunityId(), pandingMember.getPosition());
-
                     break;
+                default:
+                    LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + id);
             }
 
         }
@@ -224,9 +207,11 @@ public class CommunitiesDetailActivity extends BaseActivity implements  InviteFr
             ownerRemoveDialog = new OwnerRemoveDialog();
             Bundle bundleCommunity = new Bundle();
             if (isOwner) {
+                isMemberRemoveDialog = isOwner;
                 OwnerList ownerList = (OwnerList) baseResponse;
                 bundleCommunity.putParcelable(AppConstants.OWNER_SUB_TYPE, ownerList);
             } else {
+                isMemberRemoveDialog = isOwner;
                 Member member = (Member) baseResponse;
                 bundleCommunity.putParcelable(AppConstants.MEMBER, member);
                 bundleCommunity.putLong(AppConstants.COMMUNITY_DETAIL, mFeedDetail.getIdOfEntityOrParticipant());
@@ -242,8 +227,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements  InviteFr
 
     //private void communityDetailHandled(View view, ) {
     private void communityDetailHandled(View view, BaseResponse baseResponse) {
-        FeedDetail callAddOwner = (FeedDetail) baseResponse;
-
+        FeedDetail feedDetail = (FeedDetail) baseResponse;
         int id = view.getId();
         if (!mFeedDetail.isClosedCommunity()) {
             mFragment = viewPagerAdapter.getActiveFragment(mViewPagerCommunitiesDetail, AppConstants.NO_REACTION_CONSTANT);
@@ -255,52 +239,66 @@ public class CommunitiesDetailActivity extends BaseActivity implements  InviteFr
         super.feedCardsHandled(view, baseResponse);
         switch (id) {
             case R.id.card_community_detail:
-                communityOpenAboutFragment();
+                communityOpenAboutFragment(feedDetail);
             case R.id.tv_add_invite:
-                if (null != baseResponse) {
-                    Long userid=((FeedDetail) baseResponse).getIdOfEntityOrParticipant();
-                    if(null!=userid&&userid>AppConstants.NO_REACTION_CONSTANT) {
-                        mUserIdsList.add(userid);
-                        mCommunityId = mFeedDetail.getIdOfEntityOrParticipant();
+                if (null != feedDetail) {
+                    if (null != mInviteCommunityMember) {
+                        mInviteCommunityMember.onAddMemberClick(feedDetail);
                     }
                 }
                 break;
-            case R.id.tv_owner_cross:
+            case R.id.tv_owner_add:
                 if (baseResponse instanceof FeedDetail)
-                    CallCommunityOwnerSearchFragment(callAddOwner.getIdOfEntityOrParticipant());
+                    CallCommunityOwnerSearchFragment(feedDetail, feedDetail.getIdOfEntityOrParticipant());
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
 
                 break;
             default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + id);
         }
 
     }
 
-    private void communityOpenAboutFragment() {
-        if (null != mFeedDetail) {
-            communityOpenAboutFragment = new CommunityOpenAboutFragment();
-            communityOpenAboutFragment.setArguments(getIntent().getExtras());
-            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.bottom_to_top_slide_reverse_anim)
-                    .replace(R.id.about_community_container, communityOpenAboutFragment, CommunityOpenAboutFragment.class.getName()).addToBackStack(CommunityOpenAboutFragment.class.getName()).commitAllowingStateLoss();
+    public void communityOpenAboutFragment(FeedDetail feedDetail) {
+        mFragmentOpen.setOpenAboutFragment(true);
+        if (null != feedDetail) {
+            mCommunityOpenAboutFragment = new CommunityOpenAboutFragment();
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, feedDetail);
+            bundle.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, communityEnum);
+            mCommunityOpenAboutFragment.setArguments(bundle);
+            mCommunityOpenAboutFragment.setArguments(getIntent().getExtras());
+            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in_dialog, 0, 0, R.anim.fade_in_dialog)
+                    .add(R.id.about_community_container, mCommunityOpenAboutFragment, CommunityOpenAboutFragment.class.getName()).addToBackStack(CommunityOpenAboutFragment.class.getName()).commitAllowingStateLoss();
         }
     }
 
-    private void CallCommunityOwnerSearchFragment(Long userId) {
+    public void updateOpenAboutFragment(FeedDetail feedDetail) {
+        mFeedDetail = feedDetail;
+        if (null != mInviteCommunityMember) {
+            mInviteCommunityMember.dismiss();
+        }
+        if (null != mAllMembersFragment) {
+            mAllMembersFragment.dismiss();
+        }
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(CommunityOpenAboutFragment.class.getName());
+        if (AppUtils.isFragmentUIActive(fragment)) {
+            ((CommunityOpenAboutFragment) fragment).refreshMemberCount(feedDetail);
+        }
+    }
+
+    private void CallCommunityOwnerSearchFragment(FeedDetail feedDetail, Long userId) {
         final Fragment fragmentCommunityOwnerSearch = getSupportFragmentManager().findFragmentByTag(InviteCommunityOwner.class.getName());
         if (AppUtils.isFragmentUIActive(fragmentCommunityOwnerSearch)) {
-            ((InviteCommunityOwner) fragmentCommunityOwnerSearch).callAddOwner(userId);
+            ((InviteCommunityOwner) fragmentCommunityOwnerSearch).callAddOwner(feedDetail, userId);
         }
 
     }
 
     private void CallCommunityMemberRemoveFragment(Long userId, Long communityId, int position) {
-
-        final Fragment frgmentAllMember = getSupportFragmentManager().findFragmentByTag(AllMembersFragment.class.getName());
-        if (AppUtils.isFragmentUIActive(frgmentAllMember)) {
-            ((AllMembersFragment) frgmentAllMember).callRemoveMember(userId, communityId, position);
+        if (null != mAllMembersFragment) {
+            mAllMembersFragment.callRemoveMember(userId, communityId, position);
         }
-
     }
 
     private void CallCommunityPandingMemberRemoveFragment(long userId, long communityId, int position) {
@@ -321,20 +319,24 @@ public class CommunitiesDetailActivity extends BaseActivity implements  InviteFr
 
     }
 
-
-    public void memberClick() {
-        AllMembersFragment frag = new AllMembersFragment();
-        Bundle bundleCommunity = new Bundle();
-        bundleCommunity.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
-        frag.setArguments(bundleCommunity);
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.bottom_to_top_slide_reverse_anim)
-                .replace(R.id.about_community_container, frag, AllMembersFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
-
+    public DialogFragment openAllMemberFragmentClick() {
+        mAllMembersFragment = (AllMembersFragment) getFragmentManager().findFragmentByTag(AllMembersFragment.class.getName());
+        if (mAllMembersFragment == null) {
+            mAllMembersFragment = new AllMembersFragment();
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, mFeedDetail);
+            mAllMembersFragment.setArguments(bundle);
+        }
+        if (!mAllMembersFragment.isVisible() && !mAllMembersFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
+            mAllMembersFragment.show(getFragmentManager(), AllMembersFragment.class.getName());
+        }
+        return mAllMembersFragment;
     }
 
     public void inviteJoinEventClick(String pressedEventName, FeedDetail feedDetail) {
-        if (pressedEventName.equals(getString(R.string.ID_JOIN))) {
+        if (pressedEventName.equalsIgnoreCase(getString(R.string.ID_JOIN))) {
             if (feedDetail.isClosedCommunity()) {
+                feedDetail.setScreenName(AppConstants.COMMUNITY_DETAIL);
                 showCommunityJoinReason(feedDetail);
             } else {
                 Fragment fragmentCommunityDetail = getSupportFragmentManager().findFragmentByTag(CommunitiesDetailFragment.class.getName());
@@ -342,34 +344,28 @@ public class CommunitiesDetailActivity extends BaseActivity implements  InviteFr
                     ((CommunitiesDetailFragment) fragmentCommunityDetail).joinRequestForOpenCommunity(mFeedDetail);
                 }
             }
-        } else {
-            InviteCommunityMember myCommunityInviteMemberFragment = new InviteCommunityMember();
-            Bundle bundleInvite = new Bundle();
-            bundleInvite.putParcelable(AppConstants.COMMUNITIES_DETAIL, mFeedDetail);
-            myCommunityInviteMemberFragment.setArguments(bundleInvite);
-            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
-                    .replace(R.id.about_community_container, myCommunityInviteMemberFragment, InviteCommunityMember.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+        } else if (pressedEventName.equalsIgnoreCase(getString(R.string.ID_INVITE))) {
+            inviteCommunityMemberDialog();
         }
     }
 
-    public void inviteJoinEventClickFromAboutPage(String pressedEventName, FeedDetail feedDetail, CommunityOpenAboutFragment communityOpenAboutFragment) {
-        if (pressedEventName.equals(getString(R.string.ID_JOIN))) {
-            if (mFeedDetail.isClosedCommunity()) {
-                showCommunityJoinReasonFromAboutCommunity(feedDetail, communityOpenAboutFragment);
-            } else {
-
-            }
-        } else {
-            InviteCommunityMember myCommunityInviteMemberFragment = new InviteCommunityMember();
-            Bundle bundleInvite = new Bundle();
-            bundleInvite.putParcelable(AppConstants.COMMUNITIES_DETAIL, mFeedDetail);
-            myCommunityInviteMemberFragment.setArguments(bundleInvite);
-            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
-                    .replace(R.id.about_community_container, myCommunityInviteMemberFragment, InviteCommunityMember.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+    public DialogFragment inviteCommunityMemberDialog() {
+        mInviteCommunityMember = (InviteCommunityMember) getFragmentManager().findFragmentByTag(InviteCommunityMember.class.getName());
+        if (mInviteCommunityMember == null) {
+            mInviteCommunityMember = new InviteCommunityMember();
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, mFeedDetail);
+            mInviteCommunityMember.setArguments(bundle);
         }
+        if (!mInviteCommunityMember.isVisible() && !mInviteCommunityMember.isAdded() && !isFinishing() && !mIsDestroyed) {
+            mInviteCommunityMember.show(getFragmentManager(), InviteCommunityMember.class.getName());
+        }
+        return mInviteCommunityMember;
     }
 
-    public void ownerClick() {
+    public void addOwnerOnClick() {
+        mFragmentOpen.setOpenAboutFragment(false);
+        mFragmentOpen.setInviteCommunityOwner(true);
         if (null != mFeedDetail) {
             InviteCommunityOwner myCommunityInviteMemberFragment = new InviteCommunityOwner();
             Bundle bundleInvite = new Bundle();
@@ -377,6 +373,21 @@ public class CommunitiesDetailActivity extends BaseActivity implements  InviteFr
             myCommunityInviteMemberFragment.setArguments(bundleInvite);
             getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
                     .replace(R.id.about_community_container, myCommunityInviteMemberFragment, InviteCommunityOwner.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+        }
+    }
+
+    public void onJoinDialogSuccessResult(String status, FeedDetail feedDetail) {
+        if (StringUtil.isNotNullOrEmptyString(status)) {
+            if (AppConstants.SUCCESS.equalsIgnoreCase(status)) {
+                Fragment fragmentCommunityDetail = getSupportFragmentManager().findFragmentByTag(CommunityOpenAboutFragment.class.getName());
+                if (AppUtils.isFragmentUIActive(fragmentCommunityDetail)) {
+                    ((CommunityOpenAboutFragment) fragmentCommunityDetail).setStatusOfButton(feedDetail);
+                }
+            } else {
+                onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), JOIN_INVITE);
+            }
+        } else {
+            onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), JOIN_INVITE);
         }
     }
 
@@ -411,14 +422,11 @@ public class CommunitiesDetailActivity extends BaseActivity implements  InviteFr
     public void onOwnerClose() {
         final Fragment fragmentCommunityOwnerSearch = getSupportFragmentManager().findFragmentByTag(CommunityOpenAboutFragment.class.getName());
         if (AppUtils.isFragmentUIActive(fragmentCommunityOwnerSearch)) {
-            ((CommunityOpenAboutFragment) fragmentCommunityOwnerSearch).callRemoveOwner(mFeedDetail.getIdOfEntityOrParticipant());
+            if (!isMemberRemoveDialog) {
+                mFeedDetail.setNoOfMembers(mFeedDetail.getNoOfMembers() - 1);
+            }
+            ((CommunityOpenAboutFragment) fragmentCommunityOwnerSearch).callRemoveOwner(mFeedDetail);
         }
-    }
-
-    @Override
-    public void OwnerAddDone() {
-        getSupportFragmentManager().popBackStackImmediate();
-
     }
 
     @Override
@@ -451,6 +459,19 @@ public class CommunitiesDetailActivity extends BaseActivity implements  InviteFr
             getSupportFragmentManager().popBackStack();
             mFragmentOpen.setReactionList(false);
             mFragmentOpen.setCommentList(true);
+        } else if (mFragmentOpen.isOpenAboutFragment()) {
+            if (mFeedDetail.isClosedCommunity()) {
+                onBackClick();
+            } else {
+                mFragmentOpen.setOpenAboutFragment(false);
+                getSupportFragmentManager().popBackStackImmediate();
+            }
+        } else if (mFragmentOpen.isInviteCommunityOwner()) {
+            mFragmentOpen.setInviteCommunityOwner(false);
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag(InviteCommunityOwner.class.getName());
+            if (AppUtils.isFragmentUIActive(fragment)) {
+                ((InviteCommunityOwner) fragment).inviteSubmit();
+            }
         } else {
             onBackClick();
         }
@@ -466,26 +487,12 @@ public class CommunitiesDetailActivity extends BaseActivity implements  InviteFr
     }
 
     @Override
-    public void closeInvite() {
-        getSupportFragmentManager().popBackStack();
-    }
-
-    @Override
     public void closeRequestFragment() {
         getSupportFragmentManager().popBackStack();
     }
 
     @Override
     public void onClickReactionList(FragmentOpen isFragmentOpen) {
-
-    }
-
-    public void closeMembersFragment(int size) {
-        getSupportFragmentManager().popBackStack();
-        final Fragment frgmentAllMember = getSupportFragmentManager().findFragmentByTag(CommunityOpenAboutFragment.class.getName());
-        if (AppUtils.isFragmentUIActive(frgmentAllMember)) {
-            ((CommunityOpenAboutFragment) frgmentAllMember).refreshData(size);
-        }
 
     }
 
@@ -507,30 +514,14 @@ public class CommunitiesDetailActivity extends BaseActivity implements  InviteFr
 
     @OnClick(R.id.iv_community_detail_back)
     public void onBackClick() {
-        if (mFeedDetail.isClosedCommunity()) {
-            finish();
-        } else {
-            if (communityOpenAboutFragment != null) communityOpenAboutFragment.dismissPopup();
-            Intent intent = new Intent();
-            Bundle bundle = new Bundle();
-            bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, mFeedDetail);
-            bundle.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, communityEnum);
-            intent.putExtras(bundle);
-            setResult(RESULT_OK, intent);
-            super.onBackPressed();
-        }
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, mFeedDetail);
+        bundle.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, communityEnum);
+        intent.putExtras(bundle);
+        setResult(RESULT_OK, intent);
+        finish();
     }
-
-    @Override
-    public void callInviteMembers() {
-        final Fragment fragmentCommunityMember = getSupportFragmentManager().findFragmentByTag(InviteCommunityMember.class.getName());
-        if (AppUtils.isFragmentUIActive(fragmentCommunityMember)) {
-            ((InviteCommunityMember) fragmentCommunityMember).AddMembersOnCallInviteCommunity(mUserIdsList, mCommunityId);
-            mUserIdsList.clear();
-        }
-    }
-
-
 
     @Override
     public void onShowErrorDialog(String errorReason, FeedParticipationEnum feedParticipationEnum) {
@@ -540,17 +531,11 @@ public class CommunitiesDetailActivity extends BaseActivity implements  InviteFr
                     showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
                     break;
                 default:
-                    showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
+                    showNetworkTimeoutDoalog(true, false, errorReason);
             }
         } else {
             showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
         }
     }
 
-    @Override
-    public void onInviteDone() {
-       /* final Fragment fragmentCommunityOwnerSearch = getSupportFragmentManager().findFragmentByTag(CommunityOpenAboutFragment.class.getName());
-            ((CommunityOpenAboutFragment) fragmentCommunityOwnerSearch).refreshMemberCount();*/
-        getSupportFragmentManager().popBackStack();
-    }
 }

@@ -77,6 +77,7 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
     @Override
     public void bindData(FeedDetail item, final Context context, int position) {
         this.dataItem = item;
+        dataItem.setItemPosition(position);
         mContext = context;
         mViewMore = context.getString(R.string.ID_VIEW_MORE);
         mLess = context.getString(R.string.ID_LESS);
@@ -256,7 +257,7 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
     public void joinClick() {
         if (tvCommunityInvite.getText().toString().equalsIgnoreCase(mContext.getString(R.string.ID_VIEW))) {
             viewInterface.handleOnClick(dataItem, liCoverImage);
-        } else {
+        } else  if (tvCommunityInvite.getText().toString().equalsIgnoreCase(mContext.getString(R.string.ID_INVITE))){
             viewInterface.handleOnClick(dataItem, tvCommunityInvite);
         }
     }

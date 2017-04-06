@@ -34,7 +34,6 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
-import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LastComment;
@@ -258,13 +257,6 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
         }
         mSwipeView.setRefreshing(false);
     }
-
-
-    @Override
-    public void getTagListSuccess(List<Doc> feedDetailList) {
-
-    }
-
     @Override
     public void getSuccessForAllResponse(String success, FeedParticipationEnum feedParticipationEnum) {
         switch (feedParticipationEnum) {
@@ -309,7 +301,6 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                     mFeedDetail.setRequestPending(true);
 
                 } else {
-                    mFeedDetail.setOwner(true);
                     mFeedDetail.setMember(true);
                 }
                 commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);

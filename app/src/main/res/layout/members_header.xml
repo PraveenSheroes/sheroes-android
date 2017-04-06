@@ -22,33 +22,31 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="(0)"
         android:layout_toRightOf="@+id/tv_user_comment_header_text"
         android:textSize="@dimen/sp_size_24"
         android:paddingBottom="@dimen/dp_size_30"
         android:paddingTop="@dimen/dp_size_30"
         android:paddingLeft="@dimen/dp_size_10"
-
         android:id="@+id/tv_member_count"
         />
     <FrameLayout
-        android:id="@+id/fmCommunityMembersClose"
+        android:id="@+id/fm_community_members_close"
         android:layout_width="@dimen/dp_size_38"
         android:layout_height="@dimen/dp_size_38"
         android:layout_marginEnd="@dimen/dp_size_25"
-
         android:layout_marginRight="@dimen/dp_size_20"
         android:layout_marginTop="@dimen/dp_size_25"
         android:layout_alignParentRight="true"
 
         android:layout_gravity="right">
-    <TextView
-        android:id="@+id/tv_requested_cross"
-        android:layout_width="@dimen/dp_size_18"
-        android:layout_height="@dimen/dp_size_18"
-        android:layout_gravity="center"
-        android:background="@drawable/ic_cross"
-        />
+
+        <TextView
+            android:id="@+id/tv_requested_cross"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:drawableLeft="@drawable/ic_cross"
+            android:padding="@dimen/dp_size_10" />
     </FrameLayout>
 
 </RelativeLayout>

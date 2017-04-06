@@ -4,8 +4,6 @@ import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
 
-import java.util.HashMap;
-
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
@@ -29,7 +27,7 @@ public class OwnerListHolder extends BaseViewHolder<OwnerList> {
     TextView tv_owner;
     @Bind(R.id.img1)
     CircleImageView background;
-    @Bind(R.id.tv_owner_cross)
+    @Bind(R.id.tv_owner_add)
     TextView mTvownerclose;
     BaseHolderInterface viewInterface;
     private OwnerList dataItem;
@@ -73,21 +71,13 @@ public class OwnerListHolder extends BaseViewHolder<OwnerList> {
 
         int id = view.getId();
         switch (id) {
-            case R.id.tv_owner_cross:
-                HashMap<String,Object> map = new HashMap<String,Object>();
-                //   map.put("collection name",dataItem.getTitle());
-                map.put("collection id",dataItem.getId());
-//    map.put("collection type",dataItem.getType());
+            case R.id.tv_owner_add:
                 mTvownerclose.setBackgroundResource(R.drawable.selected_add_btn_shap);
-
                 viewInterface.handleOnClick(this.dataItem,view);
                 break;
             default:
                 LogUtils.error("", AppConstants.CASE_NOT_HANDLED + " " + "" + " " + id);
         }
-
-        //createCommunityViewInterface.closeDialog("communityDialog");
-
 
     }
 }

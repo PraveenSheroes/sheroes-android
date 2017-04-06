@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.app.DialogFragment;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -120,7 +121,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
         mCustomCollapsingToolbarLayout.setExpandedTitleMarginStart(200);
         // mCustomCollapsingToolbarLayout.setTitle(mFeedDetail.getNameOrTitle());
         //  mCustomCollapsingToolbarLayout.setSubtitle(mFeedDetail.getAuthorName());
-      /*  if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getNextScreen())) {
+        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getNextScreen())) {
             if (userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.CURRENT_STATUS_SCREEN)) {
                 tellUsAboutFragment();
             } else if (userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.HOW_CAN_SHEROES_AKA_LOOKING_FOR_SCREEN)) {
@@ -156,8 +157,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
             Intent homeIntent = new Intent(this, HomeActivity.class);
             startActivity(homeIntent);
             finish();
-        }*/
-        tellUsAboutFragment();
+        }
     }
 
     private void tellUsAboutFragment() {

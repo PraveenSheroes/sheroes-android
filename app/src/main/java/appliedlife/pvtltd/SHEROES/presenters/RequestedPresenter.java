@@ -10,7 +10,7 @@ import appliedlife.pvtltd.SHEROES.models.RequestedListModel;
 import appliedlife.pvtltd.SHEROES.models.entities.community.ApproveMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MemberListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MemberRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMember;
+import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.RequestedListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -78,13 +78,13 @@ public class RequestedPresenter extends BasePresenter<RequestedView> {
         registerSubscription(subscription);
 
     }
-    public void onRejectMemberApi(RemoveMember removeMember) {
+    public void onRejectMemberApi(RemoveMemberRequest removeMemberRequest) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.ERROR_APP_CLOSE, ERROR_MEMBER);
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = requestedListModel.removePandingMember(removeMember).subscribe(new Subscriber<MemberListResponse>() {
+        Subscription subscription = requestedListModel.removePandingMember(removeMemberRequest).subscribe(new Subscriber<MemberListResponse>() {
             @Override
             public void onCompleted() {
                 getMvpView().stopProgressBar();

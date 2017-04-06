@@ -36,8 +36,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginTop="@dimen/dp_size_10"
         android:layout_marginLeft="@dimen/dp_size_12"
         android:layout_marginRight="@dimen/dp_size_12"
+        android:layout_marginBottom="@dimen/dp_size_10"
         android:gravity="center"
         android:orientation="vertical">
 

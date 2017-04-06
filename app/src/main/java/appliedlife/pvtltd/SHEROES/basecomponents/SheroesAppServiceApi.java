@@ -23,7 +23,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.MemberListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMember;
+import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.RequestedListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectedCommunityResponse;
@@ -219,11 +219,11 @@ public interface SheroesAppServiceApi {
 
 
     @POST("participant/community/unjoin")
-    Observable<MemberListResponse>removeMember(@Body RemoveMember removeMember);
+    Observable<MemberListResponse>removeMember(@Body RemoveMemberRequest removeMemberRequest);
 
 
     @POST("participant/community/reject_joining_request")
-    Observable<MemberListResponse>removePandingMember(@Body RemoveMember removeMember);
+    Observable<MemberListResponse>removePandingMember(@Body RemoveMemberRequest removeMemberRequest);
 
     @POST("participant/community/approve_joining_request")
     Observable<MemberListResponse>approvePandingMember(@Body ApproveMemberRequest approveMemberRequest);

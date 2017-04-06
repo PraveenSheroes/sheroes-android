@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_invite_member_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
@@ -7,7 +8,6 @@
         android:layout_width="@dimen/dp_size_40"
         android:layout_height="@dimen/dp_size_40"
         android:layout_marginTop="@dimen/dp_size_10"
-        android:background="@drawable/ic_add_city_icon"
         android:layout_marginLeft="@dimen/dp_size_12"/>
     <TextView
         android:id="@+id/tv_member_name"

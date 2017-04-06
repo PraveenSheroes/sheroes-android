@@ -25,12 +25,11 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityType;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.PopularTag;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
@@ -228,11 +227,6 @@ public class CommunityTypeFragment extends BaseDialogFragment implements Communi
 
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
-
-    }
-
-    @Override
-    public void getTagListSuccess(List<Doc> feedDetailList) {
 
     }
 

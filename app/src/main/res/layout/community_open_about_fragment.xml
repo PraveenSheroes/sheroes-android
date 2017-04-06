@@ -256,7 +256,6 @@
                 android:id="@+id/tv_about_community_des"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/ID_ABOUT_COMMUNITY_DES"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:textSize="@dimen/sp_size_12"
                 android:textColor="@color/black"

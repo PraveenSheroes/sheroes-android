@@ -40,8 +40,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="@dimen/dp_size_20"
-        android:background="@drawable/ic_cross" />
+        android:layout_marginRight="@dimen/dp_size_10"
+        android:padding="@dimen/dp_size_10"
+        android:drawableLeft="@drawable/ic_cross" />
 
     <View
         android:layout_width="fill_parent"

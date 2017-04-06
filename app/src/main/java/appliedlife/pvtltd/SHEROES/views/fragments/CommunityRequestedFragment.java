@@ -21,10 +21,8 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.community.ApproveMemberRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.community.MemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.PandingMember;
-import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMember;
-import appliedlife.pvtltd.SHEROES.models.entities.community.RequestedList;
+import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
@@ -136,14 +134,14 @@ public class CommunityRequestedFragment extends BaseFragment implements Requeste
     public void removePandingRequest(long userId, long communityId, int position)
     {
         this.position=position;
-        RemoveMember removeMember=new RemoveMember();
-        removeMember.setCommunityId((communityId));
-        removeMember.setUserId(userId);
-        removeMember.setCloudMessagingId("string");
-        removeMember.setDeviceUniqueId("string");
-        removeMember.setAppVersion("string");
-        removeMember.setSource("string");
-        requestedPresenter.onRejectMemberApi(removeMember);
+        RemoveMemberRequest removeMemberRequest =new RemoveMemberRequest();
+        removeMemberRequest.setCommunityId((communityId));
+        removeMemberRequest.setUserId(userId);
+        removeMemberRequest.setCloudMessagingId("string");
+        removeMemberRequest.setDeviceUniqueId("string");
+        removeMemberRequest.setAppVersion("string");
+        removeMemberRequest.setSource("string");
+        requestedPresenter.onRejectMemberApi(removeMemberRequest);
     }
     public void approvePandingRequest(long userId, long communityId, int position)
     {

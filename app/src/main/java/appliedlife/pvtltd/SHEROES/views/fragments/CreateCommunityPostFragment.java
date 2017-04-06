@@ -66,11 +66,12 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
 import appliedlife.pvtltd.SHEROES.presenters.CreateCommunityPresenter;
@@ -157,6 +158,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
     Button mBtncross[]=new Button[6];
     Bitmap mRoundBitmap;
     float alpha=0.7f;
+    private FeedDetail mFeedDetail;
     @Inject
     CreateCommunityPresenter createCommunityPresenter;
     @Override
@@ -177,6 +179,9 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.create_community_post_fragment, container, false);
         ButterKnife.bind(this, view);
+        if (null != getArguments()) {
+            mFeedDetail = getArguments().getParcelable(AppConstants.COMMUNITY_POST_FRAGMENT);
+        }
         mOutPutFile = new File(Environment.getExternalStorageDirectory(), "temp.jpg");
         mOutPutFile1 = new File(Environment.getExternalStorageDirectory(), "temp1.jpg");
         getActivity().setRequestedOrientation(

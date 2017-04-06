@@ -8,7 +8,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.models.entities.community.ApproveMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MemberListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MemberRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMember;
+import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.RequestedListResponse;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import rx.android.schedulers.AndroidSchedulers;
@@ -43,10 +43,10 @@ public class RequestedListModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-    public rx.Observable<MemberListResponse> removePandingMember(RemoveMember removeMember){
-        LogUtils.error("Community Panding Member Reject req: ",gson.toJson(removeMember));
+    public rx.Observable<MemberListResponse> removePandingMember(RemoveMemberRequest removeMemberRequest){
+        LogUtils.error("Community Panding Member Reject req: ",gson.toJson(removeMemberRequest));
 
-        return sheroesAppServiceApi.removePandingMember(removeMember)
+        return sheroesAppServiceApi.removePandingMember(removeMemberRequest)
                 .map(new Func1<MemberListResponse, MemberListResponse>() {
                     @Override
                     public MemberListResponse call(MemberListResponse memberListResponse) {

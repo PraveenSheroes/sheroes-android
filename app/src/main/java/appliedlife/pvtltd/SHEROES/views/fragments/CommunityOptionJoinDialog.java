@@ -20,7 +20,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
-import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -28,18 +27,19 @@ import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
-
 /**
- * Created by SHEROES-TECH on 01-04-2017.
+ * Created by SHEROES-TECH on 09-02-2017.
  */
 
-public class CommunityJoinFromeAboutFragment extends BaseDialogFragment implements HomeView {
-    private final String TAG = LogUtils.makeLogTag(CommunityJoinRegionDialogFragment.class);
+public class CommunityOptionJoinDialog extends BaseDialogFragment implements HomeView {
+    private final String TAG = LogUtils.makeLogTag(CommunityOptionJoinDialog.class);
     @Inject
     Preference<LoginResponse> userPreference;
     private FeedDetail mFeedDetail;
@@ -64,6 +64,7 @@ public class CommunityJoinFromeAboutFragment extends BaseDialogFragment implemen
         super.onStart();
         Dialog dialog = getDialog();
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
         if (dialog != null) {
             dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
@@ -88,6 +89,7 @@ public class CommunityJoinFromeAboutFragment extends BaseDialogFragment implemen
     @OnClick(R.id.tv_already_member)
     public void alreadyOnClick() {
         joinNewUser(getString(R.string.ID_COMMUNITY_JOIN_REGION2));
+
     }
 
     private void joinNewUser(String reasonToJoin) {
@@ -95,8 +97,6 @@ public class CommunityJoinFromeAboutFragment extends BaseDialogFragment implemen
             List<Long> userIdList = new ArrayList();
             userIdList.add((long) userPreference.get().getUserSummary().getUserId());
             mHomePresenter.communityJoinFromPresenter(mAppUtils.communityRequestBuilder(userIdList, mFeedDetail.getIdOfEntityOrParticipant(), reasonToJoin));
-            getDialog().cancel();
-
         }
     }
 
@@ -110,24 +110,34 @@ public class CommunityJoinFromeAboutFragment extends BaseDialogFragment implemen
 
     }
 
-
-    @Override
-    public void getTagListSuccess(List<Doc> feedDetailList) {
-
-    }
-
     @Override
     public void getSuccessForAllResponse(String success, FeedParticipationEnum feedParticipationEnum) {
         switch (success) {
             case AppConstants.SUCCESS:
-                mFeedDetail.setRequestPending(true);
-                mHomeSearchActivityFragmentIntractionWithActivityListner.onSuccessResult(success, mFeedDetail);
+                if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getScreenName())) {
+                    mFeedDetail.setRequestPending(true);
+                    mFeedDetail.setOwner(false);
+                    if (mFeedDetail.getScreenName().equalsIgnoreCase(AppConstants.FEATURE_FRAGMENT)) {
+                        ((HomeActivity) getActivity()). onJoinEventSuccessResult(success, mFeedDetail);
+                    } else {
+
+                        ((CommunitiesDetailActivity) getActivity()).onJoinDialogSuccessResult(success, mFeedDetail);
+                    }
+                }
+                dismiss();
                 break;
             case AppConstants.FAILED:
-                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_JOIN_INVITE);
+                if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getScreenName())) {
+                    if (mFeedDetail.getScreenName().equalsIgnoreCase(AppConstants.FEATURE_FRAGMENT)) {
+                        ((HomeActivity) getActivity()).onJoinEventSuccessResult(success, mFeedDetail);
+                    } else {
+
+                        ((CommunitiesDetailActivity) getActivity()).onJoinDialogSuccessResult(success, mFeedDetail);
+                    }
+                }
+                dismiss();
                 break;
             default:
-                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_JOIN_INVITE);
         }
 
     }
@@ -136,5 +146,7 @@ public class CommunityJoinFromeAboutFragment extends BaseDialogFragment implemen
     public void getDB(List<RecentSearchData> recentSearchDatas) {
 
     }
+
+
 }
 
