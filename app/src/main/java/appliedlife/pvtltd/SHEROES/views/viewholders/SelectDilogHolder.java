@@ -5,15 +5,12 @@ import android.view.View;
 import android.widget.TextView;
 
 import java.util.HashMap;
-import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityList;
-import appliedlife.pvtltd.SHEROES.models.entities.community.Docs;
-import appliedlife.pvtltd.SHEROES.models.entities.community.SelectedCommunityResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.EditNameDialogListener;
@@ -24,7 +21,7 @@ import butterknife.ButterKnife;
  * Created by Ajit Kumar on 22-01-2017.
  */
 
-public class SelectDilogHolder extends BaseViewHolder<Docs> {
+public class SelectDilogHolder extends BaseViewHolder<CommunityPostResponse> {
     @Bind(R.id.textView1)
     TextView tvCity;
     @Bind(R.id.img1)
@@ -32,7 +29,7 @@ public class SelectDilogHolder extends BaseViewHolder<Docs> {
     BaseHolderInterface viewInterface;
     private FeedDetail dataItem;
     private int position;
-    Docs docs;
+    CommunityPostResponse communityPostResponse;
 
     public SelectDilogHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
@@ -47,11 +44,11 @@ public class SelectDilogHolder extends BaseViewHolder<Docs> {
     }
 
     @Override
-    public void bindData(Docs obj, Context context, int position) {
-        docs=obj;
-        tvCity.setText(docs.getTitle());
+    public void bindData(CommunityPostResponse obj, Context context, int position) {
+        communityPostResponse =obj;
+        tvCity.setText(communityPostResponse.getTitle());
         tvCity.setOnClickListener(this);
-        String images = docs.getLogo();
+        String images = communityPostResponse.getLogo();
 
         background.setCircularImage(true);
         background.bindImage(images);
@@ -67,9 +64,9 @@ public class SelectDilogHolder extends BaseViewHolder<Docs> {
     public void onClick(View view) {
         HashMap<String,Object> map = new HashMap<String,Object>();
         //   map.put("collection name",dataItem.getTitle());
-        map.put("collection id",docs.getId());
+        map.put("collection id", communityPostResponse.getId());
 //    map.put("collection type",dataItem.getType());
-        viewInterface.handleOnClick(this.docs,view);
+        viewInterface.handleOnClick(this.communityPostResponse,view);
         //createCommunityViewInterface.closeDialog("communityDialog");
 
 

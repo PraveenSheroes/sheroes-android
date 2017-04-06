@@ -69,7 +69,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateR
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.Docs;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
@@ -409,14 +409,14 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
     }
 
     @Override
-    public void onAddCommunityDetailSubmit(Docs docs) {
-        mEtchoosecommunity.setText(docs.getTitle());
+    public void onAddCommunityDetailSubmit(CommunityPostResponse communityPostResponse) {
+        mEtchoosecommunity.setText(communityPostResponse.getTitle());
 
-        mCommunityId=Integer.parseInt(docs.getId());
-         mimages = docs.getLogo();
+        mCommunityId=Integer.parseInt(communityPostResponse.getId());
+         mimages = communityPostResponse.getLogo();
        mIvcommunity_post_icon.setCircularImage(true);
         mIvcommunity_post_icon.bindImage(mimages);
-        tv_community_owner.setText(docs.getTitle());
+        tv_community_owner.setText(communityPostResponse.getTitle());
         Glide.with(this).load(mimages).transform(new CommunityOpenAboutFragment.CircleTransform(getActivity())).into(iv_community_owner);
 
       //  iv_community_owner.setCircularImage(true);
@@ -431,7 +431,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
 
 
     @Override
-    public void getSelectedCommunityListSuccess(List<Docs> selected_community_response) {
+    public void getSelectedCommunityListSuccess(List<CommunityPostResponse> selected_community_response) {
 
     }
 

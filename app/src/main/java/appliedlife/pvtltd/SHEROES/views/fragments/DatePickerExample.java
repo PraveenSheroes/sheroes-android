@@ -120,7 +120,7 @@ public class DatePickerExample extends DialogFragment {
         if (dialog != null) {
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-            dialog.getWindow().setLayout(400,350);
+            dialog.getWindow().setLayout(400,450);
 
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
 

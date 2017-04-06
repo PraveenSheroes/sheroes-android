@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -138,6 +139,8 @@ public class OnBoardingTellUsAboutFragment extends BaseFragment implements OnBoa
         if (StringUtil.isNotNullOrEmptyString(mCurrentStatus.getText().toString()) && StringUtil.isNotNullOrEmptyString(mLocation.getText().toString()) && StringUtil.isNotNullOrEmptyString(mMobileNumber.getText().toString())) {
             if (mMobileNumber.getText().toString().length() == 10) {
                 if (null != labelValue&&null!=getAllDataDocument) {
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(mMobileNumber.getWindowToken(), 0);
                   mOnBoardingPresenter.getCurrentDataStatusToPresenter(mAppUtils.boardingTellUsFormDataRequestBuilder(AppConstants.CURRENT_STATUS,AppConstants.CURRENT_STATUS_TYPE,labelValue,getAllDataDocument));
                 }
             } else {

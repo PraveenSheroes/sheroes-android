@@ -9,7 +9,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
  * Created by Ajit Kumar on 22-03-2017.
  */
 
-public class Docs extends BaseResponse {
+public class CommunityPostResponse extends BaseResponse {
         @SerializedName("id")
         @Expose
         private String id;

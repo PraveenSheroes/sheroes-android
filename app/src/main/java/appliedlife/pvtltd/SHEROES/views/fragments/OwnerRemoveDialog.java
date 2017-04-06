@@ -24,7 +24,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwner
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.Docs;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Member;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerList;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
@@ -144,7 +144,7 @@ public class OwnerRemoveDialog extends BaseDialogFragment implements CommunityVi
 
 
     @Override
-    public void getSelectedCommunityListSuccess(List<Docs> selected_community_response) {
+    public void getSelectedCommunityListSuccess(List<CommunityPostResponse> selected_community_response) {
 
     }
 

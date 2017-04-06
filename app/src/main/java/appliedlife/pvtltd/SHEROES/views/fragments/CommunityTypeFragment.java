@@ -30,7 +30,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwner
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
-import appliedlife.pvtltd.SHEROES.models.entities.community.Docs;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.PopularTag;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
@@ -186,7 +186,7 @@ public class CommunityTypeFragment extends BaseDialogFragment implements Communi
 
 
     @Override
-    public void getSelectedCommunityListSuccess(List<Docs> selected_community_response) {
+    public void getSelectedCommunityListSuccess(List<CommunityPostResponse> selected_community_response) {
 
     }
 

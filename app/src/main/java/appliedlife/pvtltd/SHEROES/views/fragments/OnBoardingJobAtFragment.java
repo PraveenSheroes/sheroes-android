@@ -87,7 +87,7 @@ public class OnBoardingJobAtFragment extends BaseFragment implements OnBoardingV
 
             @Override
             public void onShow() {
-                ((OnBoardingActivity) getActivity()).mLiStripForAddItem.setVisibility(View.GONE);
+                ((OnBoardingActivity) getActivity()).mLiStripForAddItem.setVisibility(View.VISIBLE);
 
             }
 

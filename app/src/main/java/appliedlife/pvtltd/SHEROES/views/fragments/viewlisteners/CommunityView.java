@@ -6,7 +6,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseMvpView;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.Docs;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
 
 /**
@@ -14,7 +14,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
  */
 
 public interface CommunityView extends BaseMvpView {
-    void getSelectedCommunityListSuccess(List<Docs> selected_community_response);
+    void getSelectedCommunityListSuccess(List<CommunityPostResponse> selected_community_response);
     void getOwnerListSuccess(OwnerListResponse ownerListResponse);
     void createCommunitySuccess(CreateCommunityResponse createCommunityResponse);
    void getOwnerListDeactivateSuccess(DeactivateOwnerResponse deactivateOwnerResponse);

@@ -2,7 +2,6 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.app.DialogFragment;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -97,11 +96,10 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
     OnBoardingDailogHeySuccess onBoardingDailogHeySuccess;
     @Inject
     Preference<LoginResponse> userPreference;
-    View mView;
     @Inject
     Preference<MasterDataResponse> mUserPreferenceMasterData;
-    int position;
-
+    private int position;
+    private OnBoardingData mBoardingData;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,7 +120,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
         mCustomCollapsingToolbarLayout.setExpandedTitleMarginStart(200);
         // mCustomCollapsingToolbarLayout.setTitle(mFeedDetail.getNameOrTitle());
         //  mCustomCollapsingToolbarLayout.setSubtitle(mFeedDetail.getAuthorName());
-        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getNextScreen())) {
+      /*  if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getNextScreen())) {
             if (userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.CURRENT_STATUS_SCREEN)) {
                 tellUsAboutFragment();
             } else if (userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.HOW_CAN_SHEROES_AKA_LOOKING_FOR_SCREEN)) {
@@ -158,7 +156,8 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
             Intent homeIntent = new Intent(this, HomeActivity.class);
             startActivity(homeIntent);
             finish();
-        }
+        }*/
+        tellUsAboutFragment();
     }
 
     private void tellUsAboutFragment() {
@@ -243,6 +242,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
 
 
     private void setTagsForFragment(OnBoardingData boardingData, View view) {
+        mBoardingData=boardingData;
         switch (boardingData.getFragmentName()) {
             case AppConstants.HOW_SHEROES_CAN_HELP:
                 if (mIvHowCanSheroesNext.getVisibility() == View.GONE) {
@@ -250,7 +250,6 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
                 }
                 mLiStripForAddItem.removeAllViews();
                 mLiStripForAddItem.removeAllViewsInLayout();
-                mView = view;
                 selectTagOnClick(view);
                 renderSelectedAddedItem(mLiStripForAddItem, mSelectedTag);
                 break;
@@ -713,21 +712,43 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
             @Override
             public void onClick(View v) {
                 LabelValue labelValue = (LabelValue) mTvTagData.getTag();
-                mLiStripForAddItem.removeAllViews();
-                mLiStripForAddItem.removeAllViewsInLayout();
-                check(labelValue);
+                switch (mBoardingData.getFragmentName()) {
+                    case AppConstants.HOW_SHEROES_CAN_HELP:
+                        mLiStripForAddItem.removeAllViews();
+                        mLiStripForAddItem.removeAllViewsInLayout();
+                        List<LabelValue> lookingTemp = mSelectedTag;
+                        mCurrentIndex = 0;
+                        if (StringUtil.isNotEmptyCollection(lookingTemp)) {
+                            lookingTemp.remove(labelValue);
+                        }
+                         renderSelectedAddedItem(mLiStripForAddItem, lookingTemp);
+                        break;
+                    case AppConstants.YOUR_INTEREST:
+                        mLiInterestStripForAddItem.removeAllViews();
+                        mLiInterestStripForAddItem.removeAllViewsInLayout();
+                        List<LabelValue> interestTemp = mSelectedTag;
+                        mCurrentIndex = 0;
+                        if (StringUtil.isNotEmptyCollection(interestTemp)) {
+                            interestTemp.remove(labelValue);
+                        }
+                        renderSelectedAddedItem(mLiInterestStripForAddItem, interestTemp);
+                        break;
+                    case AppConstants.JOB_AT:
+                        mLiJobAtStripForAddItem.removeAllViews();
+                        mLiJobAtStripForAddItem.removeAllViewsInLayout();
+                        List<LabelValue> job = mSelectedTag;
+                        mCurrentIndex = 0;
+                        if (StringUtil.isNotEmptyCollection(job)) {
+                            job.remove(labelValue);
+                        }
+                        renderSelectedAddedItem(mLiJobAtStripForAddItem, job);
+                        break;
+                    default:
+                        LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + mBoardingData.getFragmentName());
+                }
             }
         });
         liRow.addView(liTagLable);
-    }
-
-    private void check(LabelValue labelValue) {
-        List<LabelValue> temp = mSelectedTag;
-        mCurrentIndex = 0;
-        if (StringUtil.isNotEmptyCollection(temp)) {
-            temp.remove(labelValue);
-        }
-        renderSelectedAddedItem(mLiStripForAddItem, temp);
     }
 
     public void onWorkExpSuccess() {

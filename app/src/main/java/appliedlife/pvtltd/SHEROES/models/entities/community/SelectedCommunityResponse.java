@@ -18,7 +18,7 @@ public class SelectedCommunityResponse extends BaseResponse implements Parcelabl
 
     @SerializedName("docs")
     @Expose
-    private List<Docs> docs = null;
+    private List<CommunityPostResponse> docs = null;
 
 
     protected SelectedCommunityResponse(Parcel in) {
@@ -36,11 +36,11 @@ public class SelectedCommunityResponse extends BaseResponse implements Parcelabl
         }
     };
 
-    public List<Docs> getDocs() {
+    public List<CommunityPostResponse> getDocs() {
         return docs;
     }
 
-    public void setDocs(List<Docs> docs) {
+    public void setDocs(List<CommunityPostResponse> docs) {
         this.docs = docs;
     }
 

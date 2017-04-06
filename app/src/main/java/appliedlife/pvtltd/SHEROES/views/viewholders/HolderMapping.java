@@ -10,8 +10,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionDoc;
 import appliedlife.pvtltd.SHEROES.models.entities.communities.CommunitySuggestion;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityTags;
-import appliedlife.pvtltd.SHEROES.models.entities.community.Docs;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
 import appliedlife.pvtltd.SHEROES.models.entities.community.ListOfInviteSearch;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Member;
@@ -139,7 +139,7 @@ public enum HolderMapping {
             return new ArticleCardHolder(view, viewInterface);
         }
     },
-    SELECTDILOG(R.layout.list_of_community) {
+    SELECT_DIALOG(R.layout.list_of_community) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new SelectDilogHolder(view, viewInterface);
@@ -296,13 +296,13 @@ public enum HolderMapping {
             return new FilterHolder(view, viewInterface);
         }
     },
-    GOODAT(R.layout.ggodat_card) {
+    GOOD_AT(R.layout.ggodat_card) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new GoodAtHolder(view, viewInterface);
         }
     },
-    JOBLOCATIONLIST(R.layout.joblocationlist) {
+    JOB_LOCATION_LIST(R.layout.joblocationlist) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new JobLocationHolder(view, viewInterface);
@@ -408,10 +408,14 @@ public enum HolderMapping {
             } else if (item instanceof BoardingInterestJobSearch) {
                 return JOB_SEARCH.ordinal();
             } else if (callFromType.equalsIgnoreCase(AppConstants.OWNER_SUB_TYPE)) {
-                returnView = FEED_USER.ordinal();
+                if (item instanceof FeedDetail) {
+                    returnView = FEED_USER.ordinal();
+                }
 
             } else if (callFromType.equalsIgnoreCase(AppConstants.COMMUNITY_NAME_SUB_TYPE)) {
-                returnView = SELECTDILOG.ordinal();
+                if (item instanceof CommunityPostResponse) {
+                    returnView = SELECT_DIALOG.ordinal();
+                }
             } else if (callFromType.equalsIgnoreCase(AppConstants.ALL_DATA_SUB_TYPE)) {
                 returnView = COMMUNITY_TAG_SEARCH.ordinal();
 
@@ -451,8 +455,8 @@ public enum HolderMapping {
 
                         default:
                     }
-                } else if (item instanceof Docs) {
-                    returnView = SELECTDILOG.ordinal();
+                } else if (item instanceof CommunityPostResponse) {
+                    returnView = SELECT_DIALOG.ordinal();
                 } else if (item instanceof DrawerItems) {
                     returnView = DRAWER_ITEMS.ordinal();
                 } else if (item instanceof CommentReactionDoc) {
@@ -524,7 +528,7 @@ public enum HolderMapping {
                     }
 
                 } else if (item instanceof GoodAt) {
-                    return GOODAT.ordinal();
+                    return GOOD_AT.ordinal();
                 } else if (item instanceof ListOfInviteSearch) {
                     return INVITE_SEARCH_MODULE.ordinal();
                 } else if (item instanceof Member) {
@@ -543,16 +547,14 @@ public enum HolderMapping {
                     return OWNERLIST.ordinal();
                 } else if (item instanceof MembersList) {
                     return MEMBERLIST.ordinal();
-                }
-                else if (item instanceof PandingMember) {
+                } else if (item instanceof PandingMember) {
                     return PANDINGREQUESTLIST.ordinal();
-                }
-                 else if (item instanceof CommunityTags) {
+                } else if (item instanceof CommunityTags) {
                     return SEARCHTAGS.ordinal();
                 } else if (item instanceof CommunitySuggestion) {
                     return COMMUNITY_SUGGESTED_BY_HOLDER.ordinal();
                 } else if (item instanceof JobLocationList) {
-                    return JOBLOCATIONLIST.ordinal();
+                    return JOB_LOCATION_LIST.ordinal();
                 } else if (item instanceof FilterList) {
                     return FILTERLIST.ordinal();
                 } else if (item instanceof JobDetailPojo) {

@@ -24,7 +24,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwner
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
-import appliedlife.pvtltd.SHEROES.models.entities.community.Docs;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
@@ -93,7 +93,7 @@ public class SelectCommunityFragment extends BaseDialogFragment implements Commu
 
 
     @Override
-    public void getSelectedCommunityListSuccess(List<Docs> selected_community_response) {
+    public void getSelectedCommunityListSuccess(List<CommunityPostResponse> selected_community_response) {
         if(StringUtil.isNotEmptyCollection(selected_community_response)) {
             mAdapter.setSheroesGenericListData(selected_community_response);
             mAdapter.setCallForRecycler(AppConstants.COMMUNITY_NAME_SUB_TYPE);
@@ -130,10 +130,10 @@ public class SelectCommunityFragment extends BaseDialogFragment implements Commu
 
     @Override
     public void handleOnClick(BaseResponse sheroesListDataItem, View view) {
-        if (sheroesListDataItem instanceof Docs) {
-            Docs docs = (Docs) sheroesListDataItem;
+        if (sheroesListDataItem instanceof CommunityPostResponse) {
+            CommunityPostResponse communityPostResponse = (CommunityPostResponse) sheroesListDataItem;
             //  getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, getActivity().getIntent());
-            mHomeActivityIntractionListner.onAddCommunityDetailSubmit(docs);
+            mHomeActivityIntractionListner.onAddCommunityDetailSubmit(communityPostResponse);
             //  getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, getActivity().getIntent());
            // mHomeActivityIntractionListner.onAddFriendSubmit(communityList.getName(),communityList.getBackground());
         }
@@ -193,6 +193,6 @@ public class SelectCommunityFragment extends BaseDialogFragment implements Commu
 
 
     public interface MyDialogFragmentListener {
-        void onAddCommunityDetailSubmit(Docs docs);
+        void onAddCommunityDetailSubmit(CommunityPostResponse communityPostResponse);
     }
 }

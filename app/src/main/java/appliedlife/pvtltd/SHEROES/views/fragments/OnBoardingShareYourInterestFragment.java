@@ -88,7 +88,7 @@ public class OnBoardingShareYourInterestFragment extends BaseFragment implements
 
             @Override
             public void onShow() {
-                ((OnBoardingActivity) getActivity()).mLiStripForAddItem.setVisibility(View.GONE);
+                ((OnBoardingActivity) getActivity()).mLiStripForAddItem.setVisibility(View.VISIBLE);
 
             }
 

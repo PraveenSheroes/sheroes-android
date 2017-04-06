@@ -40,7 +40,7 @@ import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.Docs;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Member;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MembersList;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListRequest;
@@ -439,7 +439,7 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
     }
 
     @Override
-    public void getSelectedCommunityListSuccess(List<Docs> selected_community_response) {
+    public void getSelectedCommunityListSuccess(List<CommunityPostResponse> selected_community_response) {
 
     }
 

@@ -91,6 +91,7 @@ public class OnBoardingSearchDialogFragment extends BaseDialogFragment implement
         switch (SEARCH_TYPE) {
             case LOCATION:
                 mSearchEditText.setHint(getString(R.string.ID_SEARCH_LOCATION));
+                mOnBoardingPresenter.getOnBoardingSearchToPresenter(mAppUtils.onBoardingSearchRequestBuilder("Delhi", mMasterDataSkill));
                 LinearLayoutManager manager = new LinearLayoutManager(getActivity());
                 mRecyclerView.setLayoutManager(manager);
                 mRecyclerView.setAdapter(mAdapter);
