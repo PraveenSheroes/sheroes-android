@@ -75,9 +75,9 @@ public class CurrentStatusDialog extends BaseDialogFragment {
     }
 
     private List<LabelValue> setFilterValues() {
-        if (null != mMasterDataResult && null != mMasterDataResult.get(AppConstants.MASTER_DATA_JOB_TAG_KEY) && null != mMasterDataResult.get(AppConstants.MASTER_DATA_JOB_TAG_KEY).get(AppConstants.MASTER_DATA_DEFAULT_CATEGORY)) {
+        if (null != mMasterDataResult && null != mMasterDataResult.get(AppConstants.MASTER_DATA_JOB_TAG_KEY) && null != mMasterDataResult.get(AppConstants.MASTER_DATA_JOB_TAG_KEY).get(AppConstants.MASTER_DATA_POPULAR_CATEGORY)) {
             HashMap<String, ArrayList<LabelValue>> hashMap = mMasterDataResult.get(AppConstants.MASTER_DATA_JOB_TAG_KEY);
-            List<LabelValue> labelValueArrayList = hashMap.get(AppConstants.MASTER_DATA_DEFAULT_CATEGORY);
+            List<LabelValue> labelValueArrayList = hashMap.get(AppConstants.MASTER_DATA_POPULAR_CATEGORY);
             return labelValueArrayList;
         }
         return null;

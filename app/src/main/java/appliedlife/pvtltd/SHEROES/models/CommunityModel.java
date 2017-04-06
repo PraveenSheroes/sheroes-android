@@ -6,7 +6,6 @@ import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityRequest;
@@ -77,13 +76,13 @@ public class CommunityModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-    public Observable<CommunityPostCreateResponse> addPostCommunity(CommunityPostCreateRequest communityPostCreateRequest){
+    public Observable<CreateCommunityResponse> addPostCommunity(CommunityPostCreateRequest communityPostCreateRequest){
         LogUtils.error("Edit Community req: ",gson.toJson(communityPostCreateRequest));
 
         return sheroesAppServiceApi.createCommunityPost(communityPostCreateRequest)
-                .map(new Func1<CommunityPostCreateResponse, CommunityPostCreateResponse>() {
+                .map(new Func1<CreateCommunityResponse, CreateCommunityResponse>() {
                     @Override
-                    public CommunityPostCreateResponse call(CommunityPostCreateResponse communityTagsListResponse) {
+                    public CreateCommunityResponse call(CreateCommunityResponse communityTagsListResponse) {
                         LogUtils.error("Edit Community res: ",gson.toJson(communityTagsListResponse));
 
                         return communityTagsListResponse;

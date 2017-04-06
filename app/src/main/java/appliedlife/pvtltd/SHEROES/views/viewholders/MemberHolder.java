@@ -12,7 +12,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MembersList;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.EditNameDialogListener;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -40,14 +39,6 @@ public class MemberHolder extends BaseViewHolder<MembersList> {
         this.viewInterface = baseHolderInterface;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
     }
-    public MemberHolder(View itemView, EditNameDialogListener baseHolderInterface) {
-        super(itemView);
-        ButterKnife.bind(this,itemView);
-        SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
-    }
-
-
-
     @Override
     public void bindData(MembersList obj, Context context, int position) {
         this.dataItem = obj;
@@ -64,8 +55,9 @@ public class MemberHolder extends BaseViewHolder<MembersList> {
         {
             tv_member_cross.setVisibility(View.VISIBLE);
         }
-        else
+        else {
             tv_member_cross.setVisibility(View.GONE);
+        }
 
     }
 

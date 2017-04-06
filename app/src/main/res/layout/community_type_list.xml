@@ -1,18 +1,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
 
     >
-    <!--      <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
-              android:id="@+id/img1"
-              android:layout_width="40dp"
-              android:layout_height="40dp"
-              android:layout_marginTop="10dp"
-              android:layout_marginLeft="@dimen/dp_size_20"
-
-              />-->
 
     <TextView
         android:id="@+id/textView1"
@@ -24,7 +15,7 @@
         android:fontFamily="@string/ID_ROBOTO_REGULAR"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@drawable/selector"
-        android:textSize="@dimen/sp_size_13"/>
+        android:textSize="@dimen/sp_size_13" />
 
     <CheckBox
         android:id="@+id/checkBox1"
@@ -33,7 +24,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="@dimen/dp_size_5"
         android:layout_marginTop="@dimen/dp_size_20"
-        android:button="@android:color/transparent"/>
+        android:button="@android:color/transparent" />
 
     <LinearLayout
         android:id="@+id/lnr1"
@@ -41,6 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView1"
         android:layout_marginTop="@dimen/dp_size_10">
+
         <include
             android:id="@+id/li_feed_article_card_emoji_pop_up"
             layout="@layout/select_purpose"

@@ -4,15 +4,13 @@ package appliedlife.pvtltd.SHEROES.models.entities.community;
  * Created by Praveen_Singh on 12-03-2017.
  */
 
-import android.os.Parcelable;
-
-import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 
 public class Member extends BaseResponse implements Parcelable {
 
@@ -36,16 +34,16 @@ public class Member extends BaseResponse implements Parcelable {
     private String comType;
     @SerializedName("comm_is_active")
     @Expose
-    private Boolean commIsActive;
+    private boolean commIsActive;
     @SerializedName("comm_is_closed")
     @Expose
-    private Boolean commIsClosed;
+    private boolean commIsClosed;
     @SerializedName("comm_is_deleted")
     @Expose
-    private Boolean commIsDeleted;
+    private boolean commIsDeleted;
     @SerializedName("comm_is_featured")
     @Expose
-    private Boolean commIsFeatured;
+    private boolean commIsFeatured;
     @SerializedName("community_id")
     @Expose
     private Integer communityId;
@@ -84,10 +82,10 @@ public class Member extends BaseResponse implements Parcelable {
     private String id;
     @SerializedName("is_active")
     @Expose
-    private Boolean isActive;
+    private boolean isActive;
     @SerializedName("is_approved")
     @Expose
-    private Boolean isApproved;
+    private boolean isApproved;
     @SerializedName("type_s")
     @Expose
     private String typeS;
@@ -103,37 +101,6 @@ public class Member extends BaseResponse implements Parcelable {
     @Expose
     private Integer ownerCount;
 
-
-    public Member(Parcel in) {
-        approvedDate = in.readString();
-        comLogoUrl = in.readString();
-        comName = in.readString();
-        comType = in.readString();
-        communityUserCityName = in.readString();
-        communityUserEmailid = in.readString();
-        communityUserFirstName = in.readString();
-        communityUserLastName = in.readString();
-        communityUserMobile = in.readString();
-        communityUserPhotoUrlPath = in.readString();
-        id = in.readString();
-        typeS = in.readString();
-    }
-
-    public static final Creator<Member> CREATOR = new Creator<Member>() {
-        @Override
-        public Member createFromParcel(Parcel in) {
-            return new Member(in);
-        }
-
-        @Override
-        public Member[] newArray(int size) {
-            return new Member[size];
-        }
-    };
-
-    public Member() {
-
-    }
 
     public String getApprovedDate() {
         return approvedDate;
@@ -183,35 +150,35 @@ public class Member extends BaseResponse implements Parcelable {
         this.comType = comType;
     }
 
-    public Boolean getCommIsActive() {
+    public boolean isCommIsActive() {
         return commIsActive;
     }
 
-    public void setCommIsActive(Boolean commIsActive) {
+    public void setCommIsActive(boolean commIsActive) {
         this.commIsActive = commIsActive;
     }
 
-    public Boolean getCommIsClosed() {
+    public boolean isCommIsClosed() {
         return commIsClosed;
     }
 
-    public void setCommIsClosed(Boolean commIsClosed) {
+    public void setCommIsClosed(boolean commIsClosed) {
         this.commIsClosed = commIsClosed;
     }
 
-    public Boolean getCommIsDeleted() {
+    public boolean isCommIsDeleted() {
         return commIsDeleted;
     }
 
-    public void setCommIsDeleted(Boolean commIsDeleted) {
+    public void setCommIsDeleted(boolean commIsDeleted) {
         this.commIsDeleted = commIsDeleted;
     }
 
-    public Boolean getCommIsFeatured() {
+    public boolean isCommIsFeatured() {
         return commIsFeatured;
     }
 
-    public void setCommIsFeatured(Boolean commIsFeatured) {
+    public void setCommIsFeatured(boolean commIsFeatured) {
         this.commIsFeatured = commIsFeatured;
     }
 
@@ -287,8 +254,6 @@ public class Member extends BaseResponse implements Parcelable {
         this.communityUserMobile = communityUserMobile;
     }
 
-
-
     public Integer getCommunityUserParticipantId() {
         return communityUserParticipantId;
     }
@@ -313,20 +278,20 @@ public class Member extends BaseResponse implements Parcelable {
         this.id = id;
     }
 
-    public Boolean getIsActive() {
+    public boolean isActive() {
         return isActive;
     }
 
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
+    public void setActive(boolean active) {
+        isActive = active;
     }
 
-    public Boolean getIsApproved() {
+    public boolean isApproved() {
         return isApproved;
     }
 
-    public void setIsApproved(Boolean isApproved) {
-        this.isApproved = isApproved;
+    public void setApproved(boolean approved) {
+        isApproved = approved;
     }
 
     public String getTypeS() {
@@ -345,21 +310,20 @@ public class Member extends BaseResponse implements Parcelable {
         this.usersId = usersId;
     }
 
+    public boolean isOwner() {
+        return isOwner;
+    }
+
+    public void setOwner(boolean owner) {
+        isOwner = owner;
+    }
+
     public Integer getOwnerCount() {
         return ownerCount;
     }
 
     public void setOwnerCount(Integer ownerCount) {
         this.ownerCount = ownerCount;
-    }
-
-
-    public boolean getIsOwner() {
-        return isOwner;
-    }
-
-    public void setIsOwner(boolean isOwner) {
-        this.isOwner = isOwner;
     }
 
     @Override
@@ -369,17 +333,79 @@ public class Member extends BaseResponse implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(approvedDate);
-        dest.writeString(comLogoUrl);
-        dest.writeString(comName);
-        dest.writeString(comType);
-        dest.writeString(communityUserCityName);
-        dest.writeString(communityUserEmailid);
-        dest.writeString(communityUserFirstName);
-        dest.writeString(communityUserLastName);
-        dest.writeString(communityUserMobile);
-        dest.writeString(communityUserPhotoUrlPath);
-        dest.writeString(id);
-        dest.writeString(typeS);
+        dest.writeString(this.approvedDate);
+        dest.writeValue(this.cityMasterId);
+        dest.writeValue(this.comId);
+        dest.writeString(this.comLogoUrl);
+        dest.writeString(this.comName);
+        dest.writeString(this.comType);
+        dest.writeByte(this.commIsActive ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.commIsClosed ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.commIsDeleted ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.commIsFeatured ? (byte) 1 : (byte) 0);
+        dest.writeValue(this.communityId);
+        dest.writeValue(this.communityMemberId);
+        dest.writeValue(this.communityUserCityId);
+        dest.writeString(this.communityUserCityName);
+        dest.writeString(this.communityUserEmailid);
+        dest.writeString(this.communityUserFirstName);
+        dest.writeValue(this.communityUserId);
+        dest.writeString(this.communityUserLastName);
+        dest.writeString(this.communityUserMobile);
+        dest.writeValue(this.communityUserParticipantId);
+        dest.writeString(this.communityUserPhotoUrlPath);
+        dest.writeString(this.id);
+        dest.writeByte(this.isActive ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isApproved ? (byte) 1 : (byte) 0);
+        dest.writeString(this.typeS);
+        dest.writeValue(this.usersId);
+        dest.writeByte(this.isOwner ? (byte) 1 : (byte) 0);
+        dest.writeValue(this.ownerCount);
     }
+
+    public Member() {
+    }
+
+    protected Member(Parcel in) {
+        this.approvedDate = in.readString();
+        this.cityMasterId = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.comId = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.comLogoUrl = in.readString();
+        this.comName = in.readString();
+        this.comType = in.readString();
+        this.commIsActive = in.readByte() != 0;
+        this.commIsClosed = in.readByte() != 0;
+        this.commIsDeleted = in.readByte() != 0;
+        this.commIsFeatured = in.readByte() != 0;
+        this.communityId = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.communityMemberId = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.communityUserCityId = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.communityUserCityName = in.readString();
+        this.communityUserEmailid = in.readString();
+        this.communityUserFirstName = in.readString();
+        this.communityUserId = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.communityUserLastName = in.readString();
+        this.communityUserMobile = in.readString();
+        this.communityUserParticipantId = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.communityUserPhotoUrlPath = in.readString();
+        this.id = in.readString();
+        this.isActive = in.readByte() != 0;
+        this.isApproved = in.readByte() != 0;
+        this.typeS = in.readString();
+        this.usersId = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.isOwner = in.readByte() != 0;
+        this.ownerCount = (Integer) in.readValue(Integer.class.getClassLoader());
+    }
+
+    public static final Creator<Member> CREATOR = new Creator<Member>() {
+        @Override
+        public Member createFromParcel(Parcel source) {
+            return new Member(source);
+        }
+
+        @Override
+        public Member[] newArray(int size) {
+            return new Member[size];
+        }
+    };
 }

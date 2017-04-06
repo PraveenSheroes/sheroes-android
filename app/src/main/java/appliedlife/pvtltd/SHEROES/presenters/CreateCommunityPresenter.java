@@ -8,7 +8,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.CommunityModel;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityRequest;
@@ -24,6 +23,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CommunityView;
 import rx.Subscriber;
 import rx.Subscription;
 
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_COMMUNITY_OWNER;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_CREATE_COMMUNITY;
 
 /**
@@ -57,7 +57,7 @@ public class CreateCommunityPresenter extends BasePresenter<CommunityView> {
 
     public void postCreateCommunityList(CreateCommunityRequest createCommunityRequest) {
         if (!NetworkUtil.isConnected(sheroesApplication)) {
-            getMvpView().showNwError();
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_COMMUNITY_OWNER);
             return;
         }
         getMvpView().startProgressBar();
@@ -70,15 +70,14 @@ public class CreateCommunityPresenter extends BasePresenter<CommunityView> {
 
             @Override
             public void onError(Throwable e) {
-                getMvpView().showError(AppConstants.ERROR_APP_CLOSE, ERROR_CREATE_COMMUNITY);
-                getMvpView().showNwError();
+                getMvpView().showError(e.getMessage(), ERROR_CREATE_COMMUNITY);
                 getMvpView().stopProgressBar();
             }
 
             @Override
             public void onNext(CreateCommunityResponse createCommunityResponse) {
                 getMvpView().stopProgressBar();
-                getMvpView().postCreateCommunitySuccess(createCommunityResponse);
+                getMvpView().createCommunitySuccess(createCommunityResponse);
             }
 
         });
@@ -87,7 +86,7 @@ public class CreateCommunityPresenter extends BasePresenter<CommunityView> {
 
     public void postEditCommunityList(EditCommunityRequest editCommunityRequest) {
         if (!NetworkUtil.isConnected(sheroesApplication)) {
-            getMvpView().showNwError();
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_COMMUNITY_OWNER);
             return;
         }
         getMvpView().startProgressBar();
@@ -100,15 +99,14 @@ public class CreateCommunityPresenter extends BasePresenter<CommunityView> {
 
             @Override
             public void onError(Throwable e) {
-                getMvpView().showError(AppConstants.ERROR_APP_CLOSE, ERROR_CREATE_COMMUNITY);
-                getMvpView().showNwError();
+                getMvpView().showError(e.getMessage(), ERROR_CREATE_COMMUNITY);
                 getMvpView().stopProgressBar();
             }
 
             @Override
             public void onNext(CreateCommunityResponse createCommunityResponse) {
                 getMvpView().stopProgressBar();
-                getMvpView().postCreateCommunitySuccess(createCommunityResponse);
+                getMvpView().createCommunitySuccess(createCommunityResponse);
             }
 
         });
@@ -117,11 +115,11 @@ public class CreateCommunityPresenter extends BasePresenter<CommunityView> {
 
     public void postEditCommunityList(CommunityPostCreateRequest communityPostCreateRequest) {
         if (!NetworkUtil.isConnected(sheroesApplication)) {
-            getMvpView().showNwError();
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_COMMUNITY_OWNER);
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = communityModel.addPostCommunity(communityPostCreateRequest).subscribe(new Subscriber<CommunityPostCreateResponse>() {
+        Subscription subscription = communityModel.addPostCommunity(communityPostCreateRequest).subscribe(new Subscriber<CreateCommunityResponse>() {
 
             @Override
             public void onCompleted() {
@@ -131,14 +129,13 @@ public class CreateCommunityPresenter extends BasePresenter<CommunityView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().showError(e.getMessage(), ERROR_CREATE_COMMUNITY);
-                getMvpView().showNwError();
                 getMvpView().stopProgressBar();
             }
 
             @Override
-            public void onNext(CommunityPostCreateResponse communityPostCreateResponse) {
+            public void onNext(CreateCommunityResponse communityPostCreateResponse) {
                 getMvpView().stopProgressBar();
-                getMvpView().addPostCreateCommunitySuccess(communityPostCreateResponse);
+                getMvpView().createCommunitySuccess(communityPostCreateResponse);
             }
 
         });
@@ -176,7 +173,7 @@ public class CreateCommunityPresenter extends BasePresenter<CommunityView> {
 
     public void postCreateCommunityOwner(CreateCommunityOwnerRequest createCommunityOwnerRequest) {
         if (!NetworkUtil.isConnected(sheroesApplication)) {
-            getMvpView().showNwError();
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_COMMUNITY_OWNER);
             return;
         }
         getMvpView().startProgressBar();
@@ -189,15 +186,14 @@ public class CreateCommunityPresenter extends BasePresenter<CommunityView> {
 
             @Override
             public void onError(Throwable e) {
-                getMvpView().showError(AppConstants.ERROR_APP_CLOSE, ERROR_CREATE_COMMUNITY);
-                getMvpView().showNwError();
+                getMvpView().showError(e.getMessage(), ERROR_CREATE_COMMUNITY);
                 getMvpView().stopProgressBar();
             }
 
             @Override
             public void onNext(CreateCommunityOwnerResponse createCommunityOwnerResponse) {
                 getMvpView().stopProgressBar();
-                getMvpView().postCreateCommunityOwnerSuccess(createCommunityOwnerResponse);
+                getMvpView().postCreateCommunityOwner(createCommunityOwnerResponse);
             }
 
         });

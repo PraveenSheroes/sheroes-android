@@ -20,109 +20,104 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityList;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Docs;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Member;
+import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerList;
+import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
 import appliedlife.pvtltd.SHEROES.presenters.OwnerPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CommunityView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
 
 /**
  * Created by Ajit Kumar on 09-02-2017.
  */
 
 public class OwnerRemoveDialog extends BaseDialogFragment implements CommunityView {
+    private final String TAG = LogUtils.makeLogTag(OwnerRemoveDialog.class);
     @Inject
     OwnerPresenter mOwnerPresenter;
-    private boolean finishParent;
-    private OwnerRemoveCloseListener mHomeActivityIntractionListner;
-    private final String TAG = LogUtils.makeLogTag(SelectCommunityFragment.class);
     @Bind(R.id.tvcancel)
     TextView mTv_cancel;
     @Bind(R.id.tv_continue)
     TextView mTv_continue;
     Member members;
+    OwnerList mOwner;
     Long community_id;
     Context context;
-    String name;
     @Bind(R.id.tv_owner_name)
     TextView tv_owner_name;
-
-    public  void setListener(OwnerRemoveCloseListener context,String ownerNm)
-    {
-        this.mHomeActivityIntractionListner=context;
-        this.name=ownerNm;
-
-    }
+    @Inject
+    AppUtils mAppUtils;
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,@Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getActivity()).inject(this);
-        if(null!=getArguments()) {
-            members=getArguments().getParcelable(AppConstants.MEMBER);
-            community_id=getArguments().getLong(AppConstants.COMMUNITY_DETAIL);
-        }
         View view = inflater.inflate(R.layout.owner_remove_dialog, container, false);
-
         ButterKnife.bind(this, view);
         mOwnerPresenter.attachView(this);
-        tv_owner_name.setText(name);
+        if (null != getArguments()) {
+            boolean isOwner = getArguments().getBoolean(AppConstants.COMMUNITY_POST_FRAGMENT);
+            if (isOwner) {
+                mOwner = getArguments().getParcelable(AppConstants.OWNER_SUB_TYPE);
+                if (null != mOwner) {
+                    tv_owner_name.setText(mOwner.getName());
+                }
+            } else {
+                members = getArguments().getParcelable(AppConstants.MEMBER);
+                community_id = getArguments().getLong(AppConstants.COMMUNITY_DETAIL);
+                if (null != members) {
+                    tv_owner_name.setText(members.getCommunityUserFirstName());
+                }
+            }
 
-        //  finishParent = getArguments().getBoolean(DISMISS_PARENT_ON_OK_OR_BACK, false);
+        }
+
         setCancelable(true);
         return view;
     }
+
     @Override
     public void onStart() {
         super.onStart();
         Dialog dialog = getDialog();
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
         if (dialog != null) {
             dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
         }
     }
+
     @OnClick(R.id.tvcancel)
-    public void cancelClick()
-    {
+    public void cancelClick() {
         getDialog().cancel();
     }
+
     @OnClick(R.id.tv_continue)
-    public void continueClick()
-    {
-        DeactivateOwnerRequest deactivateOwnerRequest=new DeactivateOwnerRequest();
-        deactivateOwnerRequest.setScreenName("String");
-        deactivateOwnerRequest.setLastScreenName("String");
-        deactivateOwnerRequest.setDeviceUniqueId("String");
-        deactivateOwnerRequest.setCommunityId(community_id);
-        deactivateOwnerRequest.setAppVersion("5.0");
-        deactivateOwnerRequest.setCloudMessagingId("String");
-        if(null !=members.getUsersId()) {
+    public void continueClick() {
+        DeactivateOwnerRequest deactivateOwnerRequest = mAppUtils.deActivateOwnerRequestBuilder(community_id);
+        if (null != members.getUsersId()) {
             deactivateOwnerRequest.setUserId(members.getUsersId());
         }
         mOwnerPresenter.getCommunityOwnerDeactive(deactivateOwnerRequest);
-        mHomeActivityIntractionListner.onOwnerClose();
-        getDialog().cancel();
-
     }
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         return new Dialog(getActivity(), getTheme()) {
             @Override
             public void onBackPressed() {
-                dismissAllowingStateLoss();//dismiss dialog on back button press
-                if (finishParent) {
-                    getActivity().finish();
-                }
+                dismiss();
             }
         };
     }
@@ -148,74 +143,40 @@ public class OwnerRemoveDialog extends BaseDialogFragment implements CommunityVi
     }
 
 
-
-    @Override
-    public void getityCommunityListSuccess(List<CommunityList> data) {
-
-    }
-
     @Override
     public void getSelectedCommunityListSuccess(List<Docs> selected_community_response) {
 
     }
 
     @Override
-    public void getOwnerListSuccess(List<Member> ownerListResponse) {
+    public void getOwnerListSuccess(OwnerListResponse ownerListResponse) {
 
     }
 
     @Override
-    public void postCreateCommunitySuccess(CreateCommunityResponse createCommunityResponse) {
+    public void createCommunitySuccess(CreateCommunityResponse createCommunityResponse) {
 
     }
 
     @Override
-    public void addPostCreateCommunitySuccess(CommunityPostCreateResponse createCommunityResponse) {
-
-    }
-
-
-    @Override
-    public void getOwnerListDeactivateSuccess(DeactivateOwnerResponse deactivateOwnerResp)
-    {
-        if(deactivateOwnerResp.getStatus().toString().equals("SUCCESS")) {
-            Toast.makeText(getActivity(), "Owner removed", Toast.LENGTH_LONG).show();
+    public void getOwnerListDeactivateSuccess(DeactivateOwnerResponse deactivateOwnerResp) {
+        switch (deactivateOwnerResp.getStatus()) {
+            case AppConstants.SUCCESS:
+                getDialog().cancel();
+                ((CommunitiesDetailActivity) getActivity()).onOwnerClose();
+                Toast.makeText(getActivity(), getString(R.string.ID_OWNER_REMOVED), Toast.LENGTH_LONG).show();
+                break;
+            case AppConstants.FAILED:
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_JOIN_INVITE);
+                break;
+            default:
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_JOIN_INVITE);
         }
-        else
-        {
-
-        }
-        getDialog().cancel();
-
     }
 
     @Override
-    public void postCreateCommunityOwnerSuccess(CreateCommunityOwnerResponse createCommunityOwnerResponse) {
+    public void postCreateCommunityOwner(CreateCommunityOwnerResponse createCommunityOwnerResponse) {
 
     }
 
-    @Override
-    public void showNwError() {
-
-    }
-
-    /* @OnClick(R.id.tvcancel)
-     public void cancelClick()
-     {
-         getDialog().cancel();
-         // mHomeActivityIntractionListner.onClose();
-     }
-     @OnClick(R.id.tv_continue)
-     public void continueClick()
-     {
-         getDialog().cancel();
-     }
-     public interface CloseListener {
-         void onErrorOccurence();
-         void onClose();
-     }*/
-    public interface OwnerRemoveCloseListener {
-        void onErrorOccurence();
-        void onOwnerClose();
-    }
 }

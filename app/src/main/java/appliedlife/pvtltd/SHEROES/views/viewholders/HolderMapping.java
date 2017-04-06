@@ -10,7 +10,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionDoc;
 import appliedlife.pvtltd.SHEROES.models.entities.communities.CommunitySuggestion;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityList;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityTags;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Docs;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
@@ -548,9 +547,7 @@ public enum HolderMapping {
                 else if (item instanceof PandingMember) {
                     return PANDINGREQUESTLIST.ordinal();
                 }
-                else if (item instanceof CommunityList) {
-                    return SELECTDILOG.ordinal();
-                } else if (item instanceof CommunityTags) {
+                 else if (item instanceof CommunityTags) {
                     return SEARCHTAGS.ordinal();
                 } else if (item instanceof CommunitySuggestion) {
                     return COMMUNITY_SUGGESTED_BY_HOLDER.ordinal();

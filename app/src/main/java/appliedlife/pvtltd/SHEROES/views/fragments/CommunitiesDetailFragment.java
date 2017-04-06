@@ -42,6 +42,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
+
 /**
  * Created by Praveen_Singh on 01-02-2017.
  */
@@ -68,8 +70,6 @@ public class CommunitiesDetailFragment extends BaseFragment {
     private int mPageNo = AppConstants.ONE_CONSTANT;
     private FragmentListRefreshData mFragmentListRefreshData;
     private FeedDetail mFeedDetail;
-    private int mPosition;
-    private int mPressedEmoji;
     private boolean mListLoad = true;
     private boolean mIsEdit = false;
     private CommunityEnum communityEnum = null;
@@ -108,32 +108,27 @@ public class CommunitiesDetailFragment extends BaseFragment {
                     case SEARCH_COMMUNITY:
                         mScreenName = AppConstants.ALL_SEARCH;
                         if (!mFeedDetail.isMember() && !mFeedDetail.isOwner() && !mFeedDetail.isRequestPending()) {
-                            mTvJoinView.setVisibility(View.VISIBLE);
                             mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.footer_icon_text));
                             mTvJoinView.setText(getString(R.string.ID_JOIN));
                             mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
                             mTvJoinView.setTag(true);
                         } else {
-                            mTvJoinView.setVisibility(View.GONE);
                             mTvJoinView.setTag(false);
                         }
                         break;
                     case FEATURE_COMMUNITY:
                         mScreenName = AppConstants.FEATURE_FRAGMENT;
                         if (!mFeedDetail.isMember() && !mFeedDetail.isOwner() && !mFeedDetail.isRequestPending()) {
-                            mTvJoinView.setVisibility(View.VISIBLE);
                             mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.footer_icon_text));
                             mTvJoinView.setText(getString(R.string.ID_JOIN));
                             mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
                             mTvJoinView.setTag(true);
                         } else {
-                            mTvJoinView.setVisibility(View.GONE);
                             mTvJoinView.setTag(false);
                         }
                         break;
                     case MY_COMMUNITY:
                         mScreenName = AppConstants.MY_COMMUNITIES_FRAGMENT;
-                        mTvJoinView.setVisibility(View.GONE);
                         mTvJoinView.setTag(false);
                         break;
                     default:
@@ -167,7 +162,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
 
             }
         });
-        super.setAllInitializationForFeeds(mFragmentListRefreshData, mPullRefreshList, mAdapter, mLayoutManager, mPageNo, mSwipeView, mLiNoResult, mFeedDetail, mRecyclerView, mPosition, mPressedEmoji, mListLoad, mIsEdit, mHomePresenter, mAppUtils, mProgressBar);
+        super.setAllInitializationForFeeds(mFragmentListRefreshData, mPullRefreshList, mAdapter, mLayoutManager, mPageNo, mSwipeView, mLiNoResult, mFeedDetail, mRecyclerView, 0, 0, mListLoad, mIsEdit, mHomePresenter, mAppUtils, mProgressBar);
         mHomePresenter.getFeedFromPresenter(mAppUtils.userCommunityPostRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCommunityId()));
         mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -187,7 +182,6 @@ public class CommunitiesDetailFragment extends BaseFragment {
     @OnClick(R.id.tv_join_view)
     public void joinClick() {
         String joinTxt = mTvJoinView.getText().toString();
-        mTvJoinView.setText(R.string.ID_REQUESTED);
         ((CommunitiesDetailActivity) getActivity()).inviteJoinEventClick(joinTxt, mFeedDetail);
     }
 
@@ -256,10 +250,44 @@ public class CommunitiesDetailFragment extends BaseFragment {
         mHomePresenter.detachView();
     }
 
+    public void joinRequestForOpenCommunity(FeedDetail feedDetail) {
+
+        super.joinRequestForOpenCommunity(feedDetail);
+    }
 
     @Override
     public void getSuccessForAllResponse(String success, FeedParticipationEnum feedParticipationEnum) {
-        super.getSuccessForAllResponse(success, feedParticipationEnum);
+        switch (feedParticipationEnum) {
+            case JOIN_INVITE:
+                joinSuccessFailed(success);
+                break;
+            default:
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
+        }
+    }
+
+    public void joinSuccessFailed(String success) {
+        switch (success) {
+            case AppConstants.SUCCESS:
+                if (mFeedDetail.isClosedCommunity()) {
+                    mFeedDetail.setRequestPending(true);
+                    mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+                    mTvJoinView.setText(getContext().getString(R.string.ID_REQUESTED));
+                    mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_community_requested);
+                } else {
+                    mFeedDetail.setOwner(true);
+                    mFeedDetail.setMember(true);
+                    mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+                    mTvJoinView.setText(getContext().getString(R.string.ID_JOINED));
+                    mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
+                }
+                break;
+            case AppConstants.FAILED:
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_JOIN_INVITE);
+                break;
+            default:
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_JOIN_INVITE);
+        }
     }
 
     public void bookMarkForCard(FeedDetail feedDetail) {

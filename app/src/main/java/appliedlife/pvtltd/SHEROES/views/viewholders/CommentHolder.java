@@ -19,6 +19,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionDoc;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
@@ -32,6 +33,8 @@ import butterknife.OnClick;
 
 public class CommentHolder extends BaseViewHolder<CommentReactionDoc> {
     private final String TAG = LogUtils.makeLogTag(CommentHolder.class);
+    @Inject
+    DateUtil mDateUtil;
     @Inject
     Preference<LoginResponse> userPreference;
     private static final String LEFT_HTML_TAG_FOR_COLOR = "<b><font color='#323940'>";
@@ -62,17 +65,15 @@ public class CommentHolder extends BaseViewHolder<CommentReactionDoc> {
     public void bindData(CommentReactionDoc item, final Context context, int position) {
         this.dataItem = item;
         this.mContext = context;
-        if(StringUtil.isNotNullOrEmptyString(dataItem.getCreatedOn()))
-        {
-         //   String dateTime= DateUtil.getInstance().getDateWithFormat(dataItem.getCreatedOn(),AppConstants.COMMENT_DATE_TIME);
-            tvListCommentTime.setText(dataItem.getCreatedOn());
+        if (StringUtil.isNotNullOrEmptyString(dataItem.getCreatedOn())) {
+            //   String dateTime= DateUtil.getInstance().getDateWithFormat(dataItem.getCreatedOn(),AppConstants.COMMENT_DATE_TIME);
+            long createdDate = mDateUtil.getTimeInMillis(dataItem.getCreatedOn(), AppConstants.DATE_FORMAT);
+            tvListCommentTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
         }
 
         if (dataItem.isMyOwnParticipation()) {
             tvUserCommentListMenu.setVisibility(View.VISIBLE);
-        }
-        else
-        {
+        } else {
             tvUserCommentListMenu.setVisibility(View.GONE);
         }
         ivListCommentProfilePic.setCircularImage(true);

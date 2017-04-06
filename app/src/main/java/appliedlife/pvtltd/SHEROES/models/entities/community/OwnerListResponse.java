@@ -5,26 +5,19 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+
 /**
  * Created by SHEROES-TECH on 03-02-2017.
  */
 
-public class OwnerListResponse {
-
-
+public class OwnerListResponse extends BaseResponse {
     @SerializedName("members")
     @Expose
     private List<Member> members = null;
-    @SerializedName("screen_name")
-    @Expose
-    private String screenName;
-    @SerializedName("status")
-    @Expose
-    private String status;
     @SerializedName("is_owner")
     @Expose
-    private boolean isOWner;
-
+    private boolean isOwner;
 
     public List<Member> getMembers() {
         return members;
@@ -34,28 +27,12 @@ public class OwnerListResponse {
         this.members = members;
     }
 
-    public String getScreenName() {
-        return screenName;
+    public boolean isOwner() {
+        return isOwner;
     }
 
-    public void setScreenName(String screenName) {
-        this.screenName = screenName;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public boolean getIsOWner() {
-        return isOWner;
-    }
-
-    public void setStatus(boolean isOWner) {
-        this.isOWner = isOWner;
+    public void setOwner(boolean owner) {
+        isOwner = owner;
     }
 }
 

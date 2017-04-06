@@ -6,7 +6,6 @@ import javax.inject.Singleton;
 import appliedlife.pvtltd.SHEROES.models.InviteSearchModel;
 import appliedlife.pvtltd.SHEROES.models.RequestedListModel;
 import appliedlife.pvtltd.SHEROES.presenters.CommunityTagsPresenter;
-import appliedlife.pvtltd.SHEROES.presenters.InvitePresenter;
 import appliedlife.pvtltd.SHEROES.presenters.MembersPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.OwnerPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePersenter;
@@ -277,7 +276,6 @@ public interface SheroesAppComponent {
     void inject(RequestedHolder requestedHolder);
     void inject(CommunityOwnerSearchFragment communityOwnerSearchFragment);
     void inject(CommunityInviteSearchFragment requestedHolder);
-    void inject(InvitePresenter requestedHolder);
     void inject(InviteSearchModel requestedHolder);
     void inject(InviteSearchHolder inviteSearchHolder);
     void inject(JobFilterActivity jobFilterActivity);

@@ -26,7 +26,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_COMMU
  */
 
 public class OwnerPresenter extends BasePresenter<CommunityView> {
-    private final String TAG = LogUtils.makeLogTag(HomePresenter.class);
+    private final String TAG = LogUtils.makeLogTag(OwnerPresenter.class);
     OwnerListModel ownerListModel;
     SheroesApplication sheroesApplication;
     @Inject
@@ -51,7 +51,7 @@ public class OwnerPresenter extends BasePresenter<CommunityView> {
 
     public void getCommunityOwnerList(OwnerListRequest ownerListRequest) {
         if (!NetworkUtil.isConnected(sheroesApplication)) {
-            getMvpView().showError(AppConstants.ERROR_APP_CLOSE,ERROR_COMMUNITY_OWNER);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_COMMUNITY_OWNER);
             return;
         }
         getMvpView().startProgressBar();
@@ -64,14 +64,15 @@ public class OwnerPresenter extends BasePresenter<CommunityView> {
 
             @Override
             public void onError(Throwable e) {
-                getMvpView().showError(AppConstants.ERROR_APP_CLOSE, ERROR_COMMUNITY_OWNER);
-                getMvpView().showNwError();
+                getMvpView().showError(e.getMessage(), ERROR_COMMUNITY_OWNER);
                 getMvpView().stopProgressBar();
             }
             @Override
             public void onNext(OwnerListResponse ownerListResponse) {
                 getMvpView().stopProgressBar();
-                getMvpView().getOwnerListSuccess(ownerListResponse.getMembers());
+                if(null!=ownerListResponse) {
+                    getMvpView().getOwnerListSuccess(ownerListResponse);
+                }
             }
 
         });
@@ -80,7 +81,7 @@ public class OwnerPresenter extends BasePresenter<CommunityView> {
 
     public void getCommunityOwnerDeactive(DeactivateOwnerRequest deactivateOwnerRequest) {
         if (!NetworkUtil.isConnected(sheroesApplication)) {
-            getMvpView().showError(AppConstants.ERROR_APP_CLOSE,ERROR_COMMUNITY_OWNER);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_COMMUNITY_OWNER);
             return;
         }
         getMvpView().startProgressBar();
@@ -93,8 +94,7 @@ public class OwnerPresenter extends BasePresenter<CommunityView> {
 
             @Override
             public void onError(Throwable e) {
-                getMvpView().showError(AppConstants.ERROR_APP_CLOSE,ERROR_COMMUNITY_OWNER);
-                getMvpView().showNwError();
+                getMvpView().showError(e.getMessage(),ERROR_COMMUNITY_OWNER);
                 getMvpView().stopProgressBar();
             }
             @Override

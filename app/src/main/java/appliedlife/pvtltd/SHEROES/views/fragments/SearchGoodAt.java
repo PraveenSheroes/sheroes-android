@@ -16,20 +16,13 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import java.util.List;
-
-import javax.inject.Inject;
-
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.community.ListOfInviteSearch;
-import appliedlife.pvtltd.SHEROES.presenters.InvitePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.InviteSearchView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -38,10 +31,8 @@ import butterknife.OnClick;
  * Created by sheroes on 26/03/17.
  */
 
-public class SearchGoodAt extends BaseFragment implements InviteSearchView {
+public class SearchGoodAt extends BaseFragment {
     private final String TAG = LogUtils.makeLogTag(AllSearchFragment.class);
-    @Inject
-    InvitePresenter mSearchModPresenter;
     @Bind(R.id.rv_search_list)
     RecyclerView mRecyclerView;
     @Bind(R.id.pb_search_progress_bar)
@@ -55,11 +46,6 @@ public class SearchGoodAt extends BaseFragment implements InviteSearchView {
     private String mSearchDataName = AppConstants.EMPTY_STRING;
     private GenericRecyclerViewAdapter mAdapter;
     private CommunityInviteSearchFragment.InviteSearchActivityIntractionListner mHomeSearchActivityIntractionListner;
-
-   /* public static CommunityInviteSearchFragment createInstance(int itemsCount) {
-        CommunityInviteSearchFragment communityInviteSearch = new CommunityInviteSearchFragment();
-        return communityInviteSearch;
-    }*/
 
     @Override
     public void onAttach(Context context) {
@@ -79,7 +65,6 @@ public class SearchGoodAt extends BaseFragment implements InviteSearchView {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.invitesearch, container, false);
         ButterKnife.bind(this, view);
-        mSearchModPresenter.attachView(this);
         mSearchEditText.setHint("Search Users");
         editTextWatcher();
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -88,19 +73,6 @@ public class SearchGoodAt extends BaseFragment implements InviteSearchView {
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mAdapter);
         return view;
-    }
-
-    @Override
-    public void getSearchListSuccess(List<ListOfInviteSearch> listOfSearches) {
-        if (mAdapter != null) {
-            mAdapter.setSheroesGenericListData(listOfSearches);
-            mAdapter.notifyDataSetChanged();
-        }
-    }
-
-    @Override
-    public void showNwError() {
-        mHomeSearchActivityIntractionListner.onErrorOccurence();
     }
 
     @OnClick(R.id.tv_back_community_tag)
@@ -128,7 +100,6 @@ public class SearchGoodAt extends BaseFragment implements InviteSearchView {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mSearchModPresenter.detachView();
     }
 
     @Override

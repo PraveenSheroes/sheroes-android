@@ -117,11 +117,6 @@ public class ShareCommunityFragment extends BaseFragment implements CreateCommun
     }
 
     @Override
-    public void showNwError() {
-
-    }
-
-    @Override
     public void dialogValue(String dilogval) {
 
     }

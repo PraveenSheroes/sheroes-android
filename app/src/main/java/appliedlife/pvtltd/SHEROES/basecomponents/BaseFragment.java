@@ -22,9 +22,13 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
+import com.f2prateek.rx.preferences.Preference;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -91,7 +95,8 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     public FragmentIntractionWithActivityListner mHomeSearchActivityFragmentIntractionWithActivityListner;
     private FragmentOpen mFragmentOpen = new FragmentOpen();
     protected GenericFragmentActivityIntractionListner genericFragmentActivityIntractionListner;
-
+    @Inject
+    Preference<LoginResponse> userPreference;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -162,6 +167,29 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
         this.mProgressBar = mProgressBar;
     }
 
+    public void setAllInitializationForMember(FragmentListRefreshData mFragmentListRefreshData, SwipPullRefreshList mPullRefreshList, GenericRecyclerViewAdapter mAdapter, LinearLayoutManager manager, int mPageNo, FeedDetail mFeedDetails, RecyclerView mRecyclerView, int i, int i1, MembersPresenter mmemberpresenter, AppUtils mAppUtils, ProgressBar mProgressBar) {
+        this.mFragmentListRefreshData = mFragmentListRefreshData;
+        this.mPullRefreshList = mPullRefreshList;
+        this.mAdapter = mAdapter;
+        this.mLayoutManager = manager;
+        this.mPageNo = mPageNo;
+        this.mRecyclerView = mRecyclerView;
+        this.mMemberpresenter = mmemberpresenter;
+        this.mAppUtils = mAppUtils;
+        this.mProgressBar = mProgressBar;
+    }
+    public void setAllInitializationForPandingMember(FragmentListRefreshData mFragmentListRefreshData, GenericRecyclerViewAdapter mAdapter, LinearLayoutManager manager, int mPageNo, FeedDetail mFeedDetails, RecyclerView mRecyclerView, int i, int i1, MembersPresenter mmemberpresenter, AppUtils mAppUtils, ProgressBar mProgressBar) {
+        this.mFragmentListRefreshData = mFragmentListRefreshData;
+        this.mPullRefreshList = mPullRefreshList;
+        this.mAdapter = mAdapter;
+        this.mLayoutManager = manager;
+        this.mPageNo = mPageNo;
+        this.mRecyclerView = mRecyclerView;
+        this.mMemberpresenter = mmemberpresenter;
+        this.mAppUtils = mAppUtils;
+        this.mProgressBar = mProgressBar;
+    }
+
     public void setListLoadFlag(boolean mListLoad) {
         this.mListLoad = mListLoad;
     }
@@ -171,6 +199,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     public void setRefreshList(SwipPullRefreshList mPullRefreshList) {
         this.mPullRefreshList = mPullRefreshList;
     }
+
 
     public void callFragment(int layout, Fragment fragment) {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
@@ -487,29 +516,6 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     protected void onBackPress() {
         getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
-
-    public void setAllInitializationForMember(FragmentListRefreshData mFragmentListRefreshData, SwipPullRefreshList mPullRefreshList, GenericRecyclerViewAdapter mAdapter, LinearLayoutManager manager, int mPageNo, FeedDetail mFeedDetails, RecyclerView mRecyclerView, int i, int i1, MembersPresenter mmemberpresenter, AppUtils mAppUtils, ProgressBar mProgressBar) {
-        this.mFragmentListRefreshData = mFragmentListRefreshData;
-        this.mPullRefreshList = mPullRefreshList;
-        this.mAdapter = mAdapter;
-        this.mLayoutManager = manager;
-        this.mPageNo = mPageNo;
-        this.mRecyclerView = mRecyclerView;
-        this.mMemberpresenter = mmemberpresenter;
-        this.mAppUtils = mAppUtils;
-        this.mProgressBar = mProgressBar;
-    }
-    public void setAllInitializationForPandingMember(FragmentListRefreshData mFragmentListRefreshData, GenericRecyclerViewAdapter mAdapter, LinearLayoutManager manager, int mPageNo, FeedDetail mFeedDetails, RecyclerView mRecyclerView, int i, int i1, MembersPresenter mmemberpresenter, AppUtils mAppUtils, ProgressBar mProgressBar) {
-        this.mFragmentListRefreshData = mFragmentListRefreshData;
-        this.mPullRefreshList = mPullRefreshList;
-        this.mAdapter = mAdapter;
-        this.mLayoutManager = manager;
-        this.mPageNo = mPageNo;
-        this.mRecyclerView = mRecyclerView;
-        this.mMemberpresenter = mmemberpresenter;
-        this.mAppUtils = mAppUtils;
-        this.mProgressBar = mProgressBar;
-    }
     public interface GenericFragmentActivityIntractionListner {
         void close();
         void onBackPress();
@@ -541,5 +547,12 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
         }
 
     }
-
+    public void joinRequestForOpenCommunity(FeedDetail feedDetail) {
+        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
+            List<Long> userIdList = new ArrayList();
+            userIdList.add((long) userPreference.get().getUserSummary().getUserId());
+            setFeedDetail(feedDetail);
+            mHomePresenter.communityJoinFromPresenter(mAppUtils.communityRequestBuilder(userIdList, feedDetail.getIdOfEntityOrParticipant(), AppConstants.OPEN_COMMUNITY));
+        }
+    }
 }

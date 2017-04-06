@@ -53,15 +53,13 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityList;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Docs;
 import appliedlife.pvtltd.SHEROES.models.entities.community.EditCommunityRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.community.Member;
+import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.presenters.CreateCommunityPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -82,7 +80,7 @@ import butterknife.OnClick;
  * Title: Create Community fragment within Create Community activity perform all the UI operation .
  * Fragment will have all UI components and operate with activity .
  */
-public class CreateCommunityFragment extends BaseFragment implements CommunityView, ChangeCommunityPrivacyDialogFragment.CloseListener, CommunityTypeFragment.MyDialogFragmentListener,HomeView{
+public class CreateCommunityFragment extends BaseFragment implements CommunityView,CommunityTypeFragment.MyDialogFragmentListener,HomeView{
 
 
     @Bind(R.id.cb_create_community_open_check)
@@ -705,54 +703,8 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
         newFragment.setListener(this);
 
         newFragment.show(getActivity().getFragmentManager(), "dialog");
-
-      /*  FragmentCategoryList nextFrag= new FragmentCategoryList();
-        getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_bottom_enter_anim, 0, 0, R.anim.top_bottom_enter_anim_reverse)
-                .replace(R.id.fl_fragment_container,nextFrag, SPINNER_FRAGMENT).addToBackStack(null).commit();
-*/
     }
 
-  /*  @Override
-    public void getCreateCommunityResponse(LoginResponse loginResponse) {
-
-    }*/
-/*
-    @Override
-    public void showNwError() {
-
-    }
-
-    @Override
-    public void dialogValue(String dilogval) {
-
-    }
-
-
-    @Override
-    public void startProgressBar() {
-
-    }
-
-    @Override
-    public void stopProgressBar() {
-
-    }
-
-    @Override
-    public void startNextScreen() {
-
-    }*/
-
-
-    @Override
-    public void onErrorOccurence() {
-
-    }
-
-
-    @Override
-    public void onClose() {
-    }
 
     @Override
     public void onAddFriendSubmit(String communitynm, Long typeId) {
@@ -774,26 +726,20 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
     }
 
     @Override
-    public void getityCommunityListSuccess(List<CommunityList> data) {
-
-    }
-
-    @Override
     public void getSelectedCommunityListSuccess(List<Docs> selected_community_response) {
 
     }
 
     @Override
-    public void getOwnerListSuccess(List<Member> ownerListResponse) {
+    public void getOwnerListSuccess(OwnerListResponse ownerListResponse) {
 
     }
 
 
     @Override
-    public void postCreateCommunitySuccess(CreateCommunityResponse createCommunityResponse) {
+    public void createCommunitySuccess(CreateCommunityResponse createCommunityResponse) {
         mProgressBar.setVisibility(View.GONE);
         mTvCreate.setEnabled(true);
-
         if (null != createCommunityResponse && StringUtil.isNotNullOrEmptyString(createCommunityResponse.getStatus())) {
 
             Toast.makeText(getActivity(), createCommunityResponse.getStatus(), Toast.LENGTH_LONG).show();
@@ -808,22 +754,12 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
     }
 
     @Override
-    public void addPostCreateCommunitySuccess(CommunityPostCreateResponse createCommunityResponse) {
-
-    }
-
-    @Override
     public void getOwnerListDeactivateSuccess(DeactivateOwnerResponse deactivateOwnerResponse) {
 
     }
 
     @Override
-    public void postCreateCommunityOwnerSuccess(CreateCommunityOwnerResponse createCommunityOwnerResponse) {
-
-    }
-
-    @Override
-    public void showNwError() {
+    public void postCreateCommunityOwner(CreateCommunityOwnerResponse createCommunityOwnerResponse) {
 
     }
 
@@ -842,12 +778,6 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
     public void startNextScreen() {
 
     }
-
-   /* @Override
-    public void showError(String s) {
-        mProgressBar.setVisibility(View.GONE);
-
-    }*/
 
     public interface CreateCommunityActivityIntractionListner {
         void callCommunityTagPage(FeedDetail mfeed,String createCommunityRequest);

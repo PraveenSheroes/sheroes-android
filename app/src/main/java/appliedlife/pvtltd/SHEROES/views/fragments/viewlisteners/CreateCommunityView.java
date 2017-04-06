@@ -9,7 +9,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 
 public interface CreateCommunityView extends BaseMvpView {
     void getCreateCommunityResponse(LoginResponse loginResponse);
-    void showNwError();
     void dialogValue(String dilogval);
 
 }

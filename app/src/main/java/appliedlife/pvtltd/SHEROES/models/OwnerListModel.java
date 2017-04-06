@@ -29,14 +29,11 @@ public class OwnerListModel {
     }
 
     public Observable<OwnerListResponse> getCommunityList(OwnerListRequest ownerListRequest){
-        LogUtils.error("Community Owner list req: ",gson.toJson(ownerListRequest));
-
+        LogUtils.info("Community Owner list req: ",gson.toJson(ownerListRequest));
         return sheroesAppServiceApi.getOwnerList(ownerListRequest)
                 .map(new Func1<OwnerListResponse, OwnerListResponse>() {
                     @Override
                     public OwnerListResponse call(OwnerListResponse ownerListResponse) {
-                        LogUtils.error("Community Owner list res: ",gson.toJson(ownerListResponse));
-
                         return ownerListResponse;
                     }
                 })
@@ -44,14 +41,12 @@ public class OwnerListModel {
                 .observeOn(AndroidSchedulers.mainThread());
     }
     public Observable<DeactivateOwnerResponse> getCommunityOwnerDeactivate(DeactivateOwnerRequest deactivateOwnerRequest){
-        LogUtils.error("Community Deactivate Owner list req: ",gson.toJson(deactivateOwnerRequest));
+        LogUtils.info("Community Deactivate Owner list req: ",gson.toJson(deactivateOwnerRequest));
 
         return sheroesAppServiceApi.getOwnerDeactivate(deactivateOwnerRequest)
                 .map(new Func1<DeactivateOwnerResponse, DeactivateOwnerResponse>() {
                     @Override
                     public DeactivateOwnerResponse call(DeactivateOwnerResponse deactivateOwnerResponse) {
-                        LogUtils.error("Community Deactivate Owner list response: ",gson.toJson(deactivateOwnerResponse));
-
                         return deactivateOwnerResponse;
                     }
                 })

@@ -65,14 +65,12 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityList;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Docs;
-import appliedlife.pvtltd.SHEROES.models.entities.community.Member;
+import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
 import appliedlife.pvtltd.SHEROES.presenters.CreateCommunityPresenter;
@@ -80,7 +78,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.JobFilterActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CommunityView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CreateCommunityView;
@@ -412,11 +409,6 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
     }
 
     @Override
-    public void onErrorOccurence() {
-
-    }
-
-    @Override
     public void onAddCommunityDetailSubmit(Docs docs) {
         mEtchoosecommunity.setText(docs.getTitle());
 
@@ -437,10 +429,6 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
 
     }
 
-    @Override
-    public void getityCommunityListSuccess(List<CommunityList> data) {
-
-    }
 
     @Override
     public void getSelectedCommunityListSuccess(List<Docs> selected_community_response) {
@@ -448,22 +436,18 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
     }
 
     @Override
-    public void getOwnerListSuccess(List<Member> ownerListResponse) {
+    public void getOwnerListSuccess(OwnerListResponse ownerListResponse) {
 
     }
 
     @Override
-    public void postCreateCommunitySuccess(CreateCommunityResponse createCommunityResponse) {
-
-    }
-
-    @Override
-    public void addPostCreateCommunitySuccess(CommunityPostCreateResponse createCommunityResponse) {
+    public void createCommunitySuccess(CreateCommunityResponse createCommunityResponse) {
         mTv_community_post_submit.setVisibility(View.VISIBLE);
         Intent intent = new Intent(getActivity(), HomeActivity.class);
         startActivity(intent);
         getActivity().finish();
     }
+
 
     @Override
     public void getOwnerListDeactivateSuccess(DeactivateOwnerResponse deactivateOwnerResponse) {
@@ -471,14 +455,10 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
     }
 
     @Override
-    public void postCreateCommunityOwnerSuccess(CreateCommunityOwnerResponse createCommunityOwnerResponse) {
+    public void postCreateCommunityOwner(CreateCommunityOwnerResponse createCommunityOwnerResponse) {
 
     }
 
-    @Override
-    public void showNwError() {
-
-    }
 
     @Override
     public void dialogValue(String dilogval) {

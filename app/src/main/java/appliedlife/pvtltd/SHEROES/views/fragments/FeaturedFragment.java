@@ -14,7 +14,6 @@ import android.widget.ProgressBar;
 
 import com.f2prateek.rx.preferences.Preference;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -66,18 +65,20 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
     ProgressBar mProgressBarFirstLoad;
     @Inject
     AppUtils mAppUtils;
-    private int mPageNo =AppConstants.ONE_CONSTANT;
+    private int mPageNo = AppConstants.ONE_CONSTANT;
     private FragmentListRefreshData mFragmentListRefreshData;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.bind(this, view);
-        mFragmentListRefreshData=new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.FEATURE_FRAGMENT,AppConstants.EMPTY_STRING);
+        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.FEATURE_FRAGMENT, AppConstants.EMPTY_STRING);
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
         mHomePresenter.attachView(this);
@@ -87,7 +88,7 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
 
-        mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager,mFragmentListRefreshData) {
+        mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager, mFragmentListRefreshData) {
             @Override
             public void onHide() {
                 ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.INVISIBLE);
@@ -103,33 +104,37 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
 
             }
         });
-        super.setAllInitializationForFeeds(mFragmentListRefreshData,  mAdapter, mLayoutManager, mRecyclerView, mHomePresenter, mAppUtils, mProgressBar);
-        LogUtils.info(TAG,"**********Feature fragment on create*********");
-        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEATURED_COMMUNITY,mFragmentListRefreshData.getPageNo()));
+        super.setAllInitializationForFeeds(mFragmentListRefreshData, mAdapter, mLayoutManager, mRecyclerView, mHomePresenter, mAppUtils, mProgressBar);
+        LogUtils.info(TAG, "**********Feature fragment on create*********");
+        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEATURED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
         mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                // Refresh items
-                setListLoadFlag(false);
-                mPullRefreshList.setPullToRefresh(true);
-                mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
-                mPullRefreshList = new SwipPullRefreshList();
-                setRefreshList(mPullRefreshList);
-                mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
-                LogUtils.info(TAG,"**********Feature fragment swip to refresh*********");
-                mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEATURED_COMMUNITY,mFragmentListRefreshData.getPageNo()));
+                swipeAndRefreshList();
             }
         });
         return view;
     }
 
+    public void swipeAndRefreshList() {
+        // Refresh items
+        setListLoadFlag(false);
+        mPullRefreshList.setPullToRefresh(true);
+        mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
+        mPullRefreshList = new SwipPullRefreshList();
+        setRefreshList(mPullRefreshList);
+        mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
+        LogUtils.info(TAG, "**********Feature fragment swip to refresh*********");
+        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEATURED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
+
+    }
 
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
-        List<FeedDetail> feedDetailList=feedResponsePojo.getFeedDetails();
+        List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
         mProgressBarFirstLoad.setVisibility(View.GONE);
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
-            mPageNo =mFragmentListRefreshData.getPageNo();
+            mPageNo = mFragmentListRefreshData.getPageNo();
             mFragmentListRefreshData.setPageNo(++mPageNo);
             mPullRefreshList.allListData(feedDetailList);
             mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
@@ -144,19 +149,15 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
         }
         mSwipeView.setRefreshing(false);
     }
-    public void joinRequestForOpenCommunity(FeedDetail feedDetail)
-    {
-        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
-            List<Long> userIdList = new ArrayList();
-            userIdList.add((long) userPreference.get().getUserSummary().getUserId());
-            setFeedDetail(feedDetail);
-            mHomePresenter.communityJoinFromPresenter(mAppUtils.communityRequestBuilder(userIdList, feedDetail.getIdOfEntityOrParticipant(),AppConstants.OPEN_COMMUNITY));
-        }
+
+    public void joinRequestForOpenCommunity(FeedDetail feedDetail) {
+        super.joinRequestForOpenCommunity(feedDetail);
     }
-    public void setJoinStatus(String status,FeedDetail feedDetail)
-    {
+
+    public void setJoinStatus(String status, FeedDetail feedDetail) {
         commentListRefresh(feedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();

@@ -53,6 +53,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.AllCommentReacti
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnFocusChange;
 
 /**
  * Created by Praveen_Singh on 24-01-2017.
@@ -178,6 +179,7 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
     }
 
     private void initializeUiComponent() {
+        liUserComment.setEnabled(false);
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
         mCommentReactionPresenter.attachView(this);
@@ -228,7 +230,19 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
             }
         });
     }
-
+    @OnClick(R.id.et_user_comment_description)
+    public void editTextForComment() {
+        AppUtils.showKeyboard(mEtUserCommentDescription, TAG);
+    }
+    @OnClick(R.id.li_user_comment)
+    public void liEditForComment() {
+    }
+    @OnFocusChange(R.id.et_user_comment_description)
+    public void focusChange() {
+        if(StringUtil.isNotNullOrEmptyString(mEtUserCommentDescription.getText().toString())) {
+            mEtUserCommentDescription.setSelection(mEtUserCommentDescription.getText().toString().length());
+        }
+    }
     @Override
     public void getAllCommentsAndReactions(CommentReactionResponsePojo commentReactionResponsePojo, int addEditOperation) {
         mLiNoResult.setVisibility(View.GONE);
@@ -426,7 +440,11 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
     }
 
     @OnClick(R.id.fl_comment_reaction)
-    public void openReactionList() {
+    public void onClickReactionList() {
+        openReactionList();
+    }
+    private void openReactionList()
+    {
         mTvUserCommentHeaderText.setText(getString(R.string.ID_REACTION));
         mFragmentOpen.setReactionList(true);
         mFragmentOpen.setCommentList(false);

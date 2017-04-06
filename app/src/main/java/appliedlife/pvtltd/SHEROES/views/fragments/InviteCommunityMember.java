@@ -1,6 +1,5 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -37,7 +36,6 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.InviteFragmentListener;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -50,8 +48,6 @@ public class InviteCommunityMember extends BaseFragment {
     private final String TAG = LogUtils.makeLogTag(MyCommunityInviteMemberFragment.class);
     @Inject
     HomePresenter mHomePresenter;
-    @Inject
-    AppUtils mAppUtils;
     @Bind(R.id.rv_invite_member_list)
     RecyclerView mRecyclerView;
     @Bind(R.id.pb_invite_member_progress_bar)
@@ -70,25 +66,13 @@ public class InviteCommunityMember extends BaseFragment {
     TextView mtv_invite_post_submit;
     private String mSearchDataName = AppConstants.EMPTY_STRING;
     private GenericRecyclerViewAdapter mAdapter;
-    private InviteFragmentListener mHomeSearchActivityFragmentIntractionWithActivityListner;
     private FragmentListRefreshData mFragmentListRefreshData;
     private Handler mHandler = new Handler();
     private List<Long> mUserIdForAddMember = new ArrayList<>();
     private FeedDetail mFeedDetail;
+    @Inject
+    AppUtils mAppUtils;
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            if (getActivity() instanceof InviteFragmentListener) {
-                mHomeSearchActivityFragmentIntractionWithActivityListner = (InviteFragmentListener) getActivity();
-            }
-        } catch (InstantiationException exception) {
-            LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
-        }
-    }
-
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -111,37 +95,17 @@ public class InviteCommunityMember extends BaseFragment {
         super.setAllInitializationForFeeds(mFragmentListRefreshData, mAdapter, manager, mRecyclerView, mHomePresenter, mAppUtils, mProgressBar);
         return view;
     }
-    public void callAddMember(List<Long> muser_ids,Long community_id)
-    {
-        List<Long> muser_id = new ArrayList<>();
-        for(int i=0;i<muser_ids.size()-1;i++)
-        {
-            muser_id.add(i,muser_ids.get(i+1));
-        }
-        CommunityRequest communityRequest=new CommunityRequest();
-        communityRequest.setUserId(muser_id);
-        communityRequest.setDeviceUniqueId("String");
-        communityRequest.setScreenName("String");
-        communityRequest.setLastScreenName("String");
-        communityRequest.setCommunityId(community_id);
-        communityRequest.setAppVersion("String");
-        communityRequest.setCloudMessagingId("String");
 
-      /*  int communityid=(int)mFeedDetail.getIdOfEntityOrParticipant();
-        CreateCommunityOwnerRequest createCommunityOwnerRequest=new CreateCommunityOwnerRequest();
-        createCommunityOwnerRequest.setAppVersion("string");
-        createCommunityOwnerRequest.setCloudMessagingId("String");
-        createCommunityOwnerRequest.setCommunityId(communityid);
-        createCommunityOwnerRequest.setDeviceUniqueId("String");
-        createCommunityOwnerRequest.setLastScreenName("String");
-        createCommunityOwnerRequest.setScreenName("String");
-        createCommunityOwnerRequest.setUserId(userid);
-        createCommunityPresenter.postCreateCommunityOwner(createCommunityOwnerRequest);*/
-        mHomePresenter.communityJoinFromPresenter(communityRequest);
+    public void AddMembersOnCallInviteCommunity(List<Long> userIdList, Long community_id) {
+        if (StringUtil.isNotEmptyCollection(userIdList)) {
+            CommunityRequest communityRequest = mAppUtils.communityRequestBuilder(userIdList, community_id);
+            mHomePresenter.communityJoinFromPresenter(communityRequest);
+        }
     }
+
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
-        List<FeedDetail> feedDetailList=feedResponsePojo.getFeedDetails();
+        List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
         if (StringUtil.isNotEmptyCollection(feedDetailList) && mAdapter != null) {
             liInviteMember.setVisibility(View.GONE);
             mAdapter.setCallForRecycler(AppConstants.FEED_SUB_TYPE);
@@ -155,7 +119,7 @@ public class InviteCommunityMember extends BaseFragment {
 
     @Override
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
-        mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog();
+        mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(errorMsg, feedParticipationEnum);
     }
 
     @Override
@@ -228,12 +192,13 @@ public class InviteCommunityMember extends BaseFragment {
                 //ToDO:; need to verify dialog;
                 Toast.makeText(getContext(), "Add members", Toast.LENGTH_SHORT).show();
                 //inviteSearchBack();
-                mHomeSearchActivityFragmentIntractionWithActivityListner.onInviteDone();
+                ((CommunitiesDetailActivity) getActivity()).onInviteDone();
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
         }
     }
+
     @OnClick(R.id.tv_back_community)
     public void inviteSearchBack() {
         getActivity().getSupportFragmentManager().popBackStack();
@@ -241,7 +206,7 @@ public class InviteCommunityMember extends BaseFragment {
 
     @OnClick(R.id.tv_invite_post_submit)
     public void inviteSubmit() {
-        mHomeSearchActivityFragmentIntractionWithActivityListner.callInviteMembers();
+        ((CommunitiesDetailActivity) getActivity()).callInviteMembers();
        /* if (StringUtil.isNotEmptyCollection(mUserIdForAddMember) && null != mFeedDetail) {
             mHomePresenter.communityJoinFromPresenter(mAppUtils.communityRequestBuilder(mUserIdForAddMember, mFeedDetail.getIdOfEntityOrParticipant()));
         }*/

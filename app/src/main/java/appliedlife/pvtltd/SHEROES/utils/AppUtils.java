@@ -88,9 +88,13 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MemberRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMember;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
@@ -1644,8 +1648,59 @@ public class AppUtils {
         loginRequest.setAdvertisementid("string");
         loginRequest.setDeviceid(appUtils.getDeviceId());
         loginRequest.setDevicetype(appUtils.getDeviceModel());
-        loginRequest.setGcmorapnsid("string");
+        loginRequest.setGcmorapnsid(appUtils.getCloudMessaging());
         return loginRequest;
+    }
+    public static DeactivateOwnerRequest deActivateOwnerRequestBuilder(Long communityId) {
+        DeactivateOwnerRequest deactivateOwnerRequest = new DeactivateOwnerRequest();
+        AppUtils appUtils = AppUtils.getInstance();
+        deactivateOwnerRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        deactivateOwnerRequest.setCommunityId(communityId);
+        deactivateOwnerRequest.setAppVersion(appUtils.getAppVersionName());
+        deactivateOwnerRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+        return deactivateOwnerRequest;
+    }
+    public static OwnerListRequest ownerRequestBuilder(Long communityId) {
+        OwnerListRequest ownerListRequest = new OwnerListRequest();
+        AppUtils appUtils = AppUtils.getInstance();
+        ownerListRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        ownerListRequest.setCommunityId(communityId);
+        ownerListRequest.setAppVersion(appUtils.getAppVersionName());
+        ownerListRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+        return ownerListRequest;
+    }
+
+    public static CommunityRequest communityRequestBuilder(List<Long> muser_id ,Long communityId) {
+        CommunityRequest communityRequest = new CommunityRequest();
+        AppUtils appUtils = AppUtils.getInstance();
+        communityRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        communityRequest.setAppVersion(appUtils.getAppVersionName());
+        communityRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+        communityRequest.setUserId(muser_id);
+        communityRequest.setCommunityId(communityId);
+        return communityRequest;
+    }
+    public static CreateCommunityOwnerRequest inviteOwnerRequestBuilder(Long communityId, Long userid) {
+        CreateCommunityOwnerRequest createCommunityOwnerRequest = new CreateCommunityOwnerRequest();
+        AppUtils appUtils = AppUtils.getInstance();
+        createCommunityOwnerRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        createCommunityOwnerRequest.setAppVersion(appUtils.getAppVersionName());
+        createCommunityOwnerRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+        createCommunityOwnerRequest.setUserId(userid);
+        createCommunityOwnerRequest.setCommunityId(communityId);
+        return createCommunityOwnerRequest;
+    }
+    public static RemoveMember removeMemberRequestBuilder(Long communityId,Long userid) {
+        RemoveMember removeMember = new RemoveMember();
+        AppUtils appUtils = AppUtils.getInstance();
+        removeMember.setCommunityId(communityId);
+        removeMember.setUserId(userid);
+        removeMember.setDeviceUniqueId(appUtils.getDeviceId());
+        removeMember.setCommunityId(communityId);
+        removeMember.setAppVersion(appUtils.getAppVersionName());
+        removeMember.setCloudMessagingId(appUtils.getCloudMessaging());
+        removeMember.setSource(AppConstants.COMMUNITIES_DETAIL);
+        return removeMember;
     }
 
     public static BoardingTellUsRequest boardingTellUsFormDataRequestBuilder(String typeOfBoardingData, String type, LabelValue labelValue, GetAllDataDocument getAllDataDocument) {

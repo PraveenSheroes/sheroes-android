@@ -28,7 +28,6 @@ import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -40,9 +39,9 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_
  */
 
 public class CommunityJoinFromeAboutFragment extends BaseDialogFragment implements HomeView {
+    private final String TAG = LogUtils.makeLogTag(CommunityJoinRegionDialogFragment.class);
     @Inject
     Preference<LoginResponse> userPreference;
-    private final String TAG = LogUtils.makeLogTag(CommunityJoinRegionDialogFragment.class);
     private FeedDetail mFeedDetail;
     @Inject
     HomePresenter mHomePresenter;
@@ -65,7 +64,6 @@ public class CommunityJoinFromeAboutFragment extends BaseDialogFragment implemen
         super.onStart();
         Dialog dialog = getDialog();
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
         if (dialog != null) {
             dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
@@ -90,7 +88,6 @@ public class CommunityJoinFromeAboutFragment extends BaseDialogFragment implemen
     @OnClick(R.id.tv_already_member)
     public void alreadyOnClick() {
         joinNewUser(getString(R.string.ID_COMMUNITY_JOIN_REGION2));
-
     }
 
     private void joinNewUser(String reasonToJoin) {
@@ -125,7 +122,6 @@ public class CommunityJoinFromeAboutFragment extends BaseDialogFragment implemen
             case AppConstants.SUCCESS:
                 mFeedDetail.setRequestPending(true);
                 mHomeSearchActivityFragmentIntractionWithActivityListner.onSuccessResult(success, mFeedDetail);
-
                 break;
             case AppConstants.FAILED:
                 mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_JOIN_INVITE);
@@ -139,10 +135,6 @@ public class CommunityJoinFromeAboutFragment extends BaseDialogFragment implemen
     @Override
     public void getDB(List<RecentSearchData> recentSearchDatas) {
 
-    }
-
-    public void setListener(CommunityOpenAboutFragment context) {
-        mHomeSearchActivityFragmentIntractionWithActivityListner=context;
     }
 }
 

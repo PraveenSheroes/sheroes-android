@@ -26,14 +26,12 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityList;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Docs;
-import appliedlife.pvtltd.SHEROES.models.entities.community.Member;
+import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
@@ -204,18 +202,10 @@ public class InviteCommunityOwner extends BaseFragment implements CommunityView 
             }
         }
     };
-    public void callAddOwner(int userid)
+    public void callAddOwner(Long userid)
     {
-
-        int communityid=(int)mFeedDetail.getIdOfEntityOrParticipant();
-        CreateCommunityOwnerRequest createCommunityOwnerRequest=new CreateCommunityOwnerRequest();
-        createCommunityOwnerRequest.setAppVersion("string");
-        createCommunityOwnerRequest.setCloudMessagingId("String");
-        createCommunityOwnerRequest.setCommunityId(communityid);
-        createCommunityOwnerRequest.setDeviceUniqueId("String");
-        createCommunityOwnerRequest.setLastScreenName("String");
-        createCommunityOwnerRequest.setScreenName("String");
-        createCommunityOwnerRequest.setUserId(userid);
+        Long communityid=mFeedDetail.getIdOfEntityOrParticipant();
+        CreateCommunityOwnerRequest createCommunityOwnerRequest=mAppUtils.inviteOwnerRequestBuilder(communityid,userid);
         createCommunityPresenter.postCreateCommunityOwner(createCommunityOwnerRequest);
     }
     @Override
@@ -265,31 +255,22 @@ public class InviteCommunityOwner extends BaseFragment implements CommunityView 
         }
     }
 
-    @Override
-    public void getityCommunityListSuccess(List<CommunityList> data) {
-
-    }
 
     @Override
     public void getSelectedCommunityListSuccess(List<Docs> selected_community_response) {
 
     }
 
-
     @Override
-    public void getOwnerListSuccess(List<Member> ownerListResponse) {
+    public void getOwnerListSuccess(OwnerListResponse ownerListResponse) {
 
     }
 
     @Override
-    public void postCreateCommunitySuccess(CreateCommunityResponse createCommunityResponse) {
+    public void createCommunitySuccess(CreateCommunityResponse createCommunityResponse) {
 
     }
 
-    @Override
-    public void addPostCreateCommunitySuccess(CommunityPostCreateResponse createCommunityResponse) {
-
-    }
 
     @Override
     public void getOwnerListDeactivateSuccess(DeactivateOwnerResponse deactivateOwnerResponse) {
@@ -297,14 +278,10 @@ public class InviteCommunityOwner extends BaseFragment implements CommunityView 
     }
 
     @Override
-    public void postCreateCommunityOwnerSuccess(CreateCommunityOwnerResponse createCommunityOwnerResponse) {
+    public void postCreateCommunityOwner(CreateCommunityOwnerResponse createCommunityOwnerResponse) {
         Toast.makeText(getActivity(),createCommunityOwnerResponse.getStatus(),Toast.LENGTH_LONG).show();
     }
 
-    @Override
-    public void showNwError() {
-
-    }
     public interface InviteOwnerDoneIntractionListner {
         void onErrorOccurence();
         void OwnerAddDone();

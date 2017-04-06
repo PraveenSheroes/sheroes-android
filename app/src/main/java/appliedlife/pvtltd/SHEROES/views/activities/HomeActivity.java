@@ -88,7 +88,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FO
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.COMMENT_REACTION;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MENU;
 
-public class HomeActivity extends BaseActivity implements SettingView, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, CommentReactionFragment.HomeActivityIntractionListner, HomeSpinnerFragment.HomeSpinnerFragmentListner {
+public class HomeActivity extends BaseActivity implements ViewPager.OnPageChangeListener, SettingView, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, CommentReactionFragment.HomeActivityIntractionListner, HomeSpinnerFragment.HomeSpinnerFragmentListner {
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
     @Inject
     Preference<LoginResponse> mUserPreference;
@@ -210,7 +210,7 @@ public class HomeActivity extends BaseActivity implements SettingView, CustiomAc
             if (null != masterDataResult && null != masterDataResult.get(AppConstants.MASTER_DATA_ARTICLE_KEY)) {
                 {
                     HashMap<String, ArrayList<LabelValue>> hashMap = masterDataResult.get(AppConstants.MASTER_DATA_ARTICLE_KEY);
-                    List<LabelValue> labelValueArrayList = hashMap.get(AppConstants.MASTER_DATA_DEFAULT_CATEGORY);
+                    List<LabelValue> labelValueArrayList = hashMap.get(AppConstants.MASTER_DATA_POPULAR_CATEGORY);
                     if (StringUtil.isNotEmptyCollection(labelValueArrayList)) {
                         List<HomeSpinnerItem> homeSpinnerItemList = new ArrayList<>();
                         HomeSpinnerItem first = new HomeSpinnerItem();
@@ -356,15 +356,12 @@ public class HomeActivity extends BaseActivity implements SettingView, CustiomAc
     }
 
     private void initCommunityViewPagerAndTabs() {
-        mFragmentOpen.setCommunityOpen(true);
-        mTabLayout.setVisibility(View.VISIBLE);
-        mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
-        mTvHome.setText(AppConstants.EMPTY_STRING);
         mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         mViewPagerAdapter.addFragment(new FeaturedFragment(), getString(R.string.ID_FEATURED));
         mViewPagerAdapter.addFragment(new MyCommunitiesFragment(), getString(R.string.ID_MY_COMMUNITIES));
         mViewPager.setAdapter(mViewPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
+        mViewPager.addOnPageChangeListener(this);
     }
 
     @OnClick(R.id.tv_search_box)
@@ -428,10 +425,8 @@ public class HomeActivity extends BaseActivity implements SettingView, CustiomAc
         checkForAllOpenFragments();
         liHomeCommunityButtonLayout.setVisibility(View.GONE);
         mFragmentOpen.setFeedOpen(true);
-        mFragmentOpen.setCommunityOpen(false);
         flFeedFullView.setVisibility(View.VISIBLE);
         mViewPager.setVisibility(View.GONE);
-        mTabLayout.removeAllTabs();
         mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.footer_icon_text));
         mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_unselected_icon), null, null);
         mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_selected_icon), null, null);
@@ -448,24 +443,26 @@ public class HomeActivity extends BaseActivity implements SettingView, CustiomAc
         liHomeCommunityButtonLayout.setVisibility(View.VISIBLE);
         mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_COMMUNITIES));
         checkForAllOpenFragments();
-        mFragmentOpen.setCommunityOpen(true);
         mFragmentOpen.setFeedOpen(false);
         flFeedFullView.setVisibility(View.GONE);
         mViewPager.setVisibility(View.VISIBLE);
-        mTabLayout.removeAllTabs();
         mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.footer_icon_text));
         mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_unselected_icon), null, null);
         mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_selected_icon), null, null);
         mliArticleSpinnerIcon.setVisibility(View.GONE);
-        initCommunityViewPagerAndTabs();
-
+        mTabLayout.setVisibility(View.VISIBLE);
+        mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
+        mTvHome.setText(AppConstants.EMPTY_STRING);
+        if (!mFragmentOpen.isCommunityOpen()) {
+            mFragmentOpen.setCommunityOpen(true);
+            initCommunityViewPagerAndTabs();
+        }
     }
 
     @OnClick(R.id.iv_footer_button_icon)
     public void commingOnClick() {
         // Snackbar.make(mCLMainLayout, "Comming soon", Snackbar.LENGTH_SHORT).show();
         Intent intent = new Intent(getApplicationContext(), CreateCommunityPostActivity.class);
-
         startActivity(intent);
     }
 
@@ -841,15 +838,20 @@ public class HomeActivity extends BaseActivity implements SettingView, CustiomAc
 
     @Override
     public void onShowErrorDialog(String errorReason, FeedParticipationEnum feedParticipationEnum) {
-        switch (errorReason) {
-            case AppConstants.CHECK_NETWORK_CONNECTION:
-                showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
-                break;
-            case AppConstants.MARK_AS_SPAM:
-                showNetworkTimeoutDoalog(true, false, errorReason);
-                break;
-            default:
-                showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
+        if(StringUtil.isNotNullOrEmptyString(errorReason)) {
+            switch (errorReason) {
+                case AppConstants.CHECK_NETWORK_CONNECTION:
+                    showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
+                    break;
+                case AppConstants.MARK_AS_SPAM:
+                    showNetworkTimeoutDoalog(true, false, errorReason);
+                    break;
+                default:
+                    showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
+            }
+        }else
+        {
+            showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
         }
 
     }
@@ -990,4 +992,52 @@ public class HomeActivity extends BaseActivity implements SettingView, CustiomAc
 
     }
 
+    /**
+     * This method will be invoked when the current page is scrolled, either as part
+     * of a programmatically initiated smooth scroll or a user initiated touch scroll.
+     *
+     * @param position             Position index of the first page currently being displayed.
+     *                             Page position+1 will be visible if positionOffset is nonzero.
+     * @param positionOffset       Value from [0, 1) indicating the offset from the page at position.
+     * @param positionOffsetPixels Value in pixels indicating the offset from position.
+     */
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    /**
+     * This method will be invoked when a new page becomes selected. Animation is not
+     * necessarily complete.
+     *
+     * @param position Position index of the new selected page.
+     */
+    @Override
+    public void onPageSelected(int position) {
+        Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, position);
+        if (fragment instanceof FeaturedFragment) {
+            if (AppUtils.isFragmentUIActive(fragment)) {
+                ((FeaturedFragment) fragment).swipeAndRefreshList();
+            }
+        } else if (fragment instanceof MyCommunitiesFragment) {
+            if (AppUtils.isFragmentUIActive(fragment)) {
+                ((MyCommunitiesFragment) fragment).swipeAndRefreshList();
+            }
+        }
+    }
+
+    /**
+     * Called when the scroll state changes. Useful for discovering when the user
+     * begins dragging, when the pager is automatically settling to the current page,
+     * or when it is fully stopped/idle.
+     *
+     * @param state The new scroll state.
+     * @see ViewPager#SCROLL_STATE_IDLE
+     * @see ViewPager#SCROLL_STATE_DRAGGING
+     * @see ViewPager#SCROLL_STATE_SETTLING
+     */
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
 }

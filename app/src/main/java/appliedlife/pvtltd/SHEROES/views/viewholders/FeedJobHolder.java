@@ -138,8 +138,10 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
             tvFeedJobName.setText(mergeJobSkills);
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getAuthorCityName())) {
-            tvFeedJobLocation.setVisibility(View.INVISIBLE);
             tvFeedJobLocation.setText(dataItem.getAuthorCityName());
+        }else
+        {
+            tvFeedJobLocation.setText(mContext.getString(R.string.ID_REMOTE));
         }
         if (dataItem.isApplied()) {
             tvFeedJobApplied.setVisibility(View.VISIBLE);

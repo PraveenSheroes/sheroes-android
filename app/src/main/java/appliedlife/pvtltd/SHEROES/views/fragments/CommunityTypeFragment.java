@@ -3,7 +3,6 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,15 +25,13 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityList;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityType;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Docs;
-import appliedlife.pvtltd.SHEROES.models.entities.community.Member;
+import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.PopularTag;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -45,7 +42,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.CommunityTypeAdapter;
-import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CommunityView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.Bind;
@@ -68,9 +64,7 @@ public class CommunityTypeFragment extends BaseDialogFragment implements Communi
     CommunityTypeAdapter madapter;
     @Bind(R.id.rl_done)
     RelativeLayout rl_done;
-    private boolean finishParent;
     Long typeId;
-    public static final String DISMISS_PARENT_ON_OK_OR_BACK = "DISMISS_PARENT_ON_OK_OR_BACK";
     String[] ItemName;
     List<CommunityType> rowItem;
     private MyDialogFragmentListener mHomeActivityIntractionListner;
@@ -79,67 +73,44 @@ public class CommunityTypeFragment extends BaseDialogFragment implements Communi
     private List<PopularTag> listFeelter = new ArrayList<PopularTag>();
     Context context;
     List<String> jobAtList = new ArrayList<>();
-    HashMap<String,Long> typeid;
+    HashMap<String, Long> typeid;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
-       /* try {
-            this.context=context;
-            if (context instanceof MyDialogFragmentListener) {
-                mHomeActivityIntractionListner = (MyDialogFragmentListener) context;
-            }
-        } catch (InstantiationException exception) {
-            LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
-        }*/
     }
-/*
-    CommunityTypeFragment(CreateCommunityFragment context) {
-
-    }*/
 
     public void setListener(MyDialogFragmentListener listener) {
-        this.mHomeActivityIntractionListner =  listener;
+        this.mHomeActivityIntractionListner = listener;
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getActivity()).inject(this);
 
         View view = inflater.inflate(R.layout.community_type, container, false);
         ButterKnife.bind(this, view);
-
         mHomePresenter.attachView(this);
-
-
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        // tryAgain.setOnClickListener(this);
-//*-
-//        finishParent = getArguments().getBoolean(DISMISS_PARENT_ON_OK_OR_BACK, false);
         setCancelable(true);
 
 
-
-        if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && null != mUserPreferenceMasterData.get().getData() ) {
+        if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && null != mUserPreferenceMasterData.get().getData()) {
             setMasterData(mUserPreferenceMasterData.get().getData());
-        }
-        else
-        {
+        } else {
             mHomePresenter.getMasterDataToPresenter();
 
         }
-
-
-        if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && null != mUserPreferenceMasterData.get().getData() ) {
-            data= mUserPreferenceMasterData.get().getData();
-            LogUtils.error("Master Data",data+"");
-            HashMap<String, ArrayList<LabelValue>> hashMap=data.get(AppConstants.MASTER_DATA_COMMUNITY_TYPE_KEY);
+        if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && null != mUserPreferenceMasterData.get().getData()) {
+            data = mUserPreferenceMasterData.get().getData();
+            LogUtils.error("Master Data", data + "");
+            HashMap<String, ArrayList<LabelValue>> hashMap = data.get(AppConstants.MASTER_DATA_COMMUNITY_TYPE_KEY);
             List<LabelValue> labelValueArrayList = hashMap.get(AppConstants.MASTER_DATA_POPULAR_CATEGORY);
             PopularTag filterList = new PopularTag();
             filterList.setName("Community Type");
 
-            for(int i=0;i<labelValueArrayList.size();i++)
-            {
-                String abc=labelValueArrayList.get(i).getLabel();
+            for (int i = 0; i < labelValueArrayList.size(); i++) {
+                String abc = labelValueArrayList.get(i).getLabel();
 
                 jobAtList.add(abc);
             }
@@ -158,24 +129,22 @@ public class CommunityTypeFragment extends BaseDialogFragment implements Communi
         }
 
 
-
         return view;
     }
-    private void setMasterData(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult)
-    {
 
-
-        LogUtils.error("Master Data",data+"");
-        HashMap<String, ArrayList<LabelValue>> hashMap=mapOfResult.get(AppConstants.MASTER_DATA_COMMUNITY_TYPE_KEY);
+    private void setMasterData(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
+        if (null != mapOfResult.get(AppConstants.MASTER_DATA_COMMUNITY_TYPE_KEY) && null != mapOfResult.get(AppConstants.MASTER_DATA_COMMUNITY_TYPE_KEY).get(AppConstants.MASTER_DATA_POPULAR_CATEGORY))
+            LogUtils.error("Master Data", data + "");
+        HashMap<String, ArrayList<LabelValue>> hashMap = mapOfResult.get(AppConstants.MASTER_DATA_COMMUNITY_TYPE_KEY);
         List<LabelValue> labelValueArrayList = hashMap.get(AppConstants.MASTER_DATA_POPULAR_CATEGORY);
         PopularTag filterList = new PopularTag();
         filterList.setName("Popular Tag");
         List<String> jobAtList = new ArrayList<>();
-        typeid=new HashMap<String, Long>();
+        typeid = new HashMap<String, Long>();
         if (StringUtil.isNotEmptyCollection(labelValueArrayList)) {
             for (int i = 0; i < labelValueArrayList.size(); i++) {
                 String abc = labelValueArrayList.get(i).getLabel();
-                typeid.put(abc,labelValueArrayList.get(i).getValue());
+                typeid.put(abc, labelValueArrayList.get(i).getValue());
                 jobAtList.add(abc);
             }
             filterList.setBoardingDataList(jobAtList);
@@ -184,25 +153,23 @@ public class CommunityTypeFragment extends BaseDialogFragment implements Communi
         madapter = new CommunityTypeAdapter(getActivity(), jobAtList, mcommunity_type_submit);
         madapter.setCallback(this);
         mCommunityTypelistView.setAdapter(madapter);
-
         madapter.notifyDataSetChanged();
     }
-
 
     @Override
     public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
         setMasterData(mapOfResult);
     }
+
     @OnClick(R.id.rl_done)
     public void onDoneClick() {
-        typeId=typeid.get(mCommunityTypelistView.getSelectedItem());
+        typeId = typeid.get(mCommunityTypelistView.getSelectedItem());
         Toast.makeText(getActivity(), mCommunityTypelistView.getSelectedItem() + "", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
     }
 
 
@@ -212,18 +179,11 @@ public class CommunityTypeFragment extends BaseDialogFragment implements Communi
             @Override
             public void onBackPressed() {
                 dismissAllowingStateLoss();//dismiss dialog on back button press
-                if (finishParent) {
                     getActivity().finish();
-                }
             }
         };
     }
 
-
-    @Override
-    public void getityCommunityListSuccess(List<CommunityList> data) {
-
-    }
 
     @Override
     public void getSelectedCommunityListSuccess(List<Docs> selected_community_response) {
@@ -231,19 +191,12 @@ public class CommunityTypeFragment extends BaseDialogFragment implements Communi
     }
 
     @Override
-    public void getOwnerListSuccess(List<Member> ownerListResponse) {
-
-    }
-
-
-
-    @Override
-    public void postCreateCommunitySuccess(CreateCommunityResponse createCommunityResponse) {
+    public void getOwnerListSuccess(OwnerListResponse ownerListResponse) {
 
     }
 
     @Override
-    public void addPostCreateCommunitySuccess(CommunityPostCreateResponse createCommunityResponse) {
+    public void createCommunitySuccess(CreateCommunityResponse createCommunityResponse) {
 
     }
 
@@ -253,20 +206,15 @@ public class CommunityTypeFragment extends BaseDialogFragment implements Communi
     }
 
     @Override
-    public void postCreateCommunityOwnerSuccess(CreateCommunityOwnerResponse createCommunityOwnerResponse) {
+    public void postCreateCommunityOwner(CreateCommunityOwnerResponse createCommunityOwnerResponse) {
 
     }
 
-    @Override
-    public void showNwError() {
-
-    }
 
     @Override
     public void communityType(String communitytype) {
 
-        typeId=typeid.get(communitytype);
-
+        typeId = typeid.get(communitytype);
         Toast.makeText(getActivity(), communitytype, Toast.LENGTH_LONG).show();
         getDialog().cancel();
         mHomeActivityIntractionListner.onAddFriendSubmit(communitytype, typeId);
@@ -299,8 +247,6 @@ public class CommunityTypeFragment extends BaseDialogFragment implements Communi
     }
 
     public interface MyDialogFragmentListener {
-        void onErrorOccurence();
-
         void onAddFriendSubmit(String communitynm, Long typeId);
     }
 }

@@ -3,14 +3,10 @@ package appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseMvpView;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityList;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Docs;
-import appliedlife.pvtltd.SHEROES.models.entities.community.Member;
-import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerList;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
 
 /**
@@ -18,12 +14,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
  */
 
 public interface CommunityView extends BaseMvpView {
-    void getityCommunityListSuccess(List<CommunityList> data);
     void getSelectedCommunityListSuccess(List<Docs> selected_community_response);
-    void getOwnerListSuccess(List<Member> ownerListResponse);
-    void postCreateCommunitySuccess(CreateCommunityResponse createCommunityResponse);
-    void addPostCreateCommunitySuccess(CommunityPostCreateResponse createCommunityResponse);
-    void getOwnerListDeactivateSuccess(DeactivateOwnerResponse deactivateOwnerResponse);
-    void postCreateCommunityOwnerSuccess(CreateCommunityOwnerResponse createCommunityOwnerResponse);
-    void showNwError();
+    void getOwnerListSuccess(OwnerListResponse ownerListResponse);
+    void createCommunitySuccess(CreateCommunityResponse createCommunityResponse);
+   void getOwnerListDeactivateSuccess(DeactivateOwnerResponse deactivateOwnerResponse);
+    void postCreateCommunityOwner(CreateCommunityOwnerResponse createCommunityOwnerResponse);
 }

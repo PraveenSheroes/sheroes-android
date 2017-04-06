@@ -40,6 +40,7 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.JobDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.errorview.NetworkTimeoutDialog;
@@ -91,10 +92,11 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
         this.mFragmentOpen = fragmentOpen;
     }
 
-    public void setViewPagerAndViewAdapter(ViewPagerAdapter viewPagerAdapter,ViewPager viewPager) {
+    public void setViewPagerAndViewAdapter(ViewPagerAdapter viewPagerAdapter, ViewPager viewPager) {
         mViewPagerAdapter = viewPagerAdapter;
-        mViewPager=viewPager;
+        mViewPager = viewPager;
     }
+
     public void setFragment(Fragment fragment) {
         mFragment = fragment;
     }
@@ -231,19 +233,19 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
         }
         return fragment;
     }
-    protected DialogFragment showCommunityJoinReasonFromAboutCommunity(FeedDetail feedDetail,CommunityOpenAboutFragment communityOpenAboutFragment) {
-        CommunityJoinFromeAboutFragment fragment = (CommunityJoinFromeAboutFragment) getFragmentManager().findFragmentByTag(CommunityJoinFromeAboutFragment.class.getName());
-        if (fragment == null) {
-            fragment = new CommunityJoinFromeAboutFragment();
-            Bundle b = new Bundle();
-            b.putParcelable(BaseDialogFragment.DISMISS_PARENT_ON_OK_OR_BACK, feedDetail);
-            fragment.setArguments(b);
-            fragment.setListener(communityOpenAboutFragment);
+
+    protected DialogFragment showCommunityJoinReasonFromAboutCommunity(FeedDetail feedDetail, CommunityOpenAboutFragment communityOpenAboutFragment) {
+        CommunityJoinFromeAboutFragment communityJoinFromeAboutFragment = (CommunityJoinFromeAboutFragment) getFragmentManager().findFragmentByTag(CommunityJoinFromeAboutFragment.class.getName());
+        if (communityJoinFromeAboutFragment == null) {
+            communityJoinFromeAboutFragment = new CommunityJoinFromeAboutFragment();
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(BaseDialogFragment.DISMISS_PARENT_ON_OK_OR_BACK, feedDetail);
+            communityJoinFromeAboutFragment.setArguments(bundle);
         }
-        if (!fragment.isVisible() && !fragment.isAdded() && !isFinishing() && !mIsDestroyed) {
-            fragment.show(getFragmentManager(), CommunityJoinRegionDialogFragment.class.getName());
+        if (!communityJoinFromeAboutFragment.isVisible() && !communityJoinFromeAboutFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
+            communityJoinFromeAboutFragment.show(getFragmentManager(), CommunityJoinRegionDialogFragment.class.getName());
         }
-        return fragment;
+        return communityJoinFromeAboutFragment;
     }
 
     protected void feedCardsHandled(View view, BaseResponse baseResponse) {
@@ -254,7 +256,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 if (mFeedDetail.isClosedCommunity()) {
                     showCommunityJoinReason(mFeedDetail);
                 } else {
-                    if(null!=mViewPagerAdapter) {
+                    if (null != mViewPagerAdapter) {
                         Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
                         if (AppUtils.isFragmentUIActive(fragment)) {
                             mFeedDetail.setScreenName(AppConstants.FEATURE_FRAGMENT);
@@ -358,7 +360,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 Intent intentMyCommunity = new Intent(this, CommunitiesDetailActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
-                LogUtils.error("tagId in base activity=",mFeedDetail.getTag_ids()+"");
+                LogUtils.error("tagId in base activity=", mFeedDetail.getTag_ids() + "");
                 bundle.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.MY_COMMUNITY);
                 intentMyCommunity.putExtras(bundle);
                 startActivityForResult(intentMyCommunity, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
@@ -399,7 +401,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
         tvCommunityReaction2.setOnClickListener(this);
         tvCommunityReaction3.setOnClickListener(this);
         tvCommunityReaction4.setOnClickListener(this);
-        popupWindow.showAsDropDown(view, 0,-200);
+        popupWindow.showAsDropDown(view, 0, -200);
         popupView.setOnTouchListener(this);
     }
 
@@ -452,7 +454,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
         final TextView tvShare = (TextView) popupView.findViewById(R.id.tv_article_menu_share);
         final TextView tvReport = (TextView) popupView.findViewById(R.id.tv_article_menu_report);
         final Fragment fragmentCommentReaction = getSupportFragmentManager().findFragmentByTag(CommentReactionFragment.class.getName());
-        popupWindow.showAsDropDown(view, -150,-10);
+        popupWindow.showAsDropDown(view, -150, -10);
         tvEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -539,7 +541,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
             case R.id.tv_feed_community_post_user_menu:
                 mFeedDetail = (FeedDetail) baseResponse;
                 if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
-                    if (mFeedDetail.getAuthorId() ==userPreference.get().getUserSummary().getUserId()||mFragmentOpen.isOwner() ) {
+                    if (mFeedDetail.getAuthorId() == userPreference.get().getUserSummary().getUserId() || mFragmentOpen.isOwner()) {
                         tvShare.setVisibility(View.VISIBLE);
                         tvDelete.setVisibility(View.VISIBLE);
                         tvEdit.setVisibility(View.VISIBLE);
@@ -570,6 +572,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + id);
         }
     }
+
     private void markAsSpam(MenuEnum menuEnum, BaseResponse baseResponse, Fragment fragmentCommentReaction) {
         switch (menuEnum) {
             case FEED_CARD_MENU:
@@ -590,6 +593,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
 
         }
     }
+
     private void editOperationOnMenu(MenuEnum menuEnum, BaseResponse baseResponse, Fragment fragmentCommentReaction) {
         switch (menuEnum) {
             case USER_COMMENT_ON_CARD_MENU:
@@ -612,7 +616,11 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 break;
             case FEED_CARD_MENU:
                 if (null != mFeedDetail) {
-
+                    Intent intent = new Intent(this, CreateCommunityPostActivity.class);
+                    Bundle bundleFeature = new Bundle();
+                    bundleFeature.putParcelable(AppConstants.COMMUNITY_POST_FRAGMENT, mFeedDetail);
+                    intent.putExtras(bundleFeature);
+                    startActivity(intent);
                 }
                 break;
 
@@ -788,12 +796,12 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
 
     @Override
     public void onErrorOccurence(String errorMessage) {
-        if(!StringUtil.isNotNullOrEmptyString(errorMessage))
-        {
+        if (!StringUtil.isNotNullOrEmptyString(errorMessage)) {
             errorMessage = getString(R.string.ID_GENERIC_ERROR);
         }
-        showNetworkTimeoutDoalog(true,false,errorMessage);
+        showNetworkTimeoutDoalog(true, false, errorMessage);
     }
+
     @Override
     public void onBackPress() {
         getSupportFragmentManager().popBackStack();

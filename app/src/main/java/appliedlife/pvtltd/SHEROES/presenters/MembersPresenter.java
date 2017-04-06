@@ -50,7 +50,7 @@ public class MembersPresenter extends BasePresenter<AllMembersView> {
 
     public void getAllMembers(MemberRequest memberRequest) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.ERROR_APP_CLOSE, ERROR_MEMBER);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_MEMBER);
             return;
         }
         getMvpView().startProgressBar();
@@ -61,8 +61,7 @@ public class MembersPresenter extends BasePresenter<AllMembersView> {
             }
             @Override
             public void onError(Throwable e) {
-                getMvpView().showError(AppConstants.ERROR_APP_CLOSE, ERROR_MEMBER);
-                getMvpView().showNwError();
+                getMvpView().showError(e.getMessage(), ERROR_MEMBER);
                 getMvpView().stopProgressBar();
             }
 
@@ -78,7 +77,7 @@ public class MembersPresenter extends BasePresenter<AllMembersView> {
 
     public void unJoinedApi(RemoveMember removeMember) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.ERROR_APP_CLOSE, ERROR_MEMBER);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_MEMBER);
             return;
         }
         getMvpView().startProgressBar();
@@ -89,8 +88,7 @@ public class MembersPresenter extends BasePresenter<AllMembersView> {
             }
             @Override
             public void onError(Throwable e) {
-                getMvpView().showError(AppConstants.ERROR_APP_CLOSE, ERROR_MEMBER);
-                getMvpView().showNwError();
+                getMvpView().showError(e.getMessage(), ERROR_MEMBER);
                 getMvpView().stopProgressBar();
             }
 
@@ -101,7 +99,6 @@ public class MembersPresenter extends BasePresenter<AllMembersView> {
             }
         });
         registerSubscription(subscription);
-
     }
 
 

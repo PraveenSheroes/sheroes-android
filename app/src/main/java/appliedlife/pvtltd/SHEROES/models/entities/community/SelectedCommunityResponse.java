@@ -16,8 +16,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 
 public class SelectedCommunityResponse extends BaseResponse implements Parcelable {
 
-
-
     @SerializedName("docs")
     @Expose
     private List<Docs> docs = null;

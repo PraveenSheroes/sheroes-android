@@ -20,14 +20,12 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityList;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Docs;
-import appliedlife.pvtltd.SHEROES.models.entities.community.Member;
+import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
@@ -36,6 +34,7 @@ import appliedlife.pvtltd.SHEROES.presenters.CreateCommunityPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CommunityView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
@@ -94,29 +93,21 @@ public class SelectCommunityFragment extends BaseDialogFragment implements Commu
 
 
     @Override
-    public void getityCommunityListSuccess(List<CommunityList> data) {
-        mAdapter.setSheroesGenericListData(data);
-        mAdapter.notifyDataSetChanged();
-    }
-
-    @Override
     public void getSelectedCommunityListSuccess(List<Docs> selected_community_response) {
-        mAdapter.setSheroesGenericListData( selected_community_response);
-        mAdapter.setCallForRecycler(AppConstants.COMMUNITY_NAME_SUB_TYPE);
-        mAdapter.notifyDataSetChanged();
-    }
-    @Override
-    public void getOwnerListSuccess(List<Member> ownerListResponse) {
-
+        if(StringUtil.isNotEmptyCollection(selected_community_response)) {
+            mAdapter.setSheroesGenericListData(selected_community_response);
+            mAdapter.setCallForRecycler(AppConstants.COMMUNITY_NAME_SUB_TYPE);
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
-    public void postCreateCommunitySuccess(CreateCommunityResponse createCommunityResponse) {
+    public void getOwnerListSuccess(OwnerListResponse ownerListResponse) {
 
     }
 
     @Override
-    public void addPostCreateCommunitySuccess(CommunityPostCreateResponse createCommunityResponse) {
+    public void createCommunitySuccess(CreateCommunityResponse createCommunityResponse) {
 
     }
 
@@ -126,12 +117,7 @@ public class SelectCommunityFragment extends BaseDialogFragment implements Commu
     }
 
     @Override
-    public void postCreateCommunityOwnerSuccess(CreateCommunityOwnerResponse createCommunityOwnerResponse) {
-
-    }
-
-    @Override
-    public void showNwError() {
+    public void postCreateCommunityOwner(CreateCommunityOwnerResponse createCommunityOwnerResponse) {
 
     }
 
@@ -207,8 +193,6 @@ public class SelectCommunityFragment extends BaseDialogFragment implements Commu
 
 
     public interface MyDialogFragmentListener {
-        void onErrorOccurence();
-
         void onAddCommunityDetailSubmit(Docs docs);
     }
 }

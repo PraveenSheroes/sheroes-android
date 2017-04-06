@@ -2,7 +2,6 @@ package appliedlife.pvtltd.SHEROES.views.adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
@@ -17,8 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityType;
-import appliedlife.pvtltd.SHEROES.models.entities.community.PopularTag;
 
 /**
  * Created by Ajit Kumar on 17-01-2017.
@@ -27,8 +24,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.PopularTag;
 public class CommunityTypeAdapter extends BaseAdapter {
 
     Context mContext;
-    //List<CommunityType> ;
-    //private List<PopularTag> mRowItem = new ArrayList<PopularTag>();
     List<String> mRowItem = new ArrayList<>();
     String mItemsnm;
     View mListView;
@@ -38,7 +33,6 @@ public class CommunityTypeAdapter extends BaseAdapter {
     ViewHolder mHolder;
     TextView mDone;
     private CommunityTypeAdapterCallback mCallback;
-
     public CommunityTypeAdapter(Context mContext, List<String> mRowItem, TextView done) {
 
         this.mContext = mContext;
@@ -87,21 +81,14 @@ public class CommunityTypeAdapter extends BaseAdapter {
         LayoutInflater layoutInflater = (LayoutInflater) mContext
                 .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         mListView = new View(mContext);
-        mListView = layoutInflater.inflate(R.layout.community_type_list,
-                parent, false);
+        mListView = layoutInflater.inflate(R.layout.community_type_list,parent, false);
         if (view == null) {
 
             if(position ==mPos) {
                 mListView.setBackgroundColor((Color.parseColor("#f5f5f5")));
-
-                // tvItemName.setTextColor((Color.parseColor("#3949ab")));
-
             }
             else {
                 mListView.setBackgroundColor(Color.WHITE);
-                // holder.tvItemName.setTextColor((Color.parseColor("#000000")));
-
-
             }
 
 
@@ -278,7 +265,6 @@ public class CommunityTypeAdapter extends BaseAdapter {
         return mListView;
     }
     public void setCallback(CommunityTypeAdapterCallback callback){
-
         this.mCallback = callback;
     }
     public interface CommunityTypeAdapterCallback {

@@ -10,7 +10,9 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
  */
 
 public class CommentReactionRequestPojo extends BaseRequest {
-
+    @SerializedName("entity_id")
+    @Expose
+    private long entityId;
     @SerializedName("comment")
     @Expose
     private String userComment;
@@ -54,5 +56,29 @@ public class CommentReactionRequestPojo extends BaseRequest {
 
     public void setParticipationId(long participationId) {
         this.participationId = participationId;
+    }
+
+    public long getEntityId() {
+        return entityId;
+    }
+
+    public void setEntityId(long entityId) {
+        this.entityId = entityId;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    public boolean isAnonymous() {
+        return isAnonymous;
+    }
+
+    public void setAnonymous(boolean anonymous) {
+        isAnonymous = anonymous;
     }
 }

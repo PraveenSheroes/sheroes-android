@@ -17,12 +17,14 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
+import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.AllSearchFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SearchArticleFragment;
@@ -279,6 +281,23 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
         }
 
     }
-
+    @Override
+    public void onShowErrorDialog(String errorReason, FeedParticipationEnum feedParticipationEnum) {
+        if(StringUtil.isNotNullOrEmptyString(errorReason)) {
+            switch (errorReason) {
+                case AppConstants.CHECK_NETWORK_CONNECTION:
+                    showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
+                    break;
+                case AppConstants.HTTP_401_UNAUTHORIZED:
+                    showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_INVALID_USER_PASSWORD));
+                    break;
+                default:
+                    showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
+            }
+        }else
+        {
+            showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
+        }
+    }
 
 }

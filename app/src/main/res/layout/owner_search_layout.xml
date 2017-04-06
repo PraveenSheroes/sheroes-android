@@ -12,10 +12,11 @@
         android:layout_height="?attr/actionBarSize"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
         <TextView
-            android:id="@+id/tv_back_community_tag"
+            android:id="@+id/tv_back_owner_search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_back_black"/>
+            android:padding="@dimen/dp_size_10"
+            android:drawableLeft="@drawable/ic_back_black"/>
         <include layout="@layout/search_layout" />
     </android.support.v7.widget.Toolbar>
     <View

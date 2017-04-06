@@ -18,7 +18,7 @@ public class Doc extends BaseResponse {
     private String title;
     @SerializedName("category")
     @Expose
-    private Object category;
+    private String category;
 
     public Long getId() {
         return id;
@@ -36,11 +36,11 @@ public class Doc extends BaseResponse {
         this.title = title;
     }
 
-    public Object getCategory() {
+    public String getCategory() {
         return category;
     }
 
-    public void setCategory(Object category) {
+    public void setCategory(String category) {
         this.category = category;
     }
 }

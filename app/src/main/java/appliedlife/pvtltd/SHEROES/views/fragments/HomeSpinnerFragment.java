@@ -126,7 +126,7 @@ public class HomeSpinnerFragment extends BaseFragment implements HomeView {
             if (null != masterDataResult && null != masterDataResult.get(AppConstants.MASTER_DATA_ARTICLE_KEY)) {
                 {
                     HashMap<String, ArrayList<LabelValue>> hashMap = masterDataResult.get(AppConstants.MASTER_DATA_ARTICLE_KEY);
-                    List<LabelValue> labelValueArrayList = hashMap.get(AppConstants.MASTER_DATA_DEFAULT_CATEGORY);
+                    List<LabelValue> labelValueArrayList = hashMap.get(AppConstants.MASTER_DATA_POPULAR_CATEGORY);
                     if (StringUtil.isNotEmptyCollection(labelValueArrayList)) {
                         List<HomeSpinnerItem> homeSpinnerItemList = new ArrayList<>();
                         HomeSpinnerItem homeSpinnerFirst=new HomeSpinnerItem();

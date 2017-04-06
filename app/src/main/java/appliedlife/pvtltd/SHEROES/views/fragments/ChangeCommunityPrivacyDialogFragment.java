@@ -1,11 +1,9 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +11,6 @@ import android.widget.TextView;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
-import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -25,32 +22,11 @@ import butterknife.OnClick;
 
 public class ChangeCommunityPrivacyDialogFragment extends BaseDialogFragment {
     private boolean finishParent;
-    private CloseListener mHomeActivityIntractionListner;
     private final String TAG = LogUtils.makeLogTag(SelectCommunityFragment.class);
     @Bind(R.id.tv_change_community_cancel)
     TextView tv_cance;
     @Bind(R.id.tv_change_community_continue)
     TextView tvContinue;
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            if (context instanceof CloseListener) {
-                mHomeActivityIntractionListner = (CloseListener)context;
-            }
-        } catch (Fragment.InstantiationException exception) {
-            LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
-        }
-    }
-  /*  ChangeCommunityPrivacyDialogFragment(CreateCommunityFragment context) {
-        try {
-            if (context instanceof CloseListener) {
-                mHomeActivityIntractionListner = (CloseListener)context;
-            }
-        } catch (Fragment.InstantiationException exception) {
-            LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
-        }
-    }*/
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -97,8 +73,5 @@ public class ChangeCommunityPrivacyDialogFragment extends BaseDialogFragment {
     {
         getDialog().cancel();
     }
-    public interface CloseListener {
-        void onErrorOccurence();
-        void onClose();
-    }
+
     }

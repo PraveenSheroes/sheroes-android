@@ -59,7 +59,7 @@ public class ProfileShareYourIntrestFragment extends BaseFragment {
             data= mUserPreference.get().getData();
             LogUtils.error("Master Data",data+"");
             HashMap<String, ArrayList<LabelValue>> hashMap=data.get(AppConstants.INTEREST);
-            List<LabelValue> labelValueArrayList = hashMap.get(AppConstants.MASTER_DATA_DEFAULT_CATEGORY);
+            List<LabelValue> labelValueArrayList = hashMap.get(AppConstants.MASTER_DATA_POPULAR_CATEGORY);
             GoodAt filterList = new GoodAt();
             filterList.setName("Popular Tag");
             List<String> jobAtList = new ArrayList<>();

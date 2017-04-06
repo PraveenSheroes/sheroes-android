@@ -158,8 +158,6 @@ public class AppConstants {
 /**/
 
     public static final String MASTER_DATA_OPRTUNITY = "Opportunities"; // on second map lavele key
-
-    public static final String MASTER_DATA_DEFAULT_CATEGORY = "DEFAULT"; // on second map lavele key
     public static final String MASTER_DATA_POPULAR_CATEGORY = "POPULAR"; // on second map lavele key
 
     public static final String DAY = " day";
@@ -191,7 +189,8 @@ public class AppConstants {
     public static final String RETURN_FROM_BREAK = "Return from a break";
 
     public static final String OPEN_COMMUNITY = "open community for join";
-
+    public static final String LEFT_BRACKET = "(";
+    public static final String RIGHT_BRACKET = ")";
 
 
 

@@ -96,6 +96,9 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_SETTING">Settings</string>
     <string name="ID_POST">Post as:</string>
     <string name="ID_MEMBERS">Members</string>
+    <string name="ID_ADMIN">Admin</string>
+    <string name="ID_OWNER_REMOVED">Owner removed</string>
+    <string name="ID_REMOTE">Remote</string>
     <string name="ID_INVITE">Invite</string>
     <string name="ID_TOTAL_IMAGES">4+</string>
     <string name="ID_SHARE">Share</string>

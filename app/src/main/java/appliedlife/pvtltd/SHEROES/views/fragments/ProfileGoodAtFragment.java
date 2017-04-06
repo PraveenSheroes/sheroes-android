@@ -61,7 +61,7 @@ public class ProfileGoodAtFragment extends BaseFragment {
             data= mUserPreference.get().getData();
             LogUtils.error("Master Data",data+"");
             HashMap<String, ArrayList<LabelValue>> hashMap=data.get(AppConstants.MASTER_DATA_SKILL_KEY);
-            List<LabelValue> labelValueArrayList = hashMap.get(AppConstants.MASTER_DATA_DEFAULT_CATEGORY);
+            List<LabelValue> labelValueArrayList = hashMap.get(AppConstants.MASTER_DATA_POPULAR_CATEGORY);
             GoodAt filterList = new GoodAt();
             filterList.setName("Popular Tag");
             List<String> jobAtList = new ArrayList<>();
