@@ -36,14 +36,14 @@
                 android:gravity="center"
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-                <ImageView
+                <TextView
                     android:id="@+id/iv_login_back"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left|top"
                     android:layout_marginLeft="@dimen/dp_size_40"
-                    android:padding="@dimen/dp_size_5"
-                    android:background="@drawable/ic_back_black"/>
+                    android:padding="@dimen/dp_size_10"
+                    android:drawableLeft="@drawable/ic_back_black"/>
                 <TextView
                     android:id="@+id/tv_login_lable"
                     android:layout_width="wrap_content"

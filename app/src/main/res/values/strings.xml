@@ -13,6 +13,7 @@
     <string name="IDS_UN_AUTHORIZE">The server encountered an error and could not complete your request.</string>
     <!-- Strings related to login -->
     <string name="ID_PROMPT_EMAIL">Email</string>
+    <string name="ID_CREATE">Create</string>
     <string name="ID_PROMPT_PASSWORD">Password</string>
     <string name="ID_ACTION_LOG_IN_SHORT">Login</string>
     <string name="ID_ERROR_INVALID_EMAIL">This email address is invalid</string>

@@ -92,7 +92,6 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     private ProgressBar mProgressBar;
     public FragmentIntractionWithActivityListner mHomeSearchActivityFragmentIntractionWithActivityListner;
     private FragmentOpen mFragmentOpen = new FragmentOpen();
-    protected GenericFragmentActivityIntractionListner genericFragmentActivityIntractionListner;
     @Inject
     Preference<LoginResponse> userPreference;
 
@@ -225,9 +224,6 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
         try {
             if (mActivity instanceof FragmentIntractionWithActivityListner) {
                 mHomeSearchActivityFragmentIntractionWithActivityListner = (FragmentIntractionWithActivityListner) getActivity();
-            }
-            if (getActivity() instanceof GenericFragmentActivityIntractionListner) {
-                genericFragmentActivityIntractionListner = (GenericFragmentActivityIntractionListner) getActivity();
             }
         } catch (Fragment.InstantiationException exception) {
             LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
@@ -515,16 +511,6 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     protected void onBackPress() {
         getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
-
-    public interface GenericFragmentActivityIntractionListner {
-        void close();
-
-        void onBackPress();
-
-        void onErrorOccurence(String errorMessage);
-
-    }
-
     protected void getExternalStoragePermission() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {

@@ -179,7 +179,6 @@ public class CommunitiesDetailFragment extends BaseFragment {
         });
         return view;
     }
-
     @OnClick(R.id.tv_join_view)
     public void joinClick() {
         String joinTxt = mTvJoinView.getText().toString();

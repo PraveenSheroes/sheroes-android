@@ -37,7 +37,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityPostActivity;
@@ -66,7 +65,7 @@ import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_REACTION_COMMENT_ME
  * @since 29/12/2016.
  * Title: Base activity for all activities.
  */
-public class BaseActivity extends AppCompatActivity implements BaseHolderInterface, FragmentIntractionWithActivityListner, View.OnTouchListener, View.OnClickListener, BaseFragment.GenericFragmentActivityIntractionListner {
+public class BaseActivity extends AppCompatActivity implements BaseHolderInterface, FragmentIntractionWithActivityListner, View.OnTouchListener, View.OnClickListener {
     private final String TAG = LogUtils.makeLogTag(BaseActivity.class);
     public boolean mIsDestroyed;
     protected SheroesApplication mSheroesApplication;
@@ -770,26 +769,6 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
     public void onSuccessResult(String result, FeedDetail feedDetail) {
 
     }
-
-
-    @Override
-    public void close() {
-        finish();
-    }
-
-    @Override
-    public void onErrorOccurence(String errorMessage) {
-        if (!StringUtil.isNotNullOrEmptyString(errorMessage)) {
-            errorMessage = getString(R.string.ID_GENERIC_ERROR);
-        }
-        showNetworkTimeoutDoalog(true, false, errorMessage);
-    }
-
-    @Override
-    public void onBackPress() {
-        getSupportFragmentManager().popBackStack();
-    }
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();

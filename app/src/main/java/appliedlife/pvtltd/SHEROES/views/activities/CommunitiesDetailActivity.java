@@ -15,6 +15,8 @@ import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.transition.Slide;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -86,6 +88,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
     private InviteCommunityMember mInviteCommunityMember;
     private AllMembersFragment mAllMembersFragment;
     private boolean isMemberRemoveDialog;
+    private CommunityRequestedFragment communityRequestedFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -101,6 +104,13 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
             communityEnum = (CommunityEnum) getIntent().getSerializableExtra(AppConstants.MY_COMMUNITIES_FRAGMENT);
         }
         setPagerAndLayouts();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LogUtils.error("**********************","*************OnResume************commundetail activity*******");
+
     }
 
     private void setPagerAndLayouts() {
@@ -189,10 +199,10 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
             PandingMember pandingMember = (PandingMember) baseResponse;
             switch (id) {
                 case R.id.tv_panding_member_cross:
-                    CallCommunityPandingMemberRemoveFragment(pandingMember.getUsersId(), pandingMember.getCommunityId(), pandingMember.getPosition());
+                    callCommunityPendingMemberRemoveFragment(pandingMember.getUsersId(), pandingMember.getCommunityId(), pandingMember.getPosition());
                     break;
                 case R.id.tv_panding_member_check:
-                    CallCommunityAproveMemberFragment(pandingMember.getUsersId(), pandingMember.getCommunityId(), pandingMember.getPosition());
+                    callCommunityAproveMemberFragment(pandingMember.getUsersId(), pandingMember.getCommunityId(), pandingMember.getPosition());
                     break;
                 default:
                     LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + id);
@@ -281,6 +291,9 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
         if (null != mAllMembersFragment) {
             mAllMembersFragment.dismiss();
         }
+        if (null != communityRequestedFragment) {
+            communityRequestedFragment.dismiss();
+        }
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(CommunityOpenAboutFragment.class.getName());
         if (AppUtils.isFragmentUIActive(fragment)) {
             ((CommunityOpenAboutFragment) fragment).refreshMemberCount(feedDetail);
@@ -301,23 +314,22 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
         }
     }
 
-    private void CallCommunityPandingMemberRemoveFragment(long userId, long communityId, int position) {
+    private void callCommunityPendingMemberRemoveFragment(long userId, long communityId, int position) {
 
-        final Fragment frgmentAllMember = getSupportFragmentManager().findFragmentByTag(CommunityRequestedFragment.class.getName());
-        if (AppUtils.isFragmentUIActive(frgmentAllMember)) {
-            ((CommunityRequestedFragment) frgmentAllMember).removePandingRequest(userId, communityId, position);
+        if (null != communityRequestedFragment) {
+            communityRequestedFragment.removePandingRequest(userId, communityId, position);
         }
 
     }
 
-    private void CallCommunityAproveMemberFragment(long userId, long communityId, int position) {
+    private void callCommunityAproveMemberFragment(long userId, long communityId, int position) {
 
-        final Fragment frgmentAllMember = getSupportFragmentManager().findFragmentByTag(CommunityRequestedFragment.class.getName());
-        if (AppUtils.isFragmentUIActive(frgmentAllMember)) {
-            ((CommunityRequestedFragment) frgmentAllMember).approvePandingRequest(userId, communityId, position);
+        if (null != communityRequestedFragment) {
+            communityRequestedFragment.approvePandingRequest(userId, communityId, position);
         }
 
     }
+
 
     public DialogFragment openAllMemberFragmentClick() {
         mAllMembersFragment = (AllMembersFragment) getFragmentManager().findFragmentByTag(AllMembersFragment.class.getName());
@@ -391,22 +403,28 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
         }
     }
 
-    public void requestClick() {
-        CommunityRequestedFragment frag = new CommunityRequestedFragment();
-        Bundle bundleCommunity = new Bundle();
-        bundleCommunity.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
-        frag.setArguments(bundleCommunity);
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.bottom_to_top_slide_reverse_anim)
-                .replace(R.id.about_community_container, frag, CommunityRequestedFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
-
+    public DialogFragment requestApproveAndRemoveOnClick() {
+        communityRequestedFragment = (CommunityRequestedFragment) getFragmentManager().findFragmentByTag(CommunityRequestedFragment.class.getName());
+        if (communityRequestedFragment == null) {
+            communityRequestedFragment = new CommunityRequestedFragment();
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
+            communityRequestedFragment.setArguments(bundle);
+        }
+        if (!communityRequestedFragment.isVisible() && !communityRequestedFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
+            communityRequestedFragment.show(getFragmentManager(), CommunityRequestedFragment.class.getName());
+        }
+        return communityRequestedFragment;
     }
+
 
     public void createCommunityClick(FeedDetail feedDetail) {
         Intent intent = new Intent(this, CreateCommunityActivity.class);
         Bundle bundle = new Bundle();
         bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, feedDetail);
         intent.putExtras(bundle);
-        startActivity(intent);
+        startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY);
+        overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
     }
 
     public void shareClick() {
@@ -463,8 +481,9 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
             if (mFeedDetail.isClosedCommunity()) {
                 onBackClick();
             } else {
-                mFragmentOpen.setOpenAboutFragment(false);
+                mCommunityDetailActivity.setVisibility(View.VISIBLE);
                 getSupportFragmentManager().popBackStackImmediate();
+                mFragmentOpen.setOpenAboutFragment(false);
             }
         } else if (mFragmentOpen.isInviteCommunityOwner()) {
             mFragmentOpen.setInviteCommunityOwner(false);
@@ -477,6 +496,10 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
         }
     }
 
+    private void setCustomAnimation(View viewToAnimate) {
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.bottom_to_top_slide_anim);
+        viewToAnimate.startAnimation(animation);
+    }
     public void closeOwner() {
         getSupportFragmentManager().popBackStack();
     }
@@ -487,17 +510,6 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
     }
 
 
-    public void onClose() {
-        if (mFeedDetail.isClosedCommunity()) {
-            finish();
-        } else {
-            mCommunityDetailActivity.setVisibility(View.VISIBLE);
-            ivCommunitiesDetail.setVisibility(View.VISIBLE);
-            mToolbarCommunitiesDetail.setVisibility(View.VISIBLE);
-            getSupportFragmentManager().popBackStack();
-        }
-
-    }
 
     public void onLeaveClick() {
         finish();
@@ -522,11 +534,27 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
                     showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
                     break;
                 default:
-                    showNetworkTimeoutDoalog(true, false, errorReason);
+                    showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
             }
         } else {
             showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
         }
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+         /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
+        if (null != intent) {
+            switch (requestCode) {
+                case AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY:
+                    mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITIES_DETAIL);
+                    updateOpenAboutFragment(mFeedDetail);
+                    break;
+                default:
+                    LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);
+            }
+        }
+
     }
 
 }

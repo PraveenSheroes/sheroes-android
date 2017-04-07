@@ -11,30 +11,28 @@ import java.util.List;
 
 public class FragmentOpen implements Parcelable {
 
-    boolean isOpen;
-    boolean reactionList;
-    boolean commentList;
-    boolean feedOpen;
-    boolean articleFragment;
-    boolean jobFragment;
-    boolean communityOpen;
-    boolean settingFragment;
-    boolean bookmarkFragment;
-    boolean isImageBlur;
-    int openCommentReactionFragmentFor;
-    boolean isOpenImageViewer;
-    List<HomeSpinnerItem> homeSpinnerItemList;
-    boolean isOwner;
-
-
-    boolean isTellUsOpen;
-    boolean isLookingForHowCanOpen;
-    boolean isJobAtOpen;
-    boolean isInterestOpen;
-    boolean isWorkingExpOpen;
-    boolean isOpenAboutFragment;
-    boolean isInviteCommunityOwner;
-
+    private boolean isOpen;
+    private boolean reactionList;
+    private boolean commentList;
+    private boolean feedOpen;
+    private boolean articleFragment;
+    private boolean jobFragment;
+    private boolean communityOpen;
+    private boolean settingFragment;
+    private boolean bookmarkFragment;
+    private boolean isImageBlur;
+    private int openCommentReactionFragmentFor;
+    private boolean isOpenImageViewer;
+    private List<HomeSpinnerItem> homeSpinnerItemList;
+    private boolean isOwner;
+    private boolean isTellUsOpen;
+    private boolean isLookingForHowCanOpen;
+    private boolean isJobAtOpen;
+    private boolean isInterestOpen;
+    private boolean isWorkingExpOpen;
+    private boolean isOpenAboutFragment;
+    private boolean isInviteCommunityOwner;
+    private boolean isCreateCommunity;
     public FragmentOpen() {
     }
 
@@ -151,58 +149,6 @@ public class FragmentOpen implements Parcelable {
         isOwner = owner;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeByte(this.isOpen ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.reactionList ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.commentList ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.feedOpen ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.articleFragment ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.jobFragment ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.communityOpen ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.settingFragment ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.bookmarkFragment ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.isImageBlur ? (byte) 1 : (byte) 0);
-        dest.writeInt(this.openCommentReactionFragmentFor);
-        dest.writeByte(this.isOpenImageViewer ? (byte) 1 : (byte) 0);
-        dest.writeTypedList(this.homeSpinnerItemList);
-        dest.writeByte(this.isOwner ? (byte) 1 : (byte) 0);
-    }
-
-    protected FragmentOpen(Parcel in) {
-        this.isOpen = in.readByte() != 0;
-        this.reactionList = in.readByte() != 0;
-        this.commentList = in.readByte() != 0;
-        this.feedOpen = in.readByte() != 0;
-        this.articleFragment = in.readByte() != 0;
-        this.jobFragment = in.readByte() != 0;
-        this.communityOpen = in.readByte() != 0;
-        this.settingFragment = in.readByte() != 0;
-        this.bookmarkFragment = in.readByte() != 0;
-        this.isImageBlur = in.readByte() != 0;
-        this.openCommentReactionFragmentFor = in.readInt();
-        this.isOpenImageViewer = in.readByte() != 0;
-        this.homeSpinnerItemList = in.createTypedArrayList(HomeSpinnerItem.CREATOR);
-        this.isOwner = in.readByte() != 0;
-    }
-
-    public static final Creator<FragmentOpen> CREATOR = new Creator<FragmentOpen>() {
-        @Override
-        public FragmentOpen createFromParcel(Parcel source) {
-            return new FragmentOpen(source);
-        }
-
-        @Override
-        public FragmentOpen[] newArray(int size) {
-            return new FragmentOpen[size];
-        }
-    };
-
     public boolean isTellUsOpen() {
         return isTellUsOpen;
     }
@@ -258,4 +204,80 @@ public class FragmentOpen implements Parcelable {
     public void setInviteCommunityOwner(boolean inviteCommunityOwner) {
         isInviteCommunityOwner = inviteCommunityOwner;
     }
+
+    public boolean isCreateCommunity() {
+        return isCreateCommunity;
+    }
+
+    public void setCreateCommunity(boolean createCommunity) {
+        isCreateCommunity = createCommunity;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeByte(this.isOpen ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.reactionList ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.commentList ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.feedOpen ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.articleFragment ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.jobFragment ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.communityOpen ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.settingFragment ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.bookmarkFragment ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isImageBlur ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.openCommentReactionFragmentFor);
+        dest.writeByte(this.isOpenImageViewer ? (byte) 1 : (byte) 0);
+        dest.writeTypedList(this.homeSpinnerItemList);
+        dest.writeByte(this.isOwner ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isTellUsOpen ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isLookingForHowCanOpen ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isJobAtOpen ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isInterestOpen ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isWorkingExpOpen ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isOpenAboutFragment ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isInviteCommunityOwner ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isCreateCommunity ? (byte) 1 : (byte) 0);
+    }
+
+    protected FragmentOpen(Parcel in) {
+        this.isOpen = in.readByte() != 0;
+        this.reactionList = in.readByte() != 0;
+        this.commentList = in.readByte() != 0;
+        this.feedOpen = in.readByte() != 0;
+        this.articleFragment = in.readByte() != 0;
+        this.jobFragment = in.readByte() != 0;
+        this.communityOpen = in.readByte() != 0;
+        this.settingFragment = in.readByte() != 0;
+        this.bookmarkFragment = in.readByte() != 0;
+        this.isImageBlur = in.readByte() != 0;
+        this.openCommentReactionFragmentFor = in.readInt();
+        this.isOpenImageViewer = in.readByte() != 0;
+        this.homeSpinnerItemList = in.createTypedArrayList(HomeSpinnerItem.CREATOR);
+        this.isOwner = in.readByte() != 0;
+        this.isTellUsOpen = in.readByte() != 0;
+        this.isLookingForHowCanOpen = in.readByte() != 0;
+        this.isJobAtOpen = in.readByte() != 0;
+        this.isInterestOpen = in.readByte() != 0;
+        this.isWorkingExpOpen = in.readByte() != 0;
+        this.isOpenAboutFragment = in.readByte() != 0;
+        this.isInviteCommunityOwner = in.readByte() != 0;
+        this.isCreateCommunity = in.readByte() != 0;
+    }
+
+    public static final Creator<FragmentOpen> CREATOR = new Creator<FragmentOpen>() {
+        @Override
+        public FragmentOpen createFromParcel(Parcel source) {
+            return new FragmentOpen(source);
+        }
+
+        @Override
+        public FragmentOpen[] newArray(int size) {
+            return new FragmentOpen[size];
+        }
+    };
 }

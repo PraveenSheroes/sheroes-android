@@ -238,6 +238,11 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
     @OnClick(R.id.li_user_comment)
     public void liEditForComment() {
     }
+    @OnClick(R.id.li_replies_header)
+    public void onHeaderClick()
+    {
+
+    }
     @OnFocusChange(R.id.et_user_comment_description)
     public void focusChange() {
         if(StringUtil.isNotNullOrEmptyString(mEtUserCommentDescription.getText().toString())) {

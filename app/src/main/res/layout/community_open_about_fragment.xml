@@ -144,6 +144,7 @@
                     android:paddingLeft="@dimen/dp_size_10"
                     android:paddingTop="@dimen/dp_size_5"
                     android:paddingBottom="@dimen/dp_size_5"
+                    android:visibility="gone"
                     android:paddingRight="@dimen/dp_size_10"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"

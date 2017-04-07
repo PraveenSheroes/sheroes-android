@@ -48,6 +48,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
@@ -137,6 +138,28 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
         if (null != getArguments()) {
             communityEnum = (CommunityEnum) getArguments().getSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT);
             mFeedDetail = getArguments().getParcelable(AppConstants.COMMUNITY_DETAIL);
+            setAllViewsOfFragment();
+        }
+
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        mAboutCommunityOwnerRecyclerView.setLayoutManager(mLayoutManager);
+        mAdapter = new GenericRecyclerViewAdapter(getContext(), (CommunitiesDetailActivity) getActivity());
+
+        mAboutCommunityOwnerRecyclerView.setLayoutManager(mLayoutManager);
+        mAboutCommunityOwnerRecyclerView.setAdapter(mAdapter);
+        OwnerListRequest ownerListRequest = mAppUtils.ownerRequestBuilder(mcommunityid);
+        mOwnerPresenter.getCommunityOwnerList(ownerListRequest);
+        mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_ARTICLE, AppConstants.ONE_CONSTANT, mFeedDetail.getId()));
+        return view;
+    }
+
+    private void setAllViewsOfFragment() {
+        if (null != mFeedDetail) {
+            if (!mFeedDetail.isOwner() && !mFeedDetail.isMember()) {
+                mOptionIv.setVisibility(View.GONE);
+            } else {
+                mOptionIv.setVisibility(View.VISIBLE);
+            }
             mcommunityid = mFeedDetail.getIdOfEntityOrParticipant();
             Glide.with(this)
                     .load(mFeedDetail.getImageUrl())
@@ -159,21 +182,26 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
             mtv_community_members.setText(count + AppConstants.SPACE + getString(R.string.ID_MEMBERS));
             displayTabAsCommunityType(mFeedDetail);
         }
+    }
 
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        mAboutCommunityOwnerRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new GenericRecyclerViewAdapter(getContext(), (CommunitiesDetailActivity) getActivity());
-
-        mAboutCommunityOwnerRecyclerView.setLayoutManager(mLayoutManager);
-        mAboutCommunityOwnerRecyclerView.setAdapter(mAdapter);
-        OwnerListRequest ownerListRequest = mAppUtils.ownerRequestBuilder(mcommunityid);
-        mOwnerPresenter.getCommunityOwnerList(ownerListRequest);
-        return view;
+    @Override
+    public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
+        List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
+        if (StringUtil.isNotEmptyCollection(feedDetailList)) {
+            mFeedDetail = feedDetailList.get(0);
+            setAllViewsOfFragment();
+        }
     }
 
     public void refreshMemberCount(FeedDetail feedDetail) {
         mFeedDetail = feedDetail;
-        mtv_community_members.setText(feedDetail.getNoOfMembers() + AppConstants.SPACE + getString(R.string.ID_MEMBERS));
+        if (null != mFeedDetail) {
+            mtv_community_members.setText(feedDetail.getNoOfMembers() + AppConstants.SPACE + getString(R.string.ID_MEMBERS));
+            mtv_community_requested.setText(mFeedDetail.getNoOfPendingRequest() + AppConstants.SPACE + getString(R.string.ID_COMMUNITY_REQUESTED));
+            if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getNameOrTitle())) {
+                mtv_community_name.setText(mFeedDetail.getNameOrTitle());
+            }
+        }
     }
 
     private void displayTabAsCommunityType(FeedDetail mFeedDetail) {
@@ -208,10 +236,6 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
                         mTvJoinInviteView.setBackgroundResource(R.drawable.rectangle_community_invite);
                         mTvJoinInviteView.setVisibility(View.VISIBLE);
                     }
-                    if (mFeedDetail.isOwner()) {
-                        tv_community_add_more.setVisibility(View.VISIBLE);
-                        mtv_community_requested.setVisibility(View.VISIBLE);
-                    }
                     break;
                 case FEATURE_COMMUNITY:
                     if (!mFeedDetail.isMember() && !mFeedDetail.isOwner() && !mFeedDetail.isRequestPending()) {
@@ -230,28 +254,8 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
                         mTvJoinInviteView.setVisibility(View.VISIBLE);
                         mTvJoinInviteView.setEnabled(false);
                     }
-                    if (mFeedDetail.isOwner()) {
-                        tv_community_add_more.setVisibility(View.VISIBLE);
-                    }
                     break;
                 case MY_COMMUNITY:
-                    if (mFeedDetail.isClosedCommunity()) {
-                        if (mFeedDetail.isOwner()) {
-                            mtv_community_requested.setVisibility(View.VISIBLE);
-                            tv_community_add_more.setVisibility(View.VISIBLE);
-                        } else if (mFeedDetail.isMember()) {
-                            mtv_community_requested.setVisibility(View.GONE);
-                            tv_community_add_more.setVisibility(View.GONE);
-                        }
-                    } else {
-                        if (mFeedDetail.isOwner()) {
-                            mtv_community_requested.setVisibility(View.GONE);
-                            tv_community_add_more.setVisibility(View.VISIBLE);
-                        } else if (mFeedDetail.isMember()) {
-                            mtv_community_requested.setVisibility(View.GONE);
-                            tv_community_add_more.setVisibility(View.GONE);
-                        }
-                    }
                     mTvJoinInviteView.setText(getActivity().getString(R.string.ID_INVITE));
                     mTvJoinInviteView.setBackgroundResource(R.drawable.rectangle_community_invite);
                     mTvJoinInviteView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
@@ -259,13 +263,29 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
                 default:
                     LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + communityEnum);
             }
-
+            if (mFeedDetail.isClosedCommunity()) {
+                if (mFeedDetail.isOwner()) {
+                    mtv_community_requested.setVisibility(View.VISIBLE);
+                    tv_community_add_more.setVisibility(View.VISIBLE);
+                } else if (mFeedDetail.isMember()) {
+                    mtv_community_requested.setVisibility(View.GONE);
+                    tv_community_add_more.setVisibility(View.GONE);
+                }
+            } else {
+                if (mFeedDetail.isOwner()) {
+                    mtv_community_requested.setVisibility(View.GONE);
+                    tv_community_add_more.setVisibility(View.VISIBLE);
+                } else if (mFeedDetail.isMember()) {
+                    mtv_community_requested.setVisibility(View.GONE);
+                    tv_community_add_more.setVisibility(View.GONE);
+                }
+            }
         }
     }
 
     @OnClick(R.id.tv_about_community_back)
     public void clickBackButton() {
-        ((CommunitiesDetailActivity) getActivity()).onClose();
+        ((CommunitiesDetailActivity) getActivity()).onBackPressed();
     }
 
     @OnClick(R.id.tv_about_community_share)
@@ -275,7 +295,7 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
 
     @OnClick(R.id.tv_community_requested)
     public void requestClick() {
-        ((CommunitiesDetailActivity) getActivity()).requestClick();
+        ((CommunitiesDetailActivity) getActivity()).requestApproveAndRemoveOnClick();
     }
 
     @OnClick(R.id.tv_community_members)
@@ -456,7 +476,7 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
         if (StringUtil.isNotEmptyCollection(ownerList)) {
             this.ownerListResponse = ownerList;
             for (Member member : ownerList) {
-                if (ownerList.size() > AppConstants.ONE_CONSTANT) {
+                if (ownerList.size() > AppConstants.ONE_CONSTANT && mFeedDetail.isOwner()) {
                     member.setOwner(true);
                 } else {
                     member.setOwner(false);

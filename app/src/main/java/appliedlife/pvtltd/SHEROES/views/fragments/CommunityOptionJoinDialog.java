@@ -115,26 +115,22 @@ public class CommunityOptionJoinDialog extends BaseDialogFragment implements Hom
     public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
         switch (baseResponse.getStatus()) {
             case AppConstants.SUCCESS:
-                if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getScreenName())) {
-                    mFeedDetail.setRequestPending(true);
-                    mFeedDetail.setOwner(false);
-                    if (mFeedDetail.getScreenName().equalsIgnoreCase(AppConstants.FEATURE_FRAGMENT)) {
-                        ((HomeActivity) getActivity()). onJoinEventSuccessResult(baseResponse.getStatus(), mFeedDetail);
-                    } else {
 
-                        ((CommunitiesDetailActivity) getActivity()).onJoinDialogSuccessResult(baseResponse.getStatus(), mFeedDetail);
-                    }
+                mFeedDetail.setRequestPending(true);
+                mFeedDetail.setOwner(false);
+                if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getScreenName()) && mFeedDetail.getScreenName().equalsIgnoreCase(AppConstants.FEATURE_FRAGMENT)) {
+                    ((HomeActivity) getActivity()).onJoinEventSuccessResult(baseResponse.getStatus(), mFeedDetail);
+                } else {
+
+                    ((CommunitiesDetailActivity) getActivity()).onJoinDialogSuccessResult(baseResponse.getStatus(), mFeedDetail);
                 }
                 dismiss();
                 break;
             case AppConstants.FAILED:
-                if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getScreenName())) {
-                    if (mFeedDetail.getScreenName().equalsIgnoreCase(AppConstants.FEATURE_FRAGMENT)) {
-                        ((HomeActivity) getActivity()).onJoinEventSuccessResult(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), mFeedDetail);
-                    } else {
-
-                        ((CommunitiesDetailActivity) getActivity()).onJoinDialogSuccessResult(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), mFeedDetail);
-                    }
+                if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getScreenName()) && mFeedDetail.getScreenName().equalsIgnoreCase(AppConstants.FEATURE_FRAGMENT)) {
+                    ((HomeActivity) getActivity()).onJoinEventSuccessResult(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), mFeedDetail);
+                } else {
+                    ((CommunitiesDetailActivity) getActivity()).onJoinDialogSuccessResult(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), mFeedDetail);
                 }
                 dismiss();
                 break;

@@ -59,6 +59,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerRespo
 import appliedlife.pvtltd.SHEROES.models.entities.community.EditCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.presenters.CreateCommunityPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -70,6 +71,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.COMMUNITY_OWNER;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MY_COMMUNITIES;
+
 /**
  * Created by Ajit Kumar on 11-01-2017.
  *
@@ -79,7 +83,7 @@ import butterknife.OnClick;
  * Title: Create Community fragment within Create Community activity perform all the UI operation .
  * Fragment will have all UI components and operate with activity .
  */
-public class CreateCommunityFragment extends BaseFragment implements CommunityView,CommunityTypeFragment.MyDialogFragmentListener,HomeView{
+public class CreateCommunityFragment extends BaseFragment implements CommunityView, CommunityTypeFragment.MyDialogFragmentListener, HomeView {
     private final String TAG = LogUtils.makeLogTag(CreateCommunityFragment.class);
 
     @Bind(R.id.cb_create_community_open_check)
@@ -130,7 +134,7 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
     @Bind(R.id.pb_create_community_progress_bar)
     ProgressBar mProgressBar;
 
-    int mTagFlag=0;
+    int mTagFlag = 0;
 
     String encImage;
 
@@ -145,17 +149,18 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
     String mDescription = "";
     String mCommunityName = "";
     View view;
-    long tagId[]=new long[4];
+    long tagId[] = new long[4];
 
     List<Long> tagsid = new ArrayList<>();
-
+    private FragmentOpen mFragmentOpen;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if(view==null) {
+        if (view == null) {
             SheroesApplication.getAppComponent(getContext()).inject(this);
             view = inflater.inflate(R.layout.fragmentcreate_community, container, false);
             ButterKnife.bind(this, view);
+            mFragmentOpen=new FragmentOpen();
             mCbopenCommunity.setChecked(true);
             mOutPutFile = new File(Environment.getExternalStorageDirectory(), "temp.jpg");
             mOutPutFile1 = new File(Environment.getExternalStorageDirectory(), "temp1.jpg");
@@ -166,14 +171,13 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
             if (null != getArguments()) {
                 mFeedDetail = getArguments().getParcelable(AppConstants.COMMUNITIES_DETAIL);
                 if (null != mFeedDetail) {
-
-                    if (null !=mFeedDetail.getCommunityType()) {
+                    if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getCommunityType())) {
                         mEtCommunityType.setText(mFeedDetail.getCommunityType().toString());
-                        typeId=mFeedDetail.getCommunityTypeL();
+                        typeId = mFeedDetail.getCommunityTypeL();
                     }
-                    if (null !=mFeedDetail.getTag_ids() && mFeedDetail.getTag_ids().size()>0 ) {
+                    if (null != mFeedDetail.getTag_ids() && mFeedDetail.getTag_ids().size() > 0) {
                         mEtCreateCommunityTags.setText(mFeedDetail.getTags().toString());
-                        tagsid=mFeedDetail.getTag_ids();
+                        tagsid = mFeedDetail.getTag_ids();
                     }
                     if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getNameOrTitle())) {
                         metCreateCommunityName.setText(mFeedDetail.getNameOrTitle());
@@ -182,14 +186,13 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
                         metCreateCommunityDescription.setText(mFeedDetail.getListDescription());
                     }
 
-                    if(mFeedDetail.isOwner()) {
+                    if (mFeedDetail.isOwner()) {
                         mTvCreate.setText(R.string.ID_EDIT);
                         mtvCreateCommunityTitle.setText("EDIT COMMUNITY");
                     }
-                    if(null != getArguments().getStringArray(AppConstants.TAG_LIST)) {
+                    if (null != getArguments().getStringArray(AppConstants.TAG_LIST)) {
 
-                    }
-                    else {
+                    } else {
                         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getImageUrl())) {
                             Glide.with(this)
                                     .load(mFeedDetail.getImageUrl()).asBitmap()
@@ -240,10 +243,8 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
                 }
 
 
-
-
             } else {
-                genericFragmentActivityIntractionListner.onErrorOccurence((AppConstants.ERROR_OCCUR));
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog((AppConstants.ERROR_OCCUR),ERROR_MY_COMMUNITIES);
             }
 
             // getActivity().setRequestedOrientation(
@@ -272,18 +273,17 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
         return view;
     }
 
-    public void setCommunitiyTags(String[] tagsval,long[] tagsid)
-    {
-        tagId=tagsid;
-        StringBuilder stringBuilder=new StringBuilder();
-        if(tagsval.length>0) {
+    public void setCommunitiyTags(String[] tagsval, long[] tagsid) {
+        tagId = tagsid;
+        StringBuilder stringBuilder = new StringBuilder();
+        if (tagsval.length > 0) {
             for (String tagValue : tagsval) {
-                if(StringUtil.isNotNullOrEmptyString(tagValue)) {
+                if (StringUtil.isNotNullOrEmptyString(tagValue)) {
                     stringBuilder.append(tagValue).append(AppConstants.COMMA);
                 }
             }
         }
-        mEtCreateCommunityTags.setText(stringBuilder.substring(0,stringBuilder.length()-1));
+        mEtCreateCommunityTags.setText(stringBuilder.substring(0, stringBuilder.length() - 1));
     }
 
     @OnClick(R.id.iv_create_community_cross)
@@ -312,55 +312,51 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
         checkCameraPermission();
         openImageOption();
     }
-//*********Tag Click**********************//
+
+    //*********Tag Click**********************//
     @OnClick(R.id.et_create_community_tags)
     public void btnTagClick() {
-        mTagFlag=1;
-        CreateCommunityRequest createCommunityRequest=new CreateCommunityRequest();
+        mTagFlag = 1;
+        CreateCommunityRequest createCommunityRequest = new CreateCommunityRequest();
 
-        if(StringUtil.isNotNullOrEmptyString(metCreateCommunityName.getText().toString()))
-        {
+        if (StringUtil.isNotNullOrEmptyString(metCreateCommunityName.getText().toString())) {
             createCommunityRequest.setName(metCreateCommunityName.getText().toString());
 
         }
 
-        if(null !=mIvCover.getDrawable()) {
+        if (null != mIvCover.getDrawable()) {
             Bitmap bitmap = ((BitmapDrawable) mIvCover.getDrawable()).getBitmap();
             byte[] buffer = new byte[4096];
             buffer = getBytesFromBitmap(bitmap);
             encCoverImage = Base64.encodeToString(buffer, Base64.DEFAULT);
-                createCommunityRequest.setCoverImage(encCoverImage);
-
+            createCommunityRequest.setCoverImage(encCoverImage);
 
 
         }
         mIvlogo.buildDrawingCache();
-        if(null !=(mIvlogo.getDrawingCache())) {
+        if (null != (mIvlogo.getDrawingCache())) {
             Bitmap bitmap1 = mIvlogo.getDrawingCache();
             //  Bitmap bitmap1 = mIvlogo.getDrawingCache();
             byte[] buffer = new byte[4096];
             buffer = getBytesFromBitmap(bitmap1);
             encImage = Base64.encodeToString(buffer, Base64.DEFAULT);
-                createCommunityRequest.setLogo(encImage);
+            createCommunityRequest.setLogo(encImage);
 
 
         }
-        if(StringUtil.isNotNullOrEmptyString(metCreateCommunityDescription.getText().toString()))
-        {
+        if (StringUtil.isNotNullOrEmptyString(metCreateCommunityDescription.getText().toString())) {
             createCommunityRequest.setDescription(metCreateCommunityDescription.getText().toString());
 
         }
-        if(StringUtil.isNotNullOrEmptyString(mEtCommunityType.getText().toString()))
-        {
+        if (StringUtil.isNotNullOrEmptyString(mEtCommunityType.getText().toString())) {
             createCommunityRequest.setType(mEtCommunityType.getText().toString());
 
         }
-        if(null !=typeId)
-        {
+        if (null != typeId) {
             createCommunityRequest.setCommunityTypeId(typeId);
         }
 
-        ((CreateCommunityActivity)getActivity()).callCommunityTagPage(mFeedDetail);
+        ((CreateCommunityActivity) getActivity()).callCommunityTagPage(mFeedDetail);
 
         //  CommunitySearchTagsDialog newFragment = new CommunitySearchTagsDialog();
     }
@@ -375,58 +371,47 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
     @OnClick(R.id.tv_create_community_submit)
     public void btnCreateClick() {
         mTvCreate.setEnabled(false);
-       /* Intent intent = new Intent(getActivity(), CreateCommunityPostActivity.class);
-        startActivity(intent);*/
-        if(StringUtil.isNotNullOrEmptyString(metCreateCommunityDescription.getText().toString()) && StringUtil.isNotNullOrEmptyString(mEtCommunityType.getText().toString()) && StringUtil.isNotNullOrEmptyString(metCreateCommunityName.getText().toString()) && StringUtil.isNotNullOrEmptyString(mEtCreateCommunityTags.getText().toString())) {
-            if (mTvCreate.getText().toString().equalsIgnoreCase("create")) {
+        if (StringUtil.isNotNullOrEmptyString(metCreateCommunityDescription.getText().toString()) && StringUtil.isNotNullOrEmptyString(mEtCommunityType.getText().toString()) && StringUtil.isNotNullOrEmptyString(metCreateCommunityName.getText().toString()) && StringUtil.isNotNullOrEmptyString(mEtCreateCommunityTags.getText().toString())) {
+            if (mTvCreate.getText().toString().equalsIgnoreCase(getString(R.string.ID_CREATE))) {
+                mFragmentOpen.setCreateCommunity(true);
                 callCreateCommunitySubmit();
             } else {
+                mFragmentOpen.setCreateCommunity(false);
                 callEditCommunitySubmit();
             }
-        }
-        else {
+        } else {
             mTvCreate.setEnabled(true);
-            genericFragmentActivityIntractionListner.onErrorOccurence((AppConstants.BLANK_MESSAGE));
+            mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog((AppConstants.BLANK_MESSAGE),ERROR_MY_COMMUNITIES);
         }
-        // mCreatecommunityIntractionListner.close();
     }
 
     void callEditCommunitySubmit() {
         mProgressBar.setVisibility(View.VISIBLE);
 
         List<Long> tags = new ArrayList<>();
-        for(int i=0;i<tagId.length;i++)
-        {
-            if(tagId[i]>0)
+        for (int i = 0; i < tagId.length; i++) {
+            if (tagId[i] > 0)
                 tags.add(tagId[i]);
 
         }
-        if(tags.size()==0)
-        {
-            tags=tagsid;
+        if (tags.size() == 0) {
+            tags = tagsid;
         }
         List<Long> tags2 = new ArrayList<>();
-        for(int i=0;i<tagId.length;i++)
-        {
-            if(tagId[i]>0)
+        for (int i = 0; i < tagId.length; i++) {
+            if (tagId[i] > 0)
                 tags2.add(tagId[i]);
 
         }
 
         EditCommunityRequest editCommunityRequest = new EditCommunityRequest();
-      //  editCommunityRequest.setCoverImageUrl(encCoverImage);
+        //  editCommunityRequest.setCoverImageUrl(encCoverImage);
 
 
-
-            editCommunityRequest.setCoverImageUrl(encCoverImage);
-
+        editCommunityRequest.setCoverImageUrl(encCoverImage);
 
 
-
-            editCommunityRequest.setLogoUrl(encImage);
-
-
-
+        editCommunityRequest.setLogoUrl(encImage);
 
 
         editCommunityRequest.setLogoUrl(encImage);
@@ -469,7 +454,7 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
             createCommunityPresenter.postEditCommunityList(editCommunityRequest);
         else {
             mTvCreate.setEnabled(true);
-            genericFragmentActivityIntractionListner.onErrorOccurence((AppConstants.INAVLID_DATA));
+            mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog((AppConstants.INAVLID_DATA),ERROR_MY_COMMUNITIES);
         }
 
     }
@@ -478,23 +463,18 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
         mProgressBar.setVisibility(View.VISIBLE);
 
         List<Long> tags = new ArrayList<>();
-        for(int i=0;i<tagId.length;i++)
-        {
-            if(tagId[i]>0)
+        for (int i = 0; i < tagId.length; i++) {
+            if (tagId[i] > 0)
                 tags.add(tagId[i]);
 
         }
-        // tags.add(tagIds[0]);
-
 
         CreateCommunityRequest createCommunityRequest = new CreateCommunityRequest();
 
-            createCommunityRequest.setCoverImage(encCoverImage);
+        createCommunityRequest.setCoverImage(encCoverImage);
 
 
-
-            createCommunityRequest.setLogo(encImage);
-
+        createCommunityRequest.setLogo(encImage);
 
 
         createCommunityRequest.setAppVersion("String");
@@ -531,8 +511,6 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
         createCommunityRequest.setTags(tags);
 
         createCommunityPresenter.postCreateCommunityList(createCommunityRequest);
-
-
 
 
     }
@@ -611,7 +589,7 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
 
     @OnClick(R.id.et_create_community_type)
     public void onLogInBtnClick() {
-        CommunityTypeFragment newFragment =new CommunityTypeFragment();
+        CommunityTypeFragment newFragment = new CommunityTypeFragment();
         newFragment.setListener(this);
 
         newFragment.show(getActivity().getFragmentManager(), "dialog");
@@ -621,7 +599,7 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
     @Override
     public void onAddFriendSubmit(String communitynm, Long typeId) {
         mEtCommunityType.setText(communitynm);
-        this.typeId=typeId;
+        this.typeId = typeId;
 
 
     }
@@ -647,23 +625,30 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
 
     }
 
-
     @Override
     public void createCommunitySuccess(CreateCommunityResponse createCommunityResponse) {
         mProgressBar.setVisibility(View.GONE);
         mTvCreate.setEnabled(true);
-        if (null != createCommunityResponse && StringUtil.isNotNullOrEmptyString(createCommunityResponse.getStatus())) {
-
-            Toast.makeText(getActivity(), createCommunityResponse.getStatus(), Toast.LENGTH_LONG).show();
-
-            getActivity().finish();
-        }
-        else
-        {
-            genericFragmentActivityIntractionListner.onErrorOccurence((AppConstants.INAVLID_DATA));
-
+        switch (createCommunityResponse.getStatus()) {
+            case AppConstants.SUCCESS:
+                Toast.makeText(getActivity(), getString(R.string.ID_ADDED), Toast.LENGTH_SHORT).show();
+                setFeedDetailData();
+                ((CreateCommunityActivity)getActivity()).onBackClickHandle(mFeedDetail,mFragmentOpen);
+                break;
+            case AppConstants.FAILED:
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(createCommunityResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), COMMUNITY_OWNER);
+                break;
+            default:
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, COMMUNITY_OWNER);
         }
     }
+    private void setFeedDetailData()
+    {
+        mFeedDetail.setNameOrTitle(metCreateCommunityName.getText().toString());
+        mFeedDetail.setDescription(metCreateCommunityDescription.getText().toString());
+        mFeedDetail.setType(mEtCommunityType.getText().toString());
+    }
+
 
     @Override
     public void getOwnerListDeactivateSuccess(DeactivateOwnerResponse deactivateOwnerResponse) {
@@ -716,6 +701,7 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
             checkCameraPermission();
         }
     }
+
     /*
     This mathod is for select image from camera and gellery
     */
@@ -831,8 +817,7 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
                 if (mImage_type == 2) {
                     mIvCover.setImageDrawable(null);
                     mIvCover.setImageBitmap(photo);
-                }
-                else {
+                } else {
                     mIvlogo.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
 
                     mIvlogo.setBackground(new BitmapDrawable(getResources(), photo));
@@ -852,11 +837,10 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
             intent.setData(mImageCaptureUri);
             intent.putExtra("outputX", 512);
             intent.putExtra("outputY", 512);
-            if(mImage_type==1){
+            if (mImage_type == 1) {
                 intent.putExtra("aspectX", 1);
                 intent.putExtra("aspectY", 1);
-            }
-            else{
+            } else {
                 intent.putExtra("aspectX", 5);
                 intent.putExtra("aspectY", 2);
             }
@@ -885,8 +869,7 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
                 if (mImage_type == 2) {
                     mIvCover.setImageDrawable(null);
                     mIvCover.setImageBitmap(bmp);
-                }
-                else {
+                } else {
                     mIvlogo.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
 
                     mIvlogo.setBackground(new BitmapDrawable(getResources(), bmp));
@@ -930,4 +913,6 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
         }
         return null;
     }
+
+
 }
