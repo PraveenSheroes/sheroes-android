@@ -25,8 +25,10 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
@@ -49,7 +51,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_
  * Created by Praveen_Singh on 06-03-2017.
  */
 
-public class MyCommunityInviteMemberFragment  extends BaseDialogFragment implements HomeView{
+public class MyCommunityInviteMemberFragment extends BaseDialogFragment implements HomeView {
     private final String TAG = LogUtils.makeLogTag(MyCommunityInviteMemberFragment.class);
     @Inject
     HomePresenter mHomePresenter;
@@ -181,16 +183,13 @@ public class MyCommunityInviteMemberFragment  extends BaseDialogFragment impleme
     };
 
     @Override
-    public void getSuccessForAllResponse(String success, FeedParticipationEnum feedParticipationEnum) {
-        switch (success) {
-            case AppConstants.SUCCESS:
-                joinSuccess(feedParticipationEnum);
-                break;
-            case AppConstants.FAILED:
-                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(getString(R.string.ID_ALREADY_MEMBER), ERROR_JOIN_INVITE);
+    public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
+        switch (feedParticipationEnum) {
+            case JOIN_INVITE:
+                joinSuccess(baseResponse);
                 break;
             default:
-                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_JOIN_INVITE);
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
         }
     }
 
@@ -199,19 +198,24 @@ public class MyCommunityInviteMemberFragment  extends BaseDialogFragment impleme
 
     }
 
-    private void joinSuccess(FeedParticipationEnum feedParticipationEnum) {
-        switch (feedParticipationEnum) {
-            case JOIN_INVITE:
-                Toast.makeText(getActivity(),getString(R.string.ID_ADDED), Toast.LENGTH_SHORT).show();
-                if (null != mFeedDetail && StringUtil.isNotEmptyCollection(mUserIdForAddMember)) {
-                    int count = mFeedDetail.getNoOfMembers();
-                    count += mUserIdForAddMember.size();
-                    mFeedDetail.setNoOfMembers(count);
-                    ((HomeActivity) getActivity()).updateMyCommunitiesFragment(mFeedDetail);
-                }
-                break;
-            default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
+    private void joinSuccess(BaseResponse baseResponse) {
+        if (baseResponse instanceof CommunityResponse) {
+            switch (baseResponse.getStatus()) {
+                case AppConstants.SUCCESS:
+                    Toast.makeText(getActivity(), getString(R.string.ID_ADDED), Toast.LENGTH_SHORT).show();
+                    if (null != mFeedDetail && StringUtil.isNotEmptyCollection(mUserIdForAddMember)) {
+                        int count = mFeedDetail.getNoOfMembers();
+                        count += mUserIdForAddMember.size();
+                        mFeedDetail.setNoOfMembers(count);
+                        ((HomeActivity) getActivity()).updateMyCommunitiesFragment(mFeedDetail);
+                    }
+                    break;
+                case AppConstants.FAILED:
+                    mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);
+                    break;
+                default:
+                    mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_JOIN_INVITE);
+            }
         }
     }
 
@@ -244,6 +248,7 @@ public class MyCommunityInviteMemberFragment  extends BaseDialogFragment impleme
                 tvAddedMember.setText(getString(R.string.ID_ADDED) + AppConstants.SPACE + mUserIdForAddMember.size() + AppConstants.SPACE + getString(R.string.ID_MEMBERS));
         }
     }
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         return new Dialog(getActivity(), R.style.Theme_Material_Light_Dialog_NoMinWidth) {

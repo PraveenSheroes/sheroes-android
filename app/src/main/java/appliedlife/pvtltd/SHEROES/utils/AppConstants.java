@@ -22,12 +22,12 @@ public class AppConstants {
     public static final String SHEROES_PREFERENCE = "sheroes_preference";
     public static final String HTTP_401_UNAUTHORIZED = "HTTP 401 Unauthorized";
     public static final String INAVLID_DATA = "INVALID_DATA";
+    public static final String ERROR = "error";
     public static final String CHECK_NETWORK_CONNECTION = "check_network_connection";
     public static final String VIEW_NOT_ATTACHED_EXCEPTION = "Please call SheroesPresenter.attachView(BaseMvpView) before" + " requesting data to the SheroesPresenter";
     public static final String EXCEPTION_MUST_IMPLEMENT = "Exception while implement listner with in :";
     public static final String CASE_NOT_HANDLED = "Case not handled on : ";
     public static final String APP_CRASHED = "App crashed ";
-    public static final String ERROR_APP_CLOSE = "error while notifying app close";
     public static final String EMPTY_STRING = "";
     public static final String COMMA = ",";
     public static final String HOME_SPINNER_FRAGMENT = "spinner_fragment";
@@ -122,6 +122,7 @@ public class AppConstants {
     public static final String MARK_AS_SPAM = "Mark as spam successfully";
     public static final String FACEBOOK_VERIFICATION = "Your account is not facebook verified please click below continue with facebook";
     public static final String FAILED = "FAILED";
+    public static final String INVALID = "INVALID";
     public static final long SAVED_DAYS_TIME = 86400000;
     public static final int ONE_CONSTANT = 1;
     public static final int TWO_CONSTANT = 2;

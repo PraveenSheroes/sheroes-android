@@ -11,6 +11,7 @@ import android.widget.TextView;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.FaceBookOpenActivity;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -23,8 +24,10 @@ import butterknife.OnClick;
 public class FacebookErrorDialog extends BaseDialogFragment {
     @Bind(R.id.tv_ok)
     TextView mTvCacel;
+    @Bind(R.id.tv_message)
+    TextView mTvMessage;
     int callFor = 0;
-
+    String message;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -32,6 +35,10 @@ public class FacebookErrorDialog extends BaseDialogFragment {
         ButterKnife.bind(this, view);
         if (null != getArguments()) {
             callFor = getArguments().getInt(AppConstants.FACEBOOK_VERIFICATION);
+            message = getArguments().getString(AppConstants.SHEROES_AUTH_TOKEN);
+        }
+        if(StringUtil.isNotNullOrEmptyString(message)) {
+            mTvMessage.setText(message);
         }
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         setCancelable(true);

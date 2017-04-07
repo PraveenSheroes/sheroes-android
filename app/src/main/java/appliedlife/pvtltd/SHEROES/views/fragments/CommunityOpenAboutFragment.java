@@ -34,6 +34,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostResponse;
@@ -401,8 +402,8 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
     }
 
     @Override
-    public void getSuccessForAllResponse(String success, FeedParticipationEnum feedParticipationEnum) {
-        switch (success) {
+    public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
+        switch (baseResponse.getStatus()) {
             case AppConstants.SUCCESS:
                 mTvJoinInviteView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
                 mTvJoinInviteView.setText(getString(R.string.ID_JOINED));
@@ -410,7 +411,7 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
                 mTvJoinInviteView.setVisibility(View.VISIBLE);
                 break;
             case AppConstants.FAILED:
-                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_JOIN_INVITE);
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);
                 break;
             default:
                 mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_JOIN_INVITE);

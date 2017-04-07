@@ -20,6 +20,9 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.RequestedView;
 import rx.Subscriber;
 import rx.Subscription;
 
+import static appliedlife.pvtltd.SHEROES.enums.CommunityEnum.APPROVE_REQUEST;
+import static appliedlife.pvtltd.SHEROES.enums.CommunityEnum.REMOVE_REQUEST;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_AUTH_TOKEN;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MEMBER;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_REQUESTED;
 
@@ -28,7 +31,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_REQUE
  */
 
 public class RequestedPresenter extends BasePresenter<RequestedView> {
-    private final String TAG = LogUtils.makeLogTag(SearchModulePresenter.class);
+    private final String TAG = LogUtils.makeLogTag(RequestedPresenter.class);
     RequestedListModel requestedListModel;
     SheroesApplication mSheroesApplication;
     @Inject
@@ -53,7 +56,7 @@ public class RequestedPresenter extends BasePresenter<RequestedView> {
 
     public void getAllMembers(MemberRequest memberRequest) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.ERROR_APP_CLOSE,ERROR_REQUESTED);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
             return;
         }
         getMvpView().startProgressBar();
@@ -64,8 +67,7 @@ public class RequestedPresenter extends BasePresenter<RequestedView> {
             }
             @Override
             public void onError(Throwable e) {
-                getMvpView().showError(AppConstants.ERROR_APP_CLOSE,ERROR_REQUESTED);
-                getMvpView().showNwError();
+                getMvpView().showError(e.getMessage(),ERROR_REQUESTED);
                 getMvpView().stopProgressBar();
             }
 
@@ -80,7 +82,7 @@ public class RequestedPresenter extends BasePresenter<RequestedView> {
     }
     public void onRejectMemberApi(RemoveMemberRequest removeMemberRequest) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.ERROR_APP_CLOSE, ERROR_MEMBER);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
             return;
         }
         getMvpView().startProgressBar();
@@ -91,15 +93,14 @@ public class RequestedPresenter extends BasePresenter<RequestedView> {
             }
             @Override
             public void onError(Throwable e) {
-                getMvpView().showError(AppConstants.ERROR_APP_CLOSE, ERROR_MEMBER);
-                getMvpView().showNwError();
+                getMvpView().showError(e.getMessage(), ERROR_MEMBER);
                 getMvpView().stopProgressBar();
             }
 
             @Override
             public void onNext(MemberListResponse memberListResponse) {
                 getMvpView().stopProgressBar();
-                getMvpView().removePandingMember(memberListResponse.getStatus());
+                getMvpView().removeApprovePandingMember(memberListResponse, REMOVE_REQUEST);
             }
         });
         registerSubscription(subscription);
@@ -108,7 +109,7 @@ public class RequestedPresenter extends BasePresenter<RequestedView> {
 
     public void onApproveMember(ApproveMemberRequest approveMemberRequest) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.ERROR_APP_CLOSE, ERROR_MEMBER);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
             return;
         }
         getMvpView().startProgressBar();
@@ -119,15 +120,14 @@ public class RequestedPresenter extends BasePresenter<RequestedView> {
             }
             @Override
             public void onError(Throwable e) {
-                getMvpView().showError(AppConstants.ERROR_APP_CLOSE, ERROR_MEMBER);
-                getMvpView().showNwError();
+                getMvpView().showError(e.getMessage(), ERROR_MEMBER);
                 getMvpView().stopProgressBar();
             }
 
             @Override
             public void onNext(MemberListResponse memberListResponse) {
                 getMvpView().stopProgressBar();
-                getMvpView().approvePandingMember(memberListResponse.getStatus());
+                getMvpView().removeApprovePandingMember(memberListResponse,APPROVE_REQUEST);
             }
         });
         registerSubscription(subscription);

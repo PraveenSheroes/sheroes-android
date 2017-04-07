@@ -37,13 +37,11 @@ import rx.Subscription;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.BOOKMARK_UNBOOKMARK;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.COMMENT_REACTION;
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.COMMUNITY_OWNER;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.DELETE_COMMUNITY_POST;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_AUTH_TOKEN;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_BOOKMARK_UNBOOKMARK;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_BOOK_MARK_LIST;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_COMMENT_REACTION;
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_COMMUNITY_OWNER;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_RESPONSE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_LIKE_UNLIKE;
@@ -227,13 +225,13 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().getSuccessForAllResponse(e.getMessage(), ERROR_LIKE_UNLIKE);
+                getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
             }
 
             @Override
             public void onNext(LikeResponse likeResponse) {
                 getMvpView().stopProgressBar();
-                getMvpView().getSuccessForAllResponse(likeResponse.getStatus(), LIKE_UNLIKE);
+                getMvpView().getSuccessForAllResponse(likeResponse, LIKE_UNLIKE);
             }
         });
         registerSubscription(subscription);
@@ -254,13 +252,13 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().getSuccessForAllResponse(e.getMessage(), ERROR_LIKE_UNLIKE);
+                getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
             }
 
             @Override
             public void onNext(LikeResponse likeResponse) {
                 getMvpView().stopProgressBar();
-                getMvpView().getSuccessForAllResponse(likeResponse.getStatus(), LIKE_UNLIKE);
+                getMvpView().getSuccessForAllResponse(likeResponse, LIKE_UNLIKE);
             }
         });
         registerSubscription(subscription);
@@ -281,13 +279,13 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().getSuccessForAllResponse(e.getMessage(), ERROR_BOOKMARK_UNBOOKMARK);
+                getMvpView().showError(e.getMessage(), ERROR_BOOKMARK_UNBOOKMARK);
             }
 
             @Override
             public void onNext(BookmarkResponsePojo bookmarkResponsePojo) {
                 getMvpView().stopProgressBar();
-                getMvpView().getSuccessForAllResponse(bookmarkResponsePojo.getStatus(), BOOKMARK_UNBOOKMARK);
+                getMvpView().getSuccessForAllResponse(bookmarkResponsePojo, BOOKMARK_UNBOOKMARK);
             }
         });
         registerSubscription(subscription);
@@ -315,7 +313,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onNext(CommentReactionResponsePojo commentResponsePojo) {
                 getMvpView().stopProgressBar();
-                getMvpView().getSuccessForAllResponse(commentResponsePojo.getStatus(), COMMENT_REACTION);
+                getMvpView().getSuccessForAllResponse(commentResponsePojo, COMMENT_REACTION);
             }
         });
         registerSubscription(subscription);
@@ -342,7 +340,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onNext(CommunityResponse communityResponse) {
                getMvpView().stopProgressBar();
-                getMvpView().getSuccessForAllResponse(communityResponse.getStatus(), JOIN_INVITE);
+                getMvpView().getSuccessForAllResponse(communityResponse, JOIN_INVITE);
             }
         });
         registerSubscription(subscription);
@@ -368,7 +366,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onNext(DeleteCommunityPostResponse deleteCommunityPostResponse) {
                 getMvpView().stopProgressBar();
-                getMvpView().getSuccessForAllResponse(deleteCommunityPostResponse.getStatus(), DELETE_COMMUNITY_POST);
+                getMvpView().getSuccessForAllResponse(deleteCommunityPostResponse, DELETE_COMMUNITY_POST);
             }
         });
         registerSubscription(subscription);
@@ -394,34 +392,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onNext(BookmarkResponsePojo bookmarkResponsePojo1) {
                 getMvpView().stopProgressBar();
-                getMvpView().getSuccessForAllResponse(bookmarkResponsePojo1.getStatus(), MARK_AS_SPAM);
-            }
-        });
-        registerSubscription(subscription);
-    }
-
-    public void communityOwnerAdd(CommunityRequest communityRequest) {
-        if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.ERROR_APP_CLOSE, ERROR_COMMUNITY_OWNER);
-            return;
-        }
-        getMvpView().startProgressBar();
-        Subscription subscription = mHomeModel.communityOwnerFromModel(communityRequest).subscribe(new Subscriber<CommunityResponse>() {
-            @Override
-            public void onCompleted() {
-                getMvpView().stopProgressBar();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                getMvpView().stopProgressBar();
-                getMvpView().showError(AppConstants.ERROR_APP_CLOSE, ERROR_COMMUNITY_OWNER);
-            }
-
-            @Override
-            public void onNext(CommunityResponse communityResponse) {
-                getMvpView().stopProgressBar();
-                getMvpView().getSuccessForAllResponse(communityResponse.getStatus(), COMMUNITY_OWNER);
+                getMvpView().getSuccessForAllResponse(bookmarkResponsePojo1, MARK_AS_SPAM);
             }
         });
         registerSubscription(subscription);

@@ -117,8 +117,8 @@ public class FaceBookOpenActivity extends BaseActivity implements LoginView {
     public void fbOnClick() {
         fbSignIn();
     }
-    public void backToLogInActivity()
-    {
+
+    public void backToLogInActivity() {
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
         bundle.putInt(AppConstants.HOME_FRAGMENT, AppConstants.TWO_CONSTANT);
@@ -126,8 +126,8 @@ public class FaceBookOpenActivity extends BaseActivity implements LoginView {
         setResult(RESULT_OK, intent);
         finish();
     }
-    public void backToWelcome()
-    {
+
+    public void backToWelcome() {
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
         bundle.putInt(AppConstants.HOME_FRAGMENT, AppConstants.ONE_CONSTANT);
@@ -135,6 +135,7 @@ public class FaceBookOpenActivity extends BaseActivity implements LoginView {
         setResult(RESULT_OK, intent);
         finish();
     }
+
     private void fbSignIn() {
         LoginManager.getInstance().logOut();
         mFbLogin.setReadPermissions(Arrays.asList("public_profile", "email", "user_birthday", "user_friends"));
@@ -152,7 +153,7 @@ public class FaceBookOpenActivity extends BaseActivity implements LoginView {
                 showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_INVALID_USER_PASSWORD));
                 break;
             default:
-                showFaceBookError();
+                showFaceBookError(AppConstants.EMPTY_STRING);
         }
     }
 
@@ -170,14 +171,14 @@ public class FaceBookOpenActivity extends BaseActivity implements LoginView {
                         @Override
                         public void onCompleted(JSONObject object, GraphResponse response) {
                             if (null != accessToken && StringUtil.isNotNullOrEmptyString(accessToken.getToken())) {
-                                    LoginRequest loginRequest = AppUtils.loginRequestBuilder();
-                                    loginRequest.setAccessToken(accessToken.getToken());
-                                    AppUtils appUtils = AppUtils.getInstance();
-                                    loginRequest.setAppVersion(appUtils.getAppVersionName());
-                                    //TODO:: Google gcm ID
-                                    loginRequest.setCloudMessagingId(appUtils.getCloudMessaging());
-                                    loginRequest.setDeviceUniqueId(appUtils.getDeviceId());
-                                    mLoginPresenter.getFBVerificationInPresenter(loginRequest);
+                                LoginRequest loginRequest = AppUtils.loginRequestBuilder();
+                                loginRequest.setAccessToken(accessToken.getToken());
+                                AppUtils appUtils = AppUtils.getInstance();
+                                loginRequest.setAppVersion(appUtils.getAppVersionName());
+                                //TODO:: Google gcm ID
+                                loginRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+                                loginRequest.setDeviceUniqueId(appUtils.getDeviceId());
+                                mLoginPresenter.getFBVerificationInPresenter(loginRequest);
                             }
                         }
                     });
@@ -254,11 +255,18 @@ public class FaceBookOpenActivity extends BaseActivity implements LoginView {
                     case AppConstants.SUCCESS:
                         backToLogInActivity();
                         break;
-                    case AppConstants.FAILED:
+                    case AppConstants.INVALID:
+                        mUserPreference.delete();
                         LoginManager.getInstance().logOut();
-                        showFaceBookError();
+                        showFaceBookError(loginResponse.getFieldErrorMessageMap().get(AppConstants.ERROR));
                         break;
+                    default:
+                        mUserPreference.delete();
+                        LoginManager.getInstance().logOut();
                 }
+            } else {
+                mUserPreference.delete();
+                LoginManager.getInstance().logOut();
             }
         }
     }
@@ -293,10 +301,13 @@ public class FaceBookOpenActivity extends BaseActivity implements LoginView {
         }
     }
 
-    public DialogFragment showFaceBookError() {
+    public DialogFragment showFaceBookError(String message) {
         FacebookErrorDialog fragment = (FacebookErrorDialog) getFragmentManager().findFragmentByTag(FacebookErrorDialog.class.getName());
         if (fragment == null) {
             fragment = new FacebookErrorDialog();
+            Bundle bundle = new Bundle();
+            bundle.putString(AppConstants.SHEROES_AUTH_TOKEN, message);
+            fragment.setArguments(bundle);
         }
         if (!fragment.isVisible() && !fragment.isAdded() && !isFinishing() && !mIsDestroyed) {
             fragment.show(getFragmentManager(), FacebookErrorDialog.class.getName());

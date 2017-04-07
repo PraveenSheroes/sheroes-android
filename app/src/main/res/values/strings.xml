@@ -71,8 +71,6 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_REPLIES">Replies</string>
     <string name="ID_NO_REPLIES">No replies</string>
     <string name="ID_REPLY">Reply</string>
-    <string name="ID_ALREADY_BOOKMARK">Already performed</string>
-    <string name="ID_ALREADY_MEMBER">Already member of this community</string>
     <string name="ID_OPEN_BRACKET">(</string>
     <string name="ID_CLOSE_BRACKET">)</string>
     <string name="ID_REACTION">Reaction</string>

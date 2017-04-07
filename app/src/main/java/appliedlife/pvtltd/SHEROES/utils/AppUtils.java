@@ -87,6 +87,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.community.ApproveMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerRequest;
@@ -1660,6 +1661,7 @@ public class AppUtils {
         deactivateOwnerRequest.setCloudMessagingId(appUtils.getCloudMessaging());
         return deactivateOwnerRequest;
     }
+
     public static OwnerListRequest ownerRequestBuilder(Long communityId) {
         OwnerListRequest ownerListRequest = new OwnerListRequest();
         AppUtils appUtils = AppUtils.getInstance();
@@ -1690,6 +1692,20 @@ public class AppUtils {
         removeMemberRequest.setCloudMessagingId(appUtils.getCloudMessaging());
         removeMemberRequest.setSource(AppConstants.COMMUNITIES_DETAIL);
         return removeMemberRequest;
+
+    }
+    public static ApproveMemberRequest approveMemberRequestBuilder(Long communityId, Long userid) {
+        ApproveMemberRequest approveMemberRequest = new ApproveMemberRequest();
+        AppUtils appUtils = AppUtils.getInstance();
+        approveMemberRequest.setCommunityId(communityId);
+        approveMemberRequest.setUserId(userid);
+        approveMemberRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        approveMemberRequest.setCommunityId(communityId);
+        approveMemberRequest.setAppVersion(appUtils.getAppVersionName());
+        approveMemberRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+        approveMemberRequest.setSource(AppConstants.COMMUNITIES_DETAIL);
+        return approveMemberRequest;
+
     }
 
     public static BoardingTellUsRequest boardingTellUsFormDataRequestBuilder(String typeOfBoardingData, String type, LabelValue labelValue, GetAllDataDocument getAllDataDocument) {

@@ -1,6 +1,5 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,9 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,17 +17,17 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.community.ApproveMemberRequest;
+import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.community.MemberListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.PandingMember;
-import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
-import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.presenters.MembersPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.RequestedPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
@@ -39,6 +36,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.getMemberRequestBuilder;
 
 /**
@@ -46,7 +44,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.getMemberRequestBuilder;
  */
 
 public class CommunityRequestedFragment extends BaseFragment implements RequestedView {
-    private final String TAG = LogUtils.makeLogTag(CommentReactionFragment.class);
+    private final String TAG = LogUtils.makeLogTag(CommunityRequestedFragment.class);
     @Inject
     MembersPresenter mmemberpresenter;
     @Inject
@@ -55,31 +53,15 @@ public class CommunityRequestedFragment extends BaseFragment implements Requeste
     RecyclerView mRecyclerView;
     @Bind(R.id.pb_community_requested_progress_bar)
     ProgressBar mProgressBar;
-    @Bind(R.id.fmCommunityMembersClose)
-    FrameLayout fmCommunityMembersClose;
-    private FragmentOpen mFragmentOpen;
-    private String mSearchDataName = AppConstants.EMPTY_STRING;
     private GenericRecyclerViewAdapter mAdapter;
-    private RequestHomeActivityIntractionListner mHomeActivityIntractionListner;
     FeedDetail mFeedDetail;
     int position;
     private FragmentListRefreshData mFragmentListRefreshData;
     private int mPageNo = AppConstants.ONE_CONSTANT;
-    List<PandingMember> pandingListData=new ArrayList<>();
+    List<PandingMember> pandingListData = new ArrayList<>();
     @Inject
     AppUtils mAppUtils;
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            if (getActivity() instanceof RequestHomeActivityIntractionListner) {
-                mHomeActivityIntractionListner = (RequestHomeActivityIntractionListner) getActivity();
-            }
-        } catch (InstantiationException exception) {
-            LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
-        }
-    }
-    @Nullable
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -87,9 +69,8 @@ public class CommunityRequestedFragment extends BaseFragment implements Requeste
         ButterKnife.bind(this, view);
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MEMBER_FRAGMENT, AppConstants.EMPTY_STRING);
 
-        if(null!=getArguments())
-        {
-            mFeedDetail =getArguments().getParcelable(AppConstants.COMMUNITY_DETAIL);
+        if (null != getArguments()) {
+            mFeedDetail = getArguments().getParcelable(AppConstants.COMMUNITY_DETAIL);
         }
         requestedPresenter.attachView(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -97,27 +78,14 @@ public class CommunityRequestedFragment extends BaseFragment implements Requeste
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mAdapter);
-       /* MemberRequest memberRequest=new MemberRequest();
-        memberRequest.setDeviceUniqueId("String");
-        memberRequest.setScreenName("String");
-        memberRequest.setLastScreenName("String");
-        memberRequest.setCloudMessagingId("String");
-        memberRequest.setPageSize(200);
-        memberRequest.setPageNo(1);
-        memberRequest.setAppVersion("String");
-        memberRequest.setCommunityId(mFeedDetail.getIdOfEntityOrParticipant());
-        requestedPresenter.getAllMembers(memberRequest);*/
-
 
         mRecyclerView.addOnScrollListener(new HidingScrollListener(requestedPresenter, mRecyclerView, manager, mFragmentListRefreshData) {
             @Override
             public void onHide() {
-                //((CommunitiesDetailActivity) getActivity()).mFlHomeFooterList.setVisibility(View.INVISIBLE);
             }
 
             @Override
             public void onShow() {
-                // ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -126,159 +94,87 @@ public class CommunityRequestedFragment extends BaseFragment implements Requeste
             }
         });
         super.setAllInitializationForPandingMember(mFragmentListRefreshData, mAdapter, manager, mPageNo, null, mRecyclerView, 0, 0, mmemberpresenter, mAppUtils, mProgressBar);
-        requestedPresenter.getAllMembers(getMemberRequestBuilder(mFeedDetail.getIdOfEntityOrParticipant(),mFragmentListRefreshData.getPageNo()));
+        requestedPresenter.getAllMembers(getMemberRequestBuilder(mFeedDetail.getIdOfEntityOrParticipant(), mFragmentListRefreshData.getPageNo()));
         mFragmentListRefreshData.setEnitityOrParticpantid(mFeedDetail.getIdOfEntityOrParticipant());
 
         return view;
     }
-    public void removePandingRequest(long userId, long communityId, int position)
-    {
-        this.position=position;
-        RemoveMemberRequest removeMemberRequest =new RemoveMemberRequest();
-        removeMemberRequest.setCommunityId((communityId));
-        removeMemberRequest.setUserId(userId);
-        removeMemberRequest.setCloudMessagingId("string");
-        removeMemberRequest.setDeviceUniqueId("string");
-        removeMemberRequest.setAppVersion("string");
-        removeMemberRequest.setSource("string");
-        requestedPresenter.onRejectMemberApi(removeMemberRequest);
+
+    public void removePandingRequest(long userId, long communityId, int position) {
+        this.position = position;
+        requestedPresenter.onRejectMemberApi(mAppUtils.removeMemberRequestBuilder(communityId, userId));
     }
-    public void approvePandingRequest(long userId, long communityId, int position)
-    {
-        this.position=position;
-        ApproveMemberRequest removeMember=new ApproveMemberRequest();
-        removeMember.setCommunityId((communityId));
-        removeMember.setUserId(userId);
-        removeMember.setCloudMessagingId("string");
-        removeMember.setDeviceUniqueId("string");
-        removeMember.setAppVersion("string");
-        removeMember.setSource("string");
-        requestedPresenter.onApproveMember(removeMember);
+
+    public void approvePandingRequest(long userId, long communityId, int position) {
+        this.position = position;
+        requestedPresenter.onApproveMember(mAppUtils.approveMemberRequestBuilder(communityId, userId));
     }
 
 
     @OnClick(R.id.fmCommunityMembersClose)
-    public void communityClosePress()
-    {
-        mHomeActivityIntractionListner.closeRequestFragment();
-    }
-   /* @Override
-    public void getAllCommentsAndReactions(List<CommentsList> data) {
-        if(mAdapter!=null) {
-            mTvUserCommentHeaderText.setText(getString(R.string.ID_REPLIES)+getString(R.string.ID_OPEN_BRACKET)+String.valueOf(data.size())+getString(R.string.ID_CLOSE_BRACKET));
-            mAdapter.setSheroesGenericListData(data);
-            mAdapter.notifyDataSetChanged();
-        }
+    public void communityClosePress() {
+        ((CommunitiesDetailActivity)getActivity()).getSupportFragmentManager().popBackStack();
     }
 
-    @Override
-    public void getAllReactions(List<ReactionList> data) {
-        if(mAdapter!=null) {
-            mTvUserCommentHeaderText.setText(getString(R.string.ID_REACTION)+getString(R.string.ID_OPEN_BRACKET)+String.valueOf(data.size())+getString(R.string.ID_CLOSE_BRACKET));
-            mAdapter.setSheroesGenericListData(data);
-            mAdapter.notifyDataSetChanged();
-        }
-    }
-
-    @Override
-    public void showNwError() {
-        mHomeActivityIntractionListner.onErrorOccurence();
-    }
-
-
-    @Override
-    public void startProgressBar() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mProgressBar.bringToFront();
-    }
-*/
-
-    @Override
-    public void startProgressBar() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mProgressBar.bringToFront();
-    }
-
-    @Override
-    public void stopProgressBar() {
-        mProgressBar.setVisibility(View.GONE);
-    }
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         requestedPresenter.detachView();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
 
     @Override
     public void getAllRequest(List<PandingMember> data) {
-        mAdapter.setSheroesGenericListData(data);
-        mAdapter.notifyDataSetChanged();
-        if(null !=data) {
-            pandingListData=data;
-            mFragmentListRefreshData.setPageNo(mFragmentListRefreshData.getPageNo()+1);
+        if (StringUtil.isNotEmptyCollection(data)) {
+            pandingListData = data;
+            mAdapter.setSheroesGenericListData(data);
+            mAdapter.notifyDataSetChanged();
+            mFragmentListRefreshData.setPageNo(mFragmentListRefreshData.getPageNo() + 1);
         }
     }
 
     @Override
-    public void removePandingMember(String members) {
-
-        pandingListData.remove(position);
-        mAdapter.setSheroesGenericListData(pandingListData);
-        mAdapter.notifyDataSetChanged();
+    public void removeApprovePandingMember(MemberListResponse memberListResponse, CommunityEnum communityEnum) {
+        switch (communityEnum) {
+            case APPROVE_REQUEST:
+                approvePandingMember(memberListResponse);
+                break;
+            case REMOVE_REQUEST:
+                removePandingMember(memberListResponse);
+                break;
+            default:
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + communityEnum);
+        }
     }
 
-    @Override
-    public void approvePandingMember(String members) {
-        Toast.makeText(getActivity(), members, Toast.LENGTH_SHORT).show();
-        pandingListData.remove(position);
-        mAdapter.setSheroesGenericListData(pandingListData);
-        mAdapter.notifyDataSetChanged();
+    private void removePandingMember(MemberListResponse memberListResponse) {
+        switch (memberListResponse.getStatus()) {
+            case AppConstants.SUCCESS:
+                pandingListData.remove(position);
+                mAdapter.setSheroesGenericListData(pandingListData);
+                mAdapter.notifyDataSetChanged();
+                break;
+            case AppConstants.FAILED:
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(memberListResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);
+                break;
+            default:
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_JOIN_INVITE);
+        }
     }
 
-
-    @Override
-    public void showNwError() {
-
+    private void approvePandingMember(MemberListResponse memberListResponse) {
+        switch (memberListResponse.getStatus()) {
+            case AppConstants.SUCCESS:
+                pandingListData.remove(position);
+                mAdapter.setSheroesGenericListData(pandingListData);
+                mAdapter.notifyDataSetChanged();
+                break;
+            case AppConstants.FAILED:
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(memberListResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);
+                break;
+            default:
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_JOIN_INVITE);
+        }
     }
 
-
-    @Override
-    public void startNextScreen() {
-
-    }
-
-
-    public interface RequestHomeActivityIntractionListner {
-        void onErrorOccurence();
-        void closeRequestFragment();
-        void onClickReactionList(FragmentOpen isFragmentOpen);
-    }
-   /* @OnClick(R.id.tv_user_comment_header_text)
-    public void dismissCommentDialog()
-    {
-        mHomeActivityIntractionListner.onDialogDismissWithListRefresh(mFragmentOpen);
-    }
-    @OnClick(R.id.fl_comment_reaction)
-    public void openReactionList()
-    {
-        mFragmentOpen.setReactionList(true);
-        mFragmentOpen.setCommentList(false);
-        mHomeActivityIntractionListner.onClickReactionList(mFragmentOpen);
-    }*/
 }

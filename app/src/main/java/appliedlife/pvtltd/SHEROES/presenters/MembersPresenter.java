@@ -25,7 +25,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MEMBE
  */
 
 public class MembersPresenter extends BasePresenter<AllMembersView> {
-    private final String TAG = LogUtils.makeLogTag(SearchModulePresenter.class);
+    private final String TAG = LogUtils.makeLogTag(MembersPresenter.class);
     MemberListModel mCommentReactionModel;
     SheroesApplication mSheroesApplication;
     @Inject

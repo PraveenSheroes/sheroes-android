@@ -59,7 +59,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FO
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.JOIN_INVITE;
 
 
-public class CommunitiesDetailActivity extends BaseActivity implements ShareCommunityFragment.ShareCommunityActivityIntractionListner, CommunityRequestedFragment.RequestHomeActivityIntractionListner, CommentReactionFragment.HomeActivityIntractionListner {
+public class CommunitiesDetailActivity extends BaseActivity implements ShareCommunityFragment.ShareCommunityActivityIntractionListner, CommentReactionFragment.HomeActivityIntractionListner {
     private final String TAG = LogUtils.makeLogTag(CommunitiesDetailActivity.class);
     @Bind(R.id.app_bar_coomunities_detail)
     AppBarLayout mAppBarLayout;
@@ -384,7 +384,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
                     ((CommunityOpenAboutFragment) fragmentCommunityDetail).setStatusOfButton(feedDetail);
                 }
             } else {
-                onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), JOIN_INVITE);
+                onShowErrorDialog(status, JOIN_INVITE);
             }
         } else {
             onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), JOIN_INVITE);
@@ -486,15 +486,6 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
         getSupportFragmentManager().popBackStack();
     }
 
-    @Override
-    public void closeRequestFragment() {
-        getSupportFragmentManager().popBackStack();
-    }
-
-    @Override
-    public void onClickReactionList(FragmentOpen isFragmentOpen) {
-
-    }
 
     public void onClose() {
         if (mFeedDetail.isClosedCommunity()) {

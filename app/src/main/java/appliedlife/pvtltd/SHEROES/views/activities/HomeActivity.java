@@ -1006,7 +1006,7 @@ public class HomeActivity extends BaseActivity implements ViewPager.OnPageChange
                     }
                 }
             } else {
-                onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), JOIN_INVITE);
+                onShowErrorDialog(result, JOIN_INVITE);
             }
         }
     }

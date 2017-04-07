@@ -30,7 +30,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
@@ -96,6 +95,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     protected GenericFragmentActivityIntractionListner genericFragmentActivityIntractionListner;
     @Inject
     Preference<LoginResponse> userPreference;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -177,6 +177,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
         this.mAppUtils = mAppUtils;
         this.mProgressBar = mProgressBar;
     }
+
     public void setAllInitializationForPandingMember(FragmentListRefreshData mFragmentListRefreshData, GenericRecyclerViewAdapter mAdapter, LinearLayoutManager manager, int mPageNo, FeedDetail mFeedDetails, RecyclerView mRecyclerView, int i, int i1, MembersPresenter mmemberpresenter, AppUtils mAppUtils, ProgressBar mProgressBar) {
         this.mFragmentListRefreshData = mFragmentListRefreshData;
         this.mPullRefreshList = mPullRefreshList;
@@ -192,9 +193,11 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     public void setListLoadFlag(boolean mListLoad) {
         this.mListLoad = mListLoad;
     }
+
     public void setFeedDetail(FeedDetail feedDetail) {
         this.mFeedDetail = feedDetail;
     }
+
     public void setRefreshList(SwipPullRefreshList mPullRefreshList) {
         this.mPullRefreshList = mPullRefreshList;
     }
@@ -223,8 +226,8 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
             if (mActivity instanceof FragmentIntractionWithActivityListner) {
                 mHomeSearchActivityFragmentIntractionWithActivityListner = (FragmentIntractionWithActivityListner) getActivity();
             }
-            if(getActivity() instanceof  GenericFragmentActivityIntractionListner) {
-                genericFragmentActivityIntractionListner = (GenericFragmentActivityIntractionListner)getActivity();
+            if (getActivity() instanceof GenericFragmentActivityIntractionListner) {
+                genericFragmentActivityIntractionListner = (GenericFragmentActivityIntractionListner) getActivity();
             }
         } catch (Fragment.InstantiationException exception) {
             LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
@@ -234,7 +237,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
 
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
-        List<FeedDetail> feedDetailList=feedResponsePojo.getFeedDetails();
+        List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
             mLiNoResult.setVisibility(View.GONE);
             mPageNo = mFragmentListRefreshData.getPageNo();
@@ -257,8 +260,9 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
         }
         mSwipeView.setRefreshing(false);
     }
+
     @Override
-    public void getSuccessForAllResponse(String success, FeedParticipationEnum feedParticipationEnum) {
+    public void getSuccessForAllResponse(BaseResponse success, FeedParticipationEnum feedParticipationEnum) {
         switch (feedParticipationEnum) {
             case LIKE_UNLIKE:
                 likeSuccess(success);
@@ -282,20 +286,22 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
         }
     }
-    public void deleteCommunityPostRespose(String success) {
-        switch (success) {
+
+    public void deleteCommunityPostRespose(BaseResponse baseResponse) {
+        switch (baseResponse.getStatus()) {
             case AppConstants.SUCCESS:
-                  commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+                commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
                 break;
             case AppConstants.FAILED:
-                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_JOIN_INVITE);
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);
                 break;
             default:
                 mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_JOIN_INVITE);
         }
     }
-    public void joinInviteResponse(String success) {
-        switch (success) {
+
+    public void joinInviteResponse(BaseResponse baseResponse) {
+        switch (baseResponse.getStatus()) {
             case AppConstants.SUCCESS:
                 if (mFeedDetail.isClosedCommunity()) {
                     mFeedDetail.setRequestPending(true);
@@ -306,16 +312,16 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                 commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
                 break;
             case AppConstants.FAILED:
-                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_JOIN_INVITE);
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);
                 break;
             default:
                 mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_JOIN_INVITE);
         }
     }
 
-    private void recentCommentEditDelete(String success) {
+    private void recentCommentEditDelete(BaseResponse baseResponse) {
         if (null != mFeedDetail) {
-            switch (success) {
+            switch (baseResponse.getStatus()) {
                 case AppConstants.SUCCESS:
                     List<LastComment> lastCommentList = mFeedDetail.getLastComments();
                     if (StringUtil.isNotEmptyCollection(lastCommentList) && null != lastCommentList.get(lastCommentList.size() - 1)) {
@@ -326,7 +332,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                     mAdapter.notifyDataSetChanged();
                     break;
                 case AppConstants.FAILED:
-                    showError(getString(R.string.ID_ALREADY_BOOKMARK), ERROR_COMMENT_REACTION);
+                    showError(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_COMMENT_REACTION);
                     break;
                 default:
                     showError(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_COMMENT_REACTION);
@@ -349,9 +355,9 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
         mAdapter.notifyDataSetChanged();
     }
 
-    protected void bookMarkSuccess(String success) {
+    protected void bookMarkSuccess(BaseResponse baseResponse) {
         if (null != mFeedDetail) {
-            switch (success) {
+            switch (baseResponse.getStatus()) {
                 case AppConstants.SUCCESS:
                     if (!mFeedDetail.isBookmarked()) {
                         mFeedDetail.setBookmarked(true);
@@ -368,10 +374,9 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                         ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
                         ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setAddDuration(AppConstants.NO_REACTION_CONSTANT);
                     }
-
                     break;
                 case AppConstants.FAILED:
-                    showError(getString(R.string.ID_ALREADY_BOOKMARK), ERROR_BOOKMARK_UNBOOKMARK);
+                    showError(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_BOOKMARK_UNBOOKMARK);
                     break;
                 default:
                     showError(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_BOOKMARK_UNBOOKMARK);
@@ -379,9 +384,9 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
         }
     }
 
-    protected void likeSuccess(String success) {
+    protected void likeSuccess(BaseResponse baseResponse) {
         if (null != mFeedDetail) {
-            switch (success) {
+            switch (baseResponse.getStatus()) {
                 case AppConstants.SUCCESS:
 
                     if (mFeedDetail.isLongPress()) {
@@ -409,7 +414,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                     }
                     break;
                 case AppConstants.FAILED:
-                    showError(getString(R.string.ID_ALREADY_BOOKMARK), ERROR_LIKE_UNLIKE);
+                    showError(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_LIKE_UNLIKE);
                     break;
                 default:
                     showError(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_LIKE_UNLIKE);
@@ -418,16 +423,19 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
         }
 
     }
+
     public void markAsSpamCommunityPost(FeedDetail feedDetail) {
         mListLoad = false;
         mFeedDetail = feedDetail;
         mHomePresenter.markAsSpamFromPresenter(mAppUtils.bookMarkRequestBuilder(feedDetail.getEntityOrParticipantId()));
     }
+
     public void deleteCommunityPost(FeedDetail feedDetail) {
         mListLoad = false;
         mFeedDetail = feedDetail;
         mHomePresenter.deleteCommunityPostFromPresenter(mAppUtils.deleteCommunityPostRequest(feedDetail.getIdOfEntityOrParticipant()));
     }
+
     public void bookMarkForCard(FeedDetail feedDetail) {
         mListLoad = false;
         mFeedDetail = feedDetail;
@@ -507,12 +515,16 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     protected void onBackPress() {
         getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
+
     public interface GenericFragmentActivityIntractionListner {
         void close();
+
         void onBackPress();
+
         void onErrorOccurence(String errorMessage);
 
     }
+
     protected void getExternalStoragePermission() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
@@ -538,6 +550,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
         }
 
     }
+
     public void joinRequestForOpenCommunity(FeedDetail feedDetail) {
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
             List<Long> userIdList = new ArrayList();

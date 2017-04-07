@@ -288,7 +288,7 @@ public class CommunitySearchTagsDialog extends BaseDialogFragment implements Com
     }
 
     @Override
-    public void getSuccessForAllResponse(String success, FeedParticipationEnum feedParticipationEnum) {
+    public void getSuccessForAllResponse(BaseResponse success, FeedParticipationEnum feedParticipationEnum) {
 
     }
 

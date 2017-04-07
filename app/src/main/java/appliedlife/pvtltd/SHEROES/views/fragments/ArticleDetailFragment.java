@@ -21,6 +21,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
@@ -36,6 +37,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_BOOKMARK_UNBOOKMARK;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_LIKE_UNLIKE;
 
 /**
  * Created by Praveen_Singh on 08-02-2017.
@@ -104,7 +106,7 @@ public class ArticleDetailFragment extends BaseFragment {
 
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
-        List<FeedDetail> feedDetailList=feedResponsePojo.getFeedDetails();
+        List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
         if (StringUtil.isNotEmptyCollection(feedDetailList) && mAdapter != null) {
             articleList = new ArrayList<>();
             articleDetailPojo = new ArticleDetailPojo();
@@ -124,8 +126,9 @@ public class ArticleDetailFragment extends BaseFragment {
             mArticleDetailActivityIntractionListner.onBookmarkClick(mFeedDetail, AppConstants.TWO_CONSTANT);
         }
     }
+
     @Override
-    public void getSuccessForAllResponse(String success, FeedParticipationEnum feedParticipationEnum) {
+    public void getSuccessForAllResponse(BaseResponse success, FeedParticipationEnum feedParticipationEnum) {
         switch (feedParticipationEnum) {
             case LIKE_UNLIKE:
                 likeSuccess(success);
@@ -139,38 +142,38 @@ public class ArticleDetailFragment extends BaseFragment {
     }
 
 
-
-    protected void articleBookMarkSuccess(String success) {
+    protected void articleBookMarkSuccess(BaseResponse baseResponse) {
         if (null != mFeedDetail) {
-            switch (success) {
-                case AppConstants.SUCCESS:
-                    if (!mFeedDetail.isBookmarked()) {
-                        mFeedDetail.setBookmarked(true);
-                        articleDetailPojo.setFeedDetail(mFeedDetail);
-                        mFeedDetail.setBookmarked(false);
-                    } else {
-                        mFeedDetail.setBookmarked(false);
-                        articleDetailPojo.setFeedDetail(mFeedDetail);
-                        mFeedDetail.setBookmarked(true);
-                    }
-                    articleList.clear();
-                    articleList.add(articleDetailPojo);
-                    mAdapter.notifyDataSetChanged();
-                    mArticleDetailActivityIntractionListner.onBookmarkClick(mFeedDetail, AppConstants.ONE_CONSTANT);
-                    break;
-                case AppConstants.FAILED:
-                    showError(getString(R.string.ID_ALREADY_BOOKMARK), ERROR_BOOKMARK_UNBOOKMARK);
-                    break;
-                default:
-                    showError(AppConstants.HTTP_401_UNAUTHORIZED,ERROR_BOOKMARK_UNBOOKMARK);
+            if (baseResponse instanceof BookmarkResponsePojo) {
+                switch (baseResponse.getStatus()) {
+                    case AppConstants.SUCCESS:
+                        if (!mFeedDetail.isBookmarked()) {
+                            mFeedDetail.setBookmarked(true);
+                            articleDetailPojo.setFeedDetail(mFeedDetail);
+                            mFeedDetail.setBookmarked(false);
+                        } else {
+                            mFeedDetail.setBookmarked(false);
+                            articleDetailPojo.setFeedDetail(mFeedDetail);
+                            mFeedDetail.setBookmarked(true);
+                        }
+                        articleList.clear();
+                        articleList.add(articleDetailPojo);
+                        mAdapter.notifyDataSetChanged();
+                        mArticleDetailActivityIntractionListner.onBookmarkClick(mFeedDetail, AppConstants.ONE_CONSTANT);
+                        break;
+                    case AppConstants.FAILED:
+                        showError(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_BOOKMARK_UNBOOKMARK);
+                        break;
+                    default:
+                        showError(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_BOOKMARK_UNBOOKMARK);
+                }
             }
         }
     }
 
-    protected void likeSuccess(String success) {
+    protected void likeSuccess(BaseResponse baseResponse) {
 
-        if (success.equalsIgnoreCase(AppConstants.SUCCESS) && null != mFeedDetail) {
-
+        if (StringUtil.isNotNullOrEmptyString(baseResponse.getStatus())&&baseResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS) && null != mFeedDetail) {
             if (mFeedDetail.isLongPress()) {
                 if (mFeedDetail.getReactionValue() == AppConstants.NO_REACTION_CONSTANT) {
                     mFeedDetail.setReactionValue(mPressedEmoji);
@@ -198,6 +201,8 @@ public class ArticleDetailFragment extends BaseFragment {
                 ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setAddDuration(AppConstants.NO_REACTION_CONSTANT);
             }
             mArticleDetailActivityIntractionListner.onBookmarkClick(mFeedDetail, AppConstants.TWO_CONSTANT);
+        } else {
+            showError(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_LIKE_UNLIKE);
         }
     }
 

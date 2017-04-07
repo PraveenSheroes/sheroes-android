@@ -24,7 +24,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_COMME
  */
 
 public class CommentReactionPresenter extends BasePresenter<AllCommentReactionView> {
-    private final String TAG = LogUtils.makeLogTag(SearchModulePresenter.class);
+    private final String TAG = LogUtils.makeLogTag(CommentReactionPresenter.class);
     CommentReactionModel mCommentReactionModel;
     SheroesApplication mSheroesApplication;
     @Inject

@@ -25,6 +25,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -187,18 +188,18 @@ public class InviteCommunityMember extends BaseDialogFragment implements HomeVie
     };
 
     @Override
-    public void getSuccessForAllResponse(String success, FeedParticipationEnum feedParticipationEnum) {
+    public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
         switch (feedParticipationEnum) {
             case JOIN_INVITE:
-                joinSuccess(success);
+                joinSuccess(baseResponse);
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
         }
     }
 
-    private void joinSuccess(String success) {
-        switch (success) {
+    private void joinSuccess(BaseResponse baseResponse) {
+        switch (baseResponse.getStatus()) {
             case AppConstants.SUCCESS:
                 Toast.makeText(getActivity(),getString(R.string.ID_ADDED), Toast.LENGTH_SHORT).show();
                 if (null != mFeedDetail && StringUtil.isNotEmptyCollection(mUserIdForAddMember)) {
@@ -209,7 +210,7 @@ public class InviteCommunityMember extends BaseDialogFragment implements HomeVie
                 }
                 break;
             case AppConstants.FAILED:
-                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(getString(R.string.ID_ALREADY_MEMBER), ERROR_JOIN_INVITE);
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);
                 break;
             default:
                 mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_JOIN_INVITE);

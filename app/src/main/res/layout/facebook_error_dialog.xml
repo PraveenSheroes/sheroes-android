@@ -20,6 +20,7 @@
             android:layout_marginTop="@dimen/dp_size_20"
             android:src="@drawable/ic_facebook_gender" />
         <TextView
+            android:id="@+id/tv_message"
             android:layout_width="@dimen/dp_size_250"
             android:layout_height="wrap_content"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"

@@ -117,8 +117,8 @@ public class BookmarksFragment extends BaseFragment {
     }
 
     @Override
-    public void getSuccessForAllResponse(String success,FeedParticipationEnum feedParticipationEnum) {
-    super.getSuccessForAllResponse(success,feedParticipationEnum);
+    public void getSuccessForAllResponse(BaseResponse baseResponse,FeedParticipationEnum feedParticipationEnum) {
+    super.getSuccessForAllResponse(baseResponse,feedParticipationEnum);
     }
 
     @Override

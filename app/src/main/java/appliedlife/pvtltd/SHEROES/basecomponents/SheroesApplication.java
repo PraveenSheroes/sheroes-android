@@ -56,7 +56,7 @@ public class SheroesApplication extends MultiDexApplication {
             if (getCurrentActivityName() == null) { // App is sent to background perform a background operation
             }
         } catch (Exception e) {
-            LogUtils.error(TAG, AppConstants.ERROR_APP_CLOSE, e);
+            LogUtils.error(TAG, AppConstants.ERROR_OCCUR, e);
         }
     }
 }

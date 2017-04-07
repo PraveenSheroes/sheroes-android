@@ -19,6 +19,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
@@ -92,8 +93,6 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
             mFeedDetail = getArguments().getParcelable(AppConstants.JOB_DETAIL);
         }
     }
-
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -160,38 +159,33 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
 
     }
 
-    @Override
-    public void showNwError() {
-
-    }
-
 
     public interface JobDetailActivityIntractionListner {
         void onJobBookmarkClick(FeedDetail feedDetail);
     }
     @Override
-    public void getSuccessForAllResponse(String success, FeedParticipationEnum feedParticipationEnum) {
+    public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
         switch (feedParticipationEnum) {
             case BOOKMARK_UNBOOKMARK:
-                jobDetailBookMarkSuccess(success);
+                jobDetailBookMarkSuccess(baseResponse);
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
         }
     }
 
-    protected void jobDetailBookMarkSuccess(String success) {
+    protected void jobDetailBookMarkSuccess(BaseResponse baseResponse) {
         if (null != mFeedDetail) {
-            switch (success) {
-                case AppConstants.SUCCESS:
-                    mJobDetailActivityIntractionListner.onJobBookmarkClick(mFeedDetail);
-                    break;
-                case AppConstants.FAILED:
-                    showError(getString(R.string.ID_ALREADY_BOOKMARK), ERROR_BOOKMARK_UNBOOKMARK);
-                    break;
-                default:
-                    showError(AppConstants.HTTP_401_UNAUTHORIZED,ERROR_BOOKMARK_UNBOOKMARK);
-            }
+                switch (baseResponse.getStatus()) {
+                    case AppConstants.SUCCESS:
+                        mJobDetailActivityIntractionListner.onJobBookmarkClick(mFeedDetail);
+                        break;
+                    case AppConstants.FAILED:
+                        showError(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_BOOKMARK_UNBOOKMARK);
+                        break;
+                    default:
+                        showError(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_BOOKMARK_UNBOOKMARK);
+                }
         }
     }
 }

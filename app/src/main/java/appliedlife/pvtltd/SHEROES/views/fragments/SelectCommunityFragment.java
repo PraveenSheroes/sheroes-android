@@ -175,7 +175,7 @@ public class SelectCommunityFragment extends BaseDialogFragment implements Commu
     }
 
     @Override
-    public void getSuccessForAllResponse(String success, FeedParticipationEnum feedParticipationEnum) {
+    public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
 
     }
 

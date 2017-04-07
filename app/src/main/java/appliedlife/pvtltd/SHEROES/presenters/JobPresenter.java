@@ -24,7 +24,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_
  */
 
 public class JobPresenter extends BasePresenter<JobView> {
-    private final String TAG = LogUtils.makeLogTag(SearchModulePresenter.class);
+    private final String TAG = LogUtils.makeLogTag(JobPresenter.class);
     JobModel jobModel;
     SheroesApplication mSheroesApplication;
     @Inject
@@ -49,7 +49,7 @@ public class JobPresenter extends BasePresenter<JobView> {
 
     public void getJobApply(final JobApplyRequest jobApplyRequest) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showNwError();
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);
             return;
         }
         getMvpView().startProgressBar();
@@ -60,9 +60,8 @@ public class JobPresenter extends BasePresenter<JobView> {
             }
             @Override
             public void onError(Throwable e) {
-                getMvpView().showError(AppConstants.ERROR_APP_CLOSE, ERROR_FEED_RESPONSE);
-                getMvpView().showNwError();
                 getMvpView().stopProgressBar();
+                getMvpView().showError(e.getMessage(), ERROR_FEED_RESPONSE);
             }
 
             @Override

@@ -9,5 +9,4 @@ import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobApplyResponse;
 
 public interface JobView extends BaseMvpView {
     void getJobApplySuccess(JobApplyResponse jobApplyRequests);
-    void showNwError();
 }

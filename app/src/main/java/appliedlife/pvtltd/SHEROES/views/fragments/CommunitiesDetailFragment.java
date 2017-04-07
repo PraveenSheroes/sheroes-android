@@ -26,6 +26,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
@@ -256,7 +257,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
     }
 
     @Override
-    public void getSuccessForAllResponse(String success, FeedParticipationEnum feedParticipationEnum) {
+    public void getSuccessForAllResponse(BaseResponse success, FeedParticipationEnum feedParticipationEnum) {
         switch (feedParticipationEnum) {
             case JOIN_INVITE:
                 joinSuccessFailed(success);
@@ -266,27 +267,29 @@ public class CommunitiesDetailFragment extends BaseFragment {
         }
     }
 
-    public void joinSuccessFailed(String success) {
-        switch (success) {
-            case AppConstants.SUCCESS:
-                if (mFeedDetail.isClosedCommunity()) {
-                    mFeedDetail.setRequestPending(true);
-                    mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
-                    mTvJoinView.setText(getContext().getString(R.string.ID_REQUESTED));
-                    mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_community_requested);
-                } else {
-                    mFeedDetail.setOwner(true);
-                    mFeedDetail.setMember(true);
-                    mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
-                    mTvJoinView.setText(getContext().getString(R.string.ID_JOINED));
-                    mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
-                }
-                break;
-            case AppConstants.FAILED:
-                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_JOIN_INVITE);
-                break;
-            default:
-                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_JOIN_INVITE);
+    public void joinSuccessFailed(BaseResponse baseResponse) {
+        if (baseResponse instanceof CommunityResponse) {
+            switch (baseResponse.getStatus()) {
+                case AppConstants.SUCCESS:
+                    if (mFeedDetail.isClosedCommunity()) {
+                        mFeedDetail.setRequestPending(true);
+                        mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+                        mTvJoinView.setText(getContext().getString(R.string.ID_REQUESTED));
+                        mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_community_requested);
+                    } else {
+                        mFeedDetail.setOwner(true);
+                        mFeedDetail.setMember(true);
+                        mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+                        mTvJoinView.setText(getContext().getString(R.string.ID_JOINED));
+                        mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
+                    }
+                    break;
+                case AppConstants.FAILED:
+                    mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);
+                    break;
+                default:
+                    mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_JOIN_INVITE);
+            }
         }
     }
 

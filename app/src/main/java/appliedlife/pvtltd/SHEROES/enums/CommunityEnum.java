@@ -5,13 +5,5 @@ package appliedlife.pvtltd.SHEROES.enums;
  */
 
 public enum  CommunityEnum {
-    SEARCH_COMMUNITY("search"), FEATURE_COMMUNITY("feature"),MY_COMMUNITY("my_community");
-    String value;
-    CommunityEnum(String value){
-        this.value=value;
-    }
-
-    public String getValue() {
-        return value;
-    }
+    SEARCH_COMMUNITY, FEATURE_COMMUNITY,MY_COMMUNITY,APPROVE_REQUEST,REMOVE_REQUEST;
 }
