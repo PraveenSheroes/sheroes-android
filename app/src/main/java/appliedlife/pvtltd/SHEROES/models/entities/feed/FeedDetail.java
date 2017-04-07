@@ -606,7 +606,13 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         this.communityType = communityType;
     }
 
+    public long getCommunityTypeL() {
+        return communityTypeL;
+    }
 
+    public void setCommunityTypeL(long communityTypeL) {
+        this.communityTypeL = communityTypeL;
+    }
 
     public String getSlugS() {
         return slugS;
@@ -1369,14 +1375,6 @@ public class FeedDetail extends BaseResponse implements Parcelable {
     }
 
     public FeedDetail() {
-    }
-
-    public long getCommunityTypeL() {
-        return communityTypeL;
-    }
-
-    public void setCommunityTypeL(long communityTypeL) {
-        this.communityTypeL = communityTypeL;
     }
 
     @Override

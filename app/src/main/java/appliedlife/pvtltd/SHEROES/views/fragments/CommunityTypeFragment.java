@@ -163,8 +163,9 @@ public class CommunityTypeFragment extends BaseDialogFragment implements Communi
 
     @OnClick(R.id.rl_done)
     public void onDoneClick() {
-        typeId = typeid.get(mCommunityTypelistView.getSelectedItem());
-        Toast.makeText(getActivity(), mCommunityTypelistView.getSelectedItem() + "", Toast.LENGTH_LONG).show();
+        if(StringUtil.isNotNullOrEmptyString(mCommunityTypelistView.getSelectedItem().toString())) {
+            typeId = typeid.get(mCommunityTypelistView.getSelectedItem());
+        }
     }
 
     @Override
@@ -215,7 +216,6 @@ public class CommunityTypeFragment extends BaseDialogFragment implements Communi
     public void communityType(String communitytype) {
 
         typeId = typeid.get(communitytype);
-        Toast.makeText(getActivity(), communitytype, Toast.LENGTH_LONG).show();
         getDialog().cancel();
         mHomeActivityIntractionListner.onAddFriendSubmit(communitytype, typeId);
 

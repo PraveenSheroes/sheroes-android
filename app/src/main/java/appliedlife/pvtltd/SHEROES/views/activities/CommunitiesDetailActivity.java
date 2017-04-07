@@ -536,6 +536,10 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
         finish();
     }
 
+
+
+
+
     @Override
     public void onShowErrorDialog(String errorReason, FeedParticipationEnum feedParticipationEnum) {
         if (StringUtil.isNotNullOrEmptyString(errorReason)) {

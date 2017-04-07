@@ -54,9 +54,9 @@
     <View
         android:layout_width="fill_parent"
         android:layout_height="@dimen/sp_size_1"
-        android:layout_below="@+id/tv_owner_title"
+        android:layout_below="@+id/tv_owner_city"
         android:layout_marginLeft="@dimen/dp_size_68"
         android:layout_marginRight="@dimen/dp_size_13"
-        android:layout_marginTop="@dimen/dp_size_10"
+        android:layout_marginTop="@dimen/dp_size_5"
         android:background="@color/grey2" />
 </RelativeLayout>

@@ -21,7 +21,7 @@ public class EditCommunityRequest {
     private Long communityTypeId;
     @SerializedName("cover_image")
     @Expose
-    private String coverImageUrl;
+    private String coverImage;
     @SerializedName("description")
     @Expose
     private String description;
@@ -42,7 +42,7 @@ public class EditCommunityRequest {
     private String lastScreenName;
     @SerializedName("logo_image")
     @Expose
-    private String logoUrl;
+    private String logo;
     @SerializedName("name")
     @Expose
     private String name;
@@ -83,12 +83,12 @@ public class EditCommunityRequest {
         this.communityTypeId = communityTypeId;
     }
 
-    public String getCoverImageUrl() {
-        return coverImageUrl;
+    public String getCoverImage() {
+        return coverImage;
     }
 
-    public void setCoverImageUrl(String coverImageUrl) {
-        this.coverImageUrl = coverImageUrl;
+    public void setCoverImage(String coverImage) {
+        this.coverImage = coverImage;
     }
 
     public String getDescription() {
@@ -139,12 +139,12 @@ public class EditCommunityRequest {
         this.lastScreenName = lastScreenName;
     }
 
-    public String getLogoUrl() {
-        return logoUrl;
+    public String getLogo() {
+        return logo;
     }
 
-    public void setLogoUrl(String logoUrl) {
-        this.logoUrl = logoUrl;
+    public void setLogo(String logo) {
+        this.logo = logo;
     }
 
     public String getName() {

@@ -66,6 +66,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CommunityView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
@@ -75,6 +76,8 @@ import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.COMMUNITY_OWNER;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MY_COMMUNITIES;
+
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
 
 /**
  * Created by Ajit Kumar on 11-01-2017.
@@ -143,6 +146,7 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
     Long typeId;
     String encCoverImage;
     private int mImage_type = 0;
+    private int mLogoFlag=0,mCoverFlag=0;
     private static final int mCAMERA_CODE = 101, mGALLERY_CODE = 201, mCROPING_CODE = 301;
     private Uri mImageCaptureUri;
     private File mOutPutFile = null;
@@ -152,6 +156,7 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
     String mCommunityName = "";
     View view;
     long tagId[] = new long[4];
+
 
     List<Long> tagsid = new ArrayList<>();
     @Inject
@@ -181,7 +186,7 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
                     }
                     if (null != mFeedDetail.getTag_ids() && mFeedDetail.getTag_ids().size() > 0) {
                         mEtCreateCommunityTags.setText(mFeedDetail.getTags().toString());
-                        tagsid = mFeedDetail.getTag_ids();
+                       // tagsid=mFeedDetail.getTag_ids();
                     }
                     if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getNameOrTitle())) {
                         metCreateCommunityName.setText(mFeedDetail.getNameOrTitle());
@@ -191,56 +196,53 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
                     }
 
                     if (mFeedDetail.isOwner()) {
-                        mTvCreate.setText(R.string.ID_EDIT);
+                        mTvCreate.setText(R.string.ID_SAVE);
                         mtvCreateCommunityTitle.setText("EDIT COMMUNITY");
                     }
-                    if (null != getArguments().getStringArray(AppConstants.TAG_LIST)) {
+                    if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getImageUrl())) {
+                        Glide.with(this)
+                                .load(mFeedDetail.getImageUrl()).asBitmap()
+                                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                                .skipMemoryCache(true)
+                                .into(new SimpleTarget<Bitmap>() {
+                                    @Override
+                                    public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
+                                        mIvCover.setImageBitmap(resource);
+                                        Palette.from(resource).generate(new Palette.PaletteAsyncListener() {
+                                            public void onGenerated(Palette palette) {
+                                                getActivity().supportStartPostponedEnterTransition();
+                                            }
+                                        });
+                                    }
+                                });
+                        if (null != mIvCover.getDrawable()) {
+                            Bitmap bitmap = ((BitmapDrawable) mIvCover.getDrawable()).getBitmap();
+                            byte[] buffer = new byte[4096];
+                            buffer = getBytesFromBitmap(bitmap);
+                            encCoverImage = Base64.encodeToString(buffer, Base64.DEFAULT);
 
-                    } else {
-                        if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getImageUrl())) {
-                            Glide.with(this)
-                                    .load(mFeedDetail.getImageUrl()).asBitmap()
-                                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                                    .skipMemoryCache(true)
-                                    .into(new SimpleTarget<Bitmap>() {
-                                        @Override
-                                        public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
-                                            mIvCover.setImageBitmap(resource);
-                                            Palette.from(resource).generate(new Palette.PaletteAsyncListener() {
-                                                public void onGenerated(Palette palette) {
-                                                    getActivity().supportStartPostponedEnterTransition();
-                                                }
-                                            });
-                                        }
-                                    });
-                            if (null != mIvCover.getDrawable()) {
-                                Bitmap bitmap = ((BitmapDrawable) mIvCover.getDrawable()).getBitmap();
-                                byte[] buffer = new byte[4096];
-                                buffer = getBytesFromBitmap(bitmap);
-                                encCoverImage = Base64.encodeToString(buffer, Base64.DEFAULT);
+                        }
+                    }
+                    if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getThumbnailImageUrl())) {
+                        Glide.with(mIvlogo.getContext())
+                                .load((mFeedDetail.getThumbnailImageUrl()))
+                                .asBitmap()
+                                .into(new SimpleTarget<Bitmap>(100, 100) {
+                                    @Override
+                                    public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
+                                        mIvlogo.setCompoundDrawablesWithIntrinsicBounds(null, new BitmapDrawable(mIvlogo.getResources(), resource), null, null);
+                                    }
+                                });
+                        if (null != (mIvlogo.getDrawingCache())) {
+                            mIvlogo.buildDrawingCache();
+                            Bitmap bitmap1 = mIvlogo.getDrawingCache();
+                            //  Bitmap bitmap1 = mIvlogo.getDrawingCache();
+                            byte[] buffer = new byte[4096];
+                            buffer = getBytesFromBitmap(bitmap1);
+                            encImage = Base64.encodeToString(buffer, Base64.DEFAULT);
+                        }
+                         mIvlogo.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
 
-                            }
-                        }
-                        if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getThumbnailImageUrl())) {
-                            Glide.with(mIvlogo.getContext())
-                                    .load((mFeedDetail.getThumbnailImageUrl()))
-                                    .asBitmap()
-                                    .into(new SimpleTarget<Bitmap>(100, 100) {
-                                        @Override
-                                        public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
-                                            mIvlogo.setCompoundDrawablesWithIntrinsicBounds(null, new BitmapDrawable(mIvlogo.getResources(), resource), null, null);
-                                        }
-                                    });
-                            if (null != (mIvlogo.getDrawingCache())) {
-                                mIvlogo.buildDrawingCache();
-                                Bitmap bitmap1 = mIvlogo.getDrawingCache();
-                                //  Bitmap bitmap1 = mIvlogo.getDrawingCache();
-                                byte[] buffer = new byte[4096];
-                                buffer = getBytesFromBitmap(bitmap1);
-                                encImage = Base64.encodeToString(buffer, Base64.DEFAULT);
-                            }
-                            // mIvlogo.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                        }
                     }
                     mCbcloseCommunity.setChecked(mFeedDetail.isClosedCommunity());
                     mCbopenCommunity.setChecked(!mFeedDetail.isClosedCommunity());
@@ -306,13 +308,14 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
 
     @OnClick(R.id.tv_create_community_logo_upload)
     public void btnChangeLogo() {
-        mImage_type = 1;
+        mLogoFlag=1;
         checkCameraPermission();
         openImageOption();
     }
 
     @OnClick(R.id.iv_create_community_cover_img)
     public void coverImageClick() {
+
         mImage_type = 2;
         checkCameraPermission();
         openImageOption();
@@ -368,7 +371,8 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
             createCommunityRequest.setCommunityTypeId(typeId);
         }
 
-        ((CreateCommunityActivity) getActivity()).callCommunityTagPage(mFeedDetail);
+        mTagFlag=1;
+        ((CreateCommunityActivity)getActivity()).callCommunityTagPage(mFeedDetail);
 
         //  CommunitySearchTagsDialog newFragment = new CommunitySearchTagsDialog();
     }
@@ -398,68 +402,61 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
     void callEditCommunitySubmit() {
         mProgressBar.setVisibility(View.VISIBLE);
 
-        List<Long> tags = new ArrayList<>();
-        for (int i = 0; i < tagId.length; i++) {
-            if (tagId[i] > 0)
-                tags.add(tagId[i]);
 
-        }
-        if (tags.size() == 0) {
-            tags = tagsid;
-        }
-        List<Long> tags2 = new ArrayList<>();
-        for (int i = 0; i < tagId.length; i++) {
-            if (tagId[i] > 0)
-                tags2.add(tagId[i]);
+        List<Long> tagsIdValue = new ArrayList<>();
+        for(int i=0;i<tagId.length;i++)
+        {
+            if(tagId[i]>0)
+                tagsIdValue.add(tagId[i]);
 
         }
 
         EditCommunityRequest editCommunityRequest = new EditCommunityRequest();
-        //  editCommunityRequest.setCoverImageUrl(encCoverImage);
-
-
-        editCommunityRequest.setCoverImageUrl(encCoverImage);
-
-
-        editCommunityRequest.setLogoUrl(encImage);
-
-
-        editCommunityRequest.setLogoUrl(encImage);
+        if(mCoverFlag==1) {
+            editCommunityRequest.setCoverImage(encCoverImage);
+        }
+        if(mLogoFlag==1) {
+            editCommunityRequest.setLogo(encImage);
+        }
         editCommunityRequest.setId((int) mFeedDetail.getIdOfEntityOrParticipant());
-
         editCommunityRequest.setIsActive(true);
-
         editCommunityRequest.setAppVersion("String");
-
         editCommunityRequest.setCloudMessagingId("String");
-
         editCommunityRequest.setCommunityTypeId(typeId);
-
         if (null != metCreateCommunityDescription.getText().toString() && StringUtil.isNotNullOrEmptyString(metCreateCommunityDescription.getText().toString())) {
             mDescription = metCreateCommunityDescription.getText().toString();
         }
         editCommunityRequest.setDescription(mDescription);
         editCommunityRequest.setDeviceUniqueId("String");
-        if (mCbcloseCommunity.isChecked())
+        if (mCbcloseCommunity.isChecked()) {
             editCommunityRequest.setIsClosed(true);
-        else
+        }
+        else {
             editCommunityRequest.setIsClosed(false);
-
+        }
         editCommunityRequest.setLastScreenName("String");
 
         if (null != metCreateCommunityName.getText().toString() && StringUtil.isNotNullOrEmptyString(metCreateCommunityName.getText().toString())) {
             mCommunityName = metCreateCommunityName.getText().toString();
+            editCommunityRequest.setName(mCommunityName);
+
         }
-        editCommunityRequest.setName(mCommunityName);
         editCommunityRequest.setPurpose("sink more test code");
 
 
         editCommunityRequest.setScreenName("String");
 
-        editCommunityRequest.setRemovedTags(tagsid);
+        if(null !=mFeedDetail.getTag_ids() && tagsIdValue.size()>0) {
+            editCommunityRequest.setRemovedTags(mFeedDetail.getTag_ids());
+        }
 
-
-        editCommunityRequest.setTags(tags);
+        if(tagsIdValue.size()>0) {
+            editCommunityRequest.setTags(tagsIdValue);
+        }
+        else
+        {
+            editCommunityRequest.setTags(mFeedDetail.getTag_ids());
+        }
         if (StringUtil.isNotNullOrEmptyString(mCommunityName) || StringUtil.isNotNullOrEmptyString(mDescription))
             createCommunityPresenter.postEditCommunityList(editCommunityRequest);
         else {
@@ -481,10 +478,14 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
 
         CreateCommunityRequest createCommunityRequest = new CreateCommunityRequest();
 
-        createCommunityRequest.setCoverImage(encCoverImage);
 
+        if(mCoverFlag==1) {
+            createCommunityRequest.setCoverImage(encCoverImage);
+        }
+        if(mLogoFlag==1) {
+            createCommunityRequest.setLogo(encImage);
+        }
 
-        createCommunityRequest.setLogo(encImage);
 
 
         createCommunityRequest.setAppVersion("String");
@@ -622,7 +623,6 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
         LogUtils.info("result-", tagval);
         mEtCreateCommunityTags.setText(tagval);
 
-        Toast.makeText(getActivity(), tagval, Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -641,7 +641,7 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
         mTvCreate.setEnabled(true);
         switch (createCommunityResponse.getStatus()) {
             case AppConstants.SUCCESS:
-                mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_ARTICLE, AppConstants.ONE_CONSTANT, mFeedDetail.getId()));
+                    mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_ARTICLE, AppConstants.ONE_CONSTANT, ""+createCommunityResponse.getId()));
                 break;
             case AppConstants.FAILED:
                 mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(createCommunityResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), COMMUNITY_OWNER);
@@ -776,6 +776,8 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
                         buffer = getBytesFromBitmap(photo);
                         encCoverImage = Base64.encodeToString(buffer, Base64.DEFAULT);
                         Log.e("str", encCoverImage);
+                        mCoverFlag = 1;
+
 
                     } else {
                         //   mIvlogo.setImageBitmap(photo);
@@ -784,6 +786,8 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
                         byte[] buffer = new byte[4096];
                         buffer = getBytesFromBitmap(photo);
                         encImage = Base64.encodeToString(buffer, Base64.DEFAULT);
+                        mImage_type = 1;
+                        mLogoFlag=1;
                         Log.e("str", encImage);
                     }
                     byte[] buffer = new byte[4096];
@@ -917,3 +921,4 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
 
 
 }
+

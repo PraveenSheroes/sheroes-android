@@ -54,6 +54,8 @@ public class InviteCommunityMember extends BaseDialogFragment implements HomeVie
     private final String TAG = LogUtils.makeLogTag(InviteCommunityMember.class);
     @Inject
     HomePresenter mHomePresenter;
+    @Inject
+    AppUtils mAppUtils;
     @Bind(R.id.rv_invite_member_list)
     RecyclerView mRecyclerView;
     @Bind(R.id.pb_invite_member_progress_bar)
@@ -68,16 +70,13 @@ public class InviteCommunityMember extends BaseDialogFragment implements HomeVie
     public EditText mSearchEditText;
     @Bind(R.id.tv_added_member)
     TextView tvAddedMember;
-    @Bind(R.id.tv_invite_post_submit)
-    TextView mtv_invite_post_submit;
     private String mSearchDataName = AppConstants.EMPTY_STRING;
     private GenericRecyclerViewAdapter mAdapter;
     private FragmentListRefreshData mFragmentListRefreshData;
     private Handler mHandler = new Handler();
     private List<Long> mUserIdForAddMember = new ArrayList<>();
     private FeedDetail mFeedDetail;
-    @Inject
-    AppUtils mAppUtils;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -90,7 +89,7 @@ public class InviteCommunityMember extends BaseDialogFragment implements HomeVie
         if (bundle != null) {
             mFeedDetail = bundle.getParcelable(AppConstants.COMMUNITIES_DETAIL);
         }
-        mSearchEditText.setHint(R.string.ID_SEARCH_USER);
+        tvInviteText.setText(getString(R.string.ID_SEARCH));
         editTextWatcher();
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new GenericRecyclerViewAdapter(getActivity(), (CommunitiesDetailActivity) getActivity());
@@ -108,7 +107,7 @@ public class InviteCommunityMember extends BaseDialogFragment implements HomeVie
 
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
-        List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
+        List<FeedDetail> feedDetailList=feedResponsePojo.getFeedDetails();
         if (StringUtil.isNotEmptyCollection(feedDetailList) && mAdapter != null) {
             liInviteMember.setVisibility(View.GONE);
             mAdapter.setCallForRecycler(AppConstants.FEED_SUB_TYPE);
@@ -186,7 +185,6 @@ public class InviteCommunityMember extends BaseDialogFragment implements HomeVie
             }
         }
     };
-
     @Override
     public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
         switch (feedParticipationEnum) {
@@ -241,7 +239,8 @@ public class InviteCommunityMember extends BaseDialogFragment implements HomeVie
         } else {
             mUserIdForAddMember.remove(feedDetail.getIdOfEntityOrParticipant());
         }
-        switch (mUserIdForAddMember.size()) {
+        switch (mUserIdForAddMember.size())
+        {
             case AppConstants.NO_REACTION_CONSTANT:
                 tvAddedMember.setText(AppConstants.SPACE);
                 break;
@@ -250,11 +249,6 @@ public class InviteCommunityMember extends BaseDialogFragment implements HomeVie
                 break;
             default:
                 tvAddedMember.setText(getString(R.string.ID_ADDED) + AppConstants.SPACE + mUserIdForAddMember.size() + AppConstants.SPACE + getString(R.string.ID_MEMBERS));
-        }
-        if (mUserIdForAddMember.size() == AppConstants.ONE_CONSTANT) {
-            tvAddedMember.setText(getString(R.string.ID_ADDED) + AppConstants.SPACE + +mUserIdForAddMember.size() + AppConstants.SPACE + getString(R.string.ID_MEMBERS).substring(0, getString(R.string.ID_MEMBERS).length() - 1));
-        } else {
-            tvAddedMember.setText(getString(R.string.ID_ADDED) + AppConstants.SPACE + mUserIdForAddMember.size() + AppConstants.SPACE + getString(R.string.ID_MEMBERS));
         }
     }
 
