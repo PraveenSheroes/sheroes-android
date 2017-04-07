@@ -32,9 +32,9 @@ public class SettingAboutFragment extends BaseFragment implements SettingView {
     private final String TAG = LogUtils.makeLogTag(SettingAboutFragment.class);
 
     @Bind(R.id.iv_back_setting)
-    ImageView miv_back_setting;
+    ImageView mIvBackSetting;
     @Bind(R.id.tv_setting_tittle)
-    TextView mtv_setting_tittle;
+    TextView mTvSettingTittle;
     SettingView settingViewlistener;
 
     @Override
@@ -57,7 +57,7 @@ public class SettingAboutFragment extends BaseFragment implements SettingView {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_setting_about, container, false);
         ButterKnife.bind(this, view);
-        mtv_setting_tittle.setText(R.string.ID_ABOUT);
+        mTvSettingTittle.setText(R.string.ID_ABOUT);
         return view;
     }
 

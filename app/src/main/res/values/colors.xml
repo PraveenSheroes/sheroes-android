@@ -127,4 +127,6 @@
     <color name="camera_bg_end_color">#15636A</color>
     <color name="community_tag_color">#788189</color>
 
+    <color name="visiting_card_backgroung">#bababa</color>
+
 </resources>
