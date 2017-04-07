@@ -102,7 +102,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
                 mTvArticleDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_in_active, 0, 0, 0);
             }
             mCollapsingToolbarLayout.setTitle(mFeedDetail.getNameOrTitle());
-            mCollapsingToolbarLayout.setSubtitle(mFeedDetail.getAuthorName());
+           // mCollapsingToolbarLayout.setSubtitle(mFeedDetail.getAuthorName());
             viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
             viewPagerAdapter.addFragment(ArticleDetailFragment.createInstance(mFeedDetail), getString(R.string.ID_ARTICLE));
             mViewPagerArticleDetail.setAdapter(viewPagerAdapter);

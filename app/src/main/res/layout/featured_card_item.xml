@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-   android:id="@+id/card_feature_communities"
+    android:id="@+id/card_feature_communities"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/dp_size_10">
@@ -81,10 +81,10 @@
             android:background="@color/white"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:gravity="right"
-            android:visibility="gone"
             android:text="@string/ID_VIEW_MORE"
             android:textColor="@color/feed_job_card_new"
-            android:textSize="@dimen/sp_size_14" />
+            android:textSize="@dimen/sp_size_14"
+            android:visibility="gone" />
 
         <View
             android:layout_width="match_parent"
@@ -97,22 +97,26 @@
         <LinearLayout
             android:id="@+id/li_featured_community_tags"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginBottom="@dimen/dp_size_12"
             android:layout_marginLeft="@dimen/dp_size_16"
             android:layout_marginRight="@dimen/dp_size_16"
             android:layout_marginTop="@dimen/dp_size_10"
-            android:orientation="horizontal"
-            android:weightSum="@integer/int_value_for_line_1">
+            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tv_featured_community_tag_lable"
+            <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                android:textColor="@color/feed_article_label"
-                android:textSize="@dimen/sp_size_12" />
+                android:layout_weight="@integer/int_value_for_line_1">
+
+                <TextView
+                    android:id="@+id/tv_featured_community_tag_lable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:textColor="@color/feed_article_label"
+                    android:textSize="@dimen/sp_size_12" />
+            </FrameLayout>
 
             <TextView
                 android:id="@+id/tv_featured_community_join"
@@ -124,7 +128,7 @@
                 android:text="@string/ID_JOIN"
                 android:textColor="@color/footer_icon_text"
                 android:textSize="@dimen/sp_size_12"
-                android:visibility="gone" />
+                android:visibility="visible" />
 
         </LinearLayout>
 

@@ -230,6 +230,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
         }
         return fragment;
     }
+
     protected void feedCardsHandled(View view, BaseResponse baseResponse) {
         mFeedDetail = (FeedDetail) baseResponse;
         int id = view.getId();
@@ -704,21 +705,15 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
 
     @Override
     public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-        if (AppUtils.isFragmentUIActive(mFragment)) {
-            if (mFragment instanceof CommunitiesDetailFragment) {
-                ((CommunitiesDetailFragment) mFragment).likeAndUnlikeRequest(baseResponse, reactionValue, position);
+        if (mFragmentOpen.isBookmarkFragment()) {
+            Fragment fragmentBookMark = getSupportFragmentManager().findFragmentByTag(BookmarksFragment.class.getName());
+            if (AppUtils.isFragmentUIActive(fragmentBookMark)) {
+                ((BookmarksFragment) fragmentBookMark).likeAndUnlikeRequest(baseResponse, reactionValue, position);
             }
         } else {
-            if (mFragmentOpen.isBookmarkFragment()) {
-                Fragment fragmentBookMark = getSupportFragmentManager().findFragmentByTag(BookmarksFragment.class.getName());
-                if (AppUtils.isFragmentUIActive(fragmentBookMark)) {
-                    ((BookmarksFragment) fragmentBookMark).likeAndUnlikeRequest(baseResponse, reactionValue, position);
-                }
-            } else {
-                Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-                if (AppUtils.isFragmentUIActive(fragment)) {
-                    ((HomeFragment) fragment).likeAndUnlikeRequest(baseResponse, reactionValue, position);
-                }
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+            if (AppUtils.isFragmentUIActive(fragment)) {
+                ((HomeFragment) fragment).likeAndUnlikeRequest(baseResponse, reactionValue, position);
             }
         }
     }
@@ -769,6 +764,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
     public void onSuccessResult(String result, FeedDetail feedDetail) {
 
     }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();

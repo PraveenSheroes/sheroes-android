@@ -258,6 +258,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
 
     @Override
     public void getSuccessForAllResponse(BaseResponse success, FeedParticipationEnum feedParticipationEnum) {
+       super.getSuccessForAllResponse(success, feedParticipationEnum);
         switch (feedParticipationEnum) {
             case JOIN_INVITE:
                 joinSuccessFailed(success);

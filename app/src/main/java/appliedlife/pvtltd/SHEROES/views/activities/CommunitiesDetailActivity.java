@@ -130,7 +130,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
                 mTvMemebr.setText(mFeedDetail.getNoOfMembers() + AppConstants.SPACE + getString(R.string.ID_MEMBERS));
                 //  mFloatingActionButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_feed_article_top_left));
                 mCollapsingToolbarLayout.setTitle(mFeedDetail.getNameOrTitle());
-                mCollapsingToolbarLayout.setSubtitle(mFeedDetail.getNameOrTitle());
+              //  mCollapsingToolbarLayout.setSubtitle(mFeedDetail.getNameOrTitle());
                 viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
                 viewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(getIntent()), getString(R.string.ID_COMMUNITIES));
                 mViewPagerCommunitiesDetail.setAdapter(viewPagerAdapter);
@@ -281,6 +281,15 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
             mCommunityOpenAboutFragment.setArguments(getIntent().getExtras());
             getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in_dialog, 0, 0, R.anim.fade_in_dialog)
                     .add(R.id.about_community_container, mCommunityOpenAboutFragment, CommunityOpenAboutFragment.class.getName()).addToBackStack(CommunityOpenAboutFragment.class.getName()).commitAllowingStateLoss();
+        }
+    }
+    @Override
+    public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
+        mFragment = viewPagerAdapter.getActiveFragment(mViewPagerCommunitiesDetail, AppConstants.NO_REACTION_CONSTANT);
+        if (AppUtils.isFragmentUIActive(mFragment)) {
+            if (mFragment instanceof CommunitiesDetailFragment) {
+                ((CommunitiesDetailFragment) mFragment).likeAndUnlikeRequest(baseResponse, reactionValue, position);
+            }
         }
     }
 
