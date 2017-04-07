@@ -35,7 +35,7 @@ public class ChangeCommunityPrivacyDialogFragment extends BaseDialogFragment {
 
 
       //  finishParent = getArguments().getBoolean(DISMISS_PARENT_ON_OK_OR_BACK, false);
-        setCancelable(true);
+        setCancelable(false);
         return view;
     }
     @Override

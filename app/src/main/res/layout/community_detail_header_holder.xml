@@ -48,7 +48,7 @@
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_marginTop="@dimen/dp_size_40"
+            android:layout_marginTop="@dimen/dp_size_30"
             android:layout_marginLeft="@dimen/dp_size_5"
             android:layout_marginRight="@dimen/dp_size_30"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"

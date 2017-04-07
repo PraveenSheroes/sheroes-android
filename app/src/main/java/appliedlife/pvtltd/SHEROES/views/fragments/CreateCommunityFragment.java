@@ -59,9 +59,11 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerRespo
 import appliedlife.pvtltd.SHEROES.models.entities.community.EditCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.presenters.CreateCommunityPresenter;
+import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityActivity;
@@ -131,7 +133,7 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
     @Bind(R.id.et_create_community_name)
     EditText metCreateCommunityName;
 
-    @Bind(R.id.pb_create_community_progress_bar)
+    @Bind(R.id.pb_login_progress_bar)
     ProgressBar mProgressBar;
 
     int mTagFlag = 0;
@@ -152,15 +154,17 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
     long tagId[] = new long[4];
 
     List<Long> tagsid = new ArrayList<>();
-    private FragmentOpen mFragmentOpen;
-
+    @Inject
+    AppUtils mAppUtils;
+    @Inject
+    HomePresenter mHomePresenter;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (view == null) {
             SheroesApplication.getAppComponent(getContext()).inject(this);
             view = inflater.inflate(R.layout.fragmentcreate_community, container, false);
             ButterKnife.bind(this, view);
-            mFragmentOpen=new FragmentOpen();
+            mHomePresenter.attachView(this);
             mCbopenCommunity.setChecked(true);
             mOutPutFile = new File(Environment.getExternalStorageDirectory(), "temp.jpg");
             mOutPutFile1 = new File(Environment.getExternalStorageDirectory(), "temp1.jpg");
@@ -272,7 +276,15 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
         }
         return view;
     }
-
+    @Override
+    public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
+        List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
+        if (StringUtil.isNotEmptyCollection(feedDetailList)) {
+            Toast.makeText(getActivity(), getString(R.string.ID_ADDED), Toast.LENGTH_SHORT).show();
+             mFeedDetail = feedDetailList.get(0);
+            ((CreateCommunityActivity)getActivity()).onBackClickHandle(mFeedDetail);
+        }
+    }
     public void setCommunitiyTags(String[] tagsval, long[] tagsid) {
         tagId = tagsid;
         StringBuilder stringBuilder = new StringBuilder();
@@ -373,10 +385,8 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
         mTvCreate.setEnabled(false);
         if (StringUtil.isNotNullOrEmptyString(metCreateCommunityDescription.getText().toString()) && StringUtil.isNotNullOrEmptyString(mEtCommunityType.getText().toString()) && StringUtil.isNotNullOrEmptyString(metCreateCommunityName.getText().toString()) && StringUtil.isNotNullOrEmptyString(mEtCreateCommunityTags.getText().toString())) {
             if (mTvCreate.getText().toString().equalsIgnoreCase(getString(R.string.ID_CREATE))) {
-                mFragmentOpen.setCreateCommunity(true);
                 callCreateCommunitySubmit();
             } else {
-                mFragmentOpen.setCreateCommunity(false);
                 callEditCommunitySubmit();
             }
         } else {
@@ -631,9 +641,7 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
         mTvCreate.setEnabled(true);
         switch (createCommunityResponse.getStatus()) {
             case AppConstants.SUCCESS:
-                Toast.makeText(getActivity(), getString(R.string.ID_ADDED), Toast.LENGTH_SHORT).show();
-                setFeedDetailData();
-                ((CreateCommunityActivity)getActivity()).onBackClickHandle(mFeedDetail,mFragmentOpen);
+                mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_ARTICLE, AppConstants.ONE_CONSTANT, mFeedDetail.getId()));
                 break;
             case AppConstants.FAILED:
                 mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(createCommunityResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), COMMUNITY_OWNER);
@@ -642,13 +650,6 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
                 mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, COMMUNITY_OWNER);
         }
     }
-    private void setFeedDetailData()
-    {
-        mFeedDetail.setNameOrTitle(metCreateCommunityName.getText().toString());
-        mFeedDetail.setDescription(metCreateCommunityDescription.getText().toString());
-        mFeedDetail.setType(mEtCommunityType.getText().toString());
-    }
-
 
     @Override
     public void getOwnerListDeactivateSuccess(DeactivateOwnerResponse deactivateOwnerResponse) {

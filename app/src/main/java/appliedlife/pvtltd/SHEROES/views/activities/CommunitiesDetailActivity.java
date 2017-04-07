@@ -89,7 +89,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
     private AllMembersFragment mAllMembersFragment;
     private boolean isMemberRemoveDialog;
     private CommunityRequestedFragment communityRequestedFragment;
-
+    boolean isCommunityDetailFragment;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,6 +122,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
         mCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
         if (null != mFeedDetail) {
             if (mFeedDetail.isClosedCommunity()) {
+                isCommunityDetailFragment=true;
                 mCommunityDetailActivity.setVisibility(View.GONE);
                 communityOpenAboutFragment(mFeedDetail);
             } else {
@@ -478,7 +479,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
             mFragmentOpen.setReactionList(false);
             mFragmentOpen.setCommentList(true);
         } else if (mFragmentOpen.isOpenAboutFragment()) {
-            if (mFeedDetail.isClosedCommunity()) {
+            if (isCommunityDetailFragment) {
                 onBackClick();
             } else {
                 mCommunityDetailActivity.setVisibility(View.VISIBLE);
@@ -547,8 +548,8 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
         if (null != intent) {
             switch (requestCode) {
                 case AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY:
-                    mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITIES_DETAIL);
-                    updateOpenAboutFragment(mFeedDetail);
+                 FeedDetail   feedDetail = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITIES_DETAIL);
+                    updateOpenAboutFragment(feedDetail);
                     break;
                 default:
                     LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);

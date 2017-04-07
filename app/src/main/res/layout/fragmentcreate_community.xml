@@ -164,13 +164,6 @@
                     android:textSize="@dimen/sp_size_12"/>
 
             </android.support.design.widget.TextInputLayout>
-            <ProgressBar
-                android:id="@+id/pb_create_community_progress_bar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:visibility="gone"
-                android:backgroundTint="@color/search_box"/>
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -290,7 +283,7 @@
         android:text="CREATE"
         android:textColor="@color/white"
         android:textSize="@dimen/sp_size_12" />
-
+    <include layout="@layout/progress_bar_login" />
     <FrameLayout
         android:id="@+id/container"
         android:visibility="gone"

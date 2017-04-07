@@ -53,6 +53,7 @@ import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithAc
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FOR_REFRESH_FRAGMENT_LIST;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.DELETE_COMMUNITY_POST;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_BOOKMARK_UNBOOKMARK;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_COMMENT_REACTION;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_RESPONSE;
@@ -286,7 +287,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     public void deleteCommunityPostRespose(BaseResponse baseResponse) {
         switch (baseResponse.getStatus()) {
             case AppConstants.SUCCESS:
-                commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+                commentListRefresh(mFeedDetail, DELETE_COMMUNITY_POST);
                 break;
             case AppConstants.FAILED:
                 mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);
@@ -344,6 +345,9 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                 mAdapter.setDataOnPosition(feedDetail, feedDetail.getItemPosition());
                 break;
             case COMMENT_REACTION:
+                break;
+            case DELETE_COMMUNITY_POST:
+                mAdapter.removeDataOnPosition(feedDetail, feedDetail.getItemPosition());
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);

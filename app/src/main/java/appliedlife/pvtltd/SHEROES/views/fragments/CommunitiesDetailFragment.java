@@ -202,6 +202,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
                 feedDetail.setRequestPending(mFeedDetail.isRequestPending());
                 feedDetail.setClosedCommunity(mFeedDetail.isClosedCommunity());
                 feedDetail.setScreenName(mScreenName);
+                feedDetail.setThumbnailImageUrl(mFeedDetail.getThumbnailImageUrl());
                 feedDetailList.add(0, feedDetail);
             }
             mFragmentListRefreshData.setPageNo(++mPageNo);

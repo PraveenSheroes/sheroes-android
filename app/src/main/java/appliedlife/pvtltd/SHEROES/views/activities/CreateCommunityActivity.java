@@ -91,20 +91,12 @@ public class CreateCommunityActivity extends BaseActivity implements ImageUpload
 
     @Override
     public void onBackPressed() {
-        onBackClickHandle(mFeedDetail,mFragmentOpen);
+        onBackClickHandle(mFeedDetail);
     }
 
-    public void onBackClickHandle(FeedDetail feedDetail,FragmentOpen fragmentOpen) {
-        mFragmentOpen=fragmentOpen;
+    public void onBackClickHandle(FeedDetail feedDetail) {
         if(null!=mFragmentOpen)
         {
-          /*  if(mFragmentOpen.isCreateCommunity())
-            {
-
-            }else
-            {
-
-            }*/
             Intent intent = new Intent();
             Bundle bundle = new Bundle();
             bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, feedDetail);

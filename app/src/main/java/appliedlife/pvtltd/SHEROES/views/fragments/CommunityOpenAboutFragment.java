@@ -201,6 +201,8 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
             if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getNameOrTitle())) {
                 mtv_community_name.setText(mFeedDetail.getNameOrTitle());
             }
+            setAllViewsOfFragment();
+            displayTabAsCommunityType(feedDetail);
         }
     }
 
@@ -362,7 +364,7 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
         });
         tvEdit = (TextView) popupView.findViewById(R.id.tv_article_menu_edit);
         tvLeave = (TextView) popupView.findViewById(R.id.tv_article_menu_delete);
-        popupWindow.showAsDropDown(view, -50, -10);
+        popupWindow.showAsDropDown(view, -150,0);
         tvLeave.setText(getActivity().getString(R.string.ID_LEAVE));
         if (mFeedDetail.isOwner()) {
             if (StringUtil.isNotEmptyCollection(ownerListResponse) && ownerListResponse.size() > AppConstants.ONE_CONSTANT) {
