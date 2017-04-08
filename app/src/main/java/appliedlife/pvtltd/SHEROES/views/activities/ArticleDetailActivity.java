@@ -93,7 +93,6 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
         ViewCompat.setTransitionName(mAppBarLayout, AppConstants.ARTICLE_DETAIL);
         supportPostponeEnterTransition();
         setSupportActionBar(mToolbarArticleDetail);
-        mCollapsingToolbarLayout.setExpandedSubTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
         mCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
         if (null != mFeedDetail) {
             if (mFeedDetail.isBookmarked()) {
@@ -102,7 +101,6 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
                 mTvArticleDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_in_active, 0, 0, 0);
             }
             mCollapsingToolbarLayout.setTitle(mFeedDetail.getNameOrTitle());
-           // mCollapsingToolbarLayout.setSubtitle(mFeedDetail.getAuthorName());
             viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
             viewPagerAdapter.addFragment(ArticleDetailFragment.createInstance(mFeedDetail), getString(R.string.ID_ARTICLE));
             mViewPagerArticleDetail.setAdapter(viewPagerAdapter);

@@ -67,7 +67,9 @@ public class JobPresenter extends BasePresenter<JobView> {
             @Override
             public void onNext(JobApplyResponse jobApplyResponse) {
                 getMvpView().stopProgressBar();
-                getMvpView().getJobApplySuccess(jobApplyResponse);
+                if(null!=jobApplyResponse) {
+                    getMvpView().getJobApplySuccess(jobApplyResponse);
+                }
             }
         });
         registerSubscription(subscription);

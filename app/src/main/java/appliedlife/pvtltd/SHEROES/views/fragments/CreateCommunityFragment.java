@@ -163,6 +163,7 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
     AppUtils mAppUtils;
     @Inject
     HomePresenter mHomePresenter;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (view == null) {
@@ -175,7 +176,7 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
             mOutPutFile1 = new File(Environment.getExternalStorageDirectory(), "temp1.jpg");
             //    mEtCreateCommunityTags.setText("Community Tag");
             createCommunityPresenter.attachView(this);
-
+            setProgressBar(mProgressBar);
 
             if (null != getArguments()) {
                 mFeedDetail = getArguments().getParcelable(AppConstants.COMMUNITIES_DETAIL);
@@ -250,7 +251,7 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
 
 
             } else {
-                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog((AppConstants.ERROR_OCCUR),ERROR_MY_COMMUNITIES);
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog((AppConstants.ERROR_OCCUR), ERROR_MY_COMMUNITIES);
             }
 
             // getActivity().setRequestedOrientation(
@@ -278,15 +279,17 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
         }
         return view;
     }
+
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
         List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
             Toast.makeText(getActivity(), getString(R.string.ID_ADDED), Toast.LENGTH_SHORT).show();
-             mFeedDetail = feedDetailList.get(0);
-            ((CreateCommunityActivity)getActivity()).onBackClickHandle(mFeedDetail);
+            mFeedDetail = feedDetailList.get(0);
+            ((CreateCommunityActivity) getActivity()).onBackClickHandle(mFeedDetail);
         }
     }
+
     public void setCommunitiyTags(String[] tagsval, long[] tagsid) {
         tagId = tagsid;
         StringBuilder stringBuilder = new StringBuilder();
@@ -395,12 +398,11 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
             }
         } else {
             mTvCreate.setEnabled(true);
-            mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog((AppConstants.BLANK_MESSAGE),ERROR_MY_COMMUNITIES);
+            mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog((AppConstants.BLANK_MESSAGE), ERROR_MY_COMMUNITIES);
         }
     }
 
     void callEditCommunitySubmit() {
-        mProgressBar.setVisibility(View.VISIBLE);
 
 
         List<Long> tagsIdValue = new ArrayList<>();
@@ -461,13 +463,12 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
             createCommunityPresenter.postEditCommunityList(editCommunityRequest);
         else {
             mTvCreate.setEnabled(true);
-            mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog((AppConstants.INAVLID_DATA),ERROR_MY_COMMUNITIES);
+            mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog((AppConstants.INAVLID_DATA), ERROR_MY_COMMUNITIES);
         }
 
     }
 
     private void callCreateCommunitySubmit() {
-        mProgressBar.setVisibility(View.VISIBLE);
 
         List<Long> tags = new ArrayList<>();
         for (int i = 0; i < tagId.length; i++) {
@@ -634,14 +635,18 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
     public void getOwnerListSuccess(OwnerListResponse ownerListResponse) {
 
     }
-
     @Override
     public void createCommunitySuccess(CreateCommunityResponse createCommunityResponse) {
-        mProgressBar.setVisibility(View.GONE);
         mTvCreate.setEnabled(true);
         switch (createCommunityResponse.getStatus()) {
             case AppConstants.SUCCESS:
-                    mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_ARTICLE, AppConstants.ONE_CONSTANT, ""+createCommunityResponse.getId()));
+                if (null != mFeedDetail && StringUtil.isNotNullOrEmptyString(mFeedDetail.getId())) {
+                    mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_ARTICLE, AppConstants.ONE_CONSTANT, mFeedDetail.getId()));
+                }else
+                {
+                    Toast.makeText(getActivity(), getString(R.string.ID_ADDED), Toast.LENGTH_SHORT).show();
+                    ((CreateCommunityActivity) getActivity()).onBackClickHandle(mFeedDetail);
+                }
                 break;
             case AppConstants.FAILED:
                 mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(createCommunityResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), COMMUNITY_OWNER);
@@ -661,21 +666,6 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
 
     }
 
-    @Override
-    public void startProgressBar() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mProgressBar.bringToFront();
-    }
-
-    @Override
-    public void stopProgressBar() {
-        //  mProgressBar.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void startNextScreen() {
-
-    }
 
     private void openImageOption() {
         ImageUploadFragment imageUploadFragment = new ImageUploadFragment();

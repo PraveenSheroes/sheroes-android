@@ -5,6 +5,5 @@
     <ImageView
         android:id="@+id/iv_feed_community_post_single"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scaleType="fitXY" />
+        android:layout_height="wrap_content"/>
 </LinearLayout>

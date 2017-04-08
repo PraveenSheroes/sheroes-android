@@ -95,7 +95,6 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
                     .skipMemoryCache(true)
                     .into(ivFeedJobCircleIcon);
         }
-
     }
 
     @TargetApi(AppConstants.ANDROID_SDK_24)

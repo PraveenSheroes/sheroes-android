@@ -19,7 +19,7 @@ public class FeedDetail extends BaseResponse implements Parcelable {
     boolean isTrending;
     boolean isFromHome;
 
-     /*Community post*/
+    /*Community post*/
 
     @SerializedName("search_id_post_image")
     @Expose

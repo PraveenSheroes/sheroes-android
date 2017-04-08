@@ -710,9 +710,9 @@ public class HomeActivity extends BaseActivity implements ViewPager.OnPageChange
     @OnClick(R.id.fab_add_community)
     public void createCommunityButton() {
         Intent intent = new Intent(getApplicationContext(), CreateCommunityActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, mFeedDetail);
-        intent.putExtras(bundle);
+       // Bundle bundle = new Bundle();
+       // bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, mFeedDetail);
+       // intent.putExtras(bundle);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY);
         overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
     }
@@ -997,7 +997,7 @@ public class HomeActivity extends BaseActivity implements ViewPager.OnPageChange
                     mHomeSpinnerItemList.addAll(localList);
                 }
                 if (StringUtil.isNotNullOrEmptyString(stringBuilder.toString())) {
-                    mTvCategoryText.setText(stringBuilder.toString());
+                    mTvCategoryText.setText(stringBuilder.toString().substring(0,stringBuilder.toString().length()-1));
                 } else {
                     mTvCategoryText.setText(AppConstants.EMPTY_STRING);
                     mTvCategoryChoose.setVisibility(View.VISIBLE);

@@ -10,7 +10,6 @@ import android.view.Window;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.f2prateek.rx.preferences.Preference;
 
@@ -163,7 +162,7 @@ public class CommunityTypeFragment extends BaseDialogFragment implements Communi
 
     @OnClick(R.id.rl_done)
     public void onDoneClick() {
-        if(StringUtil.isNotNullOrEmptyString(mCommunityTypelistView.getSelectedItem().toString())) {
+        if(null!=mCommunityTypelistView&&null!=mCommunityTypelistView.getSelectedItem()&&StringUtil.isNotNullOrEmptyString(mCommunityTypelistView.getSelectedItem().toString())) {
             typeId = typeid.get(mCommunityTypelistView.getSelectedItem());
         }
     }

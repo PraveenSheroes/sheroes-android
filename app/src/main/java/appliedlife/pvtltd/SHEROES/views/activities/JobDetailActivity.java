@@ -32,6 +32,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -40,6 +41,7 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.CustomCollapsingToolbarLayout;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobDetailFragment;
 import butterknife.Bind;
@@ -70,7 +72,7 @@ public class JobDetailActivity extends BaseActivity implements CommentReactionFr
     @Bind(R.id.tv_job_comp_nm)
     TextView mTv_job_comp_nm;
     @Bind(R.id.iv_job_comp_logo)
-    ImageView mIv_job_comp_logo;
+    RoundedImageView mIv_job_comp_logo;
     private FeedDetail mFeedDetail;
     public View mArticlePopUp;
     TextView mTvFeedArticleDetailUserReaction;
@@ -125,20 +127,10 @@ public class JobDetailActivity extends BaseActivity implements CommentReactionFr
             if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getAuthorImageUrl())) {
                 mlogoflag = 1;
                 Glide.with(this)
-                        .load(mFeedDetail.getAuthorImageUrl()).asBitmap()
+                        .load(mFeedDetail.getAuthorImageUrl())
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                         .skipMemoryCache(true)
-                        .into(new SimpleTarget<Bitmap>() {
-                            @Override
-                            public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
-                                mIv_job_comp_logo.setImageBitmap(resource);
-                                Palette.from(resource).generate(new Palette.PaletteAsyncListener() {
-                                    public void onGenerated(Palette palette) {
-                                        applyPalette(palette);
-                                    }
-                                });
-                            }
-                        });
+                        .into(mIv_job_comp_logo);
             }
             if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getImageUrl())) {
 
@@ -339,5 +331,20 @@ public class JobDetailActivity extends BaseActivity implements CommentReactionFr
             mTvJobDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_in_active, 0, 0, 0);
         }
         mFeedDetail = feedDetail;
+    }
+    @Override
+    public void onShowErrorDialog(String errorReason, FeedParticipationEnum feedParticipationEnum) {
+        if (StringUtil.isNotNullOrEmptyString(errorReason)) {
+            switch (errorReason) {
+                case AppConstants.CHECK_NETWORK_CONNECTION:
+                    showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
+                    break;
+                default:
+                    showNetworkTimeoutDoalog(true, false,errorReason);
+            }
+        } else {
+            showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
+        }
+
     }
 }

@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobApplyRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobApplyResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobDetailPojo;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.presenters.JobPresenter;
@@ -42,6 +42,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_BOOKMARK_UNBOOKMARK;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
 
 /**
  * Created by Ajit Kumar on 20-02-2017.
@@ -135,8 +136,16 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
             JobDetailPojo jobDetailPojo = new JobDetailPojo();
             jobDetailPojo.setId(AppConstants.ONE_CONSTANT);
             jobDetailPojo.setFeedDetail(feedDetailList.get(0));
-            jobDetailPojo.setFeedDetail(mFeedDetail);
             joblist.add(jobDetailPojo);
+            if(feedDetailList.get(0).isApplied())
+            {
+                mtv_apply_job.setText(getString(R.string.ID_APPLIED));
+                mtv_apply_job.setEnabled(false);
+            }else
+            {
+                mtv_apply_job.setText(getString(R.string.ID_APPLY));
+                mtv_apply_job.setEnabled(true);
+            }
             mAdapter.setSheroesGenericListData(joblist);
             mAdapter.notifyDataSetChanged();
 
@@ -148,6 +157,7 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
     public void onDestroyView() {
         super.onDestroyView();
         mHomePresenter.detachView();
+        mJobpresenter.detachView();
     }
 
     public void bookMarkForDetailCard(FeedDetail feedDetail) {
@@ -155,7 +165,19 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
     }
 
     @Override
-    public void getJobApplySuccess(JobApplyResponse jobApplyRequests) {
+    public void getJobApplySuccess(BaseResponse baseResponse) {
+        switch (baseResponse.getStatus()) {
+            case AppConstants.SUCCESS:
+                mtv_apply_job.setText(getString(R.string.ID_APPLIED));
+                mtv_apply_job.setEnabled(false);
+                Toast.makeText(getActivity(),getString(R.string.ID_JOB)+AppConstants.SPACE+getString(R.string.ID_APPLIED),Toast.LENGTH_SHORT).show();
+                break;
+            case AppConstants.FAILED:
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);
+                break;
+            default:
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_JOIN_INVITE);
+        }
 
     }
 

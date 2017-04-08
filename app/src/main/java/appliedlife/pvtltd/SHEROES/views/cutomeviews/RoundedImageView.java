@@ -30,14 +30,14 @@ import android.net.Uri;
 import android.support.annotation.ColorInt;
 import android.support.annotation.DimenRes;
 import android.support.annotation.DrawableRes;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.widget.ImageView;
 
 import appliedlife.pvtltd.SHEROES.R;
 
 @SuppressWarnings("UnusedDeclaration")
-public class RoundedImageView extends ImageView {
+public class RoundedImageView extends AppCompatImageView {
 
   // Constants for tile mode attributes
   private static final int TILE_MODE_UNDEFINED = -2;
@@ -103,13 +103,13 @@ public class RoundedImageView extends ImageView {
         a.getDimensionPixelSize(R.styleable.RoundedImageView_riv_corner_radius, 3);
 
     mCornerRadii[Corner.TOP_LEFT] =
-        a.getDimensionPixelSize(R.styleable.RoundedImageView_riv_corner_radius_top_left, 3);
+        a.getDimensionPixelSize(R.styleable.RoundedImageView_riv_corner_radius_top_left, 15);
     mCornerRadii[Corner.TOP_RIGHT] =
-        a.getDimensionPixelSize(R.styleable.RoundedImageView_riv_corner_radius_top_right, 3);
+        a.getDimensionPixelSize(R.styleable.RoundedImageView_riv_corner_radius_top_right, 15);
     mCornerRadii[Corner.BOTTOM_RIGHT] =
-        a.getDimensionPixelSize(R.styleable.RoundedImageView_riv_corner_radius_bottom_right, 3);
+        a.getDimensionPixelSize(R.styleable.RoundedImageView_riv_corner_radius_bottom_right, 15);
     mCornerRadii[Corner.BOTTOM_LEFT] =
-        a.getDimensionPixelSize(R.styleable.RoundedImageView_riv_corner_radius_bottom_left, 3);
+        a.getDimensionPixelSize(R.styleable.RoundedImageView_riv_corner_radius_bottom_left, 15);
 
     boolean any = false;
     for (int i = 0, len = mCornerRadii.length; i < len; i++) {

@@ -18,7 +18,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            app:collapsedSubtitleAppearance="@style/subtitle_collapsed"
             app:collapsedTitleTextAppearance="@style/title.collapsed"
             app:contentScrim="@color/colorAccent"
             app:expandedSubtitleAppearance="@style/subtitle"
