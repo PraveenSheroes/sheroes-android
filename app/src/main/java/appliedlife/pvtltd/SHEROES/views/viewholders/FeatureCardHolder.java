@@ -55,6 +55,9 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
     TextView tvFeaturedCommunityTime;
     @Bind(R.id.tv_featured_community_text)
     TextView tvFeaturedDescriptionText;
+    @Bind(R.id.tv_featured_community_text_full_view)
+    TextView tvFeaturedDescriptionTextFullView;
+
     @Bind(R.id.tv_featured_view_more)
     TextView tvFeaturedViewMore;
     @Bind(R.id.tv_featured_community_join)
@@ -82,6 +85,7 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
         mLess = context.getString(R.string.ID_LESS);
         dataItem.setItemPosition(position);
         tvFeaturedDescriptionText.setTag(mViewMore);
+        tvFeaturedDescriptionTextFullView.setTag(mViewMore);
         textViewOperation(context);
         if (!dataItem.isTrending()) {
             liFeaturedCoverImage.removeAllViews();
@@ -127,7 +131,6 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
         mViewMoreDescription = dataItem.getListDescription();
         if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
             if (mViewMoreDescription.length() > AppConstants.WORD_LENGTH) {
-                mViewMoreDescription = mViewMoreDescription.substring(0, AppConstants.WORD_COUNT);
                 tvFeaturedViewMore.setVisibility(View.VISIBLE);
             } else {
                 tvFeaturedViewMore.setVisibility(View.GONE);
@@ -152,7 +155,7 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
             for (String tag : tags) {
                 mergeTags += tag + AppConstants.COMMA;
             }
-            mergeTags=mergeTags.substring(0,mergeTags.length()-1);
+            mergeTags = mergeTags.substring(0, mergeTags.length() - 1);
             String tagHeader = LEFT_HTML_TAG + context.getString(R.string.ID_TAGS) + RIGHT_HTML_TAG;
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                 tvFeaturedCommunityTagLable.setText(Html.fromHtml(tagHeader + AppConstants.COLON + AppConstants.SPACE + mergeTags, 0)); // for 24 api and more
@@ -207,6 +210,10 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
     public void viewMoreClick() {
         viewText();
     }
+    @OnClick(R.id.tv_featured_community_text_full_view)
+    public void viewMoreFullViewClick() {
+        viewText();
+    }
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void viewText() {
@@ -215,16 +222,19 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
                 String lessWithColor = LEFT_HTML_VEIW_TAG_FOR_COLOR + mLess + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
                 mViewMoreDescription = dataItem.getListDescription();
                 if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                    tvFeaturedDescriptionText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.SPACE + AppConstants.SPACE + lessWithColor, 0)); // for 24 api and more
+                    tvFeaturedDescriptionTextFullView.setText(Html.fromHtml(mViewMoreDescription + AppConstants.SPACE + AppConstants.SPACE + lessWithColor, 0)); // for 24 api and more
                 } else {
-                    tvFeaturedDescriptionText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.SPACE + AppConstants.SPACE + lessWithColor));// or for older api
+                    tvFeaturedDescriptionTextFullView.setText(Html.fromHtml(mViewMoreDescription + AppConstants.SPACE + AppConstants.SPACE + lessWithColor));// or for older api
                 }
+                tvFeaturedDescriptionText.setVisibility(View.GONE);
+                tvFeaturedDescriptionTextFullView.setVisibility(View.VISIBLE);
                 tvFeaturedDescriptionText.setTag(mLess);
+                tvFeaturedDescriptionTextFullView.setTag(mLess);
                 tvFeaturedViewMore.setVisibility(View.GONE);
             } else {
                 tvFeaturedDescriptionText.setTag(mViewMore);
+                tvFeaturedDescriptionTextFullView.setTag(mViewMore);
                 if (mViewMoreDescription.length() > AppConstants.WORD_LENGTH) {
-                    mViewMoreDescription = mViewMoreDescription.substring(0, AppConstants.WORD_COUNT);
                     tvFeaturedViewMore.setVisibility(View.VISIBLE);
                 } else {
                     tvFeaturedViewMore.setVisibility(View.GONE);
@@ -234,6 +244,8 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
                 } else {
                     tvFeaturedDescriptionText.setText(Html.fromHtml(mViewMoreDescription));// or for older api
                 }
+                tvFeaturedDescriptionTextFullView.setVisibility(View.GONE);
+                tvFeaturedDescriptionText.setVisibility(View.VISIBLE);
                 String dots = LEFT_VIEW_MORE + AppConstants.DOTS + RIGHT_VIEW_MORE;
                 if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                     tvFeaturedViewMore.setText(Html.fromHtml(dots + mContext.getString(R.string.ID_VIEW_MORE), 0)); // for 24 api and more

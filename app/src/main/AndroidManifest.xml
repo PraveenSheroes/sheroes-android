@@ -31,7 +31,8 @@
 
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.OnBoardingActivity"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait"/>
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.WelcomeActivity"
             android:screenOrientation="portrait"

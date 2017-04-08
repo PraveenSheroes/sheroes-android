@@ -129,7 +129,7 @@ public class SettingPreferencesWorkExperienceFragment extends BaseFragment imple
 
                         }
 
-                        if (privilegeList.get(1).getPrivacySettingType().equals("public")) {
+                        /*if (privilegeList.get(1).getPrivacySettingType().equals("public")) {
 
 
                             mSpinner_workexp1.setSelection(1);
@@ -138,7 +138,7 @@ public class SettingPreferencesWorkExperienceFragment extends BaseFragment imple
 
                             mSpinner_workexp1.setSelection(0);
 
-                        }
+                        }*/
 
                     }
 

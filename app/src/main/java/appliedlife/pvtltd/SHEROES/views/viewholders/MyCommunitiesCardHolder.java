@@ -55,6 +55,8 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
     TextView tvCommunityTime;
     @Bind(R.id.tv_community_text)
     TextView tvDescriptionText;
+    @Bind(R.id.tv_community_text_full_view)
+    TextView tvDescriptionTextFullView;
     @Bind(R.id.tv_my_community_view_more)
     TextView tvMyCommunityViewMore;
     @Bind(R.id.tv_community_tag_lable)
@@ -82,6 +84,7 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
         mViewMore = context.getString(R.string.ID_VIEW_MORE);
         mLess = context.getString(R.string.ID_LESS);
         tvDescriptionText.setTag(mViewMore);
+        tvDescriptionTextFullView.setTag(mViewMore);
         liCoverImage.removeAllViews();
         liCoverImage.removeAllViewsInLayout();
         imageOperations(context);
@@ -123,7 +126,6 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
         mViewMoreDescription = dataItem.getListDescription();
         if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
             if (mViewMoreDescription.length() > AppConstants.WORD_LENGTH) {
-                mViewMoreDescription = mViewMoreDescription.substring(0, AppConstants.WORD_COUNT);
                 tvMyCommunityViewMore.setVisibility(View.VISIBLE);
             } else {
                 tvMyCommunityViewMore.setVisibility(View.GONE);
@@ -216,6 +218,10 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
     public void viewMoreClick() {
         viewMoreText();
     }
+    @OnClick(R.id.tv_community_text_full_view)
+    public void viewMoreFullTextClick() {
+        viewMoreText();
+    }
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void viewMoreText() {
@@ -224,16 +230,19 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
                 String lessWithColor = LEFT_HTML_VEIW_TAG_FOR_COLOR + mLess + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
                 mViewMoreDescription = dataItem.getListDescription();
                 if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                    tvDescriptionText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.SPACE + lessWithColor, 0)); // for 24 api and more
+                    tvDescriptionTextFullView.setText(Html.fromHtml(mViewMoreDescription + AppConstants.SPACE + lessWithColor, 0)); // for 24 api and more
                 } else {
-                    tvDescriptionText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.SPACE + lessWithColor));// or for older api
+                    tvDescriptionTextFullView.setText(Html.fromHtml(mViewMoreDescription + AppConstants.SPACE + lessWithColor));// or for older api
                 }
+                tvDescriptionText.setVisibility(View.GONE);
+                tvDescriptionTextFullView.setVisibility(View.VISIBLE);
                 tvDescriptionText.setTag(mLess);
+                tvDescriptionTextFullView.setTag(mLess);
                 tvMyCommunityViewMore.setVisibility(View.GONE);
             } else {
                 tvDescriptionText.setTag(mViewMore);
+                tvDescriptionTextFullView.setTag(mViewMore);
                 if (mViewMoreDescription.length() > AppConstants.WORD_LENGTH) {
-                    mViewMoreDescription = mViewMoreDescription.substring(0, AppConstants.WORD_COUNT);
                     tvMyCommunityViewMore.setVisibility(View.VISIBLE);
                 } else {
                     tvMyCommunityViewMore.setVisibility(View.GONE);
@@ -249,6 +258,8 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
                 } else {
                     tvDescriptionText.setText(Html.fromHtml(mViewMoreDescription));// or for older api
                 }
+                tvDescriptionText.setVisibility(View.VISIBLE);
+                tvDescriptionTextFullView.setVisibility(View.GONE);
             }
         }
     }

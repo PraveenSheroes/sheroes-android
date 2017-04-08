@@ -92,6 +92,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     ImageView ivFeedCommunityPostMenu;
     @Bind(R.id.tv_feed_community_post_text)
     TextView tvFeedCommunityPostText;
+    @Bind(R.id.tv_feed_community_post_text_full_view)
+    TextView tvFeedCommunityPostTextFullView;
     @Bind(R.id.tv_feed_community_post_user_menu)
     TextView tvFeedCommunityPostUserMenu;
     @Bind(R.id.tv_feed_community_post_reaction1)
@@ -134,6 +136,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         mLess = context.getString(R.string.ID_LESS);
         dataItem.setItemPosition(position);
         tvFeedCommunityPostText.setTag(mViewMore);
+        tvFeedCommunityPostTextFullView.setTag(mViewMore);
         tvFeedCommunityPostUserBookmark.setEnabled(true);
         tvFeedCommunityPostUserReaction.setEnabled(true);
         tvFeedCommunityPostUserReactionText.setEnabled(true);
@@ -276,8 +279,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             if (mViewMoreDescription.length() > AppConstants.WORD_LENGTH) {
                 tvFeedCommunityPostViewMore.setVisibility(View.VISIBLE);
                 tvFeedCommunityPostText.setEnabled(true);
-                mViewMoreDescription = mViewMoreDescription.substring(0, AppConstants.WORD_COUNT);
-
                 if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                     tvFeedCommunityPostText.setText(Html.fromHtml(mViewMoreDescription, 0)); // for 24 api and more
                 } else {
@@ -665,7 +666,10 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     public void viewMoreClick() {
         viewMoreTextClick();
     }
-
+    @OnClick(R.id.tv_feed_community_post_text_full_view)
+    public void viewMoreFullViewClick() {
+        viewMoreTextClick();
+    }
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void viewMoreTextClick() {
         if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
@@ -674,9 +678,9 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 String lessWithColor = LEFT_HTML_VEIW_TAG_FOR_COLOR + mLess + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
                 mViewMoreDescription = dataItem.getListDescription();
                 if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                    tvFeedCommunityPostText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.SPACE + AppConstants.SPACE + lessWithColor, 0)); // for 24 api and more
+                    tvFeedCommunityPostTextFullView.setText(Html.fromHtml(mViewMoreDescription + AppConstants.SPACE + AppConstants.SPACE + lessWithColor, 0)); // for 24 api and more
                 } else {
-                    tvFeedCommunityPostText.setText(Html.fromHtml(mViewMoreDescription + AppConstants.SPACE + AppConstants.SPACE + lessWithColor));// or for older api
+                    tvFeedCommunityPostTextFullView.setText(Html.fromHtml(mViewMoreDescription + AppConstants.SPACE + AppConstants.SPACE + lessWithColor));// or for older api
                 }
                 String dots = LEFT_VIEW_MORE + AppConstants.DOTS + RIGHT_VIEW_MORE;
                 if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
@@ -685,12 +689,16 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                     tvFeedCommunityPostViewMore.setText(Html.fromHtml(dots + mContext.getString(R.string.ID_VIEW_MORE)));// or for older api
                 }
                 tvFeedCommunityPostText.setTag(mLess);
+                tvFeedCommunityPostTextFullView.setTag(mLess);
+                tvFeedCommunityPostTextFullView.setVisibility(View.VISIBLE);
+                tvFeedCommunityPostText.setVisibility(View.GONE);
                 tvFeedCommunityPostViewMore.setVisibility(View.GONE);
             } else {
-
+                tvFeedCommunityPostTextFullView.setVisibility(View.GONE);
+                tvFeedCommunityPostText.setVisibility(View.VISIBLE);
                 tvFeedCommunityPostText.setTag(mViewMore);
+                tvFeedCommunityPostTextFullView.setTag(mViewMore);
                 if (mViewMoreDescription.length() > AppConstants.WORD_LENGTH) {
-                    mViewMoreDescription = mViewMoreDescription.substring(0, AppConstants.WORD_COUNT);
                     if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                         tvFeedCommunityPostText.setText(Html.fromHtml(mViewMoreDescription, 0)); // for 24 api and more
                     } else {
