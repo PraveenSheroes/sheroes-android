@@ -120,6 +120,16 @@
         <item name="android:textSize">20dp</item>
     </style>
 
+
+
+
+    <style name="subtitle_goodAT">
+        <item name="android:textColor">@color/fully_transparent</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:layout_gravity">right</item><!-- I only change the color -->
+        <item name="android:layout_marginLeft">@dimen/dp_size_50</item>
+    </style>
+
     <style name="subtitle">
         <item name="android:textColor">@color/fully_transparent</item>
         <item name="android:gravity">right</item>

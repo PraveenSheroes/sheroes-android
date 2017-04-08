@@ -113,6 +113,10 @@ public class AppConstants {
     public static final String COVER_IMAGE = "cover_image";
     public static final String TAG_LIST = "tag_list";
     public static final String TAG_ID = "tag_id";
+    public static final String SKILL_LIST = "skill_list";
+    public static final String SKILL_LIST_ID = "skill_list_id";
+
+
     public static final String MEMBER = "Member_detail";
     public static final String MEMBER_LIST = "Member_List";
     public static final String MEMBER_FRAGMENT = "MemberFragment";
@@ -167,15 +171,10 @@ public class AppConstants {
     public static final String HOUR = " hour";
     public static final String MINUT = " minute";
     public static final String AGO = " ago";
-
-
     public static final String PDF_PATH = "application/pdf";
     public static final String PDF_VISITING_CARD = "visiting_card.pdf";
     public static final String VISITING_CARD_URL = "http://www.princexml.com/howcome/2016/samples/magic6/magic.pdf";
-
     public static final String BLANK_MESSAGE = "Please fill all the details";
-
-
     public static final String ERROR_MESSAGE_OF_PDF_DOWNLOAD = "PDF Reader application is not installed in your device";
     public static final String STARTING_PDF_DOWNLOAD = "Starting PDF download...";
     public static final String DOWNLOAD_COMPLETE = "Download Complete. Open PDF Application installed in the device.";
@@ -184,32 +183,33 @@ public class AppConstants {
 
     //Community
     public static final int MAX_WORD_COUNTER = 4000;
-
     public static final String WORK_FROM_HOME = "Work from home";
     public static final String OFFICE_JOB = "Office job";
     public static final String FREELANCING = "Freelancing";
     public static final String INTERNSHIP = "Internship";
     public static final String RETURN_FROM_BREAK = "Return from a break";
-
     public static final String OPEN_COMMUNITY = "open community for join";
     public static final String LEFT_BRACKET = "(";
     public static final String RIGHT_BRACKET = ")";
-
-
-
     public  static  final String TRAVEL="TRAVEL_FLEXIBILITY";
     public static final String STRING="string";
-
-
-
     public static final String SUMMARY="SUMMARY";
     public static final String USER_SUMMARY_SERVICE="USER_SUMMARY_SERVICE";
-
-
-
     public static final String VISIT_PREFERENCE="VISIT_PREFERENCE";
     public static final String CLIENT_SIDE_VISIT_PREFERENCE_SERVICE="CLIENT_SIDE_VISIT_PREFERENCE_SERVICE";
-
+    public static final String SHEROESFACEBOOKLINK="https://www.facebook.com/sheroesindia/\n" +
+            "https://twitter.com/sheroesindia";
+    public static final String SHEROESTWITTERLINK="https://twitter.com/sheroesindia/\n";
+    public static final String SHEROESISTRAGRAMLINK="https://www.instagram.com/sheroes.in/\n";
+    public static final String MASTER_DATA_DEFAULT_CATEGORY = "POPULAR"; // on second map lavele key
+    public static final String USER_PROFILE = "user_profile"; // on second map lavele key
+    public static final String GOOD_AT_SKILL_PROFILE = "good_at_skill";
+    public static final String INTEREST_PROFILE = "interest_Type";
+    public static final String OPPORTUNITY_PROFILE = "Looking FOR";
+    public static final String EDUCATION_PROFILE = "education_profile";
+    public static final String EXPERIENCE_PROFILE = "experience_profile";
+    public static final String PROJECT_PROFILE = "project_profile";
+    public static final String ABOUT_ME_PROFILE = "about_profile";
 
 
 }

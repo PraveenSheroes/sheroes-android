@@ -95,7 +95,7 @@ public class PreferencesDeactiveAccountDialogFragment extends BaseDialogFragment
         mUserPreference.delete();
         Intent i = new Intent(getActivity(), LoginActivity.class);
         startActivity(i);
-        //getDialog().cancel();
+        getActivity().finish();
     }
 
     @Override
