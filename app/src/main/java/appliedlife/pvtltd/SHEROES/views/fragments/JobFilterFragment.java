@@ -1,6 +1,5 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,9 +17,9 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.FilterList;
 import appliedlife.pvtltd.SHEROES.presenters.CommentReactionPresenter;
-import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.RangeSeekBar;
 import appliedlife.pvtltd.SHEROES.views.activities.JobFilterActivity;
@@ -40,33 +39,17 @@ public class JobFilterFragment extends BaseFragment {
     @Bind(R.id.rv_filter_list)
     RecyclerView mRecyclerView;
     @Bind(R.id.tv_community_title)
-    TextView mTv_community_title;
+    TextView mTvCommunityTitle;
     @Bind(R.id.tv_filter_exp)
     TextView tvExp;
 
     List<FilterList> listFeelter = new ArrayList<FilterList>();
 
     private GenericRecyclerViewAdapter mAdapter;
-    private HomeActivityJobFilterIntractionListner mHomeActivityIntractionListner;
-
-
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            if (getActivity() instanceof HomeActivityJobFilterIntractionListner) {
-                mHomeActivityIntractionListner = (HomeActivityJobFilterIntractionListner) getActivity();
-            }
-        } catch (InstantiationException exception) {
-            LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
-        }
-    }
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
-        View view = inflater.inflate(R.layout.filterfragment, container, false);
+        View view = inflater.inflate(R.layout.job_filter_fragment, container, false);
         ButterKnife.bind(this, view);
         RangeSeekBar<Integer> seekBar = (RangeSeekBar<Integer>)  view.findViewById(R.id.rangeSeekbar);
         seekBar.setRangeValues(0, 25);
@@ -80,10 +63,8 @@ public class JobFilterFragment extends BaseFragment {
             }
         });
 
-// Get noticed while dragging
         seekBar.setNotifyWhileDragging(true);
-
-        mTv_community_title.setText("FILTER");
+        mTvCommunityTitle.setText("FILTER");
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new GenericRecyclerViewAdapter(getContext(), (JobFilterActivity) getActivity());
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
@@ -98,15 +79,14 @@ public class JobFilterFragment extends BaseFragment {
         return view;
     }
     @OnClick(R.id.tv_save_job_filter)
-    public void saveClick()
+    public void applyFilterOnClick()
     {
-        mHomeActivityIntractionListner.onBackPressJobFilter();
-
+        FeedRequestPojo feedRequestPojo=new FeedRequestPojo();
+        ((JobFilterActivity)getActivity()).applyFilterData(feedRequestPojo);
     }
     @OnClick(R.id.tv_close_community)
     public void backBtnClick()
     {
-        mHomeActivityIntractionListner.onBackPressJobFilter();
     }
 
     @OnClick(R.id.tv_opportunity_type_lable)
@@ -149,10 +129,4 @@ public class JobFilterFragment extends BaseFragment {
 
 
     }
-
-    public interface HomeActivityJobFilterIntractionListner {
-        void onErrorOccurence();
-        void onBackPressJobFilter();
-    }
-
 }

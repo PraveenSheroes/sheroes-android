@@ -247,15 +247,19 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
             Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.THREE_CONSTANT);
             if (AppUtils.isFragmentUIActive(fragment)) {
                 if (fragment instanceof SearchCommunitiesFragment) {
-                    ((SearchCommunitiesFragment) fragment).saveRecentSearchData(mFeedDetail);
                     ((SearchCommunitiesFragment) fragment).setEditText(mSearchEditText.getText().toString());
+                    ((SearchCommunitiesFragment) fragment).saveRecentSearchData(mFeedDetail);
                 }
             }
             fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
             if (AppUtils.isFragmentUIActive(fragment)) {
                 if (fragment instanceof AllSearchFragment) {
-                    ((AllSearchFragment) fragment).saveRecentSearchData(mFeedDetail);
                     ((AllSearchFragment) fragment).setEditText(mSearchEditText.getText().toString());
+                    ((AllSearchFragment) fragment).saveRecentSearchData(mFeedDetail);
+                }else if(fragment instanceof SearchCommunitiesFragment)
+                {
+                    ((SearchCommunitiesFragment) fragment).setEditText(mSearchEditText.getText().toString());
+                    ((SearchCommunitiesFragment) fragment).saveRecentSearchData(mFeedDetail);
                 }
             }
         } else if (requestCode == AppConstants.REQUEST_CODE_FOR_JOB_DETAIL && null != intent) {

@@ -66,7 +66,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CommunityView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
@@ -76,8 +75,6 @@ import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.COMMUNITY_OWNER;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MY_COMMUNITIES;
-
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
 
 /**
  * Created by Ajit Kumar on 11-01-2017.
@@ -641,7 +638,7 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
         switch (createCommunityResponse.getStatus()) {
             case AppConstants.SUCCESS:
                 if (null != mFeedDetail && StringUtil.isNotNullOrEmptyString(mFeedDetail.getId())) {
-                    mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_ARTICLE, AppConstants.ONE_CONSTANT, mFeedDetail.getId()));
+                    mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_COMMUNITY, AppConstants.ONE_CONSTANT, mFeedDetail.getId()));
                 }else
                 {
                     Toast.makeText(getActivity(), getString(R.string.ID_ADDED), Toast.LENGTH_SHORT).show();

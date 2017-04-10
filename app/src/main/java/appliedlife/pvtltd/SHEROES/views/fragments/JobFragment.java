@@ -126,9 +126,14 @@ public class JobFragment extends BaseFragment {
         });
         return view;
     }
+    public void jobFilterIds() {
+        LogUtils.info(TAG,"*************JobFilter data******");
+    }
+
 
     @OnClick(R.id.fab_filter)
     public void clickFilter() {
+        ((HomeActivity)getActivity()).openJobFilterActivity();
     }
 
     private void logUser() {

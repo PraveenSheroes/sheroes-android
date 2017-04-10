@@ -15,8 +15,6 @@ import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.transition.Slide;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -306,7 +304,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
         }
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(CommunityOpenAboutFragment.class.getName());
         if (AppUtils.isFragmentUIActive(fragment)) {
-            ((CommunityOpenAboutFragment) fragment).refreshMemberCount(feedDetail);
+            ((CommunityOpenAboutFragment) fragment).refreshOpeAboutCommunityContent(feedDetail);
         }
     }
 
@@ -504,11 +502,6 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
         } else {
             onBackClick();
         }
-    }
-
-    private void setCustomAnimation(View viewToAnimate) {
-        Animation animation = AnimationUtils.loadAnimation(this, R.anim.bottom_to_top_slide_anim);
-        viewToAnimate.startAnimation(animation);
     }
     public void closeOwner() {
         getSupportFragmentManager().popBackStack();

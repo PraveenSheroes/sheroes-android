@@ -1802,6 +1802,11 @@ public class AppUtils {
         feedRequestPojo.setCategoryIds(categoryIds);
         return feedRequestPojo;
     }
+    public static FeedRequestPojo jobCategoryRequestBuilder(String typeOfFeed, int pageNo, List<Long> categoryIds) {
+        FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, pageNo);
+        feedRequestPojo.setCategoryIds(categoryIds);
+        return feedRequestPojo;
+    }
 
     public static FeedRequestPojo feedDetailRequestBuilder(String typeOfFeed, int pageNo, String idForDetail) {
 

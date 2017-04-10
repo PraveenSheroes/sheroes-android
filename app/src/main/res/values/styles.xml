@@ -71,10 +71,7 @@
 
     <style name="CheckBoxStyle">
         <item name="android:button">@drawable/check_box_selecter</item>
-        <item name="android:paddingLeft">@dimen/dp_size_4</item>
         <item name="android:background">@android:color/transparent</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
     </style>
     <style name="FabStyle">
         <item name="android:layout_width">wrap_content</item>

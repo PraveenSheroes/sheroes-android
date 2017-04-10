@@ -24,7 +24,9 @@
         android:padding="@dimen/dp_size_12"/>
     <CheckBox
         android:id="@+id/checkbox_spinner"
-        android:layout_width="@dimen/dp_size_45"
-        android:layout_height="@dimen/dp_size_45"
+        android:layout_width="@dimen/dp_size_40"
+        android:layout_height="@dimen/dp_size_40"
+        android:layout_marginRight="@dimen/dp_size_10"
+        android:layout_gravity="center"
         style="@style/CheckBoxStyle"/>
 </LinearLayout>

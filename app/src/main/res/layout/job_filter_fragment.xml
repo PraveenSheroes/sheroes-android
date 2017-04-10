@@ -7,6 +7,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/dp_size_50"
         android:orientation="vertical">
 
         <LinearLayout
@@ -119,16 +120,10 @@
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:textColor="@color/job_filter_desc_color"
                 android:textSize="@dimen/sp_size_12" />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_size_0.5"
-                android:layout_marginTop="@dimen/dp_size_10"
-                android:background="@color/search_tab_unselected_text" />
             <appliedlife.pvtltd.SHEROES.utils.RangeSeekBar
                 android:id="@+id/rangeSeekbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_size_10"
                 android:layout_below="@+id/tv_filter_exp" />
 
             <LinearLayout

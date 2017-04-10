@@ -250,10 +250,10 @@ public class HomeActivity extends BaseActivity implements ViewPager.OnPageChange
         //showNetworkTimeoutDoalog(true);
     }
 
-    public void openJobFilterFragment() {
-        getSupportFragmentManager().popBackStack(JobFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        onBackPressed();
-        openJobFragment();
+    public void openJobFilterActivity() {
+        Intent intent = new Intent(getApplicationContext(), JobFilterActivity.class);
+        startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_JOB_FILTER);
+        overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
     }
 
 
@@ -710,9 +710,6 @@ public class HomeActivity extends BaseActivity implements ViewPager.OnPageChange
     @OnClick(R.id.fab_add_community)
     public void createCommunityButton() {
         Intent intent = new Intent(getApplicationContext(), CreateCommunityActivity.class);
-       // Bundle bundle = new Bundle();
-       // bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, mFeedDetail);
-       // intent.putExtras(bundle);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY);
         overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
     }
@@ -893,13 +890,21 @@ public class HomeActivity extends BaseActivity implements ViewPager.OnPageChange
                 case AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY:
                     createCommunityActivityResponse(intent);
                     break;
+                case AppConstants.REQUEST_CODE_FOR_JOB_FILTER:
+                    jobFilterActivityResponse(intent);
+                    break;
                 default:
                     LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);
             }
         }
 
     }
-
+    private void jobFilterActivityResponse(Intent intent) {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(JobFragment.class.getName());
+        if (AppUtils.isFragmentUIActive(fragment)) {
+            ((JobFragment) fragment).jobFilterIds();
+        }
+    }
     private void createCommunityActivityResponse(Intent intent) {
         mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITIES_DETAIL);
         Fragment community = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.ONE_CONSTANT);
