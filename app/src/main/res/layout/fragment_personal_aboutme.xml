@@ -18,12 +18,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
-                app:collapsedSubtitleAppearance="@style/subtitle_collapsed"
-                app:collapsedTitleTextAppearance="@style/title.collapsed"
                 app:contentScrim="@color/colorAccent"
-                app:expandedSubtitleAppearance="@style/subtitle"
-                app:expandedTitleGravity="bottom|center_horizontal"
-                app:expandedTitleTextAppearance="@style/title.expanded"
+                android:layout_gravity="center"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
                 <RelativeLayout
@@ -57,7 +53,7 @@
                         android:visibility="gone" />
 
                     <TextView
-                        android:id="@+id/tv_about_me_tittle"
+                        android:id="@+id/tv_about_me_tittle1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/iv_profile_image"
@@ -66,7 +62,7 @@
                         android:textColor="@color/white"
                         android:gravity="center"
                         android:paddingTop="@dimen/dp_size_16"
-                        android:text=""
+                        android:text="@string/ID_ABOUT_ME"
                         android:textSize="@dimen/dp_size_24" />
 
 
@@ -86,9 +82,20 @@
                             android:id="@+id/tv_about_me_back"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/dp_size_10"
+                            android:layout_marginTop="@dimen/dp_size_16"
                             android:drawableLeft="@drawable/ic_back_white"
                             android:fontFamily="@string/ID_ROBOTO_LIGHT" />
+
+
+                        <TextView
+                            android:id="@+id/tv_about_me_tittle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:padding="@dimen/dp_size_16"
+                            android:textAllCaps="true"
+                            android:text="@string/ID_ABOUT_ME" />
+
 
 
                     </RelativeLayout>

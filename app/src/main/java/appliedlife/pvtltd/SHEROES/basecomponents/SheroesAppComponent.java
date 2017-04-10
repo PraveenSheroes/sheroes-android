@@ -73,6 +73,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.PreferencesDeactiveAccountDial
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfessionalEditBasicDetailsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProffestionalProfileFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileAboutMeFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProfileAddEditEducationFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileAddEducationFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileAddOtherFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileCityWorkFragment;
@@ -81,6 +82,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ProfileFullViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileGoodAtFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileOpportunityTypeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileOtherFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProfileSearchIntrestIn;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileShareYourIntrestFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileTravelClientFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileVisitingCardView;
@@ -89,7 +91,9 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ProfileWorkExperienceSelfEmplo
 import appliedlife.pvtltd.SHEROES.views.fragments.SearchArticleFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SearchCommunitiesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SearchGoodAt;
+import appliedlife.pvtltd.SHEROES.views.fragments.SearchIAmInterestIn;
 import appliedlife.pvtltd.SHEROES.views.fragments.SearchJobFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.SearchProfileLocation;
 import appliedlife.pvtltd.SHEROES.views.fragments.SearchRecentFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SelectCommunityFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SettingAboutFragment;
@@ -110,6 +114,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleDetailHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleDetailSuggestedHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleDetailWithInSuggestedHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.BlankHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.CanHelpInHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CommentHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CommunityCardDetailHeader;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CommunitySuggestedHolder;
@@ -338,5 +343,15 @@ public interface SheroesAppComponent {
     void inject(SearchGoodAt searchGoodAt);
     void inject(GoodAtHolder goodAtHolder);
     void inject(PandingRequestHolder pandingRequestHolder);
+   // void inject(CommunityJoinFromeAboutDailog communityJoinFromeAboutDailog);
+
+
+
+    void inject(ProfileSearchIntrestIn profileSearchIntrestIn);
+    void inject(SearchIAmInterestIn searchIAmInterestIn);
+    void inject(CanHelpInHolder canHelpInHolder);
+    void inject(SearchProfileLocation searchProfileLocation);
+
+    void inject(ProfileAddEditEducationFragment profileAddEditEducationFragment);
 
 }

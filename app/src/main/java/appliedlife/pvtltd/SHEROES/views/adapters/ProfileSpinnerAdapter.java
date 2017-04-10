@@ -12,7 +12,7 @@ import android.widget.TextView;
 import appliedlife.pvtltd.SHEROES.R;
 
 /**
- * Created by sheroes on 23/03/17.
+ * Created by priyanka on 23/03/17.
  */
 
 public class ProfileSpinnerAdapter extends ArrayAdapter<String> {
@@ -40,7 +40,7 @@ public class ProfileSpinnerAdapter extends ArrayAdapter<String> {
         LayoutInflater layoutInflater = (LayoutInflater) getContext()
                 .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
 
-        View mySpinner = layoutInflater.inflate(R.layout.setting_spinner, parent, false);
+        View mySpinner = layoutInflater.inflate(R.layout.profile_current_status_spinner, parent, false);
         TextView main_text = (TextView) mySpinner.findViewById(R.id.text_set);
 
         main_text.setText(item_text[position]);

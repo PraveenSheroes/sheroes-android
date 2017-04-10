@@ -9,19 +9,23 @@
     <RelativeLayout
         android:id="@+id/r1_relative_visiting_card_view"
         android:layout_width="match_parent"
-        android:layout_height="480dp"
-       >
+        android:layout_height="480dp">
+
+
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_size_250"
+            android:layout_height="342dp"
             android:background="@drawable/ic_v_card_background"/>
+
         <TextView
             android:id="@+id/tv_visiting_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/dp_size_17"
+            android:layout_height="@dimen/dp_size_16"
             android:layout_marginLeft="@dimen/dp_size_16"
             android:layout_marginTop="@dimen/dp_size_16"
             android:background="@drawable/ic_back_img_blue" />
+
+
         <TextView
             android:id="@+id/tv_visiting"
             android:layout_below="@+id/tv_visiting_back"
@@ -42,7 +46,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/dp_size_35"
-            android:paddingTop="@dimen/dp_size_10"
             android:textAllCaps="true"
             android:text="@string/ID_CARD"
             android:textSize="@dimen/sp_size_35"
@@ -53,26 +56,30 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/tv_visiting1"
+            android:paddingTop="@dimen/dp_size_17"
             android:layout_centerHorizontal="true"
             android:paddingBottom="@dimen/dp_size_20"
             >
 
             <include layout="@layout/visiting_editing_card"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
 
                 />
+
         </RelativeLayout>
+
+
     <TextView
         android:id="@+id/tv_download_visiting_card"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/dp_size_40"
+        android:layout_width="120dp"
+        android:layout_height="@dimen/dp_size_30"
         android:textSize="@dimen/sp_size_12"
         android:background="@drawable/download_visitingcard_background"
-        android:layout_centerHorizontal="true"
         android:text="@string/ID_DOWNLOAD_NOW"
-        android:textAlignment="center"
-        android:padding="@dimen/dp_size_10"
+        android:padding="@dimen/dp_size_5"
+        android:gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         android:textColor="@color/white"
 
@@ -85,7 +92,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginTop="@dimen/dp_size_40"
-    android:textSize="@dimen/sp_size_24"
+    android:textSize="@dimen/sp_size_14"
     android:text="@string/ID_SHARE"
     android:textAllCaps="true"
     android:textColor="@color/colorPrimary"

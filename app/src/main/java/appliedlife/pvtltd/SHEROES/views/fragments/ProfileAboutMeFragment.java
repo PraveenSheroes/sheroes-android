@@ -3,7 +3,6 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -15,19 +14,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.EducationResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.PersonalBasicDetailsResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfessionalBasicDetailsResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
+import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCardResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfilePreferredWorkLocationResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTravelFlexibilityResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryResponse;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePersenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -54,20 +53,18 @@ public class ProfileAboutMeFragment extends BaseFragment implements ProfileView 
     /* @Bind(R.id.tv_about_me_tittle)
      TextView mTv_about_me_tittle;*/
     @Bind(R.id.et_write_about_me)
-    TextView mEt_write_about_me;
+    TextView mEtWriteAboutMe;
     @Bind(R.id.btn_save_about_me_details)
-    Button mBtn_save_about_me_details;
+    Button mBtnSaveAboutMeDetails;
     @Bind(R.id.charecter_cout_number)
-    TextView charecter_cout_number;
+    TextView mCharecterCountNumber;
     @Bind(R.id.iv_write_about_line)
-    ImageView mIv_write_about_line;
+    ImageView mIvWriteAboutLine;
     @Bind(R.id.tv_about_me_tittle)
-    TextView mTv_about_me_tittle;
-
+    TextView mTvAboutMeTittle;
     @Bind(R.id.cl_profile_about_me)
 
-
-    public CustomCollapsingToolbarLayout ctProfileAboutMe;
+    public CustomCollapsingToolbarLayout mProfileAboutMe;
 
     private ProfileAboutMeFragmentListener profileAboutMeFragmentListener;
 
@@ -101,14 +98,15 @@ public class ProfileAboutMeFragment extends BaseFragment implements ProfileView 
         // mTv_about_me_tittle.setText(R.string.ID_ABOUT_ME);
 
         //TODO:Change Subtittle
-        ctProfileAboutMe.setExpandedSubTitleColor(ContextCompat.getColor(getActivity(), android.R.color.transparent));
-        ctProfileAboutMe.setExpandedTitleColor(ContextCompat.getColor(getActivity(), android.R.color.transparent));
+        mProfileAboutMe.setExpandedSubTitleColor(ContextCompat.getColor(getActivity(), android.R.color.transparent));
+        mProfileAboutMe.setExpandedTitleColor(ContextCompat.getColor(getActivity(), android.R.color.transparent));
+        mProfileAboutMe.setExpandedTitleMarginStart(200);
 
-        ctProfileAboutMe.setTitle("ABOUT ME");
-        ctProfileAboutMe.setSubtitle("ABOUT ME");
-        mTv_about_me_tittle.setText(R.string.ID_ABOUT_ME);
+        mProfileAboutMe.setTitle("ABOUT ME");
+        mProfileAboutMe.setSubtitle("ABOUT ME");
+        mTvAboutMeTittle.setText(R.string.ID_ABOUT_ME);
 
-        mEt_write_about_me.addTextChangedListener(new TextWatcher() {
+        mEtWriteAboutMe.addTextChangedListener(new TextWatcher() {
 
 
             @Override
@@ -124,12 +122,12 @@ public class ProfileAboutMeFragment extends BaseFragment implements ProfileView 
 
                 if (s.length() > 0) {
 
-                    charecter_cout_number.setVisibility(View.VISIBLE);
-                    charecter_cout_number.setText(String.valueOf(AppConstants.MAX_WORD_COUNTER - s.toString().length()));
+                    mCharecterCountNumber.setVisibility(View.VISIBLE);
+                    mCharecterCountNumber.setText(String.valueOf(AppConstants.MAX_WORD_COUNTER - s.toString().length()));
 
                 } else {
 
-                    charecter_cout_number.setVisibility(View.GONE);
+                    mCharecterCountNumber.setVisibility(View.GONE);
                 }
             }
         });
@@ -144,10 +142,10 @@ public class ProfileAboutMeFragment extends BaseFragment implements ProfileView 
 
     public boolean OnEdit_Text_Click() {
 
-        mIv_write_about_line.setBackgroundColor(getResources().getColor(R.color.blue));
-        mBtn_save_about_me_details.setEnabled(true);
-        mBtn_save_about_me_details.setBackgroundColor(getResources().getColor(R.color.red));
-        mBtn_save_about_me_details.setVisibility(View.VISIBLE);
+        mIvWriteAboutLine.setBackgroundColor(getResources().getColor(R.color.blue));
+        mBtnSaveAboutMeDetails.setEnabled(true);
+        mBtnSaveAboutMeDetails.setBackgroundColor(getResources().getColor(R.color.red));
+        mBtnSaveAboutMeDetails.setVisibility(View.VISIBLE);
 
         return false;
     }
@@ -159,7 +157,7 @@ public class ProfileAboutMeFragment extends BaseFragment implements ProfileView 
 
     public void Save_about_me_function() {
 
-        mAbout_Me_Des = mEt_write_about_me.getText().toString();
+        mAbout_Me_Des = mEtWriteAboutMe.getText().toString();
 
         if (StringUtil.isNotNullOrEmptyString(mAbout_Me_Des)) {
 
@@ -214,30 +212,34 @@ public class ProfileAboutMeFragment extends BaseFragment implements ProfileView 
     }
 
     @Override
-    public void getEducationResponse(EducationResponse educationResponse) {
+    public void getEducationResponse(BoardingDataResponse boardingDataResponse) {
+
+    }
+
+
+
+    @Override
+    public void getPersonalBasicDetailsResponse(BoardingDataResponse boardingDataResponse) {
 
     }
 
     @Override
-    public void getPersonalBasicDetailsResponse(PersonalBasicDetailsResponse personalBasicDetailsResponse) {
+    public void getprofiletracelflexibilityResponse(BoardingDataResponse boardingDataResponse) {
 
     }
 
-    @Override
-    public void getprofiletracelflexibilityResponse(ProfileTravelFlexibilityResponse profileTravelFlexibilityResponse) {
 
-    }
+
 
     @Override
-    public void getUserSummaryResponse(UserSummaryResponse userSummaryResponse) {
-
+    public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
 
         //TODO:Change Message
-        Toast.makeText(getActivity(), userSummaryResponse.getStatus(),
+        Toast.makeText(getActivity(), boardingDataResponse.getStatus(),
                 Toast.LENGTH_LONG).show();
 
 
-        if (userSummaryResponse.getStatus().equals(AppConstants.SUCCESS)) {
+        if (boardingDataResponse.getStatus().equals(AppConstants.SUCCESS)) {
 
 
             profileAboutMeFragmentListener.AboutMeBack();
@@ -247,17 +249,36 @@ public class ProfileAboutMeFragment extends BaseFragment implements ProfileView 
     }
 
     @Override
-    public void getProfessionalBasicDetailsResponse(ProfessionalBasicDetailsResponse professionalBasicDetailsResponse) {
+    public void getProfessionalBasicDetailsResponse(BoardingDataResponse boardingDataResponse) {
 
     }
 
     @Override
-    public void getProfessionalWorkLocationResponse(ProfilePreferredWorkLocationResponse profilePreferredWorkLocationResponse) {
+    public void getProfessionalWorkLocationResponse(BoardingDataResponse boardingDataResponse) {
 
     }
+
+
+
 
     @Override
     public void getProfileVisitingCardResponse(ProfileEditVisitingCardResponse profileEditVisitingCardResponse) {
+
+    }
+
+    @Override
+    public void getUserData(UserProfileResponse userProfileResponse) {
+
+    }
+
+
+    @Override
+    public void getProfileListSuccess(GetTagData getAllData) {
+
+    }
+
+    @Override
+    public void getProfileListSuccess(List<Doc> feedDetailList) {
 
     }
 

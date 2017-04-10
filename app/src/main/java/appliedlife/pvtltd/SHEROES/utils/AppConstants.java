@@ -155,8 +155,6 @@ public class AppConstants {
     public static final String MASTER_DATA_JOB_FUNCTION_KEY = "JOB_FUNCTION";
     public static final String MASTER_DATA_SKILL_KEY = "SKILL"; // job at
     public static final String MASTER_DATA_CAN_HELP_IN_KEY = "CAN_HELP_IN"; //first lable//
-    public static final String MASTER_DATA_SECTOR_KEY = "SECTOR";
-
     public static final String MASTER_DATA_COMMUNITY_TYPE_KEY = "COMMUNITY_TYPE";
     public static final String MASTER_DATA_TAGS_KEY = "TAGS";
     public static final String MASTER_DATA_FUNCTIONAL_AREA_KEY = "FUNCTIONAL_AREA";//jobfilter
@@ -203,15 +201,26 @@ public class AppConstants {
             "https://twitter.com/sheroesindia";
     public static final String SHEROESTWITTERLINK="https://twitter.com/sheroesindia/\n";
     public static final String SHEROESISTRAGRAMLINK="https://www.instagram.com/sheroes.in/\n";
-    public static final String MASTER_DATA_DEFAULT_CATEGORY = "POPULAR"; // on second map lavele key
-    public static final String USER_PROFILE = "user_profile"; // on second map lavele key
-    public static final String GOOD_AT_SKILL_PROFILE = "good_at_skill";
-    public static final String INTEREST_PROFILE = "interest_Type";
-    public static final String OPPORTUNITY_PROFILE = "Looking FOR";
-    public static final String EDUCATION_PROFILE = "education_profile";
-    public static final String EXPERIENCE_PROFILE = "experience_profile";
+    public static final String MASTER_DATA_DEFAULT_CATEGORY = "POPULAR";
+    public static final String USER_PROFILE = "Basic Details";
+    public static final String GOOD_AT_SKILL_PROFILE = "I'm good at";
+    public static final String INTEREST_PROFILE = "I am interested in";
+    public static final String OPPORTUNITY_PROFILE = "Looking for";
+    public static final String CANHELP_IN = "I can help with";
+    public static final String LOOKING_FOR = "Looking For";
+    public static final String EDUCATION_PROFILE = "Education";
+    public static final String EXPERIENCE_PROFILE = "WOrk experience";
     public static final String PROJECT_PROFILE = "project_profile";
-    public static final String ABOUT_ME_PROFILE = "about_profile";
+    public static final String ABOUT_ME_PROFILE = "About Me";
+    public static final String USER_PROFILE1="PROFESSINAL BASIC DETAILS";
+    public static final String CLIENTSIDE="Horizontal";
+    /*PROFILE*/
+    public static final String DEGREE_KEY="degree";
+    public static final String FIELD_OF_STUDY_KEY="field_of_study";
+    public static final String MASTER_DATA_SECTOR_KEY = "SECTOR";//for sector search
+
+
+
 
 
 }

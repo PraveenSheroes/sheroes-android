@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:orientation="vertical"
     android:layout_marginTop="@dimen/dp_size_10"
     android:background="@color/white"
     android:layout_height="wrap_content">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -27,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerInParent="true"
-        android:background="@drawable/ic_add_city_icon"/>
+        android:background="@drawable/ic_add_icon_grey"/>
     </RelativeLayout>
 
 
@@ -42,9 +47,9 @@
             android:background="@drawable/select_tag_shap"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:padding="@dimen/dp_size_16"
-            android:text="@string/ID_INTERESTINNG_TITTLE"
             android:textAllCaps="true"
             android:textColor="@color/dashboard_fed_text"
             android:textSize="@dimen/sp_size_13" />
@@ -56,8 +61,8 @@
             android:layout_height="wrap_content"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:layout_marginLeft="@dimen/dp_size_10"
+            android:visibility="gone"
             android:padding="@dimen/dp_size_16"
-            android:text="@string/ID_INTERESTINNG_TITTLE"
             android:textAllCaps="true"
             android:textColor="@color/dashboard_fed_text"
             android:textSize="@dimen/sp_size_13" />
@@ -71,8 +76,8 @@
             android:layout_height="wrap_content"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:padding="@dimen/dp_size_16"
-            android:text="@string/ID_INTERESTINNG_TITTLE"
             android:textAllCaps="true"
+            android:visibility="gone"
             android:textColor="@color/dashboard_fed_text"
             android:textSize="@dimen/sp_size_13" />
 
@@ -85,9 +90,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:visibility="gone"
             android:layout_marginLeft="@dimen/dp_size_10"
             android:padding="@dimen/dp_size_16"
-            android:text="@string/ID_INTERESTINNG_TITTLE"
             android:textAllCaps="true"
             android:textColor="@color/dashboard_fed_text"
             android:textSize="@dimen/sp_size_13" />
@@ -112,7 +117,6 @@
             android:textColor="@color/blue"
             android:textSize="@dimen/dp_size_13" />
 
-
-
     </RelativeLayout>
-</LinearLayout>
+    </LinearLayout>
+</android.support.v7.widget.CardView>

@@ -31,9 +31,6 @@ public class Feedback_ThankyouActivity extends BaseActivity {
     @Bind(R.id.iv_feedback_twitter)
     ImageView mIvFeedbackTwitter;
 
-
-
-
     private  Uri mSheroesFacebookUrl = Uri.parse(AppConstants.SHEROESFACEBOOKLINK);
     private  Uri mSheroesTwitterUrl = Uri.parse(AppConstants.SHEROESTWITTERLINK);
     private  Uri mSheroesIstragramUrl = Uri.parse(AppConstants.SHEROESISTRAGRAMLINK);

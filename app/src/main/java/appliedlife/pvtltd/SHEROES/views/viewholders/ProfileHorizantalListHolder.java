@@ -8,6 +8,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.MyProfileView;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileHorList;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -19,7 +20,7 @@ import butterknife.ButterKnife;
  * Created by Priyanka on 16-02-2017.
  */
 
-public class ProfileHorizantalListHolder extends BaseViewHolder<ProfileHorList> {
+public class ProfileHorizantalListHolder extends BaseViewHolder<MyProfileView> {
     @Bind(R.id.tv_location_txt)
     TextView mTv_location_txt;
     @Bind(R.id.tv_location)
@@ -27,7 +28,7 @@ public class ProfileHorizantalListHolder extends BaseViewHolder<ProfileHorList> 
     @Bind(R.id.tv_edit_other_text)
     TextView mtv_edit_other_text;
     BaseHolderInterface viewInterface;
-    private ProfileHorList dataItem;
+    private MyProfileView dataItem;
     private final String TAG = LogUtils.makeLogTag(ProfileHorizantalListHolder.class);
 
 
@@ -45,11 +46,11 @@ public class ProfileHorizantalListHolder extends BaseViewHolder<ProfileHorList> 
 
 
     @Override
-    public void bindData(ProfileHorList obj, Context context, int position) {
-        this.dataItem = obj;
+    public void bindData(MyProfileView profileView, Context context, int position) {
+        this.dataItem = profileView;
         mtv_edit_other_text.setOnClickListener(this);
-        mTv_location_txt.setText(dataItem.getTag());
-        mTv_location.setText(dataItem.getCity());
+        mTv_location_txt.setText(dataItem.getType());
+        //mTv_location.setText(dataItem.get);
     }
 
     @Override

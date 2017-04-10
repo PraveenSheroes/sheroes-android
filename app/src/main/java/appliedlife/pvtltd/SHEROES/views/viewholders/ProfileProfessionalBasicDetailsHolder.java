@@ -10,9 +10,11 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.MyProfileView;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileViewList;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.EditNameDialogListener;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -23,7 +25,7 @@ import static com.facebook.login.widget.ProfilePictureView.TAG;
  * Created by priyanka on 16-02-2017.
  */
 
-public class ProfileProfessionalBasicDetailsHolder extends BaseViewHolder<ProfileViewList> {
+public class ProfileProfessionalBasicDetailsHolder extends BaseViewHolder<MyProfileView> {
     @Bind(R.id.tv_profile_basic_details)
     TextView mTv_profile_basic_details;
     @Bind(R.id.tv_current_status)
@@ -43,7 +45,7 @@ public class ProfileProfessionalBasicDetailsHolder extends BaseViewHolder<Profil
     @Bind(R.id.tv_tot_language_value)
     TextView mTv_tot_language_value;
     BaseHolderInterface viewInterface;
-    private ProfileViewList dataItem;
+    private MyProfileView dataItem;
     @Bind(R.id.tv_professional_edit_basic_details)
     TextView mTv_professional_edit_basic_details;
 
@@ -53,28 +55,33 @@ public class ProfileProfessionalBasicDetailsHolder extends BaseViewHolder<Profil
         this.viewInterface = baseHolderInterface;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
     }
-    public ProfileProfessionalBasicDetailsHolder(View itemView, EditNameDialogListener baseHolderInterface) {
-        super(itemView);
-        ButterKnife.bind(this,itemView);
-        SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
-    }
-    @Override
-    public void bindData(ProfileViewList obj, Context context, int position) {
-        this.dataItem = obj;
-        mTv_professional_edit_basic_details.setOnClickListener(this);
-        mTv_profile_basic_details.setText(dataItem.getTag());
-        mTv_current_status.setText(dataItem.getItem1());
-        mTv_current_status_value.setText(dataItem.getItem2());
-        mTv_sector.setText(dataItem.getItem3());
-        mTv_sector_value.setText(dataItem.getItem4());
-        mTv_total_work_experience.setText(dataItem.getItem5());
-        mtv_tot_exp_value.setText(dataItem.getItem6());
-        mTv_language.setText(dataItem.getItem7());
-        mTv_tot_language_value.setText(dataItem.getItem8());
 
-    }
+    @Override
+    public void bindData(MyProfileView myProfileView, Context context, int position) {
+        this.dataItem = myProfileView;
+        mTv_professional_edit_basic_details.setOnClickListener(this);
+        mTv_profile_basic_details.setText(AppConstants.USER_PROFILE);
+
+        if(null !=dataItem) {
+            if (StringUtil.isNotNullOrEmptyString(dataItem.getUserDetails().getMaritalStatus())) {
+                mTv_current_status_value.setText(dataItem.getUserDetails().getMaritalStatus());
+            }
+            if (StringUtil.isNotNullOrEmptyString(dataItem.getUserDetails().getSector())) {
+                mTv_sector_value.setText(dataItem.getUserDetails().getSector());
+            }
+            if (StringUtil.isNotNullOrEmptyString(""+dataItem.getUserDetails().getTotalExp())) {
+                mtv_tot_exp_value.setText(""+dataItem.getUserDetails().getTotalExp());
+            }
+            /*if (StringUtil.isNotNullOrEmptyString(dataItem.getUserDetails().getDepartment())) {
+                mTv_tot_language_value.setText(dataItem.getUserDetails().getDepartment());
+            }*/
+
+        }
+
+        }
     @Override
     public void viewRecycled() {
+
 
     }
 
@@ -88,6 +95,7 @@ public class ProfileProfessionalBasicDetailsHolder extends BaseViewHolder<Profil
             case R.id.tv_professional_edit_basic_details:
 
                 viewInterface.handleOnClick(this.dataItem,mTv_professional_edit_basic_details);
+
                 break;
 
             default:

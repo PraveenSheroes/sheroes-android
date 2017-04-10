@@ -1,5 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
+import android.app.DialogFragment;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
@@ -8,11 +9,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
@@ -26,43 +27,55 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.f2prateek.rx.preferences.Preference;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import javax.inject.Inject;
+
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
+import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
+import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.EducationResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.PersonalBasicDetailsResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfessionalBasicDetailsResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.EducationEntity;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.MyProfileView;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCardResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileHorList;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfilePersonalViewList;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfilePreferredWorkLocationResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTravelFlexibilityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileViewList;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView;
+import appliedlife.pvtltd.SHEROES.views.fragments.CommunitySearchTagsDialog;
+import appliedlife.pvtltd.SHEROES.views.fragments.CurrentStatusDialog;
+import appliedlife.pvtltd.SHEROES.views.fragments.InviteCommunityOwner;
 import appliedlife.pvtltd.SHEROES.views.fragments.PersonalBasicDetailsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.PersonalProfileFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfessionalEditBasicDetailsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProffestionalProfileFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileAboutMeFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProfileAddEditEducationFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileAddEducationFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileAddOtherFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileCityWorkFragment;
@@ -70,20 +83,25 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ProfileEditVisitingCardFragmen
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileGoodAtFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileOpportunityTypeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileOtherFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProfileSearchIntrestIn;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProfileSectoreDialog;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProfileSelectCurrentStatus;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileShareYourIntrestFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileTravelClientFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileVisitingCardView;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileWorkExperienceFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.SearchGoodAt;
+import appliedlife.pvtltd.SHEROES.views.fragments.SearchProfileLocation;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * Created by Praveen_Singh on 13-02-2017.
+ * Created by Priyanka on 13-02-2017.
  */
 
-public class ProfileActicity extends BaseActivity implements ProfileView,BaseHolderInterface,AppBarLayout.OnOffsetChangedListener,ProfileTravelClientFragment.ProfileTravelClientFragmentListener,ProfileCityWorkFragment.ProfileWorkLocationFragmentListener,ProfileAboutMeFragment.ProfileAboutMeFragmentListener {
+public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragment.MyProfileyGoodAtListener,ProfileView,SearchGoodAt.MyProfileSearchGoodAtListener,BaseHolderInterface,AppBarLayout.OnOffsetChangedListener,ProfileTravelClientFragment.ProfileTravelClientFragmentListener,ProfileCityWorkFragment.ProfileWorkLocationFragmentListener,ProfileAboutMeFragment.ProfileAboutMeFragmentListener,ProfileOpportunityTypeFragment.ProfileOpportunityTypeListiner,ProfileShareYourIntrestFragment.MyProfileyYourInterestListener {
     private final String TAG = LogUtils.makeLogTag(ProfileActicity.class);
     private static final String EXTRA_IMAGE = "extraImage";
     private static final String DECRIPTION = "desc";
@@ -111,11 +129,13 @@ public class ProfileActicity extends BaseActivity implements ProfileView,BaseHol
     ProgressBar mPb_profile_full_view;
     @Bind(R.id.profile_container)
     FrameLayout flprofile_container;
-    @Bind(R.id.cl_profile)
-    CoordinatorLayout coordinatorLayout;
+    private SearchProfileLocation searchProfileLocation;
+
     int mflag=0;
     private Handler handler = new Handler();
     private int progressStatus = 0;
+    private ProfileSelectCurrentStatus mCurrentStatusDialog;
+    private ProfileSectoreDialog mSectoreDialog;
     public static void navigate(AppCompatActivity activity, View transitionImage, String profile) {
         Intent intent = new Intent(activity, ProfileActicity.class);
         intent.putExtra(EXTRA_IMAGE,profile);
@@ -131,6 +151,8 @@ public class ProfileActicity extends BaseActivity implements ProfileView,BaseHol
         ButterKnife.bind(this);
         setPagerAndLayouts();
         setprogressbar();
+
+
     }
 
     @Override
@@ -138,7 +160,7 @@ public class ProfileActicity extends BaseActivity implements ProfileView,BaseHol
         if(mflag==1) {
             mflag=0;
             getSupportFragmentManager().popBackStack();
-            coordinatorLayout.setVisibility(View.VISIBLE);
+            //coordinatorLayout.setVisibility(View.VISIBLE);
         }
         else
             finish();
@@ -210,7 +232,7 @@ public class ProfileActicity extends BaseActivity implements ProfileView,BaseHol
                     @Override
                     public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
                         ivCommunitiesDetail.setImageBitmap( resource );
-                        Palette.from(resource).generate(new Palette.PaletteAsyncListener() {
+                        Palette.from(resource).generate( new Palette.PaletteAsyncListener() {
                             public void onGenerated(Palette palette) {
                                 applyPalette(palette);
                             }
@@ -251,34 +273,59 @@ public class ProfileActicity extends BaseActivity implements ProfileView,BaseHol
     public void startActivityFromHolder(Intent intent) {
 
     }
+
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
 
-        if (baseResponse instanceof ProfileHorList) {
+        if (baseResponse instanceof MyProfileView) {
 
-            ProfileHorList dataItem= (ProfileHorList) baseResponse;
+            MyProfileView dataItem= (MyProfileView) baseResponse;
 
-            ProfileCardlHandled(view.getId(),((ProfileHorList) baseResponse).getTag());
+            ProfileCardlHandled(view.getId(),((MyProfileView) baseResponse).getType(),baseResponse);
 
-        }else  if (baseResponse instanceof ProfileViewList) {
+        }
+        if (baseResponse instanceof GetAllDataDocument) {
+            if(view.getId()==R.id.li_current_status) {
+                GetAllDataDocument dataItem = (GetAllDataDocument) baseResponse;
 
-            ProfileViewList dataItem1= (ProfileViewList) baseResponse;
+                if (null != searchProfileLocation) {
+                    searchProfileLocation.dismiss();
+                }
 
-            ProfileCardlHandled(view.getId(),((ProfileViewList) baseResponse).getTag());
+                final Fragment fragment = getSupportFragmentManager().findFragmentByTag(PersonalBasicDetailsFragment.class.getName());
+                if (AppUtils.isFragmentUIActive(fragment)) {
+                    ((PersonalBasicDetailsFragment) fragment).submitLocation(dataItem.getId(), dataItem.getTitle());
+                }
 
+            }
+            //ProfileCardlHandled(view.getId(),((MyProfileView) baseResponse).getType(),baseResponse);
 
-        }else if (baseResponse instanceof ProfilePersonalViewList) {
+        }
+        if (baseResponse instanceof LabelValue) {
+            if (null != mCurrentStatusDialog) {
+                mCurrentStatusDialog.dismiss();
 
-            ProfilePersonalViewList dataItem2= (ProfilePersonalViewList) baseResponse;
-            ProfileCardlHandled(view.getId(),((ProfilePersonalViewList) baseResponse).getTag());
+                LabelValue dataItem = (LabelValue) baseResponse;
+                final Fragment fragment = getSupportFragmentManager().findFragmentByTag(ProfessionalEditBasicDetailsFragment.class.getName());
+                if (AppUtils.isFragmentUIActive(fragment)) {
+                    ((ProfessionalEditBasicDetailsFragment) fragment).submitCurrentStatus(dataItem.getLabel(), dataItem.getValue());
+                }
 
-        }else {
+            }
+            if (null != mSectoreDialog) {
+                mSectoreDialog.dismiss();
 
+                LabelValue dataItem = (LabelValue) baseResponse;
+                final Fragment fragment = getSupportFragmentManager().findFragmentByTag(ProfessionalEditBasicDetailsFragment.class.getName());
+                if (AppUtils.isFragmentUIActive(fragment)) {
+                    ((ProfessionalEditBasicDetailsFragment) fragment).submitSectorStatus(dataItem.getLabel(), dataItem.getValue());
+                }
 
+            }
         }
     }
 
-    private void ProfileCardlHandled(int id,String tag) {
+    private void ProfileCardlHandled(int id,String tag,BaseResponse baseResponse) {
         switch (id) {
             case R.id.tv_edit_other_text:
                 if(tag.equals("Are you willing to travel to client side location?")) {
@@ -303,11 +350,12 @@ public class ProfileActicity extends BaseActivity implements ProfileView,BaseHol
                     break;
                 }
             case R.id.tv_add_education:
-                if(tag.equals("EDUCATION")) {
+                if(tag.equalsIgnoreCase("EDUCATION")) {
+                    MyProfileView myEducation=(MyProfileView) baseResponse;
                     flprofile_container.setVisibility(View.VISIBLE);
                     ProfileAddEducationFragment profileAddEducationFragment = new ProfileAddEducationFragment();
                     Bundle bundleTravel = new Bundle();
-                    ButterKnife.bind(this);
+                    bundleTravel.putParcelable(AppConstants.EDUCATION_PROFILE,myEducation);
                     profileAddEducationFragment.setArguments(bundleTravel);
                     getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
                             .replace(R.id.profile_container, profileAddEducationFragment, ProfileAddEducationFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
@@ -375,11 +423,11 @@ public class ProfileActicity extends BaseActivity implements ProfileView,BaseHol
 
 
             case R.id.tv_edit_basic_details:
-
+                MyProfileView basicDetail=(MyProfileView) baseResponse;
                 flprofile_container.setVisibility(View.VISIBLE);
                 PersonalBasicDetailsFragment personalBasicDetailsFragment= new PersonalBasicDetailsFragment();
                 Bundle bundlePersonalBasicDetailsFragment = new Bundle();
-                ButterKnife.bind(this);
+                bundlePersonalBasicDetailsFragment.putParcelable(AppConstants.EDUCATION_PROFILE,basicDetail);
                 personalBasicDetailsFragment.setArguments(bundlePersonalBasicDetailsFragment);
                 getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
                         .replace(R.id.profile_container, personalBasicDetailsFragment, PersonalBasicDetailsFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
@@ -415,9 +463,35 @@ public class ProfileActicity extends BaseActivity implements ProfileView,BaseHol
 
         }
     }
-
+    public DialogFragment showCurrentStatusDialog(HashMap<String, HashMap<String, ArrayList<LabelValue>>> masterDataResult) {
+        mCurrentStatusDialog = (ProfileSelectCurrentStatus) getFragmentManager().findFragmentByTag(ProfileSelectCurrentStatus.class.getName());
+        if (mCurrentStatusDialog == null) {
+            mCurrentStatusDialog = new ProfileSelectCurrentStatus();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(AppConstants.TAG_LIST, masterDataResult);
+            mCurrentStatusDialog.setArguments(bundle);
+        }
+        if (!mCurrentStatusDialog.isVisible() && !mCurrentStatusDialog.isAdded() && !isFinishing() && !mIsDestroyed) {
+            mCurrentStatusDialog.show(getFragmentManager(), CurrentStatusDialog.class.getName());
+        }
+        return mCurrentStatusDialog;
+    }
+    public DialogFragment showSectoreDialog(HashMap<String, HashMap<String, ArrayList<LabelValue>>> masterDataResult) {
+        mSectoreDialog = (ProfileSectoreDialog) getFragmentManager().findFragmentByTag(ProfileSectoreDialog.class.getName());
+        if (mSectoreDialog == null) {
+            mSectoreDialog = new ProfileSectoreDialog();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(AppConstants.TAG_LIST, masterDataResult);
+            mSectoreDialog.setArguments(bundle);
+        }
+        if (!mSectoreDialog.isVisible() && !mSectoreDialog.isAdded() && !isFinishing() && !mIsDestroyed) {
+            mSectoreDialog.show(getFragmentManager(), ProfileSectoreDialog.class.getName());
+        }
+        return mSectoreDialog;
+    }
     @Override
     public void dataOperationOnClick(BaseResponse baseResponse) {
+
 
     }
 
@@ -471,41 +545,32 @@ public class ProfileActicity extends BaseActivity implements ProfileView,BaseHol
     public void backListener(int id) {
 
 
- /*       switch (id) {
+        getSupportFragmentManager().popBackStack();
 
-            case R.id.tv_edit_visiting_card:
-
-                Toast.makeText(getApplicationContext(), "click_button", Toast.LENGTH_SHORT).show();
-                flprofile_container.setVisibility(View.VISIBLE);
-
-                ProfileEditVisitingCardFragment profileEditVisitingCardFragment= new ProfileEditVisitingCardFragment();
-                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
-                        .replace(R.id.profile_container, profileEditVisitingCardFragment, ProfileEditVisitingCardFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
-                break;
-
-            default:
-
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
-
-        }*/
-
-
-        //   getSupportFragmentManager().popBackStack();
 
     }
+    public void callEditEducation(MyProfileView myProfileView)
+    {
 
+        flprofile_container.setVisibility(View.VISIBLE);
+        ProfileAddEditEducationFragment profileAddEditEducationFragment = new ProfileAddEditEducationFragment();
+        Bundle bundleTravel = new Bundle();
+        bundleTravel.putParcelable(AppConstants.EDUCATION_PROFILE,myProfileView);
+        profileAddEditEducationFragment.setArguments(bundleTravel);
+        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
+                .replace(R.id.profile_container, profileAddEditEducationFragment, ProfileAddEditEducationFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+
+    }
     @Override
     public void visitingCardOpen(ProfileEditVisitingCardResponse profileEditVisitingCardResponse) {
 
 
 
         flprofile_container.setVisibility(View.VISIBLE);
-
         Gson gson1 = new Gson();
         String jsonSections1 = gson1.toJson(profileEditVisitingCardResponse);
         Bundle bundle1 = new Bundle();
         bundle1.putString("user_visiting_card_value", jsonSections1);
-
         ProfileEditVisitingCardFragment profileEditVisitingCardFragment= new ProfileEditVisitingCardFragment();
         profileEditVisitingCardFragment.setArguments(bundle1);
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
@@ -516,6 +581,8 @@ public class ProfileActicity extends BaseActivity implements ProfileView,BaseHol
 
     @Override
     public void callFragment(int id) {
+
+
         switch (id) {
 
             case R.id.fab_add_other:
@@ -535,44 +602,88 @@ public class ProfileActicity extends BaseActivity implements ProfileView,BaseHol
                 profileEditOtherFragment.setArguments(bundleEditOther);
                 getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
                         .replace(R.id.profile_container, profileEditOtherFragment, ProfileAddOtherFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+
                 break;
+            default:
 
         }
 
     }
 
     @Override
-    public void getEducationResponse(EducationResponse educationResponse) {
+    public void getEducationResponse(BoardingDataResponse boardingDataResponse) {
+
+    }
+
+
+
+
+    @Override
+    public void getPersonalBasicDetailsResponse(BoardingDataResponse boardingDataResponse) {
+
+
+
 
     }
 
     @Override
-    public void getPersonalBasicDetailsResponse(PersonalBasicDetailsResponse personalBasicDetailsResponse) {
+    public void getprofiletracelflexibilityResponse(BoardingDataResponse boardingDataResponse) {
+
+    }
+
+
+
+
+    @Override
+    public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
 
     }
 
     @Override
-    public void getprofiletracelflexibilityResponse(ProfileTravelFlexibilityResponse profileTravelFlexibilityResponse) {
+    public void getProfessionalBasicDetailsResponse(BoardingDataResponse boardingDataResponse) {
 
     }
 
     @Override
-    public void getUserSummaryResponse(UserSummaryResponse userSummaryResponse) {
+    public void getProfessionalWorkLocationResponse(BoardingDataResponse boardingDataResponse) {
 
     }
 
-    @Override
-    public void getProfessionalBasicDetailsResponse(ProfessionalBasicDetailsResponse professionalBasicDetailsResponse) {
 
-    }
 
-    @Override
-    public void getProfessionalWorkLocationResponse(ProfilePreferredWorkLocationResponse profilePreferredWorkLocationResponse) {
-
-    }
 
     @Override
     public void getProfileVisitingCardResponse(ProfileEditVisitingCardResponse profileEditVisitingCardResponse) {
+
+    }
+
+
+    @Override
+    public void getUserData(UserProfileResponse userProfileResponse) {
+
+
+
+
+
+    }
+
+
+
+
+    @Override
+    public void getProfileListSuccess(GetTagData getAllData) {
+
+
+
+
+
+
+
+
+    }
+
+    @Override
+    public void getProfileListSuccess(List<Doc> feedDetailList) {
 
     }
 
@@ -607,6 +718,90 @@ public class ProfileActicity extends BaseActivity implements ProfileView,BaseHol
 
     }
 
+    /*@Override
+    public void onIntrestSubmit(long[] skillid, String[] skills) {
+        ProfileShareYourIntrestFragment searchGoodAt = new ProfileShareYourIntrestFragment();
+        Bundle bundleSearch = new Bundle();
+        bundleSearch.putStringArray(AppConstants.SKILL_LIST, skills);
+        bundleSearch.putLongArray(AppConstants.SKILL_LIST_ID, skillid);
+        //  bundleSearch.putStringArray(AppConstants.SKILL_LIST, goodAtsval);
+
+
+        searchGoodAt.setArguments(bundleSearch);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.profile_container, searchGoodAt, ProfileGoodAtFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+
+    }*/
+
+    @Override
+    public void onGoodAtSubmit(long[] mSkillsId,String []skills ) {
+        ProfileGoodAtFragment searchGoodAt = new ProfileGoodAtFragment();
+        Bundle bundleSearch = new Bundle();
+        bundleSearch.putStringArray(AppConstants.SKILL_LIST, skills);
+        bundleSearch.putLongArray(AppConstants.SKILL_LIST_ID, mSkillsId);
+        //  bundleSearch.putStringArray(AppConstants.SKILL_LIST, goodAtsval);
+
+
+        searchGoodAt.setArguments(bundleSearch);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.profile_container, searchGoodAt, ProfileGoodAtFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+
+    }
+
+
+
+    @Override
+    public void onBackPress() {
+
+
+        getSupportFragmentManager().popBackStack();
+    }
+
+    @Override
+    public void onSearchClickIntrest() {
+
+    }
+    public DialogFragment callProfileLocation() {
+         searchProfileLocation = (SearchProfileLocation) getFragmentManager().findFragmentByTag(SearchProfileLocation.class.getName());
+        if (searchProfileLocation == null) {
+            searchProfileLocation = new SearchProfileLocation();
+
+        }
+        if (!searchProfileLocation.isVisible() && !searchProfileLocation.isAdded() && !isFinishing() && !mIsDestroyed) {
+            searchProfileLocation.show(getFragmentManager(), CommunitySearchTagsDialog.class.getName());
+        }
+        return searchProfileLocation;
+    }
+    public DialogFragment callProfileInterestPage() {
+        ProfileSearchIntrestIn profileSearchIntrestIn = (ProfileSearchIntrestIn) getFragmentManager().findFragmentByTag(ProfileSearchIntrestIn.class.getName());
+        if (profileSearchIntrestIn == null) {
+            profileSearchIntrestIn = new ProfileSearchIntrestIn();
+
+        }
+        if (!profileSearchIntrestIn.isVisible() && !profileSearchIntrestIn.isAdded() && !isFinishing() && !mIsDestroyed) {
+            profileSearchIntrestIn.show(getFragmentManager(), CommunitySearchTagsDialog.class.getName());
+        }
+        return profileSearchIntrestIn;
+    }
+    @Override
+    public void OnSearchClick() {
+        SearchGoodAt searchGoodAt = new SearchGoodAt();
+        Bundle bundleSearch = new Bundle();
+        ButterKnife.bind(this);
+        searchGoodAt.setArguments(bundleSearch);
+        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
+                .replace(R.id.profile_container, searchGoodAt, SearchGoodAt.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+
+    }
+
+    @Override
+    public void openfrag() {
+
+
+
+
+    }
+
     @Override
     public void AboutMeBack() {
 
@@ -622,6 +817,13 @@ public class ProfileActicity extends BaseActivity implements ProfileView,BaseHol
 
     @Override
     public void clintBack() {
+        getSupportFragmentManager().popBackStack();
+    }
+
+
+    @Override
+    public void OnLookinBack() {
+
         getSupportFragmentManager().popBackStack();
     }
 }

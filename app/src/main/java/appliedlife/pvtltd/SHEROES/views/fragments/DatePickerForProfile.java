@@ -21,7 +21,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 
 /**
- * Created by sheroes on 25/03/17.
+ * Created by priyanka on 25/03/17.
  */
 
 public class DatePickerForProfile extends DialogFragment {
@@ -32,13 +32,12 @@ public class DatePickerForProfile extends DialogFragment {
 
     public void setListener(DatePickerDialog.OnDateSetListener listener) {
 
-
         this.listener = listener;
-
-
     }
+
     @Override
     public void onAttach(Context context) {
+
         super.onAttach(context);
     }
 
@@ -52,9 +51,6 @@ public class DatePickerForProfile extends DialogFragment {
 
         View dialog = inflater.inflate(R.layout.date_picker_dialog, null);
         final NumberPicker yearPicker = (NumberPicker) dialog.findViewById(R.id.picker_year);
-
-
-
         int year = cal.get(Calendar.YEAR);
         yearPicker.setMinValue(0);
         yearPicker.setMaxValue(MAX_YEAR);

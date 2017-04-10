@@ -1,10 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:layout_marginTop="@dimen/dp_size_10"
     android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
 
 
     <RelativeLayout
@@ -30,7 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:drawableRight="@drawable/ic_add_city_icon"
+        android:drawableRight="@drawable/ic_add_icon_grey"
         />
 
 
@@ -45,8 +55,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:visibility="gone"
             android:padding="@dimen/dp_size_16"
-            android:text="@string/ID_OPP_SEARCh"
             android:textColor="@color/searchbox_hint_text_color"
             android:textSize="@dimen/dp_size_13" />
         <TextView
@@ -55,8 +65,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_lookingfor_text1"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:visibility="gone"
             android:padding="@dimen/dp_size_16"
-            android:text="@string/ID_OPP_SEARCH_1"
             android:textColor="@color/searchbox_hint_text_color"
             android:textSize="@dimen/dp_size_13" />
         <TextView
@@ -72,5 +82,7 @@
             android:textSize="@dimen/dp_size_13" />
 
     </RelativeLayout>
+    </LinearLayout>
 
-</LinearLayout>
+
+</android.support.v7.widget.CardView>

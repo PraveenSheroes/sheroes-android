@@ -1,11 +1,14 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -13,17 +16,19 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
+import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.EducationResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.EducationEntity;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.MyProfileView;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.PersonalBasicDetailsRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.PersonalBasicDetailsResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfessionalBasicDetailsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCardResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfilePreferredWorkLocationResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTravelFlexibilityResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePersenter;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.DayPickerProfile;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
 import butterknife.Bind;
@@ -41,25 +46,30 @@ public class ProfessionalAddEducationActivity extends BaseActivity implements Da
     @Inject
     ProfilePersenter mProfilePresenter;
     @Bind(R.id.tv_profile_tittle)
-    TextView mTv_profile_tittle;
+    TextView mTvProfileTittle;
     @Bind(R.id.et_degree_details)
-    EditText mEt_degree_details;
+    EditText mEtDegreeDetails;
     @Bind(R.id.et_school_details)
-    EditText mEt_school_details;
+    EditText mEtSchoolDetails;
     @Bind(R.id.et_field_of_study)
-    EditText mEt_field_of_study;
+    EditText mEtFieldOfStudy;
     @Bind(R.id.et_job_start_date)
-    EditText et_job_start_date;
+    EditText mEtJobStartDate;
+    @Bind(R.id.et_job_end_date)
+    EditText mEtJobEndDate;
+    @Bind(R.id.cb_working_from)
+    CheckBox mCbWorkingFrom;
+    MyProfileView myProfileView;
+
+
+
     String mDegree_details,mSchool_details,mField_of_studay;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-
         SheroesApplication.getAppComponent(this).inject(this);
-
         renderAddEducationFragmentView();
 
     }
@@ -67,9 +77,40 @@ public class ProfessionalAddEducationActivity extends BaseActivity implements Da
     public void renderAddEducationFragmentView() {
         setContentView(R.layout.fragment_professional_addeducation);
         ButterKnife.bind(this);
-        mTv_profile_tittle.setText(R.string.ID_ADD_EDUCATION);
+        mTvProfileTittle.setText(R.string.ID_ADD_EDUCATION);
         mProfilePresenter.attachView(this);
-    }
+
+        if (getIntent() != null && getIntent().getExtras() != null) {
+
+
+            myProfileView = getIntent().getExtras().getParcelable(AppConstants.EDUCATION_PROFILE);
+            List<EducationEntity> educationEntity = this.myProfileView.getEducationEntity();
+
+            if (null != educationEntity) {
+                if (StringUtil.isNotEmptyCollection(educationEntity)) {
+                    if(StringUtil.isNotNullOrEmptyString(educationEntity.get(0).getDegree())) {
+                        mEtDegreeDetails.setText(educationEntity.get(0).getDegree());
+                    }
+
+                    if(StringUtil.isNotNullOrEmptyString(educationEntity.get(0).getSchool())) {
+                        mEtSchoolDetails.setText(educationEntity.get(0).getSchool());
+                    }
+
+
+                    if(StringUtil.isNotNullOrEmptyString(educationEntity.get(0).getFieldOfStudy())) {
+                        mEtFieldOfStudy.setText(educationEntity.get(0).getFieldOfStudy());
+                    }
+                }
+
+
+            }
+         }
+        }
+
+
+
+
+
 
     @OnClick(R.id.iv_back_profile)
     public void backOnclick()
@@ -81,6 +122,7 @@ public class ProfessionalAddEducationActivity extends BaseActivity implements Da
 
     }
 
+//TODO:Change request
 
     @OnClick(R.id.btn_save_education_details_)
 
@@ -89,10 +131,9 @@ public class ProfessionalAddEducationActivity extends BaseActivity implements Da
 
 
     {
-        mDegree_details=  mEt_degree_details.getText().toString();
-        mSchool_details=  mEt_school_details.getText().toString();
-        mField_of_studay= mEt_field_of_study.getText().toString();
-
+       /* mDegree_details=  mEtDegreeDetails.getText().toString();
+        mSchool_details=  mEtSchoolDetails.getText().toString();
+        mField_of_studay= mEtFieldOfStudy.getText().toString();
         PersonalBasicDetailsRequest personalBasicDetailsRequest = new PersonalBasicDetailsRequest();
         personalBasicDetailsRequest.setAppVersion("string");
         personalBasicDetailsRequest.setCloudMessagingId("string");
@@ -101,11 +142,12 @@ public class ProfessionalAddEducationActivity extends BaseActivity implements Da
         personalBasicDetailsRequest.setScreenName("string");
         personalBasicDetailsRequest.setType("EDUCATION");
         personalBasicDetailsRequest.setSubType("BaseProfileRequest");
-        mProfilePresenter.getUserDetailsAuthTokeInPresenter(personalBasicDetailsRequest);
-
-
-
+        mProfilePresenter.getEducationDetailsAuthTokeInPresenter(personalBasicDetailsRequest);*/
     }
+
+
+    //click on star date of job
+
     @OnClick(R.id.et_job_start_date)
     public void startDateClick()
     {
@@ -114,6 +156,41 @@ public class ProfessionalAddEducationActivity extends BaseActivity implements Da
         dayPickerProfile.show(this.getFragmentManager(),"dialog");
     }
 
+
+    //Click on end date of job
+
+    @OnClick(R.id.et_job_end_date)
+    public void EndDateClick()
+    {
+
+        DayPickerProfile dayPickerProfile=new DayPickerProfile();
+        dayPickerProfile.setListener(this);
+        dayPickerProfile.show(this.getFragmentManager(),"dialog");
+
+
+    }
+
+
+    //click on check box of current working from
+
+
+    @OnClick(R.id.cb_working_from)
+    public void ClickOnCheckBox()
+    {
+        if (mCbWorkingFrom.isChecked())
+        {
+
+            mEtJobEndDate.setVisibility(View.GONE);
+           //mEtJobStartDate.setVisibility(View.GONE);
+
+        }else {
+
+            mEtJobEndDate.setVisibility(View.VISIBLE);
+            //mEtJobStartDate.setVisibility(View.VISIBLE);
+        }
+
+
+    }
     @Override
     public void backListener(int id) {
 
@@ -130,40 +207,57 @@ public class ProfessionalAddEducationActivity extends BaseActivity implements Da
     }
 
     @Override
-    public void getEducationResponse(EducationResponse educationResponse) {
+    public void getEducationResponse(BoardingDataResponse boardingDataResponse) {
+
+    }
 
 
-
+    @Override
+    public void getPersonalBasicDetailsResponse(BoardingDataResponse boardingDataResponse) {
 
     }
 
     @Override
-    public void getPersonalBasicDetailsResponse(PersonalBasicDetailsResponse personalBasicDetailsResponse) {
+    public void getprofiletracelflexibilityResponse(BoardingDataResponse boardingDataResponse) {
+
+    }
+
+
+
+    @Override
+    public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
 
     }
 
     @Override
-    public void getprofiletracelflexibilityResponse(ProfileTravelFlexibilityResponse profileTravelFlexibilityResponse) {
+    public void getProfessionalBasicDetailsResponse(BoardingDataResponse boardingDataResponse) {
 
     }
 
     @Override
-    public void getUserSummaryResponse(UserSummaryResponse userSummaryResponse) {
+    public void getProfessionalWorkLocationResponse(BoardingDataResponse boardingDataResponse) {
 
     }
 
-    @Override
-    public void getProfessionalBasicDetailsResponse(ProfessionalBasicDetailsResponse professionalBasicDetailsResponse) {
-
-    }
-
-    @Override
-    public void getProfessionalWorkLocationResponse(ProfilePreferredWorkLocationResponse profilePreferredWorkLocationResponse) {
-
-    }
 
     @Override
     public void getProfileVisitingCardResponse(ProfileEditVisitingCardResponse profileEditVisitingCardResponse) {
+
+    }
+
+    @Override
+    public void getUserData(UserProfileResponse userProfileResponse) {
+
+    }
+
+
+    @Override
+    public void getProfileListSuccess(GetTagData getAllData) {
+
+    }
+
+    @Override
+    public void getProfileListSuccess(List<Doc> feedDetailList) {
 
     }
 

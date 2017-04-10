@@ -5,20 +5,18 @@ import com.google.gson.Gson;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.EducationResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.GetUserVisitingCardRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.PersonalBasicDetailsRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.PersonalBasicDetailsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfessionalBasicDetailsRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfessionalBasicDetailsResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCardRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileAddEditEducationRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCardResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfilePreferredWorkLocationRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfilePreferredWorkLocationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTravelFLexibilityRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTravelFlexibilityResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryResponse;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -43,20 +41,20 @@ public class ProfileModel {
 
     /*for  user profile education details */
 
-    public Observable<EducationResponse> getEducationAuthTokenFromModel(PersonalBasicDetailsRequest personalBasicDetailsRequest) {
+    public Observable<BoardingDataResponse> getEducationAuthTokenFromModel(ProfileAddEditEducationRequest profileAddEditEducationRequest) {
 
 
-        LogUtils.error("user_get_preference_request req: ",gson.toJson(personalBasicDetailsRequest));
+        LogUtils.error("user_get_preference_request req: ",gson.toJson(profileAddEditEducationRequest));
 
 
-        return sheroesAppServiceApi.getEducationAuthToken(personalBasicDetailsRequest)
+        return sheroesAppServiceApi.getEducationAuthToken(profileAddEditEducationRequest)
 
-                .map(new Func1<EducationResponse, EducationResponse>() {
+                .map(new Func1<BoardingDataResponse, BoardingDataResponse>() {
 
                     @Override
-                    public EducationResponse call(EducationResponse educationResponse) {
+                    public BoardingDataResponse call(BoardingDataResponse  boardingDataResponse) {
 
-                        return educationResponse;
+                        return boardingDataResponse;
                     }
                 })
                 .subscribeOn(Schedulers.io())
@@ -68,18 +66,20 @@ public class ProfileModel {
 
      /*for  user personal basic details details */
 
-    public Observable<PersonalBasicDetailsResponse> getPersonalBasicDetailsAuthTokenFromModel(PersonalBasicDetailsRequest personalBasicDetailsRequest) {
+
+    public Observable<BoardingDataResponse> getPersonalBasicDetailsAuthTokenFromModel(PersonalBasicDetailsRequest personalBasicDetailsRequest) {
         LogUtils.error("personal" +
                 "-basic_detailsl req: ",gson.toJson(personalBasicDetailsRequest));
 
         return sheroesAppServiceApi.getPersonalBasicDetailsAuthToken(personalBasicDetailsRequest)
 
-                .map(new Func1<PersonalBasicDetailsResponse, PersonalBasicDetailsResponse>() {
+                .map(new Func1<BoardingDataResponse, BoardingDataResponse>() {
 
                     @Override
-                    public PersonalBasicDetailsResponse call(PersonalBasicDetailsResponse personalBasicDetailsResponse) {
+                    public BoardingDataResponse call(BoardingDataResponse boardingDataResponse) {
 
-                        return personalBasicDetailsResponse;
+                        return boardingDataResponse;
+
                     }
                 })
                 .subscribeOn(Schedulers.io())
@@ -92,17 +92,17 @@ public class ProfileModel {
 
  /*for  user professional travel fexibility details details */
 
-    public Observable<ProfileTravelFlexibilityResponse> getProfessionalTravelfexibilityDetailsAuthTokenFromModel(ProfileTravelFLexibilityRequest profileTravelFLexibilityRequest) {
+    public Observable<BoardingDataResponse> getProfessionalTravelfexibilityDetailsAuthTokenFromModel(ProfileTravelFLexibilityRequest profileTravelFLexibilityRequest) {
         LogUtils.error("user_get_travel_request req: ",gson.toJson(profileTravelFLexibilityRequest));
 
         return sheroesAppServiceApi.getProfessionalTravelDetailsAuthToken(profileTravelFLexibilityRequest)
 
-                .map(new Func1<ProfileTravelFlexibilityResponse, ProfileTravelFlexibilityResponse>() {
+                .map(new Func1<BoardingDataResponse, BoardingDataResponse>() {
 
                     @Override
-                    public ProfileTravelFlexibilityResponse call(ProfileTravelFlexibilityResponse profileTravelFlexibilityResponse) {
+                    public BoardingDataResponse call(BoardingDataResponse boardingDataResponse) {
 
-                        return profileTravelFlexibilityResponse ;
+                        return boardingDataResponse ;
                     }
                 })
                 .subscribeOn(Schedulers.io())
@@ -114,18 +114,18 @@ public class ProfileModel {
 
  /*for  user personal Summary details details */
 
-    public Observable<UserSummaryResponse> getPersonalUserSummaryDetailsAuthTokenFromModel(UserSummaryRequest userSummaryRequest) {
+    public Observable<BoardingDataResponse> getPersonalUserSummaryDetailsAuthTokenFromModel(UserSummaryRequest userSummaryRequest) {
         LogUtils.error("user_get_preference_request req: ",gson.toJson(userSummaryRequest));
         return sheroesAppServiceApi.getPersonalUserSummaryDetailsAuthToken(userSummaryRequest)
 
 
 
-                .map(new Func1<UserSummaryResponse, UserSummaryResponse>() {
+                .map(new Func1<BoardingDataResponse, BoardingDataResponse>() {
 
                     @Override
-                    public UserSummaryResponse call(UserSummaryResponse userSummaryResponse) {
+                    public BoardingDataResponse call(BoardingDataResponse boardingDataResponse) {
 
-                        return userSummaryResponse ;
+                        return boardingDataResponse ;
                     }
                 })
                 .subscribeOn(Schedulers.io())
@@ -134,18 +134,18 @@ public class ProfileModel {
 
      /*for  user professonal_basic_details details */
 
-    public Observable<ProfessionalBasicDetailsResponse> getProfessionalBasicDetailsAuthTokenFromModel(ProfessionalBasicDetailsRequest professionalBasicDetailsRequest) {
+    public Observable<BoardingDataResponse> getProfessionalBasicDetailsAuthTokenFromModel(ProfessionalBasicDetailsRequest professionalBasicDetailsRequest) {
         LogUtils.error("user_get_preference_request req: ",gson.toJson(professionalBasicDetailsRequest));
         return sheroesAppServiceApi.getProfessionalDetailsAuthToken(professionalBasicDetailsRequest)
 
 
 
-                .map(new Func1<ProfessionalBasicDetailsResponse, ProfessionalBasicDetailsResponse>() {
+                .map(new Func1<BoardingDataResponse, BoardingDataResponse>() {
 
                     @Override
-                    public ProfessionalBasicDetailsResponse call(ProfessionalBasicDetailsResponse professionalBasicDetailsResponse) {
+                    public BoardingDataResponse call(BoardingDataResponse boardingDataResponse) {
 
-                        return professionalBasicDetailsResponse ;
+                        return boardingDataResponse ;
                     }
                 })
                 .subscribeOn(Schedulers.io())
@@ -154,18 +154,18 @@ public class ProfileModel {
 
 /*for work location in professional section*/
 
-    public Observable<ProfilePreferredWorkLocationResponse> getProfessionalWorkLocationAuthTokenFromModel(ProfilePreferredWorkLocationRequest profilePreferredWorkLocationRequest) {
+    public Observable<BoardingDataResponse> getProfessionalWorkLocationAuthTokenFromModel(ProfilePreferredWorkLocationRequest profilePreferredWorkLocationRequest) {
         LogUtils.error("user_work_location_request req: ",gson.toJson(profilePreferredWorkLocationRequest));
 
 
         return sheroesAppServiceApi.getWorkLocationDetailsAuthToken(profilePreferredWorkLocationRequest)
 
-                .map(new Func1<ProfilePreferredWorkLocationResponse, ProfilePreferredWorkLocationResponse>() {
+                .map(new Func1<BoardingDataResponse, BoardingDataResponse>() {
 
                     @Override
-                    public ProfilePreferredWorkLocationResponse call(ProfilePreferredWorkLocationResponse profilePreferredWorkLocationResponse) {
+                    public BoardingDataResponse call(BoardingDataResponse boardingDataResponse) {
 
-                        return profilePreferredWorkLocationResponse ;
+                        return boardingDataResponse ;
                     }
                 })
                 .subscribeOn(Schedulers.io())
@@ -203,15 +203,6 @@ public class ProfileModel {
 
 
 
-
-
-
-
-
-
-
-    //for edit visiting card
-
     //*for  edit_profile_visiting_card_details*//*
 
     public Observable<ProfileEditVisitingCardResponse>getProfileEditVisitingCardDetailsAuthTokenFromModel() {
@@ -222,6 +213,7 @@ public class ProfileModel {
 
                     @Override
                     public ProfileEditVisitingCardResponse call(ProfileEditVisitingCardResponse profileEditVisitingCardResponse) {
+                        LogUtils.info("Profile Response",gson.toJson(profileEditVisitingCardResponse));
 
                         return profileEditVisitingCardResponse ;
                     }
@@ -229,6 +221,42 @@ public class ProfileModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
+    }
+
+
+
+//for profile listing
+
+    public Observable<UserProfileResponse> getAllUserDetailsromModel() {
+
+        return sheroesAppServiceApi.getUserDetails()
+
+                .map(new Func1<UserProfileResponse, UserProfileResponse>() {
+
+                    @Override
+                    public UserProfileResponse call(UserProfileResponse userProfileResponse) {
+                        LogUtils.info("Profile Response",gson.toJson(userProfileResponse));
+
+                        return userProfileResponse;
+
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+    }
+    // For Good At
+    public Observable<GetTagData> getSkillFromModel(GetAllDataRequest getAllDataRequest){
+        LogUtils.info("Skill","TAG FRom*******************"+new Gson().toJson(getAllDataRequest));
+        return sheroesAppServiceApi.getTagFromApi(getAllDataRequest)
+                .map(new Func1<GetTagData, GetTagData>() {
+                    @Override
+                    public GetTagData call(GetTagData getAllData) {
+                        return getAllData;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
 }

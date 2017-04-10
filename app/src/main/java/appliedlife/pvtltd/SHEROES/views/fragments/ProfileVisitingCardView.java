@@ -11,7 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -19,19 +19,18 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.EducationResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.PersonalBasicDetailsResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfessionalBasicDetailsResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
+import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCardResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfilePreferredWorkLocationResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTravelFlexibilityResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePersenter;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
@@ -49,6 +48,7 @@ import butterknife.OnClick;
 public class ProfileVisitingCardView extends BaseFragment implements ProfileView{
 
     private final String TAG = LogUtils.makeLogTag(ProfileVisitingCardView.class);
+
     private final String SCREEN_NAME = "Profile_Visiting_card_screen";
     String dest_file_path = "visiting_card.pdf";
     int downloadedSize = 0, totalsize;
@@ -67,7 +67,7 @@ public class ProfileVisitingCardView extends BaseFragment implements ProfileView
     @Bind(R.id.tv_interesting_text2)
     TextView mTv_interesting_text2;
     @Bind(R.id.tv_user_location)
-    TextView mTv_user_location;
+    TextView mTvUserLocation;
     @Bind(R.id.tv_mobile_no)
     TextView mTv_mobile_no;
     @Bind(R.id.tv_email_text)
@@ -251,34 +251,42 @@ public class ProfileVisitingCardView extends BaseFragment implements ProfileView
     }
 
     @Override
-    public void getEducationResponse(EducationResponse educationResponse) {
+    public void getEducationResponse(BoardingDataResponse boardingDataResponse) {
+
+    }
+
+
+
+    @Override
+    public void getPersonalBasicDetailsResponse(BoardingDataResponse boardingDataResponse) {
 
     }
 
     @Override
-    public void getPersonalBasicDetailsResponse(PersonalBasicDetailsResponse personalBasicDetailsResponse) {
+    public void getprofiletracelflexibilityResponse(BoardingDataResponse boardingDataResponse) {
+
+    }
+
+
+
+
+    @Override
+    public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
 
     }
 
     @Override
-    public void getprofiletracelflexibilityResponse(ProfileTravelFlexibilityResponse profileTravelFlexibilityResponse) {
+    public void getProfessionalBasicDetailsResponse(BoardingDataResponse boardingDataResponse) {
 
     }
 
     @Override
-    public void getUserSummaryResponse(UserSummaryResponse userSummaryResponse) {
+    public void getProfessionalWorkLocationResponse(BoardingDataResponse boardingDataResponse) {
 
     }
 
-    @Override
-    public void getProfessionalBasicDetailsResponse(ProfessionalBasicDetailsResponse professionalBasicDetailsResponse) {
 
-    }
 
-    @Override
-    public void getProfessionalWorkLocationResponse(ProfilePreferredWorkLocationResponse profilePreferredWorkLocationResponse) {
-
-    }
 
     @Override
     public void getProfileVisitingCardResponse(ProfileEditVisitingCardResponse profileEditVisitingCardResponse) {
@@ -291,21 +299,30 @@ public class ProfileVisitingCardView extends BaseFragment implements ProfileView
         profileEditVisitingCardResponse.getMobile();
         profileEditVisitingCardResponse.getCurrentCompany();
         profileEditVisitingCardResponse.getCurrentDesignation();
-
         mTv_user_fullname.setText(profileEditVisitingCardResponse.getFirstName()+" "+ profileEditVisitingCardResponse.getLastName());
         mTv_mobile_no.setText(profileEditVisitingCardResponse.getMobile());
         mTv_designation.setText(profileEditVisitingCardResponse.getCurrentDesignation());
-        mTv_user_address.setText(profileEditVisitingCardResponse.getCurrentDesignation());
-        mTv_user_location.setText(profileEditVisitingCardResponse.getCurrentLocation());
+        mTv_user_address.setText(profileEditVisitingCardResponse.getCurrentLocation());
+        mTvUserLocation.setText(profileEditVisitingCardResponse.getCurrentLocation());
         mTv_email_text.setText(profileEditVisitingCardResponse.getEmailid());
-
-
         this.profileEditVisitingCardResponse=profileEditVisitingCardResponse;
 
 
+    }
+
+    @Override
+    public void getUserData(UserProfileResponse userProfileResponse) {
+
+    }
 
 
+    @Override
+    public void getProfileListSuccess(GetTagData getAllData) {
 
+    }
+
+    @Override
+    public void getProfileListSuccess(List<Doc> feedDetailList) {
 
     }
 }

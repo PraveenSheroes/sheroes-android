@@ -8,28 +8,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.EducationResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.PersonalBasicDetailsResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfessionalBasicDetailsResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
+import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCardResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfilePreferredWorkLocationRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfilePreferredWorkLocationResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTravelFlexibilityResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePersenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -320,50 +318,46 @@ public class ProfileCityWorkFragment extends BaseFragment implements ProfileView
     }
 
     @Override
-    public void getEducationResponse(EducationResponse educationResponse) {
+    public void getEducationResponse(BoardingDataResponse boardingDataResponse) {
+
+    }
 
 
 
-
-
-
+    @Override
+    public void getPersonalBasicDetailsResponse(BoardingDataResponse boardingDataResponse) {
 
     }
 
     @Override
-    public void getPersonalBasicDetailsResponse(PersonalBasicDetailsResponse personalBasicDetailsResponse) {
+    public void getprofiletracelflexibilityResponse(BoardingDataResponse boardingDataResponse) {
+
+    }
+
+
+
+    @Override
+    public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
 
     }
 
     @Override
-    public void getprofiletracelflexibilityResponse(ProfileTravelFlexibilityResponse profileTravelFlexibilityResponse) {
+    public void getProfessionalBasicDetailsResponse(BoardingDataResponse boardingDataResponse) {
 
     }
 
     @Override
-    public void getUserSummaryResponse(UserSummaryResponse userSummaryResponse) {
-
-    }
-
-    @Override
-    public void getProfessionalBasicDetailsResponse(ProfessionalBasicDetailsResponse professionalBasicDetailsResponse) {
-
-    }
-
-    @Override
-    public void getProfessionalWorkLocationResponse(ProfilePreferredWorkLocationResponse profilePreferredWorkLocationResponse) {
-
-
+    public void getProfessionalWorkLocationResponse(BoardingDataResponse boardingDataResponse) {
 
 
         //TODO:check condition
 
-        Toast.makeText(getActivity(), profilePreferredWorkLocationResponse.getStatus(),
+        Toast.makeText(getActivity(), boardingDataResponse.getStatus(),
                 Toast.LENGTH_LONG).show();
 
         //TODO:Change Message
 
-        if(profilePreferredWorkLocationResponse.getStatus().equals(AppConstants.SUCCESS)) {
+        if(boardingDataResponse.getStatus().equals(AppConstants.SUCCESS)) {
 
             profileWorkLocationFragmentListener.locationBack();
 
@@ -374,8 +368,27 @@ public class ProfileCityWorkFragment extends BaseFragment implements ProfileView
 
     }
 
+
+
+
     @Override
     public void getProfileVisitingCardResponse(ProfileEditVisitingCardResponse profileEditVisitingCardResponse) {
+
+    }
+
+    @Override
+    public void getUserData(UserProfileResponse userProfileResponse) {
+
+    }
+
+
+    @Override
+    public void getProfileListSuccess(GetTagData getAllData) {
+
+    }
+
+    @Override
+    public void getProfileListSuccess(List<Doc> feedDetailList) {
 
     }
 

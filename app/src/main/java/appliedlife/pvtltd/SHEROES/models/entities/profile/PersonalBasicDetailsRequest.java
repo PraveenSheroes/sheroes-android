@@ -3,6 +3,8 @@ package appliedlife.pvtltd.SHEROES.models.entities.profile;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.sql.Date;
+
 /**
  * Created by priyanka on 19/03/17.
  */
@@ -42,15 +44,14 @@ public class PersonalBasicDetailsRequest {
     @SerializedName("last_name")
     @Expose
     private String lastName;
-    @SerializedName("total_exp")
-    @Expose
-    private int totalExp;
+
     @SerializedName("city_master_id")
     @Expose
     private int cityMasterId;
     @SerializedName("city_master")
     @Expose
     private String cityMaster;
+
     @SerializedName("marital_status")
     @Expose
     private String maritalStatus;
@@ -141,14 +142,6 @@ public class PersonalBasicDetailsRequest {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public Integer getTotalExp() {
-        return totalExp;
-    }
-
-    public void setTotalExp(Integer totalExp) {
-        this.totalExp = totalExp;
     }
 
     public Integer getCityMasterId() {

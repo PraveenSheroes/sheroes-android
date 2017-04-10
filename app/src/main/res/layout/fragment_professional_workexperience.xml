@@ -1,6 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <android.support.design.widget.CoordinatorLayout
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -118,6 +119,11 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_input_add" />
+        android:src="@drawable/ic_add_education"
+        app:backgroundTint="@color/colorPrimary"
+        app:borderWidth="@dimen/dp_size_4"
+        app:elevation="6dp"
+        app:fabSize="auto"
+        app:rippleColor="@color/colorPrimary"/>
 
 </RelativeLayout>

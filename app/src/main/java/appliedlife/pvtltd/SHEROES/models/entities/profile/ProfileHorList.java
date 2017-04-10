@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 
 /**
- * Created by SHEROES-TECH on 16-02-2017.
+ * Created by priyankaon 16-02-2017.
  */
 
 public class ProfileHorList extends BaseResponse {

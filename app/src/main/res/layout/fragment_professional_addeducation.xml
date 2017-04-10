@@ -151,6 +151,13 @@
                     android:textSize="@dimen/sp_size_13" />
 
             </RelativeLayout>
+
+            <ProgressBar
+                android:id="@+id/pb_profile_progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_centerInParent="true" />
             <RelativeLayout
 
                 android:id="@+id/r1_add_education_details2"
@@ -166,6 +173,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_size_7"
+                    android:focusable="false"
+                    android:imeOptions="actionUnspecified"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:hint="@string/ID_SELF_EMP_START_DATE_HINT"
                     android:textColorHint="@color/text_color_contactdetails_page"
@@ -177,6 +186,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_size_40"
+                    android:focusable="false"
+                    android:imeOptions="actionUnspecified"
                     android:layout_toRightOf="@+id/et_job_start_date"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:hint="@string/ID_SELF_EMP_START_DATE_HINT"
@@ -245,7 +256,6 @@
 
 
             </RelativeLayout>
-
 
             <TextView
                 android:id="@+id/tv_grade"
@@ -320,10 +330,9 @@
                     android:id="@+id/et_gpa"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
-
                     android:layout_toRightOf="@+id/tv_saperate"
                     android:padding="@dimen/dp_size_16"
-                    android:text="@string/ID_8"
+                    android:text=""
                     android:textSize="@dimen/dp_size_13" />
             </RelativeLayout>
 

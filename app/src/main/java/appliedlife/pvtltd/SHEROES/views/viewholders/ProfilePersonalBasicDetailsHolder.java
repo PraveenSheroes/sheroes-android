@@ -10,9 +10,11 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.MyProfileView;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfilePersonalViewList;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.EditNameDialogListener;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -23,7 +25,7 @@ import static appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView.TAG;
  * Created by priyanka on 17/02/17.
  */
 
-public class ProfilePersonalBasicDetailsHolder extends BaseViewHolder<ProfilePersonalViewList> {
+public class ProfilePersonalBasicDetailsHolder extends BaseViewHolder<MyProfileView> {
 
     @Bind(R.id.tv_date_of_birth)
     TextView MTv_date_of_birth;
@@ -76,7 +78,7 @@ public class ProfilePersonalBasicDetailsHolder extends BaseViewHolder<ProfilePer
 
     BaseHolderInterface viewInterface;
 
-    private ProfilePersonalViewList dataItem;
+    private MyProfileView dataItem;
 
 
     public ProfilePersonalBasicDetailsHolder(View itemView, BaseHolderInterface baseHolderInterface) {
@@ -93,12 +95,13 @@ public class ProfilePersonalBasicDetailsHolder extends BaseViewHolder<ProfilePer
     }
 
     @Override
-    public void bindData(ProfilePersonalViewList obj, Context context, int position) {
+    public void bindData(MyProfileView profileView, Context context, int position) {
 
-        this.dataItem = obj;
+        this.dataItem = profileView;
+
         mTv_edit_basic_details.setOnClickListener(this);
-      //  MTv_date_of_birth.setVisibility(View.VISIBLE);
-       // mTv_date_of_birth_value.setVisibility(View.VISIBLE);
+        MTv_date_of_birth.setVisibility(View.VISIBLE);
+        mTv_date_of_birth_value.setVisibility(View.VISIBLE);
         mTv_current_location.setVisibility(View.VISIBLE);
         mTv_current_location_value.setVisibility(View.VISIBLE);
         mTv_home_town.setVisibility(View.VISIBLE);
@@ -111,10 +114,32 @@ public class ProfilePersonalBasicDetailsHolder extends BaseViewHolder<ProfilePer
         mTv_status_value.setVisibility(View.VISIBLE);
         mTv_child_no.setVisibility(View.VISIBLE);
         mTv_child_value.setVisibility(View.VISIBLE);
-        mTv_profile_basic_details.setText(dataItem.getTag());
-        //MTv_date_of_birth.setText(dataItem.getItem1());
-        //mTv_date_of_birth_value.setText(dataItem.getItem2());
-        mTv_current_location.setText(dataItem.getItem3());
+        mTv_profile_basic_details.setText(dataItem.getType());
+        if(null !=dataItem) {
+           /* if (StringUtil.isNotNullOrEmptyString(dataItem.getUserDetails().getDob())) {
+                mTv_date_of_birth_value.setText(dataItem.getUserDetails().getDob());
+            }*/
+            if (StringUtil.isNotNullOrEmptyString(dataItem.getUserDetails().getAddress())) {
+                mTv_current_location_value.setText(dataItem.getUserDetails().getAddress());
+            }
+            if (StringUtil.isNotNullOrEmptyString(dataItem.getUserDetails().getMobile())) {
+                mTv_contact_number_value.setText(dataItem.getUserDetails().getMobile());
+            }
+            if (StringUtil.isNotNullOrEmptyString(dataItem.getUserDetails().getMaritalStatus())) {
+                mTv_status_value.setText(dataItem.getUserDetails().getMaritalStatus());
+            }if (StringUtil.isNotNullOrEmptyString(""+dataItem.getUserDetails().getNoOfChildren())) {
+
+            mTv_child_value.setText(""+dataItem.getUserDetails().getNoOfChildren());
+
+        }
+            if (StringUtil.isNotNullOrEmptyString(dataItem.getUserDetails().getEmailid())) {
+                mTv_email_value.setText(dataItem.getUserDetails().getEmailid());
+            }
+
+
+            //MTv_date_of_birth.setText(dataItem.getItem1());
+            //mTv_date_of_birth_value.setText(dataItem.getItem2());
+    /*    mTv_current_location.setText(dataItem.getItem3());
         mTv_current_location_value.setText(dataItem.getItem4());
         mTv_home_town.setText(dataItem.getItem5());
         mTv_home_town_value.setText(dataItem.getItem6());
@@ -125,20 +150,25 @@ public class ProfilePersonalBasicDetailsHolder extends BaseViewHolder<ProfilePer
         mTv_status.setText(dataItem.getItem11());
         mTv_status_value.setText(dataItem.getItem12());
         mTv_child_no.setText(dataItem.getItem13());
-        mTv_child_value.setText(dataItem.getItem14());
-        mTv_current_status.setVisibility(View.GONE);
-        mTv_current_status_value.setVisibility(View.GONE);
-        mTv_sector.setVisibility(View.GONE);
-        mTv_sector_value.setVisibility(View.GONE);
-        mtv_tot_exp_value.setVisibility(View.GONE);
-        mTv_language.setVisibility(View.GONE);
-        mTv_tot_language_value.setVisibility(View.GONE);
-
+        mTv_child_value.setText(dataItem.getItem14());*/
+            mTv_current_status.setVisibility(View.GONE);
+            mTv_current_status_value.setVisibility(View.GONE);
+            mTv_sector.setVisibility(View.GONE);
+            mTv_sector_value.setVisibility(View.GONE);
+            mtv_tot_exp_value.setVisibility(View.GONE);
+            mTv_language.setVisibility(View.GONE);
+            mTv_tot_language_value.setVisibility(View.GONE);
+        }
 
     }
 
     @Override
     public void viewRecycled() {
+
+
+
+
+
 
     }
 

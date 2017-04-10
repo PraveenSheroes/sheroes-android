@@ -93,6 +93,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     private ProgressBar mProgressBar;
     public FragmentIntractionWithActivityListner mHomeSearchActivityFragmentIntractionWithActivityListner;
     private FragmentOpen mFragmentOpen = new FragmentOpen();
+
     @Inject
     Preference<LoginResponse> userPreference;
 
@@ -155,6 +156,8 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
         this.mProgressBar = mProgressBar;
     }
 
+
+
     public void setCommentReaction(FragmentListRefreshData mFragmentListRefreshData, GenericRecyclerViewAdapter mAdapter, LinearLayoutManager mLayoutManager, FeedDetail mFeedDetail, RecyclerView mRecyclerView, CommentReactionPresenter commentReactionPresenter, AppUtils mAppUtils, ProgressBar mProgressBar) {
         this.mFragmentListRefreshData = mFragmentListRefreshData;
         this.mAdapter = mAdapter;
@@ -210,7 +213,14 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
-
+    public void setInitializationForProfile(FragmentListRefreshData mFragmentListRefreshData, GenericRecyclerViewAdapter mAdapter, LinearLayoutManager mLayoutManager, RecyclerView mRecyclerView, AppUtils mAppUtils, ProgressBar mProgressBar) {
+        this.mFragmentListRefreshData = mFragmentListRefreshData;
+        this.mAdapter = mAdapter;
+        this.mLayoutManager = mLayoutManager;
+        this.mRecyclerView = mRecyclerView;
+        this.mAppUtils = mAppUtils;
+        this.mProgressBar = mProgressBar;
+    }
 
     @Override
     public void onClick(View v) {
@@ -477,6 +487,8 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     @Override
     public void getDB(List<RecentSearchData> recentSearchDatas) {
     }
+
+
 
 
     @Override

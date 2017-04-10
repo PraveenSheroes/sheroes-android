@@ -26,14 +26,17 @@ public class ProfessionalBasicDetailsResponse {
     private String screenName;
 
     public String getStatus() {
+
         return status;
     }
 
     public void setStatus(String status) {
+
         this.status = status;
     }
 
     public FieldErrorMessageMap getFieldErrorMessageMap() {
+
         return fieldErrorMessageMap;
     }
 

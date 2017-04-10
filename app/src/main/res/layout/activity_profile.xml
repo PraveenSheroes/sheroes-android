@@ -8,7 +8,9 @@
     tools:openDrawer="start">
 
 
-    <include layout="@layout/activity_profile_layout"/>
+    <include
+        android:id="@+id/lnr_profile"
+        layout="@layout/activity_profile_layout"/>
 
 
 

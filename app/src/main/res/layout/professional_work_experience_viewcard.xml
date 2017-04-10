@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
+
+
+<android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    >
+<LinearLayout
     android:id="@+id/l1_job_add_card"
     android:layout_width="match_parent"
     android:paddingLeft="@dimen/dp_size_16"
@@ -76,3 +83,4 @@
         android:textSize="@dimen/sp_size_12" />
 
 </LinearLayout>
+</android.support.v7.widget.CardView>

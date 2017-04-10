@@ -12,6 +12,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.MyProfileView;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileHorList;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileViewList;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActicity;
@@ -24,14 +25,14 @@ import butterknife.ButterKnife;
  * Created by SHEROES-TECH on 16-02-2017.
  */
 
-public class ProfileHorizontalViewHolder  extends BaseViewHolder<ProfileViewList> {
+public class ProfileHorizontalViewHolder  extends BaseViewHolder<MyProfileView> {
     @Bind(R.id.rv_profile_horizontal_list)
     RecyclerView mRecyclerView;
     GenericRecyclerViewAdapter mAdapter;
     List<ProfileHorList> profileList = new ArrayList<ProfileHorList>();
     LinearLayoutManager mLayoutManager;
     BaseHolderInterface viewInterface;
-    private ProfileViewList dataItem;
+    private MyProfileView dataItem;
 
 
     public ProfileHorizontalViewHolder(View itemView, BaseHolderInterface baseHolderInterface) {
@@ -49,7 +50,7 @@ public class ProfileHorizontalViewHolder  extends BaseViewHolder<ProfileViewList
 
 
     @Override
-    public void bindData(ProfileViewList obj, Context context, int position) {
+    public void bindData(MyProfileView obj, Context context, int position) {
         this.dataItem = obj;
         itemView.setOnClickListener(this);
         mLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL,false);

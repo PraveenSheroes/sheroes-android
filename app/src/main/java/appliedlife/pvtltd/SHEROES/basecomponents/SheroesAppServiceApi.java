@@ -46,19 +46,15 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.GetInterestJobRespo
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.EducationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.GetUserVisitingCardRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.PersonalBasicDetailsRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.PersonalBasicDetailsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfessionalBasicDetailsRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfessionalBasicDetailsResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileAddEditEducationRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCardResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfilePreferredWorkLocationRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfilePreferredWorkLocationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTravelFLexibilityRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTravelFlexibilityResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingChangeUserPreferenceRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingChangeUserPreferenseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingDeActivateRequest;
@@ -155,9 +151,6 @@ public interface SheroesAppServiceApi {
     Observable<RequestedListResponse> getRequestList(@Body MemberRequest memberRequest);
     @POST("entity/master/get_data")
     Observable<GetTagData> getTagFromApi(@Body GetAllDataRequest getAllDataRequest );
-
-
-
     @POST("participant/settings/save_feedback")
     Observable<SettingFeedbackResponce> getSettingAuthToken(@Body SettingFeedbackRequest feedbackRequest);
     @POST("participant/settings/save_rating")
@@ -166,7 +159,6 @@ public interface SheroesAppServiceApi {
     Observable<SettingDeActivateResponse> getUserDeactiveAuthToken(@Body SettingDeActivateRequest deActivateRequest);
     @POST("participant/settings/get_user_preferences")
     Observable<UserpreferenseResponse>getUserPreferenceAuthToken(@Body UserPreferenceRequest userPreferenceRequest);
-
     @POST("entity/master/all_data")
     Observable<MasterDataResponse> getOnBoardingMasterDataFromApi();
     @POST("entity/master/get_data")
@@ -187,44 +179,32 @@ public interface SheroesAppServiceApi {
     @POST("participant/settings/change_user_preference")
     Observable<SettingChangeUserPreferenseResponse>getUserChangePreferenceAuthToken(@Body SettingChangeUserPreferenceRequest settingChangeUserPreferenceRequest);
     @POST("participant/user/get_details\n")
-    Observable<EducationResponse>getEducationAuthToken(@Body PersonalBasicDetailsRequest personalBasicDetailsRequest);
-
-
+    Observable<BoardingDataResponse>getEducationAuthToken(@Body ProfileAddEditEducationRequest profileAddEditEducationRequest);
     @POST("participant/user/add_or_edit")
-    Observable<PersonalBasicDetailsResponse>getPersonalBasicDetailsAuthToken(@Body PersonalBasicDetailsRequest personalBasicDetailsRequest);
+    Observable<BoardingDataResponse>getPersonalBasicDetailsAuthToken(@Body PersonalBasicDetailsRequest personalBasicDetailsRequest);
     @POST("participant/user/add_or_edit")
-    Observable<ProfileTravelFlexibilityResponse>getProfessionalTravelDetailsAuthToken(@Body ProfileTravelFLexibilityRequest profileTravelFLexibilityRequest);
+    Observable<BoardingDataResponse>getProfessionalTravelDetailsAuthToken(@Body ProfileTravelFLexibilityRequest profileTravelFLexibilityRequest);
     @POST("participant/user/add_or_edit")
-    Observable<UserSummaryResponse>getPersonalUserSummaryDetailsAuthToken(@Body UserSummaryRequest userSummaryRequest);
+    Observable<BoardingDataResponse>getPersonalUserSummaryDetailsAuthToken(@Body UserSummaryRequest userSummaryRequest);
     @POST("participant/user/add_or_edit")
-    Observable<ProfessionalBasicDetailsResponse>getProfessionalDetailsAuthToken(@Body ProfessionalBasicDetailsRequest professionalBasicDetailsRequest);
-
-
+    Observable<BoardingDataResponse>getProfessionalDetailsAuthToken(@Body ProfessionalBasicDetailsRequest professionalBasicDetailsRequest);
     @POST("participant/user/add_or_edit")
-    Observable<ProfilePreferredWorkLocationResponse>getWorkLocationDetailsAuthToken(@Body ProfilePreferredWorkLocationRequest profilePreferredWorkLocationRequest);
-
-
-
+    Observable<BoardingDataResponse>getWorkLocationDetailsAuthToken(@Body ProfilePreferredWorkLocationRequest profilePreferredWorkLocationRequest);
     @POST("participant/user/get_visiting_card_details")
     Observable<ProfileEditVisitingCardResponse>getEditVisitingCardDetailsAuthToken();
 
 
 
-    @POST("participant/user/getSaveVisitingCardDetailsAuthToken")
+    @POST("participant/user/participant/user/get_visiting_card")
     Observable<ProfileEditVisitingCardResponse>getSaveVisitingCardDetailsAuthToken(@Body GetUserVisitingCardRequest getUserVisitingCardRequest);
 
+    @POST("participant/user/get_all_details")
 
+    Observable<UserProfileResponse>getUserDetails();
 
-
-
-
-    @POST("participant/community/unjoin")
     Observable<MemberListResponse>removeMember(@Body RemoveMemberRequest removeMemberRequest);
-
-
     @POST("participant/community/reject_joining_request")
     Observable<MemberListResponse>removePandingMember(@Body RemoveMemberRequest removeMemberRequest);
-
     @POST("participant/community/approve_joining_request")
     Observable<MemberListResponse>approvePandingMember(@Body ApproveMemberRequest approveMemberRequest);
 

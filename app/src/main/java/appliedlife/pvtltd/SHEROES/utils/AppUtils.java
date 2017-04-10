@@ -71,6 +71,7 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -107,6 +108,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingTellUsReque
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingWorkExpRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.EducationEntity;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileAddEditEducationRequest;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 
 
@@ -2027,6 +2030,23 @@ public class AppUtils {
         return communityRequest;
     }
 
+   public static ProfileAddEditEducationRequest profileAddEditEducationRequest(long mEducationId,long mSchoolNameId,long mDeegreeId,long mFieldOfStudyId) {
+        AppUtils appUtils = AppUtils.getInstance();
+        ProfileAddEditEducationRequest profileAddEditEducationRequest = new ProfileAddEditEducationRequest();
 
+       profileAddEditEducationRequest.setAppVersion(appUtils.getAppVersionName());
+       profileAddEditEducationRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+       profileAddEditEducationRequest.setDeviceUniqueId(appUtils.mDeviceId);
+       profileAddEditEducationRequest.setLastScreenName("string");
+       profileAddEditEducationRequest.setScreenName("string");
+       profileAddEditEducationRequest.setType("EDUCATION");
+       profileAddEditEducationRequest.setSubType("BaseProfileRequest");
+       profileAddEditEducationRequest.setDegreeNameMasterId(mDeegreeId);
+       profileAddEditEducationRequest.setDegreeNameMasterId(mDeegreeId);
+       profileAddEditEducationRequest.setFieldOfStudyMasterId(mFieldOfStudyId);
+       profileAddEditEducationRequest.setSchoolNameMasterId(mSchoolNameId);
+       profileAddEditEducationRequest.setId(mEducationId);
+       return profileAddEditEducationRequest;
+    }
 
 }
