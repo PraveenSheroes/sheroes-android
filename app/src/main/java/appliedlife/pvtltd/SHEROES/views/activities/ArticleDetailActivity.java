@@ -288,11 +288,6 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
     }
 
     @Override
-    public void onErrorOccurence() {
-
-    }
-
-    @Override
     public void onDialogDissmiss(FragmentOpen isFragmentOpen, FeedDetail feedDetail) {
         mFragmentOpen = isFragmentOpen;
         mFeedDetail = feedDetail;

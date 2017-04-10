@@ -427,7 +427,6 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
     }
 
     public interface HomeActivityIntractionListner {
-        void onErrorOccurence();
         void onDialogDissmiss(FragmentOpen isFragmentOpen, FeedDetail feedDetail);
         void onClickReactionList(FragmentOpen isFragmentOpen, FeedDetail feedDetail);
     }

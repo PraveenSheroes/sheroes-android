@@ -269,10 +269,6 @@ public class JobDetailActivity extends BaseActivity implements CommentReactionFr
     }
 
 
-    @Override
-    public void onErrorOccurence() {
-
-    }
 
     @Override
     public void onDialogDissmiss(FragmentOpen isFragmentOpen, FeedDetail feedDetail) {

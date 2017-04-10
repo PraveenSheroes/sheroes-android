@@ -152,6 +152,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     Preference<MasterDataResponse> mUserPreferenceMasterData;
     private ViewPagerAdapter mViewPagerAdapter;
     private MyCommunityInviteMemberFragment myCommunityInviteMemberFragment;
+    private int backPressClickCount = 1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -159,6 +160,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         SheroesApplication.getAppComponent(this).inject(this);
         renderHomeFragmentView();
     }
+
     public void renderHomeFragmentView() {
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
@@ -235,11 +237,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         };
     }
 
-    @Override
-    public void onErrorOccurence() {
-        getSupportFragmentManager().popBackStack();
-        //showNetworkTimeoutDoalog(true);
-    }
+
 
     public void openJobFilterActivity() {
         Intent intent = new Intent(getApplicationContext(), JobFilterActivity.class);
@@ -364,7 +362,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         intent.putExtras(bundle);
         startActivity(intent);
         overridePendingTransition(R.anim.fade_in_dialog, R.anim.fade_out_dialog);
-        //Snackbar.make(mCLMainLayout, "Work in progress", Snackbar.LENGTH_SHORT).show();
     }
 
     @OnClick(R.id.li_article_spinner_icon)
@@ -585,6 +582,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         mliArticleSpinnerIcon.setVisibility(View.GONE);
 
     }
+
     @Override
     public void onBackPressed() {
         if (mFragmentOpen.isOpen()) {
@@ -643,7 +641,12 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             mFragmentOpen.setOpenImageViewer(false);
             getSupportFragmentManager().popBackStackImmediate();
         } else {
-            finish();
+            if (backPressClickCount == 0) {
+                finish();
+            } else {
+                backPressClickCount--;
+                Snackbar.make(mCLMainLayout, getString(R.string.ID_BACK_PRESS), Snackbar.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -787,6 +790,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         }
 
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
@@ -814,12 +818,14 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         }
 
     }
+
     private void jobFilterActivityResponse(Intent intent) {
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(JobFragment.class.getName());
         if (AppUtils.isFragmentUIActive(fragment)) {
             ((JobFragment) fragment).jobFilterIds();
         }
     }
+
     private void createCommunityActivityResponse(Intent intent) {
         mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITIES_DETAIL);
         Fragment community = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.ONE_CONSTANT);
@@ -917,7 +923,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     mHomeSpinnerItemList.addAll(localList);
                 }
                 if (StringUtil.isNotNullOrEmptyString(stringBuilder.toString())) {
-                    mTvCategoryText.setText(stringBuilder.toString().substring(0,stringBuilder.toString().length()-1));
+                    mTvCategoryText.setText(stringBuilder.toString().substring(0, stringBuilder.toString().length() - 1));
                 } else {
                     mTvCategoryText.setText(AppConstants.EMPTY_STRING);
                     mTvCategoryChoose.setVisibility(View.VISIBLE);

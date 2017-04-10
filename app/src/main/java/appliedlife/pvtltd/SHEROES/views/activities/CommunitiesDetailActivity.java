@@ -29,6 +29,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionDoc;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Member;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MembersList;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerList;
@@ -57,6 +58,7 @@ import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FOR_REFRESH_FRAGMENT_LIST;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.JOIN_INVITE;
+import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MENU;
 
 
 public class CommunitiesDetailActivity extends BaseActivity implements ShareCommunityFragment.ShareCommunityActivityIntractionListner, CommentReactionFragment.HomeActivityIntractionListner {
@@ -208,6 +210,10 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
                     LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + id);
             }
 
+        }else if (baseResponse instanceof CommentReactionDoc) {
+            setAllValues(mFragmentOpen);
+             /* Comment mCurrentStatusDialog list  comment menu option edit,delete */
+            super.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU);
         }
     }
 
@@ -238,6 +244,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
     //private void communityDetailHandled(View view, ) {
     private void communityDetailHandled(View view, BaseResponse baseResponse) {
         FeedDetail feedDetail = (FeedDetail) baseResponse;
+        mMyCommunityPostFeedDetail=feedDetail;
         int id = view.getId();
         if (!mFeedDetail.isClosedCommunity()) {
             mFragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);

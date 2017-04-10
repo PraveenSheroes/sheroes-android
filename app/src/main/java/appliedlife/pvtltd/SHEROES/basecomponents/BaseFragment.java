@@ -340,20 +340,22 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     /*1:- If pass one from home activity means its comments section changes
     2:- If two Home activity means its Detail section changes of activity,and refresh particular card*/
     public void commentListRefresh(FeedDetail feedDetail, FeedParticipationEnum feedParticipationEnum) {
-        switch (feedParticipationEnum) {
-            case ACTIVITY_FOR_REFRESH_FRAGMENT_LIST:
-                mAdapter.setDataOnPosition(feedDetail, feedDetail.getItemPosition());
-                mLayoutManager.scrollToPosition(feedDetail.getItemPosition());
-                break;
-            case COMMENT_REACTION:
-                mAdapter.setDataOnPosition(feedDetail, feedDetail.getItemPosition());
-                mLayoutManager.scrollToPosition(feedDetail.getItemPosition());
-                break;
-            case DELETE_COMMUNITY_POST:
-                mAdapter.removeDataOnPosition(feedDetail, feedDetail.getItemPosition());
-                break;
-            default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
+        if(null!=feedDetail) {
+            switch (feedParticipationEnum) {
+                case ACTIVITY_FOR_REFRESH_FRAGMENT_LIST:
+                    mAdapter.setDataOnPosition(feedDetail, feedDetail.getItemPosition());
+                    mLayoutManager.scrollToPosition(feedDetail.getItemPosition());
+                    break;
+                case COMMENT_REACTION:
+                    mAdapter.setDataOnPosition(feedDetail, feedDetail.getItemPosition());
+                    mLayoutManager.scrollToPosition(feedDetail.getItemPosition());
+                    break;
+                case DELETE_COMMUNITY_POST:
+                    mAdapter.removeDataOnPosition(feedDetail, feedDetail.getItemPosition());
+                    break;
+                default:
+                    LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
+            }
         }
         mAdapter.notifyDataSetChanged();
     }
