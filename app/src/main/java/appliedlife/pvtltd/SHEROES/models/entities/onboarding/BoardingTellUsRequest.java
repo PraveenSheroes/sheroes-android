@@ -31,6 +31,9 @@ public class BoardingTellUsRequest extends BaseRequest {
     @SerializedName("type")
     @Expose
     private String type;
+    @SerializedName("mobile")
+    @Expose
+    private String mobile;
 
     public long getCityMasterId() {
         return cityMasterId;
@@ -86,5 +89,13 @@ public class BoardingTellUsRequest extends BaseRequest {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 }

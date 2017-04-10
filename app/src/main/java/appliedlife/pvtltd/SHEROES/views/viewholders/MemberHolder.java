@@ -20,6 +20,8 @@ import butterknife.OnClick;
  */
 
 public class MemberHolder extends BaseViewHolder<MembersList> {
+    @Bind(R.id.tv_admin)
+    TextView tvAdmin;
     @Bind(R.id.tv_member_city)
     TextView tv_member_city;
     @Bind(R.id.tv_member_name)
@@ -51,8 +53,13 @@ public class MemberHolder extends BaseViewHolder<MembersList> {
         dataItem.setPosition(position);
         if (dataItem.getIsOwner() && !dataItem.getTypeS().equalsIgnoreCase(AppConstants.OWNER_SUB_TYPE)) {
             tv_member_cross.setVisibility(View.VISIBLE);
-        } else {
+            tvAdmin.setVisibility(View.GONE);
+        } else if(dataItem.getIsOwner()) {
             tv_member_cross.setVisibility(View.GONE);
+            tvAdmin.setVisibility(View.VISIBLE);
+        }else {
+            tv_member_cross.setVisibility(View.GONE);
+            tvAdmin.setVisibility(View.GONE);
         }
 
     }

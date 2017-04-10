@@ -569,23 +569,16 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
     public void OnOpenCheckClick() {
         mCbcloseCommunity.setChecked(false);
         if (mCbopenCommunity.isChecked()) {
-            ChangeCommunityPrivacyDialogFragment newFragment = new ChangeCommunityPrivacyDialogFragment();
-            newFragment.show(getActivity().getFragmentManager(), "dialog");
-      /*      CommunityOptionJoinDialog newFragment = new CommunityOptionJoinDialog(this);
-            newFragment.show(getActivity().getFragmentManager(), "dialog");*/
+            ((CreateCommunityActivity)getActivity()).changePrivacy(false);
         }
 
     }
-
     @OnClick(R.id.cb_create_community_close_check)
     public void OnCloseCheckClick() {
         mCbopenCommunity.setChecked(false);
         if (mCbcloseCommunity.isChecked()) {
-            // ChangeCommunityPrivacyDialogFragment newFragment = new ChangeCommunityPrivacyDialogFragment(this);
-            // newFragment.show(getActivity().getFragmentManager(), "dialog");
+            ((CreateCommunityActivity)getActivity()).changePrivacy(true);
         }
-
-
     }
 /*
     @OnTouch(R.id.et_create_community_type)

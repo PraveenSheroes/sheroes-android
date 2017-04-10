@@ -30,9 +30,9 @@ import appliedlife.pvtltd.SHEROES.presenters.SettingFeedbackPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SettingFeedbackView;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SettingView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -90,7 +90,6 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
     String value;
     @Inject
     SettingFeedbackPresenter mSettingFeedbackPresenter;
-    SettingView settingViewlistener;
     private FragmentIntractionWithActivityListner mHomeSearchActivityFragmentIntractionWithActivityListner;
 
 
@@ -100,15 +99,6 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        try {
-            if (getActivity() instanceof SettingView) {
-
-                settingViewlistener = (SettingView) getActivity();
-            }
-        } catch (Exception e) {
-
-
-        }
         try {
             if (mActivity instanceof FragmentIntractionWithActivityListner) {
                 mHomeSearchActivityFragmentIntractionWithActivityListner = (FragmentIntractionWithActivityListner) getActivity();
@@ -141,7 +131,7 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
             public void onClick(View view) {
 
 
-                settingViewlistener.backListener(R.id.iv_back_setting);
+                ((HomeActivity) getActivity()).getSupportFragmentManager().popBackStack();
 
              /*   Intent intent = new Intent(getActivity(), SettingPreferencesActivity.class);
                 startActivity(intent);*/

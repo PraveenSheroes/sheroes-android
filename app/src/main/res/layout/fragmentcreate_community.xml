@@ -249,8 +249,9 @@
                     android:layout_marginBottom="@dimen/dp_size_10"
                     android:button="@drawable/customecheckbox"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:textAllCaps="true"
                     android:paddingLeft="@dimen/dp_size_10"
-                    android:text="OPEN "
+                    android:text="@string/ID_OPEN"
                     android:textSize="@dimen/sp_size_14"/>
 
                 <CheckBox
@@ -263,7 +264,8 @@
                     android:checked="false"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:paddingLeft="@dimen/dp_size_10"
-                    android:text="CLOSE "
+                    android:textAllCaps="true"
+                    android:text="@string/ID_CLOSE_PRIVACY"
                     android:textSize="@dimen/sp_size_14"/>
             </RelativeLayout>
 

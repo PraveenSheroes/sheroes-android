@@ -14,10 +14,13 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.fragments.ChangeCommunityPrivacyDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitySearchTagsDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.CreateCommunityFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ImageUploadFragment;
 import butterknife.ButterKnife;
+
+import static appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment.DISMISS_PARENT_ON_OK_OR_BACK;
 
 /**
  * Created by Ajit Kumar on 11/01/2017.
@@ -123,5 +126,20 @@ public class CreateCommunityActivity extends BaseActivity implements ImageUpload
             showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
         }
 
+    }
+
+
+    public DialogFragment changePrivacy(boolean openClose) {
+        ChangeCommunityPrivacyDialogFragment changeCommunityPrivacyDialogFragment = (ChangeCommunityPrivacyDialogFragment) getFragmentManager().findFragmentByTag(ChangeCommunityPrivacyDialogFragment.class.getName());
+        if (changeCommunityPrivacyDialogFragment == null) {
+            changeCommunityPrivacyDialogFragment = new ChangeCommunityPrivacyDialogFragment();
+            Bundle bundle = new Bundle();
+            bundle.putBoolean(DISMISS_PARENT_ON_OK_OR_BACK, openClose);
+            changeCommunityPrivacyDialogFragment.setArguments(bundle);
+        }
+        if (!changeCommunityPrivacyDialogFragment.isVisible() && !changeCommunityPrivacyDialogFragment.isAdded()&& !isFinishing() && !mIsDestroyed) {
+            changeCommunityPrivacyDialogFragment.show(getFragmentManager(), ChangeCommunityPrivacyDialogFragment.class.getName());
+        }
+        return changeCommunityPrivacyDialogFragment;
     }
 }

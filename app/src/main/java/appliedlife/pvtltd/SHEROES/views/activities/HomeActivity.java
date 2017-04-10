@@ -55,7 +55,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.setting.Section;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -73,14 +72,12 @@ import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeSpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.JobLocationFilter;
 import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunitiesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunityInviteMemberFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SettingAboutFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SettingFeedbackFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SettingFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SettingTermsAndConditionFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SettingView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -90,7 +87,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.COMMENT_REA
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.JOIN_INVITE;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MENU;
 
-public class HomeActivity extends BaseActivity implements ViewPager.OnPageChangeListener, SettingView, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, CommentReactionFragment.HomeActivityIntractionListner, HomeSpinnerFragment.HomeSpinnerFragmentListner {
+public class HomeActivity extends BaseActivity implements CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, CommentReactionFragment.HomeActivityIntractionListner, HomeSpinnerFragment.HomeSpinnerFragmentListner {
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
     @Inject
     Preference<LoginResponse> mUserPreference;
@@ -162,12 +159,6 @@ public class HomeActivity extends BaseActivity implements ViewPager.OnPageChange
         SheroesApplication.getAppComponent(this).inject(this);
         renderHomeFragmentView();
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
     public void renderHomeFragmentView() {
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
@@ -363,7 +354,6 @@ public class HomeActivity extends BaseActivity implements ViewPager.OnPageChange
         mViewPagerAdapter.addFragment(new MyCommunitiesFragment(), getString(R.string.ID_MY_COMMUNITIES));
         mViewPager.setAdapter(mViewPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
-        mViewPager.addOnPageChangeListener(this);
     }
 
     @OnClick(R.id.tv_search_box)
@@ -522,8 +512,6 @@ public class HomeActivity extends BaseActivity implements ViewPager.OnPageChange
     private void openSettingFragment() {
         mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_FEED));
         liHomeCommunityButtonLayout.setVisibility(View.GONE);
-        mFlHomeFooterList.setVisibility(View.VISIBLE);
-        mToolbar.setVisibility(View.VISIBLE);
         mFragmentOpen.setSettingFragment(true);
         mViewPager.setVisibility(View.GONE);
         mTabLayout.setVisibility(View.GONE);
@@ -536,12 +524,14 @@ public class HomeActivity extends BaseActivity implements ViewPager.OnPageChange
         mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_unselected_icon), null, null);
         mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_unselected_icon), null, null);
         mTvCommunities.setText(AppConstants.EMPTY_STRING);
+        setAllValues(mFragmentOpen);
         SettingFragment settingFragment = new SettingFragment();
         Bundle bundle = new Bundle();
         settingFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
                 .replace(R.id.fl_article_card_view, settingFragment).addToBackStack(null).commitAllowingStateLoss();
         mliArticleSpinnerIcon.setVisibility(View.GONE);
+
 
     }
 
@@ -568,7 +558,6 @@ public class HomeActivity extends BaseActivity implements ViewPager.OnPageChange
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
                 .replace(R.id.fl_article_card_view, bookmarksFragment, BookmarksFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
         mliArticleSpinnerIcon.setVisibility(View.GONE);
-
     }
 
     public void openJobFragment() {
@@ -596,30 +585,6 @@ public class HomeActivity extends BaseActivity implements ViewPager.OnPageChange
         mliArticleSpinnerIcon.setVisibility(View.GONE);
 
     }
-
-    public void openJobLocationFragment(List<Long> skillIds) {
-        mFragmentOpen.setSettingFragment(true);
-        mViewPager.setVisibility(View.GONE);
-        mTabLayout.setVisibility(View.GONE);
-        flFeedFullView.setVisibility(View.GONE);
-        mliArticleSpinnerIcon.setVisibility(View.GONE);
-        mTvHome.setText(AppConstants.EMPTY_STRING);
-        mTvSearchBox.setVisibility(View.GONE);
-        mTvSetting.setVisibility(View.GONE);
-        mTvSetting.setText(R.string.ID_JOBS);
-        mFlHomeFooterList.setVisibility(View.GONE);
-        mToolbar.setVisibility(View.GONE);
-        mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_unselected_icon), null, null);
-        mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_unselected_icon), null, null);
-        mTvCommunities.setText(AppConstants.EMPTY_STRING);
-        JobLocationFilter articlesFragment = new JobLocationFilter();
-        Bundle bundle = new Bundle();
-        articlesFragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
-                .replace(R.id.fl_article_card_view, articlesFragment).addToBackStack(null).commitAllowingStateLoss();
-        mliArticleSpinnerIcon.setVisibility(View.GONE);
-    }
-
     @Override
     public void onBackPressed() {
         if (mFragmentOpen.isOpen()) {
@@ -655,6 +620,7 @@ public class HomeActivity extends BaseActivity implements ViewPager.OnPageChange
 
         } else if (mFragmentOpen.isSettingFragment()) {
             getSupportFragmentManager().popBackStackImmediate();
+            initHomeViewPagerAndTabs();
             setHomeFeedCommunityData();
             mFragmentOpen.setSettingFragment(false);
 
@@ -768,38 +734,16 @@ public class HomeActivity extends BaseActivity implements ViewPager.OnPageChange
         }
     }
 
-    @Override
-    public void showNwError() {
-
-    }
-
-    @Override
-    public void backListener(int id) {
-        getSupportFragmentManager().popBackStack();
-
-
-    }
-
-    @Override
-    public void settingpreference(int id, List<Section> sections) {
-
+    public void settingListItemSelected(int id) {
         switch (id) {
             case R.id.tv_setting_feedback:
-                TextView tv_setting_feedback;
                 SettingFeedbackFragment articlesFragment = new SettingFeedbackFragment();
                 getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
                         .replace(R.id.fl_feed_comments, articlesFragment).addToBackStack(null).commitAllowingStateLoss();
                 break;
-
             case R.id.tv_setting_preferences:
-
-              /*  Gson gson = new Gson();
-                String jsonSections = gson.toJson(sections);
-                intent.putExtra("Setting_preferences",jsonSections);*/
                 Intent intent = new Intent(this, SettingPreferencesActivity.class);
                 startActivity(intent);
-
-
                 break;
             case R.id.tv_setting_terms_and_condition:
                 SettingTermsAndConditionFragment settingTermsAndConditionFragment = new SettingTermsAndConditionFragment();
@@ -815,32 +759,14 @@ public class HomeActivity extends BaseActivity implements ViewPager.OnPageChange
             case R.id.tv_logout:
                 if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
                     mUserPreference.delete();
+                    Intent intent1 = new Intent(getApplicationContext(), LoginActivity.class);
+                    startActivity(intent1);
+                    finish();
                 }
-                Intent intent1 = new Intent(getApplicationContext(), LoginActivity.class);
-                startActivity(intent1);
-                finish();
                 break;
             default:
-                getSupportFragmentManager().popBackStack();
-
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + id);
         }
-
-    }
-
-
-    @Override
-    public void startProgressBar() {
-
-    }
-
-    @Override
-    public void stopProgressBar() {
-
-    }
-
-    @Override
-    public void startNextScreen() {
-
     }
 
     @Override
@@ -861,17 +787,6 @@ public class HomeActivity extends BaseActivity implements ViewPager.OnPageChange
         }
 
     }
-
-    @Override
-    public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
-
-    }
-
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
@@ -1056,52 +971,4 @@ public class HomeActivity extends BaseActivity implements ViewPager.OnPageChange
         }
     }
 
-    /**
-     * This method will be invoked when the current page is scrolled, either as part
-     * of a programmatically initiated smooth scroll or a user initiated touch scroll.
-     *
-     * @param position             Position index of the first page currently being displayed.
-     *                             Page position+1 will be visible if positionOffset is nonzero.
-     * @param positionOffset       Value from [0, 1) indicating the offset from the page at position.
-     * @param positionOffsetPixels Value in pixels indicating the offset from position.
-     */
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-    }
-
-    /**
-     * This method will be invoked when a new page becomes selected. Animation is not
-     * necessarily complete.
-     *
-     * @param position Position index of the new selected page.
-     */
-    @Override
-    public void onPageSelected(int position) {
-      /*  Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, position);
-        if (fragment instanceof FeaturedFragment) {
-            if (AppUtils.isFragmentUIActive(fragment)) {
-                ((FeaturedFragment) fragment).swipeAndRefreshList();
-            }
-        } else if (fragment instanceof MyCommunitiesFragment) {
-            if (AppUtils.isFragmentUIActive(fragment)) {
-                ((MyCommunitiesFragment) fragment).swipeAndRefreshList();
-            }
-        }*/
-    }
-
-    /**
-     * Called when the scroll state changes. Useful for discovering when the user
-     * begins dragging, when the pager is automatically settling to the current page,
-     * or when it is fully stopped/idle.
-     *
-     * @param state The new scroll state.
-     * @see ViewPager#SCROLL_STATE_IDLE
-     * @see ViewPager#SCROLL_STATE_DRAGGING
-     * @see ViewPager#SCROLL_STATE_SETTLING
-     */
-    @Override
-    public void onPageScrollStateChanged(int state) {
-
-    }
 }

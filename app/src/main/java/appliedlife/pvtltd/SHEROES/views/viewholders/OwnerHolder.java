@@ -10,6 +10,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Member;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
@@ -65,6 +66,7 @@ public class OwnerHolder extends BaseViewHolder<Member> {
             tvOwner.setTextColor(ContextCompat.getColor(context, R.color.red_oval_shap));
         } else {
             mTvownerclose.setVisibility(View.GONE);
+            tvOwner.setText(AppConstants.EMPTY_STRING);
         }
     }
 

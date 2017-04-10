@@ -31,17 +31,14 @@ import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingRatingRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingRatingResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.UserpreferenseResponse;
 import appliedlife.pvtltd.SHEROES.presenters.SettingFeedbackPresenter;
-import appliedlife.pvtltd.SHEROES.utils.AppConstants;
-import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.Feedback_ThankyouActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SettingFeedbackView;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SettingView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnTouch;
 
 /**
  * Created by priyanka.
@@ -65,32 +62,12 @@ public class SettingFeedbackFragment extends BaseFragment implements SettingFeed
     @Bind(R.id.tv_setting_tittle)
     TextView mTvSettingTittle;
     settingFragmentCallBack msettingFragmentCallBack;
-    SettingView settingViewlistener;
     @Bind(R.id.preferences_deactiveaccount_button)
     Button mPreferencesDeactiveaccountButton;
     String mFeebackvalue;
-    Integer mStars;
-
-
+    int mStars;
     @Inject
     SettingFeedbackPresenter mSettingFeedbackPresenter;
-
-
-    @Override
-    public void onAttach(Context context) {
-
-        super.onAttach(context);
-        try {
-            if (getActivity() instanceof SettingView) {
-
-                settingViewlistener = (SettingView) getActivity();
-            }
-        } catch (InstantiationException exception) {
-            LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
-        }
-    }
-
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -166,12 +143,7 @@ public class SettingFeedbackFragment extends BaseFragment implements SettingFeed
         feedbackRequest.setLastScreenName("string");
         feedbackRequest.setScreenName("string");
         mSettingFeedbackPresenter.getFeedbackAuthTokeInPresenter(feedbackRequest);
-
        }
-
-
-
-
 
     @OnClick(R.id.preferences_deactiveaccount_button)
 
@@ -204,18 +176,14 @@ public class SettingFeedbackFragment extends BaseFragment implements SettingFeed
     }
 
     @OnClick(R.id.iv_back_setting)
-
     public void onBackClick() {
-
-
         View view = getActivity().getCurrentFocus();
         if (view != null) {
             InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
 
-
-        settingViewlistener.backListener(R.id.iv_back_setting);
+        ((HomeActivity)getActivity()).getSupportFragmentManager().popBackStack();
 
     }
 

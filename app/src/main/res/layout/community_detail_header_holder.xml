@@ -82,6 +82,7 @@
             android:background="@drawable/rectangle_feed_commnity_join"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:gravity="center"
+            android:visibility="gone"
             android:padding="@dimen/dp_size_15"
             android:layout_marginBottom="@dimen/dp_size_15"
             android:text="@string/ID_JOIN"

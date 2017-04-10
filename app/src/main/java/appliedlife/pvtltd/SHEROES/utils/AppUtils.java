@@ -1708,7 +1708,7 @@ public class AppUtils {
 
     }
 
-    public static BoardingTellUsRequest boardingTellUsFormDataRequestBuilder(String typeOfBoardingData, String type, LabelValue labelValue, GetAllDataDocument getAllDataDocument) {
+    public static BoardingTellUsRequest boardingTellUsFormDataRequestBuilder(String typeOfBoardingData, String type, LabelValue labelValue, GetAllDataDocument getAllDataDocument,String mobileNumber) {
         BoardingTellUsRequest boardingTellUsRequest = new BoardingTellUsRequest();
         AppUtils appUtils = AppUtils.getInstance();
         //TODO:: check real data
@@ -1722,6 +1722,7 @@ public class AppUtils {
         boardingTellUsRequest.setJobTag(labelValue.getLabel());
         boardingTellUsRequest.setCityMasterId(Long.parseLong(getAllDataDocument.getId()));
         boardingTellUsRequest.setCityMaster(getAllDataDocument.getTitle());
+        boardingTellUsRequest.setMobile(mobileNumber);
         return boardingTellUsRequest;
     }
     public static BoardingLookingForHowCanRequest boardingLookingHowCanFormDataRequestBuilder(Set<Long> opportunityids) {

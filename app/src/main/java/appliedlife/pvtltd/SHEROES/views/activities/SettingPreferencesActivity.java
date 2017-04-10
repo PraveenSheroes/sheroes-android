@@ -36,7 +36,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.SettingPreferencesEducationDet
 import appliedlife.pvtltd.SHEROES.views.fragments.SettingPreferencesWorkExperienceFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SettingPreferencsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SettingFeedbackView;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SettingView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -46,7 +45,7 @@ import butterknife.OnClick;
  * seting_preferences_screen
  */
 
-public class SettingPreferencesActivity extends BaseActivity implements SettingFeedbackView, SettingPreferencsFragment.settingPreferencesCallBack, SettingView {
+public class SettingPreferencesActivity extends BaseActivity implements SettingFeedbackView, SettingPreferencsFragment.settingPreferencesCallBack {
 
     int mid;
     private final String TAG = LogUtils.makeLogTag(SettingPreferencesActivity.class);
@@ -258,19 +257,12 @@ public class SettingPreferencesActivity extends BaseActivity implements SettingF
 
     }
 
-    @Override
     public void backListener(int id) {
 
         mlnr_setting.setVisibility(View.VISIBLE);
         get_user_preference();
-
         getSupportFragmentManager().popBackStack();
 
-
-    }
-
-    @Override
-    public void settingpreference(int id, List<Section> sections) {
 
     }
 

@@ -32,8 +32,6 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_SETTI
  */
 
 public class SettingFeedbackPresenter extends BasePresenter<SettingFeedbackView> {
-
-
     private final String TAG = LogUtils.makeLogTag(SettingFeedbackPresenter.class);
     SettingFeedbackModel mSettingFeedbackModel;
     SheroesApplication sheroesApplication;

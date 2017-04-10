@@ -9,17 +9,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.setting.Section;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SettingView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -27,7 +24,7 @@ import butterknife.ButterKnife;
  * Created by priyanka.
  */
 
-public class SettingPreferencsFragment extends BaseFragment implements SettingView, View.OnClickListener {
+public class SettingPreferencsFragment extends BaseFragment implements  View.OnClickListener {
 
     private final String TAG = LogUtils.makeLogTag(SettingPreferencsFragment.class);
     private final String SCREEN_NAME = "Setting_preferences_screen";
@@ -75,8 +72,6 @@ public class SettingPreferencsFragment extends BaseFragment implements SettingVi
     public void onClick(View view) {
         int id = view.getId();
         msettingPreferencesCallBack.callBackSettingPreferenceActivity(id);
-
-
         switch (id) {
 
             case R.id.tv_setting_preferences_basicdetails:
@@ -142,35 +137,5 @@ public class SettingPreferencsFragment extends BaseFragment implements SettingVi
 
     }
 
-    @Override
-    public void showNwError() {
-
-    }
-
-    @Override
-    public void backListener(int id) {
-
-    }
-
-    @Override
-    public void settingpreference(int id, List<Section> sections) {
-
-    }
-
-
-    @Override
-    public void startProgressBar() {
-
-    }
-
-    @Override
-    public void stopProgressBar() {
-
-    }
-
-    @Override
-    public void startNextScreen() {
-
-    }
 
 }

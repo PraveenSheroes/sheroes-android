@@ -159,7 +159,7 @@ public class AppConstants {
 
     public static final String MASTER_DATA_COMMUNITY_TYPE_KEY = "COMMUNITY_TYPE";
     public static final String MASTER_DATA_TAGS_KEY = "TAGS";
-    public static final String MASTER_DATA_FUNCTIONAL_AREA_KEY = "FUNCTIONAL_AREA";
+    public static final String MASTER_DATA_FUNCTIONAL_AREA_KEY = "FUNCTIONAL_AREA";//jobfilter
     /*Get all data keys*/
     public static final String LOCATION_CITY_GET_ALL_DATA_KEY = "city";
     public static final String INTEREST_GET_ALL_DATA_KEY = "interest";

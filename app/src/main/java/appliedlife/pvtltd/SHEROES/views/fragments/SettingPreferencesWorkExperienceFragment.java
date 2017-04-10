@@ -1,6 +1,5 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -32,9 +31,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingRatingResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.UserpreferenseResponse;
 import appliedlife.pvtltd.SHEROES.presenters.SettingFeedbackPresenter;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.CustomSpinnerAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SettingFeedbackView;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SettingView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -61,24 +60,6 @@ public class SettingPreferencesWorkExperienceFragment extends BaseFragment imple
     TextView mTv_setting_tittle1;
     @Bind(R.id.iv_back_setting)
     ImageView mIv_back_setting;
-    SettingView settingViewlistener;
-
-
-    @Override
-    public void onAttach(Context context) {
-
-        super.onAttach(context);
-        try {
-            if (getActivity() instanceof SettingView) {
-
-                settingViewlistener = (SettingView) getActivity();
-
-            }
-        } catch (Exception e) {
-
-
-        }
-    }
     private static final String[] total_iteam = {
 
             "ONLY ME", "PUBLIC"
@@ -234,7 +215,7 @@ public class SettingPreferencesWorkExperienceFragment extends BaseFragment imple
 
             @Override
             public void onClick(View view) {
-                settingViewlistener.backListener(R.id.iv_back_setting);
+                ((HomeActivity) getActivity()).getSupportFragmentManager().popBackStack();
 
              /*   Intent intent = new Intent(getActivity(), SettingPreferencesActivity.class);
                 startActivity(intent);*/

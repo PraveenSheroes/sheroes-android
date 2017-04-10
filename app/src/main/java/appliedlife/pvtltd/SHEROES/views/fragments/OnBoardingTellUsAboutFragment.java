@@ -141,7 +141,7 @@ public class OnBoardingTellUsAboutFragment extends BaseFragment implements OnBoa
                 if (null != labelValue&&null!=getAllDataDocument) {
                     InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(mMobileNumber.getWindowToken(), 0);
-                  mOnBoardingPresenter.getCurrentDataStatusToPresenter(mAppUtils.boardingTellUsFormDataRequestBuilder(AppConstants.CURRENT_STATUS,AppConstants.CURRENT_STATUS_TYPE,labelValue,getAllDataDocument));
+                  mOnBoardingPresenter.getCurrentDataStatusToPresenter(mAppUtils.boardingTellUsFormDataRequestBuilder(AppConstants.CURRENT_STATUS,AppConstants.CURRENT_STATUS_TYPE,labelValue,getAllDataDocument,mMobileNumber.getText().toString()));
                 }
             } else {
                 Toast.makeText(getContext(), "Enter valid mobile number", Toast.LENGTH_SHORT).show();

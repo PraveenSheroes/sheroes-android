@@ -43,9 +43,7 @@ public class FeedRequestPojo extends BaseRequest implements Parcelable {
     @SerializedName("cities")
     @Expose
     private List<String> cities = null;
-    @SerializedName("city_ids")
-    @Expose
-    private List<Integer> cityIds = null;
+
 
     @SerializedName("experience_from")
     @Expose
@@ -57,19 +55,22 @@ public class FeedRequestPojo extends BaseRequest implements Parcelable {
     @Expose
     private List<String> functionalAreas = null;
 
-    @SerializedName("opportunity_type_ids")
-    @Expose
-    private List<Integer> opportunityTypeIds = null;
     @SerializedName("opportunity_types")
     @Expose
     private List<String> opportunityTypes = null;
 
-    @SerializedName("skill_ids")
-    @Expose
-    private List<Integer> skillIds = null;
     @SerializedName("skills")
     @Expose
     private List<String> skills = null;
+
+
+    public String getIdForFeedDetail() {
+        return idForFeedDetail;
+    }
+
+    public void setIdForFeedDetail(String idForFeedDetail) {
+        this.idForFeedDetail = idForFeedDetail;
+    }
 
     public String getSubType() {
         return subType;
@@ -86,15 +87,6 @@ public class FeedRequestPojo extends BaseRequest implements Parcelable {
     public void setQuestion(String question) {
         this.question = question;
     }
-
-    public String getIdForFeedDetail() {
-        return idForFeedDetail;
-    }
-
-    public void setIdForFeedDetail(String idForFeedDetail) {
-        this.idForFeedDetail = idForFeedDetail;
-    }
-
 
     public List<String> getArticleCategories() {
         return articleCategories;
@@ -120,23 +112,12 @@ public class FeedRequestPojo extends BaseRequest implements Parcelable {
         this.communityId = communityId;
     }
 
-    public FeedRequestPojo() {
-    }
-
     public List<String> getCities() {
         return cities;
     }
 
     public void setCities(List<String> cities) {
         this.cities = cities;
-    }
-
-    public List<Integer> getCityIds() {
-        return cityIds;
-    }
-
-    public void setCityIds(List<Integer> cityIds) {
-        this.cityIds = cityIds;
     }
 
     public int getExperienceFrom() {
@@ -163,28 +144,12 @@ public class FeedRequestPojo extends BaseRequest implements Parcelable {
         this.functionalAreas = functionalAreas;
     }
 
-    public List<Integer> getOpportunityTypeIds() {
-        return opportunityTypeIds;
-    }
-
-    public void setOpportunityTypeIds(List<Integer> opportunityTypeIds) {
-        this.opportunityTypeIds = opportunityTypeIds;
-    }
-
     public List<String> getOpportunityTypes() {
         return opportunityTypes;
     }
 
     public void setOpportunityTypes(List<String> opportunityTypes) {
         this.opportunityTypes = opportunityTypes;
-    }
-
-    public List<Integer> getSkillIds() {
-        return skillIds;
-    }
-
-    public void setSkillIds(List<Integer> skillIds) {
-        this.skillIds = skillIds;
     }
 
     public List<String> getSkills() {
@@ -209,14 +174,14 @@ public class FeedRequestPojo extends BaseRequest implements Parcelable {
         dest.writeList(this.categoryIds);
         dest.writeLong(this.communityId);
         dest.writeStringList(this.cities);
-        dest.writeList(this.cityIds);
         dest.writeInt(this.experienceFrom);
         dest.writeInt(this.experienceTo);
         dest.writeStringList(this.functionalAreas);
-        dest.writeList(this.opportunityTypeIds);
         dest.writeStringList(this.opportunityTypes);
-        dest.writeList(this.skillIds);
         dest.writeStringList(this.skills);
+    }
+
+    public FeedRequestPojo() {
     }
 
     protected FeedRequestPojo(Parcel in) {
@@ -228,16 +193,10 @@ public class FeedRequestPojo extends BaseRequest implements Parcelable {
         in.readList(this.categoryIds, Long.class.getClassLoader());
         this.communityId = in.readLong();
         this.cities = in.createStringArrayList();
-        this.cityIds = new ArrayList<Integer>();
-        in.readList(this.cityIds, Integer.class.getClassLoader());
         this.experienceFrom = in.readInt();
         this.experienceTo = in.readInt();
         this.functionalAreas = in.createStringArrayList();
-        this.opportunityTypeIds = new ArrayList<Integer>();
-        in.readList(this.opportunityTypeIds, Integer.class.getClassLoader());
         this.opportunityTypes = in.createStringArrayList();
-        this.skillIds = new ArrayList<Integer>();
-        in.readList(this.skillIds, Integer.class.getClassLoader());
         this.skills = in.createStringArrayList();
     }
 

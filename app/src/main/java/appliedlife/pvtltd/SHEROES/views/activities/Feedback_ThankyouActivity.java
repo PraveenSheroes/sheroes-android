@@ -1,11 +1,8 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,7 +12,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SettingView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;

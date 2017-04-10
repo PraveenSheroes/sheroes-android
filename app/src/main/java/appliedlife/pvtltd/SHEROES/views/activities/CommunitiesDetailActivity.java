@@ -66,7 +66,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
     @Bind(R.id.iv_communities_detail)
     ImageView ivCommunitiesDetail;
     @Bind(R.id.view_pager_communities_detail)
-    ViewPager mViewPagerCommunitiesDetail;
+    ViewPager mViewPager;
     @Bind(R.id.toolbar_communities_detail)
     Toolbar mToolbarCommunitiesDetail;
     @Bind(R.id.collapsing_toolbar_communities_detail)
@@ -78,8 +78,9 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
     @Bind(R.id.community_detail_activity)
     CoordinatorLayout mCommunityDetailActivity;
     private FeedDetail mFeedDetail;
+    private FeedDetail mMyCommunityPostFeedDetail;
     private FragmentOpen mFragmentOpen;
-    ViewPagerAdapter viewPagerAdapter;
+    ViewPagerAdapter mViewPagerAdapter;
     private Fragment mFragment;
     private CommunityOpenAboutFragment mCommunityOpenAboutFragment;
     private CommunityEnum communityEnum = null;
@@ -129,9 +130,9 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
                 //  mFloatingActionButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_feed_article_top_left));
                 mCollapsingToolbarLayout.setTitle(mFeedDetail.getNameOrTitle());
               //  mCollapsingToolbarLayout.setSubtitle(mFeedDetail.getNameOrTitle());
-                viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-                viewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(getIntent()), getString(R.string.ID_COMMUNITIES));
-                mViewPagerCommunitiesDetail.setAdapter(viewPagerAdapter);
+                mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+                mViewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(getIntent()), getString(R.string.ID_COMMUNITIES));
+                mViewPager.setAdapter(mViewPagerAdapter);
                 if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getImageUrl())) {
                     Glide.with(this)
                             .load(mFeedDetail.getImageUrl()).asBitmap()
@@ -239,7 +240,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
         FeedDetail feedDetail = (FeedDetail) baseResponse;
         int id = view.getId();
         if (!mFeedDetail.isClosedCommunity()) {
-            mFragment = viewPagerAdapter.getActiveFragment(mViewPagerCommunitiesDetail, AppConstants.NO_REACTION_CONSTANT);
+            mFragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
             setFragment(mFragment);
             mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.THREE_CONSTANT);
             mFragmentOpen.setOwner(mFeedDetail.isOwner());
@@ -257,7 +258,6 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
                 }
                 break;
             case R.id.tv_owner_add:
-                if (baseResponse instanceof FeedDetail)
                     CallCommunityOwnerSearchFragment(feedDetail, feedDetail.getIdOfEntityOrParticipant());
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
 
@@ -277,13 +277,13 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
             bundle.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, communityEnum);
             mCommunityOpenAboutFragment.setArguments(bundle);
             mCommunityOpenAboutFragment.setArguments(getIntent().getExtras());
-            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in_dialog, 0, 0, R.anim.fade_in_dialog)
+            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
                     .add(R.id.about_community_container, mCommunityOpenAboutFragment, CommunityOpenAboutFragment.class.getName()).addToBackStack(CommunityOpenAboutFragment.class.getName()).commitAllowingStateLoss();
         }
     }
     @Override
     public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-        mFragment = viewPagerAdapter.getActiveFragment(mViewPagerCommunitiesDetail, AppConstants.NO_REACTION_CONSTANT);
+        mFragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
         if (AppUtils.isFragmentUIActive(mFragment)) {
             if (mFragment instanceof CommunitiesDetailFragment) {
                 ((CommunitiesDetailFragment) mFragment).likeAndUnlikeRequest(baseResponse, reactionValue, position);
@@ -458,18 +458,18 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
     @Override
     public void onDialogDissmiss(FragmentOpen isFragmentOpen, FeedDetail feedDetail) {
         mFragmentOpen = isFragmentOpen;
-        mFeedDetail = feedDetail;
+        mMyCommunityPostFeedDetail = feedDetail;
         onBackPressed();
     }
 
     @Override
     public void onClickReactionList(FragmentOpen isFragmentOpen, FeedDetail feedDetail) {
         mFragmentOpen = isFragmentOpen;
-        mFeedDetail = feedDetail;
+        mMyCommunityPostFeedDetail = feedDetail;
         if (mFragmentOpen.isReactionList()) {
             mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.THREE_CONSTANT);
             setAllValues(mFragmentOpen);
-            super.openCommentReactionFragment(mFeedDetail);
+            super.openCommentReactionFragment(mMyCommunityPostFeedDetail);
         }
     }
 
@@ -478,7 +478,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
         if (mFragmentOpen.isCommentList()) {
             getSupportFragmentManager().popBackStackImmediate();
             if (AppUtils.isFragmentUIActive(mFragment)) {
-                ((CommunitiesDetailFragment) mFragment).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+                ((CommunitiesDetailFragment) mFragment).commentListRefresh(mMyCommunityPostFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
             }
             mFragmentOpen.setCommentList(false);
         } else if (mFragmentOpen.isReactionList()) {
@@ -489,8 +489,14 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
             if (isCommunityDetailFragment) {
                 onBackClick();
             } else {
-                mCommunityDetailActivity.setVisibility(View.VISIBLE);
                 getSupportFragmentManager().popBackStackImmediate();
+                Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
+                if (AppUtils.isFragmentUIActive(fragment)) {
+                    if (fragment instanceof CommunitiesDetailFragment) {
+                        ((CommunitiesDetailFragment) fragment).updateUiAccordingToFeedDetail(mFeedDetail);
+                    }
+                }
+                mCommunityDetailActivity.setVisibility(View.VISIBLE);
                 mFragmentOpen.setOpenAboutFragment(false);
             }
         } else if (mFragmentOpen.isInviteCommunityOwner()) {
@@ -512,7 +518,11 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
         getSupportFragmentManager().popBackStack();
     }
 
+    public void updateFeedDetailWithCommunityStatus(FeedDetail feedDetail)
+    {
+        mFeedDetail=feedDetail;
 
+    }
 
     public void onLeaveClick() {
         finish();

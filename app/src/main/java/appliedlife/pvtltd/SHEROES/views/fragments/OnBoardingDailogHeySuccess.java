@@ -1,7 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,9 +16,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -44,7 +41,7 @@ public class OnBoardingDailogHeySuccess extends BaseDialogFragment {
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getFirstName())) {
             mTvName.setText(userPreference.get().getUserSummary().getFirstName());
         }
-        setCancelable(true);
+        setCancelable(false);
         return view;
     }
 
@@ -56,12 +53,7 @@ public class OnBoardingDailogHeySuccess extends BaseDialogFragment {
 
     @OnClick(R.id.iv_hey_success_next)
     public void onHeySuccessNext() {
-        LoginResponse loginResponse=userPreference.get();
-        loginResponse.setNextScreen(AppConstants.FEED_SCREEN);
-        userPreference.set(loginResponse);
-        Intent homeIntent = new Intent(getActivity(), HomeActivity.class);
-        startActivity(homeIntent);
-        getActivity().finish();
+        dismiss();
     }
 
 }

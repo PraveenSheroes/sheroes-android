@@ -21,23 +21,27 @@ import butterknife.OnClick;
  */
 
 public class ChangeCommunityPrivacyDialogFragment extends BaseDialogFragment {
-    private boolean finishParent;
-    private final String TAG = LogUtils.makeLogTag(SelectCommunityFragment.class);
+    private final String TAG = LogUtils.makeLogTag(ChangeCommunityPrivacyDialogFragment.class);
+    private boolean closeOpen;
     @Bind(R.id.tv_change_community_cancel)
     TextView tv_cance;
     @Bind(R.id.tv_change_community_continue)
     TextView tvContinue;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        View view = inflater.inflate(R.layout.change_community_privacy, container, false);
+        View view;
+        closeOpen = getArguments().getBoolean(DISMISS_PARENT_ON_OK_OR_BACK);
+        if (closeOpen) {
+            view = inflater.inflate(R.layout.close_change_community_privacy, container, false);
+        } else {
+            view = inflater.inflate(R.layout.open_change_community_privacy, container, false);
+        }
         ButterKnife.bind(this, view);
-
-
-      //  finishParent = getArguments().getBoolean(DISMISS_PARENT_ON_OK_OR_BACK, false);
         setCancelable(false);
         return view;
     }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -56,22 +60,22 @@ public class ChangeCommunityPrivacyDialogFragment extends BaseDialogFragment {
             @Override
             public void onBackPressed() {
                 dismissAllowingStateLoss();//dismiss dialog on back button press
-                if (finishParent) {
+                if (closeOpen) {
                     getActivity().finish();
                 }
             }
         };
     }
+
     @OnClick(R.id.tv_change_community_cancel)
-    public void cancelClick()
-    {
+    public void cancelClick() {
         getDialog().cancel();
-       // mHomeActivityIntractionListner.onClose();
+        // mHomeActivityIntractionListner.onClose();
     }
+
     @OnClick(R.id.tv_change_community_continue)
-    public void continueClick()
-    {
+    public void continueClick() {
         getDialog().cancel();
     }
 
-    }
+}

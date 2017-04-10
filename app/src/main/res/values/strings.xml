@@ -137,6 +137,15 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_COMMUNITES">COMMUNITY</string>
     <string name="ID_PREFERENCES">PREFERENCES</string>
     <string name="ID_ABOUT">ABOUT</string>
+    <string name="ID_CHNAGE_PRIVACY"> Change Community Privacy</string>
+    <string name="ID_CHANGE_PRIVACY_LABEL">The following changes will take place:</string>
+    <string name="ID_CHANGE_CLOSE_FIRST">• All members will remain members of the close community.</string>
+    <string name="ID_CHANGE_CLOSE_SECOND">• Posts and notifications will be hidden from the members who have not joined the community. </string>
+    <string name="ID_CHANGE_OPEN_FIRST">• All members will remain members of the open community.</string>
+    <string name="ID_CHANGE_OPEN_SECOND">• Posts will be visible to all SHEROES members.</string>
+    <string name="ID_CHANGE_OPEN_THIRD">• Users with pending requests will be added as members.</string>
+    <string name="ID_OPEN">Open</string>
+    <string name="ID_CLOSE_PRIVACY"> Close </string>
     <string name="ID_APPLY">Apply</string>
     <string name="ID_I_M_DONE">I’M DONE</string>
     <string name="ID_VERIFY">Verify your identity </string>
@@ -165,7 +174,7 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_DEACTIVE_TEXT">Account Deactivated</string>
     <string name="ID_DEACTIVE_TEXT1"> We are sorry to see you go.</string>
     <string name="ID_ERROR_REASION"> Your message is too short.</string>
-    <string name="ID_CLOSE">CLOSE</string>
+    <string name="ID_CLOSE"> CLOSE </string>
     <string name="ID_TEXT_OPTIONAL">Tap to leave a comment (optional)</string>
 
     <!--string related to setting_about page-->
@@ -696,7 +705,7 @@ etur adipiscing elit,sed do eiusmod tempor incididunt ut…</string>
     <string name="ID_WELCOME_TEXT3">Discover things that matter to you Career, Life, Love</string>
     <string name="ID_ALL_OF_YOU">All For You</string>
     <string name="ID_CONTINUE_WITH_FACEBOOK">CONTINUE WITH FACEBOOK</string>
-    <string name="ID_FACEBOOK_LONGING">LOGGING IN</string>
+    <string name="ID_FACEBOOK_LONGING">LOGGING IN...</string>
     <string name="ID_LINK_TO_FACEBOOK">Link to Facebook</string>
     <string name="ID_WELCOME_TEXT4">OTHER LOGIN OPTIONS (ONLY FOR EXISTING USERS)</string>
 

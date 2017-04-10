@@ -94,7 +94,6 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
     int first, second, third, fourth;
     int mCurrentIndex = 0;
     private List<LabelValue> mSelectedTag = new ArrayList<>();
-    OnBoardingDailogHeySuccess onBoardingDailogHeySuccess;
     @Inject
     Preference<LoginResponse> userPreference;
     @Inject
@@ -113,7 +112,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
         setPagerAndLayouts();
     }
 
-    private void setPagerAndLayouts() {
+    public void setPagerAndLayouts() {
         mFragmentOpen = new FragmentOpen();
         supportPostponeEnterTransition();
         mCustomCollapsingToolbarLayout.setExpandedSubTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
@@ -124,6 +123,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getNextScreen())) {
             if (userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.CURRENT_STATUS_SCREEN)) {
                 tellUsAboutFragment();
+                showHeySuccessDialog();
             } else if (userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.HOW_CAN_SHEROES_AKA_LOOKING_FOR_SCREEN)) {
                 position = 1;
                 mHowCanSheroes.setVisibility(View.VISIBLE);
@@ -159,8 +159,17 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
             finish();
         }
     }
-
-    private void tellUsAboutFragment() {
+    public DialogFragment showHeySuccessDialog() {
+        OnBoardingDailogHeySuccess onBoardingDailogHeySuccess = (OnBoardingDailogHeySuccess) getFragmentManager().findFragmentByTag(OnBoardingDailogHeySuccess.class.getName());
+        if (onBoardingDailogHeySuccess == null) {
+            onBoardingDailogHeySuccess = new OnBoardingDailogHeySuccess();
+        }
+        if (!onBoardingDailogHeySuccess.isVisible() && !onBoardingDailogHeySuccess.isAdded() && !isFinishing() && !mIsDestroyed) {
+            onBoardingDailogHeySuccess.show(getFragmentManager(), OnBoardingDailogHeySuccess.class.getName());
+        }
+        return onBoardingDailogHeySuccess;
+    }
+    public void tellUsAboutFragment() {
         LoginResponse loginResponse = userPreference.get();
         loginResponse.setNextScreen(AppConstants.CURRENT_STATUS_SCREEN);
         userPreference.set(loginResponse);
@@ -540,7 +549,12 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
         mHowCanSheroes.setVisibility(View.GONE);
         mInterest.setVisibility(View.VISIBLE);
         mJobAt.setVisibility(View.GONE);
-        showHeySuccessDialog();
+        LoginResponse loginResponse=userPreference.get();
+        loginResponse.setNextScreen(AppConstants.FEED_SCREEN);
+        userPreference.set(loginResponse);
+        Intent homeIntent = new Intent(this, HomeActivity.class);
+        startActivity(homeIntent);
+        finish();
     }
 
     @OnClick(R.id.iv_job_at_next)
@@ -575,18 +589,6 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
         mJobAt.setVisibility(View.VISIBLE);
         searchDataInBoarding(AppConstants.JOB_AT_GET_ALL_DATA_KEY, OnBoardingEnum.JOB_AT_SEARCH);
     }
-
-    public DialogFragment showHeySuccessDialog() {
-        onBoardingDailogHeySuccess = (OnBoardingDailogHeySuccess) getFragmentManager().findFragmentByTag(OnBoardingDailogHeySuccess.class.getName());
-        if (onBoardingDailogHeySuccess == null) {
-            onBoardingDailogHeySuccess = new OnBoardingDailogHeySuccess();
-        }
-        if (!onBoardingDailogHeySuccess.isVisible() && !onBoardingDailogHeySuccess.isAdded() && !isFinishing() && !mIsDestroyed) {
-            onBoardingDailogHeySuccess.show(getFragmentManager(), OnBoardingDailogHeySuccess.class.getName());
-        }
-        return onBoardingDailogHeySuccess;
-    }
-
     public DialogFragment showCurrentStatusDialog(HashMap<String, HashMap<String, ArrayList<LabelValue>>> masterDataResult) {
         mCurrentStatusDialog = (CurrentStatusDialog) getFragmentManager().findFragmentByTag(CurrentStatusDialog.class.getName());
         if (mCurrentStatusDialog == null) {

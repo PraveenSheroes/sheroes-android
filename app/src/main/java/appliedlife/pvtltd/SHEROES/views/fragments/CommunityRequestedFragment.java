@@ -69,7 +69,6 @@ public class CommunityRequestedFragment extends BaseDialogFragment implements Re
         View view = inflater.inflate(R.layout.fragment_request, container, false);
         ButterKnife.bind(this, view);
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MEMBER_FRAGMENT, AppConstants.EMPTY_STRING);
-
         if (null != getArguments()) {
             mFeedDetail = getArguments().getParcelable(AppConstants.COMMUNITY_DETAIL);
         }
@@ -79,7 +78,6 @@ public class CommunityRequestedFragment extends BaseDialogFragment implements Re
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mAdapter);
-
         mRecyclerView.addOnScrollListener(new HidingScrollListener(requestedPresenter, mRecyclerView, manager, mFragmentListRefreshData) {
             @Override
             public void onHide() {
@@ -94,8 +92,8 @@ public class CommunityRequestedFragment extends BaseDialogFragment implements Re
 
             }
         });
-        requestedPresenter.getAllMembers(getMemberRequestBuilder(mFeedDetail.getIdOfEntityOrParticipant(), mFragmentListRefreshData.getPageNo()));
         mFragmentListRefreshData.setEnitityOrParticpantid(mFeedDetail.getIdOfEntityOrParticipant());
+        requestedPresenter.getAllMembers(getMemberRequestBuilder(mFeedDetail.getIdOfEntityOrParticipant(), mFragmentListRefreshData.getPageNo()));
 
         return view;
     }
@@ -126,6 +124,7 @@ public class CommunityRequestedFragment extends BaseDialogFragment implements Re
 
     @Override
     public void getAllRequest(List<PandingMember> data) {
+         mProgressBar.setVisibility(View.GONE);
         if (StringUtil.isNotEmptyCollection(data)) {
             pandingListData = data;
             mAdapter.setSheroesGenericListData(data);
@@ -193,6 +192,16 @@ public class CommunityRequestedFragment extends BaseDialogFragment implements Re
                 ((CommunitiesDetailActivity) getActivity()).updateOpenAboutFragment(mFeedDetail);
             }
         };
+    }
+    @Override
+    public void startProgressBar() {
+        mProgressBar.setVisibility(View.VISIBLE);
+        mProgressBar.bringToFront();
+    }
+
+    @Override
+    public void stopProgressBar() {
+        mProgressBar.setVisibility(View.GONE);
     }
 
 }

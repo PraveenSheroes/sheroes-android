@@ -343,8 +343,11 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
         switch (feedParticipationEnum) {
             case ACTIVITY_FOR_REFRESH_FRAGMENT_LIST:
                 mAdapter.setDataOnPosition(feedDetail, feedDetail.getItemPosition());
+                mLayoutManager.scrollToPosition(feedDetail.getItemPosition());
                 break;
             case COMMENT_REACTION:
+                mAdapter.setDataOnPosition(feedDetail, feedDetail.getItemPosition());
+                mLayoutManager.scrollToPosition(feedDetail.getItemPosition());
                 break;
             case DELETE_COMMUNITY_POST:
                 mAdapter.removeDataOnPosition(feedDetail, feedDetail.getItemPosition());

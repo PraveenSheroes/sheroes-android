@@ -104,85 +104,98 @@ public class CommunitiesDetailFragment extends BaseFragment {
             mAdapter = new GenericRecyclerViewAdapter(getContext(), (CommunitiesDetailActivity) getActivity());
             mRecyclerView.setLayoutManager(mLayoutManager);
             mRecyclerView.setAdapter(mAdapter);
-            if (null != communityEnum) {
-                switch (communityEnum) {
-                    case SEARCH_COMMUNITY:
-                        mScreenName = AppConstants.ALL_SEARCH;
-                        if (!mFeedDetail.isMember() && !mFeedDetail.isOwner() && !mFeedDetail.isRequestPending()) {
-                            mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.footer_icon_text));
-                            mTvJoinView.setText(getString(R.string.ID_JOIN));
-                            mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
-                            mTvJoinView.setTag(true);
-                        } else {
-                            mTvJoinView.setTag(false);
+            mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager, mFragmentListRefreshData) {
+                @Override
+                public void onHide() {
+                    if ((boolean) mTvJoinView.getTag()) {
+                        if (mTvJoinView.getVisibility() == View.GONE) {
+                            mTvJoinView.setVisibility(View.VISIBLE);
+                            mTvJoinView.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
                         }
-                        break;
-                    case FEATURE_COMMUNITY:
-                        mScreenName = AppConstants.FEATURE_FRAGMENT;
-                        if (!mFeedDetail.isMember() && !mFeedDetail.isOwner() && !mFeedDetail.isRequestPending()) {
-                            mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.footer_icon_text));
-                            mTvJoinView.setText(getString(R.string.ID_JOIN));
-                            mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
-                            mTvJoinView.setTag(true);
-                        } else {
-                            mTvJoinView.setTag(false);
-                        }
-                        break;
-                    case MY_COMMUNITY:
-                        mScreenName = AppConstants.MY_COMMUNITIES_FRAGMENT;
-                        mTvJoinView.setTag(false);
-                        break;
-                    default:
-                        LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + communityEnum);
+                    }
                 }
-            }
+
+                @Override
+                public void onShow() {
+                    if ((boolean) mTvJoinView.getTag()) {
+                        if (mTvJoinView.getVisibility() == View.VISIBLE) {
+                            mTvJoinView.setVisibility(View.GONE);
+                            mTvJoinView.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+                        }
+                    }
+                }
+
+                @Override
+                public void dismissReactions() {
+
+                }
+            });
+            super.setAllInitializationForFeeds(mFragmentListRefreshData, mPullRefreshList, mAdapter, mLayoutManager, mPageNo, mSwipeView, mLiNoResult, mFeedDetail, mRecyclerView, 0, 0, mListLoad, mIsEdit, mHomePresenter, mAppUtils, mProgressBar);
+          //  mHomePresenter.getFeedFromPresenter(mAppUtils.userCommunityPostRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCommunityId()));
+            updateUiAccordingToFeedDetail(mFeedDetail);
+            mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    swipeToRefreshList();
+                }
+            });
         }
-        mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager, mFragmentListRefreshData) {
-            @Override
-            public void onHide() {
-                if ((boolean) mTvJoinView.getTag()) {
-                    if (mTvJoinView.getVisibility() == View.GONE) {
-                        mTvJoinView.setVisibility(View.VISIBLE);
-                        mTvJoinView.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
-                    }
-                }
-            }
-
-            @Override
-            public void onShow() {
-                if ((boolean) mTvJoinView.getTag()) {
-                    if (mTvJoinView.getVisibility() == View.VISIBLE) {
-                        mTvJoinView.setVisibility(View.GONE);
-                        mTvJoinView.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
-                    }
-                }
-            }
-
-            @Override
-            public void dismissReactions() {
-
-            }
-        });
-        super.setAllInitializationForFeeds(mFragmentListRefreshData, mPullRefreshList, mAdapter, mLayoutManager, mPageNo, mSwipeView, mLiNoResult, mFeedDetail, mRecyclerView, 0, 0, mListLoad, mIsEdit, mHomePresenter, mAppUtils, mProgressBar);
-        mHomePresenter.getFeedFromPresenter(mAppUtils.userCommunityPostRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCommunityId()));
-        mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                setListLoadFlag(false);
-                mPullRefreshList.setPullToRefresh(true);
-                mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
-                mPullRefreshList = new SwipPullRefreshList();
-                setRefreshList(mPullRefreshList);
-                mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
-                mHomePresenter.getFeedFromPresenter(mAppUtils.userCommunityPostRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCommunityId()));
-            }
-        });
         return view;
     }
+
+    private void swipeToRefreshList() {
+        setListLoadFlag(false);
+        mPullRefreshList.setPullToRefresh(true);
+        mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
+        mPullRefreshList = new SwipPullRefreshList();
+        setRefreshList(mPullRefreshList);
+        mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
+        mHomePresenter.getFeedFromPresenter(mAppUtils.userCommunityPostRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCommunityId()));
+    }
+
     @OnClick(R.id.tv_join_view)
     public void joinClick() {
         String joinTxt = mTvJoinView.getText().toString();
         ((CommunitiesDetailActivity) getActivity()).inviteJoinEventClick(joinTxt, mFeedDetail);
+    }
+
+    public void updateUiAccordingToFeedDetail(FeedDetail feedDetail) {
+        mFeedDetail = feedDetail;
+        if (null != communityEnum) {
+            switch (communityEnum) {
+                case SEARCH_COMMUNITY:
+                    mScreenName = AppConstants.ALL_SEARCH;
+                    if (!feedDetail.isMember() && !feedDetail.isOwner() && !feedDetail.isRequestPending()) {
+                        mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.footer_icon_text));
+                        mTvJoinView.setText(getString(R.string.ID_JOIN));
+                        mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
+                        mTvJoinView.setTag(true);
+                    } else {
+                        mTvJoinView.setVisibility(View.GONE);
+                        mTvJoinView.setTag(false);
+                    }
+                    break;
+                case FEATURE_COMMUNITY:
+                    mScreenName = AppConstants.FEATURE_FRAGMENT;
+                    if (!feedDetail.isMember() && !feedDetail.isOwner() && !feedDetail.isRequestPending()) {
+                        mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.footer_icon_text));
+                        mTvJoinView.setText(getString(R.string.ID_JOIN));
+                        mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
+                        mTvJoinView.setTag(true);
+                    } else {
+                        mTvJoinView.setVisibility(View.GONE);
+                        mTvJoinView.setTag(false);
+                    }
+                    break;
+                case MY_COMMUNITY:
+                    mScreenName = AppConstants.MY_COMMUNITIES_FRAGMENT;
+                    mTvJoinView.setTag(false);
+                    break;
+                default:
+                    LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + communityEnum);
+            }
+        }
+        swipeToRefreshList();
     }
 
     @Override
@@ -258,7 +271,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
 
     @Override
     public void getSuccessForAllResponse(BaseResponse success, FeedParticipationEnum feedParticipationEnum) {
-       super.getSuccessForAllResponse(success, feedParticipationEnum);
+        super.getSuccessForAllResponse(success, feedParticipationEnum);
         switch (feedParticipationEnum) {
             case JOIN_INVITE:
                 joinSuccessFailed(success);
