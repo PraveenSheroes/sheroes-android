@@ -67,7 +67,6 @@ public class ArticlesFragment extends BaseFragment {
     ProgressBar mProgressBarFirstLoad;
     private List<Long> categoryIdList = new ArrayList<>();
     View view;
-
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -104,12 +103,11 @@ public class ArticlesFragment extends BaseFragment {
         });
         super.setAllInitializationForFeeds(mFragmentListRefreshData, mPullRefreshList, mAdapter, mLayoutManager, mPageNo, mSwipeView, mLiNoResult, null, mRecyclerView, 0, 0, mListLoad, mIsEdit, mHomePresenter, mAppUtils, mProgressBar);
         mFragmentListRefreshData.setCategoryIdList(categoryIdList);
-        mHomePresenter.getFeedFromPresenter(mAppUtils.articleCategoryRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo(), categoryIdList));
-
+        categoryArticleFilter(categoryIdList);
         mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                setListLoadFlag(false);
+              /*  setListLoadFlag(false);
                 setProgressBar(mProgressBar);
                 mPullRefreshList.setPullToRefresh(true);
                 mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
@@ -117,6 +115,8 @@ public class ArticlesFragment extends BaseFragment {
                 setRefreshList(mPullRefreshList);
                 mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
                 mHomePresenter.getFeedFromPresenter(mAppUtils.articleCategoryRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo(), categoryIdList));
+    */
+                categoryArticleFilter(categoryIdList);
             }
         });
         return view;

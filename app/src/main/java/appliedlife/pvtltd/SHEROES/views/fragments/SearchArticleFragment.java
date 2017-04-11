@@ -74,7 +74,6 @@ public class SearchArticleFragment extends BaseFragment implements HomeView {
         ButterKnife.bind(this, view);
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ALL_SEARCH, AppConstants.EMPTY_STRING);
         mHomePresenter.attachView(this);
-        mTvSearchResult.setText(getString(R.string.ID_SEARCH));
         editTextWatcher();
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new GenericRecyclerViewAdapter(getContext(), (HomeSearchActivity) getActivity());
@@ -82,7 +81,6 @@ public class SearchArticleFragment extends BaseFragment implements HomeView {
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mAdapter);
         super.setAllInitializationForFeeds(mFragmentListRefreshData,  mAdapter, manager, mRecyclerView, mHomePresenter, mAppUtils, mProgressBar);
-        mLiNoSearchResult.setVisibility(View.VISIBLE);
         return view;
     }
 
@@ -99,7 +97,7 @@ public class SearchArticleFragment extends BaseFragment implements HomeView {
         else
         {
             mLiNoSearchResult.setVisibility(View.VISIBLE);
-            mTvSearchResult.setText(getString(R.string.ID_SEARCH));
+            mTvSearchResult.setText(getString(R.string.ID_NO_RESULT_FOUND_SEARCH)+((HomeSearchActivity)getActivity()).mSearchEditText.getText().toString());
         }
     }
     public void saveRecentSearchData(FeedDetail feedDetail)
@@ -123,8 +121,10 @@ public class SearchArticleFragment extends BaseFragment implements HomeView {
     {
         mSearchDataName = stringForSearch;
         /**hitting the servers to get data if length is greater than threshold defined **/
-        mHandler.removeCallbacks(mFilterTask);
-        mHandler.postDelayed(mFilterTask, AppConstants.SEARCH_CONSTANT_DELAY);
+        if(StringUtil.isNotNullOrEmptyString(mSearchDataName)) {
+            mHandler.removeCallbacks(mFilterTask);
+            mHandler.postDelayed(mFilterTask, AppConstants.SEARCH_CONSTANT_DELAY);
+        }
     }
     /**
      * When user type city name it works for each character.

@@ -61,6 +61,10 @@ public class MemberHolder extends BaseViewHolder<MembersList> {
             tv_member_cross.setVisibility(View.GONE);
             tvAdmin.setVisibility(View.GONE);
         }
+        if(dataItem.getTypeS().equalsIgnoreCase(AppConstants.OWNER_SUB_TYPE))
+        {
+            tvAdmin.setVisibility(View.VISIBLE);
+        }
 
     }
 

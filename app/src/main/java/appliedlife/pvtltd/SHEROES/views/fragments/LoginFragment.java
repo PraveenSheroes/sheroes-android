@@ -123,8 +123,8 @@ public class LoginFragment extends BaseFragment implements LoginView {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
         ButterKnife.bind(this, view);
         mLoginPresenter.attachView(this);
-        mEmailView.getBackground().setColorFilter(getResources().getColor(R.color.black_gradiant), PorterDuff.Mode.SRC_ATOP);
-        mPasswordView.getBackground().setColorFilter(getResources().getColor(R.color.black_gradiant), PorterDuff.Mode.SRC_ATOP);
+        mEmailView.getBackground().setColorFilter(getResources().getColor(R.color.blue), PorterDuff.Mode.SRC_ATOP);
+        mPasswordView.getBackground().setColorFilter(getResources().getColor(R.color.blue), PorterDuff.Mode.SRC_ATOP);
         setProgressBar(mProgressBar);
         if (Build.VERSION.SDK_INT >= 23) {
             getPermissionToReadUserContacts();

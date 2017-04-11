@@ -13,7 +13,7 @@
             android:id="@+id/tv_grow_with_sheroes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:gravity="center"
             android:padding="@dimen/dp_size_30"
             android:text="@string/ID_GROW_WITH_SHEROES"
@@ -60,7 +60,7 @@
                 android:text="@string/ID_CLICK_TO_JOIN"
                 android:padding="@dimen/dp_size_10"
                 android:textColor="@color/white"
-                android:textSize="@dimen/sp_size_13" />
+                android:textSize="@dimen/sp_size_14" />
         </RelativeLayout>
 
     </LinearLayout>

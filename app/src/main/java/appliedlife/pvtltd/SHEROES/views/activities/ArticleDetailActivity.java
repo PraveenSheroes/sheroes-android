@@ -66,8 +66,12 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
     public CustomCollapsingToolbarLayout mCollapsingToolbarLayout;
     @Bind(R.id.tv_article_detail_total_views)
     public TextView mTvArticleDetailTotalViews;
+    @Bind(R.id.tv_article_time)
+    public TextView mTvArticleTime;
     @Bind(R.id.tv_article_detail_bookmark)
     TextView mTvArticleDetailBookmark;
+    @Bind(R.id.tv_article_detail_title)
+    TextView mTvArticleDetailTitle;
     private FeedDetail mFeedDetail;
     public View mArticlePopUp;
     TextView mTvFeedArticleDetailUserReaction;
@@ -98,9 +102,11 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
             if (mFeedDetail.isBookmarked()) {
                 mTvArticleDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_active, 0, 0, 0);
             } else {
-                mTvArticleDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_in_active, 0, 0, 0);
+                mTvArticleDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_detail_white, 0, 0, 0);
             }
-            mCollapsingToolbarLayout.setTitle(mFeedDetail.getNameOrTitle());
+            mCollapsingToolbarLayout.setTitle(AppConstants.EMPTY_STRING);
+            mCollapsingToolbarLayout.setSubtitle(AppConstants.EMPTY_STRING);
+            mTvArticleDetailTitle.setText(mFeedDetail.getNameOrTitle());
             viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
             viewPagerAdapter.addFragment(ArticleDetailFragment.createInstance(mFeedDetail), getString(R.string.ID_ARTICLE));
             mViewPagerArticleDetail.setAdapter(viewPagerAdapter);
@@ -452,7 +458,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
                 mTvArticleDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_active, 0, 0, 0);
             } else {
                 feedDetail.setBookmarked(false);
-                mTvArticleDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_in_active, 0, 0, 0);
+                mTvArticleDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_detail_white, 0, 0, 0);
             }
         }
         mFeedDetail = feedDetail;

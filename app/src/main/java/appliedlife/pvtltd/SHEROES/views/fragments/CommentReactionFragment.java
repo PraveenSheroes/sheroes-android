@@ -30,6 +30,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentAddDelete;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionDoc;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -54,6 +55,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnFocusChange;
+
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_LIKE_UNLIKE;
 
 /**
  * Created by Praveen_Singh on 24-01-2017.
@@ -245,9 +248,9 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
     }
     @OnFocusChange(R.id.et_user_comment_description)
     public void focusChange() {
-        if(StringUtil.isNotNullOrEmptyString(mEtUserCommentDescription.getText().toString())) {
+       /* if(StringUtil.isNotNullOrEmptyString(mEtUserCommentDescription.getText().toString())) {
             mEtUserCommentDescription.setSelection(mEtUserCommentDescription.getText().toString().length());
-        }
+        }*/
     }
     @Override
     public void getAllCommentsAndReactions(CommentReactionResponsePojo commentReactionResponsePojo, int addEditOperation) {
@@ -340,40 +343,49 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
     }
 
     @Override
-    public void commentSuccess(String success, int operationId) {
+    public void commentSuccess(CommentAddDelete commentAddDelete, int operationId) {
         mEtUserCommentDescription.setEnabled(true);
         tvPostComment.setEnabled(true);
-        if (success.equalsIgnoreCase(AppConstants.SUCCESS)) {
+        switch (commentAddDelete.getStatus()) {
+            case AppConstants.SUCCESS:
+                switch (operationId) {
+                    case AppConstants.NO_REACTION_CONSTANT:
+                        mCommentReactionPresenter.getAllCommentListFromPresenter(mAppUtils.getCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId(), AppConstants.ONE_CONSTANT), mFragmentOpen.isReactionList(), AppConstants.ONE_CONSTANT);
+                        mEtUserCommentDescription.setText(AppConstants.EMPTY_STRING);
 
-            switch (operationId) {
-                case AppConstants.NO_REACTION_CONSTANT:
-                    mCommentReactionPresenter.getAllCommentListFromPresenter(mAppUtils.getCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId(), AppConstants.ONE_CONSTANT), mFragmentOpen.isReactionList(), AppConstants.ONE_CONSTANT);
-                    mEtUserCommentDescription.setText(AppConstants.EMPTY_STRING);
-                    tvPostComment.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_post_comment_active, 0, 0, 0);
-                    tvPostComment.setVisibility(View.GONE);
-                    mTotalComments++;
-                    break;
-                case AppConstants.ONE_CONSTANT:
-                    tvPostComment.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_post_comment_active, 0, 0, 0);
-                    mCommentReactionPresenter.addCommentListFromPresenter(mAppUtils.postCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId(), mEtUserCommentDescription.getText().toString(), mIsAnonymous), AppConstants.NO_REACTION_CONSTANT);
-                    break;
-                case AppConstants.TWO_CONSTANT:
-                    if (null != mCommentReactionDoc) {
-                        mCommentReactionDocList.remove(mCommentReactionDoc.getItemPosition());
-                    }
-                    if (mFragmentOpen.isCommentList()) {
-                        if (mCommentReactionDocList.size() >= 0) {
-                            mTvUserCommentHeaderText.setText(getString(R.string.ID_REPLIES) + getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mCommentReactionDocList.size()) + getString(R.string.ID_CLOSE_BRACKET));
+                        tvPostComment.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_post_comment_active, 0, 0, 0);
+                        tvPostComment.setVisibility(View.GONE);
+                        mTotalComments++;
+                        break;
+                    case AppConstants.ONE_CONSTANT:
+                        tvPostComment.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_post_comment_active, 0, 0, 0);
+                        mCommentReactionPresenter.addCommentListFromPresenter(mAppUtils.postCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId(), mEtUserCommentDescription.getText().toString(), mIsAnonymous), AppConstants.NO_REACTION_CONSTANT);
+                        break;
+                    case AppConstants.TWO_CONSTANT:
+                        if (null != mCommentReactionDoc) {
+                            mCommentReactionDocList.remove(mCommentReactionDoc.getItemPosition());
                         }
-                    }
-                    mTotalComments--;
-                    setLastComments();
-                    setAdapterData();
-                    break;
-                default:
-                    LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + operationId);
-            }
+                        if (mFragmentOpen.isCommentList()) {
+                            if (mCommentReactionDocList.size() >= 0) {
+                                mTvUserCommentHeaderText.setText(getString(R.string.ID_REPLIES) + getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mCommentReactionDocList.size()) + getString(R.string.ID_CLOSE_BRACKET));
+                            }
+                        }
+                        mTotalComments--;
+                        setLastComments();
+                        setAdapterData();
+                        break;
+                    default:
+                        LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + operationId);
+                }
+                break;
+            case AppConstants.FAILED:
+                showError(commentAddDelete.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_LIKE_UNLIKE);
+                break;
+            default:
+                showError(getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
+
         }
+
     }
 
     private void setLastComments() {
@@ -415,6 +427,7 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
             lastComment.setParticipantImageUrl(mCommentReactionDocList.get(i).getParticipantImageUrl());
             lastComment.setParticipantName(mCommentReactionDocList.get(i).getParticipantName());
             lastComment.setMyOwnParticipation(mCommentReactionDocList.get(i).isMyOwnParticipation());
+            lastComment.setCreatedOn(mCommentReactionDocList.get(i).getCreatedOn());
             lastCommentList.add(lastComment);
         }
         return lastCommentList;
@@ -485,13 +498,15 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
     public void editCommentInList(CommentReactionDoc commentReactionDoc) {
         mCommentReactionDoc = commentReactionDoc;
         if (null != mCommentReactionDoc && mCommentReactionDoc.isEdit()) {
-            AppUtils.showKeyboard(mEtUserCommentDescription, TAG);
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInputFromInputMethod(mEtUserCommentDescription.getWindowToken(), 0);
+          //  AppUtils.showKeyboard(mEtUserCommentDescription, TAG);
             mCommentReactionDocList.remove(mCommentReactionDoc.getItemPosition());
             mEtUserCommentDescription.setText(mCommentReactionDoc.getComment());
-            mEtUserCommentDescription.setSelection(mCommentReactionDoc.getComment().length());
+            mEtUserCommentDescription.setSelection(0,mCommentReactionDoc.getComment().length()-1);
             mEtUserCommentDescription.setTextColor(ContextCompat.getColor(getActivity(), R.color.feed_article_label));
-            mEtUserCommentDescription.setRawInputType(InputType.TYPE_CLASS_TEXT);
-            mEtUserCommentDescription.setTextIsSelectable(true);
+          //  mEtUserCommentDescription.setRawInputType(InputType.TYPE_CLASS_TEXT);
+          //  mEtUserCommentDescription.setTextIsSelectable(true);
         }
         setAdapterData();
     }

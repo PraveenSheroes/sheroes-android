@@ -20,7 +20,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@string/ID_ROBOTO_LIGHT"
-            android:text="CREATE COMMUNITY"
+            android:text="@string/ID_CREATE_COMMUNITY"
+            android:textAllCaps="true"
             android:textColor="@color/text_color_about"
             android:textSize="@dimen/sp_size_24"/>
 
@@ -83,7 +84,8 @@
                     android:alpha="0.8"
                     android:background="@drawable/rectangle_trans"
                     android:padding="@dimen/dp_size_5"
-                    android:text="UPLOAD COVER"
+                    android:textAllCaps="true"
+                    android:text="@string/ID_UPLOAD_COVER"
                     android:textColor="@color/white"
                     android:textSize="10sp"/>
 
@@ -109,7 +111,8 @@
                 android:background="@drawable/rectangle_trans"
                 android:gravity="center_horizontal"
                 android:padding="@dimen/dp_size_5"
-                android:text="UPLOAD LOGO"
+                android:textAllCaps="true"
+                android:text="@string/ID_UPLOAD_LOGO"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sp_size_10"/>
 
@@ -132,16 +135,6 @@
                     android:textSize="@dimen/sp_size_12"/>
 
             </android.support.design.widget.TextInputLayout>
-
-            <!--<appliedlife.pvtltd.SHEROES.views.cutomeviews.materialspinner.MaterialSpinner
-                android:id="@+id/spinner"
-                app:ms_dropdown_max_height="350dp"
-                app:ms_dropdown_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_size_15"
-                android:layout_marginLeft="@dimen/dp_size_15"
-                android:layout_marginRight="@dimen/dp_size_15"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>-->
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -282,10 +275,13 @@
         android:paddingBottom="@dimen/dp_size_10"
         android:textAllCaps="true"
         android:paddingTop="@dimen/dp_size_10"
-        android:text="CREATE"
+        android:text="@string/ID_CREATE"
         android:textColor="@color/white"
         android:textSize="@dimen/sp_size_12" />
-    <include layout="@layout/progress_bar_login" />
+    <include layout="@layout/progress_bar_login"
+        android:layout_below="@+id/pb_community_progress_bar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
     <FrameLayout
         android:id="@+id/container"
         android:visibility="gone"

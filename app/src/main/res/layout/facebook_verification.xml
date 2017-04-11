@@ -52,9 +52,9 @@
             android:background="@drawable/rectangle_search_bar"
             android:backgroundTint="@color/search_tab_text"
             android:drawableLeft="@drawable/com_facebook_button_icon"
-            android:drawablePadding="@dimen/dp_size_15"
             android:gravity="center"
-            android:paddingLeft="@dimen/dp_size_20"
+            android:drawablePadding="-30dp"
+            android:paddingLeft="@dimen/dp_size_70"
             android:textColor="@color/white"
             fb:login_text="@string/ID_LINK_TO_FACEBOOK"
             fb:logout_text="@string/ID_FACEBOOK_LONGING"/>

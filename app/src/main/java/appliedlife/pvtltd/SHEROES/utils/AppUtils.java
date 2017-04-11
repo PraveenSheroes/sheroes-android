@@ -89,6 +89,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.community.ApproveMemberRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerRequest;
@@ -1944,22 +1945,6 @@ public class AppUtils {
         commentReactionRequestPojo.setEntityId(entityId);
         return commentReactionRequestPojo;
     }
-    public static MemberRequest getMemberRequestBuilder(long entityId, int pageNo) {
-
-
-        MemberRequest memberRequest=new MemberRequest();
-        memberRequest.setAppVersion("String");
-        memberRequest.setCloudMessagingId("String");
-        memberRequest.setCommunityId(entityId);
-        memberRequest.setDeviceUniqueId("String");
-        memberRequest.setLastScreenName("String");
-        memberRequest.setPageNo(pageNo);
-        memberRequest.setScreenName("String");
-        memberRequest.setPageSize(AppConstants.MEMBER_PAGE_SIZE);
-
-
-        return memberRequest;
-    }
     public static MemberRequest getPandingMemberRequestBuilder(long entityId, int pageNo) {
         AppUtils appUtils = AppUtils.getInstance();
 
@@ -1972,9 +1957,19 @@ public class AppUtils {
         memberRequest.setPageNo(pageNo);
         memberRequest.setScreenName(AppConstants.PANDING_MEMBER);
         memberRequest.setPageSize(AppConstants.MEMBER_PAGE_SIZE);
-
-
         return memberRequest;
+    }
+    public static CommunityPostCreateRequest createCommunityPostRequestBuilder(long  communityId, String createType,String description,List<String> imag) {
+        AppUtils appUtils = AppUtils.getInstance();
+        CommunityPostCreateRequest communityPostCreateRequest=new CommunityPostCreateRequest();
+        communityPostCreateRequest.setAppVersion(appUtils.getAppVersionName());
+        communityPostCreateRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+        communityPostCreateRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        communityPostCreateRequest.setCommunityId(communityId);
+        communityPostCreateRequest.setCreatorType(createType);
+        communityPostCreateRequest.setDescription(description);
+        communityPostCreateRequest.setImages(imag);
+        return communityPostCreateRequest;
     }
     public static BookmarkRequestPojo bookMarkRequestBuilder(long entityId) {
         AppUtils appUtils = AppUtils.getInstance();

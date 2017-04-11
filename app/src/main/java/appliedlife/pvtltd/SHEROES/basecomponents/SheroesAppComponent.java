@@ -126,7 +126,6 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.FeedArticleHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedCommunityHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedCommunityPostHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedJobHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.FilterHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FooterViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.GetAllDataBoardingSearchHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.GoodAtHolder;
@@ -284,7 +283,6 @@ public interface SheroesAppComponent {
     void inject(InviteSearchHolder inviteSearchHolder);
     void inject(JobFilterActivity jobFilterActivity);
     void inject(JobFilterFragment jobFilterFragment);
-    void inject(FilterHolder filterHolder);
     void inject(JobLocationFilter jobLocationFilter);
     void inject(JobLocationHolder jobLocationHolder);
     void inject(JobFunctionalAreaFragment jobLocationHolder);

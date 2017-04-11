@@ -9,8 +9,6 @@ import javax.inject.Singleton;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
-import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
-import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
@@ -129,20 +127,6 @@ public class HomeModel {
                     @Override
                     public LikeResponse call(LikeResponse likeResponse) {
                         return likeResponse;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
-
-
-    public Observable<CommentReactionResponsePojo> editCommentListFromModel(CommentReactionRequestPojo commentReactionRequestPojo){
-        LogUtils.info(TAG,"*******************"+new Gson().toJson(commentReactionRequestPojo));
-        return sheroesAppServiceApi.editCommentFromApi(commentReactionRequestPojo)
-                .map(new Func1<CommentReactionResponsePojo, CommentReactionResponsePojo>() {
-                    @Override
-                    public CommentReactionResponsePojo call(CommentReactionResponsePojo commentReactionResponsePojo) {
-                        return commentReactionResponsePojo;
                     }
                 })
                 .subscribeOn(Schedulers.io())

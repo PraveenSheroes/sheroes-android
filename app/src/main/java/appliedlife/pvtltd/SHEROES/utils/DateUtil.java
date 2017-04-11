@@ -51,7 +51,6 @@ public class DateUtil {
      * @return absolute rounded off difference in days
      */
     public String getRoundedDifferenceInHours(long timeOne, long timeTwo) {
-
         //long Millis24Hrs = 24 * 60 * 60 * 1000;
         long differenceInMinutes = Math.round((timeOne - timeTwo)/(60 * 1000));
         //long  seconds =(long)difference % 60;
@@ -61,6 +60,7 @@ public class DateUtil {
         int hour = (int)(differenceInMinutes/60);
         differenceInMinutes = differenceInMinutes - (hour * 60);
         StringBuilder sb = new StringBuilder();
+
         if(day>0) {
             sb.append(day);
             if(day==1) {

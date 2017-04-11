@@ -137,9 +137,6 @@ public class BookmarksFragment extends BaseFragment {
        super.bookMarkForCard(feedDetail);
     }
 
-    public void editDeleteRecentComment(FeedDetail feedDetail, boolean isEdit) {
-        super.editDeleteRecentComment(feedDetail,isEdit);
-    }
 
     public void likeAndUnlikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
        super.likeAndUnlikeRequest(baseResponse,reactionValue,position);

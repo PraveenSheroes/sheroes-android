@@ -136,7 +136,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     @Bind(R.id.iv_side_drawer_profile_blur_background)
     ImageView mIvSideDrawerProfileBlurBackground;
     @Bind(R.id.iv_home_notification_icon)
-    ImageView mIvHomeNotification;
+    TextView mIvHomeNotification;
     @Bind(R.id.fab_add_community)
     FloatingActionButton mFloatingActionButton;
     @Bind(R.id.li_home_community_button_layout)
@@ -783,7 +783,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     showNetworkTimeoutDoalog(true, false, errorReason);
                     break;
                 default:
-                    showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
+                    showNetworkTimeoutDoalog(true, false, errorReason);
             }
         } else {
             showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
@@ -812,13 +812,24 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 case AppConstants.REQUEST_CODE_FOR_JOB_FILTER:
                     jobFilterActivityResponse(intent);
                     break;
+                case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
+                    editCommunityPostResponse(intent);
+                    break;
                 default:
                     LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);
             }
         }
 
     }
-
+    private void editCommunityPostResponse(Intent intent) {
+        mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITY_POST_FRAGMENT);
+        if(null!=mFeedDetail) {
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+            if (AppUtils.isFragmentUIActive(fragment)) {
+                ((HomeFragment) fragment).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+            }
+        }
+    }
     private void jobFilterActivityResponse(Intent intent) {
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(JobFragment.class.getName());
         if (AppUtils.isFragmentUIActive(fragment)) {

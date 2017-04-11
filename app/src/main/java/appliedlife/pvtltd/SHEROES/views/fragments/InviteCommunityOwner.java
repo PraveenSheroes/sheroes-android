@@ -272,7 +272,7 @@ public class InviteCommunityOwner extends BaseFragment implements CommunityView,
                 mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(createCommunityOwnerResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);
                 break;
             default:
-                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_JOIN_INVITE);
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), ERROR_JOIN_INVITE);
         }
     }
 }

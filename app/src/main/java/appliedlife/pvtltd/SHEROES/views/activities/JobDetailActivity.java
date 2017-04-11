@@ -115,7 +115,7 @@ public class JobDetailActivity extends BaseActivity implements CommentReactionFr
             if (mFeedDetail.isBookmarked()) {
                 mTvJobDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_active, 0, 0, 0);
             } else {
-                mTvJobDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_in_active, 0, 0, 0);
+                mTvJobDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_detail_white, 0, 0, 0);
             }
             mCustomCollapsingToolbarLayout.setTitle(mFeedDetail.getNameOrTitle());
             mCustomCollapsingToolbarLayout.setSubtitle(mFeedDetail.getAuthorName());
@@ -324,7 +324,7 @@ public class JobDetailActivity extends BaseActivity implements CommentReactionFr
             mTvJobDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_active, 0, 0, 0);
         } else {
             feedDetail.setBookmarked(false);
-            mTvJobDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_in_active, 0, 0, 0);
+            mTvJobDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_detail_white, 0, 0, 0);
         }
         mFeedDetail = feedDetail;
     }

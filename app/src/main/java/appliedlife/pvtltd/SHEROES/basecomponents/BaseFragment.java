@@ -30,6 +30,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
@@ -43,7 +44,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.presenters.CommentReactionPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
-import appliedlife.pvtltd.SHEROES.presenters.MembersPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -74,7 +74,6 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     private final String TAG = LogUtils.makeLogTag(BaseFragment.class);
     public FragmentActivity mActivity;
     private FragmentListRefreshData mFragmentListRefreshData;
-    private CommentReactionPresenter mCommentReactionPresenter;
     private SwipPullRefreshList mPullRefreshList;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
@@ -88,7 +87,6 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     private boolean mListLoad = true;
     private boolean mIsEdit;
     private HomePresenter mHomePresenter;
-    private MembersPresenter mMemberpresenter;
     private AppUtils mAppUtils;
     private ProgressBar mProgressBar;
     public FragmentIntractionWithActivityListner mHomeSearchActivityFragmentIntractionWithActivityListner;
@@ -164,34 +162,10 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
         this.mLayoutManager = mLayoutManager;
         this.mFeedDetail = mFeedDetail;
         this.mRecyclerView = mRecyclerView;
-        this.mCommentReactionPresenter = commentReactionPresenter;
         this.mAppUtils = mAppUtils;
         this.mProgressBar = mProgressBar;
     }
 
-    public void setAllInitializationForMember(FragmentListRefreshData mFragmentListRefreshData, SwipPullRefreshList mPullRefreshList, GenericRecyclerViewAdapter mAdapter, LinearLayoutManager manager, int mPageNo, FeedDetail mFeedDetails, RecyclerView mRecyclerView, int i, int i1, MembersPresenter mmemberpresenter, AppUtils mAppUtils, ProgressBar mProgressBar) {
-        this.mFragmentListRefreshData = mFragmentListRefreshData;
-        this.mPullRefreshList = mPullRefreshList;
-        this.mAdapter = mAdapter;
-        this.mLayoutManager = manager;
-        this.mPageNo = mPageNo;
-        this.mRecyclerView = mRecyclerView;
-        this.mMemberpresenter = mmemberpresenter;
-        this.mAppUtils = mAppUtils;
-        this.mProgressBar = mProgressBar;
-    }
-
-    public void setAllInitializationForPandingMember(FragmentListRefreshData mFragmentListRefreshData, GenericRecyclerViewAdapter mAdapter, LinearLayoutManager manager, int mPageNo, FeedDetail mFeedDetails, RecyclerView mRecyclerView, int i, int i1, MembersPresenter mmemberpresenter, AppUtils mAppUtils, ProgressBar mProgressBar) {
-        this.mFragmentListRefreshData = mFragmentListRefreshData;
-        this.mPullRefreshList = mPullRefreshList;
-        this.mAdapter = mAdapter;
-        this.mLayoutManager = manager;
-        this.mPageNo = mPageNo;
-        this.mRecyclerView = mRecyclerView;
-        this.mMemberpresenter = mmemberpresenter;
-        this.mAppUtils = mAppUtils;
-        this.mProgressBar = mProgressBar;
-    }
 
     public void setListLoadFlag(boolean mListLoad) {
         this.mListLoad = mListLoad;
@@ -303,7 +277,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                 mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);
                 break;
             default:
-                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_JOIN_INVITE);
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), ERROR_JOIN_INVITE);
         }
     }
 
@@ -322,7 +296,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                 mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);
                 break;
             default:
-                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_JOIN_INVITE);
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), ERROR_JOIN_INVITE);
         }
     }
 
@@ -342,7 +316,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                     showError(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_COMMENT_REACTION);
                     break;
                 default:
-                    showError(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_COMMENT_REACTION);
+                    showError(getString(R.string.ID_GENERIC_ERROR), ERROR_COMMENT_REACTION);
             }
         }
     }
@@ -394,7 +368,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                     showError(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_BOOKMARK_UNBOOKMARK);
                     break;
                 default:
-                    showError(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_BOOKMARK_UNBOOKMARK);
+                    showError(getString(R.string.ID_GENERIC_ERROR), ERROR_BOOKMARK_UNBOOKMARK);
             }
         }
     }
@@ -432,7 +406,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                     showError(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_LIKE_UNLIKE);
                     break;
                 default:
-                    showError(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_LIKE_UNLIKE);
+                    showError(getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
 
             }
         }
@@ -456,18 +430,6 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
         mFeedDetail = feedDetail;
         mHomePresenter.addBookMarkFromPresenter(mAppUtils.bookMarkRequestBuilder(feedDetail.getEntityOrParticipantId()), feedDetail.isBookmarked());
     }
-
-    public void editDeleteRecentComment(FeedDetail feedDetail, boolean isEdit) {
-        mListLoad = false;
-        mFeedDetail = feedDetail;
-        mIsEdit = isEdit;
-        List<LastComment> lastCommentList = feedDetail.getLastComments();
-        if (StringUtil.isNotEmptyCollection(lastCommentList) && null != lastCommentList.get(lastCommentList.size() - 1)) {
-            LastComment lastComment = lastCommentList.get(lastCommentList.size() - 1);
-            mHomePresenter.editCommentListFromPresenter(mAppUtils.editCommentRequestBuilder(lastComment.getEntityId(), lastComment.getComment(), lastComment.isAnonymous(), isEdit, lastComment.getId()));
-        }
-    }
-
     public void likeAndUnlikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
         mListLoad = false;
         mFeedDetail = (FeedDetail) baseResponse;

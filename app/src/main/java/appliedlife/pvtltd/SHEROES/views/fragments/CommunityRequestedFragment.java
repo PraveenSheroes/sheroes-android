@@ -38,7 +38,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
-import static appliedlife.pvtltd.SHEROES.utils.AppUtils.getMemberRequestBuilder;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.getPandingMemberRequestBuilder;
 
 /**
  * Created by Ajit Kumar on 07-02-2017.
@@ -62,7 +62,6 @@ public class CommunityRequestedFragment extends BaseDialogFragment implements Re
     List<PandingMember> pandingListData = new ArrayList<>();
     @Inject
     AppUtils mAppUtils;
-
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getActivity()).inject(this);
@@ -93,7 +92,7 @@ public class CommunityRequestedFragment extends BaseDialogFragment implements Re
             }
         });
         mFragmentListRefreshData.setEnitityOrParticpantid(mFeedDetail.getIdOfEntityOrParticipant());
-        requestedPresenter.getAllMembers(getMemberRequestBuilder(mFeedDetail.getIdOfEntityOrParticipant(), mFragmentListRefreshData.getPageNo()));
+        requestedPresenter.getAllMembers(getPandingMemberRequestBuilder(mFeedDetail.getIdOfEntityOrParticipant(), mFragmentListRefreshData.getPageNo()));
 
         return view;
     }
@@ -157,10 +156,10 @@ public class CommunityRequestedFragment extends BaseDialogFragment implements Re
                 ((CommunitiesDetailActivity) getActivity()).updateOpenAboutFragment(mFeedDetail);
                 break;
             case AppConstants.FAILED:
-                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(memberListResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);
+                ((CommunitiesDetailActivity)getActivity()).onShowErrorDialog(memberListResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);
                 break;
             default:
-                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_JOIN_INVITE);
+                ((CommunitiesDetailActivity)getActivity()).onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), ERROR_JOIN_INVITE);
         }
         dismiss();
     }
@@ -175,10 +174,10 @@ public class CommunityRequestedFragment extends BaseDialogFragment implements Re
                 ((CommunitiesDetailActivity) getActivity()).updateOpenAboutFragment(mFeedDetail);
                 break;
             case AppConstants.FAILED:
-                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(memberListResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);
+                ((CommunitiesDetailActivity)getActivity()).onShowErrorDialog(memberListResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);
                 break;
             default:
-                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_JOIN_INVITE);
+                ((CommunitiesDetailActivity)getActivity()).onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), ERROR_JOIN_INVITE);
         }
         dismiss();
     }

@@ -115,6 +115,9 @@ public class ArticleDetailFragment extends BaseFragment {
             mFeedDetail.setNoOfViews(feedDetailList.get(0).getNoOfViews());
             ((ArticleDetailActivity) getActivity()).mTvArticleDetailTotalViews.setVisibility(View.VISIBLE);
             ((ArticleDetailActivity) getActivity()).mTvArticleDetailTotalViews.setText(mFeedDetail.getNoOfViews() + AppConstants.SPACE + getActivity().getString(R.string.ID_VIEWS));
+            ((ArticleDetailActivity) getActivity()).mTvArticleTime.setVisibility(View.VISIBLE);
+            ((ArticleDetailActivity) getActivity()).mTvArticleTime.setText(mFeedDetail.getCharCount()+ AppConstants.SPACE + getActivity().getString(R.string.ID_MIN_READ));
+
             articleList.add(articleDetailPojo);
             mAdapter.setSheroesGenericListData(articleList);
             mAdapter.notifyDataSetChanged();
@@ -122,7 +125,6 @@ public class ArticleDetailFragment extends BaseFragment {
                 ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
                 ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setAddDuration(AppConstants.NO_REACTION_CONSTANT);
             }
-
             mArticleDetailActivityIntractionListner.onBookmarkClick(mFeedDetail, AppConstants.TWO_CONSTANT);
         }
     }
@@ -165,7 +167,7 @@ public class ArticleDetailFragment extends BaseFragment {
                         showError(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_BOOKMARK_UNBOOKMARK);
                         break;
                     default:
-                        showError(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_BOOKMARK_UNBOOKMARK);
+                        showError(getString(R.string.ID_GENERIC_ERROR), ERROR_BOOKMARK_UNBOOKMARK);
                 }
             }
         }

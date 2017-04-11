@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentAddDelete;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionResponsePojo;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -53,22 +54,22 @@ public class CommentReactionModel {
         }
     }
 
-    public Observable<CommentReactionResponsePojo> addCommentListFromModel(CommentReactionRequestPojo commentReactionRequestPojo){
+    public Observable<CommentAddDelete> addCommentListFromModel(CommentReactionRequestPojo commentReactionRequestPojo){
         return sheroesAppServiceApi.addCommentFromApi(commentReactionRequestPojo)
-                .map(new Func1<CommentReactionResponsePojo, CommentReactionResponsePojo>() {
+                .map(new Func1<CommentAddDelete, CommentAddDelete>() {
                     @Override
-                    public CommentReactionResponsePojo call(CommentReactionResponsePojo commentReactionResponsePojo) {
+                    public CommentAddDelete call(CommentAddDelete commentReactionResponsePojo) {
                         return commentReactionResponsePojo;
                     }
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-    public Observable<CommentReactionResponsePojo> editCommentListFromModel(CommentReactionRequestPojo commentReactionRequestPojo){
+    public Observable<CommentAddDelete> editCommentListFromModel(CommentReactionRequestPojo commentReactionRequestPojo){
         return sheroesAppServiceApi.editCommentFromApi(commentReactionRequestPojo)
-                .map(new Func1<CommentReactionResponsePojo, CommentReactionResponsePojo>() {
+                .map(new Func1<CommentAddDelete, CommentAddDelete>() {
                     @Override
-                    public CommentReactionResponsePojo call(CommentReactionResponsePojo commentReactionResponsePojo) {
+                    public CommentAddDelete call(CommentAddDelete commentReactionResponsePojo) {
                         return commentReactionResponsePojo;
                     }
                 })

@@ -61,11 +61,12 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/dp_size_50"
-                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                android:layout_marginLeft="@dimen/dp_size_20"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:gravity="center"
+                android:textAllCaps="true"
                 android:text="@string/ID_CHOOSE_CATEGORY"
-                android:textColor="@color/black"
+                android:textColor="@color/suggested_text"
                 android:textSize="@dimen/sp_size_13" />
 
             <TextView
@@ -77,6 +78,7 @@
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:gravity="center"
                 android:lines="@integer/int_value_for_line_2"
+                android:maxLength="20"
                 android:ellipsize="end"
                 android:textColor="@color/suggested_text"
                 android:textSize="@dimen/sp_size_13" />

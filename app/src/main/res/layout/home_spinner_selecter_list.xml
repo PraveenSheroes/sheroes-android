@@ -11,17 +11,18 @@
         android:id="@+id/tv_spinner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:layout_gravity="start|center_vertical"
+        android:layout_marginLeft="@dimen/dp_size_20"
+        android:layout_weight="1"
         android:ellipsize="marquee"
-        android:layout_marginLeft="@dimen/dp_size_40"
-        android:lines="@integer/int_value_for_line_1"
-        android:textAllCaps="true"
-        android:gravity="center_vertical"
-        android:textColor="@color/black"
-        android:textSize="@dimen/sp_size_13"
         android:fontFamily="@string/ID_ROBOTO_REGULAR"
-        android:padding="@dimen/dp_size_12"/>
+        android:gravity="center_vertical"
+        android:lines="@integer/int_value_for_line_1"
+        android:padding="@dimen/dp_size_12"
+        android:textAllCaps="true"
+        android:textColor="@color/black"
+        android:textSize="@dimen/sp_size_13" />
+
     <CheckBox
         android:id="@+id/checkbox_spinner"
         android:layout_width="@dimen/dp_size_40"

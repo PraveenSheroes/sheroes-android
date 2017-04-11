@@ -116,9 +116,6 @@ public class CreateCommunityActivity extends BaseActivity implements ImageUpload
                 case AppConstants.CHECK_NETWORK_CONNECTION:
                     showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
                     break;
-                case AppConstants.HTTP_401_UNAUTHORIZED:
-                    showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
-                    break;
                 default:
                     showNetworkTimeoutDoalog(true, false, errorReason);
             }

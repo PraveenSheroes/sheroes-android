@@ -3,7 +3,7 @@
     <solid android:color="@color/white"/>
     <stroke
         android:width="@dimen/dp_size_0.5"
-        android:color="@color/dashboard_fed_text"/>
+        android:color="@color/white"/>
     <corners
         android:topLeftRadius="@dimen/dp_size_5"
         android:topRightRadius="@dimen/dp_size_5"/>

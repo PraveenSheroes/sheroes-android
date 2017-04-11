@@ -65,7 +65,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateRequest;
+import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
@@ -76,9 +76,10 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
 import appliedlife.pvtltd.SHEROES.presenters.CreateCommunityPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CommunityView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CreateCommunityView;
@@ -87,18 +88,20 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_LIKE_UNLIKE;
+
 /**
  * Created by Ajit Kumar on 20-01-2017.
  */
 
-public class CreateCommunityPostFragment extends BaseFragment implements CreateCommunityView,EditNameDialogListener,SelectCommunityFragment.MyDialogFragmentListener, CommunityView {
+public class CreateCommunityPostFragment extends BaseFragment implements CreateCommunityView, EditNameDialogListener, SelectCommunityFragment.MyDialogFragmentListener, CommunityView {
 
     @Inject
     Preference<LoginResponse> mUserPreference;
     @Bind(R.id.txt_choose_community_spinner)
     TextView mEtchoosecommunity;
     @Bind(R.id.lnr_image_container)
-    ViewGroup mVg_image_container;
+    LinearLayout mVg_image_container;
     @Bind(R.id.iv_community_post_icon)
     CircleImageView mIvcommunity_post_icon;
     @Bind(R.id.hor_scroll_for_community_post_images)
@@ -122,7 +125,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
     @Bind(R.id.lnr_community_post2)
     LinearLayout lnr_community_post2;
     @Bind(R.id.et_share_community_post_text)
-    EditText met_share_community_post_text;
+    EditText mEtShareCommunityPostText;
     @Bind(R.id.iv_community_owner)
     ImageView iv_community_owner;
     @Bind(R.id.iv_community_anonymous)
@@ -138,63 +141,47 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
     @Bind(R.id.scroll_community_post)
     ScrollView scroll_community_post;
     String encCoverImage;
-    private int mCommunityId=0;
+    private long mCommunityId = 0;
     private String mCreaterType;
-
+    @Inject
+    AppUtils mAppUtils;
     @Bind(R.id.txt_counter)
     TextView mCounterTxt;
-
     String mimages;
-
-    int mImgcount=0,mCount=0;
+    int mImgcount = 0, mCount = 0;
     String mValue = "";
-    private CreateCommunityActivityPostIntractionListner mCreatecommunityPostIntractionListner;
     private final String TAG = LogUtils.makeLogTag(CreateCommunityPostFragment.class);
     private static final int mCAMERA_CODE = 101, mGALLERY_CODE = 201, mCROPING_CODE = 301;
     private Uri mImageCaptureUri;
     private File mOutPutFile = null;
     private File mOutPutFile1 = null;
-    ImageView mImg[]=new ImageView[6];
-    Button mBtncross[]=new Button[6];
+    ImageView mImg[] = new ImageView[6];
+    Button mBtncross[] = new Button[6];
     Bitmap mRoundBitmap;
-    float alpha=0.7f;
+    float alpha = 0.7f;
     private FeedDetail mFeedDetail;
+    List<String> imageUrls;
     @Inject
     CreateCommunityPresenter createCommunityPresenter;
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            if (getActivity() instanceof CreateCommunityActivityPostIntractionListner) {
-                mCreatecommunityPostIntractionListner = (CreateCommunityActivityPostIntractionListner) getActivity();
-            }
-        } catch (InstantiationException exception) {
-            LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
-        }
-    }
 
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.create_community_post_fragment, container, false);
         ButterKnife.bind(this, view);
+        createCommunityPresenter.attachView(this);
         if (null != getArguments()) {
             mFeedDetail = getArguments().getParcelable(AppConstants.COMMUNITY_POST_FRAGMENT);
+            checkIntentWithImageUrls();
         }
         mOutPutFile = new File(Environment.getExternalStorageDirectory(), "temp.jpg");
         mOutPutFile1 = new File(Environment.getExternalStorageDirectory(), "temp1.jpg");
-        getActivity().setRequestedOrientation(
-                ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         iv_community_owner.setAlpha(alpha);
         iv_community_user.setAlpha(alpha);
         iv_community_anonymous.setAlpha(alpha);
-        mTvcreate_community_post.setText(R.string.ID_CREATEPOST);
-        createCommunityPresenter.attachView(this);
         checkStoragePermission();
-
-
-        met_share_community_post_text.addTextChangedListener(new TextWatcher() {
+        mEtShareCommunityPostText.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
@@ -213,20 +200,60 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
                 }
             }
         });
-        String userImage=mUserPreference.get().getUserSummary().getPhotoUrl();
-        Glide.with(this)
-                .load(userImage)
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .skipMemoryCache(true)
-                .into(iv_community_user);
+        if (null != mUserPreference && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
+            String userImage = mUserPreference.get().getUserSummary().getPhotoUrl();
+            Glide.with(this)
+                    .load(userImage)
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .skipMemoryCache(true)
+                    .into(iv_community_user);
 
-        Glide.with(this).load(userImage).transform(new CommunityOpenAboutFragment.CircleTransform(getActivity())).into(iv_community_user);
-        tv_community_poster_user.setText(mUserPreference.get().getUserSummary().getFirstName());
+            Glide.with(this).load(userImage).transform(new CommunityOpenAboutFragment.CircleTransform(getActivity())).into(iv_community_user);
+            tv_community_poster_user.setText(mUserPreference.get().getUserSummary().getFirstName());
+        }
         // iv_community_user.setImageBitmap(loginResponse);
         return view;
     }
-    public void checkStoragePermission()
-    {
+
+    private void checkIntentWithImageUrls() {
+        mVg_image_container.removeAllViews();
+        mVg_image_container.removeAllViewsInLayout();
+        LayoutInflater layoutInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View layout2 = layoutInflater.inflate(R.layout.imagevie_with_cross, null);
+        if (null != mFeedDetail) {
+                mTvcreate_community_post.setText(getString(R.string.ID_EDIT_POST));
+            if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getListDescription())) {
+                mEtShareCommunityPostText.setText(mFeedDetail.getListDescription());
+                mCounterTxt.setVisibility(View.VISIBLE);
+                mCounterTxt.setText(String.valueOf(AppConstants.MAX_WORD_COUNTER - mFeedDetail.getListDescription().length()));
+            }
+            if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getNameOrTitle())) {
+                mEtchoosecommunity.setText(mFeedDetail.getNameOrTitle());
+            }
+            imageUrls = mFeedDetail.getImageUrls();
+            if (StringUtil.isNotEmptyCollection(mFeedDetail.getImageUrls())) {
+                for (int i = 0; i < imageUrls.size(); i++) {
+                    mIv_camera_btn_for_post_images.setVisibility(View.GONE);
+                    mTv_add_more_community_post_image.setVisibility(View.VISIBLE);
+                    final int finalI = i;
+                    mImg[finalI] = (ImageView) layout2.findViewById(R.id.customView);
+                    mBtncross[finalI] = (Button) layout2.findViewById(R.id.button1);
+                    mImg[finalI].setScaleType(ImageView.ScaleType.CENTER_CROP);
+                    mBtncross[finalI].setTag("Img" + mImgcount);
+                    mBtncross[finalI].setOnClickListener(mCorkyListener);
+                    Glide.with(this)
+                            .load(imageUrls.get(i)).asBitmap()
+                            .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                            .skipMemoryCache(true).into(mImg[finalI]);
+                }
+            }
+            mVg_image_container.addView(layout2);
+        } else {
+            mTvcreate_community_post.setText(R.string.ID_CREATEPOST);
+        }
+    }
+
+    public void checkStoragePermission() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 LogUtils.info("testing", "Permission is granted");
@@ -248,10 +275,9 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
         }
 
     }
-    private void checkCameraPermission()
-    {
-        if (Build.VERSION.SDK_INT >= 23)
-        {
+
+    private void checkCameraPermission() {
+        if (Build.VERSION.SDK_INT >= 23) {
             if (getActivity().checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
                 LogUtils.info("testing", "Permission is granted");
 
@@ -266,9 +292,9 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
 
         }
     }
+
     @OnClick(R.id.lnr_community_post)
-    public void postAsName()
-    {
+    public void postAsName() {
         iv_community_user.setAlpha(1.0f);
         tv_community_poster_user.setTextColor(ContextCompat.getColor(getActivity(), R.color.red));
         tv_community_anonomous.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey2));
@@ -280,20 +306,18 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
         scroll_community_post.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
         mTv_community_post_submit.setText("POST AS NAME");
         mTv_community_post_submit.setVisibility(View.VISIBLE);
-        if(null !=mUserPreference)
-        {
-            LoginResponse loginResponse=mUserPreference.get();
-            UserSummary userSummary=loginResponse.getUserSummary();
-            if(null !=userSummary)
-            mCreaterType=userSummary.getFirstName();
+        if (null != mUserPreference) {
+            LoginResponse loginResponse = mUserPreference.get();
+            UserSummary userSummary = loginResponse.getUserSummary();
+            if (null != userSummary)
+                mCreaterType = userSummary.getFirstName();
 
         }
-        mCreaterType="USER";
-
+        mCreaterType = "USER";
     }
+
     @OnClick(R.id.lnr_community_post1)
-    public void postAsOwner()
-    {
+    public void postAsOwner() {
         tv_community_owner.setTextColor(ContextCompat.getColor(getActivity(), R.color.red));
         iv_community_owner.setAlpha(1.0f);
 
@@ -307,11 +331,11 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
 
         mTv_community_post_submit.setText("POST AS OWNER");
         mTv_community_post_submit.setVisibility(View.VISIBLE);
-        mCreaterType="COMMUNITY_OWNER";
+        mCreaterType = "COMMUNITY_OWNER";
     }
+
     @OnClick(R.id.lnr_community_post2)
-    public void postAsAnonomous()
-    {
+    public void postAsAnonomous() {
         tv_community_anonomous.setTextColor(ContextCompat.getColor(getActivity(), R.color.red));
         scroll_community_post.fullScroll(ScrollView.FOCUS_DOWN);
         scroll_community_post.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
@@ -322,50 +346,35 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
         iv_community_anonymous.setAlpha(1.0f);
         mTv_community_post_submit.setText("POST AS ANONOMOUS");
         mTv_community_post_submit.setVisibility(View.VISIBLE);
-        mCreaterType="ANONYMOUS";
+        mCreaterType = "ANONYMOUS";
 
     }
+
     @OnClick(R.id.tv_close_community)
-    public void onCloseClick()
-    {
-        mCreatecommunityPostIntractionListner.onClose();
+    public void onCloseClick() {
+        ((CreateCommunityPostActivity) getActivity()).editedSuccessFully(mFeedDetail);
     }
+
     @OnClick(R.id.tv_add_more_community_post_image)
-    public void addMoreClick()
-    {
+    public void addMoreClick() {
         checkCameraPermission();
         openImageOption();
     }
+
     @OnClick(R.id.fl_camera_btn_for_post_images)
-    public void camerabtnClick()
-    {
+    public void camerabtnClick() {
         checkCameraPermission();
         openImageOption();
     }
+
     @OnClick(R.id.tv_community_post_submit)
-    public void communityPostSubmitClick()
-    {
-        if(mCommunityId>0 && null !=mCreaterType && StringUtil.isNotNullOrEmptyString(mCreaterType) && null !=met_share_community_post_text.getText().toString()
-                && StringUtil.isNotNullOrEmptyString(met_share_community_post_text.getText().toString())) {
-            String mDescription = "";
+    public void communityPostSubmitClick() {
+        if (mCommunityId > 0 && null != mCreaterType && StringUtil.isNotNullOrEmptyString(mCreaterType) && null != mEtShareCommunityPostText.getText().toString()
+                && StringUtil.isNotNullOrEmptyString(mEtShareCommunityPostText.getText().toString())) {
             mTv_community_post_submit.setVisibility(View.GONE);
+            String description = AppConstants.EMPTY_STRING;
             List<String> imag = new ArrayList<>();
-
-            Toast.makeText(getActivity(), "Posted", Toast.LENGTH_LONG).show();
-
-            CommunityPostCreateRequest communityPostCreateRequest = new CommunityPostCreateRequest();
-            communityPostCreateRequest.setDeviceUniqueId("string");
-            communityPostCreateRequest.setAppVersion("string");
-            communityPostCreateRequest.setCloudMessagingId("string");
-            communityPostCreateRequest.setCommunityId(mCommunityId);
-            communityPostCreateRequest.setCreatorType(mCreaterType);
-
-            mDescription = met_share_community_post_text.getText().toString();
-            communityPostCreateRequest.setDescription(mDescription);
-            communityPostCreateRequest.setLastScreenName("string");
-            communityPostCreateRequest.setScreenName("string");
-            communityPostCreateRequest.setSource("string");
-
+            description = mEtShareCommunityPostText.getText().toString();
             for (int i = 0; i < mImg.length; i++) {
                 if (null != mImg[i]) {
                     Bitmap bitmap = ((BitmapDrawable) mImg[i].getDrawable()).getBitmap();
@@ -377,55 +386,31 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
                     }
                 }
             }
-
-            communityPostCreateRequest.setImages(imag);
-            createCommunityPresenter.postEditCommunityList(communityPostCreateRequest);
-
+            createCommunityPresenter.postEditCommunityList(mAppUtils.createCommunityPostRequestBuilder(mCommunityId, mCreaterType, description, imag));
+        } else {
+            mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.BLANK_MESSAGE, FeedParticipationEnum.ERROR_CREATE_COMMUNITY);
         }
-        else
-            mCreatecommunityPostIntractionListner.onErrorOccurence((AppConstants.BLANK_MESSAGE));
-
-        /*Intent intent = new Intent(getActivity(), ShareCommunityActivity.class);
-        startActivity(intent);*/
-    }
-    @Override
-    public void onResume() {
-        LogUtils.info("DEBUG", "onResume of LoginFragment");
-        super.onResume();
     }
 
-
-    @Override
-    public void onPause() {
-        LogUtils.info("DEBUG", "OnPause of loginFragment");
-        super.onPause();
-    }
-    @Override
-    public void onStop()
-    {
-        LogUtils.info("DEBUG", "OnPause of loginFragment");
-        super.onStop();
-    }
     @OnClick(R.id.txt_choose_community_spinner)
-    public void spnOnClick()
-    {
-        // showSelectCommunityDilog(true);
+    public void spnOnClick() {
         showDialog();
     }
 
     @Override
     public void onAddCommunityDetailSubmit(CommunityPostResponse communityPostResponse) {
         mEtchoosecommunity.setText(communityPostResponse.getTitle());
-
-        mCommunityId=Integer.parseInt(communityPostResponse.getId());
-         mimages = communityPostResponse.getLogo();
-       mIvcommunity_post_icon.setCircularImage(true);
+        mCommunityId = Long.parseLong(communityPostResponse.getId());
+        mimages = communityPostResponse.getLogo();
+        mIvcommunity_post_icon.setCircularImage(true);
         mIvcommunity_post_icon.bindImage(mimages);
         tv_community_owner.setText(communityPostResponse.getTitle());
         Glide.with(this).load(mimages).transform(new CommunityOpenAboutFragment.CircleTransform(getActivity())).into(iv_community_owner);
-
-      //  iv_community_owner.setCircularImage(true);
-      //  iv_community_owner.bindImage(images);
+        if (communityPostResponse.isOwner()) {
+            lnr_community_post1.setEnabled(true);
+        } else {
+            lnr_community_post1.setEnabled(false);
+        }
     }
 
 
@@ -447,16 +432,28 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
 
     @Override
     public void createCommunitySuccess(CreateCommunityResponse createCommunityResponse) {
-        mTv_community_post_submit.setVisibility(View.VISIBLE);
-        Intent intent = new Intent(getActivity(), HomeActivity.class);
-        startActivity(intent);
-        getActivity().finish();
+        if (StringUtil.isNotNullOrEmptyString(createCommunityResponse.getStatus())) {
+            switch (createCommunityResponse.getStatus()) {
+                case AppConstants.SUCCESS:
+                    Toast.makeText(getActivity(), getString(R.string.ID_POSTED), Toast.LENGTH_LONG).show();
+                    mTv_community_post_submit.setVisibility(View.VISIBLE);
+                    mFeedDetail = createCommunityResponse.getFeedDetail();
+                    ((CreateCommunityPostActivity) getActivity()).editedSuccessFully(mFeedDetail);
+                    break;
+                case AppConstants.FAILED:
+                    mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(createCommunityResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_LIKE_UNLIKE);
+                    break;
+                default:
+                    mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
+            }
+        } else {
+            mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
+        }
     }
 
 
     @Override
     public void getOwnerListDeactivateSuccess(DeactivateOwnerResponse deactivateOwnerResponse) {
-        LogUtils.error("Message",deactivateOwnerResponse.getStatus());
     }
 
     @Override
@@ -471,20 +468,14 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
 
     }
 
-    public void closeDialog(String dialogType,Context cn) {
-        LogUtils.info("click",dialogType);
-        Toast.makeText(cn,dialogType,Toast.LENGTH_LONG).show();
-        mValue=dialogType;
-   /*     SharedPreferences sharedpreferences = getActivity().getSharedPreferences("ins", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedpreferences.edit();
-        editor.putString("newins", "1");
-        editor.commit();*/
-        //  onResume();
+    public void closeDialog(String dialogType, Context cn) {
+        LogUtils.info("click", dialogType);
+        Toast.makeText(cn, dialogType, Toast.LENGTH_LONG).show();
+        mValue = dialogType;
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.detach(this).attach(this).commit();
-
-        //etcommunityname.setText(dialogType);
     }
+
     @Override
     public void startProgressBar() {
 
@@ -502,13 +493,9 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
 
     @Override
     public void onFinishEditDialog(String inputText) {
-        LogUtils.info("value",inputText);
+        LogUtils.info("value", inputText);
     }
 
-    public interface CreateCommunityActivityPostIntractionListner {
-        void onErrorOccurence(String error);
-        void onClose();
-    }
     public static Bitmap getRoundedCroppedBitmap(Bitmap bitmap, int radius) {
         Bitmap finalBitmap;
         try {
@@ -538,8 +525,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
             canvas.drawBitmap(finalBitmap, rect, rect, paint);
             return output;
 
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             Bitmap bm = null;
             return bm;
         }
@@ -606,10 +592,8 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
                         mImageCaptureUri = Uri.fromFile(f);
                         intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
                         startActivityForResult(intent, mCAMERA_CODE);
-                    }
-                    catch (Exception e)
-                    {
-                        Toast.makeText(getActivity(),"Permission Required",Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Toast.makeText(getActivity(), "Permission Required", Toast.LENGTH_LONG).show();
                         checkCameraPermission();
                     }
 
@@ -617,10 +601,8 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
                     try {
                         Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                         startActivityForResult(i, mGALLERY_CODE);
-                    }
-                    catch (Exception e)
-                    {
-                        Toast.makeText(getActivity(),"Permission Required",Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Toast.makeText(getActivity(), "Permission Required", Toast.LENGTH_LONG).show();
                         checkCameraPermission();
                     }
 
@@ -630,6 +612,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
         });
         builder.show();
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -649,37 +632,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
 
             try {
                 if (mOutPutFile.exists()) {
-                    Bitmap photo = decodeFile(mOutPutFile);
-                    mRoundBitmap = getRoundedCroppedBitmap(photo, 500);
-                    //  btn_profile_pic.setImageBitmap(photo);//**********************set image on imageview
-                    // profilepic.setImageBitmap(photo);
-                    // profile.setImageBitmap(photo);//**********************set image on imageview
-                    View layout2 = LayoutInflater.from(getActivity()).inflate(R.layout.imagevie_with_cross, mHor_scroll_for_community_post_images, false);
-                    // View layout3 = LayoutInflater.from(getActivity()).inflate(R.layout.addimage, mhor_scroll_for_community_post_images, false);
-                    mIv_camera_btn_for_post_images.setVisibility(View.GONE);
-                    mFl_camera_btn_for_post_images.setVisibility(View.GONE);
-                    mTv_add_more_community_post_image.setVisibility(View.VISIBLE);
-                    if(mImgcount==4)
-                        mTv_add_more_community_post_image.setVisibility(View.GONE);
-                    mHor_scroll_for_community_post_images.setVisibility(View.VISIBLE);
-                    mHor_scroll_for_community_post_images.setHorizontalScrollBarEnabled(false);
-
-                    mImg[mImgcount] = (ImageView) layout2.findViewById(R.id.customView);
-                    mBtncross[mImgcount]= (Button) layout2.findViewById(R.id.button1);
-                    mImg[mImgcount].setScaleType(ImageView.ScaleType.CENTER_CROP);
-                    mImg[mImgcount].setImageBitmap(photo);
-                    mBtncross[mImgcount].setTag("Img"+mImgcount);
-                    mBtncross[mImgcount].setOnClickListener(mCorkyListener);
-
-                    mVg_image_container.addView(layout2);
-
-                    // layout2.setOnClickListener(myClickListner);
-                    // mygallery.addView(layout3);
-                    mImgcount++;
-                    byte[] buffer = new byte[4096];
-
-                    mCount++;
-
+                    setImages();
 
                 } else {
                     Toast.makeText(getActivity(), "Error while save image", Toast.LENGTH_SHORT).show();
@@ -689,39 +642,74 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
             }
         }
     }
+
+    public void setImages() {
+        Bitmap photo = decodeFile(mOutPutFile);
+        mRoundBitmap = getRoundedCroppedBitmap(photo, 500);
+        //  btn_profile_pic.setImageBitmap(photo);//**********************set image on imageview
+        // profilepic.setImageBitmap(photo);
+        // profile.setImageBitmap(photo);//**********************set image on imageview
+        View layout2 = LayoutInflater.from(getActivity()).inflate(R.layout.imagevie_with_cross, mHor_scroll_for_community_post_images, false);
+        // View layout3 = LayoutInflater.from(getActivity()).inflate(R.layout.addimage, mhor_scroll_for_community_post_images, false);
+        mIv_camera_btn_for_post_images.setVisibility(View.GONE);
+        mFl_camera_btn_for_post_images.setVisibility(View.GONE);
+        mTv_add_more_community_post_image.setVisibility(View.VISIBLE);
+        if (mImgcount == 4) {
+            mTv_add_more_community_post_image.setVisibility(View.GONE);
+        }
+        mHor_scroll_for_community_post_images.setVisibility(View.VISIBLE);
+        mHor_scroll_for_community_post_images.setHorizontalScrollBarEnabled(false);
+
+        mImg[mImgcount] = (ImageView) layout2.findViewById(R.id.customView);
+        mBtncross[mImgcount] = (Button) layout2.findViewById(R.id.button1);
+        mImg[mImgcount].setScaleType(ImageView.ScaleType.CENTER_CROP);
+        mImg[mImgcount].setImageBitmap(photo);
+        mBtncross[mImgcount].setTag("Img" + mImgcount);
+        mBtncross[mImgcount].setOnClickListener(mCorkyListener);
+
+        mVg_image_container.addView(layout2);
+
+        // layout2.setOnClickListener(myClickListner);
+        // mygallery.addView(layout3);
+        mImgcount++;
+        byte[] buffer = new byte[4096];
+
+        mCount++;
+
+    }
+
     private View.OnClickListener mCorkyListener = new View.OnClickListener() {
         public void onClick(View v) {
             mTv_add_more_community_post_image.setVisibility(View.VISIBLE);
-            if(v.getTag().equals("Img0")){
+            if (v.getTag().equals("Img0")) {
                 mImg[0].setVisibility(View.GONE);
                 mBtncross[0].setVisibility(View.GONE);
                 mImgcount--;
                 //do stuff
-            }else if(v.getTag().equals("Img1")){
+            } else if (v.getTag().equals("Img1")) {
                 mImg[1].setVisibility(View.GONE);
                 mBtncross[1].setVisibility(View.GONE);
                 mImgcount--;
 
                 //do something else
-            }else if(v.getTag().equals("Img2")){
+            } else if (v.getTag().equals("Img2")) {
                 mImg[2].setVisibility(View.GONE);
                 mBtncross[2].setVisibility(View.GONE);
                 mImgcount--;
 
                 //do something else
-            }else if(v.getTag().equals("Img3")){
+            } else if (v.getTag().equals("Img3")) {
                 mImg[3].setVisibility(View.GONE);
                 mBtncross[3].setVisibility(View.GONE);
                 //do something else
-            }else if(v.getTag().equals("Img4")){
+            } else if (v.getTag().equals("Img4")) {
                 mImg[4].setVisibility(View.GONE);
                 mBtncross[4].setVisibility(View.GONE);
                 //do something else
                 mImgcount--;
 
             }
-            if(mImgcount==0)
-            {
+            if (mImgcount == 0) {
                 mIv_camera_btn_for_post_images.setImageResource(R.drawable.ic_camera_icon_with_rectangle);
             }
 
@@ -730,8 +718,8 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
 
         }
     };
-    private void CropingIMG()
-    {
+
+    private void CropingIMG() {
 
         final ArrayList cropOptions = new ArrayList();
 
@@ -756,8 +744,8 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
                 byte[] buffer = new byte[4096];
                 buffer = getBytesFromBitmap(photo);
 
+            } catch (Exception e) {
             }
-            catch(Exception e){}
 /*
             Toast.makeText(this, "Cann't find image croping app", Toast.LENGTH_SHORT).show();
 */
@@ -802,6 +790,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
 
         }
     }
+
     public byte[] getBytesFromBitmap(Bitmap bitmap) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
@@ -836,7 +825,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
 
 
     void showDialog() {
-        SelectCommunityFragment newFragment =new SelectCommunityFragment();
+        SelectCommunityFragment newFragment = new SelectCommunityFragment();
         newFragment.setListener(this);
         newFragment.show(getActivity().getFragmentManager(), "dialog");
     }

@@ -239,7 +239,6 @@ public class OnBoardingSearchDialogFragment extends BaseDialogFragment implement
     @Override
     public void getIntersetJobResponse(GetInterestJobResponse getInterestJobResponse) {
         if (null != getInterestJobResponse) {
-
             List<BoardingInterestJobSearch> getAllDataDocuments = getInterestJobResponse.getGetBoardingInterestJobSearches();
             if (StringUtil.isNotEmptyCollection(getAllDataDocuments)) {
                 switch (SEARCH_TYPE) {

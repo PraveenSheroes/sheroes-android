@@ -4,7 +4,9 @@
     android:layout_height="match_parent"
     android:background="@color/white_color"
     android:orientation="vertical">
+
     <include layout="@layout/community_header" />
+
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -26,13 +28,11 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_size_38"
         android:layout_marginRight="@dimen/dp_size_38"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
         android:gravity="center"
         android:paddingTop="@dimen/dp_size_15"
-        android:text="@string/ID_COMMUNITITES_NAME"
-        android:fontFamily="@string/ID_ROBOTO_REGULAR"
         android:textColor="@color/com_post_share_textcolor"
-        android:textSize="@dimen/sp_size_13"
-        />
+        android:textSize="@dimen/sp_size_13" />
 
     <TextView
         android:id="@+id/tv_share_community_url"
@@ -40,12 +40,12 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_size_38"
         android:layout_marginRight="@dimen/dp_size_38"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
         android:gravity="center"
         android:paddingTop="@dimen/dp_size_10"
         android:text="@string/ID_SHARE_LINK"
-        android:fontFamily="@string/ID_ROBOTO_REGULAR"
         android:textColor="@color/com_post_share_textcolor1"
-        android:textSize="@dimen/sp_size_11"/>
+        android:textSize="@dimen/sp_size_11" />
 
     <TextView
         android:id="@+id/text3"
@@ -56,9 +56,8 @@
         android:paddingTop="@dimen/dp_size_38"
         android:text="@string/ID_COMM_SHARE_EMAIL_LINK"
         android:textColor="@color/com_share_post_text_color"
-        android:visibility="gone"
         android:textSize="@dimen/dp_size_12"
-        />
+        android:visibility="gone" />
 
 
     <EditText
@@ -68,12 +67,12 @@
         android:layout_marginLeft="@dimen/dp_size_38"
         android:layout_marginRight="@dimen/dp_size_38"
         android:background="@drawable/new_edit_text_style"
-        android:visibility="gone"
-
         android:hint="@string/ID_EMAIL_HINT_TEXT"
+
         android:paddingTop="@dimen/dp_size_15"
         android:textColor="@color/text_color_date_birth"
-        android:textSize="@dimen/sp_size_11"/>
+        android:textSize="@dimen/sp_size_11"
+        android:visibility="gone" />
 
 
     <TextView
@@ -81,8 +80,8 @@
         android:layout_height="@dimen/dp_size_1"
         android:layout_marginLeft="@dimen/dp_size_38"
         android:layout_marginRight="@dimen/dp_size_38"
-        android:background="@color/share_line_color"
-        android:layout_marginTop="@dimen/dp_size_11"/>
+        android:layout_marginTop="@dimen/dp_size_11"
+        android:background="@color/share_line_color" />
 
     <TextView
         android:id="@+id/btn_share"
@@ -90,32 +89,29 @@
         android:layout_height="50dp"
         android:layout_gravity="center"
         android:layout_marginLeft="@dimen/dp_size_38"
-        android:visibility="gone"
-
         android:layout_marginRight="@dimen/dp_size_38"
+
         android:layout_marginTop="@dimen/dp_size_24"
-        android:textStyle="bold"
         android:background="@drawable/commu_share_button_backgroung_style"
         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
         android:gravity="center"
         android:text="@string/ID_SAHRE_TEXT"
-        android:textColor="@color/text_color_close"/>
+        android:textColor="@color/text_color_close"
+        android:textStyle="bold"
+        android:visibility="gone" />
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_size_38"
         android:layout_marginRight="@dimen/dp_size_38"
-        android:layout_marginTop="@dimen/dp_size_24"
-
-
-        >
+        android:layout_marginTop="@dimen/dp_size_24">
 
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="@dimen/dp_size_1"
             android:layout_centerVertical="true"
-            android:background="@color/share_line_color"/>
+            android:background="@color/share_line_color" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -126,7 +122,7 @@
             android:gravity="center"
             android:text="OR"
             android:textColor="@color/or_color"
-            android:textSize="@dimen/dp_size_12"/>
+            android:textSize="@dimen/dp_size_12" />
 
 
     </RelativeLayout>
@@ -145,6 +141,6 @@
         android:gravity="center"
         android:text="@string/ID_COMM_SHARE_BUTTON"
         android:textColor="@color/white"
-        android:textSize="@dimen/sp_size_14"/>
+        android:textSize="@dimen/sp_size_14" />
 
 </LinearLayout>

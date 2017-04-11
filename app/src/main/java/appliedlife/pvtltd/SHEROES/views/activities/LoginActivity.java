@@ -20,45 +20,45 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
-/**
- * Created by Praveen Singh on 04/01/2017.
- *
- * @author Praveen Singh
- * @version 5.0
- * @since 04/01/2017.
- * Title: A login screen that offers login via email/password.
- */
-public class LoginActivity extends BaseActivity implements LoginFragment.LoginActivityIntractionListner {
-    private final String TAG = LogUtils.makeLogTag(LoginActivity.class);
-    @Inject
-    Preference<LoginResponse> userPreference;
+    /**
+     * Created by Praveen Singh on 04/01/2017.
+     *
+     * @author Praveen Singh
+     * @version 5.0
+     * @since 04/01/2017.
+     * Title: A login screen that offers login via email/password.
+     */
+    public class LoginActivity extends BaseActivity implements LoginFragment.LoginActivityIntractionListner {
+        private final String TAG = LogUtils.makeLogTag(LoginActivity.class);
+        @Inject
+        Preference<LoginResponse> userPreference;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        SheroesApplication.getAppComponent(this).inject(this);
-        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getToken())) {
-            if (userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.FEED_SCREEN)) {
-                Intent homeIntent = new Intent(this, HomeActivity.class);
-                startActivity(homeIntent);
-                finish();
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            SheroesApplication.getAppComponent(this).inject(this);
+            if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getToken())) {
+                if (userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.FEED_SCREEN)) {
+                    Intent homeIntent = new Intent(this, HomeActivity.class);
+                    startActivity(homeIntent);
+                    finish();
+                } else {
+                    Intent homeIntent = new Intent(this, OnBoardingActivity.class);
+                    homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    startActivity(homeIntent);
+                    finish();
+                }
             } else {
-                Intent homeIntent = new Intent(this, OnBoardingActivity.class);
-                homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NO_HISTORY);
-                startActivity(homeIntent);
-                finish();
+                renderLoginFragmentView();
             }
-        } else {
-            renderLoginFragmentView();
         }
-    }
 
-    public void renderLoginFragmentView() {
-        setContentView(R.layout.activity_login);
-        ButterKnife.bind(this);
-        LoginFragment frag = new LoginFragment();
-        callFirstFragment(R.id.fragment_login, frag);
-    }
+        public void renderLoginFragmentView() {
+            setContentView(R.layout.activity_login);
+            ButterKnife.bind(this);
+            LoginFragment frag = new LoginFragment();
+            callFirstFragment(R.id.fragment_login, frag);
+        }
 
     @Override
     public void onErrorOccurence(String errorMessage) {

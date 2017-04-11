@@ -73,7 +73,6 @@ public class SearchRecentFragment extends BaseFragment implements HomeView {
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mAdapter);
         super.setAllInitializationForFeeds(null,  mAdapter, manager, mRecyclerView, mHomePresenter, mAppUtils, mProgressBar);
-        mLiNoSearchResult.setVisibility(View.VISIBLE);
         return view;
     }
 
@@ -98,11 +97,11 @@ public class SearchRecentFragment extends BaseFragment implements HomeView {
 
             } else {
                 mLiNoSearchResult.setVisibility(View.VISIBLE);
-                mTvSearchResult.setText(getString(R.string.ID_NO_RESULT_FOUND));
+                mTvSearchResult.setText(getString(R.string.ID_NO_RESULT_FOUND_SEARCH)+((HomeSearchActivity)getActivity()).mSearchEditText.getText().toString());
             }
         } else {
             mLiNoSearchResult.setVisibility(View.VISIBLE);
-            mTvSearchResult.setText(getString(R.string.ID_NO_RESULT_FOUND));
+            mTvSearchResult.setText(getString(R.string.ID_NO_RESULT_FOUND_SEARCH)+((HomeSearchActivity)getActivity()).mSearchEditText.getText().toString());
         }
     }
 

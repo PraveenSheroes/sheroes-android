@@ -302,7 +302,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
                     mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);
                     break;
                 default:
-                    mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_JOIN_INVITE);
+                    mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), ERROR_JOIN_INVITE);
             }
         }
     }
@@ -311,9 +311,6 @@ public class CommunitiesDetailFragment extends BaseFragment {
         super.bookMarkForCard(feedDetail);
     }
 
-    public void editDeleteRecentComment(FeedDetail feedDetail, boolean isEdit) {
-        super.editDeleteRecentComment(feedDetail, isEdit);
-    }
 
     public void likeAndUnlikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
         super.likeAndUnlikeRequest(baseResponse, reactionValue, position);

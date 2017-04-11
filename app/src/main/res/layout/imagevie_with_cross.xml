@@ -2,27 +2,25 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:paddingLeft="@dimen/dp_size_5"
-    android:paddingRight="@dimen/dp_size_5"
     android:layout_gravity="left"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/dp_size_5"
+    android:paddingRight="@dimen/dp_size_5">
 
     <ImageView
         android:id="@+id/customView"
         android:layout_width="@dimen/dp_size_60"
         android:layout_height="@dimen/dp_size_60"
-        android:scaleType="fitXY"
-         />
+        android:scaleType="fitXY" />
 
     <Button
         android:id="@+id/button1"
         android:layout_width="@dimen/dp_size_18"
         android:layout_height="@dimen/dp_size_18"
+        android:layout_gravity="right|top"
         android:layout_marginRight="@dimen/dp_size_5"
         android:layout_marginTop="@dimen/dp_size_5"
-        android:padding="@dimen/dp_size_5"
-        android:layout_gravity="right|top"
         android:background="@drawable/ic_cross_flat"
-        />
+        android:padding="@dimen/dp_size_5" />
 
 </FrameLayout>

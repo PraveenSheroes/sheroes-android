@@ -171,6 +171,7 @@ public class AppConstants {
     public static final String HOUR = " hour";
     public static final String MINUT = " minute";
     public static final String AGO = " ago";
+    public static final String JUST_NOW = " just now";
     public static final String PDF_PATH = "application/pdf";
     public static final String PDF_VISITING_CARD = "visiting_card.pdf";
     public static final String VISITING_CARD_URL = "http://www.princexml.com/howcome/2016/samples/magic6/magic.pdf";
@@ -197,8 +198,7 @@ public class AppConstants {
     public static final String USER_SUMMARY_SERVICE="USER_SUMMARY_SERVICE";
     public static final String VISIT_PREFERENCE="VISIT_PREFERENCE";
     public static final String CLIENT_SIDE_VISIT_PREFERENCE_SERVICE="CLIENT_SIDE_VISIT_PREFERENCE_SERVICE";
-    public static final String SHEROESFACEBOOKLINK="https://www.facebook.com/sheroesindia/\n" +
-            "https://twitter.com/sheroesindia";
+    public static final String SHEROESFACEBOOKLINK="https://www.facebook.com/sheroesindia/\n";
     public static final String SHEROESTWITTERLINK="https://twitter.com/sheroesindia/\n";
     public static final String SHEROESISTRAGRAMLINK="https://www.instagram.com/sheroes.in/\n";
     public static final String MASTER_DATA_DEFAULT_CATEGORY = "POPULAR";

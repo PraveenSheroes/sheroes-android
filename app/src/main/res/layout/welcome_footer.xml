@@ -6,11 +6,11 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/ractangle_welcome_footer_"
-        android:layout_marginLeft="@dimen/dp_size_25"
-        android:layout_marginRight="@dimen/dp_size_20"
+        android:layout_marginLeft="@dimen/dp_size_10"
+        android:layout_marginRight="@dimen/dp_size_10"
         android:orientation="vertical">
 
         <com.facebook.login.widget.LoginButton
@@ -20,7 +20,8 @@
             android:layout_marginLeft="@dimen/dp_size_20"
             android:layout_marginRight="@dimen/dp_size_20"
             android:layout_marginTop="@dimen/dp_size_30"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:textSize="@dimen/sp_size_16"
+            android:textStyle="normal"
             android:background="@drawable/rectangle_search_bar"
             android:drawableLeft="@color/search_tab_text"
             android:backgroundTint="@color/search_tab_text"
@@ -36,8 +37,6 @@
             android:paddingTop="@dimen/dp_size_10"
             android:layout_marginTop="@dimen/dp_size_10"
             android:paddingBottom="@dimen/dp_size_20"
-            android:paddingLeft="@dimen/dp_size_10"
-            android:paddingRight="@dimen/dp_size_10"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:gravity="center"
             android:text="@string/ID_WELCOME_TEXT4"

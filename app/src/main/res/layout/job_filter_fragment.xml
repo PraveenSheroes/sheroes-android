@@ -43,6 +43,7 @@
                 android:id="@+id/rv_filter_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:layout_below="@+id/lnr_filter_header"
                 android:divider="@color/fully_transparent" />
             <View

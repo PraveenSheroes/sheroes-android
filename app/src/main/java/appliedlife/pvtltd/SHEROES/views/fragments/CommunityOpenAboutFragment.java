@@ -348,7 +348,7 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
         });
         tvEdit = (TextView) popupView.findViewById(R.id.tv_article_menu_edit);
         tvLeave = (TextView) popupView.findViewById(R.id.tv_article_menu_delete);
-        popupWindow.showAsDropDown(view, -150,0);
+        popupWindow.showAsDropDown(view, -100,0);
         tvLeave.setText(getActivity().getString(R.string.ID_LEAVE));
         if (mFeedDetail.isOwner()) {
             if (StringUtil.isNotEmptyCollection(mOwnerListResponse) && mOwnerListResponse.size() > AppConstants.ONE_CONSTANT) {
@@ -423,7 +423,7 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
                 mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);
                 break;
             default:
-                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_JOIN_INVITE);
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), ERROR_JOIN_INVITE);
 
         }
 
@@ -511,7 +511,7 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
                 mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(memberListResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);
                 break;
             default:
-                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_JOIN_INVITE);
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), ERROR_JOIN_INVITE);
         }
     }
 

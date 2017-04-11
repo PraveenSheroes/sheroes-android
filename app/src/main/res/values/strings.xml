@@ -29,14 +29,6 @@
     <string name="ID_NAVIGATION_DRAWER_OPEN">Open navigation drawer</string>
     <string name="ID_NAVIGATION_DRAWER_CLOSE">Close navigation drawer</string>
     <string name="title_activity_home_search">HomeSearchActivity</string>
-    <string name="ID_ARTICLE_TEXT">Working women have it hard enough – managing a 9 to 6 job along with family, friends, and the demand of staying fit and healthy is the last thing on the agenda. We all look for a job that gives us more than just a good salary – flexible working hours, innovation driven environment, medical insurance, the list is long.
-
-But what if the place you work for gives you free benefits that help you stay fit? Yeah… you heard that right – a job that looks after you! At work!
-
-Today’s companies need to attract and retain the best and they are upping their game to give employees a great workplace focused on professional AND personal development.
-
-Let’s check out the Top 5 companies that believe in much more than just hard work!</string>
-
     <!--String related to facebook integration-->
     <string name="ID_FACEBOOK_APP_ID">994271980664614</string>
     <!--Fragment classes-->
@@ -96,6 +88,7 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_BOOKMARK">Bookmarks</string>
     <string name="ID_SETTING">Settings</string>
     <string name="ID_POST">Post as:</string>
+    <string name="ID_POSTED">Posted</string>
     <string name="ID_MEMBERS">Members</string>
     <string name="ID_ADMIN">Admin</string>
     <string name="ID_OWNER_REMOVED">Owner removed</string>
@@ -105,9 +98,12 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_SHARE">Share</string>
     <string name="ID_SHARE_WITH_COMMUNITY">Share with your community…</string>
     <string name="ID_EDIT">Edit</string>
+    <string name="ID_EDIT_POST">EDIT A POST</string>
     <string name="ID_DELETE">Delete</string>
     <string name="ID_REPORT">Report as spam</string>
     <string name="ID_NO_RESULT_FOUND">No Result found ,Please Click For Try again</string>
+    <string name="ID_NO_RESULT_FOUND_TRY">Try another search</string>
+    <string name="ID_NO_RESULT_FOUND_SEARCH">No Result found for</string>
     <string name="ID_NO_POST">No community post found</string>
     <string name="ID_POPULAR">Popular</string>
     <string name="ID_SUGGESTED">Suggested communities</string>
@@ -137,6 +133,9 @@ Let’s check out the Top 5 companies that believe in much more than just hard w
     <string name="ID_COMMUNITES">COMMUNITY</string>
     <string name="ID_PREFERENCES">PREFERENCES</string>
     <string name="ID_ABOUT">ABOUT</string>
+    <string name="ID_UPLOAD_LOGO">Upload load</string>
+    <string name="ID_UPLOAD_COVER">Upload cover</string>
+    <string name="ID_CREATE_COMMUNITY">Create Community</string>
     <string name="ID_CHNAGE_PRIVACY"> Change Community Privacy</string>
     <string name="ID_CHANGE_PRIVACY_LABEL">The following changes will take place:</string>
     <string name="ID_CHANGE_CLOSE_FIRST">• All members will remain members of the close community.</string>
@@ -792,7 +791,7 @@ etur adipiscing elit,sed do eiusmod tempor incididunt ut…</string>
     <string name="ID_DESCRIPTION">DESCRIPTION</string>
     <string name="ID_CREATEPOST">CREATE A POST</string>
     <string name="ID_COMMUNITITES_NAME">Ranigarh Women’s Empowerment and Development Group</string>
-    <string name="ID_SHARE_LINK">https://sheroes.com/community/ranigarh-women’s-empowerment-and-development-group/Mjc0MA==</string>
+    <string name="ID_SHARE_LINK">https://sheroes.com/community/</string>
     <string name="ID_COMM_SHARE_EMAIL_LINK">SHARE COMMUNITY LINK ON EMAIL</string>
     <string name="ID_EMAIL_HINT_TEXT">Enter emails to share...</string>
     <string name="ID_SAHRE_TEXT">SHARE</string>

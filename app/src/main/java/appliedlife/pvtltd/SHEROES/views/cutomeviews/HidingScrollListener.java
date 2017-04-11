@@ -108,7 +108,7 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
             }
         }
 
-        if (totalItemCount>(visibleThreshold+1)&&!loading && totalItemCount <=(lastVisibleItem + visibleThreshold)) {
+        if (!loading && totalItemCount <=(lastVisibleItem + visibleThreshold)) {
             if(null!=mFragmentListRefreshData&& StringUtil.isNotNullOrEmptyString(mFragmentListRefreshData.getCallFromFragment())) {
                 int pageNo=mFragmentListRefreshData.getPageNo();
                 switch (mFragmentListRefreshData.getCallFromFragment()) {
@@ -143,10 +143,10 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                        mCommentReactionPresenter.getAllCommentListFromPresenter(mAppUtils.getCommentRequestBuilder(mFragmentListRefreshData.getEnitityOrParticpantid(),pageNo), mFragmentListRefreshData.isReactionList(),AppConstants.NO_REACTION_CONSTANT);
                         break;
                     case AppConstants.MEMBER_FRAGMENT:
-                        mMembersPresenter.getAllMembers(mAppUtils.getMemberRequestBuilder(mFragmentListRefreshData.getEnitityOrParticpantid(),pageNo));
+                        mMembersPresenter.getAllMembers(mAppUtils.getPandingMemberRequestBuilder(mFragmentListRefreshData.getEnitityOrParticpantid(),pageNo));
                         break;
                     case AppConstants.PANDING_MEMBER_FRAGMENT:
-                        requestedPresenter.getAllMembers(mAppUtils.getMemberRequestBuilder(mFragmentListRefreshData.getEnitityOrParticpantid(),pageNo));
+                        requestedPresenter.getAllMembers(mAppUtils.getPandingMemberRequestBuilder(mFragmentListRefreshData.getEnitityOrParticpantid(),pageNo));
 
                         break;
                     case AppConstants.USER_COMMUNITY_POST_FRAGMENT:

@@ -167,11 +167,11 @@ public class OwnerRemoveDialog extends BaseDialogFragment implements CommunityVi
                 break;
             case AppConstants.FAILED:
                 getDialog().cancel();
-                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(deactivateOwnerResp.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);
+                ((CommunitiesDetailActivity)getActivity()).onShowErrorDialog(deactivateOwnerResp.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);
                 break;
             default:
                 getDialog().cancel();
-                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_JOIN_INVITE);
+                ((CommunitiesDetailActivity)getActivity()).onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), ERROR_JOIN_INVITE);
         }
     }
 

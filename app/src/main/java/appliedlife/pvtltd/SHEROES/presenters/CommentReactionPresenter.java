@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.CommentReactionModel;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentAddDelete;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -49,7 +50,7 @@ public class CommentReactionPresenter extends BasePresenter<AllCommentReactionVi
 
     public void getAllCommentListFromPresenter(CommentReactionRequestPojo commentReactionRequestPojo,boolean isReaction,final int addEditOperation) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.HTTP_401_UNAUTHORIZED, ERROR_COMMENT_REACTION);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMENT_REACTION);
             return;
         }
         getMvpView().startProgressBar();
@@ -75,11 +76,11 @@ public class CommentReactionPresenter extends BasePresenter<AllCommentReactionVi
 
     public void addCommentListFromPresenter(CommentReactionRequestPojo commentReactionRequestPojo,final int operationId) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.HTTP_401_UNAUTHORIZED,ERROR_COMMENT_REACTION);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_COMMENT_REACTION);
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = mCommentReactionModel.addCommentListFromModel(commentReactionRequestPojo).subscribe(new Subscriber<CommentReactionResponsePojo>() {
+        Subscription subscription = mCommentReactionModel.addCommentListFromModel(commentReactionRequestPojo).subscribe(new Subscriber<CommentAddDelete>() {
             @Override
             public void onCompleted() {
                 getMvpView().stopProgressBar();
@@ -90,20 +91,22 @@ public class CommentReactionPresenter extends BasePresenter<AllCommentReactionVi
             }
 
             @Override
-            public void onNext(CommentReactionResponsePojo commentResponsePojo) {
+            public void onNext(CommentAddDelete commentResponsePojo) {
                 getMvpView().stopProgressBar();
-                getMvpView().commentSuccess(commentResponsePojo.getStatus(),operationId);
+                if(null!=commentResponsePojo) {
+                    getMvpView().commentSuccess(commentResponsePojo, operationId);
+                }
             }
         });
         registerSubscription(subscription);
     }
     public void editCommentListFromPresenter(CommentReactionRequestPojo commentReactionRequestPojo, final int editDeleteId) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.HTTP_401_UNAUTHORIZED,ERROR_COMMENT_REACTION);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_COMMENT_REACTION);
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = mCommentReactionModel.editCommentListFromModel(commentReactionRequestPojo).subscribe(new Subscriber<CommentReactionResponsePojo>() {
+        Subscription subscription = mCommentReactionModel.editCommentListFromModel(commentReactionRequestPojo).subscribe(new Subscriber<CommentAddDelete>() {
             @Override
             public void onCompleted() {
                 getMvpView().stopProgressBar();
@@ -114,9 +117,11 @@ public class CommentReactionPresenter extends BasePresenter<AllCommentReactionVi
                 getMvpView().showError(AppConstants.HTTP_401_UNAUTHORIZED,ERROR_COMMENT_REACTION);
             }
             @Override
-            public void onNext(CommentReactionResponsePojo commentResponsePojo) {
+            public void onNext(CommentAddDelete commentResponsePojo) {
                 getMvpView().stopProgressBar();
-                getMvpView().commentSuccess(commentResponsePojo.getStatus(),editDeleteId);
+                if(null!=commentResponsePojo) {
+                    getMvpView().commentSuccess(commentResponsePojo, editDeleteId);
+                }
             }
         });
         registerSubscription(subscription);

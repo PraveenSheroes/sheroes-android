@@ -2,8 +2,6 @@ package appliedlife.pvtltd.SHEROES.basecomponents;
 
 import android.app.DialogFragment;
 import android.app.FragmentManager;
-import android.content.Context;
-import android.support.v4.app.Fragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,9 +9,7 @@ import java.util.HashMap;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
-import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 
 
 /**
@@ -29,18 +25,6 @@ public class BaseDialogFragment extends DialogFragment implements BaseMvpView {
     public static final String DISMISS_PARENT_ON_OK_OR_BACK = "DISMISS_PARENT_ON_OK_OR_BACK";
     public static final String IS_CANCELABLE = "is_cancelable";
     public static final String ERROR_MESSAGE = "error_msg";
-    public FragmentIntractionWithActivityListner mHomeSearchActivityFragmentIntractionWithActivityListner;
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            if (getActivity() instanceof FragmentIntractionWithActivityListner) {
-                mHomeSearchActivityFragmentIntractionWithActivityListner = (FragmentIntractionWithActivityListner) getActivity();
-            }
-        } catch (Fragment.InstantiationException exception) {
-            LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
-        }
-    }
     @Override
     public void onStart() {
         super.onStart();

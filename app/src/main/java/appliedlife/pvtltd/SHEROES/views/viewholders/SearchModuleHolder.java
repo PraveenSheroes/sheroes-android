@@ -23,9 +23,9 @@ import butterknife.OnClick;
 
 public class SearchModuleHolder extends BaseViewHolder<FeedDetail> {
     private final String TAG = LogUtils.makeLogTag(SearchModuleHolder.class);
-    @Bind(R.id.tv_search_list_header_text)
+    @Bind(R.id.tv_home_search_list_header_text)
     TextView mTvHeaderText;
-    @Bind(R.id.tv_search_list_label_text)
+    @Bind(R.id.tv_home_search_list_label_text)
     TextView mTvLabelText;
     @Bind(R.id.rl_search_module_list)
     RelativeLayout rlSearchModuleList;

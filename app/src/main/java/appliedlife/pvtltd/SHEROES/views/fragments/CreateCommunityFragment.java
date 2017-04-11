@@ -174,12 +174,11 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
             //    mEtCreateCommunityTags.setText("Community Tag");
             createCommunityPresenter.attachView(this);
             setProgressBar(mProgressBar);
-
             if (null != getArguments()) {
                 mFeedDetail = getArguments().getParcelable(AppConstants.COMMUNITIES_DETAIL);
                 if (null != mFeedDetail) {
                     if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getCommunityType())) {
-                        mEtCommunityType.setText(mFeedDetail.getCommunityType().toString());
+                        mEtCommunityType.setText(mFeedDetail.getCommunityType());
                         typeId = mFeedDetail.getCommunityTypeL();
                     }
                     if (null != mFeedDetail.getTag_ids() && mFeedDetail.getTag_ids().size() > 0) {
@@ -642,7 +641,7 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
                 mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(createCommunityResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), COMMUNITY_OWNER);
                 break;
             default:
-                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, COMMUNITY_OWNER);
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), COMMUNITY_OWNER);
         }
     }
 

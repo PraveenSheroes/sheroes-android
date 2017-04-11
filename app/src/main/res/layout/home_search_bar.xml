@@ -11,7 +11,7 @@
         android:paddingTop="@dimen/dp_size_10"
         android:paddingLeft="@dimen/dp_size_5"
         android:paddingBottom="@dimen/dp_size_10"
-        android:paddingRight="@dimen/dp_size_10"/>
+        android:paddingRight="@dimen/dp_size_16"/>
     <TextView
         android:id="@+id/tv_search_box"
         android:layout_width="wrap_content"
@@ -20,7 +20,6 @@
         android:fontFamily="@string/ID_ROBOTO_REGULAR"
         android:padding="@dimen/dp_size_12"
         android:layout_gravity="center"
-        android:layout_marginRight="@dimen/dp_size_20"
         android:drawablePadding="@dimen/dp_size_12"
         android:drawableLeft="@drawable/ic_search_box_icon"
         android:layerType="software"
@@ -46,15 +45,15 @@
         android:visibility="gone"
         android:gravity="center"/>
 
-    <ImageView
+    <TextView
         android:id="@+id/iv_home_notification_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center|right"
-        android:background="@drawable/ic_notification"
+        android:drawableLeft="@drawable/ic_notification"
+        android:layout_marginRight="@dimen/dp_size_6"
         android:padding="@dimen/dp_size_10"
-        android:layout_marginRight="@dimen/dp_size_10"
-        android:layout_marginLeft="@dimen/dp_size_10"
+        android:layout_marginLeft="@dimen/dp_size_6"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />

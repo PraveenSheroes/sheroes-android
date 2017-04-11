@@ -15,6 +15,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityList;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -25,7 +26,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ImageUploadFragment;
 import butterknife.ButterKnife;
 
 
-public class CreateCommunityPostActivity extends BaseActivity implements CreateCommunityPostFragment.CreateCommunityActivityPostIntractionListner, BaseHolderInterface, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, ImageUploadFragment.ImageUploadCallable {
+public class CreateCommunityPostActivity extends BaseActivity implements BaseHolderInterface, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, ImageUploadFragment.ImageUploadCallable {
     String data = "";
     private FeedDetail mFeedDetail;
     private CreateCommunityPostFragment mCommunityFragment;
@@ -124,21 +125,37 @@ public class CreateCommunityPostActivity extends BaseActivity implements CreateC
     }
 
 
-
     @Override
-    public void onErrorOccurence(String error) {
-        if(!StringUtil.isNotNullOrEmptyString(error))
-        {
-            error = getString(R.string.ID_GENERIC_ERROR);
+    public void onShowErrorDialog(String errorReason, FeedParticipationEnum feedParticipationEnum) {
+        if (StringUtil.isNotNullOrEmptyString(errorReason)) {
+            switch (errorReason) {
+                case AppConstants.CHECK_NETWORK_CONNECTION:
+                    showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
+                    break;
+                case AppConstants.MARK_AS_SPAM:
+                    showNetworkTimeoutDoalog(true, false, errorReason);
+                    break;
+                default:
+                    showNetworkTimeoutDoalog(true, false, errorReason);
+            }
+        } else {
+            showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
         }
-        showNetworkTimeoutDoalog(true,false,error);
-    }
 
+    }
     @Override
-    public void onClose() {
+    public void onBackPressed() {
         finish();
     }
-
+    public void editedSuccessFully(FeedDetail feedDetail)
+    {
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(AppConstants.COMMUNITY_POST_FRAGMENT, feedDetail);
+        intent.putExtras(bundle);
+        setResult(RESULT_OK, intent);
+        onBackPressed();
+    }
     @Override
     public void onCameraSelection() {
         mCommunityFragment.selectImageFrmCamera();

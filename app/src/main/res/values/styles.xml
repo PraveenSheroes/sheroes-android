@@ -66,7 +66,7 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
     <style name="CustomTabText" parent="TextAppearance.Design.Tab">
-        <item name="android:textSize">@dimen/sp_size_10</item>
+        <item name="android:textSize">@dimen/sp_size_11</item>
     </style>
 
     <style name="CheckBoxStyle">

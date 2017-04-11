@@ -1,7 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,11 +24,6 @@ public class ClosedCommunityRequestFragment extends BaseDialogFragment {
     TextView mTvClosedCommunityHIghlyIntrested;
     @Bind(R.id.tv_closed_community_already_member)
     TextView mTvClosedCommunityAlreadyMember;
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

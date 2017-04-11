@@ -23,6 +23,6 @@
         android:textColor="@color/searchbox_hint_text_color"
         android:inputType="text"
         android:textSize="@dimen/sp_size_15"
-        android:padding="@dimen/dp_size_15" />
+        android:padding="@dimen/dp_size_10" />
 </LinearLayout>
 

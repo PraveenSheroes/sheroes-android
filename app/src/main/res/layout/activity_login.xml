@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/line_color"
+    android:background="@color/white"
     android:fitsSystemWindows="true">
 
     <android.support.design.widget.AppBarLayout
@@ -41,7 +41,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left|top"
-                    android:layout_marginLeft="@dimen/dp_size_40"
+                    android:layout_marginLeft="@dimen/dp_size_20"
                     android:padding="@dimen/dp_size_10"
                     android:drawableLeft="@drawable/ic_back_black"/>
                 <TextView
@@ -50,9 +50,10 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
                     android:textColor="@color/black"
+                    android:layout_marginLeft="@dimen/dp_size_105"
+                    android:gravity="center"
                     android:textSize="@dimen/sp_size_15"
                     android:textAllCaps="true"
-                    android:layout_marginLeft="@dimen/dp_size_105"
                     android:text="@string/ID_ACTION_LOG_IN_SHORT"/>
 
             </android.support.v7.widget.Toolbar>

@@ -22,7 +22,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.DrawerItems;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.models.entities.home.ProfileItems;
-import appliedlife.pvtltd.SHEROES.models.entities.jobs.FilterList;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobDetailPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobLocationList;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingInterestJobSearch;
@@ -294,13 +293,7 @@ public enum HolderMapping {
             return new VisitingCardholder(view, viewInterface);
         }
     },
-    FILTERLIST(R.layout.filter_list) {
-        @Override
-        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new FilterHolder(view, viewInterface);
-        }
-    },
-    GOOD_AT(R.layout.ggodat_card) {
+       GOOD_AT(R.layout.ggodat_card) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new GoodAtHolder(view, viewInterface);
@@ -539,9 +532,7 @@ public enum HolderMapping {
                     return COMMUNITY_SUGGESTED_BY_HOLDER.ordinal();
                 } else if (item instanceof JobLocationList) {
                     return JOB_LOCATION_LIST.ordinal();
-                } else if (item instanceof FilterList) {
-                    return FILTERLIST.ordinal();
-                } else if (item instanceof JobDetailPojo) {
+                }  else if (item instanceof JobDetailPojo) {
                     return JOB_DETAIL_HOLDER.ordinal();
                 } else if (item instanceof ProfileItems) {
                     return PROFILE_HOLDER.ordinal();
