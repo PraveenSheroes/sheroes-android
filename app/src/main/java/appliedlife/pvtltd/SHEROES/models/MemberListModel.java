@@ -49,7 +49,6 @@ public class MemberListModel {
                     @Override
                     public MemberListResponse call(MemberListResponse memberListResponse) {
                         LogUtils.error("Community Member list res: ",gson.toJson(memberListResponse));
-
                         return memberListResponse;
                     }
                 })

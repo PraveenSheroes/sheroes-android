@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -107,22 +106,22 @@ public class CommunitiesDetailFragment extends BaseFragment {
             mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager, mFragmentListRefreshData) {
                 @Override
                 public void onHide() {
-                    if ((boolean) mTvJoinView.getTag()) {
+                  /*  if ((boolean) mTvJoinView.getTag()) {
                         if (mTvJoinView.getVisibility() == View.GONE) {
                             mTvJoinView.setVisibility(View.VISIBLE);
                             mTvJoinView.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
                         }
-                    }
+                    }*/
                 }
 
                 @Override
                 public void onShow() {
-                    if ((boolean) mTvJoinView.getTag()) {
+                   /* if ((boolean) mTvJoinView.getTag()) {
                         if (mTvJoinView.getVisibility() == View.VISIBLE) {
                             mTvJoinView.setVisibility(View.GONE);
                             mTvJoinView.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
                         }
-                    }
+                    }*/
                 }
 
                 @Override

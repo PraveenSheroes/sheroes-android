@@ -21,6 +21,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
@@ -50,10 +51,13 @@ public class JobFilterFragment extends BaseFragment {
     TextView mTvCommunityTitle;
     @Bind(R.id.tv_filter_exp)
     TextView tvExp;
+    @Bind(R.id.tv_location_data)
+    TextView tvLocationData;
     private HashMap<String, HashMap<String, ArrayList<LabelValue>>> mMasterDataResult;
     @Inject
     Preference<MasterDataResponse> mUserPreferenceMasterData;
     private GenericRecyclerViewAdapter mAdapter;
+    private GetAllDataDocument getAllDataDocument;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -91,6 +95,13 @@ public class JobFilterFragment extends BaseFragment {
         return view;
     }
 
+    public void locationData(GetAllDataDocument getAllDataDocument) {
+        this.getAllDataDocument = getAllDataDocument;
+        if (StringUtil.isNotNullOrEmptyString(getAllDataDocument.getTitle())) {
+            tvLocationData.setText(getAllDataDocument.getTitle());
+        }
+    }
+
     @OnClick(R.id.tv_save_job_filter)
     public void applyFilterOnClick() {
         FeedRequestPojo feedRequestPojo = new FeedRequestPojo();
@@ -104,11 +115,11 @@ public class JobFilterFragment extends BaseFragment {
     @OnClick(R.id.tv_opportunity_type_lable)
     public void opportunityType() {
         mRecyclerView.setVisibility(View.VISIBLE);
-
     }
 
     @OnClick(R.id.tv_loaction_label)
     public void locationJob() {
+
     }
 
     @OnClick(R.id.tv_functional_area_lable)
@@ -138,5 +149,6 @@ public class JobFilterFragment extends BaseFragment {
         }
         return null;
     }
+
 
 }

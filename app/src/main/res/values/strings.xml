@@ -14,6 +14,7 @@
     <!-- Strings related to login -->
     <string name="ID_PROMPT_EMAIL">Email</string>
     <string name="ID_CREATE">Create</string>
+    <string name="ID_CREATED">Created</string>
     <string name="ID_PROMPT_PASSWORD">Password</string>
     <string name="ID_ACTION_LOG_IN_SHORT">Login</string>
     <string name="ID_ERROR_INVALID_EMAIL">This email address is invalid</string>
@@ -98,7 +99,7 @@
     <string name="ID_SHARE">Share</string>
     <string name="ID_SHARE_WITH_COMMUNITY">Share with your community…</string>
     <string name="ID_EDIT">Edit</string>
-    <string name="ID_EDIT_POST">EDIT A POST</string>
+    <string name="ID_EDIT_POST">EDIT POST</string>
     <string name="ID_DELETE">Delete</string>
     <string name="ID_REPORT">Report as spam</string>
     <string name="ID_NO_RESULT_FOUND">No Result found ,Please Click For Try again</string>
@@ -807,8 +808,8 @@ etur adipiscing elit,sed do eiusmod tempor incididunt ut…</string>
     <string name="ID_SELECT_PURPOSE">Select Purpose</string>
 
     <string name="ID_COMMUNITY_REQUESTED">Requests</string>
-    <string name="ID_EMPLOYER_BRANDING">Emloyer Branding</string>
-    <string name="ID_COSTOMER_REVIEW">Costomer Review</string>
+    <string name="ID_EMPLOYER_BRANDING">Employer Branding</string>
+    <string name="ID_COSTOMER_REVIEW">Customer Review</string>
     <string name="ID_ASSOCIATE_EMPLOYEE_ENGAGEMENT">Associate/Employee engagement</string>
     <string name="ID_PRODUCT_PROMOTION">Product Promotion</string>
     <string name="ID_REQUEST">Requests</string>
@@ -844,7 +845,7 @@ etur adipiscing elit,sed do eiusmod tempor incididunt ut…</string>
     <string name="ID_JOB_LOCATION">Mumbai, India</string>
     <string name="ID_JOB_DES">Description</string>
     <string name="ID_ADD">Add</string>
-
+    <string name="ID_EDITED">Edited</string>
     <string-array name="name">
 
         <item>Topic/Interest</item>

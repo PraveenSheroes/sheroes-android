@@ -163,7 +163,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
     List<String> imageUrls;
     @Inject
     CreateCommunityPresenter createCommunityPresenter;
-
+    private String messageForSuccess;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -173,6 +173,10 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
         if (null != getArguments()) {
             mFeedDetail = getArguments().getParcelable(AppConstants.COMMUNITY_POST_FRAGMENT);
             checkIntentWithImageUrls();
+            messageForSuccess=getString(R.string.ID_EDITED);
+        }else {
+            mTvcreate_community_post.setText(R.string.ID_CREATEPOST);
+            messageForSuccess=getString(R.string.ID_POSTED);
         }
         mOutPutFile = new File(Environment.getExternalStorageDirectory(), "temp.jpg");
         mOutPutFile1 = new File(Environment.getExternalStorageDirectory(), "temp1.jpg");
@@ -216,20 +220,28 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
     }
 
     private void checkIntentWithImageUrls() {
-        mVg_image_container.removeAllViews();
-        mVg_image_container.removeAllViewsInLayout();
-        LayoutInflater layoutInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View layout2 = layoutInflater.inflate(R.layout.imagevie_with_cross, null);
         if (null != mFeedDetail) {
-                mTvcreate_community_post.setText(getString(R.string.ID_EDIT_POST));
+            mVg_image_container.removeAllViews();
+            mVg_image_container.removeAllViewsInLayout();
+            LayoutInflater layoutInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View layout2 = layoutInflater.inflate(R.layout.imagevie_with_cross, null);
+            mTvcreate_community_post.setText(getString(R.string.ID_EDIT_POST));
+            mCommunityId=mFeedDetail.getIdOfEntityOrParticipant();
             if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getListDescription())) {
                 mEtShareCommunityPostText.setText(mFeedDetail.getListDescription());
                 mCounterTxt.setVisibility(View.VISIBLE);
                 mCounterTxt.setText(String.valueOf(AppConstants.MAX_WORD_COUNTER - mFeedDetail.getListDescription().length()));
             }
-            if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getNameOrTitle())) {
-                mEtchoosecommunity.setText(mFeedDetail.getNameOrTitle());
+            if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getPostCommunityName())) {
+                mEtchoosecommunity.setText(mFeedDetail.getPostCommunityName());
+                tv_community_owner.setText(mFeedDetail.getPostCommunityName());
             }
+            if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getThumbnailImageUrl())) {
+                Glide.with(this).load(mFeedDetail.getThumbnailImageUrl()).transform(new CommunityOpenAboutFragment.CircleTransform(getActivity())).into(iv_community_owner);
+                mIvcommunity_post_icon.setCircularImage(true);
+                mIvcommunity_post_icon.bindImage(mFeedDetail.getThumbnailImageUrl());
+            }
+
             imageUrls = mFeedDetail.getImageUrls();
             if (StringUtil.isNotEmptyCollection(mFeedDetail.getImageUrls())) {
                 for (int i = 0; i < imageUrls.size(); i++) {
@@ -248,8 +260,6 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
                 }
             }
             mVg_image_container.addView(layout2);
-        } else {
-            mTvcreate_community_post.setText(R.string.ID_CREATEPOST);
         }
     }
 
@@ -435,9 +445,10 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
         if (StringUtil.isNotNullOrEmptyString(createCommunityResponse.getStatus())) {
             switch (createCommunityResponse.getStatus()) {
                 case AppConstants.SUCCESS:
-                    Toast.makeText(getActivity(), getString(R.string.ID_POSTED), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), messageForSuccess, Toast.LENGTH_LONG).show();
                     mTv_community_post_submit.setVisibility(View.VISIBLE);
                     mFeedDetail = createCommunityResponse.getFeedDetail();
+                     mFeedDetail.setStatus(messageForSuccess);
                     ((CreateCommunityPostActivity) getActivity()).editedSuccessFully(mFeedDetail);
                     break;
                 case AppConstants.FAILED:

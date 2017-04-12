@@ -70,7 +70,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:fontFamily="@string/ID_ROBOTO_REGULAR"
-
         android:layout_marginTop="@dimen/dp_size_15"
         android:background="@drawable/select_purpose_btn_shap"
         android:text="@string/ID_PRODUCT_PROMOTION"

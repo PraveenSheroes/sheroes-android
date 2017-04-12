@@ -81,7 +81,6 @@ public class BasePresenter<T extends BaseMvpView> implements SheroesPresenter<T>
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(),ERROR_MASTER_DATA);
             }
 
             @Override

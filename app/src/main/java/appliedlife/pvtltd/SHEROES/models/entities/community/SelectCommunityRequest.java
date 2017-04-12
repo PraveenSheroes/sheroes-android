@@ -8,7 +8,6 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class SelectCommunityRequest {
-
     @SerializedName("appVersion")
     @Expose
     private String appVersion;

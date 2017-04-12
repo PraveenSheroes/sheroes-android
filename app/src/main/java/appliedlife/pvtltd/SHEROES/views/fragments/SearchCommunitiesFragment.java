@@ -175,7 +175,7 @@ public class SearchCommunitiesFragment extends BaseFragment implements HomeView 
             if (!isDetached())
             {
                 mSearchDataName = mSearchDataName.trim();
-                mHomePresenter.getFeedFromPresenter(mAppUtils.searchRequestBuilder(AppConstants.FEED_COMMUNITY,mSearchDataName ,mFragmentListRefreshData.getPageNo(),AppConstants.ALL_SEARCH));
+                mHomePresenter.getFeedFromPresenter(mAppUtils.searchRequestBuilder(AppConstants.FEED_COMMUNITY,mSearchDataName ,mFragmentListRefreshData.getPageNo(),AppConstants.ALL_SEARCH,null));
             }
         }
     };

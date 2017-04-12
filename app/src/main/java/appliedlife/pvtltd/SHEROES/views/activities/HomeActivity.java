@@ -238,7 +238,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     }
 
 
-
     public void openJobFilterActivity() {
         Intent intent = new Intent(getApplicationContext(), JobFilterActivity.class);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_JOB_FILTER);
@@ -821,15 +820,21 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         }
 
     }
+
     private void editCommunityPostResponse(Intent intent) {
         mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITY_POST_FRAGMENT);
-        if(null!=mFeedDetail) {
+        if (null != mFeedDetail) {
             Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
             if (AppUtils.isFragmentUIActive(fragment)) {
-                ((HomeFragment) fragment).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+                if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getStatus()) && mFeedDetail.getStatus().equalsIgnoreCase(getString(R.string.ID_POSTED))) {
+                    homeOnClick();
+                } else {
+                    ((HomeFragment) fragment).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+                }
             }
         }
     }
+
     private void jobFilterActivityResponse(Intent intent) {
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(JobFragment.class.getName());
         if (AppUtils.isFragmentUIActive(fragment)) {
@@ -921,7 +926,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 for (HomeSpinnerItem homeSpinnerItem : mHomeSpinnerItemList) {
                     if (homeSpinnerItem.isChecked()) {
                         categoryIds.add(homeSpinnerItem.getId());
-                        if(!homeSpinnerItem.getName().equalsIgnoreCase(AppConstants.FOR_ALL)) {
+                        if (!homeSpinnerItem.getName().equalsIgnoreCase(AppConstants.FOR_ALL)) {
                             stringBuilder.append(homeSpinnerItem.getName());
                             stringBuilder.append(AppConstants.COMMA);
                         }
@@ -936,8 +941,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     mHomeSpinnerItemList.addAll(localList);
                 }
                 if (StringUtil.isNotNullOrEmptyString(stringBuilder.toString())) {
-                    String total=stringBuilder.toString().substring(0,25);
-                    mTvCategoryText.setText(total+AppConstants.DOTS);
+                    String total = stringBuilder.toString().substring(0, 25);
+                    mTvCategoryText.setText(total + AppConstants.DOTS);
                 } else {
                     mTvCategoryText.setText(AppConstants.EMPTY_STRING);
                     mTvCategoryChoose.setVisibility(View.VISIBLE);

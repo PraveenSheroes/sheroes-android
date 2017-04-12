@@ -114,38 +114,26 @@ public interface SheroesAppServiceApi {
     Observable<LoginResponse> getRefreshToken();
     @POST("participant/community/join")
     Observable<CommunityResponse> getCommunityJoinResponse(@Body CommunityRequest communityRequest);
-
     @POST("participation/post/delete")
     Observable<DeleteCommunityPostResponse> getCommunityPostDeleteResponse(@Body DeleteCommunityPostRequest deleteCommunityPostRequest);
     @POST("participation/reaction/mark_spam")
     Observable<BookmarkResponsePojo> markAsSpam(@Body BookmarkRequestPojo bookmarkResponsePojo );
-
     @POST("participant/community/create")
     Observable<CreateCommunityResponse> postCreateCommunity(@Body CreateCommunityRequest createCommunityRequest);
-
     @POST("entity/master/suggest_community")
-    Observable<SelectedCommunityResponse> postCreateCommunity(@Body SelectCommunityRequest selectCommunityRequest);
-
+    Observable<SelectedCommunityResponse> suggestedCommunity(@Body SelectCommunityRequest selectCommunityRequest);
     @POST("participant/community/edit")
     Observable<CreateCommunityResponse> postEditCommunity(@Body EditCommunityRequest editCommunityRequest);
-
     @POST("participation/post/add")
     Observable<CreateCommunityResponse> createCommunityPost(@Body CommunityPostCreateRequest communityPostCreateRequest);
-
     @POST("participant/community/create_owner")
     Observable<CreateCommunityOwnerResponse> postCreateCommunityOwner(@Body CreateCommunityOwnerRequest createCommunityOwnerRequest);
-
     @POST("participant/community/owners_list")
     Observable<OwnerListResponse> getOwnerList(@Body OwnerListRequest ownerListResponse);
-
     @POST("participant/community/deactivate_owner")
     Observable<DeactivateOwnerResponse> getOwnerDeactivate(@Body DeactivateOwnerRequest deactivateOwnerRequest);
-
-
     @POST("participant/community/member_list")
     Observable<MemberListResponse> getMemberList(@Body MemberRequest membersList);
-
-
     @POST("participant/job/apply")
     Observable<JobApplyResponse> getJobApply(@Body JobApplyRequest jobApplyRequest);
     @POST("participant/community/pending_request")
@@ -176,7 +164,6 @@ public interface SheroesAppServiceApi {
     Observable<BoardingDataResponse> getWorkExpFromApi(@Body BoardingWorkExpRequest boardingJobAtRequest);
     @POST("participant/user/add_or_edit")
     Observable<BoardingDataResponse> getInterestFromApi(@Body BoardingInterestRequest boardingInterestRequest);
-
     @POST("participant/settings/change_user_preference")
     Observable<SettingChangeUserPreferenseResponse>getUserChangePreferenceAuthToken(@Body SettingChangeUserPreferenceRequest settingChangeUserPreferenceRequest);
     @POST("participant/user/get_details\n")
@@ -193,16 +180,11 @@ public interface SheroesAppServiceApi {
     Observable<BoardingDataResponse>getWorkLocationDetailsAuthToken(@Body ProfilePreferredWorkLocationRequest profilePreferredWorkLocationRequest);
     @POST("participant/user/get_visiting_card_details")
     Observable<ProfileEditVisitingCardResponse>getEditVisitingCardDetailsAuthToken();
-
-
-
     @POST("participant/user/participant/user/get_visiting_card")
     Observable<ProfileEditVisitingCardResponse>getSaveVisitingCardDetailsAuthToken(@Body GetUserVisitingCardRequest getUserVisitingCardRequest);
-
     @POST("participant/user/get_all_details")
-
     Observable<UserProfileResponse>getUserDetails();
-
+    @POST("participant/community/unjoin")
     Observable<MemberListResponse>removeMember(@Body RemoveMemberRequest removeMemberRequest);
     @POST("participant/community/reject_joining_request")
     Observable<MemberListResponse>removePandingMember(@Body RemoveMemberRequest removeMemberRequest);

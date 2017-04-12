@@ -1871,7 +1871,7 @@ public class AppUtils {
     /**
      * Request for feed api
      */
-    public static FeedRequestPojo searchRequestBuilder(String typeOfFeed, String queryName, int pageNo, String screenName) {
+    public static FeedRequestPojo searchRequestBuilder(String typeOfFeed, String queryName, int pageNo, String screenName,Long communityId) {
         AppUtils appUtils = AppUtils.getInstance();
         FeedRequestPojo feedRequestPojo = new FeedRequestPojo();
         feedRequestPojo.setAppVersion(appUtils.getAppVersionName());
@@ -1882,6 +1882,7 @@ public class AppUtils {
         feedRequestPojo.setPageSize(AppConstants.PAGE_SIZE);
         feedRequestPojo.setSubType(typeOfFeed);
         feedRequestPojo.setQuestion(queryName);
+        feedRequestPojo.setCommunityId(communityId);
         feedRequestPojo.setScreenName(screenName);
         return feedRequestPojo;
     }

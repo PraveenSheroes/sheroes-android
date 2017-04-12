@@ -154,7 +154,7 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
     View view;
     long tagId[] = new long[4];
 
-
+    private String messageForSuccess;
     List<Long> tagsid = new ArrayList<>();
     @Inject
     AppUtils mAppUtils;
@@ -243,8 +243,11 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
                     }
                     mCbcloseCommunity.setChecked(mFeedDetail.isClosedCommunity());
                     mCbopenCommunity.setChecked(!mFeedDetail.isClosedCommunity());
+                    messageForSuccess=getString(R.string.ID_EDITED);
+                }else
+                {
+                    messageForSuccess=getString(R.string.ID_CREATED);
                 }
-
 
             } else {
                 mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog((AppConstants.ERROR_OCCUR), ERROR_MY_COMMUNITIES);
@@ -280,7 +283,7 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
         List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
-            Toast.makeText(getActivity(), getString(R.string.ID_ADDED), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(),messageForSuccess, Toast.LENGTH_SHORT).show();
             mFeedDetail = feedDetailList.get(0);
             ((CreateCommunityActivity) getActivity()).onBackClickHandle(mFeedDetail);
         }
@@ -633,7 +636,7 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
                     mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_COMMUNITY, AppConstants.ONE_CONSTANT,  mFeedDetail.getIdOfEntityOrParticipant()));
                 }else
                 {
-                    Toast.makeText(getActivity(), getString(R.string.ID_ADDED), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(),messageForSuccess, Toast.LENGTH_SHORT).show();
                     ((CreateCommunityActivity) getActivity()).onBackClickHandle(mFeedDetail);
                 }
                 break;
