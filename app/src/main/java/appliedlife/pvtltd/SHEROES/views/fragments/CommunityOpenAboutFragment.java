@@ -142,7 +142,7 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
         mAdapter = new GenericRecyclerViewAdapter(getContext(), (CommunitiesDetailActivity) getActivity());
         mAboutCommunityOwnerRecyclerView.setLayoutManager(mLayoutManager);
         mAboutCommunityOwnerRecyclerView.setAdapter(mAdapter);
-        mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_COMMUNITY, AppConstants.ONE_CONSTANT, mFeedDetail.getId()));
+        mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_COMMUNITY, AppConstants.ONE_CONSTANT, mFeedDetail.getIdOfEntityOrParticipant()));
         return view;
     }
     @Override

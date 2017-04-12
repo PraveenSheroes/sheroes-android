@@ -127,7 +127,7 @@ public class CommunitySearchTagsDialog extends BaseDialogFragment implements Com
         View v = inflater.inflate(R.layout.community_tag_list, container, false);
         ButterKnife.bind(this, v);
         mcommunityListPresenter.attachView(this);
-        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ALL_SEARCH, AppConstants.EMPTY_STRING);
+        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ALL_SEARCH, AppConstants.NO_REACTION_CONSTANT);
 
         if (null != getArguments()) {
             mFeedDetail = getArguments().getParcelable(AppConstants.COMMUNITIES_DETAIL);

@@ -75,7 +75,7 @@ public class ProfileFullViewFragment extends BaseFragment implements HomeView {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_profile_full_view, container, false);
         ButterKnife.bind(this, view);
-        mFragmentListRefreshData=new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.PROFILE_FRAGMENT,AppConstants.EMPTY_STRING);
+        mFragmentListRefreshData=new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.PROFILE_FRAGMENT,AppConstants.NO_REACTION_CONSTANT);
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
         mHomePresenter.attachView(this);

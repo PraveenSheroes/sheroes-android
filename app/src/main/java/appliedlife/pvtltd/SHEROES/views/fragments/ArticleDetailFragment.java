@@ -92,7 +92,7 @@ public class ArticleDetailFragment extends BaseFragment {
         if (null != getArguments()) {
             mFeedDetail = getArguments().getParcelable(AppConstants.ARTICLE_DETAIL);
         }
-        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ARTICLE_DETAIL, mFeedDetail.getId());
+        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ARTICLE_DETAIL, mFeedDetail.getIdOfEntityOrParticipant());
         mHomePresenter.attachView(this);
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);

@@ -67,7 +67,7 @@ public class CommunityRequestedFragment extends BaseDialogFragment implements Re
         SheroesApplication.getAppComponent(getActivity()).inject(this);
         View view = inflater.inflate(R.layout.fragment_request, container, false);
         ButterKnife.bind(this, view);
-        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MEMBER_FRAGMENT, AppConstants.EMPTY_STRING);
+        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MEMBER_FRAGMENT, AppConstants.NO_REACTION_CONSTANT);
         if (null != getArguments()) {
             mFeedDetail = getArguments().getParcelable(AppConstants.COMMUNITY_DETAIL);
         }

@@ -81,7 +81,7 @@ public class InviteCommunityMember extends BaseDialogFragment implements HomeVie
         SheroesApplication.getAppComponent(getActivity()).inject(this);
         View view = inflater.inflate(R.layout.my_community_invite_member, container, false);
         ButterKnife.bind(this, view);
-        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ALL_SEARCH, AppConstants.EMPTY_STRING);
+        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ALL_SEARCH, AppConstants.NO_REACTION_CONSTANT);
         mHomePresenter.attachView(this);
         Bundle bundle = getArguments();
         if (bundle != null) {

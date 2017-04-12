@@ -630,7 +630,7 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
         switch (createCommunityResponse.getStatus()) {
             case AppConstants.SUCCESS:
                 if (null != mFeedDetail && StringUtil.isNotNullOrEmptyString(mFeedDetail.getId())) {
-                    mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_COMMUNITY, AppConstants.ONE_CONSTANT, mFeedDetail.getId()));
+                    mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_COMMUNITY, AppConstants.ONE_CONSTANT,  mFeedDetail.getIdOfEntityOrParticipant()));
                 }else
                 {
                     Toast.makeText(getActivity(), getString(R.string.ID_ADDED), Toast.LENGTH_SHORT).show();

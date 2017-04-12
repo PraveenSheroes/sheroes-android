@@ -71,7 +71,6 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -109,7 +108,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingTellUsReque
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingWorkExpRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.EducationEntity;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileAddEditEducationRequest;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 
@@ -1813,7 +1811,7 @@ public class AppUtils {
         return feedRequestPojo;
     }
 
-    public static FeedRequestPojo feedDetailRequestBuilder(String typeOfFeed, int pageNo, String idForDetail) {
+    public static FeedRequestPojo feedDetailRequestBuilder(String typeOfFeed, int pageNo, long idForDetail) {
 
         FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, pageNo);
         feedRequestPojo.setIdForFeedDetail(idForDetail);

@@ -100,7 +100,7 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
         View view = inflater.inflate(R.layout.fragment_job_details, container, false);
         ButterKnife.bind(this, view);
         mAppUtils = AppUtils.getInstance();
-        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.JOB_DETAIL, mFeedDetail.getId());
+        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.JOB_DETAIL,  mFeedDetail.getIdOfEntityOrParticipant());
         mHomePresenter.attachView(this);
         mJobpresenter.attachView(this);
         mLayoutManager = new LinearLayoutManager(getContext());

@@ -79,7 +79,7 @@ public class CommunityOwnerSearchFragment extends BaseFragment implements HomeVi
         }
         mHomePresenter.attachView(this);
         mAppUtils = AppUtils.getInstance();
-        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.JOB_FRAGMENT, AppConstants.EMPTY_STRING);
+        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.JOB_FRAGMENT, AppConstants.NO_REACTION_CONSTANT);
         mSearchEditText.setHint(getString(R.string.ID_SEARCH_USER));
         editTextWatcher();
         mPullRefreshList = new SwipPullRefreshList();

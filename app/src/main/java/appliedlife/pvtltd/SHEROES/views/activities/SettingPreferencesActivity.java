@@ -2,10 +2,6 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.google.gson.Gson;
 
@@ -36,9 +32,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.SettingPreferencesEducationDet
 import appliedlife.pvtltd.SHEROES.views.fragments.SettingPreferencesWorkExperienceFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SettingPreferencsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SettingFeedbackView;
-import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by priyanka.
@@ -49,17 +43,6 @@ public class SettingPreferencesActivity extends BaseActivity implements SettingF
 
     int mid;
     private final String TAG = LogUtils.makeLogTag(SettingPreferencesActivity.class);
-
-    @Bind(R.id.tv_setting_tittle)
-    TextView mtv_setting_tittle;
-    @Bind(R.id.tv_setting_tittle1)
-    TextView mtv_setting_tittle1;
-    @Bind(R.id.iv_back_setting)
-    ImageView miv_back_setting;
-    @Bind(R.id.lnr_setting)
-    RelativeLayout mlnr_setting;
-
-
     String privacy_type;
     String SettingListAsString;
 
@@ -72,56 +55,25 @@ public class SettingPreferencesActivity extends BaseActivity implements SettingF
     SettingFeedbackPresenter mSettingFeedbackPresenter;
 
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
         mSettingFeedbackPresenter.attachView(this);
-
-
-       /* if (null !=getIntent().getStringExtra("Setting_preferences")) {
-
-             SettingListAsString = getIntent().getStringExtra("Setting_preferences");
-
-            Gson gson = new Gson();
-            Type type = new TypeToken<List<Section>>(){}.getType();
-            sectionList = gson.fromJson(SettingListAsString, type);
-
-          for (Section section : sectionList){
-
-
-                Log.i("section Data", section.getName()+"-"+section.getId());
-
-
-
-            }
-
-
-        }*/
-
         renderPreferencsFragmentView();
 
     }
 
-
     public void renderPreferencsFragmentView() {
-
-
         setContentView(R.layout.activity_setting_dashboard_for_header_nav);
         ButterKnife.bind(this);
-        mtv_setting_tittle.setText(R.string.ID_PREFERENCES);
-        mtv_setting_tittle1.setText(R.string.ID_SETTINGS);
         SettingPreferencsFragment frag = new SettingPreferencsFragment();
         callFirstFragment(R.id.fl_prefrences_container, frag);
         get_user_preference();
 
     }
 
-    public void get_user_preference()
-
-    {
-
+    public void get_user_preference() {
         UserPreferenceRequest UserPreferenceRequest = new UserPreferenceRequest();
         UserPreferenceRequest.setAppVersion("string");
         UserPreferenceRequest.setCloudMessagingId("string");
@@ -140,7 +92,6 @@ public class SettingPreferencesActivity extends BaseActivity implements SettingF
         switch (id) {
 
             case R.id.tv_setting_preferences_basicdetails:
-                mlnr_setting.setVisibility(View.GONE);
                 SettingPreferencesBasicDetailsFragment settingPreferencesBasicDetailsFragment = new SettingPreferencesBasicDetailsFragment();
                 Gson gson = new Gson();
                 String jsonSections = gson.toJson(sectionList);
@@ -153,7 +104,6 @@ public class SettingPreferencesActivity extends BaseActivity implements SettingF
 
                 break;
             case R.id.tv_setting_preferences_education_details:
-                mlnr_setting.setVisibility(View.GONE);
                 SettingPreferencesEducationDetailsFragment settingPreferencesEducationDetailsFragment = new SettingPreferencesEducationDetailsFragment();
                 Gson gson1 = new Gson();
                 String jsonSections1 = gson1.toJson(sectionList);
@@ -174,7 +124,6 @@ public class SettingPreferencesActivity extends BaseActivity implements SettingF
                 callFirstFragment(R.id.fl_prefrences_container, frag1);*/
                 break;
             case R.id.tv_setting_preferences_work_experience:
-                mlnr_setting.setVisibility(View.GONE);
                 SettingPreferencesWorkExperienceFragment settingPreferencesWorkExperienceFragment = new SettingPreferencesWorkExperienceFragment();
                 Gson gson2 = new Gson();
                 String jsonSections2 = gson2.toJson(sectionList);
@@ -187,7 +136,6 @@ public class SettingPreferencesActivity extends BaseActivity implements SettingF
 
                 break;
             case R.id.tv_setting_preferences_deactive_account:
-                mlnr_setting.setVisibility(View.GONE);
                 SettingPreferencesDeactiveAccountFragment settingPreferencesDeactiveAccountFragment = new SettingPreferencesDeactiveAccountFragment();
                 Gson gson3 = new Gson();
                 String jsonSections3 = gson3.toJson(sectionList);
@@ -201,23 +149,6 @@ public class SettingPreferencesActivity extends BaseActivity implements SettingF
 
 
         }
-
-    }
-
-    //open SettingActivity press on id_back
-
-    @OnClick(R.id.iv_back_setting)
-    public void onbacklick() {
-
-        //finish();
-        //  getSupportFragmentManager().popBackStack();
-
-        //   mThome_toolbar.setVisibility(View.VISIBLE);
-
-        getSupportFragmentManager().popBackStack();
-
-        finish();
-
 
     }
 
@@ -258,12 +189,7 @@ public class SettingPreferencesActivity extends BaseActivity implements SettingF
     }
 
     public void backListener(int id) {
-
-        mlnr_setting.setVisibility(View.VISIBLE);
         get_user_preference();
-        getSupportFragmentManager().popBackStack();
-
-
     }
 
     @Override

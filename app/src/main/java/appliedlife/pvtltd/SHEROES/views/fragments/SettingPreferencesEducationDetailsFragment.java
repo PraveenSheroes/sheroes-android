@@ -31,7 +31,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingRatingResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.UserpreferenseResponse;
 import appliedlife.pvtltd.SHEROES.presenters.SettingFeedbackPresenter;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.SettingPreferencesActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.CustomSpinnerAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SettingFeedbackView;
 import butterknife.Bind;
@@ -153,7 +153,7 @@ public class SettingPreferencesEducationDetailsFragment extends BaseFragment imp
 
             @Override
             public void onClick(View view) {
-                ((HomeActivity) getActivity()).getSupportFragmentManager().popBackStack();
+                ((SettingPreferencesActivity)getActivity()).getSupportFragmentManager().popBackStack();
 
              /*   Intent intent = new Intent(getActivity(), SettingPreferencesActivity.class);
                 startActivity(intent);*/

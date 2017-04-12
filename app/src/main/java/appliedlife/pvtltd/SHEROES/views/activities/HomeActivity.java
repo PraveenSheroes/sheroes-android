@@ -921,8 +921,10 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 for (HomeSpinnerItem homeSpinnerItem : mHomeSpinnerItemList) {
                     if (homeSpinnerItem.isChecked()) {
                         categoryIds.add(homeSpinnerItem.getId());
-                        stringBuilder.append(homeSpinnerItem.getName());
-                        stringBuilder.append(AppConstants.COMMA);
+                        if(!homeSpinnerItem.getName().equalsIgnoreCase(AppConstants.FOR_ALL)) {
+                            stringBuilder.append(homeSpinnerItem.getName());
+                            stringBuilder.append(AppConstants.COMMA);
+                        }
                         homeSpinnerItem.setDone(true);
                     } else {
                         homeSpinnerItem.setDone(false);
@@ -934,7 +936,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     mHomeSpinnerItemList.addAll(localList);
                 }
                 if (StringUtil.isNotNullOrEmptyString(stringBuilder.toString())) {
-                    mTvCategoryText.setText(stringBuilder.toString().substring(0, stringBuilder.toString().length() - 1));
+                    String total=stringBuilder.toString().substring(0,25);
+                    mTvCategoryText.setText(total+AppConstants.DOTS);
                 } else {
                     mTvCategoryText.setText(AppConstants.EMPTY_STRING);
                     mTvCategoryChoose.setVisibility(View.VISIBLE);

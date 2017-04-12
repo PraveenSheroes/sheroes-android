@@ -91,7 +91,7 @@ public class InviteCommunityOwner extends BaseFragment implements CommunityView,
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.my_community_invite_member, container, false);
         ButterKnife.bind(this, view);
-        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ALL_SEARCH, AppConstants.EMPTY_STRING);
+        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ALL_SEARCH, AppConstants.NO_REACTION_CONSTANT);
         mHomePresenter.attachView(this);
         createCommunityPresenter.attachView(this);
         Bundle bundle = getArguments();

@@ -9,7 +9,7 @@ import java.util.List;
 public class FragmentListRefreshData {
     int pageNo;
     String callFromFragment;
-    String idFeedDetail;
+    long idFeedDetail;
     boolean isReactionList;
     long enitityOrParticpantid;
     int swipeToRefresh;
@@ -18,7 +18,7 @@ public class FragmentListRefreshData {
     public FragmentListRefreshData() {
 
     }
-    public FragmentListRefreshData(int pageNo, String callFromFragment, String idFeedDetail) {
+    public FragmentListRefreshData(int pageNo, String callFromFragment, long idFeedDetail) {
         this.pageNo = pageNo;
         this.callFromFragment = callFromFragment;
         this.idFeedDetail = idFeedDetail;
@@ -47,13 +47,6 @@ public class FragmentListRefreshData {
         this.callFromFragment = callFromFragment;
     }
 
-    public String getIdFeedDetail() {
-        return idFeedDetail;
-    }
-
-    public void setIdFeedDetail(String idFeedDetail) {
-        this.idFeedDetail = idFeedDetail;
-    }
 
     public boolean isReactionList() {
         return isReactionList;
@@ -93,5 +86,13 @@ public class FragmentListRefreshData {
 
     public void setCategoryIdList(List<Long> categoryIdList) {
         this.categoryIdList = categoryIdList;
+    }
+
+    public long getIdFeedDetail() {
+        return idFeedDetail;
+    }
+
+    public void setIdFeedDetail(long idFeedDetail) {
+        this.idFeedDetail = idFeedDetail;
     }
 }

@@ -94,7 +94,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
         }
         if (mFeedDetail != null) {
             mTvJoinView.setEnabled(true);
-            mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.USER_COMMUNITY_POST_FRAGMENT, mFeedDetail.getId());
+            mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.USER_COMMUNITY_POST_FRAGMENT,  mFeedDetail.getIdOfEntityOrParticipant());
             mFragmentListRefreshData.setCommunityId(mFeedDetail.getIdOfEntityOrParticipant());
             mPullRefreshList = new SwipPullRefreshList();
             mPullRefreshList.setPullToRefresh(false);

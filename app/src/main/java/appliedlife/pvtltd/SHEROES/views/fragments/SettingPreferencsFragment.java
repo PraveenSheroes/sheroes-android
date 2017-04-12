@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.Timer;
@@ -19,12 +20,13 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by priyanka.
  */
 
-public class SettingPreferencsFragment extends BaseFragment implements  View.OnClickListener {
+public class SettingPreferencsFragment extends BaseFragment implements View.OnClickListener {
 
     private final String TAG = LogUtils.makeLogTag(SettingPreferencsFragment.class);
     private final String SCREEN_NAME = "Setting_preferences_screen";
@@ -38,9 +40,15 @@ public class SettingPreferencsFragment extends BaseFragment implements  View.OnC
     @Bind(R.id.tv_setting_preferences_deactive_account)
     TextView mTv_setting_preferences_deactive_account;
     settingPreferencesCallBack msettingPreferencesCallBack;
-    final Handler handler_interact=new Handler();
+    final Handler handler_interact = new Handler();
     TextView mTextview;
 
+    @Bind(R.id.tv_setting_tittle)
+    TextView mtv_setting_tittle;
+    @Bind(R.id.tv_setting_tittle1)
+    TextView mtv_setting_tittle1;
+    @Bind(R.id.iv_back_setting)
+    ImageView miv_back_setting;
 
     @Override
     public void onAttach(Context context) {
@@ -63,8 +71,8 @@ public class SettingPreferencsFragment extends BaseFragment implements  View.OnC
         mT_setting_preferences_education_details.setOnClickListener(this);
         mT_setting_preferences_work_experience.setOnClickListener(this);
         mTv_setting_preferences_deactive_account.setOnClickListener(this);
-
-
+        mtv_setting_tittle.setText(R.string.ID_PREFERENCES);
+        mtv_setting_tittle1.setText(R.string.ID_SETTINGS);
         return view;
     }
 
@@ -76,22 +84,22 @@ public class SettingPreferencsFragment extends BaseFragment implements  View.OnC
 
             case R.id.tv_setting_preferences_basicdetails:
                 mT_setting_preferences_basicdetails.setTextColor(getResources().getColor(R.color.search_tab_text));
-                mTextview=mT_setting_preferences_basicdetails;
-               settextcolor();
+                mTextview = mT_setting_preferences_basicdetails;
+                settextcolor();
                 break;
             case R.id.tv_setting_preferences_education_details:
                 mT_setting_preferences_education_details.setTextColor(getResources().getColor(R.color.search_tab_text));
-                mTextview=mT_setting_preferences_education_details;
+                mTextview = mT_setting_preferences_education_details;
                 settextcolor();
                 break;
             case R.id.tv_setting_preferences_work_experience:
                 mT_setting_preferences_work_experience.setTextColor(getResources().getColor(R.color.search_tab_text));
-                mTextview=mT_setting_preferences_work_experience;
+                mTextview = mT_setting_preferences_work_experience;
                 settextcolor();
                 break;
             case R.id.tv_setting_preferences_deactive_account:
                 mTv_setting_preferences_deactive_account.setTextColor(getResources().getColor(R.color.search_tab_text));
-                mTextview=mTv_setting_preferences_deactive_account;
+                mTextview = mTv_setting_preferences_deactive_account;
                 settextcolor();
 
                 break;
@@ -105,22 +113,28 @@ public class SettingPreferencsFragment extends BaseFragment implements  View.OnC
     }
 
 
+    @OnClick(R.id.iv_back_setting)
+    public void backPressed() {
+        getActivity().finish();
+    }
 
+    public void settextcolor() {
 
- public void settextcolor()
-    {
-
-        Timer timer_interact=new Timer();
+        Timer timer_interact = new Timer();
         timer_interact.schedule(new TimerTask() {
             @Override
-            public void run() {UpdateGUI();}
+            public void run() {
+                UpdateGUI();
+            }
         }, 200);
     }
+
     private void UpdateGUI() {
 
 
         handler_interact.post(runnable_interact);
     }
+
     //creating runnable
     final Runnable runnable_interact = new Runnable() {
         public void run() {

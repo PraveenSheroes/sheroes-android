@@ -16,10 +16,10 @@ import java.util.List;
 import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
 
 public class FeedRequestPojo extends BaseRequest implements Parcelable {
-
-    @SerializedName("id")
+    @SerializedName("id_of_entity_or_participant")
     @Expose
-    private String idForFeedDetail;
+    private Long idForFeedDetail=null;
+
     @SerializedName("sub_type")
     @Expose
     private String subType;
@@ -36,9 +36,7 @@ public class FeedRequestPojo extends BaseRequest implements Parcelable {
 
     @SerializedName("community_id")
     @Expose
-    public long communityId;
-
-
+    public Long communityId=null;
 
     @SerializedName("cities")
     @Expose
@@ -47,10 +45,10 @@ public class FeedRequestPojo extends BaseRequest implements Parcelable {
 
     @SerializedName("experience_from")
     @Expose
-    private int experienceFrom;
+    private Integer experienceFrom=null;
     @SerializedName("experience_to")
     @Expose
-    private int experienceTo;
+    private Integer experienceTo=null;
     @SerializedName("functional_areas")
     @Expose
     private List<String> functionalAreas = null;
@@ -64,11 +62,11 @@ public class FeedRequestPojo extends BaseRequest implements Parcelable {
     private List<String> skills = null;
 
 
-    public String getIdForFeedDetail() {
+    public Long getIdForFeedDetail() {
         return idForFeedDetail;
     }
 
-    public void setIdForFeedDetail(String idForFeedDetail) {
+    public void setIdForFeedDetail(Long idForFeedDetail) {
         this.idForFeedDetail = idForFeedDetail;
     }
 
@@ -104,11 +102,11 @@ public class FeedRequestPojo extends BaseRequest implements Parcelable {
         this.categoryIds = categoryIds;
     }
 
-    public long getCommunityId() {
+    public Long getCommunityId() {
         return communityId;
     }
 
-    public void setCommunityId(long communityId) {
+    public void setCommunityId(Long communityId) {
         this.communityId = communityId;
     }
 
@@ -120,19 +118,19 @@ public class FeedRequestPojo extends BaseRequest implements Parcelable {
         this.cities = cities;
     }
 
-    public int getExperienceFrom() {
+    public Integer getExperienceFrom() {
         return experienceFrom;
     }
 
-    public void setExperienceFrom(int experienceFrom) {
+    public void setExperienceFrom(Integer experienceFrom) {
         this.experienceFrom = experienceFrom;
     }
 
-    public int getExperienceTo() {
+    public Integer getExperienceTo() {
         return experienceTo;
     }
 
-    public void setExperienceTo(int experienceTo) {
+    public void setExperienceTo(Integer experienceTo) {
         this.experienceTo = experienceTo;
     }
 
@@ -167,15 +165,15 @@ public class FeedRequestPojo extends BaseRequest implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.idForFeedDetail);
+        dest.writeValue(this.idForFeedDetail);
         dest.writeString(this.subType);
         dest.writeString(this.question);
         dest.writeStringList(this.articleCategories);
         dest.writeList(this.categoryIds);
-        dest.writeLong(this.communityId);
+        dest.writeValue(this.communityId);
         dest.writeStringList(this.cities);
-        dest.writeInt(this.experienceFrom);
-        dest.writeInt(this.experienceTo);
+        dest.writeValue(this.experienceFrom);
+        dest.writeValue(this.experienceTo);
         dest.writeStringList(this.functionalAreas);
         dest.writeStringList(this.opportunityTypes);
         dest.writeStringList(this.skills);
@@ -185,16 +183,16 @@ public class FeedRequestPojo extends BaseRequest implements Parcelable {
     }
 
     protected FeedRequestPojo(Parcel in) {
-        this.idForFeedDetail = in.readString();
+        this.idForFeedDetail = (Long) in.readValue(Long.class.getClassLoader());
         this.subType = in.readString();
         this.question = in.readString();
         this.articleCategories = in.createStringArrayList();
         this.categoryIds = new ArrayList<Long>();
         in.readList(this.categoryIds, Long.class.getClassLoader());
-        this.communityId = in.readLong();
+        this.communityId = (Long) in.readValue(Long.class.getClassLoader());
         this.cities = in.createStringArrayList();
-        this.experienceFrom = in.readInt();
-        this.experienceTo = in.readInt();
+        this.experienceFrom = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.experienceTo = (Integer) in.readValue(Integer.class.getClassLoader());
         this.functionalAreas = in.createStringArrayList();
         this.opportunityTypes = in.createStringArrayList();
         this.skills = in.createStringArrayList();
