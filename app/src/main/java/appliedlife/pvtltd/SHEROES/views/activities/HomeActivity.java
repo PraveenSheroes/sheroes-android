@@ -49,6 +49,7 @@ import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionDoc;
 import appliedlife.pvtltd.SHEROES.models.entities.communities.CommunitySuggestion;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.DrawerItems;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
@@ -451,7 +452,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     public void createCommunityPostOnClick() {
         // Snackbar.make(mCLMainLayout, "Comming soon", Snackbar.LENGTH_SHORT).show();
         Intent intent = new Intent(getApplicationContext(), CreateCommunityPostActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST);
+        overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
     }
 
 
@@ -826,7 +828,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         if (null != mFeedDetail) {
             Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
             if (AppUtils.isFragmentUIActive(fragment)) {
-                if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getStatus()) && mFeedDetail.getStatus().equalsIgnoreCase(getString(R.string.ID_POSTED))) {
+                if (mFeedDetail.isFromHome()) {
                     homeOnClick();
                 } else {
                     ((HomeFragment) fragment).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
@@ -836,9 +838,10 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     }
 
     private void jobFilterActivityResponse(Intent intent) {
+        FeedRequestPojo feedRequestPojo = (FeedRequestPojo) intent.getExtras().get(AppConstants.JOB_FILTER);
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(JobFragment.class.getName());
         if (AppUtils.isFragmentUIActive(fragment)) {
-            ((JobFragment) fragment).jobFilterIds();
+            ((JobFragment) fragment).jobFilterIds(feedRequestPojo);
         }
     }
 
@@ -941,8 +944,13 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     mHomeSpinnerItemList.addAll(localList);
                 }
                 if (StringUtil.isNotNullOrEmptyString(stringBuilder.toString())) {
-                    String total = stringBuilder.toString().substring(0, 25);
-                    mTvCategoryText.setText(total + AppConstants.DOTS);
+                    String total = stringBuilder.toString().substring(0, stringBuilder.length() - 1);
+                    if (total.length() > 25) {
+                        total = stringBuilder.toString().substring(0, 25);
+                        mTvCategoryText.setText(total + AppConstants.DOTS);
+                    } else {
+                        mTvCategoryText.setText(total);
+                    }
                 } else {
                     mTvCategoryText.setText(AppConstants.EMPTY_STRING);
                     mTvCategoryChoose.setVisibility(View.VISIBLE);

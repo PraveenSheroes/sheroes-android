@@ -97,8 +97,10 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMemberRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.SelectCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobApplyRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingInterestRequest;
@@ -1805,10 +1807,26 @@ public class AppUtils {
         feedRequestPojo.setCategoryIds(categoryIds);
         return feedRequestPojo;
     }
-    public static FeedRequestPojo jobCategoryRequestBuilder(String typeOfFeed, int pageNo, List<Long> categoryIds) {
+    public static FeedRequestPojo jobCategoryRequestBuilder(String typeOfFeed, int pageNo,List<String> cities,Integer experienceFrom,Integer experienceTo,List<String> functionalAreas,List<String> opportunityTypes,List<String> skills) {
         FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, pageNo);
-        feedRequestPojo.setCategoryIds(categoryIds);
+        feedRequestPojo.setCities(cities);
+        feedRequestPojo.setExperienceFrom(experienceFrom);
+        feedRequestPojo.setExperienceTo(experienceTo);
+        feedRequestPojo.setFunctionalAreas(functionalAreas);
+        feedRequestPojo.setOpportunityTypes(opportunityTypes);
+        feedRequestPojo.setSkills(skills);
         return feedRequestPojo;
+    }
+    public static JobApplyRequest jobApplyRequestBuilder(Long idOFEntityParticipant,String coverNote) {
+        JobApplyRequest jobApplyRequest = new JobApplyRequest();
+        AppUtils appUtils = AppUtils.getInstance();
+        jobApplyRequest.setAppVersion(appUtils.getAppVersionName());
+        jobApplyRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        //TODO:: change rquest data
+        jobApplyRequest.setCloudMessagingId(AppConstants.ALL_SEARCH);
+        jobApplyRequest.setCoverNote(coverNote);
+        jobApplyRequest.setJobId(idOFEntityParticipant);
+        return jobApplyRequest;
     }
 
     public static FeedRequestPojo feedDetailRequestBuilder(String typeOfFeed, int pageNo, long idForDetail) {
@@ -1958,7 +1976,7 @@ public class AppUtils {
         memberRequest.setPageSize(AppConstants.MEMBER_PAGE_SIZE);
         return memberRequest;
     }
-    public static CommunityPostCreateRequest createCommunityPostRequestBuilder(long  communityId, String createType,String description,List<String> imag) {
+    public static CommunityPostCreateRequest createCommunityPostRequestBuilder(long  communityId, String createType,String description,List<String> imag,Long mIdForEditPost) {
         AppUtils appUtils = AppUtils.getInstance();
         CommunityPostCreateRequest communityPostCreateRequest=new CommunityPostCreateRequest();
         communityPostCreateRequest.setAppVersion(appUtils.getAppVersionName());
@@ -1968,7 +1986,17 @@ public class AppUtils {
         communityPostCreateRequest.setCreatorType(createType);
         communityPostCreateRequest.setDescription(description);
         communityPostCreateRequest.setImages(imag);
+        communityPostCreateRequest.setId(mIdForEditPost);
         return communityPostCreateRequest;
+    }
+    public static SelectCommunityRequest selectCommunityRequestBuilder() {
+        AppUtils appUtils = AppUtils.getInstance();
+        SelectCommunityRequest selectCommunityRequest=new SelectCommunityRequest();
+        selectCommunityRequest.setAppVersion(appUtils.getAppVersionName());
+        selectCommunityRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+        selectCommunityRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        selectCommunityRequest.setMasterDataType(AppConstants.JOB_AT_GET_ALL_DATA_KEY);
+        return selectCommunityRequest;
     }
     public static BookmarkRequestPojo bookMarkRequestBuilder(long entityId) {
         AppUtils appUtils = AppUtils.getInstance();

@@ -98,13 +98,12 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
         } else {
             tvCommunityTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         }
-        if(StringUtil.isNotNullOrEmptyString(dataItem.getScreenName())&&dataItem.getScreenName().equalsIgnoreCase(AppConstants.FEATURE_FRAGMENT))
-        {
+        if (StringUtil.isNotNullOrEmptyString(dataItem.getScreenName()) && dataItem.getScreenName().equalsIgnoreCase(AppConstants.FEATURE_FRAGMENT)) {
             tvCommunityInvite.setTextColor(ContextCompat.getColor(mContext, R.color.white));
             tvCommunityInvite.setText(mContext.getString(R.string.ID_JOINED));
             tvCommunityInvite.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
             tvCommunityInvite.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             if (dataItem.isMember() && !dataItem.isOwner()) {
                 tvCommunityInvite.setTextColor(ContextCompat.getColor(mContext, R.color.white));
                 tvCommunityInvite.setText(mContext.getString(R.string.ID_VIEW));
@@ -148,7 +147,7 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
             for (String tag : tags) {
                 mergeTags += tag + AppConstants.COMMA;
             }
-            mergeTags=mergeTags.substring(0,mergeTags.length()-1);
+            mergeTags = mergeTags.substring(0, mergeTags.length() - 1);
             String tagHeader = LEFT_HTML_TAG + context.getString(R.string.ID_TAGS) + RIGHT_HTML_TAG;
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                 tvCommunityTag.setText(Html.fromHtml(tagHeader + AppConstants.COLON + AppConstants.SPACE + mergeTags, 0)); // for 24 api and more
@@ -176,7 +175,7 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
             final TextView time = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_time_label);
             time.setVisibility(View.INVISIBLE);
             final RelativeLayout rlFeedArticleViews = (RelativeLayout) backgroundImage.findViewById(R.id.rl_gradiant);
-            tvTotalMember.setText(dataItem.getNoOfMembers()+AppConstants.SPACE + context.getString(R.string.ID_MEMBERS));
+            tvTotalMember.setText(dataItem.getNoOfMembers() + AppConstants.SPACE + context.getString(R.string.ID_MEMBERS));
             Glide.with(mContext)
                     .load(imageUrl).asBitmap()
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
@@ -216,19 +215,26 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_community_text)
     public void viewMoreClick() {
-        viewMoreText();
+        if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
+            if (mViewMoreDescription.length() > AppConstants.WORD_LENGTH) {
+                viewMoreText();
+            }
+        }
     }
+
     @OnClick(R.id.tv_community_text_full_view)
     public void viewMoreFullTextClick() {
-        viewMoreText();
+        if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
+            if (mViewMoreDescription.length() > AppConstants.WORD_LENGTH) {
+                viewMoreText();
+            }
+        }
     }
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void viewMoreText() {
-        if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
             if (tvDescriptionText.getTag().toString().equalsIgnoreCase(mViewMore)) {
                 String lessWithColor = LEFT_HTML_VEIW_TAG_FOR_COLOR + mLess + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
-                mViewMoreDescription = dataItem.getListDescription();
                 if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                     tvDescriptionTextFullView.setText(Html.fromHtml(mViewMoreDescription + AppConstants.SPACE + lessWithColor, 0)); // for 24 api and more
                 } else {
@@ -261,14 +267,13 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
                 tvDescriptionText.setVisibility(View.VISIBLE);
                 tvDescriptionTextFullView.setVisibility(View.GONE);
             }
-        }
     }
 
     @OnClick(R.id.tv_community_detail_invite)
     public void joinClick() {
         if (tvCommunityInvite.getText().toString().equalsIgnoreCase(mContext.getString(R.string.ID_VIEW))) {
             viewInterface.handleOnClick(dataItem, liCoverImage);
-        } else  if (tvCommunityInvite.getText().toString().equalsIgnoreCase(mContext.getString(R.string.ID_INVITE))){
+        } else if (tvCommunityInvite.getText().toString().equalsIgnoreCase(mContext.getString(R.string.ID_INVITE))) {
             viewInterface.handleOnClick(dataItem, tvCommunityInvite);
         }
     }

@@ -330,11 +330,12 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     }
 
-    public DialogFragment showFaceBookError() {
+    public DialogFragment showFaceBookError(String message) {
         FacebookErrorDialog fragment = (FacebookErrorDialog) getFragmentManager().findFragmentByTag(FacebookErrorDialog.class.getName());
         if (fragment == null) {
             fragment = new FacebookErrorDialog();
             Bundle b = new Bundle();
+            b.putString(AppConstants.SHEROES_AUTH_TOKEN, message);
             b.putInt(AppConstants.FACEBOOK_VERIFICATION, AppConstants.ONE_CONSTANT);
             fragment.setArguments(b);
         }
@@ -358,13 +359,18 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                 } else {
                     userPreference.delete();
                     LoginManager.getInstance().logOut();
-                    showFaceBookError();
+                    showFaceBookError(AppConstants.EMPTY_STRING);
                 }
+                break;
+            case AppConstants.INVALID:
+                userPreference.delete();
+                LoginManager.getInstance().logOut();
+                showFaceBookError(loginResponse.getFieldErrorMessageMap().get(AppConstants.ERROR));
                 break;
             case AppConstants.FAILED:
                 userPreference.delete();
                 LoginManager.getInstance().logOut();
-                showFaceBookError();
+                showFaceBookError(loginResponse.getFieldErrorMessageMap().get(AppConstants.ERROR));
               /*  LoginManager.getInstance().logOut();
                 String errorMessage = loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA);
                 if (!StringUtil.isNotNullOrEmptyString(errorMessage)) {

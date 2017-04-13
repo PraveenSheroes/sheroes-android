@@ -30,9 +30,12 @@ public class AppConstants {
     public static final String APP_CRASHED = "App crashed ";
     public static final String EMPTY_STRING = "";
     public static final String COMMA = ",";
+    public static final String PER_ANUM = "/ Annum";
     public static final String HOME_SPINNER_FRAGMENT = "spinner_fragment";
     public static final String ANDROID_VIEW_PAGER = "android:switcher:";
     public static final String COLON = ":";
+    public static final String DASH ="-";
+
     public static final String DOTS = "...";
     public static final String S = "s";
     public static final String SHARE_MENU_TYPE = "text/plain";
@@ -97,6 +100,7 @@ public class AppConstants {
     public static final String JOB_FILTER = "job_filter";
     public static final String BOARDING_SEARCH = "boarding_Search";
     public static final String ALL_SEARCH = "search";
+    public static final String IMAGE = "Img";
     public static final String MONTH_YEAR_PICKER_DIALOG = "MonthYearPickerDialog";
     public static final String PANDING_MEMBER = "PandingMember";
     public static final String NETWORK_TIMEOUT = "network_timout";

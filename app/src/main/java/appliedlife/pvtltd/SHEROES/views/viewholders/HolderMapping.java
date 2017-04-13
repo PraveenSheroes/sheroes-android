@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
@@ -408,7 +409,6 @@ public enum HolderMapping {
                 if (item instanceof FeedDetail) {
                     returnView = FEED_USER.ordinal();
                 }
-
             } else if (callFromType.equalsIgnoreCase(AppConstants.COMMUNITY_NAME_SUB_TYPE)) {
                 if (item instanceof CommunityPostResponse) {
                     returnView = SELECT_DIALOG.ordinal();
@@ -467,8 +467,8 @@ public enum HolderMapping {
                     return HOME_SPINNER_ITEMS.ordinal();
                 } else if (item instanceof ArticleDetailPojo) {
                     returnView = ARTICLE_DETAIL_HOLDER.ordinal();//TODO: Home related changes
-
-
+                } else if (item instanceof JobDetailPojo) {
+                    return JOB_DETAIL_HOLDER.ordinal();
                 }
                 else if (item instanceof ProfileHorList) {
                     return PROFILE_HORIZONTAL_LIST.ordinal();
@@ -540,8 +540,6 @@ public enum HolderMapping {
                     return COMMUNITY_SUGGESTED_BY_HOLDER.ordinal();
                 } else if (item instanceof JobLocationList) {
                     return JOB_LOCATION_LIST.ordinal();
-                }  else if (item instanceof JobDetailPojo) {
-                    return JOB_DETAIL_HOLDER.ordinal();
                 } else if (item instanceof ProfileItems) {
                     return PROFILE_HOLDER.ordinal();
                 }

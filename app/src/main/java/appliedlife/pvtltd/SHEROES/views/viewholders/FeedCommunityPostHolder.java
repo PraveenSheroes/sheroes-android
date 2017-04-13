@@ -120,7 +120,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     private String mViewMore, mLess;
     private Context mContext;
     private int mItemPosition;
-
     public FeedCommunityPostHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
@@ -664,11 +663,19 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_feed_community_post_text)
     public void viewMoreClick() {
-        viewMoreTextClick();
+        if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
+            if (mViewMoreDescription.length() > AppConstants.WORD_LENGTH) {
+                viewMoreTextClick();
+            }
+        }
     }
     @OnClick(R.id.tv_feed_community_post_text_full_view)
     public void viewMoreFullViewClick() {
-        viewMoreTextClick();
+        if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
+            if (mViewMoreDescription.length() > AppConstants.WORD_LENGTH) {
+                viewMoreTextClick();
+            }
+        }
     }
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void viewMoreTextClick() {

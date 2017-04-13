@@ -1,6 +1,5 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -64,7 +63,6 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
     private LinearLayoutManager mLayoutManager;
     private FeedDetail mFeedDetail;
     private FragmentListRefreshData mFragmentListRefreshData;
-    private JobDetailActivityIntractionListner mJobDetailActivityIntractionListner;
     private AppUtils mAppUtils;
 
     public static JobDetailFragment createInstance(FeedDetail feedDetail) {
@@ -76,31 +74,20 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            if (getActivity() instanceof JobDetailActivityIntractionListner) {
-                mJobDetailActivityIntractionListner = (JobDetailActivityIntractionListner) getActivity();
-            }
-        } catch (InstantiationException exception) {
-            LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
-        }
-    }
-
-    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (null != getArguments()) {
             mFeedDetail = getArguments().getParcelable(AppConstants.JOB_DETAIL);
         }
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_job_details, container, false);
         ButterKnife.bind(this, view);
         mAppUtils = AppUtils.getInstance();
-        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.JOB_DETAIL,  mFeedDetail.getIdOfEntityOrParticipant());
+        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.JOB_DETAIL, mFeedDetail.getIdOfEntityOrParticipant());
         mHomePresenter.attachView(this);
         mJobpresenter.attachView(this);
         mLayoutManager = new LinearLayoutManager(getContext());
@@ -115,40 +102,28 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
 
     @OnClick(R.id.tv_apply_job)
     public void clickApplyButton() {
-        Long jobid = mFeedDetail.getIdOfEntityOrParticipant();
-        JobApplyRequest jobApplyRequest = new JobApplyRequest();
-        jobApplyRequest.setAppVersion("String");
-        jobApplyRequest.setCloudMessagingId("String");
-        jobApplyRequest.setLastScreenName("String");
-        jobApplyRequest.setCoverNote("String");
-        /*jobApplyRequest.setId(mFeedDetail.getId());*/
-        jobApplyRequest.setScreenName("String");
-        jobApplyRequest.setDeviceUniqueId("String");
-        jobApplyRequest.setJobId(jobid);
+        JobApplyRequest jobApplyRequest = mAppUtils.jobApplyRequestBuilder(mFeedDetail.getIdOfEntityOrParticipant(), AppConstants.JOB_DETAIL);
         mJobpresenter.getJobApply(jobApplyRequest);
     }
 
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
-        List<FeedDetail> feedDetailList=feedResponsePojo.getFeedDetails();
+        List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
         if (StringUtil.isNotEmptyCollection(feedDetailList) && mAdapter != null) {
             List<JobDetailPojo> joblist = new ArrayList<>();
             JobDetailPojo jobDetailPojo = new JobDetailPojo();
             jobDetailPojo.setId(AppConstants.ONE_CONSTANT);
             jobDetailPojo.setFeedDetail(feedDetailList.get(0));
             joblist.add(jobDetailPojo);
-            if(feedDetailList.get(0).isApplied())
-            {
+            if (feedDetailList.get(0).isApplied()) {
                 mtv_apply_job.setText(getString(R.string.ID_APPLIED));
                 mtv_apply_job.setEnabled(false);
-            }else
-            {
+            } else {
                 mtv_apply_job.setText(getString(R.string.ID_APPLY));
                 mtv_apply_job.setEnabled(true);
             }
             mAdapter.setSheroesGenericListData(joblist);
             mAdapter.notifyDataSetChanged();
-
         }
     }
 
@@ -170,7 +145,7 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
             case AppConstants.SUCCESS:
                 mtv_apply_job.setText(getString(R.string.ID_APPLIED));
                 mtv_apply_job.setEnabled(false);
-                Toast.makeText(getActivity(),getString(R.string.ID_JOB)+AppConstants.SPACE+getString(R.string.ID_APPLIED),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getString(R.string.ID_JOB) + AppConstants.SPACE + getString(R.string.ID_APPLIED), Toast.LENGTH_SHORT).show();
                 break;
             case AppConstants.FAILED:
                 mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);
@@ -181,10 +156,6 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
 
     }
 
-
-    public interface JobDetailActivityIntractionListner {
-        void onJobBookmarkClick(FeedDetail feedDetail);
-    }
     @Override
     public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
         switch (feedParticipationEnum) {
@@ -198,16 +169,16 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
 
     protected void jobDetailBookMarkSuccess(BaseResponse baseResponse) {
         if (null != mFeedDetail) {
-                switch (baseResponse.getStatus()) {
-                    case AppConstants.SUCCESS:
-                        mJobDetailActivityIntractionListner.onJobBookmarkClick(mFeedDetail);
-                        break;
-                    case AppConstants.FAILED:
-                        showError(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_BOOKMARK_UNBOOKMARK);
-                        break;
-                    default:
-                        showError(getString(R.string.ID_GENERIC_ERROR), ERROR_BOOKMARK_UNBOOKMARK);
-                }
+            switch (baseResponse.getStatus()) {
+                case AppConstants.SUCCESS:
+                    ((JobDetailActivity) getActivity()).onJobBookmarkClick(mFeedDetail);
+                    break;
+                case AppConstants.FAILED:
+                    showError(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_BOOKMARK_UNBOOKMARK);
+                    break;
+                default:
+                    showError(getString(R.string.ID_GENERIC_ERROR), ERROR_BOOKMARK_UNBOOKMARK);
+            }
         }
     }
 }

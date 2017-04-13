@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.crashlytics.android.Crashlytics;
+import com.google.gson.Gson;
 
 import java.util.List;
 
@@ -23,6 +24,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
@@ -126,11 +128,10 @@ public class JobFragment extends BaseFragment {
         });
         return view;
     }
-    public void jobFilterIds() {
+    public void jobFilterIds(FeedRequestPojo feedRequestPojo) {
+        LogUtils.info(TAG,"*******************"+new Gson().toJson(feedRequestPojo));
         LogUtils.info(TAG,"*************JobFilter data******");
     }
-
-
     @OnClick(R.id.fab_filter)
     public void clickFilter() {
         ((HomeActivity)getActivity()).openJobFilterActivity();

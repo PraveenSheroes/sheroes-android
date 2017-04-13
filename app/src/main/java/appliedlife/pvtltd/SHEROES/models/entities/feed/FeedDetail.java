@@ -90,6 +90,64 @@ public class FeedDetail extends BaseResponse implements Parcelable {
     private List<String> searchTextJobEmpTypes = null;
 
 
+    @SerializedName("job_Type_s")
+    @Expose
+    private String jobType;
+
+    @SerializedName("end_date_dt")
+    private String endDate;
+
+    @SerializedName("start_date_dt")
+    @Expose
+    private String startDate;
+
+    @SerializedName("is_assisted_b")
+    @Expose
+    private boolean isAssisted;
+
+    @SerializedName("is_premium_b")
+    @Expose
+    private boolean isPremimiun;
+
+    @SerializedName("is_ctc_required_b")
+    @Expose
+    private boolean isCtcRequired;
+
+    @SerializedName("compensation_from_l")
+    @Expose
+    private long compensationFrom;
+
+    @SerializedName("compensation_to_l")
+    @Expose
+    private long compensationTo;
+
+    @SerializedName("no_of_openings_i")
+    @Expose
+    private int noOfOpenings;
+
+    @SerializedName("compensation_details_s")
+    @Expose
+    private String compensationDetails;
+
+    @SerializedName("company_master_id_l")
+    @Expose
+    private Long companyMasterId;
+
+    @SerializedName("s_disp_external_application_url")
+    @Expose
+    private String externalApplicationUrl;
+
+    @SerializedName("address_s")
+    @Expose
+    private String address;
+
+    @SerializedName("s_disp_emailid")
+    @Expose
+    private String companyEmailId;
+    @SerializedName("s_disp_compensation_currency")
+    @Expose
+    private String compensationCurrency;
+
     /*Community*/
     @SerializedName("community_type_s")
     @Expose
@@ -597,6 +655,117 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         this.searchTextJobEmpTypes = searchTextJobEmpTypes;
     }
 
+    public String getJobType() {
+        return jobType;
+    }
+
+    public void setJobType(String jobType) {
+        this.jobType = jobType;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public boolean isAssisted() {
+        return isAssisted;
+    }
+
+    public void setAssisted(boolean assisted) {
+        isAssisted = assisted;
+    }
+
+    public boolean isPremimiun() {
+        return isPremimiun;
+    }
+
+    public void setPremimiun(boolean premimiun) {
+        isPremimiun = premimiun;
+    }
+
+    public boolean isCtcRequired() {
+        return isCtcRequired;
+    }
+
+    public void setCtcRequired(boolean ctcRequired) {
+        isCtcRequired = ctcRequired;
+    }
+
+    public long getCompensationFrom() {
+        return compensationFrom;
+    }
+
+    public void setCompensationFrom(long compensationFrom) {
+        this.compensationFrom = compensationFrom;
+    }
+
+    public long getCompensationTo() {
+        return compensationTo;
+    }
+
+    public void setCompensationTo(long compensationTo) {
+        this.compensationTo = compensationTo;
+    }
+
+    public int getNoOfOpenings() {
+        return noOfOpenings;
+    }
+
+    public void setNoOfOpenings(int noOfOpenings) {
+        this.noOfOpenings = noOfOpenings;
+    }
+
+    public String getCompensationDetails() {
+        return compensationDetails;
+    }
+
+    public void setCompensationDetails(String compensationDetails) {
+        this.compensationDetails = compensationDetails;
+    }
+
+    public Long getCompanyMasterId() {
+        return companyMasterId;
+    }
+
+    public void setCompanyMasterId(Long companyMasterId) {
+        this.companyMasterId = companyMasterId;
+    }
+
+    public String getExternalApplicationUrl() {
+        return externalApplicationUrl;
+    }
+
+    public void setExternalApplicationUrl(String externalApplicationUrl) {
+        this.externalApplicationUrl = externalApplicationUrl;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getCompanyEmailId() {
+        return companyEmailId;
+    }
+
+    public void setCompanyEmailId(String companyEmailId) {
+        this.companyEmailId = companyEmailId;
+    }
 
     public String getCommunityType() {
         return communityType;
@@ -1377,6 +1546,14 @@ public class FeedDetail extends BaseResponse implements Parcelable {
     public FeedDetail() {
     }
 
+    public String getCompensationCurrency() {
+        return compensationCurrency;
+    }
+
+    public void setCompensationCurrency(String compensationCurrency) {
+        this.compensationCurrency = compensationCurrency;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -1409,6 +1586,21 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         dest.writeInt(this.experienceToI);
         dest.writeList(this.searchIdJobOppTypes);
         dest.writeStringList(this.searchTextJobEmpTypes);
+        dest.writeString(this.jobType);
+        dest.writeString(this.endDate);
+        dest.writeString(this.startDate);
+        dest.writeByte(this.isAssisted ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isPremimiun ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isCtcRequired ? (byte) 1 : (byte) 0);
+        dest.writeLong(this.compensationFrom);
+        dest.writeLong(this.compensationTo);
+        dest.writeInt(this.noOfOpenings);
+        dest.writeString(this.compensationDetails);
+        dest.writeValue(this.companyMasterId);
+        dest.writeString(this.externalApplicationUrl);
+        dest.writeString(this.address);
+        dest.writeString(this.companyEmailId);
+        dest.writeString(this.compensationCurrency);
         dest.writeString(this.communityType);
         dest.writeLong(this.communityTypeL);
         dest.writeString(this.slugS);
@@ -1536,6 +1728,21 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         this.searchIdJobOppTypes = new ArrayList<Integer>();
         in.readList(this.searchIdJobOppTypes, Integer.class.getClassLoader());
         this.searchTextJobEmpTypes = in.createStringArrayList();
+        this.jobType = in.readString();
+        this.endDate = in.readString();
+        this.startDate = in.readString();
+        this.isAssisted = in.readByte() != 0;
+        this.isPremimiun = in.readByte() != 0;
+        this.isCtcRequired = in.readByte() != 0;
+        this.compensationFrom = in.readLong();
+        this.compensationTo = in.readLong();
+        this.noOfOpenings = in.readInt();
+        this.compensationDetails = in.readString();
+        this.companyMasterId = (Long) in.readValue(Long.class.getClassLoader());
+        this.externalApplicationUrl = in.readString();
+        this.address = in.readString();
+        this.companyEmailId = in.readString();
+        this.compensationCurrency = in.readString();
         this.communityType = in.readString();
         this.communityTypeL = in.readLong();
         this.slugS = in.readString();

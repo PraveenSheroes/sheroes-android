@@ -374,7 +374,6 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
         if (null != mFeedDetail) {
             switch (baseResponse.getStatus()) {
                 case AppConstants.SUCCESS:
-
                     if (mFeedDetail.isLongPress()) {
                         if (mFeedDetail.getReactionValue() == AppConstants.NO_REACTION_CONSTANT) {
                             mFeedDetail.setReactionValue(mPressedEmoji);

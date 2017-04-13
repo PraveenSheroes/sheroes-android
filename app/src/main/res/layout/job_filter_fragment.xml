@@ -67,10 +67,10 @@
                 android:id="@+id/tv_location_data"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:textStyle="bold"
                 android:textAllCaps="true"
                 android:textColor="@color/job_filter_desc_color"
-                android:textSize="@dimen/sp_size_12" />
+                android:textSize="@dimen/sp_size_14" />
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_size_0.5"
@@ -92,10 +92,10 @@
                 android:id="@+id/tv_functional_area"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:textAllCaps="true"
+                android:textStyle="bold"
                 android:textColor="@color/job_filter_desc_color"
-                android:textSize="@dimen/sp_size_12" />
+                android:textSize="@dimen/sp_size_14" />
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_size_0.5"
@@ -118,9 +118,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_filter_exp_txt"
-                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:textStyle="bold"
                 android:textColor="@color/job_filter_desc_color"
-                android:textSize="@dimen/sp_size_12" />
+                android:textSize="@dimen/sp_size_14" />
             <appliedlife.pvtltd.SHEROES.utils.RangeSeekBar
                 android:id="@+id/rangeSeekbar"
                 android:layout_width="match_parent"

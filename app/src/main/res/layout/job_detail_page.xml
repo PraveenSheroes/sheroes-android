@@ -1,114 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp_size_22"
-        android:layout_marginTop="@dimen/dp_size_10">
-        <TextView
-            android:id="@+id/tv_job_package"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/dp_size_5"
-            android:drawableLeft="@drawable/ic_job_package"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:drawablePadding="@dimen/dp_size_10"
-            android:text="@string/ID_JOB_PACKAGE"
-            />
-        <TextView
-            android:id="@+id/tv_job_opening"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/tv_job_package"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:layout_marginLeft="@dimen/dp_size_20"
-            android:drawablePadding="@dimen/dp_size_10"
-            android:drawableLeft="@drawable/ic_job_opening"
-            android:text="@string/ID_JOB_OPENING"
-            />
-        <TextView
-            android:id="@+id/tv_job_opt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_job_type"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:layout_marginTop="@dimen/dp_size_10"
-            android:drawablePadding="@dimen/dp_size_10"
-            android:layout_below="@+id/tv_job_package"
-            android:paddingLeft="@dimen/dp_size_5"
-            android:text="@string/ID_JOB_OPT"
-
-            />
-        <TextView
-            android:id="@+id/tv_job_skill"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_job_name"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:layout_marginTop="@dimen/dp_size_10"
-            android:drawablePadding="@dimen/dp_size_10"
-            android:layout_below="@+id/tv_job_opt"
-            android:paddingLeft="@dimen/dp_size_5"
-            android:text="@string/ID_JOB_SKILL"
-            />
-        <TextView
-            android:id="@+id/tv_job_start_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_job_date_time"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:layout_marginTop="@dimen/dp_size_10"
-            android:drawablePadding="@dimen/dp_size_10"
-            android:layout_below="@+id/tv_job_skill"
-            android:paddingLeft="@dimen/dp_size_5"
-            android:text="@string/ID_JOB_START_DATE"
-            />
-        <TextView
-            android:id="@+id/tv_job_end_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/tv_job_package"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:layout_marginLeft="@dimen/dp_size_20"
-            android:drawablePadding="@dimen/dp_size_10"
-            android:drawableLeft="@drawable/ic_job_opening"
-            android:layout_marginTop="@dimen/dp_size_10"
-            android:layout_below="@+id/tv_job_skill"
-            android:text="@string/ID_JOB_OPENING"
-            />
-    </RelativeLayout>
-
-    <View
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_size_1"
-        android:layout_marginTop="@dimen/dp_size_21"
-        android:background="@color/line_color"/>
-    <TextView
-        android:id="@+id/tv_job_des_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_size_25"
-        android:text="@string/ID_JOB_DES"
-        android:textAllCaps="true"
-        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-        android:textColor="@color/job_filter_desc_color"
-        android:layout_marginLeft="@dimen/dp_size_22"/>
-    <TextView
-        android:id="@+id/tv_job_des"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_size_25"
-        android:text="@string/ID_JOB_DES"
-        android:textAllCaps="true"
-        android:fontFamily="@string/ID_ROBOTO_REGULAR"
-        android:textSize="@dimen/dp_size_12"
-        android:textColor="@color/job_filter_desc_color"
-        android:layout_marginLeft="@dimen/dp_size_22"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"/>
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_size_22"
+            android:layout_marginTop="@dimen/dp_size_10">
+
+            <TextView
+                android:id="@+id/tv_job_package"
+                android:layout_width="@dimen/dp_size_220"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_job_package"
+                android:drawablePadding="@dimen/dp_size_10"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:paddingLeft="@dimen/dp_size_5" />
+
+            <TextView
+                android:id="@+id/tv_job_opening"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_size_20"
+                android:layout_toRightOf="@+id/tv_job_package"
+                android:drawableLeft="@drawable/ic_job_opening"
+                android:drawablePadding="@dimen/dp_size_10"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR" />
+
+            <TextView
+                android:id="@+id/tv_job_opt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_job_package"
+                android:layout_marginTop="@dimen/dp_size_20"
+                android:drawableLeft="@drawable/ic_job_type"
+                android:drawablePadding="@dimen/dp_size_10"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:paddingLeft="@dimen/dp_size_5"
+                android:textColor="@color/searchbox_hint_text_color"
+                android:textSize="@dimen/sp_size_12" />
+
+            <TextView
+                android:id="@+id/tv_job_skill"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_job_opt"
+                android:layout_marginTop="@dimen/dp_size_20"
+                android:drawableLeft="@drawable/ic_job_name"
+                android:drawablePadding="@dimen/dp_size_10"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:paddingLeft="@dimen/dp_size_5"
+                android:textColor="@color/searchbox_hint_text_color"
+                android:textSize="@dimen/sp_size_12" />
+
+            <TextView
+                android:id="@+id/tv_job_start_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_job_skill"
+                android:layout_marginTop="@dimen/dp_size_20"
+                android:drawableLeft="@drawable/ic_job_date_time"
+                android:drawablePadding="@dimen/dp_size_10"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:paddingLeft="@dimen/dp_size_5" />
+
+            <TextView
+                android:id="@+id/tv_job_end_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_job_skill"
+                android:layout_marginLeft="@dimen/dp_size_20"
+                android:layout_marginTop="@dimen/dp_size_20"
+                android:layout_toRightOf="@+id/tv_job_start_date"
+                android:drawableLeft="@drawable/ic_dead_line"
+                android:drawablePadding="@dimen/dp_size_10"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR" />
+
+            <TextView
+                android:id="@+id/tv_education"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_job_start_date"
+                android:layout_marginTop="@dimen/dp_size_20"
+                android:drawableLeft="@drawable/ic_job_type"
+                android:drawablePadding="@dimen/dp_size_10"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:paddingLeft="@dimen/dp_size_5"
+                android:textColor="@color/searchbox_hint_text_color"
+                android:textSize="@dimen/sp_size_12" />
+
+            <TextView
+                android:id="@+id/tv_job_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_education"
+                android:layout_marginTop="@dimen/dp_size_20"
+                android:drawableLeft="@drawable/ic_job_location"
+                android:drawablePadding="@dimen/dp_size_10"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:paddingLeft="@dimen/dp_size_5"
+                android:textColor="@color/searchbox_hint_text_color"
+                android:textSize="@dimen/sp_size_12" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_size_1"
+            android:layout_marginTop="@dimen/dp_size_21"
+            android:background="@color/line_color" />
+
+        <TextView
+            android:id="@+id/tv_job_des_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_size_22"
+            android:layout_marginTop="@dimen/dp_size_25"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:text="@string/ID_JOB_DES"
+            android:textAllCaps="true"
+            android:textColor="@color/job_filter_desc_color" />
+
+        <TextView
+            android:id="@+id/tv_job_des"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_size_22"
+            android:layout_marginTop="@dimen/dp_size_25"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:textAllCaps="true"
+            android:textColor="@color/job_filter_desc_color"
+            android:textSize="@dimen/dp_size_12" />
+    </LinearLayout>
+</android.support.v7.widget.CardView>

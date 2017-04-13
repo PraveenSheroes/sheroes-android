@@ -118,10 +118,9 @@ public class CommunityOptionJoinDialog extends BaseDialogFragment implements Hom
 
                 mFeedDetail.setRequestPending(true);
                 mFeedDetail.setOwner(false);
-                if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getScreenName()) && mFeedDetail.getScreenName().equalsIgnoreCase(AppConstants.FEATURE_FRAGMENT)) {
+                if (mFeedDetail.isFromHome()) {
                     ((HomeActivity) getActivity()).onJoinEventSuccessResult(baseResponse.getStatus(), mFeedDetail);
                 } else {
-
                     ((CommunitiesDetailActivity) getActivity()).onJoinDialogSuccessResult(baseResponse.getStatus(), mFeedDetail);
                 }
                 dismiss();

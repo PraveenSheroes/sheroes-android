@@ -28,6 +28,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.OnBoardingData;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.RangeSeekBar;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -36,6 +37,8 @@ import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static appliedlife.pvtltd.SHEROES.enums.OnBoardingEnum.LOCATION;
 
 /**
  * Created by Ajit Kumar on 10-02-2017.
@@ -53,26 +56,35 @@ public class JobFilterFragment extends BaseFragment {
     TextView tvExp;
     @Bind(R.id.tv_location_data)
     TextView tvLocationData;
+    @Bind(R.id.tv_functional_area)
+    TextView tvFunctionArea;
     private HashMap<String, HashMap<String, ArrayList<LabelValue>>> mMasterDataResult;
     @Inject
     Preference<MasterDataResponse> mUserPreferenceMasterData;
+    @Inject
+    AppUtils appUtils;
     private GenericRecyclerViewAdapter mAdapter;
     private GetAllDataDocument getAllDataDocument;
-
+    private List<String> cities=new ArrayList<>();
+    private List<String> functionArea=new ArrayList<>();
+    private List<String> opportunityType=new ArrayList<>();
+    private List<String> skill=new ArrayList<>();
+    private Integer experienceFrom;
+    private Integer experienceTo;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.job_filter_fragment, container, false);
         ButterKnife.bind(this, view);
-        RangeSeekBar<Integer> seekBar = (RangeSeekBar<Integer>) view.findViewById(R.id.rangeSeekbar);
+        RangeSeekBar<Integer> seekBar = (RangeSeekBar<Integer>)view.findViewById(R.id.rangeSeekbar);
         seekBar.setRangeValues(0, 25);
         seekBar.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener<Integer>() {
             @Override
             public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Integer minValue, Integer maxValue) {
                 //Now you have the minValue and maxValue of your RangeSeekbar
-                LogUtils.info("Range", minValue + "-" + maxValue);
-                tvExp.setText(minValue + "-" + maxValue + " Years");
-                // Toast.makeText(getActivity(), minValue + "-" + maxValue, Toast.LENGTH_LONG).show();
+                experienceFrom=minValue;
+                experienceTo=maxValue;
+                tvExp.setText(minValue +AppConstants.DASH + maxValue + AppConstants.SPACE+getString(R.string.ID_YEARS));
             }
         });
 
@@ -87,8 +99,8 @@ public class JobFilterFragment extends BaseFragment {
         } else {
             mHomePresenter.getMasterDataToPresenter();
         }
-        if (StringUtil.isNotEmptyCollection(setFilterValues())) {
-            mAdapter.setSheroesGenericListData(setFilterValues());
+        if (StringUtil.isNotEmptyCollection(setJobOpportunityValues())) {
+            mAdapter.setSheroesGenericListData(setJobOpportunityValues());
             mAdapter.notifyDataSetChanged();
         }
 
@@ -98,13 +110,14 @@ public class JobFilterFragment extends BaseFragment {
     public void locationData(GetAllDataDocument getAllDataDocument) {
         this.getAllDataDocument = getAllDataDocument;
         if (StringUtil.isNotNullOrEmptyString(getAllDataDocument.getTitle())) {
+            cities.add(getAllDataDocument.getTitle());
             tvLocationData.setText(getAllDataDocument.getTitle());
         }
     }
 
     @OnClick(R.id.tv_save_job_filter)
     public void applyFilterOnClick() {
-        FeedRequestPojo feedRequestPojo = new FeedRequestPojo();
+        FeedRequestPojo feedRequestPojo = appUtils.jobCategoryRequestBuilder(AppConstants.FEED_JOB,AppConstants.ONE_CONSTANT,cities,experienceFrom,experienceTo,functionArea,opportunityType,skill);
         ((JobFilterActivity) getActivity()).applyFilterData(feedRequestPojo);
     }
 
@@ -119,24 +132,59 @@ public class JobFilterFragment extends BaseFragment {
 
     @OnClick(R.id.tv_loaction_label)
     public void locationJob() {
+        tvLocationData.setVisibility(View.VISIBLE);
+        ((JobFilterActivity)getActivity()).searchLocationData(AppConstants.JOB_AT_GET_ALL_DATA_KEY, LOCATION);
 
     }
 
     @OnClick(R.id.tv_functional_area_lable)
     public void functionalArea() {
+      List<OnBoardingData> boardingDataList=functionalAreaValues();
+        StringBuilder stringBuilder=new StringBuilder();
+        for(OnBoardingData onBoardingData:boardingDataList)
+        {
+            functionArea.add(onBoardingData.getCategory());
+            stringBuilder.append(onBoardingData.getCategory());
+            stringBuilder.append(AppConstants.COMMA);
+        }
+        String functionalArea=stringBuilder.toString();
+        if(StringUtil.isNotNullOrEmptyString(functionalArea)) {
+            tvFunctionArea.setText(functionalArea.substring(0,functionalArea.length()-1));
+        }
+        tvFunctionArea.setVisibility(View.VISIBLE);
     }
 
     @OnClick(R.id.tv_filter_exp_label)
     public void filterExperience() {
+        tvExp.setVisibility(View.VISIBLE);
     }
 
 
-    private List<OnBoardingData> setFilterValues() {
+    private List<OnBoardingData> setJobOpportunityValues() {
         if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && null != mUserPreferenceMasterData.get().getData()) {
             mMasterDataResult = mUserPreferenceMasterData.get().getData();
         }
         if (null != mMasterDataResult && null != mMasterDataResult.get(AppConstants.MASTER_DATA_OPPORTUNITY_KEY)) {
             HashMap<String, ArrayList<LabelValue>> hashMap = mMasterDataResult.get(AppConstants.MASTER_DATA_OPPORTUNITY_KEY);
+            List<OnBoardingData> listBoardingList = new ArrayList<>();
+            Set<String> lookingForCategorySet = hashMap.keySet();
+            for (String lookingForCategory : lookingForCategorySet) {
+                OnBoardingData boardingData = new OnBoardingData();
+                opportunityType.add(lookingForCategory);
+                boardingData.setCategory(lookingForCategory);
+                boardingData.setBoardingDataList(hashMap.get(lookingForCategory));
+                listBoardingList.add(boardingData);
+            }
+            return listBoardingList;
+        }
+        return null;
+    }
+    private List<OnBoardingData> functionalAreaValues() {
+        if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && null != mUserPreferenceMasterData.get().getData()) {
+            mMasterDataResult = mUserPreferenceMasterData.get().getData();
+        }
+        if (null != mMasterDataResult && null != mMasterDataResult.get(AppConstants.MASTER_DATA_FUNCTIONAL_AREA_KEY)) {
+            HashMap<String, ArrayList<LabelValue>> hashMap = mMasterDataResult.get(AppConstants.MASTER_DATA_FUNCTIONAL_AREA_KEY);
             List<OnBoardingData> listBoardingList = new ArrayList<>();
             Set<String> lookingForCategorySet = hashMap.keySet();
             for (String lookingForCategory : lookingForCategorySet) {
@@ -149,6 +197,5 @@ public class JobFilterFragment extends BaseFragment {
         }
         return null;
     }
-
 
 }

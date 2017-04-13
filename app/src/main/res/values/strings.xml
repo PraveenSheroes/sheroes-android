@@ -835,15 +835,9 @@ etur adipiscing elit,sed do eiusmod tempor incididunt ut…</string>
     <string name="ID_BUSSINESS_OPPORTUNITIES">Business Opportunities</string>
     <string name="ID_PART_TIME">Part Time</string>
     <string name="ID_FULL_TIME">Full Time</string>
-    <string name="ID_JOB_PACKAGE">250K/Annum</string>
-    <string name="ID_JOB_OPENING">2 Openings</string>
-    <string name="ID_JOB_OPT">Work from home | Part Time, Corporate Job | Full time</string>
-    <string name="ID_JOB_SKILL">Social Media, Process Design, Data Analytics, Creativity, Communication</string>
-    <string name="ID_JOB_START_DATE">12 Dec, 2016</string>
-    <string name="ID_JOB_END_DATE">12 Jan, 2017</string>
-    <string name="ID_JOB_EDUCATION">B.COM, Bachelors in Communications</string>
-    <string name="ID_JOB_LOCATION">Mumbai, India</string>
     <string name="ID_JOB_DES">Description</string>
+    <string name="ID_JOB_OPENING">Opening</string>
+
     <string name="ID_ADD">Add</string>
     <string name="ID_EDITED">Edited</string>
     <string-array name="name">

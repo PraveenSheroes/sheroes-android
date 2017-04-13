@@ -89,6 +89,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_LIKE_UNLIKE;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.createCommunityPostRequestBuilder;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.selectCommunityRequestBuilder;
 
 /**
  * Created by Ajit Kumar on 20-01-2017.
@@ -141,13 +143,16 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
     @Bind(R.id.scroll_community_post)
     ScrollView scroll_community_post;
     String encCoverImage;
-    private long mCommunityId = 0;
+    private Long mCommunityId;
+    private Long mIdForEditPost;
+    @Inject
+    CreateCommunityPresenter mCreateCommunityPresenter;
     private String mCreaterType;
     @Inject
     AppUtils mAppUtils;
     @Bind(R.id.txt_counter)
     TextView mCounterTxt;
-    String mimages;
+    String mImages;
     int mImgcount = 0, mCount = 0;
     String mValue = "";
     private final String TAG = LogUtils.makeLogTag(CreateCommunityPostFragment.class);
@@ -221,12 +226,14 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
 
     private void checkIntentWithImageUrls() {
         if (null != mFeedDetail) {
+            mCreateCommunityPresenter.getSelectCommunityFromPresenter(selectCommunityRequestBuilder());
             mVg_image_container.removeAllViews();
             mVg_image_container.removeAllViewsInLayout();
             LayoutInflater layoutInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View layout2 = layoutInflater.inflate(R.layout.imagevie_with_cross, null);
             mTvcreate_community_post.setText(getString(R.string.ID_EDIT_POST));
-            mCommunityId=mFeedDetail.getIdOfEntityOrParticipant();
+            mCommunityId=mFeedDetail.getCommunityId();
+            mIdForEditPost=mFeedDetail.getIdOfEntityOrParticipant();
             if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getListDescription())) {
                 mEtShareCommunityPostText.setText(mFeedDetail.getListDescription());
                 mCounterTxt.setVisibility(View.VISIBLE);
@@ -236,14 +243,8 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
                 mEtchoosecommunity.setText(mFeedDetail.getPostCommunityName());
                 tv_community_owner.setText(mFeedDetail.getPostCommunityName());
             }
-            if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getThumbnailImageUrl())) {
-                Glide.with(this).load(mFeedDetail.getThumbnailImageUrl()).transform(new CommunityOpenAboutFragment.CircleTransform(getActivity())).into(iv_community_owner);
-                mIvcommunity_post_icon.setCircularImage(true);
-                mIvcommunity_post_icon.bindImage(mFeedDetail.getThumbnailImageUrl());
-            }
-
             imageUrls = mFeedDetail.getImageUrls();
-            if (StringUtil.isNotEmptyCollection(mFeedDetail.getImageUrls())) {
+            if (StringUtil.isNotEmptyCollection(imageUrls)) {
                 for (int i = 0; i < imageUrls.size(); i++) {
                     mIv_camera_btn_for_post_images.setVisibility(View.GONE);
                     mTv_add_more_community_post_image.setVisibility(View.VISIBLE);
@@ -251,7 +252,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
                     mImg[finalI] = (ImageView) layout2.findViewById(R.id.customView);
                     mBtncross[finalI] = (Button) layout2.findViewById(R.id.button1);
                     mImg[finalI].setScaleType(ImageView.ScaleType.CENTER_CROP);
-                    mBtncross[finalI].setTag("Img" + mImgcount);
+                    mBtncross[finalI].setTag(AppConstants.IMAGE + mImgcount);
                     mBtncross[finalI].setOnClickListener(mCorkyListener);
                     Glide.with(this)
                             .load(imageUrls.get(i)).asBitmap()
@@ -379,12 +380,11 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
 
     @OnClick(R.id.tv_community_post_submit)
     public void communityPostSubmitClick() {
-        if (mCommunityId > 0 && null != mCreaterType && StringUtil.isNotNullOrEmptyString(mCreaterType) && null != mEtShareCommunityPostText.getText().toString()
+        if (null!=mCommunityId && null != mCreaterType && StringUtil.isNotNullOrEmptyString(mCreaterType) && StringUtil.isNotNullOrEmptyString(mEtShareCommunityPostText.getText().toString())
                 && StringUtil.isNotNullOrEmptyString(mEtShareCommunityPostText.getText().toString())) {
             mTv_community_post_submit.setVisibility(View.GONE);
-            String description = AppConstants.EMPTY_STRING;
+            String  description = mEtShareCommunityPostText.getText().toString();
             List<String> imag = new ArrayList<>();
-            description = mEtShareCommunityPostText.getText().toString();
             for (int i = 0; i < mImg.length; i++) {
                 if (null != mImg[i]) {
                     Bitmap bitmap = ((BitmapDrawable) mImg[i].getDrawable()).getBitmap();
@@ -396,7 +396,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
                     }
                 }
             }
-            createCommunityPresenter.postEditCommunityList(mAppUtils.createCommunityPostRequestBuilder(mCommunityId, mCreaterType, description, imag));
+            createCommunityPresenter.postEditCommunityList(createCommunityPostRequestBuilder(mCommunityId, mCreaterType, description, imag,mIdForEditPost));
         } else {
             mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.BLANK_MESSAGE, FeedParticipationEnum.ERROR_CREATE_COMMUNITY);
         }
@@ -411,11 +411,11 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
     public void onAddCommunityDetailSubmit(CommunityPostResponse communityPostResponse) {
         mEtchoosecommunity.setText(communityPostResponse.getTitle());
         mCommunityId = Long.parseLong(communityPostResponse.getId());
-        mimages = communityPostResponse.getLogo();
+        mImages = communityPostResponse.getLogo();
         mIvcommunity_post_icon.setCircularImage(true);
-        mIvcommunity_post_icon.bindImage(mimages);
+        mIvcommunity_post_icon.bindImage(mImages);
         tv_community_owner.setText(communityPostResponse.getTitle());
-        Glide.with(this).load(mimages).transform(new CommunityOpenAboutFragment.CircleTransform(getActivity())).into(iv_community_owner);
+        Glide.with(this).load(mImages).transform(new CommunityOpenAboutFragment.CircleTransform(getActivity())).into(iv_community_owner);
         if (communityPostResponse.isOwner()) {
             lnr_community_post1.setEnabled(true);
         } else {
@@ -432,7 +432,25 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
 
     @Override
     public void getSelectedCommunityListSuccess(List<CommunityPostResponse> selected_community_response) {
-
+        if(StringUtil.isNotEmptyCollection(selected_community_response)) {
+            if(null!=mFeedDetail)
+            {
+                for(CommunityPostResponse communityPostResponse:selected_community_response )
+                {
+                    long communityId = Long.parseLong(communityPostResponse.getId());
+                    if(mFeedDetail.getCommunityId()==communityId)
+                    {
+                        mImages = communityPostResponse.getLogo();
+                        break;
+                    }
+                }
+                if (StringUtil.isNotNullOrEmptyString(mImages)) {
+                    mIvcommunity_post_icon.setCircularImage(true);
+                    mIvcommunity_post_icon.bindImage(mImages);
+                    Glide.with(this).load(mImages).transform(new CommunityOpenAboutFragment.CircleTransform(getActivity())).into(iv_community_owner);
+                }
+            }
+        }
     }
 
     @Override
@@ -448,7 +466,10 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
                     Toast.makeText(getActivity(), messageForSuccess, Toast.LENGTH_LONG).show();
                     mTv_community_post_submit.setVisibility(View.VISIBLE);
                     mFeedDetail = createCommunityResponse.getFeedDetail();
-                     mFeedDetail.setStatus(messageForSuccess);
+                    if(messageForSuccess.equalsIgnoreCase(getString(R.string.ID_POSTED)))
+                    {
+                        mFeedDetail.setFromHome(true);
+                    }
                     ((CreateCommunityPostActivity) getActivity()).editedSuccessFully(mFeedDetail);
                     break;
                 case AppConstants.FAILED:

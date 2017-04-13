@@ -237,7 +237,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
         switch (id) {
             case R.id.tv_featured_community_join:
                 if (mFeedDetail.isClosedCommunity()) {
-                    mFeedDetail.setScreenName(AppConstants.FEATURE_FRAGMENT);
+                    mFeedDetail.setFromHome(true);
                     showCommunityJoinReason(mFeedDetail);
                 } else {
                     if (null != mViewPagerAdapter) {

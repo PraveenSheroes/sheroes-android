@@ -12,9 +12,12 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
  */
 
 public class CommunityPostCreateRequest extends BaseRequest{
+    @SerializedName("id")
+    @Expose
+    private Long id=null;
     @SerializedName("community_id")
     @Expose
-    private long communityId;
+    private Long communityId=null;
     @SerializedName("creator_type")
     @Expose
     private String creatorType;
@@ -28,11 +31,20 @@ public class CommunityPostCreateRequest extends BaseRequest{
     @Expose
     private String source;
 
-    public long getCommunityId() {
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getCommunityId() {
         return communityId;
     }
 
-    public void setCommunityId(long communityId) {
+    public void setCommunityId(Long communityId) {
         this.communityId = communityId;
     }
 

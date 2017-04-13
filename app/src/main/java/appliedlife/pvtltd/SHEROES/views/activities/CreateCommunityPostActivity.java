@@ -27,7 +27,6 @@ import butterknife.ButterKnife;
 
 
 public class CreateCommunityPostActivity extends BaseActivity implements BaseHolderInterface, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, ImageUploadFragment.ImageUploadCallable {
-    String data = "";
     private FeedDetail mFeedDetail;
     private CreateCommunityPostFragment mCommunityFragment;
 
@@ -37,14 +36,6 @@ public class CreateCommunityPostActivity extends BaseActivity implements BaseHol
         SheroesApplication.getAppComponent(this).inject(this);
         if (null != getIntent()) {
             mFeedDetail = getIntent().getParcelableExtra(AppConstants.COMMUNITY_POST_FRAGMENT);
-            data = getIntent().getStringExtra("value");
-            try {
-                if (null != data) {
-                } else
-                    data = "";
-            } catch (Exception e) {
-                data = "";
-            }
         }
         renderLoginFragmentView();
     }

@@ -116,8 +116,8 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
         if (StringUtil.isNotNullOrEmptyString(dataItem.getAuthorName())) {
             tvFeedJobGroupName.setText(dataItem.getAuthorName());
         }
-        if (StringUtil.isNotNullOrEmptyString(dataItem.getCreatedDate())) {
-            long createdDate = mDateUtil.getTimeInMillis(dataItem.getCreatedDate(), AppConstants.DATE_FORMAT);
+        if (StringUtil.isNotNullOrEmptyString(dataItem.getStartDate())) {
+            long createdDate = mDateUtil.getTimeInMillis(dataItem.getStartDate(), AppConstants.DATE_FORMAT);
             tvFeedJobDateTime.setText(mDateUtil.getDateFromMillisecondsWithFormat(createdDate, AppConstants.DATE_FORMAT_FOR_JOB));
         }
         if (StringUtil.isNotEmptyCollection(dataItem.getSearchTextJobEmpTypes())) {

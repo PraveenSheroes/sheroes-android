@@ -208,11 +208,19 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_featured_community_text)
     public void viewMoreClick() {
-        viewText();
+        if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
+            if (mViewMoreDescription.length() > AppConstants.WORD_LENGTH) {
+                viewText();
+            }
+        }
     }
     @OnClick(R.id.tv_featured_community_text_full_view)
     public void viewMoreFullViewClick() {
-        viewText();
+        if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
+            if (mViewMoreDescription.length() > AppConstants.WORD_LENGTH) {
+                viewText();
+            }
+        }
     }
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
