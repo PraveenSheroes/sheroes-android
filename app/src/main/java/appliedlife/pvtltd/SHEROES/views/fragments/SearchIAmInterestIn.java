@@ -90,7 +90,7 @@ public class SearchIAmInterestIn extends BaseFragment implements BaseHolderInter
     EditText mEtSearchEditTextProfile;
     @Bind(R.id.pb_search_skill_progress_bar)
     ProgressBar mProgressBar;
-    @Bind(R.id.tv_no_of_skills)
+    @Bind(R.id.tv_no_of_skill)
     TextView mTvNumberOfSkills;
     @Bind(R.id.tv_skill_text)
     TextView mTvSkillText;
@@ -107,7 +107,7 @@ public class SearchIAmInterestIn extends BaseFragment implements BaseHolderInter
     String[] mSkills = new String[4];
     Long[] mSkillsId = new Long[4];
     private FragmentListRefreshData mFragmentListRefreshData;
-    private SearchGoodAt.MyProfileSearchGoodAtListener mHomeActivityIntractionListner;
+    private MyProfileSearchGoodAtListener mHomeActivityIntractionListner;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private final String mTAG = LogUtils.makeLogTag(SearchGoodAt.class);
@@ -121,8 +121,8 @@ public class SearchIAmInterestIn extends BaseFragment implements BaseHolderInter
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            if (getActivity() instanceof SearchGoodAt.MyProfileSearchGoodAtListener) {
-                mHomeActivityIntractionListner = (SearchGoodAt.MyProfileSearchGoodAtListener) getActivity();
+            if (getActivity() instanceof MyProfileSearchGoodAtListener) {
+                mHomeActivityIntractionListner = (MyProfileSearchGoodAtListener) getActivity();
             }
         } catch (InstantiationException exception) {
             LogUtils.error(mTAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + mTAG + AppConstants.SPACE + exception.getMessage());

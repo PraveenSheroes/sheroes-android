@@ -1,5 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,30 +23,40 @@ import com.f2prateek.rx.preferences.Preference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
+import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
 import appliedlife.pvtltd.SHEROES.models.entities.community.PopularTag;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCardResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
+import appliedlife.pvtltd.SHEROES.presenters.CommunityTagsPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePersenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.ProfileActicity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CommunityTagsView;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -55,9 +66,9 @@ import butterknife.OnClick;
  * Created by priyanka on 26/03/17.
  */
 
-public class SearchGoodAt extends BaseFragment implements BaseHolderInterface, ProfileView {
+public class SearchGoodAt extends BaseDialogFragment implements CommunityTagsView, BaseHolderInterface, HomeView, ProfileView {
     @Inject
-    ProfilePersenter mProfilePresenter;
+    ProfilePersenter mprofilePresenter;
     @Inject
     AppUtils mAppUtils;
     @Inject
@@ -65,19 +76,19 @@ public class SearchGoodAt extends BaseFragment implements BaseHolderInterface, P
     @Bind(R.id.rv_home_list)
     RecyclerView mRecyclerView;
     @Bind(R.id.tv_selected_skill1)
-    TextView mSkill1;
+    TextView mTag1;
     @Bind(R.id.tv_selected_skill2)
-    TextView mSkill2;
+    TextView mTag2;
     @Bind(R.id.tv_selected_skill3)
-    TextView mSkill3;
+    TextView mTag3;
     @Bind(R.id.tv_selected_skill4)
-    TextView mSkill4;
+    TextView mTag4;
     @Bind(R.id.tv_selected_skill5)
-    TextView mSkill5;
+    TextView mTag5;
     @Bind(R.id.tv_selected_skill6)
-    TextView mSkill6;
+    TextView mTag6;
     @Bind(R.id.tv_selected_skill7)
-    TextView mSkill7;
+    TextView mTag7;
     @Bind(R.id.view)
     View mVindecator;
     @Bind(R.id.view1)
@@ -85,92 +96,176 @@ public class SearchGoodAt extends BaseFragment implements BaseHolderInterface, P
     @Bind(R.id.view2)
     View mVindecator2;
     @Bind(R.id.tv_skill_submit)
-    TextView mTvSkillSubmit;
+    TextView tv_community_tag_submit;
     @Bind(R.id.et_search_edit_text_profile)
-    EditText mEtSearchEditTextProfile;
+    EditText mEt_search_edit_text;
     @Bind(R.id.pb_search_skill_progress_bar)
     ProgressBar mProgressBar;
-    @Bind(R.id.tv_no_of_skills)
-    TextView mTvNumberOfSkills;
+    @Bind(R.id.tv_no_of_skill)
+    TextView mTv_no_of_tags;
     @Bind(R.id.tv_skill_text)
-    TextView mTvSkillText;
+    TextView mtv_tag_text;
     @Bind(R.id.tv_skill_title)
-    TextView mTvSkilltitle;
+    TextView mtv_tag_title;
     @Bind(R.id.ll_indecator)
     LinearLayout ll_indecator;
-    String skill1, skill2;
+    String tag1, tag2;
     private List<PopularTag> listFeelter = new ArrayList<PopularTag>();
-    private HashMap<String, HashMap<String, ArrayList<LabelValue>>> mMasterDataResult;
+    Map<String, String> myMap;
     int mCount = 1;
     private Handler mHandler = new Handler();
+
     private String mSearchDataName = AppConstants.EMPTY_STRING;
-    String[] mSkills = new String[4];
-    long[] mSkillsId = new long[4];
+    String[] mTags = new String[4];
+
+    long[] mTagsid = new long[4];
     private FragmentListRefreshData mFragmentListRefreshData;
-    private MyProfileSearchGoodAtListener mHomeActivityIntractionListner;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
-    private final String mTAG = LogUtils.makeLogTag(SearchGoodAt.class);
+    private final String mTAG = LogUtils.makeLogTag(CreateCommunityFragment.class);
     HashMap<String, HashMap<String, ArrayList<LabelValue>>> data = new HashMap<>();
-    ArrayList<String> arrayList = new ArrayList<String>();
-    ArrayList<HashMap<String, Long>> skillDetails = new ArrayList<HashMap<String, Long>>();
-    ArrayList<HashMap<String, String>> skillDetailsId = new ArrayList<HashMap<String, String>>();
-    HashMap<String, String> skiilMap = new HashMap<String, String>();
-    HashMap<String, Long> skiilIdMap = new HashMap<String, Long>();
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            if (getActivity() instanceof MyProfileSearchGoodAtListener) {
-                mHomeActivityIntractionListner = (MyProfileSearchGoodAtListener) getActivity();
-            }
-        } catch (InstantiationException exception) {
-            LogUtils.error(mTAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + mTAG + AppConstants.SPACE + exception.getMessage());
-        }
-    }
-
+    PopularTag filterList;
+    FeedDetail mFeedDetail;
+    String encImage;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getActivity()).inject(this);
-
         View v = inflater.inflate(R.layout.profile_skill_list, container, false);
         ButterKnife.bind(this, v);
-        mProfilePresenter.attachView(this);
+        mprofilePresenter.attachView(this);
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ALL_SEARCH, AppConstants.NO_REACTION_CONSTANT);
+
+        if (null != getArguments()) {
+            mFeedDetail = getArguments().getParcelable(AppConstants.COMMUNITIES_DETAIL);
+            encImage = getArguments().getString(AppConstants.COVER_IMAGE);
+        }
+        if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && null != mUserPreferenceMasterData.get().getData()) {
+           // setMasterData(mUserPreferenceMasterData.get().getData());
+        } else {
+           // mprofilePresenter.getMasterDataToPresenter();
+        }
+        mEt_search_edit_text.setHint("Search Tags");
+        editTextWatcher();
+        mTv_no_of_tags.setVisibility(View.GONE);
+        tv_community_tag_submit.setVisibility(View.GONE);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new GenericRecyclerViewAdapter(getActivity(), this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
-        mEtSearchEditTextProfile.setHint("Search Skill");
-        editTextWatcher();
-        mTvNumberOfSkills.setVisibility(View.GONE);
-        mTvSkillSubmit.setVisibility(View.GONE);
-        super.setAllInitializationForFeeds(mFragmentListRefreshData, mAdapter, mLayoutManager, mRecyclerView, null, mAppUtils, mProgressBar);
         return v;
     }
 
-
     @OnClick(R.id.tv_back_skill_list)
     public void communityTagBackClick() {
-        mHomeActivityIntractionListner.onBackPress();
+    dismiss();
     }
 
     @OnClick(R.id.tv_skill_submit)
     public void tagSubmitPress() {
-        for(int i=1;i<mSkills.length;i++)
-        {
-            if(StringUtil.isNotNullOrEmptyString(mSkills[i])) {
-                skiilIdMap.put(mSkills[i], mSkillsId[i]);
-                skiilMap.put("skill"+i, mSkills[i]);
-                skillDetailsId.add(skiilMap);
-                skillDetails.add(skiilIdMap);
-            }
-        }
+        ((ProfileActicity) getActivity()).onTagsSubmit(mTags, mTagsid);
+        dismiss();
+    }
 
-        mHomeActivityIntractionListner.onGoodAtSubmit(mSkillsId,mSkills);
+    private void setMasterData(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
+        LogUtils.error("Master Data", data + "");
+        HashMap<String, ArrayList<LabelValue>> hashMap = mapOfResult.get(AppConstants.MASTER_DATA_TAGS_KEY);
+        List<LabelValue> labelValueArrayList = hashMap.get(AppConstants.MASTER_DATA_POPULAR_CATEGORY);
+        filterList = new PopularTag();
+        filterList.setName("Popular Tag");
+        List<String> jobAtList = new ArrayList<>();
+        myMap = new HashMap<>();
+        if (StringUtil.isNotEmptyCollection(labelValueArrayList)) {
+            for (int i = 0; i < labelValueArrayList.size(); i++) {
+                String abc = labelValueArrayList.get(i).getLabel();
+                String id = "" + labelValueArrayList.get(i).getValue();
+                myMap.put(abc, id);
+                jobAtList.add(abc);
+
+                //jobAtList.add(id);
+            }
+            filterList.setBoardingDataList(jobAtList);
+            listFeelter.add(filterList);
+        }
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mAdapter = new GenericRecyclerViewAdapter(getActivity(), this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
+
+        mAdapter.setSheroesGenericListData(listFeelter);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @OnClick(R.id.tv_selected_skill1)
+    void onTag1Click() {
+        mTag1.setText("");
+        mCount--;
+        if (StringUtil.isNotNullOrEmptyString(mTag2.getText().toString())) {
+            mTag1.setText(mTag2.getText());
+            mTag2.setVisibility(View.GONE);
+            mTv_no_of_tags.setText("2/3");
+
+            mVindecator1.setBackgroundColor((getResources().getColor(R.color.popular_tag_color)));
+        }
+        if (StringUtil.isNotNullOrEmptyString(mTag3.getText().toString())) {
+            mTag1.setText(mTag1.getText());
+            mTag2.setVisibility(View.VISIBLE);
+            mTag3.setVisibility(View.GONE);
+        } else
+            mTag1.setVisibility(View.GONE);
+
+    }
+
+    @OnClick(R.id.tv_selected_skill2)
+    void onTag2Click() {
+        mTag2.setText("");
+        mCount--;
+        if (StringUtil.isNotNullOrEmptyString(mTag3.getText().toString())) {
+            mTag2.setText(mTag3.getText());
+            mTag3.setVisibility(View.GONE);
+        } else
+            mTag2.setVisibility(View.GONE);
+
+
+    }
+
+    @OnClick(R.id.tv_selected_skill3)
+    void onTag3Click() {
+        mTag3.setText("");
+        mCount--;
+        mTag3.setVisibility(View.GONE);
+
+
+    }
+
+    @OnClick(R.id.tv_selected_skill4)
+    void onTag4Click() {
+        mTag4.setText("");
+        mCount--;
+
+        if (StringUtil.isNotNullOrEmptyString(mTag5.getText().toString())) {
+            mTag4.setText(mTag5.getText());
+            mTag5.setVisibility(View.GONE);
+        }
+        if (StringUtil.isNotNullOrEmptyString(mTag6.getText().toString())) {
+            mTag5.setText(mTag6.getText());
+            mTag5.setVisibility(View.VISIBLE);
+            mTag6.setVisibility(View.GONE);
+        } else
+            mTag4.setVisibility(View.GONE);
+
+
+    }
+
+    @Override
+    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
+        setMasterData(mapOfResult);
+    }
+
+    @Override
+    public void getLogInResponse(LoginResponse loginResponse) {
 
     }
 
@@ -184,159 +279,164 @@ public class SearchGoodAt extends BaseFragment implements BaseHolderInterface, P
         }*/
     }
 
-  /*  @Override
-    public void getTagListSuccess(List<Doc> tagDetailList) {
-        mRecyclerView.setVisibility(View.VISIBLE);
-        mAdapter.setCallForRecycler(AppConstants.ALL_DATA_SUB_TYPE);
-        mAdapter.setSheroesGenericListData(tagDetailList);
-        mAdapter.notifyDataSetChanged();
-        mTvSkillText.setVisibility(View.GONE);
-        mTvSkilltitle.setVisibility(View.GONE);
-        mTvNumberOfSkills.setVisibility(View.GONE);
-        mSkill1.setVisibility(View.GONE);
-        mSkill2.setVisibility(View.GONE);
-        mSkill3.setVisibility(View.GONE);
-        mSkill4.setVisibility(View.GONE);
-        mSkill5.setVisibility(View.GONE);
-        mSkill6.setVisibility(View.GONE);
-        ll_indecator.setVisibility(View.GONE);
-    }*/
+    @Override
+    public void getTagListSuccess(GetTagData getAllData) {
+        List<Doc> tagDetailList=getAllData.getDocs();
+        if(StringUtil.isNotEmptyCollection(tagDetailList)) {
+            mAdapter.setCallForRecycler(AppConstants.ALL_DATA_SUB_TYPE);
+            mAdapter.setSheroesGenericListData(tagDetailList);
+            mAdapter.notifyDataSetChanged();
+            mtv_tag_text.setVisibility(View.GONE);
+            mtv_tag_title.setVisibility(View.GONE);
+            mTv_no_of_tags.setVisibility(View.GONE);
+            mTag1.setVisibility(View.GONE);
+            mTag2.setVisibility(View.GONE);
+            mTag3.setVisibility(View.GONE);
+            mTag4.setVisibility(View.GONE);
+            mTag5.setVisibility(View.GONE);
+            mTag6.setVisibility(View.GONE);
+            ll_indecator.setVisibility(View.GONE);
+        }
+    }
 
-
-    @OnClick(R.id.et_search_edit_text_profile)
-
-    public void SearchClickText() {
-
-
-        mHomeActivityIntractionListner.openfrag();
-
+    @Override
+    public void getSuccessForAllResponse(BaseResponse success, FeedParticipationEnum feedParticipationEnum) {
 
     }
 
+    @Override
+    public void getDB(List<RecentSearchData> recentSearchDatas) {
 
+    }
     @Override
     public void startActivityFromHolder(Intent intent) {
 
     }
-
-
     @Override
     public void handleOnClick(BaseResponse sheroesListDataItem, View view) {
-        mRecyclerView.setVisibility(View.GONE);
         TextView textView = (TextView) view.findViewById(R.id.tv_community_tag_data);
         // textView.setBackgroundResource(R.drawable.selected_tag_shap);
 
         // getActivity().getFragmentManager().popBackStack();
 
         //   getDialog().cancel();
+        mAdapter = new GenericRecyclerViewAdapter(getActivity(), this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
+        mAdapter.setSheroesGenericListData(listFeelter);
 
+        mAdapter.notifyDataSetChanged();
 
-/*
-        mTv_no_of_Skills.setVisibility(View.VISIBLE);
-*/
-        if (StringUtil.isNotNullOrEmptyString(mSkill1.getText().toString())) {
-            mSkill1.setVisibility(View.VISIBLE);
+        mTv_no_of_tags.setVisibility(View.VISIBLE);
+        if (StringUtil.isNotNullOrEmptyString(mTag1.getText().toString())) {
+            mTag1.setVisibility(View.VISIBLE);
         }
-        if (StringUtil.isNotNullOrEmptyString(mSkill2.getText().toString())) {
-            mSkill2.setVisibility(View.VISIBLE);
+        if (StringUtil.isNotNullOrEmptyString(mTag2.getText().toString())) {
+            mTag2.setVisibility(View.VISIBLE);
         }
-        if (StringUtil.isNotNullOrEmptyString(mSkill3.getText().toString())) {
-            mSkill3.setVisibility(View.VISIBLE);
+        if (StringUtil.isNotNullOrEmptyString(mTag3.getText().toString())) {
+            mTag3.setVisibility(View.VISIBLE);
         }
-        if (StringUtil.isNotNullOrEmptyString(mSkill4.getText().toString())) {
-            mSkill4.setVisibility(View.VISIBLE);
+        if (StringUtil.isNotNullOrEmptyString(mTag4.getText().toString())) {
+            mTag4.setVisibility(View.VISIBLE);
         }
-        if (StringUtil.isNotNullOrEmptyString(mSkill5.getText().toString())) {
-            mSkill5.setVisibility(View.VISIBLE);
+        if (StringUtil.isNotNullOrEmptyString(mTag5.getText().toString())) {
+            mTag5.setVisibility(View.VISIBLE);
         }
-        if (StringUtil.isNotNullOrEmptyString(mSkill6.getText().toString())) {
-            mSkill6.setVisibility(View.VISIBLE);
+        if (StringUtil.isNotNullOrEmptyString(mTag6.getText().toString())) {
+            mTag6.setVisibility(View.VISIBLE);
         }
-        if (StringUtil.isNotNullOrEmptyString(mSkill7.getText().toString())) {
-            mSkill7.setVisibility(View.VISIBLE);
+        if (StringUtil.isNotNullOrEmptyString(mTag7.getText().toString())) {
+            mTag7.setVisibility(View.VISIBLE);
         }
-        mTvSkillText.setVisibility(View.VISIBLE);
-        mTvSkilltitle.setVisibility(View.VISIBLE);
-        /*mTv_no_of_Skills.setVisibility(View.VISIBLE);*/
-        ll_indecator.setVisibility(View.VISIBLE);
+        mtv_tag_text.setVisibility(View.GONE);
+        mtv_tag_title.setVisibility(View.GONE);
+        mTv_no_of_tags.setVisibility(View.GONE);
+        ll_indecator.setVisibility(View.GONE);
         if (mCount <= 3) {
             if (sheroesListDataItem instanceof Doc) {
-                String skill = mSkills[mCount] = ((Doc) sheroesListDataItem).getTitle();
-                long skillId = mSkillsId[mCount] = ((Doc) sheroesListDataItem).getId();
+                mTags[mCount] = ((Doc) sheroesListDataItem).getTitle();
+                mTagsid[mCount] = ((Doc) sheroesListDataItem).getId();
 
-
+            } else {
+                mTags[mCount] = textView.getText().toString();
+                mTagsid[mCount] = Long.parseLong(myMap.get(textView.getText()));
             }
-
             if (mCount == 2) {
 
-                if (mSkills[mCount].equals(mSkills[mCount - 1])) {
+                if (mTags[mCount].equals(mTags[mCount - 1])) {
                     mCount = mCount - 1;
                     Toast.makeText(getActivity(), "Already Selected Please Select Another One", Toast.LENGTH_LONG).show();
                 } else {
-                    //  mVindecator1.setBackgroundColor((getResources().getColor(R.color.popular_tag_color)));
+                    mTv_no_of_tags.setText("2/3");
 
-                    if (mSkills[mCount - 1].length() > 25) {
-                        mSkill4.setVisibility(View.VISIBLE);
-                        mSkill4.setText(mSkills[mCount]);
-                    } else if (mSkills[mCount - 1].length() < 25) {
-                        if (mSkills[mCount].length() > 25) {
-                            mSkill4.setVisibility(View.VISIBLE);
+                    mVindecator1.setBackgroundColor((getResources().getColor(R.color.popular_tag_color)));
 
-                            mSkill4.setText(mSkills[mCount]);
+                    if (mTags[mCount - 1].length() > 25) {
+                        mTag4.setVisibility(View.VISIBLE);
+                        mTag4.setText(mTags[mCount]);
+                    } else if (mTags[mCount - 1].length() < 25) {
+                        if (mTags[mCount].length() > 25) {
+                            mTag4.setVisibility(View.VISIBLE);
+
+                            mTag4.setText(mTags[mCount]);
                         } else {
-                            mSkill2.setVisibility(View.VISIBLE);
+                            mTag2.setVisibility(View.VISIBLE);
 
-                            mSkill2.setText(mSkills[mCount]);
+                            mTag2.setText(mTags[mCount]);
                         }
                     }
                 }
             } else if (mCount == 3) {
-                skill1 = mSkills[mCount];
-                skill2 = mSkills[mCount - 2];
+                tag1 = mTags[mCount];
+                tag2 = mTags[mCount - 2];
 
-                if ((mSkills[mCount].equals(mSkills[mCount - 1])) || (skill1.equals(skill2))) {
+                if ((mTags[mCount].equals(mTags[mCount - 1])) || (tag1.equals(tag2))) {
                     mCount = mCount - 1;
                     Toast.makeText(getActivity(), "Already Selected Please Select Another One", Toast.LENGTH_LONG).show();
                 } else {
-                    // mVindecator2.setBackgroundColor((getResources().getColor(R.color.popular_tag_color)));
+                    mTv_no_of_tags.setText("3/3");
 
-                    if (mSkills[mCount - 1].length() + mSkills[mCount - 2].length() > 30) {
-                        if (mSkill4.getText().equals("")) {
-                            mSkill4.setVisibility(View.VISIBLE);
+                    mVindecator2.setBackgroundColor((getResources().getColor(R.color.popular_tag_color)));
 
-                            mSkill4.setText(mSkills[mCount]);
-                        } else if (mSkills[mCount].length() > 25) {
-                            mSkill7.setText(mSkills[mCount]);
-                            mSkill7.setVisibility(View.VISIBLE);
+                    if (mTags[mCount - 1].length() + mTags[mCount - 2].length() > 30) {
+                        if (mTag4.getText().equals("")) {
+                            mTag4.setVisibility(View.VISIBLE);
+
+                            mTag4.setText(mTags[mCount]);
+                        } else if (mTags[mCount].length() > 25) {
+                            mTag7.setText(mTags[mCount]);
+                            mTag7.setVisibility(View.VISIBLE);
 
                         } else {
-                            if ((mSkills[mCount - 1].length() > 25)) {
-                                mSkill7.setText(mSkills[mCount]);
-                                mSkill7.setVisibility(View.VISIBLE);
+                            if ((mTags[mCount - 1].length() > 25)) {
+                                mTag7.setText(mTags[mCount]);
+                                mTag7.setVisibility(View.VISIBLE);
                             } else {
-                                mSkill5.setVisibility(View.VISIBLE);
+                                mTag5.setVisibility(View.VISIBLE);
 
-                                mSkill5.setText(mSkills[mCount]);
+                                mTag5.setText(mTags[mCount]);
                             }
                         }
 
                     } else {
-                        if (mSkills[mCount].length() > 25) {
-                            mSkill4.setText(mSkills[mCount]);
-                            mSkill4.setVisibility(View.VISIBLE);
+                        if (mTags[mCount].length() > 25) {
+                            mTag4.setText(mTags[mCount]);
+                            mTag4.setVisibility(View.VISIBLE);
 
                         } else {
-                            mSkill3.setVisibility(View.VISIBLE);
+                            mTag3.setVisibility(View.VISIBLE);
 
-                            mSkill3.setText(mSkills[mCount]);
+                            mTag3.setText(mTags[mCount]);
                         }
                     }
                 }
             } else if (mCount == 1) {
-                mTvSkillSubmit.setVisibility(View.VISIBLE);
-                mSkill1.setVisibility(View.VISIBLE);
-                //   mVindecator.setBackgroundColor((getResources().getColor(R.color.popular_tag_color)));
-                mSkill1.setText(mSkills[mCount]);
+                mTv_no_of_tags.setText("1/3");
+                tv_community_tag_submit.setVisibility(View.VISIBLE);
+                mTag1.setVisibility(View.VISIBLE);
+                mVindecator.setBackgroundColor((getResources().getColor(R.color.popular_tag_color)));
+                mTag1.setText(mTags[mCount]);
 
             }
             mCount++;
@@ -346,13 +446,9 @@ public class SearchGoodAt extends BaseFragment implements BaseHolderInterface, P
     }
 
     protected void editTextWatcher() {
-
-
-        mEtSearchEditTextProfile.addTextChangedListener(dataSearchTextWatcher());
-        mEtSearchEditTextProfile.setFocusableInTouchMode(true);
-        mEtSearchEditTextProfile.requestFocus();
-
-
+        mEt_search_edit_text.addTextChangedListener(dataSearchTextWatcher());
+        mEt_search_edit_text.setFocusableInTouchMode(true);
+        mEt_search_edit_text.requestFocus();
     }
 
     private TextWatcher dataSearchTextWatcher() {
@@ -391,7 +487,7 @@ public class SearchGoodAt extends BaseFragment implements BaseHolderInterface, P
         public void run() {
             if (!isDetached()) {
                 // mSearchDataName = mSearchDataName.trim().replaceAll(AppConstants.SPACE, AppConstants.EMPTY_STRING);
-                mProfilePresenter.getSkillFromPresenter(mAppUtils.getAllDataRequestBuilder(AppConstants.SKILL_SUB_TYPE, mSearchDataName, AppConstants.ALL_SEARCH));
+                mprofilePresenter.getSkillFromPresenter(mAppUtils.getAllDataRequestBuilder(AppConstants.SKILL_SUB_TYPE, mSearchDataName, AppConstants.ALL_SEARCH));
             }
         }
     };
@@ -431,6 +527,11 @@ public class SearchGoodAt extends BaseFragment implements BaseHolderInterface, P
     @Override
     public void startNextScreen() {
 
+    }
+
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        return new Dialog(getActivity(), R.style.Theme_Material_Light_Dialog_NoMinWidth);
     }
 
     @Override
@@ -490,40 +591,26 @@ public class SearchGoodAt extends BaseFragment implements BaseHolderInterface, P
 
     @Override
     public void getProfileListSuccess(GetTagData getAllData) {
-
-        mRecyclerView.setVisibility(View.VISIBLE);
-        mAdapter.setCallForRecycler(AppConstants.ALL_DATA_SUB_TYPE);
-        mAdapter.setSheroesGenericListData(getAllData.getDocs());
-        mAdapter.notifyDataSetChanged();
-        mTvSkillText.setVisibility(View.GONE);
-        mTvSkilltitle.setVisibility(View.GONE);
-        mTvNumberOfSkills.setVisibility(View.GONE);
-        mSkill1.setVisibility(View.GONE);
-        mSkill2.setVisibility(View.GONE);
-        mSkill3.setVisibility(View.GONE);
-        mSkill4.setVisibility(View.GONE);
-        mSkill5.setVisibility(View.GONE);
-        mSkill6.setVisibility(View.GONE);
-        ll_indecator.setVisibility(View.GONE);
-
+        List<Doc> tagDetailList=getAllData.getDocs();
+        if(StringUtil.isNotEmptyCollection(tagDetailList)) {
+            mAdapter.setCallForRecycler(AppConstants.ALL_DATA_SUB_TYPE);
+            mAdapter.setSheroesGenericListData(tagDetailList);
+            mAdapter.notifyDataSetChanged();
+            mtv_tag_text.setVisibility(View.GONE);
+            mtv_tag_title.setVisibility(View.GONE);
+            mTv_no_of_tags.setVisibility(View.GONE);
+            mTag1.setVisibility(View.GONE);
+            mTag2.setVisibility(View.GONE);
+            mTag3.setVisibility(View.GONE);
+            mTag4.setVisibility(View.GONE);
+            mTag5.setVisibility(View.GONE);
+            mTag6.setVisibility(View.GONE);
+            ll_indecator.setVisibility(View.GONE);
+        }
     }
 
     @Override
     public void getProfileListSuccess(List<Doc> feedDetailList) {
-
-    }
-
-
-    public interface MyProfileSearchGoodAtListener {
-
-        void onErrorOccurence();
-
-        void onGoodAtSubmit(long []skillid,String [] skills) ;
-
-        void onBackPress();
-
-        void openfrag();
-
 
     }
 }

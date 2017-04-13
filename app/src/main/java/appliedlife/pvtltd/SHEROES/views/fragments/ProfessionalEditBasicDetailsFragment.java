@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.f2prateek.rx.preferences.Preference;
 
@@ -37,8 +38,10 @@ import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCar
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePersenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActicity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.materialspinner.MaterialSpinner;
@@ -47,17 +50,18 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.COMMUNITY_OWNER;
+
 /**
  * Created by priyanka on 07/03/17.
  */
 
-public class ProfessionalEditBasicDetailsFragment extends BaseFragment implements ProfileView,DayPickerProfile.MyDayPickerListener {
+public class ProfessionalEditBasicDetailsFragment extends BaseFragment implements MonthPickerForProfile.MonthPicker,ProfileView,DayPickerProfile.MyDayPickerListener, DatePickerForProfile.YearPicker {
     private final String TAG = LogUtils.makeLogTag(ProfessionalEditBasicDetailsFragment.class);
     private final String SCREEN_NAME = "Professional_Edit_Basic_Details_screen";
     @Inject
     Preference<MasterDataResponse> mUserPreferenceMasterData;
     HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult;
-
     @Inject
     ProfilePersenter mprofilePersenter;
     ProfileView profileViewlistener;
@@ -78,8 +82,11 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment implement
     @Bind(R.id.et_current_status)
     EditText mCurrentStatus;
     Long mCurrentStatusId,mCurrentSectorId;
+    int mMonthValue,mYearValue;
     @Bind(R.id.et_sector)
     EditText mEtSector;
+    @Bind(R.id.et_add_language)
+    EditText mEtAddLanguage;
 
 
     @Override
@@ -132,10 +139,11 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment implement
     @OnClick(R.id.et_month)
     public void startDateClick()
     {
-        DayPickerProfile dayPickerProfile=new DayPickerProfile();
-        dayPickerProfile.setListener(this);
-        dayPickerProfile.show(getActivity().getFragmentManager(),"dialog");
+        MonthPickerForProfile monthPickerForProfile=new MonthPickerForProfile();
+        monthPickerForProfile.setListener(this);
+        monthPickerForProfile.show(getActivity().getFragmentManager(),"dialog");
     }
+
     @OnClick(R.id.et_current_status)
     public void clickCurrentStatus()
     {
@@ -148,19 +156,45 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment implement
         }
      }
 
-
-
     @OnClick(R.id.et_sector)
     public void clickSectorName()
+
     {
         if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && null != mUserPreferenceMasterData.get().getData()) {
             ((ProfileActicity) getActivity()).showSectoreDialog(mUserPreferenceMasterData.get().getData());
         }
+
         else{
             ((ProfileActicity) getActivity()).showSectoreDialog(mapOfResult);
-
         }
+
+
     }
+
+
+    //Click on language edit text
+
+    @OnClick(R.id.et_add_language)
+    public void
+    OnClickAddLanguage()
+    {
+
+        if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && null != mUserPreferenceMasterData.get().getData()) {
+
+            ((ProfileActicity) getActivity()).showLanguageDialog(mUserPreferenceMasterData.get().getData());
+        }
+
+        else{
+            ((ProfileActicity) getActivity()).showLanguageDialog(mapOfResult);
+        }
+
+
+
+    }
+
+
+
+
 
     //Click on end date of experience
 
@@ -168,20 +202,22 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment implement
     public void EndDateClick()
     {
 
+/*
         DayPickerProfile dayPickerProfile=new DayPickerProfile();
-        dayPickerProfile.setListener(this);
-        dayPickerProfile.show(getActivity().getFragmentManager(),"dialog");
+        dayPickerProfile.setListener((DayPickerProfile.MyDayPickerListener) this);
+        dayPickerProfile.show(getActivity().getFragmentManager(),"dialog");*/
 
+
+        DatePickerForProfile yearPickerProfile=new DatePickerForProfile();
+        yearPickerProfile.setListener(this);
+        yearPickerProfile.show(getActivity().getFragmentManager(),"dialog");
 
     }
-
 
     @OnClick(R.id.tv_language_delete)
     public void OnClickCrossLanguageIcon()
     {
         mR1AddLanguage.setVisibility(View.GONE);
-
-
 
     }
 
@@ -213,27 +249,36 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment implement
 
     {
         ProfessionalBasicDetailsRequest professionalBasicDetailsRequest=new ProfessionalBasicDetailsRequest();
+        AppUtils appUtils = AppUtils.getInstance();
         professionalBasicDetailsRequest.setSource("string");
-        professionalBasicDetailsRequest.setDeviceUniqueId("string");
-        professionalBasicDetailsRequest.setAppVersion("string");
-        professionalBasicDetailsRequest.setCloudMessagingId("string");
-        professionalBasicDetailsRequest.setSource("string");
+        professionalBasicDetailsRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        professionalBasicDetailsRequest.setAppVersion(appUtils.getAppVersionName());
+        professionalBasicDetailsRequest.setCloudMessagingId(appUtils.getCloudMessaging());
         professionalBasicDetailsRequest.setLastScreenName("string");
-        professionalBasicDetailsRequest.setScreenName("string");
+        professionalBasicDetailsRequest.setScreenName(SCREEN_NAME);
         professionalBasicDetailsRequest.setType("PROF_DETAILS");
         professionalBasicDetailsRequest.setSubType("PROFESSIONAL_DETAILS_SERVICE");
-        professionalBasicDetailsRequest.setJobTag("string");
-        professionalBasicDetailsRequest.setJobTagId(0);
-        professionalBasicDetailsRequest.setSector("string");
-        professionalBasicDetailsRequest.setMaritalStatus("string");
-        professionalBasicDetailsRequest.setTotalExp(2);
+        if (StringUtil.isNotNullOrEmptyString(""+mCurrentStatusId)) {
+            professionalBasicDetailsRequest.setJobTagId(mCurrentStatusId);
+        }
+        if (StringUtil.isNotNullOrEmptyString(""+mCurrentSectorId)) {
+            professionalBasicDetailsRequest.setSectorId(mCurrentSectorId);
+        }
+        if (StringUtil.isNotNullOrEmptyString(""+mMonthValue)) {
+            professionalBasicDetailsRequest.setTotalExpMonth(mMonthValue);
+        }if (StringUtil.isNotNullOrEmptyString(""+mYearValue)) {
+        professionalBasicDetailsRequest.setTotalExpYear(mYearValue);
+        }
         mprofilePersenter.getProfessionalBasicDetailsAuthTokeInPresenter(professionalBasicDetailsRequest);
-
-
     }
+
     @Override
     public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> apOfResult) {
+
+
         this.mapOfResult=apOfResult;
+
+
     }
 
 
@@ -277,7 +322,19 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment implement
 
     @Override
     public void getProfessionalBasicDetailsResponse(BoardingDataResponse boardingDataResponse) {
+        switch (boardingDataResponse.getStatus()) {
+            case AppConstants.SUCCESS:
 
+                //TODO:Change Message
+                Toast.makeText(getActivity(), boardingDataResponse.getStatus(),
+                        Toast.LENGTH_LONG).show();
+                break;
+            case AppConstants.FAILED:
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(boardingDataResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), COMMUNITY_OWNER);
+                break;
+            default:
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, COMMUNITY_OWNER);
+        }
     }
 
     @Override
@@ -315,7 +372,17 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment implement
     }
 
     @Override
-    public void onDaySubmit(int tagsval) {
+    public void OnMonthPicker(int monthval) {
 
+        mEtMonth.setText(""+monthval);
+        mMonthValue = monthval;
+
+    }
+
+    @Override
+    public void onDaySubmit(int YearValue) {
+
+        mEtYear.setText(""+YearValue);
+        mYearValue=YearValue;
     }
 }

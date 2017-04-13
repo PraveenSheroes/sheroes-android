@@ -77,7 +77,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/tv_no_of_skills"
+        android:id="@+id/tv_no_of_skill"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ll_indecator"
@@ -92,7 +92,7 @@
         android:id="@+id/rel_selected_tag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_no_of_skills"
+        android:layout_below="@+id/tv_no_of_skill"
         android:layout_centerHorizontal="true"
         android:gravity="center">
 
@@ -217,7 +217,6 @@
         android:layout_centerHorizontal="true"
         android:visibility="gone"
         android:layout_marginTop="@dimen/dp_size_30"
-        android:text="@string/ID_POPULAR_SKILL"
         android:textAllCaps="true"
         android:textColor="@color/grey2"
         android:textSize="@dimen/sp_size_13"/>
@@ -237,7 +236,7 @@
         android:id="@+id/rv_home_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_skill_text"
+        android:layout_below="@+id/ll_indecator"
         android:layout_marginBottom="@dimen/dp_size_50"
         android:layout_marginTop="@dimen/dp_size_10"
         android:divider="#00000000"/>

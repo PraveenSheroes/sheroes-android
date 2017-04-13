@@ -19,7 +19,6 @@
 
 
 
-
         <ProgressBar
             android:id="@+id/pb_profile_progress_bar"
             android:layout_width="wrap_content"

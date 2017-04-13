@@ -8,6 +8,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.MyProfileView;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfilePersonalViewList;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -21,7 +22,7 @@ import static com.facebook.login.widget.ProfilePictureView.TAG;
  * Created by priyanka on 02/03/17.
  */
 
-public class Visiting_card_holder1 extends BaseViewHolder<ProfilePersonalViewList> {
+public class Visiting_card_holder1 extends BaseViewHolder<MyProfileView> {
     @Bind(R.id.tv_my_contacct_card)
     TextView mTv_contacct_my_card;
     @Bind(R.id.tv_download_my_card)
@@ -29,7 +30,7 @@ public class Visiting_card_holder1 extends BaseViewHolder<ProfilePersonalViewLis
     TextView mTv_looking_more;
     BaseHolderInterface viewInterface;
 
-    private ProfilePersonalViewList dataItem;
+    private MyProfileView dataItem;
 
 
     public Visiting_card_holder1(View itemView, BaseHolderInterface baseHolderInterface) {
@@ -47,13 +48,13 @@ public class Visiting_card_holder1 extends BaseViewHolder<ProfilePersonalViewLis
 
 
     @Override
-    public void bindData(ProfilePersonalViewList obj, Context context, int position) {
+    public void bindData(MyProfileView myProfileView, Context context, int position) {
 
-        this.dataItem = obj;
+        this.dataItem = myProfileView;
         mtv_download_my_card.setOnClickListener(this);
 
-        mTv_contacct_my_card.setText(dataItem.getTag());
-        mtv_download_my_card.setText(dataItem.getItem1());
+        mTv_contacct_my_card.setText(dataItem.getType());
+        mtv_download_my_card.setText(dataItem.getIteam1());
     }
 
     @Override

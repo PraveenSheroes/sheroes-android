@@ -101,7 +101,126 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/dp_size_4">
 
+                <RelativeLayout
+                    android:id="@+id/rel_selected_tag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_no_of_skills"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center">
 
+                    <TextView
+                        android:id="@+id/tv_selected_skill1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_size_10"
+                        android:background="@drawable/selected_tag_shap"
+                        android:layout_marginLeft="@dimen/dp_size_10"
+                        android:textColor="@color/blue"
+                        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                        android:textSize="@dimen/sp_size_13"
+                        android:visibility="gone"/>
+
+                    <TextView
+                        android:id="@+id/tv_selected_skill2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_size_10"
+                        android:layout_toRightOf="@+id/tv_selected_skill1"
+                        android:background="@drawable/selected_tag_shap"
+                        android:layout_marginLeft="@dimen/dp_size_10"
+                        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+
+                        android:textColor="@color/blue"
+                        android:textSize="@dimen/sp_size_13"
+                        android:visibility="gone"/>
+
+                    <TextView
+                        android:id="@+id/tv_selected_skill3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_size_10"
+                        android:layout_toRightOf="@+id/tv_selected_skill2"
+                        android:background="@drawable/selected_tag_shap"
+                        android:layout_marginLeft="@dimen/dp_size_10"
+                        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+
+                        android:textColor="@color/blue"
+                        android:textSize="@dimen/sp_size_13"
+                        android:visibility="gone"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rel_selected_tag1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/rel_selected_tag"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/tv_selected_skill4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_size_10"
+                        android:background="@drawable/selected_tag_shap"
+                        android:layout_marginLeft="@dimen/dp_size_10"
+                        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+
+                        android:textColor="@color/blue"
+                        android:textSize="@dimen/sp_size_13"
+                        android:visibility="gone"/>
+
+                    <TextView
+                        android:id="@+id/tv_selected_skill5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_size_10"
+                        android:layout_toRightOf="@+id/tv_selected_skill4"
+                        android:layout_marginLeft="@dimen/dp_size_10"
+                        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+
+                        android:background="@drawable/selected_tag_shap"
+                        android:textColor="@color/blue"
+                        android:textSize="@dimen/sp_size_13"
+                        android:visibility="gone"/>
+
+                    <TextView
+                        android:id="@+id/tv_selected_skill6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_size_10"
+                        android:layout_toRightOf="@+id/tv_selected_skill5"
+                        android:background="@drawable/selected_tag_shap"
+                        android:layout_marginLeft="@dimen/dp_size_10"
+                        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+
+                        android:textColor="@color/blue"
+                        android:textSize="@dimen/sp_size_13"
+                        android:visibility="gone"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rel_selected_tag2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/rel_selected_tag1"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/tv_selected_skill7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_size_10"
+                        android:background="@drawable/selected_tag_shap"
+                        android:layout_marginLeft="@dimen/dp_size_10"
+                        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+
+                        android:textColor="@color/blue"
+                        android:textSize="@dimen/sp_size_13"
+                        android:visibility="gone"/>
+                </RelativeLayout>
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/rv_how_can_sheroes_help_list"
                     android:layout_width="match_parent"

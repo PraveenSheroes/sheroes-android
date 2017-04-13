@@ -91,7 +91,6 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     private ProgressBar mProgressBar;
     public FragmentIntractionWithActivityListner mHomeSearchActivityFragmentIntractionWithActivityListner;
     private FragmentOpen mFragmentOpen = new FragmentOpen();
-
     @Inject
     Preference<LoginResponse> userPreference;
 
@@ -100,9 +99,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         return super.onCreateView(inflater, container, savedInstanceState);
-
     }
-
     public void setFragmentData(FragmentOpen fragmentOpen) {
         this.mFragmentOpen = fragmentOpen;
     }

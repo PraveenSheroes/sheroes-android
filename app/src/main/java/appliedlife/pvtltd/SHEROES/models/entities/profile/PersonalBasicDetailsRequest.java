@@ -48,9 +48,6 @@ public class PersonalBasicDetailsRequest {
     @SerializedName("city_master_id")
     @Expose
     private int cityMasterId;
-    @SerializedName("city_master")
-    @Expose
-    private String cityMaster;
 
     @SerializedName("marital_status")
     @Expose
@@ -150,14 +147,6 @@ public class PersonalBasicDetailsRequest {
 
     public void setCityMasterId(Integer cityMasterId) {
         this.cityMasterId = cityMasterId;
-    }
-
-    public String getCityMaster() {
-        return cityMaster;
-    }
-
-    public void setCityMaster(String cityMaster) {
-        this.cityMaster = cityMaster;
     }
 
     public String getMaritalStatus() {

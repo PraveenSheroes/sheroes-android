@@ -3,12 +3,15 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.f2prateek.rx.preferences.Preference;
 
@@ -24,6 +27,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
@@ -51,14 +55,33 @@ public class ProfileOpportunityTypeFragment extends BaseFragment implements Base
     RecyclerView mRecyclerView;
     @Inject
     Preference<MasterDataResponse> mUserPreference;
+    @Bind(R.id.tv_selected_skill1)
+    TextView mSkill1;
+    @Bind(R.id.tv_selected_skill2)
+    TextView mSkill2;
+    @Bind(R.id.tv_selected_skill3)
+    TextView mSkill3;
+    @Bind(R.id.tv_selected_skill4)
+    TextView mSkill4;
+    @Bind(R.id.tv_selected_skill5)
+    TextView mSkill5;
+    @Bind(R.id.tv_selected_skill6)
+    TextView mSkill6;
+    @Bind(R.id.tv_selected_skill7)
+    TextView mSkill7;
+    String skill1, skill2;
+    int mCount = 1;
+    private String mSearchDataName = AppConstants.EMPTY_STRING;
+    String[] mSkills = new String[4];
+    long[] mSkillsId = new long[4];
     private GenericRecyclerViewAdapter mAdapter;
     private HashMap<String, HashMap<String, ArrayList<LabelValue>>> mMasterDataResult;
     HashMap<String, HashMap<String, ArrayList<LabelValue>>> data = new HashMap<>();
     private List<GoodAt> listFeelter = new ArrayList<GoodAt>();
     List<String> jobAtList = new ArrayList<>();
     private ProfileOpportunityTypeListiner profileOpportunityTypeListiner;
-
-
+    private HashMap<String,Long> oppertunity=new HashMap<String,Long>();
+    long optid;
 
     @Override
     public void onAttach(Context context) {
@@ -75,7 +98,12 @@ public class ProfileOpportunityTypeFragment extends BaseFragment implements Base
     }
 
 
+    public void submitOppartunityType(String goodAtId, String goodAt)
+    {
 
+        setProfileOpportunityTypeText(""+oppertunity.get(goodAt),goodAt);
+
+    }
 
 
     @Override
@@ -97,6 +125,7 @@ public class ProfileOpportunityTypeFragment extends BaseFragment implements Base
             for(int i=0;i<labelValueArrayList.size();i++)
             {
                 String abc=labelValueArrayList.get(i).getLabel();
+                oppertunity.put(abc,labelValueArrayList.get(i).getValue());
                 jobAtList.add(abc);
             }
             filterList.setBoardingDataList(jobAtList);
@@ -137,6 +166,7 @@ public class ProfileOpportunityTypeFragment extends BaseFragment implements Base
 
     }
     private List<OnBoardingData> setFilterValues() {
+
         if (null != mMasterDataResult && null != mMasterDataResult.get(AppConstants.MASTER_DATA_OPPORTUNITY_KEY)) {
             {
                 HashMap<String, ArrayList<LabelValue>> hashMap = mMasterDataResult.get(AppConstants.MASTER_DATA_OPPORTUNITY_KEY);
@@ -203,5 +233,87 @@ public class ProfileOpportunityTypeFragment extends BaseFragment implements Base
      void OnLookinBack();
 
 
+    }
+
+    public void setProfileOpportunityTypeText(String id,String value)
+    {
+        if (mCount <= 3) {
+                String skill = mSkills[mCount] = value;
+                long skillId = mSkillsId[mCount] =Long.parseLong(id);
+
+
+            if (mCount == 2) {
+
+                if (mSkills[mCount].equals(mSkills[mCount - 1])) {
+                    mCount = mCount - 1;
+                    Toast.makeText(getActivity(), "Already Selected Please Select Another One", Toast.LENGTH_LONG).show();
+                } else {
+                    //  mVindecator1.setBackgroundColor((getResources().getColor(R.color.popular_tag_color)));
+
+                    if (mSkills[mCount - 1].length() > 25) {
+                        mSkill4.setVisibility(View.VISIBLE);
+                        mSkill4.setText(mSkills[mCount]);
+                    } else if (mSkills[mCount - 1].length() < 25) {
+                        if (mSkills[mCount].length() > 25) {
+                            mSkill4.setVisibility(View.VISIBLE);
+
+                            mSkill4.setText(mSkills[mCount]);
+                        } else {
+                            mSkill2.setVisibility(View.VISIBLE);
+
+                            mSkill2.setText(mSkills[mCount]);
+                        }
+                    }
+                }
+            } else if (mCount == 3) {
+                skill1 = mSkills[mCount];
+                skill2 = mSkills[mCount - 2];
+
+                if ((mSkills[mCount].equals(mSkills[mCount - 1])) || (skill1.equals(skill2))) {
+                    mCount = mCount - 1;
+                    Toast.makeText(getActivity(), "Already Selected Please Select Another One", Toast.LENGTH_LONG).show();
+                } else {
+                    // mVindecator2.setBackgroundColor((getResources().getColor(R.color.popular_tag_color)));
+
+                    if (mSkills[mCount - 1].length() + mSkills[mCount - 2].length() > 30) {
+                        if (mSkill4.getText().equals("")) {
+                            mSkill4.setVisibility(View.VISIBLE);
+
+                            mSkill4.setText(mSkills[mCount]);
+                        } else if (mSkills[mCount].length() > 25) {
+                            mSkill7.setText(mSkills[mCount]);
+                            mSkill7.setVisibility(View.VISIBLE);
+
+                        } else {
+                            if ((mSkills[mCount - 1].length() > 25)) {
+                                mSkill7.setText(mSkills[mCount]);
+                                mSkill7.setVisibility(View.VISIBLE);
+                            } else {
+                                mSkill5.setVisibility(View.VISIBLE);
+
+                                mSkill5.setText(mSkills[mCount]);
+                            }
+                        }
+
+                    } else {
+                        if (mSkills[mCount].length() > 25) {
+                            mSkill4.setText(mSkills[mCount]);
+                            mSkill4.setVisibility(View.VISIBLE);
+
+                        } else {
+                            mSkill3.setVisibility(View.VISIBLE);
+
+                            mSkill3.setText(mSkills[mCount]);
+                        }
+                    }
+                }
+            } else if (mCount == 1) {
+                mSkill1.setVisibility(View.VISIBLE);
+                //   mVindecator.setBackgroundColor((getResources().getColor(R.color.popular_tag_color)));
+                mSkill1.setText(mSkills[mCount]);
+
+            }
+            mCount++;
+        }
     }
 }

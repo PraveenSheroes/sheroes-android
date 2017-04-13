@@ -1,7 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
@@ -14,23 +13,21 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
-
 import java.util.Calendar;
-
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 
 /**
- * Created by priyanka on 25/03/17.
+ * Created by sheroes on 12/04/17.
  */
 
-public class DatePickerForProfile extends DialogFragment {
+public class MonthPickerForProfile  extends DialogFragment {
 
-    private static final int MAX_YEAR = 50;
-    private YearPicker listener;
+    private static final int MAX_MONTH = 12;
+    private MonthPicker listener;
     private final String mTAG = LogUtils.makeLogTag(DatePickerForProfile.class);
 
-    public void setListener(YearPicker listener) {
+    public void setListener(MonthPicker listener) {
 
         this.listener = listener;
     }
@@ -49,19 +46,19 @@ public class DatePickerForProfile extends DialogFragment {
 
         Calendar cal = Calendar.getInstance();
 
-        View dialog = inflater.inflate(R.layout.date_picker_dialog, null);
-        final NumberPicker yearPicker = (NumberPicker) dialog.findViewById(R.id.picker_year);
-        int year = cal.get(Calendar.YEAR);
-        yearPicker.setMinValue(0);
-        yearPicker.setMaxValue(MAX_YEAR);
-        yearPicker.setValue(year);
-        setDividerColor(yearPicker);
+        View dialog = inflater.inflate(R.layout.month_picker_dialog, null);
+        final NumberPicker MonthPicker = (NumberPicker) dialog.findViewById(R.id.picker_month);
+        int year = cal.get(Calendar.MONTH);
+        MonthPicker.setMinValue(0);
+        MonthPicker.setMaxValue(MAX_MONTH);
+        MonthPicker.setValue(year);
+        setDividerColor(MonthPicker);
         builder.setView(dialog)
                 // Add action buttons
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        listener.onDaySubmit(yearPicker.getValue());
+                        listener.OnMonthPicker(MonthPicker.getValue());
                     }
                 });
         final AlertDialog dialog1= builder.create();
@@ -96,10 +93,10 @@ public class DatePickerForProfile extends DialogFragment {
         }
         //}
     }
-    public interface YearPicker {
+    public interface MonthPicker {
         void onErrorOccurence();
 
-        void onDaySubmit(int tagsval);
+        void OnMonthPicker(int monthval);
     }
 
 }

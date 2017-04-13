@@ -45,6 +45,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.ProfileActicity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
 import butterknife.Bind;
@@ -90,8 +91,7 @@ public class ProfileSearchIntrestIn extends BaseDialogFragment implements BaseHo
     EditText mEtSearchEditTextProfile;
     @Bind(R.id.pb_search_skill_progress_bar)
     ProgressBar mProgressBar;
-    @Bind(R.id.tv_no_of_skills)
-    TextView mTvNumberOfSkills;
+
     @Bind(R.id.tv_skill_text)
     TextView mTvSkillText;
     @Bind(R.id.tv_skill_title)
@@ -146,7 +146,6 @@ public class ProfileSearchIntrestIn extends BaseDialogFragment implements BaseHo
         mRecyclerView.setAdapter(mAdapter);
         mEtSearchEditTextProfile.setHint("Search Skill");
         editTextWatcher();
-        mTvNumberOfSkills.setVisibility(View.GONE);
         mTvSkillSubmit.setVisibility(View.GONE);
         return v;
     }
@@ -154,7 +153,7 @@ public class ProfileSearchIntrestIn extends BaseDialogFragment implements BaseHo
 
     @OnClick(R.id.tv_back_skill_list)
     public void communityTagBackClick() {
-        mHomeActivityIntractionListner.onBackPress();
+        ((ProfileActicity)getActivity()).onBackPress();
     }
 
     @OnClick(R.id.tv_skill_submit)
@@ -168,6 +167,7 @@ public class ProfileSearchIntrestIn extends BaseDialogFragment implements BaseHo
                 skillDetails.add(skiilIdMap);
             }
         }
+       // ((ProfileActicity)getActivity()).onIntrestSubmit(mSkillsId,mSkills);
 
         mHomeActivityIntractionListner.onIntrestSubmit(mSkillsId,mSkills);
 
@@ -356,7 +356,7 @@ public class ProfileSearchIntrestIn extends BaseDialogFragment implements BaseHo
         public void run() {
             if (!isDetached()) {
                 // mSearchDataName = mSearchDataName.trim().replaceAll(AppConstants.SPACE, AppConstants.EMPTY_STRING);
-                mProfilePresenter.getSkillFromPresenter(mAppUtils.getAllDataRequestBuilder(AppConstants.INTEREST_SCREEN, mSearchDataName, AppConstants.ALL_SEARCH));
+                mProfilePresenter.getSkillFromPresenter(mAppUtils.getAllDataRequestBuilder(AppConstants.MASTER_DATA_INTEREST_KEY, mSearchDataName, AppConstants.ALL_SEARCH));
             }
         }
     };
@@ -462,7 +462,6 @@ public class ProfileSearchIntrestIn extends BaseDialogFragment implements BaseHo
         mAdapter.notifyDataSetChanged();
         mTvSkillText.setVisibility(View.GONE);
         mTvSkilltitle.setVisibility(View.GONE);
-        mTvNumberOfSkills.setVisibility(View.GONE);
         mSkill1.setVisibility(View.GONE);
         mSkill2.setVisibility(View.GONE);
         mSkill3.setVisibility(View.GONE);

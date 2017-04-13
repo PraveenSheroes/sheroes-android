@@ -34,72 +34,21 @@ public class ProfessionalBasicDetailsRequest {
     @SerializedName("source")
     @Expose
     private String source;
-    @SerializedName("no_Of_children")
-    @Expose
-    private int noOfChildren;
-    @SerializedName("name")
-    @Expose
-    private String name;
-    @SerializedName("heighest_qualification")
-    @Expose
-    private String heighestQualification;
-    @SerializedName("heighest_qualification_id")
-    @Expose
-    private String heighestQualificationId;
-    @SerializedName("first_name")
-    @Expose
-    private String firstName;
-    @SerializedName("last_name")
-    @Expose
-    private String lastName;
     @SerializedName("job_tag_id")
     @Expose
-    private int jobTagId;
-    @SerializedName("job_tag")
+    private Long jobTagId;
+    @SerializedName("total_exp_year")
     @Expose
-    private String jobTag;
-    @SerializedName("total_exp")
+    private int totalExpYear;
+    @SerializedName("total_exp_month")
     @Expose
-    private int totalExp;
-    @SerializedName("city_master_id")
-    @Expose
-    private int cityMasterId;
-    @SerializedName("city_master")
-    @Expose
-    private String cityMaster;
-    @SerializedName("address")
-    @Expose
-    private String address;
-    @SerializedName("pincode")
-    @Expose
-    private String pincode;
+    private int totalExpMonth;
     @SerializedName("sector_id")
     @Expose
-    private int sectorId;
+    private Long sectorId;
     @SerializedName("sector")
     @Expose
     private String sector;
-    @SerializedName("opportunity_type_id")
-    @Expose
-    private int opportunityTypeId;
-    @SerializedName("twitter_username")
-    @Expose
-    private String twitterUsername;
-    @SerializedName("marital_status")
-    @Expose
-    private String maritalStatus;
-    @SerializedName("dob")
-    @Expose
-    private String dob;
-    @SerializedName("interest")
-    @Expose
-    private String interest;
-    @SerializedName("home_town")
-    @Expose
-    private int homeTown;
-    @SerializedName("photo_url_path")
-    @Expose
-    private String photoUrlPath;
 
     public String getSubType() {
         return subType;
@@ -165,115 +114,35 @@ public class ProfessionalBasicDetailsRequest {
         this.source = source;
     }
 
-    public int getNoOfChildren() {
-        return noOfChildren;
-    }
-
-    public void setNoOfChildren(int noOfChildren) {
-        this.noOfChildren = noOfChildren;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getHeighestQualification() {
-        return heighestQualification;
-    }
-
-    public void setHeighestQualification(String heighestQualification) {
-        this.heighestQualification = heighestQualification;
-    }
-
-    public String getHeighestQualificationId() {
-        return heighestQualificationId;
-    }
-
-    public void setHeighestQualificationId(String heighestQualificationId) {
-        this.heighestQualificationId = heighestQualificationId;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public int getJobTagId() {
+    public Long getJobTagId() {
         return jobTagId;
     }
 
-    public void setJobTagId(int jobTagId) {
+    public void setJobTagId(Long jobTagId) {
         this.jobTagId = jobTagId;
     }
 
-    public String getJobTag() {
-        return jobTag;
+    public int getTotalExpYear() {
+        return totalExpYear;
     }
 
-    public void setJobTag(String jobTag) {
-        this.jobTag = jobTag;
+    public void setTotalExpYear(int totalExpYear) {
+        this.totalExpYear = totalExpYear;
     }
 
-    public int getTotalExp() {
-        return totalExp;
+    public int getTotalExpMonth() {
+        return totalExpMonth;
     }
 
-    public void setTotalExp(int totalExp) {
-        this.totalExp = totalExp;
+    public void setTotalExpMonth(int totalExpMonth) {
+        this.totalExpMonth = totalExpMonth;
     }
 
-    public int getCityMasterId() {
-        return cityMasterId;
-    }
-
-    public void setCityMasterId(int cityMasterId) {
-        this.cityMasterId = cityMasterId;
-    }
-
-    public String getCityMaster() {
-        return cityMaster;
-    }
-
-    public void setCityMaster(String cityMaster) {
-        this.cityMaster = cityMaster;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getPincode() {
-        return pincode;
-    }
-
-    public void setPincode(String pincode) {
-        this.pincode = pincode;
-    }
-
-    public int getSectorId() {
+    public Long getSectorId() {
         return sectorId;
     }
 
-    public void setSectorId(int sectorId) {
+    public void setSectorId(Long sectorId) {
         this.sectorId = sectorId;
     }
 
@@ -284,63 +153,4 @@ public class ProfessionalBasicDetailsRequest {
     public void setSector(String sector) {
         this.sector = sector;
     }
-
-    public int getOpportunityTypeId() {
-        return opportunityTypeId;
-    }
-
-    public void setOpportunityTypeId(int opportunityTypeId) {
-        this.opportunityTypeId = opportunityTypeId;
-    }
-
-    public String getTwitterUsername() {
-        return twitterUsername;
-    }
-
-    public void setTwitterUsername(String twitterUsername) {
-        this.twitterUsername = twitterUsername;
-    }
-
-    public String getMaritalStatus() {
-        return maritalStatus;
-    }
-
-    public void setMaritalStatus(String maritalStatus) {
-        this.maritalStatus = maritalStatus;
-    }
-
-    public String getDob() {
-        return dob;
-    }
-
-    public void setDob(String dob) {
-        this.dob = dob;
-    }
-
-    public String getInterest() {
-        return interest;
-    }
-
-    public void setInterest(String interest) {
-        this.interest = interest;
-    }
-
-    public int getHomeTown() {
-        return homeTown;
-    }
-
-    public void setHomeTown(int homeTown) {
-        this.homeTown = homeTown;
-    }
-
-    public String getPhotoUrlPath() {
-        return photoUrlPath;
-    }
-
-    public void setPhotoUrlPath(String photoUrlPath) {
-        this.photoUrlPath = photoUrlPath;
-    }
-
-
-
 }

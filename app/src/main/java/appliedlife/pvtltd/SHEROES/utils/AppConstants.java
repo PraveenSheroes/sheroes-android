@@ -117,8 +117,6 @@ public class AppConstants {
     public static final String TAG_ID = "tag_id";
     public static final String SKILL_LIST = "skill_list";
     public static final String SKILL_LIST_ID = "skill_list_id";
-
-
     public static final String MEMBER = "Member_detail";
     public static final String MEMBER_LIST = "Member_List";
     public static final String MEMBER_FRAGMENT = "MemberFragment";
@@ -213,11 +211,18 @@ public class AppConstants {
     public static final String PROJECT_PROFILE = "project_profile";
     public static final String ABOUT_ME_PROFILE = "About Me";
     public static final String USER_PROFILE1="PROFESSINAL BASIC DETAILS";
+    public static final String USER_VISITING_CARD="My Contact Card";
+    public static final String USER_VISITING_CARD1="My Contact Card";
+
     public static final String CLIENTSIDE="Horizontal";
+
     /*PROFILE*/
     public static final String DEGREE_KEY="degree";
     public static final String FIELD_OF_STUDY_KEY="field_of_study";
     public static final String MASTER_DATA_SECTOR_KEY = "SECTOR";//for sector search
+    public static final String MASTER_DATA_LANGUAGE_KEY = "LANGUAGE";
+
+
 
 
 

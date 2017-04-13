@@ -502,6 +502,14 @@ public enum HolderMapping {
 
                     }else if (tagType.equalsIgnoreCase(AppConstants.CLIENTSIDE)) {
                         return PROFILE_HORIZONTAL_RECYCLER_LIST.ordinal();
+
+                    }else if (tagType.equalsIgnoreCase(AppConstants.USER_VISITING_CARD))
+                    {
+                        return PROFFESTIONAL_VISITINGCARD.ordinal();
+
+                    }else if (tagType.equalsIgnoreCase(AppConstants.USER_VISITING_CARD1))
+                    {
+                        return PROFILE_PERSONAL_VISITINGCARD.ordinal();
                     }
 
                 } else if (item instanceof GoodAt) {

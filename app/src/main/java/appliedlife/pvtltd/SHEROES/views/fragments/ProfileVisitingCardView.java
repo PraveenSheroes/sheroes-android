@@ -292,13 +292,7 @@ public class ProfileVisitingCardView extends BaseFragment implements ProfileView
     public void getProfileVisitingCardResponse(ProfileEditVisitingCardResponse profileEditVisitingCardResponse) {
 
 
-        profileEditVisitingCardResponse.getFirstName();
-        profileEditVisitingCardResponse.getLastName();
-        profileEditVisitingCardResponse.getEmailid();
-        profileEditVisitingCardResponse.getAboutMe();
-        profileEditVisitingCardResponse.getMobile();
-        profileEditVisitingCardResponse.getCurrentCompany();
-        profileEditVisitingCardResponse.getCurrentDesignation();
+
         mTv_user_fullname.setText(profileEditVisitingCardResponse.getFirstName()+" "+ profileEditVisitingCardResponse.getLastName());
         mTv_mobile_no.setText(profileEditVisitingCardResponse.getMobile());
         mTv_designation.setText(profileEditVisitingCardResponse.getCurrentDesignation());

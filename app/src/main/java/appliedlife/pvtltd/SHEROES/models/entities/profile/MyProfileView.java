@@ -15,6 +15,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 public class MyProfileView extends BaseResponse implements Parcelable {
 
     private String type;
+    private String iteam1;
     private UserDetails userDetails;
     private ArrayList<EducationEntity> educationEntity;
     private ExprienceEntity exprienceEntity;
@@ -30,6 +31,7 @@ public class MyProfileView extends BaseResponse implements Parcelable {
     public MyProfileView(Parcel in) {
         type = in.readString();
     }
+
 
     public static final Creator<MyProfileView> CREATOR = new Creator<MyProfileView>() {
         @Override
@@ -61,6 +63,13 @@ public class MyProfileView extends BaseResponse implements Parcelable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getIteam1() {
+        return iteam1;
+    }
+    public void setIteam1(String iteam1) {
+        this.iteam1 = iteam1;
     }
 
     public UserDetails getUserDetails() {

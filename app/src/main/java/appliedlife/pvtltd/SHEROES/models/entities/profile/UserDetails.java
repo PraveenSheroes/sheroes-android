@@ -24,10 +24,10 @@ public class UserDetails {
     @SerializedName("user_type_id")
     @Expose
     private int userTypeId;
-    @SerializedName("city_master_id")
+    @SerializedName("cityMasterId")
     @Expose
     private long cityMasterId;
-    @SerializedName("city_master")
+    @SerializedName("cityMaster")
     @Expose
     private String cityMaster;
     @SerializedName("emailid")
@@ -36,10 +36,10 @@ public class UserDetails {
     @SerializedName("mobile")
     @Expose
     private String mobile;
-    @SerializedName("first_name")
+    @SerializedName("firstName")
     @Expose
     private String firstName;
-    @SerializedName("last_name")
+    @SerializedName("lastName")
     @Expose
     private String lastName;
     @SerializedName("address")
@@ -144,8 +144,6 @@ public class UserDetails {
     @SerializedName("userSummary")
     @Expose
     private String userSummary;
-
-
     @SerializedName("name")
     @Expose
     private String name;

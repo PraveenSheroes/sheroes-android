@@ -50,6 +50,8 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.ProfileActicity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.CustomCollapsingToolbarLayout;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.OnBoardingView;
@@ -57,6 +59,8 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.COMMUNITY_OWNER;
 
 /**
  * Created by priyanka on 26/03/17.
@@ -128,6 +132,7 @@ public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInt
     HashMap<String, HashMap<String, ArrayList<LabelValue>>> data = new HashMap<>();
     String [] skills=new String[4];
     long [] skillsid=new long[4];
+    HashMap<String,Long> goodAtId=new HashMap<String,Long>();
     @Inject
     OnBoardingPresenter mOnBoardingPresenter;
     @Override
@@ -154,12 +159,6 @@ public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInt
         mTvSkillSubmit.setVisibility(View.GONE);
         mOnBoardingPresenter.attachView(this);
 
-       /* mCustomCollapsingToolbarLayout.setExpandedSubTitleColor(ContextCompat.getColor(getActivity(), android.R.color.transparent));
-        mCustomCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getActivity(), android.R.color.transparent));
-        mCustomCollapsingToolbarLayout.setExpandedTitleMarginStart(400);
-
-        mCustomCollapsingToolbarLayout.setTitle("GOOD AT");
-        mCustomCollapsingToolbarLayout.setSubtitle("");*/
 
         if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && null != mUserPreferenceMasterData.get().getData()) {
             data = mUserPreferenceMasterData.get().getData();
@@ -173,7 +172,7 @@ public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInt
             if(null !=labelValueArrayList) {
                 for (int i = 0; i < labelValueArrayList.size(); i++) {
                     String abc = labelValueArrayList.get(i).getLabel();
-
+                    goodAtId.put(abc,labelValueArrayList.get(i).getValue());
                     jobAtList.add(abc);
                 }
             }
@@ -234,18 +233,14 @@ public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInt
 
             }
         }
+
         mOnBoardingPresenter.getJobAtToPresenter(mAppUtils.boardingJobAtRequestBuilder(skillIds));
 
     }
 
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
-        // List<FeedDetail> feedDetailList=feedResponsePojo.getFeedDetails();
-        /*if (StringUtil.isNotEmptyCollection(feedDetailList) && mAdapter != null) {
-            mAdapter.setCallForRecycler(AppConstants.FEED_SUB_TYPE);
-            mAdapter.setSheroesGenericListData(feedDetailList);
-            mAdapter.notifyDataSetChanged();
-        }*/
+
     }
 
 
@@ -334,14 +329,25 @@ public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInt
     public void SearchClickText() {
 
 
-        mHomeActivityIntractionListner.OnSearchClick();
+        ((ProfileActicity)getActivity()).callSearchGoodAtDialog();
 
 
     }
 
 
 
+    public void setGoodAt(String[] tagsval, long[] tagsid) {
+        skillsid = tagsid;
+        StringBuilder stringBuilder = new StringBuilder();
+        if (tagsval.length > 0) {
 
+            for (int i = 1; i < tagsval.length; i++) {
+                if (StringUtil.isNotNullOrEmptyString(tagsval[i]))
+                    setSkillValue(tagsval[i]);
+            }
+        }
+       // mEtSearchEditTextProfile.setText(stringBuilder.substring(0, stringBuilder.length() - 1));
+    }
 
 
     @Override
@@ -393,6 +399,7 @@ public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInt
 
             } else {
                 mSkills[mCount] = textView.getText().toString();
+                skillsid[mCount-1]=goodAtId.get(mSkills[mCount]);
             }
             if (mCount == 2) {
 
@@ -651,6 +658,18 @@ public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInt
 
     @Override
     public void getBoardingJobResponse(BoardingDataResponse boardingDataResponse) {
+
+
+        switch (boardingDataResponse.getStatus()) {
+            case AppConstants.SUCCESS:
+                ((ProfileActicity)getActivity()).getSupportFragmentManager().popBackStack();
+                break;
+            case AppConstants.FAILED:
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(boardingDataResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), COMMUNITY_OWNER);
+                break;
+            default:
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, COMMUNITY_OWNER);
+        }
 
     }
 

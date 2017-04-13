@@ -8,6 +8,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.MyProfileView;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileViewList;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -21,14 +22,14 @@ import static com.facebook.login.widget.ProfilePictureView.TAG;
  * Created by priyanka on 02/03/17.
  */
 
-public class VisitingCardholder  extends BaseViewHolder<ProfileViewList> {
+public class VisitingCardholder  extends BaseViewHolder<MyProfileView> {
 
     @Bind(R.id.tv_my_contacct_card)
     TextView mTv_contacct_my_card;
     @Bind(R.id.tv_download_my_card)
     TextView mtv_download_my_card;
     BaseHolderInterface viewInterface;
-    private ProfileViewList dataItem;
+    private MyProfileView dataItem;
 
 
     public VisitingCardholder(View itemView, BaseHolderInterface baseHolderInterface) {
@@ -46,13 +47,14 @@ public class VisitingCardholder  extends BaseViewHolder<ProfileViewList> {
     }
 
     @Override
-    public void bindData(ProfileViewList obj, Context context, int position) {
+    public void bindData(MyProfileView myProfileView, Context context, int position) {
 
-        this.dataItem = obj;
+        this.dataItem = myProfileView;
 
         mtv_download_my_card.setOnClickListener(this);
-        mTv_contacct_my_card.setText(dataItem.getTag());
-        mtv_download_my_card.setText(dataItem.getItem1());
+        mTv_contacct_my_card.setText(myProfileView.getType());
+        mtv_download_my_card.setText(myProfileView.getIteam1());
+
     }
 
     @Override
@@ -69,11 +71,13 @@ public class VisitingCardholder  extends BaseViewHolder<ProfileViewList> {
         switch (view.getId()) {
 
             case R.id.tv_download_my_card:
-
                 viewInterface.handleOnClick(this.dataItem,mtv_download_my_card);
                 break;
+
+
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + view.getId());
+
         }
     }
 

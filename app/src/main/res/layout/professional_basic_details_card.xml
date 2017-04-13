@@ -64,7 +64,6 @@
             android:padding="@dimen/dp_size_16"
             android:layout_height="wrap_content"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:text="@string/basic_details_current_status"
             android:textColor="@color/searchbox_hint_text_color"
             android:textSize="@dimen/sp_size_13" />
 
@@ -88,7 +87,6 @@
             android:padding="@dimen/dp_size_16"
             android:layout_height="wrap_content"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:text="@string/basic_details_sector"
             android:textColor="@color/searchbox_hint_text_color"
             android:textSize="@dimen/sp_size_13" />
 
@@ -114,7 +112,6 @@
             android:padding="@dimen/dp_size_16"
             android:layout_height="wrap_content"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:text="@string/basic_details_total_exp_value"
             android:textColor="@color/searchbox_hint_text_color"
             android:textSize="@dimen/sp_size_13" />
 
@@ -143,7 +140,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:text="@string/basic_details_total_exp_value"
             android:textColor="@color/searchbox_hint_text_color"
             android:textSize="@dimen/sp_size_13" />
 

@@ -119,8 +119,8 @@ public class PersonalBasicDetailsFragment extends BaseFragment implements Profil
                     mEtLastName.setText(splitStr[1]);
                 }
             }
-            if(StringUtil.isNotNullOrEmptyString(myProfileView.getUserDetails().getAddress())) {
-                mEtCurrntLocation.setText(myProfileView.getUserDetails().getAddress());
+            if(StringUtil.isNotNullOrEmptyString(myProfileView.getUserDetails().getCityMaster())) {
+                mEtCurrntLocation.setText(myProfileView.getUserDetails().getCityMaster());
             }
             if(myProfileView.getUserDetails().getNoOfChildren()>=0) {
                 mEtChildNumber.setText(""+myProfileView.getUserDetails().getNoOfChildren());
@@ -148,6 +148,22 @@ public class PersonalBasicDetailsFragment extends BaseFragment implements Profil
         return view;
     }
 
+
+
+
+
+
+
+
+    public void submitLocation(String cityId,String city)
+    {
+        mcityNm=city;
+        mCitiId=cityId;
+        mEtCurrntLocation.setText(city);
+
+    }
+
+
     @OnClick(R.id.btn_personal_basic_details_save)
 
     public void  Save_Basic_Details()
@@ -157,8 +173,6 @@ public class PersonalBasicDetailsFragment extends BaseFragment implements Profil
         mChild_number = mEtChildNumber.getText().toString();
         mCurrent_location=mEtCurrntLocation.getText().toString();
         mRelation_status=mSpinnerRelationStatus.getSelectedItem().toString();
-
-
 
       PersonalBasicDetailsRequest personalBasicDetailsRequest = new PersonalBasicDetailsRequest();
       AppUtils appUtils = AppUtils.getInstance();
@@ -176,9 +190,10 @@ public class PersonalBasicDetailsFragment extends BaseFragment implements Profil
             personalBasicDetailsRequest.setCityMasterId(Integer.parseInt(mCitiId));
         }
       personalBasicDetailsRequest.setMaritalStatus(mRelation_status);
-        if(null !=mChild_number && StringUtil.isNotNullOrEmptyString(mChild_number))
-      personalBasicDetailsRequest.setNoOfChildren(Integer.parseInt(mChild_number));
-        personalBasicDetailsRequest.setFirstName(mFirst_name);
+        if(null !=mChild_number && StringUtil.isNotNullOrEmptyString(mChild_number)) {
+            personalBasicDetailsRequest.setNoOfChildren(Integer.parseInt(mChild_number));
+        }
+      personalBasicDetailsRequest.setFirstName(mFirst_name);
       personalBasicDetailsRequest.setLastName(mLast_name);
       mProfilePresenter.getPersonalBasicDetailsAuthTokeInPresenter(personalBasicDetailsRequest);
 
@@ -189,6 +204,7 @@ public class PersonalBasicDetailsFragment extends BaseFragment implements Profil
     {
 
         ((ProfileActicity)getActivity()).callProfileLocation();
+
     }
 
     @OnClick(R.id.iv_back_profile)
@@ -199,13 +215,7 @@ public class PersonalBasicDetailsFragment extends BaseFragment implements Profil
 
     }
 
-    public void submitLocation(String cityId,String city)
-    {
-        mcityNm=city;
-        mCitiId=cityId;
-        mEtCurrntLocation.setText(city);
 
-    }
     @Override
     public void onClick(View view) {
 

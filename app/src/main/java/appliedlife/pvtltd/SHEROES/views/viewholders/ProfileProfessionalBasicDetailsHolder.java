@@ -28,26 +28,18 @@ import static com.facebook.login.widget.ProfilePictureView.TAG;
 public class ProfileProfessionalBasicDetailsHolder extends BaseViewHolder<MyProfileView> {
     @Bind(R.id.tv_profile_basic_details)
     TextView mTv_profile_basic_details;
-    @Bind(R.id.tv_current_status)
-    TextView mTv_current_status;
     @Bind(R.id.tv_current_status_value)
-    TextView mTv_current_status_value;
-    @Bind(R.id.tv_sector)
-    TextView mTv_sector;
+    TextView mTvCurrentStatusValue;
     @Bind(R.id.tv_sector_value)
-    TextView mTv_sector_value;
-    @Bind(R.id.tv_total_work_experience)
-    TextView mTv_total_work_experience;
+    TextView mTvSectorValue;
     @Bind(R.id.tv_tot_exp_value)
-    TextView mtv_tot_exp_value;
-    @Bind(R.id.tv_language)
-    TextView mTv_language;
+    TextView mTvTotalWorkExperienceValue;
     @Bind(R.id.tv_tot_language_value)
-    TextView mTv_tot_language_value;
+    TextView mTvLanguageValue;
     BaseHolderInterface viewInterface;
     private MyProfileView dataItem;
     @Bind(R.id.tv_professional_edit_basic_details)
-    TextView mTv_professional_edit_basic_details;
+    TextView mTvProfessionalEditBasicDetails;
 
     public ProfileProfessionalBasicDetailsHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
@@ -59,18 +51,18 @@ public class ProfileProfessionalBasicDetailsHolder extends BaseViewHolder<MyProf
     @Override
     public void bindData(MyProfileView myProfileView, Context context, int position) {
         this.dataItem = myProfileView;
-        mTv_professional_edit_basic_details.setOnClickListener(this);
+        mTvProfessionalEditBasicDetails.setOnClickListener(this);
         mTv_profile_basic_details.setText(AppConstants.USER_PROFILE);
 
         if(null !=dataItem) {
-            if (StringUtil.isNotNullOrEmptyString(dataItem.getUserDetails().getMaritalStatus())) {
-                mTv_current_status_value.setText(dataItem.getUserDetails().getMaritalStatus());
+            if (StringUtil.isNotNullOrEmptyString(dataItem.getUserDetails().getJobTag())) {
+                mTvCurrentStatusValue.setText(dataItem.getUserDetails().getJobTag());
             }
             if (StringUtil.isNotNullOrEmptyString(dataItem.getUserDetails().getSector())) {
-                mTv_sector_value.setText(dataItem.getUserDetails().getSector());
+                mTvSectorValue.setText(dataItem.getUserDetails().getSector());
             }
             if (StringUtil.isNotNullOrEmptyString(""+dataItem.getUserDetails().getTotalExp())) {
-                mtv_tot_exp_value.setText(""+dataItem.getUserDetails().getTotalExp());
+                mTvTotalWorkExperienceValue.setText(""+dataItem.getUserDetails().getTotalExp());
             }
             /*if (StringUtil.isNotNullOrEmptyString(dataItem.getUserDetails().getDepartment())) {
                 mTv_tot_language_value.setText(dataItem.getUserDetails().getDepartment());
@@ -94,7 +86,7 @@ public class ProfileProfessionalBasicDetailsHolder extends BaseViewHolder<MyProf
 
             case R.id.tv_professional_edit_basic_details:
 
-                viewInterface.handleOnClick(this.dataItem,mTv_professional_edit_basic_details);
+                viewInterface.handleOnClick(this.dataItem,mTvProfessionalEditBasicDetails);
 
                 break;
 
