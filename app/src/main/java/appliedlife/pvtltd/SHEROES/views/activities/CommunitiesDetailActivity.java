@@ -91,6 +91,8 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
     private boolean isMemberRemoveDialog;
     private CommunityRequestedFragment communityRequestedFragment;
     boolean isCommunityDetailFragment;
+    private long mCommunityId;
+    private long mCommunityPostId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -104,6 +106,17 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
         if (null != getIntent()) {
             mFeedDetail = getIntent().getParcelableExtra(AppConstants.COMMUNITY_DETAIL);
             communityEnum = (CommunityEnum) getIntent().getSerializableExtra(AppConstants.MY_COMMUNITIES_FRAGMENT);
+
+            if(null !=getIntent().getExtras().get(AppConstants.COMMUNITY_ID)) {
+                mCommunityId = (long) getIntent().getExtras().get(AppConstants.COMMUNITY_ID);
+            }
+            if(null !=getIntent().getExtras().get(AppConstants.COMMUNITY_POST_ID)) {
+                mCommunityPostId = (long) getIntent().getExtras().get(AppConstants.COMMUNITY_POST_ID);
+            }
+            if(mCommunityId>0){
+                mFeedDetail=new FeedDetail();
+                mFeedDetail.setIdOfEntityOrParticipant(mCommunityId);
+            }
         }
         setPagerAndLayouts();
     }

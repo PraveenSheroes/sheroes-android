@@ -68,6 +68,7 @@ public class JobDetailActivity extends BaseActivity {
     RoundedImageView mIv_job_comp_logo;
     private FeedDetail mFeedDetail;
     int mlogoflag = 0;
+    long mJobId=0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,6 +78,11 @@ public class JobDetailActivity extends BaseActivity {
         setContentView(R.layout.activity_job_details);
         ButterKnife.bind(this);
         if (null != getIntent()) {
+            if(null !=getIntent().getExtras()) {
+                if (null != getIntent().getExtras().get(AppConstants.JOB_ID)) {
+                    mJobId = (long) getIntent().getExtras().get(AppConstants.JOB_ID);
+                }
+            }
             mFeedDetail = getIntent().getParcelableExtra(AppConstants.JOB_DETAIL);
         }
         setPagerAndLayouts();
@@ -104,12 +110,17 @@ public class JobDetailActivity extends BaseActivity {
         mCustomCollapsingToolbarLayout.setExpandedSubTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
         mCustomCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
         mCustomCollapsingToolbarLayout.setExpandedTitleMarginStart(200);
+        if(mJobId>0) {
+            mFeedDetail=new FeedDetail();
+            mFeedDetail.setIdOfEntityOrParticipant(mJobId);
+        }
         if (null != mFeedDetail) {
             if (mFeedDetail.isBookmarked()) {
                 mTvJobDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_active, 0, 0, 0);
             } else {
                 mTvJobDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_detail_white, 0, 0, 0);
             }
+
             mCustomCollapsingToolbarLayout.setTitle(mFeedDetail.getNameOrTitle());
             mCustomCollapsingToolbarLayout.setSubtitle(mFeedDetail.getAuthorName());
            mTv_job_comp_nm.setText(mFeedDetail.getAuthorName());

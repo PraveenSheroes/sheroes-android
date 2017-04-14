@@ -77,7 +77,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
     TextView mTvFeedArticleDetailUserReaction;
     private FragmentOpen mFragmentOpen;
     ViewPagerAdapter viewPagerAdapter;
-
+    long mArticleId=0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -89,6 +89,16 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
         mFragmentOpen = new FragmentOpen();
         if (null != getIntent()) {
             mFeedDetail = getIntent().getParcelableExtra(AppConstants.ARTICLE_DETAIL);
+            if (null != getIntent().getExtras()) {
+                if (null != getIntent().getExtras().get(AppConstants.ARTICLE_ID)) {
+                    mArticleId = (long) getIntent().getExtras().get(AppConstants.ARTICLE_ID);
+                }
+
+            }
+            if(mArticleId>0){
+                mFeedDetail=new FeedDetail();
+                mFeedDetail.setIdOfEntityOrParticipant(mArticleId);
+            }
         }
         setPagerAndLayouts();
     }

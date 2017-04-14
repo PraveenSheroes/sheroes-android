@@ -79,6 +79,7 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
         if (null != getArguments()) {
             mFeedDetail = getArguments().getParcelable(AppConstants.JOB_DETAIL);
         }
+
     }
 
     @Override

@@ -220,10 +220,22 @@ public class AppConstants {
 
     public static final String CLIENTSIDE="Horizontal";
 
-    /*PROFILE*/
     public static final String DEGREE_KEY="degree";
     public static final String FIELD_OF_STUDY_KEY="field_of_study";
     public static final String MASTER_DATA_SECTOR_KEY = "SECTOR";//for sector search
     public static final String MASTER_DATA_LANGUAGE_KEY = "LANGUAGE";
     public static final String WORK_EXPERIENCE_CATE = "work_exp_cate";
+
+    public static final String INVALID_URL = "Invalid Url";
+
+    public static final String WEB_BROWSER_MASSAGE = "Please select a web browser";
+    public static final String JOB_URL = "https://sheroes.in/jobs";
+    public static final String ARTICLE_URL = "https://sheroes.in/articles";
+    public static final String COMMUNITY_URL = "https://sheroes.in/communities";
+    public static final String USER_PROFILE_URL = "https://sheroes.in/users/edit_profile";
+    public static final String USER_URL = "https://sheroes.in/users";
+    public static final String JOB_ID = "job_id";
+    public static final String ARTICLE_ID = "article_id";
+    public static final String COMMUNITY_ID = "community_id";
+    public static final String COMMUNITY_POST_ID = "community_post_id";
 }

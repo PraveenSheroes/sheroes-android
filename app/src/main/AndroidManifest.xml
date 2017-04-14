@@ -124,8 +124,22 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustPan"/>
-
+        <activity
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/app_name"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:host="sheroes.in"> </data>
+                <data android:scheme="https"/>
+                <data android:pathPattern="/.*"/>
+            </intent-filter>
+        </activity>
         <activity android:name=".views.activities.WorkExperienceActivity" />
+
     </application>
 
 </manifest>
