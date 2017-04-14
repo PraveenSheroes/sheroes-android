@@ -107,10 +107,10 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
             mFeedDetail = getIntent().getParcelableExtra(AppConstants.COMMUNITY_DETAIL);
             communityEnum = (CommunityEnum) getIntent().getSerializableExtra(AppConstants.MY_COMMUNITIES_FRAGMENT);
 
-            if(null !=getIntent().getExtras().get(AppConstants.COMMUNITY_ID)) {
+            if(null !=getIntent()&&null !=getIntent().getExtras().get(AppConstants.COMMUNITY_ID)) {
                 mCommunityId = (long) getIntent().getExtras().get(AppConstants.COMMUNITY_ID);
             }
-            if(null !=getIntent().getExtras().get(AppConstants.COMMUNITY_POST_ID)) {
+            if(null !=getIntent()&&null !=getIntent().getExtras().get(AppConstants.COMMUNITY_POST_ID)) {
                 mCommunityPostId = (long) getIntent().getExtras().get(AppConstants.COMMUNITY_POST_ID);
             }
             if(mCommunityId>0){
@@ -119,13 +119,6 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
             }
         }
         setPagerAndLayouts();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        LogUtils.error("**********************", "*************OnResume************commundetail activity*******");
-
     }
 
     private void setPagerAndLayouts() {

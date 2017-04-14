@@ -20,7 +20,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
-    /**
+/**
      * Created by Praveen Singh on 04/01/2017.
      *
      * @author Praveen Singh

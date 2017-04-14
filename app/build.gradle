@@ -40,12 +40,16 @@ android {
             buildConfigField "String", "BASE_URL", "\"http://34.193.138.177/\""
             ext.enableCrashlytics = false
             shrinkResources false
-           proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.debug
         }
         release {
            // buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
             buildConfigField "String", "BASE_URL", "\"http://34.193.138.177/\""
+            ext.enableCrashlytics = false
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
     }
@@ -65,7 +69,6 @@ dependencies {
     compile "com.mixpanel.android:mixpanel-android:5.+"
 
     compile 'com.google.android.gms:play-services-analytics:10.0.1'
-
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.android.support:appcompat-v7:25.1.0'
     compile 'com.android.support:design:25.1.0'

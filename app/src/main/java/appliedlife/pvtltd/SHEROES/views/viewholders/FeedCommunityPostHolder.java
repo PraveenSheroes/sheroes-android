@@ -563,6 +563,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .skipMemoryCache(true)
                 .into(ivFirstLandscape);
+
         ImageView ivSecond = (ImageView) child.findViewById(R.id.iv_feed_community_post_second_image_landscape_with_two_images);
         ivSecond.setOnClickListener(this);
         Glide.with(context)
@@ -577,7 +578,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .skipMemoryCache(true)
                 .into(ivThird);
-
         liFeedCommunityUserPostImages.addView(child);
     }
 
