@@ -156,6 +156,10 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
         }
     }
 
+    public void replaceFragment(Fragment fragment) {
+        replaceFragment(fragment, 0, null, false);
+    }
+
     @Override
     protected void onDestroy() {
         mIsDestroyed = true;

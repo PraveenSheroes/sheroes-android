@@ -1,0 +1,90 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="appliedlife.pvtltd.SHEROES.views.fragments.ExperienceSelfEmployedFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/btn_save_selfempolyment_details"
+        android:background="@color/white"
+        android:isScrollContainer="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/dp_size_20">
+
+            <include layout="@layout/layout_fragment_work_experience_common" />
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_size_20">
+
+                <EditText
+                    android:id="@+id/et_description_your_work"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusableInTouchMode="true"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:hint="@string/ID_SCHOOL_DESCRIPTION_HINT"
+                    android:textColor="@color/text_color_contactdetails_page"
+                    android:textColorHint="@color/text_color_setting_preference_basicdetails"
+                    android:textSize="@dimen/sp_size_13"
+
+                    />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_size_20">
+
+                <EditText
+                    android:id="@+id/et_self_about_organization"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusableInTouchMode="true"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:hint="@string/ID_SELF_EMP_ABOUT_HINT"
+                    android:textColor="@color/text_color_contactdetails_page"
+                    android:textColorHint="@color/text_color_setting_preference_basicdetails"
+                    android:textSize="@dimen/sp_size_13"
+
+                    />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_size_20">
+
+                <EditText
+                    android:id="@+id/et_self_weburl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusableInTouchMode="true"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:hint="@string/ID_SELF_EMP_WEBSITE_URL_HINT"
+                    android:textColor="@color/text_color_contactdetails_page"
+                    android:textColorHint="@color/text_color_setting_preference_basicdetails"
+                    android:textSize="@dimen/sp_size_13" />
+            </android.support.design.widget.TextInputLayout>
+        </LinearLayout>
+
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btn_save_selfempolyment_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+        android:text="@string/ID_SAVE"
+        android:textColor="@color/white" />
+</RelativeLayout>

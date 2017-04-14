@@ -124,7 +124,7 @@
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustPan"/>
 
-
+        <activity android:name=".views.activities.WorkExperienceActivity" />
     </application>
 
 </manifest>

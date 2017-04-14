@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_work_experience"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="appliedlife.pvtltd.SHEROES.views.activities.WorkExperienceActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/text_color_close">
+
+        <ImageView
+            android:id="@+id/iv_back_setting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/header_backimage"
+            android:padding="@dimen/dp_size_10"
+            android:src="@drawable/ic_back_white" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txt_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="@dimen/dp_size_12"
+                android:fontFamily="@string/ID_ROBOTO_BOLD"
+                android:layerType="software"
+                android:text="@string/ID_WORK_EXPERIENCE"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp_size_19" />
+
+            <TextView
+                android:id="@+id/txt_sub_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dp_size_7"
+                android:fontFamily="@string/ID_ROBOTO_LIGHT"
+                android:paddingTop="@dimen/dp_size_8"
+                android:text="@string/ID_JOB"
+                android:textAllCaps="true"
+                android:textColor="@color/text_color_setting_header"
+                android:textSize="@dimen/sp_size_12" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>

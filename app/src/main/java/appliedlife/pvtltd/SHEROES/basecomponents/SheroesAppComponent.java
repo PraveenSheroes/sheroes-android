@@ -24,7 +24,6 @@ import appliedlife.pvtltd.SHEROES.views.activities.LoginActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.OnBoardingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfessionalAddEducationActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfessionalWorkExperienceActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.Professional_WorkExperience_Activity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActicity;
 import appliedlife.pvtltd.SHEROES.views.activities.SettingPreferencesActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.VisitingCardActivity;
@@ -37,8 +36,8 @@ import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityInviteSearchFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOptionJoinDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOpenAboutFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOptionJoinDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOwnerSearchFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityRequestedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitySearchTagsDialog;
@@ -311,7 +310,7 @@ public interface SheroesAppComponent {
     void inject(ProfileAddOtherFragment profileAddOtherFragment);
     void inject(ProfessionalEditBasicDetailsFragment professionalEditBasicDetailsFragment);
     void inject(ProfileAboutMeFragment profileAboutMeFragment);
-    void inject(Professional_WorkExperience_Activity professional_workExperience_activity);
+
     void inject(ProfileBasicDetailsHolder profileBasicDetailsHolder);
     void inject(ProfileHorListHolder profileHorListHolder);
     void inject(ProfileWorkExperienceSelfEmploymentFragment profileWorkExperienceSelfEmploymentFragment);
