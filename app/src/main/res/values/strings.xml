@@ -844,6 +844,10 @@ etur adipiscing elit,sed do eiusmod tempor incididunt ut…</string>
         <item>@string/ID_INTERSHIP</item>
     </string-array>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="married">Married</string>
+    <string name="unmarried">Unmarried</string>
+    <string-array name="relationship_status_arr">
+        <item>@string/married</item>
+        <item>@string/unmarried</item>
+    </string-array>
 </resources>

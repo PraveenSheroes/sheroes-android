@@ -11,29 +11,32 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/dp_size_16">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_size_16">
 
-    <TextView
-        android:id="@+id/tv_interesting_number"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@string/ID_ROBOTO_REGULAR"
-        android:text="@string/ID_INTERESTINNG_TITTLE"
-        android:textAllCaps="true"
-        android:textColor="@color/dashboard_fed_text"
-        android:textSize="@dimen/sp_size_13" />
+            <TextView
+                android:id="@+id/tv_interesting_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:text="@string/ID_INTERESTINNG_TITTLE"
+                android:textAllCaps="true"
+                android:textColor="@color/dashboard_fed_text"
+                android:textSize="@dimen/sp_size_13" />
 
-        <TextView
-        android:id="@+id/tv_add_good_at"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerInParent="true"
-        android:background="@drawable/ic_add_icon_grey"/>
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/tv_add_good_at"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:drawableRight="@drawable/ic_add_icon_grey"
+                android:drawableEnd="@drawable/ic_add_icon_grey"
+                android:padding="@dimen/dp_size_3" />
+        </RelativeLayout>
 
 
 

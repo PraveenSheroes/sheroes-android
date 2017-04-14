@@ -113,15 +113,15 @@ public class ProfileIAmInterestingInHolder extends BaseViewHolder<MyProfileView>
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-
-            case R.id.tv_add_interest_details:
-
-                viewInterface.handleOnClick(this.dataItem,mTv_add_interest_details);
+            case R.id.tv_add_interest_details: {
+                viewInterface.handleOnClick(this.dataItem, mTv_add_interest_details);
                 break;
-            default:
+            }
+            default: {
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + view.getId());
+                break;
+            }
         }
-
     }
     }
 

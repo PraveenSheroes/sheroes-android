@@ -3,7 +3,7 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
+import android.support.design.widget.AppBarLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,8 +51,6 @@ public class ProfileAboutMeFragment extends BaseFragment implements ProfileView 
 
     @Inject
     ProfilePersenter mProfilePresenter;
-    /* @Bind(R.id.tv_about_me_tittle)
-     TextView mTv_about_me_tittle;*/
     @Bind(R.id.et_write_about_me)
     TextView mEtWriteAboutMe;
     @Bind(R.id.btn_save_about_me_details)
@@ -61,8 +60,11 @@ public class ProfileAboutMeFragment extends BaseFragment implements ProfileView 
     @Bind(R.id.iv_write_about_line)
     ImageView mIvWriteAboutLine;
     @Bind(R.id.tv_about_me_tittle)
-    TextView mTvAboutMeTittle;
-    @Bind(R.id.cl_profile_about_me)
+    TextView mCollapeTitleTxt;
+    @Bind(R.id.al_community_open_about)
+    AppBarLayout mAppBarLayout;
+    @Bind(R.id.pb_profile_progress_bar)
+    ProgressBar mProgress;
 
     public CustomCollapsingToolbarLayout mProfileAboutMe;
 
@@ -95,16 +97,27 @@ public class ProfileAboutMeFragment extends BaseFragment implements ProfileView 
         View view = inflater.inflate(R.layout.fragment_personal_aboutme, container, false);
         ButterKnife.bind(this, view);
         mProfilePresenter.attachView(this);
-        // mTv_about_me_tittle.setText(R.string.ID_ABOUT_ME);
+        setProgressBar(mProgress);
 
-        //TODO:Change Subtittle
-        mProfileAboutMe.setExpandedSubTitleColor(ContextCompat.getColor(getActivity(), android.R.color.transparent));
-        mProfileAboutMe.setExpandedTitleColor(ContextCompat.getColor(getActivity(), android.R.color.transparent));
-        mProfileAboutMe.setExpandedTitleMarginStart(200);
+        mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = false;
+            int scrollRange = -1;
 
-        mProfileAboutMe.setTitle("ABOUT ME");
-        mProfileAboutMe.setSubtitle("ABOUT ME");
-        mTvAboutMeTittle.setText(R.string.ID_ABOUT_ME);
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if (scrollRange + verticalOffset == 0) {
+                    mCollapeTitleTxt.setVisibility(View.VISIBLE);
+                    isShow = true;
+                } else if (isShow) {
+                    mCollapeTitleTxt.setVisibility(View.GONE);
+                    isShow = false;
+                }
+            }
+        });
+
 
         mEtWriteAboutMe.addTextChangedListener(new TextWatcher() {
 
@@ -137,16 +150,13 @@ public class ProfileAboutMeFragment extends BaseFragment implements ProfileView 
 
     }
 
-    //Click on Edit_Text
+
     @OnTouch(R.id.et_write_about_me)
-
     public boolean OnEdit_Text_Click() {
-
         mIvWriteAboutLine.setBackgroundColor(getResources().getColor(R.color.blue));
         mBtnSaveAboutMeDetails.setEnabled(true);
         mBtnSaveAboutMeDetails.setBackgroundColor(getResources().getColor(R.color.red));
         mBtnSaveAboutMeDetails.setVisibility(View.VISIBLE);
-
         return false;
     }
 
@@ -191,13 +201,13 @@ public class ProfileAboutMeFragment extends BaseFragment implements ProfileView 
 
     public void Onback_Click() {
 
-        profileAboutMeFragmentListener.AboutMeBack();
+        profileAboutMeFragmentListener.aboutMeBack();
 
     }
 
 
     @Override
-    public void backListener(int id) {
+    public void onBackPressed(int id) {
 
     }
 
@@ -233,19 +243,16 @@ public class ProfileAboutMeFragment extends BaseFragment implements ProfileView 
 
     @Override
     public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
-
-        //TODO:Change Message
-        Toast.makeText(getActivity(), boardingDataResponse.getStatus(),
-                Toast.LENGTH_LONG).show();
-
-
+        int toastDuration;
         if (boardingDataResponse.getStatus().equals(AppConstants.SUCCESS)) {
-
-
-            profileAboutMeFragmentListener.AboutMeBack();
-
+            toastDuration = Toast.LENGTH_SHORT;
+            profileAboutMeFragmentListener.aboutMeBack();
+        } else {
+            toastDuration = Toast.LENGTH_LONG;
         }
-
+        //TODO:TBD for toast showing
+        Toast.makeText(getActivity(), boardingDataResponse.getStatus(),
+                toastDuration).show();
     }
 
     @Override
@@ -287,7 +294,7 @@ public class ProfileAboutMeFragment extends BaseFragment implements ProfileView 
 
         void onErrorOccurence();
 
-        void AboutMeBack();
+        void aboutMeBack();
     }
 
 

@@ -172,7 +172,7 @@ public class ProfileAddEducationFragment extends BaseFragment {
 public  void Onback_Click()
 {
 
-    profileViewlistener.backListener(R.id.tv_profile_education_back);
+    profileViewlistener.onBackPressed(R.id.tv_profile_education_back);
 
 }
 

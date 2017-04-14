@@ -246,7 +246,7 @@
     </ScrollView>
 
 
-    <Button xmlns:android="http://schemas.android.com/apk/res/android"
+    <Button
         android:id="@+id/btn_personal_basic_details_save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -257,5 +257,10 @@
         android:text="@string/ID_SAVE"
         android:textColor="@color/white" />
 
-
+    <ProgressBar
+        android:id="@+id/pb_profile_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
 </RelativeLayout>

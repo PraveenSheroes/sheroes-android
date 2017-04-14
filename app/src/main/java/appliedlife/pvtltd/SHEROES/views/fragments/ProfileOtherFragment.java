@@ -1,7 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -12,7 +11,6 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.views.activities.ProfessionalAddEducationActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -76,7 +74,7 @@ public class ProfileOtherFragment extends BaseFragment {
     public  void Onback_Click()
     {
 
-        profileViewlistener.backListener(R.id.tv_profile_other_back);
+        profileViewlistener.onBackPressed(R.id.tv_profile_other_back);
 
     }
 

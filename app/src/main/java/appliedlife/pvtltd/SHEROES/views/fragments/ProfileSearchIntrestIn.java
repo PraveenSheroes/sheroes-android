@@ -399,7 +399,7 @@ public class ProfileSearchIntrestIn extends BaseDialogFragment implements BaseHo
     }
 
     @Override
-    public void backListener(int id) {
+    public void onBackPressed(int id) {
 
     }
 

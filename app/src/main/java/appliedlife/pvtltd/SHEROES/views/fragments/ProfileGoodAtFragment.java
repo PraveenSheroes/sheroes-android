@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -135,15 +136,18 @@ public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInt
     HashMap<String,Long> goodAtId=new HashMap<String,Long>();
     @Inject
     OnBoardingPresenter mOnBoardingPresenter;
+    @Bind(R.id.tv_good_at_tittle)
+    TextView mCollapeTitleTxt;
+    @Bind(R.id.al_profile_good_at)
+    AppBarLayout mAppBarLayout;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            if (getActivity() instanceof MyProfileyGoodAtListener) {
-                mHomeActivityIntractionListner = (MyProfileyGoodAtListener) getActivity();
-            }
-        } catch (InstantiationException exception) {
-            LogUtils.error(mSkill, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + mSkill + AppConstants.SPACE + exception.getMessage());
+            mHomeActivityIntractionListner = (MyProfileyGoodAtListener) getActivity();
+        } catch (ClassCastException exception) {
+            LogUtils.error(mSkill, "Activity must implements MyProfileyGoodAtListener",exception);
         }
     }
 
@@ -158,6 +162,25 @@ public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInt
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ALL_SEARCH, AppConstants.NO_REACTION_CONSTANT);
         mTvSkillSubmit.setVisibility(View.GONE);
         mOnBoardingPresenter.attachView(this);
+
+        mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = false;
+            int scrollRange = -1;
+
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if (scrollRange + verticalOffset == 0) {
+                    mCollapeTitleTxt.setVisibility(View.VISIBLE);
+                    isShow = true;
+                } else if (isShow) {
+                    mCollapeTitleTxt.setVisibility(View.GONE);
+                    isShow = false;
+                }
+            }
+        });
 
 
         if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && null != mUserPreferenceMasterData.get().getData()) {
@@ -217,7 +240,7 @@ public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInt
 
     @OnClick(R.id.tv_back_good_at_skill)
     public void communitySkillBackClick() {
-        mHomeActivityIntractionListner.onBackPress();
+        getActivity().onBackPressed();
     }
 
 
@@ -246,7 +269,7 @@ public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInt
 
 
     @Override
-    public void backListener(int id) {
+    public void onBackPressed(int id) {
 
     }
 
@@ -677,8 +700,6 @@ public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInt
     public interface MyProfileyGoodAtListener {
 
         void onErrorOccurence();
-
-        void onBackPress();
 
         void OnSearchClick();
 

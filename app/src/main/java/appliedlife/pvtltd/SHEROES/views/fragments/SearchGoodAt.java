@@ -535,7 +535,7 @@ public class SearchGoodAt extends BaseDialogFragment implements CommunityTagsVie
     }
 
     @Override
-    public void backListener(int id) {
+    public void onBackPressed(int id) {
 
     }
 

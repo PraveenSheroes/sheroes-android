@@ -84,7 +84,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/dp_size_16"
                             android:drawableLeft="@drawable/ic_back_white"
-                            android:fontFamily="@string/ID_ROBOTO_LIGHT" />
+                            android:fontFamily="@string/ID_ROBOTO_LIGHT"
+                            android:padding="@dimen/dp_size_3" />
 
 
                         <TextView
@@ -93,6 +94,7 @@
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
                             android:padding="@dimen/dp_size_16"
+                            android:visibility="gone"
                             android:textAllCaps="true"
                             android:text="@string/ID_ABOUT_ME" />
 
@@ -192,6 +194,11 @@
 
         />
 
-
+    <ProgressBar
+        android:id="@+id/pb_profile_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
 
 </RelativeLayout>

@@ -90,16 +90,16 @@ public class ProfileLookingForHolder extends BaseViewHolder<MyProfileView> {
 
     @Override
     public void onClick(View view) {
-
         switch (view.getId()) {
-
-            case R.id.tv_looking_for:
-
+            case R.id.tv_looking_for: {
                 viewInterface.handleOnClick(this.dataItem, mTv_looking_for);
                 break;
-            default:
+            }
+            default: {
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + view.getId());
-        }
+                break;
+            }
 
+        }
     }
 }

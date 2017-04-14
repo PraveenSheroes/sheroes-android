@@ -2,9 +2,13 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -69,6 +73,10 @@ public class ProfileOpportunityTypeFragment extends BaseFragment implements Base
     TextView mSkill6;
     @Bind(R.id.tv_selected_skill7)
     TextView mSkill7;
+    @Bind(R.id.tv_about_me_tittle)
+    TextView mCollapeTitleTxt;
+    @Bind(R.id.al_community_open_about)
+    AppBarLayout mAppBarLayout;
     String skill1, skill2;
     int mCount = 1;
     private String mSearchDataName = AppConstants.EMPTY_STRING;
@@ -112,6 +120,24 @@ public class ProfileOpportunityTypeFragment extends BaseFragment implements Base
         View view = inflater.inflate(R.layout.profile_looking_for_fragment, container, false);
         ButterKnife.bind(this, view);
 
+        mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = false;
+            int scrollRange = -1;
+
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if (scrollRange + verticalOffset == 0) {
+                    mCollapeTitleTxt.setVisibility(View.VISIBLE);
+                    isShow = true;
+                } else if (isShow) {
+                    mCollapeTitleTxt.setVisibility(View.GONE);
+                    isShow = false;
+                }
+            }
+        });
 
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getData() ) {
             data= mUserPreference.get().getData();

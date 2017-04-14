@@ -17,7 +17,7 @@ public interface ProfileView extends BaseMvpView {
 
 
 
-    void backListener(int id);
+    void onBackPressed(int id);
     void visitingCardOpen(ProfileEditVisitingCardResponse profileEditVisitingCardResponse);
     void callFragment(int id);
     void getEducationResponse(BoardingDataResponse boardingDataResponse);

@@ -29,7 +29,7 @@
                         android:id="@+id/iv_community_cover_img"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp_size_200"
-                        android:background="@color/back_colo_aboutme_head"
+                        android:background="@drawable/profile_collapsible_background_color"
                         android:fitsSystemWindows="true"
                         android:scaleType="centerCrop"
                         app:layout_collapseMode="parallax" />
@@ -69,6 +69,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/dp_size_16"
+                            android:padding="@dimen/dp_size_3"
                             android:drawableLeft="@drawable/ic_back_white"
                             android:fontFamily="@string/ID_ROBOTO_LIGHT" />
 
@@ -79,6 +80,7 @@
                             android:layout_centerHorizontal="true"
                             android:fontFamily="@string/ID_ROBOTO_LIGHT"
                             android:padding="@dimen/dp_size_16"
+                            android:visibility="gone"
                             android:text="@string/ID_LOOKING_FOR"
                             android:textAllCaps="true" />
 

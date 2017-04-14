@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +26,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataRespons
 import appliedlife.pvtltd.SHEROES.models.entities.profile.MyProfileView;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.PersonalBasicDetailsRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCardResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.UserDetails;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePersenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -70,13 +72,9 @@ public class PersonalBasicDetailsFragment extends BaseFragment implements Profil
     ProfileView mProfileBasicDetailsCallBack;
     String mCitiId,mcityNm;
     MyProfileView myProfileView;
+    @Bind(R.id.pb_profile_progress_bar)
+    ProgressBar mProgress;
 
-    private String mFirst_name,mLast_name,mChild_number,mCurrent_location,mRelation_status;
-
-
-    private static final String[] total_iteam = {
-            "Married", "Unmarried"
-    };
 
     @Override
     public void onAttach(Context context) {
@@ -103,48 +101,31 @@ public class PersonalBasicDetailsFragment extends BaseFragment implements Profil
         View view = inflater.inflate(R.layout.fragment_personal_basicdetails, container, false);
         ButterKnife.bind(this, view);
         mProfilePresenter.attachView(this);
+        setProgressBar(mProgress);
         mTvProfileTittle.setText(R.string.ID_BASICDETAILS);
-        mSpinnerRelationStatus.setAdapter(new ProfileSpinnerAdapter(getActivity(), R.layout.profile_current_status_spinner, total_iteam));
-        if(null !=getArguments())
-
-        {
+        mSpinnerRelationStatus.setAdapter(new ProfileSpinnerAdapter(getActivity(), R.layout.profile_current_status_spinner, getResources().getStringArray(R.array.relationship_status_arr)));
+        if (null != getArguments()) {
             myProfileView = getArguments().getParcelable(AppConstants.EDUCATION_PROFILE);
-
-            if(StringUtil.isNotNullOrEmptyString(myProfileView.getUserDetails().getName())) {
-                String[] splitStr = myProfileView.getUserDetails().getName().split("\\s+");
-                if(StringUtil.isNotNullOrEmptyString(splitStr[0])) {
-                    mEtFirstName.setText(splitStr[0]);
+            if (myProfileView != null && myProfileView.getUserDetails() != null) {
+                UserDetails userDetails = myProfileView.getUserDetails();
+                if (userDetails != null) {
+                    mEtFirstName.setText(userDetails.getFirstName());
+                    mEtLastName.setText(userDetails.getLastName());
+                    mEtCurrntLocation.setText(userDetails.getCityMaster());
+                    mEtChildNumber.setText(String.valueOf(userDetails.getNoOfChildren()));
+                    if (getString(R.string.married).equalsIgnoreCase(userDetails.getMaritalStatus())) {
+                        mSpinnerRelationStatus.setSelection(0,true);
+                    } else {
+                        mSpinnerRelationStatus.setSelection(1,true);
+                    }
+                    mTvMobileNo.setText(userDetails.getMobile());
+                    mTvEmailNo.setText(userDetails.getEmailid());
+                    if (userDetails.getCityMasterId() > 0) {
+                        mCitiId = String.valueOf(myProfileView.getUserDetails().getCityMasterId());
+                    }
                 }
-                if(StringUtil.isNotNullOrEmptyString(splitStr[1])) {
-                    mEtLastName.setText(splitStr[1]);
-                }
             }
-            if(StringUtil.isNotNullOrEmptyString(myProfileView.getUserDetails().getCityMaster())) {
-                mEtCurrntLocation.setText(myProfileView.getUserDetails().getCityMaster());
-            }
-            if(myProfileView.getUserDetails().getNoOfChildren()>=0) {
-                mEtChildNumber.setText(""+myProfileView.getUserDetails().getNoOfChildren());
-            }
-            if(StringUtil.isNotNullOrEmptyString(myProfileView.getUserDetails().getMaritalStatus())) {
-               if(myProfileView.getUserDetails().getMaritalStatus().equalsIgnoreCase("Married")) {
-                   mSpinnerRelationStatus.setSelection(0);
-               }
-                else {
-                   mSpinnerRelationStatus.setSelection(1);
-               }
-            }
-            if(StringUtil.isNotNullOrEmptyString(myProfileView.getUserDetails().getMobile())) {
-                mTvMobileNo.setText(myProfileView.getUserDetails().getMobile());
-            }
-            if(StringUtil.isNotNullOrEmptyString(myProfileView.getUserDetails().getEmailid())) {
-                mTvEmailNo.setText(myProfileView.getUserDetails().getEmailid());
-            }
-            if(myProfileView.getUserDetails().getCityMasterId()>0) {
-                mCitiId=""+myProfileView.getUserDetails().getCityMasterId();
-            }
-
-
-            }
+        }
         return view;
     }
 
@@ -165,38 +146,29 @@ public class PersonalBasicDetailsFragment extends BaseFragment implements Profil
 
 
     @OnClick(R.id.btn_personal_basic_details_save)
+    public void Save_Basic_Details() {
+        PersonalBasicDetailsRequest personalBasicDetailsRequest = new PersonalBasicDetailsRequest();
+        AppUtils appUtils = AppUtils.getInstance();
+        personalBasicDetailsRequest.setAppVersion(appUtils.getAppVersionName());
+        //TODO:change Messageid
+        personalBasicDetailsRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+        personalBasicDetailsRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        personalBasicDetailsRequest.setLastScreenName("string");
+        personalBasicDetailsRequest.setScreenName("string");
+        personalBasicDetailsRequest.setType("BASIC_PROFILE");
+        personalBasicDetailsRequest.setSubType("BASIC_USER_PROFILE_SERVICE");
+        personalBasicDetailsRequest.setSource("string");
 
-    public void  Save_Basic_Details()
-    {
-        mFirst_name= mEtFirstName.getText().toString();
-        mLast_name= mEtLastName.getText().toString();
-        mChild_number = mEtChildNumber.getText().toString();
-        mCurrent_location=mEtCurrntLocation.getText().toString();
-        mRelation_status=mSpinnerRelationStatus.getSelectedItem().toString();
-
-      PersonalBasicDetailsRequest personalBasicDetailsRequest = new PersonalBasicDetailsRequest();
-      AppUtils appUtils = AppUtils.getInstance();
-      personalBasicDetailsRequest.setAppVersion(appUtils.getAppVersionName());
-      //TODO:change Messageid
-      personalBasicDetailsRequest.setCloudMessagingId(appUtils.getCloudMessaging());
-      personalBasicDetailsRequest.setDeviceUniqueId(appUtils.getDeviceId());
-      personalBasicDetailsRequest.setLastScreenName("string");
-      personalBasicDetailsRequest.setScreenName("string");
-      personalBasicDetailsRequest.setType("BASIC_PROFILE");
-      personalBasicDetailsRequest.setSubType("BASIC_USER_PROFILE_SERVICE");
-      personalBasicDetailsRequest.setSource("string");
-
-        if(StringUtil.isNotNullOrEmptyString(mCitiId)) {
+        if (StringUtil.isNotNullOrEmptyString(mCitiId)) {
             personalBasicDetailsRequest.setCityMasterId(Integer.parseInt(mCitiId));
         }
-      personalBasicDetailsRequest.setMaritalStatus(mRelation_status);
-        if(null !=mChild_number && StringUtil.isNotNullOrEmptyString(mChild_number)) {
-            personalBasicDetailsRequest.setNoOfChildren(Integer.parseInt(mChild_number));
+        personalBasicDetailsRequest.setMaritalStatus(mSpinnerRelationStatus.getSelectedItem().toString());
+        if (StringUtil.isNotNullOrEmptyString(mEtChildNumber.getText().toString())) {
+            personalBasicDetailsRequest.setNoOfChildren(Integer.parseInt(mEtChildNumber.getText().toString()));
         }
-      personalBasicDetailsRequest.setFirstName(mFirst_name);
-      personalBasicDetailsRequest.setLastName(mLast_name);
-      mProfilePresenter.getPersonalBasicDetailsAuthTokeInPresenter(personalBasicDetailsRequest);
-
+        personalBasicDetailsRequest.setFirstName(mEtFirstName.getText().toString());
+        personalBasicDetailsRequest.setLastName(mEtLastName.getText().toString());
+        mProfilePresenter.getPersonalBasicDetailsAuthTokeInPresenter(personalBasicDetailsRequest);
     }
 
     @OnClick(R.id.et_currnt_location)
@@ -211,7 +183,7 @@ public class PersonalBasicDetailsFragment extends BaseFragment implements Profil
 
     public void OnbackClick()
     {
-        mProfileBasicDetailsCallBack.backListener(R.id.iv_back_profile);
+        mProfileBasicDetailsCallBack.onBackPressed(R.id.iv_back_profile);
 
     }
 
@@ -225,7 +197,7 @@ public class PersonalBasicDetailsFragment extends BaseFragment implements Profil
     }
 
     @Override
-    public void backListener(int id) {
+    public void onBackPressed(int id) {
 
 
 
@@ -251,28 +223,16 @@ public class PersonalBasicDetailsFragment extends BaseFragment implements Profil
 
     @Override
     public void getPersonalBasicDetailsResponse(BoardingDataResponse boardingDataResponse) {
-
-
-        //TODO:Change Message
-
-        Toast.makeText(getActivity(), boardingDataResponse.getStatus(),
-                Toast.LENGTH_LONG).show();
-
-
-
-        //TODO:Change Message
-
-        if(boardingDataResponse.getStatus().equals(AppConstants.SUCCESS)) {
-
-            mProfileBasicDetailsCallBack.backListener(0);
-
-
-        }else {
-
-
-
+        int toastDuration;
+        if (boardingDataResponse.getStatus().equals(AppConstants.SUCCESS)) {
+            toastDuration = Toast.LENGTH_SHORT;
+            mProfileBasicDetailsCallBack.onBackPressed(0);//TODO:Need to check with priyanka why need to pass value?
+        } else {
+            toastDuration = Toast.LENGTH_LONG;
         }
-
+        //TODO:TBD about toast showing
+        Toast.makeText(getActivity(), boardingDataResponse.getStatus(),
+                toastDuration).show();
     }
 
     @Override

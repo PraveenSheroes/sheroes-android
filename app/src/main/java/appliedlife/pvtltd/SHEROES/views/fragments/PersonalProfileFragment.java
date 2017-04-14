@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,13 +59,11 @@ public class PersonalProfileFragment extends BaseFragment implements ProfileView
     RecyclerView mRecyclerView;
     GenericRecyclerViewAdapter mAdapter;
     private HomeActivityIntractionWithPersonalProfile mHomeActivityIntractionWithpersonalProfile;
+    private static PersonalProfileFragment personalProfileFragment = new PersonalProfileFragment();
 
 
-    public static PersonalProfileFragment createInstance() {
-
-        PersonalProfileFragment personalProfileFragment = new PersonalProfileFragment();
+    public static PersonalProfileFragment getInstance() {
         return personalProfileFragment;
-
     }
 
     @Override
@@ -95,6 +94,9 @@ public class PersonalProfileFragment extends BaseFragment implements ProfileView
         return view;
     }
 
+    public void onDataRefresh() {
+        profilePersenter.getALLUserDetails();
+    }
 
     private void callGetAllDetailsAPI() {
 
@@ -119,7 +121,7 @@ public class PersonalProfileFragment extends BaseFragment implements ProfileView
     }
 
     @Override
-    public void backListener(int id) {
+    public void onBackPressed(int id) {
 
     }
 
@@ -174,13 +176,10 @@ public class PersonalProfileFragment extends BaseFragment implements ProfileView
 
     @Override
     public void getUserData(UserProfileResponse userProfileResponse) {
-
-
         if (null != userProfileResponse && StringUtil.isNotEmptyCollection(renderAllProfileViews(userProfileResponse))) {
             mAdapter.setSheroesGenericListData((renderAllProfileViews(userProfileResponse)));
             mAdapter.notifyDataSetChanged();
         }
-
     }
 
 
@@ -197,36 +196,17 @@ public class PersonalProfileFragment extends BaseFragment implements ProfileView
         ArrayList<OpportunityType> opportunityTypes = new ArrayList<OpportunityType>();
 
         List<LabelValue> oppertunity = userProfileResponse.getUserDetails().getOpportunityTypes();
-        int k = 0;
         if (null != oppertunity) {
             for (LabelValue canHelps : oppertunity) {
                 OpportunityType opportunityType = new OpportunityType();
-                opportunityType.setId(oppertunity.get(k).getValue());
-                opportunityType.setName(oppertunity.get(k).getLabel());
+                opportunityType.setId(canHelps.getValue());
+                opportunityType.setName(canHelps.getLabel());
                 opportunityTypes.add(opportunityType);
-
-                k++;
             }
         }
+
         oppertunityView.setOpportunityType(opportunityTypes);
 
-
-        MyProfileView canHelp = new MyProfileView();
-        canHelp.setType(AppConstants.CANHELP_IN);
-        ArrayList<CanHelpIn> canHelpIns = new ArrayList<CanHelpIn>();
-
-        List<LabelValue> canHelpInType = userProfileResponse.getUserDetails().getCanHelpIns();
-        int j = 0;
-        if (null != canHelpInType) {
-            for (LabelValue canHelps : canHelpInType) {
-                CanHelpIn canHelpIn = new CanHelpIn();
-                canHelpIn.setId(canHelps.getValue());
-                canHelpIn.setName(canHelps.getLabel());
-                canHelpIns.add(canHelpIn);
-                j++;
-            }
-        }
-        canHelp.setCanHelpIn(canHelpIns);
 
         MyProfileView userSummary = new MyProfileView();
         userSummary.setType(AppConstants.ABOUT_ME_PROFILE);
@@ -248,25 +228,18 @@ public class PersonalProfileFragment extends BaseFragment implements ProfileView
         ArrayList<InterestType> intrests = new ArrayList<InterestType>();
         List<LabelValue> interests = userProfileResponse.getUserDetails().getInterests();
         if (StringUtil.isNotEmptyCollection(interests)) {
-            int i = 0;
-            String[] value = new String[4];
             for (LabelValue intrestValue : interests) {
                 InterestType interestType = new InterestType();
-                interestType.setId(interests.get(i).getValue());
-                interestType.setName(interests.get(i).getLabel());
-
+                interestType.setId(intrestValue.getValue());
+                interestType.setName(intrestValue.getLabel());
                 intrests.add(interestType);
-
-                i++;
             }
             interestProfile.setInterestType(intrests);
 
         }
 
-
         myProfileViewList.add(UservisitingCard);
         myProfileViewList.add(oppertunityView);
-        myProfileViewList.add(canHelp);
         myProfileViewList.add(userSummary);
         myProfileViewList.add(userProfile);
         myProfileViewList.add(interestProfile);

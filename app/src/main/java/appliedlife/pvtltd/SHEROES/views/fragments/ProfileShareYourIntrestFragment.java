@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -102,8 +103,11 @@ public class ProfileShareYourIntrestFragment extends BaseFragment implements Bas
     TextView mtv_skill_title;
     @Bind(R.id.ll_indecator)
     LinearLayout ll_indecator;
-    @Bind(R.id.cl_profile_good_at)
-    public CustomCollapsingToolbarLayout mCustomCollapsingToolbarLayout;
+    @Bind(R.id.tv_interest_tittle)
+    TextView mCollapeTitleTxt;
+    @Bind(R.id.al_profile_good_at)
+    AppBarLayout mAppBarLayout;
+
     String Skill1, Skill2;
     private List<PopularTag> listFeelter = new ArrayList<PopularTag>();
     private HashMap<String, HashMap<String, ArrayList<LabelValue>>> mMasterDataResult;
@@ -140,15 +144,28 @@ public class ProfileShareYourIntrestFragment extends BaseFragment implements Bas
         View v = inflater.inflate(R.layout.profile_interest_in_fragment, container, false);
         ButterKnife.bind(this, v);
         mprofilePersenter.attachView(this);
+        mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = false;
+            int scrollRange = -1;
+
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if (scrollRange + verticalOffset == 0) {
+                    mCollapeTitleTxt.setVisibility(View.VISIBLE);
+                    isShow = true;
+                } else if (isShow) {
+                    mCollapeTitleTxt.setVisibility(View.GONE);
+                    isShow = false;
+                }
+            }
+        });
+
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ALL_SEARCH, AppConstants.NO_REACTION_CONSTANT);
         mTvSkillSubmit.setVisibility(View.GONE);
 
-        mCustomCollapsingToolbarLayout.setExpandedSubTitleColor(ContextCompat.getColor(getActivity(), android.R.color.transparent));
-        mCustomCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getActivity(), android.R.color.transparent));
-        mCustomCollapsingToolbarLayout.setExpandedTitleMarginStart(400);
-
-        mCustomCollapsingToolbarLayout.setTitle("GOOD AT");
-        mCustomCollapsingToolbarLayout.setSubtitle("");
 
         if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && null != mUserPreferenceMasterData.get().getData()) {
             data = mUserPreferenceMasterData.get().getData();
@@ -204,12 +221,6 @@ public class ProfileShareYourIntrestFragment extends BaseFragment implements Bas
 
         return v;
     }
-
-    @OnClick(R.id.tv_back_good_at_skill)
-    public void communitySkillBackClick() {
-        mHomeActivityIntractionListner.onBackPress();
-    }
-
 
     @OnClick(R.id.tv_skill_submit)
     public void SkillSubmitPress() {
@@ -550,7 +561,7 @@ public class ProfileShareYourIntrestFragment extends BaseFragment implements Bas
     }
 
     @Override
-    public void backListener(int id) {
+    public void onBackPressed(int id) {
 
     }
 
@@ -614,6 +625,10 @@ public class ProfileShareYourIntrestFragment extends BaseFragment implements Bas
 
     }
 
+    @OnClick(R.id.tv_interest_back)
+    public void onBackPressed() {
+        getActivity().onBackPressed();
+    }
 
     public interface MyProfileyYourInterestListener {
 

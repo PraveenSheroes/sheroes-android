@@ -14,7 +14,6 @@ android:orientation="horizontal">
     android:layout_centerVertical="true"
     android:padding="@dimen/dp_size_10"
     android:layout_gravity="center|left"
-    android:background="@drawable/header_backimage"
     android:src="@drawable/ic_back_white"/>
 
 <TextView

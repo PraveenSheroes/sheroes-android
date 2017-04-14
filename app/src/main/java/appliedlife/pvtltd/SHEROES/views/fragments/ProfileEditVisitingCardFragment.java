@@ -208,13 +208,13 @@ public class ProfileEditVisitingCardFragment extends BaseFragment implements Pro
     public  void OnclickBackImg()
     {
 
-        profileViewlistener.backListener(R.id.iv_back_profile);
+        profileViewlistener.onBackPressed(R.id.iv_back_profile);
 
 
     }
 
     @Override
-    public void backListener(int id) {
+    public void onBackPressed(int id) {
 
     }
 

@@ -27,18 +27,10 @@ import static appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView.TAG;
 
 public class ProfilePersonalBasicDetailsHolder extends BaseViewHolder<MyProfileView> {
 
-    @Bind(R.id.tv_date_of_birth)
-    TextView MTv_date_of_birth;
-    @Bind(R.id.tv_date_of_birth_value)
-    TextView mTv_date_of_birth_value;
     @Bind(R.id.tv_current_location)
     TextView mTv_current_location;
     @Bind(R.id.tv_current_location_value)
     TextView mTv_current_location_value;
-    @Bind(R.id.tv_home_town)
-    TextView mTv_home_town;
-    @Bind(R.id.tv_home_town_value)
-    TextView mTv_home_town_value;
     @Bind(R.id.tv_email)
     TextView mTtv_email;
     @Bind(R.id.tv_email_value)
@@ -99,7 +91,7 @@ public class ProfilePersonalBasicDetailsHolder extends BaseViewHolder<MyProfileV
             }
             if (StringUtil.isNotNullOrEmptyString("" + dataItem.getUserDetails().getNoOfChildren())) {
 
-                mTv_child_value.setText("" + dataItem.getUserDetails().getNoOfChildren());
+                mTv_child_value.setText(String.valueOf(dataItem.getUserDetails().getNoOfChildren()));
 
             }
             if (StringUtil.isNotNullOrEmptyString(dataItem.getUserDetails().getEmailid())) {
@@ -119,16 +111,15 @@ public class ProfilePersonalBasicDetailsHolder extends BaseViewHolder<MyProfileV
 
     @Override
     public void onClick(View view) {
-
         switch (view.getId()) {
-
-            case R.id.tv_edit_basic_details:
+            case R.id.tv_edit_basic_details: {
                 viewInterface.handleOnClick(this.dataItem, mTv_edit_basic_details);
                 break;
-            default:
+            }
+            default: {
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + view.getId());
+                break;
+            }
         }
-
-
     }
 }

@@ -49,7 +49,6 @@ import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
@@ -65,7 +64,6 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitySearchTagsDialog;
-import appliedlife.pvtltd.SHEROES.views.fragments.CreateCommunityFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CurrentStatusDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.PersonalBasicDetailsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.PersonalProfileFragment;
@@ -131,7 +129,6 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
 
     @Inject
     Preference<LoginResponse> mUserPreference;
-    int mflag = 0;
     private Handler handler = new Handler();
     private int progressStatus = 0;
     private ProfileSelectCurrentStatus mCurrentStatusDialog;
@@ -161,13 +158,7 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
 
     @Override
     public void onBackPressed() {
-        if (mflag == 1) {
-            mflag = 0;
-            getSupportFragmentManager().popBackStack();
-            //coordinatorLayout.setVisibility(View.VISIBLE);
-        } else
-            finish();
-
+          super.onBackPressed();
     }
 
     //set function for progressbar
@@ -217,7 +208,7 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
         mCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        viewPagerAdapter.addFragment(PersonalProfileFragment.createInstance(), getString(R.string.ID_PERSONAL));
+        viewPagerAdapter.addFragment(PersonalProfileFragment.getInstance(), getString(R.string.ID_PERSONAL));
         viewPagerAdapter.addFragment(ProffestionalProfileFragment.createInstance(), getString(R.string.ID_PROFESSIONAL));
 
         mViewPager.setAdapter(viewPagerAdapter);
@@ -284,12 +275,9 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
     public void handleOnClick(BaseResponse baseResponse, View view) {
 
         if (baseResponse instanceof MyProfileView) {
-
-            MyProfileView dataItem = (MyProfileView) baseResponse;
-
             ProfileCardlHandled(view.getId(), ((MyProfileView) baseResponse).getType(), baseResponse);
-
         }
+
         if (baseResponse instanceof GetAllDataDocument) {
             if (view.getId() == R.id.li_city_name_layout) {
                 GetAllDataDocument dataItem = (GetAllDataDocument) baseResponse;
@@ -369,7 +357,6 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
                     profiletravelFragment.setArguments(bundleTravel);
                     getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
                             .replace(R.id.profile_container, profiletravelFragment, ProfileTravelClientFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
-                    mflag = 1;
                     break;
                 } else {
 
@@ -455,7 +442,7 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
                 break;
 
 
-            case R.id.tv_edit_basic_details:
+            case R.id.tv_edit_basic_details: {
                 MyProfileView basicDetail = (MyProfileView) baseResponse;
                 flprofile_container.setVisibility(View.VISIBLE);
                 PersonalBasicDetailsFragment personalBasicDetailsFragment = new PersonalBasicDetailsFragment();
@@ -465,7 +452,7 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
                 getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
                         .replace(R.id.profile_container, personalBasicDetailsFragment, PersonalBasicDetailsFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
                 break;
-
+            }
 
             case R.id.tv_add_good_at:
                 mFragmentOpen.setGoodAtFragment(true);
@@ -475,21 +462,20 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
                         .replace(R.id.profile_container, profileGoodAtFragment, ProfileGoodAtFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
                 break;
 
-            case R.id.tv_looking_for:
+            case R.id.tv_looking_for: {
                 flprofile_container.setVisibility(View.VISIBLE);
                 ProfileOpportunityTypeFragment profileOpportunityTypeFragment = new ProfileOpportunityTypeFragment();
                 getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
                         .replace(R.id.profile_container, profileOpportunityTypeFragment, ProfileOpportunityTypeFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
                 break;
-
-
-            case R.id.tv_add_interest_details:
+            }
+            case R.id.tv_add_interest_details: {
                 flprofile_container.setVisibility(View.VISIBLE);
                 ProfileShareYourIntrestFragment profileShareYourIntrestFragment = new ProfileShareYourIntrestFragment();
                 getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
                         .replace(R.id.profile_container, profileShareYourIntrestFragment, ProfileShareYourIntrestFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
                 break;
-
+            }
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
 
@@ -588,12 +574,9 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
 
 
     @Override
-    public void backListener(int id) {
-
-
-        getSupportFragmentManager().popBackStack();
-
-
+    public void onBackPressed(int id) {
+        PersonalProfileFragment.getInstance().onDataRefresh();
+        onBackPressed();
     }
 
     public void callEditEducation(MyProfileView myProfileView) {
@@ -808,9 +791,9 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
     }
 
     @Override
-    public void AboutMeBack() {
-
-        getSupportFragmentManager().popBackStack();
+    public void aboutMeBack() {
+        PersonalProfileFragment.getInstance().onDataRefresh();
+        onBackPressed();
     }
 
     @Override
@@ -828,7 +811,6 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
 
     @Override
     public void OnLookinBack() {
-
-        getSupportFragmentManager().popBackStack();
+        onBackPressed();
     }
 }

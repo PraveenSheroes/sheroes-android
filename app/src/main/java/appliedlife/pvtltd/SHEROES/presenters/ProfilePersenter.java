@@ -113,40 +113,36 @@ public class ProfilePersenter extends BasePresenter<ProfileView> {
 
 
 // for profile_basic_details
-    public void getPersonalBasicDetailsAuthTokeInPresenter(PersonalBasicDetailsRequest personalBasicDetailsRequest) {
-        if (!NetworkUtil.isConnected(sheroesApplication)) {
+public void getPersonalBasicDetailsAuthTokeInPresenter(PersonalBasicDetailsRequest personalBasicDetailsRequest) {
+    if (!NetworkUtil.isConnected(sheroesApplication)) {
 
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_AUTH_TOKEN);
+        getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
 
-            return;
+        return;
+    }
+
+    getMvpView().startProgressBar();
+    Subscription subscription = mProfileModel.getPersonalBasicDetailsAuthTokenFromModel(personalBasicDetailsRequest).subscribe(new Subscriber<BoardingDataResponse>() {
+        @Override
+        public void onCompleted() {
+
+
         }
 
+        @Override
+        public void onError(Throwable e) {
+            getMvpView().stopProgressBar();
+            getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
+        }
 
-        Subscription subscription = mProfileModel.getPersonalBasicDetailsAuthTokenFromModel(personalBasicDetailsRequest).subscribe(new Subscriber<BoardingDataResponse>() {
-            @Override
-            public void onCompleted() {
-
-
-            }
-            @Override
-            public void onError(Throwable e) {
-
-                getMvpView().showError(e.getMessage(),ERROR_AUTH_TOKEN);
-            }
-
-            @Override
-            public void onNext(BoardingDataResponse boardingDataResponse) {
-
-
-
-                getMvpView().getPersonalBasicDetailsResponse(boardingDataResponse);
-
-
-
-            }
-        });
-        registerSubscription(subscription);
-    }
+        @Override
+        public void onNext(BoardingDataResponse boardingDataResponse) {
+            getMvpView().stopProgressBar();
+            getMvpView().getPersonalBasicDetailsResponse(boardingDataResponse);
+        }
+    });
+    registerSubscription(subscription);
+}
 
 
 
@@ -188,35 +184,28 @@ public class ProfilePersenter extends BasePresenter<ProfileView> {
 
 
     //for users SUMMARY_details
-    public void getUserSummaryDetailsAuthTokeInPresenter(UserSummaryRequest userSummaryRequest  ) {
+    public void getUserSummaryDetailsAuthTokeInPresenter(UserSummaryRequest userSummaryRequest) {
         if (!NetworkUtil.isConnected(sheroesApplication)) {
-
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_AUTH_TOKEN);
-
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
             return;
         }
-
-
+        getMvpView().startProgressBar();
         Subscription subscription = mProfileModel.getPersonalUserSummaryDetailsAuthTokenFromModel(userSummaryRequest).subscribe(new Subscriber<BoardingDataResponse>() {
             @Override
             public void onCompleted() {
 
-
             }
+
             @Override
             public void onError(Throwable e) {
-
-                getMvpView().showError(e.getMessage(),ERROR_AUTH_TOKEN);
+                getMvpView().stopProgressBar();
+                getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
             }
 
             @Override
             public void onNext(BoardingDataResponse boardingDataResponse) {
-
-
-
+                getMvpView().stopProgressBar();
                 getMvpView().getUserSummaryResponse(boardingDataResponse);
-
-
             }
         });
         registerSubscription(subscription);

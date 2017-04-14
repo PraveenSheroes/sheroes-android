@@ -19,14 +19,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
-                app:collapsedSubtitleAppearance="@style/subtitle_collapsed"
-                app:collapsedTitleTextAppearance="@style/title.collapsed"
                 app:contentScrim="@color/colorAccent"
-                app:expandedSubtitleAppearance="@style/subtitle"
-                app:expandedTitleGravity="bottom|center_horizontal"
-                app:expandedTitleTextAppearance="@style/title.expanded"
+                android:layout_gravity="center"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
-
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -66,13 +61,36 @@
                     android:id="@+id/search_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
+                    app:layout_collapseMode="pin"
                     app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-                    <TextView
-                        android:id="@+id/tv_back_good_at_skill"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/ic_back_white" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">  
+
+                        <TextView
+                            android:id="@+id/tv_interest_back"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dp_size_16"
+                            android:drawableLeft="@drawable/ic_back_white"
+                            android:fontFamily="@string/ID_ROBOTO_LIGHT"
+                            android:padding="@dimen/dp_size_3" />
+
+
+                        <TextView
+                            android:id="@+id/tv_interest_tittle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:padding="@dimen/dp_size_16"
+                            android:visibility="gone"
+                            android:textAllCaps="true"
+                            android:text="@string/ID_POPULAR_INTEREST_IN" />
+
+
+
+                    </RelativeLayout>
 
 
                 </android.support.v7.widget.Toolbar>
