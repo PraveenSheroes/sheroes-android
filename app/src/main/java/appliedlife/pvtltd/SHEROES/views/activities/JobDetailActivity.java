@@ -27,7 +27,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -35,7 +34,6 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.CustomCollapsingToolbarLayout;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView;
-import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobDetailFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -69,7 +67,6 @@ public class JobDetailActivity extends BaseActivity {
     @Bind(R.id.iv_job_comp_logo)
     RoundedImageView mIv_job_comp_logo;
     private FeedDetail mFeedDetail;
-    private FragmentOpen mFragmentOpen;
     int mlogoflag = 0;
 
     @Override
@@ -79,7 +76,6 @@ public class JobDetailActivity extends BaseActivity {
         initActivityTransitions();
         setContentView(R.layout.activity_job_details);
         ButterKnife.bind(this);
-        mFragmentOpen = new FragmentOpen();
         if (null != getIntent()) {
             mFeedDetail = getIntent().getParcelableExtra(AppConstants.JOB_DETAIL);
         }
@@ -104,6 +100,7 @@ public class JobDetailActivity extends BaseActivity {
     private void setPagerAndLayouts() {
         ViewCompat.setTransitionName(mAppBarLayout, AppConstants.JOB_DETAIL);
         supportPostponeEnterTransition();
+        setSupportActionBar(mToolbarJobDetail);
         mCustomCollapsingToolbarLayout.setExpandedSubTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
         mCustomCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
         mCustomCollapsingToolbarLayout.setExpandedTitleMarginStart(200);
@@ -115,7 +112,7 @@ public class JobDetailActivity extends BaseActivity {
             }
             mCustomCollapsingToolbarLayout.setTitle(mFeedDetail.getNameOrTitle());
             mCustomCollapsingToolbarLayout.setSubtitle(mFeedDetail.getAuthorName());
-            mTv_job_comp_nm.setText(mFeedDetail.getAuthorName());
+           mTv_job_comp_nm.setText(mFeedDetail.getAuthorName());
             mTv_job_title.setText(mFeedDetail.getNameOrTitle());
             mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
             mViewPagerAdapter.addFragment(JobDetailFragment.createInstance(mFeedDetail), getString(R.string.ID_JOB));
@@ -129,7 +126,6 @@ public class JobDetailActivity extends BaseActivity {
                         .into(mIv_job_comp_logo);
             }
             if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getImageUrl())) {
-
                 Glide.with(this)
                         .load(mFeedDetail.getImageUrl()).asBitmap()
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE)
@@ -150,7 +146,7 @@ public class JobDetailActivity extends BaseActivity {
                 ivJobDetail.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.job_default_cover));
                 mTv_job_title.setText(mFeedDetail.getNameOrTitle());
                 if (mlogoflag == 0)
-                    mIv_job_comp_logo.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.appicon));
+                    mIv_job_comp_logo.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_createc_ommunity_icon));
                 supportStartPostponedEnterTransition();
             }
         }
@@ -190,18 +186,6 @@ public class JobDetailActivity extends BaseActivity {
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
         }
     }
-    public void onClickReactionList(FragmentOpen isFragmentOpen, FeedDetail feedDetail) {
-        mFragmentOpen = isFragmentOpen;
-        if (mFragmentOpen.isReactionList()) {
-            CommentReactionFragment commentReactionFragmentForArticle = new CommentReactionFragment();
-            Bundle bundleArticle = new Bundle();
-            bundleArticle.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, mFragmentOpen);
-            commentReactionFragmentForArticle.setArguments(bundleArticle);
-            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.bottom_to_top_slide_reverse_anim)
-                    .replace(R.id.fl_article_detail_comments, commentReactionFragmentForArticle, CommentReactionFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
-        }
-    }
-
 
     @Override
     public void onBackPressed() {

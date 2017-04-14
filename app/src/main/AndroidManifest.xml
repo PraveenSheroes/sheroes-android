@@ -17,7 +17,7 @@
     <application
         android:name="appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication"
         android:allowBackup="false"
-        android:icon="@drawable/appicon"
+        android:icon="@mipmap/ic_sheroes_launcher"
         android:label="@string/ID_APP_NAME"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -93,7 +93,8 @@
         </activity>
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.JobDetailActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
 
         </activity>
         <activity

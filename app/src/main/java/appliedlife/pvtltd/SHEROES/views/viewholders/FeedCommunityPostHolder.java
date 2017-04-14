@@ -248,26 +248,22 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void allTextViewStringOperations(Context context) {
         if (StringUtil.isNotNullOrEmptyString(dataItem.getAuthorName())) {
-            String posted=LEFT_POSTED +  mContext.getString(R.string.ID_POSTED_IN) + RIGHT_POSTED;
+          //  String posted=LEFT_POSTED +  mContext.getString(R.string.ID_POSTED_IN) + RIGHT_POSTED;
+            StringBuilder posted=new StringBuilder();
+         //   posted.append(LEFT_POSTED).append(mContext.getString(R.string.ID_POSTED_IN)).append(RIGHT_POSTED);
             String feedTitle = dataItem.getAuthorName() ;
             //TODO:: change for UI
             String feedCommunityName = dataItem.getPostCommunityName();
-            String coloredFeedCommunityName = LEFT_HTML_COMMUNITY_TITLE_FOR_COLOR + feedCommunityName + RIGHT_HTML_COMMUNITY_TITLE_FOR_COLOR;
+           // String coloredFeedCommunityName = LEFT_HTML_COMMUNITY_TITLE_FOR_COLOR + feedCommunityName + RIGHT_HTML_COMMUNITY_TITLE_FOR_COLOR;
+           // StringBuilder coloredFeedCommunityName=new StringBuilder();
+          //  coloredFeedCommunityName.append(LEFT_HTML_COMMUNITY_TITLE_FOR_COLOR).append(feedCommunityName).append(RIGHT_HTML_COMMUNITY_TITLE_FOR_COLOR);
+          //  StringBuilder finalText=new StringBuilder();
+            posted.append(feedTitle).append(AppConstants.SPACE).append(LEFT_POSTED).append(mContext.getString(R.string.ID_POSTED_IN)).append(RIGHT_POSTED).append(AppConstants.SPACE).append(LEFT_HTML_COMMUNITY_TITLE_FOR_COLOR).append(feedCommunityName).append(RIGHT_HTML_COMMUNITY_TITLE_FOR_COLOR);
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                tvFeedCommunityPostCardTitle.setText(Html.fromHtml(feedTitle+ AppConstants.SPACE+posted  + AppConstants.SPACE + coloredFeedCommunityName,0)); // for 24 api and more
+                tvFeedCommunityPostCardTitle.setText(Html.fromHtml(posted.toString(),0)); // for 24 api and more
             } else {
-                tvFeedCommunityPostCardTitle.setText(Html.fromHtml(feedTitle +  AppConstants.SPACE+posted + AppConstants.SPACE + coloredFeedCommunityName));// or for older api
+                tvFeedCommunityPostCardTitle.setText(Html.fromHtml(posted.toString()));// or for older api
             }
-/*
-
-            SpannableString str = new SpannableString(feedTitle +AppConstants.SPACE+ posted +AppConstants.SPACE+feedCommunityName);
-            str.setSpan(new StyleSpan(Typeface.BOLD),0,feedTitle.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            str.setSpan(new RelativeSizeSpan(1.1f), 0, feedTitle.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            str.setSpan(new StyleSpan(Typeface.BOLD), feedTitle.length(),feedTitle.length()+posted.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            str.setSpan(new ForegroundColorSpan(Color.parseColor("#f2403c")),feedTitle.length()+posted.length()+1,feedTitle.length()+posted.length()+feedCommunityName.length()+2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            tvFeedCommunityPostCardTitle.setText(str);
-*/
-
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getCreatedDate())) {
             long createdDate = mDateUtil.getTimeInMillis(dataItem.getCreatedDate(), AppConstants.DATE_FORMAT);
@@ -283,11 +279,13 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 } else {
                     tvFeedCommunityPostText.setText(Html.fromHtml(mViewMoreDescription));// or for older api
                 }
-                String dots = LEFT_VIEW_MORE + AppConstants.DOTS + RIGHT_VIEW_MORE;
+              //  String dots = LEFT_VIEW_MORE + AppConstants.DOTS + RIGHT_VIEW_MORE;
+                StringBuilder dots=new StringBuilder();
+                dots.append(LEFT_VIEW_MORE).append(AppConstants.DOTS ).append(RIGHT_VIEW_MORE).append(mContext.getString(R.string.ID_VIEW_MORE));
                 if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                    tvFeedCommunityPostViewMore.setText(Html.fromHtml(dots + mContext.getString(R.string.ID_VIEW_MORE), 0)); // for 24 api and more
+                    tvFeedCommunityPostViewMore.setText(Html.fromHtml(dots.toString(), 0)); // for 24 api and more
                 } else {
-                    tvFeedCommunityPostViewMore.setText(Html.fromHtml(dots + mContext.getString(R.string.ID_VIEW_MORE)));// or for older api
+                    tvFeedCommunityPostViewMore.setText(Html.fromHtml(dots.toString()));// or for older api
                 }
             } else {
                 tvFeedCommunityPostViewMore.setVisibility(View.GONE);
@@ -298,7 +296,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                     tvFeedCommunityPostText.setText(Html.fromHtml(mViewMoreDescription));
                 }
             }
-
         }
         if (dataItem.isBookmarked()) {
             tvFeedCommunityPostUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_active, 0);
@@ -398,7 +395,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 tvFeedCommunityPostUserReactionText.setText(mContext.getString(R.string.ID_FACE_PALM));
                 break;
             default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + dataItem.getReactionValue());
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG +AppConstants.SPACE + dataItem.getReactionValue());
         }
     }
 
@@ -412,19 +409,24 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             String feedUserIconUrl = lastComment.getParticipantImageUrl();
             ivFeedCommunityPostUserPic.setCircularImage(true);
             if (lastComment.isAnonymous()) {
-                String userName = LEFT_HTML_TAG_FOR_COLOR + mContext.getString(R.string.ID_ANONYMOUS) + RIGHT_HTML_TAG_FOR_COLOR;
+               // String userName = LEFT_HTML_TAG_FOR_COLOR + mContext.getString(R.string.ID_ANONYMOUS) + RIGHT_HTML_TAG_FOR_COLOR;
+                StringBuilder userName=new StringBuilder();
+                userName.append(LEFT_HTML_TAG_FOR_COLOR).append(mContext.getString(R.string.ID_ANONYMOUS) ).append(RIGHT_HTML_TAG_FOR_COLOR).append(AppConstants.SPACE).append(lastComment.getComment());
                 if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                    tvFeedCommunityPostUserCommentPost.setText(Html.fromHtml(userName + AppConstants.SPACE + lastComment.getComment(), 0)); // for 24 api and more
+                    tvFeedCommunityPostUserCommentPost.setText(Html.fromHtml(userName.toString(), 0)); // for 24 api and more
                 } else {
-                    tvFeedCommunityPostUserCommentPost.setText(Html.fromHtml(userName + AppConstants.SPACE + lastComment.getComment()));// or for older api
+                    tvFeedCommunityPostUserCommentPost.setText(Html.fromHtml(userName.toString()));// or for older api
                 }
                 ivFeedCommunityPostUserPic.setImageResource(R.drawable.ic_anonomous);
             } else {
-                String userName = LEFT_HTML_TAG_FOR_COLOR + lastComment.getParticipantName() + RIGHT_HTML_TAG_FOR_COLOR;
+               // String userName = LEFT_HTML_TAG_FOR_COLOR + lastComment.getParticipantName() + RIGHT_HTML_TAG_FOR_COLOR;
+                StringBuilder userName=new StringBuilder();
+                userName.append(LEFT_HTML_TAG_FOR_COLOR).append(lastComment.getParticipantName() ).append(RIGHT_HTML_TAG_FOR_COLOR).append(AppConstants.SPACE).append(lastComment.getComment());
+
                 if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                    tvFeedCommunityPostUserCommentPost.setText(Html.fromHtml(userName + AppConstants.SPACE + lastComment.getComment(), 0)); // for 24 api and more
+                    tvFeedCommunityPostUserCommentPost.setText(Html.fromHtml(userName.toString(), 0)); // for 24 api and more
                 } else {
-                    tvFeedCommunityPostUserCommentPost.setText(Html.fromHtml(userName + AppConstants.SPACE + lastComment.getComment()));// or for older api
+                    tvFeedCommunityPostUserCommentPost.setText(Html.fromHtml(userName.toString()));// or for older api
                 }
                 ivFeedCommunityPostUserPic.bindImage(feedUserIconUrl);
             }
@@ -658,7 +660,11 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_feed_community_post_view_more)
     public void textViewMoreClick() {
-        viewMoreTextClick();
+        if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
+            if (mViewMoreDescription.length() > AppConstants.WORD_LENGTH) {
+                viewMoreTextClick();
+            }
+        }
     }
 
     @OnClick(R.id.tv_feed_community_post_text)
@@ -679,21 +685,26 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     }
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void viewMoreTextClick() {
-        if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
             if (tvFeedCommunityPostText.getTag().toString().equalsIgnoreCase(mViewMore)) {
                 tvFeedCommunityPostViewMore.setVisibility(View.GONE);
-                String lessWithColor = LEFT_HTML_VEIW_TAG_FOR_COLOR + mLess + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
+               // String lessWithColor = LEFT_HTML_VEIW_TAG_FOR_COLOR + mLess + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
+                StringBuilder lessWithColor=new StringBuilder();
+                lessWithColor.append(LEFT_HTML_VEIW_TAG_FOR_COLOR).append(mLess).append(RIGHT_HTML_VIEW_TAG_FOR_COLOR);
+                StringBuilder finalText=new StringBuilder();
+                finalText.append(mViewMoreDescription).append(AppConstants.SPACE).append(lessWithColor);
                 mViewMoreDescription = dataItem.getListDescription();
                 if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                    tvFeedCommunityPostTextFullView.setText(Html.fromHtml(mViewMoreDescription + AppConstants.SPACE + AppConstants.SPACE + lessWithColor, 0)); // for 24 api and more
+                    tvFeedCommunityPostTextFullView.setText(Html.fromHtml(finalText.toString(), 0)); // for 24 api and more
                 } else {
-                    tvFeedCommunityPostTextFullView.setText(Html.fromHtml(mViewMoreDescription + AppConstants.SPACE + AppConstants.SPACE + lessWithColor));// or for older api
+                    tvFeedCommunityPostTextFullView.setText(Html.fromHtml(finalText.toString()));// or for older api
                 }
-                String dots = LEFT_VIEW_MORE + AppConstants.DOTS + RIGHT_VIEW_MORE;
+                //String dots = LEFT_VIEW_MORE + AppConstants.DOTS + RIGHT_VIEW_MORE;
+                StringBuilder dots=new StringBuilder();
+                dots.append(LEFT_VIEW_MORE).append(AppConstants.DOTS ).append(RIGHT_VIEW_MORE).append(mContext.getString(R.string.ID_VIEW_MORE));
                 if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                    tvFeedCommunityPostViewMore.setText(Html.fromHtml(dots + mContext.getString(R.string.ID_VIEW_MORE), 0)); // for 24 api and more
+                    tvFeedCommunityPostViewMore.setText(Html.fromHtml(dots.toString(), 0)); // for 24 api and more
                 } else {
-                    tvFeedCommunityPostViewMore.setText(Html.fromHtml(dots + mContext.getString(R.string.ID_VIEW_MORE)));// or for older api
+                    tvFeedCommunityPostViewMore.setText(Html.fromHtml(dots.toString()));// or for older api
                 }
                 tvFeedCommunityPostText.setTag(mLess);
                 tvFeedCommunityPostTextFullView.setTag(mLess);
@@ -721,7 +732,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                     }
                 }
             }
-        }
     }
 
     @Override

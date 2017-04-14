@@ -8,8 +8,6 @@
         android:layout_height="40dp"
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/dp_size_15"
-        android:src="@drawable/appicon"
-
         />
 
     <TextView

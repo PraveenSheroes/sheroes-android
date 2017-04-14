@@ -1,7 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
@@ -82,7 +81,7 @@ public class DatePickerForProfile extends DialogFragment {
                 try {
                     //pf.set(picker, getResources().getColor(R.color.my_orange));
                     //Log.v(TAG,"here");
-                    pf.set(picker, getResources().getDrawable(R.drawable.blank_image));
+                    pf.set(picker, getResources().getDrawable(R.drawable.ic_reaction_strip_background));
                 } catch (IllegalArgumentException e) {
                     e.printStackTrace();
                 } catch (Resources.NotFoundException e) {

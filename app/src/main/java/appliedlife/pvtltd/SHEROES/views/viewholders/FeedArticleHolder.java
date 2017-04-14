@@ -149,11 +149,13 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             } else {
                 tvFeedArticleHeaderLebel.setText(Html.fromHtml(documentString.text()));// or for older api
             }
-            String dots = LEFT_VIEW_MORE + AppConstants.DOTS + RIGHT_VIEW_MORE;
+          //  String dots = LEFT_VIEW_MORE + AppConstants.DOTS + RIGHT_VIEW_MORE;
+            StringBuilder dots=new StringBuilder();
+            dots.append(LEFT_VIEW_MORE).append(AppConstants.DOTS).append(RIGHT_VIEW_MORE).append(mContext.getString(R.string.ID_VIEW_MORE));
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                tvFeedArticleView.setText(Html.fromHtml(dots + mContext.getString(R.string.ID_VIEW_MORE), 0)); // for 24 api and more
+                tvFeedArticleView.setText(Html.fromHtml(dots.toString(), 0)); // for 24 api and more
             } else {
-                tvFeedArticleView.setText(Html.fromHtml(dots + mContext.getString(R.string.ID_VIEW_MORE)));// or for older api
+                tvFeedArticleView.setText(Html.fromHtml(dots.toString()));// or for older api
             }
         } else {
             tvFeedArticleView.setVisibility(View.GONE);
@@ -282,18 +284,21 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             lastComment = lastCommentList.get(mItemPosition);
             String feedUserIconUrl = lastComment.getParticipantImageUrl();
             ivFeedArticleUserPic.setCircularImage(true);
-            String userName;
+           // String userName;
+            StringBuilder userName=new StringBuilder();
             if (lastComment.isAnonymous()) {
-                userName = LEFT_HTML_TAG_FOR_COLOR + mContext.getString(R.string.ID_ANONYMOUS) + RIGHT_HTML_TAG_FOR_COLOR;
+              //  userName = LEFT_HTML_TAG_FOR_COLOR + mContext.getString(R.string.ID_ANONYMOUS) + RIGHT_HTML_TAG_FOR_COLOR;
+                userName.append(LEFT_HTML_TAG_FOR_COLOR).append(mContext.getString(R.string.ID_ANONYMOUS)).append(RIGHT_HTML_TAG_FOR_COLOR).append(AppConstants.SPACE ).append(lastComment.getComment());
                 ivFeedArticleUserPic.setImageResource(R.drawable.ic_anonomous);
             } else {
-                userName = LEFT_HTML_TAG_FOR_COLOR + lastComment.getParticipantName() + RIGHT_HTML_TAG_FOR_COLOR;
+              //  userName = LEFT_HTML_TAG_FOR_COLOR + lastComment.getParticipantName() + RIGHT_HTML_TAG_FOR_COLOR;
+                userName.append(LEFT_HTML_TAG_FOR_COLOR).append(lastComment.getParticipantName()).append(RIGHT_HTML_TAG_FOR_COLOR).append(AppConstants.SPACE ).append(lastComment.getComment());
                 ivFeedArticleUserPic.bindImage(feedUserIconUrl);
             }
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                tvFeedArticleUserCommentPost.setText(Html.fromHtml(userName + AppConstants.SPACE + lastComment.getComment(), 0)); // for 24 api and more
+                tvFeedArticleUserCommentPost.setText(Html.fromHtml(userName.toString(), 0)); // for 24 api and more
             } else {
-                tvFeedArticleUserCommentPost.setText(Html.fromHtml(userName + AppConstants.SPACE + lastComment.getComment()));// or for older api
+                tvFeedArticleUserCommentPost.setText(Html.fromHtml(userName.toString()));// or for older api
             }
 
             if (lastComment.isMyOwnParticipation()) {
@@ -327,8 +332,12 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             final TextView tvFeedArticleTimeLabel = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_time_label);
             final TextView tvFeedArticleTotalViews = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_total_views);
             final RelativeLayout rlFeedArticleViews = (RelativeLayout) backgroundImage.findViewById(R.id.rl_gradiant);
-            tvFeedArticleTotalViews.setText(dataItem.getNoOfViews() + AppConstants.SPACE + context.getString(R.string.ID_VIEWS));
-            tvFeedArticleTimeLabel.setText(dataItem.getCharCount() + AppConstants.SPACE + context.getString(R.string.ID_MIN_READ));
+            StringBuilder stringBuilder=new StringBuilder();
+            stringBuilder.append(dataItem.getNoOfViews()).append(AppConstants.SPACE).append(context.getString(R.string.ID_VIEWS));
+            tvFeedArticleTotalViews.setText(stringBuilder.toString());
+            stringBuilder=new StringBuilder();
+            stringBuilder.append(dataItem.getCharCount() ).append(AppConstants.SPACE).append(context.getString(R.string.ID_MIN_READ));
+            tvFeedArticleTimeLabel.setText(stringBuilder.toString());
             Glide.with(mContext)
                     .load(backgrndImageUrl).asBitmap()
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)

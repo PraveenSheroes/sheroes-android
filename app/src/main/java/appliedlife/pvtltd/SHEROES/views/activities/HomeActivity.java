@@ -2,12 +2,9 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.app.DialogFragment;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -17,10 +14,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -28,10 +22,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
 import com.f2prateek.rx.preferences.Preference;
 
 import java.util.ArrayList;
@@ -45,7 +35,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
-import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionDoc;
 import appliedlife.pvtltd.SHEROES.models.entities.communities.CommunitySuggestion;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -63,9 +52,7 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.CustomeDataList;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
-import appliedlife.pvtltd.SHEROES.views.cutomeviews.BlurrImage;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
-import appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
@@ -88,26 +75,27 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.COMMENT_REA
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.JOIN_INVITE;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MENU;
 
-public class HomeActivity extends BaseActivity implements CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, CommentReactionFragment.HomeActivityIntractionListner, HomeSpinnerFragment.HomeSpinnerFragmentListner {
+public class HomeActivity extends BaseActivity implements CommentReactionFragment.HomeActivityIntractionListner, HomeSpinnerFragment.HomeSpinnerFragmentListner {
+  //  implements CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
     @Inject
     Preference<LoginResponse> mUserPreference;
-    @Bind(R.id.iv_drawer_profile_circle_icon)
-    RoundedImageView ivDrawerProfileCircleIcon;
-    @Bind(R.id.tv_user_name)
-    TextView mTvUserName;
-    @Bind(R.id.tv_user_location)
-    TextView mTvUserLocation;
+   // @Bind(R.id.iv_drawer_profile_circle_icon)
+   // RoundedImageView ivDrawerProfileCircleIcon;
+  //  @Bind(R.id.tv_user_name)
+  //  TextView mTvUserName;
+ //   @Bind(R.id.tv_user_location)
+ //  TextView mTvUserLocation;
     @Bind(R.id.cl_main_layout)
     View mCLMainLayout;
     @Bind(R.id.home_toolbar)
     Toolbar mToolbar;
     @Bind(R.id.drawer_layout)
     DrawerLayout mDrawer;
-    @Bind(R.id.nav_view)
-    NavigationView mNavigationView;
-    @Bind(R.id.rv_drawer)
-    RecyclerView mRecyclerView;
+  //  @Bind(R.id.nav_view)
+   // NavigationView mNavigationView;
+   // @Bind(R.id.rv_drawer)
+  //  RecyclerView mRecyclerView;
     @Bind(R.id.home_view_pager)
     ViewPager mViewPager;
     @Bind(R.id.tab_community_view)
@@ -134,8 +122,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     public ImageView mIvSpinner;
     @Bind(R.id.fl_feed_full_view)
     public FrameLayout flFeedFullView;
-    @Bind(R.id.iv_side_drawer_profile_blur_background)
-    ImageView mIvSideDrawerProfileBlurBackground;
+  //  @Bind(R.id.iv_side_drawer_profile_blur_background)
+  //  ImageView mIvSideDrawerProfileBlurBackground;
     @Bind(R.id.iv_home_notification_icon)
     TextView mIvHomeNotification;
     @Bind(R.id.fab_add_community)
@@ -165,15 +153,14 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     public void renderHomeFragmentView() {
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
-        mCustiomActionBarToggle = new CustiomActionBarToggle(this, mDrawer, mToolbar, R.string.ID_NAVIGATION_DRAWER_OPEN, R.string.ID_NAVIGATION_DRAWER_CLOSE, this);
-        mDrawer.addDrawerListener(mCustiomActionBarToggle);
-        // mCustiomActionBarToggle.syncState();
-        mNavigationView.setNavigationItemSelectedListener(this);
+   //     mCustiomActionBarToggle = new CustiomActionBarToggle(this, mDrawer, mToolbar, R.string.ID_NAVIGATION_DRAWER_OPEN, R.string.ID_NAVIGATION_DRAWER_CLOSE, this);
+     //   mDrawer.addDrawerListener(mCustiomActionBarToggle);
+      //  mNavigationView.setNavigationItemSelectedListener(this);
         mFragmentOpen = new FragmentOpen();
         setAllValues(mFragmentOpen);
         initHomeViewPagerAndTabs();
-        assignNavigationRecyclerListView();
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
+      //  assignNavigationRecyclerListView();
+      /*  if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
             //TODO: this data to be removed
             profile = mUserPreference.get().getUserSummary().getPhotoUrl(); //"https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAhNAAAAJDYwZWIyZTg5LWFmOTItNGIwYS05YjQ5LTM2YTRkNGQ2M2JlNw.jpg";
             Glide.with(this)
@@ -190,15 +177,11 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     .into(new SimpleTarget<Bitmap>() {
                         @Override
                         public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
-
                             Bitmap blurred = BlurrImage.blurRenderScript(HomeActivity.this, profileImage, 10);
                             mIvSideDrawerProfileBlurBackground.setImageBitmap(blurred);
                         }
                     });
-        }
-        //  HomeSpinnerFragment frag = new HomeSpinnerFragment();
-        //  callFirstFragment(R.id.fl_fragment_container, frag);
-        //   new Handler().postDelayed(openDrawerRunnable(), 200);
+        }*/
     }
 
     private void setArticleCategoryFilterValues() {
@@ -306,15 +289,15 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     }
 
 
-    @Override
+   /* @Override
     public void onDrawerOpened() {
-      /*  if (!mFragmentOpen.isImageBlur()) {
+      *//*  if (!mFragmentOpen.isImageBlur()) {
             assignNavigationRecyclerListView();
             mFragmentOpen.setImageBlur(true);
-        }*/
-    }
+        }*//*
+    }*/
 
-    @Override
+ /*   @Override
     public void onDrawerClosed() {
     }
 
@@ -322,13 +305,13 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         return false;
     }
-
+*/
     private void assignNavigationRecyclerListView() {
         mAdapter = new GenericRecyclerViewAdapter(this, this);
         LinearLayoutManager manager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(manager);
+        //mRecyclerView.setLayoutManager(manager);
         mAdapter.setSheroesGenericListData(CustomeDataList.makeDrawerItemList());
-        mRecyclerView.setAdapter(mAdapter);
+      //  mRecyclerView.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
     }
 
@@ -693,7 +676,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
 
     @OnClick(R.id.tv_drawer_navigation)
     public void drawerNavigationClick() {
-        mDrawer.openDrawer(Gravity.LEFT);
+      //  mDrawer.openDrawer(Gravity.LEFT);
     }
 
     @Override
@@ -771,25 +754,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + id);
         }
-    }
-
-    @Override
-    public void onShowErrorDialog(String errorReason, FeedParticipationEnum feedParticipationEnum) {
-        if (StringUtil.isNotNullOrEmptyString(errorReason)) {
-            switch (errorReason) {
-                case AppConstants.CHECK_NETWORK_CONNECTION:
-                    showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
-                    break;
-                case AppConstants.MARK_AS_SPAM:
-                    showNetworkTimeoutDoalog(true, false, errorReason);
-                    break;
-                default:
-                    showNetworkTimeoutDoalog(true, false, errorReason);
-            }
-        } else {
-            showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
-        }
-
     }
 
     @Override

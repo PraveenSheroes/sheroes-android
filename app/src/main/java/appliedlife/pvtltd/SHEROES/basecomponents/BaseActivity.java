@@ -37,6 +37,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityPostActivity;
@@ -761,6 +762,20 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
 
     @Override
     public void onShowErrorDialog(String errorReason, FeedParticipationEnum feedParticipationEnum) {
+        if (StringUtil.isNotNullOrEmptyString(errorReason)) {
+            switch (errorReason) {
+                case AppConstants.CHECK_NETWORK_CONNECTION:
+                    showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
+                    break;
+                case AppConstants.MARK_AS_SPAM:
+                    showNetworkTimeoutDoalog(true, false, errorReason);
+                    break;
+                default:
+                    showNetworkTimeoutDoalog(true, false, errorReason);
+            }
+        } else {
+            showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
+        }
 
     }
 

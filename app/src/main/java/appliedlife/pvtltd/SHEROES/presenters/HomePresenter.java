@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
@@ -134,7 +135,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), ERROR_FEED_RESPONSE);
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
             }
 
             @Override
@@ -164,7 +165,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), ERROR_MY_COMMUNITIES);
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_MY_COMMUNITIES);
             }
 
             @Override
@@ -192,7 +193,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), ERROR_BOOK_MARK_LIST);
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_BOOK_MARK_LIST);
             }
 
             @Override
@@ -221,7 +222,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
             }
 
             @Override
@@ -248,7 +249,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
             }
 
             @Override
@@ -275,7 +276,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), ERROR_BOOKMARK_UNBOOKMARK);
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_BOOKMARK_UNBOOKMARK);
             }
 
             @Override
@@ -301,7 +302,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), ERROR_JOIN_INVITE);
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_JOIN_INVITE);
             }
 
             @Override
@@ -327,7 +328,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), ERROR_FEED_RESPONSE);
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
             }
 
             @Override
@@ -353,7 +354,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), ERROR_FEED_RESPONSE);
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
             }
 
             @Override
@@ -374,7 +375,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), ERROR_SEARCH_DATA);
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_SEARCH_DATA);
             }
 
             @Override
@@ -396,7 +397,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
 
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), ERROR_SEARCH_DATA);
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_SEARCH_DATA);
             }
 
             @Override

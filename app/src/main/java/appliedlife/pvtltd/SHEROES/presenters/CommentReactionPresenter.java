@@ -4,6 +4,7 @@ import com.f2prateek.rx.preferences.Preference;
 
 import javax.inject.Inject;
 
+import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.CommentReactionModel;
@@ -62,7 +63,7 @@ public class CommentReactionPresenter extends BasePresenter<AllCommentReactionVi
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(AppConstants.HTTP_401_UNAUTHORIZED,ERROR_COMMENT_REACTION);
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_SERVER_PROBLEM),ERROR_COMMENT_REACTION);
             }
 
             @Override
@@ -87,7 +88,7 @@ public class CommentReactionPresenter extends BasePresenter<AllCommentReactionVi
             }
             @Override
             public void onError(Throwable e) {
-                getMvpView().showError(AppConstants.HTTP_401_UNAUTHORIZED,ERROR_COMMENT_REACTION);
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_UNABLE_TO_COMMENT),ERROR_COMMENT_REACTION);
             }
 
             @Override
@@ -114,7 +115,7 @@ public class CommentReactionPresenter extends BasePresenter<AllCommentReactionVi
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(AppConstants.HTTP_401_UNAUTHORIZED,ERROR_COMMENT_REACTION);
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_UNABLE_TO_EDIT_DELETE),ERROR_COMMENT_REACTION);
             }
             @Override
             public void onNext(CommentAddDelete commentResponsePojo) {

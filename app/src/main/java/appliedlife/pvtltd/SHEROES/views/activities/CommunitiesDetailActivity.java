@@ -153,7 +153,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
                                 }
                             });
                 } else {
-                    ivCommunitiesDetail.setImageDrawable(getResources().getDrawable(R.drawable.blank_image));
+                    ivCommunitiesDetail.setImageDrawable(getResources().getDrawable(R.drawable.ic_reaction_strip_background));
                     supportStartPostponedEnterTransition();
                 }
             }

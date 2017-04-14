@@ -71,7 +71,7 @@ public class BasePresenter<T extends BaseMvpView> implements SheroesPresenter<T>
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_MASTER_DATA);
             return;
         }
-        getMvpView().startProgressBar();
+      //  getMvpView().startProgressBar();
         Subscription subscription = masterDataModel.getMasterDataFromModel().subscribe(new Subscriber<MasterDataResponse>() {
             @Override
             public void onCompleted() {
@@ -85,7 +85,7 @@ public class BasePresenter<T extends BaseMvpView> implements SheroesPresenter<T>
 
             @Override
             public void onNext(MasterDataResponse masterDataResponse) {
-                getMvpView().stopProgressBar();
+              //  getMvpView().stopProgressBar();
                 mUserPreferenceMasterData.set(masterDataResponse);
                 getMvpView().getMasterDataResponse(masterDataResponse.getData());
             }

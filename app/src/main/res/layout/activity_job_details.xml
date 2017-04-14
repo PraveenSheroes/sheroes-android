@@ -10,12 +10,5 @@
 
     <include layout="@layout/activity_job_detail_with_collepsable" />
 
-    <include
-        android:id="@+id/fl_job_detail_comments"
-        layout="@layout/fragment_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
 </android.support.v4.widget.DrawerLayout>
 
