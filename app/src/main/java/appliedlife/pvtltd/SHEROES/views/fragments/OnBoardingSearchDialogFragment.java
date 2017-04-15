@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -64,9 +63,7 @@ public class OnBoardingSearchDialogFragment extends BaseDialogFragment implement
     OnBoardingPresenter mOnBoardingPresenter;
     @Bind(R.id.pb_onboarding_search_progress_bar)
     ProgressBar mProgressBar;
-    @Bind(R.id.li_onboarding_no_search_result)
-    LinearLayout mLiNoSearchResult;
-    @Bind(R.id.tv_onboarding_search_result)
+    @Bind(R.id.tv_location_result)
     TextView tvSearchResult;
     private String mSearchDataName = AppConstants.EMPTY_STRING;
     private GenericRecyclerViewAdapter mAdapter;
@@ -180,7 +177,6 @@ public class OnBoardingSearchDialogFragment extends BaseDialogFragment implement
             public void afterTextChanged(Editable inputSearch) {
 
                 if (StringUtil.isNotNullOrEmptyString(inputSearch.toString()) && inputSearch.toString().length() > AppConstants.THREE_CONSTANT) {
-                    mLiNoSearchResult.setVisibility(View.GONE);
                     mSearchDataName = inputSearch.toString();
                     /**hitting the servers to get data if length is greater than threshold defined **/
                     mHandler.removeCallbacks(mFilterTask);
@@ -226,13 +222,18 @@ public class OnBoardingSearchDialogFragment extends BaseDialogFragment implement
 
     @Override
     public void getAllDataResponse(GetAllData getAllData) {
-        if (null != getAllData) {
+        if (null != getAllData&&StringUtil.isNotEmptyCollection(getAllData.getGetAllDataDocuments())) {
             List<GetAllDataDocument> getAllDataDocuments = getAllData.getGetAllDataDocuments();
             if (StringUtil.isNotEmptyCollection(getAllDataDocuments)) {
                 mAdapter.setSheroesGenericListData(getAllDataDocuments);
                 mAdapter.notifyDataSetChanged();
             }
-
+            mRecyclerView.setVisibility(View.VISIBLE);
+            tvSearchResult.setVisibility(View.GONE);
+        }else
+        {
+            mRecyclerView.setVisibility(View.GONE);
+            tvSearchResult.setVisibility(View.VISIBLE);
         }
     }
 

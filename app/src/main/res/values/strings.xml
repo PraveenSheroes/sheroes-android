@@ -23,8 +23,14 @@
     <string name="ID_NEW">NEW</string>
     <string name="ID_FB_VERIFY_MSG">Please verify account by linking your SHEROES account with your Facebook account.</string>
     <string name="ID_LETS_GET_TO">Let’s get to know each other </string>
-    <string name="ID_FACEBOOK_ERROR">SHEROES is women only platform, Facebook says you are a gentlemen</string>
+    <string name="ID_FACEBOOK_ERROR">Oops! SHEROES is a women-only plaform. Facebook says you are a gentleman.</string>
     <string name="ID_TELL_US_MESSAGE">This will help you connect with other SHEROES and find relevant opportunities</string>
+    <string name="ID_TELL_US_FORM_VALIDATION">Oops! You need to enter all details.</string>
+    <string name="ID_MOBILE_NUMBER">Please enter mobile number</string>
+    <string name="ID_CURRENT_STATUS_DATA">Please select current status</string>
+    <string name="ID_LOCATION_DATA">Please select location</string>
+    <string name="ID_LOCATION_RESULT">Sorry! We could not find a location matching your input.</string>
+
     <!--String related in home page-->
 
     <string name="ID_NAVIGATION_DRAWER_OPEN">Open navigation drawer</string>
@@ -75,7 +81,7 @@
     <string name="ID_NO_REACTION">No reaction</string>
     <string name="ID_APPLIED">Applied</string>
     <string name="ID_VIEWS">Views</string>
-    <string name="ID_MIN_READ">Mins Read</string>
+    <string name="ID_MIN_READ">min read</string>
     <string name="ID_JOIN_CONVERSATION">Join the conversation...</string>
     <string name="ID_SHARE_INTEREST">Share Your Interest</string>
     <string name="ID_WHAT_GOOD_AT">What Are You Good At?</string>
@@ -115,7 +121,7 @@
     <string name="ID_SEE_MORE">See more like this</string>
     <string name="ID_ANONYMOUS">Anonymous</string>
     <string name="ID_OWNER">Owner (S)</string>
-    <string name="ID_LESS">Less View</string>
+    <string name="ID_LESS">View Less</string>
     <string name="ID_RECENT">Recent</string>
     <string name="ID_RELATED_ARTICLES">Related Articles</string>
     <string name="ID_TAGS">Tags</string>
@@ -151,7 +157,7 @@
     <string name="ID_CLOSE_PRIVACY"> Close </string>
     <string name="ID_APPLY">Apply</string>
     <string name="ID_REPORTED_AS_SPAM">Reported as spam</string>
-    <string name="ID_BACK_PRESS">Press again for exit</string>
+    <string name="ID_BACK_PRESS">Press back again to exit the app</string>
     <string name="ID_I_M_DONE">I’M DONE</string>
     <string name="ID_VERIFY">Verify your identity </string>
     <string name="ID_HEY">Hey</string>

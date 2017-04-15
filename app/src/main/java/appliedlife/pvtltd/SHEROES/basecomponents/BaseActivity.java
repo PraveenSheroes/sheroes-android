@@ -330,7 +330,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 Intent intent = new Intent(this, ArticleDetailActivity.class);
                 intent.putExtra(AppConstants.ARTICLE_DETAIL, mFeedDetail);
                 startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
-                overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
+                overridePendingTransition(R.anim.left_to_right_anim_enter, R.anim.left_to_right_anim_exit);
                 break;
             case R.id.li_feed_job_card:
                 Intent intentJob = new Intent(this, JobDetailActivity.class);
@@ -339,10 +339,10 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
                 break;
             case R.id.li_article_cover_image:
-                Intent intentArticle = new Intent(this, ArticleDetailActivity.class);
-                intentArticle.putExtra(AppConstants.ARTICLE_DETAIL, mFeedDetail);
-                startActivityForResult(intentArticle, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
-                overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
+               // Intent intentArticle = new Intent(this, ArticleDetailActivity.class);
+               // intentArticle.putExtra(AppConstants.ARTICLE_DETAIL, mFeedDetail);
+              //  startActivityForResult(intentArticle, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
+              //  overridePendingTransition(R.anim.fade_in_dialog, R.anim.fade_out_dialog);
                 break;
             case R.id.li_community_images:
                 Intent intentMyCommunity = new Intent(this, CommunitiesDetailActivity.class);
@@ -529,8 +529,8 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 mFeedDetail = (FeedDetail) baseResponse;
                 if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
                     if (mFeedDetail.getAuthorId() == userPreference.get().getUserSummary().getUserId() || mFragmentOpen.isOwner()) {
-                        tvDelete.setVisibility(View.VISIBLE);
-                        tvEdit.setVisibility(View.VISIBLE);
+                     //   tvDelete.setVisibility(View.VISIBLE);
+                     //   tvEdit.setVisibility(View.VISIBLE);
                     } else {
                         if (mFeedDetail.isFromHome()) {
                             tvReport.setText(getString(R.string.ID_REPORTED_AS_SPAM));
@@ -544,18 +544,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
             case R.id.tv_feed_community_user_menu:
                 FeedDetail feedCommunityDetail = (FeedDetail) baseResponse;
                 if (null != feedCommunityDetail) {
-                    //If creator then
-                    tvEdit.setVisibility(View.VISIBLE);
-                    tvDelete.setVisibility(View.VISIBLE);
-                    tvShare.setVisibility(View.VISIBLE);
 
-                    //if owner then
-                    tvDelete.setVisibility(View.VISIBLE);
-                    tvShare.setVisibility(View.VISIBLE);
-                    tvReport.setVisibility(View.VISIBLE);
-                    //if Other then
-                    tvShare.setVisibility(View.VISIBLE);
-                    tvReport.setVisibility(View.VISIBLE);
                 }
                 break;
             default:

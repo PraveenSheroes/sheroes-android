@@ -18,20 +18,21 @@
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:text="@string/ID_CURRENT_STATUS"
             android:layout_marginRight="@dimen/dp_size_20"
+            android:layout_marginTop="@dimen/dp_size_10"
             android:textColor="@color/text_color_follow"
             android:textSize="@dimen/sp_size_14" />
 
-        <ImageView
+        <TextView
+            android:id="@+id/iv_up_arrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:rotation="180"
-            android:padding="@dimen/dp_size_3"
-            android:background="@drawable/ic_spinner_icon"
+            android:padding="@dimen/dp_size_10"
+            android:layout_marginRight="@dimen/dp_size_20"
+            android:drawableRight="@drawable/ic_spinner_icon"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="@dimen/dp_size_5"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginRight="@dimen/dp_size_30" />
+            android:layout_alignParentEnd="true" />
     </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView

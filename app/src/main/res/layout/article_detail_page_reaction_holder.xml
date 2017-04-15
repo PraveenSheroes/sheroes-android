@@ -30,6 +30,7 @@
             android:layout_marginLeft="@dimen/dp_size_16"
             android:layout_marginRight="@dimen/dp_size_16"
             android:layout_marginTop="@dimen/dp_size_20"
+            android:linksClickable="true"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:lineSpacingExtra="@dimen/dp_size_5"
             android:textColor="@color/suggested_card_text"
@@ -37,7 +38,6 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_size_0.5"
-            android:layout_marginTop="@dimen/dp_size_20"
             android:background="@color/search_tab_unselected_text"/>
         <TextView
             android:id="@+id/tv_article_detail_tag"

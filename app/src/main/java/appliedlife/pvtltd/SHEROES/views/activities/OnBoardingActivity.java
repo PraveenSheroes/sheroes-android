@@ -130,7 +130,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
                 mInterest.setVisibility(View.GONE);
                 mJobAt.setVisibility(View.GONE);
                 setHowSheroesHelpFragment();
-            } else if (userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.INTEREST_SCREEN)) {
+            }/* else if (userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.INTEREST_SCREEN)) {
                 position = 4;
                 mInterest.setVisibility(View.VISIBLE);
                 mHowCanSheroes.setVisibility(View.GONE);
@@ -148,7 +148,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
                 mHowCanSheroes.setVisibility(View.GONE);
                 mJobAt.setVisibility(View.GONE);
                 setOnWorkExperienceFragment();
-            } else {
+            }*/ else {
                 Intent homeIntent = new Intent(this, HomeActivity.class);
                 startActivity(homeIntent);
                 finish();

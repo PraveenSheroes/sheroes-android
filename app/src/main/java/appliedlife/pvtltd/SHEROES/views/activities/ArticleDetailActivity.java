@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
@@ -70,6 +69,8 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
     TextView mTvArticleDetailBookmark;
     @Bind(R.id.tv_article_detail_title)
     TextView mTvArticleDetailTitle;
+    @Bind(R.id.tv_article_detail_subtitle)
+    TextView mTvArticleDetailSubTitle;
     private FeedDetail mFeedDetail;
     private FragmentOpen mFragmentOpen;
     ViewPagerAdapter viewPagerAdapter;
@@ -80,7 +81,6 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
-        initActivityTransitions();
         setContentView(R.layout.activity_article_detail);
         ButterKnife.bind(this);
         mFragmentOpen = new FragmentOpen();
@@ -98,8 +98,8 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
     }
 
     private void setPagerAndLayouts() {
-        ViewCompat.setTransitionName(mAppBarLayout, AppConstants.ARTICLE_DETAIL);
-        supportPostponeEnterTransition();
+      //  ViewCompat.setTransitionName(mAppBarLayout, AppConstants.ARTICLE_DETAIL);
+        //supportPostponeEnterTransition();
         setSupportActionBar(mToolbarArticleDetail);
         mCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
         if (null != mFeedDetail) {
@@ -112,14 +112,27 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
             setBackGroundImage(mFeedDetail);
         }
     }
-
     public void setBackGroundImage(FeedDetail feedDetail) {
         mFeedDetail = feedDetail;
         mTvArticleDetailTitle.setText(mFeedDetail.getNameOrTitle());
+        mTvArticleDetailSubTitle.setText(mFeedDetail.getAuthorName());
         mTvArticleDetailTotalViews.setVisibility(View.VISIBLE);
-        mTvArticleDetailTotalViews.setText(mFeedDetail.getNoOfViews() + AppConstants.SPACE + getString(R.string.ID_VIEWS));
-        mTvArticleTime.setVisibility(View.VISIBLE);
-        mTvArticleTime.setText(mFeedDetail.getCharCount() + AppConstants.SPACE + getString(R.string.ID_MIN_READ));
+        if(mFeedDetail.getNoOfViews()>0) {
+            mTvArticleDetailTotalViews.setVisibility(View.VISIBLE);
+            mTvArticleDetailTotalViews.setText(mFeedDetail.getNoOfViews() + AppConstants.SPACE + getString(R.string.ID_VIEWS));
+        }else
+        {
+            mTvArticleDetailTotalViews.setVisibility(View.INVISIBLE);
+        }
+        if(mFeedDetail.getCharCount()>0)
+        {
+            mTvArticleTime.setVisibility(View.VISIBLE);
+            mTvArticleTime.setText(mFeedDetail.getCharCount() + AppConstants.SPACE + getString(R.string.ID_MIN_READ));
+
+        }else
+        {
+            mTvArticleTime.setVisibility(View.INVISIBLE);
+        }
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getNameOrTitle())) {
             mCollapsingToolbarLayout.setTitle(mFeedDetail.getNameOrTitle());
         }
@@ -442,7 +455,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
         intent.putExtras(bundle);
         setResult(RESULT_OK, intent);
         finish();
-        overridePendingTransition(R.anim.fade_in_dialog, R.anim.fade_out_dialog);
+        overridePendingTransition(R.anim.right_to_left_anim_enter, R.anim.right_to_left_anim_exit);
     }
 
     @OnClick(R.id.tv_article_detail_share)

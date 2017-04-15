@@ -23,7 +23,7 @@ public class AppConstants {
     public static final String HTTP_401_UNAUTHORIZED = "HTTP 401 Unauthorized";
     public static final String INAVLID_DATA = "INVALID_DATA";
     public static final String ERROR = "error";
-    public static final String CHECK_NETWORK_CONNECTION = "check_network_connection";
+    public static final String CHECK_NETWORK_CONNECTION = "Oops! There is some connectivity issue. Please check your internet connection.";
     public static final String VIEW_NOT_ATTACHED_EXCEPTION = "Please call SheroesPresenter.attachView(BaseMvpView) before" + " requesting data to the SheroesPresenter";
     public static final String EXCEPTION_MUST_IMPLEMENT = "Exception while implement listner with in :";
     public static final String CASE_NOT_HANDLED = "Case not handled on : ";

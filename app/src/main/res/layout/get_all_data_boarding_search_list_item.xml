@@ -2,15 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/li_city_name_layout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/dp_size_50"
     android:background="@drawable/current_status_selector">
     <TextView
         android:id="@+id/tv_city_name"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/sp_size_15"
+        android:layout_gravity="center"
         android:layout_marginLeft="@dimen/dp_size_45"
-        android:layout_marginTop="@dimen/dp_size_35"
         android:fontFamily="@string/ID_ROBOTO_REGULAR"
         android:textColor="@color/black_current"/>
 </LinearLayout>

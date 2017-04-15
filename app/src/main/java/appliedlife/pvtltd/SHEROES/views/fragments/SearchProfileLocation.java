@@ -1,13 +1,11 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -15,55 +13,33 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.f2prateek.rx.preferences.Preference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
-import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
-import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.enums.OnBoardingEnum;
-import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllData;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
-import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
-import appliedlife.pvtltd.SHEROES.models.entities.community.PopularTag;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
-import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingInterestJobSearch;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.GetInterestJobResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
-import appliedlife.pvtltd.SHEROES.presenters.CommunityTagsPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.OnBoardingPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.ProfileActicity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActicity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CommunityTagsView;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.OnBoardingView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -85,10 +61,6 @@ public class SearchProfileLocation extends BaseDialogFragment implements OnBoard
     OnBoardingPresenter mOnBoardingPresenter;
     @Bind(R.id.pb_onboarding_search_progress_bar)
     ProgressBar mProgressBar;
-    @Bind(R.id.li_onboarding_no_search_result)
-    LinearLayout mLiNoSearchResult;
-    @Bind(R.id.tv_onboarding_search_result)
-    TextView tvSearchResult;
     private String mSearchDataName = AppConstants.EMPTY_STRING;
     private GenericRecyclerViewAdapter mAdapter;
     private Handler mHandler = new Handler();
@@ -185,7 +157,6 @@ public class SearchProfileLocation extends BaseDialogFragment implements OnBoard
             public void afterTextChanged(Editable inputSearch) {
 
                 if (StringUtil.isNotNullOrEmptyString(inputSearch.toString()) && inputSearch.toString().length() > AppConstants.THREE_CONSTANT) {
-                    mLiNoSearchResult.setVisibility(View.GONE);
                     mSearchDataName = inputSearch.toString();
                     /**hitting the servers to get data if length is greater than threshold defined **/
                     mHandler.removeCallbacks(mFilterTask);

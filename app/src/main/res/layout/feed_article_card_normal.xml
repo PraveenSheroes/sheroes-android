@@ -83,7 +83,6 @@
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:lineSpacingExtra="@dimen/dp_size_3"
             android:lines="@integer/int_value_for_line_2"
-            android:maxLength="92"
             android:paddingRight="@dimen/dp_size_16"
             android:textColor="@color/feed_article_label"
             android:textSize="@dimen/sp_size_14" />

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,6 +23,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.OnBoardingActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Praveen_Singh on 24-03-2017.
@@ -32,6 +34,8 @@ public class CurrentStatusDialog extends BaseDialogFragment {
     RecyclerView mRecyclerView;
     private GenericRecyclerViewAdapter mAdapter;
     private HashMap<String, HashMap<String, ArrayList<LabelValue>>> mMasterDataResult;
+    @Bind(R.id.iv_up_arrow)
+    TextView ivUpArrow;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -56,11 +60,9 @@ public class CurrentStatusDialog extends BaseDialogFragment {
         return view;
     }
 
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
+    @OnClick(R.id.iv_up_arrow)
+    public void onUpArrowClick() {
+        dismiss();
     }
 
     @Override

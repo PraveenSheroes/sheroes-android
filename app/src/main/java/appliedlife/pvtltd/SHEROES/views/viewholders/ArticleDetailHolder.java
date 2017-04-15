@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -41,8 +42,8 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
     private final String TAG = LogUtils.makeLogTag(ArticleCardHolder.class);
     private static final String LEFT_HTML_TAG_FOR_COLOR = "<b><font color='#323940'>";
     private static final String RIGHT_HTML_TAG_FOR_COLOR = "</font></b>";
-    private static final String LEFT_HTML_TAG = "<font color='#333333'>";
-    private static final String RIGHT_HTML_TAG = "</font>";
+    private static final String LEFT_HTML_TAG = "<b><font color='#333333'>";
+    private static final String RIGHT_HTML_TAG = "</font></b>";
     @Inject
     Preference<LoginResponse> userPreference;
     @Inject
@@ -150,6 +151,7 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
             } else {
                 tvHtmlData.setText(Html.fromHtml(description));// or for older api
             }
+            tvHtmlData.setMovementMethod(LinkMovementMethod.getInstance());
         }
     }
 
@@ -160,15 +162,19 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
         }
         if (StringUtil.isNotEmptyCollection(mFeedDetail.getTags())) {
             List<String> tags = mFeedDetail.getTags();
-            String mergeTags = AppConstants.EMPTY_STRING;
+            //String mergeTags = AppConstants.EMPTY_STRING;
+            StringBuilder mergeTags=new StringBuilder();
             for (String tag : tags) {
-                mergeTags += tag + AppConstants.COMMA;
+                mergeTags.append(tag).append(AppConstants.COMMA);
+              //  mergeTags += tag + AppConstants.COMMA;
             }
-            String tagHeader = LEFT_HTML_TAG + mContext.getString(R.string.ID_TAGS) + RIGHT_HTML_TAG;
+            StringBuilder tagHeader=new StringBuilder();
+            tagHeader.append(LEFT_HTML_TAG).append(mContext.getString(R.string.ID_TAGS)).append(RIGHT_HTML_TAG).append( AppConstants.COLON ).append( AppConstants.SPACE).append(mergeTags);
+         //   String tagHeader = LEFT_HTML_TAG + mContext.getString(R.string.ID_TAGS) + RIGHT_HTML_TAG;
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                tvArticleDetailTag.setText(Html.fromHtml(tagHeader + AppConstants.COLON + AppConstants.SPACE + mergeTags, 0)); // for 24 api and more
+                tvArticleDetailTag.setText(Html.fromHtml(tagHeader.toString(), 0)); // for 24 api and more
             } else {
-                tvArticleDetailTag.setText(Html.fromHtml(tagHeader + AppConstants.COLON + AppConstants.SPACE + mergeTags));// or for older api
+                tvArticleDetailTag.setText(Html.fromHtml(tagHeader.toString()));// or for older api
             }
         }
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getAuthorName())) {

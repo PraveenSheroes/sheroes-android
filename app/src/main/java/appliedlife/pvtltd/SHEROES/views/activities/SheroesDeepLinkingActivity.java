@@ -126,7 +126,7 @@ public class SheroesDeepLinkingActivity extends Activity {
 
         }
         //In case of profile
-        else if ((AppConstants.USER_PROFILE_URL).equals(baseUrl)) {
+        else if ((AppConstants.USER_PROFILE_URL).equalsIgnoreCase(baseUrl)) {
             Intent into = new Intent(this, ProfileActicity.class);
             startActivity(into);
             finish();

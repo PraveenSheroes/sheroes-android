@@ -84,16 +84,32 @@
                     android:layout_marginRight="@dimen/dp_size_20"
                     android:padding="@dimen/dp_size_10"
                     android:drawableLeft="@drawable/ic_back_white" />
-                <TextView
-                    android:id="@+id/tv_article_detail_title"
+                <LinearLayout
                     android:layout_width="@dimen/dp_size_200"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/sp_size_14"
-                    android:lines="@integer/int_value_for_line_1"
-                    android:ellipsize="end"
-                    android:textColor="@color/white"
-                    android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-                     />
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/tv_article_detail_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/sp_size_14"
+                        android:lines="@integer/int_value_for_line_1"
+                        android:ellipsize="end"
+                        android:textColor="@color/white"
+                        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                        />
+                    <TextView
+                        android:id="@+id/tv_article_detail_subtitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/sp_size_12"
+                        android:gravity="center"
+                        android:lines="@integer/int_value_for_line_1"
+                        android:textColor="@color/white"
+                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                        />
+                </LinearLayout>
+
                 <TextView
                     android:id="@+id/tv_article_detail_share"
                     android:layout_width="wrap_content"

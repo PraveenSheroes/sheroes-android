@@ -8,7 +8,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -301,9 +300,6 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
 
                             mEtUserCommentDescription.setTextColor(ContextCompat.getColor(getActivity(), R.color.feed_article_label));
                             mCommentReactionDocList.remove(commentReactionDoc);
-                            AppUtils.showKeyboard(mEtUserCommentDescription, TAG);
-                            mEtUserCommentDescription.setRawInputType(InputType.TYPE_CLASS_TEXT);
-                            mEtUserCommentDescription.setTextIsSelectable(true);
                             commentReactionDoc.setActive(true);
                             commentReactionDoc.setEdit(true);
                             mCommentReactionDoc = commentReactionDoc;
@@ -321,9 +317,6 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
                             commentReactionDoc.setActive(false);
                             mCommentReactionPresenter.editCommentListFromPresenter(mAppUtils.editCommentRequestBuilder(commentReactionDoc.getEntityId(), commentReactionDoc.getComment(), mFeedDetail.isAnonymous(), commentReactionDoc.isActive(), commentReactionDoc.getId()), AppConstants.TWO_CONSTANT);
                             mCommentReactionDocList.remove(commentReactionDoc);
-                            AppUtils.showKeyboard(mEtUserCommentDescription, TAG);
-                            mEtUserCommentDescription.setRawInputType(InputType.TYPE_CLASS_TEXT);
-                            mEtUserCommentDescription.setTextIsSelectable(true);
                             break;
                         }
                     }

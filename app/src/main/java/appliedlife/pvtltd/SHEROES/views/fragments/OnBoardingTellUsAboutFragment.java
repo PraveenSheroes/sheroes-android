@@ -74,6 +74,7 @@ public class OnBoardingTellUsAboutFragment extends BaseFragment implements OnBoa
     Preference<LoginResponse> userPreference;
     private LabelValue labelValue;
     private GetAllDataDocument getAllDataDocument;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -109,7 +110,7 @@ public class OnBoardingTellUsAboutFragment extends BaseFragment implements OnBoa
                     mMobileNumber.setText(userPreference.get().getUserSummary().getMobile());
                 }
             }
-            mMasterDataResult=mUserPreferenceMasterData.get().getData();
+            mMasterDataResult = mUserPreferenceMasterData.get().getData();
             mCurrentStatus.setEnabled(true);
             mLocation.setEnabled(true);
             mMobileNumber.setEnabled(true);
@@ -122,46 +123,49 @@ public class OnBoardingTellUsAboutFragment extends BaseFragment implements OnBoa
 
     public void setCurrentStaus(LabelValue labelValue) {
         if (null != labelValue && StringUtil.isNotNullOrEmptyString(labelValue.getLabel())) {
-            this.labelValue=labelValue;
+            this.labelValue = labelValue;
             mCurrentStatus.setText(labelValue.getLabel());
         }
     }
 
     public void setLocationData(GetAllDataDocument getAllDataDocument) {
         if (null != getAllDataDocument && StringUtil.isNotNullOrEmptyString(getAllDataDocument.getTitle())) {
-            this.getAllDataDocument=getAllDataDocument;
+            this.getAllDataDocument = getAllDataDocument;
             mLocation.setText(getAllDataDocument.getTitle());
         }
     }
 
     @OnClick(R.id.iv_tell_us_next)
     public void nextClick() {
-        if (StringUtil.isNotNullOrEmptyString(mCurrentStatus.getText().toString()) && StringUtil.isNotNullOrEmptyString(mLocation.getText().toString()) && StringUtil.isNotNullOrEmptyString(mMobileNumber.getText().toString())) {
-            if (mMobileNumber.getText().toString().length() == 10) {
-                if (null != labelValue&&null!=getAllDataDocument) {
-                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(mMobileNumber.getWindowToken(), 0);
-                  mOnBoardingPresenter.getCurrentDataStatusToPresenter(mAppUtils.boardingTellUsFormDataRequestBuilder(AppConstants.CURRENT_STATUS,AppConstants.CURRENT_STATUS_TYPE,labelValue,getAllDataDocument,mMobileNumber.getText().toString()));
-                }
-            } else {
-                Toast.makeText(getContext(), "Enter valid mobile number", Toast.LENGTH_SHORT).show();
-            }
+        // if (StringUtil.isNotNullOrEmptyString(mCurrentStatus.getText().toString()) && StringUtil.isNotNullOrEmptyString(mLocation.getText().toString()) && StringUtil.isNotNullOrEmptyString(mMobileNumber.getText().toString())) {
+        if (!StringUtil.isNotNullOrEmptyString(mCurrentStatus.getText().toString())) {
+            Toast.makeText(getContext(), getString(R.string.ID_TELL_US_FORM_VALIDATION), Toast.LENGTH_SHORT).show();
+        } else if (!StringUtil.isNotNullOrEmptyString(mLocation.getText().toString())) {
+            Toast.makeText(getContext(), getString(R.string.ID_TELL_US_FORM_VALIDATION), Toast.LENGTH_SHORT).show();
+        }
+        if (!StringUtil.isNotNullOrEmptyString(mMobileNumber.getText().toString()) && mMobileNumber.getText().toString().length() != 10) {
+            Toast.makeText(getContext(), getString(R.string.ID_TELL_US_FORM_VALIDATION), Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(getContext(), "Pleas select Data", Toast.LENGTH_SHORT).show();
+            if (null != labelValue && null != getAllDataDocument) {
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(mMobileNumber.getWindowToken(), 0);
+                mOnBoardingPresenter.getCurrentDataStatusToPresenter(mAppUtils.boardingTellUsFormDataRequestBuilder(AppConstants.CURRENT_STATUS, AppConstants.CURRENT_STATUS_TYPE, labelValue, getAllDataDocument, mMobileNumber.getText().toString()));
+            }
         }
     }
+    // }
 
     @OnClick(R.id.tv_current_status_spinner)
     public void onCurrentStatusClick() {
         if (null != mMasterDataResult) {
-            mOnboardingIntractionListner.onSheroesHelpYouFragmentOpen(mMasterDataResult,CURRENT_STATUS);
+            mOnboardingIntractionListner.onSheroesHelpYouFragmentOpen(mMasterDataResult, CURRENT_STATUS);
         }
     }
 
     @OnClick(R.id.tv_location)
     public void onLocationClick() {
         if (null != mMasterDataResult) {
-            mOnboardingIntractionListner.onSheroesHelpYouFragmentOpen(mMasterDataResult,LOCATION);
+            mOnboardingIntractionListner.onSheroesHelpYouFragmentOpen(mMasterDataResult, LOCATION);
         }
     }
 
@@ -184,17 +188,18 @@ public class OnBoardingTellUsAboutFragment extends BaseFragment implements OnBoa
     public void getIntersetJobResponse(GetInterestJobResponse getInterestJobResponse) {
 
     }
+
     @Override
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
-       mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(errorMsg, feedParticipationEnum);
+        mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(errorMsg, feedParticipationEnum);
     }
+
     @Override
     public void getBoardingJobResponse(BoardingDataResponse boardingDataResponse) {
-        if(null!=boardingDataResponse) {
-            switch (boardingDataResponse.getStatus())
-            {
+        if (null != boardingDataResponse) {
+            switch (boardingDataResponse.getStatus()) {
                 case AppConstants.SUCCESS:
-                    mOnboardingIntractionListner.onSheroesHelpYouFragmentOpen(mMasterDataResult,TELL_US_ABOUT);
+                    mOnboardingIntractionListner.onSheroesHelpYouFragmentOpen(mMasterDataResult, TELL_US_ABOUT);
                     break;
                 case AppConstants.FAILED:
                     mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(boardingDataResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), FeedParticipationEnum.ERROR_ON_ONBOARDING);

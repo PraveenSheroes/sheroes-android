@@ -10,27 +10,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:visibility="gone" />
-
-    <LinearLayout
-        android:id="@+id/li_onboarding_no_search_result"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <TextView
-            android:id="@+id/tv_onboarding_search_result"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-            android:text="@string/ID_NO_RESULT_FOUND"
-            android:textAllCaps="true"
-            android:textColor="@color/detail_page_text" />
-    </LinearLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -67,9 +46,27 @@
             android:layout_marginRight="@dimen/dp_size_30"
             android:background="@color/search_tab_unselected_text" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_onboarding_search_list"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_onboarding_search_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+          <TextView
+              android:id="@+id/tv_location_result"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:textSize="@dimen/sp_size_14"
+              android:textColor="@color/dashboard_fed_text"
+              android:layout_gravity="center"
+              android:gravity="center"
+              android:visibility="gone"
+              android:text="@string/ID_LOCATION_RESULT"
+              android:fontFamily="@string/ID_ROBOTO_MEDIUM"/>
+        </FrameLayout>
+
     </LinearLayout>
 </FrameLayout>

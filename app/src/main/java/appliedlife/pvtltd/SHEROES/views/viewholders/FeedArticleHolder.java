@@ -58,6 +58,8 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     private static final String RIGHT_HTML_TAG_FOR_COLOR = "</font></b>";
     private static final String LEFT_VIEW_MORE = "<font color='#323840'>";
     private static final String RIGHT_VIEW_MORE = "</font>";
+    private static final String LEFT_HTML_VEIW_TAG_FOR_COLOR = "<font color='#50e3c2'>";
+    private static final String RIGHT_HTML_VIEW_TAG_FOR_COLOR = "</font>";
     @Bind(R.id.li_feed_article_images)
     LinearLayout liFeedArticleImages;
     @Bind(R.id.li_feed_article_user_comments)
@@ -115,7 +117,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     private Context mContext;
     private String mViewMoreDescription;
     private int mItemPosition;
-
+    private static String mViewMore,mLess;
     public FeedArticleHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
@@ -127,6 +129,8 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     public void bindData(FeedDetail item, final Context context, int position) {
         this.dataItem = item;
         this.mContext = context;
+        mLess = context.getString(R.string.ID_LESS);
+        mViewMore = context.getString(R.string.ID_VIEW_MORE);
         tvFeedArticleUserBookmark.setEnabled(true);
         tvFeedArticleUserReaction.setEnabled(true);
         tvFeedArticleUserReactionText.setEnabled(true);
@@ -139,19 +143,22 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void allTextViewStringOperations(Context context) {
-        mViewMoreDescription = dataItem.getListDescription();
+        mViewMoreDescription =dataItem.getListDescription();
         if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
             Document documentString = Jsoup.parse(mViewMoreDescription);
-            tvFeedArticleView.setVisibility(View.VISIBLE);
             tvFeedArticleHeaderLebel.setVisibility(View.VISIBLE);
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                 tvFeedArticleHeaderLebel.setText(Html.fromHtml(documentString.text(), 0)); // for 24 api and more
             } else {
                 tvFeedArticleHeaderLebel.setText(Html.fromHtml(documentString.text()));// or for older api
             }
-          //  String dots = LEFT_VIEW_MORE + AppConstants.DOTS + RIGHT_VIEW_MORE;
+         //   String dots = LEFT_VIEW_MORE + AppConstants.DOTS + RIGHT_VIEW_MORE;
             StringBuilder dots=new StringBuilder();
             dots.append(LEFT_VIEW_MORE).append(AppConstants.DOTS).append(RIGHT_VIEW_MORE).append(mContext.getString(R.string.ID_VIEW_MORE));
+          //  StringBuilder viewColor=new StringBuilder();
+          //  viewColor.append(LEFT_HTML_VEIW_TAG_FOR_COLOR).append(mViewMore).append(RIGHT_HTML_VIEW_TAG_FOR_COLOR);
+           // tvFeedArticleHeaderLebel.setText(mViewMoreDescription);
+           // ResizableCustomView.doResizeTextView(tvFeedArticleHeaderLebel, 2,mViewMore, true);
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                 tvFeedArticleView.setText(Html.fromHtml(dots.toString(), 0)); // for 24 api and more
             } else {
@@ -333,11 +340,25 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             final TextView tvFeedArticleTotalViews = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_total_views);
             final RelativeLayout rlFeedArticleViews = (RelativeLayout) backgroundImage.findViewById(R.id.rl_gradiant);
             StringBuilder stringBuilder=new StringBuilder();
-            stringBuilder.append(dataItem.getNoOfViews()).append(AppConstants.SPACE).append(context.getString(R.string.ID_VIEWS));
-            tvFeedArticleTotalViews.setText(stringBuilder.toString());
+            if(dataItem.getNoOfViews()>0) {
+                stringBuilder.append(dataItem.getNoOfViews()).append(AppConstants.SPACE).append(context.getString(R.string.ID_VIEWS));
+                tvFeedArticleTotalViews.setText(stringBuilder.toString());
+                tvFeedArticleTotalViews.setVisibility(View.VISIBLE);
+            }else
+            {
+                tvFeedArticleTotalViews.setVisibility(View.INVISIBLE);
+            }
             stringBuilder=new StringBuilder();
-            stringBuilder.append(dataItem.getCharCount() ).append(AppConstants.SPACE).append(context.getString(R.string.ID_MIN_READ));
-            tvFeedArticleTimeLabel.setText(stringBuilder.toString());
+            if(dataItem.getCharCount()>0)
+            {
+                stringBuilder.append(dataItem.getCharCount()).append(AppConstants.SPACE).append(context.getString(R.string.ID_MIN_READ));
+                tvFeedArticleTimeLabel.setText(stringBuilder.toString());
+                tvFeedArticleTimeLabel.setVisibility(View.VISIBLE);
+            }else
+            {
+                tvFeedArticleTimeLabel.setVisibility(View.INVISIBLE);
+            }
+
             Glide.with(mContext)
                     .load(backgrndImageUrl).asBitmap()
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
@@ -460,4 +481,6 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     public void onClick(View view) {
 
     }
+
+
 }
