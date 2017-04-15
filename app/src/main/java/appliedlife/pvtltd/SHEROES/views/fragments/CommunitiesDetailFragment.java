@@ -269,11 +269,11 @@ public class CommunitiesDetailFragment extends BaseFragment {
     }
 
     @Override
-    public void getSuccessForAllResponse(BaseResponse success, FeedParticipationEnum feedParticipationEnum) {
-        super.getSuccessForAllResponse(success, feedParticipationEnum);
+    public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
+        super.getSuccessForAllResponse(baseResponse, feedParticipationEnum);
         switch (feedParticipationEnum) {
             case JOIN_INVITE:
-                joinSuccessFailed(success);
+                joinSuccessFailed(baseResponse);
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);

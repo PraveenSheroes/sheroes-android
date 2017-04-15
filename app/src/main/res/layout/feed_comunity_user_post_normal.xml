@@ -84,6 +84,7 @@
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:lineSpacingExtra="@dimen/dp_size_3"
             android:lines="@integer/int_value_for_line_2"
+            android:maxLength="92"
             android:textColor="@color/feed_article_label"
             android:textSize="@dimen/sp_size_14" />
         <TextView
@@ -125,8 +126,8 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_size_0.5"
             android:layout_marginLeft="@dimen/dp_size_13"
+            android:layout_marginTop="@dimen/dp_size_5"
             android:layout_marginRight="@dimen/dp_size_13"
-            android:layout_marginTop="@dimen/dp_size_16"
             android:background="@color/search_tab_unselected_text" />
 
         <LinearLayout

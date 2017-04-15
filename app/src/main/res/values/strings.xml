@@ -150,6 +150,7 @@
     <string name="ID_OPEN">Open</string>
     <string name="ID_CLOSE_PRIVACY"> Close </string>
     <string name="ID_APPLY">Apply</string>
+    <string name="ID_REPORTED_AS_SPAM">Reported as spam</string>
     <string name="ID_BACK_PRESS">Press again for exit</string>
     <string name="ID_I_M_DONE">I’M DONE</string>
     <string name="ID_VERIFY">Verify your identity </string>

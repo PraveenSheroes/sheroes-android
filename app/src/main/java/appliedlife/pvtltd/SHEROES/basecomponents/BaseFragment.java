@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.f2prateek.rx.preferences.Preference;
 
@@ -240,28 +241,43 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     }
 
     @Override
-    public void getSuccessForAllResponse(BaseResponse success, FeedParticipationEnum feedParticipationEnum) {
+    public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
         switch (feedParticipationEnum) {
             case LIKE_UNLIKE:
-                likeSuccess(success);
+                likeSuccess(baseResponse);
                 break;
             case COMMENT_REACTION:
-                recentCommentEditDelete(success);
+                recentCommentEditDelete(baseResponse);
                 break;
             case BOOKMARK_UNBOOKMARK:
-                bookMarkSuccess(success);
+                bookMarkSuccess(baseResponse);
                 break;
             case JOIN_INVITE:
-                joinInviteResponse(success);
+                joinInviteResponse(baseResponse);
                 break;
             case DELETE_COMMUNITY_POST:
-                deleteCommunityPostRespose(success);
+                deleteCommunityPostRespose(baseResponse);
                 break;
             case MARK_AS_SPAM:
-                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.MARK_AS_SPAM, MARK_AS_SPAM);
+                reportAsSpamPostRespose(baseResponse);
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
+        }
+    }
+
+    public void reportAsSpamPostRespose(BaseResponse baseResponse) {
+        switch (baseResponse.getStatus()) {
+            case AppConstants.SUCCESS:
+                Toast.makeText(getContext(),AppConstants.MARK_AS_SPAM,Toast.LENGTH_SHORT).show();
+                mFeedDetail.setFromHome(true);
+                commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+                break;
+            case AppConstants.FAILED:
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), MARK_AS_SPAM);
+                break;
+            default:
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), MARK_AS_SPAM);
         }
     }
 

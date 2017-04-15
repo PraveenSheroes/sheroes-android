@@ -149,6 +149,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     private void multipleImageURLs() {
         if (StringUtil.isNotEmptyCollection(dataItem.getImageUrls())) {
+            liFeedCommunityUserPostImages.setVisibility(View.VISIBLE);
             lineForNoImage.setVisibility(View.GONE);
             List<String> coverImageList = dataItem.getImageUrls();
             int listSize = coverImageList.size();
@@ -217,6 +218,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             liFeedCommunityUserPostImages.removeAllViews();
             liFeedCommunityUserPostImages.removeAllViewsInLayout();
             lineForNoImage.setVisibility(View.VISIBLE);
+            liFeedCommunityUserPostImages.setVisibility(View.GONE);
         }
 
     }

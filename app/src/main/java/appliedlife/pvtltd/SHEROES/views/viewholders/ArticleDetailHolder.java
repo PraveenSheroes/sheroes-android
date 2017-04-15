@@ -27,7 +27,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.ArticleDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -139,9 +138,6 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void imageOperations(Context context) {
 
-        if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getNameOrTitle())) {
-            ((ArticleDetailActivity) mContext).mCollapsingToolbarLayout.setTitle(mFeedDetail.getNameOrTitle());
-        }
         String feedCircleIconUrl = mFeedDetail.getAuthorImageUrl();
         if (StringUtil.isNotNullOrEmptyString(feedCircleIconUrl)) {
             ivArticleDetailCardCircleIcon.setCircularImage(true);
@@ -313,6 +309,8 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
                     case AppConstants.NO_REACTION_CONSTANT:
                         ivArticleDetailUserPic.setCircularImage(true);
                         liArticleDetailUserComments.setVisibility(View.VISIBLE);
+                        liArticleDetailUserCommentsSecond.setVisibility(View.GONE);
+                        liArticleDetailUserCommentsThird.setVisibility(View.GONE);
                         if (lastCommentList.get(index).isAnonymous()) {
                             String userName = LEFT_HTML_TAG_FOR_COLOR + mContext.getString(R.string.ID_ANONYMOUS) + RIGHT_HTML_TAG_FOR_COLOR;
                             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
@@ -340,7 +338,7 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
                     case AppConstants.ONE_CONSTANT:
                         ivArticleDetailUserPicSecond.setCircularImage(true);
                         liArticleDetailUserCommentsSecond.setVisibility(View.VISIBLE);
-
+                        liArticleDetailUserCommentsThird.setVisibility(View.GONE);
                         if (lastCommentList.get(index).isAnonymous()) {
                             String userName = LEFT_HTML_TAG_FOR_COLOR + mContext.getString(R.string.ID_ANONYMOUS) + RIGHT_HTML_TAG_FOR_COLOR;
                             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {

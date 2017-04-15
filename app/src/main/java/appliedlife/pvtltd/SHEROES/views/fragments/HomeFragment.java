@@ -177,8 +177,8 @@ public class HomeFragment extends BaseFragment {
     }
 
     @Override
-    public void getSuccessForAllResponse(BaseResponse success, FeedParticipationEnum feedParticipationEnum) {
-        super.getSuccessForAllResponse(success, feedParticipationEnum);
+    public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
+        super.getSuccessForAllResponse(baseResponse, feedParticipationEnum);
     }
 
     public void commentListRefresh(FeedDetail feedDetail,FeedParticipationEnum feedParticipationEnum) {

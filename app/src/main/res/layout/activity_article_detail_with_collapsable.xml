@@ -81,12 +81,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left|top"
-                    android:layout_marginRight="@dimen/dp_size_25"
+                    android:layout_marginRight="@dimen/dp_size_20"
                     android:padding="@dimen/dp_size_10"
                     android:drawableLeft="@drawable/ic_back_white" />
                 <TextView
                     android:id="@+id/tv_article_detail_title"
-                    android:layout_width="@dimen/dp_size_220"
+                    android:layout_width="@dimen/dp_size_200"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/sp_size_14"
                     android:lines="@integer/int_value_for_line_1"
@@ -99,11 +99,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
-                    android:drawableLeft="@drawable/ic_share_icon"
+                    android:drawableRight="@drawable/ic_share_icon"
                     app:cardElevation="@dimen/dp_size_10"
-                    android:drawablePadding="@dimen/dp_size_10"
+                    android:paddingRight="@dimen/dp_size_10"
+                    android:layout_marginRight="@dimen/dp_size_15"
+                    android:paddingLeft="@dimen/dp_size_10"
                     android:paddingBottom="@dimen/dp_size_10"
-                    android:paddingTop="@dimen/dp_size_5" />
+                    android:paddingTop="@dimen/dp_size_10" />
 
                 <TextView
                     android:id="@+id/tv_article_detail_bookmark"
@@ -111,12 +113,12 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:drawableLeft="@drawable/ic_bookmark_detail_white"
-                    android:drawablePadding="@dimen/dp_size_10"
                     android:paddingBottom="@dimen/dp_size_10"
                     app:cardElevation="@dimen/dp_size_10"
+                    android:layout_marginRight="@dimen/dp_size_10"
                     android:paddingLeft="@dimen/dp_size_10"
-                    android:paddingRight="@dimen/dp_size_18"
-                    android:paddingTop="@dimen/dp_size_5" />
+                    android:paddingRight="@dimen/dp_size_10"
+                    android:paddingTop="@dimen/dp_size_10" />
             </android.support.v7.widget.Toolbar>
 
         </appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.CustomCollapsingToolbarLayout>

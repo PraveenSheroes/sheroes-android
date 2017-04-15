@@ -474,8 +474,8 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 FeedDetail feedDetail = (FeedDetail) baseResponse;
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType(AppConstants.SHARE_MENU_TYPE);
-                intent.putExtra(Intent.EXTRA_TEXT, feedDetail.getSlugS());
-                intent.putExtra(Intent.EXTRA_SUBJECT, feedDetail.getDescription());
+                intent.putExtra(Intent.EXTRA_TEXT, feedDetail.getDeepLinkUrl());
+              //  intent.putExtra(Intent.EXTRA_SUBJECT, feedDetail.getDescription());
                 startActivity(Intent.createChooser(intent, AppConstants.SHARE));
                 popupWindow.dismiss();
             }
@@ -529,13 +529,16 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 mFeedDetail = (FeedDetail) baseResponse;
                 if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
                     if (mFeedDetail.getAuthorId() == userPreference.get().getUserSummary().getUserId() || mFragmentOpen.isOwner()) {
-                        tvShare.setVisibility(View.VISIBLE);
                         tvDelete.setVisibility(View.VISIBLE);
                         tvEdit.setVisibility(View.VISIBLE);
                     } else {
-                        tvShare.setVisibility(View.VISIBLE);
+                        if (mFeedDetail.isFromHome()) {
+                            tvReport.setText(getString(R.string.ID_REPORTED_AS_SPAM));
+                            tvReport.setEnabled(false);
+                        }
                         tvReport.setVisibility(View.VISIBLE);
                     }
+                   // tvShare.setVisibility(View.VISIBLE);
                 }
                 break;
             case R.id.tv_feed_community_user_menu:

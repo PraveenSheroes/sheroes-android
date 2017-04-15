@@ -128,7 +128,7 @@ public class AppConstants {
     public static final String SETTING = "setting";
     public static final String PIPE = "|";
     public static final String SUCCESS = "SUCCESS";
-    public static final String MARK_AS_SPAM = "Mark as spam successfully";
+    public static final String MARK_AS_SPAM = "Report as spam success";
     public static final String FACEBOOK_VERIFICATION = "Your account is not facebook verified please click below continue with facebook";
     public static final String FAILED = "FAILED";
     public static final String INVALID = "INVALID";

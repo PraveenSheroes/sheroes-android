@@ -18,6 +18,9 @@ public class FeedDetail extends BaseResponse implements Parcelable {
     boolean isLongPress;
     boolean isTrending;
     boolean isFromHome;
+    @SerializedName("solr_ignore_deep_link_url")
+    @Expose
+    private String deepLinkUrl;
 
     /*Community post*/
 
@@ -1554,6 +1557,14 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         this.compensationCurrency = compensationCurrency;
     }
 
+    public String getDeepLinkUrl() {
+        return deepLinkUrl;
+    }
+
+    public void setDeepLinkUrl(String deepLinkUrl) {
+        this.deepLinkUrl = deepLinkUrl;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -1565,6 +1576,7 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         dest.writeByte(this.isLongPress ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isTrending ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isFromHome ? (byte) 1 : (byte) 0);
+        dest.writeString(this.deepLinkUrl);
         dest.writeList(this.imagesIds);
         dest.writeStringList(this.imageUrls);
         dest.writeLong(this.communityId);
@@ -1705,6 +1717,7 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         this.isLongPress = in.readByte() != 0;
         this.isTrending = in.readByte() != 0;
         this.isFromHome = in.readByte() != 0;
+        this.deepLinkUrl = in.readString();
         this.imagesIds = new ArrayList<Long>();
         in.readList(this.imagesIds, Long.class.getClassLoader());
         this.imageUrls = in.createStringArrayList();

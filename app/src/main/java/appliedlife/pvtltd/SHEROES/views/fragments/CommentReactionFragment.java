@@ -54,7 +54,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.AllCommentReacti
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnFocusChange;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_LIKE_UNLIKE;
 
@@ -149,6 +148,7 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
         initializeUiComponent();
         super.setCommentReaction(mFragmentListRefreshData, mAdapter, mLayoutManager, mFeedDetail, mRecyclerView, mCommentReactionPresenter, mAppUtils, mProgressBar);
         if (mFragmentOpen.isCommentList()) {
+            AppUtils.showKeyboard(mEtUserCommentDescription, TAG);
             mCommentReactionPresenter.getAllCommentListFromPresenter(mAppUtils.getCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId(), mFragmentListRefreshData.getPageNo()), mFragmentOpen.isReactionList(), AppConstants.NO_REACTION_CONSTANT);
         } else if (mFragmentOpen.isReactionList()) {
             mFlCommentReaction.setVisibility(View.GONE);
@@ -246,14 +246,10 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
     {
 
     }
-    @OnFocusChange(R.id.et_user_comment_description)
-    public void focusChange() {
-       /* if(StringUtil.isNotNullOrEmptyString(mEtUserCommentDescription.getText().toString())) {
-            mEtUserCommentDescription.setSelection(mEtUserCommentDescription.getText().toString().length());
-        }*/
-    }
+
     @Override
     public void getAllCommentsAndReactions(CommentReactionResponsePojo commentReactionResponsePojo, int addEditOperation) {
+        mEtUserCommentDescription.requestFocus();
         mLiNoResult.setVisibility(View.GONE);
         if (addEditOperation == AppConstants.ONE_CONSTANT) {
             if (StringUtil.isNotEmptyCollection(commentReactionResponsePojo.getCommentReactionDocList())) {
@@ -503,7 +499,7 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
           //  AppUtils.showKeyboard(mEtUserCommentDescription, TAG);
             mCommentReactionDocList.remove(mCommentReactionDoc.getItemPosition());
             mEtUserCommentDescription.setText(mCommentReactionDoc.getComment());
-            mEtUserCommentDescription.setSelection(0,mCommentReactionDoc.getComment().length()-1);
+            mEtUserCommentDescription.setSelection(mEtUserCommentDescription.getText().toString().length());
             mEtUserCommentDescription.setTextColor(ContextCompat.getColor(getActivity(), R.color.feed_article_label));
           //  mEtUserCommentDescription.setRawInputType(InputType.TYPE_CLASS_TEXT);
           //  mEtUserCommentDescription.setTextIsSelectable(true);
