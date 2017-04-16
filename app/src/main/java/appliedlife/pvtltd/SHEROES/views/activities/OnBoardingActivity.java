@@ -314,6 +314,9 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
     public void onSheroesHelpYouFragmentOpen(HashMap<String, HashMap<String, ArrayList<LabelValue>>> masterDataResult, OnBoardingEnum onBoardingEnum) {
         switch (onBoardingEnum) {
             case TELL_US_ABOUT:
+                LoginResponse loginResponse = userPreference.get();
+                loginResponse.setNextScreen(AppConstants.HOW_CAN_SHEROES_AKA_LOOKING_FOR_SCREEN);
+                userPreference.set(loginResponse);
                 mMasterDataResult = masterDataResult;
                 mHowCanSheroes.setVisibility(View.VISIBLE);
                 mInterest.setVisibility(View.GONE);
@@ -515,6 +518,9 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
         if (AppUtils.isFragmentUIActive(fragment)) {
             ((OnBoardingHowCanSheroesHelpYouFragment) fragment).onLookingForHowCanSheroesRequestClick(mSelectedTag);
         }*/
+        LoginResponse loginResponse = userPreference.get();
+        loginResponse.setNextScreen(AppConstants.FEED_SCREEN);
+        userPreference.set(loginResponse);
         Intent homeIntent = new Intent(this, HomeActivity.class);
         startActivity(homeIntent);
         finish();

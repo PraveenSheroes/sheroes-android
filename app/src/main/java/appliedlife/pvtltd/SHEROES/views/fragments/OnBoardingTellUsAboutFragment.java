@@ -108,6 +108,7 @@ public class OnBoardingTellUsAboutFragment extends BaseFragment implements OnBoa
                 }
                 if (StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getMobile())) {
                     mMobileNumber.setText(userPreference.get().getUserSummary().getMobile());
+                    mMobileNumber.setSelection(mMobileNumber.getText().toString().length());
                 }
             }
             mMasterDataResult = mUserPreferenceMasterData.get().getData();

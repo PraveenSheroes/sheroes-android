@@ -38,6 +38,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.ArticleTextView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -110,14 +111,13 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     FrameLayout flFeedArticleNoReactionComment;
     @Bind(R.id.tv_feed_article_user_comment_post_menu)
     TextView tvFeedArticleUserCommentPostMenu;
-    @Bind(R.id.tv_feed_article_view_more)
-    TextView tvFeedArticleView;
+   // @Bind(R.id.tv_feed_article_view_more)
+   // TextView tvFeedArticleView;
     BaseHolderInterface viewInterface;
     private FeedDetail dataItem;
     private Context mContext;
     private String mViewMoreDescription;
     private int mItemPosition;
-    private static String mViewMore,mLess;
     public FeedArticleHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
@@ -129,8 +129,6 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     public void bindData(FeedDetail item, final Context context, int position) {
         this.dataItem = item;
         this.mContext = context;
-        mLess = context.getString(R.string.ID_LESS);
-        mViewMore = context.getString(R.string.ID_VIEW_MORE);
         tvFeedArticleUserBookmark.setEnabled(true);
         tvFeedArticleUserReaction.setEnabled(true);
         tvFeedArticleUserReactionText.setEnabled(true);
@@ -157,19 +155,19 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
                // tvFeedArticleHeaderLebel.setText(html);
             }
             //   String dots = LEFT_VIEW_MORE + AppConstants.DOTS + RIGHT_VIEW_MORE;
-            StringBuilder dots=new StringBuilder();
-            dots.append(LEFT_VIEW_MORE).append(AppConstants.DOTS).append(RIGHT_VIEW_MORE).append(mContext.getString(R.string.ID_VIEW_MORE));
+         //   StringBuilder dots=new StringBuilder();
+         //   dots.append(LEFT_VIEW_MORE).append(AppConstants.DOTS).append(RIGHT_VIEW_MORE).append(mContext.getString(R.string.ID_VIEW_MORE));
           //  StringBuilder viewColor=new StringBuilder();
           //  viewColor.append(LEFT_HTML_VEIW_TAG_FOR_COLOR).append(mViewMore).append(RIGHT_HTML_VIEW_TAG_FOR_COLOR);
            // tvFeedArticleHeaderLebel.setText(mViewMoreDescription);
-           // ResizableCustomView.doResizeTextView(tvFeedArticleHeaderLebel, 2,mViewMore, true);
-            if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+            ArticleTextView.doResizeTextView(tvFeedArticleHeaderLebel, 2,AppConstants.VIEW_MORE, true);
+           /* if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                 tvFeedArticleView.setText(Html.fromHtml(dots.toString(), 0)); // for 24 api and more
             } else {
                 tvFeedArticleView.setText(Html.fromHtml(dots.toString()));// or for older api
-            }
+            }*/
         } else {
-            tvFeedArticleView.setVisibility(View.GONE);
+            //tvFeedArticleView.setVisibility(View.GONE);
             tvFeedArticleHeaderLebel.setVisibility(View.GONE);
         }
         //TODO:: change for UI

@@ -214,6 +214,8 @@ public class AppConstants {
     public static final String EXPERIENCE_PROFILE = "WOrk experience";
     public static final String PROJECT_PROFILE = "project_profile";
     public static final String ABOUT_ME_PROFILE = "About Me";
+    public static final String VIEW_MORE = "View More";
+    public static final String VIEW_LESS = "View Less";
     public static final String USER_PROFILE1="PROFESSINAL BASIC DETAILS";
     public static final String USER_VISITING_CARD="My Contact Card";
     public static final String USER_VISITING_CARD1="My Contact Card";
