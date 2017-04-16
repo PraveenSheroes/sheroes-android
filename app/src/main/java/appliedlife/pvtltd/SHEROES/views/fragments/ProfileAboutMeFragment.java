@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -25,6 +26,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.MyProfileView;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCardResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryRequest;
@@ -52,7 +54,7 @@ public class ProfileAboutMeFragment extends BaseFragment implements ProfileView 
     @Inject
     ProfilePersenter mProfilePresenter;
     @Bind(R.id.et_write_about_me)
-    TextView mEtWriteAboutMe;
+    EditText mEtWriteAboutMe;
     @Bind(R.id.btn_save_about_me_details)
     Button mBtnSaveAboutMeDetails;
     @Bind(R.id.charecter_cout_number)
@@ -73,6 +75,7 @@ public class ProfileAboutMeFragment extends BaseFragment implements ProfileView 
 
     String mAbout_Me_Des;
 
+    private MyProfileView mProfileView;
 
     @Override
     public void onAttach(Context context) {
@@ -94,6 +97,11 @@ public class ProfileAboutMeFragment extends BaseFragment implements ProfileView 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
+        try {
+            mProfileView = (MyProfileView) getArguments().getParcelable(AppConstants.MODEL_KEY);
+        } catch (ClassCastException ex) {
+            LogUtils.error(TAG, "Error while casting MyProfileView", ex);
+        }
         View view = inflater.inflate(R.layout.fragment_personal_aboutme, container, false);
         ButterKnife.bind(this, view);
         mProfilePresenter.attachView(this);
@@ -118,7 +126,7 @@ public class ProfileAboutMeFragment extends BaseFragment implements ProfileView 
             }
         });
 
-
+        setData();
         mEtWriteAboutMe.addTextChangedListener(new TextWatcher() {
 
 
@@ -150,6 +158,11 @@ public class ProfileAboutMeFragment extends BaseFragment implements ProfileView 
 
     }
 
+    private void setData() {
+        if (mProfileView != null && mProfileView.getUserDetails() != null) {
+            mEtWriteAboutMe.setText(mProfileView.getUserDetails().getUserSummary());
+        }
+    }
 
     @OnTouch(R.id.et_write_about_me)
     public boolean OnEdit_Text_Click() {

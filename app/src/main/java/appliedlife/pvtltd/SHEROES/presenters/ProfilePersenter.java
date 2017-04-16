@@ -215,38 +215,34 @@ public void getPersonalBasicDetailsAuthTokeInPresenter(PersonalBasicDetailsReque
 
 
     //for Professional_basic_details
-    public void getProfessionalBasicDetailsAuthTokeInPresenter(ProfessionalBasicDetailsRequest professionalBasicDetailsRequest  ) {
+    public void getProfessionalBasicDetailsAuthTokeInPresenter(ProfessionalBasicDetailsRequest professionalBasicDetailsRequest) {
         if (!NetworkUtil.isConnected(sheroesApplication)) {
 
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_AUTH_TOKEN);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
 
             return;
         }
-
+        getMvpView().startProgressBar();
         Subscription subscription = mProfileModel.getProfessionalBasicDetailsAuthTokenFromModel(professionalBasicDetailsRequest).subscribe(new Subscriber<BoardingDataResponse>() {
             @Override
             public void onCompleted() {
 
 
             }
+
             @Override
             public void onError(Throwable e) {
-
-                getMvpView().showError(e.getMessage(),ERROR_AUTH_TOKEN);
+                getMvpView().stopProgressBar();
+                getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
             }
 
             @Override
             public void onNext(BoardingDataResponse boardingDataResponse) {
-
-
-
+                getMvpView().stopProgressBar();
                 getMvpView().getProfessionalBasicDetailsResponse(boardingDataResponse);
-
-
             }
         });
         registerSubscription(subscription);
-
     }
 
 
@@ -377,6 +373,8 @@ public void getPersonalBasicDetailsAuthTokeInPresenter(PersonalBasicDetailsReque
 
 
 //for showing all data of profile listing
+
+
     public void getALLUserDetails() {
         if (!NetworkUtil.isConnected(sheroesApplication)) {
 

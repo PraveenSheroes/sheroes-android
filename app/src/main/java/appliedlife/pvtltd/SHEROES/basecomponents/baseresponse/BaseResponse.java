@@ -1,12 +1,14 @@
 package appliedlife.pvtltd.SHEROES.basecomponents.baseresponse;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.HashMap;
 
-public abstract class BaseResponse
-{
+public class BaseResponse implements Parcelable {
        @SerializedName("fieldErrorMessageMap")
         @Expose
         private HashMap<String,String> fieldErrorMessageMap;
@@ -62,4 +64,41 @@ public abstract class BaseResponse
         public void setScreenName(String screenName) {
             this.screenName = screenName;
         }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeSerializable(this.fieldErrorMessageMap);
+        dest.writeInt(this.numFound);
+        dest.writeInt(this.start);
+        dest.writeString(this.status);
+        dest.writeString(this.screenName);
+    }
+
+    public BaseResponse() {
+    }
+
+    protected BaseResponse(Parcel in) {
+        this.fieldErrorMessageMap = (HashMap<String, String>) in.readSerializable();
+        this.numFound = in.readInt();
+        this.start = in.readInt();
+        this.status = in.readString();
+        this.screenName = in.readString();
+    }
+
+    public static final Parcelable.Creator<BaseResponse> CREATOR = new Parcelable.Creator<BaseResponse>() {
+        @Override
+        public BaseResponse createFromParcel(Parcel source) {
+            return new BaseResponse(source);
+        }
+
+        @Override
+        public BaseResponse[] newArray(int size) {
+            return new BaseResponse[size];
+        }
+    };
+}

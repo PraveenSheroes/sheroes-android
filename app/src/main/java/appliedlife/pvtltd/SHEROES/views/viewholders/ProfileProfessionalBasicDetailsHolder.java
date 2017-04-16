@@ -12,6 +12,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.MyProfileView;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileViewList;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.UserDetails;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -54,19 +55,20 @@ public class ProfileProfessionalBasicDetailsHolder extends BaseViewHolder<MyProf
         mTvProfessionalEditBasicDetails.setOnClickListener(this);
         mTv_profile_basic_details.setText(AppConstants.USER_PROFILE);
 
-        if(null !=dataItem) {
-            if (StringUtil.isNotNullOrEmptyString(dataItem.getUserDetails().getJobTag())) {
-                mTvCurrentStatusValue.setText(dataItem.getUserDetails().getJobTag());
+        if (null != dataItem) {
+            UserDetails userDetails = dataItem.getUserDetails();
+            if (StringUtil.isNotNullOrEmptyString(userDetails.getJobTag())) {
+                mTvCurrentStatusValue.setText(userDetails.getJobTag());
             }
-            if (StringUtil.isNotNullOrEmptyString(dataItem.getUserDetails().getSector())) {
-                mTvSectorValue.setText(dataItem.getUserDetails().getSector());
+            if (StringUtil.isNotNullOrEmptyString(userDetails.getSector())) {
+                mTvSectorValue.setText(userDetails.getSector());
             }
-            if (StringUtil.isNotNullOrEmptyString(""+dataItem.getUserDetails().getTotalExp())) {
-                mTvTotalWorkExperienceValue.setText(""+dataItem.getUserDetails().getTotalExp());
+            if (StringUtil.isNotNullOrEmptyString(String.valueOf(userDetails.getTotalExp()))) {
+                mTvTotalWorkExperienceValue.setText(String.valueOf(userDetails.getTotalExp()));
             }
-            /*if (StringUtil.isNotNullOrEmptyString(dataItem.getUserDetails().getDepartment())) {
-                mTv_tot_language_value.setText(dataItem.getUserDetails().getDepartment());
-            }*/
+            if (StringUtil.isNotNullOrEmptyString(dataItem.getUserDetails().getDepartment())) {
+                // mTvLanguageValue.setText(dataItem.getUserDetails().);TODO:need to check about language with Sumit(server)
+            }
 
         }
 

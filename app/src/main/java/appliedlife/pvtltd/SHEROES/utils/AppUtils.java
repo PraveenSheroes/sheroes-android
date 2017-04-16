@@ -1751,6 +1751,7 @@ public class AppUtils {
         boardingJobAtRequest.setSkillIds(skillIds);
         boardingJobAtRequest.setSubtype(AppConstants.JOB_AT_SKILL_SERVICE);
         boardingJobAtRequest.setType(AppConstants.JOB_AT_SKILL_SERVICE_TYPE);
+        boardingJobAtRequest.setSource(AppConstants.SOURCE_NAME);
         return boardingJobAtRequest;
     }
     public static BoardingWorkExpRequest boardingWorkExpRequestBuilder(int totalExpYear, int totalExpMonth) {
@@ -2071,4 +2072,17 @@ public class AppUtils {
        return profileAddEditEducationRequest;
     }
 
+    public static BoardingLookingForHowCanRequest profileOpertunityTypeRequestBuilder(Set<Long> skillIds,String subType,String type) {
+        BoardingLookingForHowCanRequest boardingLookingForHowCanRequest = new BoardingLookingForHowCanRequest();
+        AppUtils appUtils = AppUtils.getInstance();
+        //TODO:: check real data
+        boardingLookingForHowCanRequest.setAppVersion(appUtils.getAppVersionName());
+        boardingLookingForHowCanRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        boardingLookingForHowCanRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+        boardingLookingForHowCanRequest.setOpportunityIds(skillIds);
+        boardingLookingForHowCanRequest.setSubtype(subType);
+        boardingLookingForHowCanRequest.setType(type);
+        boardingLookingForHowCanRequest.setSource(AppConstants.SOURCE_NAME);
+        return boardingLookingForHowCanRequest;
+    }
 }

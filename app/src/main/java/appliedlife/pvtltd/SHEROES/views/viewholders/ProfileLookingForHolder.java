@@ -3,6 +3,7 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +22,7 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.EditNameDialogListener;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static com.facebook.login.widget.ProfilePictureView.TAG;
 
@@ -87,6 +89,10 @@ public class ProfileLookingForHolder extends BaseViewHolder<MyProfileView> {
 
     }
 
+    @OnClick(R.id.tv_looking_more)
+    public void onClickViewMore() {
+        Toast.makeText(SheroesApplication.mContext, "Under development", Toast.LENGTH_SHORT).show();
+    }
 
     @Override
     public void onClick(View view) {

@@ -14,6 +14,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +23,7 @@ import com.f2prateek.rx.preferences.Preference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -31,30 +34,41 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
+import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.GetInterestJobResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.OnBoardingData;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.GoodAt;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
+import appliedlife.pvtltd.SHEROES.presenters.OnBoardingPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActicity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.OnBoardingView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.COMMUNITY_OWNER;
 
 /**
  * Created by priyanka on 26/03/17.
  */
 
-public class ProfileOpportunityTypeFragment extends BaseFragment implements BaseHolderInterface {
+public class ProfileOpportunityTypeFragment extends BaseFragment implements BaseHolderInterface, OnBoardingView {
+    private static final String TAG = "ProfileOpportunityTypeFragment";
 
-
+    @Inject
+    OnBoardingPresenter mOnBoardingPresenter;
     @Bind(R.id.rv_how_can_sheroes_help_list)
     RecyclerView mRecyclerView;
     @Inject
@@ -77,6 +91,12 @@ public class ProfileOpportunityTypeFragment extends BaseFragment implements Base
     TextView mCollapeTitleTxt;
     @Bind(R.id.al_community_open_about)
     AppBarLayout mAppBarLayout;
+    @Bind(R.id.btn_save_about_me_details)
+    Button mbtnSaveAboutMe;
+    @Inject
+    AppUtils mAppUtils;
+    @Bind(R.id.pb_profile_progress_bar)
+    ProgressBar pb_profile_progress_bar;
     String skill1, skill2;
     int mCount = 1;
     private String mSearchDataName = AppConstants.EMPTY_STRING;
@@ -87,21 +107,17 @@ public class ProfileOpportunityTypeFragment extends BaseFragment implements Base
     HashMap<String, HashMap<String, ArrayList<LabelValue>>> data = new HashMap<>();
     private List<GoodAt> listFeelter = new ArrayList<GoodAt>();
     List<String> jobAtList = new ArrayList<>();
-    private ProfileOpportunityTypeListiner profileOpportunityTypeListiner;
     private HashMap<String,Long> oppertunity=new HashMap<String,Long>();
     long optid;
+    private OppertunitiesCallback mCallback;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            if (getActivity() instanceof ProfileOpportunityTypeListiner) {
-
-
-                profileOpportunityTypeListiner = (ProfileOpportunityTypeListiner) getActivity();
-            }
+            mCallback = (OppertunitiesCallback) context;
         } catch (InstantiationException exception) {
-            //LogUtils.error(mSkill, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + mSkill + AppConstants.SPACE + exception.getMessage());
+            LogUtils.error(TAG, "Activity must implements OppertunitiesCallback", exception);
         }
     }
 
@@ -112,7 +128,6 @@ public class ProfileOpportunityTypeFragment extends BaseFragment implements Base
         setProfileOpportunityTypeText(""+oppertunity.get(goodAt),goodAt);
 
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -139,6 +154,9 @@ public class ProfileOpportunityTypeFragment extends BaseFragment implements Base
             }
         });
 
+        mbtnSaveAboutMe.setEnabled(true);
+        mOnBoardingPresenter.attachView(this);
+        setProgressBar(pb_profile_progress_bar);
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getData() ) {
             data= mUserPreference.get().getData();
             LogUtils.error("Master Data",data+"");
@@ -210,7 +228,20 @@ public class ProfileOpportunityTypeFragment extends BaseFragment implements Base
         }
         return null;
     }
+    @OnClick(R.id.btn_save_about_me_details)
+    public void saveAboutMe()
+    {
+        Set<Long> skillIds = new HashSet<>();
+        for(int i=0;i<mSkillsId.length;i++)
+        {
+            if(mSkillsId[i]>0)
+            {
+                skillIds.add(mSkillsId[i]);
+            }
+        }
+        mOnBoardingPresenter.getLookingForHowCanToPresenter(mAppUtils.profileOpertunityTypeRequestBuilder(skillIds,AppConstants.LOOKING_FOR_HOW_CAN,AppConstants.LOOKING_FOR_HOW_CAN_TYPE));
 
+    }
 
     @Override
     public void startActivityFromHolder(Intent intent) {
@@ -243,15 +274,38 @@ public class ProfileOpportunityTypeFragment extends BaseFragment implements Base
     }
 
 
-
-
-
     @OnClick(R.id.tv_looking_back)
-    public void OnclickLookingBack()
-    {
+    public void OnclickLookingBack() {
+        getActivity().onBackPressed();
 
-        profileOpportunityTypeListiner.OnLookinBack();
+    }
 
+    @Override
+    public void getAllDataResponse(GetAllData getAllData) {
+
+    }
+
+    @Override
+    public void getIntersetJobResponse(GetInterestJobResponse getInterestJobResponse) {
+
+    }
+
+    @Override
+    public void getBoardingJobResponse(BoardingDataResponse boardingDataResponse) {
+        switch (boardingDataResponse.getStatus()) {
+            case AppConstants.SUCCESS: {
+                mCallback.onSaveSuccess();
+                break;
+            }
+            case AppConstants.FAILED: {
+                mCallback.onShowErrorDialog(boardingDataResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), COMMUNITY_OWNER);
+                break;
+            }
+            default: {
+                mCallback.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, COMMUNITY_OWNER);
+                break;
+            }
+        }
     }
 
 
@@ -334,6 +388,7 @@ public class ProfileOpportunityTypeFragment extends BaseFragment implements Base
                     }
                 }
             } else if (mCount == 1) {
+                mbtnSaveAboutMe.setEnabled(true);
                 mSkill1.setVisibility(View.VISIBLE);
                 //   mVindecator.setBackgroundColor((getResources().getColor(R.color.popular_tag_color)));
                 mSkill1.setText(mSkills[mCount]);
@@ -341,5 +396,10 @@ public class ProfileOpportunityTypeFragment extends BaseFragment implements Base
             }
             mCount++;
         }
+    }
+
+    public interface OppertunitiesCallback{
+        void onSaveSuccess();
+        void onShowErrorDialog(String errorReason,FeedParticipationEnum feedParticipationEnum);
     }
 }

@@ -3,13 +3,13 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-
 import android.support.design.widget.TextInputLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,7 +57,6 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment implement
     HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult;
     @Inject
     ProfilePersenter mprofilePersenter;
-    ProfileView profileViewlistener;
     @Bind(R.id.tv_profile_tittle)
     TextView mTvProfileTittle;
     @Bind(R.id.et_year)
@@ -80,18 +79,16 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment implement
     EditText mEtSector;
     @Bind(R.id.et_add_language)
     EditText mEtAddLanguage;
-
+    @Bind(R.id.progressbar)
+    ProgressBar mProgressBar;
+    private EditProfileCallable mCallback;
 
     @Override
     public void onAttach(Context context) {
-
         try {
-
-            if (getActivity() instanceof ProfileView) {
-                profileViewlistener = (ProfileView) getActivity();
-            }
-
-        } catch (InstantiationException exception) {
+            mCallback = (EditProfileCallable) context;
+        } catch (ClassCastException exception) {
+            LogUtils.error(TAG, "Activity must implements EditProfileCallable", exception);
         }
         super.onAttach(context);
     }
@@ -104,6 +101,7 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment implement
         View view = inflater.inflate(R.layout.fragment_professional_basic_details, container, false);
         mprofilePersenter.attachView(this);
         ButterKnife.bind(this, view);
+        setProgressBar(mProgressBar);
         mTvProfileTittle.setText(R.string.ID_BASICDETAILS);
         mR1AddLanguage.setVisibility(View.GONE);
 
@@ -225,13 +223,9 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment implement
     }
 
 
-
     @OnClick(R.id.iv_back_profile)
-
-    public  void Onback_Click()
-    {
-
-        profileViewlistener.onBackPressed(R.id.iv_back_profile);
+    public void onBackPressed() {
+        getActivity().onBackPressed();
     }
 
 
@@ -243,7 +237,7 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment implement
     {
         ProfessionalBasicDetailsRequest professionalBasicDetailsRequest=new ProfessionalBasicDetailsRequest();
         AppUtils appUtils = AppUtils.getInstance();
-        professionalBasicDetailsRequest.setSource("string");
+        professionalBasicDetailsRequest.setSource(AppConstants.SOURCE_NAME);
         professionalBasicDetailsRequest.setDeviceUniqueId(appUtils.getDeviceId());
         professionalBasicDetailsRequest.setAppVersion(appUtils.getAppVersionName());
         professionalBasicDetailsRequest.setCloudMessagingId(appUtils.getCloudMessaging());
@@ -315,19 +309,24 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment implement
 
     @Override
     public void getProfessionalBasicDetailsResponse(BoardingDataResponse boardingDataResponse) {
+        int toastDuration = Toast.LENGTH_LONG;
         switch (boardingDataResponse.getStatus()) {
-            case AppConstants.SUCCESS:
-
-                //TODO:Change Message
-                Toast.makeText(getActivity(), boardingDataResponse.getStatus(),
-                        Toast.LENGTH_LONG).show();
+            case AppConstants.SUCCESS: {
+                mCallback.onBasicDetailsUpdate();
+                toastDuration = Toast.LENGTH_SHORT;
                 break;
-            case AppConstants.FAILED:
+            }
+            case AppConstants.FAILED: {
                 mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(boardingDataResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), COMMUNITY_OWNER);
                 break;
-            default:
+            }
+            default: {
                 mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, COMMUNITY_OWNER);
+                break;
+            }
         }
+        Toast.makeText(getActivity(), boardingDataResponse.getStatus(),
+                toastDuration).show();
     }
 
     @Override
@@ -378,4 +377,9 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment implement
         mEtYear.setText(""+YearValue);
         mYearValue=YearValue;
     }
+
+    public interface EditProfileCallable {
+        void onBasicDetailsUpdate();
+    }
+
 }

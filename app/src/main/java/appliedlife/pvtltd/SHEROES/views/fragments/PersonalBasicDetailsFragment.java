@@ -157,7 +157,7 @@ public class PersonalBasicDetailsFragment extends BaseFragment implements Profil
         personalBasicDetailsRequest.setScreenName("string");
         personalBasicDetailsRequest.setType("BASIC_PROFILE");
         personalBasicDetailsRequest.setSubType("BASIC_USER_PROFILE_SERVICE");
-        personalBasicDetailsRequest.setSource("string");
+        personalBasicDetailsRequest.setSource(AppConstants.SOURCE_NAME);
 
         if (StringUtil.isNotNullOrEmptyString(mCitiId)) {
             personalBasicDetailsRequest.setCityMasterId(Integer.parseInt(mCitiId));

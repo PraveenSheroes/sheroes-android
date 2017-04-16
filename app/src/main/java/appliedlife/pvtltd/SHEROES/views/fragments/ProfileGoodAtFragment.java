@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -43,6 +44,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataRespons
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.GetInterestJobResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.GoodAtSkill;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.MyProfileView;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCardResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 import appliedlife.pvtltd.SHEROES.presenters.OnBoardingPresenter;
@@ -51,7 +54,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActicity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.CustomCollapsingToolbarLayout;
@@ -68,6 +70,8 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.COMMUNITY_O
  */
 
 public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInterface, ProfileView, OnBoardingView {
+    private static final String TAG = "ProfileGoodAtFragment";
+    private static final int KEY_SKILLS_LIMIT = 4;
 
     @Inject
     ProfilePersenter mProfilePresenter;
@@ -126,7 +130,7 @@ public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInt
     private String mSearchDataName = AppConstants.EMPTY_STRING;
     String[] mSkills = new String[4];
     private FragmentListRefreshData mFragmentListRefreshData;
-    private MyProfileyGoodAtListener mHomeActivityIntractionListner;
+    private ProfileGoodAtListener mCallback;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private final String mSkill = LogUtils.makeLogTag(CreateCommunityFragment.class);
@@ -141,13 +145,15 @@ public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInt
     @Bind(R.id.al_profile_good_at)
     AppBarLayout mAppBarLayout;
 
+    private MyProfileView mBaseResponse;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            mHomeActivityIntractionListner = (MyProfileyGoodAtListener) getActivity();
+            mCallback = (ProfileGoodAtListener) getActivity();
         } catch (ClassCastException exception) {
-            LogUtils.error(mSkill, "Activity must implements MyProfileyGoodAtListener",exception);
+            LogUtils.error(mSkill, "Activity must implements ProfileGoodAtListener",exception);
         }
     }
 
@@ -155,9 +161,14 @@ public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInt
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getActivity()).inject(this);
-
+        try {
+            mBaseResponse = (MyProfileView) getArguments().getParcelable(AppConstants.MODEL_KEY);
+        }catch (ClassCastException ex){
+            LogUtils.error(TAG, "Error while casting", ex);
+        }
         View v = inflater.inflate(R.layout.profile_good_at_fragment, container, false);
         ButterKnife.bind(this, v);
+        setProgressBar(mProgressBar);
         mProfilePresenter.attachView(this);
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ALL_SEARCH, AppConstants.NO_REACTION_CONSTANT);
         mTvSkillSubmit.setVisibility(View.GONE);
@@ -246,21 +257,39 @@ public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInt
 
     @OnClick(R.id.tv_skill_submit)
     public void SkillSubmitPress() {
-
-        Set<Long> skillIds = new HashSet<>();
-        for(int i=0;i<skillsid.length;i++)
-        {
-            if(skillsid[i]>0)
-            {
-                skillIds.add(skillsid[i]);
-
+        List<Long> longList = getExistingSelection();
+        for (int i = 0; i < skillsid.length; i++) {
+            if (skillsid[i] > 0) {
+                if (longList.size() < KEY_SKILLS_LIMIT) {
+                    if (!longList.contains(skillsid[i])) {
+                        longList.add(skillsid[i]);
+                    }
+                } else {
+                    if (!longList.contains(skillsid[i])) {
+                        longList.remove(0);
+                        longList.add(skillsid[i]);
+                    } else {
+                        longList.remove(longList.indexOf(skillsid[i]));
+                        longList.add(skillsid[i]);
+                    }
+                }
             }
+
         }
-
-        mOnBoardingPresenter.getJobAtToPresenter(mAppUtils.boardingJobAtRequestBuilder(skillIds));
-
+        mOnBoardingPresenter.getJobAtToPresenter(mAppUtils.boardingJobAtRequestBuilder(new HashSet<Long>(longList)));
     }
 
+    @NonNull
+    private List<Long> getExistingSelection() {
+        List<Long> skillsIdList = new ArrayList<>();
+        if (mBaseResponse != null) {
+            List<GoodAtSkill> skillList = mBaseResponse.getGoodAtSkill();
+            for (GoodAtSkill skill : skillList) {
+                skillsIdList.add(skill.getId());
+            }
+        }
+        return skillsIdList;
+    }
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
 
@@ -681,29 +710,26 @@ public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInt
 
     @Override
     public void getBoardingJobResponse(BoardingDataResponse boardingDataResponse) {
-
-
         switch (boardingDataResponse.getStatus()) {
-            case AppConstants.SUCCESS:
-                ((ProfileActicity)getActivity()).getSupportFragmentManager().popBackStack();
+            case AppConstants.SUCCESS: {
+                mCallback.onGoodAtBack();
                 break;
-            case AppConstants.FAILED:
+            }
+            case AppConstants.FAILED: {
                 mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(boardingDataResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), COMMUNITY_OWNER);
                 break;
-            default:
+            }
+            default: {
                 mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.HTTP_401_UNAUTHORIZED, COMMUNITY_OWNER);
+                break;
+            }
         }
-
     }
 
 
-    public interface MyProfileyGoodAtListener {
-
+    public interface ProfileGoodAtListener {
         void onErrorOccurence();
-
-        void OnSearchClick();
-
-
+        void onGoodAtBack();
     }
 
 }

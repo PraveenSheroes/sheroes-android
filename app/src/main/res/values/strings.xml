@@ -628,6 +628,7 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_ADD_LANGUAGE">ADD LANGUAGE</string>
     <string name="ID_SELECT_PROFICIENT">PROFICIENT</string>
     <string name="ID_ADDED">Added</string>
+    <string name="language">Language</string>
 
     <!-- String related to setting_preference_work_experience  view page-->
 

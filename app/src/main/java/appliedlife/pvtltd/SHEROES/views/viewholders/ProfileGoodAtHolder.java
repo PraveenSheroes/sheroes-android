@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +23,7 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.EditNameDialogListener;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static com.facebook.GraphRequest.TAG;
 
@@ -95,24 +97,22 @@ public class ProfileGoodAtHolder extends BaseViewHolder<MyProfileView> {
 
     }
 
+    @OnClick(R.id.tv_more)
+    public void onClickViewMore() {
+        Toast.makeText(SheroesApplication.mContext, "Under development", Toast.LENGTH_SHORT).show();
+    }
 
     @Override
     public void onClick(View view) {
-
-
-
         switch (view.getId()) {
-
-            case R.id.tv_add_good_at:
-
-                viewInterface.handleOnClick(this.dataItem,mTv_add_good_at);
+            case R.id.tv_add_good_at: {
+                viewInterface.handleOnClick(this.dataItem, mTv_add_good_at);
                 break;
-            default:
+            }
+            default: {
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + view.getId());
+                break;
+            }
         }
-
-
-
-
     }
 }

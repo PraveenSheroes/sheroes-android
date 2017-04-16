@@ -158,14 +158,6 @@
                     android:layout_weight="0.33"
                     android:background="@color/blue" />
 
-                <ProgressBar
-                    android:id="@+id/pb_search_Skill_progress_bar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/text1"
-                    android:layout_centerInParent="true"
-                    android:visibility="gone" />
-
                 <LinearLayout
                     android:id="@+id/ll_indecator"
                     android:layout_width="match_parent"
@@ -370,8 +362,14 @@
 
     </android.support.design.widget.CoordinatorLayout>
 
+    <ProgressBar
+        android:id="@+id/pb_search_Skill_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
 
-    <Button xmlns:android="http://schemas.android.com/apk/res/android"
+    <Button
         android:id="@+id/tv_skill_submit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

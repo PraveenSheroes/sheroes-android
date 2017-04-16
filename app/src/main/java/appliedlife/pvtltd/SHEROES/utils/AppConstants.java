@@ -195,7 +195,7 @@ public class AppConstants {
     public static final String LEFT_BRACKET = "(";
     public static final String RIGHT_BRACKET = ")";
     public  static  final String TRAVEL="TRAVEL_FLEXIBILITY";
-    public static final String STRING="string";
+    public static final String STRING = SOURCE_NAME;
     public static final String SUMMARY="SUMMARY";
     public static final String USER_SUMMARY_SERVICE="USER_SUMMARY_SERVICE";
     public static final String VISIT_PREFERENCE="VISIT_PREFERENCE";
@@ -238,4 +238,6 @@ public class AppConstants {
     public static final String ARTICLE_ID = "article_id";
     public static final String COMMUNITY_ID = "community_id";
     public static final String COMMUNITY_POST_ID = "community_post_id";
+
+    public static final String MODEL_KEY = "key";
 }

@@ -11,37 +11,37 @@
         android:orientation="vertical">
 
 
+        <RelativeLayout
+            android:id="@+id/r1_add_education_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_size_16">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/dp_size_16"
-        android:id="@+id/r1_add_education_card">
+            <TextView
+                android:id="@+id/tv_job_language_number"
+                android:layout_width="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_height="wrap_content"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:text="@string/ID_EDUCATION"
+                android:textAllCaps="true"
+                android:textColor="@color/dashboard_fed_text"
+                android:textSize="@dimen/sp_size_13" />
 
-    <TextView
-        android:id="@+id/tv_job_language_number"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@string/ID_ROBOTO_REGULAR"
-        android:text="@string/ID_EDUCATION"
-        android:textAllCaps="true"
-        android:textColor="@color/dashboard_fed_text"
-        android:textSize="@dimen/sp_size_13" />
+            <TextView
+                android:id="@+id/tv_add_education"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:padding="@dimen/dp_size_3"
+                android:layout_centerVertical="true"
+                android:drawableRight="@drawable/ic_add_icon_grey" />
 
-    <TextView
-        android:id="@+id/tv_add_education"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:drawableRight="@drawable/ic_add_icon_grey"
-            />
+        </RelativeLayout>
 
-    </RelativeLayout>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="@dimen/dp_size_30">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
         <TextView
             android:id="@+id/tv_degree1"
             android:layout_width="wrap_content"
@@ -122,8 +122,9 @@
             android:id="@+id/tv_education_saperate_line"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_size_1"
+            android:layout_marginRight="@dimen/dp_size_18"
             android:layout_below="@+id/tv_degree22"
-            android:layout_marginTop="@dimen/dp_size_5"
+            android:layout_marginTop="@dimen/dp_size_16"
             android:layout_marginLeft="@dimen/dp_size_16"
             android:background="@color/text_education_line"
             />

@@ -99,9 +99,7 @@ public class PersonalProfileFragment extends BaseFragment implements ProfileView
     }
 
     private void callGetAllDetailsAPI() {
-
         profilePersenter.getALLUserDetails();
-
     }
 
     @Override

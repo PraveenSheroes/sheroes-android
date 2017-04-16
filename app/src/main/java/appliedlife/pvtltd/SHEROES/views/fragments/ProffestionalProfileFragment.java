@@ -56,9 +56,9 @@ public class ProffestionalProfileFragment extends BaseFragment implements Profil
     GenericRecyclerViewAdapter mAdapter;
     private HomeActivityIntractionWithProffestionalProfile mHomeActivityIntractionWithProffestionalProfile;
     List<ProfileViewList> profileList = new ArrayList<ProfileViewList>();
+    private static ProffestionalProfileFragment proffestionalProfileFragment = new ProffestionalProfileFragment();
 
-    public static ProffestionalProfileFragment createInstance() {
-        ProffestionalProfileFragment proffestionalProfileFragment = new ProffestionalProfileFragment();
+    public static ProffestionalProfileFragment getInstance() {
         return proffestionalProfileFragment;
     }
 
@@ -106,7 +106,9 @@ public class ProffestionalProfileFragment extends BaseFragment implements Profil
 
 
 
-
+    public void onDataRefresh() {
+        profilePersenter.getALLUserDetails();
+    }
 
     private void callGetAllDetailsAPI() {
 

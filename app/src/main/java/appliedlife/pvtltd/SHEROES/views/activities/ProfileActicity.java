@@ -97,7 +97,8 @@ import butterknife.OnClick;
  * Created by Priyanka on 13-02-2017.
  */
 
-public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragment.MyProfileyGoodAtListener, ProfileView, BaseHolderInterface, AppBarLayout.OnOffsetChangedListener, ProfileTravelClientFragment.ProfileTravelClientFragmentListener, ProfileCityWorkFragment.ProfileWorkLocationFragmentListener, ProfileAboutMeFragment.ProfileAboutMeFragmentListener, ProfileOpportunityTypeFragment.ProfileOpportunityTypeListiner, ProfileShareYourIntrestFragment.MyProfileyYourInterestListener {
+public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragment.ProfileGoodAtListener, ProfileView, BaseHolderInterface, AppBarLayout.OnOffsetChangedListener, ProfileTravelClientFragment.ProfileTravelClientFragmentListener, ProfileCityWorkFragment.ProfileWorkLocationFragmentListener, ProfileAboutMeFragment.ProfileAboutMeFragmentListener, ProfileOpportunityTypeFragment.ProfileOpportunityTypeListiner, ProfileShareYourIntrestFragment.MyProfileyYourInterestListener,
+        ProfessionalEditBasicDetailsFragment.EditProfileCallable,ProfileOpportunityTypeFragment.OppertunitiesCallback{
     private final String TAG = LogUtils.makeLogTag(ProfileActicity.class);
     private static final String EXTRA_IMAGE = "extraImage";
     private static final String DECRIPTION = "desc";
@@ -209,7 +210,7 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         viewPagerAdapter.addFragment(PersonalProfileFragment.getInstance(), getString(R.string.ID_PERSONAL));
-        viewPagerAdapter.addFragment(ProffestionalProfileFragment.createInstance(), getString(R.string.ID_PROFESSIONAL));
+        viewPagerAdapter.addFragment(ProffestionalProfileFragment.getInstance(), getString(R.string.ID_PROFESSIONAL));
 
         mViewPager.setAdapter(viewPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
@@ -416,18 +417,18 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
                 break;
 
 
-            case R.id.tv_add_about_me:
-
+            case R.id.tv_add_about_me: {
                 flprofile_container.setVisibility(View.VISIBLE);
                 ProfileAboutMeFragment profileAboutMeFragment = new ProfileAboutMeFragment();
                 Bundle bundleAddAboutMeFragment = new Bundle();
+                bundleAddAboutMeFragment.putParcelable(AppConstants.MODEL_KEY, baseResponse);
                 ButterKnife.bind(this);
                 profileAboutMeFragment.setArguments(bundleAddAboutMeFragment);
                 getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
                         .replace(R.id.profile_container, profileAboutMeFragment, ProfileAboutMeFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
 
                 break;
-
+            }
             case R.id.tv_download_my_card:
 
                 flprofile_container.setVisibility(View.VISIBLE);
@@ -454,14 +455,17 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
                 break;
             }
 
-            case R.id.tv_add_good_at:
+            case R.id.tv_add_good_at: {
                 mFragmentOpen.setGoodAtFragment(true);
                 flprofile_container.setVisibility(View.VISIBLE);
                 ProfileGoodAtFragment profileGoodAtFragment = new ProfileGoodAtFragment();
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(AppConstants.MODEL_KEY, baseResponse);
+                profileGoodAtFragment.setArguments(bundle);
                 getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
                         .replace(R.id.profile_container, profileGoodAtFragment, ProfileGoodAtFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
                 break;
-
+            }
             case R.id.tv_looking_for: {
                 flprofile_container.setVisibility(View.VISIBLE);
                 ProfileOpportunityTypeFragment profileOpportunityTypeFragment = new ProfileOpportunityTypeFragment();
@@ -767,10 +771,7 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
         return profileSearchIntrestIn;
     }
 
-    @Override
-    public void OnSearchClick() {
 
-    }
 
     public DialogFragment callSearchGoodAtDialog() {
         SearchGoodAt searchGoodAt = (SearchGoodAt) getFragmentManager().findFragmentByTag(SearchGoodAt.class.getName());
@@ -812,5 +813,21 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
     @Override
     public void OnLookinBack() {
         onBackPressed();
+    }
+
+    @Override
+    public void onGoodAtBack() {
+        ProffestionalProfileFragment.getInstance().onDataRefresh();
+        onBackPressed();
+    }
+
+    @Override
+    public void onBasicDetailsUpdate() {
+        onGoodAtBack();
+    }
+
+    @Override
+    public void onSaveSuccess() {
+        aboutMeBack();
     }
 }

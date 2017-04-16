@@ -222,6 +222,12 @@
                         android:textColor="@color/blue"
                         android:textSize="@dimen/sp_size_13"
                         android:visibility="gone"/>
+                    <ProgressBar
+                        android:id="@+id/pb_profile_progress_bar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        android:layout_gravity="center" />
                 </RelativeLayout>
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/rv_how_can_sheroes_help_list"
