@@ -100,6 +100,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
     Preference<MasterDataResponse> mUserPreferenceMasterData;
     private int position;
     private OnBoardingData mBoardingData;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -159,6 +160,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
             finish();
         }
     }
+
     public DialogFragment showHeySuccessDialog() {
         OnBoardingDailogHeySuccess onBoardingDailogHeySuccess = (OnBoardingDailogHeySuccess) getFragmentManager().findFragmentByTag(OnBoardingDailogHeySuccess.class.getName());
         if (onBoardingDailogHeySuccess == null) {
@@ -169,6 +171,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
         }
         return onBoardingDailogHeySuccess;
     }
+
     public void tellUsAboutFragment() {
         LoginResponse loginResponse = userPreference.get();
         loginResponse.setNextScreen(AppConstants.CURRENT_STATUS_SCREEN);
@@ -251,7 +254,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
 
 
     private void setTagsForFragment(OnBoardingData boardingData, View view) {
-        mBoardingData=boardingData;
+        mBoardingData = boardingData;
         switch (boardingData.getFragmentName()) {
             case AppConstants.HOW_SHEROES_CAN_HELP:
                 if (mIvHowCanSheroesNext.getVisibility() == View.GONE) {
@@ -508,10 +511,13 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
 
     @OnClick(R.id.iv_how_can_help_next)
     public void onLookingNextClick() {
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(OnBoardingHowCanSheroesHelpYouFragment.class.getName());
+      /*  Fragment fragment = getSupportFragmentManager().findFragmentByTag(OnBoardingHowCanSheroesHelpYouFragment.class.getName());
         if (AppUtils.isFragmentUIActive(fragment)) {
             ((OnBoardingHowCanSheroesHelpYouFragment) fragment).onLookingForHowCanSheroesRequestClick(mSelectedTag);
-        }
+        }*/
+        Intent homeIntent = new Intent(this, HomeActivity.class);
+        startActivity(homeIntent);
+        finish();
     }
 
     public void onLookingForHowCanSheroesNextClick() {
@@ -549,7 +555,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
         mHowCanSheroes.setVisibility(View.GONE);
         mInterest.setVisibility(View.VISIBLE);
         mJobAt.setVisibility(View.GONE);
-        LoginResponse loginResponse=userPreference.get();
+        LoginResponse loginResponse = userPreference.get();
         loginResponse.setNextScreen(AppConstants.FEED_SCREEN);
         userPreference.set(loginResponse);
         Intent homeIntent = new Intent(this, HomeActivity.class);
@@ -589,6 +595,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
         mJobAt.setVisibility(View.VISIBLE);
         searchDataInBoarding(AppConstants.JOB_AT_GET_ALL_DATA_KEY, OnBoardingEnum.JOB_AT_SEARCH);
     }
+
     public DialogFragment showCurrentStatusDialog(HashMap<String, HashMap<String, ArrayList<LabelValue>>> masterDataResult) {
         mCurrentStatusDialog = (CurrentStatusDialog) getFragmentManager().findFragmentByTag(CurrentStatusDialog.class.getName());
         if (mCurrentStatusDialog == null) {
@@ -723,7 +730,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
                         if (StringUtil.isNotEmptyCollection(lookingTemp)) {
                             lookingTemp.remove(labelValue);
                         }
-                         renderSelectedAddedItem(mLiStripForAddItem, lookingTemp);
+                        renderSelectedAddedItem(mLiStripForAddItem, lookingTemp);
                         break;
                     case AppConstants.YOUR_INTEREST:
                         mLiInterestStripForAddItem.removeAllViews();

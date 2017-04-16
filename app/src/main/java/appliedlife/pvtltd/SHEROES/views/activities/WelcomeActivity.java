@@ -1,21 +1,24 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.DialogFragment;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.text.Html;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.f2prateek.rx.preferences.Preference;
 import com.facebook.AccessToken;
@@ -37,6 +40,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.inject.Inject;
 
@@ -55,6 +60,7 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.FacebookErrorDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeScreenFirstFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeScreenFourthFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeScreenSecondFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeScreenThirdFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.LoginView;
@@ -80,16 +86,25 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     ImageView ivWelcomeSecond;
     @Bind(R.id.iv_welcome_third)
     ImageView ivWelcomeThird;
-    @Bind(R.id.fb_welcome_footer)
-    LinearLayout fbWelcomeFooter;
+    @Bind(R.id.iv_welcome_fourth)
+    ImageView ivWelcomeFourth;
     @Bind(R.id.click_to_join)
     LoginButton mFbLogin;
+    @Bind(R.id.tv_join)
+    TextView mTvJoin;
+    @Bind(R.id.tv_growth_women)
+    TextView mTvGrowthWomen;
     @Bind(R.id.pb_login_progress_bar)
     ProgressBar mProgressBar;
     private static final int READ_CONTACTS_PERMISSIONS_REQUEST1 = 1;
     private CallbackManager callbackManager;
     private AccessTokenTracker accessTokenTracker;
     private ProfileTracker profileTracker;
+    int currentPage = 0;
+    Timer timer;
+    int NUM_PAGES = 4;
+    private static final String LEFT = "<b><font color='#ffffff'>";
+    private static final String RIGHT = "</font></b>";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -131,11 +146,24 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         profileTracker.startTracking();
     }
 
+    @TargetApi(AppConstants.ANDROID_SDK_24)
     private void initHomeViewPagerAndTabs() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Join").append(LEFT).append(" 1 Million+ Women ").append(RIGHT).append("Just As Awesome As You");
+        StringBuilder womenGrowth = new StringBuilder();
+        womenGrowth.append("A Growth Network").append(LEFT).append(" Only for Women ").append(RIGHT).append("Because");
+        if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+            mTvJoin.setText(Html.fromHtml(stringBuilder.toString(), 0)); // for 24 api and more
+            mTvGrowthWomen.setText(Html.fromHtml(womenGrowth.toString(), 0)); // for 24 api and more
+        }else {
+            mTvJoin.setText(Html.fromHtml(stringBuilder.toString())); // for 24 api and more
+            mTvGrowthWomen.setText(Html.fromHtml(womenGrowth.toString())); // for 24 api and more
+        }
         mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         mViewPagerAdapter.addFragment(new WelcomeScreenFirstFragment(), AppConstants.EMPTY_STRING);
         mViewPagerAdapter.addFragment(new WelcomeScreenSecondFragment(), AppConstants.EMPTY_STRING);
         mViewPagerAdapter.addFragment(new WelcomeScreenThirdFragment(), AppConstants.EMPTY_STRING);
+        mViewPagerAdapter.addFragment(new WelcomeScreenFourthFragment(), AppConstants.EMPTY_STRING);
         mViewPager.setAdapter(mViewPagerAdapter);
         mViewPager.addOnPageChangeListener(this);
         mLoginPresenter.attachView(this);
@@ -144,6 +172,23 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         }
         mLoginPresenter.getMasterDataToPresenter();
         fbSignIn();
+        final Handler handler = new Handler();
+        final Runnable Update = new Runnable() {
+            public void run() {
+                if (currentPage == NUM_PAGES) {
+                    currentPage = 0;
+                }
+                mViewPager.setCurrentItem(currentPage++, true);
+            }
+        };
+        timer = new Timer(); // This will create a new Thread
+        timer.schedule(new TimerTask() { // task to be scheduled
+
+            @Override
+            public void run() {
+                handler.post(Update);
+            }
+        }, 500, 3000);
     }
 
     @OnClick(R.id.click_to_join)
@@ -207,19 +252,25 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                 ivWelcomeFirst.setImageResource(R.drawable.ic_circle_red);
                 ivWelcomeSecond.setImageResource(R.drawable.ic_circle_w);
                 ivWelcomeThird.setImageResource(R.drawable.ic_circle_w);
-                fbWelcomeFooter.setVisibility(View.GONE);
+                ivWelcomeFourth.setImageResource(R.drawable.ic_circle_w);
                 break;
             case AppConstants.ONE_CONSTANT:
                 ivWelcomeSecond.setImageResource(R.drawable.ic_circle_red);
                 ivWelcomeFirst.setImageResource(R.drawable.ic_circle_w);
                 ivWelcomeThird.setImageResource(R.drawable.ic_circle_w);
-                fbWelcomeFooter.setVisibility(View.GONE);
+                ivWelcomeFourth.setImageResource(R.drawable.ic_circle_w);
                 break;
             case AppConstants.TWO_CONSTANT:
                 ivWelcomeThird.setImageResource(R.drawable.ic_circle_red);
                 ivWelcomeFirst.setImageResource(R.drawable.ic_circle_w);
                 ivWelcomeSecond.setImageResource(R.drawable.ic_circle_w);
-                fbWelcomeFooter.setVisibility(View.GONE);
+                ivWelcomeFourth.setImageResource(R.drawable.ic_circle_w);
+                break;
+            case AppConstants.THREE_CONSTANT:
+                ivWelcomeFourth.setImageResource(R.drawable.ic_circle_red);
+                ivWelcomeFirst.setImageResource(R.drawable.ic_circle_w);
+                ivWelcomeSecond.setImageResource(R.drawable.ic_circle_w);
+                ivWelcomeThird.setImageResource(R.drawable.ic_circle_w);
                 break;
         }
     }
@@ -415,8 +466,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     @Override
     public void onSuccessResult(String result, FeedDetail feedDetail) {
         if (result.equalsIgnoreCase(AppConstants.SUCCESS)) {
-            fbWelcomeFooter.setVisibility(View.VISIBLE);
-            setCustomAnimation(fbWelcomeFooter);
         }
     }
 }

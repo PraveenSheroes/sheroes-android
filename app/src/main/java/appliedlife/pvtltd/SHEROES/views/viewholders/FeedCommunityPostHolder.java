@@ -626,6 +626,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_feed_community_post_total_replies)
     public void repliesClick() {
+        dataItem.setCallFromName(mContext.getString(R.string.ID_REPLY));
         viewInterface.handleOnClick(dataItem, liFeedCommunityPostJoinConversation);
     }
 
@@ -637,15 +638,18 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.li_feed_community_post_join_conversation)
     public void joinConversationClick() {
+        dataItem.setCallFromName(AppConstants.EMPTY_STRING);
         viewInterface.handleOnClick(dataItem, liFeedCommunityPostJoinConversation);
     }
 
     @OnClick(R.id.li_feed_community_post_user_comments)
     public void openCommentClick() {
+        dataItem.setCallFromName(AppConstants.EMPTY_STRING);
         viewInterface.handleOnClick(dataItem, liFeedCommunityPostJoinConversation);
     }
     @OnClick(R.id.tv_feed_community_post_user_comment)
     public void userCommentClick() {
+        dataItem.setCallFromName(AppConstants.EMPTY_STRING);
         viewInterface.handleOnClick(dataItem, liFeedCommunityPostJoinConversation);
     }
 

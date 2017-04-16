@@ -20,11 +20,6 @@ public class GetAllDataRequest extends BaseRequest implements Parcelable {
     @Expose
     private String q;
 
-    @SerializedName("source")
-    @Expose
-    private String source;
-
-
     public String getMasterDataType() {
         return masterDataType;
     }
@@ -41,14 +36,6 @@ public class GetAllDataRequest extends BaseRequest implements Parcelable {
         this.q = q;
     }
 
-    public String getSource() {
-        return source;
-    }
-
-    public void setSource(String source) {
-        this.source = source;
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -58,7 +45,6 @@ public class GetAllDataRequest extends BaseRequest implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.masterDataType);
         dest.writeString(this.q);
-        dest.writeString(this.source);
     }
 
     public GetAllDataRequest() {
@@ -67,10 +53,9 @@ public class GetAllDataRequest extends BaseRequest implements Parcelable {
     protected GetAllDataRequest(Parcel in) {
         this.masterDataType = in.readString();
         this.q = in.readString();
-        this.source = in.readString();
     }
 
-    public static final Parcelable.Creator<GetAllDataRequest> CREATOR = new Parcelable.Creator<GetAllDataRequest>() {
+    public static final Creator<GetAllDataRequest> CREATOR = new Creator<GetAllDataRequest>() {
         @Override
         public GetAllDataRequest createFromParcel(Parcel source) {
             return new GetAllDataRequest(source);

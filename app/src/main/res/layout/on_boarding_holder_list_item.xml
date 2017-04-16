@@ -17,13 +17,13 @@
         android:textColor="@color/blue"
         android:textSize="@dimen/sp_size_15" />
 
-    <LinearLayout
+    <appliedlife.pvtltd.SHEROES.views.cutomeviews.HorizontalFlowLayout
         android:id="@+id/li_tags"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_size_4"
-        android:layout_marginTop="@dimen/dp_size_15"
-        android:orientation="vertical">
-    </LinearLayout>
+        android:layout_marginTop="@dimen/dp_size_15">
+        <!--Item will be added here at runtime-->
+    </appliedlife.pvtltd.SHEROES.views.cutomeviews.HorizontalFlowLayout>
 
 </LinearLayout>

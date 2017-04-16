@@ -14,9 +14,6 @@ public class ApproveMemberRequest extends BaseRequest {
     @SerializedName("community_id")
     @Expose
     private Long communityId;
-    @SerializedName("source")
-    @Expose
-    private String source;
     @SerializedName("user_id")
     @Expose
     private Long userId;
@@ -28,15 +25,6 @@ public class ApproveMemberRequest extends BaseRequest {
 
     public void setCommunityId(Long communityId) {
         this.communityId = communityId;
-    }
-
-
-    public String getSource() {
-        return source;
-    }
-
-    public void setSource(String source) {
-        this.source = source;
     }
 
     public Long getUserId() {

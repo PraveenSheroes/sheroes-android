@@ -106,6 +106,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.SettingPreferencsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SettingTermsAndConditionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareCommunityFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeScreenFirstFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeScreenFourthFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeScreenSecondFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeScreenThirdFragment;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleCardHolder;
@@ -325,6 +326,7 @@ public interface SheroesAppComponent {
     void inject(ProfileVisitingCardView profileVisitingCardView);
     void inject(ProfilePersenter profilePersenter);
     void inject(WelcomeActivity welcomeActivity);
+    void inject(WelcomeScreenFourthFragment welcomeScreenFourthFragment);
     void inject(WelcomeScreenThirdFragment welcomeScreenThirdFragment);
     void inject(WelcomeScreenSecondFragment welcomeScreenSecondFragment);
     void inject(WelcomeScreenFirstFragment welcomeScreenFirstFragment);

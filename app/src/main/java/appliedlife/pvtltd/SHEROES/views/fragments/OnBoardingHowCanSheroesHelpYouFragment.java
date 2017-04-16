@@ -80,14 +80,11 @@ public class OnBoardingHowCanSheroesHelpYouFragment extends BaseFragment impleme
         mRecyclerView.addOnScrollListener(new HidingScrollListener(mRecyclerView, manager, new FragmentListRefreshData()) {
             @Override
             public void onHide() {
-                LogUtils.info(TAG,"***********on hide ********");
                 ((OnBoardingActivity) getActivity()).mLiStripForAddItem.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onShow() {
-                LogUtils.info(TAG,"***********on show********");
-
                 ((OnBoardingActivity) getActivity()).mLiStripForAddItem.setVisibility(View.VISIBLE);
 
             }

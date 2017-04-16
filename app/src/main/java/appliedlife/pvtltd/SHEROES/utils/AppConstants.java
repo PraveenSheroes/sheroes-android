@@ -50,7 +50,7 @@ public class AppConstants {
     public static final String COMMUNITY_NAME_SUB_TYPE = "CN";
     public static final String FEED_SCREEN = "feed";
     public static final String CURRENT_STATUS_SCREEN = "current_status";
-    public static final String SOURCE_NAME = "Android";
+    public static final String SOURCE_NAME = "android";
 
     public static final String HOW_CAN_SHEROES_AKA_LOOKING_FOR_SCREEN = "looking_for";
     public static final String GOOD_AT_SCREEN = "good_at";

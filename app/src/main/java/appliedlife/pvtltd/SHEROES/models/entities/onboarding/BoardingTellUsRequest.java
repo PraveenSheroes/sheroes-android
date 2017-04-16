@@ -22,9 +22,6 @@ public class BoardingTellUsRequest extends BaseRequest {
     @SerializedName("job_tag_id")
     @Expose
     private long jobTagId;
-    @SerializedName("source")
-    @Expose
-    private String source;
     @SerializedName("subType")
     @Expose
     private String subtype;
@@ -67,13 +64,6 @@ public class BoardingTellUsRequest extends BaseRequest {
         this.jobTagId = jobTagId;
     }
 
-    public String getSource() {
-        return source;
-    }
-
-    public void setSource(String source) {
-        this.source = source;
-    }
 
     public String getSubtype() {
         return subtype;

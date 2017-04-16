@@ -148,11 +148,15 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             Document documentString = Jsoup.parse(mViewMoreDescription);
             tvFeedArticleHeaderLebel.setVisibility(View.VISIBLE);
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                tvFeedArticleHeaderLebel.setText(Html.fromHtml(documentString.text(), 0)); // for 24 api and more
+               tvFeedArticleHeaderLebel.setText(Html.fromHtml(documentString.text(), 0)); // for 24 api and more
+               // Spanned html = Html.fromHtml(documentString.text(),0);
+              //  tvFeedArticleHeaderLebel.setText(html);
             } else {
-                tvFeedArticleHeaderLebel.setText(Html.fromHtml(documentString.text()));// or for older api
+               tvFeedArticleHeaderLebel.setText(Html.fromHtml(documentString.text()));// or for older api
+              //  Spanned html = Html.fromHtml(documentString.text());
+               // tvFeedArticleHeaderLebel.setText(html);
             }
-         //   String dots = LEFT_VIEW_MORE + AppConstants.DOTS + RIGHT_VIEW_MORE;
+            //   String dots = LEFT_VIEW_MORE + AppConstants.DOTS + RIGHT_VIEW_MORE;
             StringBuilder dots=new StringBuilder();
             dots.append(LEFT_VIEW_MORE).append(AppConstants.DOTS).append(RIGHT_VIEW_MORE).append(mContext.getString(R.string.ID_VIEW_MORE));
           //  StringBuilder viewColor=new StringBuilder();
@@ -168,7 +172,6 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             tvFeedArticleView.setVisibility(View.GONE);
             tvFeedArticleHeaderLebel.setVisibility(View.GONE);
         }
-
         //TODO:: change for UI
         if (StringUtil.isNotNullOrEmptyString(dataItem.getAuthorName())) {
             tvFeedArticleCardTitle.setText(dataItem.getAuthorName());
@@ -397,6 +400,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_feed_article_total_replies)
     public void repliesClick() {
+        dataItem.setCallFromName(mContext.getString(R.string.ID_REPLY));
         viewInterface.handleOnClick(dataItem, liFeedArticleJoinConversation);
     }
 
@@ -414,16 +418,19 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.li_feed_article_join_conversation)
     public void joinConversationClick() {
+        dataItem.setCallFromName(AppConstants.EMPTY_STRING);
         viewInterface.handleOnClick(dataItem, liFeedArticleJoinConversation);
     }
 
     @OnClick(R.id.li_feed_article_user_comments)
     public void openCommentClick() {
+        dataItem.setCallFromName(AppConstants.EMPTY_STRING);
         viewInterface.handleOnClick(dataItem, liFeedArticleJoinConversation);
     }
 
     @OnClick(R.id.tv_feed_article_user_comment)
     public void articleUserCommentClick() {
+        dataItem.setCallFromName(AppConstants.EMPTY_STRING);
         viewInterface.handleOnClick(dataItem, liFeedArticleJoinConversation);
     }
 

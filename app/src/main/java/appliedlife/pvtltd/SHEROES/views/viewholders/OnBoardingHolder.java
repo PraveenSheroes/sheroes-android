@@ -16,6 +16,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.OnBoardingData;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.HorizontalFlowLayout;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -27,7 +28,7 @@ public class OnBoardingHolder extends BaseViewHolder<OnBoardingData> {
     private final String TAG = LogUtils.makeLogTag(OnBoardingHolder.class);
     BaseHolderInterface viewInterface;
     @Bind(R.id.li_tags)
-    LinearLayout liTags;
+    HorizontalFlowLayout liTags;
     @Bind(R.id.tv_tag_header)
     TextView tvTagHeader;
     private OnBoardingData dataItem;
@@ -55,8 +56,18 @@ public class OnBoardingHolder extends BaseViewHolder<OnBoardingData> {
     public void viewRecycled() {
 
     }
-
     public void renderOnBoardingView() {
+        if (StringUtil.isNotEmptyCollection(dataItem.getBoardingDataList()) && StringUtil.isNotNullOrEmptyString(dataItem.getCategory())) {
+            tvTagHeader.setText(dataItem.getCategory());
+            List<LabelValue> list = dataItem.getBoardingDataList();
+            // LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            //HorizontalFlowLayout view = (HorizontalFlowLayout) layoutInflater.inflate(R.layout.tags_onboarding_ui_layout, null);
+            for (int index = 0; index < list.size(); index++) {
+               inflateTagData(liTags, list.get(index));
+            }
+        }
+    }
+    /*public void renderOnBoardingView() {
         int mSeatHeight = 100;//(int) mContext.getResources().getDimension(R.dimen.dp_size_48);
         int mSeatWidth = (int) mContext.getResources().getDimension(R.dimen.dp_size_48);
         if (StringUtil.isNotEmptyCollection(dataItem.getBoardingDataList()) && StringUtil.isNotNullOrEmptyString(dataItem.getCategory())) {
@@ -71,9 +82,9 @@ public class OnBoardingHolder extends BaseViewHolder<OnBoardingData> {
                 liTags.addView(liRow);
             }
         }
-    }
+    }*/
 
-    private int cloumnViewTwo(LinearLayout liRow, int passedRow, int column, List<LabelValue> stringList) {
+    /*private int cloumnViewTwo(LinearLayout liRow, int passedRow, int column, List<LabelValue> stringList) {
 
         if (mCurrentIndex < stringList.size()) {
             int lengthString = stringList.get(mCurrentIndex).getLabel().length();
@@ -142,14 +153,14 @@ public class OnBoardingHolder extends BaseViewHolder<OnBoardingData> {
 
         }
         return passedRow;
-    }
+    }*/
 
-    private void inflateTagData(LinearLayout liRow, List<LabelValue> stringList) {
+    private void inflateTagData(HorizontalFlowLayout liRow, LabelValue stringList) {
         LayoutInflater columnInflate = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         LinearLayout liTagLable = (LinearLayout) columnInflate.inflate(R.layout.tag_item_ui_for_onboarding, null);
         final TextView mTvTagData = (TextView) liTagLable.findViewById(R.id.tv_tag_data);
-        mTvTagData.setText(stringList.get(mCurrentIndex).getLabel());
-        mTvTagData.setTag(stringList.get(mCurrentIndex));
+        mTvTagData.setText(stringList.getLabel());
+        mTvTagData.setTag(stringList);
         mTvTagData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

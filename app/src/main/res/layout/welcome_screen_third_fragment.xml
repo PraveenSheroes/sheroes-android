@@ -1,71 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:background="@color/fully_transparent"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/welcome_gradient1"
-        android:orientation="vertical">
+        android:layout_height="@dimen/dp_size_250"
+        android:src="@drawable/welcome_three" />
 
-        <TextView
-            android:id="@+id/tv_grow_with_sheroes"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-            android:gravity="center"
-            android:padding="@dimen/dp_size_30"
-            android:text="@string/ID_GROW_WITH_SHEROES"
-            android:textColor="@color/white"
-            android:textSize="@dimen/sp_size_20" />
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/welcome_img1" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/dp_size_20"
-            android:layout_marginTop="@dimen/dp_size_30"
-            android:gravity="bottom">
-
-            <TextView
-                android:id="@+id/tv_welcome_text1"
-                android:layout_width="@dimen/dp_size_300"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                android:lineSpacingExtra="@dimen/dp_size_3"
-                android:layout_marginLeft="@dimen/dp_size_20"
-                android:layout_marginRight="@dimen/dp_size_20"
-                android:layout_marginTop="@dimen/dp_size_30"
-                android:text="@string/ID_WELCOME_TEXT1"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="@dimen/sp_size_16" />
-
-            <TextView
-                android:id="@+id/tv_click_to_join"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_welcome_text1"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/dp_size_20"
-                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-                android:paddingLeft="@dimen/dp_size_35"
-                android:paddingRight="@dimen/dp_size_35"
-                android:text="@string/ID_CLICK_TO_JOIN"
-                android:padding="@dimen/dp_size_10"
-                android:textColor="@color/white"
-                android:textSize="@dimen/sp_size_14" />
-        </RelativeLayout>
-
-    </LinearLayout>
-
-    <include
-        android:id="@+id/pb_welcome"
-        layout="@layout/progress_bar_login" />
-</FrameLayout>
+    <TextView
+        android:id="@+id/tv_welcome_text1"
+        android:layout_width="@dimen/dp_size_320"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:layout_marginTop="@dimen/dp_size_18"
+        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+        android:text="@string/ID_WELCOME_THIRD"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_size_14" />
+</LinearLayout>

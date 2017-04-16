@@ -60,6 +60,7 @@ android {
 repositories {
     mavenCentral()
     maven { url 'https://maven.fabric.io/public' }
+    maven { url "https://jitpack.io" }
 }
 final STORIO_VERSION = "1.8.0"
 dependencies {

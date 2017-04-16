@@ -58,6 +58,24 @@ public class CommentReactionDoc extends BaseResponse implements Parcelable {
     @SerializedName("solr_ignore_my_own_participation")
     @Expose
     private boolean myOwnParticipation;
+    @SerializedName("solr_ignore_created_on")
+    @Expose
+    private String  postedDate;
+
+    @SerializedName("solr_ignore_city")
+    @Expose
+    private String city;
+
+    @SerializedName("entity_author_user_id_l")
+    @Expose
+    private Long entityAuthorUserId;
+
+
+    @SerializedName("solr_ignore_is_participant_active")
+    @Expose
+    private boolean participantActive = false;
+
+
     public boolean isEdit() {
         return isEdit;
     }
@@ -197,6 +215,38 @@ public class CommentReactionDoc extends BaseResponse implements Parcelable {
         this.byDefaultMenuOpen = byDefaultMenuOpen;
     }
 
+    public String getPostedDate() {
+        return postedDate;
+    }
+
+    public void setPostedDate(String postedDate) {
+        this.postedDate = postedDate;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public Long getEntityAuthorUserId() {
+        return entityAuthorUserId;
+    }
+
+    public void setEntityAuthorUserId(Long entityAuthorUserId) {
+        this.entityAuthorUserId = entityAuthorUserId;
+    }
+
+    public boolean isParticipantActive() {
+        return participantActive;
+    }
+
+    public void setParticipantActive(boolean participantActive) {
+        this.participantActive = participantActive;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -221,6 +271,10 @@ public class CommentReactionDoc extends BaseResponse implements Parcelable {
         dest.writeString(this.participantName);
         dest.writeLong(this.participationTypeId);
         dest.writeByte(this.myOwnParticipation ? (byte) 1 : (byte) 0);
+        dest.writeString(this.postedDate);
+        dest.writeString(this.city);
+        dest.writeValue(this.entityAuthorUserId);
+        dest.writeByte(this.participantActive ? (byte) 1 : (byte) 0);
     }
 
     protected CommentReactionDoc(Parcel in) {
@@ -241,6 +295,10 @@ public class CommentReactionDoc extends BaseResponse implements Parcelable {
         this.participantName = in.readString();
         this.participationTypeId = in.readLong();
         this.myOwnParticipation = in.readByte() != 0;
+        this.postedDate = in.readString();
+        this.city = in.readString();
+        this.entityAuthorUserId = (Long) in.readValue(Long.class.getClassLoader());
+        this.participantActive = in.readByte() != 0;
     }
 
     public static final Creator<CommentReactionDoc> CREATOR = new Creator<CommentReactionDoc>() {

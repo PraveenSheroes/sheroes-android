@@ -80,7 +80,7 @@ public class CommentReactionPresenter extends BasePresenter<AllCommentReactionVi
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_COMMENT_REACTION);
             return;
         }
-        getMvpView().startProgressBar();
+       // getMvpView().startProgressBar();
         Subscription subscription = mCommentReactionModel.addCommentListFromModel(commentReactionRequestPojo).subscribe(new Subscriber<CommentAddDelete>() {
             @Override
             public void onCompleted() {
@@ -106,7 +106,7 @@ public class CommentReactionPresenter extends BasePresenter<AllCommentReactionVi
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_COMMENT_REACTION);
             return;
         }
-        getMvpView().startProgressBar();
+      //  getMvpView().startProgressBar();
         Subscription subscription = mCommentReactionModel.editCommentListFromModel(commentReactionRequestPojo).subscribe(new Subscriber<CommentAddDelete>() {
             @Override
             public void onCompleted() {

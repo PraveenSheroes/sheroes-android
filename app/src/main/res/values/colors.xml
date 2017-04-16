@@ -9,10 +9,12 @@
     <color name="spinner">#f1f1f1</color>
     <color name="grey2">#b7b7b7</color>
     <color name="welcome_footer">#ccffffff</color>
+    <color name="facebook_btn">#33ffffff</color>
     <color name="red">#d50000</color>
     <color name="added_member">#56596b</color>
     <color name="dashboard_text">#323940</color>
     <color name="detail_page_text">#4a4a4a</color>
+    <color name="logging">#8793de</color>
     <color name="dashboard_fed_text">#757e87</color>
     <color name="noConnection">#2f2f2f</color>
     <color name="added_member_text">#cbcddd</color>

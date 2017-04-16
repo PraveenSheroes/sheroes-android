@@ -15,7 +15,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by priyanka on 08/03/17.
@@ -46,10 +45,10 @@ public class WelcomeScreenFirstFragment extends BaseFragment {
         ButterKnife.bind(this, view);
         return view;
     }
-    @OnClick(R.id.tv_click_to_join)
+   /* @OnClick(R.id.tv_click_to_join)
     public void clickToJoin()
     {
         mHomeSearchActivityFragmentIntractionWithActivityListner.onSuccessResult(AppConstants.SUCCESS,null);
-    }
+    }*/
 
 }

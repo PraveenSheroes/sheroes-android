@@ -101,6 +101,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         return super.onCreateView(inflater, container, savedInstanceState);
     }
+
     public void setFragmentData(FragmentOpen fragmentOpen) {
         this.mFragmentOpen = fragmentOpen;
     }
@@ -153,7 +154,6 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     }
 
 
-
     public void setCommentReaction(FragmentListRefreshData mFragmentListRefreshData, GenericRecyclerViewAdapter mAdapter, LinearLayoutManager mLayoutManager, FeedDetail mFeedDetail, RecyclerView mRecyclerView, CommentReactionPresenter commentReactionPresenter, AppUtils mAppUtils, ProgressBar mProgressBar) {
         this.mFragmentListRefreshData = mFragmentListRefreshData;
         this.mAdapter = mAdapter;
@@ -185,6 +185,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
+
     public void setInitializationForProfile(FragmentListRefreshData mFragmentListRefreshData, GenericRecyclerViewAdapter mAdapter, LinearLayoutManager mLayoutManager, RecyclerView mRecyclerView, AppUtils mAppUtils, ProgressBar mProgressBar) {
         this.mFragmentListRefreshData = mFragmentListRefreshData;
         this.mAdapter = mAdapter;
@@ -236,6 +237,8 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
             }
         } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
             mLiNoResult.setVisibility(View.VISIBLE);
+        } else {
+            mLiNoResult.setVisibility(View.GONE);
         }
         mSwipeView.setRefreshing(false);
     }
@@ -269,7 +272,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     public void reportAsSpamPostRespose(BaseResponse baseResponse) {
         switch (baseResponse.getStatus()) {
             case AppConstants.SUCCESS:
-                Toast.makeText(getContext(),AppConstants.MARK_AS_SPAM,Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), AppConstants.MARK_AS_SPAM, Toast.LENGTH_SHORT).show();
                 mFeedDetail.setFromHome(true);
                 commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
                 break;
@@ -337,7 +340,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     /*1:- If pass one from home activity means its comments section changes
     2:- If two Home activity means its Detail section changes of activity,and refresh particular card*/
     public void commentListRefresh(FeedDetail feedDetail, FeedParticipationEnum feedParticipationEnum) {
-        if(null!=feedDetail) {
+        if (null != feedDetail) {
             switch (feedParticipationEnum) {
                 case ACTIVITY_FOR_REFRESH_FRAGMENT_LIST:
                     mAdapter.setDataOnPosition(feedDetail, feedDetail.getItemPosition());
@@ -442,6 +445,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
         mFeedDetail = feedDetail;
         mHomePresenter.addBookMarkFromPresenter(mAppUtils.bookMarkRequestBuilder(feedDetail.getEntityOrParticipantId()), feedDetail.isBookmarked());
     }
+
     public void likeAndUnlikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
         mListLoad = false;
         mFeedDetail = (FeedDetail) baseResponse;
@@ -461,8 +465,6 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     @Override
     public void getDB(List<RecentSearchData> recentSearchDatas) {
     }
-
-
 
 
     @Override
@@ -506,6 +508,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     protected void onBackPress() {
         getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
+
     protected void getExternalStoragePermission() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {

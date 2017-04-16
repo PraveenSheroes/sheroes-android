@@ -85,6 +85,7 @@
                     android:padding="@dimen/dp_size_10"
                     android:drawableLeft="@drawable/ic_back_white" />
                 <LinearLayout
+                    android:id="@+id/li_header"
                     android:layout_width="@dimen/dp_size_200"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">

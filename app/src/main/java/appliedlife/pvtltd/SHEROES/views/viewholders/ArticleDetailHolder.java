@@ -184,9 +184,10 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
             ivArticleDetailRegisterUserPic.setCircularImage(true);
             ivArticleDetailRegisterUserPic.bindImage(userPreference.get().getUserSummary().getPhotoUrl());
         }
-        if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getCreatedDate())) {
-            long createdDate = mDateUtil.getTimeInMillis(mFeedDetail.getCreatedDate(), AppConstants.DATE_FORMAT);
-            tvArticleDetailTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
+        if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getPostedDate())) {
+          //  long createdDate = mDateUtil.getTimeInMillis(mFeedDetail.getCreatedDate(), AppConstants.DATE_FORMAT);
+        //    tvArticleDetailTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
+            tvArticleDetailTime.setText(mFeedDetail.getPostedDate());
         }
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getAuthorShortDescription())) {
             String description = mFeedDetail.getAuthorShortDescription().trim();
@@ -450,12 +451,14 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
     @OnClick(R.id.tv_article_detail_user_comment)
     public void userCommentClick() {
         mFeedDetail.setItemPosition(getAdapterPosition());
+        mFeedDetail.setCallFromName(AppConstants.EMPTY_STRING);
         viewInterface.handleOnClick(mFeedDetail, liArticleDetailJoinConversation);
     }
 
     @OnClick(R.id.tv_article_detail_total_reactions)
     public void reactionClick() {
         mFeedDetail.setItemPosition(getAdapterPosition());
+        mFeedDetail.setCallFromName(mContext.getString(R.string.ID_REPLY));
         viewInterface.handleOnClick(mFeedDetail, tvArticleDetailTotalReaction);
     }
 
@@ -468,12 +471,14 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
     @OnClick(R.id.li_article_detail_join_conversation)
     public void joinConversationClick() {
         mFeedDetail.setItemPosition(getAdapterPosition());
+        mFeedDetail.setCallFromName(AppConstants.EMPTY_STRING);
         viewInterface.handleOnClick(mFeedDetail, liArticleDetailJoinConversation);
     }
 
     @OnClick(R.id.tv_article_detail_view_more)
     public void viewMoreClick() {
         mFeedDetail.setItemPosition(getAdapterPosition());
+        mFeedDetail.setCallFromName(AppConstants.EMPTY_STRING);
         viewInterface.handleOnClick(mFeedDetail, liArticleDetailJoinConversation);
     }
 

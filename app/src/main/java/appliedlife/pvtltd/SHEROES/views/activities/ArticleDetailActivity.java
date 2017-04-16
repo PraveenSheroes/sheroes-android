@@ -18,6 +18,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
@@ -49,7 +50,7 @@ import butterknife.OnClick;
  * Created by Praveen_Singh on 07-02-2017.
  */
 
-public class ArticleDetailActivity extends BaseActivity implements CommentReactionFragment.HomeActivityIntractionListner {
+public class ArticleDetailActivity extends BaseActivity implements CommentReactionFragment.HomeActivityIntractionListner, AppBarLayout.OnOffsetChangedListener {
     private final String TAG = LogUtils.makeLogTag(ArticleDetailActivity.class);
     @Bind(R.id.app_bar_article_detail)
     AppBarLayout mAppBarLayout;
@@ -71,6 +72,8 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
     TextView mTvArticleDetailTitle;
     @Bind(R.id.tv_article_detail_subtitle)
     TextView mTvArticleDetailSubTitle;
+    @Bind(R.id.li_header)
+    public LinearLayout mLiHeader;
     private FeedDetail mFeedDetail;
     private FragmentOpen mFragmentOpen;
     ViewPagerAdapter viewPagerAdapter;
@@ -83,6 +86,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
         SheroesApplication.getAppComponent(this).inject(this);
         setContentView(R.layout.activity_article_detail);
         ButterKnife.bind(this);
+        mAppBarLayout.addOnOffsetChangedListener(this);
         mFragmentOpen = new FragmentOpen();
         if (null != getIntent()) {
             mFeedDetail = getIntent().getParcelableExtra(AppConstants.ARTICLE_DETAIL);
@@ -95,6 +99,11 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
             }
         }
         setPagerAndLayouts();
+    }
+    @Override
+    public void onStop() {
+        super.onStop();
+        mAppBarLayout.removeOnOffsetChangedListener(this);
     }
 
     private void setPagerAndLayouts() {
@@ -478,5 +487,28 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
             }
         }
         mFeedDetail = feedDetail;
+    }
+
+    /**
+     * Called when the {@link AppBarLayout}'s layout offset has been changed. This allows
+     * child views to implement custom behavior based on the offset (for instance pinning a
+     * view at a certain y value).
+     *
+     * @param appBarLayout   the {@link AppBarLayout} which offset has changed
+     * @param verticalOffset the vertical offset for the parent {@link AppBarLayout}, in px
+     */
+    @Override
+    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+        LogUtils.info(TAG,"****************offset***"+verticalOffset);
+        if(verticalOffset>=AppConstants.NO_REACTION_CONSTANT)
+        {
+            mCollapsingToolbarLayout.setTitle(AppConstants.EMPTY_STRING);
+            mCollapsingToolbarLayout.setSubtitle(AppConstants.EMPTY_STRING);
+            mLiHeader.setVisibility(View.INVISIBLE);
+        }else
+        {
+            mLiHeader.setVisibility(View.VISIBLE);
+        }
+
     }
 }

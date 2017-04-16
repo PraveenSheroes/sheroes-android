@@ -3,6 +3,8 @@ package appliedlife.pvtltd.SHEROES.basecomponents.baserequest;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+
 /**
  * Created by Praveen.Singh on 23/01/2017.
  *
@@ -38,6 +40,10 @@ public abstract class BaseRequest {
     @SerializedName("page_size")
     @Expose
     private int pageSize=10;
+    @SerializedName("source")
+    @Expose
+    private String source= AppConstants.SOURCE_NAME;
+
     public BaseRequest(TrackingParams trackingParams, DeviceInfo deviceInfo, String appVersion, String cloudMessagingId, String deviceUniqueId, String screenName, String lastScreenName, int pageNo, int pageSize) {
         this.trackingParams = trackingParams;
         this.deviceInfo = deviceInfo;
@@ -126,5 +132,12 @@ public abstract class BaseRequest {
     }
 
 
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
 }
 

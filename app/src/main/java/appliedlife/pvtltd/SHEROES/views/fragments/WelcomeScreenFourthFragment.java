@@ -12,19 +12,19 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import butterknife.ButterKnife;
 
 /**
- * Created by priyanka on 08/03/17.
+ * Created by Praveen_Singh on 16-04-2017.
  */
 
-public class WelcomeScreenThirdFragment extends BaseFragment {
+public class WelcomeScreenFourthFragment  extends BaseFragment {
     private final String TAG = LogUtils.makeLogTag(WelcomeScreenThirdFragment.class);
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
-        View view = inflater.inflate(R.layout.welcome_screen_third_fragment, container, false);
+        View view = inflater.inflate(R.layout.welcome_screen_fourth_fragment, container, false);
         ButterKnife.bind(this, view);
         return view;
     }
-   /* @OnClick(R.id.tv_click_to_join)
+  /*  @OnClick(R.id.tv_click_to_join)
     public void clickToJoin()
     {
         mHomeSearchActivityFragmentIntractionWithActivityListner.onSuccessResult(AppConstants.SUCCESS,null);

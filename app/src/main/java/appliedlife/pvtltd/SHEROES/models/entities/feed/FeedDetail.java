@@ -16,8 +16,12 @@ public class FeedDetail extends BaseResponse implements Parcelable {
 
     int itemPosition;
     boolean isLongPress;
+    String callFromName;
     boolean isTrending;
     boolean isFromHome;
+    @SerializedName("solr_ignore_posting_date_dt")
+    @Expose
+    private String  postedDate;
     @SerializedName("solr_ignore_deep_link_url")
     @Expose
     private String deepLinkUrl;
@@ -1565,6 +1569,22 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         this.deepLinkUrl = deepLinkUrl;
     }
 
+    public String getPostedDate() {
+        return postedDate;
+    }
+
+    public void setPostedDate(String postedDate) {
+        this.postedDate = postedDate;
+    }
+
+    public String getCallFromName() {
+        return callFromName;
+    }
+
+    public void setCallFromName(String callFromName) {
+        this.callFromName = callFromName;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -1574,8 +1594,10 @@ public class FeedDetail extends BaseResponse implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(this.itemPosition);
         dest.writeByte(this.isLongPress ? (byte) 1 : (byte) 0);
+        dest.writeString(this.callFromName);
         dest.writeByte(this.isTrending ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isFromHome ? (byte) 1 : (byte) 0);
+        dest.writeString(this.postedDate);
         dest.writeString(this.deepLinkUrl);
         dest.writeList(this.imagesIds);
         dest.writeStringList(this.imageUrls);
@@ -1715,8 +1737,10 @@ public class FeedDetail extends BaseResponse implements Parcelable {
     protected FeedDetail(Parcel in) {
         this.itemPosition = in.readInt();
         this.isLongPress = in.readByte() != 0;
+        this.callFromName = in.readString();
         this.isTrending = in.readByte() != 0;
         this.isFromHome = in.readByte() != 0;
+        this.postedDate = in.readString();
         this.deepLinkUrl = in.readString();
         this.imagesIds = new ArrayList<Long>();
         in.readList(this.imagesIds, Long.class.getClassLoader());

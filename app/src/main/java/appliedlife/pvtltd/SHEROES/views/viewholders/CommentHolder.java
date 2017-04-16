@@ -65,14 +65,15 @@ public class CommentHolder extends BaseViewHolder<CommentReactionDoc> {
     public void bindData(CommentReactionDoc item, final Context context, int position) {
         this.dataItem = item;
         this.mContext = context;
-        if (StringUtil.isNotNullOrEmptyString(dataItem.getCreatedOn())) {
-            long createdDate = mDateUtil.getTimeInMillis(dataItem.getCreatedOn(), AppConstants.DATE_FORMAT);
+        if (StringUtil.isNotNullOrEmptyString(dataItem.getPostedDate())) {
+          /*  long createdDate = mDateUtil.getTimeInMillis(dataItem.getCreatedOn(), AppConstants.DATE_FORMAT);
             String time = mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate);
             if (StringUtil.isNotNullOrEmptyString(time)) {
                 tvListCommentTime.setText(time);
             } else {
                 tvListCommentTime.setText(AppConstants.JUST_NOW);
-            }
+            }*/
+            tvListCommentTime.setText(dataItem.getPostedDate());
         }
 
         if (dataItem.isMyOwnParticipation()) {
