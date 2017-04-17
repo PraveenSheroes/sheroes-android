@@ -26,8 +26,7 @@
                 <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
                     android:id="@+id/iv_feed_community_post_circle_icon"
                     android:layout_width="@dimen/feed_profile_icon_size"
-                    android:layout_height="@dimen/feed_profile_icon_size"
-                    android:layout_gravity="top"/>
+                    android:layout_height="@dimen/feed_profile_icon_size"/>
 
                 <ImageView
                     android:id="@+id/iv_feed_community_post_circle_icon_verified"
@@ -80,10 +79,36 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_size_16"
-            android:layout_marginRight="@dimen/dp_size_15"
+            android:layout_marginRight="@dimen/dp_size_18"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:lineSpacingExtra="@dimen/dp_size_3"
+            android:maxLines="@integer/int_value_for_line_2"
             android:textColor="@color/feed_article_label"
+            android:textSize="@dimen/sp_size_14" />
+        <TextView
+            android:id="@+id/tv_feed_community_post_text_full_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_size_16"
+            android:layout_marginRight="@dimen/dp_size_16"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:visibility="gone"
+            android:lineSpacingExtra="@dimen/dp_size_3"
+            android:textColor="@color/feed_article_label"
+            android:textSize="@dimen/sp_size_14" />
+        <TextView
+            android:id="@+id/tv_feed_community_post_view_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginLeft="@dimen/dp_size_16"
+            android:layout_marginRight="@dimen/dp_size_20"
+            android:layout_marginTop="@dimen/dp_size_minus_22"
+            android:background="@color/white"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:gravity="right"
+            android:text="@string/ID_VIEW_MORE"
+            android:textColor="@color/feed_job_card_new"
             android:textSize="@dimen/sp_size_14" />
 
         <LinearLayout
@@ -157,7 +182,6 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="right"
                 android:layout_marginLeft="@dimen/dp_size_40"
-                android:visibility="invisible"
                 android:drawableRight="@drawable/ic_menu_dashboard"
                 android:paddingRight="@dimen/dp_size_10" />
         </LinearLayout>

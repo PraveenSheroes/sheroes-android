@@ -88,7 +88,7 @@
     <string name="ID_EMPTY_TEXT">Please enter comment</string>
     <string name="ID_WISHTLE">Whistle</string>
     <string name="ID_LOVE">Love</string>
-    <string name="ID_LIKE">Like</string>
+    <string name="ID_LIKE">With You</string>
     <string name="ID_FACE_PALM">Face Palm</string>
     <string name="ID_XOXO">Xoxo</string>
     <string name="ID_MORE_FROM_LIFE">More From Life</string>
@@ -159,6 +159,8 @@
     <string name="ID_OPEN">Open</string>
     <string name="ID_CLOSE_PRIVACY"> Close </string>
     <string name="ID_APPLY">Apply</string>
+    <string name="ID_FEED_REFRESH"> The feed has been refreshed.</string>
+
     <string name="ID_REPORTED_AS_SPAM">Reported as spam</string>
     <string name="ID_BACK_PRESS">Press back again to exit the app</string>
     <string name="ID_I_M_DONE">I’M DONE</string>

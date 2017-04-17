@@ -37,7 +37,7 @@ public class ResizableCustomView {
                     LogUtils.info("Hi","**************maxline*****"+text);
                     tv.setMovementMethod(LinkMovementMethod.getInstance());
                     String data=LEFT_HTML_VEIW_TAG_FOR_COLOR+text.substring(text.length()-10,text.length())+RIGHT_HTML_VIEW_TAG_FOR_COLOR;
-                    text=text.substring(0,text.length()-10)+ AppConstants.DOTS;
+                    text=text.substring(0,text.length()-20)+ AppConstants.DOTS;
                     tv.setText(
                             addClickablePartTextViewResizable(Html.fromHtml(text+data), tv, maxLine, expandText,
                                     viewMore), TextView.BufferType.SPANNABLE);
@@ -49,7 +49,7 @@ public class ResizableCustomView {
                     LogUtils.info("Hi","**************maxline >0*****"+text+data);
                     //  tv.setText(text+data);
                     tv.setMovementMethod(LinkMovementMethod.getInstance());
-                    text=text.substring(0,text.length()-10)+ AppConstants.DOTS;
+                    text=text.substring(0,text.length()-20)+ AppConstants.DOTS;
                     tv.setText(addClickablePartTextViewResizable(Html.fromHtml(text+data), tv, maxLine, expandText,
                                     viewMore), TextView.BufferType.SPANNABLE);
                 } else {
@@ -58,7 +58,7 @@ public class ResizableCustomView {
                     String data=LEFT_HTML_VEIW_TAG_FOR_COLOR+text.substring(text.length()-10,text.length())+RIGHT_HTML_VIEW_TAG_FOR_COLOR;
                     LogUtils.info("Hi","**************else*****"+text+data);
                    // tv.setText(text+data);
-                    text=text.substring(0,text.length()-10);
+                    text=text.substring(0,text.length()-20);
                     tv.setMovementMethod(LinkMovementMethod.getInstance());
                     tv.setText(addClickablePartTextViewResizable(Html.fromHtml(text+data), tv, lineEndIndex, expandText,
                                     viewMore), TextView.BufferType.SPANNABLE);

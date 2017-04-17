@@ -218,8 +218,11 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
         List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
+        mLiNoResult.setVisibility(View.GONE);
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
-            mLiNoResult.setVisibility(View.GONE);
+            if (StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
+               Toast.makeText(getContext(),getString(R.string.ID_FEED_REFRESH),Toast.LENGTH_SHORT).show();
+            }
             mPageNo = mFragmentListRefreshData.getPageNo();
             mFragmentListRefreshData.setPageNo(++mPageNo);
             mPullRefreshList.allListData(feedDetailList);
@@ -236,7 +239,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                 mLayoutManager.scrollToPositionWithOffset(0, 0);
             }
         } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
-            mLiNoResult.setVisibility(View.VISIBLE);
+            //mLiNoResult.setVisibility(View.VISIBLE);
         } else {
             mLiNoResult.setVisibility(View.GONE);
         }

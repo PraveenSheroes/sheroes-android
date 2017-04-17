@@ -144,13 +144,14 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         mViewMoreDescription =dataItem.getListDescription();
         if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
             Document documentString = Jsoup.parse(mViewMoreDescription);
+            String text=documentString.text().trim();
             tvFeedArticleHeaderLebel.setVisibility(View.VISIBLE);
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-               tvFeedArticleHeaderLebel.setText(Html.fromHtml(documentString.text(), 0)); // for 24 api and more
+               tvFeedArticleHeaderLebel.setText(Html.fromHtml(text, 0)); // for 24 api and more
                // Spanned html = Html.fromHtml(documentString.text(),0);
               //  tvFeedArticleHeaderLebel.setText(html);
             } else {
-               tvFeedArticleHeaderLebel.setText(Html.fromHtml(documentString.text()));// or for older api
+               tvFeedArticleHeaderLebel.setText(Html.fromHtml(text));// or for older api
               //  Spanned html = Html.fromHtml(documentString.text());
                // tvFeedArticleHeaderLebel.setText(html);
             }
