@@ -45,7 +45,7 @@
 
     <TextView
         android:id="@+id/tv_article_menu_delete"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/dp_size_80"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/dp_size_8"
         android:paddingBottom="@dimen/dp_size_8"

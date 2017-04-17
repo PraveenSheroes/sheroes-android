@@ -173,7 +173,6 @@ public class HomeFragment extends BaseFragment {
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
         mProgressBarFirstLoad.setVisibility(View.GONE);
         super.getFeedListSuccess(feedResponsePojo);
-
     }
 
     @Override
