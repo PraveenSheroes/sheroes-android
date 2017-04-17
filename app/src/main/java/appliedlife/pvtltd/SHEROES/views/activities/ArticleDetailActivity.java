@@ -100,6 +100,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
         }
         setPagerAndLayouts();
     }
+
     @Override
     public void onStop() {
         super.onStop();
@@ -107,12 +108,12 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
     }
 
     private void setPagerAndLayouts() {
-      //  ViewCompat.setTransitionName(mAppBarLayout, AppConstants.ARTICLE_DETAIL);
+        //  ViewCompat.setTransitionName(mAppBarLayout, AppConstants.ARTICLE_DETAIL);
         //supportPostponeEnterTransition();
         setSupportActionBar(mToolbarArticleDetail);
         mCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
         if (null != mFeedDetail) {
-            feedDetailPosition=mFeedDetail.getItemPosition();
+            feedDetailPosition = mFeedDetail.getItemPosition();
             mCollapsingToolbarLayout.setTitle(AppConstants.EMPTY_STRING);
             mCollapsingToolbarLayout.setSubtitle(AppConstants.EMPTY_STRING);
             viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -121,25 +122,26 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
             setBackGroundImage(mFeedDetail);
         }
     }
+
     public void setBackGroundImage(FeedDetail feedDetail) {
         mFeedDetail = feedDetail;
         mTvArticleDetailTitle.setText(mFeedDetail.getNameOrTitle());
         mTvArticleDetailSubTitle.setText(mFeedDetail.getAuthorName());
         mTvArticleDetailTotalViews.setVisibility(View.VISIBLE);
-        if(mFeedDetail.getNoOfViews()>0) {
+        if (mFeedDetail.getNoOfViews() > 1) {
             mTvArticleDetailTotalViews.setVisibility(View.VISIBLE);
             mTvArticleDetailTotalViews.setText(mFeedDetail.getNoOfViews() + AppConstants.SPACE + getString(R.string.ID_VIEWS));
-        }else
-        {
+        } else if (mFeedDetail.getNoOfViews() == 1) {
+            mTvArticleDetailTotalViews.setVisibility(View.VISIBLE);
+            mTvArticleDetailTotalViews.setText(mFeedDetail.getNoOfViews() + AppConstants.SPACE + getString(R.string.ID_VIEW));
+        } else {
             mTvArticleDetailTotalViews.setVisibility(View.INVISIBLE);
         }
-        if(mFeedDetail.getCharCount()>0)
-        {
+        if (mFeedDetail.getCharCount() > 0) {
             mTvArticleTime.setVisibility(View.VISIBLE);
             mTvArticleTime.setText(mFeedDetail.getCharCount() + AppConstants.SPACE + getString(R.string.ID_MIN_READ));
 
-        }else
-        {
+        } else {
             mTvArticleTime.setVisibility(View.INVISIBLE);
         }
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getNameOrTitle())) {
@@ -460,7 +462,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
         mFeedDetail.setItemPosition(feedDetailPosition);
-        bundle.putParcelable(AppConstants.HOME_FRAGMENT,mFeedDetail);
+        bundle.putParcelable(AppConstants.HOME_FRAGMENT, mFeedDetail);
         intent.putExtras(bundle);
         setResult(RESULT_OK, intent);
         finish();
@@ -499,14 +501,12 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
      */
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-        LogUtils.info(TAG,"****************offset***"+verticalOffset);
-        if(verticalOffset>=AppConstants.NO_REACTION_CONSTANT)
-        {
+        LogUtils.info(TAG, "****************offset***" + verticalOffset);
+        if (verticalOffset >= AppConstants.NO_REACTION_CONSTANT) {
             mCollapsingToolbarLayout.setTitle(AppConstants.EMPTY_STRING);
             mCollapsingToolbarLayout.setSubtitle(AppConstants.EMPTY_STRING);
             mLiHeader.setVisibility(View.INVISIBLE);
-        }else
-        {
+        } else {
             mLiHeader.setVisibility(View.VISIBLE);
         }
 

@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences.Preference;
@@ -79,6 +80,8 @@ public class HomeFragment extends BaseFragment {
     private int mPageNo = AppConstants.ONE_CONSTANT;
     @Bind(R.id.progress_bar_first_load)
     ProgressBar mProgressBarFirstLoad;
+    @Bind(R.id.tv_refresh)
+    TextView tvRefresh;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -111,12 +114,16 @@ public class HomeFragment extends BaseFragment {
             public void onHide() {
                 mListLoad = false;
                 //((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.INVISIBLE);
+                tvRefresh.setVisibility(View.GONE);
             }
 
             @Override
             public void onShow() {
                 mListLoad = false;
-               // ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
+                // ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
+                if(mLayoutManager.findLastVisibleItemPosition()>5) {
+                    tvRefresh.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
@@ -126,7 +133,6 @@ public class HomeFragment extends BaseFragment {
                 }
             }
         });
-
 
         super.setAllInitializationForFeeds(mFragmentListRefreshData, mPullRefreshList, mAdapter, mLayoutManager, mPageNo, mSwipeView, mLiNoResult, mFeedDetail, mRecyclerView, mPosition, mPressedEmoji, mListLoad, mIsEdit, mHomePresenter, mAppUtils, mProgressBar);
         if (null == mUserPreference || !StringUtil.isNotNullOrEmptyString(mUserPreference.get().getToken())) {
@@ -145,16 +151,27 @@ public class HomeFragment extends BaseFragment {
         mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                setListLoadFlag(false);
-                mPullRefreshList.setPullToRefresh(true);
-                mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
-                mPullRefreshList = new SwipPullRefreshList();
-                setRefreshList(mPullRefreshList);
-                mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
-                mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
+                refreshFeedMethod();
             }
         });
         return view;
+    }
+
+    @OnClick(R.id.tv_refresh)
+    public void onRefreshClick() {
+        tvRefresh.setVisibility(View.GONE);
+        refreshFeedMethod();
+    }
+
+    private void refreshFeedMethod() {
+        setListLoadFlag(false);
+        mPullRefreshList.setPullToRefresh(true);
+        mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
+        mPullRefreshList = new SwipPullRefreshList();
+        setRefreshList(mPullRefreshList);
+        mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
+        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
+
     }
 
     private void logUser() {
@@ -180,15 +197,18 @@ public class HomeFragment extends BaseFragment {
         super.getSuccessForAllResponse(baseResponse, feedParticipationEnum);
     }
 
-    public void commentListRefresh(FeedDetail feedDetail,FeedParticipationEnum feedParticipationEnum) {
+    public void commentListRefresh(FeedDetail feedDetail, FeedParticipationEnum feedParticipationEnum) {
         super.commentListRefresh(feedDetail, feedParticipationEnum);
     }
+
     public void markAsSpamCommunityPost(FeedDetail feedDetail) {
         super.markAsSpamCommunityPost(feedDetail);
     }
+
     public void deleteCommunityPost(FeedDetail feedDetail) {
         super.deleteCommunityPost(feedDetail);
     }
+
     public void bookMarkForCard(FeedDetail feedDetail) {
         super.bookMarkForCard(feedDetail);
     }

@@ -217,7 +217,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
                         case INTEREST_SEARCH:
                             if (null != mOnBoardingSearchDialogFragment) {
                                 mOnBoardingSearchDialogFragment.dismiss();
-                                AppUtils.showKeyboard(mTvInterestSearchBox, TAG);
+                                AppUtils.keyboardToggle(mTvInterestSearchBox, TAG);
                             }
                             if (mIvInterestNext.getVisibility() == View.GONE) {
                                 mIvInterestNext.setVisibility(View.VISIBLE);
@@ -230,7 +230,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
                         case JOB_AT_SEARCH:
                             if (null != mOnBoardingSearchDialogFragment) {
                                 mOnBoardingSearchDialogFragment.dismiss();
-                                AppUtils.showKeyboard(mTvGoodAtSearchBox, TAG);
+                                AppUtils.keyboardToggle(mTvGoodAtSearchBox, TAG);
                             }
                             if (mIvJobAtNext.getVisibility() == View.GONE) {
                                 mIvJobAtNext.setVisibility(View.VISIBLE);

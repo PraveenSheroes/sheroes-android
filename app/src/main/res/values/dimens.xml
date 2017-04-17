@@ -26,6 +26,7 @@
     <dimen name="dp_size_72">72dp</dimen>
     <dimen name="dp_size_84">84dp</dimen>
     <dimen name="dp_size_54">54dp</dimen>
+    <dimen name="dp_size_52">52dp</dimen>
     <dimen name="dp_size_14">14dp</dimen>
     <dimen name="dp_size_15">15dp</dimen>
     <dimen name="dp_size_20">20dp</dimen>

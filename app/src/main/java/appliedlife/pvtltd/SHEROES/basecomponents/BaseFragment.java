@@ -220,10 +220,10 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
         List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
         mLiNoResult.setVisibility(View.GONE);
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
-            if (StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
-               Toast.makeText(getContext(),getString(R.string.ID_FEED_REFRESH),Toast.LENGTH_SHORT).show();
-            }
             mPageNo = mFragmentListRefreshData.getPageNo();
+            if (mPageNo==AppConstants.ONE_CONSTANT&&mFragmentListRefreshData.getSwipeToRefresh()==AppConstants.ONE_CONSTANT) {
+                Toast.makeText(getContext(),getString(R.string.ID_FEED_REFRESH),Toast.LENGTH_SHORT).show();
+            }
             mFragmentListRefreshData.setPageNo(++mPageNo);
             mPullRefreshList.allListData(feedDetailList);
             mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
@@ -489,8 +489,9 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     @Override
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
         if (feedParticipationEnum == ERROR_FEED_RESPONSE) {
-            if (null != mLiNoResult) {
-                mLiNoResult.setVisibility(View.VISIBLE);
+            if (null != mSwipeView) {
+               // mLiNoResult.setVisibility(View.VISIBLE);
+                mSwipeView.setRefreshing(false);
             }
         }
         mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(errorMsg, feedParticipationEnum);

@@ -26,7 +26,7 @@
     <string name="ID_FACEBOOK_ERROR">Oops! SHEROES is a women-only plaform. Facebook says you are a gentleman.</string>
     <string name="ID_TELL_US_MESSAGE">This will help you connect with other SHEROES and find relevant opportunities</string>
     <string name="ID_TELL_US_FORM_VALIDATION">Oops! You need to enter all details.</string>
-    <string name="ID_MOBILE_NUMBER">Please enter mobile number</string>
+    <string name="ID_MOBILE_NUMBER">Please enter valid mobile number</string>
     <string name="ID_CURRENT_STATUS_DATA">Please select current status</string>
     <string name="ID_LOCATION_DATA">Please select location</string>
     <string name="ID_LOCATION_RESULT">Sorry! We could not find a location matching your input.</string>
@@ -111,6 +111,7 @@
     <string name="ID_EDIT_POST">EDIT POST</string>
     <string name="ID_DELETE">Delete</string>
     <string name="ID_REPORT">Report as spam</string>
+    <string name="ID_REFRESH">Refresh feed</string>
     <string name="ID_NO_RESULT_FOUND">No Result found ,Please Click For Try again</string>
     <string name="ID_NO_RESULT_FOUND_TRY">Try another search</string>
     <string name="ID_NO_RESULT_FOUND_SEARCH">No Result found for</string>
@@ -729,9 +730,7 @@ etur adipiscing elit,sed do eiusmod tempor incididunt ut…</string>
     <string name="ID_WELCOME_FOUR">Celebrate your everyday growth</string>
     <string name="ID_WELCOME">Welcome</string>
     <string name="ID_WELCOME_WOMEN">It’s a delight to have you on SHEROES,a community of over 1Million women.</string>
-    <string name="ID_WELCOME_DETAIL"> We are team SHEROES, we understand thoings that you care about and we
-    keep finding topics that you want
-    to talk about openly.</string>
+    <string name="ID_WELCOME_DETAIL"> We are team SHEROES, we understand things that you care about and we find want you are looking for, everyday.</string>
     <!--string related client travel page-->
 
     <string name="ID_TRAVEL_FLEXIBILITY">TRAVEL FLEXIBILITY</string>

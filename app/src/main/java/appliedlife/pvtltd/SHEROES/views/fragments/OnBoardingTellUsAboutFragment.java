@@ -144,8 +144,8 @@ public class OnBoardingTellUsAboutFragment extends BaseFragment implements OnBoa
         } else if (!StringUtil.isNotNullOrEmptyString(mLocation.getText().toString())) {
             Toast.makeText(getContext(), getString(R.string.ID_TELL_US_FORM_VALIDATION), Toast.LENGTH_SHORT).show();
         }
-        if (!StringUtil.isNotNullOrEmptyString(mMobileNumber.getText().toString()) && mMobileNumber.getText().toString().length() != 10) {
-            Toast.makeText(getContext(), getString(R.string.ID_TELL_US_FORM_VALIDATION), Toast.LENGTH_SHORT).show();
+        else if (!StringUtil.isNotNullOrEmptyString(mMobileNumber.getText().toString()) || mMobileNumber.getText().toString().length() < 10) {
+            Toast.makeText(getContext(), getString(R.string.ID_MOBILE_NUMBER), Toast.LENGTH_SHORT).show();
         } else {
             if (null != labelValue && null != getAllDataDocument) {
                 InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);

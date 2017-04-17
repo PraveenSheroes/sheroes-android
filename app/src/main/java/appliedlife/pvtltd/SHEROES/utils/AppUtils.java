@@ -195,7 +195,7 @@ public class AppUtils {
      *
      * @param view
      */
-    public static void showKeyboard(View view, String TAG) {
+    public static void keyboardToggle(View view, String TAG) {
         if (view == null) {
             return;
         }
@@ -214,6 +214,17 @@ public class AppUtils {
         try {
             InputMethodManager inputManager = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             inputManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        } catch (Exception e) {
+            LogUtils.error(TAG, e);
+        }
+    }
+    public static void showKeyboard(View view, String TAG) {
+        if (view == null) {
+            return;
+        }
+        try {
+            InputMethodManager inputMethodManager =  (InputMethodManager)view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.showSoftInput(view,InputMethodManager.SHOW_FORCED);
         } catch (Exception e) {
             LogUtils.error(TAG, e);
         }

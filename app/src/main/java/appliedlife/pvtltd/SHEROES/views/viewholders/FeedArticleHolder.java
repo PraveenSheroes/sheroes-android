@@ -342,11 +342,17 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             final TextView tvFeedArticleTotalViews = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_total_views);
             final RelativeLayout rlFeedArticleViews = (RelativeLayout) backgroundImage.findViewById(R.id.rl_gradiant);
             StringBuilder stringBuilder=new StringBuilder();
-            if(dataItem.getNoOfViews()>0) {
+            if(dataItem.getNoOfViews()>1) {
                 stringBuilder.append(dataItem.getNoOfViews()).append(AppConstants.SPACE).append(context.getString(R.string.ID_VIEWS));
                 tvFeedArticleTotalViews.setText(stringBuilder.toString());
                 tvFeedArticleTotalViews.setVisibility(View.VISIBLE);
-            }else
+            }if(dataItem.getNoOfViews()==1)
+            {
+                stringBuilder.append(dataItem.getNoOfViews()).append(AppConstants.SPACE).append(context.getString(R.string.ID_VIEW));
+                tvFeedArticleTotalViews.setText(stringBuilder.toString());
+                tvFeedArticleTotalViews.setVisibility(View.VISIBLE);
+            }
+            else
             {
                 tvFeedArticleTotalViews.setVisibility(View.INVISIBLE);
             }
