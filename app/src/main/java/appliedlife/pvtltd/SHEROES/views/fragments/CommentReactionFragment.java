@@ -345,6 +345,7 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
         tvPostComment.setEnabled(true);
         switch (commentAddDelete.getStatus()) {
             case AppConstants.SUCCESS:
+                AppUtils.hideKeyboard(mEtUserCommentDescription, TAG);
                 switch (operationId) {
                     case AppConstants.NO_REACTION_CONSTANT:
                         mCommentReactionPresenter.getAllCommentListFromPresenter(mAppUtils.getCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId(), AppConstants.ONE_CONSTANT), mFragmentOpen.isReactionList(), AppConstants.ONE_CONSTANT);

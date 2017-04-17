@@ -207,6 +207,18 @@ public class AppUtils {
         }
     }
 
+    public static void hideKeyboard(View view, String TAG) {
+        if (view == null) {
+            return;
+        }
+        try {
+            InputMethodManager inputManager = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        } catch (Exception e) {
+            LogUtils.error(TAG, e);
+        }
+    }
+
     /**
      * The version number of this package, as specified by the manifest tag_item_ui_for_onboarding's
      * attribute.
