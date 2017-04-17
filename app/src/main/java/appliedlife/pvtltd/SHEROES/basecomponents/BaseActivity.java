@@ -597,7 +597,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 if (null != mFeedDetail) {
                     Intent intetFeature = new Intent(this, CreateCommunityPostActivity.class);
                     Bundle bundle = new Bundle();
-                    mFeedDetail.setCallFromName(AppConstants.EMPTY_STRING);
+                   // mFeedDetail.setCallFromName(AppConstants.EMPTY_STRING);
                     bundle.putParcelable(AppConstants.COMMUNITY_POST_FRAGMENT, mFeedDetail);
                     intetFeature.putExtras(bundle);
                     startActivityForResult(intetFeature, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST);

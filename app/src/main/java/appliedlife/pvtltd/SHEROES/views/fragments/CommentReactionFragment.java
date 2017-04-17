@@ -348,7 +348,7 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
         tvPostComment.setEnabled(true);
         switch (commentAddDelete.getStatus()) {
             case AppConstants.SUCCESS:
-                AppUtils.hideKeyboard(mEtUserCommentDescription, TAG);
+               AppUtils.hideKeyboard(mEtUserCommentDescription, TAG);
                 switch (operationId) {
                     case AppConstants.NO_REACTION_CONSTANT:
                         mCommentReactionPresenter.getAllCommentListFromPresenter(mAppUtils.getCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId(), AppConstants.ONE_CONSTANT), mFragmentOpen.isReactionList(), AppConstants.ONE_CONSTANT);
@@ -508,7 +508,8 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
     public void editCommentInList(CommentReactionDoc commentReactionDoc) {
         mCommentReactionDoc = commentReactionDoc;
         if (null != mCommentReactionDoc && mCommentReactionDoc.isEdit()) {
-           AppUtils.showKeyboard(mEtUserCommentDescription, TAG);
+            AppUtils.hideKeyboard(mEtUserCommentDescription, TAG);
+            AppUtils.showKeyboard(mEtUserCommentDescription, TAG);
          //   mEtUserCommentDescription.requestFocus();
             InputMethodManager inputMethodManager =  (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.showSoftInput(mEtUserCommentDescription,InputMethodManager.SHOW_FORCED);

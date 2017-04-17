@@ -35,7 +35,6 @@ public class AppConstants {
     public static final String ANDROID_VIEW_PAGER = "android:switcher:";
     public static final String COLON = ":";
     public static final String DASH ="-";
-
     public static final String DOTS = "...";
     public static final String S = "s";
     public static final String SHARE_MENU_TYPE = "text/plain";
