@@ -16,29 +16,55 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:background="@color/footer_icon_text"
-                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-                android:gravity="center"
-                android:padding="@dimen/dp_size_20"
-                android:text="@string/ID_WELCOME_HEADER"
-                android:textColor="@color/white"
-                android:textSize="@dimen/sp_size_16" />
+                android:layout_marginTop="@dimen/dp_size_20"
+                android:layout_marginBottom="@dimen/dp_size_20"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                    android:text="We"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_size_16" />
+
+                <ImageView
+                    android:layout_width="@dimen/dp_size_18"
+                    android:layout_height="@dimen/dp_size_15"
+                    android:layout_marginLeft="@dimen/dp_size_5"
+                    android:layout_marginTop="@dimen/dp_size_2"
+                    android:background="@drawable/ic_heart_active" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/dp_size_5"
+                    android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                    android:text="Your Aspirations"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_size_16" />
+            </LinearLayout>
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/welcome_view_pager"
                 android:layout_width="match_parent"
-                android:layout_marginTop="-10dp"
-                android:layout_height="@dimen/dp_size_320"
+                android:layout_marginTop="0dp"
+                android:layout_height="@dimen/dp_size_380"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginTop="@dimen/dp_size_17"
                 android:gravity="center">
 
                 <ImageView
@@ -75,14 +101,18 @@
 
             <TextView
                 android:id="@+id/tv_join"
-                android:layout_width="@dimen/dp_size_150"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/dp_size_20"
+                android:layout_marginTop="@dimen/dp_size_10"
+                android:paddingTop="@dimen/dp_size_10"
+                android:paddingBottom="@dimen/dp_size_10"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:text="@string/onboarding_join_the_world"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sp_size_12" />
+
 
             <TextView
                 android:id="@+id/tv_growth_women"
@@ -90,44 +120,11 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/dp_size_20"
+                android:visibility="gone"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sp_size_12" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:text="We"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/sp_size_12" />
-
-                <ImageView
-                    android:layout_width="@dimen/dp_size_18"
-                    android:layout_height="@dimen/dp_size_15"
-                    android:layout_marginLeft="@dimen/dp_size_5"
-                    android:background="@drawable/ic_heart_active" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="@dimen/dp_size_5"
-                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:text="Women"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/sp_size_12" />
-            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -137,15 +134,16 @@
                 <com.facebook.login.widget.LoginButton
                     android:id="@+id/click_to_join"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_size_50"
-                    android:layout_marginLeft="@dimen/dp_size_20"
-                    android:layout_marginRight="@dimen/dp_size_20"
-                    android:layout_marginTop="@dimen/dp_size_30"
+                    android:layout_height="@dimen/dp_size_40"
+                    android:layout_marginLeft="@dimen/dp_size_45"
+                    android:layout_marginRight="@dimen/dp_size_45"
+                    android:layout_marginTop="@dimen/dp_size_10"
+                    android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                     android:background="@drawable/facbook_ractangle"
                     android:drawableLeft="@color/facebook_btn"
                     android:gravity="center"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/sp_size_16"
+                    android:textSize="@dimen/sp_size_12"
                     android:textStyle="normal"
                     fb:login_text="@string/ID_CONTINUE_WITH_FACEBOOK"
                     fb:logout_text="@string/ID_FACEBOOK_LONGING" />
@@ -167,16 +165,7 @@
                     android:textSize="@dimen/sp_size_12" />
             </LinearLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                android:gravity="center"
-                android:layout_marginBottom="@dimen/dp_size_10"
-                android:text="@string/BY_LOGGING"
-                android:textColor="@color/logging"
-                android:textSize="@dimen/sp_size_12" />
+
 
             <include
                 layout="@layout/progress_bar_login"

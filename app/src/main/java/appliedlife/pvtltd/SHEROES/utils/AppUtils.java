@@ -1717,7 +1717,6 @@ public class AppUtils {
         removeMemberRequest.setCommunityId(communityId);
         removeMemberRequest.setAppVersion(appUtils.getAppVersionName());
         removeMemberRequest.setCloudMessagingId(appUtils.getCloudMessaging());
-        removeMemberRequest.setSource(AppConstants.COMMUNITIES_DETAIL);
         return removeMemberRequest;
 
     }
@@ -1730,7 +1729,6 @@ public class AppUtils {
         approveMemberRequest.setCommunityId(communityId);
         approveMemberRequest.setAppVersion(appUtils.getAppVersionName());
         approveMemberRequest.setCloudMessagingId(appUtils.getCloudMessaging());
-        approveMemberRequest.setSource(AppConstants.COMMUNITIES_DETAIL);
         return approveMemberRequest;
 
     }

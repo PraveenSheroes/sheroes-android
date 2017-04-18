@@ -6,6 +6,8 @@
   <integer name="int_value_270">270</integer>
   <integer name="int_value_for_line_1">1</integer>
   <integer name="int_value_for_line_2">2</integer>
+  <integer name="int_value_for_line_4">4</integer>
+
   <integer name="anim_speed_slow">800</integer>
 
   <!--Search View Integers -->

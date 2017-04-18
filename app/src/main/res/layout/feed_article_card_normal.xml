@@ -38,7 +38,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-                    android:textColor="@color/footer_icon_text"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/sp_size_15" />
 
                 <TextView
@@ -69,7 +69,9 @@
             android:layout_marginRight="@dimen/dp_size_16"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:lineSpacingExtra="@dimen/dp_size_3"
-            android:lines="@integer/int_value_for_line_1"
+            android:maxLines="4"
+            android:lines="4"
+            android:minLines="1"
             android:textColor="@color/feed_article_label"
             android:textSize="@dimen/sp_size_14" />
 

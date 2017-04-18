@@ -260,6 +260,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
                 if (mIvHowCanSheroesNext.getVisibility() == View.GONE) {
                     mIvHowCanSheroesNext.setVisibility(View.VISIBLE);
                 }
+
                 mLiStripForAddItem.removeAllViews();
                 mLiStripForAddItem.removeAllViewsInLayout();
                 selectTagOnClick(view);
@@ -735,6 +736,10 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
                         mCurrentIndex = 0;
                         if (StringUtil.isNotEmptyCollection(lookingTemp)) {
                             lookingTemp.remove(labelValue);
+                        }
+                        if(mSelectedTag.size()==0)
+                        {
+                            mIvHowCanSheroesNext.setVisibility(View.GONE);
                         }
                         renderSelectedAddedItem(mLiStripForAddItem, lookingTemp);
                         break;

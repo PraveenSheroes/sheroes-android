@@ -153,10 +153,10 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         StringBuilder womenGrowth = new StringBuilder();
         womenGrowth.append("A Growth Network").append(LEFT).append(" Only for Women ").append(RIGHT).append("Because");
         if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-            mTvJoin.setText(Html.fromHtml(stringBuilder.toString(), 0)); // for 24 api and more
+          //  mTvJoin.setText(Html.fromHtml(stringBuilder.toString(), 0)); // for 24 api and more
             mTvGrowthWomen.setText(Html.fromHtml(womenGrowth.toString(), 0)); // for 24 api and more
         }else {
-            mTvJoin.setText(Html.fromHtml(stringBuilder.toString())); // for 24 api and more
+           // mTvJoin.setText(Html.fromHtml(stringBuilder.toString())); // for 24 api and more
             mTvGrowthWomen.setText(Html.fromHtml(womenGrowth.toString())); // for 24 api and more
         }
         mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());

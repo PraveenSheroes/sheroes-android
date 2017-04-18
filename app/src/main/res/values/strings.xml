@@ -725,10 +725,10 @@ etur adipiscing elit,sed do eiusmod tempor incididunt ut…</string>
     <string name="ID_FACEBOOK_LONGING">LOGGING IN...</string>
     <string name="ID_LINK_TO_FACEBOOK">Link to Facebook</string>
     <string name="ID_WELCOME_TEXT4">Other Login Options ? (Only For Existing Users)</string>
-    <string name="ID_WELCOME_FIRST">Express yourself in a non judgemental community</string>
-    <string name="ID_WELCOME_SECOND">Move forword in your career find flexible work options</string>
-    <string name="ID_WELCOME_THIRD">Get advice relationships and love</string>
-    <string name="ID_WELCOME_FOUR">Celebrate your everyday growth</string>
+    <string name="ID_WELCOME_FIRST">Grow With Your Circle Of Support</string>
+    <string name="ID_WELCOME_SECOND">Find Flexible Work Options</string>
+    <string name="ID_WELCOME_THIRD">Learn And Get Skilled For Today\'s Age</string>
+    <string name="ID_WELCOME_FOUR">Inspire Others With Your Growth Story</string>
     <string name="ID_WELCOME">Welcome</string>
     <string name="ID_WELCOME_WOMEN">It’s a delight to have you on SHEROES,a community of over 1Million women.</string>
     <string name="ID_WELCOME_DETAIL"> We are team SHEROES, we understand things that you care about and we find want you are looking for, everyday.</string>
@@ -854,6 +854,7 @@ etur adipiscing elit,sed do eiusmod tempor incididunt ut…</string>
 
     <string name="camera">CAMERA</string>
     <string name="gallery">GALLERY</string>
+    <string name="onboarding_join_the_world">Join The World\'s Largest Women Only Network </string>
 
     <!--Work Experience-->
     <string-array name="work_exp_arr">

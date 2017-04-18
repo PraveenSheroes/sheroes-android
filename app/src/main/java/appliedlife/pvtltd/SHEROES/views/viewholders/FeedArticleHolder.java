@@ -346,7 +346,8 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
                 stringBuilder.append(dataItem.getNoOfViews()).append(AppConstants.SPACE).append(context.getString(R.string.ID_VIEWS));
                 tvFeedArticleTotalViews.setText(stringBuilder.toString());
                 tvFeedArticleTotalViews.setVisibility(View.VISIBLE);
-            }if(dataItem.getNoOfViews()==1)
+            }
+            else if(dataItem.getNoOfViews()==1)
             {
                 stringBuilder.append(dataItem.getNoOfViews()).append(AppConstants.SPACE).append(context.getString(R.string.ID_VIEW));
                 tvFeedArticleTotalViews.setText(stringBuilder.toString());
@@ -354,7 +355,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             }
             else
             {
-                tvFeedArticleTotalViews.setVisibility(View.INVISIBLE);
+                tvFeedArticleTotalViews.setVisibility(View.GONE);
             }
             stringBuilder=new StringBuilder();
             if(dataItem.getCharCount()>0)

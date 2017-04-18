@@ -2,9 +2,17 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LevelListDrawable;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.text.Html;
+import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -12,6 +20,11 @@ import android.widget.TextView;
 
 import com.f2prateek.rx.preferences.Preference;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -38,12 +51,15 @@ import butterknife.OnLongClick;
  * Created by Praveen_Singh on 08-02-2017.
  */
 
-public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
+public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> implements Html.ImageGetter{
     private final String TAG = LogUtils.makeLogTag(ArticleCardHolder.class);
     private static final String LEFT_HTML_TAG_FOR_COLOR = "<b><font color='#323940'>";
     private static final String RIGHT_HTML_TAG_FOR_COLOR = "</font></b>";
     private static final String LEFT_HTML_TAG = "<b><font color='#333333'>";
-    private static final String RIGHT_HTML_TAG = "</font></b>";
+    private static final String RIGHT_HTML_TAG = "<font color='#868788'>";
+    private static final String END_HTML_TAG = "</font></b>";
+    private static final String END_HTML_FONT_TAG = "</font>";
+
     @Inject
     Preference<LoginResponse> userPreference;
     @Inject
@@ -147,9 +163,11 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
         String description = mFeedDetail.getDescription();
         if (StringUtil.isNotNullOrEmptyString(description)) {
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                tvHtmlData.setText(Html.fromHtml(description, 0)); // for 24 api and more
+                Spanned spanned = Html.fromHtml(description, this, null);
+                tvHtmlData.setText(spanned);
             } else {
-                tvHtmlData.setText(Html.fromHtml(description));// or for older api
+                Spanned spanned = Html.fromHtml(description, this, null);
+                tvHtmlData.setText(spanned);// or for older api
             }
             tvHtmlData.setMovementMethod(LinkMovementMethod.getInstance());
         }
@@ -164,12 +182,18 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
             List<String> tags = mFeedDetail.getTags();
             //String mergeTags = AppConstants.EMPTY_STRING;
             StringBuilder mergeTags=new StringBuilder();
+            boolean isFirst = true;
             for (String tag : tags) {
-                mergeTags.append(tag).append(AppConstants.COMMA);
-              //  mergeTags += tag + AppConstants.COMMA;
+                if(isFirst) {
+                    isFirst=false;
+                } else {
+                    mergeTags.append(AppConstants.COMMA).append(AppConstants.SPACE);
+                }
+                mergeTags.append(tag);
             }
             StringBuilder tagHeader=new StringBuilder();
-            tagHeader.append(LEFT_HTML_TAG).append(mContext.getString(R.string.ID_TAGS)).append(RIGHT_HTML_TAG).append( AppConstants.COLON ).append( AppConstants.SPACE).append(mergeTags);
+            tagHeader.append(LEFT_HTML_TAG).append(mContext.getString(R.string.ID_TAGS)).
+                    append(END_HTML_TAG).append(RIGHT_HTML_TAG).append( AppConstants.COLON ).append( AppConstants.SPACE).append(mergeTags).append(END_HTML_FONT_TAG);
          //   String tagHeader = LEFT_HTML_TAG + mContext.getString(R.string.ID_TAGS) + RIGHT_HTML_TAG;
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                 tvArticleDetailTag.setText(Html.fromHtml(tagHeader.toString(), 0)); // for 24 api and more
@@ -505,4 +529,54 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> {
 
     }
 
+    @Override
+    public Drawable getDrawable(String source) {
+        LevelListDrawable d = new LevelListDrawable();
+        Drawable empty = mContext.getResources().getDrawable(R.drawable.ic_happy_face);
+        d.addLevel(0, 0, empty);
+        d.setBounds(0, 0, empty.getIntrinsicWidth(), empty.getIntrinsicHeight());
+
+        new LoadImage().execute(source, d);
+
+        return d;
+    }
+
+
+    class LoadImage extends AsyncTask<Object, Void, Bitmap> {
+
+
+        private LevelListDrawable mDrawable;
+
+        @Override
+        protected Bitmap doInBackground(Object... params) {
+            String source = (String) params[0];
+            mDrawable = (LevelListDrawable) params[1];
+            try {
+                InputStream is = new URL(source).openStream();
+                return BitmapFactory.decodeStream(is);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            if (bitmap != null) {
+                BitmapDrawable d = new BitmapDrawable(bitmap);
+                mDrawable.addLevel(1, 1, d);
+                mDrawable.setBounds(0, 0, bitmap.getWidth(), bitmap.getHeight());
+                mDrawable.setLevel(1);
+                // i don't know yet a better way to refresh TextView
+                // mTv.invalidate() doesn't work as expected
+                CharSequence t =   tvHtmlData.getText();
+                tvHtmlData.setText(t);
+            }
+        }
+
+    }
 }

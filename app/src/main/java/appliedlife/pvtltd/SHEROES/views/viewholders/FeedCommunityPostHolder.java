@@ -50,7 +50,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     private static final String RIGHT_HTML_TAG_FOR_COLOR = "</font></b>";
     private static final String LEFT_HTML_VEIW_TAG_FOR_COLOR = "<font color='#50e3c2'>";
     private static final String RIGHT_HTML_VIEW_TAG_FOR_COLOR = "</font>";
-    private static final String LEFT_HTML_COMMUNITY_TITLE_FOR_COLOR = "<font color='#f2403c'>";
+    private static final String LEFT_HTML_COMMUNITY_TITLE_FOR_COLOR = "<font color='#8a8d8e'>";
     private static final String RIGHT_HTML_COMMUNITY_TITLE_FOR_COLOR = "</font>";
     private static final String LEFT_VIEW_MORE = "<font color='#323840'>";
     private static final String RIGHT_VIEW_MORE = "</font>";
@@ -260,7 +260,10 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
            // StringBuilder coloredFeedCommunityName=new StringBuilder();
           //  coloredFeedCommunityName.append(LEFT_HTML_COMMUNITY_TITLE_FOR_COLOR).append(feedCommunityName).append(RIGHT_HTML_COMMUNITY_TITLE_FOR_COLOR);
           //  StringBuilder finalText=new StringBuilder();
-            posted.append(feedTitle).append(AppConstants.SPACE).append(LEFT_POSTED).append(mContext.getString(R.string.ID_POSTED_IN)).append(RIGHT_POSTED).append(AppConstants.SPACE).append(LEFT_HTML_COMMUNITY_TITLE_FOR_COLOR).append(feedCommunityName).append(RIGHT_HTML_COMMUNITY_TITLE_FOR_COLOR);
+            if(!feedTitle.equalsIgnoreCase("Admin")) {
+                posted.append(feedTitle).append(AppConstants.SPACE).append(LEFT_POSTED).append(mContext.getString(R.string.ID_POSTED_IN)).append(RIGHT_POSTED).append(AppConstants.SPACE);
+            }
+            posted.append(feedCommunityName);
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                 tvFeedCommunityPostCardTitle.setText(Html.fromHtml(posted.toString(),0)); // for 24 api and more
             } else {
