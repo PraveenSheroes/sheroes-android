@@ -122,7 +122,7 @@ public class HomeFragment extends BaseFragment {
                 mListLoad = false;
                 // ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
                 if(mLayoutManager.findLastVisibleItemPosition()>5) {
-                    tvRefresh.setVisibility(View.VISIBLE);
+                    tvRefresh.setVisibility(View.GONE);
                 }
             }
 

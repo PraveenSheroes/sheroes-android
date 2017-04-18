@@ -92,6 +92,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     private ProgressBar mProgressBar;
     public FragmentIntractionWithActivityListner mHomeSearchActivityFragmentIntractionWithActivityListner;
     private FragmentOpen mFragmentOpen = new FragmentOpen();
+    private List<FeedDetail> mfeedDetailList=new ArrayList<>();
     @Inject
     Preference<LoginResponse> userPreference;
 
@@ -222,7 +223,17 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
             mPageNo = mFragmentListRefreshData.getPageNo();
             if (mPageNo==AppConstants.ONE_CONSTANT&&mFragmentListRefreshData.getSwipeToRefresh()==AppConstants.ONE_CONSTANT) {
-                Toast.makeText(getContext(),getString(R.string.ID_FEED_REFRESH),Toast.LENGTH_SHORT).show();
+               if(StringUtil.isNotNullOrEmptyString(mfeedDetailList.get(0).getId()) && StringUtil.isNotNullOrEmptyString(feedDetailList.get(0).getId())) {
+                   if (mfeedDetailList.get(0).getId().equalsIgnoreCase(feedDetailList.get(0).getId())) {
+                       Toast.makeText(getContext(), getString(R.string.ID_FEED_ALREADY_REFRESH), Toast.LENGTH_SHORT).show();
+                   }
+                   else{
+                       Toast.makeText(getContext(), getString(R.string.ID_FEED_REFRESH), Toast.LENGTH_SHORT).show();
+                   }
+               }
+            }
+            if(mPageNo==1) {
+                mfeedDetailList = feedDetailList;
             }
             mFragmentListRefreshData.setPageNo(++mPageNo);
             mPullRefreshList.allListData(feedDetailList);

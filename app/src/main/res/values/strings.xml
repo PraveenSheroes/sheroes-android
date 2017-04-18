@@ -160,7 +160,8 @@
     <string name="ID_OPEN">Open</string>
     <string name="ID_CLOSE_PRIVACY"> Close </string>
     <string name="ID_APPLY">Apply</string>
-    <string name="ID_FEED_REFRESH"> The feed has been refreshed.</string>
+    <string name="ID_FEED_REFRESH"> The feed has been refreshed</string>
+    <string name="ID_FEED_ALREADY_REFRESH"> Your feed is up-to-date</string>
 
     <string name="ID_REPORTED_AS_SPAM">Reported as spam</string>
     <string name="ID_BACK_PRESS">Press back again to exit the app</string>

@@ -37,7 +37,7 @@ android {
     }
     buildTypes {
         debug {
-            buildConfigField "String", "BASE_URL", "\"http://34.193.138.177/\""
+            buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
             ext.enableCrashlytics = false
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -45,7 +45,7 @@ android {
         }
         release {
            // buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
-            buildConfigField "String", "BASE_URL", "\"http://34.193.138.177/\""
+            buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
             ext.enableCrashlytics = false
             minifyEnabled true
             shrinkResources true
