@@ -19,7 +19,7 @@
         android:id="@+id/tv_team"
         android:textColor="@color/white"
         android:shadowRadius="@integer/int_value_for_line_4"
-        android:text="TEAM"
+        android:text="TEAM "
         android:fontFamily="@string/ID_ROBOTO_REGULAR"
         />
         <TextView
