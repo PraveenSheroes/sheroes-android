@@ -88,7 +88,7 @@ public class OnBoardingSearchDialogFragment extends BaseDialogFragment implement
         switch (SEARCH_TYPE) {
             case LOCATION:
                 mSearchEditText.setHint(getString(R.string.ID_SEARCH_LOCATION));
-                mOnBoardingPresenter.getOnBoardingSearchToPresenter(mAppUtils.onBoardingSearchRequestBuilder("Delhi", mMasterDataSkill));
+                mOnBoardingPresenter.getOnBoardingSearchToPresenter(mAppUtils.onBoardingSearchRequestBuilder("!POPULAR!", mMasterDataSkill));
                 LinearLayoutManager manager = new LinearLayoutManager(getActivity());
                 mRecyclerView.setLayoutManager(manager);
                 mRecyclerView.setAdapter(mAdapter);
@@ -193,7 +193,7 @@ public class OnBoardingSearchDialogFragment extends BaseDialogFragment implement
         @Override
         public void run() {
             if (!isDetached()) {
-                mSearchDataName = mSearchDataName.trim().replaceAll(AppConstants.SPACE, AppConstants.EMPTY_STRING);
+                mSearchDataName = mSearchDataName.trim();//.replaceAll(AppConstants.SPACE, AppConstants.EMPTY_STRING);
                 if (StringUtil.isNotNullOrEmptyString(mMasterDataSkill)) {
                     switch (SEARCH_TYPE) {
                         case LOCATION:
