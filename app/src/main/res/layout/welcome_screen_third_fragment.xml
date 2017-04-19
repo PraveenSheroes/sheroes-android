@@ -4,10 +4,9 @@
     android:layout_height="wrap_content"
     android:background="@color/fully_transparent"
     android:orientation="vertical">
-
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/dp_size_337"
         android:src="@drawable/welcome_three"
         android:scaleType="fitXY"/>
 

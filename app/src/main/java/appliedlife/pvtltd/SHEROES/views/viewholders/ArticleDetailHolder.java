@@ -130,6 +130,8 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> imple
     LinearLayout liArticleDetailUserCommentsThird;
     @Bind(R.id.iv_article_detail_user_pic_third)
     CircleImageView ivArticleDetailUserPicThird;
+    Bitmap bitmap;
+    InputStream is;
 
     public ArticleDetailHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
@@ -532,7 +534,7 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> imple
     @Override
     public Drawable getDrawable(String source) {
         LevelListDrawable d = new LevelListDrawable();
-        Drawable empty = mContext.getResources().getDrawable(R.drawable.ic_happy_face);
+        Drawable empty = mContext.getResources().getDrawable(R.drawable.article_default);
         d.addLevel(0, 0, empty);
         d.setBounds(0, 0, empty.getIntrinsicWidth(), empty.getIntrinsicHeight());
 
@@ -552,9 +554,25 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> imple
             String source = (String) params[0];
             mDrawable = (LevelListDrawable) params[1];
             try {
-                InputStream is = new URL(source).openStream();
+                LogUtils.info("url=",source);
+                 is = new URL(source).openStream();
                 return BitmapFactory.decodeStream(is);
-            } catch (FileNotFoundException e) {
+            }
+            catch (OutOfMemoryError oom) {
+               // System.gc();
+                try {
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+
+                    options.inSampleSize = 2;
+                    Bitmap bitmapFactory = BitmapFactory.decodeStream(is, null, options);
+                    return BitmapFactory.decodeStream(is, null, options);
+                }
+                catch (Exception e){
+                    
+                }
+            }
+
+            catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (MalformedURLException e) {
                 e.printStackTrace();
