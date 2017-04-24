@@ -102,6 +102,7 @@
     <string name="ID_POST_AS">Post as </string>
     <string name="ID_POSTED">Posted</string>
     <string name="ID_MEMBERS">Members</string>
+    <string name="ID_MEMBER">Member</string>
     <string name="ID_ADMIN">Admin</string>
     <string name="ID_OWNER_REMOVED">Owner removed</string>
     <string name="ID_REMOTE">Remote</string>

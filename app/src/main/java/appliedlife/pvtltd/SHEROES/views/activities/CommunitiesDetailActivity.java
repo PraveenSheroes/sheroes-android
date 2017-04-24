@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.graphics.Palette;
@@ -16,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.transition.Slide;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -61,7 +61,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.JOIN_INVITE
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MENU;
 
 
-public class CommunitiesDetailActivity extends BaseActivity implements ShareCommunityFragment.ShareCommunityActivityIntractionListner, CommentReactionFragment.HomeActivityIntractionListner {
+public class CommunitiesDetailActivity extends BaseActivity implements ShareCommunityFragment.ShareCommunityActivityIntractionListner, CommentReactionFragment.HomeActivityIntractionListner, AppBarLayout.OnOffsetChangedListener {
     private final String TAG = LogUtils.makeLogTag(CommunitiesDetailActivity.class);
     @Bind(R.id.app_bar_coomunities_detail)
     AppBarLayout mAppBarLayout;
@@ -93,16 +93,22 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
     boolean isCommunityDetailFragment;
     private long mCommunityId;
     private long mCommunityPostId;
-
+    @Bind(R.id.tv_community_detail_title)
+    TextView mTvCommunityDetailTitle;
+    @Bind(R.id.tv_community_detail_subtitle)
+    TextView mTvCommunityDetailSubTitle;
+    @Bind(R.id.li_header)
+    public LinearLayout mLiHeader;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
+        setContentView(R.layout.activity_communities_detail);
+        ButterKnife.bind(this);
         mFragmentOpen = new FragmentOpen();
         setAllValues(mFragmentOpen);
         initActivityTransitions();
-        setContentView(R.layout.activity_communities_detail);
-        ButterKnife.bind(this);
+        mAppBarLayout.addOnOffsetChangedListener(this);
         if (null != getIntent()) {
             mFeedDetail = getIntent().getParcelableExtra(AppConstants.COMMUNITY_DETAIL);
             communityEnum = (CommunityEnum) getIntent().getSerializableExtra(AppConstants.MY_COMMUNITIES_FRAGMENT);
@@ -125,10 +131,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
         ViewCompat.setTransitionName(mAppBarLayout, AppConstants.COMMUNITY_DETAIL);
         supportPostponeEnterTransition();
         setSupportActionBar(mToolbarCommunitiesDetail);
-        mCollapsingToolbarLayout.setExpandedSubTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
-        mCollapsingToolbarLayout.setExpandedTitleMarginStart(200);
-        mCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
-        if (null != mFeedDetail) {
+           if (null != mFeedDetail) {
             if (mFeedDetail.isClosedCommunity()) {
                 isCommunityDetailFragment = true;
                 mCommunityDetailActivity.setVisibility(View.GONE);
@@ -137,8 +140,19 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
                 mCommunityDetailActivity.setVisibility(View.VISIBLE);
                 mTvMemebr.setText(mFeedDetail.getNoOfMembers() + AppConstants.SPACE + getString(R.string.ID_MEMBERS));
                 //  mFloatingActionButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_feed_article_top_left));
-                mCollapsingToolbarLayout.setTitle(mFeedDetail.getNameOrTitle());
-                //  mCollapsingToolbarLayout.setSubtitle(mFeedDetail.getNameOrTitle());
+                if (mFeedDetail.getNoOfMembers() > 1) {
+                    mTvMemebr.setVisibility(View.VISIBLE);
+                    mTvMemebr.setText(mFeedDetail.getNoOfMembers() + AppConstants.SPACE + getString(R.string.ID_MEMBERS));
+                } else if (mFeedDetail.getNoOfViews() == 1) {
+                    mTvMemebr.setVisibility(View.VISIBLE);
+                    mTvMemebr.setText(mFeedDetail.getNoOfMembers() + AppConstants.SPACE + getString(R.string.ID_MEMBER));
+                } else {
+                    mTvMemebr.setVisibility(View.INVISIBLE);
+                }
+                mCollapsingToolbarLayout.setTitle(AppConstants.SPACE);
+                mCollapsingToolbarLayout.setSubtitle(AppConstants.SPACE);
+                mTvCommunityDetailTitle.setText(mFeedDetail.getNameOrTitle());
+                mTvCommunityDetailSubTitle.setText(mFeedDetail.getCommunityType());
                 mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
                 mViewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(getIntent()), getString(R.string.ID_COMMUNITIES));
                 mViewPager.setAdapter(mViewPagerAdapter);
@@ -607,5 +621,15 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
         }
 
     }
+    @Override
+    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+        if (verticalOffset >= AppConstants.NO_REACTION_CONSTANT) {
+            mCollapsingToolbarLayout.setTitle(AppConstants.SPACE);
+            mCollapsingToolbarLayout.setSubtitle(AppConstants.SPACE);
+            mLiHeader.setVisibility(View.INVISIBLE);
+        } else {
+            mLiHeader.setVisibility(View.VISIBLE);
+        }
 
+    }
 }
