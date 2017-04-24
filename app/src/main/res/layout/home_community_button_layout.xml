@@ -12,7 +12,7 @@
         android:layout_marginRight="@dimen/dp_size_16"
         android:background="@color/blue"
         android:src="@drawable/ic_createc_ommunity_icon"
-
+        android:visibility="gone"
         app:backgroundTint="@color/colorPrimary"
         app:borderWidth="@dimen/dp_size_4"
         app:elevation="6dp"

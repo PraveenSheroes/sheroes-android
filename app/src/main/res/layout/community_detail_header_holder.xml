@@ -45,14 +45,14 @@
 
         <TextView
             android:id="@+id/tv_community_name"
-            android:layout_width="150dp"
+            android:layout_width="220dp"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_marginTop="@dimen/dp_size_30"
-            android:layout_marginLeft="@dimen/dp_size_5"
+            android:layout_marginTop="@dimen/dp_size_16"
+            android:layout_marginLeft="@dimen/dp_size_40"
             android:layout_marginRight="@dimen/dp_size_30"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-            android:gravity="center"
+            android:gravity="left"
             android:lineSpacingExtra="@dimen/dp_size_3"
             android:textColor="@color/dashboard_text"
             android:textSize="@dimen/sp_size_14"
@@ -67,7 +67,7 @@
             android:layout_marginRight="@dimen/dp_size_30"
             android:layout_marginTop="@dimen/dp_size_10"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:gravity="center"
+            android:gravity="left"
             android:lineSpacingExtra="@dimen/dp_size_3"
             android:textColor="@color/footer_icon_text"
             android:textSize="@dimen/sp_size_12" />

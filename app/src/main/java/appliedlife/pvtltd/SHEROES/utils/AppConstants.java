@@ -85,6 +85,7 @@ public class AppConstants {
     public static final int REQUEST_CODE_FOR_FACEBOOK = 4001;
     public static final int REQUEST_CODE_FOR_COMMUNITY_POST = 5001;
     public static final int REQUEST_CODE_FOR_CREATE_COMMUNITY = 6001;
+    public static final int REQUEST_CODE_FOR_CREATE_COMMUNITY_POST = 7001;
     public static final int REQUEST_CODE_FOR_JOB_FILTER = 7001;
     public static final String JOB_FRAGMENT = "job";
     public static final String PROFILE_FRAGMENT = "profile";

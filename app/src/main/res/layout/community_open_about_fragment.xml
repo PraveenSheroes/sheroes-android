@@ -7,20 +7,20 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/al_community_open_about"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="@dimen/dp_size_160"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/cl_community_open_about"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_size_200"
+            android:layout_height="@dimen/dp_size_160"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <ImageView
                 android:id="@+id/iv_community_cover_img"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_size_200"
+                android:layout_height="@dimen/dp_size_160"
                 android:fitsSystemWindows="true"
                 android:scaleType="centerCrop"
                 app:layout_collapseMode="parallax" />

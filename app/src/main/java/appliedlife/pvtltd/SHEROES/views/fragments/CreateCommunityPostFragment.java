@@ -18,6 +18,7 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -170,15 +171,23 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
     CreateCommunityPresenter createCommunityPresenter;
     private String messageForSuccess;
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,ViewGroup container, Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.create_community_post_fragment, container, false);
         ButterKnife.bind(this, view);
         createCommunityPresenter.attachView(this);
+        mTvcreate_community_post.setText(R.string.ID_CREATEPOST);
         if (null != getArguments()) {
             mFeedDetail = getArguments().getParcelable(AppConstants.COMMUNITY_POST_FRAGMENT);
-            checkIntentWithImageUrls();
-            messageForSuccess=getString(R.string.ID_EDITED);
+            if(null !=mFeedDetail) {
+                if (null != mFeedDetail.getNameOrTitle()) {
+                    mEtchoosecommunity.setText(mFeedDetail.getNameOrTitle());
+                }
+
+                communityValue();
+                checkIntentWithImageUrls();
+                messageForSuccess = getString(R.string.ID_EDITED);
+            }
         }else {
             mTvcreate_community_post.setText(R.string.ID_CREATEPOST);
             messageForSuccess=getString(R.string.ID_POSTED);
@@ -222,6 +231,18 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
         }
         // iv_community_user.setImageBitmap(loginResponse);
         return view;
+    }
+
+    private void communityValue() {
+        mIvcommunity_post_icon.setCircularImage(true);
+        mIvcommunity_post_icon.bindImage(mFeedDetail.getThumbnailImageUrl());
+       // tv_community_owner.setText(mFeedDetail.getTitle());
+        Glide.with(this).load(mFeedDetail.getThumbnailImageUrl()).transform(new CommunityOpenAboutFragment.CircleTransform(getActivity())).into(iv_community_owner);
+        if (mFeedDetail.isOwner()) {
+            lnr_community_post1.setEnabled(true);
+        } else {
+            lnr_community_post1.setEnabled(false);
+        }
     }
 
     private void checkIntentWithImageUrls() {
@@ -340,7 +361,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
 
         scroll_community_post.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
 
-        mTv_community_post_submit.setText("POST AS OWNER");
+        mTv_community_post_submit.setText("POST AS COMMUNITY");
         mTv_community_post_submit.setVisibility(View.VISIBLE);
         mCreaterType = "COMMUNITY_OWNER";
     }
@@ -410,6 +431,12 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
     @Override
     public void onAddCommunityDetailSubmit(CommunityPostResponse communityPostResponse) {
         mEtchoosecommunity.setText(communityPostResponse.getTitle());
+        mEtchoosecommunity.setTextColor(Color.BLACK);
+      /*  Typeface face = Typeface.createFromAsset(getActivity().getAssets(),
+                "Roboto-Medium.ttf");
+        mEtchoosecommunity.setTypeface(face);*/
+        mEtchoosecommunity.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
+
         mCommunityId = Long.parseLong(communityPostResponse.getId());
         mImages = communityPostResponse.getLogo();
         mIvcommunity_post_icon.setCircularImage(true);
@@ -687,7 +714,24 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
         mFl_camera_btn_for_post_images.setVisibility(View.GONE);
         mTv_add_more_community_post_image.setVisibility(View.VISIBLE);
         if (mImgcount == 4) {
-            mTv_add_more_community_post_image.setVisibility(View.GONE);
+            mTv_add_more_community_post_image.setVisibility(View.VISIBLE);
+            mTv_add_more_community_post_image.setText("5/5");
+        }
+        if (mImgcount == 3) {
+            mTv_add_more_community_post_image.setVisibility(View.VISIBLE);
+            mTv_add_more_community_post_image.setText("4/5 "+getString(R.string.ID_ADDMORE));
+        }
+        if (mImgcount == 2) {
+            mTv_add_more_community_post_image.setVisibility(View.VISIBLE);
+            mTv_add_more_community_post_image.setText("3/5 "+getString(R.string.ID_ADDMORE));
+        }
+        if (mImgcount == 1) {
+            mTv_add_more_community_post_image.setVisibility(View.VISIBLE);
+            mTv_add_more_community_post_image.setText("2/5 "+getString(R.string.ID_ADDMORE));
+        }
+        if (mImgcount == 0) {
+            mTv_add_more_community_post_image.setVisibility(View.VISIBLE);
+            mTv_add_more_community_post_image.setText("1/5 "+getString(R.string.ID_ADDMORE));
         }
         mHor_scroll_for_community_post_images.setVisibility(View.VISIBLE);
         mHor_scroll_for_community_post_images.setHorizontalScrollBarEnabled(false);
@@ -713,6 +757,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
     private View.OnClickListener mCorkyListener = new View.OnClickListener() {
         public void onClick(View v) {
             mTv_add_more_community_post_image.setVisibility(View.VISIBLE);
+
             if (v.getTag().equals("Img0")) {
                 mImg[0].setVisibility(View.GONE);
                 mBtncross[0].setVisibility(View.GONE);
@@ -733,6 +778,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
             } else if (v.getTag().equals("Img3")) {
                 mImg[3].setVisibility(View.GONE);
                 mBtncross[3].setVisibility(View.GONE);
+                mImgcount--;
                 //do something else
             } else if (v.getTag().equals("Img4")) {
                 mImg[4].setVisibility(View.GONE);
@@ -742,8 +788,10 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
 
             }
             if (mImgcount == 0) {
+                mIv_camera_btn_for_post_images.setVisibility(View.VISIBLE);
                 mIv_camera_btn_for_post_images.setImageResource(R.drawable.ic_camera_icon_with_rectangle);
             }
+            mTv_add_more_community_post_image.setText(mImgcount+"/5 "+getString(R.string.ID_ADDMORE));
 
             // do something when the button is clicked
             // Yes we will handle click here but which button clicked??? We don't know

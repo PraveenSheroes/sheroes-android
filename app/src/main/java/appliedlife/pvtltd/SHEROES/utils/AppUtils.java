@@ -1816,6 +1816,7 @@ public class AppUtils {
         AppUtils appUtils = AppUtils.getInstance();
         MyCommunityRequest myCommunityRequest = new MyCommunityRequest();
         myCommunityRequest.setAppVersion(appUtils.getAppVersionName());
+        myCommunityRequest.setSource(AppConstants.SOURCE_NAME);
         myCommunityRequest.setDeviceUniqueId(appUtils.getDeviceId());
         //TODO:: change rquest data
         myCommunityRequest.setCloudMessagingId(AppConstants.ALL_SEARCH);

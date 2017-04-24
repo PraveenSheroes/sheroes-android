@@ -123,6 +123,7 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
     @Inject
     AppUtils mAppUtils;
     private Long mcommunityid;
+    String mTag;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -187,6 +188,8 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
             }
             if (null != mFeedDetail.getTags()) {
                 if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getTags().toString()))
+                     mTag=mFeedDetail.getTags().toString();
+                    mTag=mTag.replaceAll("\\[","").replaceAll("\\]","");
                     mTvCommunityTags.setText(mFeedDetail.getTags().toString());
             }
             int count = mFeedDetail.getNoOfMembers();

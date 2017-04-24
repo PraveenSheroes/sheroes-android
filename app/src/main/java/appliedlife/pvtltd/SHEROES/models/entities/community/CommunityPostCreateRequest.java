@@ -27,10 +27,6 @@ public class CommunityPostCreateRequest extends BaseRequest{
     @SerializedName("images")
     @Expose
     private List<String> images = null;
-    @SerializedName("source")
-    @Expose
-    private String source;
-
 
     public Long getId() {
         return id;
@@ -72,11 +68,5 @@ public class CommunityPostCreateRequest extends BaseRequest{
         this.images = images;
     }
 
-    public String getSource() {
-        return source;
-    }
 
-    public void setSource(String source) {
-        this.source = source;
-    }
 }

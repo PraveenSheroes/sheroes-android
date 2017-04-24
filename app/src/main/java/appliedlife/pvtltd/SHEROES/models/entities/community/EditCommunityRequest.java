@@ -5,17 +5,13 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
+
 /**
  * Created by SHEROES-TECH on 08-03-2017.
  */
 
-public class EditCommunityRequest {
-    @SerializedName("appVersion")
-    @Expose
-    private String appVersion;
-    @SerializedName("cloudMessagingId")
-    @Expose
-    private String cloudMessagingId;
+public class EditCommunityRequest extends BaseRequest{
     @SerializedName("community_type_id")
     @Expose
     private Long communityTypeId;
@@ -25,9 +21,6 @@ public class EditCommunityRequest {
     @SerializedName("description")
     @Expose
     private String description;
-    @SerializedName("deviceUniqueId")
-    @Expose
-    private String deviceUniqueId;
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -37,9 +30,6 @@ public class EditCommunityRequest {
     @SerializedName("is_closed")
     @Expose
     private Boolean isClosed;
-    @SerializedName("last_screen_name")
-    @Expose
-    private String lastScreenName;
     @SerializedName("logo_image")
     @Expose
     private String logo;
@@ -52,28 +42,9 @@ public class EditCommunityRequest {
     @SerializedName("removed_tags")
     @Expose
     private List<Long> removedTags = null;
-    @SerializedName("screen_name")
-    @Expose
-    private String screenName;
     @SerializedName("tags")
     @Expose
     private List<Long> tags = null;
-
-    public String getAppVersion() {
-        return appVersion;
-    }
-
-    public void setAppVersion(String appVersion) {
-        this.appVersion = appVersion;
-    }
-
-    public String getCloudMessagingId() {
-        return cloudMessagingId;
-    }
-
-    public void setCloudMessagingId(String cloudMessagingId) {
-        this.cloudMessagingId = cloudMessagingId;
-    }
 
     public Long getCommunityTypeId() {
         return communityTypeId;
@@ -99,14 +70,6 @@ public class EditCommunityRequest {
         this.description = description;
     }
 
-    public String getDeviceUniqueId() {
-        return deviceUniqueId;
-    }
-
-    public void setDeviceUniqueId(String deviceUniqueId) {
-        this.deviceUniqueId = deviceUniqueId;
-    }
-
     public Integer getId() {
         return id;
     }
@@ -115,28 +78,20 @@ public class EditCommunityRequest {
         this.id = id;
     }
 
-    public Boolean getIsActive() {
+    public Boolean getActive() {
         return isActive;
     }
 
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
+    public void setActive(Boolean active) {
+        isActive = active;
     }
 
-    public Boolean getIsClosed() {
+    public Boolean getClosed() {
         return isClosed;
     }
 
-    public void setIsClosed(Boolean isClosed) {
-        this.isClosed = isClosed;
-    }
-
-    public String getLastScreenName() {
-        return lastScreenName;
-    }
-
-    public void setLastScreenName(String lastScreenName) {
-        this.lastScreenName = lastScreenName;
+    public void setClosed(Boolean closed) {
+        isClosed = closed;
     }
 
     public String getLogo() {
@@ -171,14 +126,6 @@ public class EditCommunityRequest {
         this.removedTags = removedTags;
     }
 
-    public String getScreenName() {
-        return screenName;
-    }
-
-    public void setScreenName(String screenName) {
-        this.screenName = screenName;
-    }
-
     public List<Long> getTags() {
         return tags;
     }
@@ -186,5 +133,4 @@ public class EditCommunityRequest {
     public void setTags(List<Long> tags) {
         this.tags = tags;
     }
-
 }

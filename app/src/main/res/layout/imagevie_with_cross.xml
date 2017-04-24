@@ -9,8 +9,8 @@
 
     <ImageView
         android:id="@+id/customView"
-        android:layout_width="@dimen/dp_size_60"
-        android:layout_height="@dimen/dp_size_60"
+        android:layout_width="@dimen/dp_size_80"
+        android:layout_height="@dimen/dp_size_80"
         android:scaleType="fitXY" />
 
     <Button

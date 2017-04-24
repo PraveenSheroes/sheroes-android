@@ -19,6 +19,7 @@ import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityList;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
 import appliedlife.pvtltd.SHEROES.views.fragments.CreateCommunityPostFragment;
@@ -34,9 +35,10 @@ public class CreateCommunityPostActivity extends BaseActivity implements BaseHol
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
-        if (null != getIntent()) {
-            mFeedDetail = getIntent().getParcelableExtra(AppConstants.COMMUNITY_POST_FRAGMENT);
+        if (getIntent() != null && getIntent().getExtras() != null) {
+            mFeedDetail = getIntent().getExtras().getParcelable(AppConstants.COMMUNITY_POST_FRAGMENT);
         }
+
         renderLoginFragmentView();
     }
 
@@ -44,7 +46,11 @@ public class CreateCommunityPostActivity extends BaseActivity implements BaseHol
         setContentView(R.layout.activity_create_community_post);
         ButterKnife.bind(this);
         mCommunityFragment=new CreateCommunityPostFragment();
-        mCommunityFragment.setArguments(getIntent().getExtras());
+        Bundle bundle = new Bundle();
+        LogUtils.info("feed data",mFeedDetail+"");
+        bundle.putParcelable(AppConstants.COMMUNITY_POST_FRAGMENT, mFeedDetail);
+
+        mCommunityFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
                 .replace(R.id.create_community_post_container, mCommunityFragment,CreateCommunityPostFragment.class.getName()).commitAllowingStateLoss();
 

@@ -441,7 +441,14 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
         return communityRequestedFragment;
     }
 
-
+    public void createCommunityPostClick(FeedDetail feedDetail) {
+        Intent intent = new Intent(this, CreateCommunityPostActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(AppConstants.COMMUNITY_POST_FRAGMENT, feedDetail);
+        intent.putExtras(bundle);
+        startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST);
+       // overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
+    }
     public void createCommunityClick(FeedDetail feedDetail) {
         Intent intent = new Intent(this, CreateCommunityActivity.class);
         Bundle bundle = new Bundle();

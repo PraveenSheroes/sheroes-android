@@ -420,7 +420,7 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
             editCommunityRequest.setLogo(encImage);
         }
         editCommunityRequest.setId((int) mFeedDetail.getIdOfEntityOrParticipant());
-        editCommunityRequest.setIsActive(true);
+        editCommunityRequest.setActive(true);
         editCommunityRequest.setAppVersion("String");
         editCommunityRequest.setCloudMessagingId("String");
         editCommunityRequest.setCommunityTypeId(typeId);
@@ -430,10 +430,10 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
         editCommunityRequest.setDescription(mDescription);
         editCommunityRequest.setDeviceUniqueId("String");
         if (mCbcloseCommunity.isChecked()) {
-            editCommunityRequest.setIsClosed(true);
+            editCommunityRequest.setClosed(true);
         }
         else {
-            editCommunityRequest.setIsClosed(false);
+            editCommunityRequest.setClosed(false);
         }
         editCommunityRequest.setLastScreenName("String");
 
