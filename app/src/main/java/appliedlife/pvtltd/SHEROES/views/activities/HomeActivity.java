@@ -412,7 +412,7 @@ public class HomeActivity extends BaseActivity implements CommentReactionFragmen
 
     @OnClick(R.id.tv_communities)
     public void communityOnClick() {
-        liHomeCommunityButtonLayout.setVisibility(View.VISIBLE);
+       // liHomeCommunityButtonLayout.setVisibility(View.VISIBLE);
         mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_COMMUNITIES));
         checkForAllOpenFragments();
         mFragmentOpen.setFeedOpen(false);

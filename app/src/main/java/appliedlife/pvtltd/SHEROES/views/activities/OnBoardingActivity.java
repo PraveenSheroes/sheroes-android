@@ -462,9 +462,9 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
 
 
     private void setHowSheroesHelpFragment() {
-        LoginResponse loginResponse = userPreference.get();
-        loginResponse.setNextScreen(AppConstants.CURRENT_STATUS_SCREEN);
-        userPreference.set(loginResponse);
+       // LoginResponse loginResponse = userPreference.get();
+       // loginResponse.setNextScreen(AppConstants.CURRENT_STATUS_SCREEN);
+       // userPreference.set(loginResponse);
         mFragmentOpen.setLookingForHowCanOpen(true);
         mFlOnBoardingFragment.setVisibility(View.GONE);
         OnBoardingHowCanSheroesHelpYouFragment onBoardingHowCanSheroesHelpYouFragment = new OnBoardingHowCanSheroesHelpYouFragment();
@@ -475,9 +475,9 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
     }
 
     private void setOnBoardingInterestFragment() {
-        LoginResponse loginResponse = userPreference.get();
-        loginResponse.setNextScreen(AppConstants.INTEREST_SCREEN);
-        userPreference.set(loginResponse);
+       // LoginResponse loginResponse = userPreference.get();
+       // loginResponse.setNextScreen(AppConstants.INTEREST_SCREEN);
+       // userPreference.set(loginResponse);
         mFragmentOpen.setInterestOpen(true);
         mInterest.setVisibility(View.VISIBLE);
         mFlOnBoardingFragment.setVisibility(View.GONE);
@@ -490,9 +490,9 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
     }
 
     private void setOnJobAtFragment() {
-        LoginResponse loginResponse = userPreference.get();
-        loginResponse.setNextScreen(AppConstants.GOOD_AT_SCREEN);
-        userPreference.set(loginResponse);
+       // LoginResponse loginResponse = userPreference.get();
+       // loginResponse.setNextScreen(AppConstants.GOOD_AT_SCREEN);
+       // userPreference.set(loginResponse);
         mFragmentOpen.setJobAtOpen(true);
         mFlOnBoardingFragment.setVisibility(View.GONE);
         mSelectedTag.clear();
@@ -504,9 +504,9 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
     }
 
     private void setOnWorkExperienceFragment() {
-        LoginResponse loginResponse = userPreference.get();
-        loginResponse.setNextScreen(AppConstants.TOTAL_WORK_EXPERIENCE_SCREEN);
-        userPreference.set(loginResponse);
+      //  LoginResponse loginResponse = userPreference.get();
+      //  loginResponse.setNextScreen(AppConstants.TOTAL_WORK_EXPERIENCE_SCREEN);
+     //   userPreference.set(loginResponse);
         mFragmentOpen.setWorkingExpOpen(true);
         mFlOnBoardingFragment.setVisibility(View.GONE);
         OnBoardingWorkExperienceFragment onBoardingWorkExperienceFragment = new OnBoardingWorkExperienceFragment();
@@ -515,20 +515,21 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
 
     @OnClick(R.id.iv_how_can_help_next)
     public void onLookingNextClick() {
-      /*  Fragment fragment = getSupportFragmentManager().findFragmentByTag(OnBoardingHowCanSheroesHelpYouFragment.class.getName());
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(OnBoardingHowCanSheroesHelpYouFragment.class.getName());
         if (AppUtils.isFragmentUIActive(fragment)) {
             ((OnBoardingHowCanSheroesHelpYouFragment) fragment).onLookingForHowCanSheroesRequestClick(mSelectedTag);
-        }*/
+        }
+    }
+
+    public void onLookingForHowCanSheroesNextClick() {
         LoginResponse loginResponse = userPreference.get();
         loginResponse.setNextScreen(AppConstants.FEED_SCREEN);
         userPreference.set(loginResponse);
         Intent homeIntent = new Intent(this, HomeActivity.class);
         startActivity(homeIntent);
         finish();
-    }
 
-    public void onLookingForHowCanSheroesNextClick() {
-        if (StringUtil.isNotEmptyCollection(mSelectedTag)) {
+      /*  if (StringUtil.isNotEmptyCollection(mSelectedTag)) {
             boolean flag = false;
             for (LabelValue labelValue : mSelectedTag) {
                 String value = labelValue.getLabel();
@@ -546,7 +547,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
                 mFragmentOpen.setLookingForHowCanOpen(false);
                 setOnBoardingInterestFragment();
             }
-        }
+        }*/
 
     }
 

@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
@@ -436,6 +437,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 popupWindow.dismiss();
             }
         });
+        final LinearLayout liFeedMenu = (LinearLayout) popupView.findViewById(R.id.li_feed_menu);
         final TextView tvEdit = (TextView) popupView.findViewById(R.id.tv_article_menu_edit);
         final TextView tvDelete = (TextView) popupView.findViewById(R.id.tv_article_menu_delete);
         final TextView tvShare = (TextView) popupView.findViewById(R.id.tv_article_menu_share);
@@ -529,16 +531,16 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 mFeedDetail = (FeedDetail) baseResponse;
                 if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
                     if (mFeedDetail.getAuthorId() == userPreference.get().getUserSummary().getUserId() || mFragmentOpen.isOwner()) {
-                     //   tvDelete.setVisibility(View.VISIBLE);
-                     //   tvEdit.setVisibility(View.VISIBLE);
+                        tvDelete.setVisibility(View.VISIBLE);
+                        tvEdit.setVisibility(View.VISIBLE);
                     } else {
                         if (mFeedDetail.isFromHome()) {
                             tvReport.setText(getString(R.string.ID_REPORTED_AS_SPAM));
                             tvReport.setEnabled(false);
                         }
-                        tvReport.setVisibility(View.VISIBLE);
+                        tvReport.setVisibility(View.GONE);
                     }
-                   // tvShare.setVisibility(View.VISIBLE);
+                    tvShare.setVisibility(View.GONE);
                 }
                 break;
             case R.id.tv_feed_community_user_menu:
@@ -629,7 +631,11 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 break;
             case FEED_CARD_MENU:
                 if (null != mFeedDetail) {
-                    if (mFragmentOpen.isBookmarkFragment()) {
+                    Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+                    if (AppUtils.isFragmentUIActive(fragment)) {
+                        ((HomeFragment) fragment).deleteCommunityPost(mFeedDetail);
+                    }
+                   /* if (mFragmentOpen.isBookmarkFragment()) {
                         Fragment fragmentBookMark = getSupportFragmentManager().findFragmentByTag(BookmarksFragment.class.getName());
                         if (AppUtils.isFragmentUIActive(fragmentBookMark)) {
                             ((BookmarksFragment) fragmentBookMark).deleteCommunityPost(mFeedDetail);
@@ -639,7 +645,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                         if (AppUtils.isFragmentUIActive(fragment)) {
                             ((HomeFragment) fragment).deleteCommunityPost(mFeedDetail);
                         }
-                    }
+                    }*/
                 }
                 break;
 

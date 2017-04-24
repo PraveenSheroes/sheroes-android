@@ -62,6 +62,7 @@ public class AppConstants {
     public static final String JOB_AT_SKILL_SERVICE ="SKILL_SERVICE";
     public static final String JOB_AT_SKILL_SERVICE_TYPE ="SKILL";
     public static final String INTEREST_TYPE ="INTEREST";
+    public static final String USER ="USER";
     public static final String INTEREST_SUB_TYPE ="INTEREST_SERVICE";
     public static final String WORK_EXPERIENCE_SUB_TYPE ="TOTAL_EXP";
     public static final String WORK_EXPERIENCE_TYPE ="TOTAL_EXP";
@@ -85,8 +86,8 @@ public class AppConstants {
     public static final int REQUEST_CODE_FOR_FACEBOOK = 4001;
     public static final int REQUEST_CODE_FOR_COMMUNITY_POST = 5001;
     public static final int REQUEST_CODE_FOR_CREATE_COMMUNITY = 6001;
-    public static final int REQUEST_CODE_FOR_CREATE_COMMUNITY_POST = 7001;
     public static final int REQUEST_CODE_FOR_JOB_FILTER = 7001;
+    public static final int REQUEST_CODE_FOR_CREATE_COMMUNITY_POST = 8001;
     public static final String JOB_FRAGMENT = "job";
     public static final String PROFILE_FRAGMENT = "profile";
     public static final String FEATURE_FRAGMENT = "feature";
@@ -94,6 +95,7 @@ public class AppConstants {
     public static final String ARTICLE_FRAGMENT = "article";
     public static final String COMMUNITY_POST_FRAGMENT = "community_post_fragment";
     public static final String USER_COMMUNITY_POST_FRAGMENT = "user_community_post_fragment";
+    public static final String INVITE_MEMBER = "invite_member";
     public static final String MY_COMMUNITIES_HEADER = "COMMUNITY_HEADER";
     public static final String NO_COMMUNITIES = "NO_COMMUNITIES";
     public static final String COMMUNITIES_DETAIL = "community_detail";
@@ -164,6 +166,7 @@ public class AppConstants {
     public static final String LOCATION_CITY_GET_ALL_DATA_KEY = "city";
     public static final String INTEREST_GET_ALL_DATA_KEY = "interest";
     public static final String JOB_AT_GET_ALL_DATA_KEY = "skill";
+    public static final String BAD_RQUEST = "HTTP 400 Bad Request";
 /**/
 
     public static final String MASTER_DATA_OPRTUNITY = "Opportunities"; // on second map lavele key

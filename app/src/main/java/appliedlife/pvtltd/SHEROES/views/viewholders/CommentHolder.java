@@ -74,6 +74,9 @@ public class CommentHolder extends BaseViewHolder<CommentReactionDoc> {
                 tvListCommentTime.setText(AppConstants.JUST_NOW);
             }*/
             tvListCommentTime.setText(dataItem.getPostedDate());
+        }else
+        {
+            tvListCommentTime.setText(mContext.getString(R.string.ID_JUST_NOW));
         }
 
         if (dataItem.isMyOwnParticipation()) {

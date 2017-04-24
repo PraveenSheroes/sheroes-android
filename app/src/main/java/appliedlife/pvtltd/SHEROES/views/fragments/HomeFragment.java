@@ -113,17 +113,17 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void onHide() {
                 mListLoad = false;
-                //((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.INVISIBLE);
-                tvRefresh.setVisibility(View.GONE);
+                ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.GONE);
+               // tvRefresh.setVisibility(View.GONE);
             }
 
             @Override
             public void onShow() {
                 mListLoad = false;
-                // ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
-                if(mLayoutManager.findLastVisibleItemPosition()>5) {
+                ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
+              /*  if(mLayoutManager.findLastVisibleItemPosition()>5) {
                     tvRefresh.setVisibility(View.GONE);
-                }
+                }*/
             }
 
             @Override

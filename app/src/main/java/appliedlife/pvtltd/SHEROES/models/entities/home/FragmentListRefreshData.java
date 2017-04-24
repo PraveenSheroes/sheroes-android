@@ -15,6 +15,7 @@ public class FragmentListRefreshData {
     int swipeToRefresh;
     long communityId;
     List<Long> categoryIdList;
+    String searchStringName;
     public FragmentListRefreshData() {
 
     }
@@ -23,14 +24,18 @@ public class FragmentListRefreshData {
         this.callFromFragment = callFromFragment;
         this.idFeedDetail = idFeedDetail;
     }
-
+    public FragmentListRefreshData(int pageNo, String callFromFragment, long idFeedDetail,String searchString) {
+        this.pageNo = pageNo;
+        this.callFromFragment = callFromFragment;
+        this.idFeedDetail = idFeedDetail;
+        this.searchStringName=searchString;
+    }
     public FragmentListRefreshData(int pageNo, String callFromFragment, boolean isReactionList, long enitityOrParticpantid) {
         this.pageNo = pageNo;
         this.callFromFragment = callFromFragment;
         this.isReactionList = isReactionList;
         this.enitityOrParticpantid = enitityOrParticpantid;
     }
-
     public int getPageNo() {
         return pageNo;
     }
@@ -94,5 +99,13 @@ public class FragmentListRefreshData {
 
     public void setIdFeedDetail(long idFeedDetail) {
         this.idFeedDetail = idFeedDetail;
+    }
+
+    public String getSearchStringName() {
+        return searchStringName;
+    }
+
+    public void setSearchStringName(String searchStringName) {
+        this.searchStringName = searchStringName;
     }
 }

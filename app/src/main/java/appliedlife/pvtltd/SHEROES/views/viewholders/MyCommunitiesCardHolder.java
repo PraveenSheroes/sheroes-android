@@ -169,10 +169,10 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
         String imageUrl = dataItem.getImageUrl();
         if (StringUtil.isNotNullOrEmptyString(imageUrl)) {
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View backgroundImage = layoutInflater.inflate(R.layout.feed_article_single_image, null);
-            final ImageView ivFirstLandscape = (ImageView) backgroundImage.findViewById(R.id.iv_feed_article_single_image);
-            final TextView tvTotalMember = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_total_views);
-            final TextView time = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_time_label);
+            View backgroundImage = layoutInflater.inflate(R.layout.communities_single_image, null);
+            final ImageView ivFirstLandscape = (ImageView) backgroundImage.findViewById(R.id.iv_community_single_image);
+            final TextView tvTotalMember = (TextView) backgroundImage.findViewById(R.id.tv_community_total_views);
+            final TextView time = (TextView) backgroundImage.findViewById(R.id.tv_community_time_label);
             time.setVisibility(View.INVISIBLE);
             final RelativeLayout rlFeedArticleViews = (RelativeLayout) backgroundImage.findViewById(R.id.rl_gradiant);
             tvTotalMember.setText(dataItem.getNoOfMembers() + AppConstants.SPACE + context.getString(R.string.ID_MEMBERS));

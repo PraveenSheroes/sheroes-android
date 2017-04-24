@@ -32,6 +32,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
+import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -41,6 +42,7 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -78,12 +80,16 @@ public class MyCommunityInviteMemberFragment extends BaseDialogFragment implemen
     private Handler mHandler = new Handler();
     private List<Long> mUserIdForAddMember = new ArrayList<>();
     private FeedDetail mFeedDetail;
+    private int mPageNo = AppConstants.ONE_CONSTANT;
+    private LinearLayoutManager manager;
+    private SwipPullRefreshList mPullRefreshList;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getActivity()).inject(this);
         View view = inflater.inflate(R.layout.my_community_invite_member, container, false);
         ButterKnife.bind(this, view);
-        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ALL_SEARCH, AppConstants.NO_REACTION_CONSTANT);
+        mPullRefreshList = new SwipPullRefreshList();
+        mPullRefreshList.setPullToRefresh(false);
         mHomePresenter.attachView(this);
         Bundle bundle = getArguments();
         if (bundle != null) {
@@ -91,11 +97,6 @@ public class MyCommunityInviteMemberFragment extends BaseDialogFragment implemen
         }
         tvInviteText.setText(getString(R.string.ID_SEARCH));
         editTextWatcher();
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mAdapter = new GenericRecyclerViewAdapter(getActivity(), (HomeActivity) getActivity());
-        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(manager);
-        mRecyclerView.setAdapter(mAdapter);
         liInviteMember.setVisibility(View.VISIBLE);
         return view;
     }
@@ -108,13 +109,23 @@ public class MyCommunityInviteMemberFragment extends BaseDialogFragment implemen
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
         List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
-        if (StringUtil.isNotEmptyCollection(feedDetailList) && mAdapter != null) {
-            liInviteMember.setVisibility(View.GONE);
+        liInviteMember.setVisibility(View.GONE);
+        if (StringUtil.isNotEmptyCollection(feedDetailList)) {
+            mPageNo = mFragmentListRefreshData.getPageNo();
+            mFragmentListRefreshData.setPageNo(++mPageNo);
+            mPullRefreshList.allListData(feedDetailList);
+            mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
             mAdapter.setCallForRecycler(AppConstants.FEED_SUB_TYPE);
-            mAdapter.setSheroesGenericListData(feedDetailList);
             mAdapter.notifyDataSetChanged();
+            if (!mPullRefreshList.isPullToRefresh()) {
+                manager.scrollToPosition(mPullRefreshList.getFeedResponses().size() - feedDetailList.size() - 1);
+            } else {
+                manager.scrollToPositionWithOffset(0, 0);
+            }
+        } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
+            //mLiNoResult.setVisibility(View.VISIBLE);
         } else {
-            liInviteMember.setVisibility(View.VISIBLE);
+            liInviteMember.setVisibility(View.GONE);
         }
     }
 
@@ -175,8 +186,27 @@ public class MyCommunityInviteMemberFragment extends BaseDialogFragment implemen
         @Override
         public void run() {
             if (!isDetached()) {
-                mSearchDataName = mSearchDataName.trim().replaceAll(AppConstants.SPACE, AppConstants.EMPTY_STRING);
-                mHomePresenter.getFeedFromPresenter(mAppUtils.searchRequestBuilder(AppConstants.USER_SUB_TYPE, mSearchDataName, mFragmentListRefreshData.getPageNo(), AppConstants.ALL_SEARCH,mFeedDetail.getIdOfEntityOrParticipant()));
+                mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT,AppConstants.INVITE_MEMBER, mFeedDetail.getIdOfEntityOrParticipant(),mSearchDataName);
+                mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                mAdapter = new GenericRecyclerViewAdapter(getActivity(), (HomeActivity) getActivity());
+                manager = new LinearLayoutManager(getActivity());
+                mRecyclerView.setLayoutManager(manager);
+                mRecyclerView.setAdapter(mAdapter);
+                mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, manager, mFragmentListRefreshData) {
+                    @Override
+                    public void onHide() {
+                    }
+
+                    @Override
+                    public void onShow() {
+                    }
+
+                    @Override
+                    public void dismissReactions() {
+                    }
+                });
+
+                mHomePresenter.getFeedFromPresenter(mAppUtils.searchRequestBuilder(AppConstants.USER_SUB_TYPE, mSearchDataName, mFragmentListRefreshData.getPageNo(), AppConstants.INVITE_MEMBER,mFeedDetail.getIdOfEntityOrParticipant()));
             }
         }
     };
@@ -256,5 +286,9 @@ public class MyCommunityInviteMemberFragment extends BaseDialogFragment implemen
                 dismiss();
             }
         };
+    }
+    @Override
+    public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
+        ((HomeActivity)getActivity()).onShowErrorDialog(errorMsg, feedParticipationEnum);
     }
 }

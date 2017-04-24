@@ -592,6 +592,15 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
                     FeedDetail feedDetail = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITIES_DETAIL);
                     updateOpenAboutFragment(feedDetail);
                     break;
+                case AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST:
+                    FeedDetail feedCommunityPost = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITY_POST_FRAGMENT);
+                    Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
+                    if (AppUtils.isFragmentUIActive(fragment)) {
+                        if (fragment instanceof CommunitiesDetailFragment) {
+                            ((CommunitiesDetailFragment) fragment).updateUiAccordingToFeedDetail(feedCommunityPost);
+                        }
+                    }
+                    break;
                 default:
                     LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);
             }

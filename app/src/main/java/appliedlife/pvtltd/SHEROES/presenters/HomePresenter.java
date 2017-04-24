@@ -135,7 +135,12 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
+                if(e.getMessage().equalsIgnoreCase(AppConstants.BAD_RQUEST))
+                {
+                    getMvpView().showError(mSheroesApplication.getString(R.string.ID_BAD_RQUEST), ERROR_FEED_RESPONSE);
+                }else {
+                    getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
+                }
             }
 
             @Override

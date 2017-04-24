@@ -69,9 +69,9 @@ public class BaseDialogFragment extends DialogFragment implements BaseMvpView {
 
     }
 
-    @Override
-    public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
 
+    @Override
+    public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
     }
 
     @Override

@@ -3,7 +3,6 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -59,8 +58,6 @@ public class CommunitiesDetailFragment extends BaseFragment {
     ProgressBar mProgressBar;
     @Bind(R.id.swipe_view_communities_detail)
     SwipeRefreshLayout mSwipeView;
-    @Bind(R.id.fab_post_community)
-    FloatingActionButton fabPostCommunity;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private SwipPullRefreshList mPullRefreshList;
@@ -147,7 +144,9 @@ public class CommunitiesDetailFragment extends BaseFragment {
     @OnClick(R.id.fab_post_community)
     public void communityPostClick()
     {
-        ((CommunitiesDetailActivity) getActivity()).createCommunityPostClick(mFeedDetail);
+        FeedDetail feedDetail=mFeedDetail;
+        feedDetail.setCallFromName(AppConstants.COMMUNITIES_DETAIL);
+        ((CommunitiesDetailActivity) getActivity()).createCommunityPostClick(feedDetail);
     }
     private void swipeToRefreshList() {
         setListLoadFlag(false);
