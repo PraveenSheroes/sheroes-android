@@ -16,6 +16,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -407,6 +409,7 @@ public class HomeActivity extends BaseActivity implements CommentReactionFragmen
         mTvCommunities.setText(AppConstants.EMPTY_STRING);
         mTvHome.setText(getString(R.string.ID_FEED));
         mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_FEED));
+     //   didTapButton(mTvHome);
         initHomeViewPagerAndTabs();
     }
 
@@ -425,12 +428,16 @@ public class HomeActivity extends BaseActivity implements CommentReactionFragmen
         mTabLayout.setVisibility(View.VISIBLE);
         mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
         mTvHome.setText(AppConstants.EMPTY_STRING);
+      //  didTapButton(mTvCommunities);
         // if (!mFragmentOpen.isCommunityOpen()) {
         //     mFragmentOpen.setCommunityOpen(true);
         initCommunityViewPagerAndTabs();
         //  }
     }
-
+    public void didTapButton(View view) {
+        final Animation myAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_to_top_slide_anim);
+        view.startAnimation(myAnim);
+    }
     @OnClick(R.id.iv_footer_button_icon)
     public void createCommunityPostOnClick() {
         // Snackbar.make(mCLMainLayout, "Comming soon", Snackbar.LENGTH_SHORT).show();

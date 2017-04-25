@@ -614,7 +614,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
                     Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
                     if (AppUtils.isFragmentUIActive(fragment)) {
                         if (fragment instanceof CommunitiesDetailFragment) {
-                            ((CommunitiesDetailFragment) fragment).updateUiAccordingToFeedDetail(feedCommunityPost);
+                            ((CommunitiesDetailFragment) fragment).updateUiAccordingToFeedDetail(mFeedDetail);
                         }
                     }
                     break;
@@ -623,7 +623,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
                     Fragment fragmentCommunity = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
                     if (AppUtils.isFragmentUIActive(fragmentCommunity)) {
                         if (fragmentCommunity instanceof CommunitiesDetailFragment) {
-                            ((CommunitiesDetailFragment) fragmentCommunity).updateUiAccordingToFeedDetail(feedCommunityPostEdit);
+                            ((CommunitiesDetailFragment) fragmentCommunity).updateUiAccordingToFeedDetail(mFeedDetail);
                         }
                     }
                     break;

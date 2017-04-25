@@ -28,7 +28,7 @@ public class CommunityPostResponse extends BaseResponse {
         private String community_type;
         @SerializedName("is_community_closed")
         @Expose
-        private String is_community_closed;
+        private boolean isClosedCommunity;
 
         @SerializedName("is_owner")
         @Expose
@@ -76,13 +76,6 @@ public class CommunityPostResponse extends BaseResponse {
         this.community_type = community_type;
     }
 
-    public String getIs_community_closed() {
-        return is_community_closed;
-    }
-
-    public void setIs_community_closed(String is_community_closed) {
-        this.is_community_closed = is_community_closed;
-    }
 
     public boolean isOwner() {
         return isOwner;
@@ -90,6 +83,14 @@ public class CommunityPostResponse extends BaseResponse {
 
     public void setOwner(boolean owner) {
         isOwner = owner;
+    }
+
+    public boolean isClosedCommunity() {
+        return isClosedCommunity;
+    }
+
+    public void setClosedCommunity(boolean closedCommunity) {
+        isClosedCommunity = closedCommunity;
     }
 }
 

@@ -4,16 +4,12 @@ import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
 
-import java.util.HashMap;
-
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.EditNameDialogListener;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -27,8 +23,6 @@ public class SelectDilogHolder extends BaseViewHolder<CommunityPostResponse> {
     @Bind(R.id.img1)
     CircleImageView background;
     BaseHolderInterface viewInterface;
-    private FeedDetail dataItem;
-    private int position;
     CommunityPostResponse communityPostResponse;
 
     public SelectDilogHolder(View itemView, BaseHolderInterface baseHolderInterface) {
@@ -37,19 +31,18 @@ public class SelectDilogHolder extends BaseViewHolder<CommunityPostResponse> {
         this.viewInterface = baseHolderInterface;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
     }
-    public SelectDilogHolder(View itemView, EditNameDialogListener baseHolderInterface) {
-        super(itemView);
-        ButterKnife.bind(this,itemView);
-        SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
-    }
-
     @Override
     public void bindData(CommunityPostResponse obj, Context context, int position) {
         communityPostResponse =obj;
         tvCity.setText(communityPostResponse.getTitle());
         tvCity.setOnClickListener(this);
         String images = communityPostResponse.getLogo();
-
+        if(communityPostResponse.isClosedCommunity()) {
+            tvCity.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_lock, 0);
+        }else
+        {
+            tvCity.setCompoundDrawablesWithIntrinsicBounds(0, 0,0, 0);
+        }
         background.setCircularImage(true);
         background.bindImage(images);
     }
@@ -62,13 +55,6 @@ public class SelectDilogHolder extends BaseViewHolder<CommunityPostResponse> {
 
     @Override
     public void onClick(View view) {
-        HashMap<String,Object> map = new HashMap<String,Object>();
-        //   map.put("collection name",dataItem.getTitle());
-        map.put("collection id", communityPostResponse.getId());
-//    map.put("collection type",dataItem.getType());
         viewInterface.handleOnClick(this.communityPostResponse,view);
-        //createCommunityViewInterface.closeDialog("communityDialog");
-
-
     }
 }
