@@ -101,6 +101,7 @@
                 android:layout_marginLeft="@dimen/dp_size_38"
                 android:layout_marginRight="@dimen/dp_size_38"
                 android:textColor="@color/blue"
+                android:visibility="gone"
                 android:paddingTop="@dimen/dp_size_15"
                 android:text="@string/ID_ADDMORE"
                  />
@@ -161,16 +162,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dp_size_20"
+                android:layout_marginRight="@dimen/dp_size_20"
                 android:layout_marginTop="@dimen/dp_size_40"
                 android:orientation="horizontal">
 
                 <LinearLayout
                     android:id="@+id/lnr_community_post"
-                    android:layout_width="wrap_content"
+                    android:layout_width="@dimen/dp_size_75"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:orientation="vertical"
+                    android:gravity="center"
                     >
 
                     <FrameLayout
@@ -197,11 +201,12 @@
 
                 <LinearLayout
                     android:id="@+id/lnr_community_post1"
-                    android:layout_width="wrap_content"
+                    android:layout_width="@dimen/dp_size_75"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_size_50"
+                    android:layout_marginLeft="@dimen/dp_size_20"
                     android:layout_toRightOf="@+id/lnr_community_post"
                     android:gravity="center"
+                    android:visibility="gone"
                     android:orientation="vertical">
 
                     <FrameLayout
@@ -212,8 +217,7 @@
                         <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
                             android:id="@+id/iv_community_owner"
                             android:layout_width="@dimen/dp_size_35"
-                            android:layout_height="@dimen/dp_size_35"
-                            android:background="@drawable/ripple_button"/>
+                            android:layout_height="@dimen/dp_size_35"/>
                     </FrameLayout>
 
                     <TextView
@@ -223,6 +227,7 @@
                         android:ellipsize="end"
                         android:lines="@integer/int_value_for_line_1"
                         android:text="@string/ID_COMMUNITIY"
+                        android:gravity="center_horizontal"
                         android:textAllCaps="true"
                         android:textColor="@color/searchbox_text_color"
                         android:textSize="@dimen/sp_size_12" />
@@ -230,11 +235,10 @@
 
                 <LinearLayout
                     android:id="@+id/lnr_community_post2"
-                    android:layout_width="wrap_content"
+                    android:layout_width="@dimen/dp_size_75"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_size_50"
+                    android:layout_marginLeft="@dimen/dp_size_20"
                     android:layout_toRightOf="@+id/lnr_community_post1"
-
                     android:gravity="center"
 
                     android:orientation="vertical">

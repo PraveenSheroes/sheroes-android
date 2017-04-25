@@ -60,14 +60,11 @@ public class OwnerHolder extends BaseViewHolder<Member> {
             ivFeedUserCircleIcon.setCircularImage(true);
             ivFeedUserCircleIcon.bindImage(dataItem.getCommunityUserPhotoUrlPath());
         }
-        if (dataItem.isOwner()) {
+
             mTvownerclose.setVisibility(View.VISIBLE);
             tvOwner.setText(mContext.getString(R.string.ID_ADMIN) + (position + 1));
             tvOwner.setTextColor(ContextCompat.getColor(context, R.color.red_oval_shap));
-        } else {
-            mTvownerclose.setVisibility(View.GONE);
-            tvOwner.setText(AppConstants.EMPTY_STRING);
-        }
+
     }
 
     @Override

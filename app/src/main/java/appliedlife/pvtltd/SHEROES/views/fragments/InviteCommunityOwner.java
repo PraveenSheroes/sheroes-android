@@ -98,7 +98,8 @@ public class InviteCommunityOwner extends BaseFragment implements CommunityView,
         if (bundle != null) {
             mFeedDetail = bundle.getParcelable(AppConstants.COMMUNITIES_DETAIL);
         }
-        tvInviteText.setText(getString(R.string.ID_SEARCH));
+        tvInviteText.setText(getString(R.string.ID_INVITE_OWNER_COMMUNITY));
+        mSearchEditText.setHint(getString(R.string.ID_SEARCH_USER));
         tvInvitePostExit.setText(getString(R.string.ID_CLOSE));
         editTextWatcher();
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

@@ -12,8 +12,6 @@
         android:paddingTop="@dimen/dp_size_30"
         android:paddingLeft="@dimen/dp_size_30"
         android:paddingBottom="@dimen/dp_size_30"
-
-
         android:drawablePadding="@dimen/dp_size_25"
         android:text="@string/ID_MEMBERS"
         android:textSize="@dimen/sp_size_24"
@@ -25,6 +23,8 @@
         android:layout_toRightOf="@+id/tv_user_comment_header_text"
         android:textSize="@dimen/sp_size_24"
         android:paddingBottom="@dimen/dp_size_30"
+        android:textColor="@color/searchbox_hint_text_color"
+        android:fontFamily="@string/ID_ROBOTO_LIGHT"
         android:paddingTop="@dimen/dp_size_30"
         android:paddingLeft="@dimen/dp_size_10"
         android:id="@+id/tv_member_count"
@@ -33,8 +33,8 @@
         android:id="@+id/fm_community_members_close"
         android:layout_width="@dimen/dp_size_38"
         android:layout_height="@dimen/dp_size_38"
-        android:layout_marginEnd="@dimen/dp_size_25"
-        android:layout_marginRight="@dimen/dp_size_20"
+        android:layout_marginEnd="@dimen/dp_size_10"
+        android:layout_marginRight="@dimen/dp_size_10"
         android:layout_marginTop="@dimen/dp_size_25"
         android:layout_alignParentRight="true"
 
@@ -46,7 +46,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:drawableLeft="@drawable/ic_cross"
-            android:padding="@dimen/dp_size_10" />
+            android:paddingTop="@dimen/dp_size_10"
+            android:paddingBottom="@dimen/dp_size_10"
+            android:paddingLeft="@dimen/dp_size_10"/>
     </FrameLayout>
 
 </RelativeLayout>

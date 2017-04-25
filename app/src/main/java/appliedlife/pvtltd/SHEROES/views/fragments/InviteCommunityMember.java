@@ -93,7 +93,9 @@ public class InviteCommunityMember extends BaseDialogFragment implements HomeVie
         if (bundle != null) {
             mFeedDetail = bundle.getParcelable(AppConstants.COMMUNITIES_DETAIL);
         }
-        tvInviteText.setText(getString(R.string.ID_SEARCH));
+        tvInviteText.setText(getString(R.string.ID_INVITE_MEMBER_COMMUNITY));
+        mSearchEditText.setHint(getString(R.string.ID_SEARCH_USER));
+
         editTextWatcher();
         liInviteMember.setVisibility(View.VISIBLE);
         return view;

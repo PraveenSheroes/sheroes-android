@@ -246,9 +246,9 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
         // tv_community_owner.setText(mFeedDetail.getTitle());
         Glide.with(this).load(mFeedDetail.getThumbnailImageUrl()).transform(new CommunityOpenAboutFragment.CircleTransform(getActivity())).into(iv_community_owner);
         if (mFeedDetail.isOwner()) {
-            lnr_community_post1.setEnabled(true);
+            lnr_community_post1.setVisibility(View.VISIBLE);
         } else {
-            lnr_community_post1.setEnabled(false);
+            lnr_community_post1.setVisibility(View.GONE);
         }
     }
 
@@ -466,9 +466,9 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
         tv_community_owner.setText(communityPostResponse.getTitle());
         Glide.with(this).load(mImages).transform(new CommunityOpenAboutFragment.CircleTransform(getActivity())).into(iv_community_owner);
         if (communityPostResponse.isOwner()) {
-            lnr_community_post1.setEnabled(true);
+            lnr_community_post1.setVisibility(View.VISIBLE);
         } else {
-            lnr_community_post1.setEnabled(false);
+            lnr_community_post1.setVisibility(View.GONE);
         }
     }
 

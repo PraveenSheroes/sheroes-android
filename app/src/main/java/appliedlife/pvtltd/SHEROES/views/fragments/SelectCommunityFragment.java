@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,7 +57,7 @@ public class SelectCommunityFragment extends BaseDialogFragment implements Commu
     private MyDialogFragmentListener mHomeActivityIntractionListner;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
-
+    List<CommunityPostResponse> communityPostResponses;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -73,6 +74,7 @@ public class SelectCommunityFragment extends BaseDialogFragment implements Commu
         SheroesApplication.getAppComponent(getActivity()).inject(this);
         View v = inflater.inflate(R.layout.community_list, container, false);
         ButterKnife.bind(this, v);
+        getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         mCreateCommunityPresenter.attachView(this);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -87,9 +89,11 @@ public class SelectCommunityFragment extends BaseDialogFragment implements Commu
     @Override
     public void getSelectedCommunityListSuccess(List<CommunityPostResponse> selected_community_response) {
         if(StringUtil.isNotEmptyCollection(selected_community_response)) {
+            communityPostResponses=selected_community_response;
             mAdapter.setSheroesGenericListData(selected_community_response);
             mAdapter.setCallForRecycler(AppConstants.COMMUNITY_NAME_SUB_TYPE);
             mAdapter.notifyDataSetChanged();
+            setDilogSize();
         }
     }
 
@@ -159,11 +163,50 @@ public class SelectCommunityFragment extends BaseDialogFragment implements Commu
             WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
             params.y = -20;
             params.x = 10;
-            dialog.getWindow().setLayout(600, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+            dialog.getWindow().setLayout(getScreenWidth() - 100, ViewGroup.LayoutParams.WRAP_CONTENT);
+
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
 
         }
 
+    }
+    private void setDilogSize()
+    {
+        Dialog dialog = getDialog();
+
+        if (dialog != null) {
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
+            params.y = -20;
+            params.x = 10;
+            if(StringUtil.isNotEmptyCollection(communityPostResponses)) {
+                if (communityPostResponses.size() < 9) {
+                    dialog.getWindow().setLayout(getScreenWidth() - 100, ViewGroup.LayoutParams.WRAP_CONTENT);
+                } else {
+                    dialog.getWindow().setLayout(getScreenWidth() - 100, getScreenheight() - 400);
+
+                }
+            }
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+
+        }
+    }
+    private int getScreenWidth()
+    {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
+        return width;
+    }
+    private int getScreenheight()
+    {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
+        return height;
     }
     public interface MyDialogFragmentListener {
         void onAddCommunityDetailSubmit(CommunityPostResponse communityPostResponse);

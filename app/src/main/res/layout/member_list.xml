@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/dp_size_5"
     >
     <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
         android:id="@+id/img1"
@@ -22,7 +23,6 @@
         android:textColor="@color/black"
         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
         android:textSize="@dimen/sp_size_13"
-        android:layout_marginBottom="@dimen/dp_size_3"
         android:textAppearance="?android:attr/textAppearanceMedium" />
     <TextView
         android:id="@+id/tv_member_city"
@@ -33,6 +33,7 @@
         android:layout_marginLeft="18dp"
         android:textSize="@dimen/sp_size_12"
         android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:layout_marginBottom="@dimen/dp_size_4"
         android:layout_marginTop="4dp"/>
     <TextView
         android:id="@+id/tv_admin"
@@ -59,7 +60,6 @@
         android:layout_width="fill_parent"
         android:layout_height="@dimen/sp_size_1"
         android:layout_below="@+id/tv_admin"
-        android:layout_marginTop="@dimen/dp_size_5"
         android:layout_marginRight="@dimen/dp_size_13"
         android:layout_marginLeft="@dimen/dp_size_68"
         android:background="@color/grey2"/>

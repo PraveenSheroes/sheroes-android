@@ -98,7 +98,6 @@
                     android:layout_marginTop="@dimen/dp_size_17"
                     android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                     android:gravity="center_vertical"
-                    android:text="sdjfbdsj"
                     android:maxLines="2"
                     android:minLines="2"
                     android:textColor="@color/black"
@@ -125,7 +124,6 @@
                     android:layout_toRightOf="@+id/iv_community_post_icon"
                     android:layout_below="@+id/tv_community_name"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:text="dkjfsdjk"
                     android:maxLines="1"
                     android:drawablePadding="@dimen/dp_size_5"
                     android:textColor="@color/red_oval_shap"
@@ -141,8 +139,7 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginTop="@dimen/dp_size_12">
+                android:layout_gravity="center_vertical">
 
                 <TextView
                     android:id="@+id/tv_community_requested"
@@ -201,7 +198,7 @@
                 android:layout_width="@dimen/dp_size_100"
                 android:layout_height="@dimen/dp_size_20"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/dp_size_17"
+                android:layout_marginTop="@dimen/dp_size_20"
                 android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:gravity="center"
                 android:maxLines="1"
@@ -261,7 +258,7 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_size_7">
+                android:layout_marginTop="@dimen/dp_size_20">
 
                 <TextView
                     android:id="@+id/tv_community_owner_txt"
