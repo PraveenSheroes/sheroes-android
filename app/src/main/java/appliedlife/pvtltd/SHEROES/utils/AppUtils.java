@@ -1999,7 +1999,7 @@ public class AppUtils {
         memberRequest.setPageSize(AppConstants.MEMBER_PAGE_SIZE);
         return memberRequest;
     }
-    public static CommunityPostCreateRequest createCommunityPostRequestBuilder(long  communityId, String createType,String description,List<String> imag,Long mIdForEditPost) {
+    public static CommunityPostCreateRequest createCommunityPostRequestBuilder(Long  communityId, String createType,String description,List<String> imag,Long mIdForEditPost) {
         AppUtils appUtils = AppUtils.getInstance();
         CommunityPostCreateRequest communityPostCreateRequest=new CommunityPostCreateRequest();
         communityPostCreateRequest.setAppVersion(appUtils.getAppVersionName());

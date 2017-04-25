@@ -132,7 +132,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
         supportPostponeEnterTransition();
         setSupportActionBar(mToolbarCommunitiesDetail);
            if (null != mFeedDetail) {
-            if (mFeedDetail.isClosedCommunity()) {
+            if (mFeedDetail.isClosedCommunity()&&!mFeedDetail.isOwner()) {
                 isCommunityDetailFragment = true;
                 mCommunityDetailActivity.setVisibility(View.GONE);
                 communityOpenAboutFragment(mFeedDetail);
@@ -546,6 +546,9 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
             if (AppUtils.isFragmentUIActive(fragment)) {
                 ((InviteCommunityOwner) fragment).inviteSubmit();
             }
+        } else if (mFragmentOpen.isOpenImageViewer()) {
+            mFragmentOpen.setOpenImageViewer(false);
+            getSupportFragmentManager().popBackStackImmediate();
         } else {
             onBackClick();
         }
@@ -566,7 +569,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
     }
 
     public void onLeaveClick() {
-        finish();
+        onBackClick();
     }
 
     @OnClick(R.id.iv_community_detail_back)
@@ -615,6 +618,15 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
                         }
                     }
                     break;
+                case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
+                    FeedDetail feedCommunityPostEdit = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITY_POST_FRAGMENT);
+                    Fragment fragmentCommunity = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
+                    if (AppUtils.isFragmentUIActive(fragmentCommunity)) {
+                        if (fragmentCommunity instanceof CommunitiesDetailFragment) {
+                            ((CommunitiesDetailFragment) fragmentCommunity).updateUiAccordingToFeedDetail(feedCommunityPostEdit);
+                        }
+                    }
+                    break;
                 default:
                     LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);
             }
@@ -631,5 +643,21 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
             mLiHeader.setVisibility(View.VISIBLE);
         }
 
+    }
+    @Override
+    public void dataOperationOnClick(BaseResponse baseResponse) {
+        mFragmentOpen.setOpenImageViewer(true);
+        setAllValues(mFragmentOpen);
+        super.dataOperationOnClick(baseResponse);
+    }
+    @OnClick(R.id.fab_post_community)
+    public void communityPostClick()
+    {
+        mFragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
+        if (AppUtils.isFragmentUIActive(mFragment)) {
+            if (mFragment instanceof CommunitiesDetailFragment) {
+                ((CommunitiesDetailFragment) mFragment).communityPostClick();
+            }
+        }
     }
 }

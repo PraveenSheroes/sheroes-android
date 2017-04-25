@@ -20,18 +20,6 @@ public class BoardingLookingForHowCanRequest extends BaseRequest{
     @SerializedName("type")
     @Expose
     private String type;
-    @SerializedName("source")
-    @Expose
-    private String source;
-
-    public String getSource() {
-        return source;
-    }
-
-    public void setSource(String source) {
-        this.source = source;
-    }
-
     public Set<Long> getOpportunityIds() {
         return opportunityIds;
     }

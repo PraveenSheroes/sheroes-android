@@ -418,7 +418,6 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
                 mTvJoinInviteView.setText(getString(R.string.ID_JOINED));
                 mTvJoinInviteView.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
                 mTvJoinInviteView.setVisibility(View.VISIBLE);
-                mFeedDetail.setOwner(true);
                 mFeedDetail.setMember(true);
                 ((CommunitiesDetailActivity)getActivity()).updateFeedDetailWithCommunityStatus(mFeedDetail);
                 break;

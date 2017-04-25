@@ -119,7 +119,6 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
     public void swipeAndRefreshList() {
         // Refresh items
         setListLoadFlag(false);
-        mPullRefreshList.setPullToRefresh(true);
         mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
         mPullRefreshList = new SwipPullRefreshList();
         setRefreshList(mPullRefreshList);

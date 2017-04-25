@@ -459,7 +459,7 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
             editCommunityRequest.setTags(mFeedDetail.getTag_ids());
         }
         if (StringUtil.isNotNullOrEmptyString(mCommunityName) || StringUtil.isNotNullOrEmptyString(mDescription))
-            createCommunityPresenter.postEditCommunityList(editCommunityRequest);
+            createCommunityPresenter.postCommunityList(editCommunityRequest);
         else {
             mTvCreate.setEnabled(true);
             mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog((AppConstants.INAVLID_DATA), ERROR_MY_COMMUNITIES);

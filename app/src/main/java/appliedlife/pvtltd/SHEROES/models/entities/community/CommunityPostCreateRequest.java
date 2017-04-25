@@ -27,6 +27,9 @@ public class CommunityPostCreateRequest extends BaseRequest{
     @SerializedName("images")
     @Expose
     private List<String> images = null;
+    @SerializedName("is_active")
+    @Expose
+    private boolean isActive =true;
 
     public Long getId() {
         return id;
@@ -69,4 +72,11 @@ public class CommunityPostCreateRequest extends BaseRequest{
     }
 
 
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
 }

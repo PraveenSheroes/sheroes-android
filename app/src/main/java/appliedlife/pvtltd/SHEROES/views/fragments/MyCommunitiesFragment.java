@@ -107,7 +107,6 @@ public class MyCommunitiesFragment extends BaseFragment implements HomeView {
         // Refresh items
         LogUtils.info(TAG, "**********Mycommunities fragment on swipe to refre*********");
         setListLoadFlag(false);
-        mPullRefreshList.setPullToRefresh(true);
         mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
         mPullRefreshList = new SwipPullRefreshList();
         setRefreshList(mPullRefreshList);

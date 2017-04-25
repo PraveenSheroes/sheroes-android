@@ -340,16 +340,20 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
                 break;
             case R.id.li_article_cover_image:
-               // Intent intentArticle = new Intent(this, ArticleDetailActivity.class);
-               // intentArticle.putExtra(AppConstants.ARTICLE_DETAIL, mFeedDetail);
-              //  startActivityForResult(intentArticle, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
-              //  overridePendingTransition(R.anim.fade_in_dialog, R.anim.fade_out_dialog);
+                // Intent intentArticle = new Intent(this, ArticleDetailActivity.class);
+                // intentArticle.putExtra(AppConstants.ARTICLE_DETAIL, mFeedDetail);
+                //  startActivityForResult(intentArticle, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
+                //  overridePendingTransition(R.anim.fade_in_dialog, R.anim.fade_out_dialog);
                 break;
             case R.id.li_community_images:
                 Intent intentMyCommunity = new Intent(this, CommunitiesDetailActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
-                bundle.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.MY_COMMUNITY);
+                if (mFeedDetail.isMember()) {
+                    bundle.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.FEATURE_COMMUNITY);
+                } else {
+                    bundle.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.MY_COMMUNITY);
+                }
                 intentMyCommunity.putExtras(bundle);
                 startActivityForResult(intentMyCommunity, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
                 overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
@@ -477,7 +481,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType(AppConstants.SHARE_MENU_TYPE);
                 intent.putExtra(Intent.EXTRA_TEXT, feedDetail.getDeepLinkUrl());
-              //  intent.putExtra(Intent.EXTRA_SUBJECT, feedDetail.getDescription());
+                //  intent.putExtra(Intent.EXTRA_SUBJECT, feedDetail.getDescription());
                 startActivity(Intent.createChooser(intent, AppConstants.SHARE));
                 popupWindow.dismiss();
             }
@@ -599,7 +603,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 if (null != mFeedDetail) {
                     Intent intetFeature = new Intent(this, CreateCommunityPostActivity.class);
                     Bundle bundle = new Bundle();
-                   // mFeedDetail.setCallFromName(AppConstants.EMPTY_STRING);
+                    mFeedDetail.setCallFromName(AppConstants.FEED_COMMUNITY_POST);
                     bundle.putParcelable(AppConstants.COMMUNITY_POST_FRAGMENT, mFeedDetail);
                     intetFeature.putExtras(bundle);
                     startActivityForResult(intetFeature, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST);
@@ -634,6 +638,10 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                     Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
                     if (AppUtils.isFragmentUIActive(fragment)) {
                         ((HomeFragment) fragment).deleteCommunityPost(mFeedDetail);
+                    } else {
+                        if (AppUtils.isFragmentUIActive(mFragment)) {
+                            ((CommunitiesDetailFragment) mFragment).deleteCommunityPost(mFeedDetail);
+                        }
                     }
                    /* if (mFragmentOpen.isBookmarkFragment()) {
                         Fragment fragmentBookMark = getSupportFragmentManager().findFragmentByTag(BookmarksFragment.class.getName());
@@ -652,7 +660,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
         }
     }
 
-    private void openImageFullViewFragment(FeedDetail feedDetail) {
+    public void openImageFullViewFragment(FeedDetail feedDetail) {
         ImageFullViewFragment imageFullViewFragment = new ImageFullViewFragment();
         Bundle bundle = new Bundle();
         mFragmentOpen.setOpenImageViewer(true);

@@ -327,12 +327,13 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
         @Override
         public void onCancel() {
-            showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
+            userPreference.delete();
         }
 
         @Override
         public void onError(FacebookException e) {
-            showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
+            userPreference.delete();
+            showNetworkTimeoutDoalog(true, false, e.getMessage());
         }
     };
 

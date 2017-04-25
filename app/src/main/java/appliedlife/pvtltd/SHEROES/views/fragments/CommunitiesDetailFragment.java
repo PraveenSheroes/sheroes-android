@@ -141,7 +141,6 @@ public class CommunitiesDetailFragment extends BaseFragment {
         }
         return view;
     }
-    @OnClick(R.id.fab_post_community)
     public void communityPostClick()
     {
         FeedDetail feedDetail=mFeedDetail;
@@ -150,7 +149,6 @@ public class CommunitiesDetailFragment extends BaseFragment {
     }
     private void swipeToRefreshList() {
         setListLoadFlag(false);
-        mPullRefreshList.setPullToRefresh(true);
         mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
         mPullRefreshList = new SwipPullRefreshList();
         setRefreshList(mPullRefreshList);

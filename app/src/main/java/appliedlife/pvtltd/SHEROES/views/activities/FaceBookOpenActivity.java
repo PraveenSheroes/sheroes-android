@@ -194,12 +194,12 @@ public class FaceBookOpenActivity extends BaseActivity implements LoginView {
         @Override
         public void onCancel() {
             userPreference.delete();
-            //showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
         }
 
         @Override
         public void onError(FacebookException e) {
-            showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
+            userPreference.delete();
+            showNetworkTimeoutDoalog(true, false,e.getMessage());
         }
     };
 

@@ -165,7 +165,6 @@ public class HomeFragment extends BaseFragment {
 
     private void refreshFeedMethod() {
         setListLoadFlag(false);
-        mPullRefreshList.setPullToRefresh(true);
         mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
         mPullRefreshList = new SwipPullRefreshList();
         setRefreshList(mPullRefreshList);

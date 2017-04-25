@@ -416,7 +416,6 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
     public void communityPostSubmitClick() {
         if (null != mCommunityId && null != mCreaterType && StringUtil.isNotNullOrEmptyString(mCreaterType) && StringUtil.isNotNullOrEmptyString(mEtShareCommunityPostText.getText().toString())
                 && StringUtil.isNotNullOrEmptyString(mEtShareCommunityPostText.getText().toString())) {
-            mTv_community_post_submit.setVisibility(View.GONE);
             String description = mEtShareCommunityPostText.getText().toString();
             List<String> imag = new ArrayList<>();
             for (int i = 0; i < mImg.length; i++) {
@@ -430,7 +429,13 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
                     }
                 }
             }
-            mCreateCommunityPresenter.postEditCommunityList(createCommunityPostRequestBuilder(mCommunityId, mCreaterType, description, imag, mIdForEditPost));
+            if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getCallFromName())&&mFeedDetail.getCallFromName().equalsIgnoreCase(AppConstants.FEED_COMMUNITY_POST)) {
+                mCreateCommunityPresenter.editCommunityPost(createCommunityPostRequestBuilder(mCommunityId, mCreaterType, description, imag, mIdForEditPost));
+            }else
+            {
+                mCreateCommunityPresenter.postCommunityList(createCommunityPostRequestBuilder(mCommunityId, mCreaterType, description, imag, mIdForEditPost));
+            }
+
         } else {
             mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.BLANK_MESSAGE, FeedParticipationEnum.ERROR_CREATE_COMMUNITY);
         }

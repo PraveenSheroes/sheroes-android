@@ -7,7 +7,8 @@
     <ImageView
         android:id="@+id/iv_community_single_image"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_size_200" />
+        android:layout_height="@dimen/dp_size_200"
+        android:scaleType="fitXY"/>
 
     <RelativeLayout
         android:id="@+id/rl_gradiant"

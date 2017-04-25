@@ -4,6 +4,7 @@ import com.f2prateek.rx.preferences.Preference;
 
 import javax.inject.Inject;
 
+import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.MemberListModel;
@@ -61,7 +62,7 @@ public class MembersPresenter extends BasePresenter<AllMembersView> {
             }
             @Override
             public void onError(Throwable e) {
-                getMvpView().showError(e.getMessage(), ERROR_MEMBER);
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_MEMBER);
                 getMvpView().stopProgressBar();
             }
 
@@ -88,7 +89,7 @@ public class MembersPresenter extends BasePresenter<AllMembersView> {
             }
             @Override
             public void onError(Throwable e) {
-                getMvpView().showError(e.getMessage(), ERROR_MEMBER);
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_MEMBER);
                 getMvpView().stopProgressBar();
             }
 

@@ -4,6 +4,7 @@ import com.f2prateek.rx.preferences.Preference;
 
 import javax.inject.Inject;
 
+import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.CommunityModel;
@@ -70,7 +71,7 @@ public class CreateCommunityPresenter extends BasePresenter<CommunityView> {
 
             @Override
             public void onError(Throwable e) {
-                getMvpView().showError(e.getMessage(), ERROR_CREATE_COMMUNITY);
+                getMvpView().showError(sheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_CREATE_COMMUNITY);
                 getMvpView().stopProgressBar();
             }
 
@@ -84,7 +85,7 @@ public class CreateCommunityPresenter extends BasePresenter<CommunityView> {
         registerSubscription(subscription);
     }
 
-    public void postEditCommunityList(EditCommunityRequest editCommunityRequest) {
+    public void postCommunityList(EditCommunityRequest editCommunityRequest) {
         if (!NetworkUtil.isConnected(sheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_COMMUNITY_OWNER);
             return;
@@ -99,7 +100,7 @@ public class CreateCommunityPresenter extends BasePresenter<CommunityView> {
 
             @Override
             public void onError(Throwable e) {
-                getMvpView().showError(e.getMessage(), ERROR_CREATE_COMMUNITY);
+                getMvpView().showError(sheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_CREATE_COMMUNITY);
                 getMvpView().stopProgressBar();
             }
 
@@ -113,7 +114,7 @@ public class CreateCommunityPresenter extends BasePresenter<CommunityView> {
         registerSubscription(subscription);
     }
 
-    public void postEditCommunityList(CommunityPostCreateRequest communityPostCreateRequest) {
+    public void postCommunityList(CommunityPostCreateRequest communityPostCreateRequest) {
         if (!NetworkUtil.isConnected(sheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_COMMUNITY_OWNER);
             return;
@@ -128,7 +129,35 @@ public class CreateCommunityPresenter extends BasePresenter<CommunityView> {
 
             @Override
             public void onError(Throwable e) {
-                getMvpView().showError(e.getMessage(), ERROR_CREATE_COMMUNITY);
+                getMvpView().showError(sheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_CREATE_COMMUNITY);
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onNext(CreateCommunityResponse communityPostCreateResponse) {
+                getMvpView().stopProgressBar();
+                getMvpView().createCommunitySuccess(communityPostCreateResponse);
+            }
+
+        });
+        registerSubscription(subscription);
+    }
+    public void editCommunityPost(CommunityPostCreateRequest communityPostCreateRequest) {
+        if (!NetworkUtil.isConnected(sheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_COMMUNITY_OWNER);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = communityModel.editPostCommunity(communityPostCreateRequest).subscribe(new Subscriber<CreateCommunityResponse>() {
+
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                getMvpView().showError(sheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_CREATE_COMMUNITY);
                 getMvpView().stopProgressBar();
             }
 
@@ -157,7 +186,7 @@ public class CreateCommunityPresenter extends BasePresenter<CommunityView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(),ERROR_CREATE_COMMUNITY);
+                getMvpView().showError(sheroesApplication.getString(R.string.ID_GENERIC_ERROR),ERROR_CREATE_COMMUNITY);
             }
 
             @Override
@@ -186,7 +215,7 @@ public class CreateCommunityPresenter extends BasePresenter<CommunityView> {
 
             @Override
             public void onError(Throwable e) {
-                getMvpView().showError(e.getMessage(), ERROR_CREATE_COMMUNITY);
+                getMvpView().showError(sheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_CREATE_COMMUNITY);
                 getMvpView().stopProgressBar();
             }
 
