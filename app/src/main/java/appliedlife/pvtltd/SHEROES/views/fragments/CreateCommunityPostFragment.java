@@ -292,6 +292,8 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
                             .load(imageUrls.get(i)).asBitmap()
                             .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                             .skipMemoryCache(true).into(mImg[finalI]);
+                    mBtncross[finalI].setTag("Img" + finalI);
+                    mBtncross[finalI].setOnClickListener(mCorkyListener);
                     mVg_image_container.addView(layout2);
                 }
             }
@@ -395,7 +397,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
         tv_community_poster_user.setAlpha(alpha);
         iv_community_owner.setAlpha(alpha);
         iv_community_anonymous.setAlpha(1.0f);
-        mTv_community_post_submit.setText("POST AS ANONOMOUS");
+        mTv_community_post_submit.setText("POST AS ANONYMOUS");
         mTv_community_post_submit.setVisibility(View.VISIBLE);
         mCreaterType = "ANONYMOUS";
 
@@ -471,6 +473,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
             }
 
         } else {
+            mTv_community_post_submit.setEnabled(true);
             mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.BLANK_MESSAGE, FeedParticipationEnum.ERROR_CREATE_COMMUNITY);
         }
     }
