@@ -179,6 +179,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
                     }
                     break;
                 case FEATURE_COMMUNITY:
+                    ((CommunitiesDetailActivity)getActivity()).ivFabPostCommunity.setVisibility(View.INVISIBLE);
                     mScreenName = AppConstants.FEATURE_FRAGMENT;
                     if (!feedDetail.isMember() && !feedDetail.isOwner() && !feedDetail.isRequestPending()) {
                         mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.footer_icon_text));
@@ -191,6 +192,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
                     }
                     break;
                 case MY_COMMUNITY:
+                    ((CommunitiesDetailActivity)getActivity()).ivFabPostCommunity.setVisibility(View.VISIBLE);
                     mScreenName = AppConstants.MY_COMMUNITIES_FRAGMENT;
                     mTvJoinView.setTag(false);
                     break;

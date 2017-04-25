@@ -144,8 +144,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             imageOperations(context);
             multipleImageURLs();
         }
-
-
         //TODO:: Need to verify when share and mark spam option
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
             if (dataItem.getAuthorId() == userPreference.get().getUserSummary().getUserId() || dataItem.isOwner()) {
@@ -154,8 +152,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 tvFeedCommunityPostUserMenu.setVisibility(View.GONE);
             }
         }
-
-
         allTextViewStringOperations(context);
     }
 

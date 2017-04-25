@@ -78,26 +78,26 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.JOIN_INVITE
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MENU;
 
 public class HomeActivity extends BaseActivity implements CommentReactionFragment.HomeActivityIntractionListner, HomeSpinnerFragment.HomeSpinnerFragmentListner {
-  //  implements CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener
+    //  implements CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
     @Inject
     Preference<LoginResponse> mUserPreference;
-   // @Bind(R.id.iv_drawer_profile_circle_icon)
-   // RoundedImageView ivDrawerProfileCircleIcon;
-  //  @Bind(R.id.tv_user_name)
-  //  TextView mTvUserName;
- //   @Bind(R.id.tv_user_location)
- //  TextView mTvUserLocation;
+    // @Bind(R.id.iv_drawer_profile_circle_icon)
+    // RoundedImageView ivDrawerProfileCircleIcon;
+    //  @Bind(R.id.tv_user_name)
+    //  TextView mTvUserName;
+    //   @Bind(R.id.tv_user_location)
+    //  TextView mTvUserLocation;
     @Bind(R.id.cl_main_layout)
     View mCLMainLayout;
     @Bind(R.id.home_toolbar)
     Toolbar mToolbar;
     @Bind(R.id.drawer_layout)
     DrawerLayout mDrawer;
-  //  @Bind(R.id.nav_view)
-   // NavigationView mNavigationView;
-   // @Bind(R.id.rv_drawer)
-  //  RecyclerView mRecyclerView;
+    //  @Bind(R.id.nav_view)
+    // NavigationView mNavigationView;
+    // @Bind(R.id.rv_drawer)
+    //  RecyclerView mRecyclerView;
     @Bind(R.id.home_view_pager)
     ViewPager mViewPager;
     @Bind(R.id.tab_community_view)
@@ -124,8 +124,8 @@ public class HomeActivity extends BaseActivity implements CommentReactionFragmen
     public ImageView mIvSpinner;
     @Bind(R.id.fl_feed_full_view)
     public FrameLayout flFeedFullView;
-  //  @Bind(R.id.iv_side_drawer_profile_blur_background)
-  //  ImageView mIvSideDrawerProfileBlurBackground;
+    //  @Bind(R.id.iv_side_drawer_profile_blur_background)
+    //  ImageView mIvSideDrawerProfileBlurBackground;
     @Bind(R.id.iv_home_notification_icon)
     TextView mIvHomeNotification;
     @Bind(R.id.fab_add_community)
@@ -155,13 +155,13 @@ public class HomeActivity extends BaseActivity implements CommentReactionFragmen
     public void renderHomeFragmentView() {
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
-   //     mCustiomActionBarToggle = new CustiomActionBarToggle(this, mDrawer, mToolbar, R.string.ID_NAVIGATION_DRAWER_OPEN, R.string.ID_NAVIGATION_DRAWER_CLOSE, this);
-     //   mDrawer.addDrawerListener(mCustiomActionBarToggle);
-      //  mNavigationView.setNavigationItemSelectedListener(this);
+        //     mCustiomActionBarToggle = new CustiomActionBarToggle(this, mDrawer, mToolbar, R.string.ID_NAVIGATION_DRAWER_OPEN, R.string.ID_NAVIGATION_DRAWER_CLOSE, this);
+        //   mDrawer.addDrawerListener(mCustiomActionBarToggle);
+        //  mNavigationView.setNavigationItemSelectedListener(this);
         mFragmentOpen = new FragmentOpen();
         setAllValues(mFragmentOpen);
         initHomeViewPagerAndTabs();
-      //  assignNavigationRecyclerListView();
+        //  assignNavigationRecyclerListView();
       /*  if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
             //TODO: this data to be removed
             profile = mUserPreference.get().getUserSummary().getPhotoUrl(); //"https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAhNAAAAJDYwZWIyZTg5LWFmOTItNGIwYS05YjQ5LTM2YTRkNGQ2M2JlNw.jpg";
@@ -299,21 +299,21 @@ public class HomeActivity extends BaseActivity implements CommentReactionFragmen
         }*//*
     }*/
 
- /*   @Override
-    public void onDrawerClosed() {
-    }
+    /*   @Override
+       public void onDrawerClosed() {
+       }
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        return false;
-    }
-*/
+       @Override
+       public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+           return false;
+       }
+   */
     private void assignNavigationRecyclerListView() {
         mAdapter = new GenericRecyclerViewAdapter(this, this);
         LinearLayoutManager manager = new LinearLayoutManager(this);
         //mRecyclerView.setLayoutManager(manager);
         mAdapter.setSheroesGenericListData(CustomeDataList.makeDrawerItemList());
-      //  mRecyclerView.setAdapter(mAdapter);
+        //  mRecyclerView.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
     }
 
@@ -409,13 +409,13 @@ public class HomeActivity extends BaseActivity implements CommentReactionFragmen
         mTvCommunities.setText(AppConstants.EMPTY_STRING);
         mTvHome.setText(getString(R.string.ID_FEED));
         mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_FEED));
-     //   didTapButton(mTvHome);
+        //   didTapButton(mTvHome);
         initHomeViewPagerAndTabs();
     }
 
     @OnClick(R.id.tv_communities)
     public void communityOnClick() {
-       // liHomeCommunityButtonLayout.setVisibility(View.VISIBLE);
+        // liHomeCommunityButtonLayout.setVisibility(View.VISIBLE);
         mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_COMMUNITIES));
         checkForAllOpenFragments();
         mFragmentOpen.setFeedOpen(false);
@@ -428,16 +428,18 @@ public class HomeActivity extends BaseActivity implements CommentReactionFragmen
         mTabLayout.setVisibility(View.VISIBLE);
         mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
         mTvHome.setText(AppConstants.EMPTY_STRING);
-      //  didTapButton(mTvCommunities);
+        //  didTapButton(mTvCommunities);
         // if (!mFragmentOpen.isCommunityOpen()) {
         //     mFragmentOpen.setCommunityOpen(true);
         initCommunityViewPagerAndTabs();
         //  }
     }
+
     public void didTapButton(View view) {
         final Animation myAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_to_top_slide_anim);
         view.startAnimation(myAnim);
     }
+
     @OnClick(R.id.iv_footer_button_icon)
     public void createCommunityPostOnClick() {
         // Snackbar.make(mCLMainLayout, "Comming soon", Snackbar.LENGTH_SHORT).show();
@@ -683,7 +685,7 @@ public class HomeActivity extends BaseActivity implements CommentReactionFragmen
 
     @OnClick(R.id.tv_drawer_navigation)
     public void drawerNavigationClick() {
-      //  mDrawer.openDrawer(Gravity.LEFT);
+        //  mDrawer.openDrawer(Gravity.LEFT);
     }
 
     @Override
@@ -805,6 +807,9 @@ public class HomeActivity extends BaseActivity implements CommentReactionFragmen
                     ((HomeFragment) fragment).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
                 }
             }
+        }else
+        {
+            homeOnClick();
         }
     }
 
@@ -874,9 +879,13 @@ public class HomeActivity extends BaseActivity implements CommentReactionFragmen
                     }
                     break;
                 case MY_COMMUNITY:
-                    Fragment community = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.ONE_CONSTANT);
-                    if (AppUtils.isFragmentUIActive(community)) {
-                        ((MyCommunitiesFragment) community).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+                    if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getCallFromName()) && mFeedDetail.getCallFromName().equalsIgnoreCase(AppConstants.FEATURE_FRAGMENT)) {
+                        communityOnClick();
+                    } else {
+                        Fragment community = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.ONE_CONSTANT);
+                        if (AppUtils.isFragmentUIActive(community)) {
+                            ((MyCommunitiesFragment) community).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+                        }
                     }
                     break;
                 default:

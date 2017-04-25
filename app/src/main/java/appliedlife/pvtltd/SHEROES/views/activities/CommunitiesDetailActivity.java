@@ -99,6 +99,9 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
     TextView mTvCommunityDetailSubTitle;
     @Bind(R.id.li_header)
     public LinearLayout mLiHeader;
+    @Bind(R.id.fab_post_community)
+    public ImageView ivFabPostCommunity;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,14 +116,14 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
             mFeedDetail = getIntent().getParcelableExtra(AppConstants.COMMUNITY_DETAIL);
             communityEnum = (CommunityEnum) getIntent().getSerializableExtra(AppConstants.MY_COMMUNITIES_FRAGMENT);
 
-            if(null !=getIntent()&&null !=getIntent().getExtras().get(AppConstants.COMMUNITY_ID)) {
+            if (null != getIntent() && null != getIntent().getExtras().get(AppConstants.COMMUNITY_ID)) {
                 mCommunityId = (long) getIntent().getExtras().get(AppConstants.COMMUNITY_ID);
             }
-            if(null !=getIntent()&&null !=getIntent().getExtras().get(AppConstants.COMMUNITY_POST_ID)) {
+            if (null != getIntent() && null != getIntent().getExtras().get(AppConstants.COMMUNITY_POST_ID)) {
                 mCommunityPostId = (long) getIntent().getExtras().get(AppConstants.COMMUNITY_POST_ID);
             }
-            if(mCommunityId>0){
-                mFeedDetail=new FeedDetail();
+            if (mCommunityId > 0) {
+                mFeedDetail = new FeedDetail();
                 mFeedDetail.setIdOfEntityOrParticipant(mCommunityId);
             }
         }
@@ -131,8 +134,8 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
         ViewCompat.setTransitionName(mAppBarLayout, AppConstants.COMMUNITY_DETAIL);
         supportPostponeEnterTransition();
         setSupportActionBar(mToolbarCommunitiesDetail);
-           if (null != mFeedDetail) {
-            if (mFeedDetail.isClosedCommunity()&&!mFeedDetail.isOwner()) {
+        if (null != mFeedDetail) {
+            if (mFeedDetail.isClosedCommunity() && !mFeedDetail.isOwner()) {
                 isCommunityDetailFragment = true;
                 mCommunityDetailActivity.setVisibility(View.GONE);
                 communityOpenAboutFragment(mFeedDetail);
@@ -267,13 +270,11 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
         FeedDetail feedDetail = (FeedDetail) baseResponse;
         mMyCommunityPostFeedDetail = feedDetail;
         int id = view.getId();
-        if (!mFeedDetail.isClosedCommunity()) {
-            mFragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
-            setFragment(mFragment);
-            mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.THREE_CONSTANT);
-            mFragmentOpen.setOwner(mFeedDetail.isOwner());
-            setAllValues(mFragmentOpen);
-        }
+        mFragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
+        setFragment(mFragment);
+        mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.THREE_CONSTANT);
+        mFragmentOpen.setOwner(mFeedDetail.isOwner());
+        setAllValues(mFragmentOpen);
         super.feedCardsHandled(view, baseResponse);
         switch (id) {
             case R.id.card_community_detail:
@@ -461,8 +462,9 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
         bundle.putParcelable(AppConstants.COMMUNITY_POST_FRAGMENT, feedDetail);
         intent.putExtras(bundle);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST);
-       // overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
+        // overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
     }
+
     public void createCommunityClick(FeedDetail feedDetail) {
         Intent intent = new Intent(this, CreateCommunityActivity.class);
         Bundle bundle = new Bundle();
@@ -633,6 +635,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
         }
 
     }
+
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
         if (verticalOffset >= AppConstants.NO_REACTION_CONSTANT) {
@@ -644,15 +647,16 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
         }
 
     }
+
     @Override
     public void dataOperationOnClick(BaseResponse baseResponse) {
         mFragmentOpen.setOpenImageViewer(true);
         setAllValues(mFragmentOpen);
         super.dataOperationOnClick(baseResponse);
     }
+
     @OnClick(R.id.fab_post_community)
-    public void communityPostClick()
-    {
+    public void communityPostClick() {
         mFragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
         if (AppUtils.isFragmentUIActive(mFragment)) {
             if (mFragment instanceof CommunitiesDetailFragment) {

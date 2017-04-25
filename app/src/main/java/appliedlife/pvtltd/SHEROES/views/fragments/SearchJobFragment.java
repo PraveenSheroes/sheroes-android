@@ -182,7 +182,7 @@ public class SearchJobFragment extends BaseFragment implements HomeView {
             if (!isDetached())
             {
                 mSearchDataName = mSearchDataName.trim();
-                mHomePresenter.getFeedFromPresenter(mAppUtils.searchRequestBuilder(AppConstants.FEED_JOB,mSearchDataName ,mFragmentListRefreshData.getPageNo(),AppConstants.ALL_SEARCH,null));
+                mHomePresenter.getFeedFromPresenter(mAppUtils.searchRequestBuilder(AppConstants.FEED_JOB,mSearchDataName ,mFragmentListRefreshData.getPageNo(),AppConstants.ALL_SEARCH,null,AppConstants.PAGE_SIZE));
             }
         }
     };

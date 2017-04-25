@@ -141,6 +141,7 @@ public class AppConstants {
     public static final int FOURTH_CONSTANT = 4;
     public static final int PAGE_SIZE = 10;
     public static final int MEMBER_PAGE_SIZE = 100;
+    public static final int INVITE_PAGE_SIZE = 200;
     public static final int NO_REACTION_CONSTANT = 0;
     public static final int HEART_REACTION_CONSTANT = 10;
     public static final int EMOJI_FIRST_REACTION_CONSTANT = 20;

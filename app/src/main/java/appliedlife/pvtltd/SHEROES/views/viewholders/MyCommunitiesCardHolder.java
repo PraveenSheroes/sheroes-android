@@ -103,6 +103,7 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
             tvCommunityInvite.setText(mContext.getString(R.string.ID_JOINED));
             tvCommunityInvite.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
             tvCommunityInvite.setVisibility(View.VISIBLE);
+            dataItem.setCallFromName(AppConstants.FEATURE_FRAGMENT);
         } else {
             if (dataItem.isMember() && !dataItem.isOwner()) {
                 tvCommunityInvite.setTextColor(ContextCompat.getColor(mContext, R.color.white));

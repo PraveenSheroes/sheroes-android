@@ -349,11 +349,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 Intent intentMyCommunity = new Intent(this, CommunitiesDetailActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
-                if (mFeedDetail.isMember()) {
-                    bundle.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.FEATURE_COMMUNITY);
-                } else {
-                    bundle.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.MY_COMMUNITY);
-                }
+                bundle.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.MY_COMMUNITY);
                 intentMyCommunity.putExtras(bundle);
                 startActivityForResult(intentMyCommunity, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
                 overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);

@@ -207,7 +207,7 @@ public class InviteCommunityMember extends BaseDialogFragment implements HomeVie
                     public void dismissReactions() {
                     }
                 });
-                mHomePresenter.getFeedFromPresenter(mAppUtils.searchRequestBuilder(AppConstants.USER_SUB_TYPE, mSearchDataName, mFragmentListRefreshData.getPageNo(), AppConstants.INVITE_MEMBER,mFeedDetail.getIdOfEntityOrParticipant()));
+                mHomePresenter.getFeedFromPresenter(mAppUtils.searchRequestBuilder(AppConstants.USER_SUB_TYPE, mSearchDataName, mFragmentListRefreshData.getPageNo(), AppConstants.INVITE_MEMBER,mFeedDetail.getIdOfEntityOrParticipant(),AppConstants.INVITE_PAGE_SIZE));
             }
         }
     };

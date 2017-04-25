@@ -125,6 +125,7 @@
         </appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.CustomCollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
+
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager_communities_detail"
         android:layout_width="match_parent"
@@ -135,7 +136,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right|bottom"
-        android:background="@drawable/ic_footer_button_icon"
+        android:layout_marginBottom="@dimen/dp_size_5"
+        android:layout_marginRight="@dimen/dp_size_5"
+        android:background="@drawable/ic_add_post"
         android:padding="@dimen/dp_size_30" />
-
 </android.support.design.widget.CoordinatorLayout>

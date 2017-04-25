@@ -187,6 +187,7 @@ public class MyCommunityInviteMemberFragment extends BaseDialogFragment implemen
         public void run() {
             if (!isDetached()) {
                 mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT,AppConstants.INVITE_MEMBER, mFeedDetail.getIdOfEntityOrParticipant(),mSearchDataName);
+                mPullRefreshList = new SwipPullRefreshList();
                 mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                 mAdapter = new GenericRecyclerViewAdapter(getActivity(), (HomeActivity) getActivity());
                 manager = new LinearLayoutManager(getActivity());
@@ -206,7 +207,7 @@ public class MyCommunityInviteMemberFragment extends BaseDialogFragment implemen
                     }
                 });
 
-                mHomePresenter.getFeedFromPresenter(mAppUtils.searchRequestBuilder(AppConstants.USER_SUB_TYPE, mSearchDataName, mFragmentListRefreshData.getPageNo(), AppConstants.INVITE_MEMBER,mFeedDetail.getIdOfEntityOrParticipant()));
+                mHomePresenter.getFeedFromPresenter(mAppUtils.searchRequestBuilder(AppConstants.USER_SUB_TYPE, mSearchDataName, mFragmentListRefreshData.getPageNo(), AppConstants.INVITE_MEMBER,mFeedDetail.getIdOfEntityOrParticipant(),AppConstants.INVITE_PAGE_SIZE));
             }
         }
     };

@@ -257,8 +257,6 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
             mCreateCommunityPresenter.getSelectCommunityFromPresenter(selectCommunityRequestBuilder());
             mVg_image_container.removeAllViews();
             mVg_image_container.removeAllViewsInLayout();
-            LayoutInflater layoutInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View layout2 = layoutInflater.inflate(R.layout.imagevie_with_cross, null);
             mTvcreate_community_post.setText(getString(R.string.ID_EDIT_POST));
             mCommunityId = mFeedDetail.getCommunityId();
             mIdForEditPost = mFeedDetail.getIdOfEntityOrParticipant();
@@ -274,6 +272,8 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
             imageUrls = mFeedDetail.getImageUrls();
             if (StringUtil.isNotEmptyCollection(imageUrls)) {
                 for (int i = 0; i < imageUrls.size(); i++) {
+                    LayoutInflater layoutInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    final   View layout2 = layoutInflater.inflate(R.layout.imagevie_with_cross, null);
                     mIv_camera_btn_for_post_images.setVisibility(View.GONE);
                     mTv_add_more_community_post_image.setVisibility(View.VISIBLE);
                     final int finalI = i;
@@ -286,9 +286,9 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
                             .load(imageUrls.get(i)).asBitmap()
                             .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                             .skipMemoryCache(true).into(mImg[finalI]);
+                    mVg_image_container.addView(layout2);
                 }
             }
-            mVg_image_container.addView(layout2);
         }
     }
 
@@ -416,6 +416,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
     public void communityPostSubmitClick() {
         if (null != mCommunityId && null != mCreaterType && StringUtil.isNotNullOrEmptyString(mCreaterType) && StringUtil.isNotNullOrEmptyString(mEtShareCommunityPostText.getText().toString())
                 && StringUtil.isNotNullOrEmptyString(mEtShareCommunityPostText.getText().toString())) {
+            pbCreateCommunityPost.setVisibility(View.VISIBLE);
             String description = mEtShareCommunityPostText.getText().toString();
             List<String> imag = new ArrayList<>();
             for (int i = 0; i < mImg.length; i++) {
@@ -429,10 +430,13 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
                     }
                 }
             }
-            if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getCallFromName())&&mFeedDetail.getCallFromName().equalsIgnoreCase(AppConstants.FEED_COMMUNITY_POST)) {
-                mCreateCommunityPresenter.editCommunityPost(createCommunityPostRequestBuilder(mCommunityId, mCreaterType, description, imag, mIdForEditPost));
-            }else
-            {
+            if (null != mFeedDetail) {
+                if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getCallFromName()) && mFeedDetail.getCallFromName().equalsIgnoreCase(AppConstants.FEED_COMMUNITY_POST)) {
+                    mCreateCommunityPresenter.editCommunityPost(createCommunityPostRequestBuilder(mCommunityId, mCreaterType, description, imag, mIdForEditPost));
+                } else {
+                    mCreateCommunityPresenter.postCommunityList(createCommunityPostRequestBuilder(mCommunityId, mCreaterType, description, imag, mIdForEditPost));
+                }
+            } else {
                 mCreateCommunityPresenter.postCommunityList(createCommunityPostRequestBuilder(mCommunityId, mCreaterType, description, imag, mIdForEditPost));
             }
 
@@ -505,19 +509,26 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
         if (StringUtil.isNotNullOrEmptyString(createCommunityResponse.getStatus())) {
             switch (createCommunityResponse.getStatus()) {
                 case AppConstants.SUCCESS:
-                    Toast.makeText(getActivity(), messageForSuccess, Toast.LENGTH_LONG).show();
+
                     mTv_community_post_submit.setVisibility(View.VISIBLE);
-                    if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getCallFromName()) && AppConstants.COMMUNITIES_DETAIL.equalsIgnoreCase(mFeedDetail.getCallFromName())) {
-                        FeedDetail localFeed = createCommunityResponse.getFeedDetail();
-                        mFeedDetail = createCommunityResponse.getFeedDetail();
-                        mFeedDetail.setIdOfEntityOrParticipant(localFeed.getCommunityId());
-                    } else {
-                        mFeedDetail = createCommunityResponse.getFeedDetail();
+                    if (null != mFeedDetail) {
+                        Toast.makeText(getActivity(), messageForSuccess, Toast.LENGTH_LONG).show();
+                        if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getCallFromName()) && AppConstants.COMMUNITIES_DETAIL.equalsIgnoreCase(mFeedDetail.getCallFromName())) {
+                            FeedDetail localFeed = createCommunityResponse.getFeedDetail();
+                            mFeedDetail = createCommunityResponse.getFeedDetail();
+                            mFeedDetail.setIdOfEntityOrParticipant(localFeed.getCommunityId());
+                        } else {
+                            mFeedDetail = createCommunityResponse.getFeedDetail();
+                        }
+                        if (messageForSuccess.equalsIgnoreCase(getString(R.string.ID_POSTED))) {
+                            mFeedDetail.setFromHome(true);
+                        }
+                        ((CreateCommunityPostActivity) getActivity()).editedSuccessFully(mFeedDetail);
+                    }else
+                    {
+                        Toast.makeText(getActivity(), getString(R.string.ID_POSTED), Toast.LENGTH_LONG).show();
+                        ((CreateCommunityPostActivity) getActivity()).editedSuccessFully(createCommunityResponse.getFeedDetail());
                     }
-                    if (messageForSuccess.equalsIgnoreCase(getString(R.string.ID_POSTED))) {
-                        mFeedDetail.setFromHome(true);
-                    }
-                    ((CreateCommunityPostActivity) getActivity()).editedSuccessFully(mFeedDetail);
                     break;
                 case AppConstants.FAILED:
                     mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(createCommunityResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_LIKE_UNLIKE);
