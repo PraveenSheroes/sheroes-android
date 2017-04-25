@@ -41,7 +41,7 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
     private final String TAG = LogUtils.makeLogTag(FeatureCardHolder.class);
     private static final String LEFT_HTML_VEIW_TAG_FOR_COLOR = "<font color='#50e3c2'>";
     private static final String RIGHT_HTML_VIEW_TAG_FOR_COLOR = "</font>";
-    private static final String LEFT_HTML_TAG = "<font color='#333333'>";
+    private static final String LEFT_HTML_TAG = "<font color='#000000'>";
     private static final String RIGHT_HTML_TAG = "</font>";
     private static final String LEFT_VIEW_MORE = "<font color='#323840'>";
     private static final String RIGHT_VIEW_MORE = "</font>";
@@ -158,9 +158,9 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
             mergeTags = mergeTags.substring(0, mergeTags.length() - 1);
             String tagHeader = LEFT_HTML_TAG + context.getString(R.string.ID_TAGS) + RIGHT_HTML_TAG;
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                tvFeaturedCommunityTagLable.setText(Html.fromHtml(tagHeader + AppConstants.COLON + AppConstants.SPACE + mergeTags, 0)); // for 24 api and more
+                tvFeaturedCommunityTagLable.setText(Html.fromHtml(tagHeader +AppConstants.SPACE+ AppConstants.COLON + AppConstants.SPACE + mergeTags, 0)); // for 24 api and more
             } else {
-                tvFeaturedCommunityTagLable.setText(Html.fromHtml(tagHeader + AppConstants.COLON + AppConstants.SPACE + mergeTags));// or for older api
+                tvFeaturedCommunityTagLable.setText(Html.fromHtml(tagHeader+AppConstants.SPACE+ AppConstants.COLON + AppConstants.SPACE + mergeTags));// or for older api
             }
         }
 

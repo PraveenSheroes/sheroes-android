@@ -109,13 +109,14 @@
     <string name="ID_INVITE">Invite</string>
     <string name="ID_TOTAL_IMAGES">4+</string>
     <string name="ID_SHARE">Share</string>
-    <string name="ID_SHARE_WITH_COMMUNITY">Share with your community…</string>
+    <string name="ID_SHARE_WITH_COMMUNITY">Type here to share what you are thinking...</string>
     <string name="ID_EDIT">Edit</string>
     <string name="ID_EDIT_POST">EDIT POST</string>
     <string name="ID_DELETE">Delete</string>
     <string name="ID_REPORT">Report as spam</string>
     <string name="ID_REFRESH">Refresh feed</string>
     <string name="ID_NO_RESULT_FOUND">No Result found ,Please Click For Try again</string>
+    <string name="ID_FEATURE_COMMUNITY"> We are coming up with new and exciting communities very soon.</string>
     <string name="ID_NO_RESULT_FOUND_TRY">Try another search</string>
     <string name="ID_NO_RESULT_FOUND_SEARCH">No Result found for</string>
     <string name="ID_NO_POST">No community post found</string>

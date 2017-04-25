@@ -91,6 +91,7 @@ import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_LIKE_UNLIKE;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.createCommunityPostRequestBuilder;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.editCommunityPostRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.selectCommunityRequestBuilder;
 
 /**
@@ -164,11 +165,14 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
     private File mOutPutFile = null;
     private File mOutPutFile1 = null;
     ImageView mImg[] = new ImageView[6];
+    List<Bitmap> newImages = new ArrayList<>();
     Button mBtncross[] = new Button[6];
     Bitmap mRoundBitmap;
     float alpha = 0.7f;
     private FeedDetail mFeedDetail;
     List<String> imageUrls;
+    List<Long> imageIDs;
+    List<Long> deletedImageIds=new ArrayList<>();
     private String messageForSuccess;
 
     @Override
@@ -270,17 +274,19 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
                 tv_community_owner.setText(mFeedDetail.getPostCommunityName());
             }
             imageUrls = mFeedDetail.getImageUrls();
+            imageIDs = mFeedDetail.getImagesIds();
             if (StringUtil.isNotEmptyCollection(imageUrls)) {
+                mImgcount=imageUrls.size();
                 for (int i = 0; i < imageUrls.size(); i++) {
                     LayoutInflater layoutInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                    final   View layout2 = layoutInflater.inflate(R.layout.imagevie_with_cross, null);
+                    final View layout2 = layoutInflater.inflate(R.layout.imagevie_with_cross, null);
                     mIv_camera_btn_for_post_images.setVisibility(View.GONE);
                     mTv_add_more_community_post_image.setVisibility(View.VISIBLE);
                     final int finalI = i;
                     mImg[finalI] = (ImageView) layout2.findViewById(R.id.customView);
                     mBtncross[finalI] = (Button) layout2.findViewById(R.id.button1);
                     mImg[finalI].setScaleType(ImageView.ScaleType.CENTER_CROP);
-                    mBtncross[finalI].setTag(AppConstants.IMAGE + mImgcount);
+                    mBtncross[finalI].setTag(AppConstants.IMAGE + finalI);
                     mBtncross[finalI].setOnClickListener(mCorkyListener);
                     Glide.with(this)
                             .load(imageUrls.get(i)).asBitmap()
@@ -414,29 +420,53 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
 
     @OnClick(R.id.tv_community_post_submit)
     public void communityPostSubmitClick() {
-        if (null != mCommunityId && null != mCreaterType && StringUtil.isNotNullOrEmptyString(mCreaterType) && StringUtil.isNotNullOrEmptyString(mEtShareCommunityPostText.getText().toString())
-                && StringUtil.isNotNullOrEmptyString(mEtShareCommunityPostText.getText().toString())) {
+        mTv_community_post_submit.setEnabled(false);
+        if (null != mCommunityId && null != mCreaterType && StringUtil.isNotNullOrEmptyString(mCreaterType) && StringUtil.isNotNullOrEmptyString(mEtShareCommunityPostText.getText().toString())) {
             pbCreateCommunityPost.setVisibility(View.VISIBLE);
             String description = mEtShareCommunityPostText.getText().toString();
-            List<String> imag = new ArrayList<>();
-            for (int i = 0; i < mImg.length; i++) {
-                if (null != mImg[i]) {
-                    Bitmap bitmap = ((BitmapDrawable) mImg[i].getDrawable()).getBitmap();
-                    byte[] buffer = new byte[4096];
-                    buffer = getBytesFromBitmap(bitmap);
-                    encCoverImage = Base64.encodeToString(buffer, Base64.DEFAULT);
-                    if (StringUtil.isNotNullOrEmptyString(encCoverImage)) {
-                        imag.add(encCoverImage);
-                    }
-                }
-            }
+
             if (null != mFeedDetail) {
                 if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getCallFromName()) && mFeedDetail.getCallFromName().equalsIgnoreCase(AppConstants.FEED_COMMUNITY_POST)) {
-                    mCreateCommunityPresenter.editCommunityPost(createCommunityPostRequestBuilder(mCommunityId, mCreaterType, description, imag, mIdForEditPost));
+                    List<String> imag = new ArrayList<>();
+                    if (StringUtil.isNotEmptyCollection(newImages)) {
+                        for (Bitmap bitmap : newImages) {
+                            byte[] buffer = new byte[4096];
+                            buffer = getBytesFromBitmap(bitmap);
+                            encCoverImage = Base64.encodeToString(buffer, Base64.DEFAULT);
+                            if (StringUtil.isNotNullOrEmptyString(encCoverImage)) {
+                                imag.add(encCoverImage);
+                            }
+                        }
+                    }
+                    mCreateCommunityPresenter.editCommunityPost(editCommunityPostRequestBuilder(mCommunityId, mCreaterType, description, imag, mIdForEditPost, deletedImageIds));
                 } else {
+                    List<String> imag = new ArrayList<>();
+                    for (int i = 0; i < mImg.length; i++) {
+                        if (null != mImg[i]) {
+                            Bitmap bitmap = ((BitmapDrawable) mImg[i].getDrawable()).getBitmap();
+                            byte[] buffer = new byte[4096];
+                            buffer = getBytesFromBitmap(bitmap);
+                            encCoverImage = Base64.encodeToString(buffer, Base64.DEFAULT);
+                            if (StringUtil.isNotNullOrEmptyString(encCoverImage)) {
+                                imag.add(encCoverImage);
+                            }
+                        }
+                    }
                     mCreateCommunityPresenter.postCommunityList(createCommunityPostRequestBuilder(mCommunityId, mCreaterType, description, imag, mIdForEditPost));
                 }
             } else {
+                List<String> imag = new ArrayList<>();
+                for (int i = 0; i < mImg.length; i++) {
+                    if (null != mImg[i]) {
+                        Bitmap bitmap = ((BitmapDrawable) mImg[i].getDrawable()).getBitmap();
+                        byte[] buffer = new byte[4096];
+                        buffer = getBytesFromBitmap(bitmap);
+                        encCoverImage = Base64.encodeToString(buffer, Base64.DEFAULT);
+                        if (StringUtil.isNotNullOrEmptyString(encCoverImage)) {
+                            imag.add(encCoverImage);
+                        }
+                    }
+                }
                 mCreateCommunityPresenter.postCommunityList(createCommunityPostRequestBuilder(mCommunityId, mCreaterType, description, imag, mIdForEditPost));
             }
 
@@ -506,10 +536,11 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
 
     @Override
     public void createCommunitySuccess(CreateCommunityResponse createCommunityResponse) {
+        pbCreateCommunityPost.setVisibility(View.GONE);
+        mTv_community_post_submit.setEnabled(true);
         if (StringUtil.isNotNullOrEmptyString(createCommunityResponse.getStatus())) {
             switch (createCommunityResponse.getStatus()) {
                 case AppConstants.SUCCESS:
-
                     mTv_community_post_submit.setVisibility(View.VISIBLE);
                     if (null != mFeedDetail) {
                         Toast.makeText(getActivity(), messageForSuccess, Toast.LENGTH_LONG).show();
@@ -524,8 +555,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
                             mFeedDetail.setFromHome(true);
                         }
                         ((CreateCommunityPostActivity) getActivity()).editedSuccessFully(mFeedDetail);
-                    }else
-                    {
+                    } else {
                         Toast.makeText(getActivity(), getString(R.string.ID_POSTED), Toast.LENGTH_LONG).show();
                         ((CreateCommunityPostActivity) getActivity()).editedSuccessFully(createCommunityResponse.getFeedDetail());
                     }
@@ -771,6 +801,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
         mBtncross[mImgcount] = (Button) layout2.findViewById(R.id.button1);
         mImg[mImgcount].setScaleType(ImageView.ScaleType.CENTER_CROP);
         mImg[mImgcount].setImageBitmap(photo);
+        newImages.add(photo);
         mBtncross[mImgcount].setTag("Img" + mImgcount);
         mBtncross[mImgcount].setOnClickListener(mCorkyListener);
 
@@ -790,28 +821,43 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
             mTv_add_more_community_post_image.setVisibility(View.VISIBLE);
 
             if (v.getTag().equals("Img0")) {
+                if (null != mFeedDetail && StringUtil.isNotEmptyCollection(mFeedDetail.getImagesIds()) && null != mFeedDetail.getImagesIds().get(0)) {
+                    deletedImageIds.add(mFeedDetail.getImagesIds().get(0));
+                }
                 mImg[0].setVisibility(View.GONE);
                 mBtncross[0].setVisibility(View.GONE);
                 mImgcount--;
                 //do stuff
             } else if (v.getTag().equals("Img1")) {
+                if (null != mFeedDetail && StringUtil.isNotEmptyCollection(mFeedDetail.getImagesIds()) && null != mFeedDetail.getImagesIds().get(1)) {
+                    deletedImageIds.add(mFeedDetail.getImagesIds().get(1));
+                }
                 mImg[1].setVisibility(View.GONE);
                 mBtncross[1].setVisibility(View.GONE);
                 mImgcount--;
 
                 //do something else
             } else if (v.getTag().equals("Img2")) {
+                if (null != mFeedDetail && StringUtil.isNotEmptyCollection(mFeedDetail.getImagesIds()) && null != mFeedDetail.getImagesIds().get(2)) {
+                    deletedImageIds.add(mFeedDetail.getImagesIds().get(2));
+                }
                 mImg[2].setVisibility(View.GONE);
                 mBtncross[2].setVisibility(View.GONE);
                 mImgcount--;
 
                 //do something else
             } else if (v.getTag().equals("Img3")) {
+                if (null != mFeedDetail && StringUtil.isNotEmptyCollection(mFeedDetail.getImagesIds()) && null != mFeedDetail.getImagesIds().get(3)) {
+                    deletedImageIds.add(mFeedDetail.getImagesIds().get(3));
+                }
                 mImg[3].setVisibility(View.GONE);
                 mBtncross[3].setVisibility(View.GONE);
                 mImgcount--;
                 //do something else
             } else if (v.getTag().equals("Img4")) {
+                if (null != mFeedDetail && StringUtil.isNotEmptyCollection(mFeedDetail.getImagesIds()) && null != mFeedDetail.getImagesIds().get(4)) {
+                    deletedImageIds.add(mFeedDetail.getImagesIds().get(4));
+                }
                 mImg[4].setVisibility(View.GONE);
                 mBtncross[4].setVisibility(View.GONE);
                 //do something else

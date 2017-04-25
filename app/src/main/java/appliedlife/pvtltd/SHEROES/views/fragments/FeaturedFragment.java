@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.f2prateek.rx.preferences.Preference;
 
@@ -58,6 +59,8 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
     SwipeRefreshLayout mSwipeView;
     @Bind(R.id.li_no_result)
     LinearLayout mLiNoResult;
+    @Bind(R.id.tv_no_result_try_again)
+    TextView mTvNoResult;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private SwipPullRefreshList mPullRefreshList;
@@ -132,6 +135,7 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
         List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
         mProgressBarFirstLoad.setVisibility(View.GONE);
+        mTvNoResult.setText(getString(R.string.ID_FEATURE_COMMUNITY));
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
             mPageNo = mFragmentListRefreshData.getPageNo();
             mFragmentListRefreshData.setPageNo(++mPageNo);

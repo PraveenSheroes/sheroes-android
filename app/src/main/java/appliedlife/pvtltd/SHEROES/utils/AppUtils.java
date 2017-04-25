@@ -2013,6 +2013,20 @@ public class AppUtils {
         communityPostCreateRequest.setId(mIdForEditPost);
         return communityPostCreateRequest;
     }
+    public static CommunityPostCreateRequest editCommunityPostRequestBuilder(Long  communityId, String createType,String description,List<String> imag,Long mIdForEditPost,List<Long> deletedImageId) {
+        AppUtils appUtils = AppUtils.getInstance();
+        CommunityPostCreateRequest communityPostCreateRequest=new CommunityPostCreateRequest();
+        communityPostCreateRequest.setAppVersion(appUtils.getAppVersionName());
+        communityPostCreateRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+        communityPostCreateRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        communityPostCreateRequest.setCommunityId(communityId);
+        communityPostCreateRequest.setCreatorType(createType);
+        communityPostCreateRequest.setDescription(description);
+        communityPostCreateRequest.setImages(imag);
+        communityPostCreateRequest.setId(mIdForEditPost);
+        communityPostCreateRequest.setDeleteImagesIds(deletedImageId);
+        return communityPostCreateRequest;
+    }
     public static SelectCommunityRequest selectCommunityRequestBuilder() {
         AppUtils appUtils = AppUtils.getInstance();
         SelectCommunityRequest selectCommunityRequest=new SelectCommunityRequest();

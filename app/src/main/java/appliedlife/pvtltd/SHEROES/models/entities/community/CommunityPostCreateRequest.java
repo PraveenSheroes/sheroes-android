@@ -27,6 +27,9 @@ public class CommunityPostCreateRequest extends BaseRequest{
     @SerializedName("images")
     @Expose
     private List<String> images = null;
+    @SerializedName("delete_image_id")
+    @Expose
+    private List<Long> deleteImagesIds = null;
     @SerializedName("is_active")
     @Expose
     private boolean isActive =true;
@@ -78,5 +81,13 @@ public class CommunityPostCreateRequest extends BaseRequest{
 
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    public List<Long> getDeleteImagesIds() {
+        return deleteImagesIds;
+    }
+
+    public void setDeleteImagesIds(List<Long> deleteImagesIds) {
+        this.deleteImagesIds = deleteImagesIds;
     }
 }
