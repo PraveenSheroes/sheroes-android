@@ -810,6 +810,8 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
             if (mImgcount == 0) {
                 mIv_camera_btn_for_post_images.setVisibility(View.VISIBLE);
                 mIv_camera_btn_for_post_images.setImageResource(R.drawable.ic_camera_icon_with_rectangle);
+                mFl_camera_btn_for_post_images.setVisibility(View.VISIBLE);
+                mTv_add_more_community_post_image.setVisibility(View.GONE);
             }
             mTv_add_more_community_post_image.setText(mImgcount + "/5 " + getString(R.string.ID_ADDMORE));
 
@@ -831,9 +833,6 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
         if (size == 0) {
             try {
                 Bitmap photo = decodeFile(mOutPutFile1);
-                //  btn_profile_pic.setImageBitmap(photo);
-                // profilepic.setImageBitmap(photo);
-                // profile.setImageBitmap(photo);
                 mVg_image_container.setVisibility(View.VISIBLE);
                 ImageView imageView = new ImageView(getActivity());
                 imageView.setLayoutParams(new LinearLayout.LayoutParams(220, 220));

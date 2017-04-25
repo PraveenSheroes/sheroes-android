@@ -56,5 +56,5 @@
         android:layout_marginLeft="@dimen/dp_size_68"
         android:layout_marginRight="@dimen/dp_size_13"
         android:layout_marginTop="@dimen/dp_size_5"
-        android:background="@color/grey2" />
+        android:background="@color/line_color_personal" />
 </RelativeLayout>

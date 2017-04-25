@@ -190,7 +190,7 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
                 if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getTags().toString()))
                      mTag=mFeedDetail.getTags().toString();
                     mTag=mTag.replaceAll("\\[","").replaceAll("\\]","");
-                    mTvCommunityTags.setText(mFeedDetail.getTags().toString());
+                    mTvCommunityTags.setText(mTag);
             }
             int count = mFeedDetail.getNoOfMembers();
             mTvCommunityRequested.setText(mFeedDetail.getNoOfPendingRequest() + AppConstants.SPACE + getString(R.string.ID_COMMUNITY_REQUESTED));
@@ -200,9 +200,9 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
     }
     private void displayTabAsCommunityType(FeedDetail mFeedDetail) {
         if (mFeedDetail.isClosedCommunity()) {
-            mTvCommunityName.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_lock, 0);
+            mTvCommunityOrganization.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_lock, 0);
         } else {
-            mTvCommunityName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+            mTvCommunityOrganization.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         }
         if (null != communityEnum) {
             switch (communityEnum) {
@@ -418,6 +418,7 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
                 mTvJoinInviteView.setText(getString(R.string.ID_JOINED));
                 mTvJoinInviteView.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
                 mTvJoinInviteView.setVisibility(View.VISIBLE);
+                mOptionIv.setVisibility(View.VISIBLE);
                 mFeedDetail.setMember(true);
                 ((CommunitiesDetailActivity)getActivity()).updateFeedDetailWithCommunityStatus(mFeedDetail);
                 break;

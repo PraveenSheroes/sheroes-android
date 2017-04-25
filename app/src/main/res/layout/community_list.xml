@@ -9,6 +9,7 @@
         android:id="@+id/rv_home_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_size_20"
         android:divider="@color/black"/>
 
 </RelativeLayout>

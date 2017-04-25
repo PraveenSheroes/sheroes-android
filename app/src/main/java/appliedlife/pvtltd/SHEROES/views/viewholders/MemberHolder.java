@@ -63,7 +63,7 @@ public class MemberHolder extends BaseViewHolder<MembersList> {
         }
         if(dataItem.getTypeS().equalsIgnoreCase(AppConstants.OWNER_SUB_TYPE))
         {
-            tvAdmin.setVisibility(View.VISIBLE);
+            tvAdmin.setVisibility(View.GONE);
         }
 
     }

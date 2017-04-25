@@ -10,10 +10,10 @@
     app:layout_anchorGravity="bottom|center">
     <ImageView
         android:id="@+id/iv_communities_detail"
-        android:layout_width="@dimen/dp_size_60"
+        android:layout_width="@dimen/dp_size_50"
         android:layout_gravity="left"
         android:layout_margin="@dimen/dp_size_16"
-        android:layout_height="@dimen/dp_size_60"
+        android:layout_height="@dimen/dp_size_50"
         android:background="@drawable/image_view_shap"
         />
     <TextView
@@ -37,37 +37,30 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/dp_size_10"
-        android:layout_marginLeft="@dimen/dp_size_12"
+        android:layout_marginLeft="@dimen/dp_size_45"
         android:layout_marginRight="@dimen/dp_size_12"
         android:layout_marginBottom="@dimen/dp_size_10"
-        android:gravity="center"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/tv_community_name"
             android:layout_width="220dp"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="@dimen/dp_size_16"
-            android:layout_marginLeft="@dimen/dp_size_40"
             android:layout_marginRight="@dimen/dp_size_30"
+            android:layout_marginLeft="@dimen/dp_size_16"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:gravity="left"
             android:lineSpacingExtra="@dimen/dp_size_3"
             android:textColor="@color/dashboard_text"
-            android:textSize="@dimen/sp_size_14"
-            android:textStyle="bold" />
+            android:textSize="@dimen/sp_size_14"/>
 
         <TextView
             android:id="@+id/tv_community_related"
-            android:layout_width="150dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginLeft="@dimen/dp_size_5"
-            android:layout_marginRight="@dimen/dp_size_30"
-            android:layout_marginTop="@dimen/dp_size_10"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:gravity="left"
+            android:layout_marginTop="@dimen/dp_size_5"
+            android:layout_marginLeft="@dimen/dp_size_16"
             android:lineSpacingExtra="@dimen/dp_size_3"
             android:textColor="@color/footer_icon_text"
             android:textSize="@dimen/sp_size_12" />
