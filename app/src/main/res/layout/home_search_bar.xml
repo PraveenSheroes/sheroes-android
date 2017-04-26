@@ -9,9 +9,18 @@
         android:layout_height="wrap_content"
         android:drawableLeft="@drawable/ic_nav_setting"
         android:paddingTop="@dimen/dp_size_10"
+        android:visibility="invisible"
         android:paddingLeft="@dimen/dp_size_5"
         android:paddingBottom="@dimen/dp_size_10"
         android:paddingRight="@dimen/dp_size_16"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|bottom"
+        android:layout_marginLeft="@dimen/dp_size_100"
+        android:layout_marginTop="@dimen/dp_size_12"
+        android:background="@drawable/ic_sheroes_icon" />
     <TextView
         android:id="@+id/tv_search_box"
         android:layout_width="wrap_content"
@@ -20,6 +29,7 @@
         android:fontFamily="@string/ID_ROBOTO_REGULAR"
         android:padding="@dimen/dp_size_12"
         android:layout_gravity="center"
+        android:visibility="gone"
         android:drawablePadding="@dimen/dp_size_12"
         android:drawableLeft="@drawable/ic_search_box_icon"
         android:layerType="software"

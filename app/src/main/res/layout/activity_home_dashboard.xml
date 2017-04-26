@@ -18,20 +18,12 @@
             android:background="@color/text_color_close"
             app:layout_scrollFlags="scroll|enterAlways|snap"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@drawable/ic_sheroes_icon" />
-
             <include
                 android:id="@+id/rl_search_box"
                 layout="@layout/home_search_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start|top"
-                android:visibility="gone" />
+                android:layout_gravity="start|top" />
         </android.support.v7.widget.Toolbar>
 
         <android.support.design.widget.TabLayout

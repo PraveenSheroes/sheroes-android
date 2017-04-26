@@ -34,14 +34,15 @@
             <TextView
                 android:id="@+id/txt_choose_community_spinner"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginRight="@dimen/dp_size_38"
-                android:layout_marginTop="@dimen/dp_size_25"
+                android:layout_marginTop="@dimen/dp_size_15"
+                android:padding="@dimen/dp_size_10"
                 android:drawableRight="@drawable/drop_down_shap"
                 android:gravity="center"
+                android:ellipsize="end"
                 android:hint="@string/ID_CHOOSE_COMMUNITY"
                 android:maxLines="1"
-                android:paddingLeft="@dimen/dp_size_45"
                 android:textSize="@dimen/sp_size_14" />
 
 
@@ -108,15 +109,15 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/dp_size_30"
                 android:layout_marginLeft="@dimen/dp_size_38"
                 android:layout_marginRight="@dimen/dp_size_38"
-                android:layout_marginTop="@dimen/dp_size_45">
+                android:layout_marginTop="@dimen/dp_size_25">
 
                 <EditText
                     android:id="@+id/et_share_community_post_text"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:background="@android:color/transparent"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:imeOptions="actionUnspecified"

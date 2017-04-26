@@ -422,7 +422,6 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
 
     @OnClick(R.id.tv_community_post_submit)
     public void communityPostSubmitClick() {
-        mTv_community_post_submit.setEnabled(false);
         if (null != mCommunityId && null != mCreaterType && StringUtil.isNotNullOrEmptyString(mCreaterType) && StringUtil.isNotNullOrEmptyString(mEtShareCommunityPostText.getText().toString())) {
             pbCreateCommunityPost.setVisibility(View.VISIBLE);
             String description = mEtShareCommunityPostText.getText().toString();
@@ -471,7 +470,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
                 }
                 mCreateCommunityPresenter.postCommunityList(createCommunityPostRequestBuilder(mCommunityId, mCreaterType, description, imag, mIdForEditPost));
             }
-
+            mTv_community_post_submit.setEnabled(false);
         } else {
             mTv_community_post_submit.setEnabled(true);
             mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(AppConstants.BLANK_MESSAGE, FeedParticipationEnum.ERROR_CREATE_COMMUNITY);
@@ -560,7 +559,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
                         ((CreateCommunityPostActivity) getActivity()).editedSuccessFully(mFeedDetail);
                     } else {
                         Toast.makeText(getActivity(), getString(R.string.ID_POSTED), Toast.LENGTH_LONG).show();
-                        ((CreateCommunityPostActivity) getActivity()).editedSuccessFully(createCommunityResponse.getFeedDetail());
+                        ((CreateCommunityPostActivity) getActivity()).editedSuccessFully(null);
                     }
                     break;
                 case AppConstants.FAILED:
@@ -829,6 +828,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
                 }
                 mImg[0].setVisibility(View.GONE);
                 mBtncross[0].setVisibility(View.GONE);
+                mImg[0]=null;
                 mImgcount--;
                 //do stuff
             } else if (v.getTag().equals("Img1")) {
@@ -837,6 +837,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
                 }
                 mImg[1].setVisibility(View.GONE);
                 mBtncross[1].setVisibility(View.GONE);
+                mImg[1]=null;
                 mImgcount--;
 
                 //do something else
@@ -846,6 +847,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
                 }
                 mImg[2].setVisibility(View.GONE);
                 mBtncross[2].setVisibility(View.GONE);
+                mImg[2]=null;
                 mImgcount--;
 
                 //do something else
@@ -855,6 +857,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
                 }
                 mImg[3].setVisibility(View.GONE);
                 mBtncross[3].setVisibility(View.GONE);
+                mImg[3]=null;
                 mImgcount--;
                 //do something else
             } else if (v.getTag().equals("Img4")) {
@@ -863,6 +866,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
                 }
                 mImg[4].setVisibility(View.GONE);
                 mBtncross[4].setVisibility(View.GONE);
+                mImg[4]=null;
                 //do something else
                 mImgcount--;
 
