@@ -12,7 +12,7 @@ import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 
-public class FeedDetail extends BaseResponse implements Parcelable {
+public class FeedDetail extends BaseResponse implements Parcelable,Cloneable{
 
     int itemPosition;
     boolean isLongPress;
@@ -1917,4 +1917,7 @@ public class FeedDetail extends BaseResponse implements Parcelable {
             return new FeedDetail[size];
         }
     };
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }

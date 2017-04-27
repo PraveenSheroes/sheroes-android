@@ -151,6 +151,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
     }
 
     public void initializeUiContent(FeedDetail feedDetail) {
+        mFeedDetail=feedDetail;
         mCommunityDetailActivity.setVisibility(View.VISIBLE);
         mTvMemebr.setText(feedDetail.getNoOfMembers() + AppConstants.SPACE + getString(R.string.ID_MEMBERS));
         if (feedDetail.getNoOfMembers() > 1) {
@@ -312,7 +313,6 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
             bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, feedDetail);
             bundle.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, communityEnum);
             mCommunityOpenAboutFragment.setArguments(bundle);
-            mCommunityOpenAboutFragment.setArguments(getIntent().getExtras());
             getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
                     .add(R.id.about_community_container, mCommunityOpenAboutFragment, CommunityOpenAboutFragment.class.getName()).addToBackStack(CommunityOpenAboutFragment.class.getName()).commitAllowingStateLoss();
         }

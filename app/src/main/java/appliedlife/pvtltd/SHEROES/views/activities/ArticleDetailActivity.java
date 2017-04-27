@@ -67,7 +67,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
     @Bind(R.id.tv_article_time)
     TextView mTvArticleTime;
     @Bind(R.id.tv_article_detail_bookmark)
-    TextView mTvArticleDetailBookmark;
+    public TextView mTvArticleDetailBookmark;
     @Bind(R.id.tv_article_detail_title)
     TextView mTvArticleDetailTitle;
     @Bind(R.id.tv_article_detail_subtitle)
@@ -147,11 +147,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getNameOrTitle())) {
             mCollapsingToolbarLayout.setTitle(mFeedDetail.getNameOrTitle());
         }
-        if (mFeedDetail.isBookmarked()) {
-            mTvArticleDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_active, 0, 0, 0);
-        } else {
-            mTvArticleDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_detail_white, 0, 0, 0);
-        }
+        setBookMarkImage();
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getImageUrl())) {
             Glide.with(this)
                     .load(mFeedDetail.getImageUrl()).asBitmap()
@@ -168,6 +164,14 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
                             });
                         }
                     });
+        }
+    }
+
+    private void setBookMarkImage() {
+        if (mFeedDetail.isBookmarked()) {
+            mTvArticleDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_active, 0, 0, 0);
+        } else {
+            mTvArticleDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_detail_white, 0, 0, 0);
         }
     }
 
@@ -447,6 +451,12 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
         mTvArticleDetailBookmark.setEnabled(false);
         mFeedDetail.setItemPosition(AppConstants.NO_REACTION_CONSTANT);
         bookmarkCall();
+        if (!mFeedDetail.isBookmarked()) {
+            mFeedDetail.setBookmarked(true);
+        } else {
+            mFeedDetail.setBookmarked(false);
+        }
+        setBookMarkImage();
     }
 
     private void bookmarkCall() {

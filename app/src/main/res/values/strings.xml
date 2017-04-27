@@ -79,6 +79,7 @@
     <string name="ID_OPEN_BRACKET">(</string>
     <string name="ID_CLOSE_BRACKET">)</string>
     <string name="ID_REACTION">Reaction</string>
+    <string name="ID_REACTIONS">Reactions</string>
     <string name="ID_NO_REACTION">No reaction</string>
     <string name="ID_APPLIED">Applied</string>
     <string name="ID_VIEWS">Views</string>

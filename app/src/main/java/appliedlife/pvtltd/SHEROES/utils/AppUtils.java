@@ -1805,6 +1805,11 @@ public class AppUtils {
         feedRequestPojo.setCommunityId(communityId);
         return feedRequestPojo;
     }
+    public static FeedRequestPojo userCommunityDetailRequestBuilder(String typeOfFeed, int pageNo, long communityId) {
+        FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, pageNo);
+        feedRequestPojo.setIdForFeedDetail(communityId);
+        return feedRequestPojo;
+    }
     /**
      * Request for feed api
      */

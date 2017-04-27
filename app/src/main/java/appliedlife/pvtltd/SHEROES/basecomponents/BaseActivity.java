@@ -340,10 +340,10 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
                 break;
             case R.id.li_article_cover_image:
-                // Intent intentArticle = new Intent(this, ArticleDetailActivity.class);
-                // intentArticle.putExtra(AppConstants.ARTICLE_DETAIL, mFeedDetail);
-                //  startActivityForResult(intentArticle, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
-                //  overridePendingTransition(R.anim.fade_in_dialog, R.anim.fade_out_dialog);
+                Intent intentArticle = new Intent(this, ArticleDetailActivity.class);
+                intentArticle.putExtra(AppConstants.ARTICLE_DETAIL, mFeedDetail);
+                startActivityForResult(intentArticle, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
+                overridePendingTransition(R.anim.fade_in_dialog, R.anim.fade_out_dialog);
                 break;
             case R.id.li_community_images:
                 Intent intentMyCommunity = new Intent(this, CommunitiesDetailActivity.class);

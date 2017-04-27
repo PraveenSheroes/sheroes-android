@@ -327,17 +327,9 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> imple
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void userComments() {
-
         if (StringUtil.isNotEmptyCollection(mFeedDetail.getLastComments())) {
             List<LastComment> lastCommentList = mFeedDetail.getLastComments();
-            if (lastCommentList.size() > AppConstants.ONE_CONSTANT) {
-                tvArticleDetailTotalReplies.setText(String.valueOf(mFeedDetail.getNoOfComments()) + AppConstants.SPACE + mContext.getString(R.string.ID_REPLIES));
-            } else {
-                tvArticleDetailTotalReplies.setText(String.valueOf(mFeedDetail.getNoOfComments()) + AppConstants.SPACE + mContext.getString(R.string.ID_REPLY));
-            }
             for (int index = 0; index < lastCommentList.size(); index++) {
-                //   String feedUserIconUrl = lastCommentList.get(index).getParticipantImageUrl();
-                //   String userName = LEFT_HTML_TAG_FOR_COLOR + lastCommentList.get(index).getParticipantName() + RIGHT_HTML_TAG_FOR_COLOR;
                 switch (index) {
                     case AppConstants.NO_REACTION_CONSTANT:
                         ivArticleDetailUserPic.setCircularImage(true);

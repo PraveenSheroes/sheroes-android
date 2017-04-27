@@ -111,7 +111,6 @@
                 android:layout_marginLeft="@dimen/dp_size_16"
                 android:layout_marginTop="@dimen/dp_size_16"
                 android:layout_marginRight="@dimen/dp_size_16"
-                android:lines="@integer/int_value_for_line_1"
                 android:textColor="@color/dashboard_text"
                 android:textSize="@dimen/sp_size_16" />
 

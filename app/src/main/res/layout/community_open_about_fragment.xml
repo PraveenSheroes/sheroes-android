@@ -43,9 +43,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="left|top"
                     android:layout_marginRight="@dimen/dp_size_25"
-                    android:paddingRight="@dimen/dp_size_10"
-                    android:paddingTop="@dimen/dp_size_10"
-                    android:paddingBottom="@dimen/dp_size_10"
+                    android:padding="@dimen/dp_size_10"
                     android:drawableRight="@drawable/ic_back_white"/>
 
                 <TextView
@@ -56,7 +54,6 @@
                     android:drawablePadding="@dimen/dp_size_10"
                     android:drawableRight="@drawable/ic_share_icon"
                     android:paddingBottom="@dimen/dp_size_10"
-                    android:visibility="gone"
                     android:paddingLeft="@dimen/dp_size_10"
                     android:paddingRight="@dimen/dp_size_20"
                     android:paddingTop="@dimen/dp_size_10" />

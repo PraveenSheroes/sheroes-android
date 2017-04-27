@@ -73,15 +73,16 @@ public class CommunitiesDetailFragment extends BaseFragment {
     private boolean mIsEdit = false;
     private CommunityEnum communityEnum = null;
     private String mScreenName;
-
-    public static CommunitiesDetailFragment createInstance(FeedDetail feedDetail,CommunityEnum communityEnum) {
+    private  int positionOfFeedDetail;
+    public static CommunitiesDetailFragment createInstance(FeedDetail feedDetail, CommunityEnum communityEnum) {
         CommunitiesDetailFragment communitiesDetailFragment = new CommunitiesDetailFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, feedDetail);
-        bundle.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT,communityEnum);
+        bundle.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, communityEnum);
         communitiesDetailFragment.setArguments(bundle);
         return communitiesDetailFragment;
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -93,8 +94,9 @@ public class CommunitiesDetailFragment extends BaseFragment {
         }
         if (null != mFeedDetail) {
             mTvJoinView.setEnabled(true);
-            mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.USER_COMMUNITY_POST_FRAGMENT,  mFeedDetail.getIdOfEntityOrParticipant());
+            mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.USER_COMMUNITY_POST_FRAGMENT, mFeedDetail.getIdOfEntityOrParticipant());
             mFragmentListRefreshData.setCommunityId(mFeedDetail.getIdOfEntityOrParticipant());
+            positionOfFeedDetail=mFeedDetail.getItemPosition();
             mPullRefreshList = new SwipPullRefreshList();
             mPullRefreshList.setPullToRefresh(false);
             mHomePresenter.attachView(this);
@@ -131,8 +133,8 @@ public class CommunitiesDetailFragment extends BaseFragment {
             });
             mFragmentListRefreshData.setSearchStringName(AppConstants.COMMUNITIES_DETAIL);
             super.setAllInitializationForFeeds(mFragmentListRefreshData, mPullRefreshList, mAdapter, mLayoutManager, mPageNo, mSwipeView, mLiNoResult, mFeedDetail, mRecyclerView, 0, 0, mListLoad, mIsEdit, mHomePresenter, mAppUtils, mProgressBar);
-          //  mCreateCommunityPresenter.getFeedFromPresenter(mAppUtils.userCommunityPostRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCommunityId()));
-            mHomePresenter.getFeedFromPresenter(mAppUtils.userCommunityPostRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCommunityId()));
+            //  mCreateCommunityPresenter.getFeedFromPresenter(mAppUtils.userCommunityPostRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCommunityId()));
+            mHomePresenter.getFeedFromPresenter(mAppUtils.userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCommunityId()));
             mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
@@ -142,12 +144,13 @@ public class CommunitiesDetailFragment extends BaseFragment {
         }
         return view;
     }
-    public void communityPostClick()
-    {
-        FeedDetail feedDetail=mFeedDetail;
+
+    public void communityPostClick() {
+        FeedDetail feedDetail = mFeedDetail;
         feedDetail.setCallFromName(AppConstants.COMMUNITIES_DETAIL);
         ((CommunitiesDetailActivity) getActivity()).createCommunityPostClick(feedDetail);
     }
+
     private void swipeToRefreshList() {
         setListLoadFlag(false);
         mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
@@ -180,7 +183,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
                     }
                     break;
                 case FEATURE_COMMUNITY:
-                    ((CommunitiesDetailActivity)getActivity()).ivFabPostCommunity.setVisibility(View.INVISIBLE);
+                    ((CommunitiesDetailActivity) getActivity()).ivFabPostCommunity.setVisibility(View.INVISIBLE);
                     mScreenName = AppConstants.FEATURE_FRAGMENT;
                     if (!feedDetail.isMember() && !feedDetail.isOwner() && !feedDetail.isRequestPending()) {
                         mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.footer_icon_text));
@@ -193,7 +196,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
                     }
                     break;
                 case MY_COMMUNITY:
-                    ((CommunitiesDetailActivity)getActivity()).ivFabPostCommunity.setVisibility(View.VISIBLE);
+                    ((CommunitiesDetailActivity) getActivity()).ivFabPostCommunity.setVisibility(View.VISIBLE);
                     mScreenName = AppConstants.MY_COMMUNITIES_FRAGMENT;
                     mTvJoinView.setTag(false);
                     break;
@@ -207,18 +210,24 @@ public class CommunitiesDetailFragment extends BaseFragment {
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
         List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
-        if (StringUtil.isNotEmptyCollection(feedDetailList)&&null!=mFragmentListRefreshData) {
+        if (StringUtil.isNotEmptyCollection(feedDetailList) && null != mFragmentListRefreshData) {
             mLiNoResult.setVisibility(View.GONE);
             mPageNo = mFragmentListRefreshData.getPageNo();
-            if (StringUtil.isNotNullOrEmptyString(mFragmentListRefreshData.getSearchStringName())&&mFragmentListRefreshData.getSearchStringName().equalsIgnoreCase(AppConstants.COMMUNITIES_DETAIL)) {
-                mFeedDetail=feedDetailList.get(0);
-                mFeedDetail.setSubType(AppConstants.MY_COMMUNITIES_HEADER);
+            if (StringUtil.isNotNullOrEmptyString(mFragmentListRefreshData.getSearchStringName()) && mFragmentListRefreshData.getSearchStringName().equalsIgnoreCase(AppConstants.COMMUNITIES_DETAIL)) {
+                mFeedDetail = feedDetailList.get(0);
+                mFeedDetail.setItemPosition(positionOfFeedDetail);
+                ((CommunitiesDetailActivity) getActivity()).initializeUiContent(mFeedDetail);
+                 updateUiAccordingToFeedDetail(mFeedDetail);
                 mFragmentListRefreshData.setSearchStringName(AppConstants.EMPTY_STRING);
-                ((CommunitiesDetailActivity)getActivity()).initializeUiContent(mFeedDetail);
-                updateUiAccordingToFeedDetail(mFeedDetail);
-            }else {
+            } else {
                 if (mPageNo == AppConstants.ONE_CONSTANT) {
-                    feedDetailList.add(0, mFeedDetail);
+                    try {
+                        FeedDetail mCommunityHeaderDetail = (FeedDetail) mFeedDetail.clone();
+                        mCommunityHeaderDetail.setSubType(AppConstants.MY_COMMUNITIES_HEADER);
+                        feedDetailList.add(0, mCommunityHeaderDetail);
+                    } catch (CloneNotSupportedException e) {
+                        e.printStackTrace();
+                    }
                 }
                 mFragmentListRefreshData.setPageNo(++mPageNo);
                 mPullRefreshList.allListData(feedDetailList);
@@ -233,20 +242,19 @@ public class CommunitiesDetailFragment extends BaseFragment {
 
         } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
             List<FeedDetail> noDataList = new ArrayList<>();
-            noDataList.add(mFeedDetail);
-            FeedDetail feedSecond = new FeedDetail();
-            //TODO:: Please remove this or correct
-            feedSecond.setSubType(AppConstants.NO_COMMUNITIES);
-            feedSecond.setNameOrTitle(mFeedDetail.getNameOrTitle());
-            feedSecond.setCommunityType(mFeedDetail.getCommunityType());
-            feedSecond.setMember(mFeedDetail.isMember());
-            feedSecond.setOwner(mFeedDetail.isOwner());
-            feedSecond.setRequestPending(mFeedDetail.isRequestPending());
-            feedSecond.setClosedCommunity(mFeedDetail.isClosedCommunity());
-            feedSecond.setScreenName(mScreenName);
-            noDataList.add(feedSecond);
-            mAdapter.setSheroesGenericListData(noDataList);
-            mAdapter.notifyDataSetChanged();
+            try {
+                FeedDetail mCommunityHeaderDetail = (FeedDetail) mFeedDetail.clone();
+                mCommunityHeaderDetail.setSubType(AppConstants.MY_COMMUNITIES_HEADER);
+                noDataList.add(mCommunityHeaderDetail);
+                FeedDetail noDetail = (FeedDetail) mFeedDetail.clone();
+                noDetail.setSubType(AppConstants.NO_COMMUNITIES);
+                noDetail.setScreenName(mScreenName);
+                noDataList.add(noDetail);
+                mAdapter.setSheroesGenericListData(noDataList);
+                mAdapter.notifyDataSetChanged();
+            } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+            }
         }
         mSwipeView.setRefreshing(false);
     }

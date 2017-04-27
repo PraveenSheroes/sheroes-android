@@ -88,6 +88,8 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
     TextView mTvOwnerPost;
     @Bind(R.id.tv_anonymous_post)
     TextView mTvAnonymousPost;
+    @Bind(R.id.tv_reaction_text)
+    TextView mTvReaction;
     @Bind(R.id.et_user_comment_description)
     EditText mEtUserCommentDescription;
     @Bind(R.id.iv_user_comment_profile_pic)
@@ -205,10 +207,16 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
             {
                 mTvUserCommentHeaderText.setText(getString(R.string.ID_NO_REPLIES));
             }
+            if(mFeedDetail.getNoOfLikes()>1)
+            {
+                mTvReaction.setText(getString(R.string.ID_REACTIONS)+getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mFeedDetail.getNoOfLikes()) + getString(R.string.ID_CLOSE_BRACKET));
+            }else if(mFeedDetail.getNoOfLikes()==1){
+                mTvReaction.setText(getString(R.string.ID_REACTION) + getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mFeedDetail.getNoOfLikes()) + getString(R.string.ID_CLOSE_BRACKET));
+            }
         } else if (mFragmentOpen.isReactionList()) {
             if(mFeedDetail.getNoOfLikes()>1)
             {
-                mTvUserCommentHeaderText.setText(getString(R.string.ID_REACTION) +AppConstants.S+ getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mFeedDetail.getNoOfLikes()) + getString(R.string.ID_CLOSE_BRACKET));
+                mTvUserCommentHeaderText.setText(getString(R.string.ID_REACTIONS)+getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mFeedDetail.getNoOfLikes()) + getString(R.string.ID_CLOSE_BRACKET));
             }else if(mFeedDetail.getNoOfLikes()==1){
                 mTvUserCommentHeaderText.setText(getString(R.string.ID_REACTION) + getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mFeedDetail.getNoOfLikes()) + getString(R.string.ID_CLOSE_BRACKET));
             }else

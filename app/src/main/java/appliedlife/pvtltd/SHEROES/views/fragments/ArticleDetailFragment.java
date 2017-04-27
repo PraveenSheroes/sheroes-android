@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SimpleItemAnimator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -102,10 +101,6 @@ public class ArticleDetailFragment extends BaseFragment {
             articleList.add(articleDetailPojo);
             mAdapter.setSheroesGenericListData(articleList);
             mAdapter.notifyDataSetChanged();
-            if (mRecyclerView.getItemAnimator() instanceof SimpleItemAnimator) {
-                ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
-                ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setAddDuration(AppConstants.NO_REACTION_CONSTANT);
-            }
         }
     }
 
@@ -129,21 +124,20 @@ public class ArticleDetailFragment extends BaseFragment {
             if (baseResponse instanceof BookmarkResponsePojo) {
                 switch (baseResponse.getStatus()) {
                     case AppConstants.SUCCESS:
+                        ((ArticleDetailActivity) getActivity()).mTvArticleDetailBookmark.setEnabled(true);
+                        break;
+                    case AppConstants.FAILED:
                         if (!mFeedDetail.isBookmarked()) {
                             mFeedDetail.setBookmarked(true);
                             articleDetailPojo.setFeedDetail(mFeedDetail);
-                            mFeedDetail.setBookmarked(false);
                         } else {
                             mFeedDetail.setBookmarked(false);
                             articleDetailPojo.setFeedDetail(mFeedDetail);
-                            mFeedDetail.setBookmarked(true);
                         }
                         articleList.clear();
                         articleList.add(articleDetailPojo);
                         mAdapter.notifyDataSetChanged();
                         ((ArticleDetailActivity) getActivity()).onBookmarkClick(mFeedDetail, AppConstants.ONE_CONSTANT);
-                        break;
-                    case AppConstants.FAILED:
                         showError(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_BOOKMARK_UNBOOKMARK);
                         break;
                     default:
@@ -213,10 +207,6 @@ public class ArticleDetailFragment extends BaseFragment {
         articleList.clear();
         articleList.add(articleDetailPojo);
         mAdapter.notifyDataSetChanged();
-        if (mRecyclerView.getItemAnimator() instanceof SimpleItemAnimator) {
-            ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
-            ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setAddDuration(AppConstants.NO_REACTION_CONSTANT);
-        }
     }
 
     @Override

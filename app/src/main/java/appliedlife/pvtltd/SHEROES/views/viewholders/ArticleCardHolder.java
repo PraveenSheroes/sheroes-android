@@ -89,7 +89,19 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
             imageOperations(context);
         }
         textRelatedOperation();
+        onBookMarkClick();
     }
+    private void onBookMarkClick() {
+        if(dataItem.isBookmarked())
+        {
+            tvArticleBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0,R.drawable.ic_bookmark_active, 0);
+        }
+        else
+        {
+            tvArticleBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0,R.drawable.ic_bookmark_in_active, 0);
+        }
+    }
+
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void textRelatedOperation()
     {
@@ -125,14 +137,7 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
         {
             tvArticleTrendingLabel.setText(AppConstants.EMPTY_STRING);
         }
-        if(dataItem.isBookmarked())
-        {
-            tvArticleBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0,R.drawable.ic_bookmark_active, 0);
-        }
-        else
-        {
-            tvArticleBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0,R.drawable.ic_bookmark_in_active, 0);
-        }
+
         if (StringUtil.isNotNullOrEmptyString(dataItem.getAuthorName())) {
             tvArticleCardTitle.setText(dataItem.getAuthorName());
         }
@@ -177,8 +182,26 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
             final TextView tvFeedArticleTimeLabel = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_time_label);
             final TextView tvFeedArticleTotalViews = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_total_views);
             final RelativeLayout rlFeedArticleViews = (RelativeLayout) backgroundImage.findViewById(R.id.rl_gradiant);
-            tvFeedArticleTotalViews.setText(dataItem.getNoOfViews() + AppConstants.SPACE + context.getString(R.string.ID_VIEWS));
-            tvFeedArticleTimeLabel.setText(dataItem.getCharCount()+ AppConstants.SPACE + context.getString(R.string.ID_MIN_READ));
+            StringBuilder stringBuilder = new StringBuilder();
+            if (dataItem.getNoOfViews() > 1) {
+                stringBuilder.append(dataItem.getNoOfViews()).append(AppConstants.SPACE).append(context.getString(R.string.ID_VIEWS));
+                tvFeedArticleTotalViews.setText(stringBuilder.toString());
+                tvFeedArticleTotalViews.setVisibility(View.VISIBLE);
+            } else if (dataItem.getNoOfViews() == 1) {
+                stringBuilder.append(dataItem.getNoOfViews()).append(AppConstants.SPACE).append(context.getString(R.string.ID_VIEW));
+                tvFeedArticleTotalViews.setText(stringBuilder.toString());
+                tvFeedArticleTotalViews.setVisibility(View.VISIBLE);
+            } else {
+                tvFeedArticleTotalViews.setVisibility(View.GONE);
+            }
+            stringBuilder = new StringBuilder();
+            if (dataItem.getCharCount() > 0) {
+                stringBuilder.append(dataItem.getCharCount()).append(AppConstants.SPACE).append(context.getString(R.string.ID_MIN_READ));
+                tvFeedArticleTimeLabel.setText(stringBuilder.toString());
+                tvFeedArticleTimeLabel.setVisibility(View.VISIBLE);
+            } else {
+                tvFeedArticleTimeLabel.setVisibility(View.INVISIBLE);
+            }
             Glide.with(mContext)
                     .load(backgrndImageUrl).asBitmap()
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
@@ -216,14 +239,22 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_article_bookmark)
     public void tvBookMarkClick() {
-        dataItem.setLongPress(true);
+
         tvArticleBookmark.setEnabled(false);
+        dataItem.setLongPress(true);
         dataItem.setItemPosition(getAdapterPosition());
         if (dataItem.isBookmarked()) {
             viewInterface.handleOnClick(dataItem, tvArticleBookmark);
         } else {
             viewInterface.handleOnClick(dataItem, tvArticleBookmark);
         }
+        if (!dataItem.isBookmarked()) {
+            dataItem.setBookmarked(true);
+        } else {
+            dataItem.setBookmarked(false);
+        }
+        onBookMarkClick();
+
     }
 
 
