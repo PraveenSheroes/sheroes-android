@@ -90,7 +90,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
         mFragmentOpen = new FragmentOpen();
         if (null != getIntent()) {
             mFeedDetail = getIntent().getParcelableExtra(AppConstants.ARTICLE_DETAIL);
-            if (null != getIntent().getExtras() && null != getIntent().getExtras().get(AppConstants.ARTICLE_ID)) {
+            if (null != getIntent().getExtras().get(AppConstants.ARTICLE_ID)) {
                 mArticleId = (long) getIntent().getExtras().get(AppConstants.ARTICLE_ID);
                 if (mArticleId > 0) {
                     mFeedDetail = new FeedDetail();
@@ -289,7 +289,6 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
                 popupWindow.dismiss();
                 break;
             case R.id.tv_reaction2:
-
                 userCommentLikeRequest(mFeedDetail, AppConstants.EMOJI_SECOND_REACTION_CONSTANT, mFeedDetail.getItemPosition());
                 popupWindow.dismiss();
                 break;

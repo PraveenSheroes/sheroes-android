@@ -12,7 +12,6 @@ import android.os.Build;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -149,6 +148,7 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> imple
         tvArticleDetailUserReaction.setEnabled(true);
         tvArticleDetailUserReactionText.setEnabled(true);
         if (null != mFeedDetail) {
+            mFeedDetail.setLastReactionValue(mFeedDetail.getReactionValue());
             imageOperations(context);
             allTextViewStringOperations(context);
         }
@@ -473,6 +473,18 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> imple
         } else {
             viewInterface.userCommentLikeRequest(mFeedDetail, AppConstants.HEART_REACTION_CONSTANT, getAdapterPosition());
         }
+        if (mFeedDetail.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
+            mFeedDetail.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
+            mFeedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() - AppConstants.ONE_CONSTANT);
+            tvArticleDetailUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
+            tvArticleDetailUserReactionText.setText(AppConstants.EMPTY_STRING);
+        } else {
+            mFeedDetail.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
+            mFeedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
+            tvArticleDetailUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
+            tvArticleDetailUserReactionText.setText(mContext.getString(R.string.ID_LOVE));
+        }
+        allTextViewStringOperations(mContext);
     }
     @OnClick(R.id.tv_article_detail_user_comment)
     public void userCommentClick() {

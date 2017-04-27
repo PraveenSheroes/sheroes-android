@@ -36,6 +36,8 @@ public class ShareCommunityFragment extends BaseFragment implements CreateCommun
     TextView mTvShareviasocialmedia;
     @Bind(R.id.tv_share_community_title)
     TextView mTvShareCommunityTitle;
+    @Bind(R.id.tv_community_title)
+    TextView mTvCommunityTitle;
     private FeedDetail mFeedDetail;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -49,6 +51,7 @@ public class ShareCommunityFragment extends BaseFragment implements CreateCommun
         if(null!=mFeedDetail&& StringUtil.isNotNullOrEmptyString(mFeedDetail.getNameOrTitle())) {
             mTvShareCommunityTitle.setText(mFeedDetail.getNameOrTitle());
         }
+        mTvCommunityTitle.setText(getString(R.string.ID_SHARE));
         //Fabric.with(getActivity(), new Crashlytics());
 
         return view;
@@ -57,10 +60,9 @@ public class ShareCommunityFragment extends BaseFragment implements CreateCommun
     public void socialShareFunction()
     {
         Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_TEXT, "Testing Text From SHEROES2.0");
-        intent.putExtra(Intent.EXTRA_SUBJECT, "Check out this site!");
-        startActivity(Intent.createChooser(intent, "Share"));
+        intent.setType(AppConstants.SHARE_MENU_TYPE);
+        intent.putExtra(Intent.EXTRA_TEXT, mFeedDetail.getDeepLinkUrl());
+        startActivity(Intent.createChooser(intent, AppConstants.SHARE));
     }
 
     @OnClick(R.id.tv_close_community)

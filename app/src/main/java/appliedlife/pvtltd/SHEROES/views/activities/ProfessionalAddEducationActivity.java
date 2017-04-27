@@ -3,7 +3,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -22,7 +21,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataRespons
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.EducationEntity;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.MyProfileView;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.PersonalBasicDetailsRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCardResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePersenter;
@@ -40,7 +38,7 @@ import butterknife.OnClick;
  * Created by priyanka on 07/03/17.
  */
 
-public class ProfessionalAddEducationActivity extends BaseActivity implements DayPickerProfile.MyDayPickerListener,ProfileView,View.OnClickListener
+public class ProfessionalAddEducationActivity extends BaseActivity implements DayPickerProfile.MyDayPickerListener,ProfileView
 {   private final String TAG = LogUtils.makeLogTag(ProfessionalAddEducationActivity.class);
     private final String SCREEN_NAME = "Proffesional_Add_Education_screen";
     @Inject

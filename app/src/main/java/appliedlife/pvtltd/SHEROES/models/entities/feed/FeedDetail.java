@@ -409,6 +409,7 @@ public class FeedDetail extends BaseResponse implements Parcelable {
     @Expose
     private boolean isFeatured;
     /*Like and comment*/
+    private int lastReactionValue;
     @SerializedName("solr_ignore_reacted_value")
     @Expose
     private int reactionValue;
@@ -1585,6 +1586,14 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         this.callFromName = callFromName;
     }
 
+    public int getLastReactionValue() {
+        return lastReactionValue;
+    }
+
+    public void setLastReactionValue(int lastReactionValue) {
+        this.lastReactionValue = lastReactionValue;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -1592,6 +1601,7 @@ public class FeedDetail extends BaseResponse implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
         dest.writeInt(this.itemPosition);
         dest.writeByte(this.isLongPress ? (byte) 1 : (byte) 0);
         dest.writeString(this.callFromName);
@@ -1716,6 +1726,7 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         dest.writeString(this.authorCityName);
         dest.writeString(this.authorShortDescription);
         dest.writeByte(this.isFeatured ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.lastReactionValue);
         dest.writeInt(this.reactionValue);
         dest.writeInt(this.noOfLikes);
         dest.writeInt(this.noOfComments);
@@ -1735,6 +1746,7 @@ public class FeedDetail extends BaseResponse implements Parcelable {
     }
 
     protected FeedDetail(Parcel in) {
+        super(in);
         this.itemPosition = in.readInt();
         this.isLongPress = in.readByte() != 0;
         this.callFromName = in.readString();
@@ -1875,6 +1887,7 @@ public class FeedDetail extends BaseResponse implements Parcelable {
         this.authorCityName = in.readString();
         this.authorShortDescription = in.readString();
         this.isFeatured = in.readByte() != 0;
+        this.lastReactionValue = in.readInt();
         this.reactionValue = in.readInt();
         this.noOfLikes = in.readInt();
         this.noOfComments = in.readInt();

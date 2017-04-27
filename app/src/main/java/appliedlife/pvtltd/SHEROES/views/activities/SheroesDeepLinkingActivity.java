@@ -20,6 +20,7 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 
 public class SheroesDeepLinkingActivity extends Activity {
     private Uri mData;
+    private int indexOfFourthBackSlace;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,35 +29,34 @@ public class SheroesDeepLinkingActivity extends Activity {
         if (null != getIntent()) {
             String baseUrl = "";
             int fullLength = 0;
-            int indexOfFourthBackSlace;
             Intent intent = getIntent();
             if (null != intent.getData()) {
                 mData = intent.getData();
                 if (StringUtil.isNotNullOrEmptyString(mData.toString())) {
-                    String url = mData.toString();
-
+                    String urlOfSharedCard;
+                    urlOfSharedCard = mData.toString();
                     try {
-                        if (null != url) {
-                            indexOfFourthBackSlace = findNthIndexOf(url, AppConstants.BACK_SLASH, 4);
+                        if (null != urlOfSharedCard) {
+                            indexOfFourthBackSlace = findNthIndexOf(urlOfSharedCard, AppConstants.BACK_SLASH, 4);
                             if (indexOfFourthBackSlace > 0) {
-                                baseUrl = url.substring(0, indexOfFourthBackSlace);
+                                baseUrl = urlOfSharedCard.substring(0, indexOfFourthBackSlace);
                                 //When Fourth back slace not available
                                 if (baseUrl.equalsIgnoreCase(AppConstants.EMPTY_STRING)) {
-                                    baseUrl = url;
+                                    baseUrl = urlOfSharedCard;
                                 } else {
                                     if (baseUrl.equalsIgnoreCase(AppConstants.USER_URL)) {
-                                        baseUrl = url;
+                                        baseUrl = urlOfSharedCard;
                                     }
                                 }
                             }
                         }
                     } catch (Exception e) {
                     }
-                    fullLength = url.length();
+                    fullLength = urlOfSharedCard.length();
 
                     if (StringUtil.isNotNullOrEmptyString(baseUrl)) {
 
-                        callActivities(url, baseUrl, fullLength);
+                        callActivities(urlOfSharedCard, baseUrl, fullLength);
                     }
                 }
             } else {
@@ -66,17 +66,17 @@ public class SheroesDeepLinkingActivity extends Activity {
     }
 
 
-    private void callActivities(String url, String baseUrl, int fullLength) {
-        String text = AppConstants.EMPTY_STRING;
+    private void callActivities(String urlSharedViaSocial, String baseUrl, int fullLength) {
+        String dataIdString = AppConstants.EMPTY_STRING;
         //In case of Article
         if (AppConstants.ARTICLE_URL.equalsIgnoreCase(baseUrl) && AppConstants.ARTICLE_URL.length() < fullLength) {
             try {
-                int sareid = url.lastIndexOf("/");
-                String id = url.substring(sareid + 1, url.length());
+                int sareid = urlSharedViaSocial.lastIndexOf(AppConstants.BACK_SLASH);
+                String id = urlSharedViaSocial.substring(sareid + 1, fullLength);
                 byte[] id1 = Base64.decode(id, Base64.DEFAULT);
-                text = new String(id1, "UTF-8");
+                dataIdString = new String(id1, AppConstants.UTF_8);
                 Intent into = new Intent(SheroesDeepLinkingActivity.this, ArticleDetailActivity.class);
-                into.putExtra(AppConstants.ARTICLE_ID, Long.parseLong(text));
+                into.putExtra(AppConstants.ARTICLE_ID, Long.parseLong(dataIdString));
                 startActivity(into);
                 finish();
             } catch (Exception e) {
@@ -86,12 +86,12 @@ public class SheroesDeepLinkingActivity extends Activity {
             }
         } else if (AppConstants.JOB_URL.equalsIgnoreCase(baseUrl) && AppConstants.JOB_URL.length() < fullLength) {
             try {
-                int sareid = url.lastIndexOf("/");
-                String id = url.substring(sareid + 1, url.length());
+                int sareid = urlSharedViaSocial.lastIndexOf(AppConstants.BACK_SLASH);
+                String id = urlSharedViaSocial.substring(sareid + 1, fullLength);
                 byte[] id1 = Base64.decode(id, Base64.DEFAULT);
-                text = new String(id1, "UTF-8");
+                dataIdString = new String(id1, AppConstants.UTF_8);
                 Intent into = new Intent(SheroesDeepLinkingActivity.this, JobDetailActivity.class);
-                into.putExtra(AppConstants.JOB_ID, Long.parseLong(text));
+                into.putExtra(AppConstants.JOB_ID, Long.parseLong(dataIdString));
                 startActivity(into);
                 finish();
             } catch (Exception e) {
@@ -101,20 +101,39 @@ public class SheroesDeepLinkingActivity extends Activity {
             }
 
         }
+        /*
+        "solr_ignore_deep_link_url": "https://sheroes.in/communities/test/Mjcz/MTE0NjI=",
+
+        "solr_ignore_deep_link_url": "https://sheroes.in/communities/sheroes-community/NTc0"
+        * */
         //In case of communities
         else if (AppConstants.COMMUNITY_URL.equalsIgnoreCase(baseUrl) && AppConstants.COMMUNITY_URL.length() < fullLength) {
             try {
-                int indexOfSecondBackSlace = findNthIndexOf(url, AppConstants.BACK_SLASH, 5);
-                int sareid = url.lastIndexOf("/");
-                String communityId = url.substring(indexOfSecondBackSlace + 1, sareid);
-                String postid = url.substring(sareid + 1, url.length());
-                byte[] id1 = Base64.decode(postid, Base64.DEFAULT);
-                text = new String(id1, "UTF-8");
-                byte[] id2 = Base64.decode(communityId, Base64.DEFAULT);
-                String newcommunityId = new String(id2, "UTF-8");
                 Intent into = new Intent(SheroesDeepLinkingActivity.this, CommunitiesDetailActivity.class);
-                into.putExtra(AppConstants.COMMUNITY_ID, Long.parseLong(newcommunityId));
-                into.putExtra(AppConstants.COMMUNITY_POST_ID, Long.parseLong(text));
+                String communityDetail = urlSharedViaSocial.substring(indexOfFourthBackSlace, urlSharedViaSocial.length());
+                int countBackSlash = countBackSlash(communityDetail);
+                if (countBackSlash > 2) {
+                    String splitCommPostUrl[] = communityDetail.split(AppConstants.BACK_SLASH);
+                    if (null != splitCommPostUrl && splitCommPostUrl.length > 0) {
+                        if (StringUtil.isNotNullOrEmptyString(splitCommPostUrl[splitCommPostUrl.length - 1]) && StringUtil.isNotNullOrEmptyString(splitCommPostUrl[splitCommPostUrl.length - 2])) {
+                            String postid = splitCommPostUrl[splitCommPostUrl.length - 1];
+                            postid = postid.replace("=", AppConstants.EMPTY_STRING);
+                            String communityId = splitCommPostUrl[splitCommPostUrl.length - 2];
+                            byte[] communityPostBytes = Base64.decode(postid, Base64.DEFAULT);
+                            dataIdString = new String(communityPostBytes, AppConstants.UTF_8);
+                            byte[] communityBytes = Base64.decode(communityId, Base64.DEFAULT);
+                            String newCommunityId = new String(communityBytes, AppConstants.UTF_8);
+                            into.putExtra(AppConstants.COMMUNITY_ID, Long.parseLong(newCommunityId));
+                            into.putExtra(AppConstants.COMMUNITY_POST_ID, Long.parseLong(dataIdString));
+                        }
+                    }
+                } else {
+                    int indexOfSecondBackSlace = findNthIndexOf(communityDetail, AppConstants.BACK_SLASH, 2);
+                    String communityId = communityDetail.substring(indexOfSecondBackSlace + 1, communityDetail.length());
+                    byte[] communityBytes = Base64.decode(communityId, Base64.DEFAULT);
+                    String newCommunityId = new String(communityBytes, AppConstants.UTF_8);
+                    into.putExtra(AppConstants.COMMUNITY_ID, Long.parseLong(newCommunityId));
+                }
                 startActivity(into);
                 finish();
             } catch (Exception e) {
@@ -134,15 +153,14 @@ public class SheroesDeepLinkingActivity extends Activity {
         } else {
             Toast.makeText(SheroesDeepLinkingActivity.this, AppConstants.WEB_BROWSER_MASSAGE, Toast.LENGTH_SHORT).show();
             Intent i = new Intent(Intent.ACTION_VIEW);
-            i.setData(Uri.parse(url));
+            i.setData(Uri.parse(urlSharedViaSocial));
             startActivity(i);
             finish();
         }
 
     }
 
-    public static int findNthIndexOf(String str, String needle, int occurence)
-            throws IndexOutOfBoundsException {
+    public static int findNthIndexOf(String str, String needle, int occurence) throws IndexOutOfBoundsException {
         int index = -1;
         Pattern p = Pattern.compile(needle, Pattern.MULTILINE);
         Matcher m = p.matcher(str);
@@ -156,5 +174,14 @@ public class SheroesDeepLinkingActivity extends Activity {
         return index;
     }
 
+    private int countBackSlash(String url) {
+        int counter = 0;
+        for (int i = 0; i < url.length(); i++) {
+            if (url.charAt(i) == '/') {
+                counter++;
+            }
+        }
+        return counter;
+    }
 
 }

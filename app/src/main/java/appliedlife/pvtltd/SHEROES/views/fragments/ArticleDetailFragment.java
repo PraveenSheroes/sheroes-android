@@ -97,9 +97,9 @@ public class ArticleDetailFragment extends BaseFragment {
             articleList = new ArrayList<>();
             articleDetailPojo = new ArticleDetailPojo();
             articleDetailPojo.setId(AppConstants.ONE_CONSTANT);
-            ((ArticleDetailActivity)getActivity()).setBackGroundImage(feedDetailList.get(0));
-             articleDetailPojo.setFeedDetail(feedDetailList.get(0));
-             articleList.add(articleDetailPojo);
+            ((ArticleDetailActivity) getActivity()).setBackGroundImage(feedDetailList.get(0));
+            articleDetailPojo.setFeedDetail(feedDetailList.get(0));
+            articleList.add(articleDetailPojo);
             mAdapter.setSheroesGenericListData(articleList);
             mAdapter.notifyDataSetChanged();
             if (mRecyclerView.getItemAnimator() instanceof SimpleItemAnimator) {
@@ -141,7 +141,7 @@ public class ArticleDetailFragment extends BaseFragment {
                         articleList.clear();
                         articleList.add(articleDetailPojo);
                         mAdapter.notifyDataSetChanged();
-                        ((ArticleDetailActivity)getActivity()).onBookmarkClick(mFeedDetail, AppConstants.ONE_CONSTANT);
+                        ((ArticleDetailActivity) getActivity()).onBookmarkClick(mFeedDetail, AppConstants.ONE_CONSTANT);
                         break;
                     case AppConstants.FAILED:
                         showError(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_BOOKMARK_UNBOOKMARK);
@@ -155,7 +155,7 @@ public class ArticleDetailFragment extends BaseFragment {
 
     protected void likeSuccess(BaseResponse baseResponse) {
 
-        if (StringUtil.isNotNullOrEmptyString(baseResponse.getStatus())&&baseResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS) && null != mFeedDetail) {
+        if (StringUtil.isNotNullOrEmptyString(baseResponse.getStatus()) && baseResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS) && null != mFeedDetail) {
             if (mFeedDetail.isLongPress()) {
                 if (mFeedDetail.getReactionValue() == AppConstants.NO_REACTION_CONSTANT) {
                     mFeedDetail.setReactionValue(mPressedEmoji);
@@ -163,9 +163,14 @@ public class ArticleDetailFragment extends BaseFragment {
                 } else {
                     mFeedDetail.setReactionValue(mPressedEmoji);
                 }
-
-            } else {
-
+            }
+            articleDetailPojo.setFeedDetail(mFeedDetail);
+            articleList.clear();
+            articleList.add(articleDetailPojo);
+            mAdapter.notifyDataSetChanged();
+            ((ArticleDetailActivity) getActivity()).onBookmarkClick(mFeedDetail, AppConstants.TWO_CONSTANT);
+        } else {
+            if (!mFeedDetail.isLongPress()) {
                 if (mFeedDetail.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
                     mFeedDetail.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
                     mFeedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() - AppConstants.ONE_CONSTANT);
@@ -173,17 +178,12 @@ public class ArticleDetailFragment extends BaseFragment {
                     mFeedDetail.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
                     mFeedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
                 }
+                mFeedDetail.setReactionValue(mFeedDetail.getLastReactionValue());
+                articleDetailPojo.setFeedDetail(mFeedDetail);
+                articleList.clear();
+                articleList.add(articleDetailPojo);
+                mAdapter.notifyDataSetChanged();
             }
-            articleDetailPojo.setFeedDetail(mFeedDetail);
-            articleList.clear();
-            articleList.add(articleDetailPojo);
-            mAdapter.notifyDataSetChanged();
-            if (mRecyclerView.getItemAnimator() instanceof SimpleItemAnimator) {
-                ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
-                ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setAddDuration(AppConstants.NO_REACTION_CONSTANT);
-            }
-            ((ArticleDetailActivity)getActivity()).onBookmarkClick(mFeedDetail, AppConstants.TWO_CONSTANT);
-        } else {
             showError(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_LIKE_UNLIKE);
         }
     }

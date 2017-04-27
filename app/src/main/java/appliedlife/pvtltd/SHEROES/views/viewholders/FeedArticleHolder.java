@@ -111,13 +111,14 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     FrameLayout flFeedArticleNoReactionComment;
     @Bind(R.id.tv_feed_article_user_comment_post_menu)
     TextView tvFeedArticleUserCommentPostMenu;
-   // @Bind(R.id.tv_feed_article_view_more)
-   // TextView tvFeedArticleView;
+    // @Bind(R.id.tv_feed_article_view_more)
+    // TextView tvFeedArticleView;
     BaseHolderInterface viewInterface;
     private FeedDetail dataItem;
     private Context mContext;
     private String mViewMoreDescription;
     private int mItemPosition;
+
     public FeedArticleHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
@@ -133,35 +134,45 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         tvFeedArticleUserReaction.setEnabled(true);
         tvFeedArticleUserReactionText.setEnabled(true);
         dataItem.setItemPosition(position);
+        dataItem.setLastReactionValue(dataItem.getReactionValue());
         allTextViewStringOperations(context);
+        onBookMarkClick();
         if (!dataItem.isTrending()) {
             imageOperations(context);
         }
     }
 
+    private void onBookMarkClick() {
+        if (dataItem.isBookmarked()) {
+            tvFeedArticleUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_active, 0);
+        } else {
+            tvFeedArticleUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_in_active, 0);
+        }
+    }
+
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void allTextViewStringOperations(Context context) {
-        mViewMoreDescription =dataItem.getListDescription();
+        mViewMoreDescription = dataItem.getListDescription();
         if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
             Document documentString = Jsoup.parse(mViewMoreDescription);
-            String text=documentString.text().trim();
+            String text = documentString.text().trim();
             tvFeedArticleHeaderLebel.setVisibility(View.VISIBLE);
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-               tvFeedArticleHeaderLebel.setText(Html.fromHtml(text, 0)); // for 24 api and more
-               // Spanned html = Html.fromHtml(documentString.text(),0);
-              //  tvFeedArticleHeaderLebel.setText(html);
+                tvFeedArticleHeaderLebel.setText(Html.fromHtml(text, 0)); // for 24 api and more
+                // Spanned html = Html.fromHtml(documentString.text(),0);
+                //  tvFeedArticleHeaderLebel.setText(html);
             } else {
-               tvFeedArticleHeaderLebel.setText(Html.fromHtml(text));// or for older api
-              //  Spanned html = Html.fromHtml(documentString.text());
-               // tvFeedArticleHeaderLebel.setText(html);
+                tvFeedArticleHeaderLebel.setText(Html.fromHtml(text));// or for older api
+                //  Spanned html = Html.fromHtml(documentString.text());
+                // tvFeedArticleHeaderLebel.setText(html);
             }
             //   String dots = LEFT_VIEW_MORE + AppConstants.DOTS + RIGHT_VIEW_MORE;
-         //   StringBuilder dots=new StringBuilder();
-         //   dots.append(LEFT_VIEW_MORE).append(AppConstants.DOTS).append(RIGHT_VIEW_MORE).append(mContext.getString(R.string.ID_VIEW_MORE));
-          //  StringBuilder viewColor=new StringBuilder();
-          //  viewColor.append(LEFT_HTML_VEIW_TAG_FOR_COLOR).append(mViewMore).append(RIGHT_HTML_VIEW_TAG_FOR_COLOR);
-           // tvFeedArticleHeaderLebel.setText(mViewMoreDescription);
-            ArticleTextView.doResizeTextView(tvFeedArticleHeaderLebel, 2,AppConstants.VIEW_MORE, true);
+            //   StringBuilder dots=new StringBuilder();
+            //   dots.append(LEFT_VIEW_MORE).append(AppConstants.DOTS).append(RIGHT_VIEW_MORE).append(mContext.getString(R.string.ID_VIEW_MORE));
+            //  StringBuilder viewColor=new StringBuilder();
+            //  viewColor.append(LEFT_HTML_VEIW_TAG_FOR_COLOR).append(mViewMore).append(RIGHT_HTML_VIEW_TAG_FOR_COLOR);
+            // tvFeedArticleHeaderLebel.setText(mViewMoreDescription);
+            ArticleTextView.doResizeTextView(tvFeedArticleHeaderLebel, 2, AppConstants.VIEW_MORE, true);
            /* if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                 tvFeedArticleView.setText(Html.fromHtml(dots.toString(), 0)); // for 24 api and more
             } else {
@@ -182,12 +193,6 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
             tvFeedArticleHeader.setText(dataItem.getNameOrTitle());
         }
-        if (dataItem.isBookmarked()) {
-            tvFeedArticleUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_active, 0);
-        } else {
-            tvFeedArticleUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_in_active, 0);
-        }
-
         if (dataItem.getNoOfLikes() < AppConstants.ONE_CONSTANT && dataItem.getNoOfComments() < AppConstants.ONE_CONSTANT) {
             tvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
             flFeedArticleNoReactionComment.setVisibility(View.GONE);
@@ -293,15 +298,15 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             lastComment = lastCommentList.get(mItemPosition);
             String feedUserIconUrl = lastComment.getParticipantImageUrl();
             ivFeedArticleUserPic.setCircularImage(true);
-           // String userName;
-            StringBuilder userName=new StringBuilder();
+            // String userName;
+            StringBuilder userName = new StringBuilder();
             if (lastComment.isAnonymous()) {
-              //  userName = LEFT_HTML_TAG_FOR_COLOR + mContext.getString(R.string.ID_ANONYMOUS) + RIGHT_HTML_TAG_FOR_COLOR;
-                userName.append(LEFT_HTML_TAG_FOR_COLOR).append(mContext.getString(R.string.ID_ANONYMOUS)).append(RIGHT_HTML_TAG_FOR_COLOR).append(AppConstants.SPACE ).append(lastComment.getComment());
+                //  userName = LEFT_HTML_TAG_FOR_COLOR + mContext.getString(R.string.ID_ANONYMOUS) + RIGHT_HTML_TAG_FOR_COLOR;
+                userName.append(LEFT_HTML_TAG_FOR_COLOR).append(mContext.getString(R.string.ID_ANONYMOUS)).append(RIGHT_HTML_TAG_FOR_COLOR).append(AppConstants.SPACE).append(lastComment.getComment());
                 ivFeedArticleUserPic.setImageResource(R.drawable.ic_anonomous);
             } else {
-              //  userName = LEFT_HTML_TAG_FOR_COLOR + lastComment.getParticipantName() + RIGHT_HTML_TAG_FOR_COLOR;
-                userName.append(LEFT_HTML_TAG_FOR_COLOR).append(lastComment.getParticipantName()).append(RIGHT_HTML_TAG_FOR_COLOR).append(AppConstants.SPACE ).append(lastComment.getComment());
+                //  userName = LEFT_HTML_TAG_FOR_COLOR + lastComment.getParticipantName() + RIGHT_HTML_TAG_FOR_COLOR;
+                userName.append(LEFT_HTML_TAG_FOR_COLOR).append(lastComment.getParticipantName()).append(RIGHT_HTML_TAG_FOR_COLOR).append(AppConstants.SPACE).append(lastComment.getComment());
                 ivFeedArticleUserPic.bindImage(feedUserIconUrl);
             }
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
@@ -341,30 +346,24 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             final TextView tvFeedArticleTimeLabel = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_time_label);
             final TextView tvFeedArticleTotalViews = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_total_views);
             final RelativeLayout rlFeedArticleViews = (RelativeLayout) backgroundImage.findViewById(R.id.rl_gradiant);
-            StringBuilder stringBuilder=new StringBuilder();
-            if(dataItem.getNoOfViews()>1) {
+            StringBuilder stringBuilder = new StringBuilder();
+            if (dataItem.getNoOfViews() > 1) {
                 stringBuilder.append(dataItem.getNoOfViews()).append(AppConstants.SPACE).append(context.getString(R.string.ID_VIEWS));
                 tvFeedArticleTotalViews.setText(stringBuilder.toString());
                 tvFeedArticleTotalViews.setVisibility(View.VISIBLE);
-            }
-            else if(dataItem.getNoOfViews()==1)
-            {
+            } else if (dataItem.getNoOfViews() == 1) {
                 stringBuilder.append(dataItem.getNoOfViews()).append(AppConstants.SPACE).append(context.getString(R.string.ID_VIEW));
                 tvFeedArticleTotalViews.setText(stringBuilder.toString());
                 tvFeedArticleTotalViews.setVisibility(View.VISIBLE);
-            }
-            else
-            {
+            } else {
                 tvFeedArticleTotalViews.setVisibility(View.GONE);
             }
-            stringBuilder=new StringBuilder();
-            if(dataItem.getCharCount()>0)
-            {
+            stringBuilder = new StringBuilder();
+            if (dataItem.getCharCount() > 0) {
                 stringBuilder.append(dataItem.getCharCount()).append(AppConstants.SPACE).append(context.getString(R.string.ID_MIN_READ));
                 tvFeedArticleTimeLabel.setText(stringBuilder.toString());
                 tvFeedArticleTimeLabel.setVisibility(View.VISIBLE);
-            }else
-            {
+            } else {
                 tvFeedArticleTimeLabel.setVisibility(View.INVISIBLE);
             }
 
@@ -420,6 +419,12 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         } else {
             viewInterface.handleOnClick(dataItem, tvFeedArticleUserBookmark);
         }
+        if (!dataItem.isBookmarked()) {
+            dataItem.setBookmarked(true);
+        } else {
+            dataItem.setBookmarked(false);
+        }
+        onBookMarkClick();
     }
 
     @OnClick(R.id.li_feed_article_join_conversation)
@@ -449,42 +454,57 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     public void userReactionClick() {
         userReactionWithOutLongPress();
     }
+
     @OnClick(R.id.tv_feed_article_user_reaction_text)
-    public void userReactionByText()
-    {
+    public void userReactionByText() {
         userReactionWithOutLongPress();
     }
-   private void userReactionWithOutLongPress()
-    {
-        dataItem.setTrending(true);
+
+    private void userReactionWithOutLongPress() {
         tvFeedArticleUserReactionText.setEnabled(false);
         tvFeedArticleUserReaction.setEnabled(false);
+        dataItem.setTrending(true);
         dataItem.setLongPress(false);
         if (dataItem.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
             viewInterface.userCommentLikeRequest(dataItem, AppConstants.NO_REACTION_CONSTANT, getAdapterPosition());
         } else {
             viewInterface.userCommentLikeRequest(dataItem, AppConstants.HEART_REACTION_CONSTANT, getAdapterPosition());
         }
+        if (dataItem.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
+            dataItem.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
+            dataItem.setNoOfLikes(dataItem.getNoOfLikes() - AppConstants.ONE_CONSTANT);
+            tvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
+            tvFeedArticleUserReactionText.setText(AppConstants.EMPTY_STRING);
+        } else {
+            dataItem.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
+            dataItem.setNoOfLikes(dataItem.getNoOfLikes() + AppConstants.ONE_CONSTANT);
+            tvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
+            tvFeedArticleUserReactionText.setText(mContext.getString(R.string.ID_LOVE));
+        }
+        allTextViewStringOperations(mContext);
     }
+
+
     @OnLongClick(R.id.tv_feed_article_user_reaction)
     public boolean userReactionLongClick() {
         userReactionLongPress();
         return true;
     }
+
     @OnLongClick(R.id.tv_feed_article_user_reaction_text)
-    public boolean userReactionLongPressByText()
-    {
+    public boolean userReactionLongPressByText() {
         userReactionLongPress();
         return true;
     }
-    private void userReactionLongPress()
-    {
+
+    private void userReactionLongPress() {
         dataItem.setTrending(true);
         Vibrator vibe = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
         vibe.vibrate(100);
         dataItem.setLongPress(true);
         viewInterface.handleOnClick(dataItem, tvFeedArticleUserReaction);
     }
+
     @OnClick(R.id.tv_feed_article_header_lebel)
     public void viewMoreClick() {
         viewInterface.handleOnClick(dataItem, liFeedArticleImages);

@@ -92,7 +92,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
     private CommunityRequestedFragment communityRequestedFragment;
     boolean isCommunityDetailFragment;
     private long mCommunityId;
-    private long mCommunityPostId;
+  //  private long mCommunityPostId;
     @Bind(R.id.tv_community_detail_title)
     TextView mTvCommunityDetailTitle;
     @Bind(R.id.tv_community_detail_subtitle)
@@ -112,19 +112,18 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
         setAllValues(mFragmentOpen);
         initActivityTransitions();
         mAppBarLayout.addOnOffsetChangedListener(this);
-        if (null != getIntent()) {
-            mFeedDetail = getIntent().getParcelableExtra(AppConstants.COMMUNITY_DETAIL);
-            communityEnum = (CommunityEnum) getIntent().getSerializableExtra(AppConstants.MY_COMMUNITIES_FRAGMENT);
-
-            if (null != getIntent() && null != getIntent().getExtras().get(AppConstants.COMMUNITY_ID)) {
+        if (null != getIntent() && null != getIntent().getExtras()) {
+            //&& null != getIntent().getExtras().get(AppConstants.COMMUNITY_POST_ID)
+            if (null != getIntent().getExtras().get(AppConstants.COMMUNITY_ID)) {
                 mCommunityId = (long) getIntent().getExtras().get(AppConstants.COMMUNITY_ID);
-            }
-            if (null != getIntent() && null != getIntent().getExtras().get(AppConstants.COMMUNITY_POST_ID)) {
-                mCommunityPostId = (long) getIntent().getExtras().get(AppConstants.COMMUNITY_POST_ID);
-            }
-            if (mCommunityId > 0) {
-                mFeedDetail = new FeedDetail();
-                mFeedDetail.setIdOfEntityOrParticipant(mCommunityId);
+               // mCommunityPostId = (long) getIntent().getExtras().get(AppConstants.COMMUNITY_POST_ID);
+                if (mCommunityId > 0) {
+                    mFeedDetail = new FeedDetail();
+                    mFeedDetail.setIdOfEntityOrParticipant(mCommunityId);
+                }
+            } else {
+                mFeedDetail = getIntent().getParcelableExtra(AppConstants.COMMUNITY_DETAIL);
+                communityEnum = (CommunityEnum) getIntent().getSerializableExtra(AppConstants.MY_COMMUNITIES_FRAGMENT);
             }
         }
         setPagerAndLayouts();
@@ -134,52 +133,59 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
         ViewCompat.setTransitionName(mAppBarLayout, AppConstants.COMMUNITY_DETAIL);
         supportPostponeEnterTransition();
         setSupportActionBar(mToolbarCommunitiesDetail);
-        if (null != mFeedDetail) {
+        if (null != mFeedDetail && null != communityEnum) {
             if (mFeedDetail.isClosedCommunity() && !mFeedDetail.isOwner()) {
                 isCommunityDetailFragment = true;
                 mCommunityDetailActivity.setVisibility(View.GONE);
                 communityOpenAboutFragment(mFeedDetail);
             } else {
-                mCommunityDetailActivity.setVisibility(View.VISIBLE);
-                mTvMemebr.setText(mFeedDetail.getNoOfMembers() + AppConstants.SPACE + getString(R.string.ID_MEMBERS));
-                //  mFloatingActionButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_feed_article_top_left));
-                if (mFeedDetail.getNoOfMembers() > 1) {
-                    mTvMemebr.setVisibility(View.VISIBLE);
-                    mTvMemebr.setText(mFeedDetail.getNoOfMembers() + AppConstants.SPACE + getString(R.string.ID_MEMBERS));
-                } else if (mFeedDetail.getNoOfViews() == 1) {
-                    mTvMemebr.setVisibility(View.VISIBLE);
-                    mTvMemebr.setText(mFeedDetail.getNoOfMembers() + AppConstants.SPACE + getString(R.string.ID_MEMBER));
-                } else {
-                    mTvMemebr.setVisibility(View.INVISIBLE);
-                }
-                mCollapsingToolbarLayout.setTitle(AppConstants.SPACE);
-                mCollapsingToolbarLayout.setSubtitle(AppConstants.SPACE);
-                mTvCommunityDetailTitle.setText(mFeedDetail.getNameOrTitle());
-                mTvCommunityDetailSubTitle.setText(mFeedDetail.getCommunityType());
                 mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-                mViewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(getIntent()), getString(R.string.ID_COMMUNITIES));
+                mViewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(mFeedDetail, communityEnum), getString(R.string.ID_COMMUNITIES));
                 mViewPager.setAdapter(mViewPagerAdapter);
-                if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getImageUrl())) {
-                    Glide.with(this)
-                            .load(mFeedDetail.getImageUrl()).asBitmap()
-                            .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                            .skipMemoryCache(true)
-                            .into(new SimpleTarget<Bitmap>() {
-                                @Override
-                                public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
-                                    ivCommunitiesDetail.setImageBitmap(resource);
-                                    Palette.from(resource).generate(new Palette.PaletteAsyncListener() {
-                                        public void onGenerated(Palette palette) {
-                                            supportStartPostponedEnterTransition();
-                                        }
-                                    });
+            }
+        } else {
+            mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+            mViewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(mFeedDetail, communityEnum), getString(R.string.ID_COMMUNITIES));
+            mViewPager.setAdapter(mViewPagerAdapter);
+        }
+    }
+
+    public void initializeUiContent(FeedDetail feedDetail) {
+        mCommunityDetailActivity.setVisibility(View.VISIBLE);
+        mTvMemebr.setText(feedDetail.getNoOfMembers() + AppConstants.SPACE + getString(R.string.ID_MEMBERS));
+        if (feedDetail.getNoOfMembers() > 1) {
+            mTvMemebr.setVisibility(View.VISIBLE);
+            mTvMemebr.setText(mFeedDetail.getNoOfMembers() + AppConstants.SPACE + getString(R.string.ID_MEMBERS));
+        } else if (feedDetail.getNoOfViews() == 1) {
+            mTvMemebr.setVisibility(View.VISIBLE);
+            mTvMemebr.setText(mFeedDetail.getNoOfMembers() + AppConstants.SPACE + getString(R.string.ID_MEMBER));
+        } else {
+            mTvMemebr.setVisibility(View.INVISIBLE);
+        }
+        mCollapsingToolbarLayout.setTitle(AppConstants.SPACE);
+        mCollapsingToolbarLayout.setSubtitle(AppConstants.SPACE);
+        mTvCommunityDetailTitle.setText(feedDetail.getNameOrTitle());
+        mTvCommunityDetailSubTitle.setText(feedDetail.getCommunityType());
+
+        if (StringUtil.isNotNullOrEmptyString(feedDetail.getImageUrl())) {
+            Glide.with(this)
+                    .load(feedDetail.getImageUrl()).asBitmap()
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .skipMemoryCache(true)
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
+                            ivCommunitiesDetail.setImageBitmap(resource);
+                            Palette.from(resource).generate(new Palette.PaletteAsyncListener() {
+                                public void onGenerated(Palette palette) {
+                                    supportStartPostponedEnterTransition();
                                 }
                             });
-                } else {
-                    ivCommunitiesDetail.setImageDrawable(getResources().getDrawable(R.drawable.ic_reaction_strip_background));
-                    supportStartPostponedEnterTransition();
-                }
-            }
+                        }
+                    });
+        } else {
+            ivCommunitiesDetail.setImageDrawable(getResources().getDrawable(R.drawable.ic_reaction_strip_background));
+            supportStartPostponedEnterTransition();
         }
     }
 

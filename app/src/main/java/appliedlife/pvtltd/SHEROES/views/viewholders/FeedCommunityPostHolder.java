@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -120,6 +121,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     private String mViewMore, mLess;
     private Context mContext;
     private int mItemPosition;
+    View popupView;
+    PopupWindow popupWindow;
 
     public FeedCommunityPostHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
@@ -140,6 +143,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         tvFeedCommunityPostUserBookmark.setEnabled(true);
         tvFeedCommunityPostUserReaction.setEnabled(true);
         tvFeedCommunityPostUserReactionText.setEnabled(true);
+        dataItem.setLastReactionValue(dataItem.getReactionValue());
         if (!dataItem.isTrending()) {
             imageOperations(context);
             multipleImageURLs();
@@ -152,7 +156,9 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 tvFeedCommunityPostUserMenu.setVisibility(View.GONE);
             }
         }
+        onBookMarkClick();
         allTextViewStringOperations(context);
+
     }
 
     private void multipleImageURLs() {
@@ -253,6 +259,14 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     }
 
+    private void onBookMarkClick() {
+        if (dataItem.isBookmarked()) {
+            tvFeedCommunityPostUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_active, 0);
+        } else {
+            tvFeedCommunityPostUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_in_active, 0);
+        }
+    }
+
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void allTextViewStringOperations(Context context) {
         if (StringUtil.isNotNullOrEmptyString(dataItem.getAuthorName())) {
@@ -307,11 +321,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                     tvFeedCommunityPostText.setText(Html.fromHtml(mViewMoreDescription));
                 }
             }
-        }
-        if (dataItem.isBookmarked()) {
-            tvFeedCommunityPostUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_active, 0);
-        } else {
-            tvFeedCommunityPostUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_in_active, 0);
         }
         if (dataItem.getNoOfLikes() < AppConstants.ONE_CONSTANT && dataItem.getNoOfComments() < AppConstants.ONE_CONSTANT) {
             tvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
@@ -836,10 +845,9 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 viewInterface.dataOperationOnClick(dataItem);
                 break;
             }
-            default: {
+            default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
-                break;
-            }
+
         }
     }
 
@@ -853,6 +861,12 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         } else {
             viewInterface.handleOnClick(dataItem, tvFeedCommunityPostUserBookmark);
         }
+        if (!dataItem.isBookmarked()) {
+            dataItem.setBookmarked(true);
+        } else {
+            dataItem.setBookmarked(false);
+        }
+        onBookMarkClick();
     }
 
     @OnClick(R.id.tv_feed_community_post_total_reactions)
@@ -880,6 +894,19 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         } else {
             viewInterface.userCommentLikeRequest(dataItem, AppConstants.HEART_REACTION_CONSTANT, getAdapterPosition());
         }
+        if (dataItem.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
+            dataItem.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
+            dataItem.setNoOfLikes(dataItem.getNoOfLikes() - AppConstants.ONE_CONSTANT);
+            tvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
+            tvFeedCommunityPostUserReactionText.setText(AppConstants.EMPTY_STRING);
+        } else {
+            dataItem.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
+            dataItem.setNoOfLikes(dataItem.getNoOfLikes() + AppConstants.ONE_CONSTANT);
+            tvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
+            tvFeedCommunityPostUserReactionText.setText(mContext.getString(R.string.ID_LOVE));
+
+        }
+        allTextViewStringOperations(mContext);
     }
 
     @OnLongClick(R.id.tv_feed_community_post_user_reaction)
@@ -901,5 +928,4 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         dataItem.setLongPress(true);
         viewInterface.handleOnClick(dataItem, tvFeedCommunityPostUserReaction);
     }
-
 }

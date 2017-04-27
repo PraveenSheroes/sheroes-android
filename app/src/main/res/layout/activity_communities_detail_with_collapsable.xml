@@ -84,7 +84,7 @@
 
                 <LinearLayout
                     android:id="@+id/li_header"
-                    android:layout_width="@dimen/dp_size_200"
+                    android:layout_width="@dimen/dp_size_220"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
                     <TextView
@@ -115,10 +115,7 @@
                     android:layout_gravity="right"
                     android:drawableLeft="@drawable/ic_share_icon"
                     android:drawablePadding="@dimen/dp_size_10"
-                    android:visibility="gone"
-                    android:paddingTop="@dimen/dp_size_10"
-                    android:paddingRight="@dimen/dp_size_10"
-                    android:paddingBottom="@dimen/dp_size_10" />
+                    android:padding="@dimen/dp_size_10" />
 
             </android.support.v7.widget.Toolbar>
 

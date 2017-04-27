@@ -14,7 +14,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SimpleItemAnimator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,7 +91,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     private ProgressBar mProgressBar;
     public FragmentIntractionWithActivityListner mHomeSearchActivityFragmentIntractionWithActivityListner;
     private FragmentOpen mFragmentOpen = new FragmentOpen();
-    private List<FeedDetail> mfeedDetailList=new ArrayList<>();
+    private List<FeedDetail> mfeedDetailList = new ArrayList<>();
     @Inject
     Preference<LoginResponse> userPreference;
 
@@ -222,17 +221,16 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
         mLiNoResult.setVisibility(View.GONE);
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
             mPageNo = mFragmentListRefreshData.getPageNo();
-            if (mPageNo==AppConstants.ONE_CONSTANT&&mFragmentListRefreshData.getSwipeToRefresh()==AppConstants.ONE_CONSTANT) {
-               if(StringUtil.isNotNullOrEmptyString(mfeedDetailList.get(0).getId()) && StringUtil.isNotNullOrEmptyString(feedDetailList.get(0).getId())) {
-                   if (mfeedDetailList.get(0).getId().equalsIgnoreCase(feedDetailList.get(0).getId())) {
-                       Toast.makeText(getContext(), getString(R.string.ID_FEED_ALREADY_REFRESH), Toast.LENGTH_SHORT).show();
-                   }
-                   else{
-                       Toast.makeText(getContext(), getString(R.string.ID_FEED_REFRESH), Toast.LENGTH_SHORT).show();
-                   }
-               }
+            if (mPageNo == AppConstants.ONE_CONSTANT && mFragmentListRefreshData.getSwipeToRefresh() == AppConstants.ONE_CONSTANT) {
+                if (StringUtil.isNotNullOrEmptyString(mfeedDetailList.get(0).getId()) && StringUtil.isNotNullOrEmptyString(feedDetailList.get(0).getId())) {
+                    if (mfeedDetailList.get(0).getId().equalsIgnoreCase(feedDetailList.get(0).getId())) {
+                        Toast.makeText(getContext(), getString(R.string.ID_FEED_ALREADY_REFRESH), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(), getString(R.string.ID_FEED_REFRESH), Toast.LENGTH_SHORT).show();
+                    }
+                }
             }
-            if(mPageNo==1) {
+            if (mPageNo == 1) {
                 mfeedDetailList = feedDetailList;
             }
             mFragmentListRefreshData.setPageNo(++mPageNo);
@@ -240,10 +238,6 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
             mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
             mAdapter.setCallForRecycler(AppConstants.FEED_SUB_TYPE);
             mAdapter.notifyDataSetChanged();
-            if (mRecyclerView.getItemAnimator() instanceof SimpleItemAnimator) {
-                ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
-                ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setAddDuration(AppConstants.NO_REACTION_CONSTANT);
-            }
             if (!mPullRefreshList.isPullToRefresh()) {
                 mLayoutManager.scrollToPosition(mPullRefreshList.getFeedResponses().size() - feedDetailList.size() - 1);
             } else {
@@ -378,23 +372,20 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
         if (null != mFeedDetail) {
             switch (baseResponse.getStatus()) {
                 case AppConstants.SUCCESS:
-                    if (!mFeedDetail.isBookmarked()) {
-                        mFeedDetail.setBookmarked(true);
-                    } else {
-                        mFeedDetail.setBookmarked(false);
-                    }
                     if (mFragmentOpen.isBookmarkFragment()) {
                         mAdapter.removeDataOnPosition(mFeedDetail, mFeedDetail.getItemPosition());
                         mAdapter.notifyDataSetChanged();
                     } else {
                         mAdapter.notifyItemChanged(mFeedDetail.getItemPosition(), mFeedDetail);
                     }
-                    if (mRecyclerView.getItemAnimator() instanceof SimpleItemAnimator) {
-                        ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
-                        ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setAddDuration(AppConstants.NO_REACTION_CONSTANT);
-                    }
                     break;
                 case AppConstants.FAILED:
+                    if (!mFeedDetail.isBookmarked()) {
+                        mFeedDetail.setBookmarked(true);
+                    } else {
+                        mFeedDetail.setBookmarked(false);
+                    }
+                    mAdapter.notifyItemChanged(mFeedDetail.getItemPosition(), mFeedDetail);
                     showError(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_BOOKMARK_UNBOOKMARK);
                     break;
                 default:
@@ -414,9 +405,11 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                         } else {
                             mFeedDetail.setReactionValue(mPressedEmoji);
                         }
-
-                    } else {
-
+                    }
+                    mAdapter.notifyItemChanged(mFeedDetail.getItemPosition(), mFeedDetail);
+                    break;
+                case AppConstants.FAILED:
+                    if (!mFeedDetail.isLongPress()) {
                         if (mFeedDetail.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
                             mFeedDetail.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
                             mFeedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() - AppConstants.ONE_CONSTANT);
@@ -424,19 +417,13 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                             mFeedDetail.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
                             mFeedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
                         }
+                        mFeedDetail.setReactionValue(mFeedDetail.getLastReactionValue());
+                        mAdapter.notifyItemChanged(mFeedDetail.getItemPosition(), mFeedDetail);
                     }
-                    mAdapter.notifyItemChanged(mFeedDetail.getItemPosition(), mFeedDetail);
-                    if (mRecyclerView.getItemAnimator() instanceof SimpleItemAnimator) {
-                        ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
-                        ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setAddDuration(AppConstants.NO_REACTION_CONSTANT);
-                    }
-                    break;
-                case AppConstants.FAILED:
                     showError(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_LIKE_UNLIKE);
                     break;
                 default:
                     showError(getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
-
             }
         }
 
@@ -501,7 +488,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
         if (feedParticipationEnum == ERROR_FEED_RESPONSE) {
             if (null != mSwipeView) {
-               // mLiNoResult.setVisibility(View.VISIBLE);
+                // mLiNoResult.setVisibility(View.VISIBLE);
                 mSwipeView.setRefreshing(false);
             }
         }
