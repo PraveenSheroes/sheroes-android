@@ -18,6 +18,8 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
@@ -177,6 +179,11 @@ public class OwnerRemoveDialog extends BaseDialogFragment implements CommunityVi
 
     @Override
     public void postCreateCommunityOwner(CreateCommunityOwnerResponse createCommunityOwnerResponse) {
+
+    }
+
+    @Override
+    public void getSuccessForAllResponse(BaseResponse baseResponse, CommunityEnum communityEnum) {
 
     }
 

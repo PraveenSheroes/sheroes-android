@@ -15,7 +15,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityTags;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.EditNameDialogListener;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -51,13 +50,6 @@ public class TagsHolder extends BaseViewHolder<CommunityTags> {
         ButterKnife.bind(this, itemView);
         this.viewInterface = baseHolderInterface;
     }
-
-    public TagsHolder(View itemView, EditNameDialogListener baseHolderInterface) {
-        super(itemView);
-        SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
-        ButterKnife.bind(this, itemView);
-    }
-
 
     @Override
     public void bindData(CommunityTags obj, Context context, int position) {

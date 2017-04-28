@@ -51,13 +51,9 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.EditCommunityRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.presenters.CreateCommunityPresenter;
@@ -617,16 +613,6 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
         mEtCreateCommunityTags.setText(tagval);
 
     }
-
-    @Override
-    public void getSelectedCommunityListSuccess(List<CommunityPostResponse> selected_community_response) {
-
-    }
-
-    @Override
-    public void getOwnerListSuccess(OwnerListResponse ownerListResponse) {
-
-    }
     @Override
     public void createCommunitySuccess(CreateCommunityResponse createCommunityResponse) {
         mTvCreate.setEnabled(true);
@@ -647,17 +633,6 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
                 mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), COMMUNITY_OWNER);
         }
     }
-
-    @Override
-    public void getOwnerListDeactivateSuccess(DeactivateOwnerResponse deactivateOwnerResponse) {
-
-    }
-
-    @Override
-    public void postCreateCommunityOwner(CreateCommunityOwnerResponse createCommunityOwnerResponse) {
-
-    }
-
 
     private void openImageOption() {
         ImageUploadFragment imageUploadFragment = new ImageUploadFragment();

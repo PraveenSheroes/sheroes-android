@@ -61,7 +61,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.JOIN_INVITE
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MENU;
 
 
-public class CommunitiesDetailActivity extends BaseActivity implements ShareCommunityFragment.ShareCommunityActivityIntractionListner, CommentReactionFragment.HomeActivityIntractionListner, AppBarLayout.OnOffsetChangedListener {
+public class CommunitiesDetailActivity extends BaseActivity implements  CommentReactionFragment.HomeActivityIntractionListner, AppBarLayout.OnOffsetChangedListener {
     private final String TAG = LogUtils.makeLogTag(CommunitiesDetailActivity.class);
     @Bind(R.id.app_bar_coomunities_detail)
     AppBarLayout mAppBarLayout;
@@ -490,9 +490,6 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
                 .replace(R.id.about_community_container, shareCommunityFragment).addToBackStack(null).commitAllowingStateLoss();
     }
 
-    @Override
-    public void onErrorOccurence() {
-    }
 
     public void onOwnerClose() {
         final Fragment fragmentCommunityOwnerSearch = getSupportFragmentManager().findFragmentByTag(CommunityOpenAboutFragment.class.getName());
@@ -563,11 +560,6 @@ public class CommunitiesDetailActivity extends BaseActivity implements ShareComm
     }
 
     public void closeOwner() {
-        getSupportFragmentManager().popBackStack();
-    }
-
-    @Override
-    public void onShareClose() {
         getSupportFragmentManager().popBackStack();
     }
 

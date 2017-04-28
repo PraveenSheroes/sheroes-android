@@ -61,7 +61,6 @@ import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.AllMembersView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CommunityView;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CreateCommunityView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -72,7 +71,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_
  * Created by Ajit Kumar on 01-02-2017.
  */
 
-public class CommunityOpenAboutFragment extends BaseFragment implements CommunityView, AdapterView.OnItemClickListener, AdapterView.OnItemSelectedListener, CreateCommunityView, AllMembersView {
+public class CommunityOpenAboutFragment extends BaseFragment implements CommunityView, AdapterView.OnItemClickListener, AdapterView.OnItemSelectedListener, AllMembersView {
     private final String TAG = LogUtils.makeLogTag(CommunityOpenAboutFragment.class);
     @Inject
     MembersPresenter mMemberpresenter;
@@ -432,10 +431,6 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
 
     }
 
-    @Override
-    public void getCreateCommunityResponse(LoginResponse loginResponse) {
-
-    }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -518,11 +513,6 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
         }
     }
 
-
-    @Override
-    public void dialogValue(String dilogval) {
-
-    }
 
     public static class CircleTransform extends BitmapTransformation {
         public CircleTransform(Context context) {

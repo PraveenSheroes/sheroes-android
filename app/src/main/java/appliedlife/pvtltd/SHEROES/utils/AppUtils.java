@@ -111,6 +111,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingWorkExpRequ
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileAddEditEducationRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.sharemail.ShareViaMail;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 
 
@@ -1809,6 +1810,19 @@ public class AppUtils {
         FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, pageNo);
         feedRequestPojo.setIdForFeedDetail(communityId);
         return feedRequestPojo;
+    }
+    public static ShareViaMail shareRequestBuilder(String deepLinkUrl, Long communityId,String emailIds,String subject) {
+        AppUtils appUtils = AppUtils.getInstance();
+        ShareViaMail shareViaMail = new ShareViaMail();
+        shareViaMail.setAppVersion(appUtils.getAppVersionName());
+        shareViaMail.setDeviceUniqueId(appUtils.getDeviceId());
+        //TODO:: change rquest data
+        shareViaMail.setCloudMessagingId(AppConstants.ALL_SEARCH);
+        shareViaMail.setCommunityId(communityId);
+        shareViaMail.setDeepLinkUrl(deepLinkUrl);
+        shareViaMail.setEmailId(emailIds);
+        shareViaMail.setSubject(subject);
+        return shareViaMail;
     }
     /**
      * Request for feed api

@@ -669,7 +669,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             mTvCommunities.setText(getString(R.string.ID_COMMUNITIY));
             mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.footer_icon_text));
         }
-        mTvSearchBox.setVisibility(View.VISIBLE);
+      //  mTvSearchBox.setVisibility(View.VISIBLE);
         mTvSetting.setVisibility(View.GONE);
     }
 

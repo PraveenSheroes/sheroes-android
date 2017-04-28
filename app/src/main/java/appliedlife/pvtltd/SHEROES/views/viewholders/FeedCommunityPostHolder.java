@@ -280,7 +280,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             // StringBuilder coloredFeedCommunityName=new StringBuilder();
             //  coloredFeedCommunityName.append(LEFT_HTML_COMMUNITY_TITLE_FOR_COLOR).append(feedCommunityName).append(RIGHT_HTML_COMMUNITY_TITLE_FOR_COLOR);
             //  StringBuilder finalText=new StringBuilder();
-            if (!feedTitle.equalsIgnoreCase("Admin")) {
+            if (!feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_ADMIN))) {
                 posted.append(feedTitle).append(AppConstants.SPACE).append(LEFT_POSTED).append(mContext.getString(R.string.ID_POSTED_IN)).append(RIGHT_POSTED).append(AppConstants.SPACE);
             }
             posted.append(feedCommunityName);

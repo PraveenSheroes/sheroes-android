@@ -4,8 +4,6 @@ import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
 
-import java.util.HashMap;
-
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
@@ -13,7 +11,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileHorList;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.EditNameDialogListener;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -37,11 +34,6 @@ public class ProfileHorListHolder extends BaseViewHolder<ProfileHorList> {
         super(itemView);
         ButterKnife.bind(this,itemView);
         this.viewInterface = baseHolderInterface;
-        SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
-    }
-    public ProfileHorListHolder(View itemView, EditNameDialogListener baseHolderInterface) {
-        super(itemView);
-        ButterKnife.bind(this,itemView);
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
     }
 

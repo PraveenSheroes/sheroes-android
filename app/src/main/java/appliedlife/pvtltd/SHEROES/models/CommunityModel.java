@@ -13,6 +13,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityRespo
 import appliedlife.pvtltd.SHEROES.models.entities.community.EditCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectedCommunityResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.sharemail.ShareMailResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.sharemail.ShareViaMail;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -108,4 +110,17 @@ public class CommunityModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+    public Observable<ShareMailResponse> shareViaEmailModel(ShareViaMail shareViaMail){
+        LogUtils.info(TAG,"***************share community post****"+new Gson().toJson(shareViaMail));
+        return sheroesAppServiceApi.shareCommunityViaMail(shareViaMail)
+                .map(new Func1<ShareMailResponse, ShareMailResponse>() {
+                    @Override
+                    public ShareMailResponse call(ShareMailResponse shareMailResponse) {
+                        return shareMailResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
 }

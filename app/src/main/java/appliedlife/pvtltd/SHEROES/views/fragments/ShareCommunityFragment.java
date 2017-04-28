@@ -1,37 +1,41 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.presenters.CreateCommunityPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CreateCommunityView;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.EditNameDialogListener;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_LIKE_UNLIKE;
 
 /**
  * Created by Ajit Kumar on 30-01-2017.
  */
 
-public class ShareCommunityFragment extends BaseFragment implements CreateCommunityView, EditNameDialogListener {
+public class ShareCommunityFragment extends BaseFragment {
     private final String TAG = LogUtils.makeLogTag(ShareCommunityFragment.class);
     @Bind(R.id.tv_close_community)
     TextView mTvCloseCommunity;
@@ -43,7 +47,17 @@ public class ShareCommunityFragment extends BaseFragment implements CreateCommun
     TextView mTvCommunityTitle;
     @Bind(R.id.et_share_community_via_email)
     EditText mEtShareViaEmail;
+    @Bind(R.id.tv_share_community_url)
+    TextView mTvShareUrl;
+    @Bind(R.id.pb_login_progress_bar)
+    ProgressBar mProgressBar;
+    @Bind(R.id.tv_share)
+    TextView mTvShare;
     private FeedDetail mFeedDetail;
+    @Inject
+    CreateCommunityPresenter mCreateCommunityPresenter;
+    @Inject
+    AppUtils mAppUtils;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -53,8 +67,15 @@ public class ShareCommunityFragment extends BaseFragment implements CreateCommun
         if (null != getArguments()) {
             mFeedDetail = getArguments().getParcelable(AppConstants.SHARE);
         }
-        if (null != mFeedDetail && StringUtil.isNotNullOrEmptyString(mFeedDetail.getNameOrTitle())) {
-            mTvShareCommunityTitle.setText(mFeedDetail.getNameOrTitle());
+        mCreateCommunityPresenter.attachView(this);
+        setProgressBar(mProgressBar);
+        if (null != mFeedDetail) {
+            if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getNameOrTitle())) {
+                mTvShareCommunityTitle.setText(mFeedDetail.getNameOrTitle());
+            }
+            if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getDeepLinkUrl())) {
+                mTvShareUrl.setText(mFeedDetail.getDeepLinkUrl());
+            }
         }
         mTvCommunityTitle.setText(getString(R.string.ID_SHARE));
         //Fabric.with(getActivity(), new Crashlytics());
@@ -69,17 +90,25 @@ public class ShareCommunityFragment extends BaseFragment implements CreateCommun
         intent.putExtra(Intent.EXTRA_TEXT, mFeedDetail.getDeepLinkUrl());
         startActivity(Intent.createChooser(intent, AppConstants.SHARE));
     }
+
     @OnClick(R.id.tv_share)
     public void shareViaEmail() {
         if (StringUtil.isNotNullOrEmptyString(mEtShareViaEmail.getText().toString())) {
-            Intent intent = new Intent(Intent.ACTION_SEND);
-            intent.setType(AppConstants.SHARE_MENU_TYPE);
-            intent.putExtra(Intent.EXTRA_TEXT, mFeedDetail.getDeepLinkUrl());
-            startActivity(Intent.createChooser(intent, AppConstants.SHARE));
-            Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(AppConstants.MAIL_TO, mEtShareViaEmail.getText().toString(), null));
-            emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.ID_COMM_SHARE_EMAIL_LINK));
-            emailIntent.putExtra(Intent.EXTRA_TEXT, mFeedDetail.getDeepLinkUrl());
-            startActivity(Intent.createChooser(emailIntent, AppConstants.EMAIL_OPTION));
+            boolean cancel = false;
+            View focusView = null;
+            if (!mAppUtils.checkEmail(mEtShareViaEmail.getText().toString())) {
+                mEtShareViaEmail.setError(getString(R.string.ID_ERROR_INVALID_EMAIL));
+                focusView = mEtShareViaEmail;
+                cancel = true;
+            }
+            if (cancel) {
+                focusView.requestFocus();
+
+            } else {
+                mTvShare.setEnabled(false);
+                mCreateCommunityPresenter.shareViaEmailPresenter(mAppUtils.shareRequestBuilder(mFeedDetail.getDeepLinkUrl(), mFeedDetail.getIdOfEntityOrParticipant(), mEtShareViaEmail.getText().toString(), getString(R.string.ID_COMM_SHARE_EMAIL_LINK)));
+            }
+
         } else {
             Toast.makeText(getContext(), getString(R.string.ID_EMAIL_HINT_TEXT), Toast.LENGTH_SHORT).show();
         }
@@ -87,48 +116,35 @@ public class ShareCommunityFragment extends BaseFragment implements CreateCommun
 
     @OnClick(R.id.tv_close_community)
     public void onCloseClick() {
-        ((CommunitiesDetailActivity) getActivity()).onShareClose();
+        ((CommunitiesDetailActivity) getActivity()).getSupportFragmentManager().popBackStackImmediate();
     }
 
     @Override
-    public void getCreateCommunityResponse(LoginResponse loginResponse) {
-
+    public void getSuccessForAllResponse(BaseResponse baseResponse, CommunityEnum communityEnum) {
+        mTvShare.setEnabled(true);
+        switch (communityEnum) {
+            case SHARE_COMMUNITY:
+                sharedMail(baseResponse);
+                break;
+            default:
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + communityEnum);
+        }
     }
 
-    public interface ShareCommunityActivityIntractionListner {
-        void onErrorOccurence();
-
-        void onShareClose();
-    }
-
-    @Override
-    public void dialogValue(String dilogval) {
-
-    }
-
-    @Override
-    public void startProgressBar() {
-
-    }
-
-    @Override
-    public void stopProgressBar() {
-
-    }
-
-    @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
-    public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
-
-    }
-
-    @Override
-    public void onFinishEditDialog(String inputText) {
-        LogUtils.info("value", inputText);
+    protected void sharedMail(BaseResponse baseResponse) {
+        if (null != mFeedDetail) {
+            switch (baseResponse.getStatus()) {
+                case AppConstants.SUCCESS:
+                    mEtShareViaEmail.setText(AppConstants.EMPTY_STRING);
+                    Toast.makeText(getContext(), getString(R.string.ID_SHARED), Toast.LENGTH_SHORT).show();
+                    break;
+                case AppConstants.FAILED:
+                    showError(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_LIKE_UNLIKE);
+                    break;
+                default:
+                    showError(getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
+            }
+        }
     }
 
 }

@@ -84,7 +84,6 @@ import appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CommunityView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CreateCommunityView;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.EditNameDialogListener;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -98,7 +97,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.selectCommunityRequestBu
  * Created by Ajit Kumar on 20-01-2017.
  */
 
-public class CreateCommunityPostFragment extends BaseFragment implements CreateCommunityView, EditNameDialogListener, SelectCommunityFragment.MyDialogFragmentListener, CommunityView {
+public class CreateCommunityPostFragment extends BaseFragment implements CreateCommunityView, SelectCommunityFragment.MyDialogFragmentListener, CommunityView {
 
     @Inject
     Preference<LoginResponse> mUserPreference;
@@ -505,11 +504,6 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
     }
 
 
-    @Override
-    public void getCreateCommunityResponse(LoginResponse loginResponse) {
-
-    }
-
 
     @Override
     public void getSelectedCommunityListSuccess(List<CommunityPostResponse> selected_community_response) {
@@ -583,11 +577,9 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
 
     }
 
-
     @Override
     public void dialogValue(String dilogval) {
         mEtchoosecommunity.setText(dilogval);
-
     }
 
     public void closeDialog(String dialogType, Context cn) {
@@ -611,11 +603,6 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
     @Override
     public void startNextScreen() {
 
-    }
-
-    @Override
-    public void onFinishEditDialog(String inputText) {
-        LogUtils.info("value", inputText);
     }
 
     public static Bitmap getRoundedCroppedBitmap(Bitmap bitmap, int radius) {

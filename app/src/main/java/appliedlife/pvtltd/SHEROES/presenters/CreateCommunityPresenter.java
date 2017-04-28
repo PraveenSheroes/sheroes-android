@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.models.CommunityModel;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerRequest;
@@ -17,6 +18,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.EditCommunityRequest
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectedCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.sharemail.ShareMailResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.sharemail.ShareViaMail;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
@@ -223,6 +226,34 @@ public class CreateCommunityPresenter extends BasePresenter<CommunityView> {
             public void onNext(CreateCommunityOwnerResponse createCommunityOwnerResponse) {
                 getMvpView().stopProgressBar();
                 getMvpView().postCreateCommunityOwner(createCommunityOwnerResponse);
+            }
+
+        });
+        registerSubscription(subscription);
+    }
+    public void shareViaEmailPresenter(ShareViaMail shareViaMail) {
+        if (!NetworkUtil.isConnected(sheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_COMMUNITY_OWNER);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = communityModel.shareViaEmailModel(shareViaMail).subscribe(new Subscriber<ShareMailResponse>() {
+
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                getMvpView().showError(sheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_CREATE_COMMUNITY);
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onNext(ShareMailResponse shareMailResponse) {
+                getMvpView().stopProgressBar();
+                getMvpView().getSuccessForAllResponse(shareMailResponse, CommunityEnum.SHARE_COMMUNITY);
             }
 
         });

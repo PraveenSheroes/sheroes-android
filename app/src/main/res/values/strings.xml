@@ -824,6 +824,7 @@ etur adipiscing elit,sed do eiusmod tempor incididunt ut…</string>
     <string name="ID_ADD">Add</string>
     <string name="ID_JUST_NOW">Just Now</string>
     <string name="ID_EDITED">Edited</string>
+    <string name="ID_SHARED">Successfully shared community</string>
     <string-array name="name">
 
         <item>Topic/Interest</item>

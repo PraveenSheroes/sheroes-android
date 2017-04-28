@@ -22,121 +22,132 @@
             android:background="@drawable/ic_footer_button_icon" />
     </FrameLayout>
 
-    <TextView
-        android:id="@+id/tv_share_community_title"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp_size_38"
-        android:layout_marginRight="@dimen/dp_size_38"
-        android:fontFamily="@string/ID_ROBOTO_REGULAR"
-        android:gravity="center"
-        android:paddingTop="@dimen/dp_size_15"
-        android:textColor="@color/com_post_share_textcolor"
-        android:textSize="@dimen/sp_size_13" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/tv_share_community_url"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp_size_38"
-        android:layout_marginRight="@dimen/dp_size_38"
-        android:fontFamily="@string/ID_ROBOTO_REGULAR"
-        android:gravity="center"
-        android:paddingTop="@dimen/dp_size_10"
-        android:text="@string/ID_SHARE_LINK"
-        android:textColor="@color/com_post_share_textcolor1"
-        android:textSize="@dimen/sp_size_11" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/text3"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp_size_38"
-        android:layout_marginRight="@dimen/dp_size_38"
-        android:layout_marginTop="@dimen/dp_size_30"
-        android:text="@string/ID_COMM_SHARE_EMAIL_LINK"
-        android:textColor="@color/com_share_post_text_color"
-        android:textSize="@dimen/dp_size_12" />
+            <TextView
+                android:id="@+id/tv_share_community_title"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_size_38"
+                android:layout_marginRight="@dimen/dp_size_38"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:gravity="center"
+                android:paddingTop="@dimen/dp_size_15"
+                android:textColor="@color/com_post_share_textcolor"
+                android:textSize="@dimen/sp_size_13" />
 
+            <TextView
+                android:id="@+id/tv_share_community_url"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_size_38"
+                android:layout_marginRight="@dimen/dp_size_38"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:gravity="center"
+                android:textIsSelectable="true"
+                android:paddingTop="@dimen/dp_size_10"
+                android:textColor="@color/com_post_share_textcolor1"
+                android:textSize="@dimen/sp_size_11" />
 
-    <EditText
-        android:id="@+id/et_share_community_via_email"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp_size_38"
-        android:layout_marginRight="@dimen/dp_size_38"
-        android:background="@drawable/new_edit_text_style"
-        android:hint="@string/ID_EMAIL_HINT_TEXT"
-        android:paddingTop="@dimen/dp_size_20"
-        android:textColor="@color/text_color_date_birth"
-        android:textSize="@dimen/sp_size_11" />
+            <TextView
+                android:id="@+id/text3"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_size_38"
+                android:layout_marginRight="@dimen/dp_size_38"
+                android:layout_marginTop="@dimen/dp_size_30"
+                android:text="@string/ID_COMM_SHARE_EMAIL_LINK"
+                android:textColor="@color/com_share_post_text_color"
+                android:textSize="@dimen/dp_size_12" />
 
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="@dimen/dp_size_1"
-        android:layout_marginLeft="@dimen/dp_size_38"
-        android:layout_marginRight="@dimen/dp_size_38"
-        android:layout_marginTop="@dimen/sp_size_12"
-        android:background="@color/share_line_color" />
-
-    <TextView
-        android:id="@+id/tv_share"
-        android:layout_width="fill_parent"
-        android:layout_height="50dp"
-        android:layout_gravity="center"
-        android:layout_marginLeft="@dimen/dp_size_38"
-        android:layout_marginRight="@dimen/dp_size_38"
-        android:layout_marginTop="@dimen/dp_size_24"
-        android:background="@drawable/commu_share_button_backgroung_style"
-        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-        android:gravity="center"
-        android:text="@string/ID_SAHRE_TEXT"
-        android:textSize="@dimen/sp_size_14"
-        android:textColor="@color/text_color_close"
-        android:textStyle="bold" />
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp_size_38"
-        android:layout_marginRight="@dimen/dp_size_38"
-        android:layout_marginTop="@dimen/dp_size_24">
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="@dimen/dp_size_1"
-            android:layout_centerVertical="true"
-            android:background="@color/share_line_color" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:background="@drawable/white_circle"
-            android:gravity="center"
-            android:text="OR"
-            android:textColor="@color/or_color"
-            android:textSize="@dimen/dp_size_12" />
+            <EditText
+                android:id="@+id/et_share_community_via_email"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_size_38"
+                android:layout_marginRight="@dimen/dp_size_38"
+                android:background="@drawable/new_edit_text_style"
+                android:hint="@string/ID_EMAIL_HINT_TEXT"
+                android:paddingTop="@dimen/dp_size_20"
+                android:textColor="@color/text_color_date_birth"
+                android:textSize="@dimen/sp_size_11" />
 
 
-    </RelativeLayout>
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/dp_size_1"
+                android:layout_marginLeft="@dimen/dp_size_38"
+                android:layout_marginRight="@dimen/dp_size_38"
+                android:background="@color/share_line_color" />
 
-    <TextView
-        android:id="@+id/tv_share_via_social_media"
-        android:layout_width="fill_parent"
-        android:layout_height="50dp"
-        android:layout_marginBottom="@dimen/dp_size_65"
-        android:layout_marginLeft="@dimen/dp_size_38"
-        android:layout_marginRight="@dimen/dp_size_38"
-        android:layout_marginTop="@dimen/dp_size_20"
+            <TextView
+                android:id="@+id/tv_share"
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dp_size_38"
+                android:layout_marginRight="@dimen/dp_size_38"
+                android:layout_marginTop="@dimen/dp_size_24"
+                android:background="@drawable/commu_share_button_backgroung_style"
+                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                android:gravity="center"
+                android:text="@string/ID_SAHRE_TEXT"
+                android:textColor="@color/text_color_close"
+                android:textSize="@dimen/sp_size_14" />
 
-        android:background="@drawable/rectangle_btn"
-        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-        android:gravity="center"
-        android:text="@string/ID_COMM_SHARE_BUTTON"
-        android:textColor="@color/white"
-        android:textSize="@dimen/sp_size_14" />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_size_38"
+                android:layout_marginRight="@dimen/dp_size_38"
+                android:layout_marginTop="@dimen/dp_size_24">
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="@dimen/dp_size_1"
+                    android:layout_centerVertical="true"
+                    android:background="@color/share_line_color" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/white_circle"
+                    android:gravity="center"
+                    android:text="OR"
+                    android:textColor="@color/or_color"
+                    android:textSize="@dimen/dp_size_12" />
+
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tv_share_via_social_media"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="@dimen/dp_size_65"
+                android:layout_marginLeft="@dimen/dp_size_38"
+                android:layout_marginRight="@dimen/dp_size_38"
+                android:layout_marginTop="@dimen/dp_size_20"
+                android:background="@drawable/rectangle_btn"
+                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                android:gravity="center"
+                android:text="@string/ID_COMM_SHARE_BUTTON"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp_size_14" />
+        </LinearLayout>
+
+        <include layout="@layout/progress_bar_login"
+           />
+    </FrameLayout>
 
 </LinearLayout>

@@ -526,6 +526,7 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> imple
 
     @OnClick(R.id.tv_article_detail_user_comment_post_menu_third)
     public void menuThirdClick() {
+
         mFeedDetail.setItemPosition(AppConstants.TWO_CONSTANT);
         viewInterface.handleOnClick(mFeedDetail, tvArticleDetailUserCommentPostMenuThird);
     }

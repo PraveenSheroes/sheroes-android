@@ -66,6 +66,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingRatingRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingRatingResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.UserPreferenceRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.UserpreferenseResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.sharemail.ShareMailResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.sharemail.ShareViaMail;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
@@ -192,5 +194,6 @@ public interface SheroesAppServiceApi {
     Observable<MemberListResponse>removePandingMember(@Body RemoveMemberRequest removeMemberRequest);
     @POST("participant/community/approve_joining_request")
     Observable<MemberListResponse>approvePandingMember(@Body ApproveMemberRequest approveMemberRequest);
-
+    @POST("participant/community/invite")
+    Observable<ShareMailResponse>shareCommunityViaMail(@Body ShareViaMail shareViaMail);
 }

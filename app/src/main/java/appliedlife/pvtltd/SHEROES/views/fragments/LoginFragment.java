@@ -234,10 +234,6 @@ public class LoginFragment extends BaseFragment implements LoginView {
             mEmailView.setError(getString(R.string.ID_ERROR_INVALID_EMAIL));
             focusView = mEmailView;
             cancel = true;
-        } else if (!mAppUtils.checkEmail(email)) {
-            mEmailView.setError(getString(R.string.ID_ERROR_INVALID_EMAIL));
-            focusView = mEmailView;
-            cancel = true;
         }
         if (cancel) {
             // There was an error; don't attempt login and focus the first
