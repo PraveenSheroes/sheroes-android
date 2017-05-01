@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -164,6 +165,8 @@ public class OnBoardingHolder extends BaseViewHolder<OnBoardingData> {
         mTvTagData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mTvTagData.setBackground(ContextCompat.getDrawable(mContext, R.drawable.on_boarding_tag_border_ractangle_selected));
+                mTvTagData.setTextColor(ContextCompat.getColor(mContext, R.color.blue));
                 viewInterface.handleOnClick(dataItem, mTvTagData);
             }
         });

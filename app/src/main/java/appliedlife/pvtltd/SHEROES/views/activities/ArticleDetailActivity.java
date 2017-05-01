@@ -108,8 +108,6 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
     }
 
     private void setPagerAndLayouts() {
-        //  ViewCompat.setTransitionName(mAppBarLayout, AppConstants.ARTICLE_DETAIL);
-        //supportPostponeEnterTransition();
         setSupportActionBar(mToolbarArticleDetail);
         mCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
         if (null != mFeedDetail) {

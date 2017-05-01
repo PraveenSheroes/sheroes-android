@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
@@ -34,6 +33,7 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.CustomCollapsingToolbarLayout;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView;
+import appliedlife.pvtltd.SHEROES.views.fragments.ArticleDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobDetailFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -68,7 +68,8 @@ public class JobDetailActivity extends BaseActivity {
     RoundedImageView mIv_job_comp_logo;
     private FeedDetail mFeedDetail;
     int mlogoflag = 0;
-    long mJobId=0;
+    long mJobId = 0;
+    int feedDetailPosition;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,13 +78,18 @@ public class JobDetailActivity extends BaseActivity {
         initActivityTransitions();
         setContentView(R.layout.activity_job_details);
         ButterKnife.bind(this);
-        if (null != getIntent()) {
-            if(null !=getIntent().getExtras()) {
-                if (null != getIntent().getExtras().get(AppConstants.JOB_ID)) {
-                    mJobId = (long) getIntent().getExtras().get(AppConstants.JOB_ID);
+        if (null != getIntent() && null != getIntent().getExtras()) {
+            //&& null != getIntent().getExtras().get(AppConstants.COMMUNITY_POST_ID)
+            if (null != getIntent().getExtras().get(AppConstants.JOB_ID)) {
+                mJobId = (long) getIntent().getExtras().get(AppConstants.JOB_ID);
+                // mCommunityPostId = (long) getIntent().getExtras().get(AppConstants.COMMUNITY_POST_ID);
+                if (mJobId > 0) {
+                    mFeedDetail = new FeedDetail();
+                    mFeedDetail.setIdOfEntityOrParticipant(mJobId);
                 }
+            } else {
+                mFeedDetail = getIntent().getParcelableExtra(AppConstants.JOB_DETAIL);
             }
-            mFeedDetail = getIntent().getParcelableExtra(AppConstants.JOB_DETAIL);
         }
         setPagerAndLayouts();
     }
@@ -98,72 +104,71 @@ public class JobDetailActivity extends BaseActivity {
         finish();
         overridePendingTransition(R.anim.fade_in_dialog, R.anim.fade_out_dialog);
     }
+
     @OnClick(R.id.tv_job_detail_share)
     public void onJobDetailShare() {
 
     }
 
     private void setPagerAndLayouts() {
-        ViewCompat.setTransitionName(mAppBarLayout, AppConstants.JOB_DETAIL);
-        supportPostponeEnterTransition();
         setSupportActionBar(mToolbarJobDetail);
-        mCustomCollapsingToolbarLayout.setExpandedSubTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
         mCustomCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
-        mCustomCollapsingToolbarLayout.setExpandedTitleMarginStart(200);
-        if(mJobId>0) {
-            mFeedDetail=new FeedDetail();
-            mFeedDetail.setIdOfEntityOrParticipant(mJobId);
-        }
         if (null != mFeedDetail) {
-            if (mFeedDetail.isBookmarked()) {
-                mTvJobDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_active, 0, 0, 0);
-            } else {
-                mTvJobDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_detail_white, 0, 0, 0);
-            }
-
-            mCustomCollapsingToolbarLayout.setTitle(mFeedDetail.getNameOrTitle());
-            mCustomCollapsingToolbarLayout.setSubtitle(mFeedDetail.getAuthorName());
-           mTv_job_comp_nm.setText(mFeedDetail.getAuthorName());
-            mTv_job_title.setText(mFeedDetail.getNameOrTitle());
+            feedDetailPosition = mFeedDetail.getItemPosition();
+            mCustomCollapsingToolbarLayout.setTitle(AppConstants.EMPTY_STRING);
+            mCustomCollapsingToolbarLayout.setSubtitle(AppConstants.EMPTY_STRING);
             mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-            mViewPagerAdapter.addFragment(JobDetailFragment.createInstance(mFeedDetail), getString(R.string.ID_JOB));
+            mViewPagerAdapter.addFragment(ArticleDetailFragment.createInstance(mFeedDetail), getString(R.string.ID_ARTICLE));
             mViewPagerJobDetail.setAdapter(mViewPagerAdapter);
-            if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getAuthorImageUrl())) {
-                mlogoflag = 1;
-                Glide.with(this)
-                        .load(mFeedDetail.getAuthorImageUrl())
-                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                        .skipMemoryCache(true)
-                        .into(mIv_job_comp_logo);
-            }
-            if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getImageUrl())) {
-                Glide.with(this)
-                        .load(mFeedDetail.getImageUrl()).asBitmap()
-                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                        .skipMemoryCache(true)
-                        .into(new SimpleTarget<Bitmap>() {
-                            @Override
-                            public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
-                                ivJobDetail.setImageBitmap(resource);
-                                Palette.from(resource).generate(new Palette.PaletteAsyncListener() {
-                                    public void onGenerated(Palette palette) {
-                                        applyPalette(palette);
-                                    }
-                                });
-                            }
-                        });
-
-            } else {
-                ivJobDetail.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.job_default_cover));
-                mTv_job_title.setText(mFeedDetail.getNameOrTitle());
-                if (mlogoflag == 0)
-                    mIv_job_comp_logo.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_createc_ommunity_icon));
-                supportStartPostponedEnterTransition();
-            }
+            setBackGroundImage(mFeedDetail);
         }
     }
 
+    public void setBackGroundImage(FeedDetail feedDetail) {
+        mFeedDetail = feedDetail;
+        mTv_job_comp_nm.setText(mFeedDetail.getAuthorName());
+        mTv_job_title.setText(mFeedDetail.getNameOrTitle());
+        setBookMarkImage();
+        if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getAuthorImageUrl())) {
+            mlogoflag = 1;
+            Glide.with(this)
+                    .load(mFeedDetail.getAuthorImageUrl())
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .skipMemoryCache(true)
+                    .into(mIv_job_comp_logo);
+        }
+        if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getImageUrl())) {
+            Glide.with(this)
+                    .load(mFeedDetail.getImageUrl()).asBitmap()
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .skipMemoryCache(true)
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
+                            ivJobDetail.setImageBitmap(resource);
+                            Palette.from(resource).generate(new Palette.PaletteAsyncListener() {
+                                public void onGenerated(Palette palette) {
+                                    applyPalette(palette);
+                                }
+                            });
+                        }
+                    });
+        } else {
+            ivJobDetail.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.job_default_cover));
+            mTv_job_title.setText(mFeedDetail.getNameOrTitle());
+            if (mlogoflag == 0)
+                mIv_job_comp_logo.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_createc_ommunity_icon));
+            supportStartPostponedEnterTransition();
+        }
+    }
 
+    private void setBookMarkImage() {
+        if (mFeedDetail.isBookmarked()) {
+            mTvJobDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_active, 0, 0, 0);
+        } else {
+            mTvJobDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_detail_white, 0, 0, 0);
+        }
+    }
     private void initActivityTransitions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Slide transition = new Slide();
@@ -176,7 +181,6 @@ public class JobDetailActivity extends BaseActivity {
     private void applyPalette(Palette palette) {
         supportStartPostponedEnterTransition();
     }
-
 
 
     @Override
@@ -200,7 +204,7 @@ public class JobDetailActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-           onBackClick();
+        onBackClick();
     }
 
     @OnClick(R.id.tv_job_detail_bookmark)
@@ -226,6 +230,7 @@ public class JobDetailActivity extends BaseActivity {
         }
         mFeedDetail = feedDetail;
     }
+
     @Override
     public void onShowErrorDialog(String errorReason, FeedParticipationEnum feedParticipationEnum) {
         if (StringUtil.isNotNullOrEmptyString(errorReason)) {
@@ -234,7 +239,7 @@ public class JobDetailActivity extends BaseActivity {
                     showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
                     break;
                 default:
-                    showNetworkTimeoutDoalog(true, false,errorReason);
+                    showNetworkTimeoutDoalog(true, false, errorReason);
             }
         } else {
             showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));

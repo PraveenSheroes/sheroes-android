@@ -68,6 +68,7 @@
             android:layout_marginRight="@dimen/dp_size_16"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:lineSpacingExtra="@dimen/dp_size_3"
+            android:linksClickable="true"
             android:maxLines="@integer/int_value_for_line_2"
             android:textColor="@color/feed_article_label"
             android:textSize="@dimen/sp_size_12" />
@@ -79,6 +80,7 @@
             android:layout_marginRight="@dimen/dp_size_16"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:lineSpacingExtra="@dimen/dp_size_3"
+            android:linksClickable="true"
             android:visibility="gone"
             android:textColor="@color/feed_article_label"
             android:textSize="@dimen/sp_size_12" />

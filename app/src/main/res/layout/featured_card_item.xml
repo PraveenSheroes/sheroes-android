@@ -68,6 +68,7 @@
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:lineSpacingExtra="@dimen/dp_size_3"
             android:maxLines="@integer/int_value_for_line_2"
+            android:linksClickable="true"
             android:textColor="@color/feed_article_label"
             android:textSize="@dimen/sp_size_12" />
         <TextView
@@ -78,6 +79,7 @@
             android:layout_marginRight="@dimen/dp_size_16"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:visibility="gone"
+            android:linksClickable="true"
             android:lineSpacingExtra="@dimen/dp_size_3"
             android:textColor="@color/feed_article_label"
             android:textSize="@dimen/sp_size_12" />

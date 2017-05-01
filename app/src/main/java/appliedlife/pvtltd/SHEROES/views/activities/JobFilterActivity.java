@@ -13,6 +13,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.OnBoardingEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.OnBoardingData;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -52,7 +53,10 @@ public class JobFilterActivity extends BaseActivity  {
     }
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
-        if (baseResponse instanceof GetAllDataDocument) {
+        if (baseResponse instanceof OnBoardingData) {
+            OnBoardingData boardingData = (OnBoardingData) baseResponse;
+
+        }else  if (baseResponse instanceof GetAllDataDocument) {
             GetAllDataDocument getAllDataDocument = (GetAllDataDocument) baseResponse;
             if (null != mOnBoardingSearchDialogFragment) {
                 mOnBoardingSearchDialogFragment.dismiss();

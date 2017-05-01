@@ -92,7 +92,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:background="@color/blue"
+        app:backgroundTint="@color/blue"
+        android:visibility="gone"
+        android:src="@drawable/ic_fab_icon"
+        android:layout_marginBottom="@dimen/dp_size_65"
+        android:layout_marginRight="@dimen/dp_size_20"/>
     <include
         android:id="@+id/fl_feed_full_view"
         layout="@layout/fragment_container"

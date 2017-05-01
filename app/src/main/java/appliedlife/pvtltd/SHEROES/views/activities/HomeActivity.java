@@ -141,6 +141,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     TextView mIvHomeNotification;
     @Bind(R.id.fab_add_community)
     FloatingActionButton mFloatingActionButton;
+    @Bind(R.id.fab_filter)
+    FloatingActionButton mJobFragment;
     @Bind(R.id.li_home_community_button_layout)
     LinearLayout liHomeCommunityButtonLayout;
     GenericRecyclerViewAdapter mAdapter;
@@ -182,7 +184,9 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     .skipMemoryCache(true)
                     .into(ivDrawerProfileCircleIcon);
             mTvUserName.setText(mUserPreference.get().getUserSummary().getFirstName() + AppConstants.SPACE + mUserPreference.get().getUserSummary().getLastName());
-            //mTvUserLocation.setText("Delhi, India");
+           if(null != mUserPreference.get().getUserSummary().getUserBO()&&StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getUserBO().getCityMaster())) {
+               mTvUserLocation.setText(mUserPreference.get().getUserSummary().getUserBO().getCityMaster());
+           }
             Glide.with(this)
                     .load(profile).asBitmap()
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
@@ -234,7 +238,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         };
     }
 
-
+    @OnClick(R.id.fab_filter)
     public void openJobFilterActivity() {
         Intent intent = new Intent(getApplicationContext(), JobFilterActivity.class);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_JOB_FILTER);
@@ -562,6 +566,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     }
 
     public void openJobFragment() {
+        mJobFragment.setVisibility(View.VISIBLE);
         mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_JOBS));
         liHomeCommunityButtonLayout.setVisibility(View.GONE);
         mFlHomeFooterList.setVisibility(View.VISIBLE);
@@ -637,6 +642,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 mFragmentOpen.setBookmarkFragment(false);
             }
         } else if (mFragmentOpen.isJobFragment()) {
+            mJobFragment.setVisibility(View.GONE);
             getSupportFragmentManager().popBackStackImmediate();
             initHomeViewPagerAndTabs();
             setHomeFeedCommunityData();

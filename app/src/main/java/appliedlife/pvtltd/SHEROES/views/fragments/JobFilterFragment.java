@@ -123,6 +123,7 @@ public class JobFilterFragment extends BaseFragment {
 
     @OnClick(R.id.tv_close_community)
     public void backBtnClick() {
+        ((JobFilterActivity) getActivity()).onBackPressed();
     }
 
     @OnClick(R.id.tv_opportunity_type_lable)

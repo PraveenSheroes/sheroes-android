@@ -38,7 +38,6 @@ import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by Ajit Kumar on 19-02-2017.
@@ -132,11 +131,6 @@ public class JobFragment extends BaseFragment {
         LogUtils.info(TAG,"*******************"+new Gson().toJson(feedRequestPojo));
         LogUtils.info(TAG,"*************JobFilter data******");
     }
-    @OnClick(R.id.fab_filter)
-    public void clickFilter() {
-        ((HomeActivity)getActivity()).openJobFilterActivity();
-    }
-
     private void logUser() {
         // TODO: Use the current user's information
         // You can call any combination of these three methods
