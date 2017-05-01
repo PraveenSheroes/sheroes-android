@@ -156,18 +156,34 @@ public class OnBoardingHolder extends BaseViewHolder<OnBoardingData> {
         return passedRow;
     }*/
 
-    private void inflateTagData(HorizontalFlowLayout liRow, LabelValue stringList) {
+    private void inflateTagData(HorizontalFlowLayout liRow, final LabelValue stringList) {
         LayoutInflater columnInflate = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         LinearLayout liTagLable = (LinearLayout) columnInflate.inflate(R.layout.tag_item_ui_for_onboarding, null);
         final TextView mTvTagData = (TextView) liTagLable.findViewById(R.id.tv_tag_data);
+        mTvTagData.setBackground(ContextCompat.getDrawable(mContext, R.drawable.on_boarding_tag_border_rectangle_unselected));
+        mTvTagData.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+        mTvTagData.setPadding(15, 15, 15, 15);
         mTvTagData.setText(stringList.getLabel());
         mTvTagData.setTag(stringList);
+
         mTvTagData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mTvTagData.setBackground(ContextCompat.getDrawable(mContext, R.drawable.on_boarding_tag_border_ractangle_selected));
-                mTvTagData.setTextColor(ContextCompat.getColor(mContext, R.color.blue));
                 viewInterface.handleOnClick(dataItem, mTvTagData);
+                if(!stringList.isSelected()) {
+                    stringList.setSelected(true);
+                    mTvTagData.setTag(stringList);
+                    mTvTagData.setBackground(ContextCompat.getDrawable(mContext, R.drawable.on_boarding_tag_border_ractangle_selected));
+                    mTvTagData.setTextColor(ContextCompat.getColor(mContext, R.color.blue));
+                    mTvTagData.setPadding(15, 15, 15, 15);
+                }else
+                {
+                    stringList.setSelected(false);
+                    mTvTagData.setTag(stringList);
+                    mTvTagData.setBackground(ContextCompat.getDrawable(mContext, R.drawable.on_boarding_tag_border_rectangle_unselected));
+                    mTvTagData.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+                    mTvTagData.setPadding(15, 15, 15, 15);
+                }
             }
         });
         liRow.addView(liTagLable);

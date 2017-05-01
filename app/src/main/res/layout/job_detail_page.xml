@@ -7,7 +7,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/dp_size_22"
         android:layout_marginRight="@dimen/dp_size_22"
         android:layout_marginTop="@dimen/dp_size_10"
         android:orientation="vertical">
@@ -23,6 +22,7 @@
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_job_package"
                 android:drawablePadding="@dimen/dp_size_10"
+                android:layout_marginLeft="@dimen/dp_size_22"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:paddingLeft="@dimen/dp_size_5"
                 android:textColor="@color/searchbox_hint_text_color"
@@ -32,10 +32,10 @@
                 android:id="@+id/tv_job_opening"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_size_50"
                 android:layout_toRightOf="@+id/tv_job_package"
                 android:drawableLeft="@drawable/ic_job_opening"
                 android:drawablePadding="@dimen/dp_size_10"
+                android:layout_marginLeft="@dimen/dp_size_22"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:textColor="@color/searchbox_hint_text_color"
                 android:textSize="@dimen/sp_size_12" />
@@ -49,6 +49,7 @@
             android:layout_marginTop="@dimen/dp_size_20"
             android:drawableLeft="@drawable/ic_job_type"
             android:drawablePadding="@dimen/dp_size_10"
+            android:layout_marginLeft="@dimen/dp_size_22"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:paddingLeft="@dimen/dp_size_5"
             android:textColor="@color/searchbox_hint_text_color"
@@ -60,6 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_job_opt"
             android:layout_marginTop="@dimen/dp_size_20"
+            android:layout_marginLeft="@dimen/dp_size_22"
             android:drawableLeft="@drawable/ic_job_name"
             android:drawablePadding="@dimen/dp_size_10"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
@@ -80,6 +82,7 @@
                 android:layout_marginTop="@dimen/dp_size_20"
                 android:drawableLeft="@drawable/ic_job_date_time"
                 android:drawablePadding="@dimen/dp_size_10"
+                android:layout_marginLeft="@dimen/dp_size_22"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:paddingLeft="@dimen/dp_size_5"
                 android:textColor="@color/searchbox_hint_text_color"
@@ -90,7 +93,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_job_skill"
-                android:layout_marginLeft="@dimen/dp_size_50"
+                android:layout_marginLeft="@dimen/dp_size_22"
                 android:layout_marginTop="@dimen/dp_size_20"
                 android:layout_toRightOf="@+id/tv_job_start_date"
                 android:drawableLeft="@drawable/ic_dead_line"
@@ -105,6 +108,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_job_start_date"
             android:layout_marginTop="@dimen/dp_size_20"
+            android:layout_marginLeft="@dimen/dp_size_22"
             android:drawableLeft="@drawable/ic_job_type"
             android:drawablePadding="@dimen/dp_size_10"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
@@ -121,6 +125,7 @@
             android:drawableLeft="@drawable/ic_job_location"
             android:drawablePadding="@dimen/dp_size_10"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:layout_marginLeft="@dimen/dp_size_22"
             android:paddingLeft="@dimen/dp_size_5"
             android:textColor="@color/searchbox_hint_text_color"
             android:textSize="@dimen/sp_size_12" />
@@ -129,6 +134,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_size_1"
             android:layout_marginTop="@dimen/dp_size_21"
+            android:layout_marginLeft="@dimen/dp_size_22"
             android:background="@color/line_color" />
 
         <TextView
@@ -138,6 +144,7 @@
             android:layout_marginTop="@dimen/dp_size_25"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:text="@string/ID_JOB_DES"
+            android:layout_marginLeft="@dimen/dp_size_22"
             android:textAllCaps="true"
             android:textColor="@color/job_filter_desc_color" />
 
@@ -147,6 +154,7 @@
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/dp_size_25"
             android:linksClickable="true"
+            android:layout_marginLeft="@dimen/dp_size_22"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:textColor="@color/job_filter_desc_color"
             android:textSize="@dimen/sp_size_12" />

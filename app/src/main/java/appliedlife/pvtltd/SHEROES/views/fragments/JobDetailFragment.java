@@ -21,6 +21,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
@@ -64,7 +65,8 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
     private FeedDetail mFeedDetail;
     private FragmentListRefreshData mFragmentListRefreshData;
     private AppUtils mAppUtils;
-
+    private JobDetailPojo jobDetailPojo;
+    private  List<JobDetailPojo> joblist;
     public static JobDetailFragment createInstance(FeedDetail feedDetail) {
         JobDetailFragment jobDetailFragment = new JobDetailFragment();
         Bundle bundle = new Bundle();
@@ -111,9 +113,10 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
         List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
         if (StringUtil.isNotEmptyCollection(feedDetailList) && mAdapter != null) {
-            List<JobDetailPojo> joblist = new ArrayList<>();
-            JobDetailPojo jobDetailPojo = new JobDetailPojo();
+            joblist = new ArrayList<>();
+            jobDetailPojo = new JobDetailPojo();
             jobDetailPojo.setId(AppConstants.ONE_CONSTANT);
+            ((JobDetailActivity) getActivity()).setBackGroundImage(feedDetailList.get(0));
             jobDetailPojo.setFeedDetail(feedDetailList.get(0));
             joblist.add(jobDetailPojo);
             if (feedDetailList.get(0).isApplied()) {
@@ -123,6 +126,7 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
                 mtv_apply_job.setText(getString(R.string.ID_APPLY));
                 mtv_apply_job.setEnabled(true);
             }
+            mAdapter.notifyDataSetChanged();
             mAdapter.setSheroesGenericListData(joblist);
             mAdapter.notifyDataSetChanged();
         }
@@ -170,16 +174,30 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
 
     protected void jobDetailBookMarkSuccess(BaseResponse baseResponse) {
         if (null != mFeedDetail) {
-            switch (baseResponse.getStatus()) {
-                case AppConstants.SUCCESS:
-                    ((JobDetailActivity) getActivity()).onJobBookmarkClick(mFeedDetail);
-                    break;
-                case AppConstants.FAILED:
-                    showError(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_BOOKMARK_UNBOOKMARK);
-                    break;
-                default:
-                    showError(getString(R.string.ID_GENERIC_ERROR), ERROR_BOOKMARK_UNBOOKMARK);
+            if (baseResponse instanceof BookmarkResponsePojo) {
+                switch (baseResponse.getStatus()) {
+                    case AppConstants.SUCCESS:
+                        ((JobDetailActivity) getActivity()).mTvJobDetailBookmark.setEnabled(true);
+                        break;
+                    case AppConstants.FAILED:
+                        if (!mFeedDetail.isBookmarked()) {
+                            mFeedDetail.setBookmarked(true);
+                            jobDetailPojo.setFeedDetail(mFeedDetail);
+                        } else {
+                            mFeedDetail.setBookmarked(false);
+                            jobDetailPojo.setFeedDetail(mFeedDetail);
+                        }
+                        joblist.clear();
+                        joblist.add(jobDetailPojo);
+                        mAdapter.notifyDataSetChanged();
+                        ((JobDetailActivity) getActivity()).onJobBookmarkClick(mFeedDetail);
+                        showError(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_BOOKMARK_UNBOOKMARK);
+                        break;
+                    default:
+                        showError(getString(R.string.ID_GENERIC_ERROR), ERROR_BOOKMARK_UNBOOKMARK);
+                }
             }
         }
+
     }
 }

@@ -84,6 +84,32 @@
                     android:layout_marginRight="@dimen/dp_size_25"
                     android:padding="@dimen/dp_size_10"
                     android:drawableLeft="@drawable/ic_back_white"/>
+                <LinearLayout
+                    android:id="@+id/li_header"
+                    android:layout_width="@dimen/dp_size_212"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/tv_job_detail_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/sp_size_14"
+                        android:lines="@integer/int_value_for_line_1"
+                        android:ellipsize="end"
+                        android:textColor="@color/white"
+                        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                        />
+                    <TextView
+                        android:id="@+id/tv_job_detail_subtitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/sp_size_12"
+                        android:gravity="center"
+                        android:lines="@integer/int_value_for_line_1"
+                        android:textColor="@color/white"
+                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                        />
+                </LinearLayout>
                 <TextView
                     android:id="@+id/tv_job_detail_share"
                     android:layout_width="wrap_content"

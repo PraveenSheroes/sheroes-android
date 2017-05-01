@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.transition.Slide;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -33,7 +34,6 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.CustomCollapsingToolbarLayout;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView;
-import appliedlife.pvtltd.SHEROES.views.fragments.ArticleDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobDetailFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -43,14 +43,14 @@ import butterknife.OnClick;
  * Created by SHEROES-TECH on 20-02-2017.
  */
 
-public class JobDetailActivity extends BaseActivity {
+public class JobDetailActivity extends BaseActivity implements  AppBarLayout.OnOffsetChangedListener {
     private final String TAG = LogUtils.makeLogTag(JobDetailActivity.class);
     @Bind(R.id.app_bar_job_detail)
     AppBarLayout mAppBarLayout;
     @Bind(R.id.iv_job_detail)
     ImageView ivJobDetail;
     @Bind(R.id.tv_job_detail_bookmark)
-    TextView mTvJobDetailBookmark;
+    public TextView mTvJobDetailBookmark;
     @Bind(R.id.view_pager_job_detail)
     ViewPager mViewPagerJobDetail;
     ViewPagerAdapter mViewPagerAdapter;
@@ -58,6 +58,10 @@ public class JobDetailActivity extends BaseActivity {
     Toolbar mToolbarJobDetail;
     @Bind(R.id.tv_job_title)
     TextView mTv_job_title;
+    @Bind(R.id.tv_job_detail_title)
+    TextView mTvJobDetailTitle;
+    @Bind(R.id.tv_job_detail_subtitle)
+    TextView mTvJobDetailSubTitle;
     @Bind(R.id.tv_job_detail_share)
     TextView mTv_job_detail_share;
     @Bind(R.id.collapsing_toolbar_job_detail)
@@ -70,7 +74,8 @@ public class JobDetailActivity extends BaseActivity {
     int mlogoflag = 0;
     long mJobId = 0;
     int feedDetailPosition;
-
+    @Bind(R.id.li_header)
+    public LinearLayout mLiHeader;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +83,7 @@ public class JobDetailActivity extends BaseActivity {
         initActivityTransitions();
         setContentView(R.layout.activity_job_details);
         ButterKnife.bind(this);
+        mAppBarLayout.addOnOffsetChangedListener(this);
         if (null != getIntent() && null != getIntent().getExtras()) {
             //&& null != getIntent().getExtras().get(AppConstants.COMMUNITY_POST_ID)
             if (null != getIntent().getExtras().get(AppConstants.JOB_ID)) {
@@ -107,7 +113,10 @@ public class JobDetailActivity extends BaseActivity {
 
     @OnClick(R.id.tv_job_detail_share)
     public void onJobDetailShare() {
-
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType(AppConstants.SHARE_MENU_TYPE);
+        intent.putExtra(Intent.EXTRA_TEXT, mFeedDetail.getDeepLinkUrl());
+        startActivity(Intent.createChooser(intent, AppConstants.SHARE));
     }
 
     private void setPagerAndLayouts() {
@@ -118,7 +127,7 @@ public class JobDetailActivity extends BaseActivity {
             mCustomCollapsingToolbarLayout.setTitle(AppConstants.EMPTY_STRING);
             mCustomCollapsingToolbarLayout.setSubtitle(AppConstants.EMPTY_STRING);
             mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-            mViewPagerAdapter.addFragment(ArticleDetailFragment.createInstance(mFeedDetail), getString(R.string.ID_ARTICLE));
+            mViewPagerAdapter.addFragment(JobDetailFragment.createInstance(mFeedDetail), getString(R.string.ID_ARTICLE));
             mViewPagerJobDetail.setAdapter(mViewPagerAdapter);
             setBackGroundImage(mFeedDetail);
         }
@@ -128,6 +137,8 @@ public class JobDetailActivity extends BaseActivity {
         mFeedDetail = feedDetail;
         mTv_job_comp_nm.setText(mFeedDetail.getAuthorName());
         mTv_job_title.setText(mFeedDetail.getNameOrTitle());
+        mTvJobDetailSubTitle.setText(mFeedDetail.getAuthorName());
+        mTvJobDetailTitle.setText(mFeedDetail.getNameOrTitle());
         setBookMarkImage();
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getAuthorImageUrl())) {
             mlogoflag = 1;
@@ -209,8 +220,15 @@ public class JobDetailActivity extends BaseActivity {
 
     @OnClick(R.id.tv_job_detail_bookmark)
     public void onBookMarkClick() {
-        mFeedDetail.setItemPosition(0);
+        mTvJobDetailBookmark.setEnabled(false);
+        mFeedDetail.setItemPosition(AppConstants.NO_REACTION_CONSTANT);
         bookmarkCall();
+        if (!mFeedDetail.isBookmarked()) {
+            mFeedDetail.setBookmarked(true);
+        } else {
+            mFeedDetail.setBookmarked(false);
+        }
+        setBookMarkImage();
     }
 
     private void bookmarkCall() {
@@ -219,18 +237,17 @@ public class JobDetailActivity extends BaseActivity {
             ((JobDetailFragment) fragment).bookMarkForDetailCard(mFeedDetail);
         }
     }
-
     public void onJobBookmarkClick(FeedDetail feedDetail) {
-        if (!feedDetail.isBookmarked()) {
-            feedDetail.setBookmarked(true);
-            mTvJobDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_active, 0, 0, 0);
-        } else {
-            feedDetail.setBookmarked(false);
-            mTvJobDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_detail_white, 0, 0, 0);
-        }
+            mTvJobDetailBookmark.setEnabled(true);
+            if (!feedDetail.isBookmarked()) {
+                feedDetail.setBookmarked(true);
+                mTvJobDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_active, 0, 0, 0);
+            } else {
+                feedDetail.setBookmarked(false);
+                mTvJobDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_detail_white, 0, 0, 0);
+            }
         mFeedDetail = feedDetail;
     }
-
     @Override
     public void onShowErrorDialog(String errorReason, FeedParticipationEnum feedParticipationEnum) {
         if (StringUtil.isNotNullOrEmptyString(errorReason)) {
@@ -243,6 +260,17 @@ public class JobDetailActivity extends BaseActivity {
             }
         } else {
             showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
+        }
+
+    }
+    @Override
+    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+        if (verticalOffset >= AppConstants.NO_REACTION_CONSTANT) {
+            mCustomCollapsingToolbarLayout.setTitle(AppConstants.EMPTY_STRING);
+            mCustomCollapsingToolbarLayout.setSubtitle(AppConstants.EMPTY_STRING);
+            mLiHeader.setVisibility(View.INVISIBLE);
+        } else {
+            mLiHeader.setVisibility(View.VISIBLE);
         }
 
     }

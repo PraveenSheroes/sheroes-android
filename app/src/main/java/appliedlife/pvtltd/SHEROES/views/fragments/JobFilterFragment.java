@@ -39,6 +39,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.enums.OnBoardingEnum.LOCATION;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.jobCategoryRequestBuilder;
 
 /**
  * Created by Ajit Kumar on 10-02-2017.
@@ -58,33 +59,35 @@ public class JobFilterFragment extends BaseFragment {
     TextView tvLocationData;
     @Bind(R.id.tv_functional_area)
     TextView tvFunctionArea;
+    private int minSeekValue = 0;
+    private int maxSeekValue = 25;
     private HashMap<String, HashMap<String, ArrayList<LabelValue>>> mMasterDataResult;
     @Inject
     Preference<MasterDataResponse> mUserPreferenceMasterData;
     @Inject
     AppUtils appUtils;
     private GenericRecyclerViewAdapter mAdapter;
-    private GetAllDataDocument getAllDataDocument;
-    private List<String> cities=new ArrayList<>();
-    private List<String> functionArea=new ArrayList<>();
-    private List<String> opportunityType=new ArrayList<>();
-    private List<String> skill=new ArrayList<>();
+    private List<String> cities = new ArrayList<>();
+    private List<String> functionArea = new ArrayList<>();
+    private List<String> skill = new ArrayList<>();
     private Integer experienceFrom;
     private Integer experienceTo;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.job_filter_fragment, container, false);
         ButterKnife.bind(this, view);
-        RangeSeekBar<Integer> seekBar = (RangeSeekBar<Integer>)view.findViewById(R.id.rangeSeekbar);
-        seekBar.setRangeValues(0, 25);
+        RangeSeekBar<Integer> seekBar = (RangeSeekBar<Integer>) view.findViewById(R.id.rangeSeekbar);
+        seekBar.setRangeValues(minSeekValue, maxSeekValue);
+        tvExp.setText(minSeekValue + AppConstants.DASH + maxSeekValue + AppConstants.SPACE + getString(R.string.ID_YEARS));
         seekBar.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener<Integer>() {
             @Override
             public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Integer minValue, Integer maxValue) {
                 //Now you have the minValue and maxValue of your RangeSeekbar
-                experienceFrom=minValue;
-                experienceTo=maxValue;
-                tvExp.setText(minValue +AppConstants.DASH + maxValue + AppConstants.SPACE+getString(R.string.ID_YEARS));
+                experienceFrom = minValue;
+                experienceTo = maxValue;
+                tvExp.setText(minValue + AppConstants.DASH + maxValue + AppConstants.SPACE + getString(R.string.ID_YEARS));
             }
         });
 
@@ -108,7 +111,6 @@ public class JobFilterFragment extends BaseFragment {
     }
 
     public void locationData(GetAllDataDocument getAllDataDocument) {
-        this.getAllDataDocument = getAllDataDocument;
         if (StringUtil.isNotNullOrEmptyString(getAllDataDocument.getTitle())) {
             cities.add(getAllDataDocument.getTitle());
             tvLocationData.setText(getAllDataDocument.getTitle());
@@ -117,7 +119,7 @@ public class JobFilterFragment extends BaseFragment {
 
     @OnClick(R.id.tv_save_job_filter)
     public void applyFilterOnClick() {
-        FeedRequestPojo feedRequestPojo = appUtils.jobCategoryRequestBuilder(AppConstants.FEED_JOB,AppConstants.ONE_CONSTANT,cities,experienceFrom,experienceTo,functionArea,opportunityType,skill);
+        FeedRequestPojo feedRequestPojo = jobCategoryRequestBuilder(AppConstants.FEED_JOB, AppConstants.ONE_CONSTANT, cities, experienceFrom, experienceTo, functionArea, ((JobFilterActivity) getActivity()).listOfOpportunity, skill);
         ((JobFilterActivity) getActivity()).applyFilterData(feedRequestPojo);
     }
 
@@ -134,23 +136,22 @@ public class JobFilterFragment extends BaseFragment {
     @OnClick(R.id.tv_loaction_label)
     public void locationJob() {
         tvLocationData.setVisibility(View.VISIBLE);
-        ((JobFilterActivity)getActivity()).searchLocationData(AppConstants.JOB_AT_GET_ALL_DATA_KEY, LOCATION);
+        ((JobFilterActivity) getActivity()).searchLocationData(AppConstants.LOCATION_CITY_GET_ALL_DATA_KEY, LOCATION);
 
     }
 
     @OnClick(R.id.tv_functional_area_lable)
     public void functionalArea() {
-      List<OnBoardingData> boardingDataList=functionalAreaValues();
-        StringBuilder stringBuilder=new StringBuilder();
-        for(OnBoardingData onBoardingData:boardingDataList)
-        {
+        List<OnBoardingData> boardingDataList = functionalAreaValues();
+        StringBuilder stringBuilder = new StringBuilder();
+        for (OnBoardingData onBoardingData : boardingDataList) {
             functionArea.add(onBoardingData.getCategory());
             stringBuilder.append(onBoardingData.getCategory());
             stringBuilder.append(AppConstants.COMMA);
         }
-        String functionalArea=stringBuilder.toString();
-        if(StringUtil.isNotNullOrEmptyString(functionalArea)) {
-            tvFunctionArea.setText(functionalArea.substring(0,functionalArea.length()-1));
+        String functionalArea = stringBuilder.toString();
+        if (StringUtil.isNotNullOrEmptyString(functionalArea)) {
+            tvFunctionArea.setText(functionalArea.substring(0, functionalArea.length() - 1));
         }
         tvFunctionArea.setVisibility(View.VISIBLE);
     }
@@ -171,7 +172,6 @@ public class JobFilterFragment extends BaseFragment {
             Set<String> lookingForCategorySet = hashMap.keySet();
             for (String lookingForCategory : lookingForCategorySet) {
                 OnBoardingData boardingData = new OnBoardingData();
-                opportunityType.add(lookingForCategory);
                 boardingData.setCategory(lookingForCategory);
                 boardingData.setBoardingDataList(hashMap.get(lookingForCategory));
                 listBoardingList.add(boardingData);
@@ -180,6 +180,7 @@ public class JobFilterFragment extends BaseFragment {
         }
         return null;
     }
+
     private List<OnBoardingData> functionalAreaValues() {
         if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && null != mUserPreferenceMasterData.get().getData()) {
             mMasterDataResult = mUserPreferenceMasterData.get().getData();

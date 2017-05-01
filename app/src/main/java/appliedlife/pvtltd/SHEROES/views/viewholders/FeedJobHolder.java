@@ -79,11 +79,21 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
     public void bindData(FeedDetail item, final Context context, int position) {
         this.dataItem = item;
         this.mContext = context;
+        dataItem.setItemPosition(position);
         tvFeedJobUserBookmark.setEnabled(true);
         if (!dataItem.isTrending()) {
             imageOperations(context);
         }
         allTextViewStringOperations(context);
+        onBookMarkClick();
+    }
+    private void onBookMarkClick() {
+        if (dataItem.isBookmarked()) {
+            tvFeedJobUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_active, 0);
+        } else {
+            tvFeedJobUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_in_active, 0);
+        }
+
     }
 
     private void imageOperations(Context context) {
@@ -147,12 +157,6 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
         } else {
             tvFeedJobApplied.setVisibility(View.INVISIBLE);
         }
-        if (dataItem.isBookmarked()) {
-            tvFeedJobUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_active, 0);
-        } else {
-            tvFeedJobUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_in_active, 0);
-        }
-
 
     }
 
@@ -160,12 +164,17 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
     public void isBookMarkClick() {
         dataItem.setTrending(true);
         tvFeedJobUserBookmark.setEnabled(false);
-        dataItem.setItemPosition(getAdapterPosition());
         if (dataItem.isBookmarked()) {
             viewInterface.handleOnClick(dataItem, tvFeedJobUserBookmark);
         } else {
             viewInterface.handleOnClick(dataItem, tvFeedJobUserBookmark);
         }
+        if (!dataItem.isBookmarked()) {
+            dataItem.setBookmarked(true);
+        } else {
+            dataItem.setBookmarked(false);
+        }
+        onBookMarkClick();
     }
 
     @OnClick(R.id.tv_feed_job_user_menu)

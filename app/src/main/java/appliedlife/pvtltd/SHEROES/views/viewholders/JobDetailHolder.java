@@ -33,7 +33,7 @@ public class JobDetailHolder extends BaseViewHolder<JobDetailPojo> {
     private FeedDetail mFeedDetail;
     private Context mContext;
     @Bind(R.id.tv_job_des)
-    TextView mTv_job_des;
+    TextView mTvJobDes;
     @Bind(R.id.tv_job_end_date)
     TextView mTvJobEndDate;
     @Bind(R.id.tv_job_start_date)
@@ -66,7 +66,6 @@ public class JobDetailHolder extends BaseViewHolder<JobDetailPojo> {
         mContext = context;
         mFeedDetail = dataItem.getFeedDetail();
         if (null != mFeedDetail) {
-
             jobTextViewOperation();
         }
     }
@@ -76,9 +75,9 @@ public class JobDetailHolder extends BaseViewHolder<JobDetailPojo> {
         String description =mFeedDetail.getListDescription();
         if (StringUtil.isNotNullOrEmptyString(description)) {
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                mTv_job_des.setText(Html.fromHtml(description, 0)); // for 24 api and more
+                mTvJobDes.setText(Html.fromHtml(description, 0)); // for 24 api and more
             } else {
-                mTv_job_des.setText(Html.fromHtml(description));// or for older api
+                mTvJobDes.setText(Html.fromHtml(description));// or for older api
             }
         }
         if (StringUtil.isNotEmptyCollection(mFeedDetail.getSearchTextJobEmpTypes())) {
@@ -88,6 +87,8 @@ public class JobDetailHolder extends BaseViewHolder<JobDetailPojo> {
                 mergeJobTypes += jobType + AppConstants.PIPE;
             }
             mTvJobOpt.setText(mergeJobTypes.substring(0, mergeJobTypes.length() - 1));
+        } else {
+            mTvJobOpt.setVisibility(View.GONE);
         }
 
         if (StringUtil.isNotEmptyCollection(mFeedDetail.getSearchTextJobSkills())) {
@@ -98,14 +99,20 @@ public class JobDetailHolder extends BaseViewHolder<JobDetailPojo> {
                 mergeJobSkills.append(AppConstants.COMMA);
             }
             mTvJobSkill.setText(mergeJobSkills.toString().substring(0, mergeJobSkills.toString().length() - 1));
+        } else {
+            mTvJobSkill.setVisibility(View.GONE);
         }
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getStartDate())) {
             long startDate = mDateUtil.getTimeInMillis(mFeedDetail.getStartDate(), AppConstants.DATE_FORMAT);
             mTvJobStartDate.setText(mDateUtil.getDateFromMillisecondsWithFormat(startDate, AppConstants.DATE_FORMAT_FOR_JOB));
+        } else {
+            mTvJobStartDate.setVisibility(View.GONE);
         }
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getEndDate())) {
             long endDate = mDateUtil.getTimeInMillis(mFeedDetail.getEndDate(), AppConstants.DATE_FORMAT);
             mTvJobEndDate.setText(mDateUtil.getDateFromMillisecondsWithFormat(endDate, AppConstants.DATE_FORMAT_FOR_JOB));
+        } else {
+            mTvJobEndDate.setVisibility(View.GONE);
         }
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getAuthorCityName())) {
             mTvJobLocation.setText(mFeedDetail.getAuthorCityName());
@@ -122,6 +129,9 @@ public class JobDetailHolder extends BaseViewHolder<JobDetailPojo> {
             }
             mTvJobPackage.setText(jobPackage.toString());
         }
+        else {
+            mTvJobPackage.setVisibility(View.GONE);
+        }
         if (StringUtil.isNotEmptyCollection(mFeedDetail.getEducationDegreeNames())) {
             StringBuilder education = new StringBuilder();
             for (String degreeName : mFeedDetail.getEducationDegreeNames()) {
@@ -132,12 +142,12 @@ public class JobDetailHolder extends BaseViewHolder<JobDetailPojo> {
                 mTvJobEducation.setText(education.toString().substring(0, education.toString().length() - 1));
             }
         } else {
-            mTvJobEducation.setVisibility(View.INVISIBLE);
+            mTvJobEducation.setVisibility(View.GONE);
         }
         if (mFeedDetail.getNoOfOpenings() > 0) {
             mTvJobOpening.setText(mFeedDetail.getNoOfOpenings() + AppConstants.SPACE + mContext.getString(R.string.ID_JOB_OPENING));
         } else {
-            mTvJobOpening.setVisibility(View.INVISIBLE);
+            mTvJobOpening.setVisibility(View.GONE);
         }
 
 

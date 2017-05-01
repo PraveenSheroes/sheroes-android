@@ -36,7 +36,7 @@ public class SheroesDeepLinkingActivity extends Activity {
                     String urlOfSharedCard;
                     urlOfSharedCard = mData.toString();
                     try {
-                        if (null != urlOfSharedCard) {
+                        if (StringUtil.isNotNullOrEmptyString(urlOfSharedCard)) {
                             indexOfFourthBackSlace = findNthIndexOf(urlOfSharedCard, AppConstants.BACK_SLASH, 4);
                             if (indexOfFourthBackSlace > 0) {
                                 baseUrl = urlOfSharedCard.substring(0, indexOfFourthBackSlace);
@@ -49,6 +49,11 @@ public class SheroesDeepLinkingActivity extends Activity {
                                     }
                                 }
                             }
+                        }else
+                        {
+                            Intent homeFeed = new Intent(this, HomeActivity.class);
+                            startActivity(homeFeed);
+                            finish();
                         }
                     } catch (Exception e) {
                     }
@@ -75,9 +80,9 @@ public class SheroesDeepLinkingActivity extends Activity {
                 String id = urlSharedViaSocial.substring(sareid + 1, fullLength);
                 byte[] id1 = Base64.decode(id, Base64.DEFAULT);
                 dataIdString = new String(id1, AppConstants.UTF_8);
-                Intent into = new Intent(SheroesDeepLinkingActivity.this, ArticleDetailActivity.class);
-                into.putExtra(AppConstants.ARTICLE_ID, Long.parseLong(dataIdString));
-                startActivity(into);
+                Intent articleDetail = new Intent(SheroesDeepLinkingActivity.this, ArticleDetailActivity.class);
+                articleDetail.putExtra(AppConstants.ARTICLE_ID, Long.parseLong(dataIdString));
+                startActivity(articleDetail);
                 finish();
             } catch (Exception e) {
                 Intent into = new Intent(this, HomeActivity.class);
@@ -90,9 +95,9 @@ public class SheroesDeepLinkingActivity extends Activity {
                 String id = urlSharedViaSocial.substring(sareid + 1, fullLength);
                 byte[] id1 = Base64.decode(id, Base64.DEFAULT);
                 dataIdString = new String(id1, AppConstants.UTF_8);
-                Intent into = new Intent(SheroesDeepLinkingActivity.this, JobDetailActivity.class);
-                into.putExtra(AppConstants.JOB_ID, Long.parseLong(dataIdString));
-                startActivity(into);
+                Intent jobDetail = new Intent(SheroesDeepLinkingActivity.this, JobDetailActivity.class);
+                jobDetail.putExtra(AppConstants.JOB_ID, Long.parseLong(dataIdString));
+                startActivity(jobDetail);
                 finish();
             } catch (Exception e) {
                 Intent into = new Intent(this, HomeActivity.class);
@@ -119,6 +124,7 @@ public class SheroesDeepLinkingActivity extends Activity {
                             String postid = splitCommPostUrl[splitCommPostUrl.length - 1];
                             postid = postid.replace("=", AppConstants.EMPTY_STRING);
                             String communityId = splitCommPostUrl[splitCommPostUrl.length - 2];
+                            communityId = communityId.replace("=", AppConstants.EMPTY_STRING);
                             byte[] communityPostBytes = Base64.decode(postid, Base64.DEFAULT);
                             dataIdString = new String(communityPostBytes, AppConstants.UTF_8);
                             byte[] communityBytes = Base64.decode(communityId, Base64.DEFAULT);

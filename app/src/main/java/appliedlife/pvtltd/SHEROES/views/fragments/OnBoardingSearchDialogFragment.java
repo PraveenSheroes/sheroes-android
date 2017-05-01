@@ -39,6 +39,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.JobFilterActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.OnBoardingActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
@@ -70,7 +71,7 @@ public class OnBoardingSearchDialogFragment extends BaseDialogFragment implement
     private Handler mHandler = new Handler();
     private String mMasterDataSkill = AppConstants.EMPTY_STRING;
     OnBoardingEnum SEARCH_TYPE = null;
-
+    private boolean isJobFilter;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getActivity()).inject(this);
@@ -80,15 +81,21 @@ public class OnBoardingSearchDialogFragment extends BaseDialogFragment implement
         if (null != getArguments()) {
             mMasterDataSkill = getArguments().getString(AppConstants.MASTER_SKILL);
             SEARCH_TYPE = (OnBoardingEnum) getArguments().getSerializable(AppConstants.BOARDING_SEARCH);
+            isJobFilter = getArguments().getBoolean(AppConstants.JOB_FILTER);
         }
         mOnBoardingPresenter.attachView(this);
         editTextWatcher();
-        mAdapter = new GenericRecyclerViewAdapter(getActivity(), (OnBoardingActivity) getActivity());
+        if(isJobFilter)
+        {
+            mAdapter = new GenericRecyclerViewAdapter(getActivity(), (JobFilterActivity) getActivity());
+        }else {
+            mAdapter = new GenericRecyclerViewAdapter(getActivity(), (OnBoardingActivity) getActivity());
+        }
 
         switch (SEARCH_TYPE) {
             case LOCATION:
                 mSearchEditText.setHint(getString(R.string.ID_SEARCH_LOCATION));
-                mOnBoardingPresenter.getOnBoardingSearchToPresenter(mAppUtils.onBoardingSearchRequestBuilder("!POPULAR!", mMasterDataSkill));
+                mOnBoardingPresenter.getOnBoardingSearchToPresenter(mAppUtils.onBoardingSearchRequestBuilder("Delhi", mMasterDataSkill));
                 LinearLayoutManager manager = new LinearLayoutManager(getActivity());
                 mRecyclerView.setLayoutManager(manager);
                 mRecyclerView.setAdapter(mAdapter);

@@ -4,6 +4,7 @@ import com.f2prateek.rx.preferences.Preference;
 
 import javax.inject.Inject;
 
+import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
@@ -74,7 +75,7 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), ERROR_ON_ONBOARDING);
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_ON_ONBOARDING);
             }
 
             @Override
@@ -100,7 +101,7 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), ERROR_ON_ONBOARDING);
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_ON_ONBOARDING);
             }
 
             @Override
@@ -127,7 +128,7 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), ERROR_ON_ONBOARDING);
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_ON_ONBOARDING);
             }
 
             @Override
@@ -153,7 +154,7 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), ERROR_ON_ONBOARDING);
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_ON_ONBOARDING);
             }
 
             @Override
@@ -180,7 +181,7 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), ERROR_ON_ONBOARDING);
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_ON_ONBOARDING);
             }
 
             @Override
@@ -206,7 +207,7 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), ERROR_ON_ONBOARDING);
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_ON_ONBOARDING);
             }
 
             @Override
@@ -232,7 +233,7 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), ERROR_ON_ONBOARDING);
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_ON_ONBOARDING);
             }
 
             @Override
