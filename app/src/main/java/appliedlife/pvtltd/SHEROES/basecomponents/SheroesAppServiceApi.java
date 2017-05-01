@@ -7,6 +7,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentAddDelete;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.community.ApproveMemberRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.BellNotificationRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
@@ -196,4 +199,8 @@ public interface SheroesAppServiceApi {
     Observable<MemberListResponse>approvePandingMember(@Body ApproveMemberRequest approveMemberRequest);
     @POST("participant/community/invite")
     Observable<ShareMailResponse>shareCommunityViaMail(@Body ShareViaMail shareViaMail);
+
+    @POST("participation/notification/bell")
+    Observable<BelNotificationListResponse>bellNotification(@Body BellNotificationRequest bellNotificationRequest);
+
 }

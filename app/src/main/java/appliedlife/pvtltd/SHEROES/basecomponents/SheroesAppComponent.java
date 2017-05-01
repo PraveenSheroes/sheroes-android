@@ -32,6 +32,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.AllMembersFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.AllSearchFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticleDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.BellNotificationFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
@@ -113,6 +114,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleDetailHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleDetailSuggestedHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleDetailWithInSuggestedHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.BellNotificationHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.BlankHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CanHelpInHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CommentHolder;
@@ -352,5 +354,7 @@ public interface SheroesAppComponent {
     void inject(SearchProfileLocation searchProfileLocation);
 
     void inject(ProfileAddEditEducationFragment profileAddEditEducationFragment);
+    void inject(BellNotificationFragment bellNotificationFragment);
+    void inject(BellNotificationHolder bellNotificationHolder);
 
 }

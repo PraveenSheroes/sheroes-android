@@ -5,11 +5,18 @@ import android.app.FragmentManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 
 
 /**
@@ -20,7 +27,7 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
  * @since 29/12/2016.
  * Title: Base Dialog class handling fadein and fadeout animations
  */
-public class BaseDialogFragment extends DialogFragment implements BaseMvpView {
+public class BaseDialogFragment extends DialogFragment implements BaseMvpView,HomeView {
     private final String TAG = LogUtils.makeLogTag(BaseDialogFragment.class);
     public static final String DISMISS_PARENT_ON_OK_OR_BACK = "DISMISS_PARENT_ON_OK_OR_BACK";
     public static final String IS_CANCELABLE = "is_cancelable";
@@ -76,6 +83,31 @@ public class BaseDialogFragment extends DialogFragment implements BaseMvpView {
 
     @Override
     public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
+
+    }
+
+    @Override
+    public void getLogInResponse(LoginResponse loginResponse) {
+
+    }
+
+    @Override
+    public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
+
+    }
+
+    @Override
+    public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
+
+    }
+
+    @Override
+    public void getDB(List<RecentSearchData> recentSearchDatas) {
+
+    }
+
+    @Override
+    public void getNotificationListSuccess(BelNotificationListResponse bellNotificationResponse) {
 
     }
 }

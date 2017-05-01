@@ -9,6 +9,9 @@ import javax.inject.Singleton;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.community.BellNotificationRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
@@ -192,4 +195,17 @@ public class HomeModel {
                 .observeOn(AndroidSchedulers.mainThread());
 
     }
+    public Observable<BelNotificationListResponse> getNotificationFromModel(BellNotificationRequest bellNotificationRequest){
+        LogUtils.info(TAG,"Bell notification request"+new Gson().toJson(bellNotificationRequest));
+        return sheroesAppServiceApi.bellNotification(bellNotificationRequest)
+                .map(new Func1<BelNotificationListResponse, BelNotificationListResponse>() {
+                    @Override
+                    public BelNotificationListResponse call(BelNotificationListResponse bellNotificationResponse) {
+                        return bellNotificationResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
 }

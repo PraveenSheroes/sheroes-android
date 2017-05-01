@@ -122,6 +122,8 @@ public class AppConstants {
     public static final String JOB_AT = "job_at";
     public static final String JOB_DETAIL = "job_detail";
     public static final String COMMUNITY_DETAIL = "community_detail";
+    public static final String CLICKABLE_SCREEN = "https://sheroes.in/feed";
+    public static final String NOT_CLICABLE = "#";
     public static final String COVER_IMAGE = "cover_image";
     public static final String TAG_LIST = "tag_list";
     public static final String TAG_ID = "tag_id";

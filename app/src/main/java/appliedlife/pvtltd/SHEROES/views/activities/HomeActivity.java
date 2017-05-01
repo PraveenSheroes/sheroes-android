@@ -3,6 +3,7 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 import android.app.DialogFragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -50,6 +51,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionDoc;
 import appliedlife.pvtltd.SHEROES.models.entities.communities.CommunitySuggestion;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.DrawerItems;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
@@ -67,6 +69,7 @@ import appliedlife.pvtltd.SHEROES.views.cutomeviews.BlurrImage;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.BellNotificationFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
@@ -156,6 +159,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     Preference<MasterDataResponse> mUserPreferenceMasterData;
     private ViewPagerAdapter mViewPagerAdapter;
     private MyCommunityInviteMemberFragment myCommunityInviteMemberFragment;
+    private BellNotificationFragment bellNotificationFragment;
     private int backPressClickCount = 1;
 
     @Override
@@ -248,7 +252,34 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
 
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
-        if (baseResponse instanceof FeedDetail) {
+        if (baseResponse instanceof BellNotificationResponse) {
+            BellNotificationResponse bellNotificationResponse=(BellNotificationResponse) baseResponse;
+            if(null !=bellNotificationResponse) {
+                if(StringUtil.isNotNullOrEmptyString(bellNotificationResponse.getScreenName()))
+                {
+                    if(bellNotificationResponse.getScreenName().equalsIgnoreCase(AppConstants.CLICKABLE_SCREEN)) {
+                        if(StringUtil.isNotNullOrEmptyString(bellNotificationResponse.getSolrIgnoreDeepLinkUrl())) {
+                            String urlStr = bellNotificationResponse.getSolrIgnoreDeepLinkUrl();
+                            Uri url = Uri.parse(urlStr);
+                            Intent intent = new Intent(this, SheroesDeepLinkingActivity.class);
+                            intent.setData(url);
+                            startActivity(intent);
+                        }
+                        else {
+                           onBackPressed();
+                            homeOnClick();
+                        }
+                    }
+                    else if(bellNotificationResponse.getScreenName().equalsIgnoreCase(AppConstants.NOT_CLICABLE))
+                    {
+
+                    }
+
+                }
+
+            }
+        }
+           else if (baseResponse instanceof FeedDetail) {
             mFeedDetail = (FeedDetail) baseResponse;
             int id = view.getId();
             if (id == R.id.tv_community_detail_invite) {
@@ -406,6 +437,10 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         if (mFragmentOpen.isSettingFragment()) {
             onBackPressed();
             mFragmentOpen.setSettingFragment(false);
+        }
+        if (mFragmentOpen.isBellNotificationFragment()) {
+            onBackPressed();
+            mFragmentOpen.setBellNotificationFragment(false);
         }
     }
 
@@ -650,7 +685,12 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         } else if (mFragmentOpen.isOpenImageViewer()) {
             mFragmentOpen.setOpenImageViewer(false);
             getSupportFragmentManager().popBackStackImmediate();
-        } else {
+        }
+        else if(mFragmentOpen.isBellNotificationFragment()){
+            mFragmentOpen.setBellNotificationFragment(false);
+            getSupportFragmentManager().popBackStackImmediate();
+        }
+        else {
             if (backPressClickCount == 0) {
                 finish();
             } else {
@@ -696,7 +736,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     @OnClick(R.id.iv_home_notification_icon)
     public void notificationClick() {
         // mDrawer.openDrawer(Gravity.LEFT);
-        Snackbar.make(mCLMainLayout, "Work in progress", Snackbar.LENGTH_SHORT).show();
+        callBellNotification();
     }
 
 
@@ -735,7 +775,13 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         mHomeSpinnerItemList.clear();
         mHomeSpinnerItemList.addAll(localList);
     }
-
+    public void callBellNotification() {
+        mFragmentOpen.setBellNotificationFragment(true);
+        setAllValues(mFragmentOpen);
+        BellNotificationFragment bellNotificationFragment = new BellNotificationFragment();
+        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
+                .add(R.id.fl_feed_comments, bellNotificationFragment, BellNotificationFragment.class.getName()).addToBackStack(BellNotificationFragment.class.getName()).commitAllowingStateLoss();
+          }
     @Override
     public void onClickReactionList(FragmentOpen isFragmentOpen, FeedDetail feedDetail) {
         mFragmentOpen = isFragmentOpen;

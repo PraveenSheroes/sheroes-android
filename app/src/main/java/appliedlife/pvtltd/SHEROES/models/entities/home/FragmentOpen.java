@@ -34,6 +34,8 @@ public class FragmentOpen implements Parcelable {
     private boolean isInviteCommunityOwner;
     private boolean isGoodAtFragment;
     private boolean isCreateCommunity;
+    private boolean isBellNotificationFragment;
+
     public FragmentOpen() {
     }
 
@@ -64,6 +66,14 @@ public class FragmentOpen implements Parcelable {
 
     public boolean isFeedOpen() {
         return feedOpen;
+    }
+
+    public boolean isBellNotificationFragment() {
+        return isBellNotificationFragment;
+    }
+
+    public void setBellNotificationFragment(boolean bellNotificationFragment) {
+        isBellNotificationFragment = bellNotificationFragment;
     }
 
     public void setFeedOpen(boolean feedOpen) {

@@ -20,6 +20,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.PandingMember;
 import appliedlife.pvtltd.SHEROES.models.entities.community.PopularTag;
 import appliedlife.pvtltd.SHEROES.models.entities.community.RequestedList;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.DrawerItems;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.models.entities.home.ProfileItems;
@@ -36,6 +38,12 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 
 public enum HolderMapping {
 
+    BELL_NOTIFICATION(R.layout.bel_notification_card) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new BellNotificationHolder(view, viewInterface);
+        }
+    },
     FEED_COMMUNITY_POST(R.layout.feed_comunity_user_post_normal) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
@@ -512,7 +520,11 @@ public enum HolderMapping {
                         return PROFILE_PERSONAL_VISITINGCARD.ordinal();
                     }
 
-                } else if (item instanceof GoodAt) {
+                }
+                else if (item instanceof BellNotificationResponse) {
+                    return BELL_NOTIFICATION.ordinal();
+                }
+                else if (item instanceof GoodAt) {
                     return GOOD_AT.ordinal();
                 } else if (item instanceof ListOfInviteSearch) {
                     return INVITE_SEARCH_MODULE.ordinal();

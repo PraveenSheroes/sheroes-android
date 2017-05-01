@@ -88,6 +88,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.community.ApproveMemberRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.BellNotificationRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerRequest;
@@ -2018,6 +2019,15 @@ public class AppUtils {
         memberRequest.setScreenName(AppConstants.PANDING_MEMBER);
         memberRequest.setPageSize(AppConstants.MEMBER_PAGE_SIZE);
         return memberRequest;
+    }
+    public static BellNotificationRequest getBellNotificationRequest() {
+        AppUtils appUtils = AppUtils.getInstance();
+
+        BellNotificationRequest bellNotificationRequest=new BellNotificationRequest();
+        bellNotificationRequest.setAppVersion(appUtils.getAppVersionName());
+        bellNotificationRequest.setCloudMessagingId(AppConstants.ALL_SEARCH);
+        bellNotificationRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        return bellNotificationRequest;
     }
     public static CommunityPostCreateRequest createCommunityPostRequestBuilder(Long  communityId, String createType,String description,List<String> imag,Long mIdForEditPost) {
         AppUtils appUtils = AppUtils.getInstance();

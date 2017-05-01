@@ -41,6 +41,8 @@
     <!--Fragment classes-->
     <string name="ID_ALL">All</string>
     <string name="ID_COMMUNITIES">Communities</string>
+    <string name="ID_NO_MEMBER">No Member Selected</string>
+    <string name="ID_NOTIFICATION">Notification</string>
     <string name="ID_JOBS">Jobs</string>
     <string name="ID_FEATURED">Featured</string>
     <string name="ID_MY_COMMUNITIES">My Communities</string>

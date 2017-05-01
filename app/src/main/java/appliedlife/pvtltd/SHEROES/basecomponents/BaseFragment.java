@@ -40,6 +40,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwner
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LastComment;
@@ -473,6 +475,13 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     @Override
     public void getDB(List<RecentSearchData> recentSearchDatas) {
     }
+
+    @Override
+    public void getNotificationListSuccess(BelNotificationListResponse bellNotificationResponse) {
+
+    }
+
+
 
 
     @Override

@@ -16,6 +16,9 @@ import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
 import appliedlife.pvtltd.SHEROES.models.RecentSearchDataModel;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.community.BellNotificationRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
@@ -44,6 +47,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_LIKE_UNLIKE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MY_COMMUNITIES;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_SEARCH_DATA;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.JOIN_INVITE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.LIKE_UNLIKE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.MARK_AS_SPAM;
@@ -366,6 +370,34 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onNext(BookmarkResponsePojo bookmarkResponsePojo1) {
                 getMvpView().stopProgressBar();
                 getMvpView().getSuccessForAllResponse(bookmarkResponsePojo1, MARK_AS_SPAM);
+            }
+        });
+        registerSubscription(subscription);
+    }
+    public void getBellNotificationFromPresenter(BellNotificationRequest bellNotificationRequest) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = mHomeModel.getNotificationFromModel(bellNotificationRequest).subscribe(new Subscriber<BelNotificationListResponse>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                getMvpView().stopProgressBar();
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_SEARCH_DATA);
+            }
+
+            @Override
+            public void onNext(BelNotificationListResponse bellNotificationResponse) {
+                getMvpView().stopProgressBar();
+                if(null!=bellNotificationResponse) {
+                    getMvpView().getNotificationListSuccess(bellNotificationResponse);
+                }
             }
         });
         registerSubscription(subscription);
