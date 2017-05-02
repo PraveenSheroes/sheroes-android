@@ -1,5 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
@@ -10,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.transition.Slide;
 import android.view.View;
 import android.widget.ImageView;
@@ -45,6 +47,8 @@ import butterknife.OnClick;
 
 public class JobDetailActivity extends BaseActivity implements  AppBarLayout.OnOffsetChangedListener {
     private final String TAG = LogUtils.makeLogTag(JobDetailActivity.class);
+    private static final String LEFT_NEW = "<font color='#50e3c2'>";
+    private static final String RIGHT_NEW = "</font>";
     @Bind(R.id.app_bar_job_detail)
     AppBarLayout mAppBarLayout;
     @Bind(R.id.iv_job_detail)
@@ -132,13 +136,27 @@ public class JobDetailActivity extends BaseActivity implements  AppBarLayout.OnO
             setBackGroundImage(mFeedDetail);
         }
     }
-
+    @TargetApi(AppConstants.ANDROID_SDK_24)
     public void setBackGroundImage(FeedDetail feedDetail) {
         mFeedDetail = feedDetail;
         mTv_job_comp_nm.setText(mFeedDetail.getAuthorName());
-        mTv_job_title.setText(mFeedDetail.getNameOrTitle());
         mTvJobDetailSubTitle.setText(mFeedDetail.getAuthorName());
-        mTvJobDetailTitle.setText(mFeedDetail.getNameOrTitle());
+        if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getNameOrTitle())) {
+            StringBuilder stringBuilder=new StringBuilder();
+            if (!mFeedDetail.isApplied() && !mFeedDetail.isViewed()) {
+                stringBuilder.append(mFeedDetail.getNameOrTitle()).append(AppConstants.SPACE).append(LEFT_NEW).append(getString(R.string.ID_NEW)).append(RIGHT_NEW);
+            } else {
+                stringBuilder.append(mFeedDetail.getNameOrTitle());
+            }
+            if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                mTvJobDetailTitle.setText(Html.fromHtml(stringBuilder.toString(), 0)); // for 24 api and more
+                mTv_job_title.setText(Html.fromHtml(stringBuilder.toString(), 0));
+            } else {
+                mTvJobDetailTitle.setText(Html.fromHtml(stringBuilder.toString()));// or for older api
+                mTv_job_title.setText(Html.fromHtml(stringBuilder.toString()));
+            }
+        }
+
         setBookMarkImage();
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getAuthorImageUrl())) {
             mlogoflag = 1;

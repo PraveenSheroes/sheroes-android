@@ -13,15 +13,15 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/dp_size_35"
             android:background="@color/white"
-            android:layout_marginRight="@dimen/dp_size_30"
             android:orientation="vertical">
 
             <LinearLayout
                 android:id="@+id/lnr_filter_header"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_size_35"
+                android:layout_marginRight="@dimen/dp_size_30">
 
                 <include layout="@layout/community_header" />
             </LinearLayout>
@@ -33,6 +33,8 @@
                 android:paddingTop="@dimen/dp_size_15"
                 android:layout_marginTop="@dimen/dp_size_15"
                 android:paddingBottom="@dimen/dp_size_15"
+                android:layout_marginLeft="@dimen/dp_size_35"
+                android:layout_marginRight="@dimen/dp_size_30"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:text="@string/ID_OPPORTUNITY_TYPE"
                 android:textAllCaps="true"
@@ -43,13 +45,17 @@
                 android:id="@+id/rv_filter_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_size_35"
                 android:visibility="gone"
+                android:layout_marginRight="@dimen/dp_size_30"
                 android:layout_below="@+id/tv_opportunity_type_lable"
                 android:divider="@color/fully_transparent" />
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_size_0.5"
                 android:layout_marginTop="@dimen/dp_size_10"
+                android:layout_marginLeft="@dimen/dp_size_35"
+                android:layout_marginRight="@dimen/dp_size_30"
                 android:background="@color/search_tab_unselected_text" />
             <TextView
                 android:id="@+id/tv_loaction_label"
@@ -57,6 +63,8 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/dp_size_15"
                 android:paddingBottom="@dimen/dp_size_15"
+                android:layout_marginLeft="@dimen/dp_size_35"
+                android:layout_marginRight="@dimen/dp_size_30"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:text="@string/ID_LOCATION"
                 android:textAllCaps="true"
@@ -68,12 +76,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:layout_marginLeft="@dimen/dp_size_35"
                 android:textAllCaps="true"
+                android:layout_marginRight="@dimen/dp_size_30"
                 android:textColor="@color/searchbox_hint_text_color"
                 android:textSize="@dimen/sp_size_12" />
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_size_0.5"
+                android:layout_marginLeft="@dimen/dp_size_35"
+                android:layout_marginRight="@dimen/dp_size_30"
                 android:layout_marginTop="@dimen/dp_size_10"
                 android:background="@color/search_tab_unselected_text" />
             <TextView
@@ -83,23 +95,26 @@
                 android:paddingTop="@dimen/dp_size_15"
                 android:paddingBottom="@dimen/dp_size_15"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:layout_marginLeft="@dimen/dp_size_35"
                 android:text="@string/ID_SELF_EMP_FUNCTIONAL_HINT"
+                android:layout_marginRight="@dimen/dp_size_30"
                 android:textAllCaps="true"
                 android:textColor="@color/text_color_setting_preference_basicdetails"
                 android:textSize="@dimen/sp_size_12" />
-
-            <TextView
+            <android.support.v7.widget.RecyclerView
                 android:id="@+id/tv_functional_area"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                android:textAllCaps="true"
-                android:textColor="@color/searchbox_hint_text_color"
-                android:textSize="@dimen/sp_size_12" />
+                android:layout_marginLeft="@dimen/dp_size_35"
+                android:visibility="gone"
+                android:layout_marginRight="@dimen/dp_size_30"
+                android:divider="@color/fully_transparent" />
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_size_0.5"
                 android:layout_marginTop="@dimen/dp_size_10"
+                android:layout_marginLeft="@dimen/dp_size_35"
+                android:layout_marginRight="@dimen/dp_size_30"
                 android:background="@color/search_tab_unselected_text" />
             <TextView
                 android:id="@+id/tv_filter_exp_label"
@@ -108,7 +123,9 @@
                 android:layout_below="@+id/rv_filter_list"
                 android:paddingTop="@dimen/dp_size_15"
                 android:paddingBottom="@dimen/dp_size_15"
+                android:layout_marginLeft="@dimen/dp_size_35"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:layout_marginRight="@dimen/dp_size_30"
                 android:text="@string/ID_EXP"
                 android:textColor="@color/text_color_setting_preference_basicdetails"
                 android:textSize="@dimen/sp_size_12" />
@@ -120,18 +137,21 @@
                 android:layout_below="@+id/tv_filter_exp_txt"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:textAllCaps="true"
+                android:layout_marginLeft="@dimen/dp_size_35"
+                android:layout_marginRight="@dimen/dp_size_30"
                 android:textColor="@color/searchbox_hint_text_color"
                 android:textSize="@dimen/sp_size_12"/>
             <appliedlife.pvtltd.SHEROES.utils.RangeSeekBar
                 android:id="@+id/rangeSeekbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_filter_exp" />
+                android:layout_marginLeft="@dimen/dp_size_15"
+                android:layout_marginRight="@dimen/dp_size_30" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/rangeSeekbar"
+                android:layout_marginLeft="@dimen/dp_size_35"
                 android:background="@color/white"
                 android:orientation="horizontal">
 
@@ -146,35 +166,35 @@
                     android:id="@+id/tv_five"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_size_42"
+                    android:layout_marginLeft="@dimen/dp_size_50"
                     android:text="5" />
 
                 <TextView
                     android:id="@+id/tv_ten"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_size_42"
+                    android:layout_marginLeft="@dimen/dp_size_38"
                     android:text="10" />
 
                 <TextView
                     android:id="@+id/tv_fifteen"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_size_42"
+                    android:layout_marginLeft="@dimen/dp_size_40"
                     android:text="15" />
 
                 <TextView
                     android:id="@+id/tv_twenty"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_size_42"
+                    android:layout_marginLeft="@dimen/dp_size_40"
                     android:text="20" />
 
                 <TextView
                     android:id="@+id/tv_twenty_five"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_size_42"
+                    android:layout_marginLeft="@dimen/dp_size_40"
                     android:text="25" />
             </LinearLayout>
         </LinearLayout>

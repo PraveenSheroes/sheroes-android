@@ -110,17 +110,16 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void allTextViewStringOperations(Context context) {
         if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
-            String nameTitleWithData;
-            String newTag = mContext.getString(R.string.ID_NEW);
+            StringBuilder stringBuilder=new StringBuilder();
             if (!dataItem.isApplied() && !dataItem.isViewed()) {
-                nameTitleWithData = dataItem.getNameOrTitle() + AppConstants.SPACE + LEFT_NEW + newTag + RIGHT_NEW;
+                stringBuilder.append(dataItem.getNameOrTitle()).append(AppConstants.SPACE).append(LEFT_NEW).append(mContext.getString(R.string.ID_NEW)).append(RIGHT_NEW);
             } else {
-                nameTitleWithData = dataItem.getNameOrTitle();
+                stringBuilder.append(dataItem.getNameOrTitle());
             }
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                tvFeedJobCardTitle.setText(Html.fromHtml(nameTitleWithData, 0)); // for 24 api and more
+                tvFeedJobCardTitle.setText(Html.fromHtml(stringBuilder.toString(), 0)); // for 24 api and more
             } else {
-                tvFeedJobCardTitle.setText(Html.fromHtml(nameTitleWithData));// or for older api
+                tvFeedJobCardTitle.setText(Html.fromHtml(stringBuilder.toString()));// or for older api
             }
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getAuthorName())) {

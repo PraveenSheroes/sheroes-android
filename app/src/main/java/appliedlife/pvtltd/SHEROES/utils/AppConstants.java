@@ -51,6 +51,7 @@ public class AppConstants {
     public static final String CURRENT_STATUS_SCREEN = "current_status";
     public static final String SOURCE_NAME = "android";
     public static final String UTF_8 ="UTF-8";
+    public static final String CITY_NAME_DEFAULT ="Delhi";
 
     public static final String HOW_CAN_SHEROES_AKA_LOOKING_FOR_SCREEN = "looking_for";
     public static final String GOOD_AT_SCREEN = "good_at";
@@ -169,6 +170,8 @@ public class AppConstants {
     public static final String MASTER_DATA_COMMUNITY_TYPE_KEY = "COMMUNITY_TYPE";
     public static final String MASTER_DATA_TAGS_KEY = "TAGS";
     public static final String MASTER_DATA_FUNCTIONAL_AREA_KEY = "FUNCTIONAL_AREA";//jobfilter
+    public static final String JOB_DATA_OPPORTUNITY_KEY = "OPPORTUNITY_FOR_JOB_FILTER";//jobfilter
+
     /*Get all data keys*/
     public static final String LOCATION_CITY_GET_ALL_DATA_KEY = "city";
     public static final String INTEREST_GET_ALL_DATA_KEY = "interest";

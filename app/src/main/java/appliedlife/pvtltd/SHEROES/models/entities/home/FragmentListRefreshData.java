@@ -7,15 +7,15 @@ import java.util.List;
  */
 
 public class FragmentListRefreshData {
-    int pageNo;
-    String callFromFragment;
-    long idFeedDetail;
-    boolean isReactionList;
-    long enitityOrParticpantid;
-    int swipeToRefresh;
-    long communityId;
-    List<Long> categoryIdList;
-    String searchStringName;
+    private int pageNo;
+    private String callFromFragment;
+    private long idFeedDetail;
+    private boolean isReactionList;
+    private  long enitityOrParticpantid;
+    private int swipeToRefresh;
+    private long communityId;
+    private List<Long> categoryIdList;
+    private String searchStringName;
     public FragmentListRefreshData() {
 
     }

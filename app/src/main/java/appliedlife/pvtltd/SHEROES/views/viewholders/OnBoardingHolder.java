@@ -15,6 +15,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.OnBoardingData;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HorizontalFlowLayout;
@@ -48,7 +49,7 @@ public class OnBoardingHolder extends BaseViewHolder<OnBoardingData> {
     public void bindData(OnBoardingData onBoardingData, Context context, int position) {
         dataItem = onBoardingData;
         mContext = context;
-        if(null!=dataItem) {
+        if (null != dataItem) {
             renderOnBoardingView();
         }
     }
@@ -57,6 +58,7 @@ public class OnBoardingHolder extends BaseViewHolder<OnBoardingData> {
     public void viewRecycled() {
 
     }
+
     public void renderOnBoardingView() {
         if (StringUtil.isNotEmptyCollection(dataItem.getBoardingDataList()) && StringUtil.isNotNullOrEmptyString(dataItem.getCategory())) {
             tvTagHeader.setText(dataItem.getCategory());
@@ -64,7 +66,7 @@ public class OnBoardingHolder extends BaseViewHolder<OnBoardingData> {
             // LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             //HorizontalFlowLayout view = (HorizontalFlowLayout) layoutInflater.inflate(R.layout.tags_onboarding_ui_layout, null);
             for (int index = 0; index < list.size(); index++) {
-               inflateTagData(liTags, list.get(index));
+                inflateTagData(liTags, list.get(index));
             }
         }
     }
@@ -170,19 +172,20 @@ public class OnBoardingHolder extends BaseViewHolder<OnBoardingData> {
             @Override
             public void onClick(View v) {
                 viewInterface.handleOnClick(dataItem, mTvTagData);
-                if(!stringList.isSelected()) {
-                    stringList.setSelected(true);
-                    mTvTagData.setTag(stringList);
-                    mTvTagData.setBackground(ContextCompat.getDrawable(mContext, R.drawable.on_boarding_tag_border_ractangle_selected));
-                    mTvTagData.setTextColor(ContextCompat.getColor(mContext, R.color.blue));
-                    mTvTagData.setPadding(15, 15, 15, 15);
-                }else
-                {
-                    stringList.setSelected(false);
-                    mTvTagData.setTag(stringList);
-                    mTvTagData.setBackground(ContextCompat.getDrawable(mContext, R.drawable.on_boarding_tag_border_rectangle_unselected));
-                    mTvTagData.setTextColor(ContextCompat.getColor(mContext, R.color.black));
-                    mTvTagData.setPadding(15, 15, 15, 15);
+                if (null != dataItem && StringUtil.isNotNullOrEmptyString(dataItem.getFragmentName()) && !dataItem.getFragmentName().equalsIgnoreCase(AppConstants.HOW_SHEROES_CAN_HELP)) {
+                    if (!stringList.isSelected()) {
+                        stringList.setSelected(true);
+                        mTvTagData.setTag(stringList);
+                        mTvTagData.setBackground(ContextCompat.getDrawable(mContext, R.drawable.on_boarding_tag_border_ractangle_selected));
+                        mTvTagData.setTextColor(ContextCompat.getColor(mContext, R.color.blue));
+                        mTvTagData.setPadding(15, 15, 15, 15);
+                    } else {
+                        stringList.setSelected(false);
+                        mTvTagData.setTag(stringList);
+                        mTvTagData.setBackground(ContextCompat.getDrawable(mContext, R.drawable.on_boarding_tag_border_rectangle_unselected));
+                        mTvTagData.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+                        mTvTagData.setPadding(15, 15, 15, 15);
+                    }
                 }
             }
         });

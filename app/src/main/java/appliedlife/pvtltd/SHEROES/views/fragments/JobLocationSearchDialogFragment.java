@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -26,12 +25,10 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.enums.OnBoardingEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllData;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingInterestJobSearch;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.GetInterestJobResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.presenters.OnBoardingPresenter;
@@ -39,7 +36,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.OnBoardingActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.JobFilterActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.OnBoardingView;
@@ -48,14 +45,14 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * Created by Praveen_Singh on 25-03-2017.
+ * Created by Praveen_Singh on 02-05-2017.
  */
 
-public class OnBoardingSearchDialogFragment extends BaseDialogFragment implements OnBoardingView {
-    private final String TAG = LogUtils.makeLogTag(OnBoardingSearchDialogFragment.class);
+public class JobLocationSearchDialogFragment extends BaseDialogFragment implements OnBoardingView {
+    private final String TAG = LogUtils.makeLogTag(JobLocationSearchDialogFragment.class);
     @Inject
     AppUtils mAppUtils;
-    @Bind(R.id.rv_onboarding_search_list)
+    @Bind(R.id.rv_job_loc_search_list)
     RecyclerView mRecyclerView;
     @Bind(R.id.et_search_edit_text)
     public EditText mSearchEditText;
@@ -65,66 +62,52 @@ public class OnBoardingSearchDialogFragment extends BaseDialogFragment implement
     ProgressBar mProgressBar;
     @Bind(R.id.tv_location_result)
     TextView tvSearchResult;
+    @Bind(R.id.tv_save_job_location)
+    TextView tvSaveJobLocation;
     private String mSearchDataName = AppConstants.EMPTY_STRING;
     private GenericRecyclerViewAdapter mAdapter;
     private Handler mHandler = new Handler();
     private String mMasterDataSkill = AppConstants.EMPTY_STRING;
-    OnBoardingEnum SEARCH_TYPE = null;
-    private boolean isJobFilter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getActivity()).inject(this);
-        View view = inflater.inflate(R.layout.rv_onboarding_search, container, false);
+        View view = inflater.inflate(R.layout.job_location_search_dialog, container, false);
         ButterKnife.bind(this, view);
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         if (null != getArguments()) {
             mMasterDataSkill = getArguments().getString(AppConstants.MASTER_SKILL);
-            SEARCH_TYPE = (OnBoardingEnum) getArguments().getSerializable(AppConstants.BOARDING_SEARCH);
         }
         mOnBoardingPresenter.attachView(this);
         editTextWatcher();
-        mAdapter = new GenericRecyclerViewAdapter(getActivity(), (OnBoardingActivity) getActivity());
-        switch (SEARCH_TYPE) {
-            case LOCATION:
-                mSearchEditText.setHint(getString(R.string.ID_SEARCH_LOCATION));
-                mOnBoardingPresenter.getOnBoardingSearchToPresenter(mAppUtils.onBoardingSearchRequestBuilder(AppConstants.CITY_NAME_DEFAULT, mMasterDataSkill));
-                LinearLayoutManager manager = new LinearLayoutManager(getActivity());
-                mRecyclerView.setLayoutManager(manager);
-                mRecyclerView.setAdapter(mAdapter);
-                mRecyclerView.addOnScrollListener(new HidingScrollListener(mRecyclerView, manager, new FragmentListRefreshData()) {
-                    @Override
-                    public void onHide() {
-                    }
+        mAdapter = new GenericRecyclerViewAdapter(getActivity(), (JobFilterActivity) getActivity());
+        mSearchEditText.setHint(getString(R.string.ID_SEARCH_LOCATION));
+        mOnBoardingPresenter.getOnBoardingSearchToPresenter(mAppUtils.onBoardingSearchRequestBuilder(AppConstants.CITY_NAME_DEFAULT, mMasterDataSkill));
+        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(manager);
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.addOnScrollListener(new HidingScrollListener(mRecyclerView, manager, new FragmentListRefreshData()) {
+            @Override
+            public void onHide() {
+            }
 
-                    @Override
-                    public void onShow() {
-                    }
+            @Override
+            public void onShow() {
+            }
 
-                    @Override
-                    public void dismissReactions() {
+            @Override
+            public void dismissReactions() {
 
-                    }
-                });
-                break;
-            case INTEREST_SEARCH:
-                mSearchEditText.setHint(getString(R.string.ID_SEARCH_INTEREST));
-                StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(1, 1);
-                mRecyclerView.setLayoutManager(staggeredGridLayoutManager);
-                mRecyclerView.setAdapter(mAdapter);
-                break;
-            case JOB_AT_SEARCH:
-                StaggeredGridLayoutManager job = new StaggeredGridLayoutManager(1, 1);
-                mRecyclerView.setLayoutManager(job);
-                mRecyclerView.setAdapter(mAdapter);
-                break;
-            default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + SEARCH_TYPE);
-
-        }
+            }
+        });
 
         setCancelable(true);
         return view;
+    }
+
+    @OnClick(R.id.tv_save_job_location)
+    public void onSaveJobLocation() {
+        ((JobFilterActivity)getActivity()).saveJobLocation();
     }
 
     @OnClick(R.id.iv_search_back)
@@ -195,21 +178,7 @@ public class OnBoardingSearchDialogFragment extends BaseDialogFragment implement
             if (!isDetached()) {
                 mSearchDataName = mSearchDataName.trim();//.replaceAll(AppConstants.SPACE, AppConstants.EMPTY_STRING);
                 if (StringUtil.isNotNullOrEmptyString(mMasterDataSkill)) {
-                    switch (SEARCH_TYPE) {
-                        case LOCATION:
-                            mOnBoardingPresenter.getOnBoardingSearchToPresenter(mAppUtils.onBoardingSearchRequestBuilder(mSearchDataName, mMasterDataSkill));
-                            break;
-                        case INTEREST_SEARCH:
-                            mOnBoardingPresenter.getInterestJobSearchToPresenter(mAppUtils.onBoardingSearchRequestBuilder(mSearchDataName, mMasterDataSkill));
-                            break;
-                        case JOB_AT_SEARCH:
-                            mOnBoardingPresenter.getInterestJobSearchToPresenter(mAppUtils.onBoardingSearchRequestBuilder(mSearchDataName, mMasterDataSkill));
-                            break;
-                        default:
-                            LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + SEARCH_TYPE);
-
-                    }
-
+                    mOnBoardingPresenter.getOnBoardingSearchToPresenter(mAppUtils.onBoardingSearchRequestBuilder(mSearchDataName, mMasterDataSkill));
                 }
             }
         }
@@ -226,6 +195,7 @@ public class OnBoardingSearchDialogFragment extends BaseDialogFragment implement
             List<GetAllDataDocument> getAllDataDocuments = getAllData.getGetAllDataDocuments();
             if (StringUtil.isNotEmptyCollection(getAllDataDocuments)) {
                 mAdapter.setSheroesGenericListData(getAllDataDocuments);
+                mAdapter.setCallForRecycler(AppConstants.FEED_SUB_TYPE);
                 mAdapter.notifyDataSetChanged();
             }
             mRecyclerView.setVisibility(View.VISIBLE);
@@ -238,25 +208,7 @@ public class OnBoardingSearchDialogFragment extends BaseDialogFragment implement
 
     @Override
     public void getIntersetJobResponse(GetInterestJobResponse getInterestJobResponse) {
-        if (null != getInterestJobResponse) {
-            List<BoardingInterestJobSearch> getAllDataDocuments = getInterestJobResponse.getGetBoardingInterestJobSearches();
-            if (StringUtil.isNotEmptyCollection(getAllDataDocuments)) {
-                switch (SEARCH_TYPE) {
-                    case INTEREST_SEARCH:
-                        mAdapter.setSheroesGenericListData(getAllDataDocuments);
-                        mAdapter.setCallForRecycler(AppConstants.FEED_SUB_TYPE);
-                        break;
-                    case JOB_AT_SEARCH:
-                        mAdapter.setSheroesGenericListData(getAllDataDocuments);
-                        break;
-                    default:
-                        LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + SEARCH_TYPE);
 
-                }
-                mAdapter.notifyDataSetChanged();
-            }
-
-        }
     }
 
     @Override

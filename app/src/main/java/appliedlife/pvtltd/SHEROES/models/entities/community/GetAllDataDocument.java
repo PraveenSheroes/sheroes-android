@@ -31,6 +31,7 @@ public class GetAllDataDocument  extends BaseResponse implements Parcelable {
     @SerializedName("is_community_closed")
     @Expose
     private boolean isCommunityClosed;
+    private boolean isChecked;
 
     public String getId() {
         return id;
@@ -80,6 +81,17 @@ public class GetAllDataDocument  extends BaseResponse implements Parcelable {
         isCommunityClosed = communityClosed;
     }
 
+    public GetAllDataDocument() {
+    }
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -87,24 +99,25 @@ public class GetAllDataDocument  extends BaseResponse implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
         dest.writeString(this.id);
         dest.writeString(this.title);
         dest.writeString(this.category);
         dest.writeString(this.logo);
         dest.writeString(this.communityType);
         dest.writeByte(this.isCommunityClosed ? (byte) 1 : (byte) 0);
-    }
-
-    public GetAllDataDocument() {
+        dest.writeByte(this.isChecked ? (byte) 1 : (byte) 0);
     }
 
     protected GetAllDataDocument(Parcel in) {
+        super(in);
         this.id = in.readString();
         this.title = in.readString();
         this.category = in.readString();
         this.logo = in.readString();
         this.communityType = in.readString();
         this.isCommunityClosed = in.readByte() != 0;
+        this.isChecked = in.readByte() != 0;
     }
 
     public static final Creator<GetAllDataDocument> CREATOR = new Creator<GetAllDataDocument>() {

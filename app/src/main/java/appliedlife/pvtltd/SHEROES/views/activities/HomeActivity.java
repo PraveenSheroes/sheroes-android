@@ -20,6 +20,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -742,7 +743,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
 
     @OnClick(R.id.tv_drawer_navigation)
     public void drawerNavigationClick() {
-        //  mDrawer.openDrawer(Gravity.LEFT);
+         mDrawer.openDrawer(Gravity.LEFT);
     }
 
     @Override

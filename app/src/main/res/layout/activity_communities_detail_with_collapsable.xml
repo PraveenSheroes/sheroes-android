@@ -91,6 +91,7 @@
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/sp_size_14"
                         android:lines="@integer/int_value_for_line_1"
+                        android:gravity="center"
                         android:ellipsize="end"
                         android:textColor="@color/white"
                         android:fontFamily="@string/ID_ROBOTO_MEDIUM"

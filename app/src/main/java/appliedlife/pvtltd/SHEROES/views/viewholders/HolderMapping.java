@@ -20,7 +20,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.PandingMember;
 import appliedlife.pvtltd.SHEROES.models.entities.community.PopularTag;
 import appliedlife.pvtltd.SHEROES.models.entities.community.RequestedList;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.DrawerItems;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
@@ -354,6 +353,11 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new GetAllDataBoardingSearchHolder(view, viewInterface);
         }
+    }, JOB_LOCATION_SEARCH(R.layout.job_location_search) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new JobLocationSearchHolder(view, viewInterface);
+        }
     }, INTEREST_SEARCH(R.layout.interest_job_search_list_item) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
@@ -410,6 +414,8 @@ public enum HolderMapping {
                     }
                 } else if (item instanceof BoardingInterestJobSearch) {
                     return INTEREST_SEARCH.ordinal();
+                }else if (item instanceof GetAllDataDocument) {
+                    return JOB_LOCATION_SEARCH.ordinal();
                 }
             } else if (item instanceof BoardingInterestJobSearch) {
                 return JOB_SEARCH.ordinal();

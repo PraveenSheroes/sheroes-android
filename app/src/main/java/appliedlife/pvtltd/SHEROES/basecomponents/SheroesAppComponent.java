@@ -56,6 +56,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.JobFilterFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobFunctionalAreaFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobLocationFilter;
+import appliedlife.pvtltd.SHEROES.views.fragments.JobLocationSearchDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LoginFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunitiesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunityInviteMemberFragment;
@@ -137,6 +138,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.InviteMemberHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.InviteSearchHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.JobDetailHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.JobLocationHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.JobLocationSearchHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.JobSearchHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MemberHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MyCommunitiesCardHolder;
@@ -184,177 +186,343 @@ import dagger.Component;
 @Component(modules = {SheroesAppModule.class})
 public interface SheroesAppComponent {
     void inject(HomeActivity homeActivity);
+
     void inject(HomeFragment homeFragment);
+
     void inject(LoginActivity loginActivity);
+
     void inject(HomeSearchActivity homeSearchActivity);
+
     void inject(CommunitiesDetailActivity communitiesDetailActivity);
+
     void inject(ArticleDetailActivity articleDetailActivity);
+
     void inject(ProfileActicity profileActicity);
+
     void inject(FaceBookOpenActivity faceBookOpenActivity);
+
     void inject(LoginFragment loginFragment);
+
     void inject(HomeSpinnerFragment homeSpinnerFragment);
+
     void inject(SearchCommunitiesFragment searchCommunitiesFragment);
+
     void inject(ArticlesFragment articlesFragment);
+
     void inject(AllSearchFragment allSearchFragment);
+
     void inject(CommentReactionFragment commentReactionFragment);
+
     void inject(FeaturedFragment featuredFragment);
+
     void inject(MyCommunitiesFragment myCommunitiesFragment);
+
     void inject(CommunitiesDetailFragment communitiesDetailFragment);
+
     void inject(ImageFullViewFragment imageFullViewFragment);
+
     void inject(ArticleDetailFragment articleDetailFragment);
+
     void inject(ProfileFullViewFragment profileFullViewFragment);
+
     void inject(PersonalProfileFragment personalProfileFragment);
+
     void inject(ProffestionalProfileFragment proffestionalProfileFragment);
+
     void inject(MyCommunityInviteMemberFragment myCommunityInviteMemberFragment);
+
     void inject(BookmarksFragment bookmarksFragment);
+
     void inject(BlankHolder blankHolder);
+
     void inject(ArticleDetailHolder articleDetailHolder);
+
     void inject(ArticleCardHolder articleCardHolder);
+
     void inject(FooterViewHolder footerViewHolder);
+
     void inject(DrawerViewHolder drawerViewHolder);
+
     void inject(HomeSpinnerSelectorHolder homeSpinnerSelectorHolder);
+
     void inject(SearchModuleHolder searchModuleHolder);
+
     void inject(FeatureCardHolder featureCardHolder);
+
     void inject(FeedCommunityPostHolder feedCommunityPostHolder);
+
     void inject(FeedCommunityHolder feedCommunityHolder);
+
     void inject(FeedJobHolder feedJobHolder);
+
     void inject(FeedArticleHolder feedArticleHolder);
+
     void inject(OnBoardingDailogHeySuccess onBoardingDailogHeySuccess);
+
     void inject(CommentHolder commentHolder);
+
     void inject(ReactionHolder reactionHolder);
+
     void inject(NoCommunityHolder noCommunityHolder);
+
     void inject(MyCommunitiesCardHolder myCommunitiesCardHolder);
+
     void inject(ArticleDetailSuggestedHolder articleDetailSuggestedHolder);
+
     void inject(ArticleDetailWithInSuggestedHolder articleDetailWithInSuggestedHolder);
+
     void inject(ProfileViewHolder profileViewHolder);
+
     void inject(InviteMemberHolder inviteMemberHolder);
+
     void inject(InterestSearchHolder interestSearchHolder);
+
     void inject(JobSearchHolder jobSearchHolder);
+
     void inject(ProfileWorkExperienceHolder profileWorkExperienceHolder);
+
     void inject(ProfileProfessionalBasicDetailsHolder profileProfessionalBasicDetailsHolder);
+
     void inject(ProfileEducationHolder profileEducationHolder);
+
     void inject(ProfileOtherHolder profileOtherHolder);
+
     void inject(ProfileHorizantalListHolder profileHorListHolder);
+
     void inject(ProfileHorizontalViewHolder profileHorizontalViewHolder);
+
     void inject(ProfileGoodAtHolder profileGoodAtHolder);
+
     void inject(ProfileLookingForHolder profileLookingForHolder);
+
     void inject(ProfileICanHelpWithHolder profileICanHelpWithHolder);
+
     void inject(ProfileAboutMeHolder profileAboutMeHolder);
+
     void inject(ProfilePersonalBasicDetailsHolder profilePersonalBasicDetailsHolder);
+
     void inject(ProfileIAmInterestingInHolder profileIAmInterestingInHolder);
+
     void inject(SettingFragment settingFragment);
+
     void inject(SettingFeedbackFragment settingFeedbackFragment);
+
     void inject(SettingPreferencsFragment settingPreferencsFragment);
+
     void inject(SettingAboutFragment settingAboutFragment);
+
     void inject(SettingTermsAndConditionFragment settingTermsAndConditionFragment);
+
     void inject(SettingPreferencesBasicDetailsFragment setting_preferences_basicDetailsFragment);
+
     void inject(SettingPreferencesActivity settingPreferencesActivity);
+
     void inject(SettingPreferencesEducationDetailsFragment settingPreferencesEducationDetailsFragment);
+
     void inject(SettingPreferencesWorkExperienceFragment settingPreferencesWorkExperienceFragment);
+
     void inject(SettingPreferencesDeactiveAccountFragment settingPreferencesDeactiveAccountFragment);
+
     void inject(CreateCommunityFragment createCommunityFragment);
+
     void inject(CreateCommunityActivity createCommunityActivity);
+
     void inject(CreateCommunityPostActivity createCommunityPostActivity);
+
     void inject(CreateCommunityPostFragment createCommunityPostFragment);
+
     void inject(SelectCommunityFragment selectCommunityFragment);
+
     void inject(ShareCommunityFragment shareCommunityFragment);
+
     void inject(SelectDilogHolder selectDilogHolder);
+
     void inject(CommunityCardDetailHeader communityCardDetailHeader);
+
     void inject(CommunitySuggestedHolder communitySuggestedHolder);
+
     void inject(CommunityWithInSggestedHolder communityWithInSggestedHolder);
+
     void inject(SearchArticleFragment searchArticleFragment);
+
     void inject(SearchJobFragment searchJobFragment);
+
     void inject(SearchRecentFragment searchRecentFragment);
+
     void inject(CommunityOpenAboutFragment communityOpenAboutFragment);
+
     void inject(OwnerPresenter ownerPresenter);
+
     void inject(OwnerListHolder ownerListHolder);
+
     void inject(AllMembersFragment allMembersFragment);
+
     void inject(MemberHolder memberHolder);
+
     void inject(MembersPresenter membersPresenter);
+
     void inject(Feedback_ThankyouActivity feedback_thankyouActivity);
+
     void inject(CommunitySearchTagsDialog communitySearchTagsDialog);
+
     void inject(CommunityTagsPresenter communityTagsPresenter);
+
     void inject(TagsHolder tagsHolder);
+
     void inject(CommunityRequestedFragment communityRequestedFragment);
+
     void inject(RequestedPresenter requestedPresenter);
+
     void inject(RequestedListModel tagsHolder);
+
     void inject(RequestedHolder requestedHolder);
+
     void inject(CommunityOwnerSearchFragment communityOwnerSearchFragment);
+
     void inject(CommunityInviteSearchFragment requestedHolder);
+
     void inject(InviteSearchModel requestedHolder);
+
     void inject(InviteSearchHolder inviteSearchHolder);
+
     void inject(JobFilterActivity jobFilterActivity);
+
     void inject(JobFilterFragment jobFilterFragment);
+
     void inject(JobLocationFilter jobLocationFilter);
+
     void inject(JobLocationHolder jobLocationHolder);
+
     void inject(JobFunctionalAreaFragment jobLocationHolder);
+
     void inject(ProfessionalWorkExperienceActivity professional_workExperience_activity);
+
     void inject(JobFragment jobFragment);
+
     void inject(JobDetailActivity jobDetailActivity);
+
     void inject(JobDetailFragment jobDetailFragment);
+
     void inject(JobDetailHolder jobDetailHolder);
+
     void inject(OnBoardingActivity onBoardingActivity);
+
     void inject(OnBoardingTellUsAboutFragment onBoardingTellUsAboutFragment);
+
     void inject(OnBoardingHowCanSheroesHelpYouFragment onBoardingHowCanSheroesHelpYouFragment);
+
     void inject(OnBoardingShareYourInterestFragment onBoardingShareYourInterestFragment);
+
     void inject(OnBoardingJobAtFragment onBoardingJobAtFragment);
+
     void inject(OnBoardingSearchDialogFragment onBoardingSearchDialogFragment);
+
     void inject(GetAllDataBoardingSearchHolder getAllDataBoardingSearchHolder);
+
     void inject(OnBoardingHolder onBoardingHolder);
+
     void inject(ProfileTravelClientFragment profileTravelClientFragment);
+
     void inject(ProfileCityWorkFragment profileCityWorkFragment);
+
     void inject(CurrentStatusHolder currentStatusHolder);
+
     void inject(ProfileAddEducationFragment profileAddEducationFragment);
+
     void inject(ProfileWorkExperienceFragment profileWorkExperienceFragment);
+
     void inject(VisitingCardholder visitingCardholder);
+
     void inject(Visiting_card_holder1 visiting_card_holder1);
+
     void inject(ProfileOtherFragment profileOtherFragment);
+
     void inject(ProfessionalAddEducationActivity professionalAddEducationActivity);
+
     void inject(ProfileAddOtherFragment profileAddOtherFragment);
+
     void inject(ProfessionalEditBasicDetailsFragment professionalEditBasicDetailsFragment);
+
     void inject(ProfileAboutMeFragment profileAboutMeFragment);
 
-    void inject(ProfileBasicDetailsHolder profileBasicDetailsHolder);
-    void inject(ProfileHorListHolder profileHorListHolder);
-    void inject(ProfileWorkExperienceSelfEmploymentFragment profileWorkExperienceSelfEmploymentFragment);
-    void inject(InviteCommunityMember inviteCommunityMember);
-    void inject(InviteCommunityOwner inviteCommunityMember);
-    void inject(UserHolder userHolder);
-    void inject(OwnerHolder ownerHolder);
-    void inject(OwnerRemoveDialog ownerRemoveDialog);
-    void inject(OnBoardingWorkExperienceFragment onBoardingWorkExperienceFragment);
-    void inject(TagSearchHolder tagSearchHolder);
-    void inject(VisitingCardActivity visitingCardActivity);
-    void inject(ProfileVisitingCardView profileVisitingCardView);
-    void inject(ProfilePersenter profilePersenter);
-    void inject(WelcomeActivity welcomeActivity);
-    void inject(WelcomeScreenFourthFragment welcomeScreenFourthFragment);
-    void inject(WelcomeScreenThirdFragment welcomeScreenThirdFragment);
-    void inject(WelcomeScreenSecondFragment welcomeScreenSecondFragment);
-    void inject(WelcomeScreenFirstFragment welcomeScreenFirstFragment);
-    void inject(PreferencesDeactiveAccountDialogFragment preferencesDeactiveAccountDialogFragment);
-    void inject(CommunityTypeFragment communityTypeFragment);
-    void inject(CommunityOptionJoinDialog communityOptionJoinDialog);
-    void inject(PopularTagHolder popularTagHolder);
-    void inject(PersonalBasicDetailsFragment personalBasicDetailsFragment);
-    void inject(ProfileEditVisitingCardFragment profileEditVisitingCardFragment);
-    void inject(ProfileGoodAtFragment profileGoodAtFragment);
-    void inject(ProfileOpportunityTypeFragment profileOpportunityTypeFragment);
-    void inject(ProfileShareYourIntrestFragment profileShareYourIntrestFragment);
-    void inject(SearchGoodAt searchGoodAt);
-    void inject(GoodAtHolder goodAtHolder);
-    void inject(PandingRequestHolder pandingRequestHolder);
-   // void inject(CommunityJoinFromeAboutDailog communityJoinFromeAboutDailog);
+    void inject(JobLocationSearchHolder jobLocationSearchHolder);
 
+    void inject(ProfileBasicDetailsHolder profileBasicDetailsHolder);
+
+    void inject(ProfileHorListHolder profileHorListHolder);
+
+    void inject(ProfileWorkExperienceSelfEmploymentFragment profileWorkExperienceSelfEmploymentFragment);
+
+    void inject(InviteCommunityMember inviteCommunityMember);
+
+    void inject(InviteCommunityOwner inviteCommunityMember);
+
+    void inject(UserHolder userHolder);
+
+    void inject(OwnerHolder ownerHolder);
+
+    void inject(OwnerRemoveDialog ownerRemoveDialog);
+
+    void inject(OnBoardingWorkExperienceFragment onBoardingWorkExperienceFragment);
+
+    void inject(TagSearchHolder tagSearchHolder);
+
+    void inject(VisitingCardActivity visitingCardActivity);
+
+    void inject(ProfileVisitingCardView profileVisitingCardView);
+
+    void inject(ProfilePersenter profilePersenter);
+
+    void inject(WelcomeActivity welcomeActivity);
+
+    void inject(WelcomeScreenFourthFragment welcomeScreenFourthFragment);
+
+    void inject(WelcomeScreenThirdFragment welcomeScreenThirdFragment);
+
+    void inject(WelcomeScreenSecondFragment welcomeScreenSecondFragment);
+
+    void inject(WelcomeScreenFirstFragment welcomeScreenFirstFragment);
+
+    void inject(PreferencesDeactiveAccountDialogFragment preferencesDeactiveAccountDialogFragment);
+
+    void inject(CommunityTypeFragment communityTypeFragment);
+
+    void inject(CommunityOptionJoinDialog communityOptionJoinDialog);
+
+    void inject(PopularTagHolder popularTagHolder);
+
+    void inject(PersonalBasicDetailsFragment personalBasicDetailsFragment);
+
+    void inject(ProfileEditVisitingCardFragment profileEditVisitingCardFragment);
+
+    void inject(ProfileGoodAtFragment profileGoodAtFragment);
+
+    void inject(ProfileOpportunityTypeFragment profileOpportunityTypeFragment);
+
+    void inject(ProfileShareYourIntrestFragment profileShareYourIntrestFragment);
+
+    void inject(SearchGoodAt searchGoodAt);
+
+    void inject(GoodAtHolder goodAtHolder);
+
+    void inject(JobLocationSearchDialogFragment jobLocationSearchDialogFragment);
+
+    void inject(PandingRequestHolder pandingRequestHolder);
+    // void inject(CommunityJoinFromeAboutDailog communityJoinFromeAboutDailog);
 
 
     void inject(ProfileSearchIntrestIn profileSearchIntrestIn);
+
     void inject(SearchIAmInterestIn searchIAmInterestIn);
+
     void inject(CanHelpInHolder canHelpInHolder);
+
     void inject(SearchProfileLocation searchProfileLocation);
 
     void inject(ProfileAddEditEducationFragment profileAddEditEducationFragment);
+
     void inject(BellNotificationFragment bellNotificationFragment);
+
     void inject(BellNotificationHolder bellNotificationHolder);
 
 }

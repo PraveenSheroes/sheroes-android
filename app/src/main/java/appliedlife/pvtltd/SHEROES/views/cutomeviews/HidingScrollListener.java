@@ -15,6 +15,16 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.articleCategoryRequestBuilder;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.feedDetailRequestBuilder;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.feedRequestBuilder;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.getBookMarks;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.getCommentRequestBuilder;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.getPandingMemberRequestBuilder;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.myCommunityRequestBuilder;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.searchRequestBuilder;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.userCommunityPostRequestBuilder;
+
 /*
 * This class is a ScrollListener for RecyclerView that allows to show/hide
 * views when list is scrolled. It assumes that you have added a header
@@ -112,46 +122,46 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                 int pageNo=mFragmentListRefreshData.getPageNo();
                 switch (mFragmentListRefreshData.getCallFromFragment()) {
                     case AppConstants.ARTICLE_FRAGMENT:
-                        mHomePresenter.getFeedFromPresenter(mAppUtils.articleCategoryRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo(),mFragmentListRefreshData.getCategoryIdList()));
+                        mHomePresenter.getFeedFromPresenter(articleCategoryRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo(),mFragmentListRefreshData.getCategoryIdList()));
                         break;
                     case AppConstants.COMMUNITY_POST_FRAGMENT:
-                        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY_POST,pageNo));
+                        mHomePresenter.getFeedFromPresenter(feedRequestBuilder(AppConstants.FEED_COMMUNITY_POST,pageNo));
                         break;
                     case AppConstants.FEATURE_FRAGMENT:
-                        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEATURED_COMMUNITY,pageNo));
+                        mHomePresenter.getFeedFromPresenter(feedRequestBuilder(AppConstants.FEATURED_COMMUNITY,pageNo));
                         break;
                     case AppConstants.MY_COMMUNITIES_FRAGMENT:
-                        mHomePresenter.getMyCommunityFromPresenter(mAppUtils.myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY,pageNo));
+                        mHomePresenter.getMyCommunityFromPresenter(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY,pageNo));
                         break;
                     case AppConstants.HOME_FRAGMENT:
-                        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE,pageNo));
+                        mHomePresenter.getFeedFromPresenter(feedRequestBuilder(AppConstants.FEED_SUB_TYPE,pageNo));
                         break;
                     case AppConstants.JOB_FRAGMENT:
-                        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_JOB,pageNo));
+                        mHomePresenter.getFeedFromPresenter(feedRequestBuilder(AppConstants.FEED_JOB,pageNo));
                         break;
                     case AppConstants.COMMUNITY_DETAIL:
-                        mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST,pageNo,mFragmentListRefreshData.getIdFeedDetail()));
+                        mHomePresenter.getFeedFromPresenter(feedDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST,pageNo,mFragmentListRefreshData.getIdFeedDetail()));
                         break;
                     case AppConstants.ARTICLE_DETAIL:
-                        mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_ARTICLE,pageNo,mFragmentListRefreshData.getIdFeedDetail()));
+                        mHomePresenter.getFeedFromPresenter(feedDetailRequestBuilder(AppConstants.FEED_ARTICLE,pageNo,mFragmentListRefreshData.getIdFeedDetail()));
                         break;
                     case AppConstants.BOOKMARKS:
-                        mHomePresenter.getBookMarkFromPresenter(mAppUtils.getBookMarks(pageNo));
+                        mHomePresenter.getBookMarkFromPresenter(getBookMarks(pageNo));
                         break;
                     case AppConstants.COMMENT_REACTION_FRAGMENT:
-                       mCommentReactionPresenter.getAllCommentListFromPresenter(mAppUtils.getCommentRequestBuilder(mFragmentListRefreshData.getEnitityOrParticpantid(),pageNo), mFragmentListRefreshData.isReactionList(),AppConstants.NO_REACTION_CONSTANT);
+                       mCommentReactionPresenter.getAllCommentListFromPresenter(getCommentRequestBuilder(mFragmentListRefreshData.getEnitityOrParticpantid(),pageNo), mFragmentListRefreshData.isReactionList(),AppConstants.NO_REACTION_CONSTANT);
                         break;
                     case AppConstants.MEMBER_FRAGMENT:
-                        mMembersPresenter.getAllMembers(mAppUtils.getPandingMemberRequestBuilder(mFragmentListRefreshData.getEnitityOrParticpantid(),pageNo));
+                        mMembersPresenter.getAllMembers(getPandingMemberRequestBuilder(mFragmentListRefreshData.getEnitityOrParticpantid(),pageNo));
                         break;
                     case AppConstants.PANDING_MEMBER_FRAGMENT:
-                        requestedPresenter.getAllMembers(mAppUtils.getPandingMemberRequestBuilder(mFragmentListRefreshData.getEnitityOrParticpantid(),pageNo));
+                        requestedPresenter.getAllMembers(getPandingMemberRequestBuilder(mFragmentListRefreshData.getEnitityOrParticpantid(),pageNo));
                         break;
                     case AppConstants.USER_COMMUNITY_POST_FRAGMENT:
-                        mHomePresenter.getFeedFromPresenter(mAppUtils.userCommunityPostRequestBuilder(AppConstants.FEED_COMMUNITY_POST,pageNo,mFragmentListRefreshData.getCommunityId()));
+                        mHomePresenter.getFeedFromPresenter(userCommunityPostRequestBuilder(AppConstants.FEED_COMMUNITY_POST,pageNo,mFragmentListRefreshData.getCommunityId()));
                         break;
                     case AppConstants.INVITE_MEMBER:
-                        mHomePresenter.getFeedFromPresenter(mAppUtils.searchRequestBuilder(AppConstants.USER_SUB_TYPE, mFragmentListRefreshData.getSearchStringName(), mFragmentListRefreshData.getPageNo(), AppConstants.INVITE_MEMBER,mFragmentListRefreshData.getEnitityOrParticpantid(),AppConstants.INVITE_PAGE_SIZE));
+                        mHomePresenter.getFeedFromPresenter(searchRequestBuilder(AppConstants.USER_SUB_TYPE, mFragmentListRefreshData.getSearchStringName(), mFragmentListRefreshData.getPageNo(), AppConstants.INVITE_MEMBER,mFragmentListRefreshData.getEnitityOrParticpantid(),AppConstants.INVITE_PAGE_SIZE));
                         break;
                     default:
                         LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + mFragmentListRefreshData.getCallFromFragment());

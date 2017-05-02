@@ -23,7 +23,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobFilterFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingSearchDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.JobLocationSearchDialogFragment;
 import butterknife.ButterKnife;
 
 /**
@@ -32,8 +32,10 @@ import butterknife.ButterKnife;
 
 public class JobFilterActivity extends BaseActivity {
     private final String TAG = LogUtils.makeLogTag(JobFilterActivity.class);
-    private OnBoardingSearchDialogFragment mOnBoardingSearchDialogFragment;
-    public List<String> listOfOpportunity = new ArrayList<>();
+    private JobLocationSearchDialogFragment jobLocationSearchDialogFragment;
+    public List<String> mListOfOpportunity = new ArrayList<>();
+    public List<String> mFunctionArea = new ArrayList<>();
+    private List<String> mJobLocationList = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,42 +65,42 @@ public class JobFilterActivity extends BaseActivity {
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
         if (baseResponse instanceof OnBoardingData) {
-            LabelValue labelValue = (LabelValue) view.getTag();
-            if (labelValue.isSelected()) {
-                if (StringUtil.isNotEmptyCollection(listOfOpportunity)) {
-                    listOfOpportunity.remove(labelValue.getLabel());
+            OnBoardingData onBoardingData = (OnBoardingData) baseResponse;
+            if (null != onBoardingData && StringUtil.isNotNullOrEmptyString(onBoardingData.getFragmentName())) {
+                LabelValue labelValue = (LabelValue) view.getTag();
+                if (onBoardingData.getFragmentName().equalsIgnoreCase(AppConstants.JOB_DATA_OPPORTUNITY_KEY)) {
+                    if (labelValue.isSelected()) {
+                        if (StringUtil.isNotEmptyCollection(mListOfOpportunity)) {
+                            mListOfOpportunity.remove(labelValue.getLabel());
+                        }
+                    } else {
+                        mListOfOpportunity.add(labelValue.getLabel());
+                    }
+                } else {
+                    if (labelValue.isSelected()) {
+                        if (StringUtil.isNotEmptyCollection(mFunctionArea)) {
+                            mFunctionArea.remove(labelValue.getLabel());
+                        }
+                    } else {
+                        mFunctionArea.add(labelValue.getLabel());
+                    }
                 }
-            } else {
-                listOfOpportunity.add(labelValue.getLabel());
+
             }
 
         } else if (baseResponse instanceof GetAllDataDocument) {
             GetAllDataDocument getAllDataDocument = (GetAllDataDocument) baseResponse;
-            if (null != mOnBoardingSearchDialogFragment) {
-                mOnBoardingSearchDialogFragment.dismiss();
+            if (StringUtil.isNotNullOrEmptyString(getAllDataDocument.getTitle())) {
+                if (!getAllDataDocument.isChecked()) {
+                    mJobLocationList.add(getAllDataDocument.getTitle());
+                } else {
+                    if (StringUtil.isNotEmptyCollection(mJobLocationList)) {
+                        mJobLocationList.remove(getAllDataDocument.getTitle());
+                    }
+                }
             }
-            Fragment fragment = getSupportFragmentManager().findFragmentByTag(JobFilterFragment.class.getName());
-            if (AppUtils.isFragmentUIActive(fragment)) {
-                ((JobFilterFragment) fragment).locationData(getAllDataDocument);
-            }
+
         }
-    }
-
-    public void openJobLocationFragment() {
-
-      /*  JobLocationFilter articlesFragment = new JobLocationFilter();
-        Bundle bundle = new Bundle();
-        articlesFragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
-                .replace(R.id.job_filter_container, articlesFragment).addToBackStack(null).commitAllowingStateLoss();*/
-    }
-
-    public void openJobFunctionalAreaFragment() {
-       /* JobFunctionalAreaFragment articlesFragment = new JobFunctionalAreaFragment();
-        Bundle bundle = new Bundle();
-        articlesFragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
-                .replace(R.id.job_filter_container, articlesFragment).addToBackStack(null).commitAllowingStateLoss();*/
     }
 
     @Override
@@ -107,19 +109,27 @@ public class JobFilterActivity extends BaseActivity {
         finish();
     }
 
+    public void saveJobLocation() {
+        if (null != jobLocationSearchDialogFragment) {
+            jobLocationSearchDialogFragment.dismiss();
+        }
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(JobFilterFragment.class.getName());
+        if (AppUtils.isFragmentUIActive(fragment)) {
+            ((JobFilterFragment) fragment).locationData(mJobLocationList);
+        }
+    }
+
     public DialogFragment searchLocationData(String masterDataSkill, OnBoardingEnum onBoardingEnum) {
-        mOnBoardingSearchDialogFragment = (OnBoardingSearchDialogFragment) getFragmentManager().findFragmentByTag(OnBoardingSearchDialogFragment.class.getName());
-        if (mOnBoardingSearchDialogFragment == null) {
-            mOnBoardingSearchDialogFragment = new OnBoardingSearchDialogFragment();
+        jobLocationSearchDialogFragment = (JobLocationSearchDialogFragment) getFragmentManager().findFragmentByTag(JobLocationSearchDialogFragment.class.getName());
+        if (jobLocationSearchDialogFragment == null) {
+            jobLocationSearchDialogFragment = new JobLocationSearchDialogFragment();
             Bundle bundle = new Bundle();
-            bundle.putSerializable(AppConstants.BOARDING_SEARCH, onBoardingEnum);
             bundle.putString(AppConstants.MASTER_SKILL, masterDataSkill);
-            bundle.putBoolean(AppConstants.JOB_FILTER, true);
-            mOnBoardingSearchDialogFragment.setArguments(bundle);
+            jobLocationSearchDialogFragment.setArguments(bundle);
         }
-        if (!mOnBoardingSearchDialogFragment.isVisible() && !mOnBoardingSearchDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
-            mOnBoardingSearchDialogFragment.show(getFragmentManager(), OnBoardingSearchDialogFragment.class.getName());
+        if (!jobLocationSearchDialogFragment.isVisible() && !jobLocationSearchDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
+            jobLocationSearchDialogFragment.show(getFragmentManager(), JobLocationSearchDialogFragment.class.getName());
         }
-        return mOnBoardingSearchDialogFragment;
+        return jobLocationSearchDialogFragment;
     }
 }
