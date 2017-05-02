@@ -31,18 +31,17 @@ public class UserProfileResponse extends BaseResponse {
 
     @SerializedName("education")
     @Expose
-    private ArrayList<EducationEntity> educations;
+    private List<EducationEntity> education;
 
     @SerializedName("experience")
     @Expose
-    private ArrayList<ExprienceEntity> experiences;
+    private List<ExprienceEntity> experience;
 
     @SerializedName("project")
     @Expose
-    private ArrayList<ProjectEntity> projects;
+    private List<ProjectEntity> project;
 
-    public UserDetails getUserDetails()
-    {
+    public UserDetails getUserDetails() {
         return userDetails;
     }
 
@@ -50,28 +49,27 @@ public class UserProfileResponse extends BaseResponse {
         this.userDetails = userDetails;
     }
 
-    public ArrayList<EducationEntity> getEducations() {
-        return educations;
+    public List<EducationEntity> getEducation() {
+        return education;
     }
 
-    public void setEducations(ArrayList<EducationEntity> educations) {
-        this.educations = educations;
+    public void setEducation(List<EducationEntity> education) {
+        this.education = education;
     }
 
-    public ArrayList<ExprienceEntity> getExperiences() {
-        return experiences;
+    public List<ExprienceEntity> getExperience() {
+        return experience;
     }
 
-    public void setExperiences(ArrayList<ExprienceEntity> experiences) {
-        this.experiences = experiences;
+    public void setExperience(List<ExprienceEntity> experience) {
+        this.experience = experience;
     }
 
-    public ArrayList<ProjectEntity> getProjects() {
-        return projects;
+    public List<ProjectEntity> getProject() {
+        return project;
     }
 
-    public void setProjects(ArrayList<ProjectEntity> projects) {
-        this.projects = projects;
+    public void setProject(List<ProjectEntity> project) {
+        this.project = project;
     }
-
-  }
+}

@@ -30,6 +30,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfessionalAddEducationActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.ProfileActicity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -40,10 +41,6 @@ import butterknife.OnClick;
  */
 
 public class ProfileAddEditEducationFragment extends BaseFragment implements DayPickerProfile.MyDayPickerListener,ProfileView,View.OnClickListener{
-
-
-
-
     private final String TAG = LogUtils.makeLogTag(ProfessionalAddEducationActivity.class);
     private final String SCREEN_NAME = "Proffesional_Add_Edi_Education_screen";
     @Inject
@@ -70,7 +67,7 @@ public class ProfileAddEditEducationFragment extends BaseFragment implements Day
     Long mEducationId,mDeegreeId,mFieldOfStudyId,mSchoolNameId;
 
 
-    String mDegree_details,mSchool_details,mField_of_studay;
+    String mDegree_details,mSchool_details,mField_of_studay,mdegreeId,mdegreeName,mSchoolId;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -183,17 +180,56 @@ return view;
     }
     private void editEducationRequest()
     {
+        AppUtils appUtils = AppUtils.getInstance();
         ProfileAddEditEducationRequest profileAddEditEducationRequest = new ProfileAddEditEducationRequest();
-        profileAddEditEducationRequest.setAppVersion("string");
-        profileAddEditEducationRequest.setCloudMessagingId("string");
-        profileAddEditEducationRequest.setDeviceUniqueId("string");
+        profileAddEditEducationRequest.setAppVersion(appUtils.getAppVersionName());
+        profileAddEditEducationRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+        profileAddEditEducationRequest.setDeviceUniqueId(appUtils.getDeviceId());
         profileAddEditEducationRequest.setLastScreenName("string");
-        profileAddEditEducationRequest.setScreenName("string");
+        profileAddEditEducationRequest.setScreenName(TAG);
         profileAddEditEducationRequest.setType("EDUCATION");
         profileAddEditEducationRequest.setSubType("BaseProfileRequest");
 
-       mProfilePresenter.getEducationDetailsAuthTokeInPresenter(AppUtils.profileAddEditEducationRequest(mEducationId,mSchoolNameId,mDeegreeId,mFieldOfStudyId));
+       mProfilePresenter.getEducationDetailsAuthTokeInPresenter(AppUtils.profileAddEditEducationRequest(mEducationId,mSchoolNameId,mDeegreeId,mField_of_studay));
     }
+
+    @OnClick(R.id.et_degree_details)
+    public void clickOnDegree()
+    {
+        ((ProfileActicity)getActivity()).callProfileDegree();
+    }
+    public void submitDegree(String degreeId,String degree)
+    {
+        mdegreeId=degreeId;
+        mdegreeName=degree;
+        mEtDegreeDetails.setText(mdegreeName);
+
+    }
+    @OnClick(R.id.et_school_details)
+    public void clickOnSchool()
+    {
+        ((ProfileActicity)getActivity()).callProfileSchool();
+    }
+    public void submitSchool(String schoolId,String school)
+    {
+        mSchoolId=schoolId;
+        mdegreeName=school;
+        mEtSchoolDetails.setText(school);
+
+    }
+    @OnClick(R.id.et_field_of_study)
+    public void clickOnStudy()
+    {
+        ((ProfileActicity)getActivity()).callProfileStudy();
+    }
+    public void submitStudy(String mStudyId,String school)
+    {
+        mStudyId=mStudyId;
+        mdegreeName=school;
+        mEtFieldOfStudy.setText(school);
+
+    }
+
     @Override
     public void onErrorOccurence() {
 

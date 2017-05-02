@@ -47,9 +47,13 @@ public class ProfileProfessionalBasicDetailsHolder extends BaseViewHolder<MyProf
 
     @Override
     public void bindData(MyProfileView myProfileView, Context context, int position) {
+
+
         this.dataItem = myProfileView;
         mTvProfessionalEditBasicDetails.setOnClickListener(this);
         mTv_profile_basic_details.setText(AppConstants.USER_PROFILE);
+
+
 
         if (null != dataItem) {
             UserDetails userDetails = dataItem.getUserDetails();
@@ -60,12 +64,11 @@ public class ProfileProfessionalBasicDetailsHolder extends BaseViewHolder<MyProf
                 mTvSectorValue.setText(userDetails.getSector());
             }
             if (StringUtil.isNotNullOrEmptyString(String.valueOf(userDetails.getTotalExp()))) {
-                mTvTotalWorkExperienceValue.setText(String.valueOf(userDetails.getTotalExp()));
-            }
-            if (StringUtil.isNotNullOrEmptyString(dataItem.getUserDetails().getDepartment())) {
-                // mTvLanguageValue.setText(dataItem.getUserDetails().);TODO:need to check about language with Sumit(server)
-            }
 
+                mTvTotalWorkExperienceValue.setText(String.valueOf(userDetails.getTotalExp())+" "+AppConstants.EXP_YEAR+" "+String.valueOf(userDetails.getTotalExpMonth())+" " +AppConstants.EXP_MONTH);
+            }if (StringUtil.isNotNullOrEmptyString(""+userDetails.getLanguage())) {
+                mTvLanguageValue.setText(""+userDetails.getLanguage());
+            }
         }
 
         }
@@ -90,6 +93,7 @@ public class ProfileProfessionalBasicDetailsHolder extends BaseViewHolder<MyProf
 
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + view.getId());
+                break;
         }
 
     }

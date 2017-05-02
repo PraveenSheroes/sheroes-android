@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,19 +39,21 @@ public class ProfileAddEducationFragment extends BaseFragment {
     private final String SCREEN_NAME = "Profile_add_education_screen";
     MyProfileView myProfileView;
     ProfileView profileViewlistener;
+    @Bind(R.id.tv_date_details)
+    TextView mTvDateDetails;
+    @Bind(R.id.tv_education_name)
+    TextView mTvEducationName;
+    @Bind(R.id.tv_college_name)
+    TextView mTvCollegeName;
+    @Bind(R.id.tv_subject_name)
+    TextView mTvSubjectName;
+    @Bind(R.id.tv_grade_value)
+    TextView mTvGradeValue;
+    @Bind(R.id.a1_profile_workexperiences)
+    AppBarLayout ma1ProfileWorkexperiences;
+    @Bind(R.id.tv_education)
+    TextView mTvEducationTittle;
 
-    @Bind(R.id.tv_degree1)
-    TextView mTv_degree1;
-    @Bind(R.id.tv_date1)
-    TextView mTv_date1;
-    @Bind(R.id.tv_degree11)
-    TextView mTv_degree11;
-    @Bind(R.id.tv_degree2)
-    TextView mTv_degree2;
-    @Bind(R.id.tv_degree21)
-    TextView mTv_degree21;
-    @Bind(R.id.tv_date2)
-    TextView mTv_date2;
 
     private ProfileActivityIntractionListner mProfileActivityIntractionListner;
 
@@ -74,6 +77,30 @@ public class ProfileAddEducationFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_profile_education, container, false);
         ButterKnife.bind(this, view);
 
+
+
+
+
+
+        ma1ProfileWorkexperiences.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = false;
+            int scrollRange = -1;
+
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if (scrollRange + verticalOffset == 0) {
+                    mTvEducationTittle.setVisibility(View.VISIBLE);
+                    isShow = true;
+                } else if (isShow) {
+                    mTvEducationTittle.setVisibility(View.GONE);
+                    isShow = false;
+                }
+            }
+        });
+
         if(null !=getArguments())
 
         {
@@ -81,17 +108,15 @@ public class ProfileAddEducationFragment extends BaseFragment {
 
             List<EducationEntity> educationEntity=this.myProfileView.getEducationEntity();
 
-            if(null !=educationEntity) {
+           if(null !=educationEntity) {
                 if (StringUtil.isNotEmptyCollection(educationEntity)) {
+
+
+
                     if(StringUtil.isNotNullOrEmptyString(educationEntity.get(0).getDegree())) {
-                        mTv_degree1.setVisibility(View.VISIBLE);
-                        mTv_degree1.setText(educationEntity.get(0).getDegree());
-                    }
-                    if(StringUtil.isNotNullOrEmptyString(educationEntity.get(0).getSchool())) {
-                        mTv_degree11.setVisibility(View.VISIBLE);
-                        mTv_degree11.setText(educationEntity.get(0).getSchool());
-                    }
-                    if(educationEntity.get(0).getSessionStartYear()>0) {
+                        mTvEducationName.setVisibility(View.VISIBLE);
+                        mTvEducationName.setText(educationEntity.get(0).getDegree());
+                    }if(educationEntity.get(0).getSessionStartYear()>0) {
                         String session="";
                         if(educationEntity.get(0).getSessionEndYear()>0)
                         {
@@ -101,34 +126,18 @@ public class ProfileAddEducationFragment extends BaseFragment {
                         {
                             session="("+educationEntity.get(0).getSessionStartYear()+")";
                         }
-                        mTv_date1.setVisibility(View.VISIBLE);
-                        mTv_date1.setText(session);
+                        mTvDateDetails.setVisibility(View.VISIBLE);
+                        mTvDateDetails.setText(session);
+                    }if(StringUtil.isNotNullOrEmptyString(educationEntity.get(0).getSchool())) {
+                        mTvCollegeName.setVisibility(View.VISIBLE);
+                        mTvCollegeName.setText(educationEntity.get(0).getSchool());
+                    }if(StringUtil.isNotNullOrEmptyString(educationEntity.get(0).getFieldOfStudy())) {
+                        mTvSubjectName.setVisibility(View.VISIBLE);
+                        mTvSubjectName.setText(educationEntity.get(0).getFieldOfStudy());
+                    }if(StringUtil.isNotNullOrEmptyString(educationEntity.get(0).getGrade())) {
+                        mTvGradeValue.setVisibility(View.VISIBLE);
+                        mTvGradeValue.setText(educationEntity.get(0).getGrade());
                     }
-
-
-                    if(StringUtil.isNotNullOrEmptyString(educationEntity.get(1).getDegree())) {
-                        mTv_degree2.setVisibility(View.VISIBLE);
-                        mTv_degree2.setText(educationEntity.get(1).getDegree());
-                    }
-                    if(StringUtil.isNotNullOrEmptyString(educationEntity.get(1).getSchool())) {
-                        mTv_degree21.setVisibility(View.VISIBLE);
-                        mTv_degree21.setText(educationEntity.get(1).getSchool());
-                    }
-                    if(educationEntity.get(1).getSessionStartYear()>1) {
-                        String session="";
-                        if(educationEntity.get(1).getSessionEndYear()>1)
-                        {
-                            session="("+educationEntity.get(1).getSessionStartYear()+"-"+educationEntity.get(1).getSessionEndYear()+")";
-                        }
-                        else
-                        {
-                            session="("+educationEntity.get(1).getSessionStartYear()+")";
-                        }
-                        mTv_date2.setVisibility(View.VISIBLE);
-                        mTv_date2.setText(session);
-                    }
-
-
 
 
                 }
@@ -156,8 +165,8 @@ public class ProfileAddEducationFragment extends BaseFragment {
 
         }
 
-    //click on flotting button
-    @OnClick(R.id.tv_add_education)
+    //click on edit icon
+    @OnClick(R.id.tv_edit_education)
 
     public  void fab_edit_education_click()
     {

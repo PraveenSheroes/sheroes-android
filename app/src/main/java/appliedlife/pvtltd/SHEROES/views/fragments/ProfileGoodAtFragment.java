@@ -258,7 +258,8 @@ public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInt
     @OnClick(R.id.tv_skill_submit)
     public void SkillSubmitPress() {
         List<Long> longList = getExistingSelection();
-        for (int i = 0; i < skillsid.length; i++) {
+        for (int i = 0; i < skillsid.length && skillsid[i]>0; i++) {
+
             if (skillsid[i] > 0) {
                 if (longList.size() < KEY_SKILLS_LIMIT) {
                     if (!longList.contains(skillsid[i])) {

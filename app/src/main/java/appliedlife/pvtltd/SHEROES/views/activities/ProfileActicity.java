@@ -74,15 +74,18 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ProfileAddEditEducationFragmen
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileAddEducationFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileAddOtherFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileCityWorkFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProfileDegreeDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileEditVisitingCardFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileGoodAtFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.ProfileLanguageDialog;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProfileSchoolDialog;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProfileSearchLanguage;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileOpportunityTypeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileOtherFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileSearchIntrestIn;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileSectoreDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileSelectCurrentStatus;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileShareYourIntrestFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProfileStudyDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileTravelClientFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileVisitingCardView;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileWorkExperienceFragment;
@@ -134,8 +137,12 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
     private int progressStatus = 0;
     private ProfileSelectCurrentStatus mCurrentStatusDialog;
     private ProfileSectoreDialog mSectoreDialog;
-    private ProfileLanguageDialog profileLanguageDialog;
+
+    private ProfileSearchLanguage profileSearchLanguage;
     private FragmentOpen mFragmentOpen;
+    private ProfileSchoolDialog profileSchoolDialog;
+    private ProfileStudyDialog profileStudyDialog;
+    private ProfileDegreeDialog profileDegreeDialog;
 
     public static void navigate(AppCompatActivity activity, View transitionImage, String profile) {
         Intent intent = new Intent(activity, ProfileActicity.class);
@@ -146,6 +153,7 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
         initActivityTransitions();
@@ -155,6 +163,7 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
         setAllValues(mFragmentOpen);
         setPagerAndLayouts();
         setprogressbar();
+
     }
 
     @Override
@@ -203,7 +212,6 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
         ViewCompat.setTransitionName(mAppBarLayout, EXTRA_IMAGE);
         supportPostponeEnterTransition();
         setSupportActionBar(mToolbar);
-        //  getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mCollapsingToolbarLayout.setTitle("  ");
         mCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
@@ -286,12 +294,49 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
                 if (null != searchProfileLocation) {
 
                     searchProfileLocation.dismiss();
+                    final Fragment fragment = getSupportFragmentManager().findFragmentByTag(PersonalBasicDetailsFragment.class.getName());
+                    if (AppUtils.isFragmentUIActive(fragment)) {
+                        ((PersonalBasicDetailsFragment) fragment).submitLocation(dataItem.getId(), dataItem.getTitle());
+                    }
                 }
 
-                final Fragment fragment = getSupportFragmentManager().findFragmentByTag(PersonalBasicDetailsFragment.class.getName());
-                if (AppUtils.isFragmentUIActive(fragment)) {
-                    ((PersonalBasicDetailsFragment) fragment).submitLocation(dataItem.getId(), dataItem.getTitle());
+
+                if (null != profileSearchLanguage) {
+
+                    profileSearchLanguage.dismiss();
+                    final Fragment fragment = getSupportFragmentManager().findFragmentByTag(ProfessionalEditBasicDetailsFragment.class.getName());
+                    if (AppUtils.isFragmentUIActive(fragment)) {
+                        ((ProfessionalEditBasicDetailsFragment) fragment).submitLanguage(dataItem.getId(), dataItem.getTitle());
+                    }
                 }
+                if (null != profileDegreeDialog) {
+
+                    profileDegreeDialog.dismiss();
+                    final Fragment fragment = getSupportFragmentManager().findFragmentByTag(ProfileAddEditEducationFragment.class.getName());
+                    if (AppUtils.isFragmentUIActive(fragment)) {
+                        ((ProfileAddEditEducationFragment) fragment).submitDegree(dataItem.getId(), dataItem.getTitle());
+                    }
+                    profileDegreeDialog=null;
+                }
+                if (null != profileSchoolDialog) {
+
+                    profileSchoolDialog.dismiss();
+                    final Fragment fragment = getSupportFragmentManager().findFragmentByTag(ProfileAddEditEducationFragment.class.getName());
+                    if (AppUtils.isFragmentUIActive(fragment)) {
+                        ((ProfileAddEditEducationFragment) fragment).submitSchool(dataItem.getId(), dataItem.getTitle());
+                    }
+                    profileSchoolDialog=null;
+                }
+                if (null != profileStudyDialog) {
+
+                    profileStudyDialog.dismiss();
+                    final Fragment fragment = getSupportFragmentManager().findFragmentByTag(ProfileAddEditEducationFragment.class.getName());
+                    if (AppUtils.isFragmentUIActive(fragment)) {
+                        ((ProfileAddEditEducationFragment) fragment).submitStudy(dataItem.getId(), dataItem.getTitle());
+                    }
+                    profileStudyDialog=null;
+                }
+
 
             }
 
@@ -319,17 +364,7 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
 
             }
 
-            if (null != profileLanguageDialog) {
-                profileLanguageDialog.dismiss();
-                profileLanguageDialog = null;
 
-                LabelValue dataItem = (LabelValue) baseResponse;
-                final Fragment fragment = getSupportFragmentManager().findFragmentByTag(ProfessionalEditBasicDetailsFragment.class.getName());
-                if (AppUtils.isFragmentUIActive(fragment)) {
-                    ((ProfessionalEditBasicDetailsFragment) fragment).submitSectorStatus(dataItem.getLabel(), dataItem.getValue());
-                }
-
-            }
         }
         if (baseResponse instanceof GoodAt) {
 
@@ -407,10 +442,12 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
 
             case R.id.tv_professional_edit_basic_details:
 
+
+                MyProfileView editbasicDetail = (MyProfileView) baseResponse;
                 flprofile_container.setVisibility(View.VISIBLE);
                 ProfessionalEditBasicDetailsFragment profileEditBasicDetailsFragment = new ProfessionalEditBasicDetailsFragment();
                 Bundle bundleEditBasicDetails = new Bundle();
-                ButterKnife.bind(this);
+                bundleEditBasicDetails.putParcelable(AppConstants.EDUCATION_PROFILE, editbasicDetail);
                 profileEditBasicDetailsFragment.setArguments(bundleEditBasicDetails);
                 getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
                         .replace(R.id.profile_container, profileEditBasicDetailsFragment, ProfessionalEditBasicDetailsFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
@@ -514,20 +551,41 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
         }
         return mSectoreDialog;
     }
+    public DialogFragment callProfileStudy() {
 
+        profileStudyDialog = (ProfileStudyDialog) getFragmentManager().findFragmentByTag(ProfileStudyDialog.class.getName());
+        if (profileStudyDialog == null) {
+            profileStudyDialog = new ProfileStudyDialog();
 
-    public DialogFragment showLanguageDialog(HashMap<String, HashMap<String, ArrayList<LabelValue>>> masterDataResult) {
-        profileLanguageDialog = (ProfileLanguageDialog) getFragmentManager().findFragmentByTag(ProfileLanguageDialog.class.getName());
-        if (profileLanguageDialog == null) {
-            profileLanguageDialog = new ProfileLanguageDialog();
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(AppConstants.TAG_LIST, masterDataResult);
-            mSectoreDialog.setArguments(bundle);
         }
-        if (!profileLanguageDialog.isVisible() && !profileLanguageDialog.isAdded() && !isFinishing() && !mIsDestroyed) {
-            profileLanguageDialog.show(getFragmentManager(), ProfileLanguageDialog.class.getName());
+        if (!profileStudyDialog.isVisible() && !profileStudyDialog.isAdded() && !isFinishing() && !mIsDestroyed) {
+            profileStudyDialog.show(getFragmentManager(), SearchProfileLocation.class.getName());
         }
-        return profileLanguageDialog;
+        return profileStudyDialog;
+    }
+    public DialogFragment callProfileDegree() {
+
+        profileDegreeDialog = (ProfileDegreeDialog) getFragmentManager().findFragmentByTag(ProfileDegreeDialog.class.getName());
+        if (profileDegreeDialog == null) {
+            profileDegreeDialog = new ProfileDegreeDialog();
+
+        }
+        if (!profileDegreeDialog.isVisible() && !profileDegreeDialog.isAdded() && !isFinishing() && !mIsDestroyed) {
+            profileDegreeDialog.show(getFragmentManager(), SearchProfileLocation.class.getName());
+        }
+        return profileDegreeDialog;
+    }
+    public DialogFragment callProfileSchool() {
+
+        profileSchoolDialog = (ProfileSchoolDialog) getFragmentManager().findFragmentByTag(ProfileSchoolDialog.class.getName());
+        if (profileSchoolDialog == null) {
+            profileSchoolDialog = new ProfileSchoolDialog();
+
+        }
+        if (!profileSchoolDialog.isVisible() && !profileSchoolDialog.isAdded() && !isFinishing() && !mIsDestroyed) {
+            profileSchoolDialog.show(getFragmentManager(), SearchProfileLocation.class.getName());
+        }
+        return profileSchoolDialog;
     }
 
 
@@ -581,6 +639,18 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
     public void onBackPressed(int id) {
         PersonalProfileFragment.getInstance().onDataRefresh();
         onBackPressed();
+    }
+    public DialogFragment callLanguage() {
+
+        profileSearchLanguage = (ProfileSearchLanguage) getFragmentManager().findFragmentByTag(ProfileSearchLanguage.class.getName());
+        if (profileSearchLanguage == null) {
+            profileSearchLanguage = new ProfileSearchLanguage();
+
+        }
+        if (!profileSearchLanguage.isVisible() && !profileSearchLanguage.isAdded() && !isFinishing() && !mIsDestroyed) {
+            profileSearchLanguage.show(getFragmentManager(), ProfileSearchLanguage.class.getName());
+        }
+        return profileSearchLanguage;
     }
 
     public void callEditEducation(MyProfileView myProfileView) {

@@ -224,7 +224,7 @@ public class ProffestionalProfileFragment extends BaseFragment implements Profil
         MyProfileView educationProfile = new MyProfileView();
         educationProfile.setType(AppConstants.EDUCATION_PROFILE);
         ArrayList<EducationEntity> educationEntities=new ArrayList<EducationEntity>();
-        List<EducationEntity> educationEntityList = userProfileResponse.getEducations();
+        List<EducationEntity> educationEntityList = userProfileResponse.getEducation();
         if (StringUtil.isNotEmptyCollection(educationEntityList)) {
             for (int i=0;i<2;i++) {
                 EducationEntity educationEntity1 = new EducationEntity();
@@ -246,13 +246,13 @@ public class ProffestionalProfileFragment extends BaseFragment implements Profil
         educationProfile.setEducationEntity(educationEntities);
 
         MyProfileView experienceProfile = new MyProfileView();
+        ArrayList<ExprienceEntity> exprienceEntities1=new ArrayList<ExprienceEntity>();
         experienceProfile.setType(AppConstants.EXPERIENCE_PROFILE);
         ExprienceEntity exprienceEntity = new ExprienceEntity();
-        List<ExprienceEntity> exprienceEntityList = userProfileResponse.getExperiences();
-        if (StringUtil.isNotEmptyCollection(exprienceEntityList)) {
-            exprienceEntity.setExprienceEntity(exprienceEntityList.get(0));
-        }
-        experienceProfile.setExprienceEntity(exprienceEntity);
+        List<ExprienceEntity> exprienceEntityList = userProfileResponse.getExperience();
+        exprienceEntity.setTitle(exprienceEntityList.get(0).getTitle());
+        exprienceEntities1.add(exprienceEntity);
+        experienceProfile.setExprienceEntity(exprienceEntities1);
 
 
 
@@ -283,6 +283,9 @@ public class ProffestionalProfileFragment extends BaseFragment implements Profil
         return myProfileViewList;
 
     }
+
+
+
 
 
     @Override

@@ -4,7 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Created by sheroes on 10/04/17.
+ * Created by priyanka on 10/04/17.
  */
 
 public class ProfileAddEditEducationRequest {
@@ -36,9 +36,7 @@ public class ProfileAddEditEducationRequest {
     @SerializedName("id")
     @Expose
     private long id;
-    @SerializedName("field_of_study_master_id")
-    @Expose
-    private long fieldOfStudyMasterId;
+
     @SerializedName("degree_name_master_id")
     @Expose
     private long degreeNameMasterId;
@@ -79,6 +77,15 @@ public class ProfileAddEditEducationRequest {
     @SerializedName("is_active")
     @Expose
     private boolean isActive;
+    @SerializedName("is_currently_attending")
+    @Expose
+    private Boolean isCurrentlyAttending;
+    @SerializedName("is_grade")
+    @Expose
+    private Boolean isGrade;
+    @SerializedName("max_grade")
+    @Expose
+    private String maxGrade;
 
     public String getSubType() {
         return subType;
@@ -150,14 +157,6 @@ public class ProfileAddEditEducationRequest {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public long getFieldOfStudyMasterId() {
-        return fieldOfStudyMasterId;
-    }
-
-    public void setFieldOfStudyMasterId(long fieldOfStudyMasterId) {
-        this.fieldOfStudyMasterId = fieldOfStudyMasterId;
     }
 
     public long getDegreeNameMasterId() {
@@ -275,15 +274,6 @@ public class ProfileAddEditEducationRequest {
     public void setActive(boolean active) {
         isActive = active;
     }
-
-    public String getTag() {
-        return tag;
-    }
-
-    public void setTag(String tag) {
-        this.tag = tag;
-    }
-
     public Boolean getCurrentlyAttending() {
         return isCurrentlyAttending;
     }
@@ -291,19 +281,5 @@ public class ProfileAddEditEducationRequest {
     public void setCurrentlyAttending(Boolean currentlyAttending) {
         isCurrentlyAttending = currentlyAttending;
     }
-
-    @SerializedName("tag")
-    @Expose
-    private String tag;
-
-
-    private Boolean isCurrentlyAttending;
-    @SerializedName("is_grade")
-    @Expose
-    private Boolean isGrade;
-    @SerializedName("max_grade")
-    @Expose
-    private String maxGrade;
-
 
 }

@@ -82,6 +82,7 @@
                       android:padding="@dimen/dp_size_16"
                       android:textAllCaps="true"
                       android:text="@string/ID_EDUCATION"
+                      android:visibility="gone"
 
                       />
 

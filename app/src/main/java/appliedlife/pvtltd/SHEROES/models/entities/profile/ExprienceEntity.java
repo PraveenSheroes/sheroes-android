@@ -19,9 +19,15 @@ public class ExprienceEntity extends BaseResponse {
     @SerializedName("experience_type")
     @Expose
     private long experienceType;
+    @SerializedName("experience_type_string")
+    @Expose
+    private String experienceTypeString;
     @SerializedName("organisation_type")
     @Expose
     private long organisationType;
+    @SerializedName("organisation_type_string")
+    @Expose
+    private String organisationTypeString;
     @SerializedName("sector")
     @Expose
     private long sector;
@@ -34,6 +40,9 @@ public class ExprienceEntity extends BaseResponse {
     @SerializedName("location_id")
     @Expose
     private long locationId;
+    @SerializedName("location")
+    @Expose
+    private String location;
     @SerializedName("title")
     @Expose
     private String title;
@@ -82,6 +91,9 @@ public class ExprienceEntity extends BaseResponse {
     @SerializedName("image_url")
     @Expose
     private String imageUrl;
+    @SerializedName("mob_app_url")
+    @Expose
+    private String mobAppUrl;
     @SerializedName("is_active")
     @Expose
     private boolean isActive;
@@ -96,8 +108,6 @@ public class ExprienceEntity extends BaseResponse {
     @SerializedName("title1")
     @Expose
     private String title1;
-
-    private ExprienceEntity exprienceEntity;
 
 
     public long getId() {
@@ -274,12 +284,4 @@ public class ExprienceEntity extends BaseResponse {
         this.title1 = title1;
     }
 
-
-    public ExprienceEntity getExprienceEntity() {
-        return exprienceEntity;
-    }
-
-    public void setExprienceEntity(ExprienceEntity exprienceEntity) {
-        this.exprienceEntity = exprienceEntity;
-    }
 }

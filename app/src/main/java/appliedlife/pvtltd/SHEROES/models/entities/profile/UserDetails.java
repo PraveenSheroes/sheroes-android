@@ -18,10 +18,10 @@ public class UserDetails {
     @SerializedName("id")
     @Expose
     private long id;
-    @SerializedName("participant_id")
+    @SerializedName("participantId")
     @Expose
     private long participantId;
-    @SerializedName("user_type_id")
+    @SerializedName("userTypeId")
     @Expose
     private int userTypeId;
     @SerializedName("cityMasterId")
@@ -48,19 +48,19 @@ public class UserDetails {
     @SerializedName("crdt")
     @Expose
     private String crdt;
-    @SerializedName("last_login")
+    @SerializedName("lastLogin")
     @Expose
     private String lastLogin;
-    @SerializedName("last_modified_on")
+    @SerializedName("lastModifiedOn")
     @Expose
     private String lastModifiedOn;
-    @SerializedName("is_active")
+    @SerializedName("isActive")
     @Expose
     private boolean isActive;
-    @SerializedName("photo_url_path")
+    @SerializedName("photoUrlPath")
     @Expose
     private String photoUrlPath;
-    @SerializedName("job_function_id")
+    @SerializedName("jobFunctionId")
     @Expose
     private long jobFunctionId;
     @SerializedName("maritalStatus")
@@ -69,19 +69,24 @@ public class UserDetails {
     @SerializedName("dob")
     @Expose
     private String dob;
-    @SerializedName("sector_id")
+    @SerializedName("sectorId")
     @Expose
     private long sectorId;
-    @SerializedName("job_title")
+    @SerializedName("jobTitle")
     @Expose
     private String jobTitle;
-    @SerializedName("employment_type_id")
+    @SerializedName("employmentTypeId")
     @Expose
     private long employmentTypeId;
-    @SerializedName("total_exp")
+    @SerializedName("totalExp")
     @Expose
     private int totalExp;
-    @SerializedName("personal_bios")
+
+    @SerializedName("totalExpMonth")
+    @Expose
+    private int totalExpMonth;
+
+    @SerializedName("personalBios")
     @Expose
     private String personalBios;
     @SerializedName("interest")
@@ -90,25 +95,25 @@ public class UserDetails {
     @SerializedName("industry")
     @Expose
     private String industry;
-    @SerializedName("opportunity_type_id")
+    @SerializedName("opportunityTypeId")
     @Expose
     private long opportunityTypeId;
-    @SerializedName("job_tag_id")
+    @SerializedName("jobTagId")
     @Expose
     private long jobTagId;
-    @SerializedName("company_profile_id")
+    @SerializedName("companyProfileid")
     @Expose
     private long companyProfileid;
-    @SerializedName("profile_weight")
+    @SerializedName("profileWeight")
     @Expose
     private long profileWeight;
-    @SerializedName("is_email_verified")
+    @SerializedName("isEmailVerified")
     @Expose
     private boolean isEmailVerified;
     @SerializedName("gender")
     @Expose
     private String gender;
-    @SerializedName("is_company_admin")
+    @SerializedName("isCompanyAdmin")
     @Expose
     private boolean isCompanyAdmin;
     @SerializedName("department")
@@ -120,10 +125,10 @@ public class UserDetails {
     @SerializedName("collage")
     @Expose
     private String collage;
-    @SerializedName("user_job_view_count")
+    @SerializedName("userJobView_count")
     @Expose
     private int userJobViewCount;
-    @SerializedName("user_job_apply_count")
+    @SerializedName("userJobApplyCount")
     @Expose
     private int userJobApplyCount;
     @SerializedName("pincode")
@@ -135,10 +140,10 @@ public class UserDetails {
     @SerializedName("longitude")
     @Expose
     private double longitude;
-    @SerializedName("number_of_followers")
+    @SerializedName("numberOfFollowers")
     @Expose
     private String numberOfFollowers;
-    @SerializedName("current_ctc")
+    @SerializedName("currentCtc")
     @Expose
     private int currentCtc;
     @SerializedName("userSummary")
@@ -147,39 +152,52 @@ public class UserDetails {
     @SerializedName("name")
     @Expose
     private String name;
-    @SerializedName("twitter_username")
+    @SerializedName("twitterUsername")
     @Expose
     private String twitterUsername;
     @SerializedName("noOfChildren")
     @Expose
     private int noOfChildren;
-    @SerializedName("profile_id")
+    @SerializedName("profileId")
     @Expose
     private long profileId;
     @SerializedName("tag")
     @Expose
     private String tag;
-    private UserDetails userDetails;
 
+    @SerializedName("skills")
+    @Expose
     private List<LabelValue> skills;
 
+    @SerializedName("interests")
+    @Expose
     private List<LabelValue> interests;
 
+    @SerializedName("opportunityTypes")
+    @Expose
     private List<LabelValue> opportunityTypes;
 
+    @SerializedName("language")
+    @Expose
+    private List<LabelValue> language;
+
+    @SerializedName("canHelpIns")
+    @Expose
     private List<LabelValue> canHelpIns;
 
+    @SerializedName("sector")
+    @Expose
     private String sector;
 
     private String employmentType;
 
     private String jobFunction;
 
+    @SerializedName("jobTag")
+    @Expose
     private String jobTag;
 
     private int travelFlexibility;
-
-    private int clientSideVisitPreference;
 
     public long getId() {
         return id;
@@ -355,6 +373,14 @@ public class UserDetails {
 
     public void setTotalExp(int totalExp) {
         this.totalExp = totalExp;
+    }
+
+    public int getTotalExpMonth() {
+        return totalExpMonth;
+    }
+
+    public void setTotalExpMonth(int totalExpMonth) {
+        this.totalExpMonth = totalExpMonth;
     }
 
     public String getPersonalBios() {
@@ -565,14 +591,6 @@ public class UserDetails {
         this.tag = tag;
     }
 
-    public UserDetails getUserDetails() {
-        return userDetails;
-    }
-
-    public void setUserDetails(UserDetails userDetails) {
-        this.userDetails = userDetails;
-    }
-
     public List<LabelValue> getSkills() {
         return skills;
     }
@@ -595,6 +613,14 @@ public class UserDetails {
 
     public void setOpportunityTypes(List<LabelValue> opportunityTypes) {
         this.opportunityTypes = opportunityTypes;
+    }
+
+    public List<LabelValue> getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(List<LabelValue> language) {
+        this.language = language;
     }
 
     public List<LabelValue> getCanHelpIns() {
@@ -652,4 +678,7 @@ public class UserDetails {
     public void setClientSideVisitPreference(int clientSideVisitPreference) {
         this.clientSideVisitPreference = clientSideVisitPreference;
     }
+
+    private int clientSideVisitPreference;
+
 }

@@ -195,6 +195,7 @@ public interface SheroesAppServiceApi {
     Observable<MemberListResponse>removeMember(@Body RemoveMemberRequest removeMemberRequest);
     @POST("participant/community/reject_joining_request")
     Observable<MemberListResponse>removePandingMember(@Body RemoveMemberRequest removeMemberRequest);
+
     @POST("participant/community/approve_joining_request")
     Observable<MemberListResponse>approvePandingMember(@Body ApproveMemberRequest approveMemberRequest);
     @POST("participant/community/invite")
@@ -202,5 +203,8 @@ public interface SheroesAppServiceApi {
 
     @POST("participation/notification/bell")
     Observable<BelNotificationListResponse>bellNotification(@Body BellNotificationRequest bellNotificationRequest);
+
+    @POST("participation/notification/bell")
+    Observable<BellNotificationResponse>notificationlistAuthToken(@Body BellNotificationRequest bellNotificationRequest);
 
 }

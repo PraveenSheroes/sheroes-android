@@ -60,6 +60,7 @@ public class ProfilePersonalBasicDetailsHolder extends BaseViewHolder<MyProfileV
     }
 
 
+
     @Override
     public void bindData(MyProfileView profileView, Context context, int position) {
 
@@ -68,6 +69,8 @@ public class ProfilePersonalBasicDetailsHolder extends BaseViewHolder<MyProfileV
         mTv_edit_basic_details.setOnClickListener(this);
 
         mTv_profile_basic_details.setText(dataItem.getType());
+
+
         if (null != dataItem) {
 
             if (StringUtil.isNotNullOrEmptyString(dataItem.getUserDetails().getCityMaster())) {

@@ -11,10 +11,10 @@ public class LanguageEntity {
     @SerializedName("id")
     @Expose
     private long id;
-    @SerializedName("language_id")
+    @SerializedName("name")
     @Expose
-    private long languageId;
-    @SerializedName("proficiency_level")
+    private String name;
+    @SerializedName("proficiencylevel")
     @Expose
     private long proficiencyLevel;
 
@@ -26,12 +26,12 @@ public class LanguageEntity {
         this.id = id;
     }
 
-    public long getLanguageId() {
-        return languageId;
+    public String getName() {
+        return name;
     }
 
-    public void setLanguageId(long languageId) {
-        this.languageId = languageId;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public long getProficiencyLevel() {

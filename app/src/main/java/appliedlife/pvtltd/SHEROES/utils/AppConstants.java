@@ -253,6 +253,8 @@ public class AppConstants {
     public static final String ARTICLE_ID = "article_id";
     public static final String COMMUNITY_ID = "community_id";
     public static final String COMMUNITY_POST_ID = "community_post_id";
-
     public static final String MODEL_KEY = "key";
+    public static final String EXP_YEAR = "Year";
+    public static final String EXP_MONTH = "Month";
+
 }

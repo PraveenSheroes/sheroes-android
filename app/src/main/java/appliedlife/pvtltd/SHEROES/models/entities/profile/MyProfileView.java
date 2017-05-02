@@ -18,8 +18,8 @@ public class MyProfileView extends BaseResponse implements Parcelable {
     private String iteam1;
     private UserDetails userDetails;
     private ArrayList<EducationEntity> educationEntity;
-    private ExprienceEntity exprienceEntity;
-    private ProjectEntity projectEntity;
+    private ArrayList<ExprienceEntity> exprienceEntity;
+    private ArrayList<ProjectEntity> projectEntity;
     private ArrayList<GoodAtSkill> goodAtSkill;
     private ArrayList<OpportunityType> opportunityType;
     private ArrayList<InterestType> interestType;
@@ -88,20 +88,16 @@ public class MyProfileView extends BaseResponse implements Parcelable {
         this.educationEntity = educationEntity;
     }
 
-    public ExprienceEntity getExprienceEntity() {
+    public ArrayList<ExprienceEntity> getExprienceEntity() {
         return exprienceEntity;
     }
 
-    public void setExprienceEntity(ExprienceEntity exprienceEntity) {
-        this.exprienceEntity = exprienceEntity;
-    }
-
-    public ProjectEntity getProjectEntity() {
+    public ArrayList<ProjectEntity> getProjectEntity() {
         return projectEntity;
     }
 
-    public void setProjectEntity(ProjectEntity projectEntity) {
-        this.projectEntity = projectEntity;
+    public ClientSideLocation getClientSideLocation() {
+        return clientSideLocation;
     }
 
     public ArrayList<GoodAtSkill> getGoodAtSkill() {
@@ -138,6 +134,14 @@ public class MyProfileView extends BaseResponse implements Parcelable {
 
     public void setClientSideLocation(ClientSideLocation clientSideLocation) {
         this.clientSideLocation = clientSideLocation;
+    }
+
+    public void setExprienceEntity(ArrayList<ExprienceEntity> exprienceEntity) {
+        this.exprienceEntity = exprienceEntity;
+    }
+
+    public void setProjectEntity(ArrayList<ProjectEntity> projectEntity) {
+        this.projectEntity = projectEntity;
     }
 
     @Override

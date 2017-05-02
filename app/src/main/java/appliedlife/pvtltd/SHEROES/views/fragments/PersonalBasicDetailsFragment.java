@@ -79,9 +79,6 @@ public class PersonalBasicDetailsFragment extends BaseFragment implements Profil
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
-
-        super.onAttach(context);
         try {
             if (getActivity() instanceof ProfileView) {
 
@@ -104,6 +101,7 @@ public class PersonalBasicDetailsFragment extends BaseFragment implements Profil
         setProgressBar(mProgress);
         mTvProfileTittle.setText(R.string.ID_BASICDETAILS);
         mSpinnerRelationStatus.setAdapter(new ProfileSpinnerAdapter(getActivity(), R.layout.profile_current_status_spinner, getResources().getStringArray(R.array.relationship_status_arr)));
+
         if (null != getArguments()) {
             myProfileView = getArguments().getParcelable(AppConstants.EDUCATION_PROFILE);
             if (myProfileView != null && myProfileView.getUserDetails() != null) {

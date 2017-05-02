@@ -170,7 +170,7 @@ public class UserBO implements Parcelable {
 	@SerializedName("profile_id")
 	@Expose
 	private long profileId;
-	
+
 	private List<LabelValue> skills;
 	
 	private List<LabelValue> interests;
@@ -190,7 +190,7 @@ public class UserBO implements Parcelable {
 	private int travelFlexibility;
 	
 	private int clientSideVisitPreference;
-	
+
 	/**
 	 * @return the id
 	 */

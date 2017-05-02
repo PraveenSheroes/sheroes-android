@@ -78,13 +78,18 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ProfileAddEditEducationFragmen
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileAddEducationFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileAddOtherFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileCityWorkFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProfileDegreeDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileEditVisitingCardFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileFullViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileGoodAtFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileOpportunityTypeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileOtherFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProfileSchoolDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileSearchIntrestIn;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProfileSearchLanguage;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProfileSectoreDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileShareYourIntrestFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProfileStudyDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileTravelClientFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileVisitingCardView;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileWorkExperienceFragment;
@@ -524,5 +529,10 @@ public interface SheroesAppComponent {
     void inject(BellNotificationFragment bellNotificationFragment);
 
     void inject(BellNotificationHolder bellNotificationHolder);
+    void inject(ProfileSearchLanguage profileSearchLanguage);
+    void inject(ProfileDegreeDialog profileDegreeDialog);
+    void inject(ProfileSectoreDialog profileSectoreDialog);
+    void inject(ProfileStudyDialog profileStudyDialog);
+    void inject(ProfileSchoolDialog profileSchoolDialog);
 
 }

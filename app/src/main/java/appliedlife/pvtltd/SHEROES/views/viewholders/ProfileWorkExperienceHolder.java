@@ -5,6 +5,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.List;
+
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
@@ -59,35 +61,36 @@ public class ProfileWorkExperienceHolder extends BaseViewHolder<MyProfileView> {
     public void bindData(MyProfileView myProfileView, Context context, int position) {
         this.dataItem = myProfileView;
         mTv_add_education.setOnClickListener(this);
+
         if(null !=dataItem) {
 
             mTvJobLanguageNumber.setText(dataItem.getType());
-            if(null !=dataItem.getExprienceEntity()) {
-                exprienceEntity = dataItem.getExprienceEntity();
-            }
-            if(null !=exprienceEntity.getExprienceEntity()) {
-                exprienceEntity1 = exprienceEntity.getExprienceEntity();
-            }
-            if(StringUtil.isNotNullOrEmptyString(exprienceEntity1.getTitle())) {
-                mTv_degree1.setText(exprienceEntity1.getTitle());
-            }
-            if(StringUtil.isNotNullOrEmptyString(exprienceEntity1.getCompany())) {
-                mTv_degree11.setText(exprienceEntity1.getCompany());
-            }
-            if(StringUtil.isNotNullOrEmptyString(exprienceEntity1.getAboutOrg())) {
-                mTv_degree12.setText(exprienceEntity1.getAboutOrg());
-            }
-            if(exprienceEntity1.getStartYear()>0) {
-                String session="";
-                if(exprienceEntity1.getEndYear()>0){
-                    session="("+exprienceEntity1.getStartYear()+"-"+exprienceEntity1.getEndYear()+")";
-                }
-                else{
-                    session="("+exprienceEntity1.getStartYear()+")";
-                }
-                mTv_date1.setText(session);
-            }
 
+            List<ExprienceEntity> exprienceEntities=this.dataItem.getExprienceEntity();
+            exprienceEntity1=exprienceEntities.get(0);
+
+            if(null!=exprienceEntities && exprienceEntities.size()>0) {
+
+
+                if (StringUtil.isNotNullOrEmptyString(exprienceEntities.get(0).getTitle())) {
+                    mTv_degree1.setText(exprienceEntity1.getTitle());
+                }
+                if (StringUtil.isNotNullOrEmptyString(exprienceEntities.get(0).getCompany())) {
+                    mTv_degree11.setText(exprienceEntity1.getCompany());
+                }
+                if (StringUtil.isNotNullOrEmptyString(exprienceEntities.get(0).getAboutOrg())) {
+                    mTv_degree12.setText(exprienceEntity1.getAboutOrg());
+                }
+                if (exprienceEntities.get(0).getStartYear() > 0) {
+                    String session = "";
+                    if (exprienceEntities.get(0).getEndYear() > 0) {
+                        session = "(" + exprienceEntities.get(0).getStartYear() + "-" + exprienceEntities.get(0).getEndYear() + ")";
+                    } else {
+                        session = "(" + exprienceEntities.get(0).getStartYear() + ")";
+                    }
+                    mTv_date1.setText(session);
+                }
+            }
         }
 
     }

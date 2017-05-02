@@ -2119,7 +2119,7 @@ public class AppUtils {
         return communityRequest;
     }
 
-   public static ProfileAddEditEducationRequest profileAddEditEducationRequest(long mEducationId,long mSchoolNameId,long mDeegreeId,long mFieldOfStudyId) {
+   public static ProfileAddEditEducationRequest profileAddEditEducationRequest(long mEducationId,long mSchoolNameId,long mDeegreeId,String mEtFieldOfStudy) {
         AppUtils appUtils = AppUtils.getInstance();
         ProfileAddEditEducationRequest profileAddEditEducationRequest = new ProfileAddEditEducationRequest();
 
@@ -2132,7 +2132,7 @@ public class AppUtils {
        profileAddEditEducationRequest.setSubType("BaseProfileRequest");
        profileAddEditEducationRequest.setDegreeNameMasterId(mDeegreeId);
        profileAddEditEducationRequest.setDegreeNameMasterId(mDeegreeId);
-       profileAddEditEducationRequest.setFieldOfStudyMasterId(mFieldOfStudyId);
+       profileAddEditEducationRequest.setFieldOfStudy(mEtFieldOfStudy);
        profileAddEditEducationRequest.setSchoolNameMasterId(mSchoolNameId);
        profileAddEditEducationRequest.setId(mEducationId);
        return profileAddEditEducationRequest;

@@ -3,6 +3,10 @@ package appliedlife.pvtltd.SHEROES.models.entities.profile;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LanguageEntity;
+
 /**
  * Created by priyanka on 24/03/17.
  */
@@ -49,6 +53,10 @@ public class ProfessionalBasicDetailsRequest {
     @SerializedName("sector")
     @Expose
     private String sector;
+
+    @SerializedName("add_languages")
+    @Expose
+    private ArrayList<LanguageEntity> addLanguages;
 
     public String getSubType() {
         return subType;
@@ -152,5 +160,13 @@ public class ProfessionalBasicDetailsRequest {
 
     public void setSector(String sector) {
         this.sector = sector;
+    }
+
+    public ArrayList<LanguageEntity> getAddLanguages() {
+        return addLanguages;
+    }
+
+    public void setAddLanguages(ArrayList<LanguageEntity> addLanguages) {
+        this.addLanguages = addLanguages;
     }
 }

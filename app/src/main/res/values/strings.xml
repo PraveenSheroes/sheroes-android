@@ -611,6 +611,7 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_SELF_EMP_END">End</string>
 
     <string name="ID_SELF_EMP_START_DATE_HINT">DD MM YYYY</string>
+    <string name="ID_DATE_START_HINT">MM YYYY</string>
 
 
 
@@ -637,7 +638,8 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_MONTHS">MONTHS</string>
     <string name="ID_LANGUAGE">language</string>
     <string name="ID_ADD_LANGUAGE">ADD LANGUAGE</string>
-    <string name="ID_SELECT_PROFICIENT">PROFICIENT</string>
+    <string name="ID_SELECT_PROFICIENT">PROFICI</string>
+    <string name="ID_LANGUAGE_LEVEL">Language Level</string>
     <string name="ID_ADDED">Added</string>
     <string name="language">Language</string>
 
@@ -762,6 +764,8 @@ etur adipiscing elit,sed do eiusmod tempor incididunt ut…</string>
 
     <string name="ID_POPULAR_INTEREST_IN">I AM INTERESTED IN</string>
 
+    <string name="ID_NOTIFICATION_TITLE">Hanshika Sahrma, Preeti Singh AND 2 others people replied to yuor post in Vasant Kunj Walfare Association</string>
+    <string name="ID_NOTIFICATION_DATE">Yesterday, 7:00 PM</string>
 
     <!--close sthring through priyanka-->
 

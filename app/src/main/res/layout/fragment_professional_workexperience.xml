@@ -29,7 +29,7 @@
                         android:id="@+id/iv_community_cover_img"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp_size_200"
-                        android:background="@color/back_colo_aboutme_head"
+                        android:background="@drawable/profile_collapsible_background_color"
                         android:fitsSystemWindows="true"
                         android:scaleType="centerCrop"
                         app:layout_collapseMode="parallax" />
@@ -80,6 +80,7 @@
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
                             android:padding="@dimen/dp_size_16"
+                            android:visibility="gone"
                             android:textAllCaps="true"
                             android:text="@string/ID_WORK_EXPERIENCE"
 

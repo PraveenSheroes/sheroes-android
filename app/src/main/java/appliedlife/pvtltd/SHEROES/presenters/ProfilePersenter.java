@@ -332,7 +332,7 @@ public void getPersonalBasicDetailsAuthTokeInPresenter(PersonalBasicDetailsReque
     }
 
     //for Profile Edit visiting_card
-    public void getEditVisitingCardDetailsAuthTokeInPresenter(  ) {
+    public void getEditVisitingCardDetailsAuthTokeInPresenter( ) {
 
 
 

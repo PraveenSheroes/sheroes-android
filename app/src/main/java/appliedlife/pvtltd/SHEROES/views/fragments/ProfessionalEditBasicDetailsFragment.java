@@ -28,9 +28,12 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LanguageEntity;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.MyProfileView;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfessionalBasicDetailsRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCardResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.UserDetails;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePersenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -73,8 +76,9 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment implement
     LinearLayout mR1AddLanguage;
     @Bind(R.id.et_current_status)
     EditText mCurrentStatus;
-    Long mCurrentStatusId,mCurrentSectorId;
+    Long mCurrentStatusId,mCurrentSectorId,mLanguageNameId;
     int mMonthValue,mYearValue;
+    Long mLanguageId;
     @Bind(R.id.et_sector)
     EditText mEtSector;
     @Bind(R.id.et_add_language)
@@ -82,17 +86,23 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment implement
     @Bind(R.id.progressbar)
     ProgressBar mProgressBar;
     private EditProfileCallable mCallback;
+    MyProfileView myProfileView;
+    ProfileView mProfileBasicDetailsCallBack;
+    ArrayList <LanguageEntity> mlanguagevalue=new ArrayList<>();
 
     @Override
     public void onAttach(Context context) {
-        try {
-            mCallback = (EditProfileCallable) context;
-        } catch (ClassCastException exception) {
-            LogUtils.error(TAG, "Activity must implements EditProfileCallable", exception);
-        }
         super.onAttach(context);
-    }
+        try {
+            if (getActivity() instanceof ProfileView) {
 
+                mProfileBasicDetailsCallBack = (ProfileView) getActivity();
+
+            }
+        } catch (Exception e) {
+
+
+        }}
 
     @Nullable
     @Override
@@ -104,6 +114,27 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment implement
         setProgressBar(mProgressBar);
         mTvProfileTittle.setText(R.string.ID_BASICDETAILS);
         mR1AddLanguage.setVisibility(View.GONE);
+
+
+
+
+        if (null != getArguments()) {
+            myProfileView = getArguments().getParcelable(AppConstants.EDUCATION_PROFILE);
+            if (myProfileView != null && myProfileView.getUserDetails() != null) {
+                UserDetails userDetails = myProfileView.getUserDetails();
+
+                if (userDetails != null) {
+
+                    mEtYear.setText(""+userDetails.getTotalExp());
+                    mEtMonth.setText(""+userDetails.getTotalExpMonth());
+                    mCurrentStatus.setText(userDetails.getJobTag());
+                    mEtSector.setText(userDetails.getSector());
+                    mEtAddLanguage.setText(""+userDetails.getLanguage());
+
+
+                }
+            }
+        }
 
         if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && null != mUserPreferenceMasterData.get().getData()) {
         } else {
@@ -124,6 +155,28 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment implement
     {
         mEtSector.setText(currentSector);
         mCurrentSectorId=currentSectorId;
+    }
+
+
+
+    @OnClick(R.id.et_add_language)
+    public void clickLanguage()
+    {
+        ((ProfileActicity) getActivity()).callLanguage();
+    }
+
+    public void submitLanguage(String languageId,String language)
+    {
+
+        mEtAddLanguage.setText(language);
+        mLanguageId = Long.parseLong(languageId);
+        LanguageEntity languageEntity=new LanguageEntity();
+        languageEntity.setId(mLanguageId);
+        languageEntity.setName(language);
+        languageEntity.setProficiencyLevel(2);
+        mlanguagevalue.add(languageEntity);
+
+
     }
     //click on star date of experience
 
@@ -161,31 +214,6 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment implement
 
 
     }
-
-
-    //Click on language edit text
-
-    @OnClick(R.id.et_add_language)
-    public void
-    OnClickAddLanguage()
-    {
-
-        if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && null != mUserPreferenceMasterData.get().getData()) {
-
-            ((ProfileActicity) getActivity()).showLanguageDialog(mUserPreferenceMasterData.get().getData());
-        }
-
-        else{
-            ((ProfileActicity) getActivity()).showLanguageDialog(mapOfResult);
-        }
-
-
-
-    }
-
-
-
-
 
     //Click on end date of experience
 
@@ -225,7 +253,11 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment implement
 
     @OnClick(R.id.iv_back_profile)
     public void onBackPressed() {
-        getActivity().onBackPressed();
+
+
+        mProfileBasicDetailsCallBack.onBackPressed(R.id.iv_back_profile);
+
+
     }
 
 
@@ -245,6 +277,8 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment implement
         professionalBasicDetailsRequest.setScreenName(SCREEN_NAME);
         professionalBasicDetailsRequest.setType("PROF_DETAILS");
         professionalBasicDetailsRequest.setSubType("PROFESSIONAL_DETAILS_SERVICE");
+        professionalBasicDetailsRequest.setAddLanguages(mlanguagevalue);
+
         if (StringUtil.isNotNullOrEmptyString(""+mCurrentStatusId)) {
             professionalBasicDetailsRequest.setJobTagId(mCurrentStatusId);
         }
@@ -267,6 +301,9 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment implement
 
 
     }
+
+
+
 
 
     @Override

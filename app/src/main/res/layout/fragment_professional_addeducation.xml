@@ -176,7 +176,7 @@
                     android:focusable="false"
                     android:imeOptions="actionUnspecified"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:hint="@string/ID_SELF_EMP_START_DATE_HINT"
+                    android:hint="@string/ID_DATE_START_HINT"
                     android:textColorHint="@color/text_color_contactdetails_page"
                     android:textSize="@dimen/sp_size_13" />
 
@@ -190,7 +190,7 @@
                     android:imeOptions="actionUnspecified"
                     android:layout_toRightOf="@+id/et_job_start_date"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:hint="@string/ID_SELF_EMP_START_DATE_HINT"
+                    android:hint="@string/ID_DATE_START_HINT"
                     android:textColorHint="@color/text_color_contactdetails_page"
                     android:textSize="@dimen/sp_size_13" />
 
