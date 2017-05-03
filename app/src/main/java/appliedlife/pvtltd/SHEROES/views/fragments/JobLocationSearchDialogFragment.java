@@ -37,6 +37,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.JobFilterActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.ProfileActicity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.OnBoardingView;
@@ -68,6 +69,7 @@ public class JobLocationSearchDialogFragment extends BaseDialogFragment implemen
     private GenericRecyclerViewAdapter mAdapter;
     private Handler mHandler = new Handler();
     private String mMasterDataSkill = AppConstants.EMPTY_STRING;
+    private String sourceName;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -77,10 +79,16 @@ public class JobLocationSearchDialogFragment extends BaseDialogFragment implemen
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         if (null != getArguments()) {
             mMasterDataSkill = getArguments().getString(AppConstants.MASTER_SKILL);
+            sourceName = getArguments().getString(AppConstants.SOURCE_NAME);
         }
         mOnBoardingPresenter.attachView(this);
         editTextWatcher();
-        mAdapter = new GenericRecyclerViewAdapter(getActivity(), (JobFilterActivity) getActivity());
+        if (StringUtil.isNotNullOrEmptyString(sourceName) && AppConstants.PROFILE_FRAGMENT.equalsIgnoreCase(sourceName)) {
+            mAdapter = new GenericRecyclerViewAdapter(getActivity(), (ProfileActicity) getActivity());
+            tvSaveJobLocation.setVisibility(View.GONE);
+        } else {
+            mAdapter = new GenericRecyclerViewAdapter(getActivity(), (JobFilterActivity) getActivity());
+        }
         mSearchEditText.setHint(getString(R.string.ID_SEARCH_LOCATION));
         mOnBoardingPresenter.getOnBoardingSearchToPresenter(mAppUtils.onBoardingSearchRequestBuilder(AppConstants.CITY_NAME_DEFAULT, mMasterDataSkill));
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
@@ -107,7 +115,7 @@ public class JobLocationSearchDialogFragment extends BaseDialogFragment implemen
 
     @OnClick(R.id.tv_save_job_location)
     public void onSaveJobLocation() {
-        ((JobFilterActivity)getActivity()).saveJobLocation();
+        ((JobFilterActivity) getActivity()).saveJobLocation();
     }
 
     @OnClick(R.id.iv_search_back)

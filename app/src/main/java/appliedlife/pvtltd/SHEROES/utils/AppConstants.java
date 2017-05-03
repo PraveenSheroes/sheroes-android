@@ -30,6 +30,7 @@ public class AppConstants {
     public static final String APP_CRASHED = "App crashed ";
     public static final String EMPTY_STRING = "";
     public static final String COMMA = ",";
+    public static final String PRESENT = "PRESENT";
     public static final String PER_ANUM = "/ Annum";
     public static final String HOME_SPINNER_FRAGMENT = "spinner_fragment";
     public static final String ANDROID_VIEW_PAGER = "android:switcher:";
@@ -224,7 +225,7 @@ public class AppConstants {
     public static final String CANHELP_IN = "I can help with";
     public static final String LOOKING_FOR = "Looking For";
     public static final String EDUCATION_PROFILE = "Education";
-    public static final String EXPERIENCE_PROFILE = "WOrk experience";
+    public static final String EXPERIENCE_PROFILE = "Work experience";
     public static final String PROJECT_PROFILE = "project_profile";
     public static final String ABOUT_ME_PROFILE = "About Me";
     public static final String VIEW_MORE = "View More";

@@ -1,6 +1,5 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,38 +47,24 @@ public class ProffestionalProfileFragment extends BaseFragment implements Profil
     private final String TAG = LogUtils.makeLogTag(ProffestionalProfileFragment.class);
     @Bind(R.id.rv_profile_spinner_list)
     RecyclerView mRecyclerView;
+    @Bind(R.id.pb_profile_progress_bar)
+    ProgressBar mProgressBar;
     @Inject
     ProfilePersenter profilePersenter;
-
-
     GenericRecyclerViewAdapter mAdapter;
-    private HomeActivityIntractionWithProffestionalProfile mHomeActivityIntractionWithProffestionalProfile;
     List<ProfileViewList> profileList = new ArrayList<ProfileViewList>();
     private static ProffestionalProfileFragment proffestionalProfileFragment = new ProffestionalProfileFragment();
 
     public static ProffestionalProfileFragment getInstance() {
         return proffestionalProfileFragment;
     }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            if (getActivity() instanceof HomeActivityIntractionWithProffestionalProfile) {
-                mHomeActivityIntractionWithProffestionalProfile = (HomeActivityIntractionWithProffestionalProfile) getActivity();
-            }
-        } catch (InstantiationException exception) {
-            LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
-        }
-    }
-
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.profile_visiting_card, container, false);
         ButterKnife.bind(this, view);
         profilePersenter.attachView(this);
+        setProgressBar(mProgressBar);
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(manager);
         mAdapter = new GenericRecyclerViewAdapter(getContext(), (ProfileActicity) getActivity());
@@ -87,17 +73,6 @@ public class ProffestionalProfileFragment extends BaseFragment implements Profil
         callGetAllDetailsAPI();
         return view;
 
-    }
-
-
-    private void checkForSpinnerItemSelection() {
-
-
-
-
-        /*if (StringUtil.isNotEmptyCollection(AppUtils.profileDetail())) {
-            mAdapter.setSheroesGenericListData(AppUtils.profileDetail());
-        }*/
     }
 
 
@@ -179,8 +154,6 @@ public class ProffestionalProfileFragment extends BaseFragment implements Profil
 
     @Override
     public void getUserData(UserProfileResponse userProfileResponse) {
-
-
         if (null != userProfileResponse && StringUtil.isNotEmptyCollection(renderAllProfileViews(userProfileResponse))) {
             mAdapter.setSheroesGenericListData((renderAllProfileViews(userProfileResponse)));
             mAdapter.notifyDataSetChanged();
@@ -212,7 +185,6 @@ public class ProffestionalProfileFragment extends BaseFragment implements Profil
         }
         goodAtSkillProfile.setGoodAtSkill(goodAtSkill);
 
-
         MyProfileView educationProfile = new MyProfileView();
         educationProfile.setType(AppConstants.EDUCATION_PROFILE);
         List<EducationEntity> educationEntities = new ArrayList<>();
@@ -231,13 +203,8 @@ public class ProffestionalProfileFragment extends BaseFragment implements Profil
         educationProfile.setEducationEntity(educationEntities);
 
         MyProfileView experienceProfile = new MyProfileView();
-        List<ExprienceEntity> exprienceEntities1 = new ArrayList<ExprienceEntity>();
         experienceProfile.setType(AppConstants.EXPERIENCE_PROFILE);
-        ExprienceEntity exprienceEntity = new ExprienceEntity();
         List<ExprienceEntity> exprienceEntityList = userProfileResponse.getExperience();
-        exprienceEntity.setTitle(exprienceEntityList.get(0).getTitle());
-        exprienceEntities1.add(exprienceEntity);
-        experienceProfile.setExprienceEntity(exprienceEntities1);
 
 
         MyProfileView userProfile = new MyProfileView();
@@ -259,7 +226,10 @@ public class ProffestionalProfileFragment extends BaseFragment implements Profil
       //  myProfileViewList.add(UservisitingCard);
         myProfileViewList.add(goodAtSkillProfile);
         myProfileViewList.add(educationProfile);
-        myProfileViewList.add(experienceProfile);
+        if(StringUtil.isNotEmptyCollection(exprienceEntityList)) {
+            experienceProfile.setExprienceEntity(exprienceEntityList);
+            myProfileViewList.add(experienceProfile);
+        }
         myProfileViewList.add(userProfile);
         return myProfileViewList;
 

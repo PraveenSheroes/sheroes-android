@@ -13,7 +13,6 @@
         android:layout_height="@dimen/drawer_profile_icon_size"
         android:layout_gravity="center"
         android:scaleType="center"
-        android:src="@drawable/ic_footer_button_icon"
         app:riv_border_width="@dimen/dp_size_0.5"
         app:riv_corner_radius="@dimen/dp_size_10"
         app:riv_oval="false" />
@@ -45,6 +44,7 @@
             android:layout_marginTop="@dimen/dp_size_10"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:text=""
+            android:visibility="invisible"
             android:textColor="@color/white"
             android:textSize="@dimen/dp_size_14" />
 
@@ -53,6 +53,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_size_10"
             android:layout_marginTop="@dimen/dp_size_10"
+            android:visibility="invisible"
             style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
             android:progressDrawable="@drawable/progressbar_backgroungdstyle"
             android:progressTint="#50e3c2"

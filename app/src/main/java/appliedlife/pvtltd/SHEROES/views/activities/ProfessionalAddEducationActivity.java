@@ -23,6 +23,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.profile.EducationEntity;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.MyProfileView;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCardResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.WorkExpListResponse;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePersenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -256,6 +257,11 @@ public class ProfessionalAddEducationActivity extends BaseActivity implements Da
 
     @Override
     public void getProfileListSuccess(List<Doc> feedDetailList) {
+
+    }
+
+    @Override
+    public void getWorkExpListSuccess(WorkExpListResponse workExpListResponse) {
 
     }
 

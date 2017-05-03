@@ -269,6 +269,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void allTextViewStringOperations(Context context) {
+        tvFeedCommunityPostTextFullView.setVisibility(View.GONE);
+        tvFeedCommunityPostText.setVisibility(View.VISIBLE);
         if (StringUtil.isNotNullOrEmptyString(dataItem.getAuthorName())) {
             //  String posted=LEFT_POSTED +  mContext.getString(R.string.ID_POSTED_IN) + RIGHT_POSTED;
             StringBuilder posted = new StringBuilder();

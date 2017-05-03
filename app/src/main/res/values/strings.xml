@@ -150,6 +150,8 @@
     <string name="ID_FEEDS">FEEDS</string>
     <string name="ID_COMMUNITES">COMMUNITY</string>
     <string name="ID_PREFERENCES">PREFERENCES</string>
+    <string name="ID_DASH">-</string>
+
     <string name="ID_ABOUT">ABOUT</string>
     <string name="ID_LETS_TALK"> Let’s Start Talking</string>
 
@@ -636,6 +638,7 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_DURECTION">DURATION</string>
     <string name="ID_YEARS">YEARS</string>
     <string name="ID_MONTHS">MONTHS</string>
+    <string name="ID_DAY">Day</string>
     <string name="ID_LANGUAGE">language</string>
     <string name="ID_ADD_LANGUAGE">ADD LANGUAGE</string>
     <string name="ID_SELECT_PROFICIENT">PROFICI</string>

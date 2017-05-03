@@ -127,8 +127,7 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getStartDate())) {
             tvFeedJobDateTime.setVisibility(View.VISIBLE);
-            long createdDate = mDateUtil.getTimeInMillis(dataItem.getStartDate(), AppConstants.DATE_FORMAT);
-            tvFeedJobDateTime.setText(mDateUtil.getDateFromMillisecondsWithFormat(createdDate, AppConstants.DATE_FORMAT_FOR_JOB));
+            tvFeedJobDateTime.setText(dataItem.getStartDate());
         }
         else
         {

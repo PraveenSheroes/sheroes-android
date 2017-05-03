@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:isScrollContainer="false"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:isScrollContainer="false">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/r1_visitind_card"
@@ -12,37 +12,70 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/home_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_size_65"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_gravity="right"
+            android:gravity="right"
+            app:layout_collapseMode="pin"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-            <include
-                layout="@layout/setting_header"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/iv_back_setting"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start|top" />
+                android:layout_gravity="left|top"
+                android:layout_marginRight="@dimen/dp_size_20"
+                android:drawableLeft="@drawable/ic_back_white"
+                android:padding="@dimen/dp_size_10" />
 
+            <LinearLayout
+                android:id="@+id/li_header"
+                android:layout_width="@dimen/dp_size_212"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_setting_tittle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                    android:gravity="center"
+                    android:textAllCaps="true"
+                    android:lines="@integer/int_value_for_line_1"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_size_14" />
+
+                <TextView
+                    android:id="@+id/tv_setting_tittle1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:gravity="center"
+                    android:lines="@integer/int_value_for_line_1"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_size_12" />
+            </LinearLayout>
         </android.support.v7.widget.Toolbar>
-
     </android.support.design.widget.AppBarLayout>
 
 
     <ScrollView
-
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_below="@+id/r1_visitind_card"
-        android:isScrollContainer="false"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:isScrollContainer="false">
 
         <LinearLayout
             android:id="@+id/personal_contactdetails_editpage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="@dimen/dp_size_16"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="@dimen/dp_size_16">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -53,27 +86,29 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:text="*"
-                    android:padding="@dimen/dp_size_4"
                     android:layout_marginTop="@dimen/dp_size_8"
-                    android:textColor="@color/star_color"/>
+                    android:padding="@dimen/dp_size_4"
+                    android:text="*"
+                    android:textColor="@color/star_color" />
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
                     <EditText
                         android:id="@+id/et_self_designation"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:focusableInTouchMode="true"
                         android:fontFamily="@string/ID_ROBOTO_REGULAR"
                         android:hint="@string/ID_SELF_EMP_DESIGNATION_HINT"
-                        android:textColorHint="@color/text_color_setting_preference_basicdetails"
                         android:textColor="@color/text_color_contactdetails_page"
-                        android:focusableInTouchMode="true"
+                        android:textColorHint="@color/text_color_setting_preference_basicdetails"
                         android:textSize="@dimen/sp_size_13" />
 
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -82,11 +117,94 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:text="*"
-                    android:padding="@dimen/dp_size_4"
+                    android:layout_gravity="top"
                     android:layout_marginTop="@dimen/dp_size_8"
-                    android:textColor="@color/star_color"/>
+                    android:padding="@dimen/dp_size_4"
+                    android:text="*"
+                    android:textColor="@color/star_color" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_functional_area_lable"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_size_5"
+                        android:padding="@dimen/dp_size_5"
+                        android:text="@string/ID_SELF_EMP_FUNCTIONAL_HINT" />
+
+                    <TextView
+                        android:id="@+id/tv_functional_area_item"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                        android:padding="@dimen/dp_size_10"
+                        android:textColor="@color/text_color_contactdetails_page"
+                        android:textSize="@dimen/sp_size_13"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top"
+                    android:layout_marginTop="@dimen/dp_size_8"
+                    android:padding="@dimen/dp_size_4"
+                    android:text="*"
+                    android:textColor="@color/star_color" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_job_loc_lable"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_size_5"
+                        android:padding="@dimen/dp_size_5"
+                        android:text="@string/ID_LOCATION"
+                        android:textAllCaps="true" />
+
+                    <TextView
+                        android:id="@+id/tv_job_loc_city"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                        android:padding="@dimen/dp_size_10"
+                        android:textAllCaps="true"
+                        android:textColor="@color/text_color_contactdetails_page"
+                        android:textSize="@dimen/sp_size_13"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="@dimen/dp_size_8"
+                    android:padding="@dimen/dp_size_4"
+                    android:text="*"
+                    android:textColor="@color/star_color" />
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
@@ -94,246 +212,281 @@
 
 
                     <EditText
-                        android:id="@+id/et_self_functional_area"
+                        android:id="@+id/et_self_organization_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                        android:hint="@string/ID_SELF_EMP_FUNCTIONAL_HINT"
-                        android:textAllCaps="true"
-                        android:textColorHint="@color/text_color_setting_preference_basicdetails"
-                        android:textColor="@color/text_color_contactdetails_page"
                         android:focusableInTouchMode="true"
-                        android:textSize="@dimen/sp_size_13"
-                        android:drawablePadding="@dimen/dp_size_8"
-
-
-                        />
+                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                        android:hint="@string/ID_SELF_EMP_ORGANIZATION_HINT"
+                        android:textColor="@color/text_color_contactdetails_page"
+                        android:textColorHint="@color/text_color_setting_preference_basicdetails"
+                        android:textSize="@dimen/sp_size_13" />
 
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
 
-            <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:text="*"
-                android:padding="@dimen/dp_size_4"
-                android:layout_marginTop="@dimen/dp_size_8"
-                android:textColor="@color/star_color"/>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_size_15">
 
                 <EditText
-                    android:id="@+id/et_self_organization_name"
+                    android:id="@+id/et_self_organization_brandname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:hint="@string/ID_SELF_EMP_ORGANIZATION_HINT"
-                    android:textColorHint="@color/text_color_setting_preference_basicdetails"
-                    android:textColor="@color/text_color_contactdetails_page"
+                    android:layout_marginLeft="@dimen/dp_size_15"
                     android:focusableInTouchMode="true"
-                    android:textSize="@dimen/sp_size_13"
-                    />
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:hint="@string/ID_SELF_EMP_BRAND_HINT"
+                    android:textColor="@color/text_color_contactdetails_page"
+                    android:textColorHint="@color/text_color_setting_preference_basicdetails"
+                    android:textSize="@dimen/sp_size_13" />
 
             </android.support.design.widget.TextInputLayout>
-            </LinearLayout>
-
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="@dimen/dp_size_16">
-
-                    <EditText
-                        android:id="@+id/et_self_organization_brandname"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                        android:hint="@string/ID_SELF_EMP_BRAND_HINT"
-                        android:textColorHint="@color/text_color_setting_preference_basicdetails"
-                        android:textColor="@color/text_color_contactdetails_page"
-                        android:focusableInTouchMode="true"
-                        android:textSize="@dimen/sp_size_13"
-                        />
-
-                </android.support.design.widget.TextInputLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingLeft="@dimen/dp_size_16"
-                android:orientation="horizontal">
+                android:layout_marginTop="@dimen/dp_size_15"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/dp_size_16">
 
                 <TextView
                     android:id="@+id/tv_starid"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="*"
                     android:padding="@dimen/dp_size_4"
-                    android:textColor="@color/star_color"/>
+                    android:text="*"
+                    android:textColor="@color/star_color" />
 
-                <EditText
+                <TextView
                     android:id="@+id/tv_job_start_date"
-                    android:layout_toRightOf="@+id/tv_starid"
-                    android:textAllCaps="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/tv_starid"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:text="@string/ID_SELF_EMP_START"
+                    android:textAllCaps="true"
                     android:textColor="@color/text_color_setting_preference_basicdetails"
                     android:textSize="@dimen/sp_size_13" />
 
-                <EditText
+                <TextView
                     android:id="@+id/tv_job_end_date"
-                    android:layout_toRightOf="@+id/et_job_start_date"
-                    android:paddingLeft="@dimen/dp_size_60"
                     android:layout_width="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:textAllCaps="true"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="@dimen/dp_size_100"
+                    android:layout_toRightOf="@+id/et_job_start_date"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:text="@string/ID_SELF_EMP_END"
+                    android:textAllCaps="true"
                     android:textColor="@color/text_color_setting_preference_basicdetails"
                     android:textSize="@dimen/sp_size_13" />
             </LinearLayout>
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/dp_size_16">
-                <EditText
-                    android:id="@+id/et_job_start_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/dp_size_10"
-                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:hint="@string/ID_SELF_EMP_START_DATE_HINT"
-                    android:textColorHint="@color/text_color_contactdetails_page"
-                    android:background="@drawable/date_edittext_backgroundstyle"
-                    android:layout_marginLeft="@dimen/dp_size_7"
-                    android:focusableInTouchMode="true"
-                    android:textSize="@dimen/sp_size_13" />
-
-
-                <EditText
-                    android:id="@+id/et_job_end_date"
-                    android:layout_toRightOf="@+id/et_job_start_date"
-                    android:layout_marginLeft="@dimen/dp_size_30"
-                    android:padding="@dimen/dp_size_10"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:hint="@string/ID_SELF_EMP_START_DATE_HINT"
-                    android:textColorHint="@color/text_color_contactdetails_page"
-                    android:background="@drawable/date_edittext_backgroundstyle"
-                    android:focusableInTouchMode="true"
-                    android:textSize="@dimen/sp_size_13" />
-
-
-
+                android:layout_marginLeft="@dimen/dp_size_20"
+                android:orientation="horizontal">
 
                 <TextView
-                    android:layout_below="@+id/et_job_end_date"
-                    android:id="@+id/et_working_from"
+                    android:id="@+id/et_job_start_day"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:drawableLeft="@drawable/ic_circle_inactive"
-                    android:paddingTop="@dimen/dp_size_16"
-                    android:drawablePadding="@dimen/dp_size_5"
-                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:text="@string/ID_SELF_EMP_TITTLE"
-                    android:textColorHint="@color/text_color_setting_preference_basicdetails"
-                    android:textColor="@color/text_color_contactdetails_page"
+                    android:background="@drawable/date_edittext_backgroundstyle"
                     android:focusableInTouchMode="true"
-                    android:layout_marginRight="@dimen/dp_size_35"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:hint="DD"
+                    android:padding="@dimen/dp_size_5"
+                    android:textColorHint="@color/text_color_contactdetails_page"
                     android:textSize="@dimen/sp_size_13" />
 
-            </RelativeLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:text="@string/ID_DASH"
+                    android:textColorHint="@color/black"
+                    android:textSize="@dimen/sp_size_20" />
 
+                <TextView
+                    android:id="@+id/et_job_start_month"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/date_edittext_backgroundstyle"
+                    android:focusableInTouchMode="true"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:hint="MM"
+                    android:padding="@dimen/dp_size_5"
+                    android:textColorHint="@color/text_color_contactdetails_page"
+                    android:textSize="@dimen/sp_size_13" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:text="@string/ID_DASH"
+                    android:textColorHint="@color/black"
+                    android:textSize="@dimen/sp_size_20" />
+
+                <TextView
+                    android:id="@+id/et_job_start_year"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/et_job_start_date"
+                    android:background="@drawable/date_edittext_backgroundstyle"
+                    android:focusableInTouchMode="true"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:hint="YYYY"
+                    android:padding="@dimen/dp_size_5"
+                    android:textColorHint="@color/text_color_contactdetails_page"
+                    android:textSize="@dimen/sp_size_13" />
+
+                <TextView
+                    android:id="@+id/et_job_end_day"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_size_30"
+                    android:background="@drawable/date_edittext_backgroundstyle"
+                    android:focusableInTouchMode="true"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:hint="DD"
+                    android:padding="@dimen/dp_size_5"
+                    android:textColorHint="@color/text_color_contactdetails_page"
+                    android:textSize="@dimen/sp_size_13" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:text="@string/ID_DASH"
+                    android:textColorHint="@color/black"
+                    android:textSize="@dimen/sp_size_20" />
+
+                <TextView
+                    android:id="@+id/et_job_end_month"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/date_edittext_backgroundstyle"
+                    android:focusableInTouchMode="true"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:hint="MM"
+                    android:padding="@dimen/dp_size_5"
+                    android:textColorHint="@color/text_color_contactdetails_page"
+                    android:textSize="@dimen/sp_size_13" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:text="@string/ID_DASH"
+                    android:textColorHint="@color/black"
+                    android:textSize="@dimen/sp_size_20" />
+
+                <TextView
+                    android:id="@+id/et_job_end_year"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/date_edittext_backgroundstyle"
+                    android:focusableInTouchMode="true"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:hint="YYYY"
+                    android:padding="@dimen/dp_size_5"
+                    android:textColorHint="@color/text_color_contactdetails_page"
+                    android:textSize="@dimen/sp_size_13" />
+
+            </LinearLayout>
+
+            <CheckBox
+                android:id="@+id/checkbox_is_working"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_size_30"
+                android:layout_gravity="right"
+                android:layout_marginRight="@dimen/dp_size_10"
+                android:layout_marginTop="@dimen/dp_size_10"
+                android:background="@android:color/transparent"
+                android:button="@drawable/customecheckbox"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:paddingLeft="@dimen/dp_size_10"
+                android:text="@string/ID_SELF_EMP_TITTLE"
+                android:textColor="@color/text_color_contactdetails_page"
+                android:textSize="@dimen/sp_size_13" />
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:paddingLeft="@dimen/dp_size_16"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_size_15">
 
                 <EditText
                     android:id="@+id/et_description_your_work"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_size_15"
+                    android:focusableInTouchMode="true"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:hint="@string/ID_SELF_EMP_DESCRIPTION_HINT"
-                    android:textColorHint="@color/text_color_setting_preference_basicdetails"
                     android:textColor="@color/text_color_contactdetails_page"
-                    android:focusableInTouchMode="true"
+                    android:textColorHint="@color/text_color_setting_preference_basicdetails"
                     android:textSize="@dimen/sp_size_13"
 
                     />
 
             </android.support.design.widget.TextInputLayout>
 
+            <Spinner
+                android:id="@+id/sp_orgnization_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="@dimen/dp_size_15"
+                android:layout_marginTop="@dimen/dp_size_10"
+                android:gravity="left"
+                android:hint="@string/ID_SELF_EMP_ORGANIZATION_TYPE_HINT"
+                android:textColor="@color/text_color_contactdetails_page"
+                android:textColorHint="@color/text_color_setting_preference_basicdetails"
+                android:textSize="@dimen/sp_size_13" />
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:paddingLeft="@dimen/dp_size_16"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_size_15"
+                android:visibility="gone">
 
-                <EditText
-                    android:id="@+id/et_organization_type"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:hint="@string/ID_SELF_EMP_ORGANIZATION_TYPE_HINT"
-                    android:textColorHint="@color/text_color_setting_preference_basicdetails"
-                    android:textColor="@color/text_color_contactdetails_page"
-                    android:focusableInTouchMode="true"
-                    android:textSize="@dimen/sp_size_13"
-
-                    />
-
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-
-                android:layout_width="match_parent"
-                android:paddingLeft="@dimen/dp_size_16"
-                android:layout_height="wrap_content">
                 <EditText
                     android:id="@+id/et_self_sector_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_size_15"
+                    android:focusableInTouchMode="true"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:hint="@string/ID_SELF_EMP_SECTOR_HINT"
-                    android:textColorHint="@color/text_color_setting_preference_basicdetails"
                     android:textColor="@color/text_color_contactdetails_page"
-                    android:focusableInTouchMode="true"
-                    android:textSize="@dimen/sp_size_13"/>
+                    android:textColorHint="@color/text_color_setting_preference_basicdetails"
+                    android:textSize="@dimen/sp_size_13" />
 
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:paddingLeft="@dimen/dp_size_16"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_size_15">
 
                 <EditText
                     android:id="@+id/et_self_about_organization"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_size_15"
+                    android:focusableInTouchMode="true"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:hint="@string/ID_SELF_EMP_ABOUT_HINT"
-                    android:textColorHint="@color/text_color_setting_preference_basicdetails"
                     android:textColor="@color/text_color_contactdetails_page"
-                    android:focusableInTouchMode="true"
+                    android:textColorHint="@color/text_color_setting_preference_basicdetails"
                     android:textSize="@dimen/sp_size_13"
 
                     />
@@ -341,61 +494,58 @@
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                  <EditText
-                        android:id="@+id/et_self_weburl"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                        android:hint="@string/ID_SELF_EMP_WEBSITE_URL_HINT"
-                        android:textColorHint="@color/text_color_setting_preference_basicdetails"
-                        android:textColor="@color/text_color_contactdetails_page"
-                        android:focusableInTouchMode="true"
-                        android:textSize="@dimen/sp_size_13"
-                      android:paddingLeft="@dimen/dp_size_16" />
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <EditText
-                        android:id="@+id/et_self_app_url"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                        android:hint="@string/ID_SELF_EMP_APP_URL_HINT"
-                        android:textColorHint="@color/text_color_setting_preference_basicdetails"
-                        android:textColor="@color/text_color_contactdetails_page"
-                        android:focusableInTouchMode="true"
-                        android:textSize="@dimen/sp_size_13"
-                        android:padding="@dimen/dp_size_16" />
-                </android.support.design.widget.TextInputLayout>
-
-            <TextView
-                android:id="@+id/tv_add_image_self_emp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:drawablePadding="@dimen/dp_size_4"
-                android:drawableTop="@drawable/ic_camera_icon_with_rectangle"
-                android:text="@string/ID_ADDMORE"
-                android:gravity="center"
-                android:textSize="@dimen/dp_size_12"
-                android:padding="@dimen/dp_size_4"
-                android:textColor="@color/star_color"/>
+                android:layout_marginTop="@dimen/dp_size_15">
+
+                <EditText
+                    android:id="@+id/et_self_weburl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_size_15"
+                    android:focusableInTouchMode="true"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:hint="@string/ID_SELF_EMP_WEBSITE_URL_HINT"
+                    android:textColor="@color/text_color_contactdetails_page"
+                    android:textColorHint="@color/text_color_setting_preference_basicdetails"
+                    android:textSize="@dimen/sp_size_13" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="invisible">
+
+                <EditText
+                    android:id="@+id/et_self_app_url"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusableInTouchMode="true"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:hint="@string/ID_SELF_EMP_APP_URL_HINT"
+                    android:padding="@dimen/dp_size_16"
+                    android:textColor="@color/text_color_contactdetails_page"
+                    android:textColorHint="@color/text_color_setting_preference_basicdetails"
+                    android:textSize="@dimen/sp_size_13" />
+            </android.support.design.widget.TextInputLayout>
 
         </LinearLayout>
 
     </ScrollView>
-    <Button
-        android:id="@+id/btn_save_selfempolyment_details"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/ID_SAVE"
-        android:textColor="@color/white"
-        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+
+    <include layout="@layout/progress_bar_login" />
+
+    <TextView
+        android:id="@+id/tv_save_work_exp"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_size_50"
         android:layout_alignParentBottom="true"
-        />
+        android:layout_gravity="bottom"
+        android:background="@drawable/rect_btn"
+        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+        android:gravity="center"
+        android:text="@string/ID_SAVE"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_size_13" />
 </RelativeLayout>

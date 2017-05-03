@@ -14,6 +14,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ExprienceEntity;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.GetUserVisitingCardRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.PersonalBasicDetailsRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfessionalBasicDetailsRequest;
@@ -39,8 +40,6 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
  */
 
 public class ProfilePersenter extends BasePresenter<ProfileView> {
-
-
     private final String TAG = LogUtils.makeLogTag(ProfilePersenter.class);
     ProfileModel mProfileModel;
     SheroesApplication sheroesApplication;
@@ -331,7 +330,7 @@ public class ProfilePersenter extends BasePresenter<ProfileView> {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
             return;
         }
-
+        getMvpView().startProgressBar();
         Subscription subscription = mProfileModel.getAllUserDetailsromModel().subscribe(new Subscriber<UserProfileResponse>() {
             @Override
             public void onCompleted() {
@@ -340,11 +339,13 @@ public class ProfilePersenter extends BasePresenter<ProfileView> {
 
             @Override
             public void onError(Throwable e) {
+                getMvpView().stopProgressBar();
                 getMvpView().showError(sheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_AUTH_TOKEN);
             }
 
             @Override
             public void onNext(UserProfileResponse userProfileResponse) {
+                getMvpView().stopProgressBar();
                 if (null != userProfileResponse) {
                     getMvpView().getUserData(userProfileResponse);
                 }
@@ -386,6 +387,34 @@ public class ProfilePersenter extends BasePresenter<ProfileView> {
         registerSubscription(subscription);
     }
 
+    public void getWorkExpResponseInPresenter(ExprienceEntity exprienceEntity) {
+        if (!NetworkUtil.isConnected(sheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = mProfileModel.getWorkExpFromModel(exprienceEntity).subscribe(new Subscriber<BoardingDataResponse>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                getMvpView().stopProgressBar();
+                getMvpView().showError(sheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_AUTH_TOKEN);
+            }
+
+            @Override
+            public void onNext(BoardingDataResponse boardingDataResponse) {
+                getMvpView().stopProgressBar();
+                if (null != boardingDataResponse) {
+                    getMvpView().getEducationResponse(boardingDataResponse);
+                }
+            }
+        });
+        registerSubscription(subscription);
+    }
     public void onStop() {
         detachView();
     }

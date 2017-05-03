@@ -70,7 +70,8 @@ public class JobFilterFragment extends BaseFragment {
     private List<String> skill = new ArrayList<>();
     private Integer experienceFrom;
     private Integer experienceTo;
-
+    @Bind(R.id.tv_functional_area_data)
+    TextView tvFunctionAreaData;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -142,7 +143,17 @@ public class JobFilterFragment extends BaseFragment {
             tvLocationData.setText(loc);
         }
     }
-
+    public void setFunctionAreaDataItem(List<String> functionAreaDataItem) {
+        if (StringUtil.isNotEmptyCollection(functionAreaDataItem)) {
+            tvFunctionAreaData.setVisibility(View.VISIBLE);
+            StringBuilder stringBuilder = new StringBuilder();
+            for (String fuctinalArea : functionAreaDataItem) {
+                stringBuilder.append(fuctinalArea).append(AppConstants.COMMA);
+            }
+            String funcArea = stringBuilder.toString().substring(0, stringBuilder.toString().length() - 1);
+            tvFunctionAreaData.setText(funcArea);
+        }
+    }
     @OnClick(R.id.tv_save_job_filter)
     public void applyFilterOnClick() {
         FeedRequestPojo feedRequestPojo = jobCategoryRequestBuilder(AppConstants.FEED_JOB, AppConstants.ONE_CONSTANT, cities, experienceFrom, experienceTo,  ((JobFilterActivity) getActivity()).mFunctionArea, ((JobFilterActivity) getActivity()).mListOfOpportunity, skill);
@@ -163,15 +174,18 @@ public class JobFilterFragment extends BaseFragment {
     public void locationJob() {
         tvLocationData.setVisibility(View.VISIBLE);
         ((JobFilterActivity) getActivity()).searchLocationData(AppConstants.LOCATION_CITY_GET_ALL_DATA_KEY, LOCATION);
-
     }
 
     @OnClick(R.id.tv_functional_area_lable)
     public void functionalArea() {
-        functionalRecyclerDataList();
-        tvFunctionAreaRecycler.setVisibility(View.VISIBLE);
+        ((JobFilterActivity) getActivity()).functionAreaData();
+      //  functionalRecyclerDataList();
+      //  tvFunctionAreaRecycler.setVisibility(View.VISIBLE);
     }
-
+    @OnClick(R.id.tv_functional_area_data)
+    public void onFuncAreaDataClick() {
+        ((JobFilterActivity) getActivity()).functionAreaData();
+    }
     @OnClick(R.id.tv_filter_exp_label)
     public void filterExperience() {
         tvExp.setVisibility(View.VISIBLE);

@@ -46,6 +46,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.CommunityTypeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CreateCommunityFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CreateCommunityPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.FunctionalAreaDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeSpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ImageFullViewFragment;
@@ -177,6 +178,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.TagsHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.UserHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.VisitingCardholder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.Visiting_card_holder1;
+import appliedlife.pvtltd.SHEROES.views.viewholders.WorkExperienceCardHolder;
 import dagger.Component;
 
 /**
@@ -534,5 +536,7 @@ public interface SheroesAppComponent {
     void inject(ProfileSectoreDialog profileSectoreDialog);
     void inject(ProfileStudyDialog profileStudyDialog);
     void inject(ProfileSchoolDialog profileSchoolDialog);
+    void inject(WorkExperienceCardHolder workExperienceCardHolder);
+    void inject(FunctionalAreaDialogFragment functionalAreaDialogFragment);
 
 }

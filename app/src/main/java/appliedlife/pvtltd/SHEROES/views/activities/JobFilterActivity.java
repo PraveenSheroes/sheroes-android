@@ -22,6 +22,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.fragments.FunctionalAreaDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobFilterFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobLocationSearchDialogFragment;
 import butterknife.ButterKnife;
@@ -33,6 +34,7 @@ import butterknife.ButterKnife;
 public class JobFilterActivity extends BaseActivity {
     private final String TAG = LogUtils.makeLogTag(JobFilterActivity.class);
     private JobLocationSearchDialogFragment jobLocationSearchDialogFragment;
+    private FunctionalAreaDialogFragment functionalAreaDialogFragment;
     public List<String> mListOfOpportunity = new ArrayList<>();
     public List<String> mFunctionArea = new ArrayList<>();
     private List<String> mJobLocationList = new ArrayList<>();
@@ -99,7 +101,6 @@ public class JobFilterActivity extends BaseActivity {
                     }
                 }
             }
-
         }
     }
 
@@ -131,5 +132,26 @@ public class JobFilterActivity extends BaseActivity {
             jobLocationSearchDialogFragment.show(getFragmentManager(), JobLocationSearchDialogFragment.class.getName());
         }
         return jobLocationSearchDialogFragment;
+    }
+    public DialogFragment functionAreaData() {
+        functionalAreaDialogFragment = (FunctionalAreaDialogFragment) getFragmentManager().findFragmentByTag(FunctionalAreaDialogFragment.class.getName());
+        if (functionalAreaDialogFragment == null) {
+            functionalAreaDialogFragment = new FunctionalAreaDialogFragment();
+            Bundle bundle = new Bundle();
+            functionalAreaDialogFragment.setArguments(bundle);
+        }
+        if (!functionalAreaDialogFragment.isVisible() && !functionalAreaDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
+            functionalAreaDialogFragment.show(getFragmentManager(), FunctionalAreaDialogFragment.class.getName());
+        }
+        return functionalAreaDialogFragment;
+    }
+    public void onDoneFunctionArea() {
+        if (null != functionalAreaDialogFragment) {
+            functionalAreaDialogFragment.dismiss();
+            Fragment fragmentJobFilter = getSupportFragmentManager().findFragmentByTag(JobFilterFragment.class.getName());
+            if (AppUtils.isFragmentUIActive(fragmentJobFilter)) {
+                ((JobFilterFragment) fragmentJobFilter).setFunctionAreaDataItem(mFunctionArea);
+            }
+        }
     }
 }

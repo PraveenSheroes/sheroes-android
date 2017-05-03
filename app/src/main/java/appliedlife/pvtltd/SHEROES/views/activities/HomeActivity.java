@@ -189,9 +189,9 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     .skipMemoryCache(true)
                     .into(ivDrawerProfileCircleIcon);
             mTvUserName.setText(mUserPreference.get().getUserSummary().getFirstName() + AppConstants.SPACE + mUserPreference.get().getUserSummary().getLastName());
-           if(null != mUserPreference.get().getUserSummary().getUserBO()&&StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getUserBO().getCityMaster())) {
-               mTvUserLocation.setText(mUserPreference.get().getUserSummary().getUserBO().getCityMaster());
-           }
+            if (null != mUserPreference.get().getUserSummary().getUserBO() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getUserBO().getCityMaster())) {
+                mTvUserLocation.setText(mUserPreference.get().getUserSummary().getUserBO().getCityMaster());
+            }
             Glide.with(this)
                     .load(profile).asBitmap()
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
@@ -254,33 +254,28 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
         if (baseResponse instanceof BellNotificationResponse) {
-            BellNotificationResponse bellNotificationResponse=(BellNotificationResponse) baseResponse;
-            if(null !=bellNotificationResponse) {
-                if(StringUtil.isNotNullOrEmptyString(bellNotificationResponse.getScreenName()))
-                {
-                    if(bellNotificationResponse.getScreenName().equalsIgnoreCase(AppConstants.CLICKABLE_SCREEN)) {
-                        if(StringUtil.isNotNullOrEmptyString(bellNotificationResponse.getSolrIgnoreDeepLinkUrl())) {
+            BellNotificationResponse bellNotificationResponse = (BellNotificationResponse) baseResponse;
+            if (null != bellNotificationResponse) {
+                if (StringUtil.isNotNullOrEmptyString(bellNotificationResponse.getScreenName())) {
+                    if (bellNotificationResponse.getScreenName().equalsIgnoreCase(AppConstants.CLICKABLE_SCREEN)) {
+                        if (StringUtil.isNotNullOrEmptyString(bellNotificationResponse.getSolrIgnoreDeepLinkUrl())) {
                             String urlStr = bellNotificationResponse.getSolrIgnoreDeepLinkUrl();
                             Uri url = Uri.parse(urlStr);
                             Intent intent = new Intent(this, SheroesDeepLinkingActivity.class);
                             intent.setData(url);
                             startActivity(intent);
-                        }
-                        else {
-                           onBackPressed();
+                        } else {
+                            onBackPressed();
                             homeOnClick();
                         }
-                    }
-                    else if(bellNotificationResponse.getScreenName().equalsIgnoreCase(AppConstants.NOT_CLICABLE))
-                    {
+                    } else if (bellNotificationResponse.getScreenName().equalsIgnoreCase(AppConstants.NOT_CLICABLE)) {
 
                     }
 
                 }
 
             }
-        }
-           else if (baseResponse instanceof FeedDetail) {
+        } else if (baseResponse instanceof FeedDetail) {
             mFeedDetail = (FeedDetail) baseResponse;
             int id = view.getId();
             if (id == R.id.tv_community_detail_invite) {
@@ -686,12 +681,10 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         } else if (mFragmentOpen.isOpenImageViewer()) {
             mFragmentOpen.setOpenImageViewer(false);
             getSupportFragmentManager().popBackStackImmediate();
-        }
-        else if(mFragmentOpen.isBellNotificationFragment()){
+        } else if (mFragmentOpen.isBellNotificationFragment()) {
             mFragmentOpen.setBellNotificationFragment(false);
             getSupportFragmentManager().popBackStackImmediate();
-        }
-        else {
+        } else {
             if (backPressClickCount == 0) {
                 finish();
             } else {
@@ -716,7 +709,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             mTvCommunities.setText(getString(R.string.ID_COMMUNITIY));
             mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.footer_icon_text));
         }
-      //  mTvSearchBox.setVisibility(View.VISIBLE);
+        //  mTvSearchBox.setVisibility(View.VISIBLE);
         mTvSetting.setVisibility(View.GONE);
     }
 
@@ -743,7 +736,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
 
     @OnClick(R.id.tv_drawer_navigation)
     public void drawerNavigationClick() {
-         mDrawer.openDrawer(Gravity.LEFT);
+        mDrawer.openDrawer(Gravity.LEFT);
     }
 
     @Override
@@ -776,13 +769,15 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         mHomeSpinnerItemList.clear();
         mHomeSpinnerItemList.addAll(localList);
     }
+
     public void callBellNotification() {
         mFragmentOpen.setBellNotificationFragment(true);
         setAllValues(mFragmentOpen);
         BellNotificationFragment bellNotificationFragment = new BellNotificationFragment();
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
                 .add(R.id.fl_feed_comments, bellNotificationFragment, BellNotificationFragment.class.getName()).addToBackStack(BellNotificationFragment.class.getName()).commitAllowingStateLoss();
-          }
+    }
+
     @Override
     public void onClickReactionList(FragmentOpen isFragmentOpen, FeedDetail feedDetail) {
         mFragmentOpen = isFragmentOpen;

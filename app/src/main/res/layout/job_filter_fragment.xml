@@ -109,6 +109,18 @@
                 android:visibility="gone"
                 android:layout_marginRight="@dimen/dp_size_30"
                 android:divider="@color/fully_transparent" />
+            <TextView
+                android:id="@+id/tv_functional_area_data"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:layout_marginLeft="@dimen/dp_size_35"
+                android:layout_marginRight="@dimen/dp_size_30"
+                android:textAllCaps="true"
+                android:visibility="gone"
+                android:textColor="@color/searchbox_hint_text_color"
+                android:textSize="@dimen/sp_size_12" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_size_0.5"

@@ -1,4 +1,5 @@
 package appliedlife.pvtltd.SHEROES.views.viewholders;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobLocationList;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingInterestJobSearch;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.OnBoardingData;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ExprienceEntity;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.GoodAt;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.MyProfileView;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileHorList;
@@ -37,12 +39,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 
 public enum HolderMapping {
 
-    BELL_NOTIFICATION(R.layout.bel_notification_card) {
-        @Override
-        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new BellNotificationHolder(view, viewInterface);
-        }
-    },
     FEED_COMMUNITY_POST(R.layout.feed_comunity_user_post_normal) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
@@ -226,7 +222,7 @@ public enum HolderMapping {
             return new ProfileEducationHolder(view, viewInterface);
         }
     },
-    PROFILE_WORK_EXPERIENCE(R.layout.professional_education_card) {
+    PROFILE_WORK_EXPERIENCE(R.layout.professtional_work_exp_card) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new ProfileWorkExperienceHolder(view, viewInterface);
@@ -250,12 +246,6 @@ public enum HolderMapping {
             return new ProfileProfessionalBasicDetailsHolder(view, viewInterface);
         }
     },
-   /* PROFILE_OTHER(R.layout.professional_other_card) {
-        @Override
-        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new ProfileOtherHolder(view, viewInterface);
-        }
-    },*/
 
     PROFILE_LOOK_IN_FOR(R.layout.personal_lookingfor_card) {
         @Override
@@ -263,12 +253,6 @@ public enum HolderMapping {
             return new ProfileLookingForHolder(view, viewInterface);
         }
     },
-    /*  PROFILE_I_CAN_HELP(R.layout.personal_lookingfor_card) {
-          @Override
-          public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-              return new ProfileICanHelpWithHolder(view, viewInterface);
-          }
-      },*/
     PROFILE_ABOUTME(R.layout.profile_about_me_card) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
@@ -284,8 +268,7 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new ProfileIAmInterestingInHolder(view, viewInterface);
         }
-    }
-    , CANHELP_IN(R.layout.profile_can_help_in) {
+    }, CANHELP_IN(R.layout.profile_can_help_in) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new CanHelpInHolder(view, viewInterface);
@@ -301,7 +284,7 @@ public enum HolderMapping {
             return new VisitingCardholder(view, viewInterface);
         }
     },
-       GOOD_AT(R.layout.ggodat_card) {
+    GOOD_AT(R.layout.ggodat_card) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new GoodAtHolder(view, viewInterface);
@@ -368,6 +351,16 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new JobSearchHolder(view, viewInterface);
         }
+    }, BELL_NOTIFICATION(R.layout.bel_notification_card) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new BellNotificationHolder(view, viewInterface);
+        }
+    },  WORK_EXPERIENCE_DETAIl_CARD(R.layout.professional_work_experience_viewcard) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new WorkExperienceCardHolder(view, viewInterface);
+        }
     };
     public Object object;
     public int layout;
@@ -414,7 +407,7 @@ public enum HolderMapping {
                     }
                 } else if (item instanceof BoardingInterestJobSearch) {
                     return INTEREST_SEARCH.ordinal();
-                }else if (item instanceof GetAllDataDocument) {
+                } else if (item instanceof GetAllDataDocument) {
                     return JOB_LOCATION_SEARCH.ordinal();
                 }
             } else if (item instanceof BoardingInterestJobSearch) {
@@ -483,52 +476,42 @@ public enum HolderMapping {
                     returnView = ARTICLE_DETAIL_HOLDER.ordinal();//TODO: Home related changes
                 } else if (item instanceof JobDetailPojo) {
                     return JOB_DETAIL_HOLDER.ordinal();
-                }
-                else if (item instanceof ProfileHorList) {
+                } else if (item instanceof ProfileHorList) {
                     return PROFILE_HORIZONTAL_LIST.ordinal();
-                }
-                else if (item instanceof MyProfileView) {
+                } else if (item instanceof MyProfileView) {
                     String tagType = ((MyProfileView) item).getType();
-
                     if (tagType.equalsIgnoreCase(AppConstants.GOOD_AT_SKILL_PROFILE)) {
                         return PROFILE_GOOD_AT.ordinal();
-                    }else if (tagType.equalsIgnoreCase(AppConstants.ABOUT_ME_PROFILE)) {
+                    } else if (tagType.equalsIgnoreCase(AppConstants.ABOUT_ME_PROFILE)) {
                         return PROFILE_ABOUTME.ordinal();
-                    }else if (tagType.equalsIgnoreCase(AppConstants.USER_PROFILE)) {
+                    } else if (tagType.equalsIgnoreCase(AppConstants.USER_PROFILE)) {
                         return PROFILE_PERSONAL_BASICDETAILS.ordinal();
 
-                    }else if (tagType.equalsIgnoreCase(AppConstants.USER_PROFILE1)) {
+                    } else if (tagType.equalsIgnoreCase(AppConstants.USER_PROFILE1)) {
 
                         return PROFILE_BASIC_DETAILS.ordinal();
 
-                    }else if (tagType.equalsIgnoreCase(AppConstants.INTEREST_PROFILE)) {
+                    } else if (tagType.equalsIgnoreCase(AppConstants.INTEREST_PROFILE)) {
                         return PROFILE_PERSONAL_INTERESTING.ordinal();
-                    }
-                    else if (tagType.equalsIgnoreCase(AppConstants.CANHELP_IN)) {
+                    } else if (tagType.equalsIgnoreCase(AppConstants.CANHELP_IN)) {
                         return CANHELP_IN.ordinal();
-                    }else
-                    if (tagType.equalsIgnoreCase(AppConstants.OPPORTUNITY_PROFILE)) {
+                    } else if (tagType.equalsIgnoreCase(AppConstants.OPPORTUNITY_PROFILE)) {
                         return PROFILE_LOOK_IN_FOR.ordinal();
-                    }  else if (tagType.equalsIgnoreCase(AppConstants.EDUCATION_PROFILE)) {
+                    } else if (tagType.equalsIgnoreCase(AppConstants.EDUCATION_PROFILE)) {
                         return PROFILE_EDUCATION.ordinal();
                     } else if (tagType.equalsIgnoreCase(AppConstants.EXPERIENCE_PROFILE)) {
                         return PROFILE_WORK_EXPERIENCE.ordinal();
 
-                    }else if (tagType.equalsIgnoreCase(AppConstants.CLIENTSIDE)) {
+                    } else if (tagType.equalsIgnoreCase(AppConstants.CLIENTSIDE)) {
                         return PROFILE_HORIZONTAL_RECYCLER_LIST.ordinal();
 
-                    }else if (tagType.equalsIgnoreCase(AppConstants.USER_VISITING_CARD))
-                    {
+                    } else if (tagType.equalsIgnoreCase(AppConstants.USER_VISITING_CARD)) {
                         return PROFFESTIONAL_VISITINGCARD.ordinal();
 
-                    }else if (tagType.equalsIgnoreCase(AppConstants.USER_VISITING_CARD1))
-                    {
+                    } else if (tagType.equalsIgnoreCase(AppConstants.USER_VISITING_CARD1)) {
                         return PROFILE_PERSONAL_VISITINGCARD.ordinal();
                     }
 
-                }
-                else if (item instanceof BellNotificationResponse) {
-                    return BELL_NOTIFICATION.ordinal();
                 }
                 else if (item instanceof GoodAt) {
                     return GOOD_AT.ordinal();
@@ -560,6 +543,10 @@ public enum HolderMapping {
                     return JOB_LOCATION_LIST.ordinal();
                 } else if (item instanceof ProfileItems) {
                     return PROFILE_HOLDER.ordinal();
+                } else if (item instanceof BellNotificationResponse) {
+                    return BELL_NOTIFICATION.ordinal();
+                } else if (item instanceof ExprienceEntity) {
+                    return WORK_EXPERIENCE_DETAIl_CARD.ordinal();
                 }
             }
         }

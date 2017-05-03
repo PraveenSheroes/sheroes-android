@@ -64,12 +64,12 @@ public class ProfileEducationHolder extends BaseViewHolder<MyProfileView> {
         if(null !=educationEntity) {
            /* if (StringUtil.isNotEmptyCollection(educationEntity)) {
                 if(StringUtil.isNotNullOrEmptyString(educationEntity.get(0).getDegree())) {
-                    mTv_degree1.setVisibility(View.VISIBLE);
-                    mTv_degree1.setText(educationEntity.get(0).getDegree());
+                    mTvPosition.setVisibility(View.VISIBLE);
+                    mTvPosition.setText(educationEntity.get(0).getDegree());
                 }
                 if(StringUtil.isNotNullOrEmptyString(educationEntity.get(0).getSchool())) {
-                    mTv_degree11.setVisibility(View.VISIBLE);
-                    mTv_degree11.setText(educationEntity.get(0).getSchool());
+                    mTvCompanyName.setVisibility(View.VISIBLE);
+                    mTvCompanyName.setText(educationEntity.get(0).getSchool());
                 }
                 if(educationEntity.get(0).getSessionStartYear()>0) {
                     String session="";
@@ -81,8 +81,8 @@ public class ProfileEducationHolder extends BaseViewHolder<MyProfileView> {
                     {
                         session="("+educationEntity.get(0).getSessionStartYear()+")";
                     }
-                    mTv_date1.setVisibility(View.VISIBLE);
-                    mTv_date1.setText(session);
+                    mTvDate.setVisibility(View.VISIBLE);
+                    mTvDate.setText(session);
                 }
 
 

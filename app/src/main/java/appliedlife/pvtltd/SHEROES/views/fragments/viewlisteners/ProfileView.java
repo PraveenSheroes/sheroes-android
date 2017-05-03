@@ -8,6 +8,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCardResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.WorkExpListResponse;
 
 /**
  * Created by priyanka on 07/03/17.
@@ -34,7 +35,7 @@ public interface ProfileView extends BaseMvpView {
     void getProfileListSuccess(GetTagData getAllData);
 
     void getProfileListSuccess(List<Doc> feedDetailList);
-
+    void getWorkExpListSuccess(WorkExpListResponse workExpListResponse);
 
 
 

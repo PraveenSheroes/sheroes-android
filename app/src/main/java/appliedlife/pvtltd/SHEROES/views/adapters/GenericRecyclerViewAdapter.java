@@ -34,7 +34,7 @@ public class GenericRecyclerViewAdapter<T extends BaseResponse> extends Recycler
     List<T> mSheroesGenericListData = new ArrayList<>();
     BaseHolderInterface viewHolderInterface;
     protected List<T> filterListData;
-    private String mCallFromType= AppConstants.FOR_ALL;
+    private String mCallFromType = AppConstants.FOR_ALL;
 
     public GenericRecyclerViewAdapter(Context context, BaseHolderInterface viewHolderInterface) {
         this.context = context;
@@ -45,19 +45,23 @@ public class GenericRecyclerViewAdapter<T extends BaseResponse> extends Recycler
         this.mSheroesGenericListData = mSheroesGenericListData;
         this.filterListData = mSheroesGenericListData;
     }
+
     public void setCallForRecycler(String callFromType) {
         this.mCallFromType = callFromType;
     }
-    public void removeDataOnPosition(FeedDetail feedDetail,int position) {
-        if(StringUtil.isNotEmptyCollection(filterListData)&&filterListData.size()>position) {
+
+    public void removeDataOnPosition(FeedDetail feedDetail, int position) {
+        if (StringUtil.isNotEmptyCollection(filterListData) && filterListData.size() > position) {
             this.filterListData.remove(position);
         }
     }
+
     public void addAllDataForList(List<T> data) {
         this.filterListData.addAll(data);
     }
-    public void setDataOnPosition(FeedDetail feedDetail,int position) {
-        if(StringUtil.isNotEmptyCollection(filterListData)&&filterListData.size()>position) {
+
+    public void setDataOnPosition(FeedDetail feedDetail, int position) {
+        if (StringUtil.isNotEmptyCollection(filterListData) && filterListData.size() > position) {
             this.filterListData.remove(position);
             this.filterListData.add(position, (T) feedDetail);
         }
@@ -82,15 +86,15 @@ public class GenericRecyclerViewAdapter<T extends BaseResponse> extends Recycler
 
     @Override
     public void onBindViewHolder(BaseViewHolder holder, int position) {
-
         holder.bindData(filterListData.get(position), context, position);
     }
 
 
     @Override
     public int getItemViewType(int position) {
-        return HolderMapping.getOrdinal(filterListData.get(position), filterListData.size(),mCallFromType);
+        return HolderMapping.getOrdinal(filterListData.get(position), filterListData.size(), mCallFromType);
     }
+
     @Override
     public int getItemCount() {
         return filterListData == null ? 0 : filterListData.size();

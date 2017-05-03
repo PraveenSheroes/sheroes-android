@@ -105,6 +105,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
             @Override
             public void onNext(LoginResponse loginResponse) {
                 getMvpView().stopProgressBar();
+                if(null!=loginResponse)
                 getMvpView().getLogInResponse(loginResponse);
             }
         });

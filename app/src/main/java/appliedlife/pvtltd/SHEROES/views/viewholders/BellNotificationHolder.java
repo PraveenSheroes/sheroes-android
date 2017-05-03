@@ -44,8 +44,8 @@ public class BellNotificationHolder extends BaseViewHolder<BellNotificationRespo
     private Context mContext;
     public BellNotificationHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
-        SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
         ButterKnife.bind(this, itemView);
+        SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
         this.mViewInterface = baseHolderInterface;
     }
     @TargetApi(AppConstants.ANDROID_SDK_24)

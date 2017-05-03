@@ -39,17 +39,22 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostRespons
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
+import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LastComment;
+import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCardResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.WorkExpListResponse;
 import appliedlife.pvtltd.SHEROES.presenters.CommentReactionPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -60,6 +65,7 @@ import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CommunityView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FOR_REFRESH_FRAGMENT_LIST;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.DELETE_COMMUNITY_POST;
@@ -79,7 +85,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.MARK_AS_SPA
  * Title: Base fragment for all child fragment.
  * all the common behaviour.
  */
-public class BaseFragment extends Fragment implements View.OnClickListener, HomeView,CommunityView {
+public class BaseFragment extends Fragment implements View.OnClickListener, HomeView,CommunityView,ProfileView {
     private final String TAG = LogUtils.makeLogTag(BaseFragment.class);
     public FragmentActivity mActivity;
     private FragmentListRefreshData mFragmentListRefreshData;
@@ -589,6 +595,76 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
 
     @Override
     public void getSuccessForAllResponse(BaseResponse baseResponse, CommunityEnum communityEnum) {
+
+    }
+
+    @Override
+    public void onBackPressed(int id) {
+
+    }
+
+    @Override
+    public void visitingCardOpen(ProfileEditVisitingCardResponse profileEditVisitingCardResponse) {
+
+    }
+
+    @Override
+    public void callFragment(int id) {
+
+    }
+
+    @Override
+    public void getEducationResponse(BoardingDataResponse boardingDataResponse) {
+
+    }
+
+    @Override
+    public void getPersonalBasicDetailsResponse(BoardingDataResponse boardingDataResponse) {
+
+    }
+
+    @Override
+    public void getprofiletracelflexibilityResponse(BoardingDataResponse boardingDataResponse) {
+
+    }
+
+    @Override
+    public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
+
+    }
+
+    @Override
+    public void getProfessionalBasicDetailsResponse(BoardingDataResponse boardingDataResponse) {
+
+    }
+
+    @Override
+    public void getProfessionalWorkLocationResponse(BoardingDataResponse boardingDataResponse) {
+
+    }
+
+    @Override
+    public void getProfileVisitingCardResponse(ProfileEditVisitingCardResponse profileEditVisitingCardResponse) {
+
+    }
+
+    @Override
+    public void getUserData(UserProfileResponse userProfileResponse) {
+
+    }
+
+    @Override
+    public void getProfileListSuccess(GetTagData getAllData) {
+
+    }
+
+    @Override
+    public void getProfileListSuccess(List<Doc> feedDetailList) {
+
+    }
+
+    @Override
+    public void getWorkExpListSuccess(WorkExpListResponse workExpListResponse) {
 
     }
 }

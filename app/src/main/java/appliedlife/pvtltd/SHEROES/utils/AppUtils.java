@@ -111,6 +111,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingTellUsReque
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingWorkExpRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ExprienceEntity;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileAddEditEducationRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.sharemail.ShareViaMail;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -1818,7 +1819,7 @@ public class AppUtils {
         shareViaMail.setAppVersion(appUtils.getAppVersionName());
         shareViaMail.setDeviceUniqueId(appUtils.getDeviceId());
         //TODO:: change rquest data
-        shareViaMail.setCloudMessagingId(AppConstants.ALL_SEARCH);
+        shareViaMail.setCloudMessagingId(appUtils.getCloudMessaging());
         shareViaMail.setCommunityId(communityId);
         shareViaMail.setDeepLinkUrl(deepLinkUrl);
         shareViaMail.setEmailId(emailIds);
@@ -1839,7 +1840,7 @@ public class AppUtils {
         myCommunityRequest.setSource(AppConstants.SOURCE_NAME);
         myCommunityRequest.setDeviceUniqueId(appUtils.getDeviceId());
         //TODO:: change rquest data
-        myCommunityRequest.setCloudMessagingId(AppConstants.ALL_SEARCH);
+        myCommunityRequest.setCloudMessagingId(appUtils.getCloudMessaging());
         myCommunityRequest.setPageNo(pageNo);
         myCommunityRequest.setPageSize(AppConstants.PAGE_SIZE);
         myCommunityRequest.setSubType(typeOfFeed);
@@ -1866,7 +1867,7 @@ public class AppUtils {
         jobApplyRequest.setAppVersion(appUtils.getAppVersionName());
         jobApplyRequest.setDeviceUniqueId(appUtils.getDeviceId());
         //TODO:: change rquest data
-        jobApplyRequest.setCloudMessagingId(AppConstants.ALL_SEARCH);
+        jobApplyRequest.setCloudMessagingId(appUtils.getCloudMessaging());
         jobApplyRequest.setCoverNote(coverNote);
         jobApplyRequest.setJobId(idOFEntityParticipant);
         return jobApplyRequest;
@@ -1885,7 +1886,7 @@ public class AppUtils {
         feedRequestPojo.setAppVersion(appUtils.getAppVersionName());
         feedRequestPojo.setDeviceUniqueId(appUtils.getDeviceId());
         //TODO:: change rquest data
-        feedRequestPojo.setCloudMessagingId(AppConstants.ALL_SEARCH);
+        feedRequestPojo.setCloudMessagingId(appUtils.getCloudMessaging());
         feedRequestPojo.setPageNo(pageNo);
         feedRequestPojo.setPageSize(AppConstants.PAGE_SIZE);
         feedRequestPojo.setSubType(typeOfFeed);
@@ -1897,7 +1898,7 @@ public class AppUtils {
         deleteCommunityPostRequest.setAppVersion(appUtils.getAppVersionName());
         deleteCommunityPostRequest.setDeviceUniqueId(appUtils.getDeviceId());
         //TODO:: change rquest data
-        deleteCommunityPostRequest.setCloudMessagingId(AppConstants.ALL_SEARCH);
+        deleteCommunityPostRequest.setCloudMessagingId(appUtils.getCloudMessaging());
         deleteCommunityPostRequest.setIdOfEntityOrParticipant(idOfEntityParticipant);
         return deleteCommunityPostRequest;
     }
@@ -1908,7 +1909,7 @@ public class AppUtils {
         feedRequestPojo.setAppVersion(appUtils.getAppVersionName());
         feedRequestPojo.setDeviceUniqueId(appUtils.getDeviceId());
         //TODO:: change rquest data
-        feedRequestPojo.setCloudMessagingId(AppConstants.ALL_SEARCH);
+        feedRequestPojo.setCloudMessagingId(appUtils.getCloudMessaging());
         feedRequestPojo.setPageNo(pageNo);
         feedRequestPojo.setPageSize(AppConstants.PAGE_SIZE);
         return feedRequestPojo;
@@ -1922,7 +1923,7 @@ public class AppUtils {
         getAllDataRequest.setAppVersion(appUtils.getAppVersionName());
         getAllDataRequest.setDeviceUniqueId(appUtils.getDeviceId());
         //TODO:: change rquest data
-        getAllDataRequest.setCloudMessagingId(AppConstants.ALL_SEARCH);
+        getAllDataRequest.setCloudMessagingId(appUtils.getCloudMessaging());
         getAllDataRequest.setQ(queryName);
         getAllDataRequest.setMasterDataType(masterDataTypeSkill);
         //TODO:: change rquest data
@@ -1938,7 +1939,7 @@ public class AppUtils {
         feedRequestPojo.setAppVersion(appUtils.getAppVersionName());
         feedRequestPojo.setDeviceUniqueId(appUtils.getDeviceId());
         //TODO:: change rquest data
-        feedRequestPojo.setCloudMessagingId(AppConstants.ALL_SEARCH);
+        feedRequestPojo.setCloudMessagingId(appUtils.getCloudMessaging());
         feedRequestPojo.setPageNo(pageNo);
         feedRequestPojo.setPageSize(pageSize);
         feedRequestPojo.setSubType(typeOfFeed);
@@ -1954,7 +1955,7 @@ public class AppUtils {
         getAllDataRequest.setAppVersion(appUtils.getAppVersionName());
         getAllDataRequest.setDeviceUniqueId(appUtils.getDeviceId());
         //TODO:: change rquest data
-        getAllDataRequest.setCloudMessagingId(AppConstants.ALL_SEARCH);
+        getAllDataRequest.setCloudMessagingId(appUtils.getCloudMessaging());
         getAllDataRequest.setMasterDataType(typeOfData);
         getAllDataRequest.setQ(queryName);
         getAllDataRequest.setScreenName(screenName);
@@ -1973,7 +1974,7 @@ public class AppUtils {
         likeRequestPojo.setAppVersion(appUtils.getAppVersionName());
         likeRequestPojo.setDeviceUniqueId(appUtils.getDeviceId());
         //TODO:: change rquest data
-        likeRequestPojo.setCloudMessagingId(AppConstants.ALL_SEARCH);
+        likeRequestPojo.setCloudMessagingId(appUtils.getCloudMessaging());
         likeRequestPojo.setEntityId(entityId);
         likeRequestPojo.setReactionValue(reactionValue);
         return likeRequestPojo;
@@ -1988,7 +1989,7 @@ public class AppUtils {
         likeRequestPojo.setAppVersion(appUtils.getAppVersionName());
         likeRequestPojo.setDeviceUniqueId(appUtils.getDeviceId());
         //TODO:: change rquest data
-        likeRequestPojo.setCloudMessagingId(AppConstants.ALL_SEARCH);
+        likeRequestPojo.setCloudMessagingId(appUtils.getCloudMessaging());
         likeRequestPojo.setEntityId(entityId);
         return likeRequestPojo;
     }
@@ -1999,7 +2000,7 @@ public class AppUtils {
         commentReactionRequestPojo.setAppVersion(appUtils.getAppVersionName());
         commentReactionRequestPojo.setDeviceUniqueId(appUtils.getDeviceId());
         //TODO:: change rquest data
-        commentReactionRequestPojo.setCloudMessagingId(AppConstants.ALL_SEARCH);
+        commentReactionRequestPojo.setCloudMessagingId(appUtils.getCloudMessaging());
         commentReactionRequestPojo.setPageNo(pageNo);
         //Page size for comment list
         commentReactionRequestPojo.setPageSize(AppConstants.WORD_COUNT);
@@ -2011,7 +2012,7 @@ public class AppUtils {
 
         MemberRequest memberRequest=new MemberRequest();
         memberRequest.setAppVersion(appUtils.getAppVersionName());
-        memberRequest.setCloudMessagingId(AppConstants.ALL_SEARCH);
+        memberRequest.setCloudMessagingId(appUtils.getCloudMessaging());
         memberRequest.setCommunityId(entityId);
         memberRequest.setDeviceUniqueId(appUtils.getDeviceId());
         memberRequest.setLastScreenName(AppConstants.COMMUNITY_DETAIL);
@@ -2025,7 +2026,7 @@ public class AppUtils {
 
         BellNotificationRequest bellNotificationRequest=new BellNotificationRequest();
         bellNotificationRequest.setAppVersion(appUtils.getAppVersionName());
-        bellNotificationRequest.setCloudMessagingId(AppConstants.ALL_SEARCH);
+        bellNotificationRequest.setCloudMessagingId(appUtils.getCloudMessaging());
         bellNotificationRequest.setDeviceUniqueId(appUtils.getDeviceId());
         return bellNotificationRequest;
     }
@@ -2071,7 +2072,7 @@ public class AppUtils {
         bookmarkRequestPojo.setAppVersion(appUtils.getAppVersionName());
         bookmarkRequestPojo.setDeviceUniqueId(appUtils.getDeviceId());
         //TODO:: change rquest data
-        bookmarkRequestPojo.setCloudMessagingId(AppConstants.ALL_SEARCH);
+        bookmarkRequestPojo.setCloudMessagingId(appUtils.getCloudMessaging());
         bookmarkRequestPojo.setEntityId(entityId);
         return bookmarkRequestPojo;
     }
@@ -2082,7 +2083,7 @@ public class AppUtils {
         commentReactionRequestPojo.setAppVersion(appUtils.getAppVersionName());
         commentReactionRequestPojo.setDeviceUniqueId(appUtils.getDeviceId());
         //TODO:: change rquest data
-        commentReactionRequestPojo.setCloudMessagingId(AppConstants.ALL_SEARCH);
+        commentReactionRequestPojo.setCloudMessagingId(appUtils.getCloudMessaging());
         commentReactionRequestPojo.setUserComment(userComment);
         commentReactionRequestPojo.setIsAnonymous(isAnonymous);
         commentReactionRequestPojo.setEntityId(entityId);
@@ -2095,7 +2096,7 @@ public class AppUtils {
         commentReactionRequestPojo.setAppVersion(appUtils.getAppVersionName());
         commentReactionRequestPojo.setDeviceUniqueId(appUtils.getDeviceId());
         //TODO:: change rquest data
-        commentReactionRequestPojo.setCloudMessagingId(AppConstants.ALL_SEARCH);
+        commentReactionRequestPojo.setCloudMessagingId(appUtils.getCloudMessaging());
         commentReactionRequestPojo.setUserComment(userComment);
         commentReactionRequestPojo.setIsAnonymous(isAnonymous);
         commentReactionRequestPojo.setIsActive(isActive);
@@ -2111,10 +2112,10 @@ public class AppUtils {
         communityRequest.setUserId(userId);
         communityRequest.setCommunityId(idOfEntityParticipant);
         communityRequest.setAppVersion(appUtils.getAppVersionName());
-        communityRequest.setCloudMessagingId(AppConstants.ALL_SEARCH);
+        communityRequest.setCloudMessagingId(appUtils.getCloudMessaging());
         communityRequest.setDeviceUniqueId(appUtils.getDeviceId());
         communityRequest.setLastScreenName(AppConstants.COMMUNITY_DETAIL);
-        communityRequest.setScreenName(AppConstants.ALL_SEARCH);
+        communityRequest.setScreenName(AppConstants.COMMUNITY_DETAIL);
         communityRequest.setReasonToJoin(reasonToJoin);
         return communityRequest;
     }
@@ -2150,5 +2151,11 @@ public class AppUtils {
         boardingLookingForHowCanRequest.setType(type);
         boardingLookingForHowCanRequest.setSource(AppConstants.SOURCE_NAME);
         return boardingLookingForHowCanRequest;
+    }
+    public static ExprienceEntity workExpRequestBuilder(int sector,boolean isActive) {
+        ExprienceEntity exprienceEntity = new ExprienceEntity();
+        exprienceEntity.setSector(sector);
+        exprienceEntity.setActive(true);
+        return exprienceEntity;
     }
 }

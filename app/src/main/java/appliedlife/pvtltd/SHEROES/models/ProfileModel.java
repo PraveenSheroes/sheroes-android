@@ -8,6 +8,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ExprienceEntity;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.GetUserVisitingCardRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.PersonalBasicDetailsRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfessionalBasicDetailsRequest;
@@ -28,7 +29,7 @@ import rx.schedulers.Schedulers;
  */
 
 public class ProfileModel {
-
+    private final String TAG = LogUtils.makeLogTag(ProfileModel.class);
     private final SheroesAppServiceApi sheroesAppServiceApi;
     Gson gson;
 
@@ -230,7 +231,6 @@ public class ProfileModel {
     public Observable<UserProfileResponse> getAllUserDetailsromModel() {
 
         return sheroesAppServiceApi.getUserDetails()
-
                 .map(new Func1<UserProfileResponse, UserProfileResponse>() {
 
                     @Override
@@ -253,6 +253,19 @@ public class ProfileModel {
                     @Override
                     public GetTagData call(GetTagData getAllData) {
                         return getAllData;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+    public Observable<BoardingDataResponse> getWorkExpFromModel(ExprienceEntity exprienceEntity) {
+        LogUtils.info(TAG,"********** Work exp request"+gson.toJson(exprienceEntity));
+        return sheroesAppServiceApi.getWorkExpAddEditResponse(exprienceEntity)
+                .map(new Func1<BoardingDataResponse, BoardingDataResponse>() {
+
+                    @Override
+                    public BoardingDataResponse call(BoardingDataResponse  boardingDataResponse) {
+                        return boardingDataResponse;
                     }
                 })
                 .subscribeOn(Schedulers.io())

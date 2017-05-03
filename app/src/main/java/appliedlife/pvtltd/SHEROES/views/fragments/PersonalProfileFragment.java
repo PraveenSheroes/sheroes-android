@@ -22,18 +22,10 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.AboutMe;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.CanHelpIn;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.EducationEntity;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ExprienceEntity;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.GoodAtSkill;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.InterestType;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.MyProfileView;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.OpportunityType;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCardResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileListResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfilePersonalViewList;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProjectEntity;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserDetails;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePersenter;
@@ -57,6 +49,9 @@ public class PersonalProfileFragment extends BaseFragment implements ProfileView
     private final String TAG = LogUtils.makeLogTag(PersonalProfileFragment.class);
     @Bind(R.id.rv_profile_spinner_list)
     RecyclerView mRecyclerView;
+    @Bind(R.id.pb_profile_progress_bar)
+    ProgressBar mProgressBar;
+
     GenericRecyclerViewAdapter mAdapter;
     private HomeActivityIntractionWithPersonalProfile mHomeActivityIntractionWithpersonalProfile;
     private static PersonalProfileFragment personalProfileFragment = new PersonalProfileFragment();
@@ -85,6 +80,7 @@ public class PersonalProfileFragment extends BaseFragment implements ProfileView
         View view = inflater.inflate(R.layout.profile_visiting_card, container, false);
         ButterKnife.bind(this, view);
         profilePersenter.attachView(this);
+        setProgressBar(mProgressBar);
         callGetAllDetailsAPI();
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(manager);

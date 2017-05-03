@@ -1,24 +1,23 @@
 package appliedlife.pvtltd.SHEROES.models.entities.profile;
 
 import android.os.Parcel;
-import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.login.ExprienceEntityBO;
 
 /**
  * Created by sheroes on 29/03/17.
  */
 public class ExprienceEntity extends BaseResponse {
+    int itemPosition;
     @SerializedName("id")
     @Expose
-    private long id;
+    private Long id;
     @SerializedName("experience_type")
     @Expose
-    private long experienceType;
+    private long experienceType=1;
     @SerializedName("experience_type_string")
     @Expose
     private String experienceTypeString;
@@ -31,9 +30,6 @@ public class ExprienceEntity extends BaseResponse {
     @SerializedName("sector")
     @Expose
     private long sector;
-    @SerializedName("company_id")
-    @Expose
-    private long companyId;
     @SerializedName("company")
     @Expose
     private String company;
@@ -96,7 +92,7 @@ public class ExprienceEntity extends BaseResponse {
     private String mobAppUrl;
     @SerializedName("is_active")
     @Expose
-    private boolean isActive;
+    private boolean isActive=true;
     @SerializedName("tag")
     @Expose
     private String tag;
@@ -108,13 +104,32 @@ public class ExprienceEntity extends BaseResponse {
     @SerializedName("title1")
     @Expose
     private String title1;
+    @SerializedName("start_day")
+    @Expose
+    private Integer startDay;
+    @SerializedName("end_day")
+    @Expose
+    private Integer endDay;
+    @SerializedName("type")
+    @Expose
+    private String type="EXPERIENCE";
+    @SerializedName("subType")
+    @Expose
+    private String subType="EXPERIENCE_SERVICE";
 
+    public int getItemPosition() {
+        return itemPosition;
+    }
 
-    public long getId() {
+    public void setItemPosition(int itemPosition) {
+        this.itemPosition = itemPosition;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -156,14 +171,6 @@ public class ExprienceEntity extends BaseResponse {
 
     public void setSector(long sector) {
         this.sector = sector;
-    }
-
-    public long getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(long companyId) {
-        this.companyId = companyId;
     }
 
     public String getCompany() {
@@ -358,6 +365,38 @@ public class ExprienceEntity extends BaseResponse {
         this.title1 = title1;
     }
 
+    public Integer getStartDay() {
+        return startDay;
+    }
+
+    public void setStartDay(Integer startDay) {
+        this.startDay = startDay;
+    }
+
+    public Integer getEndDay() {
+        return endDay;
+    }
+
+    public void setEndDay(Integer endDay) {
+        this.endDay = endDay;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getSubType() {
+        return subType;
+    }
+
+    public void setSubType(String subType) {
+        this.subType = subType;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -366,13 +405,13 @@ public class ExprienceEntity extends BaseResponse {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
-        dest.writeLong(this.id);
+        dest.writeInt(this.itemPosition);
+        dest.writeValue(this.id);
         dest.writeLong(this.experienceType);
         dest.writeString(this.experienceTypeString);
         dest.writeLong(this.organisationType);
         dest.writeString(this.organisationTypeString);
         dest.writeLong(this.sector);
-        dest.writeLong(this.companyId);
         dest.writeString(this.company);
         dest.writeLong(this.locationId);
         dest.writeString(this.location);
@@ -397,6 +436,10 @@ public class ExprienceEntity extends BaseResponse {
         dest.writeString(this.tag);
         dest.writeString(this.tag1);
         dest.writeString(this.title1);
+        dest.writeValue(this.startDay);
+        dest.writeValue(this.endDay);
+        dest.writeString(this.type);
+        dest.writeString(this.subType);
     }
 
     public ExprienceEntity() {
@@ -404,13 +447,13 @@ public class ExprienceEntity extends BaseResponse {
 
     protected ExprienceEntity(Parcel in) {
         super(in);
-        this.id = in.readLong();
+        this.itemPosition = in.readInt();
+        this.id = (Long) in.readValue(Long.class.getClassLoader());
         this.experienceType = in.readLong();
         this.experienceTypeString = in.readString();
         this.organisationType = in.readLong();
         this.organisationTypeString = in.readString();
         this.sector = in.readLong();
-        this.companyId = in.readLong();
         this.company = in.readString();
         this.locationId = in.readLong();
         this.location = in.readString();
@@ -435,6 +478,10 @@ public class ExprienceEntity extends BaseResponse {
         this.tag = in.readString();
         this.tag1 = in.readString();
         this.title1 = in.readString();
+        this.startDay = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.endDay = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.type = in.readString();
+        this.subType = in.readString();
     }
 
     public static final Creator<ExprienceEntity> CREATOR = new Creator<ExprienceEntity>() {

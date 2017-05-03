@@ -6,17 +6,12 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
-
-
     <include
         android:id="@+id/lnr_profile"
         layout="@layout/activity_profile_layout"/>
-
-
 
     <include layout="@layout/fragment_container"
         android:id="@+id/profile_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-
 </android.support.v4.widget.DrawerLayout>
