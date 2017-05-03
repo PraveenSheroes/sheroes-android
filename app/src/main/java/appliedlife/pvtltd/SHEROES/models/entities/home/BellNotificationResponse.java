@@ -24,20 +24,18 @@ public class BellNotificationResponse extends BaseResponse{
     @SerializedName("priority")
     @Expose
     private int priority;
-    @SerializedName("last_activity_date")
+    @SerializedName("solr_ignore_last_activity_date")
     @Expose
     private String lastActivityDate;
     @SerializedName("solr_ignore_deep_link_url")
     @Expose
     private String solrIgnoreDeepLinkUrl;
-
     @SerializedName("solr_ignore_icon_image_url")
     @Expose
     private String solrIgnoreIconImageUrl;
     @SerializedName("solr_ignore_author_or_entity_image_url")
     @Expose
     private String solrIgnoreAuthorOrEntityImageUrl;
-
     @SerializedName("solr_ignore_community_participant_id")
     @Expose
     private Long solrIgnoreAuthorCommunityParticipantId;

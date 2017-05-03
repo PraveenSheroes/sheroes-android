@@ -57,17 +57,20 @@ public class ProfileProfessionalBasicDetailsHolder extends BaseViewHolder<MyProf
 
         if (null != dataItem) {
             UserDetails userDetails = dataItem.getUserDetails();
-            if (StringUtil.isNotNullOrEmptyString(userDetails.getJobTag())) {
-                mTvCurrentStatusValue.setText(userDetails.getJobTag());
-            }
-            if (StringUtil.isNotNullOrEmptyString(userDetails.getSector())) {
-                mTvSectorValue.setText(userDetails.getSector());
-            }
-            if (StringUtil.isNotNullOrEmptyString(String.valueOf(userDetails.getTotalExp()))) {
+            if(null !=userDetails) {
+                if (StringUtil.isNotNullOrEmptyString(userDetails.getJobTag())) {
+                    mTvCurrentStatusValue.setText(userDetails.getJobTag());
+                }
+                if (StringUtil.isNotNullOrEmptyString(userDetails.getSector())) {
+                    mTvSectorValue.setText(userDetails.getSector());
+                }
+                if (StringUtil.isNotNullOrEmptyString(String.valueOf(userDetails.getTotalExp()))) {
 
-                mTvTotalWorkExperienceValue.setText(String.valueOf(userDetails.getTotalExp())+" "+AppConstants.EXP_YEAR+" "+String.valueOf(userDetails.getTotalExpMonth())+" " +AppConstants.EXP_MONTH);
-            }if (StringUtil.isNotNullOrEmptyString(""+userDetails.getLanguage())) {
-                mTvLanguageValue.setText(""+userDetails.getLanguage());
+                    mTvTotalWorkExperienceValue.setText(String.valueOf(userDetails.getTotalExp()) + " " + AppConstants.EXP_YEAR + " " + String.valueOf(userDetails.getTotalExpMonth()) + " " + AppConstants.EXP_MONTH);
+                }
+                if (StringUtil.isNotNullOrEmptyString("" + userDetails.getLanguage())) {
+                    mTvLanguageValue.setText("" + userDetails.getLanguage());
+                }
             }
         }
 

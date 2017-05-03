@@ -9,6 +9,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileViewList;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -49,17 +50,35 @@ public class ProfileBasicDetailsHolder extends BaseViewHolder<ProfileViewList> {
     public void bindData(ProfileViewList obj, Context context, int position) {
         this.dataItem = obj;
         itemView.setOnClickListener(this);
-
-        mTv_profile_basic_details.setText(dataItem.getTag());
-        mTv_current_status.setText(dataItem.getItem1());
-        mTv_current_status_value.setText(dataItem.getItem2());
-        mTv_sector.setText(dataItem.getItem3());
-        mTv_sector_value.setText(dataItem.getItem4());
-        mTv_total_work_experience.setText(dataItem.getItem5());
-        mtv_tot_exp_value.setText(dataItem.getItem6());
-        mTv_language.setText(dataItem.getItem7());
-        mTv_tot_language_value.setText(dataItem.getItem8());
-
+        if(null !=dataItem) {
+            if(StringUtil.isNotNullOrEmptyString(dataItem.getTag())) {
+                mTv_profile_basic_details.setText(dataItem.getTag());
+            }
+            if(StringUtil.isNotNullOrEmptyString(dataItem.getItem1())) {
+                mTv_current_status.setText(dataItem.getItem1());
+            }
+            if(StringUtil.isNotNullOrEmptyString(dataItem.getItem2())) {
+                mTv_current_status_value.setText(dataItem.getItem2());
+            }
+            if(StringUtil.isNotNullOrEmptyString(dataItem.getItem3())) {
+                mTv_sector.setText(dataItem.getItem3());
+            }
+            if(StringUtil.isNotNullOrEmptyString(dataItem.getItem4())) {
+                mTv_sector_value.setText(dataItem.getItem4());
+            }
+            if(StringUtil.isNotNullOrEmptyString(dataItem.getItem5())) {
+                mTv_total_work_experience.setText(dataItem.getItem5());
+            }
+            if(StringUtil.isNotNullOrEmptyString(dataItem.getItem6())) {
+                mtv_tot_exp_value.setText(dataItem.getItem6());
+            }
+            if(StringUtil.isNotNullOrEmptyString(dataItem.getItem7())) {
+                mTv_language.setText(dataItem.getItem7());
+            }
+            if(StringUtil.isNotNullOrEmptyString(dataItem.getItem8())) {
+                mTv_tot_language_value.setText(dataItem.getItem8());
+            }
+        }
     }
     @Override
     public void viewRecycled() {
@@ -70,7 +89,7 @@ public class ProfileBasicDetailsHolder extends BaseViewHolder<ProfileViewList> {
     @Override
     public void onClick(View view) {
 
-      //  viewInterface.handleOnClick(this.dataItem,view);
+      //  mViewInterface.handleOnClick(this.dataItem,view);
 
 
     }

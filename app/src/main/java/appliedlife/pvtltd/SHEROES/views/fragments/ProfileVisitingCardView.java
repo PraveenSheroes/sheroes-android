@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,14 +30,22 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.GetUserVisitingCardRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCardResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePersenter;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.VisitingCardActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
 
 /**
  * Created by priyanka on 14/03/17.
@@ -118,19 +127,21 @@ public class ProfileVisitingCardView extends BaseFragment implements ProfileView
     void downloadAndOpenPDF() {
         new Thread(new Runnable() {
             public void run() {
-                Uri path = Uri.fromFile(downloadFile(download_file_url));
-                try {
-                    Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setDataAndType(path, "application/pdf");
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
-                    getActivity().finish();
-                } catch (ActivityNotFoundException e) {
+                if(StringUtil.isNotNullOrEmptyString(profileEditVisitingCardResponse.getUrl()));
+                {
+                    Uri path = Uri.fromFile(downloadFile(profileEditVisitingCardResponse.getUrl()));
+                    try {
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setDataAndType(path, "application/pdf");
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        getActivity().finish();
+                    } catch (ActivityNotFoundException e) {
 
 
-                    //mTv_loading.setError("PDF Reader application is not installed in your device");
+                        //mTv_loading.setError("PDF Reader application is not installed in your device");
+                    }
                 }
-
             }
         }).start();
 
@@ -229,7 +240,23 @@ public class ProfileVisitingCardView extends BaseFragment implements ProfileView
     protected  void  ClickOnTexview()
     {
 
-     // downloadAndOpenPDF();
+        GetUserVisitingCardRequest getUserVisitingCardRequest = new GetUserVisitingCardRequest();
+        AppUtils appUtils = AppUtils.getInstance();
+
+        getUserVisitingCardRequest.setAboutMe(profileEditVisitingCardResponse.getAboutMe());
+        getUserVisitingCardRequest.setScreenName("string");
+        getUserVisitingCardRequest.setCurrentLocation(profileEditVisitingCardResponse.getCurrentLocation());
+        getUserVisitingCardRequest.setMobile(profileEditVisitingCardResponse.getMobile());
+        getUserVisitingCardRequest.setFirstName(profileEditVisitingCardResponse.getFirstName());
+        getUserVisitingCardRequest.setLastName(profileEditVisitingCardResponse.getLastName());
+        getUserVisitingCardRequest.setCurrentDesignation(profileEditVisitingCardResponse.getCurrentDesignation());
+        getUserVisitingCardRequest.setCurrentCompany(profileEditVisitingCardResponse.getCurrentCompany());
+        getUserVisitingCardRequest.setEmailId(profileEditVisitingCardResponse.getEmailid());
+        getUserVisitingCardRequest.setHeighestDegree(profileEditVisitingCardResponse.getHeighestDegree());
+        getUserVisitingCardRequest.setSchool(profileEditVisitingCardResponse.getSchool());
+        mProfilePresenter.getVisitingCardDetailsAuthTokeInPresenter(getUserVisitingCardRequest);
+        downloadAndOpenPDF();
+
       /*Intent myIntent = new Intent(getActivity(), VisitingCardActivity.class);
       startActivity(myIntent);*/
 
@@ -291,16 +318,22 @@ public class ProfileVisitingCardView extends BaseFragment implements ProfileView
     @Override
     public void getProfileVisitingCardResponse(ProfileEditVisitingCardResponse profileEditVisitingCardResponse) {
 
-
-
-        mTv_user_fullname.setText(profileEditVisitingCardResponse.getFirstName()+" "+ profileEditVisitingCardResponse.getLastName());
-        mTv_mobile_no.setText(profileEditVisitingCardResponse.getMobile());
-        mTv_designation.setText(profileEditVisitingCardResponse.getCurrentDesignation());
-        mTv_user_address.setText(profileEditVisitingCardResponse.getCurrentLocation());
-        mTvUserLocation.setText(profileEditVisitingCardResponse.getCurrentLocation());
-        mTv_email_text.setText(profileEditVisitingCardResponse.getEmailid());
-        this.profileEditVisitingCardResponse=profileEditVisitingCardResponse;
-
+        switch (profileEditVisitingCardResponse.getStatus()) {
+            case AppConstants.SUCCESS:
+                mTv_user_fullname.setText(profileEditVisitingCardResponse.getFirstName()+" "+ profileEditVisitingCardResponse.getLastName());
+                mTv_mobile_no.setText(profileEditVisitingCardResponse.getMobile());
+                mTv_designation.setText(profileEditVisitingCardResponse.getCurrentDesignation());
+                mTv_user_address.setText(profileEditVisitingCardResponse.getCurrentLocation());
+                mTvUserLocation.setText(profileEditVisitingCardResponse.getCurrentLocation());
+                mTv_email_text.setText(profileEditVisitingCardResponse.getEmailid());
+                this.profileEditVisitingCardResponse=profileEditVisitingCardResponse;
+                break;
+            case AppConstants.FAILED:
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(profileEditVisitingCardResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);
+                break;
+            default:
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), ERROR_JOIN_INVITE);
+        }
 
     }
 

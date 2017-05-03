@@ -62,7 +62,7 @@ public class ProfileIAmInterestingInHolder extends BaseViewHolder<MyProfileView>
 
         List<InterestType> interests=this.dataItem.getInterestType();
 
-        if(null !=interests){
+        if(StringUtil.isNotEmptyCollection(interests)){
 
             if (StringUtil.isNotEmptyCollection(interests)) {
 
