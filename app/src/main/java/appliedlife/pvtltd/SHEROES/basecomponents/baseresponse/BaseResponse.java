@@ -66,6 +66,9 @@ public class BaseResponse implements Parcelable {
         }
 
 
+    public BaseResponse() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -80,9 +83,6 @@ public class BaseResponse implements Parcelable {
         dest.writeString(this.screenName);
     }
 
-    public BaseResponse() {
-    }
-
     protected BaseResponse(Parcel in) {
         this.fieldErrorMessageMap = (HashMap<String, String>) in.readSerializable();
         this.numFound = in.readInt();
@@ -91,4 +91,15 @@ public class BaseResponse implements Parcelable {
         this.screenName = in.readString();
     }
 
+    public static final Creator<BaseResponse> CREATOR = new Creator<BaseResponse>() {
+        @Override
+        public BaseResponse createFromParcel(Parcel source) {
+            return new BaseResponse(source);
+        }
+
+        @Override
+        public BaseResponse[] newArray(int size) {
+            return new BaseResponse[size];
+        }
+    };
 }

@@ -43,6 +43,8 @@ import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_BOOKMARK_UNBOOKMARK;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.feedDetailRequestBuilder;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.jobApplyRequestBuilder;
 
 /**
  * Created by Ajit Kumar on 20-02-2017.
@@ -67,6 +69,7 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
     private AppUtils mAppUtils;
     private JobDetailPojo jobDetailPojo;
     private  List<JobDetailPojo> joblist;
+    private int mItemPosition;
     public static JobDetailFragment createInstance(FeedDetail feedDetail) {
         JobDetailFragment jobDetailFragment = new JobDetailFragment();
         Bundle bundle = new Bundle();
@@ -91,6 +94,7 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
         ButterKnife.bind(this, view);
         mAppUtils = AppUtils.getInstance();
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.JOB_DETAIL, mFeedDetail.getIdOfEntityOrParticipant());
+        mItemPosition=mFeedDetail.getItemPosition();
         mHomePresenter.attachView(this);
         mJobpresenter.attachView(this);
         mLayoutManager = new LinearLayoutManager(getContext());
@@ -99,13 +103,13 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
         super.setAllInitializationForFeeds(mFragmentListRefreshData, mAdapter, mLayoutManager, mFeedDetail, mRecyclerView, 0, 0, false, mHomePresenter, mAppUtils, mProgressBar);
-        mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_JOB, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getIdFeedDetail()));
+        mHomePresenter.getFeedFromPresenter(feedDetailRequestBuilder(AppConstants.FEED_JOB, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getIdFeedDetail()));
         return view;
     }
 
     @OnClick(R.id.tv_apply_job)
     public void clickApplyButton() {
-        JobApplyRequest jobApplyRequest = mAppUtils.jobApplyRequestBuilder(mFeedDetail.getIdOfEntityOrParticipant(), AppConstants.JOB_DETAIL);
+        JobApplyRequest jobApplyRequest = jobApplyRequestBuilder(mFeedDetail.getIdOfEntityOrParticipant(), AppConstants.JOB_DETAIL);
         mJobpresenter.getJobApply(jobApplyRequest);
     }
 
@@ -116,10 +120,12 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
             joblist = new ArrayList<>();
             jobDetailPojo = new JobDetailPojo();
             jobDetailPojo.setId(AppConstants.ONE_CONSTANT);
-            ((JobDetailActivity) getActivity()).setBackGroundImage(feedDetailList.get(0));
-            jobDetailPojo.setFeedDetail(feedDetailList.get(0));
+             mFeedDetail=feedDetailList.get(0);
+             mFeedDetail.setItemPosition(mItemPosition);
+            ((JobDetailActivity) getActivity()).setBackGroundImage(mFeedDetail);
+            jobDetailPojo.setFeedDetail(mFeedDetail);
             joblist.add(jobDetailPojo);
-            if (feedDetailList.get(0).isApplied()) {
+            if (mFeedDetail.isApplied()) {
                 mtv_apply_job.setText(getString(R.string.ID_APPLIED));
                 mtv_apply_job.setEnabled(false);
             } else {
@@ -150,6 +156,8 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
             case AppConstants.SUCCESS:
                 mtv_apply_job.setText(getString(R.string.ID_APPLIED));
                 mtv_apply_job.setEnabled(false);
+                mFeedDetail.setApplied(true);
+                ((JobDetailActivity) getActivity()).setBackGroundImage(mFeedDetail);
                 Toast.makeText(getActivity(), getString(R.string.ID_JOB) + AppConstants.SPACE + getString(R.string.ID_APPLIED), Toast.LENGTH_SHORT).show();
                 break;
             case AppConstants.FAILED:

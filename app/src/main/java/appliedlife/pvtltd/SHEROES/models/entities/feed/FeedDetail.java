@@ -101,10 +101,10 @@ public class FeedDetail extends BaseResponse implements Parcelable,Cloneable{
     @Expose
     private String jobType;
 
-    @SerializedName("end_date_dt")
+    @SerializedName("solr_ignore_end_date_dt")
     private String endDate;
 
-    @SerializedName("start_date_dt")
+    @SerializedName("solr_ignore_start_date_dt")
     @Expose
     private String startDate;
 

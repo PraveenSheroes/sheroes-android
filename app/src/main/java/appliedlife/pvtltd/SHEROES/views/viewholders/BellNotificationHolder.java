@@ -53,7 +53,6 @@ public class BellNotificationHolder extends BaseViewHolder<BellNotificationRespo
     public void bindData(BellNotificationResponse belNotificationListResponse, Context context, int position) {
         this.mDataItem = belNotificationListResponse;
         mContext = context;
-        if(null != mDataItem) {
             if(null != mDataItem) {
                 if(StringUtil.isNotNullOrEmptyString(mDataItem.getTitle())) {
                     if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
@@ -81,8 +80,6 @@ public class BellNotificationHolder extends BaseViewHolder<BellNotificationRespo
                 }
 
             }
-        }
-
     }
 
     @Override

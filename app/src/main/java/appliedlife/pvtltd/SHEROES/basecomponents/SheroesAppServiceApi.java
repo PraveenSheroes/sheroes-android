@@ -9,7 +9,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRespons
 import appliedlife.pvtltd.SHEROES.models.entities.community.ApproveMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.BellNotificationRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
@@ -203,8 +202,5 @@ public interface SheroesAppServiceApi {
 
     @POST("participation/notification/bell")
     Observable<BelNotificationListResponse>bellNotification(@Body BellNotificationRequest bellNotificationRequest);
-
-    @POST("participation/notification/bell")
-    Observable<BellNotificationResponse>notificationlistAuthToken(@Body BellNotificationRequest bellNotificationRequest);
 
 }

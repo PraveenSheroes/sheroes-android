@@ -103,14 +103,14 @@ public class JobDetailHolder extends BaseViewHolder<JobDetailPojo> {
             mTvJobSkill.setVisibility(View.GONE);
         }
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getStartDate())) {
-            long startDate = mDateUtil.getTimeInMillis(mFeedDetail.getStartDate(), AppConstants.DATE_FORMAT);
-            mTvJobStartDate.setText(mDateUtil.getDateFromMillisecondsWithFormat(startDate, AppConstants.DATE_FORMAT_FOR_JOB));
+         //   long startDate = mDateUtil.getTimeInMillis(mFeedDetail.getStartDate(), AppConstants.DATE_FORMAT);
+            mTvJobStartDate.setText(mFeedDetail.getStartDate());
         } else {
             mTvJobStartDate.setVisibility(View.GONE);
         }
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getEndDate())) {
-            long endDate = mDateUtil.getTimeInMillis(mFeedDetail.getEndDate(), AppConstants.DATE_FORMAT);
-            mTvJobEndDate.setText(mDateUtil.getDateFromMillisecondsWithFormat(endDate, AppConstants.DATE_FORMAT_FOR_JOB));
+         //   long endDate = mDateUtil.getTimeInMillis(mFeedDetail.getEndDate(), AppConstants.DATE_FORMAT);
+            mTvJobEndDate.setText(mFeedDetail.getEndDate());
         } else {
             mTvJobEndDate.setVisibility(View.GONE);
         }

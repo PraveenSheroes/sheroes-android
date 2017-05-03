@@ -1,9 +1,9 @@
 package appliedlife.pvtltd.SHEROES.models.entities.home;
 
+import android.os.Parcel;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
-import java.util.Date;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 
@@ -111,4 +111,50 @@ public class BellNotificationResponse extends BaseResponse{
         this.solrIgnoreIconImageUrl = solrIgnoreIconImageUrl;
     }
 
+    public BellNotificationResponse() {
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
+        dest.writeString(this.title);
+        dest.writeString(this.type);
+        dest.writeString(this.recordId);
+        dest.writeInt(this.priority);
+        dest.writeString(this.lastActivityDate);
+        dest.writeString(this.solrIgnoreDeepLinkUrl);
+        dest.writeString(this.solrIgnoreIconImageUrl);
+        dest.writeString(this.solrIgnoreAuthorOrEntityImageUrl);
+        dest.writeValue(this.solrIgnoreAuthorCommunityParticipantId);
+    }
+
+    protected BellNotificationResponse(Parcel in) {
+        super(in);
+        this.title = in.readString();
+        this.type = in.readString();
+        this.recordId = in.readString();
+        this.priority = in.readInt();
+        this.lastActivityDate = in.readString();
+        this.solrIgnoreDeepLinkUrl = in.readString();
+        this.solrIgnoreIconImageUrl = in.readString();
+        this.solrIgnoreAuthorOrEntityImageUrl = in.readString();
+        this.solrIgnoreAuthorCommunityParticipantId = (Long) in.readValue(Long.class.getClassLoader());
+    }
+
+    public static final Creator<BellNotificationResponse> CREATOR = new Creator<BellNotificationResponse>() {
+        @Override
+        public BellNotificationResponse createFromParcel(Parcel source) {
+            return new BellNotificationResponse(source);
+        }
+
+        @Override
+        public BellNotificationResponse[] newArray(int size) {
+            return new BellNotificationResponse[size];
+        }
+    };
 }

@@ -763,13 +763,7 @@ etur adipiscing elit,sed do eiusmod tempor incididunt ut…</string>
     <!--string relates interest_in_for-->
 
     <string name="ID_POPULAR_INTEREST_IN">I AM INTERESTED IN</string>
-
-    <string name="ID_NOTIFICATION_TITLE">Hanshika Sahrma, Preeti Singh AND 2 others people replied to yuor post in Vasant Kunj Walfare Association</string>
-    <string name="ID_NOTIFICATION_DATE">Yesterday, 7:00 PM</string>
-
     <!--close sthring through priyanka-->
-
-
     <string name="ID_ERROR_FIELD_REQUIRED">This field is required</string>
 
     <string name="ID_COMMUNITY_NAME">COMMUNITY NAME</string>

@@ -131,7 +131,7 @@ public class JobDetailActivity extends BaseActivity implements  AppBarLayout.OnO
             mCustomCollapsingToolbarLayout.setTitle(AppConstants.EMPTY_STRING);
             mCustomCollapsingToolbarLayout.setSubtitle(AppConstants.EMPTY_STRING);
             mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-            mViewPagerAdapter.addFragment(JobDetailFragment.createInstance(mFeedDetail), getString(R.string.ID_ARTICLE));
+            mViewPagerAdapter.addFragment(JobDetailFragment.createInstance(mFeedDetail), getString(R.string.ID_JOB));
             mViewPagerJobDetail.setAdapter(mViewPagerAdapter);
             setBackGroundImage(mFeedDetail);
         }
@@ -239,7 +239,6 @@ public class JobDetailActivity extends BaseActivity implements  AppBarLayout.OnO
     @OnClick(R.id.tv_job_detail_bookmark)
     public void onBookMarkClick() {
         mTvJobDetailBookmark.setEnabled(false);
-        mFeedDetail.setItemPosition(AppConstants.NO_REACTION_CONSTANT);
         bookmarkCall();
         if (!mFeedDetail.isBookmarked()) {
             mFeedDetail.setBookmarked(true);
