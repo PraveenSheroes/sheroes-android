@@ -100,7 +100,9 @@ public class OwnerPresenter extends BasePresenter<CommunityView> {
             @Override
             public void onNext(DeactivateOwnerResponse deactivateOwnerResponse) {
                 getMvpView().stopProgressBar();
-                getMvpView().getOwnerListDeactivateSuccess(deactivateOwnerResponse);
+                if(null!=deactivateOwnerResponse) {
+                    getMvpView().getOwnerListDeactivateSuccess(deactivateOwnerResponse);
+                }
             }
 
         });

@@ -49,7 +49,6 @@ public class ProjectEntity extends BaseResponse {
 
     private ProjectEntity projectEntity;
 
-
     public long getId() {
         return id;
     }
@@ -145,4 +144,57 @@ public class ProjectEntity extends BaseResponse {
     public void setProjectEntity(ProjectEntity projectEntity) {
         this.projectEntity = projectEntity;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
+        dest.writeLong(this.id);
+        dest.writeString(this.name);
+        dest.writeInt(this.startDateMonth);
+        dest.writeInt(this.startDateYear);
+        dest.writeInt(this.endDateMonth);
+        dest.writeInt(this.endDateYear);
+        dest.writeInt(this.isProjectOngoing);
+        dest.writeString(this.projectUrl);
+        dest.writeString(this.descrption);
+        dest.writeByte(this.isActive ? (byte) 1 : (byte) 0);
+        dest.writeString(this.tag);
+        dest.writeParcelable(this.projectEntity, flags);
+    }
+
+    public ProjectEntity() {
+    }
+
+    protected ProjectEntity(Parcel in) {
+        super(in);
+        this.id = in.readLong();
+        this.name = in.readString();
+        this.startDateMonth = in.readInt();
+        this.startDateYear = in.readInt();
+        this.endDateMonth = in.readInt();
+        this.endDateYear = in.readInt();
+        this.isProjectOngoing = in.readInt();
+        this.projectUrl = in.readString();
+        this.descrption = in.readString();
+        this.isActive = in.readByte() != 0;
+        this.tag = in.readString();
+        this.projectEntity = in.readParcelable(ProjectEntity.class.getClassLoader());
+    }
+
+    public static final Creator<ProjectEntity> CREATOR = new Creator<ProjectEntity>() {
+        @Override
+        public ProjectEntity createFromParcel(Parcel source) {
+            return new ProjectEntity(source);
+        }
+
+        @Override
+        public ProjectEntity[] newArray(int size) {
+            return new ProjectEntity[size];
+        }
+    };
 }

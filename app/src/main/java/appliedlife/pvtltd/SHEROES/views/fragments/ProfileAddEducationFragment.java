@@ -134,10 +134,10 @@ public class ProfileAddEducationFragment extends BaseFragment {
                     }if(StringUtil.isNotNullOrEmptyString(educationEntity.get(0).getFieldOfStudy())) {
                         mTvSubjectName.setVisibility(View.VISIBLE);
                         mTvSubjectName.setText(educationEntity.get(0).getFieldOfStudy());
-                    }if(StringUtil.isNotNullOrEmptyString(educationEntity.get(0).getGrade())) {
+                    }/*if(StringUtil.isNotNullOrEmptyString(educationEntity.get(0).getGrade())) {
                         mTvGradeValue.setVisibility(View.VISIBLE);
                         mTvGradeValue.setText(educationEntity.get(0).getGrade());
-                    }
+                    }*/
 
 
                 }

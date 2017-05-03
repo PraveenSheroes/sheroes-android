@@ -15,7 +15,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.profile.EducationEntity;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.MyProfileView;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -63,7 +62,7 @@ public class ProfileEducationHolder extends BaseViewHolder<MyProfileView> {
 
         List<EducationEntity> educationEntity=this.dataItem.getEducationEntity();
         if(null !=educationEntity) {
-            if (StringUtil.isNotEmptyCollection(educationEntity)) {
+           /* if (StringUtil.isNotEmptyCollection(educationEntity)) {
                 if(StringUtil.isNotNullOrEmptyString(educationEntity.get(0).getDegree())) {
                     mTv_degree1.setVisibility(View.VISIBLE);
                     mTv_degree1.setText(educationEntity.get(0).getDegree());
@@ -112,7 +111,7 @@ public class ProfileEducationHolder extends BaseViewHolder<MyProfileView> {
 
 
 
-            }
+            }*/
         }
 
 

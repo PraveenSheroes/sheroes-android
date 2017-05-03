@@ -8,9 +8,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.inject.Inject;
+
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -18,15 +21,10 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.AboutMe;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ClientSideLocation;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.EducationEntity;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ExprienceEntity;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.GoodAt;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.GoodAtSkill;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.InterestType;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.MyProfileView;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.OpportunityType;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCardResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileViewList;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserDetails;
@@ -92,7 +90,6 @@ public class ProffestionalProfileFragment extends BaseFragment implements Profil
     }
 
 
-
     private void checkForSpinnerItemSelection() {
 
 
@@ -102,8 +99,6 @@ public class ProffestionalProfileFragment extends BaseFragment implements Profil
             mAdapter.setSheroesGenericListData(AppUtils.profileDetail());
         }*/
     }
-
-
 
 
     public void onDataRefresh() {
@@ -197,17 +192,14 @@ public class ProffestionalProfileFragment extends BaseFragment implements Profil
         List<MyProfileView> myProfileViewList = new ArrayList<>();
 
 
-
-
         MyProfileView UservisitingCard = new MyProfileView();
         UservisitingCard.setType(AppConstants.USER_VISITING_CARD);
         UservisitingCard.setIteam1("Download Now");
 
 
-
         MyProfileView goodAtSkillProfile = new MyProfileView();
         goodAtSkillProfile.setType(AppConstants.GOOD_AT_SKILL_PROFILE);
-        ArrayList<GoodAtSkill> goodAtSkill = new ArrayList<GoodAtSkill>();
+        List<GoodAtSkill> goodAtSkill = new ArrayList<GoodAtSkill>();
         List<LabelValue> skill = userProfileResponse.getUserDetails().getSkills();
         if (StringUtil.isNotEmptyCollection(skill)) {
             for (LabelValue goodAtVal : skill) {
@@ -223,40 +215,29 @@ public class ProffestionalProfileFragment extends BaseFragment implements Profil
 
         MyProfileView educationProfile = new MyProfileView();
         educationProfile.setType(AppConstants.EDUCATION_PROFILE);
-        ArrayList<EducationEntity> educationEntities=new ArrayList<EducationEntity>();
+        List<EducationEntity> educationEntities = new ArrayList<>();
         List<EducationEntity> educationEntityList = userProfileResponse.getEducation();
         if (StringUtil.isNotEmptyCollection(educationEntityList)) {
-            for (int i=0;i<2;i++) {
-                EducationEntity educationEntity1 = new EducationEntity();
-                educationEntity1.setId(educationEntityList.get(i).getId());
-                educationEntity1.setDegree(educationEntityList.get(i).getDegree());
-                educationEntity1.setSchool(educationEntityList.get(i).getSchool());
-                educationEntity1.setFieldOfStudy(educationEntityList.get(i).getFieldOfStudy());
-                educationEntity1.setDegreeNameMasterId(educationEntityList.get(i).getDegreeNameMasterId());
-                educationEntity1.setSchoolNameMasterId(educationEntityList.get(i).getSchoolNameMasterId());
-                educationEntity1.setFieldOfStudyMasterId(educationEntityList.get(i).getFieldOfStudyMasterId());
-                educationEntity1.setGrade(educationEntityList.get(i).getGrade());
-                educationEntity1.setSessionStartYear(educationEntityList.get(i).getSessionStartYear());
-                educationEntity1.setSessionEndYear(educationEntityList.get(i).getSessionEndYear());
-                educationEntity1.setIsGrade(educationEntityList.get(i).getIsGrade());
-                educationEntity1.setMaxGrade(educationEntityList.get(i).getMaxGrade());
-                educationEntities.add(educationEntity1);
+            int count = 1;
+            for (EducationEntity educationEntity : educationEntityList) {
+                if (count <= 2) {
+                    educationEntities.add(educationEntity);
+                } else {
+                    break;
+                }
+                count++;
             }
         }
         educationProfile.setEducationEntity(educationEntities);
 
         MyProfileView experienceProfile = new MyProfileView();
-        ArrayList<ExprienceEntity> exprienceEntities1=new ArrayList<ExprienceEntity>();
+        List<ExprienceEntity> exprienceEntities1 = new ArrayList<ExprienceEntity>();
         experienceProfile.setType(AppConstants.EXPERIENCE_PROFILE);
         ExprienceEntity exprienceEntity = new ExprienceEntity();
         List<ExprienceEntity> exprienceEntityList = userProfileResponse.getExperience();
         exprienceEntity.setTitle(exprienceEntityList.get(0).getTitle());
         exprienceEntities1.add(exprienceEntity);
         experienceProfile.setExprienceEntity(exprienceEntities1);
-
-
-
-
 
 
         MyProfileView userProfile = new MyProfileView();
@@ -275,7 +256,7 @@ public class ProffestionalProfileFragment extends BaseFragment implements Profil
         cliendsidelocation.setClientSideLocation(clientside);*/
 
 
-        myProfileViewList.add(UservisitingCard);
+      //  myProfileViewList.add(UservisitingCard);
         myProfileViewList.add(goodAtSkillProfile);
         myProfileViewList.add(educationProfile);
         myProfileViewList.add(experienceProfile);
@@ -283,9 +264,6 @@ public class ProffestionalProfileFragment extends BaseFragment implements Profil
         return myProfileViewList;
 
     }
-
-
-
 
 
     @Override

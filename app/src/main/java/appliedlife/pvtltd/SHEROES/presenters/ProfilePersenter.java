@@ -4,6 +4,7 @@ import com.f2prateek.rx.preferences.Preference;
 
 import javax.inject.Inject;
 
+import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
@@ -47,27 +48,26 @@ public class ProfilePersenter extends BasePresenter<ProfileView> {
     Preference<LoginResponse> userPreference;
     MasterDataModel masterDataModel;
     Preference<MasterDataResponse> userPreferenceMasterData;
+
     @Inject
-    public ProfilePersenter(MasterDataModel masterDataModel,ProfileModel mProfileModel, SheroesApplication sheroesApplication, Preference<LoginResponse> userPreference,Preference<MasterDataResponse> userPreferenceMasterData) {
+    public ProfilePersenter(MasterDataModel masterDataModel, ProfileModel mProfileModel, SheroesApplication sheroesApplication, Preference<LoginResponse> userPreference, Preference<MasterDataResponse> userPreferenceMasterData) {
         this.mProfileModel = mProfileModel;
-        this.sheroesApplication=sheroesApplication;
+        this.sheroesApplication = sheroesApplication;
         this.userPreference = userPreference;
-        this.masterDataModel=masterDataModel;
-        this.userPreferenceMasterData=userPreferenceMasterData;
+        this.masterDataModel = masterDataModel;
+        this.userPreferenceMasterData = userPreferenceMasterData;
     }
 
     @Override
     public void detachView() {
-
         super.detachView();
     }
 
     @Override
     public boolean isViewAttached() {
-
         return super.isViewAttached();
-
     }
+
     public void getMasterDataToPresenter() {
         super.getMasterDataToAllPresenter(sheroesApplication, masterDataModel, userPreferenceMasterData);
     }
@@ -76,84 +76,73 @@ public class ProfilePersenter extends BasePresenter<ProfileView> {
 
     public void getEducationDetailsAuthTokeInPresenter(ProfileAddEditEducationRequest profileAddEditEducationRequest) {
         if (!NetworkUtil.isConnected(sheroesApplication)) {
-
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
-
             return;
         }
-
-
         getMvpView().startProgressBar();
-
         Subscription subscription = mProfileModel.getEducationAuthTokenFromModel(profileAddEditEducationRequest).subscribe(new Subscriber<BoardingDataResponse>() {
             @Override
             public void onCompleted() {
                 getMvpView().stopProgressBar();
             }
+
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(),ERROR_AUTH_TOKEN);
+                getMvpView().showError(sheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_AUTH_TOKEN);
             }
 
             @Override
             public void onNext(BoardingDataResponse boardingDataResponse) {
-
                 getMvpView().stopProgressBar();
-                getMvpView().getEducationResponse(boardingDataResponse);
-
+                if (null != boardingDataResponse) {
+                    getMvpView().getEducationResponse(boardingDataResponse);
+                }
             }
         });
         registerSubscription(subscription);
     }
 
 
-
-
-
-
-// for profile_basic_details
-public void getPersonalBasicDetailsAuthTokeInPresenter(PersonalBasicDetailsRequest personalBasicDetailsRequest) {
-    if (!NetworkUtil.isConnected(sheroesApplication)) {
-
-        getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
-
-        return;
-    }
-
-    getMvpView().startProgressBar();
-    Subscription subscription = mProfileModel.getPersonalBasicDetailsAuthTokenFromModel(personalBasicDetailsRequest).subscribe(new Subscriber<BoardingDataResponse>() {
-        @Override
-        public void onCompleted() {
-
-
-        }
-
-        @Override
-        public void onError(Throwable e) {
-            getMvpView().stopProgressBar();
-            getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
-        }
-
-        @Override
-        public void onNext(BoardingDataResponse boardingDataResponse) {
-            getMvpView().stopProgressBar();
-            getMvpView().getPersonalBasicDetailsResponse(boardingDataResponse);
-        }
-    });
-    registerSubscription(subscription);
-}
-
-
-
-
-
-//for usrs travel_details
-    public void getUserTravelDetailsAuthTokeInPresenter(ProfileTravelFLexibilityRequest profileTravelFLexibilityRequest) {
+    // for profile_basic_details
+    public void getPersonalBasicDetailsAuthTokeInPresenter(PersonalBasicDetailsRequest personalBasicDetailsRequest) {
         if (!NetworkUtil.isConnected(sheroesApplication)) {
 
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_AUTH_TOKEN);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
 
+            return;
+        }
+
+        getMvpView().startProgressBar();
+        Subscription subscription = mProfileModel.getPersonalBasicDetailsAuthTokenFromModel(personalBasicDetailsRequest).subscribe(new Subscriber<BoardingDataResponse>() {
+            @Override
+            public void onCompleted() {
+
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                getMvpView().stopProgressBar();
+                getMvpView().showError(sheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_AUTH_TOKEN);
+            }
+
+            @Override
+            public void onNext(BoardingDataResponse boardingDataResponse) {
+                getMvpView().stopProgressBar();
+                if (null != boardingDataResponse) {
+                    getMvpView().getPersonalBasicDetailsResponse(boardingDataResponse);
+                }
+            }
+        });
+        registerSubscription(subscription);
+    }
+
+
+    //for usrs travel_details
+    public void getUserTravelDetailsAuthTokeInPresenter(ProfileTravelFLexibilityRequest profileTravelFLexibilityRequest) {
+        if (!NetworkUtil.isConnected(sheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
             return;
         }
 
@@ -161,22 +150,18 @@ public void getPersonalBasicDetailsAuthTokeInPresenter(PersonalBasicDetailsReque
         Subscription subscription = mProfileModel.getProfessionalTravelfexibilityDetailsAuthTokenFromModel(profileTravelFLexibilityRequest).subscribe(new Subscriber<BoardingDataResponse>() {
             @Override
             public void onCompleted() {
-
-
             }
+
             @Override
             public void onError(Throwable e) {
-
-                getMvpView().showError(e.getMessage(),ERROR_AUTH_TOKEN);
+                getMvpView().showError(sheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_AUTH_TOKEN);
             }
 
             @Override
             public void onNext(BoardingDataResponse boardingDataResponse) {
-
-
-
-                getMvpView().getprofiletracelflexibilityResponse(boardingDataResponse);
-
+                if (null != boardingDataResponse) {
+                    getMvpView().getprofiletracelflexibilityResponse(boardingDataResponse);
+                }
             }
         });
         registerSubscription(subscription);
@@ -199,27 +184,25 @@ public void getPersonalBasicDetailsAuthTokeInPresenter(PersonalBasicDetailsReque
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
+                getMvpView().showError(sheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_AUTH_TOKEN);
             }
 
             @Override
             public void onNext(BoardingDataResponse boardingDataResponse) {
                 getMvpView().stopProgressBar();
-                getMvpView().getUserSummaryResponse(boardingDataResponse);
+                if (null != boardingDataResponse) {
+                    getMvpView().getUserSummaryResponse(boardingDataResponse);
+                }
             }
         });
         registerSubscription(subscription);
     }
 
 
-
-
     //for Professional_basic_details
     public void getProfessionalBasicDetailsAuthTokeInPresenter(ProfessionalBasicDetailsRequest professionalBasicDetailsRequest) {
         if (!NetworkUtil.isConnected(sheroesApplication)) {
-
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
-
             return;
         }
         getMvpView().startProgressBar();
@@ -227,37 +210,30 @@ public void getPersonalBasicDetailsAuthTokeInPresenter(PersonalBasicDetailsReque
             @Override
             public void onCompleted() {
 
-
             }
 
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
+                getMvpView().showError(sheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_AUTH_TOKEN);
             }
 
             @Override
             public void onNext(BoardingDataResponse boardingDataResponse) {
                 getMvpView().stopProgressBar();
-                getMvpView().getProfessionalBasicDetailsResponse(boardingDataResponse);
+                if (null != boardingDataResponse) {
+                    getMvpView().getProfessionalBasicDetailsResponse(boardingDataResponse);
+                }
             }
         });
         registerSubscription(subscription);
     }
 
 
-
-
-
-
-
-
     //for Professional_work_location_details
-    public void getUserWorkLocationAuthTokeInPresenter(ProfilePreferredWorkLocationRequest profilePreferredWorkLocationRequest  ) {
+    public void getUserWorkLocationAuthTokeInPresenter(ProfilePreferredWorkLocationRequest profilePreferredWorkLocationRequest) {
         if (!NetworkUtil.isConnected(sheroesApplication)) {
-
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_AUTH_TOKEN);
-
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
             return;
         }
 
@@ -265,22 +241,18 @@ public void getPersonalBasicDetailsAuthTokeInPresenter(PersonalBasicDetailsReque
             @Override
             public void onCompleted() {
 
-
             }
+
             @Override
             public void onError(Throwable e) {
-
-                getMvpView().showError(e.getMessage(),ERROR_AUTH_TOKEN);
+                getMvpView().showError(sheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_AUTH_TOKEN);
             }
 
             @Override
             public void onNext(BoardingDataResponse boardingDataResponse) {
-
-
-
-                getMvpView().getProfessionalWorkLocationResponse(boardingDataResponse);
-
-
+                if (null != boardingDataResponse) {
+                    getMvpView().getProfessionalWorkLocationResponse(boardingDataResponse);
+                }
             }
         });
         registerSubscription(subscription);
@@ -291,39 +263,29 @@ public void getPersonalBasicDetailsAuthTokeInPresenter(PersonalBasicDetailsReque
     //for Profile get_visiting_card
 
 
-    public void getVisitingCardDetailsAuthTokeInPresenter(GetUserVisitingCardRequest getUserVisitingCardRequest  ) {
-
-
-
-
+    public void getVisitingCardDetailsAuthTokeInPresenter(GetUserVisitingCardRequest getUserVisitingCardRequest) {
         if (!NetworkUtil.isConnected(sheroesApplication)) {
-
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_AUTH_TOKEN);
-
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
             return;
         }
 
         Subscription subscription = mProfileModel.getProfileVisitingCardDetailsAuthTokenFromModel(getUserVisitingCardRequest).subscribe(new Subscriber<ProfileEditVisitingCardResponse>() {
-
-
             @Override
             public void onCompleted() {
 
 
             }
+
             @Override
             public void onError(Throwable e) {
-
-                getMvpView().showError(e.getMessage(),ERROR_AUTH_TOKEN);
+                getMvpView().showError(sheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_AUTH_TOKEN);
             }
 
             @Override
             public void onNext(ProfileEditVisitingCardResponse profileEditVisitingCardResponse) {
-
-
-
-                getMvpView().getProfileVisitingCardResponse(profileEditVisitingCardResponse);
-
+                if (null != profileEditVisitingCardResponse) {
+                    getMvpView().getProfileVisitingCardResponse(profileEditVisitingCardResponse);
+                }
 
             }
         });
@@ -332,15 +294,9 @@ public void getPersonalBasicDetailsAuthTokeInPresenter(PersonalBasicDetailsReque
     }
 
     //for Profile Edit visiting_card
-    public void getEditVisitingCardDetailsAuthTokeInPresenter( ) {
-
-
-
-
+    public void getEditVisitingCardDetailsAuthTokeInPresenter() {
         if (!NetworkUtil.isConnected(sheroesApplication)) {
-
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_AUTH_TOKEN);
-
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
             return;
         }
 
@@ -349,20 +305,17 @@ public void getPersonalBasicDetailsAuthTokeInPresenter(PersonalBasicDetailsReque
             public void onCompleted() {
 
             }
+
             @Override
             public void onError(Throwable e) {
-
-                getMvpView().showError(e.getMessage(),ERROR_AUTH_TOKEN);
+                getMvpView().showError(sheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_AUTH_TOKEN);
             }
 
             @Override
             public void onNext(ProfileEditVisitingCardResponse profileEditVisitingCardResponse) {
-
-
-
-                getMvpView().getProfileVisitingCardResponse(profileEditVisitingCardResponse);
-
-
+                if (null != profileEditVisitingCardResponse) {
+                    getMvpView().getProfileVisitingCardResponse(profileEditVisitingCardResponse);
+                }
             }
         });
         registerSubscription(subscription);
@@ -370,43 +323,31 @@ public void getPersonalBasicDetailsAuthTokeInPresenter(PersonalBasicDetailsReque
     }
 
 
-
-
 //for showing all data of profile listing
 
 
     public void getALLUserDetails() {
         if (!NetworkUtil.isConnected(sheroesApplication)) {
-
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_AUTH_TOKEN);
-
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
             return;
         }
 
-
         Subscription subscription = mProfileModel.getAllUserDetailsromModel().subscribe(new Subscriber<UserProfileResponse>() {
-
             @Override
             public void onCompleted() {
 
-
             }
+
             @Override
             public void onError(Throwable e) {
-
-                getMvpView().showError(e.getMessage(),ERROR_AUTH_TOKEN);
+                getMvpView().showError(sheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_AUTH_TOKEN);
             }
 
             @Override
             public void onNext(UserProfileResponse userProfileResponse) {
-
-
-
-
-                getMvpView().getUserData(userProfileResponse);
-
-
-
+                if (null != userProfileResponse) {
+                    getMvpView().getUserData(userProfileResponse);
+                }
             }
         });
         registerSubscription(subscription);
@@ -429,7 +370,7 @@ public void getPersonalBasicDetailsAuthTokeInPresenter(PersonalBasicDetailsReque
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), ERROR_TAG);
+                getMvpView().showError(sheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_AUTH_TOKEN);
             }
 
             @Override
@@ -445,19 +386,8 @@ public void getPersonalBasicDetailsAuthTokeInPresenter(PersonalBasicDetailsReque
         registerSubscription(subscription);
     }
 
-
-
-
-
-
-
     public void onStop() {
-
         detachView();
     }
-
-
-
-
 
 }

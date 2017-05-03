@@ -6,14 +6,10 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.security.PrivateKey;
-
-import appliedlife.pvtltd.SHEROES.models.entities.login.EducationEntityBO;
-
 /**
  * Created by sheroes on 29/03/17.
  */
-public class EducationEntity {
+public class EducationEntity implements Parcelable {
     @SerializedName("id")
     @Expose
     private long id;
@@ -63,18 +59,10 @@ public class EducationEntity {
     private Boolean isGrade;
     @SerializedName("max_grade")
     @Expose
-    private Object maxGrade;
+    private String maxGrade;
     @SerializedName("grade")
     @Expose
     private String grade;
-
-    public EducationEntity getEducationEntity() {
-        return educationEntity;
-    }
-
-    public void setEducationEntity(EducationEntity educationEntity) {
-        this.educationEntity = educationEntity;
-    }
 
     public long getId() {
         return id;
@@ -148,14 +136,6 @@ public class EducationEntity {
         this.fieldOfStudy = fieldOfStudy;
     }
 
-    public String getGrade() {
-        return grade;
-    }
-
-    public void setGrade(String grade) {
-        this.grade = grade;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -196,29 +176,104 @@ public class EducationEntity {
         this.tag = tag;
     }
 
+    public EducationEntity getEducationEntity() {
+        return educationEntity;
+    }
 
+    public void setEducationEntity(EducationEntity educationEntity) {
+        this.educationEntity = educationEntity;
+    }
 
-    public Boolean getIsCurrentlyAttending() {
+    public Boolean getCurrentlyAttending() {
         return isCurrentlyAttending;
     }
 
-    public void setIsCurrentlyAttending(Boolean isCurrentlyAttending) {
-        this.isCurrentlyAttending = isCurrentlyAttending;
+    public void setCurrentlyAttending(Boolean currentlyAttending) {
+        isCurrentlyAttending = currentlyAttending;
     }
 
-    public Boolean getIsGrade() {
+    public Boolean getGrade() {
         return isGrade;
     }
 
-    public void setIsGrade(Boolean isGrade) {
-        this.isGrade = isGrade;
+    public void setGrade(String grade) {
+        this.grade = grade;
     }
 
-    public Object getMaxGrade() {
+    public void setGrade(Boolean grade) {
+        isGrade = grade;
+    }
+
+    public String getMaxGrade() {
         return maxGrade;
     }
 
-    public void setMaxGrade(Object maxGrade) {
+    public void setMaxGrade(String maxGrade) {
         this.maxGrade = maxGrade;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(this.id);
+        dest.writeLong(this.fieldOfStudyMasterId);
+        dest.writeLong(this.degreeNameMasterId);
+        dest.writeLong(this.schoolNameMasterId);
+        dest.writeString(this.school);
+        dest.writeInt(this.sessionStartYear);
+        dest.writeInt(this.sessionEndYear);
+        dest.writeString(this.degree);
+        dest.writeString(this.fieldOfStudy);
+        dest.writeString(this.description);
+        dest.writeString(this.activities);
+        dest.writeInt(this.displayOrder);
+        dest.writeByte(this.isActive ? (byte) 1 : (byte) 0);
+        dest.writeString(this.tag);
+        dest.writeParcelable(this.educationEntity, flags);
+        dest.writeValue(this.isCurrentlyAttending);
+        dest.writeValue(this.isGrade);
+        dest.writeString(this.maxGrade);
+        dest.writeString(this.grade);
+    }
+
+    public EducationEntity() {
+    }
+
+    protected EducationEntity(Parcel in) {
+        this.id = in.readLong();
+        this.fieldOfStudyMasterId = in.readLong();
+        this.degreeNameMasterId = in.readLong();
+        this.schoolNameMasterId = in.readLong();
+        this.school = in.readString();
+        this.sessionStartYear = in.readInt();
+        this.sessionEndYear = in.readInt();
+        this.degree = in.readString();
+        this.fieldOfStudy = in.readString();
+        this.description = in.readString();
+        this.activities = in.readString();
+        this.displayOrder = in.readInt();
+        this.isActive = in.readByte() != 0;
+        this.tag = in.readString();
+        this.educationEntity = in.readParcelable(EducationEntity.class.getClassLoader());
+        this.isCurrentlyAttending = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.isGrade = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.maxGrade = in.readString();
+        this.grade = in.readString();
+    }
+
+    public static final Creator<EducationEntity> CREATOR = new Creator<EducationEntity>() {
+        @Override
+        public EducationEntity createFromParcel(Parcel source) {
+            return new EducationEntity(source);
+        }
+
+        @Override
+        public EducationEntity[] newArray(int size) {
+            return new EducationEntity[size];
+        }
+    };
 }

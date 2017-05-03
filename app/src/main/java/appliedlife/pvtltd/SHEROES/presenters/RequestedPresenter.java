@@ -74,7 +74,9 @@ public class RequestedPresenter extends BasePresenter<RequestedView> {
             @Override
             public void onNext(RequestedListResponse requestedListResponse) {
                 getMvpView().stopProgressBar();
-                getMvpView().getAllRequest(requestedListResponse.getMembers());
+                if(null!=requestedListResponse) {
+                    getMvpView().getAllRequest(requestedListResponse.getMembers());
+                }
             }
         });
         registerSubscription(subscription);
@@ -100,7 +102,9 @@ public class RequestedPresenter extends BasePresenter<RequestedView> {
             @Override
             public void onNext(MemberListResponse memberListResponse) {
                 getMvpView().stopProgressBar();
-                getMvpView().removeApprovePandingMember(memberListResponse, REMOVE_REQUEST);
+                if(null!=memberListResponse) {
+                    getMvpView().removeApprovePandingMember(memberListResponse, REMOVE_REQUEST);
+                }
             }
         });
         registerSubscription(subscription);
@@ -127,7 +131,9 @@ public class RequestedPresenter extends BasePresenter<RequestedView> {
             @Override
             public void onNext(MemberListResponse memberListResponse) {
                 getMvpView().stopProgressBar();
-                getMvpView().removeApprovePandingMember(memberListResponse,APPROVE_REQUEST);
+                if(null!=memberListResponse) {
+                    getMvpView().removeApprovePandingMember(memberListResponse, APPROVE_REQUEST);
+                }
             }
         });
         registerSubscription(subscription);
