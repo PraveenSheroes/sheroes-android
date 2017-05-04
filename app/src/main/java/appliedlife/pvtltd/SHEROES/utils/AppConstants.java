@@ -9,6 +9,9 @@ package appliedlife.pvtltd.SHEROES.utils;
  * Title: App constants stores all app messages.
  */
 public class AppConstants {
+    public static final String GOOGLE_PLAY_ANDROID_APP_URL = "https://play.google.com/store/apps/details?id=appliedlife.pvtltd.sheroesask&hl=en";
+    public static final String GOOGLE_PLAY_BROWSER_URL = "https:/mmt.intent.action.HOTEL_BOOK/play.google.com/store/apps/details?id=appliedlife.pvtltd.sheroesask";
+
     public static final int ONEGIGABYTE = 1024 * 1024 * 1024;
     public static final int ANDROID_SDK_24 = 24;
     public static final int READ_TIME_OUT = 180;

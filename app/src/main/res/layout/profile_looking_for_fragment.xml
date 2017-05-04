@@ -58,33 +58,32 @@
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    app:layout_collapseMode="pin">
+                    android:layout_gravity="right"
+                    android:gravity="right"
+                    app:layout_collapseMode="pin"
+                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-                    <RelativeLayout
+                    <TextView
+                        android:id="@+id/tv_looking_back"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left|top"
+                        android:layout_marginRight="@dimen/dp_size_20"
+                        android:drawableLeft="@drawable/ic_back_white"
+                        android:padding="@dimen/dp_size_10" />
+
+                    <TextView
+                        android:id="@+id/tv_about_me_tittle"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">  
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/dp_size_20"
+                        android:ellipsize="end"
+                        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                        android:gravity="center"
+                        android:lines="@integer/int_value_for_line_1"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/sp_size_14" />
 
-                        <TextView
-                            android:id="@+id/tv_looking_back"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/dp_size_16"
-                            android:padding="@dimen/dp_size_3"
-                            android:drawableLeft="@drawable/ic_back_white"
-                            android:fontFamily="@string/ID_ROBOTO_LIGHT" />
-
-                        <TextView
-                            android:id="@+id/tv_about_me_tittle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:fontFamily="@string/ID_ROBOTO_LIGHT"
-                            android:padding="@dimen/dp_size_16"
-                            android:visibility="gone"
-                            android:text="@string/ID_LOOKING_FOR"
-                            android:textAllCaps="true" />
-
-                    </RelativeLayout>
 
                 </android.support.v7.widget.Toolbar>
 
@@ -98,174 +97,48 @@
             android:background="@color/white"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="@dimen/dp_size_4">
+                android:orientation="vertical">
 
-                <RelativeLayout
-                    android:id="@+id/rel_selected_tag"
-                    android:layout_width="wrap_content"
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/tv_no_of_skills"
-                    android:layout_centerHorizontal="true"
-                    android:gravity="center">
+                    android:layout_marginBottom="@dimen/dp_size_5">
 
-                    <TextView
-                        android:id="@+id/tv_selected_skill1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp_size_10"
-                        android:background="@drawable/selected_tag_shap"
-                        android:layout_marginLeft="@dimen/dp_size_10"
-                        android:textColor="@color/blue"
-                        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-                        android:textSize="@dimen/sp_size_13"
-                        android:visibility="gone"/>
+                    <LinearLayout
+                        android:id="@+id/li_how_sheroes_looking_for_strip_for_add_item"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/white"
+                        android:gravity="center"
+                        android:orientation="vertical" />
+                </android.support.v7.widget.CardView>
 
-                    <TextView
-                        android:id="@+id/tv_selected_skill2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp_size_10"
-                        android:layout_toRightOf="@+id/tv_selected_skill1"
-                        android:background="@drawable/selected_tag_shap"
-                        android:layout_marginLeft="@dimen/dp_size_10"
-                        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-
-                        android:textColor="@color/blue"
-                        android:textSize="@dimen/sp_size_13"
-                        android:visibility="gone"/>
-
-                    <TextView
-                        android:id="@+id/tv_selected_skill3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp_size_10"
-                        android:layout_toRightOf="@+id/tv_selected_skill2"
-                        android:background="@drawable/selected_tag_shap"
-                        android:layout_marginLeft="@dimen/dp_size_10"
-                        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-
-                        android:textColor="@color/blue"
-                        android:textSize="@dimen/sp_size_13"
-                        android:visibility="gone"/>
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/rel_selected_tag1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/rel_selected_tag"
-                    android:layout_centerHorizontal="true"
-                    android:gravity="center">
-
-                    <TextView
-                        android:id="@+id/tv_selected_skill4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp_size_10"
-                        android:background="@drawable/selected_tag_shap"
-                        android:layout_marginLeft="@dimen/dp_size_10"
-                        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-
-                        android:textColor="@color/blue"
-                        android:textSize="@dimen/sp_size_13"
-                        android:visibility="gone"/>
-
-                    <TextView
-                        android:id="@+id/tv_selected_skill5"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp_size_10"
-                        android:layout_toRightOf="@+id/tv_selected_skill4"
-                        android:layout_marginLeft="@dimen/dp_size_10"
-                        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-
-                        android:background="@drawable/selected_tag_shap"
-                        android:textColor="@color/blue"
-                        android:textSize="@dimen/sp_size_13"
-                        android:visibility="gone"/>
-
-                    <TextView
-                        android:id="@+id/tv_selected_skill6"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp_size_10"
-                        android:layout_toRightOf="@+id/tv_selected_skill5"
-                        android:background="@drawable/selected_tag_shap"
-                        android:layout_marginLeft="@dimen/dp_size_10"
-                        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-
-                        android:textColor="@color/blue"
-                        android:textSize="@dimen/sp_size_13"
-                        android:visibility="gone"/>
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/rel_selected_tag2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/rel_selected_tag1"
-                    android:layout_centerHorizontal="true"
-                    android:gravity="center">
-
-                    <TextView
-                        android:id="@+id/tv_selected_skill7"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp_size_10"
-                        android:background="@drawable/selected_tag_shap"
-                        android:layout_marginLeft="@dimen/dp_size_10"
-                        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-
-                        android:textColor="@color/blue"
-                        android:textSize="@dimen/sp_size_13"
-                        android:visibility="gone"/>
-                    <ProgressBar
-                        android:id="@+id/pb_profile_progress_bar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:visibility="gone"
-                        android:layout_gravity="center" />
-                </RelativeLayout>
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/rv_how_can_sheroes_help_list"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_below="@+id/text1"
-                    android:layout_marginTop="@dimen/dp_size_50" />
-
-            </RelativeLayout>
+                    android:layout_height="match_parent" />
+            </LinearLayout>
 
         </android.support.v4.widget.NestedScrollView>
 
     </android.support.design.widget.CoordinatorLayout>
 
-    <Button xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/btn_select_one_more"
+    <TextView
+        android:id="@+id/tv_save_looking_for_details"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/dp_size_50"
         android:layout_alignParentBottom="true"
-        android:background="@color/added_member"
-        android:enabled="false"
-        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-        android:gravity="center"
-        android:text="@string/ID_CHOOSE_CATEGORY"
-        android:textColor="@color/white"
-        android:visibility="gone" />
-
-
-    <Button xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/btn_save_about_me_details"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/grey2"
-        android:enabled="false"
+        android:layout_gravity="bottom"
+        android:background="@drawable/rect_btn"
         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
         android:gravity="center"
         android:text="@string/ID_SAVE"
-        android:textColor="@color/white" />
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_size_13" />
 
+    <include layout="@layout/progress_bar_login" />
 </RelativeLayout>

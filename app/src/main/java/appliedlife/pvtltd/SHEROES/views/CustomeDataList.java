@@ -34,11 +34,16 @@ public class CustomeDataList {
         fifthDrawerItem.setId(5);
         fifthDrawerItem.setName("Settings");
         fifthDrawerItem.setIconName("ic_setting");
+        DrawerItems sixthDrawerItem = new DrawerItems();
+        sixthDrawerItem.setId(6);
+        sixthDrawerItem.setName("Ask SHEROES");
+        sixthDrawerItem.setIconName("ic_setting");
         drawerItemsList.add(firstDrawerItem);
         drawerItemsList.add(secondDrawerItem);
         drawerItemsList.add(thirdDrawerItem);
       //  drawerItemsList.add(fourthDrawerItem);
       //  drawerItemsList.add(fifthDrawerItem);
+        drawerItemsList.add(sixthDrawerItem);
         return  drawerItemsList;
     }
 }

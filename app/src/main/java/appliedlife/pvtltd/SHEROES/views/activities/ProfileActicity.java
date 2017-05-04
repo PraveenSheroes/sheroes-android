@@ -69,6 +69,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.BlurrImage;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitySearchTagsDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.CurrentStatusDialog;
@@ -88,6 +89,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ProfileEditVisitingCardFragmen
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileGoodAtFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileOpportunityTypeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileOtherFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProfilePersonelHowCanLookingForFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileSchoolDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileSearchIntrestIn;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileSearchLanguage;
@@ -205,6 +207,10 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
             mFragmentOpen.setWorkExpFragment(false);
             getSupportFragmentManager().popBackStack();
             updateProffesstionalWorkExpListItem();
+        } else if (mFragmentOpen.isLookingForHowCanOpen()) {
+            mFragmentOpen.setLookingForHowCanOpen(false);
+            getSupportFragmentManager().popBackStack();
+            updatePersonelWorkExpListItem();
         } else {
             super.onBackPressed();
         }
@@ -268,15 +274,17 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .skipMemoryCache(true)
                     .into(mProfileIcon);
+
             Glide.with(this)
                     .load(mUserPreference.get().getUserSummary().getPhotoUrl()).asBitmap()
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .skipMemoryCache(true)
                     .into(new SimpleTarget<Bitmap>() {
                         @Override
-                        public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
-                            ivCommunitiesDetail.setImageBitmap(resource);
-                            Palette.from(resource).generate(new Palette.PaletteAsyncListener() {
+                        public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
+                            Bitmap blurred = BlurrImage.blurRenderScript(ProfileActicity.this, profileImage, 10);
+                            ivCommunitiesDetail.setImageBitmap(blurred);
+                            Palette.from(profileImage).generate(new Palette.PaletteAsyncListener() {
                                 public void onGenerated(Palette palette) {
                                     applyPalette(palette);
                                 }
@@ -347,8 +355,7 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
                 }
 
             }
-        }
-        else if (baseResponse instanceof GoodAt) {
+        } else if (baseResponse instanceof GoodAt) {
             GoodAt goodAt = (GoodAt) baseResponse;
             TextView textView = (TextView) view.findViewById(R.id.tv_good_at_data);
             final Fragment fragment = getSupportFragmentManager().findFragmentByTag(ProfileOpportunityTypeFragment.class.getName());
@@ -362,18 +369,32 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
             openEditAddWorkExpFragment(exprienceEntity);
         } else if (baseResponse instanceof OnBoardingData) {
             OnBoardingData onBoardingData = (OnBoardingData) baseResponse;
-            if (StringUtil.isNotNullOrEmptyString(onBoardingData.getFragmentName())) {
-                LabelValue labelValue = (LabelValue) view.getTag();
-                if (labelValue.isSelected()) {
-                    if (StringUtil.isNotEmptyCollection(mFunctionArea)) {
-                        mFunctionArea.remove(labelValue);
+            switch (onBoardingData.getFragmentName()) {
+                case AppConstants.HOW_SHEROES_CAN_HELP:
+                    Fragment fragment = getSupportFragmentManager().findFragmentByTag(ProfilePersonelHowCanLookingForFragment.class.getName());
+                    if (AppUtils.isFragmentUIActive(fragment)) {
+                        ((ProfilePersonelHowCanLookingForFragment) fragment).setItemOnHeader(view);
                     }
-                } else {
-                    mFunctionArea.add(labelValue);
-                    onDoneFunctionArea();
-                    mFunctionArea.clear();
-                }
+                    break;
+                case AppConstants.MASTER_DATA_FUNCTIONAL_AREA_KEY:
+                    if (StringUtil.isNotNullOrEmptyString(onBoardingData.getFragmentName())) {
+                        LabelValue labelValue = (LabelValue) view.getTag();
+                        if (labelValue.isSelected()) {
+                            if (StringUtil.isNotEmptyCollection(mFunctionArea)) {
+                                mFunctionArea.remove(labelValue);
+                            }
+                        } else {
+                            mFunctionArea.add(labelValue);
+                            onDoneFunctionArea();
+                            mFunctionArea.clear();
+                        }
+                    }
+                    break;
+                default:
+                    LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + onBoardingData.getFragmentName());
             }
+
+
         }
     }
 
@@ -578,10 +599,11 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
                 break;
             }
             case R.id.tv_looking_for: {
+                mFragmentOpen.setLookingForHowCanOpen(true);
                 flprofile_container.setVisibility(View.VISIBLE);
-                ProfileOpportunityTypeFragment profileOpportunityTypeFragment = new ProfileOpportunityTypeFragment();
+                ProfilePersonelHowCanLookingForFragment profilePersonelHowCanLookingForFragment = new ProfilePersonelHowCanLookingForFragment();
                 getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
-                        .replace(R.id.profile_container, profileOpportunityTypeFragment, ProfileOpportunityTypeFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+                        .replace(R.id.profile_container, profilePersonelHowCanLookingForFragment, ProfilePersonelHowCanLookingForFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
                 break;
             }
             case R.id.tv_add_interest_details: {
@@ -707,8 +729,7 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
 
     @OnClick(R.id.iv_back)
     public void backOnclick() {
-        finish();
-        overridePendingTransition(R.anim.top_to_bottom_exit, R.anim.top_bottom_exit_anim);
+        super.onBackPressed();
     }
 
 
@@ -1035,4 +1056,12 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
             ((ProffestionalProfileFragment) feature).onDataRefresh();
         }
     }
+    public void updatePersonelWorkExpListItem() {
+        Fragment feature = viewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
+        if (AppUtils.isFragmentUIActive(feature)) {
+            ((PersonalProfileFragment) feature).onDataRefresh();
+        }
+    }
+
+
 }

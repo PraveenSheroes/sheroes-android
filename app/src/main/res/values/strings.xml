@@ -104,6 +104,7 @@
     <string name="ID_ARTICLE">Articles</string>
     <string name="ID_BOOKMARK">Bookmarks</string>
     <string name="ID_SETTING">Settings</string>
+    <string name="ID_ASK_SHEROES">Ask SHEROES</string>
     <string name="ID_POST">Post as:</string>
     <string name="ID_POST_AS">Post as </string>
     <string name="ID_POSTED">Posted</string>

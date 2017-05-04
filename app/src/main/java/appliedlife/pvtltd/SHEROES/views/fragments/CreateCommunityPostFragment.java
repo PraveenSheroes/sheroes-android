@@ -737,7 +737,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
 
             System.out.println("Camera Image URI : " + mImageCaptureUri);
             CropingIMG();
-        } else if (requestCode == mCROPING_CODE) {
+        } else if (requestCode == mCROPING_CODE&& resultCode == Activity.RESULT_OK ) {
 
             try {
                 if (mOutPutFile.exists()) {
@@ -810,8 +810,10 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
             mTv_add_more_community_post_image.setVisibility(View.VISIBLE);
 
             if (v.getTag().equals("Img0")) {
-                if (null != mFeedDetail && StringUtil.isNotEmptyCollection(mFeedDetail.getImagesIds()) && null != mFeedDetail.getImagesIds().get(0)) {
+                if (null != mFeedDetail && StringUtil.isNotEmptyCollection(mFeedDetail.getImagesIds()) && mFeedDetail.getImagesIds().size()>0&&null != mFeedDetail.getImagesIds().get(0)) {
                     deletedImageIds.add(mFeedDetail.getImagesIds().get(0));
+                   if(newImages.size()>0)
+                    newImages.remove(0);
                 }
                 mImg[0].setVisibility(View.GONE);
                 mBtncross[0].setVisibility(View.GONE);
@@ -819,8 +821,10 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
                 mImgcount--;
                 //do stuff
             } else if (v.getTag().equals("Img1")) {
-                if (null != mFeedDetail && StringUtil.isNotEmptyCollection(mFeedDetail.getImagesIds()) && null != mFeedDetail.getImagesIds().get(1)) {
+                if (null != mFeedDetail && StringUtil.isNotEmptyCollection(mFeedDetail.getImagesIds()) && mFeedDetail.getImagesIds().size()>1&& null != mFeedDetail.getImagesIds().get(1)) {
                     deletedImageIds.add(mFeedDetail.getImagesIds().get(1));
+                    if(newImages.size()>1)
+                        newImages.remove(1);
                 }
                 mImg[1].setVisibility(View.GONE);
                 mBtncross[1].setVisibility(View.GONE);
@@ -829,8 +833,10 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
 
                 //do something else
             } else if (v.getTag().equals("Img2")) {
-                if (null != mFeedDetail && StringUtil.isNotEmptyCollection(mFeedDetail.getImagesIds()) && null != mFeedDetail.getImagesIds().get(2)) {
+                if (null != mFeedDetail && StringUtil.isNotEmptyCollection(mFeedDetail.getImagesIds()) &&  mFeedDetail.getImagesIds().size()>2&&null != mFeedDetail.getImagesIds().get(2)) {
                     deletedImageIds.add(mFeedDetail.getImagesIds().get(2));
+                    if(newImages.size()>2)
+                        newImages.remove(2);
                 }
                 mImg[2].setVisibility(View.GONE);
                 mBtncross[2].setVisibility(View.GONE);
@@ -839,8 +845,10 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
 
                 //do something else
             } else if (v.getTag().equals("Img3")) {
-                if (null != mFeedDetail && StringUtil.isNotEmptyCollection(mFeedDetail.getImagesIds()) && null != mFeedDetail.getImagesIds().get(3)) {
+                if (null != mFeedDetail && StringUtil.isNotEmptyCollection(mFeedDetail.getImagesIds()) && mFeedDetail.getImagesIds().size()>3&& null != mFeedDetail.getImagesIds().get(3)) {
                     deletedImageIds.add(mFeedDetail.getImagesIds().get(3));
+                    if(newImages.size()>3)
+                        newImages.remove(3);
                 }
                 mImg[3].setVisibility(View.GONE);
                 mBtncross[3].setVisibility(View.GONE);
@@ -848,8 +856,10 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
                 mImgcount--;
                 //do something else
             } else if (v.getTag().equals("Img4")) {
-                if (null != mFeedDetail && StringUtil.isNotEmptyCollection(mFeedDetail.getImagesIds()) && null != mFeedDetail.getImagesIds().get(4)) {
+                if (null != mFeedDetail && StringUtil.isNotEmptyCollection(mFeedDetail.getImagesIds()) && mFeedDetail.getImagesIds().size()>4&& null != mFeedDetail.getImagesIds().get(4)) {
                     deletedImageIds.add(mFeedDetail.getImagesIds().get(4));
+                    if(newImages.size()>4)
+                        newImages.remove(4);
                 }
                 mImg[4].setVisibility(View.GONE);
                 mBtncross[4].setVisibility(View.GONE);

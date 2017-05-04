@@ -117,7 +117,7 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                 previousTotal = totalItemCount;
             }
         }
-        if (!loading && totalItemCount <=(lastVisibleItem + visibleThreshold)) {
+        if (totalItemCount>visibleThreshold&&!loading && totalItemCount <=(lastVisibleItem + visibleThreshold)) {
             if(null!=mFragmentListRefreshData&& StringUtil.isNotNullOrEmptyString(mFragmentListRefreshData.getCallFromFragment())) {
                 int pageNo=mFragmentListRefreshData.getPageNo();
                 switch (mFragmentListRefreshData.getCallFromFragment()) {

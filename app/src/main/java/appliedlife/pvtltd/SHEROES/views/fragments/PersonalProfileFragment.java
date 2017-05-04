@@ -22,7 +22,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.InterestType;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.MyProfileView;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.OpportunityType;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCardResponse;
@@ -211,8 +210,6 @@ public class PersonalProfileFragment extends BaseFragment implements ProfileView
             UserDetails userDetails = userProfileResponse.getUserDetails();
             userProfile.setUserDetails(userDetails);
         }
-
-
 
 
         myProfileViewList.add(oppertunityView);

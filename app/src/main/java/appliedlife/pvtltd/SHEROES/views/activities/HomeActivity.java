@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.app.DialogFragment;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -30,6 +31,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -313,9 +315,15 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     checkForAllOpenFragments();
                     openBookMarkFragment();
                     break;
-                default:
+                case 5:
                     //   checkForAllOpenFragments();
                     openSettingFragment();
+                    break;
+                case 6:
+                    launchPlayStore();
+                    break;
+                default:
+
             }
         } else if (baseResponse instanceof CommunitySuggestion) {
 
@@ -325,7 +333,32 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             super.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU);
         }
     }
-
+    public void launchPlayStore() {
+        boolean isLaunchedSuccessfully;
+        Uri uri = Uri.parse(AppConstants.GOOGLE_PLAY_ANDROID_APP_URL);
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        try {
+            startActivity(intent);
+            isLaunchedSuccessfully = true;
+        } catch (ActivityNotFoundException ex) {
+            isLaunchedSuccessfully = false;
+            LogUtils.error(TAG, ex.toString(), ex);
+        }
+        if (!isLaunchedSuccessfully) {
+            uri = Uri.parse(AppConstants.GOOGLE_PLAY_BROWSER_URL);
+            intent = new Intent(Intent.ACTION_VIEW, uri);
+            try {
+                startActivity(intent);
+                isLaunchedSuccessfully = true;
+            } catch (ActivityNotFoundException ex) {
+                isLaunchedSuccessfully = false;
+                LogUtils.error(TAG, ex.toString(), ex);
+            }
+        }
+        if (!isLaunchedSuccessfully) {
+            Toast.makeText(this, "Could not open Google Play, please install the Google Play app.",Toast.LENGTH_SHORT).show();
+        }
+    }
 
     @Override
     public List getListData() {

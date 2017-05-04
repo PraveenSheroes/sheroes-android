@@ -85,6 +85,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ProfileFullViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileGoodAtFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileOpportunityTypeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileOtherFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProfilePersonelHowCanLookingForFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileSchoolDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileSearchIntrestIn;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileSearchLanguage;
@@ -540,5 +541,7 @@ public interface SheroesAppComponent {
     void inject(WorkExperienceCardHolder workExperienceCardHolder);
     void inject(FunctionalAreaDialogFragment functionalAreaDialogFragment);
     void inject(EducationListHolder educationListHolder);
+    void inject(ProfilePersonelHowCanLookingForFragment profilePersonelHowCanLookingForFragment);
+
 
 }

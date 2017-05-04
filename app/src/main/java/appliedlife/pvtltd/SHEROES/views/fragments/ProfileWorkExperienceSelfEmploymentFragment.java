@@ -104,6 +104,7 @@ public class ProfileWorkExperienceSelfEmploymentFragment extends BaseDialogFragm
     private String editOrAdd;
     private Long functionAreaId;
     private Long locationId;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getActivity()).inject(this);
@@ -117,14 +118,14 @@ public class ProfileWorkExperienceSelfEmploymentFragment extends BaseDialogFragm
     private void initializeAllViews() {
         if (null != getArguments()) {
             mExprienceEntity = getArguments().getParcelable(AppConstants.WORK_EXPERIENCE_TYPE);
+            editOrAdd = getString(R.string.ID_EDITED);
         } else {
             editOrAdd = getString(R.string.ID_ADDED);
         }
         mTvTitle.setText(getString(R.string.ID_WORK_EXPERIENCE));
         mTvSubTitle.setText(getString(R.string.ID_JOB));
         if (null != mExprienceEntity) {
-            if(mExprienceEntity.isCurrentlyWorkingHere())
-            {
+            if (mExprienceEntity.isCurrentlyWorkingHere()) {
                 checkBoxIsWorking.setChecked(mExprienceEntity.isCurrentlyWorkingHere());
                 mEtvJobEndDay.setTextColor(ContextCompat.getColor(getActivity(), R.color.text_color_setting_preference_basicdetails));
                 mEtvJobEndMonth.setTextColor(ContextCompat.getColor(getActivity(), R.color.text_color_setting_preference_basicdetails));
@@ -135,11 +136,7 @@ public class ProfileWorkExperienceSelfEmploymentFragment extends BaseDialogFragm
                 mEtvJobEndDay.setText(getString(R.string.ID_DD));
                 mEtvJobEndMonth.setText(getString(R.string.ID_MM));
                 mEtvJobEndYear.setText(getString(R.string.ID_YYYY));
-            }else
-            {
-                if (mExprienceEntity.getEndDay() > 0) {
-                    mEtvJobEndDay.setText(String.valueOf(mExprienceEntity.getEndDay()));
-                }
+            } else {
                 if (mExprienceEntity.getEndMonth() > 0) {
                     mEtvJobEndMonth.setText(String.valueOf(mExprienceEntity.getEndMonth()));
                 }
@@ -178,9 +175,6 @@ public class ProfileWorkExperienceSelfEmploymentFragment extends BaseDialogFragm
                 mTvJobLocCity.setVisibility(View.VISIBLE);
             } else {
                 mTvJobLocCity.setVisibility(View.GONE);
-            }
-            if (mExprienceEntity.getStartDay() > 0) {
-                mEtvJobStartDay.setText(String.valueOf(mExprienceEntity.getStartDay()));
             }
             if (mExprienceEntity.getStartMonth() > 0) {
                 mEtvJobStartMonth.setText(String.valueOf(mExprienceEntity.getStartMonth()));
@@ -225,15 +219,14 @@ public class ProfileWorkExperienceSelfEmploymentFragment extends BaseDialogFragm
                         exprienceEntity.setCompany(mEtvSelfOrgnisationName.getText().toString());
 
 
-                        if (StringUtil.isNotNullOrEmptyString(mEtvJobStartDay.getText().toString()) && StringUtil.isNotNullOrEmptyString(mEtvJobStartMonth.getText().toString()) && StringUtil.isNotNullOrEmptyString(mEtvJobStartYear.getText().toString())) {
-                            exprienceEntity.setStartDay(Integer.parseInt(mEtvJobStartDay.getText().toString()));
+                        if (StringUtil.isNotNullOrEmptyString(mEtvJobStartMonth.getText().toString()) && StringUtil.isNotNullOrEmptyString(mEtvJobStartYear.getText().toString())) {
+                           // exprienceEntity.setStartDay(Integer.parseInt(mEtvJobStartDay.getText().toString()));
                             exprienceEntity.setStartMonth(Integer.parseInt(mEtvJobStartMonth.getText().toString()));
                             exprienceEntity.setStartYear(Integer.parseInt(mEtvJobStartYear.getText().toString()));
 
-                            if(checkBoxIsWorking.isChecked())
-                            {
+                            if (checkBoxIsWorking.isChecked()) {
                                 exprienceEntity.setCurrentlyWorkingHere(checkBoxIsWorking.isChecked());
-                               if (StringUtil.isNotNullOrEmptyString(mEtDescriptionYourWork.getText().toString())) {
+                                if (StringUtil.isNotNullOrEmptyString(mEtDescriptionYourWork.getText().toString())) {
                                     exprienceEntity.setDescription(mEtDescriptionYourWork.getText().toString());
                                 }
                                 if (StringUtil.isNotNullOrEmptyString(mEtSelfAboutOrganization.getText().toString())) {
@@ -246,13 +239,15 @@ public class ProfileWorkExperienceSelfEmploymentFragment extends BaseDialogFragm
                                     exprienceEntity.setOrgBrandName(mEtvSelfOrgnisationBrandName.getText().toString());
                                 }
                                 exprienceEntity.setOrganisationType(mOrgTypeDataPosition);
-                                if (null != mExprienceEntity) {
-                                    editOrAdd = getString(R.string.ID_EDIT);
+                                if (null != mExprienceEntity && null != mExprienceEntity.getId() && mExprienceEntity.getId() > 0) {
+                                    editOrAdd = getString(R.string.ID_EDITED);
                                     exprienceEntity.setId(mExprienceEntity.getId());
+                                }else
+                                {
+                                    editOrAdd = getString(R.string.ID_ADDED);
                                 }
-                            }
-                            else {
-                                if (StringUtil.isNotNullOrEmptyString(mEtvJobEndDay.getText().toString()) && StringUtil.isNotNullOrEmptyString(mEtvJobEndMonth.getText().toString()) && StringUtil.isNotNullOrEmptyString(mEtvJobEndYear.getText().toString())) {
+                            } else {
+                                if ( StringUtil.isNotNullOrEmptyString(mEtvJobEndMonth.getText().toString()) && StringUtil.isNotNullOrEmptyString(mEtvJobEndYear.getText().toString())) {
                                     exprienceEntity.setEndDay(Integer.parseInt(mEtvJobEndDay.getText().toString()));
                                     exprienceEntity.setEndMonth(Integer.parseInt(mEtvJobEndMonth.getText().toString()));
                                     exprienceEntity.setEndYear(Integer.parseInt(mEtvJobEndYear.getText().toString()));
@@ -272,9 +267,12 @@ public class ProfileWorkExperienceSelfEmploymentFragment extends BaseDialogFragm
                                     }
                                     exprienceEntity.setOrganisationType(mOrgTypeDataPosition);
                                     exprienceEntity.setCurrentlyWorkingHere(checkBoxIsWorking.isChecked());
-                                    if (null != mExprienceEntity) {
-                                        editOrAdd = getString(R.string.ID_EDIT);
+                                    if (null != mExprienceEntity && null != mExprienceEntity.getId() && mExprienceEntity.getId() > 0) {
+                                        editOrAdd = getString(R.string.ID_EDITED);
                                         exprienceEntity.setId(mExprienceEntity.getId());
+                                    }else
+                                    {
+                                        editOrAdd = getString(R.string.ID_ADDED);
                                     }
                                 } else {
                                     exprienceEntity = null;
@@ -336,32 +334,32 @@ public class ProfileWorkExperienceSelfEmploymentFragment extends BaseDialogFragm
             mTvFunctionAreaItem.setText(funcArea);
         }
     }
+
     @OnCheckedChanged(R.id.checkbox_is_working)
     public void clickCheckBox() {
-      if(checkBoxIsWorking.isChecked())
-      {
-          mEtvJobEndDay.setTextColor(ContextCompat.getColor(getActivity(), R.color.text_color_setting_preference_basicdetails));
-          mEtvJobEndMonth.setTextColor(ContextCompat.getColor(getActivity(), R.color.text_color_setting_preference_basicdetails));
-          mEtvJobEndYear.setTextColor(ContextCompat.getColor(getActivity(), R.color.text_color_setting_preference_basicdetails));
-          mEtvJobEndDay.setEnabled(false);
-          mEtvJobEndMonth.setEnabled(false);
-          mEtvJobEndYear.setEnabled(false);
-          mEtvJobEndDay.setText(getString(R.string.ID_DD));
-          mEtvJobEndMonth.setText(getString(R.string.ID_MM));
-          mEtvJobEndYear.setText(getString(R.string.ID_YYYY));
-      }else
-      {
-          mEtvJobEndDay.setTextColor(ContextCompat.getColor(getActivity(), R.color.text_color_contactdetails_page));
-          mEtvJobEndMonth.setTextColor(ContextCompat.getColor(getActivity(), R.color.text_color_contactdetails_page));
-          mEtvJobEndYear.setTextColor(ContextCompat.getColor(getActivity(), R.color.text_color_contactdetails_page));
-          mEtvJobEndDay.setEnabled(true);
-          mEtvJobEndMonth.setEnabled(true);
-          mEtvJobEndYear.setEnabled(true);
-          mEtvJobEndDay.setText(AppConstants.EMPTY_STRING);
-          mEtvJobEndMonth.setText(AppConstants.EMPTY_STRING);
-          mEtvJobEndYear.setText(AppConstants.EMPTY_STRING);
-      }
+        if (checkBoxIsWorking.isChecked()) {
+            mEtvJobEndDay.setTextColor(ContextCompat.getColor(getActivity(), R.color.text_color_setting_preference_basicdetails));
+            mEtvJobEndMonth.setTextColor(ContextCompat.getColor(getActivity(), R.color.text_color_setting_preference_basicdetails));
+            mEtvJobEndYear.setTextColor(ContextCompat.getColor(getActivity(), R.color.text_color_setting_preference_basicdetails));
+            mEtvJobEndDay.setEnabled(false);
+            mEtvJobEndMonth.setEnabled(false);
+            mEtvJobEndYear.setEnabled(false);
+            mEtvJobEndDay.setText(getString(R.string.ID_DD));
+            mEtvJobEndMonth.setText(getString(R.string.ID_MM));
+            mEtvJobEndYear.setText(getString(R.string.ID_YYYY));
+        } else {
+            mEtvJobEndDay.setTextColor(ContextCompat.getColor(getActivity(), R.color.text_color_contactdetails_page));
+            mEtvJobEndMonth.setTextColor(ContextCompat.getColor(getActivity(), R.color.text_color_contactdetails_page));
+            mEtvJobEndYear.setTextColor(ContextCompat.getColor(getActivity(), R.color.text_color_contactdetails_page));
+            mEtvJobEndDay.setEnabled(true);
+            mEtvJobEndMonth.setEnabled(true);
+            mEtvJobEndYear.setEnabled(true);
+            mEtvJobEndDay.setText(AppConstants.EMPTY_STRING);
+            mEtvJobEndMonth.setText(AppConstants.EMPTY_STRING);
+            mEtvJobEndYear.setText(AppConstants.EMPTY_STRING);
+        }
     }
+
     @OnClick(R.id.et_job_start_day)
     public void clickStartDay() {
         DatePickerExample pd = new DatePickerExample();
@@ -435,6 +433,8 @@ public class ProfileWorkExperienceSelfEmploymentFragment extends BaseDialogFragm
     public void onSaveWorkExp() {
         mExprienceEntity = makeWorkExpRequest();
         if (null != mExprienceEntity) {
+            mExprienceEntity.setStartDay(1);
+            mExprienceEntity.setEndDay(1);
             mProfilePersenter.getWorkExpResponseInPresenter(mExprienceEntity);
         }
     }
@@ -488,7 +488,7 @@ public class ProfileWorkExperienceSelfEmploymentFragment extends BaseDialogFragm
     public void getEducationResponse(BoardingDataResponse boardingDataResponse) {
         switch (boardingDataResponse.getStatus()) {
             case AppConstants.SUCCESS:
-                ((ProfileActicity) getActivity()).updateProfileWorkExpListItem();
+                ((ProfileActicity) getActivity()).onBackPressed();
                 Toast.makeText(getActivity(), "Work experience " + editOrAdd + " successfully", Toast.LENGTH_SHORT).show();
                 break;
             case AppConstants.FAILED:

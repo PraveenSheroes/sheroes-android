@@ -300,6 +300,7 @@
                     android:focusableInTouchMode="true"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:hint="@string/ID_DD"
+                    android:visibility="gone"
                     android:textAllCaps="true"
                     android:padding="@dimen/dp_size_5"
                     android:textColorHint="@color/text_color_contactdetails_page"
@@ -311,6 +312,7 @@
                     android:layout_gravity="center"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:text="@string/ID_DASH"
+                    android:visibility="invisible"
                     android:textColorHint="@color/black"
                     android:textSize="@dimen/sp_size_20" />
 
@@ -355,11 +357,12 @@
                     android:id="@+id/et_job_end_day"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_size_30"
                     android:background="@drawable/date_edittext_backgroundstyle"
                     android:focusableInTouchMode="true"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:hint="@string/ID_DD"
+                    android:layout_marginLeft="@dimen/dp_size_20"
+                    android:visibility="invisible"
                     android:textAllCaps="true"
                     android:padding="@dimen/dp_size_5"
                     android:textColorHint="@color/text_color_contactdetails_page"
@@ -371,6 +374,7 @@
                     android:layout_gravity="center"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:text="@string/ID_DASH"
+                    android:visibility="invisible"
                     android:textColorHint="@color/black"
                     android:textSize="@dimen/sp_size_20" />
 
