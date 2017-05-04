@@ -320,68 +320,10 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
 
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
-
         if (baseResponse instanceof MyProfileView) {
             profileCardHandled(view.getId(), ((MyProfileView) baseResponse).getType(), baseResponse);
         } else if (baseResponse instanceof GetAllDataDocument) {
-            GetAllDataDocument getAllDataDocument = (GetAllDataDocument) baseResponse;
-            if (StringUtil.isNotNullOrEmptyString(getAllDataDocument.getTitle())) {
-                if (!getAllDataDocument.isChecked()) {
-                    mJobLocationList.add(getAllDataDocument);
-                    saveJobLocation();
-                    mJobLocationList.clear();
-                } else {
-                    if (StringUtil.isNotEmptyCollection(mJobLocationList)) {
-                        mJobLocationList.remove(getAllDataDocument);
-                    }
-                }
-            }
-           /* if (view.getId() == R.id.li_city_name_layout) {
-                GetAllDataDocument dataItem = (GetAllDataDocument) baseResponse;
-                if (null != searchProfileLocation) {
-                    searchProfileLocation.dismiss();
-                    final Fragment fragment = getSupportFragmentManager().findFragmentByTag(PersonalBasicDetailsFragment.class.getName());
-                    if (AppUtils.isFragmentUIActive(fragment)) {
-                        ((PersonalBasicDetailsFragment) fragment).submitLocation(dataItem.getId(), dataItem.getTitle());
-                    }
-                }
-
-                if (null != profileSearchLanguage) {
-
-                    profileSearchLanguage.dismiss();
-                    final Fragment fragment = getSupportFragmentManager().findFragmentByTag(ProfessionalEditBasicDetailsFragment.class.getName());
-                    if (AppUtils.isFragmentUIActive(fragment)) {
-                        ((ProfessionalEditBasicDetailsFragment) fragment).submitLanguage(dataItem.getId(), dataItem.getTitle());
-                    }
-                }
-                if (null != profileDegreeDialog) {
-
-                    profileDegreeDialog.dismiss();
-                    final Fragment fragment = getSupportFragmentManager().findFragmentByTag(ProfileAddEditEducationFragment.class.getName());
-                    if (AppUtils.isFragmentUIActive(fragment)) {
-                        ((ProfileAddEditEducationFragment) fragment).submitDegree(dataItem.getId(), dataItem.getTitle());
-                    }
-                    profileDegreeDialog = null;
-                }
-                if (null != profileSchoolDialog) {
-
-                    profileSchoolDialog.dismiss();
-                    final Fragment fragment = getSupportFragmentManager().findFragmentByTag(ProfileAddEditEducationFragment.class.getName());
-                    if (AppUtils.isFragmentUIActive(fragment)) {
-                        ((ProfileAddEditEducationFragment) fragment).submitSchool(dataItem.getId(), dataItem.getTitle());
-                    }
-                    profileSchoolDialog = null;
-                }
-                if (null != profileStudyDialog) {
-
-                    profileStudyDialog.dismiss();
-                    final Fragment fragment = getSupportFragmentManager().findFragmentByTag(ProfileAddEditEducationFragment.class.getName());
-                    if (AppUtils.isFragmentUIActive(fragment)) {
-                        ((ProfileAddEditEducationFragment) fragment).submitStudy(dataItem.getId(), dataItem.getTitle());
-                    }
-                    profileStudyDialog = null;
-                }
-            }
+            dataOnClickForCardItem(view, baseResponse);
         } else if (baseResponse instanceof LabelValue) {
             if (null != mCurrentStatusDialog) {
                 mCurrentStatusDialog.dismiss();
@@ -402,9 +344,7 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
                     ((ProfessionalEditBasicDetailsFragment) fragment).submitSectorStatus(dataItem.getLabel(), dataItem.getValue());
                 }
 
-            }*/
-
-
+            }
         } else if (baseResponse instanceof GoodAt) {
             GoodAt goodAt = (GoodAt) baseResponse;
             TextView textView = (TextView) view.findViewById(R.id.tv_good_at_data);
@@ -431,6 +371,78 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
                     mFunctionArea.clear();
                 }
             }
+        }
+    }
+
+    private void dataOnClickForCardItem(View view, BaseResponse baseResponse) {
+        int id = view.getId();
+        switch (id) {
+            case R.id.li_job_item:
+                GetAllDataDocument getAllDataDocument = (GetAllDataDocument) baseResponse;
+                if (StringUtil.isNotNullOrEmptyString(getAllDataDocument.getTitle())) {
+                    if (!getAllDataDocument.isChecked()) {
+                        mJobLocationList.add(getAllDataDocument);
+                        saveJobLocation();
+                        mJobLocationList.clear();
+                    } else {
+                        if (StringUtil.isNotEmptyCollection(mJobLocationList)) {
+                            mJobLocationList.remove(getAllDataDocument);
+                        }
+                    }
+                }
+                break;
+            case R.id.li_city_name_layout:
+                goodAtDataItem(baseResponse);
+                break;
+
+            default:
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + id);
+        }
+    }
+
+    private void goodAtDataItem(BaseResponse baseResponse) {
+        GetAllDataDocument dataItem = (GetAllDataDocument) baseResponse;
+        if (null != searchProfileLocation) {
+            searchProfileLocation.dismiss();
+            final Fragment fragment = getSupportFragmentManager().findFragmentByTag(PersonalBasicDetailsFragment.class.getName());
+            if (AppUtils.isFragmentUIActive(fragment)) {
+                ((PersonalBasicDetailsFragment) fragment).submitLocation(dataItem.getId(), dataItem.getTitle());
+            }
+        }
+        if (null != profileSearchLanguage) {
+
+            profileSearchLanguage.dismiss();
+            final Fragment fragment = getSupportFragmentManager().findFragmentByTag(ProfessionalEditBasicDetailsFragment.class.getName());
+            if (AppUtils.isFragmentUIActive(fragment)) {
+                ((ProfessionalEditBasicDetailsFragment) fragment).submitLanguage(dataItem.getId(), dataItem.getTitle());
+            }
+        }
+        if (null != profileDegreeDialog) {
+
+            profileDegreeDialog.dismiss();
+            final Fragment fragment = getSupportFragmentManager().findFragmentByTag(ProfileAddEditEducationFragment.class.getName());
+            if (AppUtils.isFragmentUIActive(fragment)) {
+                ((ProfileAddEditEducationFragment) fragment).submitDegree(dataItem.getId(), dataItem.getTitle());
+            }
+            profileDegreeDialog = null;
+        }
+        if (null != profileSchoolDialog) {
+
+            profileSchoolDialog.dismiss();
+            final Fragment fragment = getSupportFragmentManager().findFragmentByTag(ProfileAddEditEducationFragment.class.getName());
+            if (AppUtils.isFragmentUIActive(fragment)) {
+                ((ProfileAddEditEducationFragment) fragment).submitSchool(dataItem.getId(), dataItem.getTitle());
+            }
+            profileSchoolDialog = null;
+        }
+        if (null != profileStudyDialog) {
+
+            profileStudyDialog.dismiss();
+            final Fragment fragment = getSupportFragmentManager().findFragmentByTag(ProfileAddEditEducationFragment.class.getName());
+            if (AppUtils.isFragmentUIActive(fragment)) {
+                ((ProfileAddEditEducationFragment) fragment).submitStudy(dataItem.getId(), dataItem.getTitle());
+            }
+            profileStudyDialog = null;
         }
     }
 
