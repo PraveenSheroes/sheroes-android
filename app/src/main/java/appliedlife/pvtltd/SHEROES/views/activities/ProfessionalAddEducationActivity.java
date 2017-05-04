@@ -298,7 +298,9 @@ public class ProfessionalAddEducationActivity extends BaseActivity implements Da
     }
 
     @Override
-    public void onDaySubmit(int tagsval) {
+    public void onDateSubmit(String tagsval) {
 
     }
+
+
 }

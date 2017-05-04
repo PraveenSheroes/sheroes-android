@@ -173,7 +173,7 @@ public class ProfileStudyDialog extends BaseDialogFragment implements OnBoarding
         @Override
         public void run() {
             if (!isDetached()) {
-                mMasterDataSkill = AppConstants.DEGREE_KEY;
+                mMasterDataSkill = AppConstants.FIELD_OF_STUDY_KEY;
                 mSearchDataName = mSearchDataName.trim().replaceAll(AppConstants.SPACE, AppConstants.EMPTY_STRING);
                 mOnBoardingPresenter.getOnBoardingSearchToPresenter(mAppUtils.onBoardingSearchRequestBuilder(mSearchDataName, mMasterDataSkill));
 
@@ -193,12 +193,18 @@ public class ProfileStudyDialog extends BaseDialogFragment implements OnBoarding
         if (null != getAllData) {
 
             List<GetAllDataDocument> getAllDataDocuments = getAllData.getGetAllDataDocuments();
-            GetAllDataDocument getAllDataDocument=new GetAllDataDocument();
-            getAllDataDocument.setId("0");
-            getAllDataDocument.setTitle(mSearchEditText.getText().toString());
-            getAllDataDocument.setCategory(mSearchEditText.getText().toString());
-            getAllDataDocuments.add(0,getAllDataDocument);
             if (StringUtil.isNotEmptyCollection(getAllDataDocuments)) {
+
+                if(getAllDataDocuments.get(0).getTitle().equalsIgnoreCase(mSearchEditText.getText().toString())){
+
+                }
+                else {
+                    GetAllDataDocument getAllDataDocument = new GetAllDataDocument();
+                    getAllDataDocument.setId("0");
+                    getAllDataDocument.setTitle(mSearchEditText.getText().toString());
+                    getAllDataDocument.setCategory(mSearchEditText.getText().toString());
+                    getAllDataDocuments.add(0, getAllDataDocument);
+                }
                 mAdapter.setSheroesGenericListData(getAllDataDocuments);
                 mAdapter.notifyDataSetChanged();
             }

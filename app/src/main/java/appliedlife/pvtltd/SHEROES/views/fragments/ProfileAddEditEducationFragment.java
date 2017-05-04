@@ -2,6 +2,8 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,15 +61,19 @@ public class ProfileAddEditEducationFragment extends BaseFragment implements Day
     EditText mEtJobEndDate;
     @Bind(R.id.cb_working_from)
     CheckBox mCbWorkingFrom;
-    MyProfileView myProfileView;
-    @Bind(R.id.et_gpa)
-    EditText mEt_Gpa;
+    EducationEntity educationEntity;
     @Bind(R.id.pb_profile_progress_bar)
     ProgressBar mProgressbar;
-    Long mEducationId,mDeegreeId,mFieldOfStudyId,mSchoolNameId;
+    @Bind(R.id.et_write_desc)
+    EditText mEtWriteAboutMe;
+    @Bind(R.id.charecter_cout_number)
+    TextView mCharecterCountNumber;
+    long mEducationId,mDeegreeId,mFieldOfStudyId,mSchoolNameId,mdegreeId;
+    int mDateFlag=0,mCurrentlyFlag=0;
+    String mStartMonth,mStartYear,mEndMonth,mEndYear,mSchoolName,mStudyName;
+    String[] mStartTime,mEndTime;
 
-
-    String mDegree_details,mSchool_details,mField_of_studay,mdegreeId,mdegreeName,mSchoolId;
+    String mDegree_details,mSchool_details,mField_of_studay,mdegreeName,mSchoolId;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -80,60 +86,80 @@ public class ProfileAddEditEducationFragment extends BaseFragment implements Day
         setProgressBar(mProgressbar);
 
         if(null !=getArguments())
-
         {
 
-            myProfileView=getArguments().getParcelable(AppConstants.EDUCATION_PROFILE);
-            List<EducationEntity> educationEntity = this.myProfileView.getEducationEntity();
+            educationEntity=getArguments().getParcelable(AppConstants.EDUCATION_PROFILE);
 
             if (null != educationEntity) {
-                if (StringUtil.isNotEmptyCollection(educationEntity)) {
-                    if(educationEntity.get(0).getId()>0)
-                    {
-                        mEducationId=educationEntity.get(0).getId();
+                    if (educationEntity.getId() > 0) {
+                        mEducationId = educationEntity.getId();
                     }
-                    if(StringUtil.isNotNullOrEmptyString(educationEntity.get(0).getDegree())) {
-                        mEtDegreeDetails.setText(educationEntity.get(0).getDegree());
+                    if (StringUtil.isNotNullOrEmptyString(educationEntity.getDegree())) {
+                        mEtDegreeDetails.setText(educationEntity.getDegree());
 
                     }
-                    if(educationEntity.get(0).getDegreeNameMasterId()>0)
-                    {
-                        mDeegreeId=educationEntity.get(0).getDegreeNameMasterId();
+                    if (educationEntity.getDegreeNameMasterId() > 0) {
+                        mDeegreeId = educationEntity.getDegreeNameMasterId();
                     }
-                    if(StringUtil.isNotNullOrEmptyString(educationEntity.get(0).getSchool())) {
-                        mEtSchoolDetails.setText(educationEntity.get(0).getSchool());
-                    }
-
-                    if(educationEntity.get(0).getSchoolNameMasterId()>0)
-                    {
-                        mSchoolNameId=educationEntity.get(0).getSchoolNameMasterId();
-                    }
-                    if(StringUtil.isNotNullOrEmptyString(educationEntity.get(0).getFieldOfStudy())) {
-                        mEtFieldOfStudy.setText(educationEntity.get(0).getFieldOfStudy());
-                    }
-                    if(educationEntity.get(0).getFieldOfStudyMasterId()>0)
-                    {
-                        mFieldOfStudyId=educationEntity.get(0).getFieldOfStudyMasterId();
+                    if (StringUtil.isNotNullOrEmptyString(educationEntity.getSchool())) {
+                        mSchoolName=educationEntity.getSchool();
+                        mEtSchoolDetails.setText(educationEntity.getSchool());
                     }
 
-                    if(StringUtil.isNotNullOrEmptyString(""+educationEntity.get(0).getSessionStartYear())) {
-                        mEtJobStartDate.setText(""+educationEntity.get(0).getSessionStartYear());
+                    if (educationEntity.getSchoolNameMasterId() > 0) {
+                        mSchoolNameId = educationEntity.getSchoolNameMasterId();
+                    }
+                    if (StringUtil.isNotNullOrEmptyString(educationEntity.getFieldOfStudy())) {
+                        mEtFieldOfStudy.setText(educationEntity.getFieldOfStudy());
+                        mStudyName=educationEntity.getFieldOfStudy();
+                    }
+                    if (educationEntity.getFieldOfStudyMasterId() > 0) {
+                        mFieldOfStudyId = educationEntity.getFieldOfStudyMasterId();
                     }
 
-                    if(StringUtil.isNotNullOrEmptyString(""+educationEntity.get(0).getSessionEndYear())) {
-                        mEtJobEndDate.setText(""+educationEntity.get(0).getSessionEndYear());
-                    }
-                    if(StringUtil.isNotNullOrEmptyString(""+educationEntity.get(0).getGrade())) {
-                        mEt_Gpa.setText(""+educationEntity.get(0).getGrade());
+                    if (educationEntity.getSessionStartYear()>0) {
+                        mEtJobStartDate.setText(educationEntity.getSessionStartMonth()+ "-" + educationEntity.getSessionStartYear());
+                        mStartTime = mEtJobStartDate.getText().toString().split("-");
+
                     }
 
-
-                }
+                    if (educationEntity.getSessionEndYear()>0) {
+                        mEtJobEndDate.setText(educationEntity.getSessionEndMonth()+ "-" + educationEntity.getSessionEndYear());
+                        mEndTime = mEtJobEndDate.getText().toString().split("-");
+                    }
+                    if (StringUtil.isNotNullOrEmptyString(educationEntity.getDescription())) {
+                        mEtWriteAboutMe.setText(educationEntity.getDescription());
+                    }
 
 
             }
         }
 
+        mEtWriteAboutMe.addTextChangedListener(new TextWatcher() {
+
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int aft) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                if (s.length() > 0) {
+
+                    mCharecterCountNumber.setVisibility(View.VISIBLE);
+                    mCharecterCountNumber.setText(String.valueOf(AppConstants.MAX_WORD_COUNTER - s.toString().length()));
+
+                } else {
+
+                    mCharecterCountNumber.setVisibility(View.GONE);
+                }
+            }
+        });
 
 
 return view;
@@ -141,18 +167,20 @@ return view;
     }
 
 
-
+    @OnClick(R.id.iv_back_profile)
+    public void backClick()
+    {
+        ((ProfileActicity)getActivity()).getSupportFragmentManager().popBackStack();
+    }
     //TODO:Change request
 
     @OnClick(R.id.btn_save_education_details_)
-
-
     public void btn_Onclick(){
 
         mDegree_details=  mEtDegreeDetails.getText().toString();
         mSchool_details=  mEtSchoolDetails.getText().toString();
         mField_of_studay= mEtFieldOfStudy.getText().toString();
-        if(null !=myProfileView)
+        if(null != educationEntity)
         {
             editEducationRequest();
         }
@@ -160,37 +188,48 @@ return view;
             addEducationRequest();
         }
 
+    }
+    @OnClick(R.id.cb_working_from)
+    public void checkCurrently()
+    {
+        if(mCbWorkingFrom.isChecked()) {
+            mEtJobEndDate.setVisibility(View.GONE);
+        }
+        else{
+            mEtJobEndDate.setVisibility(View.VISIBLE);
+
+        }
+    }
+    @OnClick(R.id.et_job_start_date)
+    public void startDateClick()
+    {
+        mDateFlag=1;
+        DayPickerProfile dayPickerProfile=new DayPickerProfile();
+        dayPickerProfile.setListener(this);
+        dayPickerProfile.show(getActivity().getFragmentManager(),"dialog");
+    }
 
 
+    //Click on end date of job
+
+    @OnClick(R.id.et_job_end_date)
+    public void EndDateClick()
+    {
+        mDateFlag=2;
+        DayPickerProfile dayPickerProfile=new DayPickerProfile();
+        dayPickerProfile.setListener(this);
+        dayPickerProfile.show(getActivity().getFragmentManager(),"dialog");
 
 
     }
     private void addEducationRequest()
     {
-        ProfileAddEditEducationRequest profileAddEditEducationRequest = new ProfileAddEditEducationRequest();
-        profileAddEditEducationRequest.setAppVersion("string");
-        profileAddEditEducationRequest.setCloudMessagingId("string");
-        profileAddEditEducationRequest.setDeviceUniqueId("string");
-        profileAddEditEducationRequest.setLastScreenName("string");
-        profileAddEditEducationRequest.setScreenName("string");
-        profileAddEditEducationRequest.setType("EDUCATION");
-        profileAddEditEducationRequest.setSubType("BaseProfileRequest");
-        mProfilePresenter.getEducationDetailsAuthTokeInPresenter(profileAddEditEducationRequest);
+        mProfilePresenter.getEducationDetailsAuthTokeInPresenter(AppUtils.profileAddEducationRequest(mSchoolName,mdegreeId,mStudyName,mStartTime,mEndTime,mEtWriteAboutMe.getText().toString()));
 
     }
     private void editEducationRequest()
     {
-        AppUtils appUtils = AppUtils.getInstance();
-        ProfileAddEditEducationRequest profileAddEditEducationRequest = new ProfileAddEditEducationRequest();
-        profileAddEditEducationRequest.setAppVersion(appUtils.getAppVersionName());
-        profileAddEditEducationRequest.setCloudMessagingId(appUtils.getCloudMessaging());
-        profileAddEditEducationRequest.setDeviceUniqueId(appUtils.getDeviceId());
-        profileAddEditEducationRequest.setLastScreenName("string");
-        profileAddEditEducationRequest.setScreenName(TAG);
-        profileAddEditEducationRequest.setType("EDUCATION");
-        profileAddEditEducationRequest.setSubType("BaseProfileRequest");
-
-       mProfilePresenter.getEducationDetailsAuthTokeInPresenter(AppUtils.profileAddEditEducationRequest(mEducationId,mSchoolNameId,mDeegreeId,mField_of_studay));
+       mProfilePresenter.getEducationDetailsAuthTokeInPresenter(AppUtils.profileEditEducationRequest(mEducationId,mSchoolName,mDeegreeId,mStudyName,mStartTime,mEndTime,mEtWriteAboutMe.getText().toString()));
     }
 
     @OnClick(R.id.et_degree_details)
@@ -200,7 +239,7 @@ return view;
     }
     public void submitDegree(String degreeId,String degree)
     {
-        mdegreeId=degreeId;
+        mdegreeId=Long.parseLong(degreeId);
         mdegreeName=degree;
         mEtDegreeDetails.setText(mdegreeName);
 
@@ -213,7 +252,7 @@ return view;
     public void submitSchool(String schoolId,String school)
     {
         mSchoolId=schoolId;
-        mdegreeName=school;
+        mSchoolName=school;
         mEtSchoolDetails.setText(school);
 
     }
@@ -222,11 +261,11 @@ return view;
     {
         ((ProfileActicity)getActivity()).callProfileStudy();
     }
-    public void submitStudy(String mStudyId,String school)
+    public void submitStudy(String mStudyId,String study)
     {
         mStudyId=mStudyId;
-        mdegreeName=school;
-        mEtFieldOfStudy.setText(school);
+        mStudyName=study;
+        mEtFieldOfStudy.setText(study);
 
     }
 
@@ -236,9 +275,18 @@ return view;
     }
 
     @Override
-    public void onDaySubmit(int tagsval) {
-
+    public void onDateSubmit(String tagsval) {
+        if(mDateFlag==1)
+        {
+            mStartTime = tagsval.split("-");
+            mEtJobStartDate.setText(tagsval);
+        }
+        else if(mDateFlag==2){
+            mEndTime = tagsval.split("-");
+            mEtJobEndDate.setText(tagsval);
+        }
     }
+
 
     @Override
     public void onBackPressed(int id) {

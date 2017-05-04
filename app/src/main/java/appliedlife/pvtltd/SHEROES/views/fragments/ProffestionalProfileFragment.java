@@ -157,13 +157,6 @@ public class ProffestionalProfileFragment extends BaseFragment implements Profil
 
     private List<MyProfileView> renderAllProfileViews(UserProfileResponse userProfileResponse) {
         List<MyProfileView> myProfileViewList = new ArrayList<>();
-
-
-        MyProfileView UservisitingCard = new MyProfileView();
-        UservisitingCard.setType(AppConstants.USER_VISITING_CARD);
-        UservisitingCard.setIteam1("Download Now");
-
-
         MyProfileView goodAtSkillProfile = new MyProfileView();
         goodAtSkillProfile.setType(AppConstants.GOOD_AT_SKILL_PROFILE);
         List<GoodAtSkill> goodAtSkill = new ArrayList<GoodAtSkill>();
@@ -183,16 +176,8 @@ public class ProffestionalProfileFragment extends BaseFragment implements Profil
         educationProfile.setType(AppConstants.EDUCATION_PROFILE);
         List<EducationEntity> educationEntities = new ArrayList<>();
         List<EducationEntity> educationEntityList = userProfileResponse.getEducation();
-        if (StringUtil.isNotEmptyCollection(educationEntityList)) {
-            int count = 1;
-            for (EducationEntity educationEntity : educationEntityList) {
-                if (count <= 2) {
-                    educationEntities.add(educationEntity);
-                } else {
-                    break;
-                }
-                count++;
-            }
+        if (StringUtil.isNotEmptyCollection(educationEntityList)){
+            educationEntities.addAll(educationEntityList);
         }
         educationProfile.setEducationEntity(educationEntities);
 
@@ -203,7 +188,7 @@ public class ProffestionalProfileFragment extends BaseFragment implements Profil
 
         MyProfileView userProfile = new MyProfileView();
         userProfile.setType(AppConstants.USER_PROFILE1);
-        if (null != userProfileResponse.getUserDetails()) {
+        if (null != userProfileResponse.getUserDetails()){
             UserDetails userDetails = userProfileResponse.getUserDetails();
             userProfile.setUserDetails(userDetails);
         }
@@ -217,7 +202,7 @@ public class ProffestionalProfileFragment extends BaseFragment implements Profil
         cliendsidelocation.setClientSideLocation(clientside);*/
 
 
-        //  myProfileViewList.add(UservisitingCard);
+      //  myProfileViewList.add(UservisitingCard);
         myProfileViewList.add(goodAtSkillProfile);
         myProfileViewList.add(educationProfile);
         if (StringUtil.isNotEmptyCollection(exprienceEntityList)) {

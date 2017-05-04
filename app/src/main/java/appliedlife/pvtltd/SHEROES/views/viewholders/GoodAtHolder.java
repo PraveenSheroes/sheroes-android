@@ -162,11 +162,9 @@ public class GoodAtHolder extends BaseViewHolder<GoodAt> {
         tagText=stringList.get(mCurrentIndex);
         // mTvTagData.mTvTag
         mTvTagData.setBackgroundResource(R.drawable.select_tag_shap);
-
         mTvTagData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mTvTagData.setBackgroundResource(R.drawable.selected_tag_shap);
 
                 viewInterface.handleOnClick(dataItem,mTvTagData);
 

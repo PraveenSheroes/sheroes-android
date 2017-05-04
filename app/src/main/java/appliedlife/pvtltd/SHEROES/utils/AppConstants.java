@@ -238,6 +238,7 @@ public class AppConstants {
 
     public static final String DEGREE_KEY="degree";
     public static final String FIELD_OF_STUDY_KEY="field_of_study";
+    public static final String SCHOOL_KEY="school_name";
     public static final String MASTER_DATA_SECTOR_KEY = "SECTOR";//for sector search
     public static final String MASTER_DATA_LANGUAGE_KEY = "LANGUAGE";
     public static final String WORK_EXPERIENCE_CATE = "work_exp_cate";

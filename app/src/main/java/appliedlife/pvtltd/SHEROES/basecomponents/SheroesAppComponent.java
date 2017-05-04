@@ -130,6 +130,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.CommunitySuggestedHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CommunityWithInSggestedHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CurrentStatusHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.EducationListHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeatureCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedArticleHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedCommunityHolder;
@@ -538,5 +539,6 @@ public interface SheroesAppComponent {
     void inject(ProfileSchoolDialog profileSchoolDialog);
     void inject(WorkExperienceCardHolder workExperienceCardHolder);
     void inject(FunctionalAreaDialogFragment functionalAreaDialogFragment);
+    void inject(EducationListHolder educationListHolder);
 
 }

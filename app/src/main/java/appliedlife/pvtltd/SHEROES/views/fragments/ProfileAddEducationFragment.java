@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +24,7 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfessionalAddEducationActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActicity;
+import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -39,21 +42,9 @@ public class ProfileAddEducationFragment extends BaseFragment {
     private final String SCREEN_NAME = "Profile_add_education_screen";
     MyProfileView myProfileView;
     ProfileView profileViewlistener;
-    @Bind(R.id.tv_date_details)
-    TextView mTvDateDetails;
-    @Bind(R.id.tv_education_name)
-    TextView mTvEducationName;
-    @Bind(R.id.tv_college_name)
-    TextView mTvCollegeName;
-    @Bind(R.id.tv_subject_name)
-    TextView mTvSubjectName;
-    @Bind(R.id.tv_grade_value)
-    TextView mTvGradeValue;
-    @Bind(R.id.a1_profile_workexperiences)
-    AppBarLayout ma1ProfileWorkexperiences;
-    @Bind(R.id.tv_education)
-    TextView mTvEducationTittle;
-
+    @Bind(R.id.rv_profile_education_list)
+    RecyclerView mRecyclerView;
+    GenericRecyclerViewAdapter mAdapter;
 
     private ProfileActivityIntractionListner mProfileActivityIntractionListner;
 
@@ -77,12 +68,16 @@ public class ProfileAddEducationFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_profile_education, container, false);
         ButterKnife.bind(this, view);
 
+        LinearLayoutManager manager = new LinearLayoutManager(getContext());
+        mRecyclerView.setLayoutManager(manager);
+        mAdapter = new GenericRecyclerViewAdapter(getContext(), (ProfileActicity) getActivity());
+        mRecyclerView.setLayoutManager(manager);
+        mRecyclerView.setAdapter(mAdapter);
 
 
 
 
-
-        ma1ProfileWorkexperiences.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+     /*   ma1ProfileWorkexperiences.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             boolean isShow = false;
             int scrollRange = -1;
 
@@ -99,17 +94,21 @@ public class ProfileAddEducationFragment extends BaseFragment {
                     isShow = false;
                 }
             }
-        });
+        });*/
 
         if(null !=getArguments())
-
         {
              myProfileView=getArguments().getParcelable(AppConstants.EDUCATION_PROFILE);
 
             List<EducationEntity> educationEntity=this.myProfileView.getEducationEntity();
 
            if(null !=educationEntity) {
-                if (StringUtil.isNotEmptyCollection(educationEntity)) {
+
+
+               mAdapter.setSheroesGenericListData((educationEntity));
+               mAdapter.notifyDataSetChanged();
+
+               /* if (StringUtil.isNotEmptyCollection(educationEntity)) {
 
 
 
@@ -134,13 +133,13 @@ public class ProfileAddEducationFragment extends BaseFragment {
                     }if(StringUtil.isNotNullOrEmptyString(educationEntity.get(0).getFieldOfStudy())) {
                         mTvSubjectName.setVisibility(View.VISIBLE);
                         mTvSubjectName.setText(educationEntity.get(0).getFieldOfStudy());
-                    }/*if(StringUtil.isNotNullOrEmptyString(educationEntity.get(0).getGrade())) {
+                    }*//*if(StringUtil.isNotNullOrEmptyString(educationEntity.get(0).getGrade())) {
                         mTvGradeValue.setVisibility(View.VISIBLE);
                         mTvGradeValue.setText(educationEntity.get(0).getGrade());
-                    }*/
+                    }*//*
 
 
-                }
+                }*/
             }
 
         }
@@ -160,20 +159,20 @@ public class ProfileAddEducationFragment extends BaseFragment {
 
         public  void fab_add_education_click()
         {
-            Intent intent = new Intent(getActivity(), ProfessionalAddEducationActivity.class);
-            startActivity(intent);
+            ((ProfileActicity)getActivity()).callEditEducation(null);
 
         }
 
     //click on edit icon
-    @OnClick(R.id.tv_edit_education)
+   /* @OnClick(R.id.tv_edit_education)
+
 
     public  void fab_edit_education_click()
     {
 
         ((ProfileActicity)getActivity()).callEditEducation(myProfileView);
 
-    }
+    }*/
 
 
     @OnClick(R.id.tv_profile_education_back)

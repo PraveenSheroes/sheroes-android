@@ -258,7 +258,7 @@ public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInt
     @OnClick(R.id.tv_skill_submit)
     public void SkillSubmitPress() {
         List<Long> longList = getExistingSelection();
-        for (int i = 0; i < skillsid.length && skillsid[i]>0; i++) {
+        for (int i = 0; i < skillsid.length; i++) {
 
             if (skillsid[i] > 0) {
                 if (longList.size() < KEY_SKILLS_LIMIT) {
@@ -279,7 +279,64 @@ public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInt
         }
         mOnBoardingPresenter.getJobAtToPresenter(mAppUtils.boardingJobAtRequestBuilder(new HashSet<Long>(longList)));
     }
+    @OnClick(R.id.tv_selected_skill1)
+    void onTag1Click() {
+        mSkill1.setText("");
+        mCount--;
+        if (StringUtil.isNotNullOrEmptyString(mSkill2.getText().toString())) {
+            mSkill1.setText(mSkill2.getText());
+            mSkill2.setVisibility(View.GONE);
 
+        }
+        if (StringUtil.isNotNullOrEmptyString(mSkill3.getText().toString())) {
+            mSkill1.setText(mSkill1.getText());
+            mSkill2.setVisibility(View.VISIBLE);
+            mSkill3.setVisibility(View.GONE);
+        } else
+            mSkill1.setVisibility(View.GONE);
+
+    }
+
+    @OnClick(R.id.tv_selected_skill2)
+    void onTag2Click() {
+        mSkill2.setText("");
+        mCount--;
+        if (StringUtil.isNotNullOrEmptyString(mSkill3.getText().toString())) {
+            mSkill2.setText(mSkill3.getText());
+            mSkill3.setVisibility(View.GONE);
+        } else
+            mSkill2.setVisibility(View.GONE);
+
+
+    }
+
+    @OnClick(R.id.tv_selected_skill3)
+    void onTag3Click() {
+        mSkill3.setText("");
+        mCount--;
+        mSkill3.setVisibility(View.GONE);
+
+
+    }
+
+    @OnClick(R.id.tv_selected_skill4)
+    void onTag4Click() {
+        mSkill4.setText("");
+        mCount--;
+
+        if (StringUtil.isNotNullOrEmptyString(mSkill5.getText().toString())) {
+            mSkill4.setText(mSkill5.getText());
+            mSkill5.setVisibility(View.GONE);
+        }
+        if (StringUtil.isNotNullOrEmptyString(mSkill6.getText().toString())) {
+            mSkill5.setText(mSkill6.getText());
+            mSkill5.setVisibility(View.VISIBLE);
+            mSkill6.setVisibility(View.GONE);
+        } else
+            mSkill4.setVisibility(View.GONE);
+
+
+    }
     @NonNull
     private List<Long> getExistingSelection() {
         List<Long> skillsIdList = new ArrayList<>();

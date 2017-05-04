@@ -31,6 +31,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingInterestJob
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.OnBoardingData;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ExprienceEntity;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.EducationEntity;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.GoodAt;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.MyProfileView;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileHorList;
@@ -226,6 +227,12 @@ public enum HolderMapping {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new ProfileWorkExperienceHolder(view, viewInterface);
+        }
+    },
+    EDUCATIONLIST(R.layout.education_list_card) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new EducationListHolder(view, viewInterface);
         }
     },
     PROFILE_HORIZONTAL_LIST(R.layout.profile_hor_card) {
@@ -512,6 +519,9 @@ public enum HolderMapping {
                         return PROFILE_PERSONAL_VISITINGCARD.ordinal();
                     }
 
+                }
+                else if (item instanceof EducationEntity) {
+                    return EDUCATIONLIST.ordinal();
                 }
                 else if (item instanceof GoodAt) {
                     return GOOD_AT.ordinal();

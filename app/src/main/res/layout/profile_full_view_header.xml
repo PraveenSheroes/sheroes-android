@@ -33,6 +33,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:textAllCaps="true"
+            android:visibility="gone"
             android:textColor="@color/white"
             android:textSize="@dimen/dp_size_14" />
 
@@ -44,7 +45,7 @@
             android:layout_marginTop="@dimen/dp_size_10"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:text=""
-            android:visibility="invisible"
+            android:visibility="gone"
             android:textColor="@color/white"
             android:textSize="@dimen/dp_size_14" />
 
@@ -53,10 +54,10 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_size_10"
             android:layout_marginTop="@dimen/dp_size_10"
-            android:visibility="invisible"
             style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
             android:progressDrawable="@drawable/progressbar_backgroungdstyle"
             android:progressTint="#50e3c2"
+            android:visibility="gone"
             android:focusable="false"
             android:progress="40" />
 

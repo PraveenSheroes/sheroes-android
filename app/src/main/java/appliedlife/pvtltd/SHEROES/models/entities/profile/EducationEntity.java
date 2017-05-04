@@ -6,10 +6,12 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+
 /**
  * Created by sheroes on 29/03/17.
  */
-public class EducationEntity implements Parcelable {
+public class EducationEntity extends BaseResponse implements Parcelable{
     @SerializedName("id")
     @Expose
     private long id;
@@ -31,6 +33,12 @@ public class EducationEntity implements Parcelable {
     @SerializedName("session_end_year")
     @Expose
     private int sessionEndYear;
+    @SerializedName("session_start_month")
+    @Expose
+    private int sessionStartMonth;
+    @SerializedName("session_end_month")
+    @Expose
+    private int sessionEndMonth;
     @SerializedName("degree")
     @Expose
     private String degree;
@@ -52,17 +60,6 @@ public class EducationEntity implements Parcelable {
     @SerializedName("tag")
     @Expose
     private String tag;
-    private EducationEntity educationEntity;
-    private Boolean isCurrentlyAttending;
-    @SerializedName("is_grade")
-    @Expose
-    private Boolean isGrade;
-    @SerializedName("max_grade")
-    @Expose
-    private String maxGrade;
-    @SerializedName("grade")
-    @Expose
-    private String grade;
 
     public long getId() {
         return id;
@@ -118,6 +115,22 @@ public class EducationEntity implements Parcelable {
 
     public void setSessionEndYear(int sessionEndYear) {
         this.sessionEndYear = sessionEndYear;
+    }
+
+    public int getSessionStartMonth() {
+        return sessionStartMonth;
+    }
+
+    public void setSessionStartMonth(int sessionStartMonth) {
+        this.sessionStartMonth = sessionStartMonth;
+    }
+
+    public int getSessionEndMonth() {
+        return sessionEndMonth;
+    }
+
+    public void setSessionEndMonth(int sessionEndMonth) {
+        this.sessionEndMonth = sessionEndMonth;
     }
 
     public String getDegree() {
@@ -212,6 +225,18 @@ public class EducationEntity implements Parcelable {
         this.maxGrade = maxGrade;
     }
 
+    private EducationEntity educationEntity;
+    private Boolean isCurrentlyAttending;
+    @SerializedName("is_grade")
+    @Expose
+    private Boolean isGrade;
+    @SerializedName("max_grade")
+    @Expose
+    private String maxGrade;
+    @SerializedName("grade")
+    @Expose
+    private String grade;
+
     @Override
     public int describeContents() {
         return 0;
@@ -219,6 +244,7 @@ public class EducationEntity implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
         dest.writeLong(this.id);
         dest.writeLong(this.fieldOfStudyMasterId);
         dest.writeLong(this.degreeNameMasterId);
@@ -226,6 +252,8 @@ public class EducationEntity implements Parcelable {
         dest.writeString(this.school);
         dest.writeInt(this.sessionStartYear);
         dest.writeInt(this.sessionEndYear);
+        dest.writeInt(this.sessionStartMonth);
+        dest.writeInt(this.sessionEndMonth);
         dest.writeString(this.degree);
         dest.writeString(this.fieldOfStudy);
         dest.writeString(this.description);
@@ -244,6 +272,7 @@ public class EducationEntity implements Parcelable {
     }
 
     protected EducationEntity(Parcel in) {
+        super(in);
         this.id = in.readLong();
         this.fieldOfStudyMasterId = in.readLong();
         this.degreeNameMasterId = in.readLong();
@@ -251,6 +280,8 @@ public class EducationEntity implements Parcelable {
         this.school = in.readString();
         this.sessionStartYear = in.readInt();
         this.sessionEndYear = in.readInt();
+        this.sessionStartMonth = in.readInt();
+        this.sessionEndMonth = in.readInt();
         this.degree = in.readString();
         this.fieldOfStudy = in.readString();
         this.description = in.readString();

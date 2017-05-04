@@ -40,8 +40,7 @@ public class DayPickerProfile extends DatePickerForProfile {
         Calendar cal = Calendar.getInstance();
 
         View dialog = inflater.inflate(R.layout.education_date_picker, null);
-        final NumberPicker monthPicker = (NumberPicker) dialog.findViewById(R.id.picker_day);
-        final NumberPicker dayPicker = (NumberPicker) dialog.findViewById(R.id.picker_month);
+        final NumberPicker monthPicker = (NumberPicker) dialog.findViewById(R.id.picker_month);
         final NumberPicker yearPicker = (NumberPicker) dialog.findViewById(R.id.picker_year);
 
         final TextView tvDone = (TextView) dialog.findViewById(R.id.tv_done);
@@ -49,19 +48,16 @@ public class DayPickerProfile extends DatePickerForProfile {
         monthPicker.setMaxValue(12);
         monthPicker.setDisplayedValues(new String[]{"JAN", "FAB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"});
 
-        dayPicker.setMinValue(1);
-        dayPicker.setMaxValue(30);
 
         yearPicker.setMinValue(1960);
         yearPicker.setMaxValue(2050);
 
         setDividerColor(monthPicker);
-        setDividerColor(dayPicker);
         setDividerColor(yearPicker);
         tvDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //  listener.onDateSet(monthPicker.getValue());
+                  listener.onDateSubmit(monthPicker.getValue()+"-"+yearPicker.getValue());
                 getDialog().cancel();
             }
         });
@@ -109,7 +105,7 @@ public class DayPickerProfile extends DatePickerForProfile {
         if (dialog != null) {
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-            dialog.getWindow().setLayout(700, ViewGroup.LayoutParams.WRAP_CONTENT);
+            dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
 
@@ -119,6 +115,6 @@ public class DayPickerProfile extends DatePickerForProfile {
     public interface MyDayPickerListener {
         void onErrorOccurence();
 
-        void onDaySubmit(int tagsval);
+        void onDateSubmit(String tagsval);
     }
 }

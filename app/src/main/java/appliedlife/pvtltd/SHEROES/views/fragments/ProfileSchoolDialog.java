@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,6 +38,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActicity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
@@ -44,6 +46,8 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.OnBoardingView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.COMMUNITY_OWNER;
 
 /**
  * Created by SHEROES-TECH on 16-04-2017.
@@ -173,7 +177,7 @@ public class ProfileSchoolDialog extends BaseDialogFragment implements OnBoardin
         @Override
         public void run() {
             if (!isDetached()) {
-                mMasterDataSkill = AppConstants.DEGREE_KEY;
+                mMasterDataSkill = AppConstants.SCHOOL_KEY;
                 mSearchDataName = mSearchDataName.trim().replaceAll(AppConstants.SPACE, AppConstants.EMPTY_STRING);
                 mOnBoardingPresenter.getOnBoardingSearchToPresenter(mAppUtils.onBoardingSearchRequestBuilder(mSearchDataName, mMasterDataSkill));
 
@@ -191,18 +195,22 @@ public class ProfileSchoolDialog extends BaseDialogFragment implements OnBoardin
     @Override
     public void getAllDataResponse(GetAllData getAllData) {
         if (null != getAllData) {
-
             List<GetAllDataDocument> getAllDataDocuments = getAllData.getGetAllDataDocuments();
-            GetAllDataDocument getAllDataDocument=new GetAllDataDocument();
-            getAllDataDocument.setId("0");
-            getAllDataDocument.setTitle(mSearchEditText.getText().toString());
-            getAllDataDocument.setCategory(mSearchEditText.getText().toString());
-            getAllDataDocuments.add(0,getAllDataDocument);
-            if (StringUtil.isNotEmptyCollection(getAllDataDocuments)) {
-                mAdapter.setSheroesGenericListData(getAllDataDocuments);
-                mAdapter.notifyDataSetChanged();
-            }
+            if(StringUtil.isNotEmptyCollection(getAllDataDocuments)) {
+                if (getAllDataDocuments.get(0).getTitle().equalsIgnoreCase(mSearchEditText.getText().toString())) {
 
+                } else {
+                    GetAllDataDocument getAllDataDocument = new GetAllDataDocument();
+                    getAllDataDocument.setId("0");
+                    getAllDataDocument.setTitle(mSearchEditText.getText().toString());
+                    getAllDataDocument.setCategory(mSearchEditText.getText().toString());
+                    getAllDataDocuments.add(0, getAllDataDocument);
+                }
+                if (StringUtil.isNotEmptyCollection(getAllDataDocuments)) {
+                    mAdapter.setSheroesGenericListData(getAllDataDocuments);
+                    mAdapter.notifyDataSetChanged();
+                }
+            }
         }
     }
 

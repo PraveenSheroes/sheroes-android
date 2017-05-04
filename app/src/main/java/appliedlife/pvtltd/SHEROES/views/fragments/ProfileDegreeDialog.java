@@ -193,11 +193,7 @@ public class ProfileDegreeDialog extends BaseDialogFragment implements OnBoardin
         if (null != getAllData) {
 
             List<GetAllDataDocument> getAllDataDocuments = getAllData.getGetAllDataDocuments();
-            GetAllDataDocument getAllDataDocument=new GetAllDataDocument();
-            getAllDataDocument.setId("0");
-            getAllDataDocument.setTitle(mSearchEditText.getText().toString());
-            getAllDataDocument.setCategory(mSearchEditText.getText().toString());
-            getAllDataDocuments.add(0,getAllDataDocument);
+
             if (StringUtil.isNotEmptyCollection(getAllDataDocuments)) {
                 mAdapter.setSheroesGenericListData(getAllDataDocuments);
                 mAdapter.notifyDataSetChanged();

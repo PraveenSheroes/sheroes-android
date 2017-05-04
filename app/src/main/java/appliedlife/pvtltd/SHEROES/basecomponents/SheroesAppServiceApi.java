@@ -173,7 +173,7 @@ public interface SheroesAppServiceApi {
     Observable<BoardingDataResponse> getInterestFromApi(@Body BoardingInterestRequest boardingInterestRequest);
     @POST("participant/settings/change_user_preference")
     Observable<SettingChangeUserPreferenseResponse>getUserChangePreferenceAuthToken(@Body SettingChangeUserPreferenceRequest settingChangeUserPreferenceRequest);
-    @POST("participant/user/get_details\n")
+    @POST("participant/user/add_or_edit")
     Observable<BoardingDataResponse>getEducationAuthToken(@Body ProfileAddEditEducationRequest profileAddEditEducationRequest);
     @POST("participant/user/add_or_edit")
     Observable<BoardingDataResponse>getPersonalBasicDetailsAuthToken(@Body PersonalBasicDetailsRequest personalBasicDetailsRequest);

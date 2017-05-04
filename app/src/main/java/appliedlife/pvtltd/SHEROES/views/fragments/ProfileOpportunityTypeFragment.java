@@ -154,7 +154,6 @@ public class ProfileOpportunityTypeFragment extends BaseFragment implements Base
             }
         });
 
-        mbtnSaveAboutMe.setEnabled(true);
         mOnBoardingPresenter.attachView(this);
         setProgressBar(pb_profile_progress_bar);
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getData() ) {
@@ -307,7 +306,67 @@ public class ProfileOpportunityTypeFragment extends BaseFragment implements Base
             }
         }
     }
+    @OnClick(R.id.tv_selected_skill1)
+    void onTag1Click() {
+        mSkill1.setText("");
+        mCount--;
+        if (StringUtil.isNotNullOrEmptyString(mSkill3.getText().toString())) {
+            mSkill1.setText(mSkill2.getText());
+            mSkill2.setText(mSkill3.getText());
+            mSkill1.setVisibility(View.VISIBLE);
+            mSkill2.setVisibility(View.VISIBLE);
+            mSkill3.setVisibility(View.GONE);
+        }
+        else if (StringUtil.isNotNullOrEmptyString(mSkill2.getText().toString())) {
+            mSkill1.setText(mSkill2.getText());
+            mSkill2.setVisibility(View.GONE);
 
+        }
+         else
+            mSkill1.setVisibility(View.GONE);
+
+    }
+
+    @OnClick(R.id.tv_selected_skill2)
+    void onTag2Click() {
+        mSkill2.setText("");
+        mCount--;
+        if (StringUtil.isNotNullOrEmptyString(mSkill3.getText().toString())) {
+            mSkill2.setText(mSkill3.getText());
+            mSkill3.setVisibility(View.GONE);
+        } else
+            mSkill2.setVisibility(View.GONE);
+
+
+    }
+
+    @OnClick(R.id.tv_selected_skill3)
+    void onTag3Click() {
+        mSkill3.setText("");
+        mCount--;
+        mSkill3.setVisibility(View.GONE);
+
+
+    }
+
+    @OnClick(R.id.tv_selected_skill4)
+    void onTag4Click() {
+        mSkill4.setText("");
+        mCount--;
+
+        if (StringUtil.isNotNullOrEmptyString(mSkill5.getText().toString())) {
+            mSkill4.setText(mSkill5.getText());
+            mSkill5.setVisibility(View.GONE);
+        }
+        if (StringUtil.isNotNullOrEmptyString(mSkill6.getText().toString())) {
+            mSkill5.setText(mSkill6.getText());
+            mSkill5.setVisibility(View.VISIBLE);
+            mSkill6.setVisibility(View.GONE);
+        } else
+            mSkill4.setVisibility(View.GONE);
+
+
+    }
 
     public interface ProfileOpportunityTypeListiner {
      void OnLookinBack();
@@ -317,6 +376,9 @@ public class ProfileOpportunityTypeFragment extends BaseFragment implements Base
 
     public void setProfileOpportunityTypeText(String id,String value)
     {
+        mbtnSaveAboutMe.setEnabled(true);
+        mbtnSaveAboutMe.setBackgroundColor(getResources().getColor(R.color.red));
+
         if (mCount <= 3) {
                 String skill = mSkills[mCount] = value;
                 long skillId = mSkillsId[mCount] =Long.parseLong(id);

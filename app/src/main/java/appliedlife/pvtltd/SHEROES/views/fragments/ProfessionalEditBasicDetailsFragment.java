@@ -68,8 +68,7 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment implement
     EditText mEtMonth;
     @Bind(R.id.et_select_current_status)
     TextInputLayout mEtSelectCurrentStatus;
-    @Bind(R.id.tv_language_delete)
-    TextView mTvLanguageDelete;
+
     @Bind(R.id.et_add_Proficient)
     EditText mEtAddProficient;
     @Bind(R.id.l1_add_language)
@@ -233,23 +232,6 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment implement
 
     }
 
-    @OnClick(R.id.tv_language_delete)
-    public void OnClickCrossLanguageIcon()
-    {
-        mR1AddLanguage.setVisibility(View.GONE);
-
-    }
-
-
-    @OnClick(R.id.add_language)
-    public void AddLanguage()
-    {
-        mR1AddLanguage.setVisibility(View.VISIBLE);
-
-
-
-    }
-
 
     @OnClick(R.id.iv_back_profile)
     public void onBackPressed() {
@@ -277,7 +259,6 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment implement
         professionalBasicDetailsRequest.setScreenName(SCREEN_NAME);
         professionalBasicDetailsRequest.setType("PROF_DETAILS");
         professionalBasicDetailsRequest.setSubType("PROFESSIONAL_DETAILS_SERVICE");
-        professionalBasicDetailsRequest.setAddLanguages(mlanguagevalue);
 
         if (StringUtil.isNotNullOrEmptyString(""+mCurrentStatusId)) {
             professionalBasicDetailsRequest.setJobTagId(mCurrentStatusId);
@@ -397,6 +378,11 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment implement
 
     @Override
     public void onErrorOccurence() {
+
+    }
+
+    @Override
+    public void onDateSubmit(String tagsval) {
 
     }
 

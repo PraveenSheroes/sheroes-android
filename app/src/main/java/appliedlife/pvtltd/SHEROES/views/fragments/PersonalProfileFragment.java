@@ -181,10 +181,6 @@ public class PersonalProfileFragment extends BaseFragment implements ProfileView
         List<MyProfileView> myProfileViewList = new ArrayList<>();
 
 
-        MyProfileView UservisitingCard = new MyProfileView();
-        UservisitingCard.setType(AppConstants.USER_VISITING_CARD1);
-        UservisitingCard.setIteam1("Download Now");
-
         MyProfileView oppertunityView = new MyProfileView();
         oppertunityView.setType(AppConstants.OPPORTUNITY_PROFILE);
         ArrayList<OpportunityType> opportunityTypes = new ArrayList<OpportunityType>();
@@ -217,26 +213,11 @@ public class PersonalProfileFragment extends BaseFragment implements ProfileView
         }
 
 
-        MyProfileView interestProfile = new MyProfileView();
-        interestProfile.setType(AppConstants.INTEREST_PROFILE);
-        ArrayList<InterestType> intrests = new ArrayList<InterestType>();
-        List<LabelValue> interests = userProfileResponse.getUserDetails().getInterests();
-        if (StringUtil.isNotEmptyCollection(interests)) {
-            for (LabelValue intrestValue : interests) {
-                InterestType interestType = new InterestType();
-                interestType.setId(intrestValue.getValue());
-                interestType.setName(intrestValue.getLabel());
-                intrests.add(interestType);
-            }
-            interestProfile.setInterestType(intrests);
 
-        }
 
-        myProfileViewList.add(UservisitingCard);
         myProfileViewList.add(oppertunityView);
         myProfileViewList.add(userSummary);
         myProfileViewList.add(userProfile);
-        myProfileViewList.add(interestProfile);
         return myProfileViewList;
     }
 

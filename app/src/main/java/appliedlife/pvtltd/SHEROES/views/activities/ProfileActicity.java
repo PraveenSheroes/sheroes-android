@@ -57,6 +57,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.OnBoardingData;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.EducationEntity;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ExprienceEntity;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.GoodAt;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.MyProfileView;
@@ -322,6 +323,9 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
     public void handleOnClick(BaseResponse baseResponse, View view) {
         if (baseResponse instanceof MyProfileView) {
             profileCardHandled(view.getId(), ((MyProfileView) baseResponse).getType(), baseResponse);
+        } else if (baseResponse instanceof EducationEntity) {
+            EducationEntity educationEntity = (EducationEntity) baseResponse;
+            callEditEducation(educationEntity);
         } else if (baseResponse instanceof GetAllDataDocument) {
             dataOnClickForCardItem(view, baseResponse);
         } else if (baseResponse instanceof LabelValue) {
@@ -333,9 +337,7 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
                 if (AppUtils.isFragmentUIActive(fragment)) {
                     ((ProfessionalEditBasicDetailsFragment) fragment).submitCurrentStatus(dataItem.getLabel(), dataItem.getValue());
                 }
-
-            }
-            if (null != mSectoreDialog) {
+            } else if (null != mSectoreDialog) {
                 mSectoreDialog.dismiss();
                 mSectoreDialog = null;
                 LabelValue dataItem = (LabelValue) baseResponse;
@@ -345,7 +347,8 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
                 }
 
             }
-        } else if (baseResponse instanceof GoodAt) {
+        }
+        else if (baseResponse instanceof GoodAt) {
             GoodAt goodAt = (GoodAt) baseResponse;
             TextView textView = (TextView) view.findViewById(R.id.tv_good_at_data);
             final Fragment fragment = getSupportFragmentManager().findFragmentByTag(ProfileOpportunityTypeFragment.class.getName());
@@ -728,12 +731,12 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
         return profileSearchLanguage;
     }
 
-    public void callEditEducation(MyProfileView myProfileView) {
+    public void callEditEducation(EducationEntity educationEntity) {
 
         flprofile_container.setVisibility(View.VISIBLE);
         ProfileAddEditEducationFragment profileAddEditEducationFragment = new ProfileAddEditEducationFragment();
         Bundle bundleTravel = new Bundle();
-        bundleTravel.putParcelable(AppConstants.EDUCATION_PROFILE, myProfileView);
+        bundleTravel.putParcelable(AppConstants.EDUCATION_PROFILE, educationEntity);
         profileAddEditEducationFragment.setArguments(bundleTravel);
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
                 .replace(R.id.profile_container, profileAddEditEducationFragment, ProfileAddEditEducationFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();

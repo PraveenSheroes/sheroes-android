@@ -15,6 +15,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.profile.EducationEntity;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.MyProfileView;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -62,31 +63,36 @@ public class ProfileEducationHolder extends BaseViewHolder<MyProfileView> {
 
         List<EducationEntity> educationEntity=this.dataItem.getEducationEntity();
         if(null !=educationEntity) {
-           /* if (StringUtil.isNotEmptyCollection(educationEntity)) {
-                if(StringUtil.isNotNullOrEmptyString(educationEntity.get(0).getDegree())) {
-                    mTvPosition.setVisibility(View.VISIBLE);
-                    mTvPosition.setText(educationEntity.get(0).getDegree());
-                }
-                if(StringUtil.isNotNullOrEmptyString(educationEntity.get(0).getSchool())) {
-                    mTvCompanyName.setVisibility(View.VISIBLE);
-                    mTvCompanyName.setText(educationEntity.get(0).getSchool());
-                }
-                if(educationEntity.get(0).getSessionStartYear()>0) {
-                    String session="";
-                    if(educationEntity.get(0).getSessionEndYear()>0)
-                    {
-                        session="("+educationEntity.get(0).getSessionStartYear()+"-"+educationEntity.get(0).getSessionEndYear()+")";
+            int i=0;
+            if (StringUtil.isNotEmptyCollection(educationEntity)) {
+                for (EducationEntity education: educationEntity) {
+                    if(StringUtil.isNotNullOrEmptyString(educationEntity.get(i).getDegree())) {
+                        mTv_degree1.setVisibility(View.VISIBLE);
+                        mTv_degree1.setText(educationEntity.get(i).getDegree());
                     }
-                    else
-                    {
-                        session="("+educationEntity.get(0).getSessionStartYear()+")";
+                    if(StringUtil.isNotNullOrEmptyString(educationEntity.get(i).getSchool())) {
+                        mTv_degree11.setVisibility(View.VISIBLE);
+                        mTv_degree11.setText(educationEntity.get(i).getSchool());
                     }
-                    mTvDate.setVisibility(View.VISIBLE);
-                    mTvDate.setText(session);
+                    if(educationEntity.get(i).getSessionStartYear()>0) {
+                        String session="";
+                        if(educationEntity.get(i).getSessionEndYear()>0)
+                        {
+                            session="("+educationEntity.get(i).getSessionStartYear()+"-"+educationEntity.get(i).getSessionEndYear()+")";
+                        }
+                        else
+                        {
+                            session="("+educationEntity.get(i).getSessionStartYear()+")";
+                        }
+                        mTv_date1.setVisibility(View.VISIBLE);
+                        mTv_date1.setText(session);
+                    }
+                    i++;
                 }
 
 
-                if(StringUtil.isNotNullOrEmptyString(educationEntity.get(1).getDegree())) {
+
+               /* if(StringUtil.isNotNullOrEmptyString(educationEntity.get(1).getDegree())) {
                     mTv_degree2.setVisibility(View.VISIBLE);
                     mTv_degree2.setText(educationEntity.get(1).getDegree());
                 }
@@ -106,12 +112,12 @@ public class ProfileEducationHolder extends BaseViewHolder<MyProfileView> {
                     }
                     mTv_date2.setVisibility(View.VISIBLE);
                     mTv_date2.setText(session);
-                }
+                }*/
 
 
 
 
-            }*/
+            }
         }
 
 

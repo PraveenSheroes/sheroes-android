@@ -2119,8 +2119,31 @@ public class AppUtils {
         communityRequest.setReasonToJoin(reasonToJoin);
         return communityRequest;
     }
+    public static ProfileAddEditEducationRequest profileAddEducationRequest(String mSchoolName,long mDeegreeId,String study,String[] startTime,String[] endTime,String description) {
+        AppUtils appUtils = AppUtils.getInstance();
+        ProfileAddEditEducationRequest profileAddEditEducationRequest = new ProfileAddEditEducationRequest();
 
-   public static ProfileAddEditEducationRequest profileAddEditEducationRequest(long mEducationId,long mSchoolNameId,long mDeegreeId,String mEtFieldOfStudy) {
+        profileAddEditEducationRequest.setAppVersion(appUtils.getAppVersionName());
+        profileAddEditEducationRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+        profileAddEditEducationRequest.setDeviceUniqueId(appUtils.mDeviceId);
+        profileAddEditEducationRequest.setLastScreenName("string");
+        profileAddEditEducationRequest.setScreenName("string");
+        profileAddEditEducationRequest.setType("EDUCATION");
+        profileAddEditEducationRequest.setSubType("EDUCATION_SERVICE");
+        profileAddEditEducationRequest.setDegreeNameMasterId(mDeegreeId);
+        profileAddEditEducationRequest.setActive(true);
+        profileAddEditEducationRequest.setSessionStartMonth(Integer.parseInt(startTime[0]));
+        profileAddEditEducationRequest.setSessionStartYear(Integer.parseInt(startTime[1]));
+        profileAddEditEducationRequest.setSessionEndMonth(Integer.parseInt(endTime[0]));
+        profileAddEditEducationRequest.setSessionEndYear(Integer.parseInt(endTime[1]));
+        profileAddEditEducationRequest.setSchool(mSchoolName);
+        profileAddEditEducationRequest.setFieldOfStudy(study);
+        profileAddEditEducationRequest.setGrade("0");
+        profileAddEditEducationRequest.setActivities("study");
+        profileAddEditEducationRequest.setDescription(description);
+        return profileAddEditEducationRequest;
+    }
+   public static ProfileAddEditEducationRequest profileEditEducationRequest(long mEducationId,String mSchoolName,long mDeegreeId,String mEtFieldOfStudy,String[] startTime,String[] endTime,String description) {
         AppUtils appUtils = AppUtils.getInstance();
         ProfileAddEditEducationRequest profileAddEditEducationRequest = new ProfileAddEditEducationRequest();
 
@@ -2130,11 +2153,18 @@ public class AppUtils {
        profileAddEditEducationRequest.setLastScreenName("string");
        profileAddEditEducationRequest.setScreenName("string");
        profileAddEditEducationRequest.setType("EDUCATION");
-       profileAddEditEducationRequest.setSubType("BaseProfileRequest");
+       profileAddEditEducationRequest.setSubType("EDUCATION_SERVICE");
        profileAddEditEducationRequest.setDegreeNameMasterId(mDeegreeId);
-       profileAddEditEducationRequest.setDegreeNameMasterId(mDeegreeId);
+       profileAddEditEducationRequest.setActive(true);
+       profileAddEditEducationRequest.setSessionStartMonth(Integer.parseInt(startTime[0]));
+       profileAddEditEducationRequest.setSessionStartYear(Integer.parseInt(startTime[1]));
+       profileAddEditEducationRequest.setSessionEndMonth(Integer.parseInt(endTime[0]));
+       profileAddEditEducationRequest.setSessionEndYear(Integer.parseInt(endTime[1]));
+       profileAddEditEducationRequest.setSchool(mSchoolName);
        profileAddEditEducationRequest.setFieldOfStudy(mEtFieldOfStudy);
-       profileAddEditEducationRequest.setSchoolNameMasterId(mSchoolNameId);
+       profileAddEditEducationRequest.setGrade("0");
+       profileAddEditEducationRequest.setActivities("study");
+       profileAddEditEducationRequest.setDescription(description);
        profileAddEditEducationRequest.setId(mEducationId);
        return profileAddEditEducationRequest;
     }

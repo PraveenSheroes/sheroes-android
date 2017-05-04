@@ -157,19 +157,6 @@
 
             </RelativeLayout>
 
-            <TextView
-                android:id="@+id/tv_language"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                android:paddingLeft="@dimen/dp_size_16"
-                android:paddingRight="@dimen/dp_size_16"
-                android:paddingTop="@dimen/dp_size_35"
-                android:text="@string/ID_LANGUAGE"
-                android:textAllCaps="true"
-                android:textColor="@color/feed_article_label"
-                android:textSize="@dimen/sp_size_13" />
-
             <include
                 layout="@layout/add_language_card"
                 android:layout_width="match_parent"

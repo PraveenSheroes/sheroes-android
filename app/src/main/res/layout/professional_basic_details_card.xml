@@ -165,6 +165,7 @@
                     android:paddingBottom="@dimen/dp_size_16"
                     android:paddingLeft="@dimen/dp_size_16"
                     android:paddingStart="@dimen/dp_size_16"
+                    android:visibility="gone"
                     android:paddingTop="@dimen/dp_size_16"
                     android:text="@string/language"
                     android:textColor="@color/dashboard_fed_text"
@@ -180,6 +181,7 @@
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:maxLines="1"
                     android:padding="@dimen/dp_size_16"
+                    android:visibility="gone"
                     android:text=""
                     android:textColor="@color/searchbox_hint_text_color"
                     android:textSize="@dimen/sp_size_13" />
