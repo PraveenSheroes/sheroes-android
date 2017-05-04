@@ -63,13 +63,13 @@ public class WorkExperienceCardHolder extends BaseViewHolder<ExprienceEntity> {
             if (dataItem.isCurrentlyWorkingHere()) {
                 if (dataItem.getStartMonth() > 0) {
                     StringBuilder currentWork = new StringBuilder();
-                    currentWork.append(setDateWithYearMonth(dataItem.getStartMonth())).append(AppConstants.SPACE).append(dataItem.getStartYear()).append(AppConstants.DASH).append(AppConstants.PRESENT);
+                    currentWork.append(setDateWithYearMonth(dataItem.getStartMonth())).append(AppConstants.SPACE).append(dataItem.getStartYear()).append(AppConstants.SPACE).append(AppConstants.DASH).append(AppConstants.SPACE).append(AppConstants.PRESENT);
                     mTvWorkExpDateDetails.setText(currentWork.toString());
                 }
             } else {
                 if (dataItem.getStartMonth() > 0 && dataItem.getEndYear() > 0) {
                     StringBuilder workExpDate = new StringBuilder();
-                    workExpDate.append(setDateWithYearMonth(dataItem.getStartMonth())).append(AppConstants.SPACE).append(dataItem.getStartYear()).append(AppConstants.DASH).append(setDateWithYearMonth(dataItem.getEndMonth())).append(AppConstants.SPACE).append(dataItem.getEndYear());
+                    workExpDate.append(setDateWithYearMonth(dataItem.getStartMonth())).append(AppConstants.SPACE).append(dataItem.getStartYear()).append(AppConstants.SPACE).append(AppConstants.DASH).append(AppConstants.SPACE).append(setDateWithYearMonth(dataItem.getEndMonth())).append(AppConstants.SPACE).append(dataItem.getEndYear());
                     mTvWorkExpDateDetails.setText(workExpDate.toString());
                 }
             }

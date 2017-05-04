@@ -58,6 +58,7 @@ public class ProffestionalProfileFragment extends BaseFragment implements Profil
     public static ProffestionalProfileFragment getInstance() {
         return proffestionalProfileFragment;
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -70,7 +71,7 @@ public class ProffestionalProfileFragment extends BaseFragment implements Profil
         mAdapter = new GenericRecyclerViewAdapter(getContext(), (ProfileActicity) getActivity());
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mAdapter);
-        callGetAllDetailsAPI();
+        onDataRefresh();
         return view;
 
     }
@@ -79,13 +80,6 @@ public class ProffestionalProfileFragment extends BaseFragment implements Profil
     public void onDataRefresh() {
         profilePersenter.getALLUserDetails();
     }
-
-    private void callGetAllDetailsAPI() {
-
-        profilePersenter.getALLUserDetails();
-
-    }
-
     @Override
     public void onStart() {
         super.onStart();
@@ -223,11 +217,17 @@ public class ProffestionalProfileFragment extends BaseFragment implements Profil
         cliendsidelocation.setClientSideLocation(clientside);*/
 
 
-      //  myProfileViewList.add(UservisitingCard);
+        //  myProfileViewList.add(UservisitingCard);
         myProfileViewList.add(goodAtSkillProfile);
         myProfileViewList.add(educationProfile);
-        if(StringUtil.isNotEmptyCollection(exprienceEntityList)) {
+        if (StringUtil.isNotEmptyCollection(exprienceEntityList)) {
             experienceProfile.setExprienceEntity(exprienceEntityList);
+            myProfileViewList.add(experienceProfile);
+        } else {
+            List<ExprienceEntity> localWorkList = new ArrayList<>();
+            ExprienceEntity exprienceEntity = new ExprienceEntity();
+            localWorkList.add(exprienceEntity);
+            experienceProfile.setExprienceEntity(localWorkList);
             myProfileViewList.add(experienceProfile);
         }
         myProfileViewList.add(userProfile);

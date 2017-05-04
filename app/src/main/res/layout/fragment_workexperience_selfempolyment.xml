@@ -194,6 +194,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_size_5"
                 android:orientation="horizontal">
 
 
@@ -298,7 +299,8 @@
                     android:background="@drawable/date_edittext_backgroundstyle"
                     android:focusableInTouchMode="true"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:hint="DD"
+                    android:hint="@string/ID_DD"
+                    android:textAllCaps="true"
                     android:padding="@dimen/dp_size_5"
                     android:textColorHint="@color/text_color_contactdetails_page"
                     android:textSize="@dimen/sp_size_13" />
@@ -319,8 +321,11 @@
                     android:background="@drawable/date_edittext_backgroundstyle"
                     android:focusableInTouchMode="true"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:hint="MM"
-                    android:padding="@dimen/dp_size_5"
+                    android:textAllCaps="true"
+                    android:paddingLeft="@dimen/dp_size_8"
+                    android:hint="@string/ID_MM"
+                    android:paddingTop="@dimen/dp_size_5"
+                    android:paddingBottom="@dimen/dp_size_5"
                     android:textColorHint="@color/text_color_contactdetails_page"
                     android:textSize="@dimen/sp_size_13" />
 
@@ -337,11 +342,11 @@
                     android:id="@+id/et_job_start_year"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/et_job_start_date"
                     android:background="@drawable/date_edittext_backgroundstyle"
                     android:focusableInTouchMode="true"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:hint="YYYY"
+                    android:hint="@string/ID_YYYY"
+                    android:textAllCaps="true"
                     android:padding="@dimen/dp_size_5"
                     android:textColorHint="@color/text_color_contactdetails_page"
                     android:textSize="@dimen/sp_size_13" />
@@ -354,7 +359,8 @@
                     android:background="@drawable/date_edittext_backgroundstyle"
                     android:focusableInTouchMode="true"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:hint="DD"
+                    android:hint="@string/ID_DD"
+                    android:textAllCaps="true"
                     android:padding="@dimen/dp_size_5"
                     android:textColorHint="@color/text_color_contactdetails_page"
                     android:textSize="@dimen/sp_size_13" />
@@ -375,8 +381,11 @@
                     android:background="@drawable/date_edittext_backgroundstyle"
                     android:focusableInTouchMode="true"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:hint="MM"
-                    android:padding="@dimen/dp_size_5"
+                    android:hint="@string/ID_MM"
+                    android:textAllCaps="true"
+                    android:paddingLeft="@dimen/dp_size_8"
+                    android:paddingTop="@dimen/dp_size_5"
+                    android:paddingBottom="@dimen/dp_size_5"
                     android:textColorHint="@color/text_color_contactdetails_page"
                     android:textSize="@dimen/sp_size_13" />
 
@@ -396,7 +405,8 @@
                     android:background="@drawable/date_edittext_backgroundstyle"
                     android:focusableInTouchMode="true"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:hint="YYYY"
+                    android:hint="@string/ID_YYYY"
+                    android:textAllCaps="true"
                     android:padding="@dimen/dp_size_5"
                     android:textColorHint="@color/text_color_contactdetails_page"
                     android:textSize="@dimen/sp_size_13" />

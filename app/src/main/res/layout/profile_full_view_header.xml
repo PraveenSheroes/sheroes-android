@@ -23,6 +23,7 @@
         android:layout_gravity="center"
         android:layout_marginLeft="@dimen/dp_size_16"
         android:layout_marginRight="@dimen/dp_size_16"
+        android:layout_marginTop="@dimen/dp_size_20"
         android:layout_weight="@integer/int_value_for_line_1"
         android:orientation="vertical">
 
@@ -31,7 +32,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:text="@string/ID_APP_NAME"
             android:textAllCaps="true"
             android:textColor="@color/white"
             android:textSize="@dimen/dp_size_14" />

@@ -138,6 +138,8 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
     ProgressBar mPb_profile_full_view;
     @Bind(R.id.profile_container)
     FrameLayout flprofile_container;
+    @Bind(R.id.tv_profile_full_view_name)
+    TextView tvProfileFullName;
     private SearchProfileLocation searchProfileLocation;
     private FunctionalAreaDialogFragment functionalAreaDialogFragment;
     private JobLocationSearchDialogFragment jobLocationSearchDialogFragment;
@@ -156,6 +158,7 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
     private ProfileDegreeDialog profileDegreeDialog;
     public List<LabelValue> mFunctionArea = new ArrayList<>();
     private ExprienceEntity mExprienceEntity;
+    private ViewPagerAdapter viewPagerAdapter;
 
     public static void navigate(AppCompatActivity activity, View transitionImage, String profile) {
         Intent intent = new Intent(activity, ProfileActicity.class);
@@ -172,23 +175,35 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
         setContentView(R.layout.activity_profile);
         ButterKnife.bind(this);
         mFragmentOpen = new FragmentOpen();
+        setName();
         setAllValues(mFragmentOpen);
         setPagerAndLayouts();
         setprogressbar();
 
     }
 
+    private void setName() {
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
+            tvProfileFullName.setText(mUserPreference.get().getUserSummary().getFirstName() + AppConstants.SPACE + mUserPreference.get().getUserSummary().getLastName());
+
+        }
+
+    }
+
     @Override
     public void onBackPressed() {
-        if (mFragmentOpen.isGoodAtFragment()) {
-            mFragmentOpen.setGoodAtFragment(false);
-            getSupportFragmentManager().popBackStack();
-        } else if (mFragmentOpen.isProfileWorkExpEditFragment()) {
+        if (mFragmentOpen.isProfileWorkExpEditFragment()) {
             mFragmentOpen.setProfileWorkExpEditFragment(false);
-            if (profileWorkExperienceSelfEmploymentFragment == null) {
+            if (profileWorkExperienceSelfEmploymentFragment != null) {
                 profileWorkExperienceSelfEmploymentFragment.dismiss();
             }
-            updateProfileWorkExpListItem();
+        } else if (mFragmentOpen.isGoodAtFragment()) {
+            mFragmentOpen.setGoodAtFragment(false);
+            getSupportFragmentManager().popBackStack();
+        } else if (mFragmentOpen.isWorkExpFragment()) {
+            mFragmentOpen.setWorkExpFragment(false);
+            getSupportFragmentManager().popBackStack();
+            updateProffesstionalWorkExpListItem();
         } else {
             super.onBackPressed();
         }
@@ -239,7 +254,7 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
         mCollapsingToolbarLayout.setTitle(AppConstants.EMPTY_STRING);
         mCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
 
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         viewPagerAdapter.addFragment(PersonalProfileFragment.getInstance(), getString(R.string.ID_PERSONAL));
         viewPagerAdapter.addFragment(ProffestionalProfileFragment.getInstance(), getString(R.string.ID_PROFESSIONAL));
 
@@ -467,6 +482,7 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
                     break;
                 }
             case R.id.tv_add_work_exp:
+                mFragmentOpen.setWorkExpFragment(true);
                 MyProfileView workExp = (MyProfileView) baseResponse;
                 flprofile_container.setVisibility(View.VISIBLE);
                 ProfileWorkExperienceFragment profileWorkExperienceFragment = new ProfileWorkExperienceFragment();
@@ -992,10 +1008,16 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
     }
 
     public void updateProfileWorkExpListItem() {
-        mFragmentOpen.setProfileWorkExpEditFragment(false);
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(ProfileWorkExperienceFragment.class.getName());
         if (AppUtils.isFragmentUIActive(fragment)) {
             ((ProfileWorkExperienceFragment) fragment).refreshWorkExpList();
+        }
+    }
+
+    public void updateProffesstionalWorkExpListItem() {
+        Fragment feature = viewPagerAdapter.getActiveFragment(mViewPager, AppConstants.ONE_CONSTANT);
+        if (AppUtils.isFragmentUIActive(feature)) {
+            ((ProffestionalProfileFragment) feature).onDataRefresh();
         }
     }
 }

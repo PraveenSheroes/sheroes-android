@@ -180,7 +180,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         setAllValues(mFragmentOpen);
         initHomeViewPagerAndTabs();
         assignNavigationRecyclerListView();
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get()&& null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
             //TODO: this data to be removed
             profile = mUserPreference.get().getUserSummary().getPhotoUrl(); //"https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAhNAAAAJDYwZWIyZTg5LWFmOTItNGIwYS05YjQ5LTM2YTRkNGQ2M2JlNw.jpg";
             Glide.with(this)

@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -23,6 +24,8 @@ import butterknife.OnClick;
  */
 
 public class ProfileWorkExperienceHolder extends BaseViewHolder<MyProfileView> {
+    @Bind(R.id.li_no_item_row)
+    LinearLayout mLiNoItem;
     @Bind(R.id.tv_work_exp_lable)
     TextView mTvJobLanguageNumber;
     @Bind(R.id.tv_position)
@@ -51,9 +54,14 @@ public class ProfileWorkExperienceHolder extends BaseViewHolder<MyProfileView> {
         this.dataItem = myProfileView;
         if (null != dataItem) {
             mTvJobLanguageNumber.setText(dataItem.getType());
-            List<ExprienceEntity> exprienceEntities = this.dataItem.getExprienceEntity();
+            List<ExprienceEntity> exprienceEntities = dataItem.getExprienceEntity();
             if (StringUtil.isNotEmptyCollection(exprienceEntities)) {
                 workExprienceEntity = exprienceEntities.get(0);
+                if (null != workExprienceEntity.getId() && workExprienceEntity.getId() > 0) {
+                    mLiNoItem.setVisibility(View.VISIBLE);
+                } else {
+                    mLiNoItem.setVisibility(View.GONE);
+                }
                 if (StringUtil.isNotNullOrEmptyString(workExprienceEntity.getTitle())) {
                     mTvPosition.setText(workExprienceEntity.getTitle());
                 }
@@ -63,14 +71,13 @@ public class ProfileWorkExperienceHolder extends BaseViewHolder<MyProfileView> {
                 if (StringUtil.isNotNullOrEmptyString(workExprienceEntity.getAboutOrg())) {
                     mTvType.setText(workExprienceEntity.getAboutOrg());
                 }
-                if(workExprienceEntity.isCurrentlyWorkingHere())
-                {
+                if (workExprienceEntity.isCurrentlyWorkingHere()) {
                     if (workExprienceEntity.getStartYear() > 0) {
                         StringBuilder currentWork = new StringBuilder();
                         currentWork.append(workExprienceEntity.getStartYear()).append(AppConstants.DASH).append(AppConstants.PRESENT);
                         mTvDate.setText(currentWork.toString());
                     }
-                }else {
+                } else {
                     if (workExprienceEntity.getStartYear() > 0) {
                         StringBuilder session = new StringBuilder();
                         if (workExprienceEntity.getEndYear() > 0) {

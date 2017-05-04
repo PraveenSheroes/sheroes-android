@@ -415,6 +415,7 @@ public class ProfilePersenter extends BasePresenter<ProfileView> {
         });
         registerSubscription(subscription);
     }
+
     public void onStop() {
         detachView();
     }

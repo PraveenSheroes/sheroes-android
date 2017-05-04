@@ -32,7 +32,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
-import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -42,7 +41,6 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
-import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -82,14 +80,15 @@ public class MyCommunityInviteMemberFragment extends BaseDialogFragment implemen
     private FeedDetail mFeedDetail;
     private int mPageNo = AppConstants.ONE_CONSTANT;
     private LinearLayoutManager manager;
-    private SwipPullRefreshList mPullRefreshList;
+
+    //   private SwipPullRefreshList mPullRefreshList;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getActivity()).inject(this);
         View view = inflater.inflate(R.layout.my_community_invite_member, container, false);
         ButterKnife.bind(this, view);
-        mPullRefreshList = new SwipPullRefreshList();
-        mPullRefreshList.setPullToRefresh(false);
+        //   mPullRefreshList = new SwipPullRefreshList();
+        //   mPullRefreshList.setPullToRefresh(false);
         mHomePresenter.attachView(this);
         Bundle bundle = getArguments();
         if (bundle != null) {
@@ -98,6 +97,14 @@ public class MyCommunityInviteMemberFragment extends BaseDialogFragment implemen
         tvInviteText.setText(getString(R.string.ID_SEARCH));
         editTextWatcher();
         liInviteMember.setVisibility(View.VISIBLE);
+
+        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.INVITE_MEMBER, mFeedDetail.getIdOfEntityOrParticipant(), mSearchDataName);
+        //mPullRefreshList = new SwipPullRefreshList();
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mAdapter = new GenericRecyclerViewAdapter(getActivity(), (HomeActivity) getActivity());
+        manager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(manager);
+        mRecyclerView.setAdapter(mAdapter);
         return view;
     }
 
@@ -113,17 +120,15 @@ public class MyCommunityInviteMemberFragment extends BaseDialogFragment implemen
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
             mPageNo = mFragmentListRefreshData.getPageNo();
             mFragmentListRefreshData.setPageNo(++mPageNo);
-            mPullRefreshList.allListData(feedDetailList);
-            mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
+            //    mPullRefreshList.allListData(feedDetailList);
+            mAdapter.setSheroesGenericListData(feedDetailList);
             mAdapter.setCallForRecycler(AppConstants.FEED_SUB_TYPE);
             mAdapter.notifyDataSetChanged();
-            if (!mPullRefreshList.isPullToRefresh()) {
+           /* if (!mPullRefreshList.isPullToRefresh()) {
                 manager.scrollToPosition(mPullRefreshList.getFeedResponses().size() - feedDetailList.size() - 1);
             } else {
                 manager.scrollToPositionWithOffset(0, 0);
-            }
-        } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
-            //mLiNoResult.setVisibility(View.VISIBLE);
+            }*/
         } else {
             liInviteMember.setVisibility(View.GONE);
         }
@@ -186,28 +191,7 @@ public class MyCommunityInviteMemberFragment extends BaseDialogFragment implemen
         @Override
         public void run() {
             if (!isDetached()) {
-                mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT,AppConstants.INVITE_MEMBER, mFeedDetail.getIdOfEntityOrParticipant(),mSearchDataName);
-                mPullRefreshList = new SwipPullRefreshList();
-                mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                mAdapter = new GenericRecyclerViewAdapter(getActivity(), (HomeActivity) getActivity());
-                manager = new LinearLayoutManager(getActivity());
-                mRecyclerView.setLayoutManager(manager);
-                mRecyclerView.setAdapter(mAdapter);
-                mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, manager, mFragmentListRefreshData) {
-                    @Override
-                    public void onHide() {
-                    }
-
-                    @Override
-                    public void onShow() {
-                    }
-
-                    @Override
-                    public void dismissReactions() {
-                    }
-                });
-
-                mHomePresenter.getFeedFromPresenter(mAppUtils.searchRequestBuilder(AppConstants.USER_SUB_TYPE, mSearchDataName, mFragmentListRefreshData.getPageNo(), AppConstants.INVITE_MEMBER,mFeedDetail.getIdOfEntityOrParticipant(),AppConstants.INVITE_PAGE_SIZE));
+                mHomePresenter.getFeedFromPresenter(mAppUtils.searchRequestBuilder(AppConstants.USER_SUB_TYPE, mSearchDataName, mFragmentListRefreshData.getPageNo(), AppConstants.INVITE_MEMBER, mFeedDetail.getIdOfEntityOrParticipant(), AppConstants.INVITE_PAGE_SIZE));
             }
         }
     };
@@ -241,10 +225,10 @@ public class MyCommunityInviteMemberFragment extends BaseDialogFragment implemen
                     }
                     break;
                 case AppConstants.FAILED:
-                    ((CommunitiesDetailActivity)getActivity()).onShowErrorDialog(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);
+                    ((CommunitiesDetailActivity) getActivity()).onShowErrorDialog(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);
                     break;
                 default:
-                    ((CommunitiesDetailActivity)getActivity()).onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), ERROR_JOIN_INVITE);
+                    ((CommunitiesDetailActivity) getActivity()).onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), ERROR_JOIN_INVITE);
             }
         }
     }
@@ -288,8 +272,9 @@ public class MyCommunityInviteMemberFragment extends BaseDialogFragment implemen
             }
         };
     }
+
     @Override
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
-        ((HomeActivity)getActivity()).onShowErrorDialog(errorMsg, feedParticipationEnum);
+        ((HomeActivity) getActivity()).onShowErrorDialog(errorMsg, feedParticipationEnum);
     }
 }

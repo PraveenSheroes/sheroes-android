@@ -106,10 +106,10 @@ public class ExprienceEntity extends BaseResponse {
     private String title1;
     @SerializedName("start_day")
     @Expose
-    private Integer startDay;
+    private int startDay;
     @SerializedName("end_day")
     @Expose
-    private Integer endDay;
+    private int endDay;
     @SerializedName("type")
     @Expose
     private String type="EXPERIENCE";
@@ -365,19 +365,19 @@ public class ExprienceEntity extends BaseResponse {
         this.title1 = title1;
     }
 
-    public Integer getStartDay() {
+    public int getStartDay() {
         return startDay;
     }
 
-    public void setStartDay(Integer startDay) {
+    public void setStartDay(int startDay) {
         this.startDay = startDay;
     }
 
-    public Integer getEndDay() {
+    public int getEndDay() {
         return endDay;
     }
 
-    public void setEndDay(Integer endDay) {
+    public void setEndDay(int endDay) {
         this.endDay = endDay;
     }
 
@@ -478,8 +478,8 @@ public class ExprienceEntity extends BaseResponse {
         this.tag = in.readString();
         this.tag1 = in.readString();
         this.title1 = in.readString();
-        this.startDay = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.endDay = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.startDay = (int) in.readValue(int.class.getClassLoader());
+        this.endDay = (int) in.readValue(int.class.getClassLoader());
         this.type = in.readString();
         this.subType = in.readString();
     }
