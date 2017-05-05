@@ -126,6 +126,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_size_0.5"
                 android:layout_marginTop="@dimen/dp_size_10"
+                android:visibility="gone"
                 android:layout_marginLeft="@dimen/dp_size_35"
                 android:layout_marginRight="@dimen/dp_size_30"
                 android:background="@color/search_tab_unselected_text" />

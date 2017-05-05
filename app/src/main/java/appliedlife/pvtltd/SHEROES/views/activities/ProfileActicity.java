@@ -189,9 +189,7 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
     private void setName() {
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
             tvProfileFullName.setText(mUserPreference.get().getUserSummary().getFirstName() + AppConstants.SPACE + mUserPreference.get().getUserSummary().getLastName());
-
         }
-
     }
 
     @Override
@@ -269,7 +267,7 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
         supportPostponeEnterTransition();
         setSupportActionBar(mToolbar);
 
-        mCollapsingToolbarLayout.setTitle(AppConstants.EMPTY_STRING);
+        mCollapsingToolbarLayout.setTitle(AppConstants.SPACE);
         mCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
 
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());

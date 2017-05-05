@@ -559,17 +559,17 @@
 
     <include layout="@layout/progress_bar_login" />
 
-    <TextView
+    <Button
         android:id="@+id/tv_save_work_exp"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_size_50"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="bottom"
+        android:layout_height="wrap_content"
         android:background="@drawable/rect_btn"
+        android:layout_alignParentBottom="true"
+        android:enabled="false"
         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
         android:gravity="center"
+        android:textSize="@dimen/sp_size_13"
         android:text="@string/ID_SAVE"
-        android:textAllCaps="true"
         android:textColor="@color/white"
-        android:textSize="@dimen/sp_size_13" />
+        />
 </RelativeLayout>
