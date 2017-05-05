@@ -262,5 +262,7 @@ public class AppConstants {
     public static final String MODEL_KEY = "key";
     public static final String EXP_YEAR = "Year";
     public static final String EXP_MONTH = "Month";
+    public static final String BASIC_EXP_YEAR = "Year(s)";
+    public static final String BASIC_EXP_MONTH = "Month(s)";
 
 }

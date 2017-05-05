@@ -55,8 +55,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:paddingLeft="@dimen/dp_size_16"
+            android:maxWidth="@dimen/dp_size_270"
 
+            android:paddingLeft="@dimen/dp_size_16"
             android:layout_below="@+id/tv_degree1"
             android:textColor="@color/searchbox_hint_text_color"
             android:textSize="@dimen/dp_size_13" />
@@ -87,6 +88,7 @@
             android:layout_below="@+id/tv_degree12"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:paddingLeft="@dimen/dp_size_16"
+            android:visibility="gone"
             android:paddingTop="@dimen/dp_size_16"
             android:textColor="@color/searchbox_hint_text_color"
             android:textSize="@dimen/dp_size_13" />
@@ -97,6 +99,7 @@
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:paddingLeft="@dimen/dp_size_16"
             android:layout_below="@+id/tv_degree2"
+            android:visibility="gone"
             android:textColor="@color/searchbox_hint_text_color"
             android:textSize="@dimen/dp_size_13" />
         <TextView
@@ -139,7 +142,6 @@
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:gravity="center"
             android:padding="@dimen/dp_size_16"
-            android:visibility="gone"
             android:text="@string/ID_MORE"
             android:textColor="@color/blue"
             android:textSize="@dimen/dp_size_13" />

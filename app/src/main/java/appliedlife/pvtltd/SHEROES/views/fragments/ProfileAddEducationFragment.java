@@ -10,15 +10,21 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.EducationEntity;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ExprienceEntity;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.MyProfileView;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
+import appliedlife.pvtltd.SHEROES.presenters.ProfilePersenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -36,7 +42,7 @@ import butterknife.OnClick;
  */
 
 
-public class ProfileAddEducationFragment extends BaseFragment {
+public class ProfileAddEducationFragment extends BaseFragment implements ProfileView{
 
     private final String TAG = LogUtils.makeLogTag(ProfileAddEducationFragment.class);
     private final String SCREEN_NAME = "Profile_add_education_screen";
@@ -45,7 +51,10 @@ public class ProfileAddEducationFragment extends BaseFragment {
     @Bind(R.id.rv_profile_education_list)
     RecyclerView mRecyclerView;
     GenericRecyclerViewAdapter mAdapter;
-
+    @Inject
+    ProfilePersenter mProfilePersenter;
+    @Bind(R.id.pb_profile_progress_bar)
+    ProgressBar mProgressBar;
     private ProfileActivityIntractionListner mProfileActivityIntractionListner;
 
     @Override
@@ -67,7 +76,8 @@ public class ProfileAddEducationFragment extends BaseFragment {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_profile_education, container, false);
         ButterKnife.bind(this, view);
-
+        mProfilePersenter.attachView(this);
+        setProgressBar(mProgressBar);
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(manager);
         mAdapter = new GenericRecyclerViewAdapter(getContext(), (ProfileActicity) getActivity());
@@ -147,7 +157,9 @@ public class ProfileAddEducationFragment extends BaseFragment {
         return view;
 
     }
-
+    public void refreshWorkExpList() {
+        mProfilePersenter.getALLUserDetails();
+    }
    @Override
     public void onClick(View view) {
 
@@ -174,13 +186,22 @@ public class ProfileAddEducationFragment extends BaseFragment {
 
     }*/
 
+    @Override
+    public void getUserData(UserProfileResponse userProfileResponse) {
+        List<EducationEntity> educationEntity=userProfileResponse.getEducation();
 
+        if (StringUtil.isNotEmptyCollection(educationEntity)) {
+            mAdapter.setSheroesGenericListData(educationEntity);
+            mAdapter.notifyDataSetChanged();
+        }
+    }
     @OnClick(R.id.tv_profile_education_back)
 
 public  void Onback_Click()
 {
 
-    profileViewlistener.onBackPressed(R.id.tv_profile_education_back);
+    //profileViewlistener.onBackPressed(R.id.tv_profile_education_back);
+    ((ProfileActicity)getActivity()).updateProffesstionalEducationListItem();
 
 }
 

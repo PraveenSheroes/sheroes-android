@@ -167,7 +167,6 @@
                 android:id="@+id/r1_add_education_details2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="@dimen/dp_size_10"
                 android:layout_below="@+id/r1_add_education_details1">
 
 
@@ -257,12 +256,33 @@
 
                 </android.support.design.widget.TextInputLayout>
             </RelativeLayout>
+            <TextView
+                android:id="@+id/tv_star5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:paddingRight="@dimen/dp_size_4"
+                android:text="*"
+                android:paddingTop="@dimen/dp_size_30"
 
+                android:textColor="@color/star_color"
+                android:layout_below="@+id/r1_add_education_details3"/>
+
+            <TextView
+                android:id="@+id/tv_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ID_DESCRIPTION"
+                android:paddingTop="@dimen/dp_size_30"
+                android:layout_marginLeft="@dimen/dp_size_15"
+
+                android:layout_below="@+id/r1_add_education_details3"
+                />
             <EditText
                 android:id="@+id/et_write_desc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/r1_add_education_details3"
+                android:layout_below="@+id/tv_desc"
                 android:background="@drawable/edit_text_create_community_style"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:hint="@string/ID_WRITE_REASION"
@@ -270,7 +290,7 @@
                 android:inputType="textMultiLine"
                 android:lineSpacingExtra="@dimen/dp_size_4"
                 android:maxLength="4000"
-                android:paddingTop="@dimen/dp_size_50"
+                android:paddingTop="@dimen/dp_size_20"
                 android:scrollbars="vertical"
                 android:textColor="@color/black"
                 android:textColorHint="@color/text_color_setting_preference_basicdetails"

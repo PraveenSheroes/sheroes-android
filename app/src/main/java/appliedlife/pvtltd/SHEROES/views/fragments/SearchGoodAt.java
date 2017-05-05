@@ -119,11 +119,13 @@ public class SearchGoodAt extends BaseDialogFragment implements CommunityTagsVie
     String[] mTags = new String[4];
 
     long[] mTagsid = new long[4];
+
     private FragmentListRefreshData mFragmentListRefreshData;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private final String mTAG = LogUtils.makeLogTag(CreateCommunityFragment.class);
     HashMap<String, HashMap<String, ArrayList<LabelValue>>> data = new HashMap<>();
+
     PopularTag filterList;
     FeedDetail mFeedDetail;
     String encImage;
@@ -163,8 +165,11 @@ public class SearchGoodAt extends BaseDialogFragment implements CommunityTagsVie
     }
 
     @OnClick(R.id.tv_skill_submit)
+
     public void tagSubmitPress() {
+
         ((ProfileActicity) getActivity()).onTagsSubmit(mTags, mTagsid);
+
         dismiss();
     }
 
@@ -355,6 +360,7 @@ public class SearchGoodAt extends BaseDialogFragment implements CommunityTagsVie
         ll_indecator.setVisibility(View.GONE);
         if (mCount <= 3) {
             if (sheroesListDataItem instanceof Doc) {
+
                 mTags[mCount] = ((Doc) sheroesListDataItem).getTitle();
                 mTagsid[mCount] = ((Doc) sheroesListDataItem).getId();
 

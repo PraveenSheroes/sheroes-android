@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Date;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
@@ -67,7 +68,7 @@ public class UserDetails implements Parcelable {
     private String maritalStatus;
     @SerializedName("dob")
     @Expose
-    private String dob;
+    private Long dob;
     @SerializedName("sectorId")
     @Expose
     private long sectorId;
@@ -197,6 +198,7 @@ public class UserDetails implements Parcelable {
     private String jobTag;
 
     private int travelFlexibility;
+
 
     public long getId() {
         return id;
@@ -334,11 +336,11 @@ public class UserDetails implements Parcelable {
         this.maritalStatus = maritalStatus;
     }
 
-    public String getDob() {
+    public Long getDob() {
         return dob;
     }
 
-    public void setDob(String dob) {
+    public void setDob(Long dob) {
         this.dob = dob;
     }
 
@@ -670,16 +672,6 @@ public class UserDetails implements Parcelable {
         this.travelFlexibility = travelFlexibility;
     }
 
-    public int getClientSideVisitPreference() {
-        return clientSideVisitPreference;
-    }
-
-    public void setClientSideVisitPreference(int clientSideVisitPreference) {
-        this.clientSideVisitPreference = clientSideVisitPreference;
-    }
-
-    private int clientSideVisitPreference;
-
     @Override
     public int describeContents() {
         return 0;
@@ -704,7 +696,7 @@ public class UserDetails implements Parcelable {
         dest.writeString(this.photoUrlPath);
         dest.writeLong(this.jobFunctionId);
         dest.writeString(this.maritalStatus);
-        dest.writeString(this.dob);
+        dest.writeValue(this.dob);
         dest.writeLong(this.sectorId);
         dest.writeString(this.jobTitle);
         dest.writeLong(this.employmentTypeId);
@@ -746,7 +738,6 @@ public class UserDetails implements Parcelable {
         dest.writeString(this.jobFunction);
         dest.writeString(this.jobTag);
         dest.writeInt(this.travelFlexibility);
-        dest.writeInt(this.clientSideVisitPreference);
     }
 
     public UserDetails() {
@@ -770,7 +761,7 @@ public class UserDetails implements Parcelable {
         this.photoUrlPath = in.readString();
         this.jobFunctionId = in.readLong();
         this.maritalStatus = in.readString();
-        this.dob = in.readString();
+        this.dob = (Long) in.readValue(Long.class.getClassLoader());
         this.sectorId = in.readLong();
         this.jobTitle = in.readString();
         this.employmentTypeId = in.readLong();
@@ -812,7 +803,6 @@ public class UserDetails implements Parcelable {
         this.jobFunction = in.readString();
         this.jobTag = in.readString();
         this.travelFlexibility = in.readInt();
-        this.clientSideVisitPreference = in.readInt();
     }
 
     public static final Parcelable.Creator<UserDetails> CREATOR = new Parcelable.Creator<UserDetails>() {

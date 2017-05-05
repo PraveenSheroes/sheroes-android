@@ -43,6 +43,8 @@ public class ProfileEducationHolder extends BaseViewHolder<MyProfileView> {
     TextView mTv_degree21;
     @Bind(R.id.tv_date2)
     TextView mTv_date2;
+    @Bind(R.id.tv_more)
+     TextView mTvMore;
     BaseHolderInterface viewInterface;
     private MyProfileView dataItem;
 
@@ -130,7 +132,7 @@ public class ProfileEducationHolder extends BaseViewHolder<MyProfileView> {
 
     @OnClick(R.id.tv_more)
     public void onClickViewMore() {
-        Toast.makeText(SheroesApplication.mContext, "Under development", Toast.LENGTH_SHORT).show();
+        viewInterface.handleOnClick(this.dataItem,mTv_add_education);
     }
 
     @Override

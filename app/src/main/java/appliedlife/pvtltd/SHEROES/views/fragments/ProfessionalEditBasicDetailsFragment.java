@@ -69,10 +69,6 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment implement
     @Bind(R.id.et_select_current_status)
     TextInputLayout mEtSelectCurrentStatus;
 
-    @Bind(R.id.et_add_Proficient)
-    EditText mEtAddProficient;
-    @Bind(R.id.l1_add_language)
-    LinearLayout mR1AddLanguage;
     @Bind(R.id.et_current_status)
     EditText mCurrentStatus;
     Long mCurrentStatusId,mCurrentSectorId,mLanguageNameId;
@@ -80,8 +76,7 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment implement
     Long mLanguageId;
     @Bind(R.id.et_sector)
     EditText mEtSector;
-    @Bind(R.id.et_add_language)
-    EditText mEtAddLanguage;
+
     @Bind(R.id.progressbar)
     ProgressBar mProgressBar;
     private EditProfileCallable mCallback;
@@ -101,7 +96,13 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment implement
         } catch (Exception e) {
 
 
-        }}
+        }
+        try {
+            mCallback = (EditProfileCallable) getActivity();
+        } catch (ClassCastException exception) {
+            LogUtils.error("", "Activity must implements ProfileGoodAtListener",exception);
+        }
+    }
 
     @Nullable
     @Override
@@ -112,7 +113,6 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment implement
         ButterKnife.bind(this, view);
         setProgressBar(mProgressBar);
         mTvProfileTittle.setText(R.string.ID_BASICDETAILS);
-        mR1AddLanguage.setVisibility(View.GONE);
 
 
 
@@ -128,7 +128,6 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment implement
                     mEtMonth.setText(""+userDetails.getTotalExpMonth());
                     mCurrentStatus.setText(userDetails.getJobTag());
                     mEtSector.setText(userDetails.getSector());
-                    mEtAddLanguage.setText(""+userDetails.getLanguage());
 
 
                 }
@@ -156,27 +155,6 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment implement
         mCurrentSectorId=currentSectorId;
     }
 
-
-
-    @OnClick(R.id.et_add_language)
-    public void clickLanguage()
-    {
-        ((ProfileActicity) getActivity()).callLanguage();
-    }
-
-    public void submitLanguage(String languageId,String language)
-    {
-
-        mEtAddLanguage.setText(language);
-        mLanguageId = Long.parseLong(languageId);
-        LanguageEntity languageEntity=new LanguageEntity();
-        languageEntity.setId(mLanguageId);
-        languageEntity.setName(language);
-        languageEntity.setProficiencyLevel(2);
-        mlanguagevalue.add(languageEntity);
-
-
-    }
     //click on star date of experience
 
     @OnClick(R.id.et_month)
@@ -330,7 +308,7 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment implement
         int toastDuration = Toast.LENGTH_LONG;
         switch (boardingDataResponse.getStatus()) {
             case AppConstants.SUCCESS: {
-                mCallback.onBasicDetailsUpdate();
+                mCallback.onBasicDetailsUpdate();//TODO:Need to check with priyanka why need to pass value?
                 toastDuration = Toast.LENGTH_SHORT;
                 break;
             }

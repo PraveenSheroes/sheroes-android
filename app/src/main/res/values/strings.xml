@@ -58,6 +58,9 @@
     <string name="ID_SERVER_PROBLEM"> The server encountered an error and could not complete your request.</string>
     <string name="ID_SEARCH">Search</string>
     <string name="ID_SEARCH_LOCATION">Search Location</string>
+    <string name="ID_SEARCH_DEGREE">Search Degree</string>
+    <string name="ID_SEARCH_SCHOOL">Search School</string>
+    <string name="ID_SEARCH_FIELD_OF_STUDY">Search Field Of Study</string>
     <string name="ID_SEARCH_INTEREST">Search Your Interest</string>
     <string name="ID_SEARCH_GOOD_AT">Search Good At</string>
     <string name="ID_RECENT_SEARCH">Recent Search</string>
@@ -621,7 +624,7 @@ Our website www.sheroes.in offers services for certain products and services. By
 
 
 
-    <string name="ID_SELF_EMP_TITTLE">Currently working</string>
+    <string name="ID_SELF_EMP_TITTLE">Currently Studying</string>
     <string name="ID_SELF_EMP_DESCRIPTION_HINT">DESCRIPTION OF YOUR WORK</string>
     <string name="ID_SCHOOL_DESCRIPTION_HINT">DESCRIPTION</string>
     <string name="ID_SELF_EMP_ORGANIZATION_TYPE_HINT">ORGANIZATION TYPE </string>
@@ -725,7 +728,7 @@ etur adipiscing elit,sed do eiusmod tempor incididunt ut…</string>
     <string name="ID_USER_MOBILE">028 1234 5678</string>
     <string name="ID_USER_EMAIL">yourname@email.com</string>
 
-    <string name="ID_ADD_EDUCATION">ADD EDUCATION</string>
+    <string name="ID_ADD_EDUCATION">EDUCATION</string>
 
     <!--string related welcome page-->
 
@@ -778,7 +781,7 @@ etur adipiscing elit,sed do eiusmod tempor incididunt ut…</string>
     <string name="ID_SHARE_COMMUNITY">SHARE</string>
 
     <string name="ID_COMMUNITY_TYPE">COMMUNITY TYPE</string>
-    <string name="ID_DESCRIPTION">DESCRIPTION</string>
+    <string name="ID_DESCRIPTION"> DESCRIPTION</string>
     <string name="ID_CREATEPOST">CREATE A POST</string>
     <string name="ID_COMMUNITITES_NAME">Ranigarh Women’s Empowerment and Development Group</string>
     <string name="ID_SHARE_LINK">https://sheroes.com/community/</string>
@@ -869,7 +872,8 @@ etur adipiscing elit,sed do eiusmod tempor incididunt ut…</string>
     <string name="camera">CAMERA</string>
     <string name="gallery">GALLERY</string>
     <string name="onboarding_join_the_world">Join The World\'s Largest Women Only Network </string>
-
+    <string name="from_date">From Date</string>
+    <string name="to_date">Date Of Birth</string>
     <!--Work Experience-->
     <string-array name="work_exp_arr">
         <item>@string/ID_SELF_EMP</item>

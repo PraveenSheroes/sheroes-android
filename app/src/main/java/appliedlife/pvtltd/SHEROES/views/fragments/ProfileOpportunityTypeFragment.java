@@ -98,7 +98,7 @@ public class ProfileOpportunityTypeFragment extends BaseFragment implements Base
     @Bind(R.id.pb_profile_progress_bar)
     ProgressBar pb_profile_progress_bar;
     String skill1, skill2;
-    int mCount = 1;
+    int mCount = 1,mNcount=0;
     private String mSearchDataName = AppConstants.EMPTY_STRING;
     String[] mSkills = new String[4];
     long[] mSkillsId = new long[4];
@@ -311,19 +311,27 @@ public class ProfileOpportunityTypeFragment extends BaseFragment implements Base
         mSkill1.setText("");
         mCount--;
         if (StringUtil.isNotNullOrEmptyString(mSkill3.getText().toString())) {
+            mSkillsId[mNcount]=0;
+            mNcount++;
             mSkill1.setText(mSkill2.getText());
             mSkill2.setText(mSkill3.getText());
             mSkill1.setVisibility(View.VISIBLE);
             mSkill2.setVisibility(View.VISIBLE);
             mSkill3.setVisibility(View.GONE);
+
         }
         else if (StringUtil.isNotNullOrEmptyString(mSkill2.getText().toString())) {
+            mSkillsId[mNcount]=0;
+            mNcount++;
             mSkill1.setText(mSkill2.getText());
             mSkill2.setVisibility(View.GONE);
 
         }
-         else
+         else {
+            mSkillsId[mNcount]=0;
+            mNcount++;
             mSkill1.setVisibility(View.GONE);
+        }
 
     }
 
@@ -334,19 +342,17 @@ public class ProfileOpportunityTypeFragment extends BaseFragment implements Base
         if (StringUtil.isNotNullOrEmptyString(mSkill3.getText().toString())) {
             mSkill2.setText(mSkill3.getText());
             mSkill3.setVisibility(View.GONE);
+            mSkillsId[mCount]=0;
         } else
             mSkill2.setVisibility(View.GONE);
 
 
     }
-
     @OnClick(R.id.tv_selected_skill3)
     void onTag3Click() {
         mSkill3.setText("");
         mCount--;
         mSkill3.setVisibility(View.GONE);
-
-
     }
 
     @OnClick(R.id.tv_selected_skill4)

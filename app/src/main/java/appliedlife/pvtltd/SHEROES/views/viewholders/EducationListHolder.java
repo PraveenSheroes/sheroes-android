@@ -73,7 +73,7 @@ public class EducationListHolder extends BaseViewHolder<EducationEntity> {
                         String session="";
                         if(educationEntity.getSessionEndYear()>0)
                         {
-                            session=getMonth(educationEntity.getSessionStartMonth())+" "+educationEntity.getSessionStartYear()+" - "+getMonth(educationEntity.getSessionEndMonth())+" "+educationEntity.getSessionEndYear()+")";
+                            session=getMonth(educationEntity.getSessionStartMonth())+" "+educationEntity.getSessionStartYear()+" - "+getMonth(educationEntity.getSessionEndMonth())+" "+educationEntity.getSessionEndYear();
                         }
                         else
                         {

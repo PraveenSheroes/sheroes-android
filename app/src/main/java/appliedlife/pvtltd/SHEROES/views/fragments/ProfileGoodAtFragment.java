@@ -195,6 +195,7 @@ public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInt
 
         if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && null != mUserPreferenceMasterData.get().getData()) {
             data = mUserPreferenceMasterData.get().getData();
+
             LogUtils.error("Master Data", data + "");
             HashMap<String, ArrayList<LabelValue>> hashMap = data.get(AppConstants.MASTER_DATA_SKILL_KEY);
             List<LabelValue> labelValueArrayList = hashMap.get(AppConstants.MASTER_DATA_DEFAULT_CATEGORY);
@@ -519,6 +520,7 @@ public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInt
                 mSkills[mCount] = ((Doc) sheroesListDataItem).getTitle();
 
             } else {
+
                 mSkills[mCount] = textView.getText().toString();
                 //skillsid[mCount - 1] = goodAtId.get(mSkills[mCount]);
             }

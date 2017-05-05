@@ -4,6 +4,11 @@ import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
@@ -47,6 +52,8 @@ public class ProfilePersonalBasicDetailsHolder extends BaseViewHolder<MyProfileV
     TextView mTv_profile_basic_details;
     @Bind(R.id.tv_edit_basic_details)
     TextView mTv_edit_basic_details;
+    @Bind(R.id.tv_dob_value)
+     TextView mTvDob;
     BaseHolderInterface viewInterface;
 
     private MyProfileView dataItem;
@@ -89,6 +96,11 @@ public class ProfilePersonalBasicDetailsHolder extends BaseViewHolder<MyProfileV
             }
             if (StringUtil.isNotNullOrEmptyString(dataItem.getUserDetails().getEmailid())) {
                 mTv_email_value.setText(dataItem.getUserDetails().getEmailid());
+            }
+            if (null !=dataItem.getUserDetails().getDob()) {
+                Calendar cal = new GregorianCalendar();
+                cal.setTime(new Date(dataItem.getUserDetails().getDob()));
+                mTvDob.setText(cal.get(Calendar.DAY_OF_MONTH) +" "+ new SimpleDateFormat("MMM").format(cal.getTime()) +" "+cal.get(Calendar.YEAR));
             }
 
         }

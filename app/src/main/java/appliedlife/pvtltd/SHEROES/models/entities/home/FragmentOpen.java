@@ -9,7 +9,7 @@ import java.util.List;
  * Created by Praveen_Singh on 13-01-2017.
  */
 
-public class FragmentOpen implements Parcelable {
+public class FragmentOpen implements Parcelable{
 
     private boolean isOpen;
     private boolean reactionList;
@@ -37,6 +37,7 @@ public class FragmentOpen implements Parcelable {
     private boolean isBellNotificationFragment;
     private boolean isProfileWorkExpEditFragment;
     private boolean isWorkExpFragment;
+    private boolean isEducationFragment;
     public FragmentOpen() {
     }
 
@@ -67,14 +68,6 @@ public class FragmentOpen implements Parcelable {
 
     public boolean isFeedOpen() {
         return feedOpen;
-    }
-
-    public boolean isBellNotificationFragment() {
-        return isBellNotificationFragment;
-    }
-
-    public void setBellNotificationFragment(boolean bellNotificationFragment) {
-        isBellNotificationFragment = bellNotificationFragment;
     }
 
     public void setFeedOpen(boolean feedOpen) {
@@ -217,6 +210,14 @@ public class FragmentOpen implements Parcelable {
         isInviteCommunityOwner = inviteCommunityOwner;
     }
 
+    public boolean isGoodAtFragment() {
+        return isGoodAtFragment;
+    }
+
+    public void setGoodAtFragment(boolean goodAtFragment) {
+        isGoodAtFragment = goodAtFragment;
+    }
+
     public boolean isCreateCommunity() {
         return isCreateCommunity;
     }
@@ -225,12 +226,12 @@ public class FragmentOpen implements Parcelable {
         isCreateCommunity = createCommunity;
     }
 
-    public boolean isGoodAtFragment() {
-        return isGoodAtFragment;
+    public boolean isBellNotificationFragment() {
+        return isBellNotificationFragment;
     }
 
-    public void setGoodAtFragment(boolean goodAtFragment) {
-        isGoodAtFragment = goodAtFragment;
+    public void setBellNotificationFragment(boolean bellNotificationFragment) {
+        isBellNotificationFragment = bellNotificationFragment;
     }
 
     public boolean isProfileWorkExpEditFragment() {
@@ -247,6 +248,14 @@ public class FragmentOpen implements Parcelable {
 
     public void setWorkExpFragment(boolean workExpFragment) {
         isWorkExpFragment = workExpFragment;
+    }
+
+    public boolean isEducationFragment() {
+        return isEducationFragment;
+    }
+
+    public void setEducationFragment(boolean educationFragment) {
+        isEducationFragment = educationFragment;
     }
 
     @Override
@@ -282,6 +291,7 @@ public class FragmentOpen implements Parcelable {
         dest.writeByte(this.isBellNotificationFragment ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isProfileWorkExpEditFragment ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isWorkExpFragment ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isEducationFragment ? (byte) 1 : (byte) 0);
     }
 
     protected FragmentOpen(Parcel in) {
@@ -311,6 +321,7 @@ public class FragmentOpen implements Parcelable {
         this.isBellNotificationFragment = in.readByte() != 0;
         this.isProfileWorkExpEditFragment = in.readByte() != 0;
         this.isWorkExpFragment = in.readByte() != 0;
+        this.isEducationFragment = in.readByte() != 0;
     }
 
     public static final Creator<FragmentOpen> CREATOR = new Creator<FragmentOpen>() {

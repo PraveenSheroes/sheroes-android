@@ -81,7 +81,7 @@ public class ProfileStudyDialog extends BaseDialogFragment implements OnBoarding
         editTextWatcher();
         mAdapter = new GenericRecyclerViewAdapter(getActivity(), (ProfileActicity) getActivity());
 
-        mSearchEditText.setHint(getString(R.string.ID_SEARCH_LOCATION));
+        mSearchEditText.setHint(getString(R.string.ID_SEARCH_FIELD_OF_STUDY));
         mOnBoardingPresenter.getOnBoardingSearchToPresenter(mAppUtils.onBoardingSearchRequestBuilder("B Tech", mMasterDataSkill));
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(manager);

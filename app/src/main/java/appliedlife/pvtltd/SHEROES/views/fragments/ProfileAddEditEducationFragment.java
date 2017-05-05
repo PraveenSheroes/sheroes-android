@@ -1,5 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
@@ -15,12 +17,14 @@ import android.widget.Toast;
 import java.util.List;
 import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.EducationEntity;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ExprienceEntity;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.MyProfileView;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.PersonalBasicDetailsRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileAddEditEducationRequest;
@@ -38,11 +42,14 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.COMMUNITY_OWNER;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.MARK_AS_SPAM;
+
 /**
  * Created by priyanka on 10/04/17.
  */
 
-public class ProfileAddEditEducationFragment extends BaseFragment implements DayPickerProfile.MyDayPickerListener,ProfileView,View.OnClickListener{
+public class ProfileAddEditEducationFragment extends BaseDialogFragment implements DayPickerProfile.MyDayPickerListener,ProfileView,View.OnClickListener{
     private final String TAG = LogUtils.makeLogTag(ProfessionalAddEducationActivity.class);
     private final String SCREEN_NAME = "Proffesional_Add_Edi_Education_screen";
     @Inject
@@ -72,18 +79,26 @@ public class ProfileAddEditEducationFragment extends BaseFragment implements Day
     int mDateFlag=0,mCurrentlyFlag=0;
     String mStartMonth,mStartYear,mEndMonth,mEndYear,mSchoolName,mStudyName;
     String[] mStartTime,mEndTime;
-
+    private ProfileEducationListener mCallback;
     String mDegree_details,mSchool_details,mField_of_studay,mdegreeName,mSchoolId;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mCallback = (ProfileEducationListener) getActivity();
+        } catch (ClassCastException exception) {
+            LogUtils.error("", "Activity must implements ProfileGoodAtListener",exception);
+        }
+    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        SheroesApplication.getAppComponent(getContext()).inject(this);
+        SheroesApplication.getAppComponent(getActivity()).inject(this);
         View view = inflater.inflate(R.layout.fragment_professional_addeducation, container, false);
         ButterKnife.bind(this, view);
-
         mTvProfileTittle.setText(R.string.ID_ADD_EDUCATION);
         mProfilePresenter.attachView(this);
-        setProgressBar(mProgressbar);
 
         if(null !=getArguments())
         {
@@ -170,7 +185,7 @@ return view;
     @OnClick(R.id.iv_back_profile)
     public void backClick()
     {
-        ((ProfileActicity)getActivity()).getSupportFragmentManager().popBackStack();
+        ((ProfileActicity)getActivity()).backEducation();
     }
     //TODO:Change request
 
@@ -182,10 +197,22 @@ return view;
         mField_of_studay= mEtFieldOfStudy.getText().toString();
         if(null != educationEntity)
         {
-            editEducationRequest();
+            if(StringUtil.isNotNullOrEmptyString(mEtDegreeDetails.getText().toString()) && StringUtil.isNotNullOrEmptyString(mEtSchoolDetails.getText().toString()) && StringUtil.isNotNullOrEmptyString(mEtFieldOfStudy.getText().toString()) && StringUtil.isNotNullOrEmptyString(mEtJobEndDate.getText().toString()) && StringUtil.isNotNullOrEmptyString(mEtJobEndDate.getText().toString()) && StringUtil.isNotNullOrEmptyString(mEtWriteAboutMe.getText().toString()))
+            {
+                editEducationRequest();
+            }
+            else {
+                Toast.makeText(getActivity(),AppConstants.BLANK_MESSAGE,Toast.LENGTH_LONG).show();
+            }
         }
         else {
-            addEducationRequest();
+            if(StringUtil.isNotNullOrEmptyString(mEtDegreeDetails.getText().toString()) && StringUtil.isNotNullOrEmptyString(mEtSchoolDetails.getText().toString()) && StringUtil.isNotNullOrEmptyString(mEtFieldOfStudy.getText().toString()) && StringUtil.isNotNullOrEmptyString(mEtJobEndDate.getText().toString()) && StringUtil.isNotNullOrEmptyString(mEtJobEndDate.getText().toString()) && StringUtil.isNotNullOrEmptyString(mEtWriteAboutMe.getText().toString()))
+            {
+                addEducationRequest();
+            }
+            else{
+                Toast.makeText(getActivity(),AppConstants.BLANK_MESSAGE,Toast.LENGTH_LONG).show();
+            }
         }
 
     }
@@ -305,22 +332,26 @@ return view;
 
     @Override
     public void getEducationResponse(BoardingDataResponse boardingDataResponse) {
-
-
+        int toastDuration = Toast.LENGTH_LONG;
+        switch (boardingDataResponse.getStatus()) {
+            case AppConstants.SUCCESS: {
+                mCallback.onBasiEducationUpdate();//TODO:Need to check with priyanka why need to pass value?
+                toastDuration = Toast.LENGTH_SHORT;
+                break;
+            }
+            case AppConstants.FAILED: {
+                ((ProfileActicity) getActivity()).onShowErrorDialog(boardingDataResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), MARK_AS_SPAM);
+                break;
+            }
+            default: {
+                ((ProfileActicity) getActivity()).onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), MARK_AS_SPAM);
+                break;
+            }
+        }
         //TODO:check condition
 
         Toast.makeText(getActivity(), boardingDataResponse.getStatus(),
-                Toast.LENGTH_LONG).show();
-
-        //TODO:Change Message
-
-        if(boardingDataResponse.getStatus().equals(AppConstants.SUCCESS)) {
-
-           // profileWorkLocationFragmentListener.locationBack();
-
-        }else {
-
-        }
+                toastDuration).show();
 
 
 
@@ -370,5 +401,38 @@ return view;
     @Override
     public void getProfileListSuccess(List<Doc> feedDetailList) {
 
+    }
+
+    @Override
+    public void onClick(View view) {
+
+    }
+
+    public void setListener(ProfileActicity listener) {
+        this.mCallback = listener;
+    }
+
+    public interface ProfileEducationListener {
+        void onBasiEducationUpdate();
+    }
+    @Override
+    public void startProgressBar() {
+        mProgressbar.setVisibility(View.VISIBLE);
+        mProgressbar.bringToFront();
+    }
+
+    @Override
+    public void stopProgressBar() {
+        mProgressbar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        return new Dialog(getActivity(), R.style.Theme_Material_Light_Dialog_NoMinWidth) {
+            @Override
+            public void onBackPressed() {
+                ((ProfileActicity) getActivity()).onBackPressed();
+            }
+        };
     }
 }

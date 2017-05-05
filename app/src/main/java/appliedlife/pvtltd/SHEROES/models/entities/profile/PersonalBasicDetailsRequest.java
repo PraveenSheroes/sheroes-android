@@ -3,7 +3,7 @@ package appliedlife.pvtltd.SHEROES.models.entities.profile;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.sql.Date;
+import java.util.Date;
 
 /**
  * Created by priyanka on 19/03/17.
@@ -52,6 +52,9 @@ public class PersonalBasicDetailsRequest {
     @SerializedName("marital_status")
     @Expose
     private String maritalStatus;
+    @SerializedName("dob")
+    @Expose
+    private String dateOfBirth;
 
     public String getSubType() {
         return subType;
@@ -117,11 +120,11 @@ public class PersonalBasicDetailsRequest {
         this.source = source;
     }
 
-    public Integer getNoOfChildren() {
+    public int getNoOfChildren() {
         return noOfChildren;
     }
 
-    public void setNoOfChildren(Integer noOfChildren) {
+    public void setNoOfChildren(int noOfChildren) {
         this.noOfChildren = noOfChildren;
     }
 
@@ -141,11 +144,11 @@ public class PersonalBasicDetailsRequest {
         this.lastName = lastName;
     }
 
-    public Integer getCityMasterId() {
+    public int getCityMasterId() {
         return cityMasterId;
     }
 
-    public void setCityMasterId(Integer cityMasterId) {
+    public void setCityMasterId(int cityMasterId) {
         this.cityMasterId = cityMasterId;
     }
 
@@ -157,4 +160,11 @@ public class PersonalBasicDetailsRequest {
         this.maritalStatus = maritalStatus;
     }
 
+    public String getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(String dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
 }

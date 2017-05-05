@@ -66,7 +66,7 @@ public class ProfileProfessionalBasicDetailsHolder extends BaseViewHolder<MyProf
                 }
                 if (StringUtil.isNotNullOrEmptyString(String.valueOf(userDetails.getTotalExp()))) {
 
-                    mTvTotalWorkExperienceValue.setText(String.valueOf(userDetails.getTotalExp()) + " " + AppConstants.EXP_YEAR + " " + String.valueOf(userDetails.getTotalExpMonth()) + " " + AppConstants.EXP_MONTH);
+                    mTvTotalWorkExperienceValue.setText(String.valueOf(userDetails.getTotalExp()) + " " + AppConstants.BASIC_EXP_YEAR + " " + String.valueOf(userDetails.getTotalExpMonth()) + " " + AppConstants.BASIC_EXP_MONTH);
                 }
                 if (StringUtil.isNotNullOrEmptyString("" + userDetails.getLanguage())) {
                     mTvLanguageValue.setText("" + userDetails.getLanguage());

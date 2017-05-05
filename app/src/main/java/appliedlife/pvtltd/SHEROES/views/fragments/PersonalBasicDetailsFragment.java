@@ -1,11 +1,14 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -13,7 +16,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -44,7 +54,7 @@ import butterknife.OnClick;
  * Personal Basic Details Fragment
  */
 
-public class PersonalBasicDetailsFragment extends BaseFragment implements ProfileView {
+public class PersonalBasicDetailsFragment extends BaseFragment implements ProfileView,View.OnClickListener{
     private final String TAG = LogUtils.makeLogTag(ProfessionalEditBasicDetailsFragment.class);
     private final String SCREEN_NAME = "Personal_edit_basic_details_screen";
     @Inject
@@ -74,6 +84,13 @@ public class PersonalBasicDetailsFragment extends BaseFragment implements Profil
     MyProfileView myProfileView;
     @Bind(R.id.pb_profile_progress_bar)
     ProgressBar mProgress;
+    @Bind(R.id.etxt_fromdate)
+    EditText fromDateEtxt;
+    private DatePickerDialog fromDatePickerDialog;
+    private DatePickerDialog toDatePickerDialog;
+    Date thedate;
+
+    private SimpleDateFormat dateFormatter;
 
 
     @Override
@@ -107,10 +124,18 @@ public class PersonalBasicDetailsFragment extends BaseFragment implements Profil
             if (myProfileView != null && myProfileView.getUserDetails() != null) {
                 UserDetails userDetails = myProfileView.getUserDetails();
                 if (userDetails != null) {
-                    mEtFirstName.setText(userDetails.getFirstName());
-                    mEtLastName.setText(userDetails.getLastName());
-                    mEtCurrntLocation.setText(userDetails.getCityMaster());
-                    mEtChildNumber.setText(String.valueOf(userDetails.getNoOfChildren()));
+                    if(StringUtil.isNotNullOrEmptyString(userDetails.getFirstName())) {
+                        mEtFirstName.setText(userDetails.getFirstName());
+                    }
+                    if(StringUtil.isNotNullOrEmptyString(userDetails.getLastName())) {
+                        mEtLastName.setText(userDetails.getLastName());
+                    }
+                    if(StringUtil.isNotNullOrEmptyString(userDetails.getCityMaster())) {
+                        mEtCurrntLocation.setText(userDetails.getCityMaster());
+                    }
+                    if(userDetails.getNoOfChildren()>0) {
+                        mEtChildNumber.setText(String.valueOf(userDetails.getNoOfChildren()));
+                    }
                     if (getString(R.string.married).equalsIgnoreCase(userDetails.getMaritalStatus())) {
                         mSpinnerRelationStatus.setSelection(0,true);
                     } else {
@@ -121,14 +146,48 @@ public class PersonalBasicDetailsFragment extends BaseFragment implements Profil
                     if (userDetails.getCityMasterId() > 0) {
                         mCitiId = String.valueOf(myProfileView.getUserDetails().getCityMasterId());
                     }
+                    if(null !=myProfileView.getUserDetails().getDob()){
+                        Calendar cal = new GregorianCalendar();
+                        cal.setTime(new Date(myProfileView.getUserDetails().getDob()));
+                        fromDateEtxt.setText(cal.get(Calendar.DAY_OF_MONTH) +" "+ new SimpleDateFormat("MMM").format(cal.getTime()) +" "+cal.get(Calendar.YEAR));
+                    }
                 }
             }
         }
+        dateFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        fromDateEtxt.setInputType(InputType.TYPE_NULL);
+        fromDateEtxt.requestFocus();
+        fromDateEtxt.setInputType(InputType.TYPE_NULL);
+        fromDateEtxt.requestFocus();
+        setDateTimeField();
         return view;
     }
 
 
+    private void setDateTimeField() {
+        fromDateEtxt.setOnClickListener(this);
 
+        Calendar newCalendar = Calendar.getInstance();
+        fromDatePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                Calendar newDate = Calendar.getInstance();
+                newDate.set(year, monthOfYear, dayOfMonth);
+                fromDateEtxt.setText(dateFormatter.format(newDate.getTime()));
+            }
+
+        },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+
+        toDatePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                Calendar newDate = Calendar.getInstance();
+                newDate.set(year, monthOfYear, dayOfMonth);
+
+            }
+
+        },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+    }
 
 
 
@@ -166,6 +225,15 @@ public class PersonalBasicDetailsFragment extends BaseFragment implements Profil
         }
         personalBasicDetailsRequest.setFirstName(mEtFirstName.getText().toString());
         personalBasicDetailsRequest.setLastName(mEtLastName.getText().toString());
+
+        try {
+             thedate = (Date) new SimpleDateFormat("yyyy-MM-dd").parse(fromDateEtxt.getText().toString());
+            personalBasicDetailsRequest.setDateOfBirth(new SimpleDateFormat("yyyy-MM-dd").format(thedate));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
         mProfilePresenter.getPersonalBasicDetailsAuthTokeInPresenter(personalBasicDetailsRequest);
     }
 
@@ -191,6 +259,9 @@ public class PersonalBasicDetailsFragment extends BaseFragment implements Profil
 
 
         int id = view.getId();
+        if(view == fromDateEtxt) {
+            fromDatePickerDialog.show();
+        }
 
     }
 
