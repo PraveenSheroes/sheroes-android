@@ -227,7 +227,7 @@ public class ProfileAboutMeFragment extends BaseFragment implements ProfileView 
     @OnClick(R.id.tv_about_me_back)
 
     public void Onback_Click() {
-
+        AppUtils.hideKeyboard(mEtWriteAboutMe, TAG);
         profileAboutMeFragmentListener.aboutMeBack();
 
     }
@@ -254,7 +254,6 @@ public class ProfileAboutMeFragment extends BaseFragment implements ProfileView 
     }
 
 
-
     @Override
     public void getPersonalBasicDetailsResponse(BoardingDataResponse boardingDataResponse) {
 
@@ -264,8 +263,6 @@ public class ProfileAboutMeFragment extends BaseFragment implements ProfileView 
     public void getprofiletracelflexibilityResponse(BoardingDataResponse boardingDataResponse) {
 
     }
-
-
 
 
     @Override
@@ -291,8 +288,6 @@ public class ProfileAboutMeFragment extends BaseFragment implements ProfileView 
     public void getProfessionalWorkLocationResponse(BoardingDataResponse boardingDataResponse) {
 
     }
-
-
 
 
     @Override

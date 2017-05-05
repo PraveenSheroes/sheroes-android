@@ -16,11 +16,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.Date;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
@@ -249,6 +248,7 @@ public class PersonalBasicDetailsFragment extends BaseFragment implements Profil
 
     public void OnbackClick()
     {
+        AppUtils.hideKeyboard(mEtChildNumber,TAG);
         mProfileBasicDetailsCallBack.onBackPressed(R.id.iv_back_profile);
 
     }

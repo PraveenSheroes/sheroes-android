@@ -438,6 +438,7 @@ public class ProfileWorkExperienceSelfEmploymentFragment extends BaseDialogFragm
 
     @OnClick(R.id.iv_back_setting)
     public void onBackWorkExp() {
+        AppUtils.hideKeyboard(mEtSelfAboutOrganization,TAG);
         ((ProfileActicity) getActivity()).onBackPressed();
     }
 
