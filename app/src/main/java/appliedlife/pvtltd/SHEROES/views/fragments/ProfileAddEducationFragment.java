@@ -1,17 +1,14 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import java.util.List;
 
@@ -21,14 +18,12 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.EducationEntity;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ExprienceEntity;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.MyProfileView;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePersenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.ProfessionalAddEducationActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActicity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
@@ -43,7 +38,6 @@ import butterknife.OnClick;
 
 
 public class ProfileAddEducationFragment extends BaseFragment implements ProfileView{
-
     private final String TAG = LogUtils.makeLogTag(ProfileAddEducationFragment.class);
     private final String SCREEN_NAME = "Profile_add_education_screen";
     MyProfileView myProfileView;
@@ -70,7 +64,6 @@ public class ProfileAddEducationFragment extends BaseFragment implements Profile
         super.onAttach(context);
     }
 
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -83,8 +76,6 @@ public class ProfileAddEducationFragment extends BaseFragment implements Profile
         mAdapter = new GenericRecyclerViewAdapter(getContext(), (ProfileActicity) getActivity());
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mAdapter);
-
-
 
 
      /*   ma1ProfileWorkexperiences.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
@@ -113,8 +104,6 @@ public class ProfileAddEducationFragment extends BaseFragment implements Profile
             List<EducationEntity> educationEntity=this.myProfileView.getEducationEntity();
 
            if(null !=educationEntity) {
-
-
                mAdapter.setSheroesGenericListData((educationEntity));
                mAdapter.notifyDataSetChanged();
 
@@ -189,7 +178,6 @@ public class ProfileAddEducationFragment extends BaseFragment implements Profile
     @Override
     public void getUserData(UserProfileResponse userProfileResponse) {
         List<EducationEntity> educationEntity=userProfileResponse.getEducation();
-
         if (StringUtil.isNotEmptyCollection(educationEntity)) {
             mAdapter.setSheroesGenericListData(educationEntity);
             mAdapter.notifyDataSetChanged();

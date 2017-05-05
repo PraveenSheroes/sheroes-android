@@ -33,6 +33,7 @@
     <string name="ID_CURRENT_STATUS_DATA">Please select current status</string>
     <string name="ID_LOCATION_DATA">Please select location</string>
     <string name="ID_LOCATION_RESULT">Sorry! We could not find a location matching your input.</string>
+    <string name="ID_JOB_NOT_FOUND"> Sorry! Could not find jobs matching your criteria. Please swipe down to refresh.</string>
 
     <!--String related in home page-->
 
@@ -575,7 +576,7 @@ Our website www.sheroes.in offers services for certain products and services. By
     <!--String Related personal other details page-->
     <string name="ID_ADITIONAL">ADD ADITIONAL ACTIVITIES AND ACHIEVEMENTS</string>
 
-
+    <string name="ID_SUCCESSFULLY">Successfully</string>
 
 
     <!--String Related professional choose_city details page-->

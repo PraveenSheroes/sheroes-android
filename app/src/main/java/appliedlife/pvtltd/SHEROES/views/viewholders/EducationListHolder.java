@@ -3,23 +3,19 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.DateFormatSymbols;
-import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.EducationEntity;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.MyProfileView;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 import static com.facebook.login.widget.ProfilePictureView.TAG;
 
@@ -44,7 +40,7 @@ public class EducationListHolder extends BaseViewHolder<EducationEntity> {
 
     public EducationListHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
-        ButterKnife.bind(this,itemView);
+        ButterKnife.bind(this, itemView);
         this.viewInterface = baseHolderInterface;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
     }
@@ -55,42 +51,45 @@ public class EducationListHolder extends BaseViewHolder<EducationEntity> {
         this.dataItem = educationEntity;
         mTv_add_education.setOnClickListener(this);
 
-        if(null !=educationEntity) {
-            if (null !=educationEntity) {
-                    if(StringUtil.isNotNullOrEmptyString(educationEntity.getDegree())) {
-                        tvEducationName.setVisibility(View.VISIBLE);
-                        tvEducationName.setText(educationEntity.getDegree());
-                    }
-                    if(StringUtil.isNotNullOrEmptyString(educationEntity.getSchool())) {
-                        mTvSchool.setVisibility(View.VISIBLE);
-                        mTvSchool.setText(educationEntity.getSchool());
-                    }
-                if(StringUtil.isNotNullOrEmptyString(educationEntity.getFieldOfStudy())) {
+        if (null != educationEntity) {
+            if (null != educationEntity) {
+                if (StringUtil.isNotNullOrEmptyString(educationEntity.getDegree())) {
+                    tvEducationName.setVisibility(View.VISIBLE);
+                    tvEducationName.setText(educationEntity.getDegree());
+                }
+                if (StringUtil.isNotNullOrEmptyString(educationEntity.getSchool())) {
+                    mTvSchool.setVisibility(View.VISIBLE);
+                    mTvSchool.setText(educationEntity.getSchool());
+                }
+                if (StringUtil.isNotNullOrEmptyString(educationEntity.getFieldOfStudy())) {
                     mTvStudy.setVisibility(View.VISIBLE);
                     mTvStudy.setText(educationEntity.getFieldOfStudy());
                 }
-                    if(educationEntity.getSessionStartYear()>0) {
-                        String session="";
-                        if(educationEntity.getSessionEndYear()>0)
-                        {
-                            session=getMonth(educationEntity.getSessionStartMonth())+" "+educationEntity.getSessionStartYear()+" - "+getMonth(educationEntity.getSessionEndMonth())+" "+educationEntity.getSessionEndYear();
-                        }
-                        else
-                        {
-                            session="("+educationEntity.getSessionStartYear()+")";
-                        }
-                        mTv_date1.setVisibility(View.VISIBLE);
-                        mTv_date1.setText(session);
+                if (educationEntity.getSessionStartYear() > 0) {
+                    String session = "";
+                    if (educationEntity.getSessionEndYear() > 0&&educationEntity.getSessionEndMonth()>0) {
+                        session = getMonth(educationEntity.getSessionStartMonth()) + " " + educationEntity.getSessionStartYear() + " - " + getMonth(educationEntity.getSessionEndMonth()) + " " + educationEntity.getSessionEndYear();
+                    } else {
+                        session = "(" + educationEntity.getSessionStartYear() + ")";
                     }
+                    mTv_date1.setVisibility(View.VISIBLE);
+                    mTv_date1.setText(session);
                 }
+            }
 
         }
 
 
     }
+
     public String getMonth(int month) {
-        return new DateFormatSymbols().getMonths()[month-1];
+        DateFormatSymbols dateFormatSymbols = new DateFormatSymbols();
+        if (null != dateFormatSymbols.getMonths() && dateFormatSymbols.getMonths().length > 0 && month > 0) {
+            return new DateFormatSymbols().getMonths()[month - 1];
+        }
+        return null;
     }
+
     @Override
     public void viewRecycled() {
 
@@ -103,7 +102,7 @@ public class EducationListHolder extends BaseViewHolder<EducationEntity> {
         switch (view.getId()) {
 
             case R.id.tv_edit_education:
-                viewInterface.handleOnClick(this.dataItem,mTv_add_education);
+                viewInterface.handleOnClick(this.dataItem, mTv_add_education);
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + view.getId());
@@ -112,11 +111,7 @@ public class EducationListHolder extends BaseViewHolder<EducationEntity> {
         }
 
 
-
-
     }
-
-
 
 
 }

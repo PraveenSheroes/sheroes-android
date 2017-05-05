@@ -158,7 +158,7 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
                 mtv_apply_job.setEnabled(false);
                 mFeedDetail.setApplied(true);
                 ((JobDetailActivity) getActivity()).setBackGroundImage(mFeedDetail);
-                Toast.makeText(getActivity(), getString(R.string.ID_JOB) + AppConstants.SPACE + getString(R.string.ID_APPLIED), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(),getString(R.string.ID_APPLIED)+AppConstants.SPACE+getString(R.string.ID_SUCCESSFULLY), Toast.LENGTH_SHORT).show();
                 break;
             case AppConstants.FAILED:
                 mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);

@@ -38,6 +38,7 @@ public class FragmentOpen implements Parcelable{
     private boolean isProfileWorkExpEditFragment;
     private boolean isWorkExpFragment;
     private boolean isEducationFragment;
+    private boolean isProfesstionalEducationFragment;
     public FragmentOpen() {
     }
 
@@ -258,6 +259,14 @@ public class FragmentOpen implements Parcelable{
         isEducationFragment = educationFragment;
     }
 
+    public boolean isProfesstionalEducationFragment() {
+        return isProfesstionalEducationFragment;
+    }
+
+    public void setProfesstionalEducationFragment(boolean professtionalEducationFragment) {
+        isProfesstionalEducationFragment = professtionalEducationFragment;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -292,6 +301,7 @@ public class FragmentOpen implements Parcelable{
         dest.writeByte(this.isProfileWorkExpEditFragment ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isWorkExpFragment ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isEducationFragment ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isProfesstionalEducationFragment ? (byte) 1 : (byte) 0);
     }
 
     protected FragmentOpen(Parcel in) {
@@ -322,6 +332,7 @@ public class FragmentOpen implements Parcelable{
         this.isProfileWorkExpEditFragment = in.readByte() != 0;
         this.isWorkExpFragment = in.readByte() != 0;
         this.isEducationFragment = in.readByte() != 0;
+        this.isProfesstionalEducationFragment = in.readByte() != 0;
     }
 
     public static final Creator<FragmentOpen> CREATOR = new Creator<FragmentOpen>() {
