@@ -137,6 +137,7 @@ public class ArticlesFragment extends BaseFragment {
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
         List<FeedDetail> feedDetailList;
+        List<FeedDetail>newFeedDetailList=new ArrayList<>();
         boolean isTrendingData = false;
         if (null != feedResponsePojo && StringUtil.isNotEmptyCollection(feedResponsePojo.getFeaturedDocs())) {
             feedDetailList = feedResponsePojo.getFeaturedDocs();
@@ -146,6 +147,7 @@ public class ArticlesFragment extends BaseFragment {
         }
         mProgressBarFirstLoad.setVisibility(View.GONE);
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
+            newFeedDetailList.addAll(feedDetailList);
             mLiNoResult.setVisibility(View.GONE);
             mPageNo = mFragmentListRefreshData.getPageNo();
             if (isTrendingData) {
@@ -160,18 +162,18 @@ public class ArticlesFragment extends BaseFragment {
                     for (FeedDetail feedDetail : feedDetailList) {
                         for (FeedDetail trendingFeedDetail : mTrendingFeedDetail) {
                             if (feedDetail.getEntityOrParticipantId() == trendingFeedDetail.getEntityOrParticipantId()) {
-                                feedDetailList.remove(feedDetail);
+                                newFeedDetailList.remove(feedDetail);
                             }
                         }
                     }
                 }
-                mPullRefreshList.allListData(feedDetailList);
+                mPullRefreshList.allListData(newFeedDetailList);
             }
             mFragmentListRefreshData.setPageNo(++mPageNo);
             mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
             mAdapter.notifyDataSetChanged();
             if (!mPullRefreshList.isPullToRefresh()) {
-                mLayoutManager.scrollToPositionWithOffset(mPullRefreshList.getFeedResponses().size() - feedDetailList.size(), 0);
+                mLayoutManager.scrollToPositionWithOffset(mPullRefreshList.getFeedResponses().size() - newFeedDetailList.size(), 0);
             } else {
                 mLayoutManager.scrollToPositionWithOffset(0, 0);
             }

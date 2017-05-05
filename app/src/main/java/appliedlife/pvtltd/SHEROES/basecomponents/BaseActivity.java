@@ -775,8 +775,13 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 case AppConstants.MARK_AS_SPAM:
                     showNetworkTimeoutDoalog(true, false, errorReason);
                     break;
-                default:
-                    showNetworkTimeoutDoalog(true, false, errorReason);
+                default: {
+                    if (AppConstants.BAD_RQUEST.contains(errorReason)) {
+                        showNetworkTimeoutDoalog(true, false, getString(R.string.ID_BAD_RQUEST));
+                    } else {
+                        showNetworkTimeoutDoalog(true, false, errorReason);
+                    }
+                }
             }
         } else {
             showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));

@@ -91,8 +91,14 @@ import butterknife.OnClick;
                 case AppConstants.HTTP_401_UNAUTHORIZED:
                     showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_INVALID_USER_PASSWORD));
                     break;
-                default:
-                    showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
+                default: {
+                    if(AppConstants.HTTP_401_UNAUTHORIZED.contains(errorReason))
+                    {
+                        showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_INVALID_USER_PASSWORD));
+                    }else {
+                        showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
+                    }
+                }
             }
         }else
         {
