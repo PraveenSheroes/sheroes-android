@@ -183,7 +183,7 @@
     <string name="ID_HEY">Hey</string>
     <string name="ID_HOW_CAN_SHEROES">How can SHEROES help you? </string>
     <string name="ID_TERMS_AND_CONDITIONS">TERMS AND CONDITIONS</string>
-    <string name="ID_LOGOUT">LOGOUT</string>
+    <string name="ID_LOGOUT">Logout</string>
     <string name="ID_CELL_PHONE">Cell Phone number</string>
     <string name="ID_LOCATION">Location</string>
     <!--string setting_feedback page-->
@@ -640,8 +640,8 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_CURRENT_STATUS">CURRENT STATUS</string>
     <string name="ID_TOTAL_WORK_EXPERIENCE">Total work experience</string>
     <string name="ID_DURECTION">DURATION</string>
-    <string name="ID_YEARS">YEARS</string>
-    <string name="ID_MONTHS">MONTHS</string>
+    <string name="ID_YEARS">YEAR</string>
+    <string name="ID_MONTHS">MONTH</string>
     <string name="ID_DAY">Day</string>
     <string name="ID_LANGUAGE">language</string>
     <string name="ID_ADD_LANGUAGE">ADD LANGUAGE</string>

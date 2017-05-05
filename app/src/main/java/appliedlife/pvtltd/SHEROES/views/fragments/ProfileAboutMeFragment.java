@@ -16,6 +16,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.f2prateek.rx.preferences.Preference;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -25,6 +27,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.MyProfileView;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCardResponse;
@@ -35,6 +38,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.CustomCollapsingToolbarLayout;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
 import butterknife.Bind;
@@ -67,9 +71,11 @@ public class ProfileAboutMeFragment extends BaseFragment implements ProfileView 
     AppBarLayout mAppBarLayout;
     @Bind(R.id.pb_profile_progress_bar)
     ProgressBar mProgress;
-
+    @Bind(R.id.iv_profile_image_about_me)
+    CircleImageView mIvProfileImage;
     public CustomCollapsingToolbarLayout mProfileAboutMe;
-
+    @Inject
+    Preference<LoginResponse> mUserPreference;
     private ProfileAboutMeFragmentListener profileAboutMeFragmentListener;
 
 
@@ -162,6 +168,14 @@ public class ProfileAboutMeFragment extends BaseFragment implements ProfileView 
         if (mProfileView != null && mProfileView.getUserDetails() != null) {
             mEtWriteAboutMe.setText(mProfileView.getUserDetails().getUserSummary());
         }
+
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
+
+            mIvProfileImage.setCircularImage(true);
+            mIvProfileImage.bindImage(mUserPreference.get().getUserSummary().getPhotoUrl());
+
+        }
+
     }
 
     @OnTouch(R.id.et_write_about_me)

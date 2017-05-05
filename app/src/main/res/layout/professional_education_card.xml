@@ -126,6 +126,7 @@
             android:layout_marginRight="@dimen/dp_size_18"
             android:layout_below="@+id/tv_degree22"
             android:layout_marginTop="@dimen/dp_size_16"
+            android:visibility="gone"
             android:layout_marginLeft="@dimen/dp_size_16"
             android:background="@color/text_education_line"
             />

@@ -34,14 +34,23 @@
                         android:fitsSystemWindows="true"
                         android:scaleType="centerCrop"
                         app:layout_collapseMode="parallax" />
-
-                    <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
-                        android:id="@+id/iv_profile_image"
-                        android:layout_width="@dimen/dp_size_62"
-                        android:layout_height="@dimen/dp_size_65"
+                    <FrameLayout
+                        android:id="@+id/fm_about"
+                        android:layout_width="@dimen/dp_size_70"
+                        android:layout_height="@dimen/dp_size_70"
                         android:layout_centerHorizontal="true"
-                        android:layout_centerInParent="true"
-                        android:background="@drawable/ic_about_me" />
+                        android:background="@drawable/ic_about_me"
+                        android:layout_centerInParent="true">
+                        <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
+                            android:id="@+id/iv_profile_image_about_me"
+                            android:layout_width="@dimen/dp_size_50"
+                            android:layout_height="@dimen/dp_size_50"
+                            android:layout_marginTop="@dimen/dp_size_5"
+                            android:layout_marginLeft="@dimen/dp_size_5"
+                            android:layout_gravity="center"
+                            />
+                    </FrameLayout>
+
 
                     <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
                         android:id="@+id/iv_user_image_set"
@@ -56,7 +65,7 @@
                         android:id="@+id/tv_about_me_tittle1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/iv_profile_image"
+                        android:layout_below="@+id/fm_about"
                         android:layout_centerInParent="true"
                         android:fontFamily="@string/ID_ROBOTO_LIGHT"
                         android:textColor="@color/white"
@@ -119,8 +128,6 @@
                 android:id="@+id/id_relative1"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-
-
                 android:paddingLeft="@dimen/dp_size_25"
                 android:paddingRight="@dimen/dp_size_25"
                 android:paddingTop="@dimen/dp_size_25">

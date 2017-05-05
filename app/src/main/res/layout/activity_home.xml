@@ -44,13 +44,22 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp" />
             </LinearLayout>
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:orientation="vertical">
-
+                <TextView
+                    android:id="@+id/tv_logout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                    android:text="@string/ID_LOGOUT"
+                    android:gravity="center"
+                    android:padding="@dimen/dp_size_10"
+                    android:textColor="@color/blue"
+                    android:textSize="@dimen/sp_size_16" />
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_size_1"

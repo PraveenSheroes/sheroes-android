@@ -6,6 +6,8 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+
 /**
  * Created by Ajit Kumar on 10-01-2017.
  */
@@ -18,7 +20,7 @@ public class GoogleAnalyticsTracing {
     public static void screenNameTracking(Context cn,String screenname)
     {
         GoogleAnalytics analytics= GoogleAnalytics.getInstance(cn);
-        Tracker tr=analytics.newTracker("UA-43289318-2");
+        Tracker tr=analytics.newTracker(AppConstants.GOOGLE_ANALYTICS);
         tr.setScreenName(screenname);
 
         tr.send(new HitBuilders.ScreenViewBuilder().build());

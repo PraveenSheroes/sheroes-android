@@ -220,7 +220,6 @@ public class ProfileWorkExperienceSelfEmploymentFragment extends BaseDialogFragm
 
 
                         if (StringUtil.isNotNullOrEmptyString(mEtvJobStartMonth.getText().toString()) && StringUtil.isNotNullOrEmptyString(mEtvJobStartYear.getText().toString())) {
-                           // exprienceEntity.setStartDay(Integer.parseInt(mEtvJobStartDay.getText().toString()));
                             exprienceEntity.setStartMonth(Integer.parseInt(mEtvJobStartMonth.getText().toString()));
                             exprienceEntity.setStartYear(Integer.parseInt(mEtvJobStartYear.getText().toString()));
 
@@ -248,7 +247,6 @@ public class ProfileWorkExperienceSelfEmploymentFragment extends BaseDialogFragm
                                 }
                             } else {
                                 if ( StringUtil.isNotNullOrEmptyString(mEtvJobEndMonth.getText().toString()) && StringUtil.isNotNullOrEmptyString(mEtvJobEndYear.getText().toString())) {
-                                    exprienceEntity.setEndDay(Integer.parseInt(mEtvJobEndDay.getText().toString()));
                                     exprienceEntity.setEndMonth(Integer.parseInt(mEtvJobEndMonth.getText().toString()));
                                     exprienceEntity.setEndYear(Integer.parseInt(mEtvJobEndYear.getText().toString()));
 
@@ -354,7 +352,6 @@ public class ProfileWorkExperienceSelfEmploymentFragment extends BaseDialogFragm
             mEtvJobEndDay.setEnabled(true);
             mEtvJobEndMonth.setEnabled(true);
             mEtvJobEndYear.setEnabled(true);
-            mEtvJobEndDay.setText(AppConstants.EMPTY_STRING);
             mEtvJobEndMonth.setText(AppConstants.EMPTY_STRING);
             mEtvJobEndYear.setText(AppConstants.EMPTY_STRING);
         }
@@ -447,7 +444,7 @@ public class ProfileWorkExperienceSelfEmploymentFragment extends BaseDialogFragm
     private void setDateAccordingToInput(int callForDate, int value) {
         switch (callForDate) {
             case AppConstants.ONE_CONSTANT:
-                mEtvJobStartDay.setText(String.valueOf(value));
+              //  mEtvJobStartDay.setText(String.valueOf(value));
                 break;
             case AppConstants.TWO_CONSTANT:
                 mEtvJobStartMonth.setText(String.valueOf(value));
@@ -456,7 +453,7 @@ public class ProfileWorkExperienceSelfEmploymentFragment extends BaseDialogFragm
                 mEtvJobStartYear.setText(String.valueOf(value));
                 break;
             case AppConstants.FOURTH_CONSTANT:
-                mEtvJobEndDay.setText(String.valueOf(value));
+             //   mEtvJobEndDay.setText(String.valueOf(value));
                 break;
             case 5:
                 mEtvJobEndMonth.setText(String.valueOf(value));

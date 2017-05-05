@@ -28,8 +28,7 @@
                 android:id="@+id/tv_notification_tittle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:maxLines="2"
-                android:inputType="textMultiLine"
+                android:maxLines="@integer/int_value_for_line_2"
                 android:textColor="@color/black"
                 android:textSize="@dimen/sp_size_13" />
             <ImageView

@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:layout_centerVertical="true"
-                android:text="@string/ID_EDUCATION"
+                android:text="@string/ID_LOOKING_FOR"
                 android:textAllCaps="true"
                 android:textColor="@color/dashboard_fed_text"
                 android:textSize="@dimen/sp_size_13" />
@@ -40,15 +40,26 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:drawableRight="@drawable/ic_add_icon_grey"
-                android:padding="@dimen/dp_size_3" />
+                android:padding="@dimen/dp_size_10" />
 
 
         </RelativeLayout>
-
+        <TextView
+            android:id="@+id/tv_lookingfor_comma_seprate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:layout_marginLeft="@dimen/dp_size_16"
+            android:layout_marginRight="@dimen/dp_size_16"
+            android:lineSpacingExtra="@dimen/dp_size_4"
+            android:layout_marginBottom="@dimen/dp_size_16"
+            android:textColor="@color/searchbox_hint_text_color"
+            android:textSize="@dimen/dp_size_13" />
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:visibility="gone">
         <TextView
             android:id="@+id/tv_lookingfor_text1"
             android:layout_width="wrap_content"
@@ -77,6 +88,7 @@
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:padding="@dimen/dp_size_16"
             android:text="@string/ID_MORE"
+            android:visibility="gone"
             android:textColor="@color/blue"
             android:textSize="@dimen/dp_size_13" />
 

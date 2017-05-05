@@ -37,6 +37,8 @@ public class ProfileLookingForHolder extends BaseViewHolder<MyProfileView> {
     TextView mTv_looking_more;
     @Bind(R.id.tv_looking_for)
     TextView mTv_looking_for;
+    @Bind(R.id.tv_lookingfor_comma_seprate)
+    TextView mTv_looking_comma_seprate;
     BaseHolderInterface viewInterface;
 
     private MyProfileView dataItem;
@@ -56,25 +58,29 @@ public class ProfileLookingForHolder extends BaseViewHolder<MyProfileView> {
 
         mTv_looking_for.setOnClickListener(this);
         mTv_lookinfor_number.setText(dataItem.getType());
-        List<OpportunityType> opportunityType=this.dataItem.getOpportunityType();
+        List<OpportunityType> opportunityTypeList=this.dataItem.getOpportunityType();
 
-        if(null !=opportunityType) {
-            if (StringUtil.isNotEmptyCollection(opportunityType)) {
-                if(opportunityType.size()>0) {
-                    if (StringUtil.isNotNullOrEmptyString(opportunityType.get(0).getName())) {
+        if(null !=opportunityTypeList) {
+            if (StringUtil.isNotEmptyCollection(opportunityTypeList)) {
+                StringBuilder stringBuilder=new StringBuilder();
+                for(OpportunityType opportunityType:opportunityTypeList)
+                {
+                    stringBuilder.append(opportunityType.getName()).append(AppConstants.COMMA).append(AppConstants.SPACE);
+                }
+                String oppTypeData=stringBuilder.toString().substring(0,stringBuilder.toString().length()-2);
+                mTv_looking_comma_seprate.setText(oppTypeData);
+              /*  if(opportunityTypeList.size()>0) {
+                    if (StringUtil.isNotNullOrEmptyString(opportunityTypeList.get(0).getName())) {
                         mTv_lookingfor_text1.setVisibility(View.VISIBLE);
-                        mTv_lookingfor_text1.setText(opportunityType.get(0).getName());
+                        mTv_lookingfor_text1.setText(opportunityTypeList.get(0).getName());
                     }
                 }
-                if(opportunityType.size()>1) {
-                    if (StringUtil.isNotNullOrEmptyString(opportunityType.get(1).getName())) {
+                if(opportunityTypeList.size()>1) {
+                    if (StringUtil.isNotNullOrEmptyString(opportunityTypeList.get(1).getName())) {
                         mTv_lookingfor_text2.setVisibility(View.VISIBLE);
-                        mTv_lookingfor_text2.setText(opportunityType.get(1).getName());
+                        mTv_lookingfor_text2.setText(opportunityTypeList.get(1).getName());
                     }
-                }
-
-
-
+                }*/
             }
         }
 

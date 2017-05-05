@@ -79,7 +79,6 @@ public class ProfilePersonelHowCanLookingForFragment extends BaseFragment implem
     TextView mCollapeTitleTxt;
     @Bind(R.id.al_community_open_about)
     AppBarLayout mAppBarLayout;
-
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -193,7 +192,8 @@ public class ProfilePersonelHowCanLookingForFragment extends BaseFragment implem
     }
 
     private void selectTagOnClick(View view) {
-
+        //scrollView.fullScroll(ScrollView.FOCUS_DOWN);
+     //   scrollView.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
         LabelValue labelValue = (LabelValue) view.getTag();
         boolean flag = true;
         mCurrentIndex = 0;

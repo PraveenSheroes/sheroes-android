@@ -182,7 +182,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         setAllValues(mFragmentOpen);
         initHomeViewPagerAndTabs();
         assignNavigationRecyclerListView();
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get()&& null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
             //TODO: this data to be removed
             profile = mUserPreference.get().getUserSummary().getPhotoUrl(); //"https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAhNAAAAJDYwZWIyZTg5LWFmOTItNGIwYS05YjQ5LTM2YTRkNGQ2M2JlNw.jpg";
             Glide.with(this)
@@ -250,6 +250,13 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         Intent intent = new Intent(getApplicationContext(), JobFilterActivity.class);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_JOB_FILTER);
         overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
+    }
+
+    @OnClick(R.id.tv_logout)
+    public void logOut() {
+        mUserPreference.delete();
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        startActivity(intent);
     }
 
 
@@ -333,6 +340,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             super.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU);
         }
     }
+
     public void launchPlayStore() {
         boolean isLaunchedSuccessfully;
         Uri uri = Uri.parse(AppConstants.GOOGLE_PLAY_ANDROID_APP_URL);
@@ -356,7 +364,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             }
         }
         if (!isLaunchedSuccessfully) {
-            Toast.makeText(this, "Could not open Google Play, please install the Google Play app.",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Could not open Google Play, please install the Google Play app.", Toast.LENGTH_SHORT).show();
         }
     }
 

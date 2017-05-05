@@ -7,7 +7,6 @@
         android:id="@+id/rv_profile_spinner_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/dp_size_50"
         android:divider="@color/feed_background" />
 
     <ProgressBar

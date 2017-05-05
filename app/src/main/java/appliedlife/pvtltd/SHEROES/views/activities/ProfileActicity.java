@@ -200,6 +200,7 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
             if (profileWorkExperienceSelfEmploymentFragment != null) {
                 profileWorkExperienceSelfEmploymentFragment.dismiss();
             }
+            updateProfileWorkExpListItem();
         } else if (mFragmentOpen.isGoodAtFragment()) {
             mFragmentOpen.setGoodAtFragment(false);
             getSupportFragmentManager().popBackStack();

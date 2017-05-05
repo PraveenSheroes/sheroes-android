@@ -39,6 +39,8 @@ public class ProfileGoodAtHolder extends BaseViewHolder<MyProfileView> {
     TextView mTv_interesting_text4;
     @Bind(R.id.tv_add_good_at)
     TextView mTv_add_good_at;
+    @Bind(R.id.tv_good_at_comma_seprate)
+    TextView mTv_good_at_comma_seprate;
     BaseHolderInterface viewInterface;
     private MyProfileView dataItem;
 
@@ -58,7 +60,14 @@ public class ProfileGoodAtHolder extends BaseViewHolder<MyProfileView> {
         List<GoodAtSkill> goodAtSkill=this.dataItem.getGoodAtSkill();
         if(null !=goodAtSkill) {
             if (StringUtil.isNotEmptyCollection(goodAtSkill)) {
-                if(goodAtSkill.size()>0) {
+                StringBuilder stringBuilder=new StringBuilder();
+                for(GoodAtSkill goodAtSkill1:goodAtSkill)
+                {
+                    stringBuilder.append(goodAtSkill1.getName()).append(AppConstants.COMMA).append(AppConstants.SPACE);
+                }
+                String oppTypeData=stringBuilder.toString().substring(0,stringBuilder.toString().length()-2);
+                mTv_good_at_comma_seprate.setText(oppTypeData);
+               /* if(goodAtSkill.size()>0) {
                     if (StringUtil.isNotNullOrEmptyString(goodAtSkill.get(0).getName())) {
                         mTv_interesting_text1.setVisibility(View.VISIBLE);
                         mTv_interesting_text1.setText(goodAtSkill.get(0).getName());
@@ -81,7 +90,7 @@ public class ProfileGoodAtHolder extends BaseViewHolder<MyProfileView> {
                         mTv_interesting_text4.setVisibility(View.VISIBLE);
                         mTv_interesting_text4.setText(goodAtSkill.get(3).getName());
                     }
-                }
+                }*/
             }
         }
 

@@ -91,7 +91,6 @@ public class HomeFragment extends BaseFragment {
         // TODO: Move this to where you establish a user session
         // logUser();
 
-        //  GoogleAnalyticsTracing.screenNameTracking(getActivity(),SCREEN_NAME);
 
         ButterKnife.bind(this, view);
         Bundle bundle = getArguments();

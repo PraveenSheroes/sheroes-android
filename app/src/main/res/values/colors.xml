@@ -38,6 +38,7 @@
     <color name="search_tab_text">#3949ab</color>
     <color name="search_box">#273691</color>
     <color name="search_box_text">#aeb7ee</color>
+    <color name="ask_sheroes">#03d3f3</color>
     <color name="search_tab_unselected_text">#bec5cc</color>
     <color name="search_shortcut_icon_color">#f8f8f8</color>
     <color name="default_color_expanded">#F0F0F0</color>

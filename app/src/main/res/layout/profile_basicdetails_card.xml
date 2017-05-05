@@ -14,7 +14,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/dp_size_16">
+            android:layout_marginLeft="@dimen/dp_size_16"
+            android:layout_marginRight="@dimen/dp_size_16">
 
 
             <TextView
@@ -36,7 +37,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:drawableRight="@drawable/ic_edit_icon"
-                android:padding="@dimen/dp_size_3" />
+                android:padding="@dimen/dp_size_10" />
 
         </RelativeLayout>
 
@@ -189,6 +190,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:layout_marginBottom="@dimen/dp_size_10"
                 android:weightSum="2">
 
                 <TextView
@@ -204,7 +206,6 @@
                     android:text="@string/ID_CHILD_NO"
                     android:textColor="@color/dashboard_fed_text"
                     android:textSize="@dimen/sp_size_13" />
-
 
                 <TextView
                     android:id="@+id/tv_child_value"

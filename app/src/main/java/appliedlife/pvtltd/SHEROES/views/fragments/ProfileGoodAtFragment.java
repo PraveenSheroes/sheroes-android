@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -135,9 +134,9 @@ public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInt
     private LinearLayoutManager mLayoutManager;
     private final String mSkill = LogUtils.makeLogTag(CreateCommunityFragment.class);
     HashMap<String, HashMap<String, ArrayList<LabelValue>>> data = new HashMap<>();
-    String [] skills=new String[4];
-    long [] skillsid=new long[4];
-    HashMap<String,Long> goodAtId=new HashMap<String,Long>();
+    String[] skills = new String[4];
+    List<Long> skillsid = new ArrayList<>();
+    HashMap<String, Long> goodAtId = new HashMap<String, Long>();
     @Inject
     OnBoardingPresenter mOnBoardingPresenter;
     @Bind(R.id.tv_good_at_tittle)
@@ -153,7 +152,7 @@ public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInt
         try {
             mCallback = (ProfileGoodAtListener) getActivity();
         } catch (ClassCastException exception) {
-            LogUtils.error(mSkill, "Activity must implements ProfileGoodAtListener",exception);
+            LogUtils.error(mSkill, "Activity must implements ProfileGoodAtListener", exception);
         }
     }
 
@@ -163,7 +162,7 @@ public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInt
         SheroesApplication.getAppComponent(getActivity()).inject(this);
         try {
             mBaseResponse = (MyProfileView) getArguments().getParcelable(AppConstants.MODEL_KEY);
-        }catch (ClassCastException ex){
+        } catch (ClassCastException ex) {
             LogUtils.error(TAG, "Error while casting", ex);
         }
         View v = inflater.inflate(R.layout.profile_good_at_fragment, container, false);
@@ -203,34 +202,34 @@ public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInt
             filterList.setName("Popular");
             List<String> jobAtList = new ArrayList<>();
 
-            if(null !=labelValueArrayList) {
+            if (null != labelValueArrayList) {
                 for (int i = 0; i < labelValueArrayList.size(); i++) {
                     String abc = labelValueArrayList.get(i).getLabel();
-                    goodAtId.put(abc,labelValueArrayList.get(i).getValue());
+                    goodAtId.put(abc, labelValueArrayList.get(i).getValue());
                     jobAtList.add(abc);
                 }
             }
             filterList.setBoardingDataList(jobAtList);
-            listFeelter.add(filterList);
+            //    listFeelter.add(filterList);
 
         }
         if (null != getArguments()) {
 
             if (null != getArguments().getStringArray(AppConstants.SKILL_LIST)) {
-                skills =  getArguments().getStringArray(AppConstants.SKILL_LIST);
+                skills = getArguments().getStringArray(AppConstants.SKILL_LIST);
                 String Skillval = "";
                 for (int i = 1; i < skills.length; i++) {
-                    if(StringUtil.isNotNullOrEmptyString(skills[i]))
-                    setSkillValue(skills[i]);
+                    if (StringUtil.isNotNullOrEmptyString(skills[i]))
+                        setSkillValue(skills[i]);
                 }
                 Skillval = Skillval.replaceAll("null", "");
             }
             if (null != getArguments().getLongArray(AppConstants.SKILL_LIST_ID)) {
-                skillsid =getArguments().getLongArray(AppConstants.SKILL_LIST_ID);
+                //   skillsid =getArguments().getLongArray(AppConstants.SKILL_LIST_ID);
                 String Skillval = "";
-                for (int i = 1; i < skillsid.length; i++) {
-                   // setSkillValue(skillDetailsId.get(i).get("skill"));
-                }
+                //   for (int i = 1; i < skillsid.length; i++) {
+                // setSkillValue(skillDetailsId.get(i).get("skill"));
+                //   }
                 Skillval = Skillval.replaceAll("null", "");
             }
             // mEt_create_community_Skills.setText(Skillval);
@@ -257,7 +256,7 @@ public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInt
 
     @OnClick(R.id.tv_skill_submit)
     public void SkillSubmitPress() {
-        List<Long> longList = getExistingSelection();
+      /*  List<Long> longList = getExistingSelection();
         for (int i = 0; i < skillsid.length; i++) {
 
             if (skillsid[i] > 0) {
@@ -276,9 +275,14 @@ public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInt
                 }
             }
 
+        }*/
+        if (StringUtil.isNotEmptyCollection(skillsid)) {
+            mOnBoardingPresenter.getJobAtToPresenter(mAppUtils.boardingJobAtRequestBuilder(new HashSet<Long>(skillsid)));
         }
-        mOnBoardingPresenter.getJobAtToPresenter(mAppUtils.boardingJobAtRequestBuilder(new HashSet<Long>(longList)));
+
+
     }
+
     @OnClick(R.id.tv_selected_skill1)
     void onTag1Click() {
         mSkill1.setText("");
@@ -337,6 +341,7 @@ public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInt
 
 
     }
+
     @NonNull
     private List<Long> getExistingSelection() {
         List<Long> skillsIdList = new ArrayList<>();
@@ -348,11 +353,11 @@ public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInt
         }
         return skillsIdList;
     }
+
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
 
     }
-
 
 
     @Override
@@ -439,24 +444,30 @@ public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInt
     public void SearchClickText() {
 
 
-        ((ProfileActicity)getActivity()).callSearchGoodAtDialog();
+        ((ProfileActicity) getActivity()).callSearchGoodAtDialog();
 
 
     }
 
 
-
     public void setGoodAt(String[] tagsval, long[] tagsid) {
-        skillsid = tagsid;
-        StringBuilder stringBuilder = new StringBuilder();
-        if (tagsval.length > 0) {
+        if (null != tagsid) {
+            for (int i = 0; i < tagsid.length; i++) {
+                if (tagsid[i] != 0) {
+                    skillsid.add(tagsid[i]);
+                }
+            }
 
-            for (int i = 1; i < tagsval.length; i++) {
-                if (StringUtil.isNotNullOrEmptyString(tagsval[i]))
-                    setSkillValue(tagsval[i]);
+            StringBuilder stringBuilder = new StringBuilder();
+            if (tagsval.length > 0) {
+
+                for (int i = 1; i < tagsval.length; i++) {
+                    if (StringUtil.isNotNullOrEmptyString(tagsval[i]))
+                        setSkillValue(tagsval[i]);
+                }
             }
         }
-       // mEtSearchEditTextProfile.setText(stringBuilder.substring(0, stringBuilder.length() - 1));
+        // mEtSearchEditTextProfile.setText(stringBuilder.substring(0, stringBuilder.length() - 1));
     }
 
 
@@ -509,7 +520,7 @@ public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInt
 
             } else {
                 mSkills[mCount] = textView.getText().toString();
-                skillsid[mCount-1]=goodAtId.get(mSkills[mCount]);
+                //skillsid[mCount - 1] = goodAtId.get(mSkills[mCount]);
             }
             if (mCount == 2) {
 
@@ -787,6 +798,7 @@ public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInt
 
     public interface ProfileGoodAtListener {
         void onErrorOccurence();
+
         void onGoodAtBack();
     }
 
