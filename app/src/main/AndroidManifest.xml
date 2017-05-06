@@ -32,13 +32,15 @@
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.OnBoardingActivity"
             android:windowSoftInputMode="stateHidden"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:noHistory="true"/>
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.WelcomeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:clearTaskOnLaunch="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

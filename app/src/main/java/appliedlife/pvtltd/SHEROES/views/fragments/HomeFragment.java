@@ -113,7 +113,7 @@ public class HomeFragment extends BaseFragment {
             public void onHide() {
                 mListLoad = false;
                 ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.GONE);
-               // tvRefresh.setVisibility(View.GONE);
+                // tvRefresh.setVisibility(View.GONE);
             }
 
             @Override
@@ -134,17 +134,26 @@ public class HomeFragment extends BaseFragment {
         });
 
         super.setAllInitializationForFeeds(mFragmentListRefreshData, mPullRefreshList, mAdapter, mLayoutManager, mPageNo, mSwipeView, mLiNoResult, mFeedDetail, mRecyclerView, mPosition, mPressedEmoji, mListLoad, mIsEdit, mHomePresenter, mAppUtils, mProgressBar);
-        if (null == mUserPreference || !StringUtil.isNotNullOrEmptyString(mUserPreference.get().getToken())) {
-            Intent intent = new Intent(getActivity(), LoginActivity.class);
-            startActivity(intent);
-            getActivity().finish();
-        } else {
-            long daysDifference = System.currentTimeMillis() - mUserPreference.get().getTokenTime();
-            if (daysDifference >= AppConstants.SAVED_DAYS_TIME) {
-                mHomePresenter.getAuthTokenRefreshPresenter();
+        if (null == mUserPreference) {
+            Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
+            loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+            startActivity(loginIntent);
+        } else if (null != mUserPreference.get()){
+            if (!StringUtil.isNotNullOrEmptyString(mUserPreference.get().getToken())) {
+                Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
+                loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                startActivity(loginIntent);
             } else {
-                mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
+                long daysDifference = System.currentTimeMillis() - mUserPreference.get().getTokenTime();
+                if (daysDifference >= AppConstants.SAVED_DAYS_TIME) {
+                    mHomePresenter.getAuthTokenRefreshPresenter();
+                } else {
+                    mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
+                }
             }
+        }else
+        {
+            mHomePresenter.getAuthTokenRefreshPresenter();
         }
 
         mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

@@ -122,8 +122,9 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     }
 
     private void openHomeScreen() {
-        Intent homeIntent = new Intent(this, OnBoardingActivity.class);
-        startActivity(homeIntent);
+        Intent boardingIntent = new Intent(this, OnBoardingActivity.class);
+        boardingIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+        startActivity(boardingIntent);
         finish();
     }
 
@@ -199,8 +200,9 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     @OnClick(R.id.tv_other_login_option)
     public void otherLoginOption() {
         Intent loginIntent = new Intent(this, LoginActivity.class);
+        loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(loginIntent);
-        finish();
+        finishAffinity();
     }
 
     private void fbSignIn() {
@@ -431,6 +433,10 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                 showNetworkTimeoutDoalog(true, false, errorMessage);*/
                 break;
         }
+    }
+    @Override
+    public void onBackPressed() {
+     super.onBackPressed();
     }
 
     @Override

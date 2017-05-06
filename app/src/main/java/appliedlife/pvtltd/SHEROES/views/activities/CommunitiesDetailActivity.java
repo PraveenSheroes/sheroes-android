@@ -396,7 +396,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements  CommentR
                 feedDetail.setScreenName(AppConstants.COMMUNITY_DETAIL);
                 showCommunityJoinReason(feedDetail);
             } else {
-                Fragment fragmentCommunityDetail = getSupportFragmentManager().findFragmentByTag(CommunitiesDetailFragment.class.getName());
+                Fragment fragmentCommunityDetail = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
                 if (AppUtils.isFragmentUIActive(fragmentCommunityDetail)) {
                     ((CommunitiesDetailFragment) fragmentCommunityDetail).joinRequestForOpenCommunity(mFeedDetail);
                 }
@@ -592,7 +592,13 @@ public class CommunitiesDetailActivity extends BaseActivity implements  CommentR
                     showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
                     break;
                 default:
-                    showNetworkTimeoutDoalog(true, false, errorReason);
+                    if (AppConstants.BAD_RQUEST.contains(errorReason)) {
+                        showNetworkTimeoutDoalog(true, false, getString(R.string.ID_BAD_RQUEST));
+                    } else if (AppConstants.HTTP_401_UNAUTHORIZED.contains(errorReason)) {
+                        showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_INVALID_USER_PASSWORD));
+                    } else {
+                        showNetworkTimeoutDoalog(true, false, errorReason);
+                    }
             }
         } else {
             showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));

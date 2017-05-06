@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -163,7 +164,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     private ViewPagerAdapter mViewPagerAdapter;
     private MyCommunityInviteMemberFragment myCommunityInviteMemberFragment;
     private BellNotificationFragment bellNotificationFragment;
-    private int backPressClickCount = 1;
+    boolean doubleBackToExitPressedOnce = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -256,6 +257,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     public void logOut() {
         mUserPreference.delete();
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(intent);
     }
 
@@ -726,12 +728,18 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             mFragmentOpen.setBellNotificationFragment(false);
             getSupportFragmentManager().popBackStackImmediate();
         } else {
-            if (backPressClickCount == 0) {
+            if (doubleBackToExitPressedOnce) {
                 finish();
-            } else {
-                backPressClickCount--;
-                Snackbar.make(mCLMainLayout, getString(R.string.ID_BACK_PRESS), Snackbar.LENGTH_SHORT).show();
+                return;
             }
+            doubleBackToExitPressedOnce = true;
+            Snackbar.make(mCLMainLayout, getString(R.string.ID_BACK_PRESS), Snackbar.LENGTH_SHORT).show();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    doubleBackToExitPressedOnce=false;
+                }
+            }, 2000);
         }
     }
 

@@ -13,6 +13,7 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
@@ -40,6 +41,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.presenters.LoginPresenter;
@@ -78,6 +80,8 @@ public class LoginFragment extends BaseFragment implements LoginView {
     ProgressBar mProgressBar;
     @Bind(R.id.login_button)
     LoginButton mFbLogin;
+    @Bind(R.id.email_sign_in_button)
+    Button mEmailSign;
     private LoginActivityIntractionListner mLoginActivityIntractionListner;
     private static final int READ_CONTACTS_PERMISSIONS_REQUEST1 = 1;
     private CallbackManager callbackManager;
@@ -154,6 +158,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
      */
     @Override
     public void getLogInResponse(LoginResponse loginResponse) {
+        mEmailSign.setEnabled(true);
         if (null != loginResponse) {
             if (StringUtil.isNotNullOrEmptyString(loginResponse.getStatus())) {
                 switch (loginResponse.getStatus()) {
@@ -244,11 +249,18 @@ public class LoginFragment extends BaseFragment implements LoginView {
             focusView.requestFocus();
 
         } else {
+            mEmailSign.setEnabled(false);
             LoginRequest loginRequest = AppUtils.loginRequestBuilder();
             loginRequest.setUsername(email);
             loginRequest.setPassword(password);
             mLoginPresenter.getLoginAuthTokeInPresenter(loginRequest, false);
         }
+    }
+
+    @Override
+    public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
+        mEmailSign.setEnabled(true);
+        super.showError(errorMsg, feedParticipationEnum);
     }
 
     // Class for facebook access token and user details

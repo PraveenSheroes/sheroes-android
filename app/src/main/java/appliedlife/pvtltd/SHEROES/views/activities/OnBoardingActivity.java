@@ -150,14 +150,12 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
                 mJobAt.setVisibility(View.GONE);
                 setOnWorkExperienceFragment();
             }*/ else {
-                Intent homeIntent = new Intent(this, HomeActivity.class);
-                startActivity(homeIntent);
-                finish();
+               Intent homeIntent = new Intent(this, HomeActivity.class);
+               startActivity(homeIntent);
             }
         } else {
             Intent homeIntent = new Intent(this, HomeActivity.class);
             startActivity(homeIntent);
-            finish();
         }
     }
 
@@ -322,6 +320,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
                 mHowCanSheroes.setVisibility(View.VISIBLE);
                 mInterest.setVisibility(View.GONE);
                 mJobAt.setVisibility(View.GONE);
+                mFragmentOpen.setLookingForHowCanOpen(true);
                 setHowSheroesHelpFragment();
                 break;
             case CURRENT_STATUS:
@@ -339,7 +338,8 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
 
     @Override
     public void onBackPressed() {
-        switch (position) {
+
+      /*  switch (position) {
             case AppConstants.NO_REACTION_CONSTANT:
                 firstTimeEnter();
                 break;
@@ -355,11 +355,21 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
             case AppConstants.FOURTH_CONSTANT:
                 fifthTimeEnter();
                 break;
+        }*/
+        if (mFragmentOpen.isLookingForHowCanOpen()) {
+            mFragmentOpen.setLookingForHowCanOpen(false);
+            mFlOnBoardingFragment.setVisibility(View.VISIBLE);
+            mHowCanSheroes.setVisibility(View.GONE);
+            getSupportFragmentManager().popBackStack();
+        }else {
+            getSupportFragmentManager().popBackStack();
+            super.onBackPressed();
         }
-        mSelectedTag.clear();
+
+     /*   mSelectedTag.clear();
         mLiStripForAddItem.removeAllViews();
         mLiStripForAddItem.removeAllViewsInLayout();
-        renderSelectedAddedItem(mLiStripForAddItem, mSelectedTag);
+        renderSelectedAddedItem(mLiStripForAddItem, mSelectedTag);*/
     }
 
     private void firstTimeEnter() {
@@ -389,7 +399,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
             mJobAt.setVisibility(View.VISIBLE);
             getSupportFragmentManager().popBackStack();
         } else {
-            finish();
+            super.onBackPressed();
         }
     }
 
@@ -414,7 +424,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
             mJobAt.setVisibility(View.VISIBLE);
             getSupportFragmentManager().popBackStack();
         } else {
-            finish();
+            super.onBackPressed();
         }
     }
 
@@ -433,7 +443,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
             mJobAt.setVisibility(View.VISIBLE);
             getSupportFragmentManager().popBackStack();
         } else {
-            finish();
+            super.onBackPressed();
         }
     }
 
@@ -447,16 +457,16 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
             mInterest.setVisibility(View.GONE);
             getSupportFragmentManager().popBackStack();
         } else {
-            finish();
+            super.onBackPressed();
         }
     }
 
     private void fifthTimeEnter() {
         if (mFragmentOpen.isInterestOpen()) {
             mFragmentOpen.setInterestOpen(false);
-            finish();
+            super.onBackPressed();
         } else {
-            finish();
+            super.onBackPressed();
         }
     }
 
@@ -465,7 +475,6 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
        // LoginResponse loginResponse = userPreference.get();
        // loginResponse.setNextScreen(AppConstants.CURRENT_STATUS_SCREEN);
        // userPreference.set(loginResponse);
-        mFragmentOpen.setLookingForHowCanOpen(true);
         mFlOnBoardingFragment.setVisibility(View.GONE);
         OnBoardingHowCanSheroesHelpYouFragment onBoardingHowCanSheroesHelpYouFragment = new OnBoardingHowCanSheroesHelpYouFragment();
         Bundle bundle = new Bundle();
@@ -526,9 +535,8 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
         loginResponse.setNextScreen(AppConstants.FEED_SCREEN);
         userPreference.set(loginResponse);
         Intent homeIntent = new Intent(this, HomeActivity.class);
+        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(homeIntent);
-        finish();
-
       /*  if (StringUtil.isNotEmptyCollection(mSelectedTag)) {
             boolean flag = false;
             for (LabelValue labelValue : mSelectedTag) {

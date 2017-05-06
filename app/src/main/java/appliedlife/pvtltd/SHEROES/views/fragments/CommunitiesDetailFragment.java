@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -108,22 +109,22 @@ public class CommunitiesDetailFragment extends BaseFragment {
             mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager, mFragmentListRefreshData) {
                 @Override
                 public void onHide() {
-                  /*  if ((boolean) mTvJoinView.getTag()) {
+                    if ((boolean) mTvJoinView.getTag()) {
                         if (mTvJoinView.getVisibility() == View.GONE) {
                             mTvJoinView.setVisibility(View.VISIBLE);
                             mTvJoinView.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
                         }
-                    }*/
+                    }
                 }
 
                 @Override
                 public void onShow() {
-                   /* if ((boolean) mTvJoinView.getTag()) {
+                    if ((boolean) mTvJoinView.getTag()) {
                         if (mTvJoinView.getVisibility() == View.VISIBLE) {
                             mTvJoinView.setVisibility(View.GONE);
                             mTvJoinView.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
                         }
-                    }*/
+                    }
                 }
 
                 @Override
@@ -172,7 +173,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
             switch (communityEnum) {
                 case SEARCH_COMMUNITY:
                     mScreenName = AppConstants.ALL_SEARCH;
-                    if (!feedDetail.isMember() && !feedDetail.isOwner() && !feedDetail.isRequestPending()) {
+                    if (!feedDetail.isMember() && !feedDetail.isOwner() && !feedDetail.isRequestPending()&&feedDetail.isFeatured()) {
                         mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.footer_icon_text));
                         mTvJoinView.setText(getString(R.string.ID_JOIN));
                         mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
@@ -185,7 +186,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
                 case FEATURE_COMMUNITY:
                     ((CommunitiesDetailActivity) getActivity()).ivFabPostCommunity.setVisibility(View.INVISIBLE);
                     mScreenName = AppConstants.FEATURE_FRAGMENT;
-                    if (!feedDetail.isMember() && !feedDetail.isOwner() && !feedDetail.isRequestPending()) {
+                    if (!feedDetail.isMember() && !feedDetail.isOwner() && !feedDetail.isRequestPending()&&feedDetail.isFeatured()) {
                         mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.footer_icon_text));
                         mTvJoinView.setText(getString(R.string.ID_JOIN));
                         mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
@@ -197,6 +198,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
                     break;
                 case MY_COMMUNITY:
                     ((CommunitiesDetailActivity) getActivity()).ivFabPostCommunity.setVisibility(View.VISIBLE);
+                    mTvJoinView.setVisibility(View.GONE);
                     mScreenName = AppConstants.MY_COMMUNITIES_FRAGMENT;
                     mTvJoinView.setTag(false);
                     break;
@@ -292,7 +294,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
                         mTvJoinView.setText(getContext().getString(R.string.ID_REQUESTED));
                         mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_community_requested);
                     } else {
-                        mFeedDetail.setOwner(true);
+                        swipeToRefreshList();
                         mFeedDetail.setMember(true);
                         mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
                         mTvJoinView.setText(getContext().getString(R.string.ID_JOINED));
