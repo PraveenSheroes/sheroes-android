@@ -74,7 +74,9 @@ public class CommunitiesDetailFragment extends BaseFragment {
     private boolean mIsEdit = false;
     private CommunityEnum communityEnum = null;
     private String mScreenName;
-    private  int positionOfFeedDetail;
+    private int positionOfFeedDetail;
+    private String mPressedButtonName;
+
     public static CommunitiesDetailFragment createInstance(FeedDetail feedDetail, CommunityEnum communityEnum) {
         CommunitiesDetailFragment communitiesDetailFragment = new CommunitiesDetailFragment();
         Bundle bundle = new Bundle();
@@ -97,7 +99,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
             mTvJoinView.setEnabled(true);
             mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.USER_COMMUNITY_POST_FRAGMENT, mFeedDetail.getIdOfEntityOrParticipant());
             mFragmentListRefreshData.setCommunityId(mFeedDetail.getIdOfEntityOrParticipant());
-            positionOfFeedDetail=mFeedDetail.getItemPosition();
+            positionOfFeedDetail = mFeedDetail.getItemPosition();
             mPullRefreshList = new SwipPullRefreshList();
             mPullRefreshList.setPullToRefresh(false);
             mHomePresenter.attachView(this);
@@ -153,7 +155,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
     }
 
     private void swipeToRefreshList() {
-        setListLoadFlag(false);
+        setProgressBar(mProgressBar);
         mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
         mPullRefreshList = new SwipPullRefreshList();
         setRefreshList(mPullRefreshList);
@@ -173,7 +175,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
             switch (communityEnum) {
                 case SEARCH_COMMUNITY:
                     mScreenName = AppConstants.ALL_SEARCH;
-                    if (!feedDetail.isMember() && !feedDetail.isOwner() && !feedDetail.isRequestPending()&&feedDetail.isFeatured()) {
+                    if (!feedDetail.isMember() && !feedDetail.isOwner() && !feedDetail.isRequestPending() && feedDetail.isFeatured()) {
                         mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.footer_icon_text));
                         mTvJoinView.setText(getString(R.string.ID_JOIN));
                         mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
@@ -186,7 +188,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
                 case FEATURE_COMMUNITY:
                     ((CommunitiesDetailActivity) getActivity()).ivFabPostCommunity.setVisibility(View.INVISIBLE);
                     mScreenName = AppConstants.FEATURE_FRAGMENT;
-                    if (!feedDetail.isMember() && !feedDetail.isOwner() && !feedDetail.isRequestPending()&&feedDetail.isFeatured()) {
+                    if (!feedDetail.isMember() && !feedDetail.isOwner() && !feedDetail.isRequestPending() && feedDetail.isFeatured()) {
                         mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.footer_icon_text));
                         mTvJoinView.setText(getString(R.string.ID_JOIN));
                         mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
@@ -218,8 +220,9 @@ public class CommunitiesDetailFragment extends BaseFragment {
             if (StringUtil.isNotNullOrEmptyString(mFragmentListRefreshData.getSearchStringName()) && mFragmentListRefreshData.getSearchStringName().equalsIgnoreCase(AppConstants.COMMUNITIES_DETAIL)) {
                 mFeedDetail = feedDetailList.get(0);
                 mFeedDetail.setItemPosition(positionOfFeedDetail);
+                mProgressBar.setVisibility(View.VISIBLE);
                 ((CommunitiesDetailActivity) getActivity()).initializeUiContent(mFeedDetail);
-                 updateUiAccordingToFeedDetail(mFeedDetail);
+                updateUiAccordingToFeedDetail(mFeedDetail);
                 mFragmentListRefreshData.setSearchStringName(AppConstants.EMPTY_STRING);
             } else {
                 if (mPageNo == AppConstants.ONE_CONSTANT) {
@@ -268,20 +271,25 @@ public class CommunitiesDetailFragment extends BaseFragment {
         mHomePresenter.detachView();
     }
 
-    public void joinRequestForOpenCommunity(FeedDetail feedDetail) {
+    public void joinRequestForOpenCommunity(FeedDetail feedDetail, String pressedButton) {
+        mPressedButtonName = pressedButton;
         super.joinRequestForOpenCommunity(feedDetail);
     }
 
     @Override
     public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
-        super.getSuccessForAllResponse(baseResponse, feedParticipationEnum);
-        switch (feedParticipationEnum) {
-            case JOIN_INVITE:
-                joinSuccessFailed(baseResponse);
-                break;
-            default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
+        if (mPressedButtonName.equalsIgnoreCase(getString(R.string.ID_JOIN))) {
+            switch (feedParticipationEnum) {
+                case JOIN_INVITE:
+                    joinSuccessFailed(baseResponse);
+                    break;
+                default:
+                    LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
+            }
+        } else {
+            super.getSuccessForAllResponse(baseResponse, feedParticipationEnum);
         }
+
     }
 
     public void joinSuccessFailed(BaseResponse baseResponse) {
@@ -294,11 +302,11 @@ public class CommunitiesDetailFragment extends BaseFragment {
                         mTvJoinView.setText(getContext().getString(R.string.ID_REQUESTED));
                         mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_community_requested);
                     } else {
-                        swipeToRefreshList();
                         mFeedDetail.setMember(true);
                         mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
                         mTvJoinView.setText(getContext().getString(R.string.ID_JOINED));
                         mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
+                        updateUiAccordingToFeedDetail(mFeedDetail);
                     }
                     break;
                 case AppConstants.FAILED:

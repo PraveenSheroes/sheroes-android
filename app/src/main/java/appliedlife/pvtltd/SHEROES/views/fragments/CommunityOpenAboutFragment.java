@@ -503,7 +503,7 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
                 mTvJoinInviteView.setTextColor(ContextCompat.getColor(getContext(), R.color.footer_icon_text));
                 mTvJoinInviteView.setText(getString(R.string.ID_JOIN));
                 mTvJoinInviteView.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
-                ((CommunitiesDetailActivity) getActivity()).onLeaveClick();
+                ((CommunitiesDetailActivity) getActivity()).onLeaveClick(CommunityEnum.FEATURE_COMMUNITY);
                 break;
             case AppConstants.FAILED:
                 mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(memberListResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);

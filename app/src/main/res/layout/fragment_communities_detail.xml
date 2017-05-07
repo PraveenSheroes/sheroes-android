@@ -13,7 +13,7 @@
             android:id="@+id/rv_communities_detail_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:divider="#00000000" />
+            android:divider="@color/fully_transparent" />
     </android.support.v4.widget.SwipeRefreshLayout>
     <ProgressBar
         android:id="@+id/pb_communities_progress_bar"

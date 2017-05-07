@@ -167,7 +167,6 @@ public class CommunitiesDetailActivity extends BaseActivity implements  CommentR
         mCollapsingToolbarLayout.setSubtitle(AppConstants.SPACE);
         mTvCommunityDetailTitle.setText(feedDetail.getNameOrTitle());
         mTvCommunityDetailSubTitle.setText(feedDetail.getCommunityType());
-
         if (StringUtil.isNotNullOrEmptyString(feedDetail.getImageUrl())) {
             Glide.with(this)
                     .load(feedDetail.getImageUrl()).asBitmap()
@@ -284,6 +283,9 @@ public class CommunitiesDetailActivity extends BaseActivity implements  CommentR
         setAllValues(mFragmentOpen);
         super.feedCardsHandled(view, baseResponse);
         switch (id) {
+            case R.id.tv_join_view_holder:
+               inviteJoinEventClick(getString(R.string.ID_JOIN), feedDetail);
+                    break;
             case R.id.card_community_detail:
                 communityOpenAboutFragment(feedDetail);
                 break;
@@ -368,11 +370,9 @@ public class CommunitiesDetailActivity extends BaseActivity implements  CommentR
     }
 
     private void callCommunityAproveMemberFragment(long userId, long communityId, int position) {
-
         if (null != communityRequestedFragment) {
             communityRequestedFragment.approvePandingRequest(userId, communityId, position);
         }
-
     }
 
 
@@ -398,7 +398,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements  CommentR
             } else {
                 Fragment fragmentCommunityDetail = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
                 if (AppUtils.isFragmentUIActive(fragmentCommunityDetail)) {
-                    ((CommunitiesDetailFragment) fragmentCommunityDetail).joinRequestForOpenCommunity(mFeedDetail);
+                    ((CommunitiesDetailFragment) fragmentCommunityDetail).joinRequestForOpenCommunity(mFeedDetail,pressedEventName);
                 }
             }
         } else if (pressedEventName.equalsIgnoreCase(getString(R.string.ID_INVITE))) {
@@ -568,7 +568,8 @@ public class CommunitiesDetailActivity extends BaseActivity implements  CommentR
 
     }
 
-    public void onLeaveClick() {
+    public void onLeaveClick(CommunityEnum communityEnum) {
+       this.communityEnum=communityEnum;
         onBackClick();
     }
 

@@ -20,7 +20,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import butterknife.Bind;
@@ -70,7 +69,7 @@ public class CommunityCardDetailHeader extends BaseViewHolder<FeedDetail> {
         if (StringUtil.isNotNullOrEmptyString(dataItem.getCommunityType())) {
             tvCommunityRelated.setText(dataItem.getCommunityType());
         }
-        if (StringUtil.isNotNullOrEmptyString(dataItem.getScreenName())) {
+      /*  if (StringUtil.isNotNullOrEmptyString(dataItem.getScreenName())) {
             switch (dataItem.getScreenName()) {
                 case AppConstants.ALL_SEARCH:
                     if (!dataItem.isMember() && !dataItem.isOwner() && !dataItem.isRequestPending()) {
@@ -81,7 +80,7 @@ public class CommunityCardDetailHeader extends BaseViewHolder<FeedDetail> {
                         tvJoin.setVisibility(View.GONE);
                     }
                     break;
-                case  AppConstants.FEATURE_FRAGMENT:
+                case AppConstants.FEATURE_FRAGMENT:
                     if (!dataItem.isMember() && !dataItem.isOwner() && !dataItem.isRequestPending()) {
                         tvJoin.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
                         tvJoin.setText(mContext.getString(R.string.ID_JOIN));
@@ -96,8 +95,15 @@ public class CommunityCardDetailHeader extends BaseViewHolder<FeedDetail> {
                 default:
                     LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + dataItem.getScreenName());
             }
+        }*/
+        if (!dataItem.isMember() && !dataItem.isOwner() && !dataItem.isRequestPending()&&dataItem.isFeatured()) {
+            tvJoin.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
+            tvJoin.setText(mContext.getString(R.string.ID_JOIN));
+            tvJoin.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
+            tvJoin.setVisibility(View.VISIBLE);
+        } else {
+            tvJoin.setVisibility(View.GONE);
         }
-
     }
 
     @OnClick(R.id.card_community_detail)
@@ -115,6 +121,7 @@ public class CommunityCardDetailHeader extends BaseViewHolder<FeedDetail> {
     public void onClick(View view) {
 
     }
+
     public static class CircleTransform extends BitmapTransformation {
         public CircleTransform(Context context) {
             super(context);
@@ -153,5 +160,10 @@ public class CommunityCardDetailHeader extends BaseViewHolder<FeedDetail> {
         public String getId() {
             return getClass().getName();
         }
+    }
+
+    @OnClick(R.id.tv_join_view_holder)
+    public void onJoinButtonClick() {
+        viewInterface.handleOnClick(dataItem, tvJoin);
     }
 }
