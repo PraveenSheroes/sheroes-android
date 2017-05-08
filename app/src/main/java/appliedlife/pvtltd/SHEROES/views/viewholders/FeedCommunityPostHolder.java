@@ -269,8 +269,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void allTextViewStringOperations(Context context) {
-        tvFeedCommunityPostTextFullView.setVisibility(View.GONE);
-        tvFeedCommunityPostText.setVisibility(View.VISIBLE);
         if (StringUtil.isNotNullOrEmptyString(dataItem.getAuthorName())) {
             //  String posted=LEFT_POSTED +  mContext.getString(R.string.ID_POSTED_IN) + RIGHT_POSTED;
             StringBuilder posted = new StringBuilder();
@@ -298,6 +296,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         }
         mViewMoreDescription = dataItem.getListDescription();
         if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
+            tvFeedCommunityPostTextFullView.setVisibility(View.GONE);
+            tvFeedCommunityPostText.setVisibility(View.VISIBLE);
             if (mViewMoreDescription.length() > AppConstants.WORD_LENGTH) {
                 tvFeedCommunityPostViewMore.setVisibility(View.VISIBLE);
                 tvFeedCommunityPostText.setEnabled(true);
@@ -323,6 +323,11 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                     tvFeedCommunityPostText.setText(Html.fromHtml(mViewMoreDescription));
                 }
             }
+        }else
+        {
+            tvFeedCommunityPostTextFullView.setVisibility(View.GONE);
+            tvFeedCommunityPostText.setVisibility(View.GONE);
+            tvFeedCommunityPostViewMore.setVisibility(View.GONE);
         }
         if (dataItem.getNoOfLikes() < AppConstants.ONE_CONSTANT && dataItem.getNoOfComments() < AppConstants.ONE_CONSTANT) {
             tvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
