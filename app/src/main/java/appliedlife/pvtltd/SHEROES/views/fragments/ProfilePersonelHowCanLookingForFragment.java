@@ -77,6 +77,8 @@ public class ProfilePersonelHowCanLookingForFragment extends BaseFragment implem
     Preference<MasterDataResponse> mUserPreferenceMasterData;
     @Bind(R.id.tv_about_me_tittle)
     TextView mCollapeTitleTxt;
+    @Bind(R.id.tv_save_looking_for_details)
+    TextView mTvSaveLookingForDetail;
     @Bind(R.id.al_community_open_about)
     AppBarLayout mAppBarLayout;
     @Override
@@ -226,6 +228,13 @@ public class ProfilePersonelHowCanLookingForFragment extends BaseFragment implem
                 row = cloumnViewTwo(liRow, row, column, labelValues);
                 liStripForAddItem.addView(liRow);
             }
+        }
+        if(StringUtil.isNotEmptyCollection(mSelectedTag))
+        {
+            mTvSaveLookingForDetail.setVisibility(View.VISIBLE);
+        }else
+        {
+            mTvSaveLookingForDetail.setVisibility(View.GONE);
         }
     }
 

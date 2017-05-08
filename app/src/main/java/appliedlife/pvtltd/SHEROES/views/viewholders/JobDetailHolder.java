@@ -115,17 +115,25 @@ public class JobDetailHolder extends BaseViewHolder<JobDetailPojo> {
             mTvJobEndDate.setVisibility(View.GONE);
         }
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getAuthorCityName())) {
-            mTvJobLocation.setText(mFeedDetail.getAuthorCityName());
+            StringBuilder stringBuilder=new StringBuilder();
+            stringBuilder.append(mFeedDetail.getAuthorCityName()).append(AppConstants.COMMA).append(AppConstants.COUNTRY_NAME);
+            mTvJobLocation.setText(stringBuilder.toString());
         } else {
             mTvJobLocation.setText(mContext.getString(R.string.ID_REMOTE));
         }
         if (mFeedDetail.getCompensationFrom() > 0 && mFeedDetail.getCompensationTo() > 0) {
             StringBuilder jobPackage = new StringBuilder();
-            jobPackage.append(mFeedDetail.getCompensationCurrency()).append(mFeedDetail.getCompensationFrom()).append(AppConstants.DASH).append(mFeedDetail.getCompensationTo());
+            if(StringUtil.isNotNullOrEmptyString(mFeedDetail.getCompensationCurrency())) {
+                jobPackage.append(mFeedDetail.getCompensationCurrency()).append(mFeedDetail.getCompensationFrom()).append(AppConstants.DASH).append(mFeedDetail.getCompensationTo());
+            }
+            else
+            {
+                jobPackage.append(mFeedDetail.getCompensationFrom()).append(AppConstants.DASH).append(mFeedDetail.getCompensationTo());
+            }
             if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getCompensationDetails())) {
-                jobPackage.append(mFeedDetail.getCompensationDetails());
+                jobPackage.append(AppConstants.SPACE).append(mFeedDetail.getCompensationDetails());
             } else {
-                jobPackage.append(AppConstants.PER_ANUM);
+                jobPackage.append(AppConstants.SPACE).append(AppConstants.PER_ANUM);
             }
             mTvJobPackage.setText(jobPackage.toString());
         }

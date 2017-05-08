@@ -51,10 +51,7 @@ import butterknife.OnTouch;
  */
 
 public class ProfileAboutMeFragment extends BaseFragment implements ProfileView {
-
     private final String TAG = LogUtils.makeLogTag(ProfessionalEditBasicDetailsFragment.class);
-    private final String SCREEN_NAME = "Profile_About_Me_screen";
-
     @Inject
     ProfilePersenter mProfilePresenter;
     @Bind(R.id.et_write_about_me)
@@ -269,6 +266,7 @@ public class ProfileAboutMeFragment extends BaseFragment implements ProfileView 
     public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
         int toastDuration;
         if (boardingDataResponse.getStatus().equals(AppConstants.SUCCESS)) {
+            AppUtils.hideKeyboard(mEtWriteAboutMe, TAG);
             toastDuration = Toast.LENGTH_SHORT;
             profileAboutMeFragmentListener.aboutMeBack();
         } else {

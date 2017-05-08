@@ -12,11 +12,8 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
@@ -115,8 +112,6 @@ import butterknife.OnClick;
 public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragment.ProfileGoodAtListener, ProfileView, BaseHolderInterface, AppBarLayout.OnOffsetChangedListener, ProfileTravelClientFragment.ProfileTravelClientFragmentListener, ProfileCityWorkFragment.ProfileWorkLocationFragmentListener, ProfileAboutMeFragment.ProfileAboutMeFragmentListener, ProfileOpportunityTypeFragment.ProfileOpportunityTypeListiner, ProfileShareYourIntrestFragment.MyProfileyYourInterestListener,
         ProfessionalEditBasicDetailsFragment.EditProfileCallable, ProfileOpportunityTypeFragment.OppertunitiesCallback, ProfileAddEditEducationFragment.ProfileEducationListener {
     private final String TAG = LogUtils.makeLogTag(ProfileActicity.class);
-    private static final String EXTRA_IMAGE = "extraImage";
-    private static final String DECRIPTION = "desc";
     @Bind(R.id.iv_profile_full_view_icon)
     RoundedImageView mProfileIcon;
     @Bind(R.id.app_bar_profile)
@@ -166,16 +161,15 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
 
     public static void navigate(AppCompatActivity activity, View transitionImage, String profile) {
         Intent intent = new Intent(activity, ProfileActicity.class);
-        intent.putExtra(EXTRA_IMAGE, profile);
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, transitionImage, EXTRA_IMAGE);
-        ActivityCompat.startActivity(activity, intent, options.toBundle());
+        intent.putExtra(AppConstants.EXTRA_IMAGE, profile);
+      //  ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, transitionImage, EXTRA_IMAGE);
+      //  ActivityCompat.startActivity(activity, intent, options.toBundle());
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
-        initActivityTransitions();
         setContentView(R.layout.activity_profile);
         ButterKnife.bind(this);
         mFragmentOpen = new FragmentOpen();
@@ -183,7 +177,7 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
         setAllValues(mFragmentOpen);
         setPagerAndLayouts();
         setprogressbar();
-
+      //  initActivityTransitions();
     }
 
     private void setName() {
@@ -222,6 +216,7 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
             updateProffesstionalWorkExpListItem();
         } else {
             super.onBackPressed();
+            overridePendingTransition(R.anim.fade_in_dialog, R.anim.fade_out_dialog);
         }
     }
 
@@ -263,13 +258,12 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
     }
 
     private void setPagerAndLayouts() {
-        ViewCompat.setTransitionName(mAppBarLayout, EXTRA_IMAGE);
-        supportPostponeEnterTransition();
+      //  ViewCompat.setTransitionName(mAppBarLayout, EXTRA_IMAGE);
+      //  supportPostponeEnterTransition();
         setSupportActionBar(mToolbar);
 
         mCollapsingToolbarLayout.setTitle(AppConstants.SPACE);
         mCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
-
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         viewPagerAdapter.addFragment(PersonalProfileFragment.getInstance(), getString(R.string.ID_PERSONAL));
         viewPagerAdapter.addFragment(ProffestionalProfileFragment.getInstance(), getString(R.string.ID_PROFESSIONAL));

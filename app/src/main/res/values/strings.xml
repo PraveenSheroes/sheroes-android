@@ -624,7 +624,7 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_DATE_START_HINT">MM YYYY</string>
 
 
-
+    <string name="ID_CURRENTLY_WORK_EXP">Currently Working</string>
     <string name="ID_SELF_EMP_TITTLE">Currently Studying</string>
     <string name="ID_SELF_EMP_DESCRIPTION_HINT">DESCRIPTION OF YOUR WORK</string>
     <string name="ID_SCHOOL_DESCRIPTION_HINT">DESCRIPTION</string>

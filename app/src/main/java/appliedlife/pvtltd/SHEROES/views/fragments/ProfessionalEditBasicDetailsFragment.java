@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -244,10 +243,13 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment implement
         if (StringUtil.isNotNullOrEmptyString(""+mCurrentSectorId)) {
             professionalBasicDetailsRequest.setSectorId(mCurrentSectorId);
         }
-        if (StringUtil.isNotNullOrEmptyString(""+mMonthValue)) {
-            professionalBasicDetailsRequest.setTotalExpMonth(mMonthValue);
-        }if (StringUtil.isNotNullOrEmptyString(""+mYearValue)) {
-        professionalBasicDetailsRequest.setTotalExpYear(mYearValue);
+        if (StringUtil.isNotNullOrEmptyString(mEtMonth.getText().toString())) {
+            int month=Integer.parseInt(mEtMonth.getText().toString());
+            professionalBasicDetailsRequest.setTotalExpMonth(month);
+        }
+        if (StringUtil.isNotNullOrEmptyString(mEtYear.getText().toString())) {
+            int year=Integer.parseInt(mEtYear.getText().toString());
+        professionalBasicDetailsRequest.setTotalExpYear(year);
         }
         mprofilePersenter.getProfessionalBasicDetailsAuthTokeInPresenter(professionalBasicDetailsRequest);
     }

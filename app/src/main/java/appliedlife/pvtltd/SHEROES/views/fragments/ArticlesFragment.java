@@ -67,6 +67,7 @@ public class ArticlesFragment extends BaseFragment {
     ProgressBar mProgressBarFirstLoad;
     private List<Long> categoryIdList = new ArrayList<>();
     View view;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -137,7 +138,7 @@ public class ArticlesFragment extends BaseFragment {
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
         List<FeedDetail> feedDetailList;
-        List<FeedDetail>newFeedDetailList=new ArrayList<>();
+        List<FeedDetail> newFeedDetailList = new ArrayList<>();
         boolean isTrendingData = false;
         if (null != feedResponsePojo && StringUtil.isNotEmptyCollection(feedResponsePojo.getFeaturedDocs())) {
             feedDetailList = feedResponsePojo.getFeaturedDocs();
@@ -155,7 +156,29 @@ public class ArticlesFragment extends BaseFragment {
                     feedDetail.setTrending(true);
                     mTrendingFeedDetail.add(feedDetail);
                 }
-                mPullRefreshList.allListData(mTrendingFeedDetail);
+                List<FeedDetail> trendingWithNormalArticleList = new ArrayList<>();
+                List<FeedDetail> normalArticleList = feedResponsePojo.getFeedDetails();
+                if (StringUtil.isNotEmptyCollection(normalArticleList)) {
+                    trendingWithNormalArticleList.addAll(normalArticleList);
+                    if (StringUtil.isNotEmptyCollection(mTrendingFeedDetail)) {
+                        for (FeedDetail normalArticle : normalArticleList) {
+                            for (FeedDetail trendingFeedDetail : mTrendingFeedDetail) {
+                                if (normalArticle.getEntityOrParticipantId() == trendingFeedDetail.getEntityOrParticipantId()) {
+                                    trendingWithNormalArticleList.remove(normalArticle);
+                                }
+                            }
+                        }
+                    }
+                }
+                mPullRefreshList.allListData(trendingWithNormalArticleList);
+                mFragmentListRefreshData.setPageNo(++mPageNo);
+                mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
+                mAdapter.notifyDataSetChanged();
+                if (!mPullRefreshList.isPullToRefresh()) {
+                    mLayoutManager.scrollToPositionWithOffset(mPullRefreshList.getFeedResponses().size() - trendingWithNormalArticleList.size(), 0);
+                } else {
+                    mLayoutManager.scrollToPositionWithOffset(0, 0);
+                }
 
             } else {
                 if (StringUtil.isNotEmptyCollection(mTrendingFeedDetail)) {
@@ -168,14 +191,14 @@ public class ArticlesFragment extends BaseFragment {
                     }
                 }
                 mPullRefreshList.allListData(newFeedDetailList);
-            }
-            mFragmentListRefreshData.setPageNo(++mPageNo);
-            mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
-            mAdapter.notifyDataSetChanged();
-            if (!mPullRefreshList.isPullToRefresh()) {
-                mLayoutManager.scrollToPositionWithOffset(mPullRefreshList.getFeedResponses().size() - newFeedDetailList.size(), 0);
-            } else {
-                mLayoutManager.scrollToPositionWithOffset(0, 0);
+                mFragmentListRefreshData.setPageNo(++mPageNo);
+                mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
+                mAdapter.notifyDataSetChanged();
+                if (!mPullRefreshList.isPullToRefresh()) {
+                    mLayoutManager.scrollToPositionWithOffset(mPullRefreshList.getFeedResponses().size() - newFeedDetailList.size(), 0);
+                } else {
+                    mLayoutManager.scrollToPositionWithOffset(0, 0);
+                }
             }
         } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
             mLiNoResult.setVisibility(View.VISIBLE);

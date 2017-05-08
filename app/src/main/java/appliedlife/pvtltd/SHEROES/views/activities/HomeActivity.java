@@ -310,7 +310,11 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             }
             switch (drawerItem) {
                 case AppConstants.ONE_CONSTANT:
-                    ProfileActicity.navigate(this, view, profile);
+                 //   ProfileActicity.navigate(this, view, profile);
+                    Intent intent = new Intent(this, ProfileActicity.class);
+                    intent.putExtra(AppConstants.EXTRA_IMAGE, profile);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.fade_in_dialog, R.anim.fade_out_dialog);
                     break;
                 case AppConstants.TWO_CONSTANT:
                     checkForAllOpenFragments();

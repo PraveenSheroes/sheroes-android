@@ -150,7 +150,9 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
             tvFeedJobName.setText(mergeJobSkills);
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getAuthorCityName())) {
-            tvFeedJobLocation.setText(dataItem.getAuthorCityName());
+            StringBuilder stringBuilder=new StringBuilder();
+            stringBuilder.append(dataItem.getAuthorCityName()).append(AppConstants.COMMA).append(AppConstants.COUNTRY_NAME);
+            tvFeedJobLocation.setText(stringBuilder.toString());
         }else
         {
             tvFeedJobLocation.setText(mContext.getString(R.string.ID_REMOTE));

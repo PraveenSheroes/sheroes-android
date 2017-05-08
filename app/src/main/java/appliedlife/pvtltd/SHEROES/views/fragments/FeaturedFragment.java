@@ -148,6 +148,10 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
             } else {
                 mLayoutManager.scrollToPositionWithOffset(0, 0);
             }
+            if(feedDetailList.size()<3)
+            {
+                ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.INVISIBLE);
+            }
         } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
             mLiNoResult.setVisibility(View.VISIBLE);
         }

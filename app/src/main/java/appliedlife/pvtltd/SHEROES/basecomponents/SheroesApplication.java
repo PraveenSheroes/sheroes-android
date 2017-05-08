@@ -3,10 +3,13 @@ package appliedlife.pvtltd.SHEROES.basecomponents;
 import android.content.Context;
 import android.support.multidex.MultiDexApplication;
 
+import com.crashlytics.android.Crashlytics;
+
 import java.io.File;
 
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by Praveen Singh on 29/12/2016.
@@ -35,7 +38,7 @@ public class SheroesApplication extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-       // Fabric.with(this, new Crashlytics());
+        Fabric.with(this, new Crashlytics());
         mContext = this;
         File cacheFile = new File(getCacheDir(), "responses");
         mSheroesAppComponent = DaggerSheroesAppComponent.builder().sheroesAppModule(new SheroesAppModule(cacheFile,this)).build();

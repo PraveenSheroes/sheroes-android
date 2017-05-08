@@ -35,12 +35,14 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:drawableRight="@drawable/ic_add_icon_grey"
-                android:padding="@dimen/dp_size_3" />
+                android:padding="@dimen/dp_size_10" />
 
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/rl_education_view_more"
             android:layout_width="match_parent"
+            android:visibility="gone"
             android:layout_height="wrap_content">
 
             <TextView

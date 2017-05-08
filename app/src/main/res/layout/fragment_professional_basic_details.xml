@@ -54,7 +54,7 @@
                     android:focusable="false"
                     android:imeOptions="actionUnspecified"
                     android:hint="@string/ID_CURRENT_STATUS"
-                    android:textColor="@color/count_char_text_color"
+                    android:textColor="@color/text_color_contactdetails_page"
                     android:textColorHint="@color/blue"
                     android:textSize="@dimen/sp_size_13" />
 
@@ -79,7 +79,7 @@
                     android:focusable="false"
                     android:imeOptions="actionUnspecified"
                     android:hint="@string/ID_SELF_EMP_SECTOR_HINT"
-                    android:textColor="@color/count_char_text_color"
+                    android:textColor="@color/text_color_contactdetails_page"
                     android:textColorHint="@color/blue"
                     android:textSize="@dimen/sp_size_13" />
 

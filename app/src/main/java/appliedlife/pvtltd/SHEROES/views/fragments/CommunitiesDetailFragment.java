@@ -278,7 +278,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
 
     @Override
     public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
-        if (mPressedButtonName.equalsIgnoreCase(getString(R.string.ID_JOIN))) {
+        if (StringUtil.isNotNullOrEmptyString(mPressedButtonName)&&mPressedButtonName.equalsIgnoreCase(getString(R.string.ID_JOIN))) {
             switch (feedParticipationEnum) {
                 case JOIN_INVITE:
                     joinSuccessFailed(baseResponse);
