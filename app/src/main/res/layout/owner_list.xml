@@ -47,7 +47,7 @@
         android:textSize="@dimen/sp_size_12"
         android:textColor="@color/black"
         android:background="@drawable/select_purpose_btn_shap"
-        android:text="@string/add" />
+        android:text="@string/ID_ADD_HERE" />
 
     <View
         android:layout_width="fill_parent"

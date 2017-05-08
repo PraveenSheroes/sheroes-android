@@ -457,12 +457,10 @@ public class RangeSeekBar<T extends Number> extends ImageView {
         paint.setAntiAlias(true);
 
         // draw min and max labels
-        String minLabel = getContext().getString(R.string.ID_MIN_LEBEL);
-        String maxLabel = getContext().getString(R.string.ID_MAX_LABEL);
-        float minMaxLabelSize = Math.max(paint.measureText(minLabel), paint.measureText(maxLabel));
+        float minMaxLabelSize = Math.max(paint.measureText(AppConstants.EMPTY_STRING), paint.measureText(AppConstants.EMPTY_STRING));
         float minMaxHeight = mTextOffset + thumbHalfHeight + mTextSize / 3;
-        canvas.drawText(minLabel, 0, minMaxHeight, paint);
-        canvas.drawText(maxLabel, getWidth() - minMaxLabelSize, minMaxHeight, paint);
+        canvas.drawText(AppConstants.EMPTY_STRING, 0, minMaxHeight, paint);
+        canvas.drawText(AppConstants.EMPTY_STRING, getWidth() - minMaxLabelSize, minMaxHeight, paint);
         padding = INITIAL_PADDING + minMaxLabelSize + thumbHalfWidth;
 
         // draw seek bar background line

@@ -41,7 +41,7 @@
         android:layout_centerVertical="true"
         android:gravity="center"
         android:textAllCaps="true"
-        android:text="@string/ID_ADD"
+        android:text="@string/ID_ADD_HERE"
         android:textSize="@dimen/sp_size_11"
         android:textColor="@color/blue"
         android:background="@drawable/select_purpose_btn_shap"

@@ -37,7 +37,7 @@
             android:layout_alignParentRight="true"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:layout_centerVertical="true"
-            android:text="@string/add"
+            android:text="@string/ID_ADD_HERE"
             android:background="@drawable/select_purpose_btn_shap"
             android:layout_marginRight="@dimen/dp_size_10"/>
     <View

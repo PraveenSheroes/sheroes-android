@@ -72,7 +72,7 @@ public class UserHolder extends BaseViewHolder<FeedDetail> {
         {
             mTvownerclose.setBackgroundResource(R.drawable.select_purpose_btn_shap);
             mTvownerclose.setTextColor(Color.BLACK);
-            mTvownerclose.setText(R.string.ID_ADD);
+            mTvownerclose.setText(R.string.ID_ADD_HERE);
         }
     }
 

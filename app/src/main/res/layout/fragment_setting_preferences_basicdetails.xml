@@ -37,7 +37,6 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/text2"
             android:layout_marginTop="@dimen/dp_size_15"
-            android:text="@string/ID_DATE_VIEW"
             android:textColor="@color/text_color_setting_preference_basicdetails"
             android:textSize="@dimen/sp_size_12" />
 
@@ -88,7 +87,6 @@
             android:layout_below="@+id/text4"
             android:layout_marginTop="@dimen/dp_size_15"
             android:textAllCaps="true"
-            android:text="@string/basic_details_hometown"
             android:textColor="@color/text_color_setting_preference_basicdetails"
             android:textSize="@dimen/sp_size_12" />
 
@@ -138,7 +136,6 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/text6"
             android:layout_marginTop="@dimen/dp_size_15"
-            android:text="@string/ID_SVIEW"
             android:textAllCaps="true"
             android:textColor="@color/text_color_setting_preference_basicdetails"
             android:textSize="@dimen/sp_size_12" />
@@ -188,7 +185,6 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/text8"
             android:layout_marginTop="@dimen/dp_size_15"
-            android:text="@string/ID_CVIEW"
             android:textColor="@color/text_color_setting_preference_basicdetails"
             android:textSize="@dimen/sp_size_12" />
 
