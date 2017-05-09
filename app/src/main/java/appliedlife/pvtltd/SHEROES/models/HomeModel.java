@@ -10,13 +10,14 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.community.BellNotificationRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCount;
+import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -202,6 +203,18 @@ public class HomeModel {
                     @Override
                     public BelNotificationListResponse call(BelNotificationListResponse bellNotificationResponse) {
                         return bellNotificationResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+    public Observable<NotificationReadCountResponse> getNotificationReadCountFromModel(NotificationReadCount notificationReadCount){
+        LogUtils.info(TAG," notification read count request"+new Gson().toJson(notificationReadCount));
+        return sheroesAppServiceApi.notificationReadCount(notificationReadCount)
+                .map(new Func1<NotificationReadCountResponse, NotificationReadCountResponse>() {
+                    @Override
+                    public NotificationReadCountResponse call(NotificationReadCountResponse notificationReadCountResponse) {
+                        return notificationReadCountResponse;
                     }
                 })
                 .subscribeOn(Schedulers.io())

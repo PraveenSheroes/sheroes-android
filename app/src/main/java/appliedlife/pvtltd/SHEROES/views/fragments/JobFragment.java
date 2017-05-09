@@ -11,8 +11,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
-import com.crashlytics.android.Crashlytics;
-
 import java.util.List;
 
 import javax.inject.Inject;
@@ -135,18 +133,6 @@ public class JobFragment extends BaseFragment {
         setRefreshList(mPullRefreshList);
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
         mHomePresenter.getFeedFromPresenter(feedRequestPojo);
-    }
-
-    private void logUser() {
-        // TODO: Use the current user's information
-        // You can call any combination of these three methods
-        Crashlytics.setUserIdentifier("12345");
-        Crashlytics.setUserEmail("ajit@sheroies.in");
-        Crashlytics.setUserName("Test User");
-    }
-
-    public void forceCrash() {
-        throw new RuntimeException(AppConstants.APP_CRASHED);
     }
 
     @Override

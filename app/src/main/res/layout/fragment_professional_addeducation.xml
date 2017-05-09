@@ -210,6 +210,7 @@
                 android:layout_marginRight="@dimen/dp_size_35"
                 android:button="@drawable/customecheckbox"
                 android:checked="false"
+                android:visibility="gone"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:paddingLeft="@dimen/dp_size_8"
                 android:text="@string/ID_SELF_EMP_TITTLE"

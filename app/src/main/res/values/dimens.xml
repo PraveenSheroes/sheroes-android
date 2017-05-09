@@ -106,6 +106,7 @@
     <dimen name="sp_size_25">25sp</dimen>
 
     <dimen name="sp_size_4">4sp</dimen>
+    <dimen name="sp_size_9">9sp</dimen>
     <dimen name="sp_size_6">6sp</dimen>
     <dimen name="sp_size_15">15sp</dimen>
     <dimen name="sp_size_19">19sp</dimen>

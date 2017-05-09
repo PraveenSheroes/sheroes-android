@@ -120,10 +120,9 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
         }
         //TODO:: change for UI
         if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
-            tvFeaturedCommunityCardTitle.setText(dataItem.getNameOrTitle() + dataItem.getId());
+            tvFeaturedCommunityCardTitle.setText(dataItem.getNameOrTitle());
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getCommunityType()))
-
         {
             tvFeaturedCommunityTime.setText(dataItem.getCommunityType());
         }

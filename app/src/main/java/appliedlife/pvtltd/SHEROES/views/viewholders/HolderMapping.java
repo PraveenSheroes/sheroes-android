@@ -46,12 +46,6 @@ public enum HolderMapping {
             return new FeedCommunityPostHolder(view, viewInterface);
         }
     },
-    FEED_COMMUNITY(R.layout.feed_community_normal_card) {
-        @Override
-        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new FeedCommunityHolder(view, viewInterface);
-        }
-    },
     FEED_JOB(R.layout.feed_job_normal_card) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
@@ -396,9 +390,6 @@ public enum HolderMapping {
                     switch (feedType) {
                         case AppConstants.FEED_ARTICLE:
                             returnView = FEED_ARTICLE.ordinal();
-                            break;
-                        case AppConstants.FEED_COMMUNITY:
-                            returnView = FEED_COMMUNITY.ordinal();
                             break;
                         case AppConstants.FEED_JOB:
                             returnView = FEED_JOB.ordinal();

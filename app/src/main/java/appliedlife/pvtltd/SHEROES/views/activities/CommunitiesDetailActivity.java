@@ -92,7 +92,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements  CommentR
     private CommunityRequestedFragment communityRequestedFragment;
     boolean isCommunityDetailFragment;
     private long mCommunityId;
-  //  private long mCommunityPostId;
+    private long mCommunityPostId=0;
     @Bind(R.id.tv_community_detail_title)
     TextView mTvCommunityDetailTitle;
     @Bind(R.id.tv_community_detail_subtitle)
@@ -113,10 +113,12 @@ public class CommunitiesDetailActivity extends BaseActivity implements  CommentR
         initActivityTransitions();
         mAppBarLayout.addOnOffsetChangedListener(this);
         if (null != getIntent() && null != getIntent().getExtras()) {
-            //&& null != getIntent().getExtras().get(AppConstants.COMMUNITY_POST_ID)
             if (null != getIntent().getExtras().get(AppConstants.COMMUNITY_ID)) {
                 mCommunityId = (long) getIntent().getExtras().get(AppConstants.COMMUNITY_ID);
-               // mCommunityPostId = (long) getIntent().getExtras().get(AppConstants.COMMUNITY_POST_ID);
+                if (null != getIntent().getExtras().get(AppConstants.COMMUNITY_POST_ID))
+                {
+                    mCommunityPostId = (long) getIntent().getExtras().get(AppConstants.COMMUNITY_POST_ID);
+                }
                 if (mCommunityId > 0) {
                     mFeedDetail = new FeedDetail();
                     mFeedDetail.setIdOfEntityOrParticipant(mCommunityId);
@@ -140,12 +142,12 @@ public class CommunitiesDetailActivity extends BaseActivity implements  CommentR
                 communityOpenAboutFragment(mFeedDetail);
             } else {
                 mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-                mViewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(mFeedDetail, communityEnum), getString(R.string.ID_COMMUNITIES));
+                mViewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(mFeedDetail, communityEnum,mCommunityPostId), getString(R.string.ID_COMMUNITIES));
                 mViewPager.setAdapter(mViewPagerAdapter);
             }
         } else {
             mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-            mViewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(mFeedDetail, communityEnum), getString(R.string.ID_COMMUNITIES));
+            mViewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(mFeedDetail, communityEnum,mCommunityPostId), getString(R.string.ID_COMMUNITIES));
             mViewPager.setAdapter(mViewPagerAdapter);
         }
     }

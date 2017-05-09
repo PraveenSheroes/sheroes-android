@@ -43,6 +43,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.userCommunityDetailRequestBuilder;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.userCommunityPostRequestBuilder;
 
 /**
  * Created by Praveen_Singh on 01-02-2017.
@@ -70,16 +72,19 @@ public class CommunitiesDetailFragment extends BaseFragment {
     private int mPageNo = AppConstants.ONE_CONSTANT;
     private FragmentListRefreshData mFragmentListRefreshData;
     private FeedDetail mFeedDetail;
+    private FeedDetail mCommunityPostDetail;
     private boolean mListLoad = true;
     private boolean mIsEdit = false;
     private CommunityEnum communityEnum = null;
     private String mScreenName;
     private int positionOfFeedDetail;
     private String mPressedButtonName;
+    private long mCommunityPostId;
 
-    public static CommunitiesDetailFragment createInstance(FeedDetail feedDetail, CommunityEnum communityEnum) {
+    public static CommunitiesDetailFragment createInstance(FeedDetail feedDetail, CommunityEnum communityEnum, long communityPostId) {
         CommunitiesDetailFragment communitiesDetailFragment = new CommunitiesDetailFragment();
         Bundle bundle = new Bundle();
+        bundle.putLong(AppConstants.COMMUNITY_POST_ID, communityPostId);
         bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, feedDetail);
         bundle.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, communityEnum);
         communitiesDetailFragment.setArguments(bundle);
@@ -92,6 +97,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_communities_detail, container, false);
         ButterKnife.bind(this, view);
         if (null != getArguments()) {
+            mCommunityPostId = getArguments().getLong(AppConstants.COMMUNITY_POST_ID);
             mFeedDetail = getArguments().getParcelable(AppConstants.COMMUNITY_DETAIL);
             communityEnum = (CommunityEnum) getArguments().getSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT);
         }
@@ -108,24 +114,34 @@ public class CommunitiesDetailFragment extends BaseFragment {
             mAdapter = new GenericRecyclerViewAdapter(getContext(), (CommunitiesDetailActivity) getActivity());
             mRecyclerView.setLayoutManager(mLayoutManager);
             mRecyclerView.setAdapter(mAdapter);
+            mTvJoinView.setTag(false);
             mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager, mFragmentListRefreshData) {
                 @Override
                 public void onHide() {
-                    if ((boolean) mTvJoinView.getTag()) {
-                        if (mTvJoinView.getVisibility() == View.GONE) {
-                            mTvJoinView.setVisibility(View.VISIBLE);
-                            mTvJoinView.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+                    try {
+                        if ((boolean) mTvJoinView.getTag()) {
+                            if (mTvJoinView.getVisibility() == View.GONE) {
+                                mTvJoinView.setVisibility(View.VISIBLE);
+                                mTvJoinView.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+                            }
                         }
+                    } catch (ClassCastException ex) {
+                        LogUtils.error(TAG, ex.getMessage());
                     }
+
                 }
 
                 @Override
                 public void onShow() {
-                    if ((boolean) mTvJoinView.getTag()) {
-                        if (mTvJoinView.getVisibility() == View.VISIBLE) {
-                            mTvJoinView.setVisibility(View.GONE);
-                            mTvJoinView.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+                    try {
+                        if ((boolean) mTvJoinView.getTag()) {
+                            if (mTvJoinView.getVisibility() == View.VISIBLE) {
+                                mTvJoinView.setVisibility(View.GONE);
+                                mTvJoinView.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+                            }
                         }
+                    } catch (ClassCastException ex) {
+                        LogUtils.error(TAG, ex.getMessage());
                     }
                 }
 
@@ -134,10 +150,15 @@ public class CommunitiesDetailFragment extends BaseFragment {
 
                 }
             });
-            mFragmentListRefreshData.setSearchStringName(AppConstants.COMMUNITIES_DETAIL);
             super.setAllInitializationForFeeds(mFragmentListRefreshData, mPullRefreshList, mAdapter, mLayoutManager, mPageNo, mSwipeView, mLiNoResult, mFeedDetail, mRecyclerView, 0, 0, mListLoad, mIsEdit, mHomePresenter, mAppUtils, mProgressBar);
-            //  mCreateCommunityPresenter.getFeedFromPresenter(mAppUtils.userCommunityPostRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCommunityId()));
-            mHomePresenter.getFeedFromPresenter(mAppUtils.userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCommunityId()));
+            if (mCommunityPostId > 0) {
+                mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
+                mFragmentListRefreshData.setSearchStringName(AppConstants.COMMUNITY_POST_FRAGMENT);
+                mHomePresenter.getFeedFromPresenter(userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo(), mCommunityPostId));
+            } else {
+                mFragmentListRefreshData.setSearchStringName(AppConstants.COMMUNITIES_DETAIL);
+                mHomePresenter.getFeedFromPresenter(userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCommunityId()));
+            }
             mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
@@ -160,7 +181,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
         mPullRefreshList = new SwipPullRefreshList();
         setRefreshList(mPullRefreshList);
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
-        mHomePresenter.getFeedFromPresenter(mAppUtils.userCommunityPostRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCommunityId()));
+        mHomePresenter.getFeedFromPresenter(userCommunityPostRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCommunityId()));
     }
 
     @OnClick(R.id.tv_join_view)
@@ -207,6 +228,16 @@ public class CommunitiesDetailFragment extends BaseFragment {
                 default:
                     LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + communityEnum);
             }
+        } else {
+            if (!feedDetail.isMember() && !feedDetail.isOwner() && !feedDetail.isRequestPending() && feedDetail.isFeatured()) {
+                mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.footer_icon_text));
+                mTvJoinView.setText(getString(R.string.ID_JOIN));
+                mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
+                mTvJoinView.setTag(true);
+            } else {
+                mTvJoinView.setVisibility(View.GONE);
+                mTvJoinView.setTag(false);
+            }
         }
         swipeToRefreshList();
     }
@@ -217,7 +248,11 @@ public class CommunitiesDetailFragment extends BaseFragment {
         if (StringUtil.isNotEmptyCollection(feedDetailList) && null != mFragmentListRefreshData) {
             mLiNoResult.setVisibility(View.GONE);
             mPageNo = mFragmentListRefreshData.getPageNo();
-            if (StringUtil.isNotNullOrEmptyString(mFragmentListRefreshData.getSearchStringName()) && mFragmentListRefreshData.getSearchStringName().equalsIgnoreCase(AppConstants.COMMUNITIES_DETAIL)) {
+            if (StringUtil.isNotNullOrEmptyString(mFragmentListRefreshData.getSearchStringName()) && mFragmentListRefreshData.getSearchStringName().equalsIgnoreCase(AppConstants.COMMUNITY_POST_FRAGMENT) && mCommunityPostId > 0) {
+                mCommunityPostDetail = feedDetailList.get(0);
+                mFragmentListRefreshData.setSearchStringName(AppConstants.COMMUNITIES_DETAIL);
+                mHomePresenter.getFeedFromPresenter(userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCommunityId()));
+            } else if (StringUtil.isNotNullOrEmptyString(mFragmentListRefreshData.getSearchStringName()) && mFragmentListRefreshData.getSearchStringName().equalsIgnoreCase(AppConstants.COMMUNITIES_DETAIL)) {
                 mFeedDetail = feedDetailList.get(0);
                 mFeedDetail.setItemPosition(positionOfFeedDetail);
                 mProgressBar.setVisibility(View.VISIBLE);
@@ -230,11 +265,27 @@ public class CommunitiesDetailFragment extends BaseFragment {
                         FeedDetail mCommunityHeaderDetail = (FeedDetail) mFeedDetail.clone();
                         mCommunityHeaderDetail.setSubType(AppConstants.MY_COMMUNITIES_HEADER);
                         feedDetailList.add(0, mCommunityHeaderDetail);
+                        if (mCommunityPostId > 0) {
+                            int postPosition = 0;
+                            for (FeedDetail feedDetail : feedDetailList) {
+                                if (mCommunityPostId == feedDetail.getIdOfEntityOrParticipant()) {
+                                    break;
+                                }
+                                postPosition++;
+                            }
+                            if (feedDetailList.size() > postPosition) {
+                                feedDetailList.remove(postPosition);
+                            }
+                            if (feedDetailList.size() > 0) {
+                                feedDetailList.add(1, mCommunityPostDetail);
+                            }
+                        }
                     } catch (CloneNotSupportedException e) {
-                        e.printStackTrace();
+                        LogUtils.error(TAG, e.getMessage());
                     }
                 }
                 mFragmentListRefreshData.setPageNo(++mPageNo);
+                mProgressBar.setVisibility(View.GONE);
                 mPullRefreshList.allListData(feedDetailList);
                 mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
                 mAdapter.notifyDataSetChanged();
@@ -278,7 +329,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
 
     @Override
     public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
-        if (StringUtil.isNotNullOrEmptyString(mPressedButtonName)&&mPressedButtonName.equalsIgnoreCase(getString(R.string.ID_JOIN))) {
+        if (StringUtil.isNotNullOrEmptyString(mPressedButtonName) && mPressedButtonName.equalsIgnoreCase(getString(R.string.ID_JOIN))) {
             switch (feedParticipationEnum) {
                 case JOIN_INVITE:
                     joinSuccessFailed(baseResponse);
@@ -337,6 +388,19 @@ public class CommunitiesDetailFragment extends BaseFragment {
 
     public void deleteCommunityPost(FeedDetail feedDetail) {
         super.deleteCommunityPost(feedDetail);
+    }
+
+    @Override
+    public void startProgressBar() {
+        mProgressBar.setVisibility(View.VISIBLE);
+        mProgressBar.bringToFront();
+    }
+
+    @Override
+    public void stopProgressBar() {
+        if (mFragmentListRefreshData.getPageNo()!= AppConstants.ONE_CONSTANT) {
+            mProgressBar.setVisibility(View.GONE);
+        }
     }
 
 }

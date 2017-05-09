@@ -149,13 +149,13 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             multipleImageURLs();
         }
         //TODO:: Need to verify when share and mark spam option
-        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
+      /*  if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
             if (dataItem.getAuthorId() == userPreference.get().getUserSummary().getUserId() || dataItem.isOwner()) {
                 tvFeedCommunityPostUserMenu.setVisibility(View.VISIBLE);
             } else {
                 tvFeedCommunityPostUserMenu.setVisibility(View.GONE);
             }
-        }
+        }*/
         onBookMarkClick();
         allTextViewStringOperations(context);
 

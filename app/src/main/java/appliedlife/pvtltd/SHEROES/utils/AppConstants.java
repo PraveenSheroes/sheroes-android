@@ -33,7 +33,6 @@ public class AppConstants {
     public static final String VIEW_NOT_ATTACHED_EXCEPTION = "Please call SheroesPresenter.attachView(BaseMvpView) before" + " requesting data to the SheroesPresenter";
     public static final String EXCEPTION_MUST_IMPLEMENT = "Exception while implement listner with in :";
     public static final String CASE_NOT_HANDLED = "Case not handled on : ";
-    public static final String APP_CRASHED = "App crashed ";
     public static final String EMPTY_STRING = "";
     public static final String COMMA = ",";
     public static final String PRESENT = "PRESENT";

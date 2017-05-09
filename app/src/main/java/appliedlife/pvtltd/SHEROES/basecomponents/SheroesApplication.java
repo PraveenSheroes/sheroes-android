@@ -25,7 +25,6 @@ public class SheroesApplication extends MultiDexApplication {
     SheroesAppComponent mSheroesAppComponent;
     public static volatile SheroesApplication mContext;
     private String mCurrentActivityName;
-
     public static SheroesAppComponent getAppComponent(Context context) {
         return ((SheroesApplication) context.getApplicationContext()).mSheroesAppComponent;
     }
@@ -38,8 +37,9 @@ public class SheroesApplication extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        Fabric.with(this, new Crashlytics());
         mContext = this;
+       // Crashlytics crashlytics = new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build();
+        Fabric.with(this, new Crashlytics());
         File cacheFile = new File(getCacheDir(), "responses");
         mSheroesAppComponent = DaggerSheroesAppComponent.builder().sheroesAppModule(new SheroesAppModule(cacheFile,this)).build();
         setAppComponent(mSheroesAppComponent);

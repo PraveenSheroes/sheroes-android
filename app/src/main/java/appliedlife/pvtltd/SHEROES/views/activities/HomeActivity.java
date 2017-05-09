@@ -146,12 +146,16 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     ImageView mIvSideDrawerProfileBlurBackground;
     @Bind(R.id.iv_home_notification_icon)
     TextView mIvHomeNotification;
+    @Bind(R.id.tv_notification_read_count)
+    public TextView mTvNotificationReadCount;
     @Bind(R.id.fab_add_community)
     FloatingActionButton mFloatingActionButton;
     @Bind(R.id.fab_filter)
     FloatingActionButton mJobFragment;
     @Bind(R.id.li_home_community_button_layout)
     LinearLayout liHomeCommunityButtonLayout;
+    @Bind(R.id.fl_notification_read_count)
+    public FrameLayout flNotificationReadCount;
     GenericRecyclerViewAdapter mAdapter;
     private List<HomeSpinnerItem> mHomeSpinnerItemList = new ArrayList<>();
     private HomeSpinnerFragment mHomeSpinnerFragment;
@@ -310,7 +314,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             }
             switch (drawerItem) {
                 case AppConstants.ONE_CONSTANT:
-                 //   ProfileActicity.navigate(this, view, profile);
+                    //   ProfileActicity.navigate(this, view, profile);
                     Intent intent = new Intent(this, ProfileActicity.class);
                     intent.putExtra(AppConstants.EXTRA_IMAGE, profile);
                     startActivity(intent);
@@ -741,7 +745,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    doubleBackToExitPressedOnce=false;
+                    doubleBackToExitPressedOnce = false;
                 }
             }, 2000);
         }
@@ -780,7 +784,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
     }
 
-    @OnClick(R.id.iv_home_notification_icon)
+    @OnClick(R.id.fl_notification)
     public void notificationClick() {
         // mDrawer.openDrawer(Gravity.LEFT);
         callBellNotification();
@@ -824,6 +828,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     }
 
     public void callBellNotification() {
+        flNotificationReadCount.setVisibility(View.GONE);
         mFragmentOpen.setBellNotificationFragment(true);
         setAllValues(mFragmentOpen);
         BellNotificationFragment bellNotificationFragment = new BellNotificationFragment();

@@ -33,6 +33,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCount;
+import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobApplyRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobApplyResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
@@ -205,4 +207,7 @@ public interface SheroesAppServiceApi {
     Observable<BelNotificationListResponse>bellNotification(@Body BellNotificationRequest bellNotificationRequest);
     @POST("participant/user/add_or_edit")
     Observable<BoardingDataResponse>getWorkExpAddEditResponse(@Body ExprienceEntity exprienceEntity);
+    @POST("participation/notification/bell/unread")
+    Observable<NotificationReadCountResponse>notificationReadCount(@Body NotificationReadCount notificationReadCount);
+
 }

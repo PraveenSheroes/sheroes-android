@@ -13,7 +13,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences.Preference;
 
 import javax.inject.Inject;
@@ -26,6 +25,7 @@ import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
+import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
@@ -40,6 +40,9 @@ import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.feedRequestBuilder;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.notificationReadCountRequestBuilder;
 
 /**
  * Created by Praveen Singh on 29/12/2016.
@@ -87,11 +90,6 @@ public class HomeFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        //   forceCrash();
-        // TODO: Move this to where you establish a user session
-        // logUser();
-
-
         ButterKnife.bind(this, view);
         Bundle bundle = getArguments();
         if (bundle != null) {
@@ -113,16 +111,12 @@ public class HomeFragment extends BaseFragment {
             public void onHide() {
                 mListLoad = false;
                 ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.GONE);
-                // tvRefresh.setVisibility(View.GONE);
             }
 
             @Override
             public void onShow() {
                 mListLoad = false;
                 ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
-              /*  if(mLayoutManager.findLastVisibleItemPosition()>5) {
-                    tvRefresh.setVisibility(View.GONE);
-                }*/
             }
 
             @Override
@@ -138,7 +132,7 @@ public class HomeFragment extends BaseFragment {
             Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
             loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(loginIntent);
-        } else if (null != mUserPreference.get()){
+        } else if (null != mUserPreference.get()) {
             if (!StringUtil.isNotNullOrEmptyString(mUserPreference.get().getToken())) {
                 Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
                 loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
@@ -148,14 +142,13 @@ public class HomeFragment extends BaseFragment {
                 if (daysDifference >= AppConstants.SAVED_DAYS_TIME) {
                     mHomePresenter.getAuthTokenRefreshPresenter();
                 } else {
-                    mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
+                    mHomePresenter.getFeedFromPresenter(feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
                 }
             }
-        }else
-        {
+        } else {
             mHomePresenter.getAuthTokenRefreshPresenter();
         }
-
+        mHomePresenter.getNotificationCountFromPresenter(notificationReadCountRequestBuilder(TAG));
         mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -177,20 +170,29 @@ public class HomeFragment extends BaseFragment {
         mPullRefreshList = new SwipPullRefreshList();
         setRefreshList(mPullRefreshList);
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
-        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
+        mHomePresenter.getFeedFromPresenter(feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
 
     }
 
-    private void logUser() {
-        // TODO: Use the current user's information
-        // You can call any combination of these three methods
-        Crashlytics.setUserIdentifier("12345");
-        Crashlytics.setUserEmail("ajit@sheroies.in");
-        Crashlytics.setUserName("Test User");
-    }
-
-    public void forceCrash() {
-        throw new RuntimeException(AppConstants.APP_CRASHED);
+    @Override
+    public void getNotificationReadCountSuccess(NotificationReadCountResponse notificationReadCountResponse) {
+        switch (notificationReadCountResponse.getStatus()) {
+            case AppConstants.SUCCESS:
+                StringBuilder stringBuilder = new StringBuilder();
+                if (notificationReadCountResponse.getUnread_notification_count() > 0) {
+                    ((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.VISIBLE);
+                    String notification = String.valueOf(notificationReadCountResponse.getUnread_notification_count());
+                    stringBuilder.append(notification);
+                    ((HomeActivity) getActivity()).mTvNotificationReadCount.setText(stringBuilder.toString());
+                } else {
+                    ((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.GONE);
+                }
+                break;
+            case AppConstants.FAILED:
+                ((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.GONE);
+                break;
+            default:
+        }
     }
 
     @Override
@@ -238,13 +240,13 @@ public class HomeFragment extends BaseFragment {
             loginResponse.setTokenTime(System.currentTimeMillis());
             loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
             mUserPreference.set(loginResponse);
-            mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
+            mHomePresenter.getFeedFromPresenter(feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
         }
     }
 
     @OnClick(R.id.tv_no_result_try_again)
     public void onClickTryAgainOnError() {
         mLiNoResult.setVisibility(View.GONE);
-        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
+        mHomePresenter.getFeedFromPresenter(feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
     }
 }

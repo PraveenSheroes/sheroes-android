@@ -10,20 +10,13 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
-import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
-import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -34,7 +27,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.COMMUNITY_OWNER;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_RESPONSE;
 
 /**
@@ -47,7 +39,7 @@ public class BellNotificationFragment extends BaseFragment implements HomeView {
     HomePresenter mHomePresenter;
     @Bind(R.id.rv_bell_notification_list)
     RecyclerView mRecyclerView;
-    @Bind(R.id.pb_bell_notification_progress_bar)
+    @Bind(R.id.pb_login_progress_bar)
     ProgressBar mProgressBar;
     @Inject
     AppUtils mAppUtils;
@@ -65,6 +57,7 @@ public class BellNotificationFragment extends BaseFragment implements HomeView {
         SheroesApplication.getAppComponent(getActivity()).inject(this);
         View v = inflater.inflate(R.layout.community_bell_notification_list, container, false);
         ButterKnife.bind(this, v);
+        setProgressBar(mProgressBar);
         tvTitle.setText(getString(R.string.ID_NOTIFICATION));
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new GenericRecyclerViewAdapter(getActivity(), (HomeActivity) getActivity());

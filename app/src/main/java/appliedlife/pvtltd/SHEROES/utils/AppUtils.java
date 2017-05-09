@@ -101,6 +101,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCount;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobApplyRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
@@ -1826,6 +1827,15 @@ public class AppUtils {
         shareViaMail.setSubject(subject);
         return shareViaMail;
     }
+    public static NotificationReadCount notificationReadCountRequestBuilder(String screenName) {
+        AppUtils appUtils = AppUtils.getInstance();
+        NotificationReadCount notificationReadCount = new NotificationReadCount();
+        notificationReadCount.setAppVersion(appUtils.getAppVersionName());
+        notificationReadCount.setDeviceUniqueId(appUtils.getDeviceId());
+        notificationReadCount.setLastScreenName(screenName);
+        notificationReadCount.setScreenName(screenName);
+        return notificationReadCount;
+    }
     /**
      * Request for feed api
      */
@@ -2134,8 +2144,10 @@ public class AppUtils {
         profileAddEditEducationRequest.setActive(true);
         profileAddEditEducationRequest.setSessionStartMonth(Integer.parseInt(startTime[0]));
         profileAddEditEducationRequest.setSessionStartYear(Integer.parseInt(startTime[1]));
-        profileAddEditEducationRequest.setSessionEndMonth(Integer.parseInt(endTime[0]));
-        profileAddEditEducationRequest.setSessionEndYear(Integer.parseInt(endTime[1]));
+        if(null!=endTime) {
+            profileAddEditEducationRequest.setSessionEndMonth(Integer.parseInt(endTime[0]));
+            profileAddEditEducationRequest.setSessionEndYear(Integer.parseInt(endTime[1]));
+        }
         profileAddEditEducationRequest.setSchool(mSchoolName);
         profileAddEditEducationRequest.setFieldOfStudy(study);
         profileAddEditEducationRequest.setGrade("0");
@@ -2158,8 +2170,10 @@ public class AppUtils {
        profileAddEditEducationRequest.setActive(true);
        profileAddEditEducationRequest.setSessionStartMonth(Integer.parseInt(startTime[0]));
        profileAddEditEducationRequest.setSessionStartYear(Integer.parseInt(startTime[1]));
-       profileAddEditEducationRequest.setSessionEndMonth(Integer.parseInt(endTime[0]));
-       profileAddEditEducationRequest.setSessionEndYear(Integer.parseInt(endTime[1]));
+       if(null!=endTime) {
+           profileAddEditEducationRequest.setSessionEndMonth(Integer.parseInt(endTime[0]));
+           profileAddEditEducationRequest.setSessionEndYear(Integer.parseInt(endTime[1]));
+       }
        profileAddEditEducationRequest.setSchool(mSchoolName);
        profileAddEditEducationRequest.setFieldOfStudy(mEtFieldOfStudy);
        profileAddEditEducationRequest.setGrade("0");

@@ -270,8 +270,6 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 bookMarkTrending();
                 break;
             /*Card menu option depend on Feed type like post,article etc */
-            case R.id.tv_feed_community_user_menu:
-                break;
             case R.id.tv_feed_community_post_user_menu:
                 clickMenuItem(view, baseResponse, FEED_CARD_MENU);
                 break;
@@ -288,18 +286,10 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
             case R.id.tv_feed_community_post_user_comment_post_menu:
                 clickMenuItem(view, baseResponse, USER_REACTION_COMMENT_MENU);
                 break;
-            case R.id.tv_feed_community_user_comment_post_menu:
-                clickMenuItem(view, baseResponse, USER_REACTION_COMMENT_MENU);
-                break;
             case R.id.tv_feed_article_user_comment_post_menu:
                 clickMenuItem(view, baseResponse, USER_REACTION_COMMENT_MENU);
                 break;
             case R.id.tv_feed_article_total_reactions:
-                mFragmentOpen.setCommentList(false);
-                mFragmentOpen.setReactionList(true);
-                openCommentReactionFragment(mFeedDetail);
-                break;
-            case R.id.tv_feed_community_total_reactions:
                 mFragmentOpen.setCommentList(false);
                 mFragmentOpen.setReactionList(true);
                 openCommentReactionFragment(mFeedDetail);
@@ -313,18 +303,12 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 mFragmentOpen.setCommentList(true);
                 openCommentReactionFragment(mFeedDetail);
                 break;
-            case R.id.li_feed_community_join_conversation:
-                mFragmentOpen.setCommentList(true);
-                openCommentReactionFragment(mFeedDetail);
-                break;
             case R.id.li_feed_community_post_join_conversation:
                 mFragmentOpen.setCommentList(true);
                 openCommentReactionFragment(mFeedDetail);
                 break;
             case R.id.tv_feed_article_user_reaction:
                 userReactionDialogLongPress(view);
-                break;
-            case R.id.tv_feed_community_user_reaction:
                 break;
             case R.id.tv_feed_community_post_user_reaction:
                 userReactionDialogLongPress(view);
@@ -479,7 +463,6 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType(AppConstants.SHARE_MENU_TYPE);
                 intent.putExtra(Intent.EXTRA_TEXT, feedDetail.getDeepLinkUrl());
-                //  intent.putExtra(Intent.EXTRA_SUBJECT, feedDetail.getDescription());
                 startActivity(Intent.createChooser(intent, AppConstants.SHARE));
                 popupWindow.dismiss();
             }
@@ -518,14 +501,6 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 tvEdit.setVisibility(View.VISIBLE);
                 tvDelete.setVisibility(View.VISIBLE);
                 break;
-            case R.id.tv_feed_community_user_comment_post_menu:
-              /*  //if owner
-                tvDelete.setVisibility(View.VISIBLE);
-                //if commenter*/
-                tvEdit.setVisibility(View.VISIBLE);
-                tvDelete.setVisibility(View.VISIBLE);
-                break;
-
             case R.id.tv_article_menu:
                 tvShare.setVisibility(View.VISIBLE);
                 break;
@@ -542,13 +517,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                         }
                         tvReport.setVisibility(View.GONE);
                     }
-                    tvShare.setVisibility(View.GONE);
-                }
-                break;
-            case R.id.tv_feed_community_user_menu:
-                FeedDetail feedCommunityDetail = (FeedDetail) baseResponse;
-                if (null != feedCommunityDetail) {
-
+                    tvShare.setVisibility(View.VISIBLE);
                 }
                 break;
             default:
