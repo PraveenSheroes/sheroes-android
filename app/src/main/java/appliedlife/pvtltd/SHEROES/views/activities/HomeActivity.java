@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
+import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -22,6 +23,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -62,6 +64,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
+import appliedlife.pvtltd.SHEROES.service.GCMClientManager;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -169,11 +172,13 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     private MyCommunityInviteMemberFragment myCommunityInviteMemberFragment;
     private BellNotificationFragment bellNotificationFragment;
     boolean doubleBackToExitPressedOnce = false;
-
+    String PROJECT_NUMBER=getString(R.string.ID_PROJECT_NO);
+    String mGcmId,mNewGcmId;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
+        mGcmId=getGcmId();
         renderHomeFragmentView();
     }
 
@@ -210,6 +215,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                             mIvSideDrawerProfileBlurBackground.setImageBitmap(blurred);
                         }
                     });
+
         }
     }
 
@@ -1099,5 +1105,26 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             }
         }
     }
+    private String getGcmId()
+    {
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 
+        StrictMode.setThreadPolicy(policy);
+        GCMClientManager pushClientManager = new GCMClientManager(this, PROJECT_NUMBER);
+        pushClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
+            @Override
+            public void onSuccess(String registrationId, boolean isNewRegistration) {
+
+                LogUtils.info("Registration id", registrationId);
+
+                mGcmId = registrationId;
+            }
+
+            @Override
+            public void onFailure(String ex) {
+                super.onFailure(ex);
+            }
+        });
+        return mGcmId;
+    }
 }

@@ -8,11 +8,13 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -54,8 +56,10 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.presenters.LoginPresenter;
+import appliedlife.pvtltd.SHEROES.service.GCMClientManager;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.FacebookErrorDialog;
@@ -105,11 +109,14 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     int NUM_PAGES = 4;
     private static final String LEFT = "<b><font color='#ffffff'>";
     private static final String RIGHT = "</font></b>";
+    String PROJECT_NUMBER=getString(R.string.ID_PROJECT_NO);
+    String mGcmId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
+        mGcmId =getGcmId();
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getToken())) {
             openHomeScreen();
         } else {
@@ -314,6 +321,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                                 //TODO:: NEED to Change
                                 loginRequest.setCloudMessagingId(appUtils.getCloudMessaging());
                                 loginRequest.setDeviceUniqueId(appUtils.getDeviceId());
+                                loginRequest.setGcmorapnsid(mGcmId);
                                 mLoginPresenter.getLoginAuthTokeInPresenter(loginRequest, true);
                             }
                         }
@@ -474,6 +482,28 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     public void onSuccessResult(String result, FeedDetail feedDetail) {
         if (result.equalsIgnoreCase(AppConstants.SUCCESS)) {
         }
+    }
+    private String getGcmId()
+    {
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+
+        StrictMode.setThreadPolicy(policy);
+        GCMClientManager pushClientManager = new GCMClientManager(this, PROJECT_NUMBER);
+        pushClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
+            @Override
+            public void onSuccess(String registrationId, boolean isNewRegistration) {
+
+                LogUtils.info("Registration id", registrationId);
+
+                mGcmId = registrationId;
+            }
+
+            @Override
+            public void onFailure(String ex) {
+                super.onFailure(ex);
+            }
+        });
+        return mGcmId;
     }
 }
 

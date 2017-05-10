@@ -37,6 +37,7 @@ android {
     }
     buildTypes {
         debug {
+           // buildConfigField "String", "BASE_URL", "\"http://34.193.138.177/\""
             buildConfigField "String", "BASE_URL", "\"http://34.193.138.177/\""
             buildConfigField 'Boolean', 'enableCrashlytics', 'false'
             shrinkResources false
@@ -67,6 +68,9 @@ dependencies {
 
     compile 'com.facebook.android:facebook-android-sdk:4.0.0'
     compile 'com.google.android.gms:play-services-analytics:10.2.1'
+    compile 'com.google.android.gms:play-services:10.2.1'
+    compile 'com.google.android.gms:play-services-plus:10.2.1'
+    compile 'com.google.android.gms:play-services-auth:10.2.1'
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.android.support:appcompat-v7:25.3.0'
     compile 'com.android.support:design:25.3.0'

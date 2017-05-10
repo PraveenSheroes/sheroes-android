@@ -162,6 +162,7 @@ public class AppConstants {
     public static final int EMOJI_THIRD_REACTION_CONSTANT = 40;
     public static final int EMOJI_FOURTH_REACTION_CONSTANT = 50;
     public static final int SEARCH_CONSTANT_DELAY = 500;
+    public static final int NOT_TIME = 50000;
     public static final String SELECT_ALL_QUERY = "Select * from ";
 
     /*Master data keys for pages*/
@@ -265,5 +266,12 @@ public class AppConstants {
     public static final String EXP_MONTH = "Month";
     public static final String BASIC_EXP_YEAR = "Year(s)";
     public static final String BASIC_EXP_MONTH = "Month(s)";
+    public static final String MESSAGE = "message";
+    public static final String TITLE = "title";
+    public static final String DEEP_LINK_URL = "deep_link_url";
+    public static final String SHEROES = "SHEROES";
+    public static final String TICKER = "ticker";
+    public static final String CHECK_OUT = "Check out ";
+
 
 }
