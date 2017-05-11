@@ -24,7 +24,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
-import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
@@ -207,7 +206,7 @@ public class HomeFragment extends BaseFragment {
     private void unReadNotificationCount(BaseResponse baseResponse) {
         switch (baseResponse.getStatus()) {
             case AppConstants.SUCCESS:
-                if (baseResponse instanceof BellNotificationResponse) {
+                if (baseResponse instanceof NotificationReadCountResponse) {
                     NotificationReadCountResponse notificationReadCountResponse = (NotificationReadCountResponse) baseResponse;
                     StringBuilder stringBuilder = new StringBuilder();
                     if (notificationReadCountResponse.getUnread_notification_count() > 0) {
