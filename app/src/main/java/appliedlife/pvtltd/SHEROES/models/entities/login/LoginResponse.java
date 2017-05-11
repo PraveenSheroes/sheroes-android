@@ -26,6 +26,7 @@ public class LoginResponse extends BaseResponse implements Parcelable {
     private UserSummary userSummary;
     private String tokenType;
     private long tokenTime;
+    private String gcmId;
     @SerializedName("next_screen")
     @Expose
     String nextScreen;
@@ -61,6 +62,25 @@ public class LoginResponse extends BaseResponse implements Parcelable {
         this.tokenTime = tokenTime;
     }
 
+    public LoginResponse() {
+    }
+
+    public String getNextScreen() {
+        return nextScreen;
+    }
+
+    public void setNextScreen(String nextScreen) {
+        this.nextScreen = nextScreen;
+    }
+
+    public String getGcmId() {
+        return gcmId;
+    }
+
+    public void setGcmId(String gcmId) {
+        this.gcmId = gcmId;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -68,23 +88,26 @@ public class LoginResponse extends BaseResponse implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
         dest.writeString(this.token);
+        dest.writeParcelable(this.userSummary, flags);
         dest.writeString(this.tokenType);
         dest.writeLong(this.tokenTime);
-        dest.writeParcelable(this.userSummary, flags);
-    }
-
-    public LoginResponse() {
+        dest.writeString(this.gcmId);
+        dest.writeString(this.nextScreen);
     }
 
     protected LoginResponse(Parcel in) {
+        super(in);
         this.token = in.readString();
+        this.userSummary = in.readParcelable(UserSummary.class.getClassLoader());
         this.tokenType = in.readString();
         this.tokenTime = in.readLong();
-        this.userSummary = in.readParcelable(UserSummary.class.getClassLoader());
+        this.gcmId = in.readString();
+        this.nextScreen = in.readString();
     }
 
-    public static final Parcelable.Creator<LoginResponse> CREATOR = new Parcelable.Creator<LoginResponse>() {
+    public static final Creator<LoginResponse> CREATOR = new Creator<LoginResponse>() {
         @Override
         public LoginResponse createFromParcel(Parcel source) {
             return new LoginResponse(source);
@@ -95,12 +118,4 @@ public class LoginResponse extends BaseResponse implements Parcelable {
             return new LoginResponse[size];
         }
     };
-
-    public String getNextScreen() {
-        return nextScreen;
-    }
-
-    public void setNextScreen(String nextScreen) {
-        this.nextScreen = nextScreen;
-    }
 }

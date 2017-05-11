@@ -9,7 +9,6 @@ import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 
 public interface HomeView extends BaseMvpView {
@@ -18,5 +17,5 @@ public interface HomeView extends BaseMvpView {
     void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum);
     void getDB(List<RecentSearchData> recentSearchDatas);
     void getNotificationListSuccess(BelNotificationListResponse bellNotificationResponse);
-    void getNotificationReadCountSuccess(NotificationReadCountResponse notificationReadCountResponse);
+    void getNotificationReadCountSuccess(BaseResponse baseResponse,FeedParticipationEnum feedParticipationEnum);
 }

@@ -7,11 +7,9 @@ import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +45,7 @@ import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.presenters.LoginPresenter;
-import appliedlife.pvtltd.SHEROES.service.GCMClientManager;
+import appliedlife.pvtltd.SHEROES.service.GcmIdReceiver;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -90,8 +88,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
     private CallbackManager callbackManager;
     private AccessTokenTracker accessTokenTracker;
     private ProfileTracker profileTracker;
-    String PROJECT_NUMBER=getString(R.string.ID_PROJECT_NO);
-    String mGcmId;
+    private String mGcmId;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -107,6 +104,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mGcmId = GcmIdReceiver.getGcmId(getActivity());
         FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
         accessTokenTracker = new AccessTokenTracker() {
@@ -123,29 +121,6 @@ public class LoginFragment extends BaseFragment implements LoginView {
         };
         accessTokenTracker.startTracking();
         profileTracker.startTracking();
-        mGcmId =getGcmId();
-    }
-    private String getGcmId()
-    {
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-
-        StrictMode.setThreadPolicy(policy);
-        GCMClientManager pushClientManager = new GCMClientManager(getActivity(), PROJECT_NUMBER);
-        pushClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
-            @Override
-            public void onSuccess(String registrationId, boolean isNewRegistration) {
-
-                LogUtils.info("Registration id", registrationId);
-
-                mGcmId = registrationId;
-            }
-
-            @Override
-            public void onFailure(String ex) {
-                super.onFailure(ex);
-            }
-        });
-        return mGcmId;
     }
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -191,6 +166,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                     case AppConstants.SUCCESS:
                         loginResponse.setTokenTime(System.currentTimeMillis());
                         loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
+                        loginResponse.setGcmId(mGcmId);
                         mUserPreference.set(loginResponse);
                         mLoginActivityIntractionListner.onLoginAuthToken();
                         break;

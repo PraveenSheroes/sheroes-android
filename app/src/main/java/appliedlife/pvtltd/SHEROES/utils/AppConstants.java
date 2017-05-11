@@ -11,7 +11,7 @@ package appliedlife.pvtltd.SHEROES.utils;
 public class AppConstants {
     public static final String GOOGLE_PLAY_ANDROID_APP_URL = "https://play.google.com/store/apps/details?id=appliedlife.pvtltd.sheroesask&hl=en";
     public static final String GOOGLE_PLAY_BROWSER_URL = "https:/android.intent.action.MAIN/play.google.com/store/apps/details?id=appliedlife.pvtltd.sheroesask";
-
+    public static final String PROJECT_NUMBER = "409228886131";
     public static final int ONEGIGABYTE = 1024 * 1024 * 1024;
     public static final int ANDROID_SDK_24 = 24;
     public static final int READ_TIME_OUT = 180;

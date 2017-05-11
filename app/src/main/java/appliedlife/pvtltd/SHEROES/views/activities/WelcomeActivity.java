@@ -8,13 +8,11 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -56,10 +54,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.presenters.LoginPresenter;
-import appliedlife.pvtltd.SHEROES.service.GCMClientManager;
+import appliedlife.pvtltd.SHEROES.service.GcmIdReceiver;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
-import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.FacebookErrorDialog;
@@ -104,19 +101,18 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     private CallbackManager callbackManager;
     private AccessTokenTracker accessTokenTracker;
     private ProfileTracker profileTracker;
-    int currentPage = 0;
-    Timer timer;
-    int NUM_PAGES = 4;
+    private int currentPage = 0;
+    private Timer timer;
+    private int NUM_PAGES = 4;
     private static final String LEFT = "<b><font color='#ffffff'>";
     private static final String RIGHT = "</font></b>";
-    String PROJECT_NUMBER=getString(R.string.ID_PROJECT_NO);
-    String mGcmId;
+    private String mGcmId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
-        mGcmId =getGcmId();
+        mGcmId = GcmIdReceiver.getGcmId(this);
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getToken())) {
             openHomeScreen();
         } else {
@@ -161,10 +157,10 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         StringBuilder womenGrowth = new StringBuilder();
         womenGrowth.append("A Growth Network").append(LEFT).append(" Only for Women ").append(RIGHT).append("Because");
         if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-          //  mTvJoin.setText(Html.fromHtml(stringBuilder.toString(), 0)); // for 24 api and more
+            //  mTvJoin.setText(Html.fromHtml(stringBuilder.toString(), 0)); // for 24 api and more
             mTvGrowthWomen.setText(Html.fromHtml(womenGrowth.toString(), 0)); // for 24 api and more
-        }else {
-           // mTvJoin.setText(Html.fromHtml(stringBuilder.toString())); // for 24 api and more
+        } else {
+            // mTvJoin.setText(Html.fromHtml(stringBuilder.toString())); // for 24 api and more
             mTvGrowthWomen.setText(Html.fromHtml(womenGrowth.toString())); // for 24 api and more
         }
         mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -209,7 +205,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         Intent loginIntent = new Intent(this, LoginActivity.class);
         loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(loginIntent);
-        finishAffinity();
+        finish();
     }
 
     private void fbSignIn() {
@@ -416,6 +412,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                 if (null != loginResponse && StringUtil.isNotNullOrEmptyString(loginResponse.getToken())) {
                     loginResponse.setTokenTime(System.currentTimeMillis());
                     loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
+                    loginResponse.setGcmId(mGcmId);
                     userPreference.set(loginResponse);
                     openHomeScreen();
                 } else {
@@ -442,9 +439,10 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                 break;
         }
     }
+
     @Override
     public void onBackPressed() {
-     super.onBackPressed();
+        super.onBackPressed();
     }
 
     @Override
@@ -483,27 +481,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         if (result.equalsIgnoreCase(AppConstants.SUCCESS)) {
         }
     }
-    private String getGcmId()
-    {
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 
-        StrictMode.setThreadPolicy(policy);
-        GCMClientManager pushClientManager = new GCMClientManager(this, PROJECT_NUMBER);
-        pushClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
-            @Override
-            public void onSuccess(String registrationId, boolean isNewRegistration) {
 
-                LogUtils.info("Registration id", registrationId);
-
-                mGcmId = registrationId;
-            }
-
-            @Override
-            public void onFailure(String ex) {
-                super.onFailure(ex);
-            }
-        });
-        return mGcmId;
-    }
 }
 

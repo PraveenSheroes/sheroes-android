@@ -1680,7 +1680,6 @@ public class AppUtils {
         loginRequest.setAdvertisementid("string");
         loginRequest.setDeviceid(appUtils.getDeviceId());
         loginRequest.setDevicetype(appUtils.getDeviceModel());
-        loginRequest.setGcmorapnsid(appUtils.getCloudMessaging());
         return loginRequest;
     }
     public static DeactivateOwnerRequest deActivateOwnerRequestBuilder(Long communityId) {

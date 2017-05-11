@@ -48,7 +48,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.LastComment;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
-import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
@@ -86,7 +85,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.MARK_AS_SPA
  * Title: Base fragment for all child fragment.
  * all the common behaviour.
  */
-public class BaseFragment extends Fragment implements View.OnClickListener, HomeView,CommunityView,ProfileView {
+public class BaseFragment extends Fragment implements View.OnClickListener, HomeView, CommunityView, ProfileView {
     private final String TAG = LogUtils.makeLogTag(BaseFragment.class);
     public FragmentActivity mActivity;
     private FragmentListRefreshData mFragmentListRefreshData;
@@ -238,7 +237,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
             mPageNo = mFragmentListRefreshData.getPageNo();
             if (mPageNo == AppConstants.ONE_CONSTANT && mFragmentListRefreshData.getSwipeToRefresh() == AppConstants.ONE_CONSTANT) {
-                if (StringUtil.isNotNullOrEmptyString(mfeedDetailList.get(0).getId()) && StringUtil.isNotNullOrEmptyString(feedDetailList.get(0).getId())) {
+                if (StringUtil.isNotEmptyCollection(mfeedDetailList)&&StringUtil.isNotNullOrEmptyString(mfeedDetailList.get(0).getId()) && StringUtil.isNotNullOrEmptyString(feedDetailList.get(0).getId())) {
                     if (mfeedDetailList.get(0).getId().equalsIgnoreCase(feedDetailList.get(0).getId())) {
                         Toast.makeText(getContext(), getString(R.string.ID_FEED_ALREADY_REFRESH), Toast.LENGTH_SHORT).show();
                     } else {
@@ -246,7 +245,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                     }
                 }
             }
-            if (mPageNo == 1) {
+            if (mPageNo == AppConstants.ONE_CONSTANT ) {
                 mfeedDetailList = feedDetailList;
             }
             mFragmentListRefreshData.setPageNo(++mPageNo);
@@ -260,7 +259,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                 mLayoutManager.scrollToPositionWithOffset(0, 0);
             }
         } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
-            //mLiNoResult.setVisibility(View.VISIBLE);
+           // mLiNoResult.setVisibility(View.VISIBLE);
         } else {
             mLiNoResult.setVisibility(View.GONE);
         }
@@ -489,7 +488,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     }
 
     @Override
-    public void getNotificationReadCountSuccess(NotificationReadCountResponse notificationReadCountResponse) {
+    public void getNotificationReadCountSuccess(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
 
     }
 

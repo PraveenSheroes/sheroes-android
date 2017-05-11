@@ -39,6 +39,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobApplyRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobApplyResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.login.GcmIdResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
@@ -165,6 +166,8 @@ public interface SheroesAppServiceApi {
     Observable<GetInterestJobResponse> getInterestJobSearchFromApi(@Body GetAllDataRequest getAllDataRequest);
     @POST("participant/user/add_or_edit")
     Observable<BoardingDataResponse> getCurrentStatusFromApi(@Body BoardingTellUsRequest boardingTellUsRequest);
+    @POST("participant/user/gcmIdChange")
+    Observable<GcmIdResponse> getNewGCMidFromApi(@Body LoginRequest loginRequest);
     @POST("participant/user/add_or_edit")
     Observable<BoardingDataResponse> getLookingForHowCanFromApi(@Body BoardingLookingForHowCanRequest boardingLookingForHowCanRequest);
     @POST("participant/user/add_or_edit")

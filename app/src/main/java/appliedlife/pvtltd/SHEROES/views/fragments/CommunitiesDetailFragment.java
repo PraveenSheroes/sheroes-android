@@ -308,6 +308,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
                 noDataList.add(noDetail);
                 mAdapter.setSheroesGenericListData(noDataList);
                 mAdapter.notifyDataSetChanged();
+                mProgressBar.setVisibility(View.GONE);
             } catch (CloneNotSupportedException e) {
                 e.printStackTrace();
             }
