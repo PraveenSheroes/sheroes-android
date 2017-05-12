@@ -150,6 +150,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     public TextView mTvNotificationReadCount;
     @Bind(R.id.fab_add_community)
     FloatingActionButton mFloatingActionButton;
+    @Bind(R.id.fl_notification)
+    FrameLayout mFlNotification;
     @Bind(R.id.fab_filter)
     FloatingActionButton mJobFragment;
     @Bind(R.id.li_home_community_button_layout)
@@ -261,6 +263,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     @OnClick(R.id.tv_logout)
     public void logOut() {
         mUserPreference.delete();
+      //  MoEHelper.getInstance(getApplicationContext()).logoutUser();
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(intent);
@@ -271,7 +274,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     public void handleOnClick(BaseResponse baseResponse, View view) {
         if (baseResponse instanceof BellNotificationResponse) {
             BellNotificationResponse bellNotificationResponse = (BellNotificationResponse) baseResponse;
-            if (null != bellNotificationResponse) {
                 if (StringUtil.isNotNullOrEmptyString(bellNotificationResponse.getScreenName())) {
                     if (bellNotificationResponse.getScreenName().equalsIgnoreCase(AppConstants.CLICKABLE_SCREEN)) {
                         if (StringUtil.isNotNullOrEmptyString(bellNotificationResponse.getSolrIgnoreDeepLinkUrl())) {
@@ -287,9 +289,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     } else if (bellNotificationResponse.getScreenName().equalsIgnoreCase(AppConstants.NOT_CLICABLE)) {
 
                     }
-
-                }
-
             }
         } else if (baseResponse instanceof FeedDetail) {
             mFeedDetail = (FeedDetail) baseResponse;
@@ -734,6 +733,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             mFragmentOpen.setOpenImageViewer(false);
             getSupportFragmentManager().popBackStackImmediate();
         } else if (mFragmentOpen.isBellNotificationFragment()) {
+            mFlNotification.setEnabled(true);
             mFragmentOpen.setBellNotificationFragment(false);
             getSupportFragmentManager().popBackStackImmediate();
         } else {
@@ -829,6 +829,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     }
 
     public void callBellNotification() {
+        mFlNotification.setEnabled(false);
         flNotificationReadCount.setVisibility(View.GONE);
         mFragmentOpen.setBellNotificationFragment(true);
         setAllValues(mFragmentOpen);

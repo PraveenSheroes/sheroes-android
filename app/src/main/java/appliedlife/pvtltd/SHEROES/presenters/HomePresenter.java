@@ -27,8 +27,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCount;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.login.GcmIdResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
@@ -51,7 +49,6 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_LIKE_
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MY_COMMUNITIES;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_SEARCH_DATA;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.GCM_ID;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.JOIN_INVITE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.LIKE_UNLIKE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.MARK_AS_SPAM;
@@ -100,26 +97,6 @@ public class HomePresenter extends BasePresenter<HomeView> {
     public boolean isViewAttached() {
         return super.isViewAttached();
     }
-    public void getNewGCMidFromPresenter(LoginRequest loginRequest) {
-        Subscription subscription = mHomeModel.getNewGCMidFromModel(loginRequest).subscribe(new Subscriber<GcmIdResponse>() {
-            @Override
-            public void onCompleted() {
-            }
-
-            @Override
-            public void onError(Throwable e) {
-            }
-
-            @Override
-            public void onNext(GcmIdResponse gcmIdResponse) {
-                if (null != gcmIdResponse) {
-                    getMvpView().getNotificationReadCountSuccess(gcmIdResponse,GCM_ID);
-                }
-            }
-        });
-        registerSubscription(subscription);
-    }
-
     public void getAuthTokenRefreshPresenter() {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);

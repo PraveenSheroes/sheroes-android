@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="appliedlife.pvtltd.SHEROES">
 
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -20,6 +21,7 @@
         android:allowBackup="false"
         android:icon="@mipmap/ic_sheroes_launcher"
         android:label="@string/ID_APP_NAME"
+        tools:replace="android:label"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <meta-data
@@ -29,7 +31,9 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="07aa242372597565df80681a25002e6e25e6ef0e" />
-
+        <meta-data
+            android:name="APP_ID"
+            android:value="6PUYXFWI96ZP47C1OKF5UFG8" />
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.OnBoardingActivity"
             android:windowSoftInputMode="stateHidden"

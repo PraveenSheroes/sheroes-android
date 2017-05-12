@@ -150,13 +150,19 @@ public <init>(android.content.Context, android.util.AttributeSet, int);
 }
 
 -keep interface android.support.design.widget.** { *; }
+-dontwarn com.google.android.gms.location.**
+-dontwarn com.google.android.gms.gcm.**
+-dontwarn com.google.android.gms.iid.**
+-dontwarn okio.**
+
+
+
 
 -dontwarn com.flurry.**
 -dontwarn okio.**
 -dontwarn oauth.signpost.signature.**
 -dontwarn com.nhaarman.**
 -dontwarn com.squareup.**
--dontwarn com.google.android.gms.**
 -dontwarn com.androidquery.auth.**
 -dontwarn javax.annotation.Nullable
 -dontwarn javax.annotation.CheckReturnValue
@@ -164,7 +170,7 @@ public <init>(android.content.Context, android.util.AttributeSet, int);
 -dontwarn com.crashlytics.**
 -dontwarn io.intercom.**
 -dontwarn com.freshdesk.hotline.**
-
+-dontwarn com.google.android.gms.cast.**
 -keepclassmembers class * extends com.apptimize.ApptimizeTest {
     <methods>;
 }

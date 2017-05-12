@@ -27,11 +27,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
-import appliedlife.pvtltd.SHEROES.models.entities.login.GcmIdResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
-import appliedlife.pvtltd.SHEROES.service.GcmIdReceiver;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -45,7 +42,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.feedRequestBuilder;
-import static appliedlife.pvtltd.SHEROES.utils.AppUtils.loginRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.notificationReadCountRequestBuilder;
 
 /**
@@ -89,7 +85,6 @@ public class HomeFragment extends BaseFragment {
     ProgressBar mProgressBarFirstLoad;
     @Bind(R.id.tv_refresh)
     TextView tvRefresh;
-    String mNewGcmId, mOldGcmId;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -147,17 +142,6 @@ public class HomeFragment extends BaseFragment {
                     mHomePresenter.getAuthTokenRefreshPresenter();
                 } else {
                     mHomePresenter.getFeedFromPresenter(feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
-
-                    if (StringUtil.isNotNullOrEmptyString(mUserPreference.get().getGcmId())) {
-                        mNewGcmId = GcmIdReceiver.getGcmId(getActivity());
-                        mOldGcmId = mUserPreference.get().getGcmId();
-                        if(!mOldGcmId.equalsIgnoreCase(mNewGcmId))
-                        {
-                            LoginRequest loginRequest=loginRequestBuilder();
-                            loginRequest.setGcmorapnsid(mNewGcmId);
-                            mHomePresenter.getNewGCMidFromPresenter(loginRequest);
-                        }
-                    }
                 }
             }
         } else {
@@ -195,9 +179,6 @@ public class HomeFragment extends BaseFragment {
             case NOTIFICATION_COUNT:
                 unReadNotificationCount(baseResponse);
                 break;
-            case GCM_ID:
-                gcmIdResponse(baseResponse);
-                break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
         }
@@ -224,20 +205,6 @@ public class HomeFragment extends BaseFragment {
                 break;
             default:
                 ((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.GONE);
-        }
-    }
-    private void gcmIdResponse(BaseResponse baseResponse) {
-        switch (baseResponse.getStatus()) {
-            case AppConstants.SUCCESS:
-                if (baseResponse instanceof GcmIdResponse) {
-                    LoginResponse loginResponse = mUserPreference.get();
-                    loginResponse.setGcmId(mNewGcmId);
-                    mUserPreference.set(loginResponse);
-                }
-                break;
-            case AppConstants.FAILED:
-                break;
-            default:
         }
     }
 

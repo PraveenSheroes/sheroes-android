@@ -54,7 +54,9 @@ public class LoginActivity extends BaseActivity implements LoginFragment.LoginAc
     public void renderLoginFragmentView() {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        Bundle bundle =getIntent().getExtras();
         LoginFragment frag = new LoginFragment();
+        frag.setArguments(bundle);
         callFirstFragment(R.id.fragment_login, frag);
     }
 

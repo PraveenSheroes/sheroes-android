@@ -81,14 +81,19 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
     private ViewPager mViewPager;
     @Inject
     Preference<LoginResponse> userPreference;
-
+   // private MoEHelper mHelper;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         GoogleAnalyticsTracing.screenNameTracking(this, TAG);
+     //   mHelper = MoEHelper.getInstance(this);
         mSheroesApplication = (SheroesApplication) this.getApplicationContext();
     }
-
+    @Override
+    protected void onStart() {
+        super.onStart();
+       // mHelper.onStart(this);
+    }
     public void setAllValues(FragmentOpen fragmentOpen) {
         this.mFragmentOpen = fragmentOpen;
     }
@@ -174,11 +179,13 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        //mHelper.onSaveInstanceState(outState);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+       // mHelper.onResume(this);
         mSheroesApplication.setCurrentActivityName(this.getClass().getSimpleName());
     }
 
@@ -186,6 +193,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
     protected void onStop() {
         super.onStop();
         if (mSheroesApplication != null) {
+         //   mHelper.onStop(this);
             mSheroesApplication.notifyIfAppInBackground();
         }
         clearReferences();

@@ -41,11 +41,11 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.presenters.LoginPresenter;
-import appliedlife.pvtltd.SHEROES.service.GcmIdReceiver;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -88,6 +88,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
     private CallbackManager callbackManager;
     private AccessTokenTracker accessTokenTracker;
     private ProfileTracker profileTracker;
+    //private MoEHelper mMoEHelper;
     private String mGcmId;
     @Override
     public void onAttach(Context context) {
@@ -104,7 +105,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mGcmId = GcmIdReceiver.getGcmId(getActivity());
+        //mMoEHelper = MoEHelper.getInstance(getApplicationContext());
         FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
         accessTokenTracker = new AccessTokenTracker() {
@@ -122,11 +123,15 @@ public class LoginFragment extends BaseFragment implements LoginView {
         accessTokenTracker.startTracking();
         profileTracker.startTracking();
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_login, container, false);
         ButterKnife.bind(this, view);
+        if(null!=getArguments()) {
+            mGcmId = getArguments().getString(AppConstants.SHEROES_AUTH_TOKEN);
+        }
         mLoginPresenter.attachView(this);
         mEmailView.getBackground().setColorFilter(getResources().getColor(R.color.blue), PorterDuff.Mode.SRC_ATOP);
         mPasswordView.getBackground().setColorFilter(getResources().getColor(R.color.blue), PorterDuff.Mode.SRC_ATOP);
@@ -167,6 +172,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                         loginResponse.setTokenTime(System.currentTimeMillis());
                         loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
                         loginResponse.setGcmId(mGcmId);
+                      //  setUserAttributeOnMoEngage(loginResponse);
                         mUserPreference.set(loginResponse);
                         mLoginActivityIntractionListner.onLoginAuthToken();
                         break;
@@ -189,6 +195,8 @@ public class LoginFragment extends BaseFragment implements LoginView {
                     }*/
                     loginResponse.setTokenTime(System.currentTimeMillis());
                     loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
+                    loginResponse.setGcmId(mGcmId);
+                    //setUserAttributeOnMoEngage(loginResponse);
                     mUserPreference.set(loginResponse);
                     mLoginActivityIntractionListner.onLoginAuthToken();
                 } else {
@@ -198,6 +206,38 @@ public class LoginFragment extends BaseFragment implements LoginView {
             }
         }
     }
+
+    @Override
+    public void getGcmResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
+
+    }
+
+   /* private void setUserAttributeOnMoEngage(LoginResponse loginResponse) {
+        if (null != loginResponse.getUserSummary() && loginResponse.getUserSummary().getUserId() > 0) {
+            mMoEHelper.setUniqueId(loginResponse.getUserSummary().getUserId());
+            // If you have first and last name separately
+            if (null != loginResponse.getUserSummary().getUserBO()) {
+                if (StringUtil.isNotNullOrEmptyString(loginResponse.getUserSummary().getUserBO().getFirstName())) {
+                    mMoEHelper.setFirstName(loginResponse.getUserSummary().getUserBO().getFirstName());
+                }
+                if (StringUtil.isNotNullOrEmptyString(loginResponse.getUserSummary().getUserBO().getLastName())) {
+                    mMoEHelper.setLastName(loginResponse.getUserSummary().getUserBO().getLastName());
+                }
+                if (StringUtil.isNotNullOrEmptyString(loginResponse.getUserSummary().getUserBO().getDob())) {
+                    mMoEHelper.setBirthDate(loginResponse.getUserSummary().getUserBO().getDob());
+                }
+                if (StringUtil.isNotNullOrEmptyString(loginResponse.getUserSummary().getUserBO().getEmailid())) {
+                    mMoEHelper.setEmail(loginResponse.getUserSummary().getUserBO().getEmailid());
+                }
+                if (StringUtil.isNotNullOrEmptyString(loginResponse.getUserSummary().getUserBO().getGender())) {
+                    mMoEHelper.setGender(loginResponse.getUserSummary().getUserBO().getGender());
+                }
+                if (StringUtil.isNotNullOrEmptyString(loginResponse.getUserSummary().getUserBO().getMobile())) {
+                    mMoEHelper.setNumber(loginResponse.getUserSummary().getUserBO().getMobile());
+                }
+            }
+        }
+    }*/
 
     @Override
     public void onDestroyView() {

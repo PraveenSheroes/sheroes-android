@@ -37,7 +37,6 @@ android {
     }
     buildTypes {
         debug {
-           // buildConfigField "String", "BASE_URL", "\"http://34.193.138.177/\""
             buildConfigField "String", "BASE_URL", "\"http://34.193.138.177/\""
             buildConfigField 'Boolean', 'enableCrashlytics', 'false'
             shrinkResources false
@@ -102,6 +101,7 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true;
     }
+   // compile 'com.moengage:moe-android-sdk:7.7.01'
 }
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'io.fabric'

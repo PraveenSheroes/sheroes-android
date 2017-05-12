@@ -29,7 +29,7 @@ public class LoginResponse extends BaseResponse implements Parcelable {
     private String gcmId;
     @SerializedName("next_screen")
     @Expose
-    String nextScreen;
+    private String nextScreen;
     public String getToken() {
         return token;
     }
@@ -80,6 +80,7 @@ public class LoginResponse extends BaseResponse implements Parcelable {
     public void setGcmId(String gcmId) {
         this.gcmId = gcmId;
     }
+
 
     @Override
     public int describeContents() {

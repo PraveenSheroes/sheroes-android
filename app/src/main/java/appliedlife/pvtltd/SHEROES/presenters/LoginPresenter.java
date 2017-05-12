@@ -8,6 +8,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.LoginModel;
 import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
+import appliedlife.pvtltd.SHEROES.models.entities.login.GcmIdResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
@@ -19,6 +20,7 @@ import rx.Subscriber;
 import rx.Subscription;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_AUTH_TOKEN;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.GCM_ID;
 
 /**
  * Created by Praveen_Singh on 04-01-2017.
@@ -59,7 +61,25 @@ public class LoginPresenter extends BasePresenter<LoginView> {
         return super.isViewAttached();
     }
 
+    public void getNewGCMidFromPresenter(LoginRequest loginRequest) {
+        Subscription subscription = mLoginModel.getNewGCMidFromModel(loginRequest).subscribe(new Subscriber<GcmIdResponse>() {
+            @Override
+            public void onCompleted() {
+            }
 
+            @Override
+            public void onError(Throwable e) {
+            }
+
+            @Override
+            public void onNext(GcmIdResponse gcmIdResponse) {
+                if (null != gcmIdResponse) {
+                    getMvpView().getGcmResponse(gcmIdResponse,GCM_ID);
+                }
+            }
+        });
+        registerSubscription(subscription);
+    }
     public void getLoginAuthTokeInPresenter(LoginRequest loginRequest,boolean isSignUp) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);

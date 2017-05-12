@@ -20,8 +20,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCount;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.login.GcmIdResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostResponse;
@@ -222,17 +220,4 @@ public class HomeModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-    public Observable<GcmIdResponse> getNewGCMidFromModel(LoginRequest loginRequest){
-        LogUtils.info(TAG," Gcm id  request"+new Gson().toJson(loginRequest));
-        return sheroesAppServiceApi.getNewGCMidFromApi(loginRequest)
-                .map(new Func1<GcmIdResponse, GcmIdResponse>() {
-                    @Override
-                    public GcmIdResponse call(GcmIdResponse gcmIdResponse) {
-                        return gcmIdResponse;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
-
 }

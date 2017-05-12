@@ -6,6 +6,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
+import appliedlife.pvtltd.SHEROES.models.entities.login.GcmIdResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -74,5 +75,16 @@ public class LoginModel {
 
     }
 
-
+    public Observable<GcmIdResponse> getNewGCMidFromModel(LoginRequest loginRequest){
+        LogUtils.info(TAG," Gcm id  request"+new Gson().toJson(loginRequest));
+        return sheroesAppServiceApi.getNewGCMidFromApi(loginRequest)
+                .map(new Func1<GcmIdResponse, GcmIdResponse>() {
+                    @Override
+                    public GcmIdResponse call(GcmIdResponse gcmIdResponse) {
+                        return gcmIdResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
 }

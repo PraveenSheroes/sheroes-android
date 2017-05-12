@@ -1677,9 +1677,9 @@ public class AppUtils {
         LoginRequest loginRequest = new LoginRequest();
         AppUtils appUtils = AppUtils.getInstance();
         //TODO:: check real data
-        loginRequest.setAdvertisementid("string");
+        loginRequest.setAdvertisementid(appUtils.getDeviceManufacturer());
         loginRequest.setDeviceid(appUtils.getDeviceId());
-        loginRequest.setDevicetype(appUtils.getDeviceModel());
+        loginRequest.setDevicetype(AppConstants.SOURCE_NAME);
         return loginRequest;
     }
     public static DeactivateOwnerRequest deActivateOwnerRequestBuilder(Long communityId) {

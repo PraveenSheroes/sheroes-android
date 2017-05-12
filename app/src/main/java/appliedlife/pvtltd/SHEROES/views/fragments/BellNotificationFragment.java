@@ -89,7 +89,7 @@ public class BellNotificationFragment extends BaseFragment implements HomeView {
     @OnClick(R.id.iv_back_setting)
     public void backClick()
     {
-        ((HomeActivity) getActivity()).getSupportFragmentManager().popBackStack();
+        ((HomeActivity) getActivity()).onBackPressed();
     }
     @Override
     public void startProgressBar() {
