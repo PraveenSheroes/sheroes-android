@@ -31,6 +31,7 @@ import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.moe.pushlibrary.MoEHelper;
 
 import org.json.JSONObject;
 
@@ -54,6 +55,8 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.LoginView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 
 /**
@@ -88,7 +91,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
     private CallbackManager callbackManager;
     private AccessTokenTracker accessTokenTracker;
     private ProfileTracker profileTracker;
-    //private MoEHelper mMoEHelper;
+    private MoEHelper mMoEHelper;
     private String mGcmId;
     @Override
     public void onAttach(Context context) {
@@ -105,7 +108,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //mMoEHelper = MoEHelper.getInstance(getApplicationContext());
+        mMoEHelper = MoEHelper.getInstance(getApplicationContext());
         FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
         accessTokenTracker = new AccessTokenTracker() {
@@ -172,7 +175,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                         loginResponse.setTokenTime(System.currentTimeMillis());
                         loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
                         loginResponse.setGcmId(mGcmId);
-                      //  setUserAttributeOnMoEngage(loginResponse);
+                        setUserAttributeOnMoEngage(loginResponse);
                         mUserPreference.set(loginResponse);
                         mLoginActivityIntractionListner.onLoginAuthToken();
                         break;
@@ -196,7 +199,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                     loginResponse.setTokenTime(System.currentTimeMillis());
                     loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
                     loginResponse.setGcmId(mGcmId);
-                    //setUserAttributeOnMoEngage(loginResponse);
+                    setUserAttributeOnMoEngage(loginResponse);
                     mUserPreference.set(loginResponse);
                     mLoginActivityIntractionListner.onLoginAuthToken();
                 } else {
@@ -212,7 +215,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
 
     }
 
-   /* private void setUserAttributeOnMoEngage(LoginResponse loginResponse) {
+    private void setUserAttributeOnMoEngage(LoginResponse loginResponse) {
         if (null != loginResponse.getUserSummary() && loginResponse.getUserSummary().getUserId() > 0) {
             mMoEHelper.setUniqueId(loginResponse.getUserSummary().getUserId());
             // If you have first and last name separately
@@ -237,7 +240,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                 }
             }
         }
-    }*/
+    }
 
     @Override
     public void onDestroyView() {

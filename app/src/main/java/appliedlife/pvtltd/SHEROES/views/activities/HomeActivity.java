@@ -39,6 +39,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.f2prateek.rx.preferences.Preference;
+import com.moe.pushlibrary.MoEHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -263,7 +264,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     @OnClick(R.id.tv_logout)
     public void logOut() {
         mUserPreference.delete();
-      //  MoEHelper.getInstance(getApplicationContext()).logoutUser();
+        MoEHelper.getInstance(getApplicationContext()).logoutUser();
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(intent);

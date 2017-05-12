@@ -155,7 +155,35 @@ public <init>(android.content.Context, android.util.AttributeSet, int);
 -dontwarn com.google.android.gms.iid.**
 -dontwarn okio.**
 
+-keep class com.google.android.gms.gcm.** { *; }
+-keep class com.google.android.gms.iid.** { *; }
+-keep class com.google.android.gms.location.** { *; }
+-keep class com.facebook.drawee.**{*;}
+-dontwarn com.facebook.drawee.
 
+-keep class com.moengage.** { *; }
+-keep class com.moe.pushlibrary.activities.** { *; }
+-keep class com.moengage.locationlibrary.GeofenceIntentService.**
+-keep class com.moe.pushlibrary.InstallReceiver
+-keep class com.moengage.push.MoEPushWorker
+-keep class com.moe.pushlibrary.providers.MoEProvider
+-keep class com.moengage.receiver.MoEInstanceIDListener
+-keep class com.moengage.worker.MoEGCMListenerService
+-keep class com.moe.pushlibrary.models.** { *;}
+-keep class com.moengage.core.GeoTask
+-keep class com.moengage.location.GeoManager
+-keep class com.moengage.inapp.InAppManager
+-keep class com.moengage.push.PushManager
+-keep class com.moengage.inapp.InAppController
+
+
+-dontwarn com.moengage.location.GeoManager
+-dontwarn com.moengage.core.GeoTask
+-dontwarn com.moengage.receiver.*
+-dontwarn com.moengage.worker.*
+-dontwarn com.moengage.ViewEngine
+-dontwarn com.moengage.**
+-keep class com.delight.**  { *; }
 
 
 -dontwarn com.flurry.**

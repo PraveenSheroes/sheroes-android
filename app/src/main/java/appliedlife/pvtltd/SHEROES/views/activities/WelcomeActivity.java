@@ -35,6 +35,7 @@ import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.moe.pushlibrary.MoEHelper;
 
 import org.json.JSONObject;
 
@@ -118,14 +119,14 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     private static final String LEFT = "<b><font color='#ffffff'>";
     private static final String RIGHT = "</font></b>";
     private String mGcmId;
-   // private MoEHelper mMoEHelper;
+    private MoEHelper mMoEHelper;
     private String  mOldGcmId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
-      //  mMoEHelper = MoEHelper.getInstance(getApplicationContext());
+        mMoEHelper = MoEHelper.getInstance(getApplicationContext());
         getGcmId();
     }
 
@@ -133,15 +134,15 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         int versionCode = BuildConfig.VERSION_CODE;
         if (null != mInstallUpdatePreference && mInstallUpdatePreference.isSet() && null != mInstallUpdatePreference.get()) {
             if (mInstallUpdatePreference.get().getAppVersion() <= versionCode) {
-            //    mMoEHelper.setExistingUser(true);
+                mMoEHelper.setExistingUser(true);
             } else {
-             //   mMoEHelper.setExistingUser(false);
+                mMoEHelper.setExistingUser(false);
             }
         } else {
             InstallUpdateForMoEngage installUpdateForMoEngage = new InstallUpdateForMoEngage();
             installUpdateForMoEngage.setAppVersion(versionCode);
             mInstallUpdatePreference.set(installUpdateForMoEngage);
-            //mMoEHelper.setExistingUser(false);
+            mMoEHelper.setExistingUser(false);
         }
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getGcmId())) {
             mOldGcmId = userPreference.get().getGcmId();
@@ -478,7 +479,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                     loginResponse.setTokenTime(System.currentTimeMillis());
                     loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
                     loginResponse.setGcmId(mGcmId);
-                  //  setUserAttributeOnMoEngage(loginResponse);
+                    setUserAttributeOnMoEngage(loginResponse);
                     userPreference.set(loginResponse);
                     openHomeScreen();
                 } else {
@@ -506,7 +507,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         }
     }
 
-   /* private void setUserAttributeOnMoEngage(LoginResponse loginResponse) {
+    private void setUserAttributeOnMoEngage(LoginResponse loginResponse) {
         if (null != loginResponse.getUserSummary() && loginResponse.getUserSummary().getUserId() > 0) {
             mMoEHelper.setUniqueId(loginResponse.getUserSummary().getUserId());
             // If you have first and last name separately
@@ -532,7 +533,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             }
         }
     }
-*/
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
