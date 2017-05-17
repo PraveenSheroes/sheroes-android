@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.f2prateek.rx.preferences.Preference;
+import com.moe.pushlibrary.MoEHelper;
+import com.moe.pushlibrary.PayloadBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +26,8 @@ import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageEvent;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -34,6 +38,8 @@ import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.communityRequestBuilder;
 
 /**
  * Created by SHEROES-TECH on 09-02-2017.
@@ -48,13 +54,16 @@ public class CommunityOptionJoinDialog extends BaseDialogFragment implements Hom
     HomePresenter mHomePresenter;
     @Inject
     AppUtils mAppUtils;
-
+    private MoEHelper mMoEHelper;
+    private PayloadBuilder payloadBuilder;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getActivity()).inject(this);
         View view = inflater.inflate(R.layout.join_community_region_dialog, container, false);
         ButterKnife.bind(this, view);
         mHomePresenter.attachView(this);
+        mMoEHelper = MoEHelper.getInstance(getActivity());
+        payloadBuilder = new PayloadBuilder();
         mFeedDetail = getArguments().getParcelable(DISMISS_PARENT_ON_OK_OR_BACK);
         setCancelable(true);
         return view;
@@ -97,7 +106,7 @@ public class CommunityOptionJoinDialog extends BaseDialogFragment implements Hom
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
             List<Long> userIdList = new ArrayList();
             userIdList.add((long) userPreference.get().getUserSummary().getUserId());
-            mHomePresenter.communityJoinFromPresenter(mAppUtils.communityRequestBuilder(userIdList, mFeedDetail.getIdOfEntityOrParticipant(), reasonToJoin));
+            mHomePresenter.communityJoinFromPresenter(communityRequestBuilder(userIdList, mFeedDetail.getIdOfEntityOrParticipant(), reasonToJoin));
         }
     }
 
@@ -115,7 +124,6 @@ public class CommunityOptionJoinDialog extends BaseDialogFragment implements Hom
     public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
         switch (baseResponse.getStatus()) {
             case AppConstants.SUCCESS:
-
                 mFeedDetail.setRequestPending(true);
                 mFeedDetail.setOwner(false);
                 if (mFeedDetail.isFromHome()) {
@@ -123,6 +131,7 @@ public class CommunityOptionJoinDialog extends BaseDialogFragment implements Hom
                 } else {
                     ((CommunitiesDetailActivity) getActivity()).onJoinDialogSuccessResult(baseResponse.getStatus(), mFeedDetail);
                 }
+                entityMoEngageJoinedCommunity(mFeedDetail.getNameOrTitle(), mFeedDetail.getIdOfEntityOrParticipant(), mFeedDetail.isClosedCommunity(), MoEngageConstants.COMMUNITY_TAG,TAG,mFeedDetail.getItemPosition());
                 dismiss();
                 break;
             case AppConstants.FAILED:
@@ -137,7 +146,20 @@ public class CommunityOptionJoinDialog extends BaseDialogFragment implements Hom
         }
 
     }
+    public void entityMoEngageJoinedCommunity(String communityName, long communityId, boolean isClose, String communityTag, String screenName, int position) {
+        payloadBuilder.putAttrString(MoEngageConstants.COMMUNITY_NAME, communityName);
+        payloadBuilder.putAttrLong(MoEngageConstants.COMMUNITY_ID, communityId);
+        if (isClose) {
+            payloadBuilder.putAttrString(MoEngageConstants.COMMUNITY_PRIVACY, getString(R.string.ID_CLOSE_PRIVACY));
 
+        } else {
+            payloadBuilder.putAttrString(MoEngageConstants.COMMUNITY_PRIVACY, getString(R.string.ID_OPEN));
+        }
+        payloadBuilder.putAttrString(MoEngageConstants.COMMUNITY_TAG, communityTag);
+        payloadBuilder.putAttrString(MoEngageConstants.SCREEN_NAME, screenName);
+        payloadBuilder.putAttrInt(MoEngageConstants.POSITION_OF_ENTITY, position);
+        mMoEHelper.trackEvent(MoEngageEvent.EVENT_JOINED_COMMUNITY.value, payloadBuilder.build());
+    }
     @Override
     public void getDB(List<RecentSearchData> recentSearchDatas) {
 

@@ -3,7 +3,6 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 import android.app.DialogFragment;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -36,10 +35,9 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
 import com.f2prateek.rx.preferences.Preference;
 import com.moe.pushlibrary.MoEHelper;
+import com.moe.pushlibrary.PayloadBuilder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,6 +61,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -70,7 +69,6 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.CustomeDataList;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
-import appliedlife.pvtltd.SHEROES.views.cutomeviews.BlurrImage;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
@@ -172,11 +170,19 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     private MyCommunityInviteMemberFragment myCommunityInviteMemberFragment;
     private BellNotificationFragment bellNotificationFragment;
     boolean doubleBackToExitPressedOnce = false;
+    private MoEHelper mMoEHelper;
+    private PayloadBuilder payloadBuilder;
+    private long startedTime;
+    private MoEngageUtills moEngageUtills;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
+        mMoEHelper = MoEHelper.getInstance(this);
+        payloadBuilder = new PayloadBuilder();
+        moEngageUtills = MoEngageUtills.getInstance();
+        startedTime = System.currentTimeMillis();
         renderHomeFragmentView();
     }
 
@@ -191,7 +197,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         initHomeViewPagerAndTabs();
         assignNavigationRecyclerListView();
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
-             //TODO: this data to be removed
+            //TODO: this data to be removed
             profile = mUserPreference.get().getUserSummary().getPhotoUrl(); //"https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAhNAAAAJDYwZWIyZTg5LWFmOTItNGIwYS05YjQ5LTM2YTRkNGQ2M2JlNw.jpg";
             Glide.with(this)
                     .load(profile)
@@ -203,6 +209,11 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 mTvUserLocation.setText(mUserPreference.get().getUserSummary().getUserBO().getCityMaster());
             }
             Glide.with(this)
+                    .load(profile)
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .skipMemoryCache(true)
+                    .into(mIvSideDrawerProfileBlurBackground);
+          /*  Glide.with(this)
                     .load(profile).asBitmap()
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .skipMemoryCache(true)
@@ -212,7 +223,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                             Bitmap blurred = BlurrImage.blurRenderScript(HomeActivity.this, profileImage, 10);
                             mIvSideDrawerProfileBlurBackground.setImageBitmap(blurred);
                         }
-                    });
+                    });*/
 
         }
     }
@@ -268,6 +279,26 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(intent);
+        finish();
+        if (mFragmentOpen.isOpen()) {
+            moEngageUtills.entityMoEngageLogOut(this, mMoEHelper, payloadBuilder, AppConstants.FEED_SCREEN);
+        }
+        if (mFragmentOpen.isArticleFragment()) {
+            moEngageUtills.entityMoEngageLogOut(this, mMoEHelper, payloadBuilder, getString(R.string.ID_ARTICLE));
+        }
+        if (mFragmentOpen.isBookmarkFragment()) {
+            moEngageUtills.entityMoEngageLogOut(this, mMoEHelper, payloadBuilder, getString(R.string.ID_BOOKMARKS));
+        }
+        if (mFragmentOpen.isJobFragment()) {
+            moEngageUtills.entityMoEngageLogOut(this, mMoEHelper, payloadBuilder, getString(R.string.ID_JOB));
+        }
+        if (mFragmentOpen.isSettingFragment()) {
+            moEngageUtills.entityMoEngageLogOut(this, mMoEHelper, payloadBuilder, getString(R.string.ID_SETTING));
+        }
+        if (mFragmentOpen.isBellNotificationFragment()) {
+            moEngageUtills.entityMoEngageLogOut(this, mMoEHelper, payloadBuilder, getString(R.string.ID_NOTIFICATION));
+        }
+
     }
 
 
@@ -275,21 +306,18 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     public void handleOnClick(BaseResponse baseResponse, View view) {
         if (baseResponse instanceof BellNotificationResponse) {
             BellNotificationResponse bellNotificationResponse = (BellNotificationResponse) baseResponse;
-                if (StringUtil.isNotNullOrEmptyString(bellNotificationResponse.getScreenName())) {
-                    if (bellNotificationResponse.getScreenName().equalsIgnoreCase(AppConstants.CLICKABLE_SCREEN)) {
-                        if (StringUtil.isNotNullOrEmptyString(bellNotificationResponse.getSolrIgnoreDeepLinkUrl())) {
-                            String urlStr = bellNotificationResponse.getSolrIgnoreDeepLinkUrl();
-                            Uri url = Uri.parse(urlStr);
-                            Intent intent = new Intent(this, SheroesDeepLinkingActivity.class);
-                            intent.setData(url);
-                            startActivity(intent);
-                        } else {
-                            onBackPressed();
-                            homeOnClick();
-                        }
-                    } else if (bellNotificationResponse.getScreenName().equalsIgnoreCase(AppConstants.NOT_CLICABLE)) {
-
-                    }
+            if (StringUtil.isNotNullOrEmptyString(bellNotificationResponse.getScreenName())) {
+                if (StringUtil.isNotNullOrEmptyString(bellNotificationResponse.getSolrIgnoreDeepLinkUrl())) {
+                    String urlStr = bellNotificationResponse.getSolrIgnoreDeepLinkUrl();
+                    Uri url = Uri.parse(urlStr);
+                    Intent intent = new Intent(this, SheroesDeepLinkingActivity.class);
+                    intent.setData(url);
+                    startActivity(intent);
+                } else if (bellNotificationResponse.getScreenName().contains(AppConstants.COMMUNITY_URL)) {
+                    communityOnClick();
+                } else {
+                    homeOnClick();
+                }
             }
         } else if (baseResponse instanceof FeedDetail) {
             mFeedDetail = (FeedDetail) baseResponse;
@@ -320,25 +348,32 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     intent.putExtra(AppConstants.EXTRA_IMAGE, profile);
                     startActivity(intent);
                     overridePendingTransition(R.anim.fade_in_dialog, R.anim.fade_out_dialog);
+                    totalTimeSpentOnFeed();
+
                     break;
                 case AppConstants.TWO_CONSTANT:
                     checkForAllOpenFragments();
                     openArticleFragment(setCategoryIds());
+                    totalTimeSpentOnFeed();
                     break;
                 case AppConstants.THREE_CONSTANT:
                     checkForAllOpenFragments();
                     openJobFragment();
+                    totalTimeSpentOnFeed();
                     break;
                 case AppConstants.FOURTH_CONSTANT:
                     checkForAllOpenFragments();
                     openBookMarkFragment();
+                    totalTimeSpentOnFeed();
                     break;
                 case 5:
                     //   checkForAllOpenFragments();
                     openSettingFragment();
+                    totalTimeSpentOnFeed();
                     break;
                 case 6:
                     launchPlayStore();
+                    totalTimeSpentOnFeed();
                     break;
                 default:
 
@@ -350,6 +385,11 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
              /* Comment mCurrentStatusDialog list  comment menu option edit,delete */
             super.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU);
         }
+    }
+
+    private void totalTimeSpentOnFeed() {
+        long timeSpentFeed = System.currentTimeMillis() - startedTime;
+        moEngageUtills.entityMoEngageViewFeed(this, mMoEHelper, payloadBuilder, timeSpentFeed);
     }
 
     public void launchPlayStore() {
@@ -422,7 +462,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         bundle.putParcelable(AppConstants.HOME_FRAGMENT, mFeedDetail);
         homeFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_feed_full_view, homeFragment, HomeFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
-
+        totalTimeSpentOnFeed();
     }
 
     private void initCommunityViewPagerAndTabs() {
@@ -531,6 +571,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         //     mFragmentOpen.setCommunityOpen(true);
         initCommunityViewPagerAndTabs();
         //  }
+        totalTimeSpentOnFeed();
     }
 
     public void didTapButton(View view) {
@@ -739,7 +780,9 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             getSupportFragmentManager().popBackStackImmediate();
         } else {
             if (doubleBackToExitPressedOnce) {
+                getSupportFragmentManager().popBackStackImmediate();
                 finish();
+                totalTimeSpentOnFeed();
                 return;
             }
             doubleBackToExitPressedOnce = true;
@@ -835,7 +878,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         mFragmentOpen.setBellNotificationFragment(true);
         setAllValues(mFragmentOpen);
         BellNotificationFragment bellNotificationFragment = new BellNotificationFragment();
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
+        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.right_to_left_anim_enter, 0, 0, R.anim.right_to_left_anim_exit)
                 .add(R.id.fl_feed_comments, bellNotificationFragment, BellNotificationFragment.class.getName()).addToBackStack(BellNotificationFragment.class.getName()).commitAllowingStateLoss();
     }
 

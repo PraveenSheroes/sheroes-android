@@ -118,7 +118,6 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     private Context mContext;
     private String mViewMoreDescription;
     private int mItemPosition;
-
     public FeedArticleHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);

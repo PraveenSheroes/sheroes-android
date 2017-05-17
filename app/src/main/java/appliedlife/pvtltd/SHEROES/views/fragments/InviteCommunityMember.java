@@ -17,6 +17,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.moe.pushlibrary.MoEHelper;
+import com.moe.pushlibrary.PayloadBuilder;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +35,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -79,7 +84,9 @@ public class InviteCommunityMember extends BaseDialogFragment implements HomeVie
     private FeedDetail mFeedDetail;
     private int mPageNo = AppConstants.ONE_CONSTANT;
     private LinearLayoutManager manager;
-
+    private MoEHelper mMoEHelper;
+    private PayloadBuilder payloadBuilder;
+    private MoEngageUtills moEngageUtills;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getActivity()).inject(this);
@@ -88,6 +95,9 @@ public class InviteCommunityMember extends BaseDialogFragment implements HomeVie
         mHomePresenter.attachView(this);
         //   mPullRefreshList = new SwipPullRefreshList();
         //  mPullRefreshList.setPullToRefresh(false);
+        mMoEHelper = MoEHelper.getInstance(getActivity());
+        payloadBuilder = new PayloadBuilder();
+        moEngageUtills= MoEngageUtills.getInstance();
         Bundle bundle = getArguments();
         if (bundle != null) {
             mFeedDetail = bundle.getParcelable(AppConstants.COMMUNITIES_DETAIL);
@@ -220,7 +230,11 @@ public class InviteCommunityMember extends BaseDialogFragment implements HomeVie
                     count += mUserIdForAddMember.size();
                     mFeedDetail.setNoOfMembers(count);
                     ((CommunitiesDetailActivity) getActivity()).updateOpenAboutFragment(mFeedDetail);
+                    if(null!=mFeedDetail) {
+                        moEngageUtills.entityMoEngageAddedMember(getActivity(),mMoEHelper,payloadBuilder,mFeedDetail.getNameOrTitle(), mFeedDetail.getIdOfEntityOrParticipant(), mFeedDetail.isClosedCommunity(), MoEngageConstants.COMMUNITY_TAG, mFeedDetail.isMember(), mFeedDetail.getNoOfMembers());
+                    }
                 }
+
                 break;
             case AppConstants.FAILED:
                 ((CommunitiesDetailActivity) getActivity()).onShowErrorDialog(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);

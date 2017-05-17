@@ -93,20 +93,6 @@
                 android:layout_gravity="center"
                 android:background="@color/forgot_password" />
 
-            <com.facebook.login.widget.LoginButton
-                android:id="@+id/login_button"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_size_50"
-                android:layout_marginTop="@dimen/dp_size_50"
-                android:background="@drawable/rectangle_search_bar"
-                android:backgroundTint="@color/search_tab_text"
-                android:drawableLeft="@color/search_tab_text"
-                fb:login_text="@string/ID_CONTINUE_WITH_FACEBOOK"
-                android:visibility="invisible"
-                android:drawablePadding="@dimen/dp_size_15"
-                android:gravity="left|center"
-                android:paddingLeft="@dimen/dp_size_20"
-                android:textColor="@color/white" />
         </LinearLayout>
     </ScrollView>
 

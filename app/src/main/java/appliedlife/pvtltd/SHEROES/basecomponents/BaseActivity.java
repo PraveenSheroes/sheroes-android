@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import com.f2prateek.rx.preferences.Preference;
 import com.moe.pushlibrary.MoEHelper;
+import com.moe.pushlibrary.PayloadBuilder;
 
 import java.util.List;
 
@@ -36,6 +37,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionDoc;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -82,19 +85,25 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
     private ViewPager mViewPager;
     @Inject
     Preference<LoginResponse> userPreference;
-    private MoEHelper mHelper;
+    private MoEHelper mMoEHelper;
+    private PayloadBuilder payloadBuilder;
+    private  MoEngageUtills moEngageUtills;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         GoogleAnalyticsTracing.screenNameTracking(this, TAG);
-        mHelper = MoEHelper.getInstance(this);
+        mMoEHelper = MoEHelper.getInstance(this);
+        payloadBuilder = new PayloadBuilder();
+        moEngageUtills=MoEngageUtills.getInstance();
         mSheroesApplication = (SheroesApplication) this.getApplicationContext();
     }
+
     @Override
     protected void onStart() {
         super.onStart();
-        mHelper.onStart(this);
+        mMoEHelper.onStart(this);
     }
+
     public void setAllValues(FragmentOpen fragmentOpen) {
         this.mFragmentOpen = fragmentOpen;
     }
@@ -180,13 +189,13 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        mHelper.onSaveInstanceState(outState);
+        mMoEHelper.onSaveInstanceState(outState);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mHelper.onResume(this);
+        mMoEHelper.onResume(this);
         mSheroesApplication.setCurrentActivityName(this.getClass().getSimpleName());
     }
 
@@ -194,7 +203,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
     protected void onStop() {
         super.onStop();
         if (mSheroesApplication != null) {
-            mHelper.onStop(this);
+            mMoEHelper.onStop(this);
             mSheroesApplication.notifyIfAppInBackground();
         }
         clearReferences();
@@ -473,6 +482,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 intent.setType(AppConstants.SHARE_MENU_TYPE);
                 intent.putExtra(Intent.EXTRA_TEXT, feedDetail.getDeepLinkUrl());
                 startActivity(Intent.createChooser(intent, AppConstants.SHARE));
+                moEngageUtills.entityMoEngageCardShareVia(getApplicationContext(),mMoEHelper,payloadBuilder,feedDetail, MoEngageConstants.SHARE_VIA_SOCIAL);
                 popupWindow.dismiss();
             }
         });
@@ -485,6 +495,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
         });
         setMenuOptionVisibility(view, tvEdit, tvDelete, tvShare, tvReport, baseResponse);
     }
+
 
     private void setMenuOptionVisibility(View view, TextView tvEdit, TextView tvDelete, TextView tvShare, TextView tvReport, BaseResponse baseResponse) {
         int id = view.getId();

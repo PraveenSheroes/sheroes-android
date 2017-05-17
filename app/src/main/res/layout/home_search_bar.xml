@@ -82,7 +82,7 @@
             android:visibility="gone"
             android:layout_marginRight="@dimen/dp_size_2"
             android:layout_marginBottom="@dimen/dp_size_10"
-            android:background="@drawable/ic_blue_circle"
+            android:background="@drawable/ic_red_circle"
             android:backgroundTint="@color/footer_icon_text">
 
             <TextView

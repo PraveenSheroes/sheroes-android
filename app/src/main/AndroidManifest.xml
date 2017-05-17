@@ -24,6 +24,15 @@
         tools:replace="android:label"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/ID_FACEBOOK_APP_ID" />
@@ -33,7 +42,7 @@
             android:value="07aa242372597565df80681a25002e6e25e6ef0e" />
         <meta-data
             android:name="APP_ID"
-            android:value="6PUYXFWI96ZP47C1OKF5UFG8" />
+            android:value="6W7EV1LPHLO5LM7CM9IJ8IUP" />
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.OnBoardingActivity"
             android:windowSoftInputMode="stateHidden"

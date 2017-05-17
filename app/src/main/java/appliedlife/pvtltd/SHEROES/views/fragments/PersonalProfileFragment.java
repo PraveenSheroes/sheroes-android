@@ -90,7 +90,10 @@ public class PersonalProfileFragment extends BaseFragment implements ProfileView
     }
 
     public void onDataRefresh() {
-        profilePersenter.getALLUserDetails();
+        if (null != profilePersenter) {
+            setProgressBar(mProgressBar);
+            profilePersenter.getALLUserDetails();
+        }
     }
 
     private void callGetAllDetailsAPI() {

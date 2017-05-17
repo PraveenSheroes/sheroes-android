@@ -52,6 +52,7 @@
     <string name="ID_MY_COMMUNITIES">My Communities</string>
     <string name="ID_FEED">Feed</string>
     <string name="ID_COMMUNITIY">Community</string>
+    <string name="ID_COMMUNITIY_POST">Community post</string>
     <string name="ID_BAD_RQUEST">Special characters are not allowed</string>
     <string name="ID_GENERIC_ERROR"> Oops, something went wrong. We are working on it, we will get it fixed as soon as we can.</string>
     <string name="ID_UNABLE_TO_COMMENT"> Sorry, unable to comment. Please try again in a few minutes.</string>
@@ -114,6 +115,7 @@
     <string name="ID_POSTED">Posted</string>
     <string name="ID_MEMBERS">Members</string>
     <string name="ID_MEMBER">Member</string>
+    <string name="ID_NORMAL_MEMBER">normal member</string>
     <string name="ID_ADMIN">Admin</string>
     <string name="ID_OWNER_REMOVED">Owner removed</string>
     <string name="ID_REMOTE">Remote</string>
@@ -137,6 +139,7 @@
     <string name="ID_SEE_MORE">See more like this</string>
     <string name="ID_ANONYMOUS">Anonymous</string>
     <string name="ID_OWNER">Owner (S)</string>
+    <string name="ID_OWNER_Mo">owner</string>
     <string name="ID_LESS">View Less</string>
     <string name="ID_RECENT">Recent</string>
     <string name="ID_RELATED_ARTICLES">Related Articles</string>
@@ -176,6 +179,8 @@
     <string name="ID_CHANGE_OPEN_THIRD">• Users with pending requests will be added as members.</string>
     <string name="ID_OPEN">Open</string>
     <string name="ID_CLOSE_PRIVACY"> Close </string>
+    <string name="ID_OPEN_MO">open</string>
+    <string name="ID_CLOSED"> closed </string>
     <string name="ID_APPLY">Apply</string>
     <string name="ID_FEED_REFRESH"> Your feed has been refreshed.</string>
     <string name="ID_FEED_ALREADY_REFRESH"> Your feed is already updated.</string>

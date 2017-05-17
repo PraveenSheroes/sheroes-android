@@ -22,6 +22,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.moe.pushlibrary.MoEHelper;
+import com.moe.pushlibrary.PayloadBuilder;
+
+import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
@@ -29,6 +33,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -80,6 +86,10 @@ public class JobDetailActivity extends BaseActivity implements  AppBarLayout.OnO
     int feedDetailPosition;
     @Bind(R.id.li_header)
     public LinearLayout mLiHeader;
+    private MoEHelper mMoEHelper;
+    private MoEngageUtills moEngageUtills;
+    private PayloadBuilder payloadBuilder;
+    private long startedTime;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +97,10 @@ public class JobDetailActivity extends BaseActivity implements  AppBarLayout.OnO
         initActivityTransitions();
         setContentView(R.layout.activity_job_details);
         ButterKnife.bind(this);
+        mMoEHelper = MoEHelper.getInstance(this);
+        payloadBuilder = new PayloadBuilder();
+        moEngageUtills = MoEngageUtills.getInstance();
+        startedTime=System.currentTimeMillis();
         mAppBarLayout.addOnOffsetChangedListener(this);
         if (null != getIntent() && null != getIntent().getExtras()) {
             //&& null != getIntent().getExtras().get(AppConstants.COMMUNITY_POST_ID)
@@ -112,7 +126,29 @@ public class JobDetailActivity extends BaseActivity implements  AppBarLayout.OnO
         intent.putExtras(bundle);
         setResult(RESULT_OK, intent);
         finish();
+        moEngageData(mFeedDetail);
         overridePendingTransition(R.anim.fade_in_dialog, R.anim.fade_out_dialog);
+    }
+    private void moEngageData(FeedDetail feedDetail) {
+        StringBuilder mergeJobTypes=new StringBuilder();
+        if (StringUtil.isNotEmptyCollection(feedDetail.getSearchTextJobEmpTypes())) {
+            List<String> jobTypes = feedDetail.getSearchTextJobEmpTypes();
+            for (String jobType : jobTypes) {
+                mergeJobTypes.append(jobType).append(AppConstants.PIPE);
+            }
+        }
+        StringBuilder mergeJobSkills = new StringBuilder();
+        if (StringUtil.isNotEmptyCollection(mFeedDetail.getSearchTextJobSkills())) {
+            List<String> jobSkills = mFeedDetail.getSearchTextJobSkills();
+
+            for (String skill : jobSkills) {
+                mergeJobSkills.append(skill);
+                mergeJobSkills.append(AppConstants.COMMA);
+            }
+        }
+        long timeSpent=System.currentTimeMillis()-startedTime;
+        moEngageUtills.entityMoEngageJobDetail(this, mMoEHelper, payloadBuilder,timeSpent,feedDetail.getNameOrTitle(), feedDetail.getIdOfEntityOrParticipant(), feedDetail.getAuthorName(), feedDetail.getAuthorCityName(),mergeJobTypes.toString(),mergeJobTypes.toString(),AppConstants.EMPTY_STRING,AppConstants.EMPTY_STRING,mergeJobSkills.toString());
+
     }
 
     @OnClick(R.id.tv_job_detail_share)
@@ -121,6 +157,7 @@ public class JobDetailActivity extends BaseActivity implements  AppBarLayout.OnO
         intent.setType(AppConstants.SHARE_MENU_TYPE);
         intent.putExtra(Intent.EXTRA_TEXT, mFeedDetail.getDeepLinkUrl());
         startActivity(Intent.createChooser(intent, AppConstants.SHARE));
+        moEngageUtills.entityMoEngageCardShareVia(getApplicationContext(),mMoEHelper,payloadBuilder,mFeedDetail, MoEngageConstants.SHARE_VIA_SOCIAL);
     }
 
     private void setPagerAndLayouts() {

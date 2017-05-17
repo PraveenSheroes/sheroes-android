@@ -67,7 +67,6 @@ public class ImageUploadFragment extends BaseFragment implements View.OnKeyListe
             }
         }
     }
-
     @Override
     public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {

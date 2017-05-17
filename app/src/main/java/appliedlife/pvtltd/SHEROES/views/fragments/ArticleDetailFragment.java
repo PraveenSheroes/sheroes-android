@@ -9,6 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import com.moe.pushlibrary.MoEHelper;
+import com.moe.pushlibrary.PayloadBuilder;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +27,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleDetailPojo;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -60,7 +64,9 @@ public class ArticleDetailFragment extends BaseFragment {
     boolean mListLoad = true;
     private List<ArticleDetailPojo> articleList;
     private ArticleDetailPojo articleDetailPojo;
-
+    private MoEHelper mMoEHelper;
+    private MoEngageUtills moEngageUtills;
+    private PayloadBuilder payloadBuilder;
     public static ArticleDetailFragment createInstance(FeedDetail feedDetail) {
         ArticleDetailFragment articleDetailFragment = new ArticleDetailFragment();
         Bundle bundle = new Bundle();
@@ -74,6 +80,9 @@ public class ArticleDetailFragment extends BaseFragment {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_article_detail, container, false);
         ButterKnife.bind(this, view);
+        mMoEHelper = MoEHelper.getInstance(getActivity());
+        payloadBuilder = new PayloadBuilder();
+        moEngageUtills = MoEngageUtills.getInstance();
         if (null != getArguments()) {
             mFeedDetail = getArguments().getParcelable(AppConstants.ARTICLE_DETAIL);
         }
@@ -126,6 +135,7 @@ public class ArticleDetailFragment extends BaseFragment {
                 switch (baseResponse.getStatus()) {
                     case AppConstants.SUCCESS:
                         ((ArticleDetailActivity) getActivity()).mTvArticleDetailBookmark.setEnabled(true);
+                        moEngageUtills.entityMoEngageBookMarkData(getActivity(), mMoEHelper, payloadBuilder, mFeedDetail);
                         break;
                     case AppConstants.FAILED:
                         if (!mFeedDetail.isBookmarked()) {
@@ -164,6 +174,7 @@ public class ArticleDetailFragment extends BaseFragment {
             articleList.add(articleDetailPojo);
             mAdapter.notifyDataSetChanged();
             ((ArticleDetailActivity) getActivity()).onBookmarkClick(mFeedDetail, AppConstants.TWO_CONSTANT);
+            moEngageUtills.entityMoEngageReaction(getActivity(), mMoEHelper, payloadBuilder, mFeedDetail, mPressedEmoji, mPosition);
         } else {
             if (!mFeedDetail.isLongPress()) {
                 if (mFeedDetail.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {

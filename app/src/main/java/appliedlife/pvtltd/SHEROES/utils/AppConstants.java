@@ -41,7 +41,7 @@ public class AppConstants {
     public static final String HOME_SPINNER_FRAGMENT = "spinner_fragment";
     public static final String ANDROID_VIEW_PAGER = "android:switcher:";
     public static final String COLON = ":";
-    public static final String DASH ="-";
+    public static final String DASH = "-";
     public static final String DOTS = "...";
     public static final String S = "s";
     public static final String SHARE_MENU_TYPE = "text/plain";
@@ -57,24 +57,24 @@ public class AppConstants {
     public static final String FEED_SCREEN = "feed";
     public static final String CURRENT_STATUS_SCREEN = "current_status";
     public static final String SOURCE_NAME = "android";
-    public static final String UTF_8 ="UTF-8";
-    public static final String CITY_NAME_DEFAULT ="Delhi";
+    public static final String UTF_8 = "UTF-8";
+    public static final String CITY_NAME_DEFAULT = "Delhi";
 
     public static final String HOW_CAN_SHEROES_AKA_LOOKING_FOR_SCREEN = "looking_for";
     public static final String GOOD_AT_SCREEN = "good_at";
     public static final String TOTAL_WORK_EXPERIENCE_SCREEN = "total_exp";
     public static final String INTEREST_SCREEN = "interest";
-    public static final String CURRENT_STATUS_TYPE ="BASIC_PROFILE";
-    public static final String CURRENT_STATUS ="BASIC_USER_PROFILE_SERVICE";
-    public static final String LOOKING_FOR_HOW_CAN ="OPPORTUNITY_SERVICE";
-    public static final String LOOKING_FOR_HOW_CAN_TYPE ="OPPORTUNITY";
-    public static final String JOB_AT_SKILL_SERVICE ="SKILL_SERVICE";
-    public static final String JOB_AT_SKILL_SERVICE_TYPE ="SKILL";
-    public static final String INTEREST_TYPE ="INTEREST";
-    public static final String USER ="USER";
-    public static final String INTEREST_SUB_TYPE ="INTEREST_SERVICE";
-    public static final String WORK_EXPERIENCE_SUB_TYPE ="TOTAL_EXP";
-    public static final String WORK_EXPERIENCE_TYPE ="TOTAL_EXP";
+    public static final String CURRENT_STATUS_TYPE = "BASIC_PROFILE";
+    public static final String CURRENT_STATUS = "BASIC_USER_PROFILE_SERVICE";
+    public static final String LOOKING_FOR_HOW_CAN = "OPPORTUNITY_SERVICE";
+    public static final String LOOKING_FOR_HOW_CAN_TYPE = "OPPORTUNITY";
+    public static final String JOB_AT_SKILL_SERVICE = "SKILL_SERVICE";
+    public static final String JOB_AT_SKILL_SERVICE_TYPE = "SKILL";
+    public static final String INTEREST_TYPE = "INTEREST";
+    public static final String USER = "USER";
+    public static final String INTEREST_SUB_TYPE = "INTEREST_SERVICE";
+    public static final String WORK_EXPERIENCE_SUB_TYPE = "TOTAL_EXP";
+    public static final String WORK_EXPERIENCE_TYPE = "TOTAL_EXP";
     public static final String FEED_COMMUNITY = "C";
     public static final String FEED_JOB = "J";
     public static final String FEED_ARTICLE = "A";
@@ -87,6 +87,7 @@ public class AppConstants {
     public static final String NO_REACTION = "no_reaction";
     public static final String HEART_REACTION = "heart";
     public static final String HOME_FRAGMENT = "home";
+    public static final String FRAGMENT = "Fragment";
     public static final String MASTER_SKILL = "master_data_skill";
     public static final String FEED_RESPONSE_CALL_BACK = "feed_response";
     public static final int REQUEST_CODE_FOR_ARTICLE_DETAIL = 1001;
@@ -119,8 +120,8 @@ public class AppConstants {
     public static final String EMAIL_OPTION = "Send email...";
     public static final String MAIL_TO = "mailto";
 
-    public static final int WORD_COUNT = 91;
-    public static final int WORD_LENGTH = 91;
+    public static final int WORD_COUNT = 95;
+    public static final int WORD_LENGTH = 95;
     public static final String IMAGE_FULL_VIEW = "image_view";
     public static final String BACK_SLASH = "/";
     public static final String ARTICLE_DETAIL = "article_detail";
@@ -215,15 +216,15 @@ public class AppConstants {
     public static final String OPEN_COMMUNITY = "open community for join";
     public static final String LEFT_BRACKET = "(";
     public static final String RIGHT_BRACKET = ")";
-    public  static  final String TRAVEL="TRAVEL_FLEXIBILITY";
+    public static final String TRAVEL = "TRAVEL_FLEXIBILITY";
     public static final String STRING = SOURCE_NAME;
-    public static final String SUMMARY="SUMMARY";
-    public static final String USER_SUMMARY_SERVICE="USER_SUMMARY_SERVICE";
-    public static final String VISIT_PREFERENCE="VISIT_PREFERENCE";
-    public static final String CLIENT_SIDE_VISIT_PREFERENCE_SERVICE="CLIENT_SIDE_VISIT_PREFERENCE_SERVICE";
-    public static final String SHEROESFACEBOOKLINK="https://www.facebook.com/sheroesindia/\n";
-    public static final String SHEROESTWITTERLINK="https://twitter.com/sheroesindia/\n";
-    public static final String SHEROESISTRAGRAMLINK="https://www.instagram.com/sheroes.in/\n";
+    public static final String SUMMARY = "SUMMARY";
+    public static final String USER_SUMMARY_SERVICE = "USER_SUMMARY_SERVICE";
+    public static final String VISIT_PREFERENCE = "VISIT_PREFERENCE";
+    public static final String CLIENT_SIDE_VISIT_PREFERENCE_SERVICE = "CLIENT_SIDE_VISIT_PREFERENCE_SERVICE";
+    public static final String SHEROESFACEBOOKLINK = "https://www.facebook.com/sheroesindia/\n";
+    public static final String SHEROESTWITTERLINK = "https://twitter.com/sheroesindia/\n";
+    public static final String SHEROESISTRAGRAMLINK = "https://www.instagram.com/sheroes/\n";
     public static final String MASTER_DATA_DEFAULT_CATEGORY = "POPULAR";
     public static final String USER_PROFILE = "Basic Details";
     public static final String GOOD_AT_SKILL_PROFILE = "I'm good at";
@@ -237,15 +238,15 @@ public class AppConstants {
     public static final String ABOUT_ME_PROFILE = "About Me";
     public static final String VIEW_MORE = "View More";
     public static final String VIEW_LESS = "View Less";
-    public static final String USER_PROFILE1="PROFESSINAL BASIC DETAILS";
-    public static final String USER_VISITING_CARD="My Contact Card";
-    public static final String USER_VISITING_CARD1="My Contact Card";
+    public static final String USER_PROFILE1 = "PROFESSINAL BASIC DETAILS";
+    public static final String USER_VISITING_CARD = "My Contact Card";
+    public static final String USER_VISITING_CARD1 = "My Contact Card";
 
-    public static final String CLIENTSIDE="Horizontal";
+    public static final String CLIENTSIDE = "Horizontal";
 
-    public static final String DEGREE_KEY="degree";
-    public static final String FIELD_OF_STUDY_KEY="field_of_study";
-    public static final String SCHOOL_KEY="school_name";
+    public static final String DEGREE_KEY = "degree";
+    public static final String FIELD_OF_STUDY_KEY = "field_of_study";
+    public static final String SCHOOL_KEY = "school_name";
     public static final String MASTER_DATA_SECTOR_KEY = "SECTOR";//for sector search
     public static final String MASTER_DATA_LANGUAGE_KEY = "LANGUAGE";
     public static final String WORK_EXPERIENCE_CATE = "work_exp_cate";
@@ -254,10 +255,15 @@ public class AppConstants {
 
     public static final String WEB_BROWSER_MASSAGE = "Please select a web browser";
     public static final String JOB_URL = "https://sheroes.in/jobs";
+    public static final String JOB_URL_COM = "https://sheroes.com/jobs";
     public static final String ARTICLE_URL = "https://sheroes.in/articles";
+    public static final String ARTICLE_URL_COM = "https://sheroes.com/articles";
     public static final String COMMUNITY_URL = "https://sheroes.in/communities";
+    public static final String COMMUNITY_URL_COM = "https://sheroes.com/communities";
     public static final String USER_PROFILE_URL = "https://sheroes.in/users/edit_profile";
+    public static final String USER_PROFILE_URL_COM = "https://sheroes.com/users/edit_profile";
     public static final String USER_URL = "https://sheroes.in/users";
+    public static final String USER_URL_COM = "https://sheroes.com/users";
     public static final String JOB_ID = "job_id";
     public static final String ARTICLE_ID = "article_id";
     public static final String COMMUNITY_ID = "community_id";
@@ -273,6 +279,6 @@ public class AppConstants {
     public static final String SHEROES = "SHEROES";
     public static final String TICKER = "ticker";
     public static final String CHECK_OUT = "Check out ";
-
-
+    public static final String GCM_ID = "Gcm Id";
+    public static final String REACTION_ON_CARD = "Reaction on card";
 }

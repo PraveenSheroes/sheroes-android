@@ -10,6 +10,9 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.moe.pushlibrary.MoEHelper;
+import com.moe.pushlibrary.PayloadBuilder;
+
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
@@ -17,6 +20,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -49,14 +53,20 @@ public class BellNotificationFragment extends BaseFragment implements HomeView {
     ImageView ivBackNotification;
     private GenericRecyclerViewAdapter mAdapter;
     LinearLayoutManager mLinearLayoutmanager;
-    BelNotificationListResponse belNotificationListResponse;
-
+    private MoEHelper mMoEHelper;
+    private MoEngageUtills moEngageUtills;
+    private PayloadBuilder payloadBuilder;
+    private long startedTime;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getActivity()).inject(this);
         View v = inflater.inflate(R.layout.community_bell_notification_list, container, false);
         ButterKnife.bind(this, v);
+        mMoEHelper = MoEHelper.getInstance(getActivity());
+        payloadBuilder = new PayloadBuilder();
+        moEngageUtills = MoEngageUtills.getInstance();
+        startedTime=System.currentTimeMillis();
         setProgressBar(mProgressBar);
         tvTitle.setText(getString(R.string.ID_NOTIFICATION));
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -66,6 +76,8 @@ public class BellNotificationFragment extends BaseFragment implements HomeView {
         mRecyclerView.setAdapter(mAdapter);
         mHomePresenter.attachView(this);
         mHomePresenter.getBellNotificationFromPresenter(mAppUtils.getBellNotificationRequest());
+        long timeSpent=System.currentTimeMillis()-startedTime;
+        moEngageUtills.entityMoEngageNotification(getActivity(),mMoEHelper,payloadBuilder,timeSpent);
         return v;
         }
 
@@ -100,5 +112,12 @@ public class BellNotificationFragment extends BaseFragment implements HomeView {
     @Override
     public void stopProgressBar() {
         mProgressBar.setVisibility(View.GONE);
+    }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mHomePresenter.detachView();
+        long timeSpent=System.currentTimeMillis()-startedTime;
+        moEngageUtills.entityMoEngageNotification(getActivity(),mMoEHelper,payloadBuilder,timeSpent);
     }
 }

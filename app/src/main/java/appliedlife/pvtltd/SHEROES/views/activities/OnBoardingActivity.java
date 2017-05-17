@@ -17,6 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.f2prateek.rx.preferences.Preference;
+import com.moe.pushlibrary.MoEHelper;
+import com.moe.pushlibrary.PayloadBuilder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,6 +39,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingInterestJob
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.OnBoardingData;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageEvent;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -100,13 +104,19 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
     Preference<MasterDataResponse> mUserPreferenceMasterData;
     private int position;
     private OnBoardingData mBoardingData;
-
+    private MoEHelper mMoEHelper;
+    private  PayloadBuilder payloadBuilder;
+    private long launchTime;
+    private long startedTime;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
         setContentView(R.layout.activity_onboarding);
         ButterKnife.bind(this);
+        mMoEHelper = MoEHelper.getInstance(this);
+        payloadBuilder = new PayloadBuilder();
+        startedTime=System.currentTimeMillis();
         if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && null != mUserPreferenceMasterData.get().getData()) {
             mMasterDataResult = mUserPreferenceMasterData.get().getData();
         }
@@ -160,6 +170,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
     }
 
     public DialogFragment showHeySuccessDialog() {
+        mMoEHelper.trackEvent(MoEngageEvent.EVENT_VIEW_FIRST_MESSAGE_SCREEN.value, payloadBuilder.build());
         OnBoardingDailogHeySuccess onBoardingDailogHeySuccess = (OnBoardingDailogHeySuccess) getFragmentManager().findFragmentByTag(OnBoardingDailogHeySuccess.class.getName());
         if (onBoardingDailogHeySuccess == null) {
             onBoardingDailogHeySuccess = new OnBoardingDailogHeySuccess();
@@ -171,6 +182,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
     }
 
     public void tellUsAboutFragment() {
+        launchTime=System.currentTimeMillis();
         LoginResponse loginResponse = userPreference.get();
         loginResponse.setNextScreen(AppConstants.CURRENT_STATUS_SCREEN);
         userPreference.set(loginResponse);
@@ -313,6 +325,9 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
     public void onSheroesHelpYouFragmentOpen(HashMap<String, HashMap<String, ArrayList<LabelValue>>> masterDataResult, OnBoardingEnum onBoardingEnum) {
         switch (onBoardingEnum) {
             case TELL_US_ABOUT:
+                long timeSpent=System.currentTimeMillis()-launchTime;
+                payloadBuilder.putAttrLong(MoEngageConstants.TIME_SPENT,timeSpent);
+                mMoEHelper.trackEvent(MoEngageEvent.EVENT_VIEW_CURRENT_STATUS.value, payloadBuilder.build());
                 LoginResponse loginResponse = userPreference.get();
                 loginResponse.setNextScreen(AppConstants.HOW_CAN_SHEROES_AKA_LOOKING_FOR_SCREEN);
                 userPreference.set(loginResponse);
@@ -475,6 +490,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
        // LoginResponse loginResponse = userPreference.get();
        // loginResponse.setNextScreen(AppConstants.CURRENT_STATUS_SCREEN);
        // userPreference.set(loginResponse);
+        launchTime=System.currentTimeMillis();
         mFlOnBoardingFragment.setVisibility(View.GONE);
         OnBoardingHowCanSheroesHelpYouFragment onBoardingHowCanSheroesHelpYouFragment = new OnBoardingHowCanSheroesHelpYouFragment();
         Bundle bundle = new Bundle();
@@ -531,6 +547,13 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
     }
 
     public void onLookingForHowCanSheroesNextClick() {
+        long currentTime=System.currentTimeMillis();
+        long timeSpent=currentTime-launchTime;
+        long totalTime=currentTime-startedTime;
+        payloadBuilder.putAttrLong(MoEngageConstants.TIME_SPENT,timeSpent);
+        mMoEHelper.trackEvent(MoEngageEvent.EVENT_VIEW_HOW_CAN_LOOKING_FOR.value, payloadBuilder.build());
+        payloadBuilder.putAttrLong(MoEngageConstants.COMPLETION_TIME,totalTime);
+        mMoEHelper.trackEvent(MoEngageEvent.EVENT_COMPLETED_ON_BOARDING.value, payloadBuilder.build());
         LoginResponse loginResponse = userPreference.get();
         loginResponse.setNextScreen(AppConstants.FEED_SCREEN);
         userPreference.set(loginResponse);

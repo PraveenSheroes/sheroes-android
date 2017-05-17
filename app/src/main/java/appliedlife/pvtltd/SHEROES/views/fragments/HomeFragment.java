@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -27,8 +28,12 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
+import appliedlife.pvtltd.SHEROES.models.entities.login.GcmIdResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.login.InstallUpdateForMoEngage;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
+import appliedlife.pvtltd.SHEROES.service.GCMClientManager;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -42,6 +47,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.feedRequestBuilder;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.loginRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.notificationReadCountRequestBuilder;
 
 /**
@@ -58,7 +64,8 @@ public class HomeFragment extends BaseFragment {
 
     @Inject
     Preference<LoginResponse> mUserPreference;
-
+    @Inject
+    Preference<InstallUpdateForMoEngage> mInstallUpdatePreference;
     @Inject
     HomePresenter mHomePresenter;
     @Bind(R.id.rv_home_list)
@@ -85,6 +92,8 @@ public class HomeFragment extends BaseFragment {
     ProgressBar mProgressBarFirstLoad;
     @Bind(R.id.tv_refresh)
     TextView tvRefresh;
+    private String mGcmId;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -148,13 +157,55 @@ public class HomeFragment extends BaseFragment {
             mHomePresenter.getAuthTokenRefreshPresenter();
         }
         mHomePresenter.getNotificationCountFromPresenter(notificationReadCountRequestBuilder(TAG));
+        getGcmId();
         mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 refreshFeedMethod();
+                mHomePresenter.getNotificationCountFromPresenter(notificationReadCountRequestBuilder(TAG));
             }
         });
         return view;
+    }
+
+    private void getGcmId() {
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        GCMClientManager pushClientManager = new GCMClientManager(getActivity(), AppConstants.PROJECT_NUMBER);
+        pushClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
+            @Override
+            public void onSuccess(String registrationId, boolean isNewRegistration) {
+                LogUtils.info(TAG, "*************Registarion" + registrationId);
+                mGcmId = registrationId;
+                if (StringUtil.isNotNullOrEmptyString(registrationId)) {
+                    if (null != mInstallUpdatePreference && mInstallUpdatePreference.isSet() && null != mInstallUpdatePreference.get()) {
+                        if (mInstallUpdatePreference.get().isFirstOpen()) {
+                            LoginRequest loginRequest = loginRequestBuilder();
+                            loginRequest.setGcmorapnsid(registrationId);
+                            mHomePresenter.getNewGCMidFromPresenter(loginRequest);
+                        } else {
+                            if (null!=mUserPreference&&null!=mUserPreference.get()&&StringUtil.isNotNullOrEmptyString(mUserPreference.get().getGcmId())) {
+                                String mOldGcmId = mUserPreference.get().getGcmId();
+                                if (StringUtil.isNotNullOrEmptyString(mOldGcmId)) {
+                                    if (!mOldGcmId.equalsIgnoreCase(registrationId)) {
+                                        LoginRequest loginRequest = loginRequestBuilder();
+                                        loginRequest.setGcmorapnsid(registrationId);
+                                        mHomePresenter.getNewGCMidFromPresenter(loginRequest);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    getGcmId();
+                }
+            }
+
+            @Override
+            public void onFailure(String ex) {
+                LogUtils.info(TAG, "*************Fail Registarion" + ex);
+            }
+        });
     }
 
     @OnClick(R.id.tv_refresh)
@@ -179,8 +230,29 @@ public class HomeFragment extends BaseFragment {
             case NOTIFICATION_COUNT:
                 unReadNotificationCount(baseResponse);
                 break;
+            case GCM_ID:
+                gcmIdResponse(baseResponse);
+                break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
+        }
+    }
+
+    private void gcmIdResponse(BaseResponse baseResponse) {
+        switch (baseResponse.getStatus()) {
+            case AppConstants.SUCCESS:
+                if (baseResponse instanceof GcmIdResponse) {
+                    LoginResponse loginResponse = mUserPreference.get();
+                    loginResponse.setGcmId(mGcmId);
+                    mUserPreference.set(loginResponse);
+                    InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
+                    installUpdateForMoEngage.setFirstOpen(false);
+                    mInstallUpdatePreference.set(installUpdateForMoEngage);
+                }
+                break;
+            case AppConstants.FAILED:
+                break;
+            default:
         }
     }
 

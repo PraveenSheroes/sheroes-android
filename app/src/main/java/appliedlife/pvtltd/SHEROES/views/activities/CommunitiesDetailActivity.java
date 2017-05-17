@@ -22,6 +22,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.moe.pushlibrary.MoEHelper;
+import com.moe.pushlibrary.PayloadBuilder;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
@@ -36,6 +38,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerList;
 import appliedlife.pvtltd.SHEROES.models.entities.community.PandingMember;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -61,7 +65,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.JOIN_INVITE
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MENU;
 
 
-public class CommunitiesDetailActivity extends BaseActivity implements  CommentReactionFragment.HomeActivityIntractionListner, AppBarLayout.OnOffsetChangedListener {
+public class CommunitiesDetailActivity extends BaseActivity implements CommentReactionFragment.HomeActivityIntractionListner, AppBarLayout.OnOffsetChangedListener {
     private final String TAG = LogUtils.makeLogTag(CommunitiesDetailActivity.class);
     @Bind(R.id.app_bar_coomunities_detail)
     AppBarLayout mAppBarLayout;
@@ -92,7 +96,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements  CommentR
     private CommunityRequestedFragment communityRequestedFragment;
     boolean isCommunityDetailFragment;
     private long mCommunityId;
-    private long mCommunityPostId=0;
+    private long mCommunityPostId = 0;
     @Bind(R.id.tv_community_detail_title)
     TextView mTvCommunityDetailTitle;
     @Bind(R.id.tv_community_detail_subtitle)
@@ -101,6 +105,10 @@ public class CommunitiesDetailActivity extends BaseActivity implements  CommentR
     public LinearLayout mLiHeader;
     @Bind(R.id.fab_post_community)
     public ImageView ivFabPostCommunity;
+    private MoEHelper mMoEHelper;
+    private MoEngageUtills moEngageUtills;
+    private PayloadBuilder payloadBuilder;
+    private long startedTime;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -108,6 +116,10 @@ public class CommunitiesDetailActivity extends BaseActivity implements  CommentR
         SheroesApplication.getAppComponent(this).inject(this);
         setContentView(R.layout.activity_communities_detail);
         ButterKnife.bind(this);
+        mMoEHelper = MoEHelper.getInstance(this);
+        payloadBuilder = new PayloadBuilder();
+        moEngageUtills = MoEngageUtills.getInstance();
+        startedTime = System.currentTimeMillis();
         mFragmentOpen = new FragmentOpen();
         setAllValues(mFragmentOpen);
         initActivityTransitions();
@@ -115,8 +127,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements  CommentR
         if (null != getIntent() && null != getIntent().getExtras()) {
             if (null != getIntent().getExtras().get(AppConstants.COMMUNITY_ID)) {
                 mCommunityId = (long) getIntent().getExtras().get(AppConstants.COMMUNITY_ID);
-                if (null != getIntent().getExtras().get(AppConstants.COMMUNITY_POST_ID))
-                {
+                if (null != getIntent().getExtras().get(AppConstants.COMMUNITY_POST_ID)) {
                     mCommunityPostId = (long) getIntent().getExtras().get(AppConstants.COMMUNITY_POST_ID);
                 }
                 if (mCommunityId > 0) {
@@ -142,18 +153,18 @@ public class CommunitiesDetailActivity extends BaseActivity implements  CommentR
                 communityOpenAboutFragment(mFeedDetail);
             } else {
                 mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-                mViewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(mFeedDetail, communityEnum,mCommunityPostId), getString(R.string.ID_COMMUNITIES));
+                mViewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId), getString(R.string.ID_COMMUNITIES));
                 mViewPager.setAdapter(mViewPagerAdapter);
             }
         } else {
             mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-            mViewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(mFeedDetail, communityEnum,mCommunityPostId), getString(R.string.ID_COMMUNITIES));
+            mViewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId), getString(R.string.ID_COMMUNITIES));
             mViewPager.setAdapter(mViewPagerAdapter);
         }
     }
 
     public void initializeUiContent(FeedDetail feedDetail) {
-        mFeedDetail=feedDetail;
+        mFeedDetail = feedDetail;
         mCommunityDetailActivity.setVisibility(View.VISIBLE);
         mTvMemebr.setText(feedDetail.getNoOfMembers() + AppConstants.SPACE + getString(R.string.ID_MEMBERS));
         if (feedDetail.getNoOfMembers() > 1) {
@@ -286,8 +297,8 @@ public class CommunitiesDetailActivity extends BaseActivity implements  CommentR
         super.feedCardsHandled(view, baseResponse);
         switch (id) {
             case R.id.tv_join_view_holder:
-               inviteJoinEventClick(getString(R.string.ID_JOIN), feedDetail);
-                    break;
+                inviteJoinEventClick(getString(R.string.ID_JOIN), feedDetail);
+                break;
             case R.id.card_community_detail:
                 communityOpenAboutFragment(feedDetail);
                 break;
@@ -400,7 +411,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements  CommentR
             } else {
                 Fragment fragmentCommunityDetail = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
                 if (AppUtils.isFragmentUIActive(fragmentCommunityDetail)) {
-                    ((CommunitiesDetailFragment) fragmentCommunityDetail).joinRequestForOpenCommunity(mFeedDetail,pressedEventName);
+                    ((CommunitiesDetailFragment) fragmentCommunityDetail).joinRequestForOpenCommunity(mFeedDetail, pressedEventName);
                 }
             }
         } else if (pressedEventName.equalsIgnoreCase(getString(R.string.ID_INVITE))) {
@@ -571,7 +582,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements  CommentR
     }
 
     public void onLeaveClick(CommunityEnum communityEnum) {
-       this.communityEnum=communityEnum;
+        this.communityEnum = communityEnum;
         onBackClick();
     }
 
@@ -584,6 +595,9 @@ public class CommunitiesDetailActivity extends BaseActivity implements  CommentR
         intent.putExtras(bundle);
         setResult(RESULT_OK, intent);
         finish();
+        long timeSpent = System.currentTimeMillis() - startedTime;
+        moEngageUtills.entityMoEngageCommunityDetail(this, mMoEHelper, payloadBuilder, timeSpent, mFeedDetail.getNameOrTitle(), mFeedDetail.getIdOfEntityOrParticipant(),mFeedDetail.isClosedCommunity(), MoEngageConstants.COMMUNITY_TAG);
+
     }
 
 

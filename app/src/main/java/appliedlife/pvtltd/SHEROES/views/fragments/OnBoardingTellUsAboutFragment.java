@@ -45,6 +45,7 @@ import butterknife.OnClick;
 import static appliedlife.pvtltd.SHEROES.enums.OnBoardingEnum.CURRENT_STATUS;
 import static appliedlife.pvtltd.SHEROES.enums.OnBoardingEnum.LOCATION;
 import static appliedlife.pvtltd.SHEROES.enums.OnBoardingEnum.TELL_US_ABOUT;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.boardingTellUsFormDataRequestBuilder;
 
 /**
  * Created by Ajit Kumar on 22-02-2017.
@@ -150,7 +151,7 @@ public class OnBoardingTellUsAboutFragment extends BaseFragment implements OnBoa
             if (null != labelValue && null != getAllDataDocument) {
                 InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(mMobileNumber.getWindowToken(), 0);
-                mOnBoardingPresenter.getCurrentDataStatusToPresenter(mAppUtils.boardingTellUsFormDataRequestBuilder(AppConstants.CURRENT_STATUS, AppConstants.CURRENT_STATUS_TYPE, labelValue, getAllDataDocument, mMobileNumber.getText().toString()));
+                mOnBoardingPresenter.getCurrentDataStatusToPresenter(boardingTellUsFormDataRequestBuilder(AppConstants.CURRENT_STATUS, AppConstants.CURRENT_STATUS_TYPE, labelValue, getAllDataDocument, mMobileNumber.getText().toString()));
             }
         }
     }

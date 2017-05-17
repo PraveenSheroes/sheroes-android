@@ -25,6 +25,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.f2prateek.rx.preferences.Preference;
+import com.moe.pushlibrary.MoEHelper;
+import com.moe.pushlibrary.PayloadBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +52,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.presenters.MembersPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.OwnerPresenter;
@@ -66,6 +70,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.communityRequestBuilder;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.ownerRequestBuilder;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.removeMemberRequestBuilder;
 
 /**
  * Created by Ajit Kumar on 01-02-2017.
@@ -121,8 +128,12 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
     private CommunityEnum communityEnum = null;
     @Inject
     AppUtils mAppUtils;
+   private MoEngageUtills moEngageUtills;
     private Long mcommunityid;
     String mTag;
+    private MoEHelper mMoEHelper;
+    private PayloadBuilder payloadBuilder;
+    private long startedTime;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -132,6 +143,10 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
         mOwnerPresenter.attachView(this);
         mMemberpresenter.attachView(this);
         mHomePresenter.attachView(this);
+        mMoEHelper = MoEHelper.getInstance(getActivity());
+        payloadBuilder = new PayloadBuilder();
+        moEngageUtills=MoEngageUtills.getInstance();
+        startedTime=System.currentTimeMillis();
         setProgressBar(mProgressbar);
         if (null != getArguments()) {
             communityEnum = (CommunityEnum) getArguments().getSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT);
@@ -151,7 +166,7 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
             mFeedDetail = feedDetailList.get(0);
             mcommunityid = mFeedDetail.getIdOfEntityOrParticipant();
-            mOwnerPresenter.getCommunityOwnerList(mAppUtils.ownerRequestBuilder(mcommunityid));
+            mOwnerPresenter.getCommunityOwnerList(ownerRequestBuilder(mcommunityid));
             refreshOpeAboutCommunityContent(mFeedDetail);
             mTvJoinInviteView.setVisibility(View.VISIBLE);
         }
@@ -325,14 +340,14 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
             List<Long> userIdList = new ArrayList();
             userIdList.add((long) mUserPreference.get().getUserSummary().getUserId());
-            mHomePresenter.communityJoinFromPresenter(AppUtils.communityRequestBuilder(userIdList, mFeedDetail.getIdOfEntityOrParticipant(), ""));
+            mHomePresenter.communityJoinFromPresenter(communityRequestBuilder(userIdList, mFeedDetail.getIdOfEntityOrParticipant(), ""));
         }
     }
 
     public void callRemoveOwner(FeedDetail feedDetail) {
         mFeedDetail = feedDetail;
         mTvCommunityMembers.setText(mFeedDetail.getNoOfMembers() + AppConstants.SPACE + getString(R.string.ID_MEMBERS));
-        mOwnerPresenter.getCommunityOwnerList(mAppUtils.ownerRequestBuilder(mcommunityid));
+        mOwnerPresenter.getCommunityOwnerList(ownerRequestBuilder(mcommunityid));
 
     }
 
@@ -390,7 +405,7 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
     public void callRemoveMember() {
         LoginResponse loginResponse = mUserPreference.get();
         UserSummary userSummary = loginResponse.getUserSummary();
-        RemoveMemberRequest removeMemberRequest = mAppUtils.removeMemberRequestBuilder(mcommunityid, userSummary.getUserId());
+        RemoveMemberRequest removeMemberRequest = removeMemberRequestBuilder(mcommunityid, userSummary.getUserId());
         mMemberpresenter.leaveCommunityAndRemoveMemberToPresenter(removeMemberRequest);
     }
 
@@ -504,6 +519,11 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
                 mTvJoinInviteView.setText(getString(R.string.ID_JOIN));
                 mTvJoinInviteView.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
                 ((CommunitiesDetailActivity) getActivity()).onLeaveClick(CommunityEnum.FEATURE_COMMUNITY);
+
+                if(null!=mFeedDetail)
+                {
+                    moEngageUtills.entityMoEngageLeaveCommunity(getActivity(),mMoEHelper,payloadBuilder,mFeedDetail.getNameOrTitle(), mFeedDetail.getIdOfEntityOrParticipant(), mFeedDetail.isClosedCommunity(), MoEngageConstants.COMMUNITY_TAG, mFeedDetail.isMember());
+                }
                 break;
             case AppConstants.FAILED:
                 mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(memberListResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);
@@ -552,5 +572,11 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
         public String getId() {
             return getClass().getName();
         }
+    }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        long timeSpent=System.currentTimeMillis()-startedTime;
+        moEngageUtills.entityMoEngageAboutCommunity(getActivity(),mMoEHelper,payloadBuilder,mFeedDetail.getIdOfEntityOrParticipant(),timeSpent);
     }
 }

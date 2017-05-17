@@ -74,7 +74,7 @@ public class SheroesDeepLinkingActivity extends Activity {
     private void callActivities(String urlSharedViaSocial, String baseUrl, int fullLength) {
         String dataIdString = AppConstants.EMPTY_STRING;
         //In case of Article
-        if (AppConstants.ARTICLE_URL.equalsIgnoreCase(baseUrl) && AppConstants.ARTICLE_URL.length() < fullLength) {
+        if (AppConstants.ARTICLE_URL.equalsIgnoreCase(baseUrl) ||AppConstants.ARTICLE_URL_COM.equalsIgnoreCase(baseUrl)&& AppConstants.ARTICLE_URL.length() < fullLength) {
             try {
                 int sareid = urlSharedViaSocial.lastIndexOf(AppConstants.BACK_SLASH);
                 String id = urlSharedViaSocial.substring(sareid + 1, fullLength);
@@ -89,7 +89,7 @@ public class SheroesDeepLinkingActivity extends Activity {
                 startActivity(into);
                 finish();
             }
-        } else if (AppConstants.JOB_URL.equalsIgnoreCase(baseUrl) && AppConstants.JOB_URL.length() < fullLength) {
+        } else if (AppConstants.JOB_URL.equalsIgnoreCase(baseUrl) ||AppConstants.JOB_URL_COM.equalsIgnoreCase(baseUrl) && AppConstants.JOB_URL.length() < fullLength) {
             try {
                 int sareid = urlSharedViaSocial.lastIndexOf(AppConstants.BACK_SLASH);
                 String id = urlSharedViaSocial.substring(sareid + 1, fullLength);
@@ -112,7 +112,7 @@ public class SheroesDeepLinkingActivity extends Activity {
         "solr_ignore_deep_link_url": "https://sheroes.in/communities/sheroes-community/NTc0"
         * */
         //In case of communities
-        else if (AppConstants.COMMUNITY_URL.equalsIgnoreCase(baseUrl) && AppConstants.COMMUNITY_URL.length() < fullLength) {
+        else if (AppConstants.COMMUNITY_URL.equalsIgnoreCase(baseUrl) ||AppConstants.COMMUNITY_URL_COM.equalsIgnoreCase(baseUrl) && AppConstants.COMMUNITY_URL.length() < fullLength) {
             try {
                 Intent into = new Intent(SheroesDeepLinkingActivity.this, CommunitiesDetailActivity.class);
                 String communityDetail = urlSharedViaSocial.substring(indexOfFourthBackSlace, urlSharedViaSocial.length());
@@ -151,7 +151,7 @@ public class SheroesDeepLinkingActivity extends Activity {
 
         }
         //In case of profile
-        else if ((AppConstants.USER_PROFILE_URL).equalsIgnoreCase(baseUrl)) {
+        else if ((AppConstants.USER_PROFILE_URL).equalsIgnoreCase(baseUrl) ||AppConstants.USER_PROFILE_URL_COM.equalsIgnoreCase(baseUrl)) {
             Intent into = new Intent(this, ProfileActicity.class);
             startActivity(into);
             finish();

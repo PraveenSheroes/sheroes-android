@@ -3,7 +3,6 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 import android.app.DialogFragment;
 import android.content.Intent;
 import android.content.res.ColorStateList;
-import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,10 +27,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
 import com.f2prateek.rx.preferences.Preference;
 import com.google.gson.Gson;
+import com.moe.pushlibrary.MoEHelper;
+import com.moe.pushlibrary.PayloadBuilder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -61,12 +60,12 @@ import appliedlife.pvtltd.SHEROES.models.entities.profile.MyProfileView;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCardResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.WorkExpListResponse;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
-import appliedlife.pvtltd.SHEROES.views.cutomeviews.BlurrImage;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitySearchTagsDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.CurrentStatusDialog;
@@ -117,7 +116,7 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
     @Bind(R.id.app_bar_profile)
     AppBarLayout mAppBarLayout;
     @Bind(R.id.iv_profile_image)
-    ImageView ivCommunitiesDetail;
+    ImageView ivProfile_bg_img;
     @Bind(R.id.view_pager_profile)
     ViewPager mViewPager;
     @Bind(R.id.toolbar_profile)
@@ -158,7 +157,10 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
     public List<LabelValue> mFunctionArea = new ArrayList<>();
     private ExprienceEntity mExprienceEntity;
     private ViewPagerAdapter viewPagerAdapter;
-
+    private MoEHelper mMoEHelper;
+    private MoEngageUtills moEngageUtills;
+    private PayloadBuilder payloadBuilder;
+    private  long startedTime;
     public static void navigate(AppCompatActivity activity, View transitionImage, String profile) {
         Intent intent = new Intent(activity, ProfileActicity.class);
         intent.putExtra(AppConstants.EXTRA_IMAGE, profile);
@@ -172,6 +174,10 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
         SheroesApplication.getAppComponent(this).inject(this);
         setContentView(R.layout.activity_profile);
         ButterKnife.bind(this);
+        mMoEHelper = MoEHelper.getInstance(this);
+        payloadBuilder = new PayloadBuilder();
+        moEngageUtills = MoEngageUtills.getInstance();
+        startedTime=System.currentTimeMillis();
         mFragmentOpen = new FragmentOpen();
         setName();
         setAllValues(mFragmentOpen);
@@ -216,6 +222,8 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
             updateProffesstionalWorkExpListItem();
         } else {
             super.onBackPressed();
+            long timeSpent=System.currentTimeMillis()-startedTime;
+            moEngageUtills.entityMoEngageViewMyProfile(this,mMoEHelper,payloadBuilder,timeSpent,TAG);
             overridePendingTransition(R.anim.fade_in_dialog, R.anim.fade_out_dialog);
         }
     }
@@ -277,8 +285,12 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .skipMemoryCache(true)
                     .into(mProfileIcon);
-
             Glide.with(this)
+                    .load(mUserPreference.get().getUserSummary().getPhotoUrl())
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .skipMemoryCache(true)
+                    .into(ivProfile_bg_img);
+           /* Glide.with(this)
                     .load(mUserPreference.get().getUserSummary().getPhotoUrl()).asBitmap()
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .skipMemoryCache(true)
@@ -286,14 +298,14 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
                         @Override
                         public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
                             Bitmap blurred = BlurrImage.blurRenderScript(ProfileActicity.this, profileImage, 10);
-                            ivCommunitiesDetail.setImageBitmap(blurred);
+                            ivProfile_bg_img.setImageBitmap(blurred);
                             Palette.from(profileImage).generate(new Palette.PaletteAsyncListener() {
                                 public void onGenerated(Palette palette) {
                                     applyPalette(palette);
                                 }
                             });
                         }
-                    });
+                    });*/
         }
         mAppBarLayout.addOnOffsetChangedListener(this);
 

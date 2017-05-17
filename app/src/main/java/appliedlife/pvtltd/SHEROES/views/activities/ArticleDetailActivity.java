@@ -26,6 +26,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.moe.pushlibrary.MoEHelper;
+import com.moe.pushlibrary.PayloadBuilder;
+
+import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
@@ -34,6 +38,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionDoc;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -76,16 +82,23 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
     public LinearLayout mLiHeader;
     private FeedDetail mFeedDetail;
     private FragmentOpen mFragmentOpen;
-    ViewPagerAdapter viewPagerAdapter;
-    long mArticleId = 0;
-    int feedDetailPosition;
-
+    private ViewPagerAdapter viewPagerAdapter;
+    private long mArticleId = 0;
+    private int feedDetailPosition;
+    private MoEHelper mMoEHelper;
+    private MoEngageUtills moEngageUtills;
+    private PayloadBuilder payloadBuilder;
+    private long startedTime;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
         setContentView(R.layout.activity_article_detail);
         ButterKnife.bind(this);
+        mMoEHelper = MoEHelper.getInstance(this);
+        payloadBuilder = new PayloadBuilder();
+        moEngageUtills = MoEngageUtills.getInstance();
+        startedTime=System.currentTimeMillis();
         mAppBarLayout.addOnOffsetChangedListener(this);
         mFragmentOpen = new FragmentOpen();
         if (null != getIntent()) {
@@ -473,7 +486,20 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
         intent.putExtras(bundle);
         setResult(RESULT_OK, intent);
         finish();
+        moEngageData(mFeedDetail);
         overridePendingTransition(R.anim.right_to_left_anim_enter, R.anim.right_to_left_anim_exit);
+    }
+    private void moEngageData(FeedDetail feedDetail) {
+        StringBuilder mergeTags =new StringBuilder();
+        if (StringUtil.isNotEmptyCollection(feedDetail.getTags())) {
+            List<String> tags = feedDetail.getTags();
+            for (String tag : tags) {
+                mergeTags.append(tag).append(AppConstants.COMMA);
+            }
+        }
+        long timeSpent=System.currentTimeMillis()-startedTime;
+        moEngageUtills.entityMoEngageArticleDetail(this, mMoEHelper, payloadBuilder,timeSpent,feedDetail.getNameOrTitle(), feedDetail.getIdOfEntityOrParticipant(), feedDetail.getArticleCategoryNameS(), mergeTags.toString(),feedDetail.getAuthorName(),feedDetail.getCharCount());
+
     }
 
     @OnClick(R.id.tv_article_detail_share)
@@ -482,6 +508,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
         intent.setType(AppConstants.SHARE_MENU_TYPE);
         intent.putExtra(Intent.EXTRA_TEXT, mFeedDetail.getDeepLinkUrl());
         startActivity(Intent.createChooser(intent, AppConstants.SHARE));
+        moEngageUtills.entityMoEngageCardShareVia(getApplicationContext(),mMoEHelper,payloadBuilder,mFeedDetail, MoEngageConstants.SHARE_VIA_SOCIAL);
     }
 
     public void onBookmarkClick(FeedDetail feedDetail, int successFrom) {

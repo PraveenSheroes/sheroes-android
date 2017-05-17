@@ -9,6 +9,7 @@ import android.os.Parcelable;
 
 public class InstallUpdateForMoEngage implements Parcelable {
     private int appVersion;
+    private boolean isFirstOpen;
 
     public int getAppVersion() {
         return appVersion;
@@ -16,6 +17,17 @@ public class InstallUpdateForMoEngage implements Parcelable {
 
     public void setAppVersion(int appVersion) {
         this.appVersion = appVersion;
+    }
+
+    public InstallUpdateForMoEngage() {
+    }
+
+    public boolean isFirstOpen() {
+        return isFirstOpen;
+    }
+
+    public void setFirstOpen(boolean firstOpen) {
+        isFirstOpen = firstOpen;
     }
 
     @Override
@@ -26,16 +38,15 @@ public class InstallUpdateForMoEngage implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(this.appVersion);
-    }
-
-    public InstallUpdateForMoEngage() {
+        dest.writeByte(this.isFirstOpen ? (byte) 1 : (byte) 0);
     }
 
     protected InstallUpdateForMoEngage(Parcel in) {
         this.appVersion = in.readInt();
+        this.isFirstOpen = in.readByte() != 0;
     }
 
-    public static final Parcelable.Creator<InstallUpdateForMoEngage> CREATOR = new Parcelable.Creator<InstallUpdateForMoEngage>() {
+    public static final Creator<InstallUpdateForMoEngage> CREATOR = new Creator<InstallUpdateForMoEngage>() {
         @Override
         public InstallUpdateForMoEngage createFromParcel(Parcel source) {
             return new InstallUpdateForMoEngage(source);

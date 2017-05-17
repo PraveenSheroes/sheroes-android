@@ -36,11 +36,13 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.moe.pushlibrary.MoEHelper;
+import com.moe.pushlibrary.PayloadBuilder;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -51,19 +53,20 @@ import appliedlife.pvtltd.SHEROES.BuildConfig;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.login.GcmIdResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.InstallUpdateForMoEngage;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.LoginPresenter;
 import appliedlife.pvtltd.SHEROES.service.GCMClientManager;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.FacebookErrorDialog;
@@ -76,6 +79,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.loginRequestBuilder;
 
 /**
@@ -109,6 +113,9 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     TextView mTvGrowthWomen;
     @Bind(R.id.pb_login_progress_bar)
     ProgressBar mProgressBar;
+    @Bind(R.id.tv_other_login_option)
+    TextView mOtherLoginOption;
+    private PayloadBuilder payloadBuilder;
     private static final int READ_CONTACTS_PERMISSIONS_REQUEST1 = 1;
     private CallbackManager callbackManager;
     private AccessTokenTracker accessTokenTracker;
@@ -120,47 +127,54 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     private static final String RIGHT = "</font></b>";
     private String mGcmId;
     private MoEHelper mMoEHelper;
-    private String  mOldGcmId;
+    private MoEngageUtills moEngageUtills;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
-        mMoEHelper = MoEHelper.getInstance(getApplicationContext());
-        getGcmId();
+        mMoEHelper = MoEHelper.getInstance(this);
+        payloadBuilder = new PayloadBuilder();
+        moEngageUtills = MoEngageUtills.getInstance();
+        moEngageUtills.entityMoEngageAppOpened(this, mMoEHelper, payloadBuilder);
+        initializeAllDataAfterGCMId();
     }
 
     private void initializeAllDataAfterGCMId() {
         int versionCode = BuildConfig.VERSION_CODE;
         if (null != mInstallUpdatePreference && mInstallUpdatePreference.isSet() && null != mInstallUpdatePreference.get()) {
-            if (mInstallUpdatePreference.get().getAppVersion() <= versionCode) {
-                mMoEHelper.setExistingUser(true);
-            } else {
-                mMoEHelper.setExistingUser(false);
+            if (mInstallUpdatePreference.get().getAppVersion() < versionCode) {
+                InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
+                installUpdateForMoEngage.setFirstOpen(true);
+                installUpdateForMoEngage.setAppVersion(versionCode);
             }
+            mMoEHelper.setExistingUser(true);
         } else {
             InstallUpdateForMoEngage installUpdateForMoEngage = new InstallUpdateForMoEngage();
             installUpdateForMoEngage.setAppVersion(versionCode);
+            installUpdateForMoEngage.setFirstOpen(true);
             mInstallUpdatePreference.set(installUpdateForMoEngage);
             mMoEHelper.setExistingUser(false);
+            mMoEHelper.setUserAttribute(MoEngageConstants.FIRST_APP_OPEN, new Date());
         }
-        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getGcmId())) {
-            mOldGcmId = userPreference.get().getGcmId();
-            if (StringUtil.isNotNullOrEmptyString(mGcmId) && StringUtil.isNotNullOrEmptyString(mOldGcmId)) {
-                if (!mOldGcmId.equalsIgnoreCase(mGcmId)) {
-                    LoginRequest loginRequest = loginRequestBuilder();
-                    loginRequest.setGcmorapnsid(mGcmId);
-                    mLoginPresenter.getNewGCMidFromPresenter(loginRequest);
-                } else {
-                    openHomeScreen();
-                }
-            }
+        mMoEHelper.setUserAttribute(MoEngageConstants.LAST_APP_OPEN, new Date());
+        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getToken())) {
+            openHomeScreen();
         } else {
             faceBookInitialization();
             setContentView(R.layout.welcome_activity);
             ButterKnife.bind(this);
             initHomeViewPagerAndTabs();
+            mFbLogin.setEnabled(false);
+            mOtherLoginOption.setEnabled(false);
+            if (!NetworkUtil.isConnected(mSheroesApplication)) {
+                showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
+                return;
+            } else {
+                getGcmId();
+            }
         }
+
     }
 
     private void getGcmId() {
@@ -173,9 +187,17 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                 LogUtils.info(TAG, "*************Registarion" + registrationId);
                 mGcmId = registrationId;
                 if (StringUtil.isNotNullOrEmptyString(mGcmId)) {
-                    initializeAllDataAfterGCMId();
+                    mFbLogin.setEnabled(true);
+                    mOtherLoginOption.setEnabled(true);
                 } else {
-                    getGcmId();
+                    mFbLogin.setEnabled(false);
+                    mOtherLoginOption.setEnabled(false);
+                    if (!NetworkUtil.isConnected(mSheroesApplication)) {
+                        showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
+                        return;
+                    } else {
+                        getGcmId();
+                    }
                 }
             }
 
@@ -260,18 +282,40 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     @OnClick(R.id.click_to_join)
     public void fbOnClick() {
-        fbSignIn();
+        if (StringUtil.isNotNullOrEmptyString(mGcmId)) {
+            fbSignIn();
+        } else {
+            mFbLogin.setEnabled(false);
+            mOtherLoginOption.setEnabled(false);
+            if (!NetworkUtil.isConnected(mSheroesApplication)) {
+                showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
+                return;
+            } else {
+                getGcmId();
+            }
+        }
     }
 
     @OnClick(R.id.tv_other_login_option)
     public void otherLoginOption() {
-        Intent loginIntent = new Intent(this, LoginActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString(AppConstants.SHEROES_AUTH_TOKEN, mGcmId);
-        loginIntent.putExtras(bundle);
-        loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
-        startActivity(loginIntent);
-        finish();
+        if (StringUtil.isNotNullOrEmptyString(mGcmId)) {
+            Intent loginIntent = new Intent(this, LoginActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString(AppConstants.SHEROES_AUTH_TOKEN, mGcmId);
+            loginIntent.putExtras(bundle);
+            loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+            startActivity(loginIntent);
+            finish();
+        } else {
+            mFbLogin.setEnabled(false);
+            mOtherLoginOption.setEnabled(false);
+            if (!NetworkUtil.isConnected(mSheroesApplication)) {
+                showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
+                return;
+            } else {
+                getGcmId();
+            }
+        }
     }
 
     private void fbSignIn() {
@@ -479,8 +523,17 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                     loginResponse.setTokenTime(System.currentTimeMillis());
                     loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
                     loginResponse.setGcmId(mGcmId);
-                    setUserAttributeOnMoEngage(loginResponse);
+                    moEngageUtills.entityMoEngageUserAttribute(this, mMoEHelper, payloadBuilder, loginResponse);
                     userPreference.set(loginResponse);
+                    if (null != loginResponse.getUserSummary() && null != loginResponse.getUserSummary().getUserBO() && StringUtil.isNotNullOrEmptyString(loginResponse.getUserSummary().getUserBO().getCrdt())) {
+                        long createdDate = Long.parseLong(loginResponse.getUserSummary().getUserBO().getCrdt());
+                        if (createdDate < System.currentTimeMillis()) {
+                            moEngageUtills.entityMoEngageLoggedIn(this, mMoEHelper, payloadBuilder, MoEngageConstants.FACEBOOK);
+                        } else {
+                            moEngageUtills.entityMoEngageSignUp(this, mMoEHelper, payloadBuilder, MoEngageConstants.FACEBOOK);
+                        }
+                    }
+                    mMoEHelper.setUserAttribute(MoEngageConstants.ACQUISITION_CHANNEL, MoEngageConstants.FACEBOOK);
                     openHomeScreen();
                 } else {
                     userPreference.delete();
@@ -507,36 +560,10 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         }
     }
 
-    private void setUserAttributeOnMoEngage(LoginResponse loginResponse) {
-        if (null != loginResponse.getUserSummary() && loginResponse.getUserSummary().getUserId() > 0) {
-            mMoEHelper.setUniqueId(loginResponse.getUserSummary().getUserId());
-            // If you have first and last name separately
-            if (null != loginResponse.getUserSummary().getUserBO()) {
-                if (StringUtil.isNotNullOrEmptyString(loginResponse.getUserSummary().getUserBO().getFirstName())) {
-                    mMoEHelper.setFirstName(loginResponse.getUserSummary().getUserBO().getFirstName());
-                }
-                if (StringUtil.isNotNullOrEmptyString(loginResponse.getUserSummary().getUserBO().getLastName())) {
-                    mMoEHelper.setLastName(loginResponse.getUserSummary().getUserBO().getLastName());
-                }
-                if (StringUtil.isNotNullOrEmptyString(loginResponse.getUserSummary().getUserBO().getDob())) {
-                    mMoEHelper.setBirthDate(loginResponse.getUserSummary().getUserBO().getDob());
-                }
-                if (StringUtil.isNotNullOrEmptyString(loginResponse.getUserSummary().getUserBO().getEmailid())) {
-                    mMoEHelper.setEmail(loginResponse.getUserSummary().getUserBO().getEmailid());
-                }
-                if (StringUtil.isNotNullOrEmptyString(loginResponse.getUserSummary().getUserBO().getGender())) {
-                    mMoEHelper.setGender(loginResponse.getUserSummary().getUserBO().getGender());
-                }
-                if (StringUtil.isNotNullOrEmptyString(loginResponse.getUserSummary().getUserBO().getMobile())) {
-                    mMoEHelper.setNumber(loginResponse.getUserSummary().getUserBO().getMobile());
-                }
-            }
-        }
-    }
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        finish();
     }
 
     @Override
@@ -576,31 +603,5 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         }
     }
 
-    @Override
-    public void getGcmResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
-        switch (feedParticipationEnum) {
-            case GCM_ID:
-                gcmIdResponse(baseResponse);
-                break;
-            default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
-        }
-    }
-
-    private void gcmIdResponse(BaseResponse baseResponse) {
-        switch (baseResponse.getStatus()) {
-            case AppConstants.SUCCESS:
-                if (baseResponse instanceof GcmIdResponse) {
-                    LoginResponse loginResponse = userPreference.get();
-                    loginResponse.setGcmId(mGcmId);
-                    userPreference.set(loginResponse);
-                    openHomeScreen();
-                }
-                break;
-            case AppConstants.FAILED:
-                break;
-            default:
-        }
-    }
 }
 

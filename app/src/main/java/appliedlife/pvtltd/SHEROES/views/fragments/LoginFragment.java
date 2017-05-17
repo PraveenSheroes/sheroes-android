@@ -1,15 +1,10 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.os.StrictMode;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,45 +13,36 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import com.f2prateek.rx.preferences.Preference;
-import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
-import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
 import com.moe.pushlibrary.MoEHelper;
-
-import org.json.JSONObject;
-
-import java.util.Arrays;
+import com.moe.pushlibrary.PayloadBuilder;
 
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.LoginPresenter;
+import appliedlife.pvtltd.SHEROES.service.GCMClientManager;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.LoginView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
 
 
 /**
@@ -82,8 +68,6 @@ public class LoginFragment extends BaseFragment implements LoginView {
     EditText mPasswordView;
     @Bind(R.id.pb_login_progress_bar)
     ProgressBar mProgressBar;
-    @Bind(R.id.login_button)
-    LoginButton mFbLogin;
     @Bind(R.id.email_sign_in_button)
     Button mEmailSign;
     private LoginActivityIntractionListner mLoginActivityIntractionListner;
@@ -93,6 +77,10 @@ public class LoginFragment extends BaseFragment implements LoginView {
     private ProfileTracker profileTracker;
     private MoEHelper mMoEHelper;
     private String mGcmId;
+    private String email;
+    private String password;
+    private  PayloadBuilder payloadBuilder;
+    private MoEngageUtills moEngageUtills;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -108,23 +96,9 @@ public class LoginFragment extends BaseFragment implements LoginView {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mMoEHelper = MoEHelper.getInstance(getApplicationContext());
-        FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
-        callbackManager = CallbackManager.Factory.create();
-        accessTokenTracker = new AccessTokenTracker() {
-            @Override
-            protected void onCurrentAccessTokenChanged(AccessToken oldToken, AccessToken newToken) {
-
-            }
-        };
-        profileTracker = new ProfileTracker() {
-            @Override
-            protected void onCurrentProfileChanged(Profile oldProfile, Profile newProfile) {
-                // displayMessage(newProfile);
-            }
-        };
-        accessTokenTracker.startTracking();
-        profileTracker.startTracking();
+        mMoEHelper = MoEHelper.getInstance(getActivity());
+        payloadBuilder = new PayloadBuilder();
+        moEngageUtills=MoEngageUtills.getInstance();
     }
 
     @Override
@@ -132,33 +106,23 @@ public class LoginFragment extends BaseFragment implements LoginView {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_login, container, false);
         ButterKnife.bind(this, view);
-        if(null!=getArguments()) {
+        if (null != getArguments()) {
             mGcmId = getArguments().getString(AppConstants.SHEROES_AUTH_TOKEN);
         }
         mLoginPresenter.attachView(this);
         mEmailView.getBackground().setColorFilter(getResources().getColor(R.color.blue), PorterDuff.Mode.SRC_ATOP);
         mPasswordView.getBackground().setColorFilter(getResources().getColor(R.color.blue), PorterDuff.Mode.SRC_ATOP);
         setProgressBar(mProgressBar);
-        if (Build.VERSION.SDK_INT >= 23) {
-            getPermissionToReadUserContacts();
-
-        }
         //  mLoginPresenter.getMasterDataToPresenter();
         return view;
     }
 
 
-    @OnClick(R.id.login_button)
+  /*  @OnClick(R.id.login_button)
     public void fbOnClick() {
-        fbSignIn();
+      //  fbSignIn();
     }
-
-    private void fbSignIn() {
-        LoginManager.getInstance().logOut();
-        mFbLogin.setReadPermissions(Arrays.asList("public_profile", "email", "user_birthday", "user_friends"));
-        mFbLogin.setFragment(this);
-        mFbLogin.registerCallback(callbackManager, callback);
-    }
+*/
 
     /**
      * Stor token into share prefrances
@@ -175,8 +139,9 @@ public class LoginFragment extends BaseFragment implements LoginView {
                         loginResponse.setTokenTime(System.currentTimeMillis());
                         loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
                         loginResponse.setGcmId(mGcmId);
-                        setUserAttributeOnMoEngage(loginResponse);
+                        moEngageUtills.entityMoEngageUserAttribute(getActivity(),mMoEHelper,payloadBuilder,loginResponse);
                         mUserPreference.set(loginResponse);
+                        moEngageUtills.entityMoEngageLoggedIn(getActivity(),mMoEHelper,payloadBuilder, MoEngageConstants.EMAIL);
                         mLoginActivityIntractionListner.onLoginAuthToken();
                         break;
                     case AppConstants.FAILED:
@@ -199,8 +164,9 @@ public class LoginFragment extends BaseFragment implements LoginView {
                     loginResponse.setTokenTime(System.currentTimeMillis());
                     loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
                     loginResponse.setGcmId(mGcmId);
-                    setUserAttributeOnMoEngage(loginResponse);
+                    moEngageUtills.entityMoEngageUserAttribute(getActivity(),mMoEHelper,payloadBuilder,loginResponse);
                     mUserPreference.set(loginResponse);
+                    moEngageUtills.entityMoEngageLoggedIn(getActivity(),mMoEHelper,payloadBuilder, MoEngageConstants.EMAIL);
                     mLoginActivityIntractionListner.onLoginAuthToken();
                 } else {
                     LoginManager.getInstance().logOut();
@@ -209,39 +175,6 @@ public class LoginFragment extends BaseFragment implements LoginView {
             }
         }
     }
-
-    @Override
-    public void getGcmResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
-
-    }
-
-    private void setUserAttributeOnMoEngage(LoginResponse loginResponse) {
-        if (null != loginResponse.getUserSummary() && loginResponse.getUserSummary().getUserId() > 0) {
-            mMoEHelper.setUniqueId(loginResponse.getUserSummary().getUserId());
-            // If you have first and last name separately
-            if (null != loginResponse.getUserSummary().getUserBO()) {
-                if (StringUtil.isNotNullOrEmptyString(loginResponse.getUserSummary().getUserBO().getFirstName())) {
-                    mMoEHelper.setFirstName(loginResponse.getUserSummary().getUserBO().getFirstName());
-                }
-                if (StringUtil.isNotNullOrEmptyString(loginResponse.getUserSummary().getUserBO().getLastName())) {
-                    mMoEHelper.setLastName(loginResponse.getUserSummary().getUserBO().getLastName());
-                }
-                if (StringUtil.isNotNullOrEmptyString(loginResponse.getUserSummary().getUserBO().getDob())) {
-                    mMoEHelper.setBirthDate(loginResponse.getUserSummary().getUserBO().getDob());
-                }
-                if (StringUtil.isNotNullOrEmptyString(loginResponse.getUserSummary().getUserBO().getEmailid())) {
-                    mMoEHelper.setEmail(loginResponse.getUserSummary().getUserBO().getEmailid());
-                }
-                if (StringUtil.isNotNullOrEmptyString(loginResponse.getUserSummary().getUserBO().getGender())) {
-                    mMoEHelper.setGender(loginResponse.getUserSummary().getUserBO().getGender());
-                }
-                if (StringUtil.isNotNullOrEmptyString(loginResponse.getUserSummary().getUserBO().getMobile())) {
-                    mMoEHelper.setNumber(loginResponse.getUserSummary().getUserBO().getMobile());
-                }
-            }
-        }
-    }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -271,8 +204,8 @@ public class LoginFragment extends BaseFragment implements LoginView {
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
-        String password = mPasswordView.getText().toString();
+        email = mEmailView.getText().toString();
+        password = mPasswordView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
@@ -295,11 +228,20 @@ public class LoginFragment extends BaseFragment implements LoginView {
 
         } else {
             mEmailSign.setEnabled(false);
-            LoginRequest loginRequest = AppUtils.loginRequestBuilder();
-            loginRequest.setUsername(email);
-            loginRequest.setPassword(password);
-            loginRequest.setGcmorapnsid(mGcmId);
-            mLoginPresenter.getLoginAuthTokeInPresenter(loginRequest, false);
+            if (StringUtil.isNotNullOrEmptyString(mGcmId)) {
+                LoginRequest loginRequest = AppUtils.loginRequestBuilder();
+                loginRequest.setUsername(email);
+                loginRequest.setPassword(password);
+                loginRequest.setGcmorapnsid(mGcmId);
+                mLoginPresenter.getLoginAuthTokeInPresenter(loginRequest, false);
+            } else {
+                if (!NetworkUtil.isConnected(getContext())) {
+                    showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
+                    return;
+                }else {
+                    getGcmId();
+                }
+            }
         }
     }
 
@@ -309,116 +251,31 @@ public class LoginFragment extends BaseFragment implements LoginView {
         super.showError(errorMsg, feedParticipationEnum);
     }
 
-    // Class for facebook access token and user details
-    public FacebookCallback<LoginResult> callback = new FacebookCallback<LoginResult>() {
 
-        @Override
-        public void onSuccess(final LoginResult loginResult) {
-            final AccessToken accessToken = loginResult.getAccessToken();
-            // Facebook Email address
-            GraphRequest request = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
-                @Override
-                public void onCompleted(JSONObject object, GraphResponse response) {
-                    if (null != accessToken && StringUtil.isNotNullOrEmptyString(accessToken.getToken())) {
-                        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getToken())) {
-                            LoginRequest loginRequest = AppUtils.loginRequestBuilder();
-                            loginRequest.setAccessToken(accessToken.getToken());
-                            AppUtils appUtils = AppUtils.getInstance();
-                            loginRequest.setAppVersion(appUtils.getAppVersionName());
-                            //TODO:: Google gcm ID
-                            loginRequest.setCloudMessagingId(appUtils.getCloudMessaging());
-                            loginRequest.setDeviceUniqueId(appUtils.getDeviceId());
-                            loginRequest.setGcmorapnsid(mGcmId);
-                            mLoginPresenter.getFBVerificationInPresenter(loginRequest);
-                        } else {
-                            LoginRequest loginRequest = AppUtils.loginRequestBuilder();
-                            loginRequest.setAccessToken(accessToken.getToken());
-                            AppUtils appUtils = AppUtils.getInstance();
-                            loginRequest.setAppVersion(appUtils.getAppVersionName());
-                            //TODO:check cloud
-                            loginRequest.setCloudMessagingId(appUtils.getCloudMessaging());
-                            loginRequest.setDeviceUniqueId(appUtils.getDeviceId());
-                            loginRequest.setGcmorapnsid(mGcmId);
-                            mLoginPresenter.getLoginAuthTokeInPresenter(loginRequest, true);
-                        }
-                    }
-
+    private void getGcmId() {
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        GCMClientManager pushClientManager = new GCMClientManager(getActivity(), AppConstants.PROJECT_NUMBER);
+        pushClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
+            @Override
+            public void onSuccess(String registrationId, boolean isNewRegistration) {
+                mGcmId = registrationId;
+                if (StringUtil.isNotNullOrEmptyString(mGcmId)) {
+                    LoginRequest loginRequest = AppUtils.loginRequestBuilder();
+                    loginRequest.setUsername(email);
+                    loginRequest.setPassword(password);
+                    loginRequest.setGcmorapnsid(mGcmId);
+                    mLoginPresenter.getLoginAuthTokeInPresenter(loginRequest, false);
+                } else {
+                    getGcmId();
                 }
-            });
-            try
-
-            {
-                Bundle parameters = new Bundle();
-                parameters.putString("fields", "id,name,email,gender,last_name,first_name");
-                request.setParameters(parameters);
-                request.executeAsync();
-            } catch (
-                    Exception e)
-
-            {
-            }
-        }
-
-        @Override
-        public void onCancel() {
-
-            mLoginActivityIntractionListner.onErrorOccurence(getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
-
-        }
-
-        @Override
-        public void onError(FacebookException e) {
-            mLoginActivityIntractionListner.onErrorOccurence(getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
-        }
-    };
-
-
-    public void getPermissionToReadUserContacts() {
-        // 1) Use the support library version ContextCompat.checkSelfPermission(...) to avoid
-        // checking the build version since Context.checkSelfPermission(...) is only available
-        // in Marshmallow
-        // 2) Always check for permission (even if permission has already been granted)
-        // since the user can revoke permissions at any time through Settings
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CONTACTS)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            // The permission is NOT already granted.
-            // Check if the user has been asked about this permission already and denied
-            // it. If so, we want to give more explanation about why the permission is needed.
-            if (shouldShowRequestPermissionRationale(
-                    Manifest.permission.READ_CONTACTS)) {
-                // Show our own UI to explain to the user why we need to read the contacts
-                // before actually requesting the permission and showing the default UI
             }
 
-            // Fire off an async request to actually get the permission
-            // This will show the standard permission request dialog UI
-            requestPermissions(new String[]{Manifest.permission.READ_CONTACTS},
-                    READ_CONTACTS_PERMISSIONS_REQUEST1);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String permissions[],
-                                           @NonNull int[] grantResults) {
-        // Make sure it's our original READ_CONTACTS request
-        if (requestCode == READ_CONTACTS_PERMISSIONS_REQUEST1) {
-            if (grantResults.length == 1 &&
-                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            @Override
+            public void onFailure(String ex) {
+                mGcmId = ex;
             }
-        } else {
-            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
+        });
     }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode, resultCode, data);
-
-    }
-
 
 }

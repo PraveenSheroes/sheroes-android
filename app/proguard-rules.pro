@@ -161,9 +161,16 @@ public <init>(android.content.Context, android.util.AttributeSet, int);
 -keep class com.facebook.drawee.**{*;}
 -dontwarn com.facebook.drawee.
 
--keep class com.moengage.** { *; }
+-dontwarn com.google.android.gms.location.**
+-dontwarn com.google.android.gms.gcm.**
+-dontwarn com.google.android.gms.iid.**
+
+-keep class com.google.android.gms.gcm.** { *; }
+-keep class com.google.android.gms.iid.** { *; }
+-keep class com.google.android.gms.location.** { *; }
+
 -keep class com.moe.pushlibrary.activities.** { *; }
--keep class com.moengage.locationlibrary.GeofenceIntentService.**
+-keep class com.moengage.locationlibrary.GeofenceIntentService
 -keep class com.moe.pushlibrary.InstallReceiver
 -keep class com.moengage.push.MoEPushWorker
 -keep class com.moe.pushlibrary.providers.MoEProvider
@@ -176,13 +183,20 @@ public <init>(android.content.Context, android.util.AttributeSet, int);
 -keep class com.moengage.push.PushManager
 -keep class com.moengage.inapp.InAppController
 
+-keep class com.moengage.pushbase.activities.PushTracker
+-keep class com.moengage.pushbase.activities.SnoozeTracker
+-keep class com.moengage.pushbase.push.MoEPushWorker
+-keep class com.moe.pushlibrary.MoEWorker
+-keep class com.moe.pushlibrary.AppUpdateReceiver
+-keep class com.moengage.core.MoEAlarmReceiver
+
 
 -dontwarn com.moengage.location.GeoManager
 -dontwarn com.moengage.core.GeoTask
 -dontwarn com.moengage.receiver.*
 -dontwarn com.moengage.worker.*
--dontwarn com.moengage.ViewEngine
--dontwarn com.moengage.**
+-dontwarn com.moengage.inapp.ViewEngine
+
 -keep class com.delight.**  { *; }
 
 

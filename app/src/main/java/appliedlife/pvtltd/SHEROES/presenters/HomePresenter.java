@@ -27,13 +27,17 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCount;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.login.GcmIdResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.Tracking.GoogleAnalyticsTracing;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import rx.Subscriber;
 import rx.Subscription;
@@ -49,6 +53,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_LIKE_
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MY_COMMUNITIES;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_SEARCH_DATA;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.GCM_ID;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.JOIN_INVITE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.LIKE_UNLIKE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.MARK_AS_SPAM;
@@ -97,6 +102,31 @@ public class HomePresenter extends BasePresenter<HomeView> {
     public boolean isViewAttached() {
         return super.isViewAttached();
     }
+    public void getNewGCMidFromPresenter(LoginRequest loginRequest) {
+        Subscription subscription = mHomeModel.getNewGCMidFromModel(loginRequest).subscribe(new Subscriber<GcmIdResponse>() {
+            @Override
+            public void onCompleted() {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+            //    getMvpView().showError(e.getMessage(),ERROR_AUTH_TOKEN);
+                if(null!=e&&StringUtil.isNotNullOrEmptyString(e.getMessage())) {
+                    StringBuilder stringBuilder=new StringBuilder();
+                    stringBuilder.append(AppConstants.GCM_ID).append(AppConstants.SPACE).append( e.getMessage());
+                    GoogleAnalyticsTracing.screenNameTracking(mSheroesApplication,stringBuilder.toString());
+                }
+            }
+
+            @Override
+            public void onNext(GcmIdResponse gcmIdResponse) {
+                if (null != gcmIdResponse) {
+                    getMvpView().getNotificationReadCountSuccess(gcmIdResponse,GCM_ID);
+                }
+            }
+        });
+        registerSubscription(subscription);
+    }
     public void getAuthTokenRefreshPresenter() {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
@@ -113,6 +143,11 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
                 getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
+                if(null!=e&&StringUtil.isNotNullOrEmptyString(e.getMessage())) {
+                    StringBuilder stringBuilder=new StringBuilder();
+                    stringBuilder.append(AppConstants.SHEROES_AUTH_TOKEN).append(AppConstants.SPACE).append( e.getMessage());
+                    GoogleAnalyticsTracing.screenNameTracking(mSheroesApplication,stringBuilder.toString());
+                }
             }
 
             @Override
@@ -139,8 +174,12 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                LogUtils.info(TAG, "********exceptionn***********"+e.getMessage());
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
+                if(null!=e&&StringUtil.isNotNullOrEmptyString(e.getMessage())) {
+                    StringBuilder stringBuilder=new StringBuilder();
+                    stringBuilder.append(AppConstants.FEED_SCREEN).append(AppConstants.SPACE).append( e.getMessage());
+                    GoogleAnalyticsTracing.screenNameTracking(mSheroesApplication,stringBuilder.toString());
+                }
             }
 
             @Override
@@ -171,6 +210,11 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_MY_COMMUNITIES);
+                if(null!=e&&StringUtil.isNotNullOrEmptyString(e.getMessage())) {
+                    StringBuilder stringBuilder=new StringBuilder();
+                    stringBuilder.append(AppConstants.MY_COMMUNITIES_FRAGMENT).append(AppConstants.SPACE).append( e.getMessage());
+                    GoogleAnalyticsTracing.screenNameTracking(mSheroesApplication,stringBuilder.toString());
+                }
             }
 
             @Override
@@ -200,6 +244,11 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_BOOK_MARK_LIST);
+                if(null!=e&&StringUtil.isNotNullOrEmptyString(e.getMessage())) {
+                    StringBuilder stringBuilder=new StringBuilder();
+                    stringBuilder.append(AppConstants.BOOKMARKS).append(AppConstants.FRAGMENT).append(AppConstants.SPACE).append( e.getMessage());
+                    GoogleAnalyticsTracing.screenNameTracking(mSheroesApplication,stringBuilder.toString());
+                }
             }
 
             @Override
@@ -229,6 +278,11 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
+                if(null!=e&&StringUtil.isNotNullOrEmptyString(e.getMessage())) {
+                    StringBuilder stringBuilder=new StringBuilder();
+                    stringBuilder.append(AppConstants.REACTION_ON_CARD).append(AppConstants.SPACE).append( e.getMessage());
+                    GoogleAnalyticsTracing.screenNameTracking(mSheroesApplication,stringBuilder.toString());
+                }
             }
 
             @Override
@@ -256,6 +310,11 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
+                if(null!=e&&StringUtil.isNotNullOrEmptyString(e.getMessage())) {
+                    StringBuilder stringBuilder=new StringBuilder();
+                    stringBuilder.append(AppConstants.REACTION_ON_CARD).append(AppConstants.SPACE).append( e.getMessage());
+                    GoogleAnalyticsTracing.screenNameTracking(mSheroesApplication,stringBuilder.toString());
+                }
             }
 
             @Override
@@ -283,6 +342,11 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_BOOKMARK_UNBOOKMARK);
+                if(null!=e&&StringUtil.isNotNullOrEmptyString(e.getMessage())) {
+                    StringBuilder stringBuilder=new StringBuilder();
+                    stringBuilder.append(AppConstants.BOOKMARKS).append(AppConstants.SPACE).append( e.getMessage());
+                    GoogleAnalyticsTracing.screenNameTracking(mSheroesApplication,stringBuilder.toString());
+                }
             }
 
             @Override
@@ -310,6 +374,11 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_JOIN_INVITE);
+                if(null!=e&&StringUtil.isNotNullOrEmptyString(e.getMessage())) {
+                    StringBuilder stringBuilder=new StringBuilder();
+                    stringBuilder.append(AppConstants.MY_COMMUNITIES_FRAGMENT).append(mSheroesApplication.getString(R.string.ID_JOIN)).append(AppConstants.SPACE).append( e.getMessage());
+                    GoogleAnalyticsTracing.screenNameTracking(mSheroesApplication,stringBuilder.toString());
+                }
             }
 
             @Override
@@ -337,6 +406,11 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
+                if(null!=e&&StringUtil.isNotNullOrEmptyString(e.getMessage())) {
+                    StringBuilder stringBuilder=new StringBuilder();
+                    stringBuilder.append(AppConstants.COMMUNITY_POST_FRAGMENT).append(mSheroesApplication.getString(R.string.ID_DELETE)).append(AppConstants.SPACE).append( e.getMessage());
+                    GoogleAnalyticsTracing.screenNameTracking(mSheroesApplication,stringBuilder.toString());
+                }
             }
 
             @Override
@@ -364,6 +438,11 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
+                if(null!=e&&StringUtil.isNotNullOrEmptyString(e.getMessage())) {
+                    StringBuilder stringBuilder=new StringBuilder();
+                    stringBuilder.append(AppConstants.FEED_SCREEN).append(mSheroesApplication.getString(R.string.ID_REPORTED_AS_SPAM)).append(AppConstants.SPACE).append( e.getMessage());
+                    GoogleAnalyticsTracing.screenNameTracking(mSheroesApplication,stringBuilder.toString());
+                }
             }
 
             @Override
@@ -391,6 +470,11 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_SEARCH_DATA);
+                if(null!=e&&StringUtil.isNotNullOrEmptyString(e.getMessage())) {
+                    StringBuilder stringBuilder=new StringBuilder();
+                    stringBuilder.append(mSheroesApplication.getString(R.string.ID_NOTIFICATION)).append(AppConstants.SPACE).append( e.getMessage());
+                    GoogleAnalyticsTracing.screenNameTracking(mSheroesApplication,stringBuilder.toString());
+                }
             }
 
             @Override

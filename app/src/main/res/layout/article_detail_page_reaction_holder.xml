@@ -31,6 +31,7 @@
             android:layout_marginRight="@dimen/dp_size_16"
             android:layout_marginTop="@dimen/dp_size_20"
             android:linksClickable="true"
+            android:autoLink="web"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:lineSpacingExtra="@dimen/dp_size_5"
             android:textColor="@color/suggested_card_text"

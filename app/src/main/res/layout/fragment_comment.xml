@@ -8,7 +8,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/dp_size_45"
+        android:layout_marginBottom="@dimen/dp_size_75"
         android:orientation="vertical"
         android:paddingTop="@dimen/dp_size_20">
 
@@ -76,8 +76,6 @@
             android:id="@+id/li_user_comment"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:layout_margin="5dp"
-            android:layout_marginBottom="@dimen/dp_size_50"
             android:gravity="bottom"
             android:orientation="vertical">
 

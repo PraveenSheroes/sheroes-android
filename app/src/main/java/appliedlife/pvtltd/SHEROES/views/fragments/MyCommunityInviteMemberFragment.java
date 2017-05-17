@@ -17,6 +17,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.moe.pushlibrary.MoEHelper;
+import com.moe.pushlibrary.PayloadBuilder;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +36,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -47,6 +52,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.communityRequestBuilder;
 
 /**
  * Created by Praveen_Singh on 06-03-2017.
@@ -80,7 +86,9 @@ public class MyCommunityInviteMemberFragment extends BaseDialogFragment implemen
     private FeedDetail mFeedDetail;
     private int mPageNo = AppConstants.ONE_CONSTANT;
     private LinearLayoutManager manager;
-
+    private MoEHelper mMoEHelper;
+    private PayloadBuilder payloadBuilder;
+    private MoEngageUtills moEngageUtills;
     //   private SwipPullRefreshList mPullRefreshList;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -89,6 +97,9 @@ public class MyCommunityInviteMemberFragment extends BaseDialogFragment implemen
         ButterKnife.bind(this, view);
         //   mPullRefreshList = new SwipPullRefreshList();
         //   mPullRefreshList.setPullToRefresh(false);
+        mMoEHelper = MoEHelper.getInstance(getActivity());
+        payloadBuilder = new PayloadBuilder();
+        moEngageUtills= MoEngageUtills.getInstance();
         mHomePresenter.attachView(this);
         Bundle bundle = getArguments();
         if (bundle != null) {
@@ -223,6 +234,9 @@ public class MyCommunityInviteMemberFragment extends BaseDialogFragment implemen
                         mFeedDetail.setNoOfMembers(count);
                         ((HomeActivity) getActivity()).updateMyCommunitiesFragment(mFeedDetail);
                     }
+                    if(null!=mFeedDetail) {
+                        moEngageUtills.entityMoEngageAddedMember(getActivity(),mMoEHelper,payloadBuilder,mFeedDetail.getNameOrTitle(), mFeedDetail.getIdOfEntityOrParticipant(), mFeedDetail.isClosedCommunity(), MoEngageConstants.COMMUNITY_TAG, mFeedDetail.isMember(), mFeedDetail.getNoOfMembers());
+                    }
                     break;
                 case AppConstants.FAILED:
                     ((CommunitiesDetailActivity) getActivity()).onShowErrorDialog(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);
@@ -232,7 +246,6 @@ public class MyCommunityInviteMemberFragment extends BaseDialogFragment implemen
             }
         }
     }
-
     @OnClick(R.id.tv_back_community)
     public void inviteSearchBack() {
         dismiss();
@@ -241,7 +254,7 @@ public class MyCommunityInviteMemberFragment extends BaseDialogFragment implemen
     @OnClick(R.id.tv_invite_post_submit)
     public void inviteSubmit() {
         if (StringUtil.isNotEmptyCollection(mUserIdForAddMember) && null != mFeedDetail) {
-            mHomePresenter.communityJoinFromPresenter(mAppUtils.communityRequestBuilder(mUserIdForAddMember, mFeedDetail.getIdOfEntityOrParticipant(), AppConstants.OPEN_COMMUNITY));
+            mHomePresenter.communityJoinFromPresenter(communityRequestBuilder(mUserIdForAddMember, mFeedDetail.getIdOfEntityOrParticipant(), AppConstants.OPEN_COMMUNITY));
         }
     }
 

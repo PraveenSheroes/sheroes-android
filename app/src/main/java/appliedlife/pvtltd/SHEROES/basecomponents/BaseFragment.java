@@ -23,6 +23,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.f2prateek.rx.preferences.Preference;
+import com.moe.pushlibrary.MoEHelper;
+import com.moe.pushlibrary.PayloadBuilder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,6 +57,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCardResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.WorkExpListResponse;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.CommentReactionPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -109,8 +113,6 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     private List<FeedDetail> mfeedDetailList = new ArrayList<>();
     @Inject
     Preference<LoginResponse> userPreference;
-
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
@@ -215,6 +217,11 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (getActivity() != null) {
@@ -229,7 +236,6 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
         }
     }
 
-
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
         List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
@@ -237,7 +243,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
             mPageNo = mFragmentListRefreshData.getPageNo();
             if (mPageNo == AppConstants.ONE_CONSTANT && mFragmentListRefreshData.getSwipeToRefresh() == AppConstants.ONE_CONSTANT) {
-                if (StringUtil.isNotEmptyCollection(mfeedDetailList)&&StringUtil.isNotNullOrEmptyString(mfeedDetailList.get(0).getId()) && StringUtil.isNotNullOrEmptyString(feedDetailList.get(0).getId())) {
+                if (StringUtil.isNotEmptyCollection(mfeedDetailList) && StringUtil.isNotNullOrEmptyString(mfeedDetailList.get(0).getId()) && StringUtil.isNotNullOrEmptyString(feedDetailList.get(0).getId())) {
                     if (mfeedDetailList.get(0).getId().equalsIgnoreCase(feedDetailList.get(0).getId())) {
                         Toast.makeText(getContext(), getString(R.string.ID_FEED_ALREADY_REFRESH), Toast.LENGTH_SHORT).show();
                     } else {
@@ -245,7 +251,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                     }
                 }
             }
-            if (mPageNo == AppConstants.ONE_CONSTANT ) {
+            if (mPageNo == AppConstants.ONE_CONSTANT) {
                 mfeedDetailList = feedDetailList;
             }
             mFragmentListRefreshData.setPageNo(++mPageNo);
@@ -259,7 +265,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                 mLayoutManager.scrollToPositionWithOffset(0, 0);
             }
         } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
-           // mLiNoResult.setVisibility(View.VISIBLE);
+            // mLiNoResult.setVisibility(View.VISIBLE);
         } else {
             mLiNoResult.setVisibility(View.GONE);
         }
@@ -330,6 +336,10 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                     mFeedDetail.setMember(true);
                 }
                 commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+                MoEHelper   mMoEHelper = MoEHelper.getInstance(getActivity());
+                PayloadBuilder  payloadBuilder = new PayloadBuilder();
+                MoEngageUtills   moEngageUtills=MoEngageUtills.getInstance();;
+                moEngageUtills.entityMoEngageJoinedCommunity(getActivity(), mMoEHelper, payloadBuilder, mFeedDetail.getNameOrTitle(), mFeedDetail.getIdOfEntityOrParticipant(), mFeedDetail.isClosedCommunity(), MoEngageConstants.COMMUNITY_TAG, TAG, mFeedDetail.getItemPosition());
                 break;
             case AppConstants.FAILED:
                 mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);
@@ -338,6 +348,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                 mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), ERROR_JOIN_INVITE);
         }
     }
+
 
     private void recentCommentEditDelete(BaseResponse baseResponse) {
         if (null != mFeedDetail) {
@@ -393,6 +404,10 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                     } else {
                         mAdapter.notifyItemChanged(mFeedDetail.getItemPosition(), mFeedDetail);
                     }
+                    MoEHelper   mMoEHelper = MoEHelper.getInstance(getActivity());
+                    PayloadBuilder  payloadBuilder = new PayloadBuilder();
+                    MoEngageUtills   moEngageUtills=MoEngageUtills.getInstance();;
+                    moEngageUtills.entityMoEngageBookMarkData(getActivity(), mMoEHelper, payloadBuilder, mFeedDetail);
                     break;
                 case AppConstants.FAILED:
                     if (!mFeedDetail.isBookmarked()) {
@@ -422,6 +437,10 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                         }
                     }
                     mAdapter.notifyItemChanged(mFeedDetail.getItemPosition(), mFeedDetail);
+                    MoEHelper   mMoEHelper = MoEHelper.getInstance(getActivity());
+                    PayloadBuilder  payloadBuilder = new PayloadBuilder();
+                    MoEngageUtills   moEngageUtills=MoEngageUtills.getInstance();;
+                    moEngageUtills.entityMoEngageReaction(getActivity(), mMoEHelper, payloadBuilder, mFeedDetail, mPressedEmoji, mPosition);
                     break;
                 case AppConstants.FAILED:
                     if (!mFeedDetail.isLongPress()) {
@@ -461,6 +480,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
         mFeedDetail = feedDetail;
         mHomePresenter.addBookMarkFromPresenter(mAppUtils.bookMarkRequestBuilder(feedDetail.getEntityOrParticipantId()), feedDetail.isBookmarked());
     }
+
 
     public void likeAndUnlikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
         mListLoad = false;
