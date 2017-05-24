@@ -28,6 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_size_10"
+                android:inputType="textMultiLine"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:textColor="@color/detail_page_text"
                 android:lineSpacingExtra="@dimen/dp_size_4"

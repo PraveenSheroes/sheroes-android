@@ -66,6 +66,11 @@ public class GenericRecyclerViewAdapter<T extends BaseResponse> extends Recycler
             this.filterListData.add(position, (T) feedDetail);
         }
     }
+    public void addDataOnPosition(FeedDetail feedDetail, int position) {
+        if (StringUtil.isNotEmptyCollection(filterListData) && filterListData.size() > position) {
+            this.filterListData.add(position, (T) feedDetail);
+        }
+    }
     public void clearAllDataForList() {
         this.filterListData.clear();
     }

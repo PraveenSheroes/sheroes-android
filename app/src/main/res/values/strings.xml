@@ -849,4 +849,10 @@ Our website www.sheroes.in offers services for certain products and services. By
         <item>@string/married</item>
         <item>@string/unmarried</item>
     </string-array>
+    <string name="ID_CHALLENGES_YOU">Challenges You</string>
+    <string name="ID_YOUR_FRIENDS">Your Friends</string>
+    <string name="ID_CHALLENGE">Challenge</string>
+    <string name="ID_CHALLENGE_ACCEPTED">Challenge Accepted</string>
+    <string name="ID_ACCEPT_CHALLENGE">Accept Challenge</string>
+    <string name="ID_JUST_STARTED">Just Started</string>
 </resources>

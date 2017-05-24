@@ -113,6 +113,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     private List<FeedDetail> mfeedDetailList = new ArrayList<>();
     @Inject
     Preference<LoginResponse> userPreference;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
@@ -221,6 +222,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
         super.onCreate(savedInstanceState);
 
     }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -270,6 +272,13 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
             mLiNoResult.setVisibility(View.GONE);
         }
         mSwipeView.setRefreshing(false);
+    }
+
+    public void challengeAddOnFeed(FeedDetail feedDetail) {
+        if (null != feedDetail) {
+            mAdapter.addDataOnPosition(feedDetail, 0);
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -336,9 +345,10 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                     mFeedDetail.setMember(true);
                 }
                 commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
-                MoEHelper   mMoEHelper = MoEHelper.getInstance(getActivity());
-                PayloadBuilder  payloadBuilder = new PayloadBuilder();
-                MoEngageUtills   moEngageUtills=MoEngageUtills.getInstance();;
+                MoEHelper mMoEHelper = MoEHelper.getInstance(getActivity());
+                PayloadBuilder payloadBuilder = new PayloadBuilder();
+                MoEngageUtills moEngageUtills = MoEngageUtills.getInstance();
+                ;
                 moEngageUtills.entityMoEngageJoinedCommunity(getActivity(), mMoEHelper, payloadBuilder, mFeedDetail.getNameOrTitle(), mFeedDetail.getIdOfEntityOrParticipant(), mFeedDetail.isClosedCommunity(), MoEngageConstants.COMMUNITY_TAG, TAG, mFeedDetail.getItemPosition());
                 break;
             case AppConstants.FAILED:
@@ -404,9 +414,10 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                     } else {
                         mAdapter.notifyItemChanged(mFeedDetail.getItemPosition(), mFeedDetail);
                     }
-                    MoEHelper   mMoEHelper = MoEHelper.getInstance(getActivity());
-                    PayloadBuilder  payloadBuilder = new PayloadBuilder();
-                    MoEngageUtills   moEngageUtills=MoEngageUtills.getInstance();;
+                    MoEHelper mMoEHelper = MoEHelper.getInstance(getActivity());
+                    PayloadBuilder payloadBuilder = new PayloadBuilder();
+                    MoEngageUtills moEngageUtills = MoEngageUtills.getInstance();
+                    ;
                     moEngageUtills.entityMoEngageBookMarkData(getActivity(), mMoEHelper, payloadBuilder, mFeedDetail);
                     break;
                 case AppConstants.FAILED:
@@ -437,9 +448,10 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                         }
                     }
                     mAdapter.notifyItemChanged(mFeedDetail.getItemPosition(), mFeedDetail);
-                    MoEHelper   mMoEHelper = MoEHelper.getInstance(getActivity());
-                    PayloadBuilder  payloadBuilder = new PayloadBuilder();
-                    MoEngageUtills   moEngageUtills=MoEngageUtills.getInstance();;
+                    MoEHelper mMoEHelper = MoEHelper.getInstance(getActivity());
+                    PayloadBuilder payloadBuilder = new PayloadBuilder();
+                    MoEngageUtills moEngageUtills = MoEngageUtills.getInstance();
+                    ;
                     moEngageUtills.entityMoEngageReaction(getActivity(), mMoEHelper, payloadBuilder, mFeedDetail, mPressedEmoji, mPosition);
                     break;
                 case AppConstants.FAILED:
@@ -515,13 +527,17 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
 
     @Override
     public void startProgressBar() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mProgressBar.bringToFront();
+        if (null != mProgressBar) {
+            mProgressBar.setVisibility(View.VISIBLE);
+            mProgressBar.bringToFront();
+        }
     }
 
     @Override
     public void stopProgressBar() {
-        mProgressBar.setVisibility(View.GONE);
+        if (null != mProgressBar) {
+            mProgressBar.setVisibility(View.GONE);
+        }
     }
 
     @Override

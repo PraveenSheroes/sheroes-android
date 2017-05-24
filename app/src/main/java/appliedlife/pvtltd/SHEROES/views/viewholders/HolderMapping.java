@@ -9,7 +9,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionDoc;
-import appliedlife.pvtltd.SHEROES.models.entities.communities.CommunitySuggestion;
+import appliedlife.pvtltd.SHEROES.models.entities.communities.ChallengeDataItem;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityTags;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
@@ -30,8 +30,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobLocationList;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingInterestJobSearch;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.OnBoardingData;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ExprienceEntity;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.EducationEntity;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ExprienceEntity;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.GoodAt;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.MyProfileView;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileHorList;
@@ -177,11 +177,6 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new NoCommunityHolder(view, viewInterface);
         }
-    }, SUGGESTED_CARD_HOLDER(R.layout.horizontal_suggestion_item) {
-        @Override
-        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new CommunitySuggestedHolder(view, viewInterface);
-        }
     }, OWNER_LIST(R.layout.owner_list) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
@@ -296,11 +291,6 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new JobLocationHolder(view, viewInterface);
         }
-    }, COMMUNITY_SUGGESTED_BY_HOLDER(R.layout.community_suggested_by_layout) {
-        @Override
-        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new CommunityWithInSggestedHolder(view, viewInterface);
-        }
     }, JOB_DETAIL_HOLDER(R.layout.job_detail_page) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
@@ -357,10 +347,20 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new BellNotificationHolder(view, viewInterface);
         }
-    },  WORK_EXPERIENCE_DETAIl_CARD(R.layout.professional_work_experience_viewcard) {
+    }, WORK_EXPERIENCE_DETAIl_CARD(R.layout.professional_work_experience_viewcard) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new WorkExperienceCardHolder(view, viewInterface);
+        }
+    }, CHALLENGE_HORIZONTAL_VIEW(R.layout.challenge_horizontal_view) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new ChallengeHorizontalView(view, viewInterface);
+        }
+    }, CHALLENGE_LIST_ITEM_HOLDER(R.layout.challenge_list_item_holder) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new ChallengeItemCardHolder(view, viewInterface);
         }
     };
     public Object object;
@@ -400,6 +400,8 @@ public enum HolderMapping {
                         case AppConstants.USER_SUB_TYPE:
                             returnView = INVITE_MEMBER_MODULE.ordinal();
                             break;
+                        case AppConstants.CHALLENGE_SUB_TYPE:
+                            return CHALLENGE_HORIZONTAL_VIEW.ordinal();
                         default:
 
                     }
@@ -437,7 +439,6 @@ public enum HolderMapping {
                             boolean isFeatured = feedDetail.isFeatured();
                             if (isFeatured && !feedDetail.isOwner() && !feedDetail.isMember()) {
                                 returnView = FEATURE_CARD.ordinal();
-                                //   return SUGGESTED_CARD_HOLDER.ordinal();
                             } else {
                                 returnView = MY_COMMUNITIES_CARD.ordinal();
                             }
@@ -454,7 +455,6 @@ public enum HolderMapping {
                         case AppConstants.NO_COMMUNITIES:
                             returnView = NO_COMMUNITIES.ordinal();
                             break;
-
                         default:
                     }
                 } else if (item instanceof CommunityPostResponse) {
@@ -510,11 +510,9 @@ public enum HolderMapping {
                         return PROFILE_PERSONAL_VISITING_CARD.ordinal();
                     }
 
-                }
-                else if (item instanceof EducationEntity) {
+                } else if (item instanceof EducationEntity) {
                     return EDUCATION_LIST.ordinal();
-                }
-                else if (item instanceof GoodAt) {
+                } else if (item instanceof GoodAt) {
                     return GOOD_AT.ordinal();
                 } else if (item instanceof ListOfInviteSearch) {
                     return INVITE_SEARCH_MODULE.ordinal();
@@ -538,9 +536,7 @@ public enum HolderMapping {
                     return PANDING_REQUEST_LIST.ordinal();
                 } else if (item instanceof CommunityTags) {
                     return SEARCHTAGS.ordinal();
-                } else if (item instanceof CommunitySuggestion) {
-                    return COMMUNITY_SUGGESTED_BY_HOLDER.ordinal();
-                } else if (item instanceof JobLocationList) {
+                }  else if (item instanceof JobLocationList) {
                     return JOB_LOCATION_LIST.ordinal();
                 } else if (item instanceof ProfileItems) {
                     return PROFILE_HOLDER.ordinal();
@@ -548,6 +544,8 @@ public enum HolderMapping {
                     return BELL_NOTIFICATION.ordinal();
                 } else if (item instanceof ExprienceEntity) {
                     return WORK_EXPERIENCE_DETAIl_CARD.ordinal();
+                }else if (item instanceof ChallengeDataItem) {
+                    return CHALLENGE_LIST_ITEM_HOLDER.ordinal();
                 }
             }
         }

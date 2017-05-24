@@ -22,6 +22,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_AUTH_
 
 /**
  * Created by Praveen_Singh on 04-01-2017.
+ *
  * @author Praveen Singh
  * @version 5.0
  * @since 29/12/2016.
@@ -37,18 +38,20 @@ public class LoginPresenter extends BasePresenter<LoginView> {
     MasterDataModel mMasterDataModel;
     @Inject
     Preference<MasterDataResponse> mUserPreferenceMasterData;
+
     @Inject
-    public LoginPresenter(MasterDataModel masterDataModel,LoginModel mLoginModel, SheroesApplication mSheroesApplication, Preference<LoginResponse> userPreference, Preference<MasterDataResponse> mUserPreferenceMasterData) {
-      this.mMasterDataModel=masterDataModel;
+    public LoginPresenter(MasterDataModel masterDataModel, LoginModel mLoginModel, SheroesApplication mSheroesApplication, Preference<LoginResponse> userPreference, Preference<MasterDataResponse> mUserPreferenceMasterData) {
+        this.mMasterDataModel = masterDataModel;
         this.mLoginModel = mLoginModel;
         this.mSheroesApplication = mSheroesApplication;
-        this.userPreference=userPreference;
+        this.userPreference = userPreference;
         this.mUserPreferenceMasterData = mUserPreferenceMasterData;
     }
 
     public void getMasterDataToPresenter() {
-        super.getMasterDataToAllPresenter(mSheroesApplication,mMasterDataModel,mUserPreferenceMasterData);
+        super.getMasterDataToAllPresenter(mSheroesApplication, mMasterDataModel, mUserPreferenceMasterData);
     }
+
     @Override
     public void detachView() {
         super.detachView();
@@ -58,21 +61,23 @@ public class LoginPresenter extends BasePresenter<LoginView> {
     public boolean isViewAttached() {
         return super.isViewAttached();
     }
-    public void getLoginAuthTokeInPresenter(LoginRequest loginRequest,boolean isSignUp) {
+
+    public void getLoginAuthTokeInPresenter(LoginRequest loginRequest, boolean isSignUp) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = mLoginModel.getLoginAuthTokenFromModel(loginRequest,isSignUp).subscribe(new Subscriber<LoginResponse>() {
+        Subscription subscription = mLoginModel.getLoginAuthTokenFromModel(loginRequest, isSignUp).subscribe(new Subscriber<LoginResponse>() {
             @Override
             public void onCompleted() {
                 getMvpView().stopProgressBar();
             }
+
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(),ERROR_AUTH_TOKEN);
+                getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
             }
 
             @Override
@@ -83,6 +88,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
         });
         registerSubscription(subscription);
     }
+
     public void getFBVerificationInPresenter(LoginRequest loginRequest) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
@@ -94,17 +100,46 @@ public class LoginPresenter extends BasePresenter<LoginView> {
             public void onCompleted() {
                 getMvpView().stopProgressBar();
             }
+
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(),ERROR_AUTH_TOKEN);
+                getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
             }
 
             @Override
             public void onNext(LoginResponse loginResponse) {
                 getMvpView().stopProgressBar();
-                if(null!=loginResponse)
-                getMvpView().getLogInResponse(loginResponse);
+                if (null != loginResponse)
+                    getMvpView().getLogInResponse(loginResponse);
+            }
+        });
+        registerSubscription(subscription);
+    }
+
+    public void getGoogleLoginFromPresenter(LoginRequest loginRequest) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = mLoginModel.getGoogleLoginFromModel(loginRequest).subscribe(new Subscriber<LoginResponse>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                getMvpView().stopProgressBar();
+                getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
+            }
+
+            @Override
+            public void onNext(LoginResponse loginResponse) {
+                getMvpView().stopProgressBar();
+                if (null != loginResponse)
+                    getMvpView().getLogInResponse(loginResponse);
             }
         });
         registerSubscription(subscription);

@@ -2,8 +2,12 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.os.Build;
-import android.text.Html;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -88,20 +92,24 @@ public class CommentHolder extends BaseViewHolder<CommentReactionDoc> {
         if (item.isAnonymous()) {
             String userName = LEFT_HTML_TAG_FOR_COLOR + mContext.getString(R.string.ID_ANONYMOUS) + RIGHT_HTML_TAG_FOR_COLOR;
             ivListCommentProfilePic.setImageResource(R.drawable.ic_anonomous);
-            if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                tvUserComment.setText(Html.fromHtml(userName + AppConstants.SPACE + item.getComment(), 0)); // for 24 api and more
-            } else {
-                tvUserComment.setText(Html.fromHtml(userName + AppConstants.SPACE + item.getComment()));// or for older api
-            }
+            StringBuilder stringBuilder=new StringBuilder();
+            stringBuilder.append(dataItem.getParticipantName()).append(AppConstants.COLON).append(AppConstants.SPACE).append(dataItem.getComment());
+            Spannable getCommentString = new SpannableString(stringBuilder.toString());
+            int size=dataItem.getParticipantName().length()+1;
+            getCommentString.setSpan(new ForegroundColorSpan(Color.BLACK), 0, size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            getCommentString.setSpan(new StyleSpan(Typeface.BOLD), 0, size, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            tvUserComment.setText(getCommentString);
         } else {
             String userName = LEFT_HTML_TAG_FOR_COLOR + dataItem.getParticipantName() + RIGHT_HTML_TAG_FOR_COLOR;
             if (StringUtil.isNotNullOrEmptyString(dataItem.getComment())) {
                 ivListCommentProfilePic.bindImage(dataItem.getParticipantImageUrl());
-                if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                    tvUserComment.setText(Html.fromHtml(userName + AppConstants.SPACE + dataItem.getComment(), 0)); // for 24 api and more
-                } else {
-                    tvUserComment.setText(Html.fromHtml(userName + AppConstants.SPACE + dataItem.getComment()));// or for older api
-                }
+                StringBuilder stringBuilder=new StringBuilder();
+                stringBuilder.append(dataItem.getParticipantName()).append(AppConstants.COLON).append(AppConstants.SPACE).append(dataItem.getComment());
+                Spannable getCommentString = new SpannableString(stringBuilder.toString());
+                int size=dataItem.getParticipantName().length()+1;
+                getCommentString.setSpan(new ForegroundColorSpan(Color.BLACK), 0, size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                getCommentString.setSpan(new StyleSpan(Typeface.BOLD), 0, size, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                tvUserComment.setText(getCommentString);
             }
         }
     }

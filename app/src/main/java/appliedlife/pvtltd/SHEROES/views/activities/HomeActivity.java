@@ -1,7 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.app.DialogFragment;
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -31,7 +30,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -51,7 +49,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionDoc;
-import appliedlife.pvtltd.SHEROES.models.entities.communities.CommunitySuggestion;
+import appliedlife.pvtltd.SHEROES.models.entities.communities.ChallengeDataItem;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotificationResponse;
@@ -174,7 +172,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     private PayloadBuilder payloadBuilder;
     private long startedTime;
     private MoEngageUtills moEngageUtills;
-
+    @Inject
+    AppUtils mAppUtils;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -372,13 +371,13 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     totalTimeSpentOnFeed();
                     break;
                 case 6:
-                    launchPlayStore();
+                    mAppUtils.launchPlayStore(this);
                     totalTimeSpentOnFeed();
                     break;
                 default:
 
             }
-        } else if (baseResponse instanceof CommunitySuggestion) {
+        } else if (baseResponse instanceof ChallengeDataItem) {
 
         } else if (baseResponse instanceof CommentReactionDoc) {
             setAllValues(mFragmentOpen);
@@ -391,34 +390,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         long timeSpentFeed = System.currentTimeMillis() - startedTime;
         moEngageUtills.entityMoEngageViewFeed(this, mMoEHelper, payloadBuilder, timeSpentFeed);
     }
-
-    public void launchPlayStore() {
-        boolean isLaunchedSuccessfully;
-        Uri uri = Uri.parse(AppConstants.GOOGLE_PLAY_ANDROID_APP_URL);
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        try {
-            startActivity(intent);
-            isLaunchedSuccessfully = true;
-        } catch (ActivityNotFoundException ex) {
-            isLaunchedSuccessfully = false;
-            LogUtils.error(TAG, ex.toString(), ex);
-        }
-        if (!isLaunchedSuccessfully) {
-            uri = Uri.parse(AppConstants.GOOGLE_PLAY_BROWSER_URL);
-            intent = new Intent(Intent.ACTION_VIEW, uri);
-            try {
-                startActivity(intent);
-                isLaunchedSuccessfully = true;
-            } catch (ActivityNotFoundException ex) {
-                isLaunchedSuccessfully = false;
-                LogUtils.error(TAG, ex.toString(), ex);
-            }
-        }
-        if (!isLaunchedSuccessfully) {
-            Toast.makeText(this, "Could not open Google Play, please install the Google Play app.", Toast.LENGTH_SHORT).show();
-        }
-    }
-
     @Override
     public List getListData() {
         return mHomeSpinnerItemList;
@@ -832,6 +803,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     @OnClick(R.id.fl_notification)
     public void notificationClick() {
         // mDrawer.openDrawer(Gravity.LEFT);
+        checkForAllOpenFragments();
         callBellNotification();
     }
 

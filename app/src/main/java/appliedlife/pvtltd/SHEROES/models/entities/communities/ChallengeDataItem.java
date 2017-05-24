@@ -6,7 +6,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
  * Created by Praveen_Singh on 02-02-2017.
  */
 
-public class CommunitySuggestion extends BaseResponse{
+public class ChallengeDataItem extends BaseResponse{
     String imageUrl;
     String postName;
 

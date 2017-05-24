@@ -156,7 +156,7 @@ public class HomeFragment extends BaseFragment {
         } else {
             mHomePresenter.getAuthTokenRefreshPresenter();
         }
-        mHomePresenter.getNotificationCountFromPresenter(notificationReadCountRequestBuilder(TAG));
+     //   mHomePresenter.getNotificationCountFromPresenter(notificationReadCountRequestBuilder(TAG));
         getGcmId();
         mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -278,12 +278,17 @@ public class HomeFragment extends BaseFragment {
             default:
                 ((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.GONE);
         }
+        //TODO:: WIll be remove just for testing
+        FeedDetail feedDetail=new FeedDetail();
+        feedDetail.setSubType(AppConstants.CHALLENGE_SUB_TYPE);
+        challengeAddOnFeed(feedDetail);
     }
 
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
         mProgressBarFirstLoad.setVisibility(View.GONE);
         super.getFeedListSuccess(feedResponsePojo);
+        mHomePresenter.getNotificationCountFromPresenter(notificationReadCountRequestBuilder(TAG));
     }
 
     @Override

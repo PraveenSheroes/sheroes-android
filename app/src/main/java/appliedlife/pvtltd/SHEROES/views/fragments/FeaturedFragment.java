@@ -119,7 +119,7 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
             }
         });
         super.setAllInitializationForFeeds(mFragmentListRefreshData, mAdapter, mLayoutManager, mRecyclerView, mHomePresenter, mAppUtils, mProgressBar);
-        LogUtils.info(TAG, "**********Feature fragment on create*********");
+        LogUtils.info(TAG, "**********ChallengeView fragment on create*********");
         mHomePresenter.getFeedFromPresenter(feedRequestBuilder(AppConstants.FEATURED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
         long timeSpent=System.currentTimeMillis()-startedTime;
         moEngageUtills.entityMoEngageFeatureCommunity(getActivity(),mMoEHelper,payloadBuilder,timeSpent);
@@ -139,7 +139,7 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
         mPullRefreshList = new SwipPullRefreshList();
         setRefreshList(mPullRefreshList);
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
-        LogUtils.info(TAG, "**********Feature fragment swip to refresh*********");
+        LogUtils.info(TAG, "**********ChallengeView fragment swip to refresh*********");
         mHomePresenter.getFeedFromPresenter(feedRequestBuilder(AppConstants.FEATURED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
 
     }

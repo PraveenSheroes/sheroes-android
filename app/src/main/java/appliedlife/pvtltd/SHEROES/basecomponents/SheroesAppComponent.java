@@ -125,10 +125,10 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleDetailWithInSuggested
 import appliedlife.pvtltd.SHEROES.views.viewholders.BellNotificationHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.BlankHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CanHelpInHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.ChallengeHorizontalView;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CommentHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CommunityCardDetailHeader;
-import appliedlife.pvtltd.SHEROES.views.viewholders.CommunitySuggestedHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.CommunityWithInSggestedHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.ChallengeItemCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CurrentStatusHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.EducationListHolder;
@@ -345,9 +345,9 @@ public interface SheroesAppComponent {
 
     void inject(CommunityCardDetailHeader communityCardDetailHeader);
 
-    void inject(CommunitySuggestedHolder communitySuggestedHolder);
+    void inject(ChallengeHorizontalView challengeHorizontalView);
 
-    void inject(CommunityWithInSggestedHolder communityWithInSggestedHolder);
+    void inject(ChallengeItemCardHolder challengeItemCardHolder);
 
     void inject(SearchArticleFragment searchArticleFragment);
 

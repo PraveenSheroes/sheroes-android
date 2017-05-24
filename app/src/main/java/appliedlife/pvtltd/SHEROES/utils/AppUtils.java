@@ -44,6 +44,7 @@ import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -2200,5 +2201,31 @@ public class AppUtils {
         exprienceEntity.setSector(sector);
         exprienceEntity.setActive(true);
         return exprienceEntity;
+    }
+    public void launchPlayStore(Context context) {
+        boolean isLaunchedSuccessfully;
+        Uri uri = Uri.parse(AppConstants.GOOGLE_PLAY_ANDROID_APP_URL);
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        try {
+            context.startActivity(intent);
+            isLaunchedSuccessfully = true;
+        } catch (ActivityNotFoundException ex) {
+            isLaunchedSuccessfully = false;
+            LogUtils.error(TAG, ex.toString(), ex);
+        }
+        if (!isLaunchedSuccessfully) {
+            uri = Uri.parse(AppConstants.GOOGLE_PLAY_BROWSER_URL);
+            intent = new Intent(Intent.ACTION_VIEW, uri);
+            try {
+                context.startActivity(intent);
+                isLaunchedSuccessfully = true;
+            } catch (ActivityNotFoundException ex) {
+                isLaunchedSuccessfully = false;
+                LogUtils.error(TAG, ex.toString(), ex);
+            }
+        }
+        if (!isLaunchedSuccessfully) {
+            Toast.makeText(context, "Could not open Google Play, please install the Google Play app.", Toast.LENGTH_SHORT).show();
+        }
     }
 }

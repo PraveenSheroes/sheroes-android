@@ -212,5 +212,6 @@ public interface SheroesAppServiceApi {
     Observable<BoardingDataResponse>getWorkExpAddEditResponse(@Body ExprienceEntity exprienceEntity);
     @POST("participation/notification/bell/unread")
     Observable<NotificationReadCountResponse>notificationReadCount(@Body NotificationReadCount notificationReadCount);
-
+    @POST("http://34.193.138.177/participant/auth/signin")
+    Observable<LoginResponse> getUserGoogleLogin(@Body LoginRequest loginRequest);
 }
