@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/challenge_header"
+        android:padding="@dimen/dp_size_20">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_winner_trophy_circle" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/dp_size_25"
+            android:drawablePadding="@dimen/dp_size_10"
+            android:drawableTop="@drawable/ic_winner_trophy"
+            android:fontFamily="@string/ID_ROBOTO_LIGHT"
+            android:text="@string/ID_CONGRATULATION"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_size_20" />
+    </FrameLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_size_45"
+        android:layout_marginRight="@dimen/dp_size_45"
+        android:layout_marginTop="@dimen/dp_size_75"
+        android:text="@string/ID_ADD_PHOTO"
+        android:textAlignment="center" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/dp_size_65"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/challenge_header"
+            android:padding="@dimen/dp_size_20"
+            android:textSize="@dimen/sp_size_11"
+            android:layout_marginLeft="@dimen/dp_size_50"
+            android:background="@color/add_member_line"
+            android:gravity="center"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:text="@string/ID_CHOOSE_PHOTO"/>
+        <ImageView
+            android:id="@+id/iv_challenge_open_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_size_15"
+            android:layout_marginLeft="@dimen/dp_size_30"
+            android:src="@drawable/ic_challenge_camera"/>
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/dp_size_30"
+        android:padding="@dimen/dp_size_20"
+        android:text="@string/ID_SAHRE_TEXT"
+        android:textAllCaps="true"
+        android:textColor="@color/challenge_header"
+        android:textSize="@dimen/sp_size_14" />
+</LinearLayout>

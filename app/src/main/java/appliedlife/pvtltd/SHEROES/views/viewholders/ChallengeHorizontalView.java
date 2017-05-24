@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +30,6 @@ public class ChallengeHorizontalView extends BaseViewHolder<FeedDetail> {
     private LinearLayoutManager mLayoutManager;
     @Bind(R.id.rv_suggested_list)
     RecyclerView mRecyclerView;
-    @Bind(R.id.li_suggested_community_see_more_like)
-    LinearLayout liSuggestedCommunitySeeMoreLike;
     BaseHolderInterface viewInterface;
     private FeedDetail dataItem;
 

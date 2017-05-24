@@ -28,7 +28,6 @@ import appliedlife.pvtltd.SHEROES.views.activities.ProfileActicity;
 import appliedlife.pvtltd.SHEROES.views.activities.SettingPreferencesActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.VisitingCardActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.WelcomeActivity;
-import appliedlife.pvtltd.SHEROES.views.fragments.AllMembersFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.AllSearchFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticleDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
@@ -38,72 +37,51 @@ import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityInviteSearchFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOpenAboutFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOptionJoinDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOwnerSearchFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.CommunityRequestedFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.CommunitySearchTagsDialog;
-import appliedlife.pvtltd.SHEROES.views.fragments.CommunityTypeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CreateCommunityFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CreateCommunityPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.FunctionalAreaDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeSpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ImageFullViewFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.InviteCommunityMember;
 import appliedlife.pvtltd.SHEROES.views.fragments.InviteCommunityOwner;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobFilterFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobFunctionalAreaFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobLocationFilter;
-import appliedlife.pvtltd.SHEROES.views.fragments.JobLocationSearchDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LoginFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunitiesFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunityInviteMemberFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingDailogHeySuccess;
 import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingHowCanSheroesHelpYouFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingJobAtFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingSearchDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingShareYourInterestFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingTellUsAboutFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingWorkExperienceFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.OwnerRemoveDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.PersonalBasicDetailsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.PersonalProfileFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.PreferencesDeactiveAccountDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfessionalEditBasicDetailsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProffestionalProfileFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileAboutMeFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.ProfileAddEditEducationFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileAddEducationFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileAddOtherFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileCityWorkFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.ProfileDegreeDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileEditVisitingCardFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileFullViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileGoodAtFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileOpportunityTypeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileOtherFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfilePersonelHowCanLookingForFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.ProfileSchoolDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileSearchIntrestIn;
-import appliedlife.pvtltd.SHEROES.views.fragments.ProfileSearchLanguage;
-import appliedlife.pvtltd.SHEROES.views.fragments.ProfileSectoreDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileShareYourIntrestFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.ProfileStudyDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileTravelClientFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileVisitingCardView;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileWorkExperienceFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileWorkExperienceSelfEmploymentFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SearchArticleFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SearchCommunitiesFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.SearchGoodAt;
 import appliedlife.pvtltd.SHEROES.views.fragments.SearchIAmInterestIn;
 import appliedlife.pvtltd.SHEROES.views.fragments.SearchJobFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.SearchProfileLocation;
 import appliedlife.pvtltd.SHEROES.views.fragments.SearchRecentFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.SelectCommunityFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SettingAboutFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SettingFeedbackFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SettingFragment;
@@ -118,6 +96,31 @@ import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeScreenFirstFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeScreenFourthFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeScreenSecondFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeScreenThirdFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.AllMembersDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ChallengeSuccessDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ChallengeUpdateProgressDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityOptionJoinDialog;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityRequestedDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunitySearchTagsDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityTypeDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.FunctionalAreaDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.InviteCommunityMemberDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.JobLocationSearchDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.MyCommunityInviteMemberDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.OnBoardingDailogHeySuccess;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.OnBoardingSearchDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.OwnerRemoveDialog;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.PreferencesDeactiveAccountDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileAddEditEducationFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileDegreeDialog;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileSchoolDialog;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileSearchLanguageDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileSectoreDialog;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileStudyDialog;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileWorkExperienceSelfEmploymentDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.SearchGoodAtDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.SearchProfileLocationDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.SelectCommunityDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleDetailHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleDetailSuggestedHolder;
@@ -126,9 +129,9 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.BellNotificationHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.BlankHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CanHelpInHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ChallengeHorizontalView;
+import appliedlife.pvtltd.SHEROES.views.viewholders.ChallengeItemCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CommentHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CommunityCardDetailHeader;
-import appliedlife.pvtltd.SHEROES.views.viewholders.ChallengeItemCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CurrentStatusHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.EducationListHolder;
@@ -237,7 +240,7 @@ public interface SheroesAppComponent {
 
     void inject(ProffestionalProfileFragment proffestionalProfileFragment);
 
-    void inject(MyCommunityInviteMemberFragment myCommunityInviteMemberFragment);
+    void inject(MyCommunityInviteMemberDialogFragment myCommunityInviteMemberFragment);
 
     void inject(BookmarksFragment bookmarksFragment);
 
@@ -337,7 +340,7 @@ public interface SheroesAppComponent {
 
     void inject(CreateCommunityPostFragment createCommunityPostFragment);
 
-    void inject(SelectCommunityFragment selectCommunityFragment);
+    void inject(SelectCommunityDialogFragment selectCommunityFragment);
 
     void inject(ShareCommunityFragment shareCommunityFragment);
 
@@ -361,7 +364,7 @@ public interface SheroesAppComponent {
 
     void inject(OwnerListHolder ownerListHolder);
 
-    void inject(AllMembersFragment allMembersFragment);
+    void inject(AllMembersDialogFragment allMembersFragment);
 
     void inject(MemberHolder memberHolder);
 
@@ -369,13 +372,13 @@ public interface SheroesAppComponent {
 
     void inject(Feedback_ThankyouActivity feedback_thankyouActivity);
 
-    void inject(CommunitySearchTagsDialog communitySearchTagsDialog);
+    void inject(CommunitySearchTagsDialogFragment communitySearchTagsDialog);
 
     void inject(CommunityTagsPresenter communityTagsPresenter);
 
     void inject(TagsHolder tagsHolder);
 
-    void inject(CommunityRequestedFragment communityRequestedFragment);
+    void inject(CommunityRequestedDialogFragment communityRequestedFragment);
 
     void inject(RequestedPresenter requestedPresenter);
 
@@ -458,8 +461,8 @@ public interface SheroesAppComponent {
     void inject(ProfileHorListHolder profileHorListHolder);
 
     void inject(ProfileWorkExperienceSelfEmploymentFragment profileWorkExperienceSelfEmploymentFragment);
-
-    void inject(InviteCommunityMember inviteCommunityMember);
+    void inject(ProfileWorkExperienceSelfEmploymentDialogFragment profileWorkExperienceSelfEmploymentDialogFragment);
+    void inject(InviteCommunityMemberDialogFragment inviteCommunityMember);
 
     void inject(InviteCommunityOwner inviteCommunityMember);
 
@@ -491,7 +494,7 @@ public interface SheroesAppComponent {
 
     void inject(PreferencesDeactiveAccountDialogFragment preferencesDeactiveAccountDialogFragment);
 
-    void inject(CommunityTypeFragment communityTypeFragment);
+    void inject(CommunityTypeDialogFragment communityTypeFragment);
 
     void inject(CommunityOptionJoinDialog communityOptionJoinDialog);
 
@@ -507,7 +510,7 @@ public interface SheroesAppComponent {
 
     void inject(ProfileShareYourIntrestFragment profileShareYourIntrestFragment);
 
-    void inject(SearchGoodAt searchGoodAt);
+    void inject(SearchGoodAtDialogFragment searchGoodAt);
 
     void inject(GoodAtHolder goodAtHolder);
 
@@ -523,22 +526,34 @@ public interface SheroesAppComponent {
 
     void inject(CanHelpInHolder canHelpInHolder);
 
-    void inject(SearchProfileLocation searchProfileLocation);
+    void inject(SearchProfileLocationDialogFragment searchProfileLocation);
 
     void inject(ProfileAddEditEducationFragment profileAddEditEducationFragment);
 
     void inject(BellNotificationFragment bellNotificationFragment);
 
     void inject(BellNotificationHolder bellNotificationHolder);
-    void inject(ProfileSearchLanguage profileSearchLanguage);
+
+    void inject(ProfileSearchLanguageDialogFragment profileSearchLanguage);
+
     void inject(ProfileDegreeDialog profileDegreeDialog);
+
     void inject(ProfileSectoreDialog profileSectoreDialog);
+
     void inject(ProfileStudyDialog profileStudyDialog);
+
     void inject(ProfileSchoolDialog profileSchoolDialog);
+
     void inject(WorkExperienceCardHolder workExperienceCardHolder);
+
     void inject(FunctionalAreaDialogFragment functionalAreaDialogFragment);
+
     void inject(EducationListHolder educationListHolder);
+
     void inject(ProfilePersonelHowCanLookingForFragment profilePersonelHowCanLookingForFragment);
 
 
+    void inject(ChallengeUpdateProgressDialogFragment challengeUpdateProgressDialogFragment);
+
+    void inject(ChallengeSuccessDialogFragment challengeSuccessDialogFragment);
 }

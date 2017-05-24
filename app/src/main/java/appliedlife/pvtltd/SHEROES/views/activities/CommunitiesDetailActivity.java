@@ -46,15 +46,15 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.CustomCollapsingToolbarLayout;
-import appliedlife.pvtltd.SHEROES.views.fragments.AllMembersFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityRequestedDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.AllMembersDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOpenAboutFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.CommunityRequestedFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.CurrentStatusDialog;
-import appliedlife.pvtltd.SHEROES.views.fragments.InviteCommunityMember;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CurrentStatusDialog;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.InviteCommunityMemberDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.InviteCommunityOwner;
-import appliedlife.pvtltd.SHEROES.views.fragments.OwnerRemoveDialog;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.OwnerRemoveDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareCommunityFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -90,10 +90,10 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
     private Fragment mFragment;
     private CommunityOpenAboutFragment mCommunityOpenAboutFragment;
     private CommunityEnum communityEnum = null;
-    private InviteCommunityMember mInviteCommunityMember;
-    private AllMembersFragment mAllMembersFragment;
+    private InviteCommunityMemberDialogFragment mInviteCommunityMemberDialogFragment;
+    private AllMembersDialogFragment mAllMembersDialogFragment;
     private boolean isMemberRemoveDialog;
-    private CommunityRequestedFragment communityRequestedFragment;
+    private CommunityRequestedDialogFragment communityRequestedDialogFragment;
     boolean isCommunityDetailFragment;
     private long mCommunityId;
     private long mCommunityPostId = 0;
@@ -304,8 +304,8 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
                 break;
             case R.id.tv_add_invite:
                 if (null != feedDetail) {
-                    if (null != mInviteCommunityMember) {
-                        mInviteCommunityMember.onAddMemberClick(feedDetail);
+                    if (null != mInviteCommunityMemberDialogFragment) {
+                        mInviteCommunityMemberDialogFragment.onAddMemberClick(feedDetail);
                     }
                 }
                 break;
@@ -345,14 +345,14 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
 
     public void updateOpenAboutFragment(FeedDetail feedDetail) {
         mFeedDetail = feedDetail;
-        if (null != mInviteCommunityMember) {
-            mInviteCommunityMember.dismiss();
+        if (null != mInviteCommunityMemberDialogFragment) {
+            mInviteCommunityMemberDialogFragment.dismiss();
         }
-        if (null != mAllMembersFragment) {
-            mAllMembersFragment.dismiss();
+        if (null != mAllMembersDialogFragment) {
+            mAllMembersDialogFragment.dismiss();
         }
-        if (null != communityRequestedFragment) {
-            communityRequestedFragment.dismiss();
+        if (null != communityRequestedDialogFragment) {
+            communityRequestedDialogFragment.dismiss();
         }
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(CommunityOpenAboutFragment.class.getName());
         if (AppUtils.isFragmentUIActive(fragment)) {
@@ -369,38 +369,38 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
     }
 
     private void CallCommunityMemberRemoveFragment(Long userId, Long communityId, int position) {
-        if (null != mAllMembersFragment) {
-            mAllMembersFragment.callRemoveMember(userId, communityId, position);
+        if (null != mAllMembersDialogFragment) {
+            mAllMembersDialogFragment.callRemoveMember(userId, communityId, position);
         }
     }
 
     private void callCommunityPendingMemberRemoveFragment(long userId, long communityId, int position) {
 
-        if (null != communityRequestedFragment) {
-            communityRequestedFragment.removePandingRequest(userId, communityId, position);
+        if (null != communityRequestedDialogFragment) {
+            communityRequestedDialogFragment.removePandingRequest(userId, communityId, position);
         }
 
     }
 
     private void callCommunityAproveMemberFragment(long userId, long communityId, int position) {
-        if (null != communityRequestedFragment) {
-            communityRequestedFragment.approvePandingRequest(userId, communityId, position);
+        if (null != communityRequestedDialogFragment) {
+            communityRequestedDialogFragment.approvePandingRequest(userId, communityId, position);
         }
     }
 
 
     public DialogFragment openAllMemberFragmentClick() {
-        mAllMembersFragment = (AllMembersFragment) getFragmentManager().findFragmentByTag(AllMembersFragment.class.getName());
-        if (mAllMembersFragment == null) {
-            mAllMembersFragment = new AllMembersFragment();
+        mAllMembersDialogFragment = (AllMembersDialogFragment) getFragmentManager().findFragmentByTag(AllMembersDialogFragment.class.getName());
+        if (mAllMembersDialogFragment == null) {
+            mAllMembersDialogFragment = new AllMembersDialogFragment();
             Bundle bundle = new Bundle();
             bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, mFeedDetail);
-            mAllMembersFragment.setArguments(bundle);
+            mAllMembersDialogFragment.setArguments(bundle);
         }
-        if (!mAllMembersFragment.isVisible() && !mAllMembersFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
-            mAllMembersFragment.show(getFragmentManager(), AllMembersFragment.class.getName());
+        if (!mAllMembersDialogFragment.isVisible() && !mAllMembersDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
+            mAllMembersDialogFragment.show(getFragmentManager(), AllMembersDialogFragment.class.getName());
         }
-        return mAllMembersFragment;
+        return mAllMembersDialogFragment;
     }
 
     public void inviteJoinEventClick(String pressedEventName, FeedDetail feedDetail) {
@@ -420,17 +420,17 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
     }
 
     public DialogFragment inviteCommunityMemberDialog() {
-        mInviteCommunityMember = (InviteCommunityMember) getFragmentManager().findFragmentByTag(InviteCommunityMember.class.getName());
-        if (mInviteCommunityMember == null) {
-            mInviteCommunityMember = new InviteCommunityMember();
+        mInviteCommunityMemberDialogFragment = (InviteCommunityMemberDialogFragment) getFragmentManager().findFragmentByTag(InviteCommunityMemberDialogFragment.class.getName());
+        if (mInviteCommunityMemberDialogFragment == null) {
+            mInviteCommunityMemberDialogFragment = new InviteCommunityMemberDialogFragment();
             Bundle bundle = new Bundle();
             bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, mFeedDetail);
-            mInviteCommunityMember.setArguments(bundle);
+            mInviteCommunityMemberDialogFragment.setArguments(bundle);
         }
-        if (!mInviteCommunityMember.isVisible() && !mInviteCommunityMember.isAdded() && !isFinishing() && !mIsDestroyed) {
-            mInviteCommunityMember.show(getFragmentManager(), InviteCommunityMember.class.getName());
+        if (!mInviteCommunityMemberDialogFragment.isVisible() && !mInviteCommunityMemberDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
+            mInviteCommunityMemberDialogFragment.show(getFragmentManager(), InviteCommunityMemberDialogFragment.class.getName());
         }
-        return mInviteCommunityMember;
+        return mInviteCommunityMemberDialogFragment;
     }
 
     public void addOwnerOnClick() {
@@ -462,17 +462,17 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
     }
 
     public DialogFragment requestApproveAndRemoveOnClick() {
-        communityRequestedFragment = (CommunityRequestedFragment) getFragmentManager().findFragmentByTag(CommunityRequestedFragment.class.getName());
-        if (communityRequestedFragment == null) {
-            communityRequestedFragment = new CommunityRequestedFragment();
+        communityRequestedDialogFragment = (CommunityRequestedDialogFragment) getFragmentManager().findFragmentByTag(CommunityRequestedDialogFragment.class.getName());
+        if (communityRequestedDialogFragment == null) {
+            communityRequestedDialogFragment = new CommunityRequestedDialogFragment();
             Bundle bundle = new Bundle();
             bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
-            communityRequestedFragment.setArguments(bundle);
+            communityRequestedDialogFragment.setArguments(bundle);
         }
-        if (!communityRequestedFragment.isVisible() && !communityRequestedFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
-            communityRequestedFragment.show(getFragmentManager(), CommunityRequestedFragment.class.getName());
+        if (!communityRequestedDialogFragment.isVisible() && !communityRequestedDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
+            communityRequestedDialogFragment.show(getFragmentManager(), CommunityRequestedDialogFragment.class.getName());
         }
-        return communityRequestedFragment;
+        return communityRequestedDialogFragment;
     }
 
     public void createCommunityPostClick(FeedDetail feedDetail) {

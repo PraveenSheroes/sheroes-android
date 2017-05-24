@@ -78,11 +78,12 @@ import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeSpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunitiesFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunityInviteMemberFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SettingAboutFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SettingFeedbackFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SettingFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SettingTermsAndConditionFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ChallengeUpdateProgressDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.MyCommunityInviteMemberDialogFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -165,7 +166,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     @Inject
     Preference<MasterDataResponse> mUserPreferenceMasterData;
     private ViewPagerAdapter mViewPagerAdapter;
-    private MyCommunityInviteMemberFragment myCommunityInviteMemberFragment;
+    private MyCommunityInviteMemberDialogFragment myCommunityInviteMemberDialogFragment;
     private BellNotificationFragment bellNotificationFragment;
     boolean doubleBackToExitPressedOnce = false;
     private MoEHelper mMoEHelper;
@@ -174,6 +175,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     private MoEngageUtills moEngageUtills;
     @Inject
     AppUtils mAppUtils;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -325,8 +327,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 inviteMyCommunityDialog();
             } else if (id == R.id.tv_add_invite) {
                 if (null != mFeedDetail) {
-                    if (null != myCommunityInviteMemberFragment) {
-                        myCommunityInviteMemberFragment.onAddMemberClick(mFeedDetail);
+                    if (null != myCommunityInviteMemberDialogFragment) {
+                        myCommunityInviteMemberDialogFragment.onAddMemberClick(mFeedDetail);
                     }
                 }
             } else {
@@ -378,6 +380,14 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
 
             }
         } else if (baseResponse instanceof ChallengeDataItem) {
+            int id = view.getId();
+            switch (id) {
+                case R.id.tv_update_progress:
+                    showUpdateProgressDialog(AppConstants.EMPTY_STRING);
+                    break;
+                default:
+                    LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + id);
+            }
 
         } else if (baseResponse instanceof CommentReactionDoc) {
             setAllValues(mFragmentOpen);
@@ -386,10 +396,24 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         }
     }
 
+    public DialogFragment showUpdateProgressDialog(String data) {
+        ChallengeUpdateProgressDialogFragment updateProgressDialogFragment = (ChallengeUpdateProgressDialogFragment) getFragmentManager().findFragmentByTag(ChallengeUpdateProgressDialogFragment.class.getName());
+        if (updateProgressDialogFragment == null) {
+            updateProgressDialogFragment = new ChallengeUpdateProgressDialogFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString(AppConstants.CHALLENGE_SUB_TYPE, data);
+            updateProgressDialogFragment.setArguments(bundle);
+        }
+        if (!updateProgressDialogFragment.isVisible() && !updateProgressDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
+            updateProgressDialogFragment.show(getFragmentManager(), ChallengeUpdateProgressDialogFragment.class.getName());
+        }
+        return updateProgressDialogFragment;
+    }
     private void totalTimeSpentOnFeed() {
         long timeSpentFeed = System.currentTimeMillis() - startedTime;
         moEngageUtills.entityMoEngageViewFeed(this, mMoEHelper, payloadBuilder, timeSpentFeed);
     }
+
     @Override
     public List getListData() {
         return mHomeSpinnerItemList;
@@ -585,23 +609,23 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     }
 
     public DialogFragment inviteMyCommunityDialog() {
-        myCommunityInviteMemberFragment = (MyCommunityInviteMemberFragment) getFragmentManager().findFragmentByTag(MyCommunityInviteMemberFragment.class.getName());
-        if (myCommunityInviteMemberFragment == null) {
-            myCommunityInviteMemberFragment = new MyCommunityInviteMemberFragment();
+        myCommunityInviteMemberDialogFragment = (MyCommunityInviteMemberDialogFragment) getFragmentManager().findFragmentByTag(MyCommunityInviteMemberDialogFragment.class.getName());
+        if (myCommunityInviteMemberDialogFragment == null) {
+            myCommunityInviteMemberDialogFragment = new MyCommunityInviteMemberDialogFragment();
             Bundle bundle = new Bundle();
             bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, mFeedDetail);
-            myCommunityInviteMemberFragment.setArguments(bundle);
+            myCommunityInviteMemberDialogFragment.setArguments(bundle);
         }
-        if (!myCommunityInviteMemberFragment.isVisible() && !myCommunityInviteMemberFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
-            myCommunityInviteMemberFragment.show(getFragmentManager(), MyCommunityInviteMemberFragment.class.getName());
+        if (!myCommunityInviteMemberDialogFragment.isVisible() && !myCommunityInviteMemberDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
+            myCommunityInviteMemberDialogFragment.show(getFragmentManager(), MyCommunityInviteMemberDialogFragment.class.getName());
         }
-        return myCommunityInviteMemberFragment;
+        return myCommunityInviteMemberDialogFragment;
     }
 
     public void updateMyCommunitiesFragment(FeedDetail feedDetail) {
         mFeedDetail = feedDetail;
-        if (null != myCommunityInviteMemberFragment) {
-            myCommunityInviteMemberFragment.dismiss();
+        if (null != myCommunityInviteMemberDialogFragment) {
+            myCommunityInviteMemberDialogFragment.dismiss();
         }
         Fragment community = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.ONE_CONSTANT);
         if (AppUtils.isFragmentUIActive(community)) {

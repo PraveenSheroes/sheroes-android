@@ -179,7 +179,7 @@ public class CommunityTypeAdapter extends BaseAdapter {
         mDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // CommunityTypeFragment.doneClick();
+                // CommunityTypeDialogFragment.doneClick();
                 mCallback.communityType(mCommunityType);
             }
         });

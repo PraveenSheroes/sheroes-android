@@ -3,9 +3,11 @@
     <!-- Text color of the search box hint text  -->
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
+    <color name="unAcceptColor">#3023ae</color>
     <color name="colorAccent">#3F51B5</color>
     <color name="comment_box_edit_border">#66aaaaaa</color>
     <color name="white">#ffffff</color>
+    <color name="challenge">#53a0fe</color>
     <color name="grey8">#fafafa</color>
     <color name="spinner">#f1f1f1</color>
     <color name="grey2">#b7b7b7</color>
@@ -90,6 +92,7 @@
     <color name="text_color_dialog">#1d2832</color>
     <color name="text_color_close">#3949ab</color>
     <color name="text_color_date_view">#767f88</color>
+    <color name="challenge_header">#6e2f95</color>
 
     <color name="text_education_line">#a6aac2</color>
 

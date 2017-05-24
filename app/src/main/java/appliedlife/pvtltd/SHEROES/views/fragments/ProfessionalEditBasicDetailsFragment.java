@@ -40,6 +40,9 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActicity;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.DatePickerForProfile;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.DayPickerProfile;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.MonthPickerForProfileDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -51,7 +54,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.COMMUNITY_O
  * Created by priyanka on 07/03/17.
  */
 
-public class ProfessionalEditBasicDetailsFragment extends BaseFragment implements MonthPickerForProfile.MonthPicker,ProfileView,DayPickerProfile.MyDayPickerListener, DatePickerForProfile.YearPicker {
+public class ProfessionalEditBasicDetailsFragment extends BaseFragment implements MonthPickerForProfileDialogFragment.MonthPicker,ProfileView,DayPickerProfile.MyDayPickerListener, DatePickerForProfile.YearPicker {
     private final String TAG = LogUtils.makeLogTag(ProfessionalEditBasicDetailsFragment.class);
     private final String SCREEN_NAME = "Professional_Edit_Basic_Details_screen";
     @Inject
@@ -159,9 +162,9 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment implement
     @OnClick(R.id.et_month)
     public void startDateClick()
     {
-        MonthPickerForProfile monthPickerForProfile=new MonthPickerForProfile();
-        monthPickerForProfile.setListener(this);
-        monthPickerForProfile.show(getActivity().getFragmentManager(),"dialog");
+        MonthPickerForProfileDialogFragment monthPickerForProfileDialogFragment =new MonthPickerForProfileDialogFragment();
+        monthPickerForProfileDialogFragment.setListener(this);
+        monthPickerForProfileDialogFragment.show(getActivity().getFragmentManager(),"dialog");
     }
 
     @OnClick(R.id.et_current_status)

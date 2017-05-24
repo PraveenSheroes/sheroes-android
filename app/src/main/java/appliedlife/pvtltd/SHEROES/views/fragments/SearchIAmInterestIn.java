@@ -45,6 +45,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.SearchGoodAtDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -110,7 +111,7 @@ public class SearchIAmInterestIn extends BaseFragment implements BaseHolderInter
     private MyProfileSearchGoodAtListener mHomeActivityIntractionListner;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
-    private final String mTAG = LogUtils.makeLogTag(SearchGoodAt.class);
+    private final String mTAG = LogUtils.makeLogTag(SearchGoodAtDialogFragment.class);
     HashMap<String, HashMap<String, ArrayList<LabelValue>>> data = new HashMap<>();
     ArrayList<String> arrayList = new ArrayList<String>();
     ArrayList<HashMap<String, Long>> skillDetails = new ArrayList<HashMap<String, Long>>();

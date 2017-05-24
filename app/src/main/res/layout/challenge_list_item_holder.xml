@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/dp_size_5"
+    android:layout_marginLeft="@dimen/dp_size_5"
+    android:layout_marginRight="@dimen/dp_size_10"
+    android:layout_marginTop="@dimen/dp_size_5"
     android:background="@drawable/challenge_gradiant_color"
     android:orientation="vertical">
 
@@ -18,14 +19,11 @@
         android:gravity="center"
         android:weightSum="1">
 
-        <appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView
+        <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
             android:id="@+id/iv_challenge_icon"
             android:layout_width="@dimen/feed_profile_icon_size"
             android:layout_height="@dimen/feed_profile_icon_size"
-            android:layout_gravity="top"
-            app:riv_border_width="@dimen/dp_size_0.5"
-            app:riv_corner_radius="@dimen/dp_size_10"
-            app:riv_oval="false" />
+            android:layout_gravity="top" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -57,15 +55,18 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp_size_5"
             android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                android:gravity="right"
                 android:text="@string/ID_CHALLENGE"
                 android:textColor="@color/white"
-                android:textSize="@dimen/sp_size_12" />
+                android:textSize="@dimen/sp_size_12"
+                android:textStyle="italic" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -74,7 +75,8 @@
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:text="@string/ID_YOUR_FRIENDS"
                 android:textColor="@color/white"
-                android:textSize="@dimen/sp_size_12" />
+                android:textSize="@dimen/sp_size_12"
+                android:textStyle="italic" />
         </LinearLayout>
 
 
@@ -83,7 +85,7 @@
             android:layout_width="@dimen/dp_size_20"
             android:layout_height="@dimen/dp_size_20"
             android:layout_gravity="center"
-            android:background="@drawable/ic_anonomous"
+            android:background="@drawable/ic_fb_shap"
             android:fontFamily="@string/ID_ROBOTO_BOLD"
             android:paddingBottom="@dimen/dp_size_12"
             android:paddingRight="@dimen/dp_size_15"
@@ -96,6 +98,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginLeft="@dimen/dp_size_18"
+        android:visibility="gone"
         android:layout_marginRight="@dimen/dp_size_20"
         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
         android:text="@string/ID_SERVER_PROBLEM"
@@ -108,10 +111,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_size_18"
+        android:layout_marginTop="@dimen/dp_size_5"
         android:drawablePadding="@dimen/dp_size_10"
-        android:drawableRight="@drawable/ic_cross"
+        android:drawableRight="@drawable/ic_time_count_down"
         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
         android:text="01:18:29"
+        android:visibility="gone"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="@dimen/sp_size_12" />
@@ -129,8 +134,7 @@
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="@dimen/sp_size_15"
-        android:textStyle="italic"
-        android:visibility="gone" />
+        android:textStyle="italic" />
 
     <TextView
         android:id="@+id/tv_timer_count_challenge"
@@ -139,53 +143,167 @@
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/dp_size_30"
         android:drawablePadding="@dimen/dp_size_10"
-        android:drawableRight="@drawable/ic_cross"
+        android:drawableRight="@drawable/ic_time_count_down"
         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
         android:text="01:18:29"
         android:textAlignment="center"
         android:textColor="@color/white"
-        android:textSize="@dimen/sp_size_15"
-        android:visibility="gone" />
+        android:textSize="@dimen/sp_size_15" />
 
     <LinearLayout
-        android:id="@+id/li_update_status_design"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/dp_size_16"
-        android:layout_marginRight="@dimen/dp_size_12"
-        android:layout_marginTop="@dimen/dp_size_5"
-        android:orientation="horizontal"
-        android:weightSum="1">
+        android:id="@+id/li_update_states_with_medal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_size_30"
+        android:layout_marginTop="@dimen/dp_size_30"
+        android:visibility="gone"
+        android:orientation="horizontal">
 
-        <LinearLayout
+        <ImageView
+            android:id="@+id/iv_just_started"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_gravity="center"
+            android:src="@drawable/ic_just_started" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_share_job" />
+        <ImageView
+            android:id="@+id/iv_half_done"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/dp_size_70"
+            android:src="@drawable/ic_half_done" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_circle_w" />
+        <ImageView
+            android:id="@+id/iv_almost_there"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/dp_size_70"
+            android:src="@drawable/ic_almost_there" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                android:gravity="center"
-                android:text="@string/ID_JUST_STARTED"
-                android:textColor="@color/white"
-                android:textSize="@dimen/sp_size_10" />
+        <ImageView
+            android:id="@+id/iv_completed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/dp_size_70"
+            android:src="@drawable/ic_completed_select" />
+    </LinearLayout>
 
-        </LinearLayout>
+    <LinearLayout
+        android:id="@+id/li_update_status_with_line"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_size_30"
+        android:layout_marginTop="@dimen/dp_size_10"
+        android:visibility="gone"
+        android:orientation="horizontal">
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_circle_white" />
+
+        <View
+            android:layout_width="@dimen/dp_size_85"
+            android:layout_height="@dimen/dp_size_1"
+            android:layout_gravity="center"
+            android:background="@color/white" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:alpha=".5"
+            android:src="@drawable/ic_circle_white" />
+
+        <View
+            android:layout_width="@dimen/dp_size_75"
+            android:layout_height="@dimen/dp_size_1"
+            android:layout_gravity="center"
+            android:alpha=".5"
+            android:background="@color/white" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:alpha=".5"
+            android:src="@drawable/ic_circle_white" />
+
+        <View
+            android:layout_width="@dimen/dp_size_80"
+            android:layout_height="@dimen/dp_size_1"
+            android:layout_gravity="center"
+            android:alpha=".5"
+            android:background="@color/white" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:alpha=".5"
+            android:src="@drawable/ic_circle_white" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/li_update_states_with_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_size_20"
+        android:visibility="gone"
+        android:layout_marginTop="@dimen/dp_size_5"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_just_started"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:text="@string/ID_JUST_STARTED"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_size_10" />
+
+        <TextView
+            android:id="@+id/tv_half_done"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/dp_size_30"
+            android:alpha=".5"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:text="@string/ID_HALF_DONE"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_size_10" />
+
+        <TextView
+            android:id="@+id/tv_almost_there"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/dp_size_30"
+            android:alpha=".5"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:text="@string/ID_ALMOST_THERE"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_size_10" />
+
+        <TextView
+            android:id="@+id/tv_completed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/dp_size_30"
+            android:alpha=".5"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:text="@string/ID_COMPLETED"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_size_10" />
     </LinearLayout>
 
     <View
@@ -193,7 +311,7 @@
         android:layout_height="@dimen/dp_size_1"
         android:layout_marginLeft="@dimen/dp_size_13"
         android:layout_marginRight="@dimen/dp_size_13"
-        android:layout_marginTop="@dimen/dp_size_10"
+        android:layout_marginTop="@dimen/dp_size_25"
         android:background="@color/search_tab_unselected_text" />
 
     <LinearLayout
@@ -203,7 +321,7 @@
         android:layout_marginBottom="@dimen/dp_size_11"
         android:layout_marginLeft="@dimen/dp_size_16"
         android:layout_marginRight="@dimen/dp_size_12"
-        android:layout_marginTop="@dimen/dp_size_5"
+        android:layout_marginTop="@dimen/dp_size_10"
         android:orientation="horizontal"
         android:weightSum="1">
 
@@ -212,15 +330,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:text="@string/ID_CHALLENGE_ACCEPTED"
             android:textColor="@color/white"
             android:textSize="@dimen/sp_size_12"
             android:textStyle="italic" />
 
         <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/comment_icon"
+            android:layout_height="@dimen/comment_icon"
             android:layout_gravity="center"
             android:layout_marginLeft="@dimen/dp_size_20"
             android:background="@drawable/challenge_count_background"
@@ -235,7 +353,7 @@
                 android:gravity="center"
                 android:text="11k"
                 android:textColor="@color/communities_post_icon"
-                android:textSize="@dimen/sp_size_10" />
+                android:textSize="@dimen/sp_size_12" />
         </FrameLayout>
 
         <TextView
@@ -244,15 +362,15 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="@dimen/dp_size_5"
-            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:gravity="center"
             android:text="In India"
             android:textColor="@color/white"
             android:textSize="@dimen/sp_size_12" />
 
         <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/comment_icon"
+            android:layout_height="@dimen/comment_icon"
             android:layout_gravity="center"
             android:layout_marginLeft="@dimen/dp_size_10"
             android:background="@drawable/challenge_count_background"
@@ -265,9 +383,9 @@
                 android:layout_gravity="center"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:gravity="center"
-                android:text="11k"
-                android:textColor="@color/communities_post_icon"
-                android:textSize="@dimen/sp_size_10" />
+                android:text="110"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp_size_12" />
         </FrameLayout>
 
         <TextView
@@ -276,7 +394,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="@dimen/dp_size_5"
-            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:gravity="center"
             android:text="In Delhi NCR"
             android:textColor="@color/white"
@@ -284,14 +402,70 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/tv_accept_challenge"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/accept_challenge_background"
         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
         android:gravity="center"
-        android:padding="@dimen/dp_size_10"
+        android:padding="@dimen/dp_size_17"
+        android:visibility="gone"
         android:text="@string/ID_ACCEPT_CHALLENGE"
         android:textAllCaps="true"
         android:textColor="@color/white"
         android:textSize="@dimen/sp_size_14" />
+
+    <TextView
+        android:id="@+id/tv_complete_share"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/accept_challenge_background"
+        android:drawablePadding="@dimen/dp_size_18"
+        android:drawableRight="@drawable/ic_share_job"
+        android:gravity="right"
+        android:visibility="gone"
+        android:paddingBottom="@dimen/dp_size_17"
+        android:paddingLeft="@dimen/dp_size_17"
+        android:paddingRight="@dimen/dp_size_30"
+        android:paddingTop="@dimen/dp_size_17"
+        android:text="@string/ID_COMPLTED_SHARE_WITH_FRIENDS"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_size_14"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:id="@+id/li_update_share"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="@integer/int_value_for_line_1">
+
+        <TextView
+            android:id="@+id/tv_update_progress"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
+            android:background="@drawable/un_accept_challenge_background"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:gravity="center"
+            android:padding="@dimen/dp_size_17"
+            android:text="@string/ID_UPDATE_PROGRESS"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_size_14" />
+
+        <TextView
+            android:id="@+id/tv_share_progress"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
+            android:background="@drawable/accept_challenge_background"
+            android:drawableRight="@drawable/ic_share_job"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:gravity="center"
+            android:padding="@dimen/dp_size_17"
+            android:text="@string/ID_SHARE_PROGRESS"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_size_14" />
+    </LinearLayout>
 </LinearLayout>

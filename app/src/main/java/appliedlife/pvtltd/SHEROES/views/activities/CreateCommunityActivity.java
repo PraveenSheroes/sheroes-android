@@ -14,8 +14,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.fragments.ChangeCommunityPrivacyDialogFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.CommunitySearchTagsDialog;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunitySearchTagsDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ChangeCommunityPrivacyDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CreateCommunityFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ImageUploadFragment;
 import butterknife.ButterKnife;
@@ -78,17 +78,17 @@ public class CreateCommunityActivity extends BaseActivity implements ImageUpload
     }
 
     public DialogFragment callCommunityTagPage(FeedDetail mFeedDetail) {
-        CommunitySearchTagsDialog communitySearchTagsDialog = (CommunitySearchTagsDialog) getFragmentManager().findFragmentByTag(CommunitySearchTagsDialog.class.getName());
-        if (communitySearchTagsDialog == null) {
-            communitySearchTagsDialog = new CommunitySearchTagsDialog();
+        CommunitySearchTagsDialogFragment communitySearchTagsDialogFragment = (CommunitySearchTagsDialogFragment) getFragmentManager().findFragmentByTag(CommunitySearchTagsDialogFragment.class.getName());
+        if (communitySearchTagsDialogFragment == null) {
+            communitySearchTagsDialogFragment = new CommunitySearchTagsDialogFragment();
             Bundle bundle = new Bundle();
             bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, mFeedDetail);
-            communitySearchTagsDialog.setArguments(bundle);
+            communitySearchTagsDialogFragment.setArguments(bundle);
         }
-        if (!communitySearchTagsDialog.isVisible() && !communitySearchTagsDialog.isAdded() && !isFinishing() && !mIsDestroyed) {
-            communitySearchTagsDialog.show(getFragmentManager(), CommunitySearchTagsDialog.class.getName());
+        if (!communitySearchTagsDialogFragment.isVisible() && !communitySearchTagsDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
+            communitySearchTagsDialogFragment.show(getFragmentManager(), CommunitySearchTagsDialogFragment.class.getName());
         }
-        return communitySearchTagsDialog;
+        return communitySearchTagsDialogFragment;
     }
 
 

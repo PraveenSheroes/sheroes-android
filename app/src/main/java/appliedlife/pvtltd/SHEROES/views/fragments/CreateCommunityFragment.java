@@ -63,6 +63,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityActivity;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityTypeDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CommunityView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.Bind;
@@ -81,7 +82,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MY_CO
  * Title: Create Community fragment within Create Community activity perform all the UI operation .
  * Fragment will have all UI components and operate with activity .
  */
-public class CreateCommunityFragment extends BaseFragment implements CommunityView, CommunityTypeFragment.MyDialogFragmentListener, HomeView {
+public class CreateCommunityFragment extends BaseFragment implements CommunityView, CommunityTypeDialogFragment.MyDialogFragmentListener, HomeView {
     private final String TAG = LogUtils.makeLogTag(CreateCommunityFragment.class);
 
     @Bind(R.id.cb_create_community_open_check)
@@ -372,7 +373,7 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
         mTagFlag=1;
         ((CreateCommunityActivity)getActivity()).callCommunityTagPage(mFeedDetail);
 
-        //  CommunitySearchTagsDialog newFragment = new CommunitySearchTagsDialog();
+        //  CommunitySearchTagsDialogFragment newFragment = new CommunitySearchTagsDialogFragment();
     }
 
     @OnClick(R.id.tv_create_community_cover_img_upload)
@@ -581,7 +582,7 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
 /*
     @OnTouch(R.id.et_create_community_type)
     public boolean onTouch() {
-        CommunityTypeFragment newFragment =new CommunityTypeFragment();
+        CommunityTypeDialogFragment newFragment =new CommunityTypeDialogFragment();
         newFragment.setListener(this);
         newFragment.show(getActivity().getFragmentManager(), "dialog");
         return true;
@@ -589,7 +590,7 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
 
     @OnClick(R.id.et_create_community_type)
     public void onLogInBtnClick() {
-        CommunityTypeFragment newFragment = new CommunityTypeFragment();
+        CommunityTypeDialogFragment newFragment = new CommunityTypeDialogFragment();
         newFragment.setListener(this);
 
         newFragment.show(getActivity().getFragmentManager(), "dialog");

@@ -855,4 +855,18 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_CHALLENGE_ACCEPTED">Challenge Accepted</string>
     <string name="ID_ACCEPT_CHALLENGE">Accept Challenge</string>
     <string name="ID_JUST_STARTED">Just Started</string>
+    <string name="ID_HALF_DONE">Half Done</string>
+    <string name="ID_ALMOST_THERE">Almost There</string>
+    <string name="ID_COMPLETED">Completed</string>
+    <string name="ID_UPDATE_PROGRESS">Update Progress</string>
+    <string name="ID_SHARE_PROGRESS">Share Progress</string>
+    <string name="ID_COMPLTED_SHARE_WITH_FRIENDS">COMPLETED! Share With Friends</string>
+    <string name="ID_JUST_STARTED_PERCENT">Just Started(0%)</string>
+    <string name="ID_HALF_DONE_PERCENT">Half Done(50%)</string>
+    <string name="ID_ALMOST_DONE_PERCENT">Almost Done(90%)</string>
+    <string name="ID_COMPLETED_PERCENT">Completed(100%)</string>
+    <string name="ID_UPDATE">Update</string>
+    <string name="ID_CONGRATULATION">Congratulations</string>
+    <string name="ID_ADD_PHOTO">Let\'s make this moment more special by adding a photo.</string>
+    <string name="ID_CHOOSE_PHOTO">Choose Photo From gallery</string>
 </resources>

@@ -88,6 +88,7 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.SelectCommunityDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CommunityView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CreateCommunityView;
 import butterknife.Bind;
@@ -103,7 +104,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.selectCommunityRequestBu
  * Created by Ajit Kumar on 20-01-2017.
  */
 
-public class CreateCommunityPostFragment extends BaseFragment implements CreateCommunityView, SelectCommunityFragment.MyDialogFragmentListener, CommunityView {
+public class CreateCommunityPostFragment extends BaseFragment implements CreateCommunityView, SelectCommunityDialogFragment.MyDialogFragmentListener, CommunityView {
 
     @Inject
     Preference<LoginResponse> mUserPreference;
@@ -1032,7 +1033,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
 
 
     void showDialog() {
-        SelectCommunityFragment newFragment = new SelectCommunityFragment();
+        SelectCommunityDialogFragment newFragment = new SelectCommunityDialogFragment();
         newFragment.setListener(this);
         newFragment.show(getActivity().getFragmentManager(), "dialog");
     }
