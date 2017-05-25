@@ -1,5 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.DialogFragment;
@@ -16,7 +17,10 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.provider.MediaStore;
+import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -88,6 +92,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.BellNotificationFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeSpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobFragment;
@@ -120,9 +125,9 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     @Bind(R.id.tv_user_location)
     TextView mTvUserLocation;
     @Bind(R.id.cl_main_layout)
-    View mCLMainLayout;
+    CoordinatorLayout mCLMainLayout;
     @Bind(R.id.home_toolbar)
-    Toolbar mToolbar;
+    public Toolbar mToolbar;
     @Bind(R.id.drawer_layout)
     DrawerLayout mDrawer;
     @Bind(R.id.nav_view)
@@ -153,6 +158,9 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     public TextView mTvCategoryChoose;
     @Bind(R.id.iv_spinner_icon)
     public ImageView mIvSpinner;
+    @Bind(R.id.appbar_layout)
+    public AppBarLayout mAppBarLayout;
+
     @Bind(R.id.fl_feed_full_view)
     public FrameLayout flFeedFullView;
     @Bind(R.id.iv_side_drawer_profile_blur_background)
@@ -194,7 +202,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     public ChallengeSuccessDialogFragment mChallengeSuccessDialogFragment;
     File local;
     private long mChallengeId;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -212,7 +219,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         mCustiomActionBarToggle = new CustiomActionBarToggle(this, mDrawer, mToolbar, R.string.ID_NAVIGATION_DRAWER_OPEN, R.string.ID_NAVIGATION_DRAWER_CLOSE, this);
         mDrawer.addDrawerListener(mCustiomActionBarToggle);
         mNavigationView.setNavigationItemSelectedListener(this);
-        mFragmentOpen = new FragmentOpen();
+         mFragmentOpen = new FragmentOpen();
         setAllValues(mFragmentOpen);
         if (null != getIntent() && null != getIntent().getExtras()) {
             mChallengeId = (long) getIntent().getExtras().get(AppConstants.CHALLENGE_ID);
@@ -247,10 +254,13 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                             mIvSideDrawerProfileBlurBackground.setImageBitmap(blurred);
                         }
                     });*/
-
         }
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
 
+    }
     private void setArticleCategoryFilterValues() {
         if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && null != mUserPreferenceMasterData.get().getData()) {
             HashMap<String, HashMap<String, ArrayList<LabelValue>>> masterDataResult = mUserPreferenceMasterData.get().getData();
@@ -395,7 +405,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     totalTimeSpentOnFeed();
                     break;
                 case 6:
-                    mAppUtils.launchPlayStore(this);
+                    checkForAllOpenFragments();
+                    openHelplineFragment();
                     totalTimeSpentOnFeed();
                     break;
                 default:
@@ -622,6 +633,11 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             onBackPressed();
             mFragmentOpen.setBellNotificationFragment(false);
         }
+        if (mFragmentOpen.isHelplineFragment()) {
+            onBackPressed();
+            mFragmentOpen.setHelplineFragment(false);
+        }
+
     }
 
     @OnClick(R.id.tv_home)
@@ -702,7 +718,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
                 .add(R.id.fl_article_card_view, articlesFragment, ArticlesFragment.class.getName()).addToBackStack(ArticlesFragment.class.getName()).commitAllowingStateLoss();
         mliArticleSpinnerIcon.setVisibility(View.VISIBLE);
-
     }
 
     public DialogFragment inviteMyCommunityDialog() {
@@ -729,6 +744,24 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             ((MyCommunitiesFragment) community).commentListRefresh(feedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
         }
     }
+    private void openHelplineFragment(){
+        liHomeCommunityButtonLayout.setVisibility(View.GONE);
+        mFlHomeFooterList.setVisibility(View.GONE);
+        mToolbar.setVisibility(View.VISIBLE);
+        mFragmentOpen.setHelplineFragment(true);
+        mViewPager.setVisibility(View.GONE);
+        mTabLayout.setVisibility(View.GONE);
+        flFeedFullView.setVisibility(View.GONE);
+        mliArticleSpinnerIcon.setVisibility(View.GONE);
+        mTvHome.setVisibility(View.GONE);
+        mTvCommunities.setText(AppConstants.EMPTY_STRING);
+        setAllValues(mFragmentOpen);
+        HelplineFragment helplineFragment = new HelplineFragment();
+        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
+                .replace(R.id.fl_article_card_view, helplineFragment, HelplineFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+        mliArticleSpinnerIcon.setVisibility(View.GONE);
+    }
+
 
     private void openSettingFragment() {
         mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_FEED));
@@ -870,7 +903,15 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             mFlNotification.setEnabled(true);
             mFragmentOpen.setBellNotificationFragment(false);
             getSupportFragmentManager().popBackStackImmediate();
-        } else {
+        }else if(mFragmentOpen.isHelplineFragment()){
+            mFragmentOpen.setHelplineFragment(false);
+            getSupportFragmentManager().popBackStackImmediate();
+            initHomeViewPagerAndTabs();
+            setHomeFeedCommunityData();
+            mFlHomeFooterList.setVisibility(View.VISIBLE);
+            mTvHome.setVisibility(View.VISIBLE);
+        }
+        else {
             if (doubleBackToExitPressedOnce) {
                 getSupportFragmentManager().popBackStackImmediate();
                 finish();
@@ -924,6 +965,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     @OnClick(R.id.fl_notification)
     public void notificationClick() {
         // mDrawer.openDrawer(Gravity.LEFT);
+        AppUtils.hideKeyboard(mTvUserName, TAG);
         checkForAllOpenFragments();
         callBellNotification();
     }
@@ -931,6 +973,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
 
     @OnClick(R.id.tv_drawer_navigation)
     public void drawerNavigationClick() {
+        AppUtils.hideKeyboard(mTvUserName, TAG);
         mDrawer.openDrawer(Gravity.LEFT);
     }
 
@@ -1058,6 +1101,9 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     break;
                 case AppConstants.REQUEST_CODE_FOR_IMAGE_CROPPING:
                     imageCropping(intent);
+                      break;
+                case AppConstants.REQ_CODE_SPEECH_INPUT:
+                    helplineSpeechActivityResponse(intent,resultCode);
                     break;
                 default:
                     LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);
@@ -1238,6 +1284,18 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 }
             }
         }
+    }
+
+    private void helplineSpeechActivityResponse(Intent intent, int resultCode) {
+
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag(HelplineFragment.class.getName());
+            if (AppUtils.isFragmentUIActive(fragment)) {
+                if (resultCode == Activity.RESULT_OK && null != intent) {
+                    ArrayList<String> result = intent
+                            .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    ((HelplineFragment) fragment).getSpeechText(result.get(0));
+                }
+            }
     }
 
     private void jobDetailActivityResponse(Intent intent) {

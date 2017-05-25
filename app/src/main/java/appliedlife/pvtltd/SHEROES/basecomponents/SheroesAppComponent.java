@@ -41,6 +41,8 @@ import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOwnerSearchFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CreateCommunityFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CreateCommunityPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
+
+import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeSpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ImageFullViewFragment;
@@ -142,6 +144,8 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.FeedJobHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FooterViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.GetAllDataBoardingSearchHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.GoodAtHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.HelplineAnswerCardHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.HelplineQuestionCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HomeSpinnerSelectorHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.InterestSearchHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.InviteMemberHolder;
@@ -551,6 +555,10 @@ public interface SheroesAppComponent {
     void inject(EducationListHolder educationListHolder);
 
     void inject(ProfilePersonelHowCanLookingForFragment profilePersonelHowCanLookingForFragment);
+
+    void inject(HelplineFragment helplineFragment);
+    void inject(HelplineQuestionCardHolder helplineQuestionCardHolder);
+    void inject(HelplineAnswerCardHolder helplineAnswerCardHolder);
 
 
     void inject(ChallengeUpdateProgressDialogFragment challengeUpdateProgressDialogFragment);

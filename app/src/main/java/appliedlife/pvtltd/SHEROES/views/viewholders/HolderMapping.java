@@ -21,6 +21,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.PandingMember;
 import appliedlife.pvtltd.SHEROES.models.entities.community.PopularTag;
 import appliedlife.pvtltd.SHEROES.models.entities.community.RequestedList;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineChatDoc;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.DrawerItems;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
@@ -352,6 +353,7 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new WorkExperienceCardHolder(view, viewInterface);
         }
+
     }, CHALLENGE_HORIZONTAL_VIEW(R.layout.challenge_horizontal_view) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
@@ -362,6 +364,22 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new ChallengeItemCardHolder(view, viewInterface);
         }
+
+    },
+        HELPLINE_CHAT_QUESTION_CARD(R.layout.helpline_question_card){
+              @Override
+            public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+                return new HelplineQuestionCardHolder(view, viewInterface);
+            }
+
+        },
+        HELPLINE_CHAT_ANSWER_CARD(R.layout.helpline_answer_card){
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new HelplineAnswerCardHolder(view, viewInterface);
+        }
+
+
     };
     public Object object;
     public int layout;
@@ -547,6 +565,13 @@ public enum HolderMapping {
                 }else if (item instanceof ChallengeDataItem) {
                     return CHALLENGE_LIST_ITEM_HOLDER.ordinal();
                 }
+                else if(item instanceof HelplineChatDoc){
+                    if(((HelplineChatDoc) item).getSubType().equalsIgnoreCase(AppConstants.HELPLINE_SUB_TYPE_QUESTION)) {
+                        return HELPLINE_CHAT_QUESTION_CARD.ordinal();
+                    }
+                    else {return  HELPLINE_CHAT_ANSWER_CARD.ordinal();}
+                }
+
             }
         }
         return returnView;

@@ -36,7 +36,9 @@
     <string name="ID_LOCATION_DATA">Please select location</string>
     <string name="ID_LOCATION_RESULT">Sorry! We could not find a location matching your input.</string>
     <string name="ID_JOB_NOT_FOUND"> Sorry! Could not find jobs matching your criteria. Please swipe down to refresh and search again.</string>
-
+    <string name="ID_CHAT_NOT_FOUND"> Sorry! Could not load you chat. Please swipe down to refresh and try again.</string>
+    <string name="ID_SPEECH_PROMPT">Say something&#8230;</string>
+    <string name="ID_SPEECH_NOT_SUPPORTED">Sorry! Your device doesn\'t support speech input</string>
     <!--String related in home page-->
 
     <string name="ID_NAVIGATION_DRAWER_OPEN">Open navigation drawer</string>
@@ -114,6 +116,7 @@
     <string name="ID_BOOKMARK">Bookmarks</string>
     <string name="ID_SETTING">Settings</string>
     <string name="ID_ASK_SHEROES">Ask SHEROES</string>
+    <string name="ID_HELPLINE">Helpline</string>
     <string name="ID_POST">Post as:</string>
     <string name="ID_POST_AS">Post as </string>
     <string name="ID_POSTED">Posted</string>

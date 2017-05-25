@@ -23,10 +23,12 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.f2prateek.rx.preferences.Preference;
+import com.google.android.gms.vision.text.Line;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -47,6 +49,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LastComment;
+import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineChatDoc;
+import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
@@ -68,6 +73,7 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CommunityView;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HelplineView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
 
@@ -89,7 +95,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.MARK_AS_SPA
  * Title: Base fragment for all child fragment.
  * all the common behaviour.
  */
-public class BaseFragment extends Fragment implements View.OnClickListener, HomeView, CommunityView, ProfileView {
+public class BaseFragment extends Fragment implements View.OnClickListener, HomeView, CommunityView, ProfileView, HelplineView {
     private final String TAG = LogUtils.makeLogTag(BaseFragment.class);
     public FragmentActivity mActivity;
     private FragmentListRefreshData mFragmentListRefreshData;
@@ -205,6 +211,15 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     }
 
     public void setInitializationForProfile(FragmentListRefreshData mFragmentListRefreshData, GenericRecyclerViewAdapter mAdapter, LinearLayoutManager mLayoutManager, RecyclerView mRecyclerView, AppUtils mAppUtils, ProgressBar mProgressBar) {
+        this.mFragmentListRefreshData = mFragmentListRefreshData;
+        this.mAdapter = mAdapter;
+        this.mLayoutManager = mLayoutManager;
+        this.mRecyclerView = mRecyclerView;
+        this.mAppUtils = mAppUtils;
+        this.mProgressBar = mProgressBar;
+    }
+
+    public void setInitializationForHelpline(FragmentListRefreshData mFragmentListRefreshData, GenericRecyclerViewAdapter mAdapter, LinearLayoutManager mLayoutManager, RecyclerView mRecyclerView,AppUtils mAppUtils,ProgressBar mProgressBar){
         this.mFragmentListRefreshData = mFragmentListRefreshData;
         this.mAdapter = mAdapter;
         this.mLayoutManager = mLayoutManager;
@@ -706,4 +721,14 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     public void getWorkExpListSuccess(WorkExpListResponse workExpListResponse) {
 
     }
+    @Override
+    public void getHelpChatThreadSuccess(HelplineGetChatThreadResponse helplineGetChatThreadResponse) {
+
+    }
+
+    @Override
+    public void getPostQuestionSuccess(HelplinePostQuestionResponse helplinePostQuestionResponse) {
+
+    }
+
 }

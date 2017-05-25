@@ -33,6 +33,10 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.SelectedCommunityRes
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeRequest;
@@ -221,4 +225,8 @@ public interface SheroesAppServiceApi {
     Observable<ChallengeListResponse>challengeAccept(@Body ChallengeAcceptRequest challengeAcceptRequest);
     @POST("http://34.193.138.177/participant/auth/signin")
     Observable<LoginResponse> getUserGoogleLogin(@Body LoginRequest loginRequest);
+    @POST("participation/helpline/post_question")
+    Observable<HelplinePostQuestionResponse>postHelplineQuestion(@Body HelplinePostQuestionRequest helplinePostQuestionRequest);
+    @POST("participation/helpline/get_thread_details")
+    Observable<HelplineGetChatThreadResponse>getHelplineChatDetails(@Body HelplineGetChatThreadRequest helplineGetChatThreadRequest);
 }

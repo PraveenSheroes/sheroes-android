@@ -32,6 +32,8 @@ import android.renderscript.Allocation;
 import android.renderscript.Element;
 import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
+import android.support.design.widget.AppBarLayout;
+import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -104,6 +106,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.SelectCommunityReque
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCount;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobApplyRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
@@ -2225,6 +2229,7 @@ public class AppUtils {
         exprienceEntity.setActive(true);
         return exprienceEntity;
     }
+
     public void launchPlayStore(Context context) {
         boolean isLaunchedSuccessfully;
         Uri uri = Uri.parse(AppConstants.GOOGLE_PLAY_ANDROID_APP_URL);
@@ -2250,5 +2255,20 @@ public class AppUtils {
         if (!isLaunchedSuccessfully) {
             Toast.makeText(context, "Could not open Google Play, please install the Google Play app.", Toast.LENGTH_SHORT).show();
         }
+    }
+
+
+    public static HelplinePostQuestionRequest helplineQuestionBuilder(String chatQueryText){
+        HelplinePostQuestionRequest helplinePostQuestionRequest = new HelplinePostQuestionRequest();
+        helplinePostQuestionRequest.setQuestion(chatQueryText);
+        helplinePostQuestionRequest.setSource(AppConstants.SOURCE_NAME);
+        return helplinePostQuestionRequest;
+    }
+
+    public static HelplineGetChatThreadRequest helplineGetChatThreadRequestBuilder(int pageNo){
+        HelplineGetChatThreadRequest helplineGetChatThreadRequest = new HelplineGetChatThreadRequest();
+        helplineGetChatThreadRequest.setPageNo(pageNo);
+        helplineGetChatThreadRequest.setPageSize(AppConstants.PAGE_SIZE_CHAT);
+        return helplineGetChatThreadRequest;
     }
 }

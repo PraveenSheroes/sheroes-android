@@ -36,7 +36,7 @@ public class CustomeDataList {
         fifthDrawerItem.setIconName("ic_setting");
         DrawerItems sixthDrawerItem = new DrawerItems();
         sixthDrawerItem.setId(6);
-        sixthDrawerItem.setName("Ask SHEROES");
+        sixthDrawerItem.setName("Helpline");
         sixthDrawerItem.setIconName("ic_setting");
         drawerItemsList.add(firstDrawerItem);
         drawerItemsList.add(secondDrawerItem);

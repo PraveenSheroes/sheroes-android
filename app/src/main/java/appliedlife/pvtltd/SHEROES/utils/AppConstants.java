@@ -57,6 +57,7 @@ public class AppConstants {
     public static final String OWNER_SUB_TYPE = "O";
     public static final String COMMUNITY_NAME_SUB_TYPE = "CN";
     public static final String FEED_SCREEN = "feed";
+    public static final String HELPLINE_SCREEN = "helpline";
     public static final String CURRENT_STATUS_SCREEN = "current_status";
     public static final String SOURCE_NAME = "android";
     public static final String UTF_8 = "UTF-8";
@@ -104,6 +105,7 @@ public class AppConstants {
     public static final int REQUEST_CODE_FOR_CAMERA = 1101;
     public static final int REQUEST_CODE_FOR_IMAGE_CROPPING = 1201;
     public static final String JOB_FRAGMENT = "job";
+    public static final String HELPLINE_FRAGMENT ="helpline";
     public static final String PROFILE_FRAGMENT = "profile";
     public static final String FEATURE_FRAGMENT = "feature";
     public static final String MY_COMMUNITIES_FRAGMENT = "my_communities";
@@ -161,6 +163,7 @@ public class AppConstants {
     public static final int THREE_CONSTANT = 3;
     public static final int FOURTH_CONSTANT = 4;
     public static final int PAGE_SIZE = 10;
+    public static final int PAGE_SIZE_CHAT = 20;
     public static final int MEMBER_PAGE_SIZE = 100;
     public static final int INVITE_PAGE_SIZE = 200;
     public static final int NO_REACTION_CONSTANT = 0;
@@ -297,4 +300,9 @@ public class AppConstants {
     public static final String FACEBOOK_SHARE ="com.facebook.katana";
     public static final String FACEBOOK_SHARE_VIA_BROSWER ="https://www.facebook.com/sharer/sharer.php?u=";
     public static final String JPG_FORMATE =".jpg";
+    public static final String HELPLINE_SUB_TYPE_QUESTION= "Q";
+    public static final String HELPLINE_SUB_TYPE_ANSWER = "A";
+    public static final String HELPlINE_NO_MESSAGE="Please enter your message";
+    public static final String HELPlINE_NO_CHAT="No Chat found";
+    public static final int REQ_CODE_SPEECH_INPUT = 100;
 }

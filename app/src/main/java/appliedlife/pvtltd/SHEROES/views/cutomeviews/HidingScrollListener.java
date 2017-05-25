@@ -7,6 +7,7 @@ import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.presenters.CommentReactionPresenter;
+import appliedlife.pvtltd.SHEROES.presenters.HelplinePresenter;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.presenters.MembersPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.RequestedPresenter;
@@ -21,6 +22,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.feedRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.getBookMarks;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.getCommentRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.getPandingMemberRequestBuilder;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.helplineGetChatThreadRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.myCommunityRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.searchRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.userCommunityPostRequestBuilder;
@@ -39,6 +41,7 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
     AppUtils mAppUtils;
     HomePresenter mHomePresenter;
     MembersPresenter mMembersPresenter;
+    HelplinePresenter mHelplinePresenter;
     RecyclerView mRecyclerView;
     private LinearLayoutManager mManager;
     private int  previousTotal = 0;
@@ -76,6 +79,13 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
         this.mFragmentListRefreshData=fragmentListRefreshData;
         mRecyclerView=recyclerView;
         mManager=manager;
+    }
+
+    public HidingScrollListener(HelplinePresenter helplinePresenter, RecyclerView recyclerView, LinearLayoutManager manager, FragmentListRefreshData fragmentListRefreshData) {
+        mHelplinePresenter=helplinePresenter;
+        mRecyclerView=recyclerView;
+        mManager=manager;
+        this.mFragmentListRefreshData=fragmentListRefreshData;
     }
 
     @Override
@@ -162,6 +172,9 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                         break;
                     case AppConstants.INVITE_MEMBER:
                         mHomePresenter.getFeedFromPresenter(searchRequestBuilder(AppConstants.USER_SUB_TYPE, mFragmentListRefreshData.getSearchStringName(), mFragmentListRefreshData.getPageNo(), AppConstants.INVITE_MEMBER,mFragmentListRefreshData.getEnitityOrParticpantid(),AppConstants.INVITE_PAGE_SIZE));
+                        break;
+                    case AppConstants.HELPLINE_FRAGMENT:
+                        mHelplinePresenter.getHelplineChatDetails(helplineGetChatThreadRequestBuilder(pageNo));
                         break;
                     default:
                         LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + mFragmentListRefreshData.getCallFromFragment());

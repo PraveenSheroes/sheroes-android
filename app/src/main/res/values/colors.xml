@@ -32,6 +32,8 @@
     <color name="verify_fb">#2d3340</color>
     <color name="searchbox_text_color">#9b9b9b</color>
     <color name="selected_on_boarding">#eaecf6</color>
+    <color name="green">#28b51b</color>
+    <color name="chat_incomming_text_color">#814edf</color>
 
     <!-- Text color of the search box hint text  -->
     <color name="forgot_password">#838a9c</color>
