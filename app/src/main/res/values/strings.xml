@@ -23,6 +23,8 @@
     <string name="ID_ERROR_INVALID_EMAIL">This email address is invalid</string>
     <string name="ID_ERROR_INVALID_PASSWORD">Enter password</string>
     <string name="ID_POSTED_IN">posted in</string>
+    <string name="ID_CHALLENGE_ACCEPTED">Challenge Accepted</string>
+    <string name="ID_CHALLENGE_COMPLETED">Challenge Completed</string>
     <string name="ID_NEW">NEW</string>
     <string name="ID_FB_VERIFY_MSG">Please verify account by linking your SHEROES account with your Facebook account.</string>
     <string name="ID_LETS_GET_TO">Let’s get to know each other </string>
@@ -74,6 +76,7 @@
     <string name="ID_CHOOSE_CATEGORY">Choose Category</string>
     <string name="ID_DONE">Done</string>
     <string name="ID_OK">Ok</string>
+    <string name="ID_OR">OR</string>
     <string name="ID_CANCEL">Cancel</string>
     <string name="ID_VIEW_MORE">View More</string>
     <string name="ID_STD">+91</string>
@@ -184,7 +187,7 @@
     <string name="ID_APPLY">Apply</string>
     <string name="ID_FEED_REFRESH"> Your feed has been refreshed.</string>
     <string name="ID_FEED_ALREADY_REFRESH"> Your feed is already updated.</string>
-
+    <string name="ID_CHALLENGE_ACCEPT">Challenge accepted</string>
     <string name="ID_REPORTED_AS_SPAM">Reported as spam</string>
     <string name="ID_BACK_PRESS">Press back again to exit the app</string>
     <string name="ID_I_M_DONE">I’M DONE</string>
@@ -852,7 +855,8 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_CHALLENGES_YOU">Challenges You</string>
     <string name="ID_YOUR_FRIENDS">Your Friends</string>
     <string name="ID_CHALLENGE">Challenge</string>
-    <string name="ID_CHALLENGE_ACCEPTED">Challenge Accepted</string>
+    <string name="ID_HAS_ACCEPTED">updated her progress on a</string>
+    <string name="ID_HAS_ACCEPTED_CHALLENGE">challenge</string>
     <string name="ID_ACCEPT_CHALLENGE">Accept Challenge</string>
     <string name="ID_JUST_STARTED">Just Started</string>
     <string name="ID_HALF_DONE">Half Done</string>
@@ -869,4 +873,9 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_CONGRATULATION">Congratulations</string>
     <string name="ID_ADD_PHOTO">Let\'s make this moment more special by adding a photo.</string>
     <string name="ID_CHOOSE_PHOTO">Choose Photo From gallery</string>
+    <string name="ID_ADD_YOU_TUBE_LINK">Add Youtube link..</string>
+    <string name="ID_JUST">Just</string>
+    <string name="ID_STARTED">Started</string>
+    <string name="ID_SHARE_MSG">Please choose photo or add youtube link.</string>
+    <string name="ID_CHALLENGE_COMPLETED_SUCCESS">Success</string>
 </resources>

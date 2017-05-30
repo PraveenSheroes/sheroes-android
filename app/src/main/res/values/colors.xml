@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Text color of the search box hint text  -->
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimary">#6e2f95</color>
+    <color name="colorPrimaryDark">#6e2f95</color>
     <color name="unAcceptColor">#3023ae</color>
-    <color name="colorAccent">#3F51B5</color>
+    <color name="colorAccent">#6e2f95</color>
     <color name="comment_box_edit_border">#66aaaaaa</color>
+    <color name="challenge_count">#303F9F</color>
     <color name="white">#ffffff</color>
     <color name="challenge">#53a0fe</color>
     <color name="grey8">#fafafa</color>
+    <color name="challenge_post">#ff4531</color>
     <color name="spinner">#f1f1f1</color>
     <color name="grey2">#b7b7b7</color>
     <color name="welcome_footer">#ccffffff</color>
@@ -25,7 +27,6 @@
     <color name="pure_black">#000000</color>
     <color name="black_current">#1a1818</color>
     <color name="black_gradiant">#80000000</color>
-    <color name="blue">#3949ab</color>
     <color name="add_member_line">#e4e9ec</color>
     <color name="shadow">#3b99fc</color>
     <color name="verify_fb">#2d3340</color>
@@ -90,7 +91,7 @@
     <!--text colors of deactive_custom dialog page-->
 
     <color name="text_color_dialog">#1d2832</color>
-    <color name="text_color_close">#3949ab</color>
+    <color name="text_color_close">#6e2f95</color>
     <color name="text_color_date_view">#767f88</color>
     <color name="challenge_header">#6e2f95</color>
 

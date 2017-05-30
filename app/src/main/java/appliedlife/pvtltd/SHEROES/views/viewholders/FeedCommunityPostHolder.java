@@ -162,77 +162,101 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     }
 
     private void multipleImageURLs() {
-        if (StringUtil.isNotEmptyCollection(dataItem.getImageUrls())) {
+        if (dataItem.getCommunityId() == AppConstants.NO_REACTION_CONSTANT) {
+            liFeedCommunityUserPostImages.removeAllViews();
+            liFeedCommunityUserPostImages.removeAllViewsInLayout();
             liFeedCommunityUserPostImages.setVisibility(View.VISIBLE);
             lineForNoImage.setVisibility(View.GONE);
-            List<String> coverImageList = dataItem.getImageUrls();
-            int listSize = coverImageList.size();
-            if (listSize > AppConstants.NO_REACTION_CONSTANT) {
-                switch (listSize) {
+            ivFeedCommunityPostMenu.setBackgroundResource(R.drawable.ic_completed_select);
+            LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View child = layoutInflater.inflate(R.layout.challenge_image, null);
+            ImageView ivChallenge = (ImageView) child.findViewById(R.id.iv_feed_challenge);
+            TextView tvJust = (TextView) child.findViewById(R.id.tv_just_post);
+            TextView tvStarted = (TextView) child.findViewById(R.id.tv_started_post);
+            TextView tvChallengePost = (TextView) child.findViewById(R.id.tv_challenge_name_post);
+            if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
+                tvChallengePost.setText(dataItem.getNameOrTitle());
+            }
+            if(StringUtil.isNotEmptyCollection(dataItem.getImageUrls())) {
+                Glide.with(mContext)
+                        .load(dataItem.getImageUrls().get(0))
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .skipMemoryCache(true)
+                        .into(ivChallenge);
+            }
+            liFeedCommunityUserPostImages.addView(child);
+        } else {
+            if (StringUtil.isNotEmptyCollection(dataItem.getImageUrls())) {
+                liFeedCommunityUserPostImages.setVisibility(View.VISIBLE);
+                lineForNoImage.setVisibility(View.GONE);
+                List<String> coverImageList = dataItem.getImageUrls();
+                int listSize = coverImageList.size();
+                if (listSize > AppConstants.NO_REACTION_CONSTANT) {
+                    switch (listSize) {
 
-                    case AppConstants.ONE_CONSTANT:
-                        liFeedCommunityUserPostImages.removeAllViews();
-                        liFeedCommunityUserPostImages.removeAllViewsInLayout();
-                        if (StringUtil.isNotEmptyCollection(coverImageList) && StringUtil.isNotNullOrEmptyString(coverImageList.get(0))) {
-                            oneImagesSetting(mContext, coverImageList.get(0));
-                        }
+                        case AppConstants.ONE_CONSTANT:
+                            liFeedCommunityUserPostImages.removeAllViews();
+                            liFeedCommunityUserPostImages.removeAllViewsInLayout();
+                            if (StringUtil.isNotEmptyCollection(coverImageList) && StringUtil.isNotNullOrEmptyString(coverImageList.get(0))) {
+                                oneImagesSetting(mContext, coverImageList.get(0));
+                            }
 
-                        break;
-                    case AppConstants.TWO_CONSTANT:
-                        liFeedCommunityUserPostImages.removeAllViews();
-                        liFeedCommunityUserPostImages.removeAllViewsInLayout();
-                        if (StringUtil.isNotEmptyCollection(coverImageList) && StringUtil.isNotNullOrEmptyString(coverImageList.get(0)) && StringUtil.isNotNullOrEmptyString(coverImageList.get(1))) {
-                            twoImagesSetting(mContext, coverImageList.get(0), coverImageList.get(1));
-                        }
-                        break;
-                    case AppConstants.THREE_CONSTANT:
-                        liFeedCommunityUserPostImages.removeAllViews();
-                        liFeedCommunityUserPostImages.removeAllViewsInLayout();
-                        if (StringUtil.isNotEmptyCollection(coverImageList) && StringUtil.isNotNullOrEmptyString(coverImageList.get(0)) && StringUtil.isNotNullOrEmptyString(coverImageList.get(1)) && StringUtil.isNotNullOrEmptyString(coverImageList.get(2))) {
-                            //boolean isHeightGreater = getCoverImageHeightWidth(coverImageList.get(0));
+                            break;
+                        case AppConstants.TWO_CONSTANT:
+                            liFeedCommunityUserPostImages.removeAllViews();
+                            liFeedCommunityUserPostImages.removeAllViewsInLayout();
+                            if (StringUtil.isNotEmptyCollection(coverImageList) && StringUtil.isNotNullOrEmptyString(coverImageList.get(0)) && StringUtil.isNotNullOrEmptyString(coverImageList.get(1))) {
+                                twoImagesSetting(mContext, coverImageList.get(0), coverImageList.get(1));
+                            }
+                            break;
+                        case AppConstants.THREE_CONSTANT:
+                            liFeedCommunityUserPostImages.removeAllViews();
+                            liFeedCommunityUserPostImages.removeAllViewsInLayout();
+                            if (StringUtil.isNotEmptyCollection(coverImageList) && StringUtil.isNotNullOrEmptyString(coverImageList.get(0)) && StringUtil.isNotNullOrEmptyString(coverImageList.get(1)) && StringUtil.isNotNullOrEmptyString(coverImageList.get(2))) {
+                                //boolean isHeightGreater = getCoverImageHeightWidth(coverImageList.get(0));
                            /* if (isHeightGreater) {
                                 feedFirstPortraitWithTwoImageModeSetting(mContext, coverImageList.get(0), coverImageList.get(1), coverImageList.get(2));
                             } else {
                                 feedFirstLandscapWIthTwoImageModeSetting(mContext, coverImageList.get(0), coverImageList.get(1), coverImageList.get(2));
                             }*/
-                            //  feedFirstPortraitWithTwoImageModeSetting(mContext, coverImageList.get(0), coverImageList.get(1), coverImageList.get(2));
-                            feedFirstLandscapWIthTwoImageModeSetting(mContext, coverImageList.get(0), coverImageList.get(1), coverImageList.get(2));
-                        }
-                        break;
-                    case AppConstants.FOURTH_CONSTANT:
-                        liFeedCommunityUserPostImages.removeAllViews();
-                        liFeedCommunityUserPostImages.removeAllViewsInLayout();
-                        if (StringUtil.isNotEmptyCollection(coverImageList) && StringUtil.isNotNullOrEmptyString(coverImageList.get(0)) && StringUtil.isNotNullOrEmptyString(coverImageList.get(1)) && StringUtil.isNotNullOrEmptyString(coverImageList.get(2)) && StringUtil.isNotNullOrEmptyString(coverImageList.get(3))) {
-                            //  boolean isHeightGreater = getCoverImageHeightWidth(coverImageList.get(0));
+                                //  feedFirstPortraitWithTwoImageModeSetting(mContext, coverImageList.get(0), coverImageList.get(1), coverImageList.get(2));
+                                feedFirstLandscapWIthTwoImageModeSetting(mContext, coverImageList.get(0), coverImageList.get(1), coverImageList.get(2));
+                            }
+                            break;
+                        case AppConstants.FOURTH_CONSTANT:
+                            liFeedCommunityUserPostImages.removeAllViews();
+                            liFeedCommunityUserPostImages.removeAllViewsInLayout();
+                            if (StringUtil.isNotEmptyCollection(coverImageList) && StringUtil.isNotNullOrEmptyString(coverImageList.get(0)) && StringUtil.isNotNullOrEmptyString(coverImageList.get(1)) && StringUtil.isNotNullOrEmptyString(coverImageList.get(2)) && StringUtil.isNotNullOrEmptyString(coverImageList.get(3))) {
+                                //  boolean isHeightGreater = getCoverImageHeightWidth(coverImageList.get(0));
                             /*if (isHeightGreater) {
                                 feedFirstPortraitImageModeSetting(mContext, coverImageList.get(0), coverImageList.get(1), coverImageList.get(2), coverImageList.get(3), listSize);
                             } else {
                                 feedFirstLandscapImageModeSetting(mContext, coverImageList.get(0), coverImageList.get(1), coverImageList.get(2), coverImageList.get(3), listSize);
                             }*/
-                            feedFirstLandscapImageModeSetting(mContext, coverImageList.get(0), coverImageList.get(1), coverImageList.get(2), coverImageList.get(3), listSize);
-                        }
-                        break;
-                    default:
-                        liFeedCommunityUserPostImages.removeAllViews();
-                        liFeedCommunityUserPostImages.removeAllViewsInLayout();
-                        if (StringUtil.isNotEmptyCollection(coverImageList) && StringUtil.isNotNullOrEmptyString(coverImageList.get(0)) && StringUtil.isNotNullOrEmptyString(coverImageList.get(1)) && StringUtil.isNotNullOrEmptyString(coverImageList.get(2)) && StringUtil.isNotNullOrEmptyString(coverImageList.get(3))) {
-                            //  boolean isHeightGreater = getCoverImageHeightWidth(coverImageList.get(0));
+                                feedFirstLandscapImageModeSetting(mContext, coverImageList.get(0), coverImageList.get(1), coverImageList.get(2), coverImageList.get(3), listSize);
+                            }
+                            break;
+                        default:
+                            liFeedCommunityUserPostImages.removeAllViews();
+                            liFeedCommunityUserPostImages.removeAllViewsInLayout();
+                            if (StringUtil.isNotEmptyCollection(coverImageList) && StringUtil.isNotNullOrEmptyString(coverImageList.get(0)) && StringUtil.isNotNullOrEmptyString(coverImageList.get(1)) && StringUtil.isNotNullOrEmptyString(coverImageList.get(2)) && StringUtil.isNotNullOrEmptyString(coverImageList.get(3))) {
+                                //  boolean isHeightGreater = getCoverImageHeightWidth(coverImageList.get(0));
                          /*   if (isHeightGreater) {
                                 feedFirstPortraitImageModeSetting(mContext, coverImageList.get(0), coverImageList.get(1), coverImageList.get(2), coverImageList.get(3), listSize);
                             } else {
                                 feedFirstLandscapImageModeSetting(mContext, coverImageList.get(0), coverImageList.get(1), coverImageList.get(2), coverImageList.get(3), listSize);
                             }*/
-                            feedFirstLandscapImageModeSetting(mContext, coverImageList.get(0), coverImageList.get(1), coverImageList.get(2), coverImageList.get(3), listSize);
-                        }
+                                feedFirstLandscapImageModeSetting(mContext, coverImageList.get(0), coverImageList.get(1), coverImageList.get(2), coverImageList.get(3), listSize);
+                            }
+                    }
                 }
+            } else {
+                liFeedCommunityUserPostImages.removeAllViews();
+                liFeedCommunityUserPostImages.removeAllViewsInLayout();
+                lineForNoImage.setVisibility(View.VISIBLE);
+                liFeedCommunityUserPostImages.setVisibility(View.GONE);
             }
-        } else {
-            liFeedCommunityUserPostImages.removeAllViews();
-            liFeedCommunityUserPostImages.removeAllViewsInLayout();
-            lineForNoImage.setVisibility(View.VISIBLE);
-            liFeedCommunityUserPostImages.setVisibility(View.GONE);
         }
-
     }
 
     private boolean getCoverImageHeightWidth(String imagePath) {
@@ -270,24 +294,34 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void allTextViewStringOperations(Context context) {
         if (StringUtil.isNotNullOrEmptyString(dataItem.getAuthorName())) {
-            //  String posted=LEFT_POSTED +  mContext.getString(R.string.ID_POSTED_IN) + RIGHT_POSTED;
             StringBuilder posted = new StringBuilder();
-            //   posted.append(LEFT_POSTED).append(mContext.getString(R.string.ID_POSTED_IN)).append(RIGHT_POSTED);
-            String feedTitle = dataItem.getAuthorName();
-            //TODO:: change for UI
-            String feedCommunityName = dataItem.getPostCommunityName();
-            // String coloredFeedCommunityName = LEFT_HTML_COMMUNITY_TITLE_FOR_COLOR + feedCommunityName + RIGHT_HTML_COMMUNITY_TITLE_FOR_COLOR;
-            // StringBuilder coloredFeedCommunityName=new StringBuilder();
-            //  coloredFeedCommunityName.append(LEFT_HTML_COMMUNITY_TITLE_FOR_COLOR).append(feedCommunityName).append(RIGHT_HTML_COMMUNITY_TITLE_FOR_COLOR);
-            //  StringBuilder finalText=new StringBuilder();
-            if (!feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_ADMIN))) {
-                posted.append(feedTitle).append(AppConstants.SPACE).append(LEFT_POSTED).append(mContext.getString(R.string.ID_POSTED_IN)).append(RIGHT_POSTED).append(AppConstants.SPACE);
-            }
-            posted.append(feedCommunityName);
-            if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                tvFeedCommunityPostCardTitle.setText(Html.fromHtml(posted.toString(), 0)); // for 24 api and more
+            if (dataItem.getCommunityId() == AppConstants.NO_REACTION_CONSTANT) {
+                tvFeedCommunityPostText.setVisibility(View.GONE);
+                tvFeedCommunityPostUserMenu.setVisibility(View.GONE);
+                dataItem.setListDescription(AppConstants.EMPTY_STRING);
+                String feedTitle = dataItem.getAuthorName();
+               // String challengerName = dataItem.getNameOrTitle();
+                posted.append(feedTitle).append(AppConstants.SPACE).append(LEFT_POSTED).append(mContext.getString(R.string.ID_HAS_ACCEPTED)).append(RIGHT_POSTED).append(AppConstants.SPACE).append(mContext.getString(R.string.ID_HAS_ACCEPTED_CHALLENGE));
+               // posted.append(challengerName).append(AppConstants.APASTROPH).append(LEFT_POSTED).append(mContext.getString(R.string.ID_HAS_ACCEPTED_CHALLENGE)).append(RIGHT_POSTED);
+                if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                    tvFeedCommunityPostCardTitle.setText(Html.fromHtml(posted.toString(), 0)); // for 24 api and more
+                } else {
+                    tvFeedCommunityPostCardTitle.setText(Html.fromHtml(posted.toString()));// or for older api
+                }
             } else {
-                tvFeedCommunityPostCardTitle.setText(Html.fromHtml(posted.toString()));// or for older api
+                tvFeedCommunityPostUserMenu.setVisibility(View.VISIBLE);
+                tvFeedCommunityPostText.setVisibility(View.VISIBLE);
+                String feedTitle = dataItem.getAuthorName();
+                String feedCommunityName = dataItem.getPostCommunityName();
+                if (!feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_ADMIN))) {
+                    posted.append(feedTitle).append(AppConstants.SPACE).append(LEFT_POSTED).append(mContext.getString(R.string.ID_POSTED_IN)).append(RIGHT_POSTED).append(AppConstants.SPACE);
+                }
+                posted.append(feedCommunityName);
+                if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                    tvFeedCommunityPostCardTitle.setText(Html.fromHtml(posted.toString(), 0)); // for 24 api and more
+                } else {
+                    tvFeedCommunityPostCardTitle.setText(Html.fromHtml(posted.toString()));// or for older api
+                }
             }
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getCreatedDate())) {
@@ -317,8 +351,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                     tvFeedCommunityPostText.setText(Html.fromHtml(mViewMoreDescription));
                 }
             }
-        }else
-        {
+        } else {
             tvFeedCommunityPostViewMore.setText(mContext.getString(R.string.ID_LESS));
             tvFeedCommunityPostViewMore.setTag(mLess);
             tvFeedCommunityPostTextFullView.setVisibility(View.GONE);
@@ -695,12 +728,13 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             }
         }
     }
+
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void viewMoreTextClick() {
         if (tvFeedCommunityPostViewMore.getTag().toString().equalsIgnoreCase(mViewMore)) {
             // String lessWithColor = LEFT_HTML_VEIW_TAG_FOR_COLOR + mLess + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
-          //  StringBuilder lessWithColor = new StringBuilder();
-          //  lessWithColor.append(LEFT_HTML_VEIW_TAG_FOR_COLOR).append(mLess).append(RIGHT_HTML_VIEW_TAG_FOR_COLOR);
+            //  StringBuilder lessWithColor = new StringBuilder();
+            //  lessWithColor.append(LEFT_HTML_VEIW_TAG_FOR_COLOR).append(mLess).append(RIGHT_HTML_VIEW_TAG_FOR_COLOR);
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                 tvFeedCommunityPostTextFullView.setText(Html.fromHtml(mViewMoreDescription, 0)); // for 24 api and more
             } else {

@@ -37,25 +37,50 @@ public class SheroesDeepLinkingActivity extends Activity {
                     urlOfSharedCard = mData.toString();
                     try {
                         if (StringUtil.isNotNullOrEmptyString(urlOfSharedCard)) {
-                            indexOfFourthBackSlace = findNthIndexOf(urlOfSharedCard, AppConstants.BACK_SLASH, 4);
-                            if (indexOfFourthBackSlace > 0) {
-                                baseUrl = urlOfSharedCard.substring(0, indexOfFourthBackSlace);
-                                //When Fourth back slace not available
-                                if (baseUrl.equalsIgnoreCase(AppConstants.EMPTY_STRING)) {
-                                    baseUrl = urlOfSharedCard;
-                                } else {
-                                    if (baseUrl.equalsIgnoreCase(AppConstants.USER_URL)) {
-                                        baseUrl = urlOfSharedCard;
+
+                              if (urlOfSharedCard.contains(AppConstants.CHALLENGE_URL)||urlOfSharedCard.contains(AppConstants.CHALLENGE_URL_COM)) {
+                                try {
+                                    Intent into = new Intent(SheroesDeepLinkingActivity.this, HomeActivity.class);
+                                int indexOfFirstEqual = findNthIndexOf(urlOfSharedCard,"=",1);
+                                 String   challengeUrl = urlOfSharedCard.substring(indexOfFirstEqual+1,urlOfSharedCard.length());
+                                    if(StringUtil.isNotNullOrEmptyString(challengeUrl)) {
+                                        String ChallengeId = challengeUrl;
+                                        byte[] challengeBytes = Base64.decode(ChallengeId, Base64.DEFAULT);
+                                        String newChallengeId = new String(challengeBytes, AppConstants.UTF_8);
+                                        into.putExtra(AppConstants.CHALLENGE_ID, Long.parseLong(newChallengeId));
+                                        startActivity(into);
+                                        finish();
                                     }
+                                } catch (Exception e) {
+                                    Intent into = new Intent(this, HomeActivity.class);
+                                    startActivity(into);
+                                    finish();
                                 }
-                            }
-                        }else
-                        {
+                            }else {
+
+
+                                  indexOfFourthBackSlace = findNthIndexOf(urlOfSharedCard, AppConstants.BACK_SLASH, 4);
+                                  if (indexOfFourthBackSlace > 0) {
+                                      baseUrl = urlOfSharedCard.substring(0, indexOfFourthBackSlace);
+                                      //When Fourth back slace not available
+                                      if (baseUrl.equalsIgnoreCase(AppConstants.EMPTY_STRING)) {
+                                          baseUrl = urlOfSharedCard;
+                                      } else {
+                                          if (baseUrl.equalsIgnoreCase(AppConstants.USER_URL)) {
+                                              baseUrl = urlOfSharedCard;
+                                          }
+                                      }
+                                  }
+                              }
+                        } else {
                             Intent homeFeed = new Intent(this, HomeActivity.class);
                             startActivity(homeFeed);
                             finish();
                         }
                     } catch (Exception e) {
+                        Intent homeFeed = new Intent(this, HomeActivity.class);
+                        startActivity(homeFeed);
+                        finish();
                     }
                     fullLength = urlOfSharedCard.length();
 
@@ -74,7 +99,7 @@ public class SheroesDeepLinkingActivity extends Activity {
     private void callActivities(String urlSharedViaSocial, String baseUrl, int fullLength) {
         String dataIdString = AppConstants.EMPTY_STRING;
         //In case of Article
-        if (AppConstants.ARTICLE_URL.equalsIgnoreCase(baseUrl) ||AppConstants.ARTICLE_URL_COM.equalsIgnoreCase(baseUrl)&& AppConstants.ARTICLE_URL.length() < fullLength) {
+        if (AppConstants.ARTICLE_URL.equalsIgnoreCase(baseUrl) || AppConstants.ARTICLE_URL_COM.equalsIgnoreCase(baseUrl) && AppConstants.ARTICLE_URL.length() < fullLength) {
             try {
                 int sareid = urlSharedViaSocial.lastIndexOf(AppConstants.BACK_SLASH);
                 String id = urlSharedViaSocial.substring(sareid + 1, fullLength);
@@ -89,7 +114,7 @@ public class SheroesDeepLinkingActivity extends Activity {
                 startActivity(into);
                 finish();
             }
-        } else if (AppConstants.JOB_URL.equalsIgnoreCase(baseUrl) ||AppConstants.JOB_URL_COM.equalsIgnoreCase(baseUrl) && AppConstants.JOB_URL.length() < fullLength) {
+        } else if (AppConstants.JOB_URL.equalsIgnoreCase(baseUrl) || AppConstants.JOB_URL_COM.equalsIgnoreCase(baseUrl) && AppConstants.JOB_URL.length() < fullLength) {
             try {
                 int sareid = urlSharedViaSocial.lastIndexOf(AppConstants.BACK_SLASH);
                 String id = urlSharedViaSocial.substring(sareid + 1, fullLength);
@@ -112,7 +137,7 @@ public class SheroesDeepLinkingActivity extends Activity {
         "solr_ignore_deep_link_url": "https://sheroes.in/communities/sheroes-community/NTc0"
         * */
         //In case of communities
-        else if (AppConstants.COMMUNITY_URL.equalsIgnoreCase(baseUrl) ||AppConstants.COMMUNITY_URL_COM.equalsIgnoreCase(baseUrl) && AppConstants.COMMUNITY_URL.length() < fullLength) {
+        else if (AppConstants.COMMUNITY_URL.equalsIgnoreCase(baseUrl) || AppConstants.COMMUNITY_URL_COM.equalsIgnoreCase(baseUrl) && AppConstants.COMMUNITY_URL.length() < fullLength) {
             try {
                 Intent into = new Intent(SheroesDeepLinkingActivity.this, CommunitiesDetailActivity.class);
                 String communityDetail = urlSharedViaSocial.substring(indexOfFourthBackSlace, urlSharedViaSocial.length());
@@ -151,7 +176,7 @@ public class SheroesDeepLinkingActivity extends Activity {
 
         }
         //In case of profile
-        else if ((AppConstants.USER_PROFILE_URL).equalsIgnoreCase(baseUrl) ||AppConstants.USER_PROFILE_URL_COM.equalsIgnoreCase(baseUrl)) {
+        else if ((AppConstants.USER_PROFILE_URL).equalsIgnoreCase(baseUrl) || AppConstants.USER_PROFILE_URL_COM.equalsIgnoreCase(baseUrl) && AppConstants.USER_PROFILE_URL.length() < fullLength) {
             Intent into = new Intent(this, ProfileActicity.class);
             startActivity(into);
             finish();

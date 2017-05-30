@@ -19,18 +19,21 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_size_20"
         android:layout_gravity="center"
+        android:layout_marginTop="@dimen/dp_size_20"
+        android:alpha=".8"
         android:gravity="center"
+        android:enabled="false"
         android:orientation="horizontal">
 
-        <CheckBox
+        <ImageView
             android:id="@+id/checkbox_just_started"
             style="@style/ChallengeCheckBoxStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
+            android:layout_gravity="right|center"
             android:layout_marginLeft="@dimen/dp_size_40"
+            android:background="@drawable/ic_challenge_update_unchecked"
             android:padding="@dimen/dp_size_10" />
 
         <TextView
@@ -41,30 +44,31 @@
             android:layout_marginRight="@dimen/dp_size_20"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:gravity="center_vertical"
-            android:text="@string/ID_JUST_STARTED_PERCENT"
             android:lines="@integer/int_value_for_line_1"
             android:padding="@dimen/dp_size_12"
+            android:text="@string/ID_JUST_STARTED_PERCENT"
             android:textColor="@color/text_color_follow"
             android:textSize="@dimen/sp_size_13" />
 
     </LinearLayout>
+
     <LinearLayout
+        android:id="@+id/li_half_done"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_size_20"
         android:layout_gravity="center"
+        android:layout_marginTop="@dimen/dp_size_20"
         android:gravity="center"
         android:orientation="horizontal">
 
-        <CheckBox
+        <ImageView
             android:id="@+id/checkbox_half_done"
-            style="@style/ChallengeCheckBoxStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
+            android:layout_gravity="right|center"
             android:layout_marginLeft="@dimen/dp_size_40"
-            android:padding="@dimen/dp_size_10"
-            />
+            android:background="@drawable/ic_challenge_update_unchecked"
+            android:padding="@dimen/dp_size_10" />
 
         <TextView
             android:id="@+id/tv_half_done_check"
@@ -74,30 +78,32 @@
             android:layout_marginRight="@dimen/dp_size_20"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:gravity="center_vertical"
-            android:text="@string/ID_HALF_DONE_PERCENT"
             android:lines="@integer/int_value_for_line_1"
             android:padding="@dimen/dp_size_12"
+            android:text="@string/ID_HALF_DONE_PERCENT"
             android:textColor="@color/text_color_follow"
             android:textSize="@dimen/sp_size_13" />
 
     </LinearLayout>
+
     <LinearLayout
+        android:id="@+id/li_almost_done"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_size_20"
         android:layout_gravity="center"
+        android:layout_marginTop="@dimen/dp_size_20"
         android:gravity="center"
         android:orientation="horizontal">
 
-        <CheckBox
+        <ImageView
             android:id="@+id/checkbox_almost_there"
             style="@style/ChallengeCheckBoxStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
+            android:layout_gravity="right|center"
             android:layout_marginLeft="@dimen/dp_size_40"
-            android:padding="@dimen/dp_size_10"
-            />
+            android:background="@drawable/ic_challenge_update_unchecked"
+            android:padding="@dimen/dp_size_10" />
 
         <TextView
             android:id="@+id/tv_almost_there_check"
@@ -107,30 +113,32 @@
             android:layout_marginRight="@dimen/dp_size_20"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:gravity="center_vertical"
-            android:text="@string/ID_ALMOST_DONE_PERCENT"
             android:lines="@integer/int_value_for_line_1"
             android:padding="@dimen/dp_size_12"
+            android:text="@string/ID_ALMOST_DONE_PERCENT"
             android:textColor="@color/text_color_follow"
             android:textSize="@dimen/sp_size_13" />
 
     </LinearLayout>
+
     <LinearLayout
+        android:id="@+id/li_completed"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_size_20"
         android:layout_gravity="center"
+        android:layout_marginTop="@dimen/dp_size_20"
         android:gravity="center"
         android:orientation="horizontal">
 
-        <CheckBox
+        <ImageView
             android:id="@+id/checkbox_completed"
             style="@style/ChallengeCheckBoxStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
+            android:layout_gravity="right|center"
             android:layout_marginLeft="@dimen/dp_size_40"
-            android:padding="@dimen/dp_size_10"
-            />
+            android:background="@drawable/ic_challenge_update_unchecked"
+            android:padding="@dimen/dp_size_10" />
 
         <TextView
             android:id="@+id/tv_completed_check"
@@ -140,22 +148,24 @@
             android:layout_marginRight="@dimen/dp_size_20"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:gravity="center_vertical"
-            android:text="@string/ID_COMPLETED_PERCENT"
             android:lines="@integer/int_value_for_line_1"
             android:padding="@dimen/dp_size_12"
+            android:text="@string/ID_COMPLETED_PERCENT"
             android:textColor="@color/text_color_follow"
             android:textSize="@dimen/sp_size_13" />
 
     </LinearLayout>
+
     <TextView
+        android:id="@+id/tv_update_progress_after_status"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:gravity="center"
         android:layout_marginTop="@dimen/dp_size_30"
+        android:gravity="center"
         android:padding="@dimen/dp_size_20"
         android:text="@string/ID_UPDATE"
         android:textAllCaps="true"
         android:textColor="@color/challenge_header"
-        android:textSize="@dimen/sp_size_14" />
+        android:textSize="@dimen/sp_size_14"
+        android:textStyle="bold" />
 </LinearLayout>

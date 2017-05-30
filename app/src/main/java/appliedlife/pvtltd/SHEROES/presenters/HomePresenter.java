@@ -16,6 +16,7 @@ import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
 import appliedlife.pvtltd.SHEROES.models.RecentSearchDataModel;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeAcceptRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.BellNotificationRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
@@ -23,6 +24,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCount;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
@@ -43,6 +46,8 @@ import rx.Subscriber;
 import rx.Subscription;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.BOOKMARK_UNBOOKMARK;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.CHALLENGE_ACCEPT;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.CHALLENGE_LIST;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.DELETE_COMMUNITY_POST;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_AUTH_TOKEN;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_BOOKMARK_UNBOOKMARK;
@@ -507,6 +512,45 @@ public class HomePresenter extends BasePresenter<HomeView> {
         registerSubscription(subscription);
     }
 
+    public void getChallengeListFromPresenter(ChallengeRequest challengeRequest) {
+        Subscription subscription = mHomeModel.getChallengeListFromModel(challengeRequest).subscribe(new Subscriber<ChallengeListResponse>() {
+            @Override
+            public void onCompleted() {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+            }
+
+            @Override
+            public void onNext(ChallengeListResponse challengeListResponse) {
+                if (null != challengeListResponse) {
+                    getMvpView().getNotificationReadCountSuccess(challengeListResponse,CHALLENGE_LIST);
+                }
+            }
+        });
+        registerSubscription(subscription);
+    }
+
+    public void getChallengeAcceptFromPresenter(ChallengeAcceptRequest challengeAcceptRequest) {
+        Subscription subscription = mHomeModel.getChallengeAcceptFromModel(challengeAcceptRequest).subscribe(new Subscriber<ChallengeListResponse>() {
+            @Override
+            public void onCompleted() {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+            }
+
+            @Override
+            public void onNext(ChallengeListResponse challengeListResponse) {
+                if (null != challengeListResponse) {
+                    getMvpView().getNotificationReadCountSuccess(challengeListResponse,CHALLENGE_ACCEPT);
+                }
+            }
+        });
+        registerSubscription(subscription);
+    }
 
     public void saveMasterDataTypes(List<RecentSearchData> recentSearchData) {
         Subscription subscribe = mRecentSearchDataModel.saveRecentSearchTypes(recentSearchData).subscribe(new Subscriber<List<RecentSearchData>>() {

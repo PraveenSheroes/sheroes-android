@@ -648,15 +648,16 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
     }
 
     public void openImageFullViewFragment(FeedDetail feedDetail) {
-        ImageFullViewFragment imageFullViewFragment = new ImageFullViewFragment();
-        Bundle bundle = new Bundle();
-        mFragmentOpen.setOpenImageViewer(true);
-        bundle.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, mFragmentOpen);
-        bundle.putParcelable(AppConstants.IMAGE_FULL_VIEW, feedDetail);
-        imageFullViewFragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.bottom_to_top_slide_reverse_anim)
-                .replace(R.id.fl_feed_comments, imageFullViewFragment, ImageFullViewFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
-
+        if(feedDetail.getCommunityId()!=0) {
+            ImageFullViewFragment imageFullViewFragment = new ImageFullViewFragment();
+            Bundle bundle = new Bundle();
+            mFragmentOpen.setOpenImageViewer(true);
+            bundle.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, mFragmentOpen);
+            bundle.putParcelable(AppConstants.IMAGE_FULL_VIEW, feedDetail);
+            imageFullViewFragment.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.bottom_to_top_slide_reverse_anim)
+                    .replace(R.id.fl_feed_comments, imageFullViewFragment, ImageFullViewFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+        }
     }
 
     protected void openCommentReactionFragment(FeedDetail feedDetail) {

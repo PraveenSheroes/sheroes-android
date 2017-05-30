@@ -87,6 +87,7 @@ import java.util.zip.GZIPInputStream;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeAcceptRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.community.ApproveMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.BellNotificationRequest;
@@ -102,6 +103,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCount;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobApplyRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
@@ -1835,6 +1837,27 @@ public class AppUtils {
         notificationReadCount.setLastScreenName(screenName);
         notificationReadCount.setScreenName(screenName);
         return notificationReadCount;
+    }
+    public static ChallengeRequest challengetRequestBuilder(String screenName) {
+        AppUtils appUtils = AppUtils.getInstance();
+        ChallengeRequest challengeRequest = new ChallengeRequest();
+        challengeRequest.setAppVersion(appUtils.getAppVersionName());
+        challengeRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        challengeRequest.setLastScreenName(screenName);
+        challengeRequest.setScreenName(screenName);
+        return challengeRequest;
+    }
+    public static ChallengeAcceptRequest acceptChallengeRequestBuilder(Long challengeId,boolean isActive,boolean isDeleted,int completionPercent,boolean isAccepted,boolean isUpdated,String imageUrl,String videoUrl) {
+        ChallengeAcceptRequest challengeAcceptRequest = new ChallengeAcceptRequest();
+        challengeAcceptRequest.setChallengeId(challengeId);
+        challengeAcceptRequest.setActive(isActive);
+        challengeAcceptRequest.setDeleted(isDeleted);
+        challengeAcceptRequest.setCompletionPercent(completionPercent);
+        challengeAcceptRequest.setAccepted(isAccepted);
+        challengeAcceptRequest.setUpdated(isUpdated);
+        challengeAcceptRequest.setProofImageUrl(imageUrl);
+        challengeAcceptRequest.setProofVideoLink(videoUrl);
+        return challengeAcceptRequest;
     }
     /**
      * Request for feed api

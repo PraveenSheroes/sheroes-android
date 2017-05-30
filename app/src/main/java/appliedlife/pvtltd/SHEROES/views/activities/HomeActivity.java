@@ -1,11 +1,21 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.DialogFragment;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -30,6 +40,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -37,6 +48,9 @@ import com.f2prateek.rx.preferences.Preference;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,8 +62,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeDataItem;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionDoc;
-import appliedlife.pvtltd.SHEROES.models.entities.communities.ChallengeDataItem;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotificationResponse;
@@ -82,6 +96,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.SettingAboutFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SettingFeedbackFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SettingFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SettingTermsAndConditionFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ChallengeSuccessDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ChallengeUpdateProgressDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.MyCommunityInviteMemberDialogFragment;
 import butterknife.Bind;
@@ -175,6 +190,10 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     private MoEngageUtills moEngageUtills;
     @Inject
     AppUtils mAppUtils;
+    private Uri mImageCaptureUri;
+    public ChallengeSuccessDialogFragment mChallengeSuccessDialogFragment;
+    File local;
+    private long mChallengeId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -195,6 +214,9 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         mNavigationView.setNavigationItemSelectedListener(this);
         mFragmentOpen = new FragmentOpen();
         setAllValues(mFragmentOpen);
+        if (null != getIntent() && null != getIntent().getExtras()) {
+            mChallengeId = (long) getIntent().getExtras().get(AppConstants.CHALLENGE_ID);
+        }
         initHomeViewPagerAndTabs();
         assignNavigationRecyclerListView();
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
@@ -383,7 +405,29 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             int id = view.getId();
             switch (id) {
                 case R.id.tv_update_progress:
-                    showUpdateProgressDialog(AppConstants.EMPTY_STRING);
+                    showUpdateProgressDialog((ChallengeDataItem) baseResponse);
+                    break;
+                case R.id.tv_accept_challenge:
+                    Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+                    if (AppUtils.isFragmentUIActive(fragment)) {
+                        ((HomeFragment) fragment).acceptChallenge((ChallengeDataItem) baseResponse, 0, true, false, AppConstants.EMPTY_STRING, AppConstants.EMPTY_STRING);
+                    }
+                    break;
+                case R.id.tv_timer_count_challenge:
+                    updateChallengeDataWithStatus((ChallengeDataItem) baseResponse, AppConstants.COMPLETE, AppConstants.EMPTY_STRING, AppConstants.EMPTY_STRING);
+                    break;
+                case R.id.tv_timer_count_challenge_update_status:
+                    updateChallengeDataWithStatus((ChallengeDataItem) baseResponse, AppConstants.COMPLETE, AppConstants.EMPTY_STRING, AppConstants.EMPTY_STRING);
+                    break;
+                case R.id.iv_fb_share:
+                   sharePostOnFacebook((ChallengeDataItem) baseResponse);
+                    break;
+                case R.id.tv_share_progress:
+                    ChallengeDataItem challengeDataItem = (ChallengeDataItem) baseResponse;
+                    Intent intent = new Intent(Intent.ACTION_SEND);
+                    intent.setType(AppConstants.SHARE_MENU_TYPE);
+                    intent.putExtra(Intent.EXTRA_TEXT, challengeDataItem.getDeepLinkUrl());
+                    startActivity(Intent.createChooser(intent, AppConstants.SHARE));
                     break;
                 default:
                     LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + id);
@@ -396,12 +440,36 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         }
     }
 
-    public DialogFragment showUpdateProgressDialog(String data) {
+    private void sharePostOnFacebook(ChallengeDataItem challengeDataItem) {
+        String urlToShare =  challengeDataItem.getDeepLinkUrl();
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType(AppConstants.SHARE_MENU_TYPE);
+        intent.putExtra(Intent.EXTRA_TEXT,urlToShare);
+// See if official Facebook app is found
+        boolean facebookAppFound = false;
+        List<ResolveInfo> matches = getPackageManager().queryIntentActivities(intent, 0);
+        for (ResolveInfo info : matches) {
+            if (info.activityInfo.packageName.toLowerCase().startsWith(AppConstants.FACEBOOK_SHARE)) {
+                intent.setPackage(info.activityInfo.packageName);
+                facebookAppFound = true;
+                break;
+            }
+        }
+// As fallback, launch sharer.php in a browser
+        if (!facebookAppFound) {
+            String sharerUrl = AppConstants.FACEBOOK_SHARE_VIA_BROSWER + urlToShare;
+            intent = new Intent(Intent.ACTION_VIEW, Uri.parse(sharerUrl));
+        }
+
+        startActivity(intent);
+    }
+
+    public DialogFragment showUpdateProgressDialog(ChallengeDataItem challengeDataItem) {
         ChallengeUpdateProgressDialogFragment updateProgressDialogFragment = (ChallengeUpdateProgressDialogFragment) getFragmentManager().findFragmentByTag(ChallengeUpdateProgressDialogFragment.class.getName());
         if (updateProgressDialogFragment == null) {
             updateProgressDialogFragment = new ChallengeUpdateProgressDialogFragment();
             Bundle bundle = new Bundle();
-            bundle.putString(AppConstants.CHALLENGE_SUB_TYPE, data);
+            bundle.putParcelable(AppConstants.CHALLENGE_SUB_TYPE, challengeDataItem);
             updateProgressDialogFragment.setArguments(bundle);
         }
         if (!updateProgressDialogFragment.isVisible() && !updateProgressDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
@@ -409,6 +477,30 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         }
         return updateProgressDialogFragment;
     }
+
+    public void updateChallengeDataWithStatus(ChallengeDataItem challengeDataItem, int percentCompleted, String imageUrl, String videoUrl) {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+        if (AppUtils.isFragmentUIActive(fragment)) {
+            ((HomeFragment) fragment).acceptChallenge(challengeDataItem, percentCompleted, false, true, imageUrl, videoUrl);
+        }
+    }
+
+    public DialogFragment challengeSuccessDialog(ChallengeDataItem challengeDataItem) {
+        local = new File(Environment.getExternalStorageDirectory(), AppConstants.IMAGE + AppConstants.JPG_FORMATE);
+        mChallengeSuccessDialogFragment = (ChallengeSuccessDialogFragment) getFragmentManager().findFragmentByTag(ChallengeSuccessDialogFragment.class.getName());
+        if (mChallengeSuccessDialogFragment == null) {
+            mChallengeSuccessDialogFragment = new ChallengeSuccessDialogFragment();
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(AppConstants.SUCCESS, challengeDataItem);
+            mChallengeSuccessDialogFragment.setArguments(bundle);
+        }
+        if (!mChallengeSuccessDialogFragment.isVisible() && !mChallengeSuccessDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
+            mChallengeSuccessDialogFragment.show(getFragmentManager(), ChallengeSuccessDialogFragment.class.getName());
+        }
+        return mChallengeSuccessDialogFragment;
+    }
+
+
     private void totalTimeSpentOnFeed() {
         long timeSpentFeed = System.currentTimeMillis() - startedTime;
         moEngageUtills.entityMoEngageViewFeed(this, mMoEHelper, payloadBuilder, timeSpentFeed);
@@ -455,6 +547,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         HomeFragment homeFragment = new HomeFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelable(AppConstants.HOME_FRAGMENT, mFeedDetail);
+        bundle.putLong(AppConstants.CHALLENGE_ID, mChallengeId);
         homeFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_feed_full_view, homeFragment, HomeFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
         totalTimeSpentOnFeed();
@@ -948,11 +1041,142 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
                     editCommunityPostResponse(intent);
                     break;
+                case AppConstants.REQUEST_CODE_FOR_GALLERY:
+                    mImageCaptureUri = intent.getData();
+                    if (resultCode == Activity.RESULT_OK) {
+                        cropingIMG();
+                    }
+                    break;
+                case AppConstants.REQUEST_CODE_FOR_CAMERA:
+                    if (resultCode == Activity.RESULT_OK) {
+                        cropingIMG();
+                    }
+                    break;
+                case AppConstants.REQUEST_CODE_FOR_IMAGE_CROPPING:
+                    imageCropping(intent);
+                    break;
+                default:
+                    LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);
+            }
+        } else {
+            switch (requestCode) {
+                case AppConstants.REQUEST_CODE_FOR_CAMERA:
+                    if (resultCode == Activity.RESULT_OK) {
+                        cropingIMG();
+                    }
+                    break;
                 default:
                     LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);
             }
         }
 
+    }
+
+    public void selectImageFrmCamera() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                mImageCaptureUri = Uri.fromFile(local);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
+                intent.putExtra("return-data", true);
+                startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_CAMERA);
+            }
+        } else {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            mImageCaptureUri = Uri.fromFile(local);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
+            intent.putExtra("return-data", true);
+            startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_CAMERA);
+        }
+
+    }
+
+    public void selectImageFrmGallery() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                try {
+                    Intent galIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    galIntent.setType("image/*");
+                    startActivityForResult(galIntent, AppConstants.REQUEST_CODE_FOR_GALLERY);
+                } catch (Exception e) {
+                }
+            }
+        } else {
+            try {
+                Intent galIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                galIntent.setType("image/*");
+                startActivityForResult(galIntent, AppConstants.REQUEST_CODE_FOR_GALLERY);
+            } catch (Exception e) {
+            }
+        }
+    }
+
+    private void cropingIMG() {
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setType("image/*");
+        List list = getPackageManager().queryIntentActivities(intent, 0);
+        intent.setData(mImageCaptureUri);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(local));
+        if (StringUtil.isNotEmptyCollection(list)) {
+            Intent i = new Intent(intent);
+            ResolveInfo res = (ResolveInfo) list.get(0);
+            i.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
+            startActivityForResult(i, AppConstants.REQUEST_CODE_FOR_IMAGE_CROPPING);
+        }
+
+    }
+
+    private void imageCropping(Intent intent) {
+       /* try {
+            if (intent != null&&null!=intent.getExtras()) {
+                Bundle bundle = intent.getExtras();
+                Bitmap bitmap = bundle.getParcelable("data");
+                if (null != mChallengeSuccessDialogFragment) {
+                    mChallengeSuccessDialogFragment.setImageOnHolder(bitmap);
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }*/
+        try {
+            if (local.exists()) {
+                Bitmap photo = decodeFile(local);
+                if (null != mChallengeSuccessDialogFragment) {
+                    mChallengeSuccessDialogFragment.setImageOnHolder(photo);
+                }
+            } else {
+                Toast.makeText(this, "Error while save image", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Bitmap decodeFile(File f) {
+        try {
+            // decode image size
+            BitmapFactory.Options o = new BitmapFactory.Options();
+            o.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(new FileInputStream(f), null, o);
+
+            // Find the correct scale value. It should be the power of 2.
+            final int REQUIRED_SIZE = 512;
+            int width_tmp = o.outWidth, height_tmp = o.outHeight;
+            int scale = 1;
+            while (true) {
+                if (width_tmp / 2 < REQUIRED_SIZE || height_tmp / 2 < REQUIRED_SIZE)
+                    break;
+                width_tmp /= 2;
+                height_tmp /= 2;
+                scale *= 2;
+            }
+            BitmapFactory.Options o2 = new BitmapFactory.Options();
+            o2.inSampleSize = scale;
+            return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
+        } catch (FileNotFoundException e) {
+        }
+        return null;
     }
 
     private void editCommunityPostResponse(Intent intent) {

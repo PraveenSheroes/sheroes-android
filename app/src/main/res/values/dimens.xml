@@ -162,6 +162,8 @@
     <dimen name="two_image_rectangle">180dp</dimen>
     <dimen name="tell_us_image_width">316dp</dimen>
     <dimen name="tell_us_image_height">207dp</dimen>
+    <dimen name="challenge_card">320dp</dimen>
+
 
     <!--Text sizes for SHEROES-->
     <!-- Default screen margins, per the Android Design guidelines. -->

@@ -3,6 +3,7 @@ package appliedlife.pvtltd.SHEROES.basecomponents;
 
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeAcceptRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentAddDelete;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionResponsePojo;
@@ -33,6 +34,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCount;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobApplyRequest;
@@ -212,6 +215,10 @@ public interface SheroesAppServiceApi {
     Observable<BoardingDataResponse>getWorkExpAddEditResponse(@Body ExprienceEntity exprienceEntity);
     @POST("participation/notification/bell/unread")
     Observable<NotificationReadCountResponse>notificationReadCount(@Body NotificationReadCount notificationReadCount);
+    @POST("participation/challenge/get/challenges")
+    Observable<ChallengeListResponse>challengeList(@Body ChallengeRequest challengeRequest);
+    @POST("participation/challenge/accept")
+    Observable<ChallengeListResponse>challengeAccept(@Body ChallengeAcceptRequest challengeAcceptRequest);
     @POST("http://34.193.138.177/participant/auth/signin")
     Observable<LoginResponse> getUserGoogleLogin(@Body LoginRequest loginRequest);
 }

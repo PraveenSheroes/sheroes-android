@@ -13,8 +13,11 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.f2prateek.rx.preferences.Preference;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -23,6 +26,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeDataItem;
+import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
@@ -46,6 +51,10 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FOR_REFRESH_FRAGMENT_LIST;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_RESPONSE;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.acceptChallengeRequestBuilder;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.challengetRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.feedRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.loginRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.notificationReadCountRequestBuilder;
@@ -93,6 +102,10 @@ public class HomeFragment extends BaseFragment {
     @Bind(R.id.tv_refresh)
     TextView tvRefresh;
     private String mGcmId;
+    private FeedDetail challengeFeedDetail;
+    private ChallengeDataItem mChallengeDataItem;
+    private int mPercentCompleted;
+    private long mChallengeId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -102,6 +115,7 @@ public class HomeFragment extends BaseFragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             mFeedDetail = bundle.getParcelable(AppConstants.HOME_FRAGMENT);
+            mChallengeId = bundle.getLong(AppConstants.CHALLENGE_ID);
         }
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.HOME_FRAGMENT, AppConstants.NO_REACTION_CONSTANT);
         mPullRefreshList = new SwipPullRefreshList();
@@ -156,7 +170,7 @@ public class HomeFragment extends BaseFragment {
         } else {
             mHomePresenter.getAuthTokenRefreshPresenter();
         }
-     //   mHomePresenter.getNotificationCountFromPresenter(notificationReadCountRequestBuilder(TAG));
+        mHomePresenter.getNotificationCountFromPresenter(notificationReadCountRequestBuilder(TAG));
         getGcmId();
         mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -184,7 +198,7 @@ public class HomeFragment extends BaseFragment {
                             loginRequest.setGcmorapnsid(registrationId);
                             mHomePresenter.getNewGCMidFromPresenter(loginRequest);
                         } else {
-                            if (null!=mUserPreference&&null!=mUserPreference.get()&&StringUtil.isNotNullOrEmptyString(mUserPreference.get().getGcmId())) {
+                            if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getGcmId())) {
                                 String mOldGcmId = mUserPreference.get().getGcmId();
                                 if (StringUtil.isNotNullOrEmptyString(mOldGcmId)) {
                                     if (!mOldGcmId.equalsIgnoreCase(registrationId)) {
@@ -233,8 +247,90 @@ public class HomeFragment extends BaseFragment {
             case GCM_ID:
                 gcmIdResponse(baseResponse);
                 break;
+            case CHALLENGE_LIST:
+                challengeResponse(baseResponse);
+                break;
+            case CHALLENGE_ACCEPT:
+                challengeAcceptedResponse(baseResponse);
+                break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
+        }
+    }
+
+    private void challengeAcceptedResponse(BaseResponse baseResponse) {
+        switch (baseResponse.getStatus()) {
+            case AppConstants.SUCCESS:
+                if (baseResponse instanceof ChallengeListResponse) {
+                    if (null != challengeFeedDetail) {
+                        List<ChallengeDataItem> challengeDataItemList = challengeFeedDetail.getChallengeDataItems();
+                        long challengeId = mChallengeDataItem.getChallengeId();
+                        for (ChallengeDataItem challengeDataItem : challengeDataItemList) {
+                            if (challengeId == challengeDataItem.getChallengeId()) {
+                                mChallengeDataItem.setIs_accepted(true);
+                                if (mPercentCompleted == AppConstants.COMPLETE) {
+                                    if (challengeDataItem.getStateChallengeAfterAccept() == AppConstants.FOURTH_CONSTANT) {
+                                        Toast.makeText(getActivity(), getString(R.string.ID_CHALLENGE_COMPLETED_SUCCESS), Toast.LENGTH_SHORT).show();
+                                        if (null != ((HomeActivity) getActivity()).mChallengeSuccessDialogFragment) {
+                                            ((HomeActivity) getActivity()).mChallengeSuccessDialogFragment.dismiss();
+                                        }
+                                    } else {
+                                        ((HomeActivity) getActivity()).challengeSuccessDialog(mChallengeDataItem);
+                                    }
+                                    mChallengeDataItem.setCompletionPercent(AppConstants.COMPLETE);
+                                } else {
+                                    if (mPercentCompleted == AppConstants.HALF_DONE) {
+                                        mChallengeDataItem.setCompletionPercent(AppConstants.HALF_DONE);
+                                    } else if (mPercentCompleted == AppConstants.ALMOST_DONE) {
+                                        mChallengeDataItem.setCompletionPercent(AppConstants.ALMOST_DONE);
+                                    } else {
+                                        int acceptedCount = mChallengeDataItem.getTotalPeopleAccepted();
+                                        if (acceptedCount == 0) {
+                                            mChallengeDataItem.setTotalPeopleAccepted(1);
+                                        }
+                                        Toast.makeText(getActivity(), getString(R.string.ID_CHALLENGE_ACCEPT), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                                challengeDataItemList.remove(mChallengeDataItem.getItemPosition());
+                                challengeDataItemList.add(mChallengeDataItem.getItemPosition(), mChallengeDataItem);
+                                challengeFeedDetail.setNoOfMembers(mChallengeDataItem.getItemPosition());
+                                challengeFeedDetail.setChallengeDataItems(challengeDataItemList);
+                                break;
+                            }
+                        }
+                        commentListRefresh(challengeFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+                    }
+                }
+                break;
+            case AppConstants.FAILED:
+                if (null != ((HomeActivity) getActivity()).mChallengeSuccessDialogFragment) {
+                    ((HomeActivity) getActivity()).mChallengeSuccessDialogFragment.dismiss();
+                }
+                showError(getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
+                break;
+            default:
+        }
+
+    }
+
+    private void challengeResponse(BaseResponse baseResponse) {
+        switch (baseResponse.getStatus()) {
+            case AppConstants.SUCCESS:
+                if (baseResponse instanceof ChallengeListResponse) {
+                    ChallengeListResponse challengeListResponse = (ChallengeListResponse) baseResponse;
+                    if (StringUtil.isNotEmptyCollection(challengeListResponse.getReponseList())) {
+                        challengeFeedDetail = new FeedDetail();
+                        challengeFeedDetail.setSubType(AppConstants.CHALLENGE_SUB_TYPE);
+                        challengeFeedDetail.setCommunityId(mChallengeId);
+                        challengeFeedDetail.setNoOfMembers(0);
+                        challengeFeedDetail.setChallengeDataItems(challengeListResponse.getReponseList());
+                        challengeAddOnFeed(challengeFeedDetail);
+                    }
+                }
+                break;
+            case AppConstants.FAILED:
+                break;
+            default:
         }
     }
 
@@ -278,17 +374,22 @@ public class HomeFragment extends BaseFragment {
             default:
                 ((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.GONE);
         }
-        //TODO:: WIll be remove just for testing
-        FeedDetail feedDetail=new FeedDetail();
-        feedDetail.setSubType(AppConstants.CHALLENGE_SUB_TYPE);
-        challengeAddOnFeed(feedDetail);
     }
 
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
         mProgressBarFirstLoad.setVisibility(View.GONE);
         super.getFeedListSuccess(feedResponsePojo);
-        mHomePresenter.getNotificationCountFromPresenter(notificationReadCountRequestBuilder(TAG));
+        if (mFragmentListRefreshData.getPageNo() == AppConstants.TWO_CONSTANT) {
+            mHomePresenter.getChallengeListFromPresenter(challengetRequestBuilder(TAG));
+        }
+    }
+
+    public void acceptChallenge(ChallengeDataItem challengeDataItem, int completionPercent, boolean isAccepted, boolean isUpdated, String imageUrl, String videoUrl) {
+        mChallengeDataItem = challengeDataItem;
+        mPercentCompleted = completionPercent;
+        Long challengeId = challengeDataItem.getChallengeId();
+        mHomePresenter.getChallengeAcceptFromPresenter(acceptChallengeRequestBuilder(challengeId, true, false, completionPercent, isAccepted, isUpdated, imageUrl, videoUrl));
     }
 
     @Override

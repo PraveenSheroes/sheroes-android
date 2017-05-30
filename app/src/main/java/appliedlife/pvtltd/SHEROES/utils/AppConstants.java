@@ -41,6 +41,8 @@ public class AppConstants {
     public static final String HOME_SPINNER_FRAGMENT = "spinner_fragment";
     public static final String ANDROID_VIEW_PAGER = "android:switcher:";
     public static final String COLON = ":";
+    public static final String APASTROPH =  "'s";
+
     public static final String DASH = "-";
     public static final String DOTS = "...";
     public static final String S = "s";
@@ -98,6 +100,9 @@ public class AppConstants {
     public static final int REQUEST_CODE_FOR_CREATE_COMMUNITY = 6001;
     public static final int REQUEST_CODE_FOR_JOB_FILTER = 7001;
     public static final int REQUEST_CODE_FOR_CREATE_COMMUNITY_POST = 8001;
+    public static final int REQUEST_CODE_FOR_GALLERY = 9001;
+    public static final int REQUEST_CODE_FOR_CAMERA = 1101;
+    public static final int REQUEST_CODE_FOR_IMAGE_CROPPING = 1201;
     public static final String JOB_FRAGMENT = "job";
     public static final String PROFILE_FRAGMENT = "profile";
     public static final String FEATURE_FRAGMENT = "feature";
@@ -265,10 +270,13 @@ public class AppConstants {
     public static final String USER_PROFILE_URL_COM = "https://sheroes.com/users/edit_profile";
     public static final String USER_URL = "https://sheroes.in/users";
     public static final String USER_URL_COM = "https://sheroes.com/users";
+    public static final String CHALLENGE_URL = "https://sheroes.in/feed";
+    public static final String CHALLENGE_URL_COM = "https://sheroes.com/feed";
     public static final String JOB_ID = "job_id";
     public static final String ARTICLE_ID = "article_id";
     public static final String COMMUNITY_ID = "community_id";
     public static final String COMMUNITY_POST_ID = "community_post_id";
+    public static final String CHALLENGE_ID = "challenge_id";
     public static final String MODEL_KEY = "key";
     public static final String EXP_YEAR = "Year";
     public static final String EXP_MONTH = "Month";
@@ -282,4 +290,11 @@ public class AppConstants {
     public static final String CHECK_OUT = "Check out ";
     public static final String GCM_ID = "Gcm Id";
     public static final String REACTION_ON_CARD = "Reaction on card";
+    public static final String THOUSANDS = "K";
+    public static final int HALF_DONE =50;
+    public static final int ALMOST_DONE =90;
+    public static final int COMPLETE =100;
+    public static final String FACEBOOK_SHARE ="com.facebook.katana";
+    public static final String FACEBOOK_SHARE_VIA_BROSWER ="https://www.facebook.com/sharer/sharer.php?u=";
+    public static final String JPG_FORMATE =".jpg";
 }

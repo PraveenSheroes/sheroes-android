@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeDataItem;
 
 public class FeedDetail extends BaseResponse implements Parcelable,Cloneable{
 
@@ -19,6 +20,7 @@ public class FeedDetail extends BaseResponse implements Parcelable,Cloneable{
     String callFromName;
     boolean isTrending;
     boolean isFromHome;
+    private List<ChallengeDataItem> challengeDataItems = null;
     @SerializedName("solr_ignore_posting_date_dt")
     @Expose
     private String  postedDate;
@@ -1594,6 +1596,18 @@ public class FeedDetail extends BaseResponse implements Parcelable,Cloneable{
         this.lastReactionValue = lastReactionValue;
     }
 
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+
+    public List<ChallengeDataItem> getChallengeDataItems() {
+        return challengeDataItems;
+    }
+
+    public void setChallengeDataItems(List<ChallengeDataItem> challengeDataItems) {
+        this.challengeDataItems = challengeDataItems;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -1607,6 +1621,7 @@ public class FeedDetail extends BaseResponse implements Parcelable,Cloneable{
         dest.writeString(this.callFromName);
         dest.writeByte(this.isTrending ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isFromHome ? (byte) 1 : (byte) 0);
+        dest.writeTypedList(this.challengeDataItems);
         dest.writeString(this.postedDate);
         dest.writeString(this.deepLinkUrl);
         dest.writeList(this.imagesIds);
@@ -1752,6 +1767,7 @@ public class FeedDetail extends BaseResponse implements Parcelable,Cloneable{
         this.callFromName = in.readString();
         this.isTrending = in.readByte() != 0;
         this.isFromHome = in.readByte() != 0;
+        this.challengeDataItems = in.createTypedArrayList(ChallengeDataItem.CREATOR);
         this.postedDate = in.readString();
         this.deepLinkUrl = in.readString();
         this.imagesIds = new ArrayList<Long>();
@@ -1917,7 +1933,4 @@ public class FeedDetail extends BaseResponse implements Parcelable,Cloneable{
             return new FeedDetail[size];
         }
     };
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
 }

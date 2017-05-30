@@ -9,6 +9,7 @@ import javax.inject.Singleton;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeAcceptRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.BellNotificationRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
@@ -16,6 +17,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCount;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
@@ -217,6 +220,30 @@ public class HomeModel {
                     @Override
                     public NotificationReadCountResponse call(NotificationReadCountResponse notificationReadCountResponse) {
                         return notificationReadCountResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+    public Observable<ChallengeListResponse> getChallengeListFromModel(ChallengeRequest challengeRequest){
+        LogUtils.info(TAG," **********challenge request"+new Gson().toJson(challengeRequest));
+        return sheroesAppServiceApi.challengeList(challengeRequest)
+                .map(new Func1<ChallengeListResponse, ChallengeListResponse>() {
+                    @Override
+                    public ChallengeListResponse call(ChallengeListResponse challengeListResponse) {
+                        return challengeListResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+    public Observable<ChallengeListResponse> getChallengeAcceptFromModel(ChallengeAcceptRequest challengeAcceptRequest){
+        LogUtils.info(TAG," **********challenge request"+new Gson().toJson(challengeAcceptRequest));
+        return sheroesAppServiceApi.challengeAccept(challengeAcceptRequest)
+                .map(new Func1<ChallengeListResponse, ChallengeListResponse>() {
+                    @Override
+                    public ChallengeListResponse call(ChallengeListResponse challengeListResponse) {
+                        return challengeListResponse;
                     }
                 })
                 .subscribeOn(Schedulers.io())

@@ -69,11 +69,11 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.FacebookErrorDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeScreenFirstFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeScreenFourthFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeScreenSecondFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeScreenThirdFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.FacebookErrorDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.LoginView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -171,7 +171,13 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                 showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
                 return;
             } else {
-                getGcmId();
+                if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getGcmId())) {
+                    mGcmId = userPreference.get().getGcmId();
+                    mFbLogin.setEnabled(true);
+                    mOtherLoginOption.setEnabled(true);
+                } else {
+                    getGcmId();
+                }
             }
         }
 
