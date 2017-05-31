@@ -15,6 +15,8 @@ import com.google.android.gms.iid.InstanceID;
 
 import java.io.IOException;
 
+import appliedlife.pvtltd.SHEROES.BuildConfig;
+
 public class GCMClientManager {
     // Constants
     public static final String TAG = "GCMClientManager";
@@ -37,13 +39,15 @@ public class GCMClientManager {
      */
     private static int getAppVersion(Context context) {
         try {
-            PackageInfo packageInfo = context.getPackageManager()
-                    .getPackageInfo(context.getPackageName(), 0);
-            return packageInfo.versionCode;
+            if(null!=context) {
+                PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+                return packageInfo.versionCode;
+            }
         } catch (NameNotFoundException e) {
             // should never happen
             throw new RuntimeException("Could not get package name: " + e);
         }
+       return BuildConfig.VERSION_CODE;
     }
     // Register if needed or fetch from local store
     public void registerIfNeeded(final RegistrationCompletedHandler handler) {

@@ -14,6 +14,12 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
  */
 
 public class ChallengeListResponse extends BaseResponse  {
+    @SerializedName("total_people_completed")
+    @Expose
+    private int totalPeopleCompleted;
+    @SerializedName("total_people_completed_delhi")
+    @Expose
+    private int totalPeopleCompletedDelhi;
     @SerializedName("reponseList")
     @Expose
     private List<ChallengeDataItem> reponseList = null;
@@ -29,6 +35,22 @@ public class ChallengeListResponse extends BaseResponse  {
     public ChallengeListResponse() {
     }
 
+    public int getTotalPeopleCompleted() {
+        return totalPeopleCompleted;
+    }
+
+    public void setTotalPeopleCompleted(int totalPeopleCompleted) {
+        this.totalPeopleCompleted = totalPeopleCompleted;
+    }
+
+    public int getTotalPeopleCompletedDelhi() {
+        return totalPeopleCompletedDelhi;
+    }
+
+    public void setTotalPeopleCompletedDelhi(int totalPeopleCompletedDelhi) {
+        this.totalPeopleCompletedDelhi = totalPeopleCompletedDelhi;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -37,11 +59,15 @@ public class ChallengeListResponse extends BaseResponse  {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
+        dest.writeInt(this.totalPeopleCompleted);
+        dest.writeInt(this.totalPeopleCompletedDelhi);
         dest.writeTypedList(this.reponseList);
     }
 
     protected ChallengeListResponse(Parcel in) {
         super(in);
+        this.totalPeopleCompleted = in.readInt();
+        this.totalPeopleCompletedDelhi = in.readInt();
         this.reponseList = in.createTypedArrayList(ChallengeDataItem.CREATOR);
     }
 

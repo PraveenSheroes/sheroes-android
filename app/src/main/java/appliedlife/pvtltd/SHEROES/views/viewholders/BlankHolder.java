@@ -6,7 +6,7 @@ import android.view.View;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import butterknife.ButterKnife;
 
@@ -14,10 +14,10 @@ import butterknife.ButterKnife;
  * Created by Praveen_Singh on 15-02-2017.
  */
 
-public class BlankHolder extends BaseViewHolder<FeedDetail> {
+public class BlankHolder extends BaseViewHolder<BaseResponse> {
     private final String TAG = LogUtils.makeLogTag(BlankHolder.class);
     BaseHolderInterface viewInterface;
-    private FeedDetail dataItem;
+    private BaseResponse dataItem;
 
     public BlankHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
@@ -27,9 +27,7 @@ public class BlankHolder extends BaseViewHolder<FeedDetail> {
     }
 
     @Override
-    public void bindData(FeedDetail item, final Context context, int position) {
-
-
+    public void bindData(BaseResponse item, final Context context, int position) {
     }
 
     @Override

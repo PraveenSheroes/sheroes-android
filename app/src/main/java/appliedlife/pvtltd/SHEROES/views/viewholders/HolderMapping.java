@@ -38,6 +38,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.profile.MyProfileView;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileHorList;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleDetailPojo;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 
 public enum HolderMapping {
 
@@ -366,14 +367,14 @@ public enum HolderMapping {
         }
 
     },
-        HELPLINE_CHAT_QUESTION_CARD(R.layout.helpline_question_card){
-              @Override
-            public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-                return new HelplineQuestionCardHolder(view, viewInterface);
-            }
+    HELPLINE_CHAT_QUESTION_CARD(R.layout.helpline_question_card) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new HelplineQuestionCardHolder(view, viewInterface);
+        }
 
-        },
-        HELPLINE_CHAT_ANSWER_CARD(R.layout.helpline_answer_card){
+    },
+    HELPLINE_CHAT_ANSWER_CARD(R.layout.helpline_answer_card) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new HelplineAnswerCardHolder(view, viewInterface);
@@ -400,7 +401,7 @@ public enum HolderMapping {
     }
 
     public static int getOrdinal(BaseResponse item, int totalCount, String callFromType) {
-        int returnView = 0;
+        int  returnView =BLANK_LIST.ordinal();;
         if (null != item) {
             if (callFromType.equalsIgnoreCase(AppConstants.FEED_SUB_TYPE)) {
                 if (item instanceof FeedDetail) {
@@ -419,17 +420,17 @@ public enum HolderMapping {
                             returnView = INVITE_MEMBER_MODULE.ordinal();
                             break;
                         case AppConstants.CHALLENGE_SUB_TYPE:
-                            return CHALLENGE_HORIZONTAL_VIEW.ordinal();
+                            returnView = CHALLENGE_HORIZONTAL_VIEW.ordinal();
                         default:
 
                     }
                 } else if (item instanceof BoardingInterestJobSearch) {
-                    return INTEREST_SEARCH.ordinal();
+                    returnView = INTEREST_SEARCH.ordinal();
                 } else if (item instanceof GetAllDataDocument) {
-                    return JOB_LOCATION_SEARCH.ordinal();
+                    returnView = JOB_LOCATION_SEARCH.ordinal();
                 }
             } else if (item instanceof BoardingInterestJobSearch) {
-                return JOB_SEARCH.ordinal();
+                returnView = JOB_SEARCH.ordinal();
             } else if (callFromType.equalsIgnoreCase(AppConstants.OWNER_SUB_TYPE)) {
                 if (item instanceof FeedDetail) {
                     returnView = FEED_USER.ordinal();
@@ -487,89 +488,94 @@ public enum HolderMapping {
                         returnView = COMMENT.ordinal();
                     }
                 } else if (item instanceof HomeSpinnerItem) {
-                    return HOME_SPINNER_ITEMS.ordinal();
+                    returnView = HOME_SPINNER_ITEMS.ordinal();
                 } else if (item instanceof ArticleDetailPojo) {
                     returnView = ARTICLE_DETAIL_HOLDER.ordinal();//TODO: Home related changes
                 } else if (item instanceof JobDetailPojo) {
-                    return JOB_DETAIL_HOLDER.ordinal();
+                    returnView = JOB_DETAIL_HOLDER.ordinal();
                 } else if (item instanceof ProfileHorList) {
-                    return PROFILE_HORIZONTAL_LIST.ordinal();
+                    returnView = PROFILE_HORIZONTAL_LIST.ordinal();
                 } else if (item instanceof MyProfileView) {
                     String tagType = ((MyProfileView) item).getType();
                     if (tagType.equalsIgnoreCase(AppConstants.GOOD_AT_SKILL_PROFILE)) {
-                        return PROFILE_GOOD_AT.ordinal();
+                        returnView = PROFILE_GOOD_AT.ordinal();
                     } else if (tagType.equalsIgnoreCase(AppConstants.ABOUT_ME_PROFILE)) {
-                        return PROFILE_ABOUT_ME.ordinal();
+                        returnView = PROFILE_ABOUT_ME.ordinal();
                     } else if (tagType.equalsIgnoreCase(AppConstants.USER_PROFILE)) {
-                        return PROFILE_PERSONAL_BASIC_DETAILS.ordinal();
+                        returnView = PROFILE_PERSONAL_BASIC_DETAILS.ordinal();
 
                     } else if (tagType.equalsIgnoreCase(AppConstants.USER_PROFILE1)) {
 
-                        return PROFILE_BASIC_DETAILS.ordinal();
+                        returnView = PROFILE_BASIC_DETAILS.ordinal();
 
                     } else if (tagType.equalsIgnoreCase(AppConstants.INTEREST_PROFILE)) {
-                        return PROFILE_PERSONAL_INTERESTING.ordinal();
+                        returnView = PROFILE_PERSONAL_INTERESTING.ordinal();
                     } else if (tagType.equalsIgnoreCase(AppConstants.CANHELP_IN)) {
-                        return CAN_HELP_IN.ordinal();
+                        returnView = CAN_HELP_IN.ordinal();
                     } else if (tagType.equalsIgnoreCase(AppConstants.OPPORTUNITY_PROFILE)) {
-                        return PROFILE_LOOK_IN_FOR.ordinal();
+                        returnView = PROFILE_LOOK_IN_FOR.ordinal();
                     } else if (tagType.equalsIgnoreCase(AppConstants.EDUCATION_PROFILE)) {
-                        return PROFILE_EDUCATION.ordinal();
+                        returnView = PROFILE_EDUCATION.ordinal();
                     } else if (tagType.equalsIgnoreCase(AppConstants.EXPERIENCE_PROFILE)) {
-                        return PROFILE_WORK_EXPERIENCE.ordinal();
+                        returnView = PROFILE_WORK_EXPERIENCE.ordinal();
 
                     } else if (tagType.equalsIgnoreCase(AppConstants.CLIENTSIDE)) {
-                        return PROFILE_HORIZONTAL_RECYCLER_LIST.ordinal();
+                        returnView = PROFILE_HORIZONTAL_RECYCLER_LIST.ordinal();
 
                     } else if (tagType.equalsIgnoreCase(AppConstants.USER_VISITING_CARD)) {
-                        return PROFFESTIONAL_VISITING_CARD.ordinal();
+                        returnView = PROFFESTIONAL_VISITING_CARD.ordinal();
 
                     } else if (tagType.equalsIgnoreCase(AppConstants.USER_VISITING_CARD1)) {
-                        return PROFILE_PERSONAL_VISITING_CARD.ordinal();
+                        returnView = PROFILE_PERSONAL_VISITING_CARD.ordinal();
                     }
 
                 } else if (item instanceof EducationEntity) {
-                    return EDUCATION_LIST.ordinal();
+                    returnView = EDUCATION_LIST.ordinal();
                 } else if (item instanceof GoodAt) {
-                    return GOOD_AT.ordinal();
+                    returnView = GOOD_AT.ordinal();
                 } else if (item instanceof ListOfInviteSearch) {
-                    return INVITE_SEARCH_MODULE.ordinal();
+                    returnView = INVITE_SEARCH_MODULE.ordinal();
                 } else if (item instanceof Member) {
-                    return MEMBER_MODULE.ordinal();
+                    returnView = MEMBER_MODULE.ordinal();
                 } else if (item instanceof OnBoardingData) {
-                    return ON_BOARDING_HOLDER.ordinal();
+                    returnView = ON_BOARDING_HOLDER.ordinal();
                 } else if (item instanceof PopularTag) {
-                    return POPULAR_TAG_HOLDER.ordinal();
+                    returnView = POPULAR_TAG_HOLDER.ordinal();
                 } else if (item instanceof LabelValue) {
-                    return CURRENT_STATUS_HOLDER.ordinal();
+                    returnView = CURRENT_STATUS_HOLDER.ordinal();
                 } else if (item instanceof GetAllDataDocument) {
-                    return GET_ALL_DATA_BOARDING_SEARCH.ordinal();
+                    returnView = GET_ALL_DATA_BOARDING_SEARCH.ordinal();
                 } else if (item instanceof RequestedList) {
-                    return REQUEST_LIST.ordinal();
+                    returnView = REQUEST_LIST.ordinal();
                 } else if (item instanceof OwnerList) {
-                    return OWNER_LIST.ordinal();
+                    returnView = OWNER_LIST.ordinal();
                 } else if (item instanceof MembersList) {
-                    return MEMBER_LIST.ordinal();
+                    returnView = MEMBER_LIST.ordinal();
                 } else if (item instanceof PandingMember) {
-                    return PANDING_REQUEST_LIST.ordinal();
+                    returnView = PANDING_REQUEST_LIST.ordinal();
                 } else if (item instanceof CommunityTags) {
-                    return SEARCHTAGS.ordinal();
-                }  else if (item instanceof JobLocationList) {
-                    return JOB_LOCATION_LIST.ordinal();
+                    returnView = SEARCHTAGS.ordinal();
+                } else if (item instanceof JobLocationList) {
+                    returnView = JOB_LOCATION_LIST.ordinal();
                 } else if (item instanceof ProfileItems) {
-                    return PROFILE_HOLDER.ordinal();
+                    returnView = PROFILE_HOLDER.ordinal();
                 } else if (item instanceof BellNotificationResponse) {
-                    return BELL_NOTIFICATION.ordinal();
+                    returnView = BELL_NOTIFICATION.ordinal();
                 } else if (item instanceof ExprienceEntity) {
-                    return WORK_EXPERIENCE_DETAIl_CARD.ordinal();
-                }else if (item instanceof ChallengeDataItem) {
-                    return CHALLENGE_LIST_ITEM_HOLDER.ordinal();
-                }
-                else if(item instanceof HelplineChatDoc){
-                    if(((HelplineChatDoc) item).getSubType().equalsIgnoreCase(AppConstants.HELPLINE_SUB_TYPE_QUESTION)) {
-                        return HELPLINE_CHAT_QUESTION_CARD.ordinal();
+                    returnView = WORK_EXPERIENCE_DETAIl_CARD.ordinal();
+                } else if (item instanceof ChallengeDataItem) {
+                    returnView = CHALLENGE_LIST_ITEM_HOLDER.ordinal();
+                } else if (item instanceof HelplineChatDoc) {
+                    if (((HelplineChatDoc) item).getSubType().equalsIgnoreCase(AppConstants.HELPLINE_SUB_TYPE_QUESTION)) {
+                        HelplineChatDoc helplineChatDoc = (HelplineChatDoc) item;
+                        if (StringUtil.isNotNullOrEmptyString(helplineChatDoc.getSearchText()))
+                        {
+                            returnView = HELPLINE_CHAT_QUESTION_CARD.ordinal();
+                        }
+
+                    } else {
+                        returnView = HELPLINE_CHAT_ANSWER_CARD.ordinal();
                     }
-                    else {return  HELPLINE_CHAT_ANSWER_CARD.ordinal();}
                 }
 
             }

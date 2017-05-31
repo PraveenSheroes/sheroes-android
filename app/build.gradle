@@ -18,8 +18,8 @@ android {
         multiDexEnabled true
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 43
-        versionName "5.0.8"
+        versionCode 44
+        versionName "5.0.9"
     }
     signingConfigs {
         debug {
@@ -44,8 +44,8 @@ android {
             signingConfig signingConfigs.debug
         }
         release {
-            buildConfigField "String", "BASE_URL", "\"http://52.44.245.191/\""
-           // buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
+           // buildConfigField "String", "BASE_URL", "\"http://52.44.245.191/\""
+            buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
             buildConfigField 'Boolean', 'enableCrashlytics', 'true'
             minifyEnabled true
             shrinkResources true

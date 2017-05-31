@@ -263,6 +263,7 @@ public class HomeFragment extends BaseFragment {
             case AppConstants.SUCCESS:
                 if (baseResponse instanceof ChallengeListResponse) {
                     if (null != challengeFeedDetail) {
+                        ChallengeListResponse challengeListResponse = (ChallengeListResponse) baseResponse;
                         List<ChallengeDataItem> challengeDataItemList = challengeFeedDetail.getChallengeDataItems();
                         long challengeId = mChallengeDataItem.getChallengeId();
                         for (ChallengeDataItem challengeDataItem : challengeDataItemList) {
@@ -280,9 +281,19 @@ public class HomeFragment extends BaseFragment {
                                     } else if (mPercentCompleted == AppConstants.ALMOST_DONE) {
                                         mChallengeDataItem.setCompletionPercent(AppConstants.ALMOST_DONE);
                                     } else {
-                                        int acceptedCount = mChallengeDataItem.getTotalPeopleAccepted();
-                                        if (acceptedCount == 0) {
-                                            mChallengeDataItem.setTotalPeopleAccepted(1);
+                                        if (challengeListResponse.getTotalPeopleCompleted() == 0) {
+                                            if (mChallengeDataItem.getTotalPeopleAccepted() == 0) {
+                                                mChallengeDataItem.setTotalPeopleAccepted(1);
+                                            }
+                                        } else {
+                                            mChallengeDataItem.setTotalPeopleAccepted(challengeListResponse.getTotalPeopleCompleted());
+                                        }
+                                        if (challengeListResponse.getTotalPeopleCompletedDelhi() == 0) {
+                                            if (mChallengeDataItem.getTotalPeopleAcceptedDelhi() == 0) {
+                                                mChallengeDataItem.setTotalPeopleAccepted(1);
+                                            }
+                                        } else {
+                                            mChallengeDataItem.setTotalPeopleAccepted(challengeListResponse.getTotalPeopleCompletedDelhi());
                                         }
                                         Toast.makeText(getActivity(), getString(R.string.ID_CHALLENGE_ACCEPT), Toast.LENGTH_SHORT).show();
                                     }

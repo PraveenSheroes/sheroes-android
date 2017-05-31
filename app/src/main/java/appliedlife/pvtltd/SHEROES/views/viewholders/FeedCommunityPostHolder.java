@@ -174,15 +174,19 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             TextView tvJust = (TextView) child.findViewById(R.id.tv_just_post);
             TextView tvStarted = (TextView) child.findViewById(R.id.tv_started_post);
             TextView tvChallengePost = (TextView) child.findViewById(R.id.tv_challenge_name_post);
-            if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
-                tvChallengePost.setText(dataItem.getNameOrTitle());
-            }
-            if(StringUtil.isNotEmptyCollection(dataItem.getImageUrls())) {
+            if (StringUtil.isNotEmptyCollection(dataItem.getImageUrls())) {
+                tvChallengePost.setText(AppConstants.EMPTY_STRING);
                 Glide.with(mContext)
                         .load(dataItem.getImageUrls().get(0))
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                         .skipMemoryCache(true)
                         .into(ivChallenge);
+            } else {
+                dataItem.setListDescription(AppConstants.EMPTY_STRING);
+                if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
+                    tvChallengePost.setText(dataItem.getNameOrTitle());
+                }
+                ivChallenge.setBackgroundResource(R.drawable.challenge_post);
             }
             liFeedCommunityUserPostImages.addView(child);
         } else {
@@ -298,11 +302,10 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             if (dataItem.getCommunityId() == AppConstants.NO_REACTION_CONSTANT) {
                 tvFeedCommunityPostText.setVisibility(View.GONE);
                 tvFeedCommunityPostUserMenu.setVisibility(View.GONE);
-                dataItem.setListDescription(AppConstants.EMPTY_STRING);
                 String feedTitle = dataItem.getAuthorName();
-               // String challengerName = dataItem.getNameOrTitle();
+                // String challengerName = dataItem.getNameOrTitle();
                 posted.append(feedTitle).append(AppConstants.SPACE).append(LEFT_POSTED).append(mContext.getString(R.string.ID_HAS_ACCEPTED)).append(RIGHT_POSTED).append(AppConstants.SPACE).append(mContext.getString(R.string.ID_HAS_ACCEPTED_CHALLENGE));
-               // posted.append(challengerName).append(AppConstants.APASTROPH).append(LEFT_POSTED).append(mContext.getString(R.string.ID_HAS_ACCEPTED_CHALLENGE)).append(RIGHT_POSTED);
+                // posted.append(challengerName).append(AppConstants.APASTROPH).append(LEFT_POSTED).append(mContext.getString(R.string.ID_HAS_ACCEPTED_CHALLENGE)).append(RIGHT_POSTED);
                 if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                     tvFeedCommunityPostCardTitle.setText(Html.fromHtml(posted.toString(), 0)); // for 24 api and more
                 } else {

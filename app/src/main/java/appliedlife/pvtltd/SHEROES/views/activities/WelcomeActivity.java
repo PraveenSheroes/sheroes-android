@@ -555,13 +555,16 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             case AppConstants.FAILED:
                 userPreference.delete();
                 LoginManager.getInstance().logOut();
-                showFaceBookError(loginResponse.getFieldErrorMessageMap().get(AppConstants.ERROR));
-              /*  LoginManager.getInstance().logOut();
-                String errorMessage = loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA);
+                //showFaceBookError(loginResponse.getFieldErrorMessageMap().get(AppConstants.ERROR));
+                LoginManager.getInstance().logOut();
+                String errorMessage = loginResponse.getFieldErrorMessageMap().get(AppConstants.ERROR);//loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA);
                 if (!StringUtil.isNotNullOrEmptyString(errorMessage)) {
-                    errorMessage = getString(R.string.ID_GENERIC_ERROR);
+                    errorMessage=loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA);
+                    if (!StringUtil.isNotNullOrEmptyString(errorMessage)) {
+                        errorMessage = getString(R.string.ID_GENERIC_ERROR);
+                    }
                 }
-                showNetworkTimeoutDoalog(true, false, errorMessage);*/
+                showNetworkTimeoutDoalog(true, false, errorMessage);
                 break;
         }
     }

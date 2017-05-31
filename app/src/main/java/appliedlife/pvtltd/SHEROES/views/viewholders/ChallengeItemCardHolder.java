@@ -228,10 +228,10 @@ public class ChallengeItemCardHolder extends BaseViewHolder<ChallengeDataItem>{
                 ivCompletedCircle.setAlpha(1.0f);
                 viewComplete.setAlpha(1.0f);
                 tvCompleted.setAlpha(1.0f);
-                tvAfterChallengeAccepted.setText(mContext.getString(R.string.ID_CHALLENGE_COMPLETED));
                 liUpdateShare.setVisibility(View.GONE);
                 tvCompleteShare.setVisibility(View.VISIBLE);
             }
+            tvAfterChallengeAccepted.setText(mContext.getString(R.string.ID_CHALLENGE_COMPLETED));
         } else {
             liBeforeAccept.setVisibility(View.VISIBLE);
             liAfterAccept.setVisibility(View.GONE);

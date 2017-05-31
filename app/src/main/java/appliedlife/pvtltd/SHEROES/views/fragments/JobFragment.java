@@ -140,7 +140,7 @@ public class JobFragment extends BaseFragment {
     }
 
     public void jobFilterIds(FeedRequestPojo feedRequestPojo) {
-        feedRequestPojo.setPageSize(20);
+        feedRequestPojo.setPageSize(100);
         mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
         mPullRefreshList = new SwipPullRefreshList();
         setRefreshList(mPullRefreshList);

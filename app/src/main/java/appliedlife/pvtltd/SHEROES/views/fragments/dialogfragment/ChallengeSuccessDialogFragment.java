@@ -100,6 +100,7 @@ public class ChallengeSuccessDialogFragment extends BaseDialogFragment implement
     @OnClick(R.id.tv_share_after_success)
     public void shareAfterSuccessClick() {
         progressBar.setVisibility(View.VISIBLE);
+        tvShareAfterSuccess.setEnabled(false);
         String youTubeLink = etYouTubeLink.getText().toString();
         ((HomeActivity) getActivity()).updateChallengeDataWithStatus(mChallengeDataItem, AppConstants.COMPLETE, encodedImageUrl, youTubeLink);
 
