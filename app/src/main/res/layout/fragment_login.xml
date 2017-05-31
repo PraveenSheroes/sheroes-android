@@ -98,6 +98,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_size_50"
                 android:src="@color/red"
+                android:visibility="gone"
                 android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:text="@string/ID_ACTION_LOG_IN_SHORT"
                 android:textSize="@dimen/sp_size_15" />

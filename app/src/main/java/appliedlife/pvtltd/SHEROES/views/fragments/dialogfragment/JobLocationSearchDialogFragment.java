@@ -45,6 +45,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.onBoardingSearchRequestBuilder;
+
 /**
  * Created by Praveen_Singh on 02-05-2017.
  */
@@ -90,7 +92,7 @@ public class JobLocationSearchDialogFragment extends BaseDialogFragment implemen
             mAdapter = new GenericRecyclerViewAdapter(getActivity(), (JobFilterActivity) getActivity());
         }
         mSearchEditText.setHint(getString(R.string.ID_SEARCH_LOCATION));
-        mOnBoardingPresenter.getOnBoardingSearchToPresenter(mAppUtils.onBoardingSearchRequestBuilder(AppConstants.CITY_NAME_DEFAULT, mMasterDataSkill));
+        mOnBoardingPresenter.getOnBoardingSearchToPresenter(onBoardingSearchRequestBuilder(AppConstants.CITY_NAME_DEFAULT, mMasterDataSkill));
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mAdapter);
@@ -108,7 +110,6 @@ public class JobLocationSearchDialogFragment extends BaseDialogFragment implemen
 
             }
         });
-
         setCancelable(true);
         return view;
     }
@@ -186,7 +187,7 @@ public class JobLocationSearchDialogFragment extends BaseDialogFragment implemen
             if (!isDetached()) {
                 mSearchDataName = mSearchDataName.trim();//.replaceAll(AppConstants.SPACE, AppConstants.EMPTY_STRING);
                 if (StringUtil.isNotNullOrEmptyString(mMasterDataSkill)) {
-                    mOnBoardingPresenter.getOnBoardingSearchToPresenter(mAppUtils.onBoardingSearchRequestBuilder(mSearchDataName, mMasterDataSkill));
+                    mOnBoardingPresenter.getOnBoardingSearchToPresenter(onBoardingSearchRequestBuilder(mSearchDataName, mMasterDataSkill));
                 }
             }
         }
@@ -226,12 +227,16 @@ public class JobLocationSearchDialogFragment extends BaseDialogFragment implemen
 
     @Override
     public void startProgressBar() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mProgressBar.bringToFront();
+        if(null!=mProgressBar) {
+            mProgressBar.setVisibility(View.VISIBLE);
+            mProgressBar.bringToFront();
+        }
     }
 
     @Override
     public void stopProgressBar() {
-        mProgressBar.setVisibility(View.GONE);
+        if(null!=mProgressBar) {
+            mProgressBar.setVisibility(View.GONE);
+        }
     }
 }

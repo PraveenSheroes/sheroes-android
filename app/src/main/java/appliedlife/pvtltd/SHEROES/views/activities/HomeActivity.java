@@ -422,13 +422,17 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 case R.id.iv_fb_share:
                    sharePostOnFacebook((ChallengeDataItem) baseResponse);
                     break;
-                case R.id.tv_share_progress:
-                    ChallengeDataItem challengeDataItem = (ChallengeDataItem) baseResponse;
+              /*  case R.id.tv_share_progress:
+                    sharePostOnFacebook((ChallengeDataItem) baseResponse);
+                    break;
+                case R.id.tv_complete_share:
+                    sharePostOnFacebook((ChallengeDataItem) baseResponse);
+                    *//*ChallengeDataItem challengeDataItem = (ChallengeDataItem) baseResponse;
                     Intent intent = new Intent(Intent.ACTION_SEND);
                     intent.setType(AppConstants.SHARE_MENU_TYPE);
                     intent.putExtra(Intent.EXTRA_TEXT, challengeDataItem.getDeepLinkUrl());
-                    startActivity(Intent.createChooser(intent, AppConstants.SHARE));
-                    break;
+                    startActivity(Intent.createChooser(intent, AppConstants.SHARE));*//*
+                    break;*/
                 default:
                     LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + id);
             }
@@ -1180,18 +1184,20 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     }
 
     private void editCommunityPostResponse(Intent intent) {
-        mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITY_POST_FRAGMENT);
-        if (null != mFeedDetail) {
-            Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-            if (AppUtils.isFragmentUIActive(fragment)) {
-                if (mFeedDetail.isFromHome()) {
-                    homeOnClick();
-                } else {
-                    ((HomeFragment) fragment).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+        if(null!=intent&&null!=intent.getExtras()) {
+            mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITY_POST_FRAGMENT);
+            if (null != mFeedDetail) {
+                Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+                if (AppUtils.isFragmentUIActive(fragment)) {
+                    if (mFeedDetail.isFromHome()) {
+                        homeOnClick();
+                    } else {
+                        ((HomeFragment) fragment).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+                    }
                 }
+            } else {
+                homeOnClick();
             }
-        } else {
-            homeOnClick();
         }
     }
 
@@ -1204,74 +1210,82 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     }
 
     private void createCommunityActivityResponse(Intent intent) {
-        mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITIES_DETAIL);
-        Fragment community = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.ONE_CONSTANT);
-        if (AppUtils.isFragmentUIActive(community)) {
-            if (null != mFeedDetail) {
-                ((MyCommunitiesFragment) community).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
-            } else {
-                communityOnClick();
+        if(null!=intent&&null!=intent.getExtras()) {
+            mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITIES_DETAIL);
+            Fragment community = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.ONE_CONSTANT);
+            if (AppUtils.isFragmentUIActive(community)) {
+                if (null != mFeedDetail) {
+                    ((MyCommunitiesFragment) community).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+                } else {
+                    communityOnClick();
+                }
             }
         }
     }
 
     private void articleDetailActivityResponse(Intent intent) {
-        mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.HOME_FRAGMENT);
-        if (mFragmentOpen.isArticleFragment()) {
-            Fragment fragmentArticle = getSupportFragmentManager().findFragmentByTag(ArticlesFragment.class.getName());
-            if (AppUtils.isFragmentUIActive(fragmentArticle)) {
-                ((ArticlesFragment) fragmentArticle).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
-            }
-        } else {
-            Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-            if (AppUtils.isFragmentUIActive(fragment)) {
-                ((HomeFragment) fragment).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+        if(null!=intent&&null!=intent.getExtras()) {
+            mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.HOME_FRAGMENT);
+            if (mFragmentOpen.isArticleFragment()) {
+                Fragment fragmentArticle = getSupportFragmentManager().findFragmentByTag(ArticlesFragment.class.getName());
+                if (AppUtils.isFragmentUIActive(fragmentArticle)) {
+                    ((ArticlesFragment) fragmentArticle).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+                }
+            } else {
+                Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+                if (AppUtils.isFragmentUIActive(fragment)) {
+                    ((HomeFragment) fragment).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+                }
             }
         }
     }
 
     private void jobDetailActivityResponse(Intent intent) {
-        mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.JOB_FRAGMENT);
-        if (mFragmentOpen.isJobFragment()) {
-            Fragment fragmentJob = getSupportFragmentManager().findFragmentByTag(JobFragment.class.getName());
-            if (AppUtils.isFragmentUIActive(fragmentJob)) {
-                ((JobFragment) fragmentJob).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
-            }
-        } else {
-            Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-            if (AppUtils.isFragmentUIActive(fragment)) {
-                ((HomeFragment) fragment).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+        if(null!=intent&&null!=intent.getExtras()) {
+            mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.JOB_FRAGMENT);
+            if (mFragmentOpen.isJobFragment()) {
+                Fragment fragmentJob = getSupportFragmentManager().findFragmentByTag(JobFragment.class.getName());
+                if (AppUtils.isFragmentUIActive(fragmentJob)) {
+                    ((JobFragment) fragmentJob).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+                }
+            } else {
+                Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+                if (AppUtils.isFragmentUIActive(fragment)) {
+                    ((HomeFragment) fragment).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+                }
             }
         }
     }
 
     private void communityDetailActivityResponse(Intent intent) {
-        mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITIES_DETAIL);
-        CommunityEnum communityEnum = (CommunityEnum) intent.getExtras().get(AppConstants.MY_COMMUNITIES_FRAGMENT);
-        if (null != communityEnum) {
-            switch (communityEnum) {
-                case FEATURE_COMMUNITY:
-                    Fragment feature = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
-                    if (AppUtils.isFragmentUIActive(feature)) {
-                        if (mFeedDetail.isFeatured() && mFeedDetail.isMember()) {
+        if(null!=intent&&null!=intent.getExtras()) {
+            mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITIES_DETAIL);
+            CommunityEnum communityEnum = (CommunityEnum) intent.getExtras().get(AppConstants.MY_COMMUNITIES_FRAGMENT);
+            if (null != communityEnum) {
+                switch (communityEnum) {
+                    case FEATURE_COMMUNITY:
+                        Fragment feature = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
+                        if (AppUtils.isFragmentUIActive(feature)) {
+                            if (mFeedDetail.isFeatured() && mFeedDetail.isMember()) {
+                                communityOnClick();
+                            } else {
+                                ((FeaturedFragment) feature).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+                            }
+                        }
+                        break;
+                    case MY_COMMUNITY:
+                        if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getCallFromName()) && mFeedDetail.getCallFromName().equalsIgnoreCase(AppConstants.FEATURE_FRAGMENT)) {
                             communityOnClick();
                         } else {
-                            ((FeaturedFragment) feature).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+                            Fragment community = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.ONE_CONSTANT);
+                            if (AppUtils.isFragmentUIActive(community)) {
+                                ((MyCommunitiesFragment) community).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+                            }
                         }
-                    }
-                    break;
-                case MY_COMMUNITY:
-                    if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getCallFromName()) && mFeedDetail.getCallFromName().equalsIgnoreCase(AppConstants.FEATURE_FRAGMENT)) {
-                        communityOnClick();
-                    } else {
-                        Fragment community = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.ONE_CONSTANT);
-                        if (AppUtils.isFragmentUIActive(community)) {
-                            ((MyCommunitiesFragment) community).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
-                        }
-                    }
-                    break;
-                default:
-                    LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + communityEnum);
+                        break;
+                    default:
+                        LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + communityEnum);
+                }
             }
         }
     }

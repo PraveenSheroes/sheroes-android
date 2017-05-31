@@ -297,7 +297,7 @@ public class ChallengeItemCardHolder extends BaseViewHolder<ChallengeDataItem>{
     }
     @OnClick(R.id.tv_complete_share)
     public void completeShareClick() {
-        viewInterface.handleOnClick(dataItem, tvShareProgress);
+        viewInterface.handleOnClick(dataItem, ivFbShare);
     }
 
     @OnClick(R.id.tv_update_progress)
@@ -322,7 +322,7 @@ public class ChallengeItemCardHolder extends BaseViewHolder<ChallengeDataItem>{
 
     @OnClick(R.id.tv_share_progress)
     public void shareProgress() {
-        viewInterface.handleOnClick(dataItem, tvShareProgress);
+        viewInterface.handleOnClick(dataItem, ivFbShare);
     }
 
     @Override

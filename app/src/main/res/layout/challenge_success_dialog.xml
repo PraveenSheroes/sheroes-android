@@ -176,7 +176,7 @@
                     android:layout_marginTop="@dimen/dp_size_30"
                     android:gravity="center"
                     android:padding="@dimen/dp_size_20"
-                    android:text="@string/ID_DONE"
+                    android:text="@string/ID_PROCEED"
                     android:textAllCaps="true"
                     android:textColor="@color/challenge_header"
                     android:textSize="@dimen/sp_size_14"

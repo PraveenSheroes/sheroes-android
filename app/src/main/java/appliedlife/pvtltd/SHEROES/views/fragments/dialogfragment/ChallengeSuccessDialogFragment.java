@@ -17,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 
@@ -30,7 +29,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeDataItem;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.Bind;
@@ -57,6 +55,7 @@ public class ChallengeSuccessDialogFragment extends BaseDialogFragment implement
     ProgressBar progressBar;
     private String encodedImageUrl;
     private ChallengeDataItem mChallengeDataItem;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getActivity()).inject(this);
@@ -98,21 +97,22 @@ public class ChallengeSuccessDialogFragment extends BaseDialogFragment implement
         };
     }
 
-
     @OnClick(R.id.tv_share_after_success)
     public void shareAfterSuccessClick() {
+        progressBar.setVisibility(View.VISIBLE);
         String youTubeLink = etYouTubeLink.getText().toString();
-        if (StringUtil.isNotNullOrEmptyString(encodedImageUrl) || StringUtil.isNotNullOrEmptyString(youTubeLink)) {
+        ((HomeActivity) getActivity()).updateChallengeDataWithStatus(mChallengeDataItem, AppConstants.COMPLETE, encodedImageUrl, youTubeLink);
+
+      /*  if (StringUtil.isNotNullOrEmptyString(encodedImageUrl) || StringUtil.isNotNullOrEmptyString(youTubeLink)) {
             progressBar.setVisibility(View.VISIBLE);
             tvShareAfterSuccess.setEnabled(false);
             mChallengeDataItem.setStateChallengeAfterAccept(AppConstants.FOURTH_CONSTANT);
-            ((HomeActivity)getActivity()).updateChallengeDataWithStatus(mChallengeDataItem,AppConstants.COMPLETE,encodedImageUrl,youTubeLink);
-        }else
-        {
+            ((HomeActivity) getActivity()).updateChallengeDataWithStatus(mChallengeDataItem, AppConstants.COMPLETE, encodedImageUrl, youTubeLink);
+        } else {
             progressBar.setVisibility(View.GONE);
             tvShareAfterSuccess.setEnabled(true);
-            Toast.makeText(getActivity(),getString(R.string.ID_SHARE_MSG),Toast.LENGTH_SHORT).show();
-        }
+            Toast.makeText(getActivity(), getString(R.string.ID_SHARE_MSG), Toast.LENGTH_SHORT).show();
+        }*/
     }
 
     @OnClick(R.id.li_you_tube_link_share)
@@ -143,6 +143,7 @@ public class ChallengeSuccessDialogFragment extends BaseDialogFragment implement
             ((HomeActivity) getActivity()).selectImageFrmGallery();
         }
     }
+
     private void checkCameraPermission() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (getActivity().checkSelfPermission(android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED && getActivity().checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && getActivity().checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {

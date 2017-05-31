@@ -75,6 +75,7 @@
     <string name="ID_TRENDING">Trending</string>
     <string name="ID_CHOOSE_CATEGORY">Choose Category</string>
     <string name="ID_DONE">Done</string>
+    <string name="ID_PROCEED">Proceed</string>
     <string name="ID_OK">Ok</string>
     <string name="ID_OR">OR</string>
     <string name="ID_CANCEL">Cancel</string>

@@ -137,7 +137,7 @@ public class ChallengeUpdateProgressDialogFragment extends BaseDialogFragment im
         } else if ((int) checkBoxAlmostThere.getTag() == AppConstants.TWO_CONSTANT) {
             ((HomeActivity) getActivity()).updateChallengeDataWithStatus(mChallengeDataItem, AppConstants.ALMOST_DONE, AppConstants.EMPTY_STRING, AppConstants.EMPTY_STRING);
         } else if ((int) checkBoxCompleted.getTag() == AppConstants.TWO_CONSTANT) {
-            ((HomeActivity) getActivity()).updateChallengeDataWithStatus(mChallengeDataItem, AppConstants.COMPLETE, AppConstants.EMPTY_STRING, AppConstants.EMPTY_STRING);
+            ((HomeActivity) getActivity()).challengeSuccessDialog(mChallengeDataItem);
         }
         dismiss();
     }

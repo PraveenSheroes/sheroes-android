@@ -269,13 +269,9 @@ public class HomeFragment extends BaseFragment {
                             if (challengeId == challengeDataItem.getChallengeId()) {
                                 mChallengeDataItem.setIs_accepted(true);
                                 if (mPercentCompleted == AppConstants.COMPLETE) {
-                                    if (challengeDataItem.getStateChallengeAfterAccept() == AppConstants.FOURTH_CONSTANT) {
-                                        Toast.makeText(getActivity(), getString(R.string.ID_CHALLENGE_COMPLETED_SUCCESS), Toast.LENGTH_SHORT).show();
-                                        if (null != ((HomeActivity) getActivity()).mChallengeSuccessDialogFragment) {
-                                            ((HomeActivity) getActivity()).mChallengeSuccessDialogFragment.dismiss();
-                                        }
-                                    } else {
-                                        ((HomeActivity) getActivity()).challengeSuccessDialog(mChallengeDataItem);
+                                    Toast.makeText(getActivity(), getString(R.string.ID_CHALLENGE_COMPLETED_SUCCESS), Toast.LENGTH_SHORT).show();
+                                    if (null != ((HomeActivity) getActivity()).mChallengeSuccessDialogFragment) {
+                                        ((HomeActivity) getActivity()).mChallengeSuccessDialogFragment.dismiss();
                                     }
                                     mChallengeDataItem.setCompletionPercent(AppConstants.COMPLETE);
                                 } else {

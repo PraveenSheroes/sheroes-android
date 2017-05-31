@@ -55,11 +55,11 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityOptionJoinDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ImageFullViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityOptionJoinDialog;
 
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.FEED_CARD_MENU;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_REACTION_COMMENT_MENU;
@@ -87,21 +87,24 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
     Preference<LoginResponse> userPreference;
     private MoEHelper mMoEHelper;
     private PayloadBuilder payloadBuilder;
-    private  MoEngageUtills moEngageUtills;
+    private MoEngageUtills moEngageUtills;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         GoogleAnalyticsTracing.screenNameTracking(this, TAG);
         mMoEHelper = MoEHelper.getInstance(this);
         payloadBuilder = new PayloadBuilder();
-        moEngageUtills=MoEngageUtills.getInstance();
+        moEngageUtills = MoEngageUtills.getInstance();
         mSheroesApplication = (SheroesApplication) this.getApplicationContext();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        mMoEHelper.onStart(this);
+        if(null!=mMoEHelper) {
+            mMoEHelper.onStart(this);
+        }
     }
 
     public void setAllValues(FragmentOpen fragmentOpen) {
@@ -210,9 +213,13 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
     }
 
     private void clearReferences() {
-        String currActivityName = mSheroesApplication.getCurrentActivityName();
-        if (this.getClass().getSimpleName().equals(currActivityName))
-            mSheroesApplication.setCurrentActivityName(null);
+        if (null != mSheroesApplication) {
+            String currActivityName = mSheroesApplication.getCurrentActivityName();
+            if (StringUtil.isNotNullOrEmptyString(currActivityName)) {
+                if (this.getClass().getSimpleName().equals(currActivityName))
+                    mSheroesApplication.setCurrentActivityName(null);
+            }
+        }
     }
 
     @Override
@@ -482,7 +489,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 intent.setType(AppConstants.SHARE_MENU_TYPE);
                 intent.putExtra(Intent.EXTRA_TEXT, feedDetail.getDeepLinkUrl());
                 startActivity(Intent.createChooser(intent, AppConstants.SHARE));
-                moEngageUtills.entityMoEngageCardShareVia(getApplicationContext(),mMoEHelper,payloadBuilder,feedDetail, MoEngageConstants.SHARE_VIA_SOCIAL);
+                moEngageUtills.entityMoEngageCardShareVia(getApplicationContext(), mMoEHelper, payloadBuilder, feedDetail, MoEngageConstants.SHARE_VIA_SOCIAL);
                 popupWindow.dismiss();
             }
         });
@@ -648,7 +655,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
     }
 
     public void openImageFullViewFragment(FeedDetail feedDetail) {
-        if(feedDetail.getCommunityId()!=0) {
+        if (feedDetail.getCommunityId() != 0) {
             ImageFullViewFragment imageFullViewFragment = new ImageFullViewFragment();
             Bundle bundle = new Bundle();
             mFragmentOpen.setOpenImageViewer(true);

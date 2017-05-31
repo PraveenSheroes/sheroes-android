@@ -1,7 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
 import android.os.Build;
@@ -10,26 +9,17 @@ import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.f2prateek.rx.preferences.Preference;
 import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.Scope;
-import com.google.android.gms.plus.Plus;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
@@ -90,10 +80,10 @@ public class LoginFragment extends BaseFragment implements LoginView, GoogleApiC
     private String password;
     private PayloadBuilder payloadBuilder;
     private MoEngageUtills moEngageUtills;
-    private GoogleSignInOptions gso;
-    public static GoogleApiClient mGoogleApiClient;
-    private int RC_SIGN_IN = 100;
-    private String URL_ACCESS_TOKEN;
+  //  private GoogleSignInOptions gso;
+   // public static GoogleApiClient mGoogleApiClient;
+  //  private int RC_SIGN_IN = 100;
+  //  private String URL_ACCESS_TOKEN;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -112,7 +102,7 @@ public class LoginFragment extends BaseFragment implements LoginView, GoogleApiC
         mMoEHelper = MoEHelper.getInstance(getActivity());
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
-        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+     /*   gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .requestProfile()
                 .requestScopes(new Scope(Scopes.PLUS_ME))
@@ -123,7 +113,7 @@ public class LoginFragment extends BaseFragment implements LoginView, GoogleApiC
                 .enableAutoManage(getActivity(), this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .addApi(Plus.API)
-                .build();
+                .build();*/
     }
 
     @Override
@@ -304,84 +294,24 @@ public class LoginFragment extends BaseFragment implements LoginView, GoogleApiC
         });
     }
 
-    @OnClick(R.id.google_log_in_button)
-    public void onGoogleLogin() {
-    //    checkCameraPermission();
-    }
 
     private void checkCameraPermission() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (getActivity().checkSelfPermission(android.Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-                signIn();
+
             } else {
                 ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.CAMERA, android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 101);
             }
         }
     }
 
-    private void signIn() {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        //Starting intent for result
-        startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mGoogleApiClient.stopAutoManage(getActivity());
-        mGoogleApiClient.disconnect();
-    }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == RC_SIGN_IN) {
-
-         /*   GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            handleSignInResult(result);
-
-            final String SCOPES = "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.me https://www.googleapis.com/auth/plus.moments.write https://www.googleapis.com/auth/plus.profile.agerange.read https://www.googleapis.com/auth/plus.profile.language.read https://www.googleapis.com/auth/plus.circles.members.read";
-            new AsyncTask<Void, Void, Void>() {
-                @Override
-                protected Void doInBackground(Void... params) {
-
-                    try {
-                        if (NetworkUtil.isConnected(getContext())) {
-                            String gmailaccesstoken = result.getSignInAccount().getIdToken();
-
-
-                            URL_ACCESS_TOKEN = "https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=" + gmailaccesstoken;
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (GoogleAuthException e) {
-                        e.printStackTrace();
-                    }
-                    // Log.i("", "mustafa olll " + gmailaccesstoken);
-                    return null;
-                }
-
-            }.execute();*/
-        }
-    }
-
-    private void handleSignInResult(GoogleSignInResult result) {
-        //If the login succeed
-        if (result.isSuccess()) {
-            //Getting google account
-            GoogleSignInAccount acct = result.getSignInAccount();
-            Log.e("google email=", acct.getEmail());
-        } else {
-            //If login fails
-            Toast.makeText(getActivity(), "Login Failed", Toast.LENGTH_LONG).show();
-        }
-    }
 
 }

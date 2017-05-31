@@ -66,7 +66,7 @@ public class LoginActivity extends BaseActivity implements LoginFragment.LoginAc
             errorMessage = getString(R.string.ID_GENERIC_ERROR);
         }
         if (AppConstants.FACEBOOK_VERIFICATION.equalsIgnoreCase(errorMessage)) {
-            openFaceBookLogin();
+            //openFaceBookLogin();
         } else {
             showNetworkTimeoutDoalog(true, false, errorMessage);
         }
@@ -118,12 +118,12 @@ public class LoginActivity extends BaseActivity implements LoginFragment.LoginAc
         finish();
     }
 
-    private void openFaceBookLogin() {
+ /*   private void openFaceBookLogin() {
         Intent intentFacebook = new Intent(this, FaceBookOpenActivity.class);
         startActivityForResult(intentFacebook, AppConstants.REQUEST_CODE_FOR_FACEBOOK);
         overridePendingTransition(R.anim.right_to_left_anim_enter, R.anim.right_to_left_anim_exit);
     }
-
+*/
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
