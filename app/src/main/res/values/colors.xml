@@ -142,4 +142,7 @@
     <color name="signup_text_color">#512da8</color>
     <color name="helpline_edittext_color">#808080</color>
 
+    <color name="faq_question_color">#39393a</color>
+    <color name="faq_answer_color">#757575</color>
+    <color name="faq_spinner_color">#783fdf</color>
 </resources>

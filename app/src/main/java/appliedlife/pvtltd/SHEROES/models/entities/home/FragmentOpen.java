@@ -41,6 +41,10 @@ public class FragmentOpen implements Parcelable{
     private boolean isProfesstionalEducationFragment;
     private boolean isHelplineFragment;
     private boolean isSignupFragment;
+    private boolean isICCMemberListFragment;
+    private boolean isFAQSFragment;
+    private boolean isFeedFragment;
+
     public FragmentOpen() {
     }
 
@@ -285,6 +289,30 @@ public class FragmentOpen implements Parcelable{
         isSignupFragment = signupFragment;
     }
 
+    public boolean isICCMemberListFragment() {
+        return isICCMemberListFragment;
+    }
+
+    public void setICCMemberListFragment(boolean ICCMemberListFragment) {
+        isICCMemberListFragment = ICCMemberListFragment;
+    }
+
+    public boolean isFAQSFragment() {
+        return isFAQSFragment;
+    }
+
+    public void setFAQSFragment(boolean FAQSFragment) {
+        isFAQSFragment = FAQSFragment;
+    }
+
+    public boolean isFeedFragment() {
+        return isFeedFragment;
+    }
+
+    public void setFeedFragment(boolean feedFragment) {
+        isFeedFragment = feedFragment;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -322,6 +350,9 @@ public class FragmentOpen implements Parcelable{
         dest.writeByte(this.isProfesstionalEducationFragment ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isHelplineFragment ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isSignupFragment ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isICCMemberListFragment ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isFAQSFragment ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isFeedFragment ? (byte) 1 : (byte) 0);
     }
 
     protected FragmentOpen(Parcel in) {
@@ -355,6 +386,9 @@ public class FragmentOpen implements Parcelable{
         this.isProfesstionalEducationFragment = in.readByte() != 0;
         this.isHelplineFragment = in.readByte() != 0;
         this.isSignupFragment = in.readByte() != 0;
+        this.isICCMemberListFragment = in.readByte() != 0;
+        this.isFAQSFragment = in.readByte() != 0;
+        this.isFeedFragment = in.readByte() != 0;
     }
 
     public static final Creator<FragmentOpen> CREATOR = new Creator<FragmentOpen>() {

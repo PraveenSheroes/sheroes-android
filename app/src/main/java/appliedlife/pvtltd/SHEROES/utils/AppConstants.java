@@ -163,6 +163,10 @@ public class AppConstants {
     public static final int TWO_CONSTANT = 2;
     public static final int THREE_CONSTANT = 3;
     public static final int FOURTH_CONSTANT = 4;
+    public static final int SEVENTH_CONSTANT = 7;
+    public static final int EIGHTH_CONSTANT = 8;
+    public static final int NINTH_CONSTANT = 9;
+    public static final int TENTH_CONSTANT = 10;
     public static final int PAGE_SIZE = 10;
     public static final int PAGE_SIZE_CHAT = 20;
     public static final int MEMBER_PAGE_SIZE = 100;

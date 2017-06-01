@@ -886,7 +886,6 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_SHARE_MSG">Please choose photo or add youtube link.</string>
     <string name="ID_CHALLENGE_COMPLETED_SUCCESS">Success</string>
 
-
     <string name="ID_SIGNUP_ALREADY_LOGIN"><font size ="11">Already have an account? Log In</font></string>
     <string name="ID_GET_STARTED">GET STARTED</string>
     <string name="ID_SIGNUP_TEXT">Sign Up Using Your Email Address</string>
@@ -897,10 +896,17 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_STR_USER_ALREADY_EXIST_ERROR">A user with this email ID or mobile number already exists.</string>
     <string name="ID_FIRST_NAME">Please enter the first name</string>
     <string name="ID_LAST_NAME">Please enter the last name</string>
+
     <string name="ID_HELPLINE_TYPE_MESSAGE"> Type Your Message</string>
     <string name="ID_FIRST_NAME_HINT_SIGNUP"><font size="10">FIRST NAME</font></string>
     <string name="ID_LAST_NAME_HINT_SIGNUP"><font size="10">LAST NAME</font></string>
     <string name="ID_EMAIL_ID_HINT_SIGNUP"><font size="10">EMAIL ID</font></string>
     <string name="ID_PASSWORD_STRENTH">Password should be greater than 5 characters.</string>
     <string name="ID_NAME_CHECK">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+
+    <string name="ID_ICC_MEMBERS">ICC Members</string>
+    <string name="ID_FAQS">FAQ</string>
+    <string name="ID_TRAINING">Training</string>
+    <string name="ID_ICC_MEMBER_TITLE">The Internal Complaints Committee (ICC) is responsible for the investigation and redressal of complaints regarding sexual harassment.</string>
+
 </resources>

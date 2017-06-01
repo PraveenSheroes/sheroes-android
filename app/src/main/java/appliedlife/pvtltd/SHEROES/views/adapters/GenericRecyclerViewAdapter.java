@@ -15,6 +15,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.she.FAQS;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HolderMapping;
@@ -66,6 +67,12 @@ public class GenericRecyclerViewAdapter<T extends BaseResponse> extends Recycler
             this.filterListData.add(position, (T) feedDetail);
         }
     }
+
+    public void setFAQOnPosition(FAQS faqs, int position) {
+        this.filterListData.remove(position);
+        this.filterListData.add(position, (T) faqs);
+    }
+
     public void addDataOnPosition(FeedDetail feedDetail, int position) {
         if (StringUtil.isNotEmptyCollection(filterListData) && filterListData.size() > position) {
             this.filterListData.add(position, (T) feedDetail);

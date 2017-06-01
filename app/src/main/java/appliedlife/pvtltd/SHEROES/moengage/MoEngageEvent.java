@@ -36,7 +36,9 @@ public enum  MoEngageEvent {
     EVENT_VIEWD_NOTIFICATION("viewed notifications"),
     EVENT_VIEWD_APPLIED_JOBS("viewed applied jobs"),
     EVENT_VIEWD_MY_PROFILE("viewed my profile"),
-    EVENT_PUSH_NOTIFICATAION_SHOWN("push notification shown");
+    EVENT_PUSH_NOTIFICATAION_SHOWN("push notification shown"),
+    EVENT_VIEWED_FAQS("viewed SHE FAQS"),
+    EVENT_VIEWED_ICC_MEMBERS("viewed ICC Members");
     public final String value;
     MoEngageEvent(String pValue) {
         value = pValue;

@@ -124,6 +124,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPost
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ExprienceEntity;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileAddEditEducationRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.sharemail.ShareViaMail;
+import appliedlife.pvtltd.SHEROES.models.entities.she.FAQSRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMemberRequest;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 
 
@@ -2284,7 +2286,7 @@ public class AppUtils {
         return helplineGetChatThreadRequest;
     }
 
-    public static SignupRequest signupRequestBuilder(){
+    public static SignupRequest signupRequestBuilder() {
 
         SignupRequest signupRequest = new SignupRequest();
         AppUtils appUtils = AppUtils.getInstance();
@@ -2292,5 +2294,14 @@ public class AppUtils {
         signupRequest.setDeviceid(appUtils.getDeviceId());
         signupRequest.setDevicetype(AppConstants.SOURCE_NAME);
         return signupRequest;
+    }
+    public static FAQSRequest sheFAQSRequestBuilder(){
+        FAQSRequest faqsRequest = new FAQSRequest();
+        return faqsRequest;
+    }
+
+    public static ICCMemberRequest sheICCMemberListRequestBuilder(){
+        ICCMemberRequest iccMemberRequest = new ICCMemberRequest();
+        return iccMemberRequest;
     }
 }

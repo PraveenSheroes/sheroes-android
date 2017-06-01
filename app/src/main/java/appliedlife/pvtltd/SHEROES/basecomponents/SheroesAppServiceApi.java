@@ -86,6 +86,10 @@ import appliedlife.pvtltd.SHEROES.models.entities.setting.UserPreferenceRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.UserpreferenseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.sharemail.ShareMailResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.sharemail.ShareViaMail;
+import appliedlife.pvtltd.SHEROES.models.entities.she.FAQSRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.she.FAQSResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMemberListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMemberRequest;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
@@ -306,4 +310,9 @@ public interface SheroesAppServiceApi {
     @POST("participant/user/getUserSummarry")
     Observable<LoginResponse> googlePlusUserResponse();
 
+    @POST("entity/she/all_faqs")
+    Observable<FAQSResponse> getAllSHEFAQS(@Body FAQSRequest faqsRequest);
+
+    @POST("entity/she/all_icc_members")
+    Observable<ICCMemberListResponse> getAllSHEICCMemberList(@Body ICCMemberRequest iccMemberRequest);
 }

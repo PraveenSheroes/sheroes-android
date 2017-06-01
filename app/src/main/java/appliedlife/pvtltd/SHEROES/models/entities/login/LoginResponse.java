@@ -7,6 +7,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 
 /**
  * Created by Praveen Singh on 29/12/2016.
@@ -24,6 +25,9 @@ public class LoginResponse extends BaseResponse implements Parcelable {
     @SerializedName("user_summary")
     @Expose
     private UserSummary userSummary;
+    @SerializedName("is_she_user")
+    @Expose
+    private boolean sheUser;
     private String tokenType;
     private long tokenTime;
     private String gcmId;
@@ -81,6 +85,13 @@ public class LoginResponse extends BaseResponse implements Parcelable {
         this.gcmId = gcmId;
     }
 
+    public boolean isSheUser() {
+        return sheUser;
+    }
+
+    public void setSheUser(boolean sheUser) {
+        this.sheUser = sheUser;
+    }
 
     @Override
     public int describeContents() {
@@ -96,6 +107,7 @@ public class LoginResponse extends BaseResponse implements Parcelable {
         dest.writeLong(this.tokenTime);
         dest.writeString(this.gcmId);
         dest.writeString(this.nextScreen);
+        dest.writeByte((byte) (this.sheUser ? 1 : 0));
     }
 
     protected LoginResponse(Parcel in) {
@@ -106,6 +118,7 @@ public class LoginResponse extends BaseResponse implements Parcelable {
         this.tokenTime = in.readLong();
         this.gcmId = in.readString();
         this.nextScreen = in.readString();
+        this.sheUser = in.readByte() != 0;
     }
 
     public static final Creator<LoginResponse> CREATOR = new Creator<LoginResponse>() {

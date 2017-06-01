@@ -76,6 +76,16 @@ public class MoEngageUtills {
         mMoEHelper.trackEvent(MoEngageEvent.EVENT_VIEWED_FEED.value, payloadBuilder.build());
     }
 
+    public void entityMoEngageViewICCMember(Context context, MoEHelper mMoEHelper, PayloadBuilder payloadBuilder, long timeSpentFeed) {
+        payloadBuilder.putAttrLong(MoEngageConstants.TIME_SPENT, timeSpentFeed);
+        mMoEHelper.trackEvent(MoEngageEvent.EVENT_VIEWED_ICC_MEMBERS.value, payloadBuilder.build());
+    }
+
+    public void entityMoEngageViewFAQ(Context context, MoEHelper mMoEHelper, PayloadBuilder payloadBuilder, long timeSpentFeed) {
+        payloadBuilder.putAttrLong(MoEngageConstants.TIME_SPENT, timeSpentFeed);
+        mMoEHelper.trackEvent(MoEngageEvent.EVENT_VIEWED_FAQS.value, payloadBuilder.build());
+    }
+
     private String getCardTag(FeedDetail feedDetail) {
         StringBuilder mergeTags = new StringBuilder();
         if (StringUtil.isNotEmptyCollection(feedDetail.getTags())) {

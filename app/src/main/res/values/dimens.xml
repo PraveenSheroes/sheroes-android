@@ -114,6 +114,7 @@
     <dimen name="sp_size_14">14sp</dimen>
     <dimen name="sp_size_11">11sp</dimen>
     <dimen name="sp_size_12">12sp</dimen>
+    <dimen name="sp_size_17">17sp</dimen>
     <dimen name="sp_size_13">13sp</dimen>
     <dimen name="sp_size_10">10sp</dimen>
     <dimen name="sp_size_24">24sp</dimen>
@@ -169,6 +170,7 @@
     <dimen name="tell_us_image_width">316dp</dimen>
     <dimen name="tell_us_image_height">207dp</dimen>
     <dimen name="challenge_card">320dp</dimen>
+    <dimen name="dp_size_minus_7">-7dp</dimen>
 
 
     <!--Text sizes for SHEROES-->

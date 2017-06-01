@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/faqs_card"
+    card_view:cardBackgroundColor="@color/white_color"
+    card_view:cardElevation="@dimen/dp_size_2"
+    android:layout_marginTop="@dimen/dp_size_minus_7"
+    android:layout_marginLeft="@dimen/dp_size_minus_5"
+    android:layout_marginRight="@dimen/dp_size_minus_5"
+    app:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/tab_faq_question"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:clickable="true"
+                android:layout_marginBottom="@dimen/dp_size_28">
+
+                <TextView
+                    android:layout_width="@dimen/dp_size_270"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_faqs_question"
+                    android:layout_marginLeft="@dimen/dp_size_16"
+                    android:layout_marginTop="@dimen/dp_size_28"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:textColor="@color/faq_question_color"
+                    android:textSize="@dimen/sp_size_14"
+                    android:textStyle="bold"/>
+
+                <ImageView
+                    android:id="@+id/id_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_spinner_icon"
+                    android:tint="@color/faq_spinner_color"
+                    android:layout_marginTop="@dimen/dp_size_30"
+                    android:layout_marginLeft="@dimen/dp_size_28"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/id_faq_answer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
+                android:visibility="gone"
+                android:orientation="vertical"
+                android:layout_marginLeft="@dimen/dp_size_16"
+                android:layout_marginRight="@dimen/dp_size_16"
+                android:layout_marginBottom="@dimen/dp_size_28">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_size_1"
+                android:background="@color/red">
+            </View>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_faqs_answer"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:textSize="@dimen/sp_size_14"
+                android:textColor="@color/faq_answer_color"
+                android:layout_marginTop="@dimen/dp_size_28" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

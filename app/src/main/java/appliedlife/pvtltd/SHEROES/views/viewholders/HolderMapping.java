@@ -37,6 +37,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.profile.GoodAt;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.MyProfileView;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileHorList;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleDetailPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.she.FAQS;
+import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMember;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 
@@ -372,12 +374,21 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new HelplineQuestionCardHolder(view, viewInterface);
         }
-
     },
-    HELPLINE_CHAT_ANSWER_CARD(R.layout.helpline_answer_card) {
+        HELPLINE_CHAT_ANSWER_CARD(R.layout.helpline_answer_card) {
+            @Override
+            public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+                return new HelplineAnswerCardHolder(view, viewInterface);
+            }
+        }, ICC_MEMBER_CARD(R.layout.icc_member_card){
+                @Override
+                public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+                    return new ICCMemberViewHolder(view, viewInterface);
+                }
+    }, FAQS_CARD(R.layout.faqs_card){
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new HelplineAnswerCardHolder(view, viewInterface);
+            return new FAQViewHolder(view, viewInterface);
         }
 
 
@@ -575,6 +586,17 @@ public enum HolderMapping {
 
                     } else {
                         returnView = HELPLINE_CHAT_ANSWER_CARD.ordinal();
+                    }
+                }else if (item instanceof ChallengeDataItem) {
+                    returnView = CHALLENGE_LIST_ITEM_HOLDER.ordinal();
+                }  else if(item instanceof ICCMember){
+                    returnView = ICC_MEMBER_CARD.ordinal();
+                } else if(item instanceof FAQS){
+                    returnView =  FAQS_CARD.ordinal();
+                }
+                else if(item instanceof HelplineChatDoc){
+                    if(((HelplineChatDoc) item).getSubType().equalsIgnoreCase(AppConstants.HELPLINE_SUB_TYPE_QUESTION)) {
+                        returnView =  HELPLINE_CHAT_QUESTION_CARD.ordinal();
                     }
                 }
 

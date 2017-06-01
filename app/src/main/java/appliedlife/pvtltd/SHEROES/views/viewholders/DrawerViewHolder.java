@@ -64,6 +64,22 @@ public class DrawerViewHolder extends BaseViewHolder<DrawerItems> {
                 tvDrawerItem.setTextColor(ContextCompat.getColor(context, R.color.ask_sheroes));
                 tvDrawerItem.setText(context.getString(R.string.ID_ASK_SHEROES));
                 break;
+            case 7:
+                tvDrawerItem.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_helpline), null, null, null);
+                tvDrawerItem.setText(context.getString(R.string.ID_ASK_SHEROES));
+                break;
+            case 8:
+                tvDrawerItem.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_icc_members), null, null, null);
+                tvDrawerItem.setText(context.getString(R.string.ID_ICC_MEMBERS));
+                break;
+            case 9:
+                tvDrawerItem.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_faq), null, null, null);
+                tvDrawerItem.setText(context.getString(R.string.ID_FAQS));
+                break;
+            case 10:
+                tvDrawerItem.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_feed), null, null, null);
+                tvDrawerItem.setText(context.getString(R.string.ID_FEED));
+                break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE+ TAG +  AppConstants.SPACE + drawerItemId);
         }
