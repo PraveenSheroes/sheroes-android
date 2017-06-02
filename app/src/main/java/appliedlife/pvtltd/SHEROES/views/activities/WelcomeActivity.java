@@ -17,6 +17,7 @@ import android.text.Html;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -55,6 +56,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.login.InstallUpdateForMoEngage;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -69,6 +71,9 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
+import appliedlife.pvtltd.SHEROES.views.fragments.SettingFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.SignupFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.FacebookErrorDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeScreenFirstFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeScreenFourthFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeScreenSecondFragment;
@@ -105,8 +110,8 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     ImageView ivWelcomeThird;
     @Bind(R.id.iv_welcome_fourth)
     ImageView ivWelcomeFourth;
-    @Bind(R.id.click_to_join)
-    LoginButton mFbLogin;
+   /* @Bind(R.id.click_to_join)
+    LoginButton mFbLogin;*/
     @Bind(R.id.tv_join)
     TextView mTvJoin;
     @Bind(R.id.tv_growth_women)
@@ -115,6 +120,8 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     ProgressBar mProgressBar;
     @Bind(R.id.tv_other_login_option)
     TextView mOtherLoginOption;
+    @Bind(R.id.click_to_join)
+    Button mGetStarted;
     private PayloadBuilder payloadBuilder;
     private static final int READ_CONTACTS_PERMISSIONS_REQUEST1 = 1;
     private CallbackManager callbackManager;
@@ -128,6 +135,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     private String mGcmId;
     private MoEHelper mMoEHelper;
     private MoEngageUtills moEngageUtills;
+    private FragmentOpen mFragmentOpen;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -161,11 +169,12 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getToken())) {
             openHomeScreen();
         } else {
-            faceBookInitialization();
+           faceBookInitialization();
             setContentView(R.layout.welcome_activity);
             ButterKnife.bind(this);
             initHomeViewPagerAndTabs();
-            mFbLogin.setEnabled(false);
+        //    mFbLogin.setEnabled(false);
+            mGetStarted.setEnabled(false);
             mOtherLoginOption.setEnabled(false);
             if (!NetworkUtil.isConnected(mSheroesApplication)) {
                 showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
@@ -173,7 +182,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             } else {
                 if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getGcmId())) {
                     mGcmId = userPreference.get().getGcmId();
-                    mFbLogin.setEnabled(true);
+                   // mFbLogin.setEnabled(true);
                     mOtherLoginOption.setEnabled(true);
                 } else {
                     getGcmId();
@@ -193,10 +202,12 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                 LogUtils.info(TAG, "******* ******Registarion" + registrationId);
                 mGcmId = registrationId;
                 if (StringUtil.isNotNullOrEmptyString(mGcmId)) {
-                    mFbLogin.setEnabled(true);
+                   // mFbLogin.setEnabled(true);
+                    mGetStarted.setEnabled(true);
                     mOtherLoginOption.setEnabled(true);
                 } else {
-                    mFbLogin.setEnabled(false);
+                   // mFbLogin.setEnabled(false);
+                    mGetStarted.setEnabled(false);
                     mOtherLoginOption.setEnabled(false);
                     if (!NetworkUtil.isConnected(mSheroesApplication)) {
                         showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
@@ -243,6 +254,8 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void initHomeViewPagerAndTabs() {
+        mFragmentOpen = new FragmentOpen();
+        setAllValues(mFragmentOpen);
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Join").append(LEFT).append(" 1 Million+ Women ").append(RIGHT).append("Just As Awesome As You");
         StringBuilder womenGrowth = new StringBuilder();
@@ -266,7 +279,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             getPermissionToReadUserContacts();
         }
         mLoginPresenter.getMasterDataToPresenter();
-        fbSignIn();
+        //fbSignIn();
         final Handler handler = new Handler();
         final Runnable Update = new Runnable() {
             public void run() {
@@ -286,12 +299,35 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         }, 500, 3000);
     }
 
-    @OnClick(R.id.click_to_join)
+   /* @OnClick(R.id.click_to_join)
     public void fbOnClick() {
         if (StringUtil.isNotNullOrEmptyString(mGcmId)) {
             fbSignIn();
         } else {
             mFbLogin.setEnabled(false);
+            mOtherLoginOption.setEnabled(false);
+            if (!NetworkUtil.isConnected(mSheroesApplication)) {
+                showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
+                return;
+            } else {
+                getGcmId();
+            }
+        }
+    }*/
+
+
+    @OnClick(R.id.click_to_join)
+    public void getStartedOnClick() {
+        if (StringUtil.isNotNullOrEmptyString(mGcmId)) {
+            Bundle bundle = new Bundle();
+            bundle.putString(AppConstants.SHEROES_AUTH_TOKEN, mGcmId);
+            SignupFragment signupFragment = new SignupFragment();
+            signupFragment.setArguments(bundle);
+            mFragmentOpen.setSignupFragment(true);
+            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
+                    .replace(R.id.fragment_welcome_sign_up, signupFragment).addToBackStack(null).commitAllowingStateLoss();
+        } else {
+            mGetStarted.setEnabled(false);
             mOtherLoginOption.setEnabled(false);
             if (!NetworkUtil.isConnected(mSheroesApplication)) {
                 showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
@@ -313,7 +349,8 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             startActivity(loginIntent);
             finish();
         } else {
-            mFbLogin.setEnabled(false);
+          //  mFbLogin.setEnabled(false);
+            mGetStarted.setEnabled(false);
             mOtherLoginOption.setEnabled(false);
             if (!NetworkUtil.isConnected(mSheroesApplication)) {
                 showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
@@ -324,11 +361,11 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         }
     }
 
-    private void fbSignIn() {
+ /*   private void fbSignIn() {
         LoginManager.getInstance().logOut();
         mFbLogin.setReadPermissions(Arrays.asList("public_profile", "email", "user_birthday", "user_friends"));
         mFbLogin.registerCallback(callbackManager, callback);
-    }
+    }*/
 
 
     @Override
@@ -500,7 +537,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode, resultCode, data);
+     //   callbackManager.onActivityResult(requestCode, resultCode, data);
 
     }
 
@@ -520,7 +557,8 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     }
 
 
-    @Override
+
+   /* @Override
     public void getLogInResponse(LoginResponse loginResponse) {
         mProgressBar.setVisibility(View.GONE);
         switch (loginResponse.getStatus()) {
@@ -567,12 +605,16 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                 showNetworkTimeoutDoalog(true, false, errorMessage);
                 break;
         }
-    }
-
+    }*/
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        finish();
+        if(mFragmentOpen.isSignupFragment())
+        {
+            mFragmentOpen.setSignupFragment(false);
+            getSupportFragmentManager().popBackStack();
+        }
+        else{ finish();}
     }
 
     @Override
@@ -612,5 +654,9 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         }
     }
 
+    @Override
+    public void getLogInResponse(LoginResponse loginResponse) {
+
+    }
 }
 

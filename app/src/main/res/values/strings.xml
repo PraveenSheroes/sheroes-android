@@ -882,4 +882,16 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_STARTED">Started</string>
     <string name="ID_SHARE_MSG">Please choose photo or add youtube link.</string>
     <string name="ID_CHALLENGE_COMPLETED_SUCCESS">Success</string>
+
+
+    <string name="ID_SIGNUP_ALREADY_LOGIN">Already have an account? Log in</string>
+    <string name="ID_GET_STARTED">GET STARTED</string>
+    <string name="ID_SIGNUP_TEXT">SIGNUP TEXT</string>
+    <string name="ID_OR_CONTINUE">OR CONTINUE USING</string>
+    <string name="ID_SIGN_UP">SIGN UP</string>
+    <string name="ID_SIGN_UP_MOBILE_HINT">MOBILE NUMBER</string>
+    <string name="ID_SIGN_UP_PASSWORD_HINT">PASSWORD</string>
+    <string name="ID_STR_USER_ALREADY_EXIST_ERROR">User exists with emailid or mobile number</string>
+    <string name="ID_FIRST_NAME">Please enter the first name</string>
+    <string name="ID_LAST_NAME">Please enter the last name</string>
 </resources>

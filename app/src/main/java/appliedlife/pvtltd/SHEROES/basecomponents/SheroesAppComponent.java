@@ -94,6 +94,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.SettingPreferencesWorkExperien
 import appliedlife.pvtltd.SHEROES.views.fragments.SettingPreferencsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SettingTermsAndConditionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareCommunityFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.SignupFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeScreenFirstFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeScreenFourthFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeScreenSecondFragment;
@@ -560,8 +561,9 @@ public interface SheroesAppComponent {
     void inject(HelplineQuestionCardHolder helplineQuestionCardHolder);
     void inject(HelplineAnswerCardHolder helplineAnswerCardHolder);
 
-
     void inject(ChallengeUpdateProgressDialogFragment challengeUpdateProgressDialogFragment);
 
     void inject(ChallengeSuccessDialogFragment challengeSuccessDialogFragment);
+
+    void inject (SignupFragment signupFragment);
 }

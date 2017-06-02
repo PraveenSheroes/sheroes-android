@@ -151,6 +151,12 @@
     <dimen name="dp_size_81">81dp</dimen>
     <dimen name="dp_size_100">100dp</dimen>
     <dimen name="dp_size_sp">75sp</dimen>
+    <dimen name="dp_size_460">460dp</dimen>
+    <dimen name="dp_size_254">254dp</dimen>
+    <dimen name="dp_size_36">36dp</dimen>
+    <dimen name="dp_size_209">209dp</dimen>
+    <dimen name="dp_size_177">177dp</dimen>
+    <dimen name="dp_size_125">125dp</dimen>
 
     <dimen name="image_upload_w">180dp</dimen>
     <dimen name="image_upload_h">130dp</dimen>

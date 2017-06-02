@@ -112,6 +112,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCount;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobApplyRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.login.SignupRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingInterestRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingJobAtRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingLookingForHowCanRequest;
@@ -2257,7 +2258,6 @@ public class AppUtils {
         }
     }
 
-
     public static HelplinePostQuestionRequest helplineQuestionBuilder(String chatQueryText){
         HelplinePostQuestionRequest helplinePostQuestionRequest = new HelplinePostQuestionRequest();
         helplinePostQuestionRequest.setQuestion(chatQueryText);
@@ -2265,10 +2265,20 @@ public class AppUtils {
         return helplinePostQuestionRequest;
     }
 
-    public static HelplineGetChatThreadRequest helplineGetChatThreadRequestBuilder(int pageNo){
+    public static HelplineGetChatThreadRequest helplineGetChatThreadRequestBuilder(int pageNo) {
         HelplineGetChatThreadRequest helplineGetChatThreadRequest = new HelplineGetChatThreadRequest();
         helplineGetChatThreadRequest.setPageNo(pageNo);
         helplineGetChatThreadRequest.setPageSize(AppConstants.PAGE_SIZE_CHAT);
         return helplineGetChatThreadRequest;
+    }
+
+    public static SignupRequest signupRequestBuilder(){
+
+        SignupRequest signupRequest = new SignupRequest();
+        AppUtils appUtils = AppUtils.getInstance();
+        signupRequest.setAdvertisementid(appUtils.getDeviceManufacturer());
+        signupRequest.setDeviceid(appUtils.getDeviceId());
+        signupRequest.setDevicetype(AppConstants.SOURCE_NAME);
+        return signupRequest;
     }
 }

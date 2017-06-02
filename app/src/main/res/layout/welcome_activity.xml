@@ -130,7 +130,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <com.facebook.login.widget.LoginButton
+                <Button
                     android:id="@+id/click_to_join"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_size_40"
@@ -144,8 +144,8 @@
                     android:textColor="@color/white"
                     android:textSize="@dimen/sp_size_12"
                     android:textStyle="normal"
-                    fb:login_text="@string/ID_CONTINUE_WITH_FACEBOOK"
-                    fb:logout_text="@string/ID_FACEBOOK_LONGING" />
+                    android:text="@string/ID_GET_STARTED"
+                   />
 
                 <TextView
                     android:id="@+id/tv_other_login_option"
@@ -180,4 +180,9 @@
                     -->
         </LinearLayout>
     </ScrollView>
+    <include
+        android:id="@+id/fragment_welcome_sign_up"
+        layout="@layout/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </android.support.design.widget.CoordinatorLayout>

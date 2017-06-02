@@ -8,6 +8,7 @@ import javax.inject.Singleton;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.login.SignupRequest;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -75,6 +76,19 @@ public class LoginModel {
     }
     public Observable<LoginResponse> getGoogleLoginFromModel(LoginRequest loginRequest) {
         return sheroesAppServiceApi.getUserGoogleLogin(loginRequest)
+                .map(new Func1<LoginResponse, LoginResponse>() {
+                    @Override
+                    public LoginResponse call(LoginResponse loginResponse) {
+                        return loginResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+    }
+
+    public Observable<LoginResponse> getAuthTokenSignupFromModel(SignupRequest signupRequest) {
+        return sheroesAppServiceApi.userSignup(signupRequest)
                 .map(new Func1<LoginResponse, LoginResponse>() {
                     @Override
                     public LoginResponse call(LoginResponse loginResponse) {
