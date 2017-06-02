@@ -305,4 +305,5 @@ public class AppConstants {
     public static final String HELPlINE_NO_MESSAGE="Please enter your message";
     public static final String HELPlINE_NO_CHAT="No Chat found";
     public static final int REQ_CODE_SPEECH_INPUT = 100;
+    public static final String USER_ALREADY_EXIST_ERROR="User exists with emailid or mobile number";
 }

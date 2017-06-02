@@ -49,6 +49,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.GcmIdResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.login.SignupRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingInterestRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingJobAtRequest;
@@ -229,4 +230,8 @@ public interface SheroesAppServiceApi {
     Observable<HelplinePostQuestionResponse>postHelplineQuestion(@Body HelplinePostQuestionRequest helplinePostQuestionRequest);
     @POST("participation/helpline/get_thread_details")
     Observable<HelplineGetChatThreadResponse>getHelplineChatDetails(@Body HelplineGetChatThreadRequest helplineGetChatThreadRequest);
+
+    @POST("participant/user/signup")
+    Observable<LoginResponse> userSignup(@Body SignupRequest signupRequest);
+
 }

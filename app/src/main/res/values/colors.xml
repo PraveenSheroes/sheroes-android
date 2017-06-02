@@ -138,5 +138,6 @@
     <color name="community_tag_color">#788189</color>
 
     <color name="visiting_card_backgroung">#bababa</color>
+    <color name="signup_text_color">#512da8</color>
 
 </resources>

@@ -10,6 +10,7 @@ import appliedlife.pvtltd.SHEROES.models.LoginModel;
 import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.login.SignupRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -140,6 +141,33 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                 getMvpView().stopProgressBar();
                 if (null != loginResponse)
                     getMvpView().getLogInResponse(loginResponse);
+            }
+        });
+        registerSubscription(subscription);
+    }
+
+    public void getAuthTokenSignupInPresenter(SignupRequest signupRequest) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = mLoginModel.getAuthTokenSignupFromModel(signupRequest).subscribe(new Subscriber<LoginResponse>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                getMvpView().stopProgressBar();
+                getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
+            }
+
+            @Override
+            public void onNext(LoginResponse loginResponse) {
+                getMvpView().stopProgressBar();
+                getMvpView().getLogInResponse(loginResponse);
             }
         });
         registerSubscription(subscription);
