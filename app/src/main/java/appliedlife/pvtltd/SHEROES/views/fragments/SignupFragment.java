@@ -127,6 +127,7 @@ public class SignupFragment extends BaseFragment implements LoginView {
         mEmailView.getBackground().setColorFilter(getResources().getColor(R.color.blue), PorterDuff.Mode.SRC_ATOP);
         mPasswordView.getBackground().setColorFilter(getResources().getColor(R.color.blue), PorterDuff.Mode.SRC_ATOP);
         setProgressBar(mProgressBar);
+        mFbSignUp.setFragment(this);
         return view;
     }
 
@@ -414,7 +415,6 @@ public class SignupFragment extends BaseFragment implements LoginView {
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
 
     }

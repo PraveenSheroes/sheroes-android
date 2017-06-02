@@ -96,6 +96,7 @@
     <color name="text_color_close">#6e2f95</color>
     <color name="text_color_date_view">#767f88</color>
     <color name="challenge_header">#6e2f95</color>
+    <color name="color_signin_button_login">#673ab7</color>
 
     <color name="text_education_line">#a6aac2</color>
 

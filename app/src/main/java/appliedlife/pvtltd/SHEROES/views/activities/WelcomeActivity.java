@@ -3,6 +3,7 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.DialogFragment;
+import android.app.Fragment;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -124,9 +125,9 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     Button mGetStarted;
     private PayloadBuilder payloadBuilder;
     private static final int READ_CONTACTS_PERMISSIONS_REQUEST1 = 1;
-    private CallbackManager callbackManager;
+   /* private CallbackManager callbackManager;
     private AccessTokenTracker accessTokenTracker;
-    private ProfileTracker profileTracker;
+    private ProfileTracker profileTracker;*/
     private int currentPage = 0;
     private Timer timer;
     private int NUM_PAGES = 4;
@@ -169,7 +170,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getToken())) {
             openHomeScreen();
         } else {
-           faceBookInitialization();
+          // faceBookInitialization();
             setContentView(R.layout.welcome_activity);
             ButterKnife.bind(this);
             initHomeViewPagerAndTabs();
@@ -233,7 +234,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         finish();
     }
 
-    private void faceBookInitialization() {
+   /* private void faceBookInitialization() {
         FacebookSdk.sdkInitialize(getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
         accessTokenTracker = new AccessTokenTracker() {
@@ -250,7 +251,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         };
         accessTokenTracker.startTracking();
         profileTracker.startTracking();
-    }
+    }*/
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void initHomeViewPagerAndTabs() {
@@ -534,12 +535,10 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         }
     }
 
-    @Override
+   /* @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-     //   callbackManager.onActivityResult(requestCode, resultCode, data);
-
-    }
+    }*/
 
     public DialogFragment showFaceBookError(String message) {
         FacebookErrorDialog fragment = (FacebookErrorDialog) getFragmentManager().findFragmentByTag(FacebookErrorDialog.class.getName());
