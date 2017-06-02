@@ -46,8 +46,7 @@
                     android:id="@+id/iv_add_pic"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/dp_size_16"
-                    android:scaleType="fitXY" />
+                    android:layout_margin="@dimen/dp_size_16" />
 
                 <TextView
                     android:id="@+id/tv_add_photo_text"

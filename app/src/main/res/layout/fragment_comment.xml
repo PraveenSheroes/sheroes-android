@@ -145,11 +145,13 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_size_13"
             android:layout_marginRight="@dimen/dp_size_13"
-            android:layout_marginBottom="@dimen/dp_size_8"
+            android:layout_marginBottom="@dimen/dp_size_5"
             android:layout_marginTop="@dimen/dp_size_10"
+            android:padding="@dimen/dp_size_5"
+            android:enabled="false"
             android:background="@color/white"
             android:orientation="horizontal"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <TextView
                 android:id="@+id/tv_post_as_label"
@@ -157,6 +159,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:text="@string/ID_POST"
+                android:enabled="false"
                 android:textColor="@color/detail_page_text"
                 android:textSize="@dimen/sp_size_12" />
 

@@ -655,7 +655,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
     }
 
     public void openImageFullViewFragment(FeedDetail feedDetail) {
-        if (feedDetail.getCommunityId() != 0) {
+        if (StringUtil.isNotEmptyCollection(feedDetail.getImageUrls())) {
             ImageFullViewFragment imageFullViewFragment = new ImageFullViewFragment();
             Bundle bundle = new Bundle();
             mFragmentOpen.setOpenImageViewer(true);

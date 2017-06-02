@@ -8,237 +8,471 @@ import java.util.List;
 
 public class AppliedJob {
 
+    @SerializedName("address_s")
+    @Expose
+    private String addressS;
+    @SerializedName("author_city_id")
+    @Expose
+    private int authorCityId;
+    @SerializedName("author_city_name")
+    @Expose
+    private String authorCityName;
+    @SerializedName("author_first_name")
+    @Expose
+    private String authorFirstName;
+    @SerializedName("author_id")
+    @Expose
+    private int authorId;
+    @SerializedName("author_image_url")
+    @Expose
+    private String authorImageUrl;
+    @SerializedName("author_last_name")
+    @Expose
+    private String authorLastName;
+    @SerializedName("author_name")
+    @Expose
+    private String authorName;
+    @SerializedName("author_participant_id")
+    @Expose
+    private int authorParticipantId;
+    @SerializedName("author_participant_type")
+    @Expose
+    private String authorParticipantType;
+    @SerializedName("author_short_description")
+    @Expose
+    private String authorShortDescription;
+    @SerializedName("company_master_id_l")
+    @Expose
+    private int companyMasterIdL;
+    @SerializedName("company_profile_id_l")
+    @Expose
+    private int companyProfileIdL;
+    @SerializedName("compensation_details_s")
+    @Expose
+    private String compensationDetailsS;
+    @SerializedName("compensation_from_l")
+    @Expose
+    private int compensationFromL;
+    @SerializedName("compensation_to_l")
+    @Expose
+    private int compensationToL;
+    @SerializedName("created_by_l")
+    @Expose
+    private int createdByL;
+    @SerializedName("description")
+    @Expose
+    private String description;
+    @SerializedName("display_id_profile_id")
+    @Expose
+    private int displayIdProfileId;
+    @SerializedName("end_date_dt")
+    @Expose
+    private String endDateDt;
+    @SerializedName("entity_or_participant_id")
+    @Expose
+    private int entityOrParticipantId;
+    @SerializedName("entity_or_participant_type_id_i")
+    @Expose
+    private int entityOrParticipantTypeIdI;
+    @SerializedName("experience_from_i")
+    @Expose
+    private int experienceFromI;
+    @SerializedName("experience_to_i")
+    @Expose
+    private int experienceToI;
+    @SerializedName("h_company_logo_s")
+    @Expose
+    private String hCompanyLogoS;
+    @SerializedName("h_company_name_s")
+    @Expose
+    private String hCompanyNameS;
     @SerializedName("id")
     @Expose
     private String id;
-    @SerializedName("entity_or_participant_id")
-    @Expose
-    private Integer entityOrParticipantId;
-    @SerializedName("entity_or_participant_type_id_i")
-    @Expose
-    private Integer entityOrParticipantTypeIdI;
-    @SerializedName("display_id_profile_id")
-    @Expose
-    private Object displayIdProfileId;
-    @SerializedName("created_by_l")
-    @Expose
-    private Object createdByL;
     @SerializedName("id_of_entity_or_participant")
     @Expose
-    private Integer idOfEntityOrParticipant;
-    @SerializedName("type")
-    @Expose
-    private String type;
-    @SerializedName("sub_type")
-    @Expose
-    private String subType;
-    @SerializedName("name")
-    @Expose
-    private String name;
+    private int idOfEntityOrParticipant;
     @SerializedName("image_url")
     @Expose
-    private Object imageUrl;
-    @SerializedName("thumbnail_image_url")
+    private String imageUrl;
+    @SerializedName("is_assisted_b")
     @Expose
-    private Object thumbnailImageUrl;
-    @SerializedName("short_description")
+    private boolean isAssistedB;
+    @SerializedName("is_author_confidential")
     @Expose
-    private Object shortDescription;
-    @SerializedName("description")
+    private boolean isAuthorConfidential;
+    @SerializedName("is_author_image_public")
     @Expose
-    private Object description;
-    @SerializedName("list_short_description")
+    private boolean isAuthorImagePublic;
+    @SerializedName("is_ctc_required_b")
     @Expose
-    private Object listShortDescription;
+    private boolean isCtcRequiredB;
+    @SerializedName("is_expired")
+    @Expose
+    private boolean isExpired;
+    @SerializedName("is_featured")
+    @Expose
+    private boolean isFeatured;
+    @SerializedName("is_from_search_firm_b")
+    @Expose
+    private boolean isFromSearchFirmB;
+    @SerializedName("is_premium_b")
+    @Expose
+    private boolean isPremiumB;
+    @SerializedName("is_search_firm_b")
+    @Expose
+    private boolean isSearchFirmB;
+    @SerializedName("job_Type_s")
+    @Expose
+    private String jobTypeS;
+    @SerializedName("job_city_id_l")
+    @Expose
+    private int jobCityIdL;
+    @SerializedName("job_city_name_s")
+    @Expose
+    private String jobCityNameS;
     @SerializedName("list_description")
     @Expose
     private String listDescription;
-    @SerializedName("tag_names")
+    @SerializedName("list_short_description")
     @Expose
-    private Object tagNames;
-    @SerializedName("tag_ids")
+    private String listShortDescription;
+    @SerializedName("name")
     @Expose
-    private Object tagIds;
-    @SerializedName("p_is_deleted")
+    private String name;
+    @SerializedName("no_of_openings_i")
     @Expose
-    private Boolean pIsDeleted;
-    @SerializedName("p_is_active")
-    @Expose
-    private Boolean pIsActive;
+    private int noOfOpeningsI;
     @SerializedName("p_crdt")
     @Expose
     private String pCrdt;
+    @SerializedName("p_is_active")
+    @Expose
+    private boolean pIsActive;
+    @SerializedName("p_is_deleted")
+    @Expose
+    private boolean pIsDeleted;
+    @SerializedName("p_last_modified_on")
+    @Expose
+    private String pLastModifiedOn;
     @SerializedName("posting_date_dt")
     @Expose
     private String postingDateDt;
     @SerializedName("posting_date_only_dt")
     @Expose
     private String postingDateOnlyDt;
-    @SerializedName("is_expired")
+    @SerializedName("s_disp_compensation_currency")
     @Expose
-    private Boolean isExpired;
-    @SerializedName("p_last_modified_on")
+    private String sDispCompensationCurrency;
+    @SerializedName("s_disp_emailid")
     @Expose
-    private String pLastModifiedOn;
-    @SerializedName("author_participant_id")
+    private String sDispEmailid;
+    @SerializedName("s_disp_external_application_url")
     @Expose
-    private Integer authorParticipantId;
-    @SerializedName("author_id")
+    private String sDispExternalApplicationUrl;
+    @SerializedName("search_id_job_emp_types")
     @Expose
-    private Integer authorId;
-    @SerializedName("is_author_confidential")
-    @Expose
-    private Boolean isAuthorConfidential;
-    @SerializedName("author_participant_type")
-    @Expose
-    private String authorParticipantType;
-    @SerializedName("author_first_name")
-    @Expose
-    private Object authorFirstName;
-    @SerializedName("author_last_name")
-    @Expose
-    private Object authorLastName;
-    @SerializedName("author_name")
-    @Expose
-    private String authorName;
-    @SerializedName("author_image_url")
-    @Expose
-    private String authorImageUrl;
-    @SerializedName("is_author_image_public")
-    @Expose
-    private Boolean isAuthorImagePublic;
-    @SerializedName("author_city_id")
-    @Expose
-    private String authorCityId;
-    @SerializedName("author_city_name")
-    @Expose
-    private String authorCityName;
-    @SerializedName("author_short_description")
-    @Expose
-    private Object authorShortDescription;
-    @SerializedName("is_featured")
-    @Expose
-    private Boolean isFeatured;
-    @SerializedName("solr_ignore_no_of_likes")
-    @Expose
-    private Integer solrIgnoreNoOfLikes;
-    @SerializedName("solr_ignore_no_of_comments")
-    @Expose
-    private Integer solrIgnoreNoOfComments;
-    @SerializedName("solr_ignore_last_comments")
-    @Expose
-    private Object solrIgnoreLastComments;
-    @SerializedName("solr_ignore_reacted_value")
-    @Expose
-    private Integer solrIgnoreReactedValue;
-    @SerializedName("solr_ignore_is_bookmarked")
-    @Expose
-    private Boolean solrIgnoreIsBookmarked;
-    @SerializedName("solr_ignore_no_of_views")
-    @Expose
-    private Integer solrIgnoreNoOfViews;
-    @SerializedName("solr_ignore_is_applied")
-    @Expose
-    private Boolean solrIgnoreIsApplied;
-    @SerializedName("solr_ignore_is_viewed")
-    @Expose
-    private Boolean solrIgnoreIsViewed;
-    @SerializedName("solr_ignore_no_of_applies")
-    @Expose
-    private Integer solrIgnoreNoOfApplies;
-    @SerializedName("company_profile_id_l")
-    @Expose
-    private Integer companyProfileIdL;
-    @SerializedName("top_company_tag_link_id_l")
-    @Expose
-    private Object topCompanyTagLinkIdL;
-    @SerializedName("sector_id_l")
-    @Expose
-    private Object sectorIdL;
-    @SerializedName("sector_name_s")
-    @Expose
-    private Object sectorNameS;
-    @SerializedName("job_city_id_l")
-    @Expose
-    private Object jobCityIdL;
-    @SerializedName("job_city_name_s")
-    @Expose
-    private Object jobCityNameS;
-    @SerializedName("is_from_search_firm_b")
-    @Expose
-    private Boolean isFromSearchFirmB;
-    @SerializedName("is_search_firm_b")
-    @Expose
-    private Boolean isSearchFirmB;
-    @SerializedName("h_company_name_s")
-    @Expose
-    private Object hCompanyNameS;
-    @SerializedName("h_company_logo_s")
-    @Expose
-    private Object hCompanyLogoS;
-    @SerializedName("experience_from_i")
-    @Expose
-    private Integer experienceFromI;
-    @SerializedName("experience_to_i")
-    @Expose
-    private Integer experienceToI;
+    private List<Integer> searchIdJobEmpTypes = null;
     @SerializedName("search_id_job_opp_types")
     @Expose
     private List<Integer> searchIdJobOppTypes = null;
-    @SerializedName("search_text_job_opp_types")
-    @Expose
-    private List<String> searchTextJobOppTypes = null;
-    @SerializedName("search_id_job_emp_types")
-    @Expose
-    private List<String> searchIdJobEmpTypes = null;
-    @SerializedName("search_text_job_emp_types")
-    @Expose
-    private List<String> searchTextJobEmpTypes = null;
     @SerializedName("search_id_job_skills")
     @Expose
     private List<Integer> searchIdJobSkills = null;
+    @SerializedName("search_text_job_emp_types")
+    @Expose
+    private List<String> searchTextJobEmpTypes = null;
+    @SerializedName("search_text_job_opp_types")
+    @Expose
+    private List<String> searchTextJobOppTypes = null;
     @SerializedName("search_text_job_skills")
     @Expose
     private List<String> searchTextJobSkills = null;
-    @SerializedName("job_Type_s")
+    @SerializedName("sector_id_l")
     @Expose
-    private Object jobTypeS;
-    @SerializedName("end_date_dt")
+    private int sectorIdL;
+    @SerializedName("sector_name_s")
     @Expose
-    private Long endDateDt;
+    private String sectorNameS;
+    @SerializedName("short_description")
+    @Expose
+    private String shortDescription;
+    @SerializedName("solr_ignore_deep_link_url")
+    @Expose
+    private String solrIgnoreDeepLinkUrl;
+    @SerializedName("solr_ignore_end_date_dt")
+    @Expose
+    private String solrIgnoreEndDateDt;
+    @SerializedName("solr_ignore_is_applied")
+    @Expose
+    private boolean solrIgnoreIsApplied;
+    @SerializedName("solr_ignore_is_bookmarked")
+    @Expose
+    private boolean solrIgnoreIsBookmarked;
+    @SerializedName("solr_ignore_is_viewed")
+    @Expose
+    private boolean solrIgnoreIsViewed;
+ 
+    @SerializedName("solr_ignore_no_of_applies")
+    @Expose
+    private int solrIgnoreNoOfApplies;
+    @SerializedName("solr_ignore_no_of_comments")
+    @Expose
+    private int solrIgnoreNoOfComments;
+    @SerializedName("solr_ignore_no_of_likes")
+    @Expose
+    private int solrIgnoreNoOfLikes;
+    @SerializedName("solr_ignore_no_of_views")
+    @Expose
+    private int solrIgnoreNoOfViews;
+    @SerializedName("solr_ignore_p_crdt")
+    @Expose
+    private String solrIgnorePCrdt;
+    @SerializedName("solr_ignore_p_last_modified_on")
+    @Expose
+    private String solrIgnorePLastModifiedOn;
+    @SerializedName("solr_ignore_posting_date_dt")
+    @Expose
+    private String solrIgnorePostingDateDt;
+    @SerializedName("solr_ignore_posting_date_only_dt")
+    @Expose
+    private String solrIgnorePostingDateOnlyDt;
+    @SerializedName("solr_ignore_reacted_value")
+    @Expose
+    private int solrIgnoreReactedValue;
+    @SerializedName("solr_ignore_start_date_dt")
+    @Expose
+    private String solrIgnoreStartDateDt;
     @SerializedName("start_date_dt")
     @Expose
-    private Long startDateDt;
-    @SerializedName("is_assisted_b")
+    private String startDateDt;
+    @SerializedName("sub_type")
     @Expose
-    private Boolean isAssistedB;
-    @SerializedName("is_premium_b")
+    private String subType;
+    @SerializedName("tag_ids")
     @Expose
-    private Boolean isPremiumB;
-    @SerializedName("is_ctc_required_b")
+    private List<Integer> tagIds = null;
+    @SerializedName("tag_names")
     @Expose
-    private Boolean isCtcRequiredB;
-    @SerializedName("compensation_from_l")
+    private List<String> tagNames = null;
+    @SerializedName("thumbnail_image_url")
     @Expose
-    private Integer compensationFromL;
-    @SerializedName("compensation_to_l")
+    private String thumbnailImageUrl;
+    @SerializedName("top_company_tag_link_id_l")
     @Expose
-    private Integer compensationToL;
-    @SerializedName("no_of_openings_i")
+    private int topCompanyTagLinkIdL;
+    @SerializedName("type")
     @Expose
-    private Integer noOfOpeningsI;
-    @SerializedName("compensation_details_s")
-    @Expose
-    private Object compensationDetailsS;
-    @SerializedName("company_master_id_l")
-    @Expose
-    private Integer companyMasterIdL;
-    @SerializedName("s_disp_external_application_url")
-    @Expose
-    private Object sDispExternalApplicationUrl;
-    @SerializedName("address_s")
-    @Expose
-    private String addressS;
+    private String type;
+
+
+    public String getAddressS() {
+        return addressS;
+    }
+
+    public void setAddressS(String addressS) {
+        this.addressS = addressS;
+    }
+
+    public int getAuthorCityId() {
+        return authorCityId;
+    }
+
+    public void setAuthorCityId(int authorCityId) {
+        this.authorCityId = authorCityId;
+    }
+
+    public String getAuthorCityName() {
+        return authorCityName;
+    }
+
+    public void setAuthorCityName(String authorCityName) {
+        this.authorCityName = authorCityName;
+    }
+
+    public String getAuthorFirstName() {
+        return authorFirstName;
+    }
+
+    public void setAuthorFirstName(String authorFirstName) {
+        this.authorFirstName = authorFirstName;
+    }
+
+    public int getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(int authorId) {
+        this.authorId = authorId;
+    }
+
+    public String getAuthorImageUrl() {
+        return authorImageUrl;
+    }
+
+    public void setAuthorImageUrl(String authorImageUrl) {
+        this.authorImageUrl = authorImageUrl;
+    }
+
+    public String getAuthorLastName() {
+        return authorLastName;
+    }
+
+    public void setAuthorLastName(String authorLastName) {
+        this.authorLastName = authorLastName;
+    }
+
+    public String getAuthorName() {
+        return authorName;
+    }
+
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
+    }
+
+    public int getAuthorParticipantId() {
+        return authorParticipantId;
+    }
+
+    public void setAuthorParticipantId(int authorParticipantId) {
+        this.authorParticipantId = authorParticipantId;
+    }
+
+    public String getAuthorParticipantType() {
+        return authorParticipantType;
+    }
+
+    public void setAuthorParticipantType(String authorParticipantType) {
+        this.authorParticipantType = authorParticipantType;
+    }
+
+    public String getAuthorShortDescription() {
+        return authorShortDescription;
+    }
+
+    public void setAuthorShortDescription(String authorShortDescription) {
+        this.authorShortDescription = authorShortDescription;
+    }
+
+    public int getCompanyMasterIdL() {
+        return companyMasterIdL;
+    }
+
+    public void setCompanyMasterIdL(int companyMasterIdL) {
+        this.companyMasterIdL = companyMasterIdL;
+    }
+
+    public int getCompanyProfileIdL() {
+        return companyProfileIdL;
+    }
+
+    public void setCompanyProfileIdL(int companyProfileIdL) {
+        this.companyProfileIdL = companyProfileIdL;
+    }
+
+    public String getCompensationDetailsS() {
+        return compensationDetailsS;
+    }
+
+    public void setCompensationDetailsS(String compensationDetailsS) {
+        this.compensationDetailsS = compensationDetailsS;
+    }
+
+    public int getCompensationFromL() {
+        return compensationFromL;
+    }
+
+    public void setCompensationFromL(int compensationFromL) {
+        this.compensationFromL = compensationFromL;
+    }
+
+    public int getCompensationToL() {
+        return compensationToL;
+    }
+
+    public void setCompensationToL(int compensationToL) {
+        this.compensationToL = compensationToL;
+    }
+
+    public int getCreatedByL() {
+        return createdByL;
+    }
+
+    public void setCreatedByL(int createdByL) {
+        this.createdByL = createdByL;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public int getDisplayIdProfileId() {
+        return displayIdProfileId;
+    }
+
+    public void setDisplayIdProfileId(int displayIdProfileId) {
+        this.displayIdProfileId = displayIdProfileId;
+    }
+
+    public String getEndDateDt() {
+        return endDateDt;
+    }
+
+    public void setEndDateDt(String endDateDt) {
+        this.endDateDt = endDateDt;
+    }
+
+    public int getEntityOrParticipantId() {
+        return entityOrParticipantId;
+    }
+
+    public void setEntityOrParticipantId(int entityOrParticipantId) {
+        this.entityOrParticipantId = entityOrParticipantId;
+    }
+
+    public int getEntityOrParticipantTypeIdI() {
+        return entityOrParticipantTypeIdI;
+    }
+
+    public void setEntityOrParticipantTypeIdI(int entityOrParticipantTypeIdI) {
+        this.entityOrParticipantTypeIdI = entityOrParticipantTypeIdI;
+    }
+
+    public int getExperienceFromI() {
+        return experienceFromI;
+    }
+
+    public void setExperienceFromI(int experienceFromI) {
+        this.experienceFromI = experienceFromI;
+    }
+
+    public int getExperienceToI() {
+        return experienceToI;
+    }
+
+    public void setExperienceToI(int experienceToI) {
+        this.experienceToI = experienceToI;
+    }
+
+    public String gethCompanyLogoS() {
+        return hCompanyLogoS;
+    }
+
+    public void sethCompanyLogoS(String hCompanyLogoS) {
+        this.hCompanyLogoS = hCompanyLogoS;
+    }
+
+    public String gethCompanyNameS() {
+        return hCompanyNameS;
+    }
+
+    public void sethCompanyNameS(String hCompanyNameS) {
+        this.hCompanyNameS = hCompanyNameS;
+    }
 
     public String getId() {
         return id;
@@ -248,108 +482,116 @@ public class AppliedJob {
         this.id = id;
     }
 
-    public Integer getEntityOrParticipantId() {
-        return entityOrParticipantId;
-    }
-
-    public void setEntityOrParticipantId(Integer entityOrParticipantId) {
-        this.entityOrParticipantId = entityOrParticipantId;
-    }
-
-    public Integer getEntityOrParticipantTypeIdI() {
-        return entityOrParticipantTypeIdI;
-    }
-
-    public void setEntityOrParticipantTypeIdI(Integer entityOrParticipantTypeIdI) {
-        this.entityOrParticipantTypeIdI = entityOrParticipantTypeIdI;
-    }
-
-    public Object getDisplayIdProfileId() {
-        return displayIdProfileId;
-    }
-
-    public void setDisplayIdProfileId(Object displayIdProfileId) {
-        this.displayIdProfileId = displayIdProfileId;
-    }
-
-    public Object getCreatedByL() {
-        return createdByL;
-    }
-
-    public void setCreatedByL(Object createdByL) {
-        this.createdByL = createdByL;
-    }
-
-    public Integer getIdOfEntityOrParticipant() {
+    public int getIdOfEntityOrParticipant() {
         return idOfEntityOrParticipant;
     }
 
-    public void setIdOfEntityOrParticipant(Integer idOfEntityOrParticipant) {
+    public void setIdOfEntityOrParticipant(int idOfEntityOrParticipant) {
         this.idOfEntityOrParticipant = idOfEntityOrParticipant;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getSubType() {
-        return subType;
-    }
-
-    public void setSubType(String subType) {
-        this.subType = subType;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Object getImageUrl() {
+    public String getImageUrl() {
         return imageUrl;
     }
 
-    public void setImageUrl(Object imageUrl) {
+    public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
 
-    public Object getThumbnailImageUrl() {
-        return thumbnailImageUrl;
+    public boolean isAssistedB() {
+        return isAssistedB;
     }
 
-    public void setThumbnailImageUrl(Object thumbnailImageUrl) {
-        this.thumbnailImageUrl = thumbnailImageUrl;
+    public void setAssistedB(boolean assistedB) {
+        isAssistedB = assistedB;
     }
 
-    public Object getShortDescription() {
-        return shortDescription;
+    public boolean isAuthorConfidential() {
+        return isAuthorConfidential;
     }
 
-    public void setShortDescription(Object shortDescription) {
-        this.shortDescription = shortDescription;
+    public void setAuthorConfidential(boolean authorConfidential) {
+        isAuthorConfidential = authorConfidential;
     }
 
-    public Object getDescription() {
-        return description;
+    public boolean isAuthorImagePublic() {
+        return isAuthorImagePublic;
     }
 
-    public void setDescription(Object description) {
-        this.description = description;
+    public void setAuthorImagePublic(boolean authorImagePublic) {
+        isAuthorImagePublic = authorImagePublic;
     }
 
-    public Object getListShortDescription() {
-        return listShortDescription;
+    public boolean isCtcRequiredB() {
+        return isCtcRequiredB;
     }
 
-    public void setListShortDescription(Object listShortDescription) {
-        this.listShortDescription = listShortDescription;
+    public void setCtcRequiredB(boolean ctcRequiredB) {
+        isCtcRequiredB = ctcRequiredB;
+    }
+
+    public boolean isExpired() {
+        return isExpired;
+    }
+
+    public void setExpired(boolean expired) {
+        isExpired = expired;
+    }
+
+    public boolean isFeatured() {
+        return isFeatured;
+    }
+
+    public void setFeatured(boolean featured) {
+        isFeatured = featured;
+    }
+
+    public boolean isFromSearchFirmB() {
+        return isFromSearchFirmB;
+    }
+
+    public void setFromSearchFirmB(boolean fromSearchFirmB) {
+        isFromSearchFirmB = fromSearchFirmB;
+    }
+
+    public boolean isPremiumB() {
+        return isPremiumB;
+    }
+
+    public void setPremiumB(boolean premiumB) {
+        isPremiumB = premiumB;
+    }
+
+    public boolean isSearchFirmB() {
+        return isSearchFirmB;
+    }
+
+    public void setSearchFirmB(boolean searchFirmB) {
+        isSearchFirmB = searchFirmB;
+    }
+
+    public String getJobTypeS() {
+        return jobTypeS;
+    }
+
+    public void setJobTypeS(String jobTypeS) {
+        this.jobTypeS = jobTypeS;
+    }
+
+    public int getJobCityIdL() {
+        return jobCityIdL;
+    }
+
+    public void setJobCityIdL(int jobCityIdL) {
+        this.jobCityIdL = jobCityIdL;
+    }
+
+    public String getJobCityNameS() {
+        return jobCityNameS;
+    }
+
+    public void setJobCityNameS(String jobCityNameS) {
+        this.jobCityNameS = jobCityNameS;
     }
 
     public String getListDescription() {
@@ -360,44 +602,60 @@ public class AppliedJob {
         this.listDescription = listDescription;
     }
 
-    public Object getTagNames() {
-        return tagNames;
+    public String getListShortDescription() {
+        return listShortDescription;
     }
 
-    public void setTagNames(Object tagNames) {
-        this.tagNames = tagNames;
+    public void setListShortDescription(String listShortDescription) {
+        this.listShortDescription = listShortDescription;
     }
 
-    public Object getTagIds() {
-        return tagIds;
+    public String getName() {
+        return name;
     }
 
-    public void setTagIds(Object tagIds) {
-        this.tagIds = tagIds;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Boolean getPIsDeleted() {
-        return pIsDeleted;
+    public int getNoOfOpeningsI() {
+        return noOfOpeningsI;
     }
 
-    public void setPIsDeleted(Boolean pIsDeleted) {
-        this.pIsDeleted = pIsDeleted;
+    public void setNoOfOpeningsI(int noOfOpeningsI) {
+        this.noOfOpeningsI = noOfOpeningsI;
     }
 
-    public Boolean getPIsActive() {
-        return pIsActive;
-    }
-
-    public void setPIsActive(Boolean pIsActive) {
-        this.pIsActive = pIsActive;
-    }
-
-    public String getPCrdt() {
+    public String getpCrdt() {
         return pCrdt;
     }
 
-    public void setPCrdt(String pCrdt) {
+    public void setpCrdt(String pCrdt) {
         this.pCrdt = pCrdt;
+    }
+
+    public boolean ispIsActive() {
+        return pIsActive;
+    }
+
+    public void setpIsActive(boolean pIsActive) {
+        this.pIsActive = pIsActive;
+    }
+
+    public boolean ispIsDeleted() {
+        return pIsDeleted;
+    }
+
+    public void setpIsDeleted(boolean pIsDeleted) {
+        this.pIsDeleted = pIsDeleted;
+    }
+
+    public String getpLastModifiedOn() {
+        return pLastModifiedOn;
+    }
+
+    public void setpLastModifiedOn(String pLastModifiedOn) {
+        this.pLastModifiedOn = pLastModifiedOn;
     }
 
     public String getPostingDateDt() {
@@ -416,292 +674,36 @@ public class AppliedJob {
         this.postingDateOnlyDt = postingDateOnlyDt;
     }
 
-    public Boolean getIsExpired() {
-        return isExpired;
+    public String getsDispCompensationCurrency() {
+        return sDispCompensationCurrency;
     }
 
-    public void setIsExpired(Boolean isExpired) {
-        this.isExpired = isExpired;
+    public void setsDispCompensationCurrency(String sDispCompensationCurrency) {
+        this.sDispCompensationCurrency = sDispCompensationCurrency;
     }
 
-    public String getPLastModifiedOn() {
-        return pLastModifiedOn;
+    public String getsDispEmailid() {
+        return sDispEmailid;
     }
 
-    public void setPLastModifiedOn(String pLastModifiedOn) {
-        this.pLastModifiedOn = pLastModifiedOn;
+    public void setsDispEmailid(String sDispEmailid) {
+        this.sDispEmailid = sDispEmailid;
     }
 
-    public Integer getAuthorParticipantId() {
-        return authorParticipantId;
+    public String getsDispExternalApplicationUrl() {
+        return sDispExternalApplicationUrl;
     }
 
-    public void setAuthorParticipantId(Integer authorParticipantId) {
-        this.authorParticipantId = authorParticipantId;
+    public void setsDispExternalApplicationUrl(String sDispExternalApplicationUrl) {
+        this.sDispExternalApplicationUrl = sDispExternalApplicationUrl;
     }
 
-    public Integer getAuthorId() {
-        return authorId;
+    public List<Integer> getSearchIdJobEmpTypes() {
+        return searchIdJobEmpTypes;
     }
 
-    public void setAuthorId(Integer authorId) {
-        this.authorId = authorId;
-    }
-
-    public Boolean getIsAuthorConfidential() {
-        return isAuthorConfidential;
-    }
-
-    public void setIsAuthorConfidential(Boolean isAuthorConfidential) {
-        this.isAuthorConfidential = isAuthorConfidential;
-    }
-
-    public String getAuthorParticipantType() {
-        return authorParticipantType;
-    }
-
-    public void setAuthorParticipantType(String authorParticipantType) {
-        this.authorParticipantType = authorParticipantType;
-    }
-
-    public Object getAuthorFirstName() {
-        return authorFirstName;
-    }
-
-    public void setAuthorFirstName(Object authorFirstName) {
-        this.authorFirstName = authorFirstName;
-    }
-
-    public Object getAuthorLastName() {
-        return authorLastName;
-    }
-
-    public void setAuthorLastName(Object authorLastName) {
-        this.authorLastName = authorLastName;
-    }
-
-    public String getAuthorName() {
-        return authorName;
-    }
-
-    public void setAuthorName(String authorName) {
-        this.authorName = authorName;
-    }
-
-    public String getAuthorImageUrl() {
-        return authorImageUrl;
-    }
-
-    public void setAuthorImageUrl(String authorImageUrl) {
-        this.authorImageUrl = authorImageUrl;
-    }
-
-    public Boolean getIsAuthorImagePublic() {
-        return isAuthorImagePublic;
-    }
-
-    public void setIsAuthorImagePublic(Boolean isAuthorImagePublic) {
-        this.isAuthorImagePublic = isAuthorImagePublic;
-    }
-
-    public String getAuthorCityId() {
-        return authorCityId;
-    }
-
-    public void setAuthorCityId(String authorCityId) {
-        this.authorCityId = authorCityId;
-    }
-
-    public String getAuthorCityName() {
-        return authorCityName;
-    }
-
-    public void setAuthorCityName(String authorCityName) {
-        this.authorCityName = authorCityName;
-    }
-
-    public Object getAuthorShortDescription() {
-        return authorShortDescription;
-    }
-
-    public void setAuthorShortDescription(Object authorShortDescription) {
-        this.authorShortDescription = authorShortDescription;
-    }
-
-    public Boolean getIsFeatured() {
-        return isFeatured;
-    }
-
-    public void setIsFeatured(Boolean isFeatured) {
-        this.isFeatured = isFeatured;
-    }
-
-    public Integer getSolrIgnoreNoOfLikes() {
-        return solrIgnoreNoOfLikes;
-    }
-
-    public void setSolrIgnoreNoOfLikes(Integer solrIgnoreNoOfLikes) {
-        this.solrIgnoreNoOfLikes = solrIgnoreNoOfLikes;
-    }
-
-    public Integer getSolrIgnoreNoOfComments() {
-        return solrIgnoreNoOfComments;
-    }
-
-    public void setSolrIgnoreNoOfComments(Integer solrIgnoreNoOfComments) {
-        this.solrIgnoreNoOfComments = solrIgnoreNoOfComments;
-    }
-
-    public Object getSolrIgnoreLastComments() {
-        return solrIgnoreLastComments;
-    }
-
-    public void setSolrIgnoreLastComments(Object solrIgnoreLastComments) {
-        this.solrIgnoreLastComments = solrIgnoreLastComments;
-    }
-
-    public Integer getSolrIgnoreReactedValue() {
-        return solrIgnoreReactedValue;
-    }
-
-    public void setSolrIgnoreReactedValue(Integer solrIgnoreReactedValue) {
-        this.solrIgnoreReactedValue = solrIgnoreReactedValue;
-    }
-
-    public Boolean getSolrIgnoreIsBookmarked() {
-        return solrIgnoreIsBookmarked;
-    }
-
-    public void setSolrIgnoreIsBookmarked(Boolean solrIgnoreIsBookmarked) {
-        this.solrIgnoreIsBookmarked = solrIgnoreIsBookmarked;
-    }
-
-    public Integer getSolrIgnoreNoOfViews() {
-        return solrIgnoreNoOfViews;
-    }
-
-    public void setSolrIgnoreNoOfViews(Integer solrIgnoreNoOfViews) {
-        this.solrIgnoreNoOfViews = solrIgnoreNoOfViews;
-    }
-
-    public Boolean getSolrIgnoreIsApplied() {
-        return solrIgnoreIsApplied;
-    }
-
-    public void setSolrIgnoreIsApplied(Boolean solrIgnoreIsApplied) {
-        this.solrIgnoreIsApplied = solrIgnoreIsApplied;
-    }
-
-    public Boolean getSolrIgnoreIsViewed() {
-        return solrIgnoreIsViewed;
-    }
-
-    public void setSolrIgnoreIsViewed(Boolean solrIgnoreIsViewed) {
-        this.solrIgnoreIsViewed = solrIgnoreIsViewed;
-    }
-
-    public Integer getSolrIgnoreNoOfApplies() {
-        return solrIgnoreNoOfApplies;
-    }
-
-    public void setSolrIgnoreNoOfApplies(Integer solrIgnoreNoOfApplies) {
-        this.solrIgnoreNoOfApplies = solrIgnoreNoOfApplies;
-    }
-
-    public Integer getCompanyProfileIdL() {
-        return companyProfileIdL;
-    }
-
-    public void setCompanyProfileIdL(Integer companyProfileIdL) {
-        this.companyProfileIdL = companyProfileIdL;
-    }
-
-    public Object getTopCompanyTagLinkIdL() {
-        return topCompanyTagLinkIdL;
-    }
-
-    public void setTopCompanyTagLinkIdL(Object topCompanyTagLinkIdL) {
-        this.topCompanyTagLinkIdL = topCompanyTagLinkIdL;
-    }
-
-    public Object getSectorIdL() {
-        return sectorIdL;
-    }
-
-    public void setSectorIdL(Object sectorIdL) {
-        this.sectorIdL = sectorIdL;
-    }
-
-    public Object getSectorNameS() {
-        return sectorNameS;
-    }
-
-    public void setSectorNameS(Object sectorNameS) {
-        this.sectorNameS = sectorNameS;
-    }
-
-    public Object getJobCityIdL() {
-        return jobCityIdL;
-    }
-
-    public void setJobCityIdL(Object jobCityIdL) {
-        this.jobCityIdL = jobCityIdL;
-    }
-
-    public Object getJobCityNameS() {
-        return jobCityNameS;
-    }
-
-    public void setJobCityNameS(Object jobCityNameS) {
-        this.jobCityNameS = jobCityNameS;
-    }
-
-    public Boolean getIsFromSearchFirmB() {
-        return isFromSearchFirmB;
-    }
-
-    public void setIsFromSearchFirmB(Boolean isFromSearchFirmB) {
-        this.isFromSearchFirmB = isFromSearchFirmB;
-    }
-
-    public Boolean getIsSearchFirmB() {
-        return isSearchFirmB;
-    }
-
-    public void setIsSearchFirmB(Boolean isSearchFirmB) {
-        this.isSearchFirmB = isSearchFirmB;
-    }
-
-    public Object getHCompanyNameS() {
-        return hCompanyNameS;
-    }
-
-    public void setHCompanyNameS(Object hCompanyNameS) {
-        this.hCompanyNameS = hCompanyNameS;
-    }
-
-    public Object getHCompanyLogoS() {
-        return hCompanyLogoS;
-    }
-
-    public void setHCompanyLogoS(Object hCompanyLogoS) {
-        this.hCompanyLogoS = hCompanyLogoS;
-    }
-
-    public Integer getExperienceFromI() {
-        return experienceFromI;
-    }
-
-    public void setExperienceFromI(Integer experienceFromI) {
-        this.experienceFromI = experienceFromI;
-    }
-
-    public Integer getExperienceToI() {
-        return experienceToI;
-    }
-
-    public void setExperienceToI(Integer experienceToI) {
-        this.experienceToI = experienceToI;
+    public void setSearchIdJobEmpTypes(List<Integer> searchIdJobEmpTypes) {
+        this.searchIdJobEmpTypes = searchIdJobEmpTypes;
     }
 
     public List<Integer> getSearchIdJobOppTypes() {
@@ -712,20 +714,12 @@ public class AppliedJob {
         this.searchIdJobOppTypes = searchIdJobOppTypes;
     }
 
-    public List<String> getSearchTextJobOppTypes() {
-        return searchTextJobOppTypes;
+    public List<Integer> getSearchIdJobSkills() {
+        return searchIdJobSkills;
     }
 
-    public void setSearchTextJobOppTypes(List<String> searchTextJobOppTypes) {
-        this.searchTextJobOppTypes = searchTextJobOppTypes;
-    }
-
-    public List<String> getSearchIdJobEmpTypes() {
-        return searchIdJobEmpTypes;
-    }
-
-    public void setSearchIdJobEmpTypes(List<String> searchIdJobEmpTypes) {
-        this.searchIdJobEmpTypes = searchIdJobEmpTypes;
+    public void setSearchIdJobSkills(List<Integer> searchIdJobSkills) {
+        this.searchIdJobSkills = searchIdJobSkills;
     }
 
     public List<String> getSearchTextJobEmpTypes() {
@@ -736,12 +730,12 @@ public class AppliedJob {
         this.searchTextJobEmpTypes = searchTextJobEmpTypes;
     }
 
-    public List<Integer> getSearchIdJobSkills() {
-        return searchIdJobSkills;
+    public List<String> getSearchTextJobOppTypes() {
+        return searchTextJobOppTypes;
     }
 
-    public void setSearchIdJobSkills(List<Integer> searchIdJobSkills) {
-        this.searchIdJobSkills = searchIdJobSkills;
+    public void setSearchTextJobOppTypes(List<String> searchTextJobOppTypes) {
+        this.searchTextJobOppTypes = searchTextJobOppTypes;
     }
 
     public List<String> getSearchTextJobSkills() {
@@ -752,108 +746,203 @@ public class AppliedJob {
         this.searchTextJobSkills = searchTextJobSkills;
     }
 
-    public Object getJobTypeS() {
-        return jobTypeS;
+    public int getSectorIdL() {
+        return sectorIdL;
     }
 
-    public void setJobTypeS(Object jobTypeS) {
-        this.jobTypeS = jobTypeS;
+    public void setSectorIdL(int sectorIdL) {
+        this.sectorIdL = sectorIdL;
     }
 
-    public Long getEndDateDt() {
-        return endDateDt;
+    public String getSectorNameS() {
+        return sectorNameS;
     }
 
-    public void setEndDateDt(Long endDateDt) {
-        this.endDateDt = endDateDt;
+    public void setSectorNameS(String sectorNameS) {
+        this.sectorNameS = sectorNameS;
     }
 
-    public Long getStartDateDt() {
+    public String getShortDescription() {
+        return shortDescription;
+    }
+
+    public void setShortDescription(String shortDescription) {
+        this.shortDescription = shortDescription;
+    }
+
+    public String getSolrIgnoreDeepLinkUrl() {
+        return solrIgnoreDeepLinkUrl;
+    }
+
+    public void setSolrIgnoreDeepLinkUrl(String solrIgnoreDeepLinkUrl) {
+        this.solrIgnoreDeepLinkUrl = solrIgnoreDeepLinkUrl;
+    }
+
+    public String getSolrIgnoreEndDateDt() {
+        return solrIgnoreEndDateDt;
+    }
+
+    public void setSolrIgnoreEndDateDt(String solrIgnoreEndDateDt) {
+        this.solrIgnoreEndDateDt = solrIgnoreEndDateDt;
+    }
+
+    public boolean isSolrIgnoreIsApplied() {
+        return solrIgnoreIsApplied;
+    }
+
+    public void setSolrIgnoreIsApplied(boolean solrIgnoreIsApplied) {
+        this.solrIgnoreIsApplied = solrIgnoreIsApplied;
+    }
+
+    public boolean isSolrIgnoreIsBookmarked() {
+        return solrIgnoreIsBookmarked;
+    }
+
+    public void setSolrIgnoreIsBookmarked(boolean solrIgnoreIsBookmarked) {
+        this.solrIgnoreIsBookmarked = solrIgnoreIsBookmarked;
+    }
+
+    public boolean isSolrIgnoreIsViewed() {
+        return solrIgnoreIsViewed;
+    }
+
+    public void setSolrIgnoreIsViewed(boolean solrIgnoreIsViewed) {
+        this.solrIgnoreIsViewed = solrIgnoreIsViewed;
+    }
+
+    public int getSolrIgnoreNoOfApplies() {
+        return solrIgnoreNoOfApplies;
+    }
+
+    public void setSolrIgnoreNoOfApplies(int solrIgnoreNoOfApplies) {
+        this.solrIgnoreNoOfApplies = solrIgnoreNoOfApplies;
+    }
+
+    public int getSolrIgnoreNoOfComments() {
+        return solrIgnoreNoOfComments;
+    }
+
+    public void setSolrIgnoreNoOfComments(int solrIgnoreNoOfComments) {
+        this.solrIgnoreNoOfComments = solrIgnoreNoOfComments;
+    }
+
+    public int getSolrIgnoreNoOfLikes() {
+        return solrIgnoreNoOfLikes;
+    }
+
+    public void setSolrIgnoreNoOfLikes(int solrIgnoreNoOfLikes) {
+        this.solrIgnoreNoOfLikes = solrIgnoreNoOfLikes;
+    }
+
+    public int getSolrIgnoreNoOfViews() {
+        return solrIgnoreNoOfViews;
+    }
+
+    public void setSolrIgnoreNoOfViews(int solrIgnoreNoOfViews) {
+        this.solrIgnoreNoOfViews = solrIgnoreNoOfViews;
+    }
+
+    public String getSolrIgnorePCrdt() {
+        return solrIgnorePCrdt;
+    }
+
+    public void setSolrIgnorePCrdt(String solrIgnorePCrdt) {
+        this.solrIgnorePCrdt = solrIgnorePCrdt;
+    }
+
+    public String getSolrIgnorePLastModifiedOn() {
+        return solrIgnorePLastModifiedOn;
+    }
+
+    public void setSolrIgnorePLastModifiedOn(String solrIgnorePLastModifiedOn) {
+        this.solrIgnorePLastModifiedOn = solrIgnorePLastModifiedOn;
+    }
+
+    public String getSolrIgnorePostingDateDt() {
+        return solrIgnorePostingDateDt;
+    }
+
+    public void setSolrIgnorePostingDateDt(String solrIgnorePostingDateDt) {
+        this.solrIgnorePostingDateDt = solrIgnorePostingDateDt;
+    }
+
+    public String getSolrIgnorePostingDateOnlyDt() {
+        return solrIgnorePostingDateOnlyDt;
+    }
+
+    public void setSolrIgnorePostingDateOnlyDt(String solrIgnorePostingDateOnlyDt) {
+        this.solrIgnorePostingDateOnlyDt = solrIgnorePostingDateOnlyDt;
+    }
+
+    public int getSolrIgnoreReactedValue() {
+        return solrIgnoreReactedValue;
+    }
+
+    public void setSolrIgnoreReactedValue(int solrIgnoreReactedValue) {
+        this.solrIgnoreReactedValue = solrIgnoreReactedValue;
+    }
+
+    public String getSolrIgnoreStartDateDt() {
+        return solrIgnoreStartDateDt;
+    }
+
+    public void setSolrIgnoreStartDateDt(String solrIgnoreStartDateDt) {
+        this.solrIgnoreStartDateDt = solrIgnoreStartDateDt;
+    }
+
+    public String getStartDateDt() {
         return startDateDt;
     }
 
-    public void setStartDateDt(Long startDateDt) {
+    public void setStartDateDt(String startDateDt) {
         this.startDateDt = startDateDt;
     }
 
-    public Boolean getIsAssistedB() {
-        return isAssistedB;
+    public String getSubType() {
+        return subType;
     }
 
-    public void setIsAssistedB(Boolean isAssistedB) {
-        this.isAssistedB = isAssistedB;
+    public void setSubType(String subType) {
+        this.subType = subType;
     }
 
-    public Boolean getIsPremiumB() {
-        return isPremiumB;
+    public List<Integer> getTagIds() {
+        return tagIds;
     }
 
-    public void setIsPremiumB(Boolean isPremiumB) {
-        this.isPremiumB = isPremiumB;
+    public void setTagIds(List<Integer> tagIds) {
+        this.tagIds = tagIds;
     }
 
-    public Boolean getIsCtcRequiredB() {
-        return isCtcRequiredB;
+    public List<String> getTagNames() {
+        return tagNames;
     }
 
-    public void setIsCtcRequiredB(Boolean isCtcRequiredB) {
-        this.isCtcRequiredB = isCtcRequiredB;
+    public void setTagNames(List<String> tagNames) {
+        this.tagNames = tagNames;
     }
 
-    public Integer getCompensationFromL() {
-        return compensationFromL;
+    public String getThumbnailImageUrl() {
+        return thumbnailImageUrl;
     }
 
-    public void setCompensationFromL(Integer compensationFromL) {
-        this.compensationFromL = compensationFromL;
+    public void setThumbnailImageUrl(String thumbnailImageUrl) {
+        this.thumbnailImageUrl = thumbnailImageUrl;
     }
 
-    public Integer getCompensationToL() {
-        return compensationToL;
+    public int getTopCompanyTagLinkIdL() {
+        return topCompanyTagLinkIdL;
     }
 
-    public void setCompensationToL(Integer compensationToL) {
-        this.compensationToL = compensationToL;
+    public void setTopCompanyTagLinkIdL(int topCompanyTagLinkIdL) {
+        this.topCompanyTagLinkIdL = topCompanyTagLinkIdL;
     }
 
-    public Integer getNoOfOpeningsI() {
-        return noOfOpeningsI;
+    public String getType() {
+        return type;
     }
 
-    public void setNoOfOpeningsI(Integer noOfOpeningsI) {
-        this.noOfOpeningsI = noOfOpeningsI;
+    public void setType(String type) {
+        this.type = type;
     }
-
-    public Object getCompensationDetailsS() {
-        return compensationDetailsS;
-    }
-
-    public void setCompensationDetailsS(Object compensationDetailsS) {
-        this.compensationDetailsS = compensationDetailsS;
-    }
-
-    public Integer getCompanyMasterIdL() {
-        return companyMasterIdL;
-    }
-
-    public void setCompanyMasterIdL(Integer companyMasterIdL) {
-        this.companyMasterIdL = companyMasterIdL;
-    }
-
-    public Object getSDispExternalApplicationUrl() {
-        return sDispExternalApplicationUrl;
-    }
-
-    public void setSDispExternalApplicationUrl(Object sDispExternalApplicationUrl) {
-        this.sDispExternalApplicationUrl = sDispExternalApplicationUrl;
-    }
-
-    public String getAddressS() {
-        return addressS;
-    }
-
-    public void setAddressS(String addressS) {
-        this.addressS = addressS;
-    }
-
 }

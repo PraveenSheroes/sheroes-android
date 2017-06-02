@@ -176,7 +176,6 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void onRefresh() {
                 refreshFeedMethod();
-                mHomePresenter.getNotificationCountFromPresenter(notificationReadCountRequestBuilder(TAG));
             }
         });
         return view;
@@ -235,7 +234,7 @@ public class HomeFragment extends BaseFragment {
         setRefreshList(mPullRefreshList);
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
         mHomePresenter.getFeedFromPresenter(feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
-
+        mHomePresenter.getNotificationCountFromPresenter(notificationReadCountRequestBuilder(TAG));
     }
 
     @Override
@@ -274,6 +273,7 @@ public class HomeFragment extends BaseFragment {
                                     if (null != ((HomeActivity) getActivity()).mChallengeSuccessDialogFragment) {
                                         ((HomeActivity) getActivity()).mChallengeSuccessDialogFragment.dismiss();
                                     }
+                                    refreshFeedMethod();
                                     mChallengeDataItem.setCompletionPercent(AppConstants.COMPLETE);
                                 } else {
                                     if (mPercentCompleted == AppConstants.HALF_DONE) {
@@ -329,7 +329,11 @@ public class HomeFragment extends BaseFragment {
                         challengeFeedDetail = new FeedDetail();
                         challengeFeedDetail.setSubType(AppConstants.CHALLENGE_SUB_TYPE);
                         challengeFeedDetail.setCommunityId(mChallengeId);
-                        challengeFeedDetail.setNoOfMembers(0);
+                        if(null!=mChallengeDataItem) {
+                            challengeFeedDetail.setNoOfMembers(mChallengeDataItem.getItemPosition());
+                        }else {
+                            challengeFeedDetail.setNoOfMembers(0);
+                        }
                         challengeFeedDetail.setChallengeDataItems(challengeListResponse.getReponseList());
                         challengeAddOnFeed(challengeFeedDetail);
                     }

@@ -1,7 +1,5 @@
 package appliedlife.pvtltd.SHEROES.models;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 
 import javax.inject.Inject;
@@ -9,7 +7,6 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobApplyRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobApplyResponse;
-import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
@@ -21,19 +18,18 @@ import rx.schedulers.Schedulers;
 public class JobModel {
     private final SheroesAppServiceApi sheroesAppServiceApi;
     Gson gson;
+
     @Inject
     public JobModel(SheroesAppServiceApi sheroesAppServiceApi, Gson gson) {
         this.sheroesAppServiceApi = sheroesAppServiceApi;
-        this.gson= gson;
+        this.gson = gson;
     }
-    public rx.Observable<JobApplyResponse> getJobApply(JobApplyRequest jobApplyRequest){
 
-        LogUtils.error("Job Apply req: ",gson.toJson(jobApplyRequest));
+    public rx.Observable<JobApplyResponse> getJobApply(JobApplyRequest jobApplyRequest) {
         return sheroesAppServiceApi.getJobApply(jobApplyRequest)
                 .map(new Func1<JobApplyResponse, JobApplyResponse>() {
                     @Override
                     public JobApplyResponse call(JobApplyResponse jobApplyResponse) {
-                        Log.e("Job Apply res: ",gson.toJson(jobApplyResponse));
                         return jobApplyResponse;
                     }
                 })
