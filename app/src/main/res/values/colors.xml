@@ -140,5 +140,6 @@
 
     <color name="visiting_card_backgroung">#bababa</color>
     <color name="signup_text_color">#512da8</color>
+    <color name="helpline_edittext_color">#808080</color>
 
 </resources>

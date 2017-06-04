@@ -107,28 +107,7 @@ public class HelplineFragment extends BaseFragment {
         appBarLayoutParams.setBehavior(null);
         ((HomeActivity) getActivity()).mAppBarLayout.setLayoutParams(appBarLayoutParams);
 
-        mLayoutManager = new LinearLayoutManager(getContext());
-        mAdapter = new GenericRecyclerViewAdapter(getContext(), (HomeActivity) getActivity());
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.addOnScrollListener(new HidingScrollListener(mHelplinePresenter, mRecyclerView, mLayoutManager, mFragmentListRefreshData) {
-            @Override
-            public void onHide() {
-                mListLoad = true;
-            }
-
-            @Override
-            public void onShow() {
-                mListLoad = true;
-            }
-
-            @Override
-            public void dismissReactions() {
-
-            }
-        });
-        super.setInitializationForHelpline(mFragmentListRefreshData, mAdapter, mLayoutManager, mRecyclerView, mAppUtils, mProgressBar);
-        mHelplinePresenter.getHelplineChatDetails(helplineGetChatThreadRequestBuilder(AppConstants.ONE_CONSTANT));
+        setUpRecyclerView();
         mSwipeView.setRefreshing(false);
         mSwipeView.setEnabled(false);
         return view;
@@ -195,12 +174,12 @@ public class HelplineFragment extends BaseFragment {
     }
 
     private void refreshChatMethod() {
-        setListLoadFlag(false);
         mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
         mPullRefreshList = new SwipPullRefreshList();
+        mPullRefreshList.setPullToRefresh(false);
         setRefreshList(mPullRefreshList);
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
-        mHelplinePresenter.getHelplineChatDetails(helplineGetChatThreadRequestBuilder(AppConstants.ONE_CONSTANT));
+        setUpRecyclerView();
 
     }
 
@@ -232,15 +211,38 @@ public class HelplineFragment extends BaseFragment {
             questionText.setText(AppConstants.EMPTY_STRING);
             AppUtils.hideKeyboard(getView(), TAG);
             refreshChatMethod();
-        } else {
-            Log.d("FAILED", "Question not posted");
         }
-
     }
 
     public void getSpeechText(String questionBySpeech) {
         questionText.append(questionBySpeech);
         questionText.setSelection(questionText.getText().length());
+    }
+
+    public void setUpRecyclerView(){
+        mLayoutManager = new LinearLayoutManager(getContext());
+        mAdapter = new GenericRecyclerViewAdapter(getContext(), (HomeActivity) getActivity());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.clearOnScrollListeners();
+        mRecyclerView.addOnScrollListener(new HidingScrollListener(mHelplinePresenter, mRecyclerView, mLayoutManager, mFragmentListRefreshData) {
+            @Override
+            public void onHide() {
+                mListLoad = true;
+            }
+
+            @Override
+            public void onShow() {
+                mListLoad = true;
+            }
+
+            @Override
+            public void dismissReactions() {
+
+            }
+        });
+        super.setInitializationForHelpline(mFragmentListRefreshData, mAdapter, mLayoutManager, mRecyclerView, mAppUtils, mProgressBar);
+        mHelplinePresenter.getHelplineChatDetails(helplineGetChatThreadRequestBuilder(AppConstants.ONE_CONSTANT));
     }
 }
 

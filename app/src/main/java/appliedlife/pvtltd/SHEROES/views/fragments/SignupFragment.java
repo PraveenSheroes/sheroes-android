@@ -172,6 +172,7 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
         setProgressBar(mProgressBar);
         mFbSignUp.setFragment(this);
         setGooglePlusButtonText(btnLoginGoogle, getString(R.string.IDS_GOOGLE_BUTTON));
+        mFbSignUp.setCompoundDrawablesWithIntrinsicBounds(null,null,null,null);
         return view;
     }
 
@@ -341,7 +342,13 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
             // There was an error; don't attempt login and focus the first
             // form field with an error.
             focusView.requestFocus();
-        } else {
+
+        }else if(password.length()<6){
+                focusView = mPasswordView;
+                mPasswordView.setError(getString(R.string.ID_PASSWORD_STRENTH));
+                focusView.requestFocus();
+            }
+        else{
             if (StringUtil.isNotNullOrEmptyString(mGcmId)) {
                 SignupRequest signupRequest = AppUtils.signupRequestBuilder();
                 signupRequest.setEmailId(email);
