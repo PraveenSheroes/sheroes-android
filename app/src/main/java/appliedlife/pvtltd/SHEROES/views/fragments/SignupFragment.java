@@ -122,7 +122,7 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
     @Bind(R.id.pb_login_progress_bar)
     ProgressBar mProgressBar;
     @Bind(R.id.btn_login_google)
-    SignInButton btnLoginGoogle;
+    Button btnLoginGoogle;
     private String mGcmId;
     private String password;
     private String email;
@@ -171,7 +171,7 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
         mPasswordView.getBackground().setColorFilter(getResources().getColor(R.color.blue), PorterDuff.Mode.SRC_ATOP);
         setProgressBar(mProgressBar);
         mFbSignUp.setFragment(this);
-        setGooglePlusButtonText(btnLoginGoogle, getString(R.string.IDS_GOOGLE_BUTTON));
+       // setGooglePlusButtonText(btnLoginGoogle, getString(R.string.IDS_GOOGLE_BUTTON));
         mFbSignUp.setCompoundDrawablesWithIntrinsicBounds(null,null,null,null);
         return view;
     }
@@ -249,7 +249,7 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
         }
     }
 
-    protected void setGooglePlusButtonText(SignInButton signInButton, String buttonText) {
+    /*protected void setGooglePlusButtonText(SignInButton signInButton, String buttonText) {
         for (int i = 0; i < signInButton.getChildCount(); i++) {
             View v = signInButton.getChildAt(i);
             if (v instanceof TextView) {
@@ -261,7 +261,7 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
                 return;
             }
         }
-    }
+    }*/
 
     @OnClick(R.id.btn_login_google)
     public void googleLoginClick() {
