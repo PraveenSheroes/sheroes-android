@@ -56,7 +56,15 @@ public class SheroesDeepLinkingActivity extends Activity {
                                     startActivity(into);
                                     finish();
                                 }
-                            }else {
+                            }else if(urlOfSharedCard.contains(AppConstants.HELPLINE_URL)||urlOfSharedCard.contains(AppConstants.HELPLINE_URL_COM)){
+                                  Intent helplineIntent = new Intent(SheroesDeepLinkingActivity.this, HomeActivity.class);
+                                  helplineIntent.putExtra(AppConstants.HELPLINE_CHAT,AppConstants.HELPLINE_CHAT);
+                                  startActivity(helplineIntent);
+                                  finish();
+                              }
+
+
+                            else {
 
 
                                   indexOfFourthBackSlace = findNthIndexOf(urlOfSharedCard, AppConstants.BACK_SLASH, 4);
