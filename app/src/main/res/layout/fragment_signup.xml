@@ -4,194 +4,208 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:id="@+id/rlsignup1"
+    <include layout="@layout/progress_bar_login" />
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <RelativeLayout
-            android:id="@+id/rlsignupin"
+            android:id="@+id/rlsignup1"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_size_460"
-            android:background="@color/white">
+            android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/signuptext"
-                android:layout_width="@dimen/dp_size_254"
-                android:layout_height="@dimen/dp_size_36"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/dp_size_31"
-                android:fontFamily="@string/ID_ROBOTO_LIGHT"
-                android:text="@string/ID_SIGNUP_TEXT"
-                android:textAlignment="center"
-                android:textSize="@dimen/dp_size_16" />
-
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/fnwidget"
+            <RelativeLayout
+                android:id="@+id/rlsignupin"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/signuptext"
-                android:layout_marginTop="@dimen/dp_size_20"
-                android:paddingLeft="@dimen/dp_size_45"
-                android:paddingRight="@dimen/dp_size_45"
-               >
+                android:layout_height="@dimen/dp_size_460"
+                android:background="@color/white">
 
-                <EditText
-                    android:id="@+id/fname_signup"
+                <TextView
+                    android:id="@+id/signuptext"
+                    android:layout_width="@dimen/dp_size_254"
+                    android:layout_height="@dimen/dp_size_36"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/dp_size_31"
+                    android:fontFamily="@string/ID_ROBOTO_LIGHT"
+                    android:text="@string/ID_SIGNUP_TEXT"
+                    android:textAlignment="center"
+                    android:textSize="@dimen/dp_size_16" />
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/fnwidget"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/signup_text_color"
-                    android:hint="@string/ID_FIRST_NAME_HINT"
-                    android:inputType="textPersonName"
-                    android:maxLines="@integer/int_value_for_line_1"
-                    android:textSize="@dimen/sp_size_12" />
+                    android:layout_below="@+id/signuptext"
+                    android:layout_marginTop="@dimen/dp_size_20"
+                    android:paddingLeft="@dimen/dp_size_45"
+                    android:paddingRight="@dimen/dp_size_45">
 
-            </android.support.design.widget.TextInputLayout>
+                    <EditText
+                        android:id="@+id/fname_signup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/signup_text_color"
+                        android:hint="@string/ID_FIRST_NAME_HINT"
+                        android:inputType="textPersonName"
+                        android:maxLines="@integer/int_value_for_line_1"
+                        android:textSize="@dimen/sp_size_12" />
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/lnwidget"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/fnwidget"
-                android:layout_marginTop="@dimen/dp_size_5"
-                android:paddingLeft="@dimen/dp_size_45"
-                android:paddingRight="@dimen/dp_size_45">
+                </android.support.design.widget.TextInputLayout>
 
-                <EditText
-                    android:id="@+id/lname_signup"
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/lnwidget"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/signup_text_color"
-                    android:hint="@string/ID_LAST_NAME_HINT"
-                    android:inputType="textPersonName"
-                    android:maxLines="@integer/int_value_for_line_1"
-                    android:textSize="@dimen/sp_size_12" />
+                    android:layout_below="@+id/fnwidget"
+                    android:layout_marginTop="@dimen/dp_size_5"
+                    android:paddingLeft="@dimen/dp_size_45"
+                    android:paddingRight="@dimen/dp_size_45">
 
-            </android.support.design.widget.TextInputLayout>
+                    <EditText
+                        android:id="@+id/lname_signup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/signup_text_color"
+                        android:hint="@string/ID_LAST_NAME_HINT"
+                        android:inputType="textPersonName"
+                        android:maxLines="@integer/int_value_for_line_1"
+                        android:textSize="@dimen/sp_size_12" />
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/emailwidget"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/lnwidget"
-                android:layout_marginTop="@dimen/dp_size_5"
-                android:paddingLeft="@dimen/dp_size_45"
-                android:paddingRight="@dimen/dp_size_45">
+                </android.support.design.widget.TextInputLayout>
 
-                <EditText
-                    android:id="@+id/email_signup"
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/emailwidget"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/signup_text_color"
-                    android:hint="@string/ID_EMAIL_ID_HINT"
-                    android:inputType="textEmailAddress"
-                    android:maxLines="@integer/int_value_for_line_1"
-                    android:textSize="@dimen/sp_size_12" />
+                    android:layout_below="@+id/lnwidget"
+                    android:layout_marginTop="@dimen/dp_size_5"
+                    android:paddingLeft="@dimen/dp_size_45"
+                    android:paddingRight="@dimen/dp_size_45">
 
-            </android.support.design.widget.TextInputLayout>
+                    <EditText
+                        android:id="@+id/email_signup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/signup_text_color"
+                        android:hint="@string/ID_EMAIL_ID_HINT"
+                        android:inputType="textEmailAddress"
+                        android:maxLines="@integer/int_value_for_line_1"
+                        android:textSize="@dimen/sp_size_12" />
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/mobilewidget"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/emailwidget"
-                android:layout_marginTop="@dimen/dp_size_5"
-                android:paddingLeft="@dimen/dp_size_45"
-                android:paddingRight="@dimen/dp_size_45">
+                </android.support.design.widget.TextInputLayout>
 
-                <EditText
-                    android:id="@+id/mobile_signup"
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/mobilewidget"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/signup_text_color"
-                    android:hint="@string/ID_SIGN_UP_MOBILE_HINT"
-                    android:inputType="number"
-                    android:maxLines="@integer/int_value_for_line_1"
-                    android:textSize="@dimen/sp_size_12" />
+                    android:layout_below="@+id/emailwidget"
+                    android:layout_marginTop="@dimen/dp_size_5"
+                    android:paddingLeft="@dimen/dp_size_45"
+                    android:paddingRight="@dimen/dp_size_45">
 
-            </android.support.design.widget.TextInputLayout>
+                    <EditText
+                        android:id="@+id/mobile_signup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/signup_text_color"
+                        android:hint="@string/ID_SIGN_UP_MOBILE_HINT"
+                        android:inputType="number"
+                        android:maxLines="@integer/int_value_for_line_1"
+                        android:textSize="@dimen/sp_size_12" />
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/passwordwidget"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/mobilewidget"
-                android:layout_marginTop="@dimen/dp_size_5"
-                android:paddingLeft="@dimen/dp_size_45"
-                android:paddingRight="@dimen/dp_size_45">
+                </android.support.design.widget.TextInputLayout>
 
-                <EditText
-                    android:id="@+id/password_signup"
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/passwordwidget"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/signup_text_color"
-                    android:hint="@string/ID_SIGN_UP_PASSWORD_HINT"
-                    android:inputType="textPassword"
-                    android:maxLines="@integer/int_value_for_line_1"
-                    android:textSize="@dimen/sp_size_12"  />
+                    android:layout_below="@+id/mobilewidget"
+                    android:layout_marginTop="@dimen/dp_size_5"
+                    android:paddingLeft="@dimen/dp_size_45"
+                    android:paddingRight="@dimen/dp_size_45">
 
-            </android.support.design.widget.TextInputLayout>
+                    <EditText
+                        android:id="@+id/password_signup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/signup_text_color"
+                        android:hint="@string/ID_SIGN_UP_PASSWORD_HINT"
+                        android:inputType="textPassword"
+                        android:maxLines="@integer/int_value_for_line_1"
+                        android:textSize="@dimen/sp_size_12" />
 
-            <Button
-                android:id="@+id/signupbtn"
-                android:layout_width="@dimen/dp_size_209"
-                android:layout_height="@dimen/dp_size_42"
-                android:layout_below="@+id/passwordwidget"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/dp_size_15"
-                android:background="@drawable/rounded_rectangle_signup"
-                android:fontFamily="@string/ID_ROBOTO_BOLD"
-                android:text="@string/ID_SIGN_UP"
-                android:textColor="@color/signup_text_color"
-                android:textSize="@dimen/sp_size_14" />
+                </android.support.design.widget.TextInputLayout>
 
-            <TextView
-                android:id="@+id/tv_signup_already_user"
-                android:layout_width="@dimen/dp_size_220"
-                android:layout_height="@dimen/dp_size_20"
-                android:layout_below="@+id/signupbtn"
-                android:layout_centerInParent="true"
-                android:layout_marginTop="@dimen/dp_size_20"
-                android:text="@string/ID_SIGNUP_ALREADY_LOGIN" />
+                <Button
+                    android:id="@+id/btn_sign_up"
+                    android:layout_width="@dimen/dp_size_209"
+                    android:layout_height="@dimen/dp_size_42"
+                    android:layout_below="@+id/passwordwidget"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/dp_size_15"
+                    android:background="@drawable/rounded_rectangle_signup"
+                    android:fontFamily="@string/ID_ROBOTO_BOLD"
+                    android:text="@string/ID_SIGN_UP"
+                    android:textColor="@color/signup_text_color"
+                    android:textSize="@dimen/sp_size_14" />
 
+                <TextView
+                    android:id="@+id/tv_signup_already_user"
+                    android:layout_width="@dimen/dp_size_220"
+                    android:layout_height="@dimen/dp_size_20"
+                    android:layout_below="@+id/btn_sign_up"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="@dimen/dp_size_20"
+                    android:text="@string/ID_SIGNUP_ALREADY_LOGIN" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/rlsignupin"
+                android:background="#fafafa">
+
+                <TextView
+                    android:id="@+id/tv_continue"
+                    android:layout_width="@dimen/dp_size_150"
+                    android:layout_height="@dimen/dp_size_18"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/dp_size_24"
+                    android:fontFamily="@string/ID_ROBOTO_BOLD"
+                    android:text="@string/ID_OR_CONTINUE"
+                    android:textAlignment="center" />
+
+                <com.facebook.login.widget.LoginButton
+                    android:id="@+id/click_to_join_fb_signup"
+                    android:layout_width="@dimen/dp_size_282"
+                    android:layout_height="@dimen/dp_size_42"
+                    android:layout_below="@+id/tv_continue"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/dp_size_10"
+                    android:background="@drawable/fb_signup_rectangle"
+                    android:drawableLeft="@color/facebook_btn"
+                    android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_size_12"
+                    android:textStyle="normal"
+                    fb:login_text="@string/ID_CONTINUE_WITH_FACEBOOK"
+                    fb:logout_text="@string/ID_FACEBOOK_LONGING" />
+
+                <com.google.android.gms.common.SignInButton
+                    android:id="@+id/btn_login_google"
+                    android:layout_width="@dimen/dp_size_282"
+                    android:layout_height="@dimen/dp_size_42"
+                    android:layout_below="@+id/click_to_join_fb_signup"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="@dimen/dp_size_30"
+                    android:layout_marginTop="@dimen/dp_size_20"
+                    android:gravity="center" />
+            </RelativeLayout>
         </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/rlsignupin"
-            android:background="#fafafa">
-
-            <TextView
-                android:id="@+id/tv_continue"
-                android:layout_width="@dimen/dp_size_150"
-                android:layout_height="@dimen/dp_size_18"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/dp_size_24"
-                android:fontFamily="@string/ID_ROBOTO_BOLD"
-                android:text="@string/ID_OR_CONTINUE"
-                android:textAlignment="center" />
-
-         <com.facebook.login.widget.LoginButton
-                android:id="@+id/click_to_join_fb_signup"
-                android:layout_width="280dp"
-                android:layout_height="42dp"
-                android:layout_below="@+id/tv_continue"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/dp_size_10"
-
-                android:background="@drawable/fb_signup_rectangle"
-                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-                android:gravity="center"
-                android:textColor="@color/white"
-                android:textSize="@dimen/sp_size_12"
-                android:textStyle="normal"
-                fb:login_text="FACEBOOK"
-                fb:logout_text="@string/ID_FACEBOOK_LONGING" />
-        </RelativeLayout>
-
-    </RelativeLayout>
-    <include layout="@layout/progress_bar_login" />
+    </ScrollView>
 </FrameLayout>

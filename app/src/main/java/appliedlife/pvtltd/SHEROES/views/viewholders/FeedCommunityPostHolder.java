@@ -190,6 +190,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             }
             liFeedCommunityUserPostImages.addView(child);
         } else {
+            ivFeedCommunityPostMenu.setBackgroundResource(R.drawable.ic_search_group_icon);
             if (StringUtil.isNotEmptyCollection(dataItem.getImageUrls())) {
                 liFeedCommunityUserPostImages.setVisibility(View.VISIBLE);
                 lineForNoImage.setVisibility(View.GONE);

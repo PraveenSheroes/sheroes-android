@@ -5,6 +5,8 @@ import android.support.multidex.MultiDexApplication;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
+import com.moe.pushlibrary.MoEHelper;
+import com.moengage.push.PushManager;
 
 import java.io.File;
 
@@ -22,7 +24,7 @@ import io.fabric.sdk.android.Fabric;
  * Title: Application level context and all app componets register here.
  * dagger used for components injection in app.
  */
-public class SheroesApplication extends MultiDexApplication {
+public class SheroesApplication extends MultiDexApplication implements PushManager.OnTokenReceivedListener {
     private final String TAG = LogUtils.makeLogTag(SheroesApplication.class);
     SheroesAppComponent mSheroesAppComponent;
     public static volatile SheroesApplication mContext;
@@ -42,6 +44,8 @@ public class SheroesApplication extends MultiDexApplication {
         mContext = this;
         Crashlytics crashlytics = new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build();
         Fabric.with(this,crashlytics);
+        MoEHelper.getInstance(getApplicationContext()).autoIntegrate(this);
+        PushManager.getInstance().setTokenObserver(this);
         File cacheFile = new File(getCacheDir(), "responses");
         mSheroesAppComponent = DaggerSheroesAppComponent.builder().sheroesAppModule(new SheroesAppModule(cacheFile,this)).build();
         setAppComponent(mSheroesAppComponent);
@@ -62,5 +66,10 @@ public class SheroesApplication extends MultiDexApplication {
         } catch (Exception e) {
             LogUtils.error(TAG, AppConstants.ERROR_OCCUR, e);
         }
+    }
+
+    @Override
+    public void onTokenReceived(String s) {
+
     }
 }

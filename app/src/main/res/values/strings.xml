@@ -8,6 +8,7 @@
     <string name="ID_DD">DD</string>
     <string name="ID_MM">MM</string>
     <string name="ID_YYYY">YYYY</string>
+    <string name="IDS_GOOGLE_CLIENT_SERVER_ID">382892394734-m6crti3onae6glei1bdgghvfr9re5lun.apps.googleusercontent.com</string>
     <!--text names in SHEROES-->
     <string name="IDS_STR_NETWORK_TIME_OUT_TITLE">Connectivity Failure</string>
     <string name="IDS_STR_NETWORK_TIME_OUT_DESCRIPTION">No internet connection or connectivity low. Please check your connection and try again.</string>
@@ -728,6 +729,7 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_ALL_OF_YOU">All For You</string>
     <string name="ID_CONTINUE_WITH_FACEBOOK">CONTINUE WITH FACEBOOK</string>
     <string name="ID_FACEBOOK_LONGING">LOGGING IN...</string>
+    <string name="IDS_GOOGLE_BUTTON">Login with Google</string>
     <string name="ID_LINK_TO_FACEBOOK">Link to Facebook</string>
     <string name="ID_WELCOME_TEXT4">Other Login Options ? (Only For Existing Users)</string>
     <string name="ID_WELCOME_FIRST">Grow With Your Circle Of Support</string>

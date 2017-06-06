@@ -32,8 +32,6 @@ import android.renderscript.Allocation;
 import android.renderscript.Element;
 import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
-import android.support.design.widget.AppBarLayout;
-import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -90,6 +88,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeAcceptRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.community.ApproveMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.BellNotificationRequest;
@@ -105,7 +104,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCount;
@@ -113,6 +111,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobApplyRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.SignupRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.Device;
+import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.GooglePlusRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.User;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingInterestRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingJobAtRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingLookingForHowCanRequest;
@@ -1680,6 +1681,17 @@ public class AppUtils {
     public static void disableLongPressOnEditText(EditText editText) {
         editText.setLongClickable(false);
         editText.setTextIsSelectable(false);
+    }
+    public GooglePlusRequest googlePlusRequestBuilder(User user) {
+        GooglePlusRequest googlePlusRequest = new GooglePlusRequest();
+        AppUtils appUtils = AppUtils.getInstance();
+        Device device=new Device();
+        device.setGmcApnsId(AppConstants.PROJECT_NUMBER);
+        device.setId(appUtils.getAppVersionCode());
+        device.setType(appUtils.getDeviceModel());
+        googlePlusRequest.setUser(user);
+        googlePlusRequest.setDevice(device);
+        return googlePlusRequest;
     }
     public static LoginRequest loginRequestBuilder() {
         LoginRequest loginRequest = new LoginRequest();

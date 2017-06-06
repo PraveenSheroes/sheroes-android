@@ -90,6 +90,7 @@ dependencies {
     compile 'com.google.dagger:dagger:2.2'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.android.support:support-v4:25.3.0'
+    compile 'com.vanniktech:emoji-one:0.4.0'
     compile "com.pushtorefresh.storio:sqlite:$STORIO_VERSION"
     compile "com.pushtorefresh.storio:sqlite-annotations:$STORIO_VERSION"
     apt "com.pushtorefresh.storio:sqlite-annotations-processor:$STORIO_VERSION"

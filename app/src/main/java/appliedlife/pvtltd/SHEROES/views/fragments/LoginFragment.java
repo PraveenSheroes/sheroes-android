@@ -1,14 +1,10 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +14,6 @@ import android.widget.ProgressBar;
 
 import com.f2prateek.rx.preferences.Preference;
 import com.facebook.login.LoginManager;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
@@ -31,6 +25,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.LoginPresenter;
@@ -57,7 +52,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
  * Title: A login screen that offers login via email/password.
  */
 
-public class LoginFragment extends BaseFragment implements LoginView, GoogleApiClient.OnConnectionFailedListener {
+public class LoginFragment extends BaseFragment implements LoginView{
     private final String TAG = LogUtils.makeLogTag(LoginFragment.class);
     @Inject
     Preference<LoginResponse> mUserPreference;
@@ -80,10 +75,7 @@ public class LoginFragment extends BaseFragment implements LoginView, GoogleApiC
     private String password;
     private PayloadBuilder payloadBuilder;
     private MoEngageUtills moEngageUtills;
-  //  private GoogleSignInOptions gso;
-   // public static GoogleApiClient mGoogleApiClient;
-  //  private int RC_SIGN_IN = 100;
-  //  private String URL_ACCESS_TOKEN;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -102,18 +94,6 @@ public class LoginFragment extends BaseFragment implements LoginView, GoogleApiC
         mMoEHelper = MoEHelper.getInstance(getActivity());
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
-     /*   gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .requestProfile()
-                .requestScopes(new Scope(Scopes.PLUS_ME))
-                .requestScopes(new Scope(Scopes.PROFILE))
-                .requestScopes(new Scope(Scopes.PLUS_LOGIN))
-                .build();
-        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
-                .enableAutoManage(getActivity(), this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .addApi(Plus.API)
-                .build();*/
     }
 
     @Override
@@ -131,13 +111,6 @@ public class LoginFragment extends BaseFragment implements LoginView, GoogleApiC
         //  mLoginPresenter.getMasterDataToPresenter();
         return view;
     }
-
-
-  /*  @OnClick(R.id.login_button)
-    public void fbOnClick() {
-      //  fbSignIn();
-    }
-*/
 
     /**
      * Stor token into share prefrances
@@ -192,6 +165,12 @@ public class LoginFragment extends BaseFragment implements LoginView, GoogleApiC
     }
 
     @Override
+    public void getGoogleExpireInResponse(ExpireInResponse expireInResponse) {
+
+    }
+
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         mLoginPresenter.detachView();
@@ -205,7 +184,6 @@ public class LoginFragment extends BaseFragment implements LoginView, GoogleApiC
 
     @OnClick(R.id.email_sign_in_button)
     public void onLogInBtnClick() {
-        // mLoginPresenter.getGoogleLoginFromPresenter();
         sheroesLogIn();
     }
 
@@ -293,25 +271,4 @@ public class LoginFragment extends BaseFragment implements LoginView, GoogleApiC
             }
         });
     }
-
-
-    private void checkCameraPermission() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (getActivity().checkSelfPermission(android.Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-
-            } else {
-                ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.CAMERA, android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 101);
-            }
-        }
-    }
-
-
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
-
-
-
 }

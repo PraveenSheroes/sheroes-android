@@ -104,6 +104,7 @@ public class AppConstants {
     public static final int REQUEST_CODE_FOR_GALLERY = 9001;
     public static final int REQUEST_CODE_FOR_CAMERA = 1101;
     public static final int REQUEST_CODE_FOR_IMAGE_CROPPING = 1201;
+    public static final int REQUEST_CODE_FOR_GOOGLE_PLUS =1301;
     public static final String JOB_FRAGMENT = "job";
     public static final String HELPLINE_FRAGMENT ="helpline";
     public static final String PROFILE_FRAGMENT = "profile";
@@ -306,4 +307,5 @@ public class AppConstants {
     public static final String HELPlINE_NO_CHAT="No Chat found";
     public static final int REQ_CODE_SPEECH_INPUT = 100;
     public static final String USER_ALREADY_EXIST_ERROR="User exists with emailid or mobile number";
+    public static final String GOOGLE_PLUS = "Google plus";
 }

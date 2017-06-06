@@ -144,11 +144,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_size_13"
-            android:layout_marginRight="@dimen/dp_size_13"
             android:layout_marginBottom="@dimen/dp_size_5"
             android:layout_marginTop="@dimen/dp_size_10"
             android:padding="@dimen/dp_size_5"
-            android:enabled="false"
+            android:clickable="false"
             android:background="@color/white"
             android:orientation="horizontal"
             android:visibility="visible">

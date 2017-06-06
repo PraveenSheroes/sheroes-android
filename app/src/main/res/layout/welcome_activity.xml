@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:fb="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/welcome_gradiant_color"
@@ -20,8 +19,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/dp_size_20"
                 android:layout_marginBottom="@dimen/dp_size_20"
+                android:layout_marginTop="@dimen/dp_size_20"
                 android:orientation="horizontal">
 
                 <TextView
@@ -104,9 +103,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/dp_size_10"
-                android:paddingTop="@dimen/dp_size_10"
-                android:paddingBottom="@dimen/dp_size_10"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:paddingBottom="@dimen/dp_size_10"
+                android:paddingTop="@dimen/dp_size_10"
                 android:text="@string/onboarding_join_the_world"
                 android:textAlignment="center"
                 android:textColor="@color/white"
@@ -119,11 +118,11 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/dp_size_20"
-                android:visibility="gone"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:textAlignment="center"
                 android:textColor="@color/white"
-                android:textSize="@dimen/sp_size_12" />
+                android:textSize="@dimen/sp_size_12"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -131,21 +130,20 @@
                 android:orientation="vertical">
 
                 <Button
-                    android:id="@+id/click_to_join"
+                    android:id="@+id/btn_get_started"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_size_40"
                     android:layout_marginLeft="@dimen/dp_size_45"
                     android:layout_marginRight="@dimen/dp_size_45"
                     android:layout_marginTop="@dimen/dp_size_10"
-                    android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                     android:background="@drawable/facbook_ractangle"
                     android:drawableLeft="@color/facebook_btn"
+                    android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                     android:gravity="center"
+                    android:text="@string/ID_GET_STARTED"
                     android:textColor="@color/white"
                     android:textSize="@dimen/sp_size_12"
-                    android:textStyle="normal"
-                    android:text="@string/ID_GET_STARTED"
-                   />
+                    android:textStyle="normal" />
 
                 <TextView
                     android:id="@+id/tv_other_login_option"
@@ -164,25 +162,15 @@
                     android:textSize="@dimen/sp_size_12" />
             </LinearLayout>
 
-
-
             <include
-                layout="@layout/progress_bar_login"
-                android:visibility="gone" />
-            <!--   <include
-                   android:id="@+id/fb_welcome_footer"
-                   layout="@layout/welcome_footer"
-                   android:layout_width="match_parent"
-                   android:visibility="gone"
-                   android:layout_height="wrap_content"
-                   android:layout_gravity="bottom" />-->
-            <!--
-                    -->
+                layout="@layout/progress_bar_login" />
+
         </LinearLayout>
     </ScrollView>
+
     <include
         android:id="@+id/fragment_welcome_sign_up"
         layout="@layout/fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 </android.support.design.widget.CoordinatorLayout>

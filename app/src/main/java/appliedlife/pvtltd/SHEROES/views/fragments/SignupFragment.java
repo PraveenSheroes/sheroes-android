@@ -1,10 +1,16 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.PorterDuff;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.InputType;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.f2prateek.rx.preferences.Preference;
 import com.facebook.AccessToken;
@@ -27,11 +34,25 @@ import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.auth.GoogleAuthException;
+import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.auth.UserRecoverableAuthException;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.Scopes;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.plus.Plus;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 import javax.inject.Inject;
@@ -42,10 +63,17 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.SignupRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.GooglePlusRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.User;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.LoginPresenter;
 import appliedlife.pvtltd.SHEROES.service.GCMClientManager;
+import appliedlife.pvtltd.SHEROES.social.CustomSocialDialog;
+import appliedlife.pvtltd.SHEROES.social.GooglePlusHelper;
+import appliedlife.pvtltd.SHEROES.social.SocialListener;
+import appliedlife.pvtltd.SHEROES.social.SocialPerson;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -66,7 +94,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.loginRequestBuilder;
  * Created by Deepak on 30-05-2017.
  */
 
-public class SignupFragment extends BaseFragment implements LoginView {
+public class SignupFragment extends BaseFragment implements LoginView, SocialListener, GoogleApiClient.OnConnectionFailedListener {
 
     private final String TAG = LogUtils.makeLogTag(SignupFragment.class);
     @Inject
@@ -85,7 +113,7 @@ public class SignupFragment extends BaseFragment implements LoginView {
     EditText mobile;
     @Bind(R.id.password_signup)
     EditText mPasswordView;
-    @Bind(R.id.signupbtn)
+    @Bind(R.id.btn_sign_up)
     Button mSignUp;
     @Bind(R.id.click_to_join_fb_signup)
     LoginButton mFbSignUp;
@@ -93,6 +121,8 @@ public class SignupFragment extends BaseFragment implements LoginView {
     TextView mTvExistingUser;
     @Bind(R.id.pb_login_progress_bar)
     ProgressBar mProgressBar;
+    @Bind(R.id.btn_login_google)
+    SignInButton btnLoginGoogle;
     private String mGcmId;
     private String password;
     private String email;
@@ -105,6 +135,16 @@ public class SignupFragment extends BaseFragment implements LoginView {
     private PayloadBuilder payloadBuilder;
     private MoEHelper mMoEHelper;
     private MoEngageUtills moEngageUtills;
+    private String loggedInChannel;
+    private String loggedInImageUrl;
+    private String socialLoginFirstName;
+    private String socialLoginLastName;
+    private GooglePlusHelper mGooglePlusHelper;
+    private GoogleSignInOptions gso;
+    private Dialog dialog;
+    //google api client
+    public static GoogleApiClient mGoogleApiClient;
+    private String mToken = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -114,6 +154,7 @@ public class SignupFragment extends BaseFragment implements LoginView {
         moEngageUtills = MoEngageUtills.getInstance();
         moEngageUtills.entityMoEngageAppOpened(getActivity(), mMoEHelper, payloadBuilder);
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -121,28 +162,137 @@ public class SignupFragment extends BaseFragment implements LoginView {
         View view = inflater.inflate(R.layout.fragment_signup, container, false);
         ButterKnife.bind(this, view);
         if (null != getArguments()) {
-            mGcmId = getArguments().getString(AppConstants.SHEROES_AUTH_TOKEN);
+            mGcmId = getArguments().getString(AppConstants.GCM_ID);
         }
         mLoginPresenter.attachView(this);
+        // initGoogleLogin();
+        googlePlusLogin();
         mEmailView.getBackground().setColorFilter(getResources().getColor(R.color.blue), PorterDuff.Mode.SRC_ATOP);
         mPasswordView.getBackground().setColorFilter(getResources().getColor(R.color.blue), PorterDuff.Mode.SRC_ATOP);
         setProgressBar(mProgressBar);
         mFbSignUp.setFragment(this);
+        setGooglePlusButtonText(btnLoginGoogle, getString(R.string.IDS_GOOGLE_BUTTON));
         return view;
+    }
+
+    private void initGoogleLogin() {
+        mGooglePlusHelper = GooglePlusHelper.getInstance();
+        mGooglePlusHelper.initializeGoogleAPIClient(getContext());
+    }
+
+    private void googlePlusLogin() {
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .requestProfile()
+                .requestScopes(new Scope(Scopes.PLUS_ME))
+                .requestScopes(new Scope(Scopes.PROFILE))
+                .requestScopes(new Scope(Scopes.PLUS_LOGIN))
+                .build();
+        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+                .enableAutoManage(getActivity(), this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .addApi(Plus.API)
+                .build();
+    }
+
+    private void signIn() {
+        //Creating an intent
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        //Starting intent for result
+        showDialog(CustomSocialDialog.LOGGING_IN_DIALOG);
+        startActivityForResult(signInIntent, AppConstants.REQUEST_CODE_FOR_GOOGLE_PLUS);
+    }
+
+    public void signOut() {
+        //Check is required otherwise illegal state exception might be thrown
+        if (mGoogleApiClient.isConnected()) {
+            Auth.GoogleSignInApi.signOut(mGoogleApiClient);
+        }
+    }
+
+    /**
+     * Show dialog
+     *
+     * @param id id of dialog
+     */
+    private void showDialog(int id) {
+        dialog = createCustomDialog(id);
+        if (dialog != null) {
+            dialog.show();
+        }
+    }
+
+    /**
+     * Creates and returns dialog
+     *
+     * @param id id of dialog
+     * @return dialog
+     */
+    private Dialog createCustomDialog(int id) {
+        Dialog dialog = null;
+        try {
+            CustomSocialDialog dialogCreater = null;
+            switch (id) {
+                case CustomSocialDialog.LOGGING_IN_DIALOG: {
+                    dialogCreater = new CustomSocialDialog(getContext(), id);
+                    dialog = dialogCreater.createCustomDialog();
+                    break;
+                }
+                default:
+                    break;
+            }
+            return dialog;
+        } catch (Exception e) {
+            LogUtils.error(TAG, e);
+            return null;
+        }
+    }
+
+    protected void setGooglePlusButtonText(SignInButton signInButton, String buttonText) {
+        for (int i = 0; i < signInButton.getChildCount(); i++) {
+            View v = signInButton.getChildAt(i);
+            if (v instanceof TextView) {
+                TextView tv = (TextView) v;
+                tv.setText(buttonText);
+                tv.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+                tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+                tv.setPadding(0, 0, 0, 0);
+                return;
+            }
+        }
+    }
+
+    @OnClick(R.id.btn_login_google)
+    public void googleLoginClick() {
+        launchGooglePlusLogin();
+    }
+
+    public void launchGooglePlusLogin() {
+        if (AppUtils.getInstance().isNetworkAvailable()) {
+          /*  if (mGooglePlusHelper != null) {
+                mGooglePlusHelper.signIn(this);
+            }*/
+            signIn();
+        } else {
+            Toast.makeText(getActivity(), getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if (mGooglePlusHelper != null) {
+            mGooglePlusHelper.signOut();
+        }
         mLoginPresenter.detachView();
     }
 
-    @OnClick(R.id.signupbtn)
-    public void signup(){
+    @OnClick(R.id.btn_sign_up)
+    public void signup() {
         signupUser();
     }
 
-    private void signupUser(){
+    private void signupUser() {
 
         mEmailView.setError(null);
         mPasswordView.setError(null);
@@ -173,16 +323,16 @@ public class SignupFragment extends BaseFragment implements LoginView {
             focusView = mEmailView;
             cancel = true;
         }
-        if(StringUtil.isNotNullOrEmptyString(lastName)) {
-            lastName= lastName.trim();
-        }else{
+        if (StringUtil.isNotNullOrEmptyString(lastName)) {
+            lastName = lastName.trim();
+        } else {
             mLName.setError(getString(R.string.ID_LAST_NAME));
             focusView = mLName;
             cancel = true;
         }
-        if(StringUtil.isNotNullOrEmptyString(firstName)) {
-            firstName= firstName.trim();
-        }else{
+        if (StringUtil.isNotNullOrEmptyString(firstName)) {
+            firstName = firstName.trim();
+        } else {
             mFName.setError(getString(R.string.ID_FIRST_NAME));
             focusView = mFName;
             cancel = true;
@@ -191,7 +341,7 @@ public class SignupFragment extends BaseFragment implements LoginView {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
             focusView.requestFocus();
-        }else{
+        } else {
             if (StringUtil.isNotNullOrEmptyString(mGcmId)) {
                 SignupRequest signupRequest = AppUtils.signupRequestBuilder();
                 signupRequest.setEmailId(email);
@@ -267,7 +417,7 @@ public class SignupFragment extends BaseFragment implements LoginView {
     public void getLogInResponse(LoginResponse loginResponse) {
         mSignUp.setEnabled(true);
         mFbSignUp.setEnabled(true);
-        if(loginResponse != null){
+        if (loginResponse != null) {
             switch (loginResponse.getStatus()) {
                 case AppConstants.SUCCESS:
                     if (StringUtil.isNotNullOrEmptyString(loginResponse.getToken())) {
@@ -312,8 +462,28 @@ public class SignupFragment extends BaseFragment implements LoginView {
                 showNetworkTimeoutDoalog(true, false, errorMessage);*/
                     break;
             }
-        }else{
+        } else {
             ((WelcomeActivity) getActivity()).showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
+        }
+    }
+
+    @Override
+    public void getGoogleExpireInResponse(ExpireInResponse expireInResponse) {
+        if (null != expireInResponse.getGooglePlusResponse()) {
+            dismissDialog();
+            if(expireInResponse.getGooglePlusResponse().getStatus()&&StringUtil.isNotNullOrEmptyString(expireInResponse.getGooglePlusResponse().getMessage())&&AppConstants.SUCCESS.equalsIgnoreCase(expireInResponse.getGooglePlusResponse().getMessage())) {
+                Toast.makeText(AppUtils.getInstance().getApplicationContext(), "Succeeeeeeeeeeeeeeeeeeee", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            if (expireInResponse.getExpiresIn() > 0 && StringUtil.isNotNullOrEmptyString(mToken)) {
+                User user = new User();
+                user.setExpiresIn(String.valueOf(expireInResponse.getExpiresIn()));
+                String created = String.valueOf(System.currentTimeMillis());
+                user.setCreated(created);
+                user.setGpAccessToken(mToken);
+                GooglePlusRequest googlePlusRequest = mAppUtils.googlePlusRequestBuilder(user);
+                mLoginPresenter.getGoogleLoginFromPresenter(googlePlusRequest);
+            }
         }
     }
 
@@ -388,12 +558,12 @@ public class SignupFragment extends BaseFragment implements LoginView {
         @Override
         public void onError(FacebookException e) {
             mUserPreference.delete();
-            ((WelcomeActivity)getActivity()).showNetworkTimeoutDoalog(true, false, e.getMessage());
+            ((WelcomeActivity) getActivity()).showNetworkTimeoutDoalog(true, false, e.getMessage());
         }
     };
 
     @OnClick(R.id.tv_signup_already_user)
-    public void signInExistingUser(){
+    public void signInExistingUser() {
         if (StringUtil.isNotNullOrEmptyString(mGcmId)) {
             Intent loginIntent = new Intent(getContext(), LoginActivity.class);
             Bundle bundle = new Bundle();
@@ -413,9 +583,130 @@ public class SignupFragment extends BaseFragment implements LoginView {
             }
         }
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         callbackManager.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case AppConstants.REQUEST_CODE_FOR_GOOGLE_PLUS:
+                if (resultCode == Activity.RESULT_OK) {
+                    GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+                    handleSignInResult(result);
+                } else {
+                    dismissDialog();
+                }
+                break;
+            default:
+                LogUtils.info(TAG, "Request is not supported");
+                break;
+        }
+    }
 
+    public void dismissDialog() {
+        try {
+            if (dialog != null && dialog.isShowing()) {
+                dialog.dismiss();
+            }
+        } catch (IllegalArgumentException e) {
+            LogUtils.error(this.getClass().getName(), e.toString(), e);
+        }
+    }
+
+    private void handleSignInResult(GoogleSignInResult result) {
+        if (result.isSuccess()) {
+            GoogleSignInAccount acct = result.getSignInAccount();
+            String personName = acct.getDisplayName();
+            String firstName = "";
+            String lastName = "";
+            if (personName != null) {
+                String[] names = personName.split(" ");
+                firstName = names[0];
+                lastName = names[names.length - 1];
+            }
+            String personEmail = acct.getEmail();
+            String imageURL = "";
+            if (acct.getPhotoUrl() != null) {
+                imageURL = acct.getPhotoUrl().toString();
+            }
+            String idToken = acct.getIdToken();
+            String socialId = acct.getId();
+            new RetrieveTokenTask().execute(personEmail);
+        }
+    }
+
+    private class RetrieveTokenTask extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            String accountName = params[0];
+            final String SCOPES = "oauth2:profile email";
+
+            try {
+                mToken = GoogleAuthUtil.getToken(getContext(), accountName, SCOPES);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (UserRecoverableAuthException e) {
+
+            } catch (GoogleAuthException e) {
+            }
+            return mToken;
+        }
+
+        @Override
+        protected void onPostExecute(String token) {
+            super.onPostExecute(token);
+            String URL_ACCESS_TOKEN = "https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=" + token;
+            mLoginPresenter.googleTokenExpireInFromPresenter(URL_ACCESS_TOKEN);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mGoogleApiClient.stopAutoManage(getActivity());
+        mGoogleApiClient.disconnect();
+    }
+
+    @Override
+    public void userLoggedIn(SocialPerson person) {
+        if (person == null) {
+            if (mGooglePlusHelper != null) {
+                mGooglePlusHelper.dismissDialog();
+            }
+            getActivity().runOnUiThread(new Runnable() {
+                public void run() {
+                    Toast.makeText(AppUtils.getInstance().getApplicationContext(), getString(R.string.ID_GENERIC_ERROR), Toast.LENGTH_SHORT).show();
+                }
+            });
+            return;
+        }
+        LogUtils.info(TAG, person.getFirstname() + " " + person.getLastname() + " " + person.getEmail() + " " + person.getLoginType());
+        if (StringUtil.isNotNullOrEmptyString(person.getEmail())) {
+            if (person.getLoginType().equalsIgnoreCase(SocialPerson.LOGIN_TYPE_GOOGLE)) {
+                if (mGooglePlusHelper != null) {
+                    mGooglePlusHelper.signOut();
+                }
+            }
+            if (person.getLoginType().equalsIgnoreCase(SocialPerson.LOGIN_TYPE_GOOGLE)) {
+                getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(AppUtils.getInstance().getApplicationContext(), getString(R.string.ID_GENERIC_ERROR), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+            return;
+        }
+        if (SocialPerson.LOGIN_TYPE_GOOGLE.equalsIgnoreCase(person.getLoginType())) {
+            loggedInChannel = AppConstants.GOOGLE_PLUS;
+        }
+        loggedInImageUrl = person.getImageUrl();
+        socialLoginFirstName = person.getFirstname();
+        socialLoginLastName = person.getLastname();
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Toast.makeText(getActivity(), "Connection failed", Toast.LENGTH_SHORT).show();
     }
 }

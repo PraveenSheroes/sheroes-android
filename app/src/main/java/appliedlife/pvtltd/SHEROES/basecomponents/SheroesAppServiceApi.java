@@ -4,6 +4,8 @@ package appliedlife.pvtltd.SHEROES.basecomponents;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeAcceptRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentAddDelete;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionResponsePojo;
@@ -38,8 +40,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThread
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeListResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCount;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobApplyRequest;
@@ -50,6 +50,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.GcmIdResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.SignupRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.GooglePlusRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.GooglePlusResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingInterestRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingJobAtRequest;
@@ -85,6 +88,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.sharemail.ShareViaMail;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Url;
 import rx.Observable;
 
 /**
@@ -98,138 +102,203 @@ import rx.Observable;
 public interface SheroesAppServiceApi {
     /*Participant*/
     @POST("participant/feed/")
-    Observable<FeedResponsePojo> getFeedFromApi(@Body FeedRequestPojo feedRequestPojo );
+    Observable<FeedResponsePojo> getFeedFromApi(@Body FeedRequestPojo feedRequestPojo);
+
     @POST("participant/feed/my_communities")
-    Observable<FeedResponsePojo> getMyCommunityFromApi(@Body MyCommunityRequest myCommunityRequest );
+    Observable<FeedResponsePojo> getMyCommunityFromApi(@Body MyCommunityRequest myCommunityRequest);
+
     @POST("participant/feed/get_bookmarked")
     Observable<FeedResponsePojo> getBookMarkFromApi(@Body FeedRequestPojo feedRequestPojo);
+
     /*Participation*/
     @POST("participation/reaction/like")
-    Observable<LikeResponse> getLikesFromApi(@Body LikeRequestPojo likeRequestPojo );
+    Observable<LikeResponse> getLikesFromApi(@Body LikeRequestPojo likeRequestPojo);
+
     @POST("participation/reaction/unlike")
-    Observable<LikeResponse> getUnLikesFromApi(@Body LikeRequestPojo likeRequestPojo );
+    Observable<LikeResponse> getUnLikesFromApi(@Body LikeRequestPojo likeRequestPojo);
+
     @POST("participation/reaction/get_comments")
     Observable<CommentReactionResponsePojo> getCommentFromApi(@Body CommentReactionRequestPojo commentReactionRequestPojo);
+
     @POST("participation/reaction/get_reactions")
     Observable<CommentReactionResponsePojo> getAllReactionFromApi(@Body CommentReactionRequestPojo commentReactionRequestPojo);
+
     @POST("participation/reaction/add_comment")
     Observable<CommentAddDelete> addCommentFromApi(@Body CommentReactionRequestPojo commentReactionRequestPojo);
+
     @POST("participation/reaction/edit_comment")
     Observable<CommentAddDelete> editCommentFromApi(@Body CommentReactionRequestPojo commentReactionRequestPojo);
+
     @POST("participation/reaction/bookmark")
-    Observable<BookmarkResponsePojo> addBookMarkToApi(@Body BookmarkRequestPojo bookmarkResponsePojo );
+    Observable<BookmarkResponsePojo> addBookMarkToApi(@Body BookmarkRequestPojo bookmarkResponsePojo);
+
     @POST("participation/reaction/unbookmark")
-    Observable<BookmarkResponsePojo> UnBookMarkToApi(@Body BookmarkRequestPojo bookmarkResponsePojo );
+    Observable<BookmarkResponsePojo> UnBookMarkToApi(@Body BookmarkRequestPojo bookmarkResponsePojo);
+
     @POST("participant/auth/signin")
     Observable<LoginResponse> getLoginAuthToken(@Body LoginRequest loginRequest);
+
     @POST("participant/user/fbVerification")
     Observable<LoginResponse> getFBVerification(@Body LoginRequest loginRequest);
+
     @POST("participant/user/fbsignup")
     Observable<LoginResponse> getFbSignUpToken(@Body LoginRequest loginRequest);
+
     @GET("participant/auth/refresh")
     Observable<LoginResponse> getRefreshToken();
+
     @POST("participant/community/join")
     Observable<CommunityResponse> getCommunityJoinResponse(@Body CommunityRequest communityRequest);
+
     @POST("participation/post/delete")
     Observable<DeleteCommunityPostResponse> getCommunityPostDeleteResponse(@Body DeleteCommunityPostRequest deleteCommunityPostRequest);
+
     @POST("participation/reaction/mark_spam")
-    Observable<BookmarkResponsePojo> markAsSpam(@Body BookmarkRequestPojo bookmarkResponsePojo );
+    Observable<BookmarkResponsePojo> markAsSpam(@Body BookmarkRequestPojo bookmarkResponsePojo);
+
     @POST("participant/community/create")
     Observable<CreateCommunityResponse> postCreateCommunity(@Body CreateCommunityRequest createCommunityRequest);
+
     @POST("entity/master/suggest_community")
     Observable<SelectedCommunityResponse> suggestedCommunity(@Body SelectCommunityRequest selectCommunityRequest);
+
     @POST("participant/community/edit")
     Observable<CreateCommunityResponse> postEditCommunity(@Body EditCommunityRequest editCommunityRequest);
+
     @POST("participation/post/add")
     Observable<CreateCommunityResponse> createCommunityPost(@Body CommunityPostCreateRequest communityPostCreateRequest);
+
     @POST("participation/post/edit")
     Observable<CreateCommunityResponse> editCommunityPost(@Body CommunityPostCreateRequest communityPostCreateRequest);
+
     @POST("participant/community/create_owner")
     Observable<CreateCommunityOwnerResponse> postCreateCommunityOwner(@Body CreateCommunityOwnerRequest createCommunityOwnerRequest);
+
     @POST("participant/community/owners_list")
     Observable<OwnerListResponse> getOwnerList(@Body OwnerListRequest ownerListResponse);
+
     @POST("participant/community/deactivate_owner")
     Observable<DeactivateOwnerResponse> getOwnerDeactivate(@Body DeactivateOwnerRequest deactivateOwnerRequest);
+
     @POST("participant/community/member_list")
     Observable<MemberListResponse> getMemberList(@Body MemberRequest membersList);
+
     @POST("participant/job/apply")
     Observable<JobApplyResponse> getJobApply(@Body JobApplyRequest jobApplyRequest);
+
     @POST("participant/community/pending_request")
     Observable<RequestedListResponse> getRequestList(@Body MemberRequest memberRequest);
+
     @POST("entity/master/get_data")
-    Observable<GetTagData> getTagFromApi(@Body GetAllDataRequest getAllDataRequest );
+    Observable<GetTagData> getTagFromApi(@Body GetAllDataRequest getAllDataRequest);
+
     @POST("participant/settings/save_feedback")
     Observable<SettingFeedbackResponce> getSettingAuthToken(@Body SettingFeedbackRequest feedbackRequest);
+
     @POST("participant/settings/save_rating")
     Observable<SettingRatingResponse> getUserRatingAuthToken(@Body SettingRatingRequest ratingRequest);
+
     @POST("participant/settings/deactivate_account")
     Observable<SettingDeActivateResponse> getUserDeactiveAuthToken(@Body SettingDeActivateRequest deActivateRequest);
+
     @POST("participant/settings/get_user_preferences")
-    Observable<UserpreferenseResponse>getUserPreferenceAuthToken(@Body UserPreferenceRequest userPreferenceRequest);
+    Observable<UserpreferenseResponse> getUserPreferenceAuthToken(@Body UserPreferenceRequest userPreferenceRequest);
+
     @POST("entity/master/all_data")
     Observable<MasterDataResponse> getOnBoardingMasterDataFromApi();
+
     @POST("entity/master/get_data")
     Observable<GetAllData> getOnBoardingSearchFromApi(@Body GetAllDataRequest getAllDataRequest);
+
     @POST("entity/master/get_data")
     Observable<GetInterestJobResponse> getInterestJobSearchFromApi(@Body GetAllDataRequest getAllDataRequest);
+
     @POST("participant/user/add_or_edit")
     Observable<BoardingDataResponse> getCurrentStatusFromApi(@Body BoardingTellUsRequest boardingTellUsRequest);
+
     @POST("participant/user/gcmIdChange")
     Observable<GcmIdResponse> getNewGCMidFromApi(@Body LoginRequest loginRequest);
+
     @POST("participant/user/add_or_edit")
     Observable<BoardingDataResponse> getLookingForHowCanFromApi(@Body BoardingLookingForHowCanRequest boardingLookingForHowCanRequest);
+
     @POST("participant/user/add_or_edit")
     Observable<BoardingDataResponse> getJobAtFromApi(@Body BoardingJobAtRequest boardingJobAtRequest);
+
     @POST("participant/user/add_or_edit")
     Observable<BoardingDataResponse> getWorkExpFromApi(@Body BoardingWorkExpRequest boardingJobAtRequest);
+
     @POST("participant/user/add_or_edit")
     Observable<BoardingDataResponse> getInterestFromApi(@Body BoardingInterestRequest boardingInterestRequest);
+
     @POST("participant/settings/change_user_preference")
-    Observable<SettingChangeUserPreferenseResponse>getUserChangePreferenceAuthToken(@Body SettingChangeUserPreferenceRequest settingChangeUserPreferenceRequest);
+    Observable<SettingChangeUserPreferenseResponse> getUserChangePreferenceAuthToken(@Body SettingChangeUserPreferenceRequest settingChangeUserPreferenceRequest);
+
     @POST("participant/user/add_or_edit")
-    Observable<BoardingDataResponse>getEducationAuthToken(@Body ProfileAddEditEducationRequest profileAddEditEducationRequest);
+    Observable<BoardingDataResponse> getEducationAuthToken(@Body ProfileAddEditEducationRequest profileAddEditEducationRequest);
+
     @POST("participant/user/add_or_edit")
-    Observable<BoardingDataResponse>getPersonalBasicDetailsAuthToken(@Body PersonalBasicDetailsRequest personalBasicDetailsRequest);
+    Observable<BoardingDataResponse> getPersonalBasicDetailsAuthToken(@Body PersonalBasicDetailsRequest personalBasicDetailsRequest);
+
     @POST("participant/user/add_or_edit")
-    Observable<BoardingDataResponse>getProfessionalTravelDetailsAuthToken(@Body ProfileTravelFLexibilityRequest profileTravelFLexibilityRequest);
+    Observable<BoardingDataResponse> getProfessionalTravelDetailsAuthToken(@Body ProfileTravelFLexibilityRequest profileTravelFLexibilityRequest);
+
     @POST("participant/user/add_or_edit")
-    Observable<BoardingDataResponse>getPersonalUserSummaryDetailsAuthToken(@Body UserSummaryRequest userSummaryRequest);
+    Observable<BoardingDataResponse> getPersonalUserSummaryDetailsAuthToken(@Body UserSummaryRequest userSummaryRequest);
+
     @POST("participant/user/add_or_edit")
-    Observable<BoardingDataResponse>getProfessionalDetailsAuthToken(@Body ProfessionalBasicDetailsRequest professionalBasicDetailsRequest);
+    Observable<BoardingDataResponse> getProfessionalDetailsAuthToken(@Body ProfessionalBasicDetailsRequest professionalBasicDetailsRequest);
+
     @POST("participant/user/add_or_edit")
-    Observable<BoardingDataResponse>getWorkLocationDetailsAuthToken(@Body ProfilePreferredWorkLocationRequest profilePreferredWorkLocationRequest);
+    Observable<BoardingDataResponse> getWorkLocationDetailsAuthToken(@Body ProfilePreferredWorkLocationRequest profilePreferredWorkLocationRequest);
+
     @POST("participant/user/get_visiting_card_details")
-    Observable<ProfileEditVisitingCardResponse>getEditVisitingCardDetailsAuthToken();
+    Observable<ProfileEditVisitingCardResponse> getEditVisitingCardDetailsAuthToken();
+
     @POST("participant/user/participant/user/get_visiting_card")
-    Observable<ProfileEditVisitingCardResponse>getSaveVisitingCardDetailsAuthToken(@Body GetUserVisitingCardRequest getUserVisitingCardRequest);
+    Observable<ProfileEditVisitingCardResponse> getSaveVisitingCardDetailsAuthToken(@Body GetUserVisitingCardRequest getUserVisitingCardRequest);
+
     @POST("participant/user/get_all_details")
-    Observable<UserProfileResponse>getUserDetails();
+    Observable<UserProfileResponse> getUserDetails();
+
     @POST("participant/community/unjoin")
-    Observable<MemberListResponse>removeMember(@Body RemoveMemberRequest removeMemberRequest);
+    Observable<MemberListResponse> removeMember(@Body RemoveMemberRequest removeMemberRequest);
+
     @POST("participant/community/reject_joining_request")
-    Observable<MemberListResponse>removePandingMember(@Body RemoveMemberRequest removeMemberRequest);
+    Observable<MemberListResponse> removePandingMember(@Body RemoveMemberRequest removeMemberRequest);
 
     @POST("participant/community/approve_joining_request")
-    Observable<MemberListResponse>approvePandingMember(@Body ApproveMemberRequest approveMemberRequest);
+    Observable<MemberListResponse> approvePandingMember(@Body ApproveMemberRequest approveMemberRequest);
+
     @POST("participant/community/invite")
-    Observable<ShareMailResponse>shareCommunityViaMail(@Body ShareViaMail shareViaMail);
+    Observable<ShareMailResponse> shareCommunityViaMail(@Body ShareViaMail shareViaMail);
 
     @POST("participation/notification/bell")
-    Observable<BelNotificationListResponse>bellNotification(@Body BellNotificationRequest bellNotificationRequest);
+    Observable<BelNotificationListResponse> bellNotification(@Body BellNotificationRequest bellNotificationRequest);
+
     @POST("participant/user/add_or_edit")
-    Observable<BoardingDataResponse>getWorkExpAddEditResponse(@Body ExprienceEntity exprienceEntity);
+    Observable<BoardingDataResponse> getWorkExpAddEditResponse(@Body ExprienceEntity exprienceEntity);
+
     @POST("participation/notification/bell/unread")
-    Observable<NotificationReadCountResponse>notificationReadCount(@Body NotificationReadCount notificationReadCount);
+    Observable<NotificationReadCountResponse> notificationReadCount(@Body NotificationReadCount notificationReadCount);
+
     @POST("participation/challenge/get/challenges")
-    Observable<ChallengeListResponse>challengeList(@Body ChallengeRequest challengeRequest);
+    Observable<ChallengeListResponse> challengeList(@Body ChallengeRequest challengeRequest);
+
     @POST("participation/challenge/accept")
-    Observable<ChallengeListResponse>challengeAccept(@Body ChallengeAcceptRequest challengeAcceptRequest);
-    @POST("http://34.193.138.177/participant/auth/signin")
-    Observable<LoginResponse> getUserGoogleLogin(@Body LoginRequest loginRequest);
+    Observable<ChallengeListResponse> challengeAccept(@Body ChallengeAcceptRequest challengeAcceptRequest);
+
+    @POST("http://52.71.218.71/sheroes/APIUsers/gplogin.json")
+    Observable<GooglePlusResponse> getUserGoogleLogin(@Body GooglePlusRequest loginRequest);
+
+    @GET
+    Observable<ExpireInResponse> getGoogleTokenExpire(@Url String url);
+
     @POST("participation/helpline/post_question")
-    Observable<HelplinePostQuestionResponse>postHelplineQuestion(@Body HelplinePostQuestionRequest helplinePostQuestionRequest);
+    Observable<HelplinePostQuestionResponse> postHelplineQuestion(@Body HelplinePostQuestionRequest helplinePostQuestionRequest);
+
     @POST("participation/helpline/get_thread_details")
-    Observable<HelplineGetChatThreadResponse>getHelplineChatDetails(@Body HelplineGetChatThreadRequest helplineGetChatThreadRequest);
+    Observable<HelplineGetChatThreadResponse> getHelplineChatDetails(@Body HelplineGetChatThreadRequest helplineGetChatThreadRequest);
 
     @POST("participant/user/signup")
     Observable<LoginResponse> userSignup(@Body SignupRequest signupRequest);

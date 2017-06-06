@@ -41,6 +41,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.presenters.LoginPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -270,6 +271,12 @@ public class FaceBookOpenActivity extends BaseActivity implements LoginView {
             }
         }
     }
+
+    @Override
+    public void getGoogleExpireInResponse(ExpireInResponse expireInResponse) {
+
+    }
+
 
     @Override
     public void startProgressBar() {

@@ -9,6 +9,9 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.SignupRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.GooglePlusRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.GooglePlusResponse;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -74,12 +77,24 @@ public class LoginModel {
                     .observeOn(AndroidSchedulers.mainThread());
 
     }
-    public Observable<LoginResponse> getGoogleLoginFromModel(LoginRequest loginRequest) {
+    public Observable<GooglePlusResponse> getGoogleLoginFromModel(GooglePlusRequest loginRequest) {
         return sheroesAppServiceApi.getUserGoogleLogin(loginRequest)
-                .map(new Func1<LoginResponse, LoginResponse>() {
+                .map(new Func1<GooglePlusResponse, GooglePlusResponse>() {
                     @Override
-                    public LoginResponse call(LoginResponse loginResponse) {
-                        return loginResponse;
+                    public GooglePlusResponse call(GooglePlusResponse googlePlusResponse) {
+                        return googlePlusResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+    }
+    public Observable<ExpireInResponse> getGoogleTokenExpireInFromModel(String expireInUrl) {
+        return sheroesAppServiceApi.getGoogleTokenExpire(expireInUrl)
+                .map(new Func1<ExpireInResponse, ExpireInResponse>() {
+                    @Override
+                    public ExpireInResponse call(ExpireInResponse expireInResponse) {
+                        return expireInResponse;
                     }
                 })
                 .subscribeOn(Schedulers.io())

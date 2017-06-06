@@ -11,6 +11,9 @@ import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.SignupRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.GooglePlusRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.GooglePlusResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -118,13 +121,13 @@ public class LoginPresenter extends BasePresenter<LoginView> {
         registerSubscription(subscription);
     }
 
-    public void getGoogleLoginFromPresenter(LoginRequest loginRequest) {
+    public void getGoogleLoginFromPresenter(GooglePlusRequest loginRequest) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = mLoginModel.getGoogleLoginFromModel(loginRequest).subscribe(new Subscriber<LoginResponse>() {
+        Subscription subscription = mLoginModel.getGoogleLoginFromModel(loginRequest).subscribe(new Subscriber<GooglePlusResponse>() {
             @Override
             public void onCompleted() {
                 getMvpView().stopProgressBar();
@@ -137,10 +140,43 @@ public class LoginPresenter extends BasePresenter<LoginView> {
             }
 
             @Override
-            public void onNext(LoginResponse loginResponse) {
+            public void onNext(GooglePlusResponse googlePlusResponse) {
                 getMvpView().stopProgressBar();
-                if (null != loginResponse)
-                    getMvpView().getLogInResponse(loginResponse);
+                if (null != googlePlusResponse) {
+                    ExpireInResponse expireInResponse=new ExpireInResponse();
+                    expireInResponse.setGooglePlusResponse(googlePlusResponse);
+                    getMvpView().getGoogleExpireInResponse(expireInResponse);
+                }
+            }
+        });
+        registerSubscription(subscription);
+    }
+
+    public void googleTokenExpireInFromPresenter(String tokenExpireUrl) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = mLoginModel.getGoogleTokenExpireInFromModel(tokenExpireUrl).subscribe(new Subscriber<ExpireInResponse>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                getMvpView().stopProgressBar();
+                getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
+            }
+
+            @Override
+            public void onNext(ExpireInResponse expireInResponse) {
+                getMvpView().stopProgressBar();
+                if (null != expireInResponse) {
+                    getMvpView().getGoogleExpireInResponse(expireInResponse);
+
+                }
             }
         });
         registerSubscription(subscription);
