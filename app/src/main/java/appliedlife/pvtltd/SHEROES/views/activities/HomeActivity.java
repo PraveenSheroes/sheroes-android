@@ -211,6 +211,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         moEngageUtills = MoEngageUtills.getInstance();
         startedTime = System.currentTimeMillis();
         renderHomeFragmentView();
+        openHelplineIfPushNotification();
     }
 
     public void renderHomeFragmentView() {
@@ -222,7 +223,9 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
          mFragmentOpen = new FragmentOpen();
         setAllValues(mFragmentOpen);
         if (null != getIntent() && null != getIntent().getExtras()) {
-            mChallengeId = (long) getIntent().getExtras().get(AppConstants.CHALLENGE_ID);
+            if(getIntent().getExtras().get(AppConstants.CHALLENGE_ID)!=null) {
+                mChallengeId = (long) getIntent().getExtras().get(AppConstants.CHALLENGE_ID);
+            }
         }
         initHomeViewPagerAndTabs();
         assignNavigationRecyclerListView();
@@ -1434,6 +1437,14 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 }
             } else {
                 onShowErrorDialog(result, JOIN_INVITE);
+            }
+        }
+    }
+    private void openHelplineIfPushNotification(){
+        if (null != getIntent() && null != getIntent().getExtras()) {
+            if(getIntent().getExtras().get(AppConstants.HELPLINE_CHAT)!=null) {
+                checkForAllOpenFragments();
+                openHelplineFragment();
             }
         }
     }
