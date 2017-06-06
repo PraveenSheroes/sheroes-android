@@ -38,6 +38,7 @@ android {
     buildTypes {
         debug {
             buildConfigField "String", "BASE_URL", "\"http://34.193.138.177/\""
+            buildConfigField "String", "GOOGLE_PLUS_URL","\"http://52.71.218.71/sheroes/APIUsers/gplogin.json\""
             buildConfigField 'Boolean', 'enableCrashlytics', 'false'
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -46,6 +47,7 @@ android {
         release {
            // buildConfigField "String", "BASE_URL", "\"http://52.44.245.191/\""
             buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
+            buildConfigField "String", "GOOGLE_PLUS_URL", "\"https://sheroes.com/APIUsers/gplogin.json\""
             buildConfigField 'Boolean', 'enableCrashlytics', 'true'
             minifyEnabled true
             shrinkResources true
@@ -90,7 +92,6 @@ dependencies {
     compile 'com.google.dagger:dagger:2.2'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.android.support:support-v4:25.3.0'
-    compile 'com.vanniktech:emoji-one:0.4.0'
     compile "com.pushtorefresh.storio:sqlite:$STORIO_VERSION"
     compile "com.pushtorefresh.storio:sqlite-annotations:$STORIO_VERSION"
     apt "com.pushtorefresh.storio:sqlite-annotations-processor:$STORIO_VERSION"

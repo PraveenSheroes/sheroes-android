@@ -159,7 +159,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     private void getGcmId() {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        GCMClientManager pushClientManager = new GCMClientManager(WelcomeActivity.this, AppConstants.PROJECT_NUMBER);
+        GCMClientManager pushClientManager = new GCMClientManager(WelcomeActivity.this, getString(R.string.ID_PROJECT_ID));
         pushClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
             @Override
             public void onSuccess(String registrationId, boolean isNewRegistration) {

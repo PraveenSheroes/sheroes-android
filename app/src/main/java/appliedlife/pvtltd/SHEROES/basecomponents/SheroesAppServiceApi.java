@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.basecomponents;
 
 
+import appliedlife.pvtltd.SHEROES.BuildConfig;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeAcceptRequest;
@@ -288,7 +289,7 @@ public interface SheroesAppServiceApi {
     @POST("participation/challenge/accept")
     Observable<ChallengeListResponse> challengeAccept(@Body ChallengeAcceptRequest challengeAcceptRequest);
 
-    @POST("http://52.71.218.71/sheroes/APIUsers/gplogin.json")
+    @POST(BuildConfig.GOOGLE_PLUS_URL)
     Observable<GooglePlusResponse> getUserGoogleLogin(@Body GooglePlusRequest loginRequest);
 
     @GET
@@ -302,5 +303,7 @@ public interface SheroesAppServiceApi {
 
     @POST("participant/user/signup")
     Observable<LoginResponse> userSignup(@Body SignupRequest signupRequest);
+    @POST("participant/user/getUserSummarry")
+    Observable<LoginResponse> googlePlusUserResponse();
 
 }

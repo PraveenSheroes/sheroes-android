@@ -114,4 +114,16 @@ public class LoginModel {
                 .observeOn(AndroidSchedulers.mainThread());
 
     }
+    public Observable<LoginResponse> getGooglePlusUserResponseFromModel() {
+        return sheroesAppServiceApi.googlePlusUserResponse()
+                .map(new Func1<LoginResponse, LoginResponse>() {
+                    @Override
+                    public LoginResponse call(LoginResponse loginResponse) {
+                        return loginResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+    }
 }

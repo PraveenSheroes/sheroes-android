@@ -13,6 +13,7 @@ public class MoEngageConstants {
     public static final String ACQUISITION_CHANNEL = "acquisition channel ";
     public static final String DISTINCT_ID = "distinct ID";
     public static final String FACEBOOK = "facebook";
+    public static final String GOOGLE = "google";
     public static final String SIGN_UP_USING = "signed up using";
     public static final String EMAIL = "email";
     public static final String LOGGED_IN_USING = "logged in using";

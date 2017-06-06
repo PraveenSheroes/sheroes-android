@@ -1,5 +1,6 @@
 <resources>
     <string name="ID_APP_NAME">SHEROES</string>
+    <string name="ID_PROJECT_ID">409228886131</string>
     <string name="ID_ROBOTO_REGULAR">sans-serif</string>
     <string name="ID_ROBOTO_LIGHT">sans-serif-light</string>
     <string name="ID_ROBOTO_CONDENSED">sans-serif-condensed</string>
