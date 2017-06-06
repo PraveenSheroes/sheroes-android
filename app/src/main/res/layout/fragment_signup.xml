@@ -46,6 +46,7 @@
                         android:layout_height="wrap_content"
                         android:backgroundTint="@color/signup_text_color"
                         android:hint="@string/ID_FIRST_NAME_HINT_SIGNUP"
+                        android:digits="@string/ID_NAME_CHECK"
                         android:inputType="textPersonName"
                         android:maxLines="@integer/int_value_for_line_1"
                         android:textSize="@dimen/sp_size_14" />
@@ -67,6 +68,7 @@
                         android:layout_height="wrap_content"
                         android:backgroundTint="@color/signup_text_color"
                         android:hint="@string/ID_LAST_NAME_HINT_SIGNUP"
+                        android:digits="@string/ID_NAME_CHECK"
                         android:inputType="textPersonName"
                         android:maxLines="@integer/int_value_for_line_1"
                         android:textSize="@dimen/sp_size_14" />
