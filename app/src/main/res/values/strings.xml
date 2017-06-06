@@ -732,13 +732,13 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_FACEBOOK_LONGING">LOGGING IN...</string>
     <string name="IDS_GOOGLE_BUTTON">Login with Google</string>
     <string name="ID_LINK_TO_FACEBOOK">Link to Facebook</string>
-    <string name="ID_WELCOME_TEXT4">Other Login Options ? (Only For Existing Users)</string>
+    <string name="ID_WELCOME_TEXT4">Login Using Email (Only For Existing Users)</string>
     <string name="ID_WELCOME_FIRST">Grow With Your Circle Of Support</string>
     <string name="ID_WELCOME_SECOND">Find Flexible Work Options</string>
     <string name="ID_WELCOME_THIRD">Learn And Get Skilled For Today\'s Age</string>
     <string name="ID_WELCOME_FOUR">Inspire Others With Your Growth Story</string>
     <string name="ID_WELCOME">Welcome</string>
-    <string name="ID_WELCOME_WOMEN">It’s a delight to have you on SHEROES,a community of over 1Million women.</string>
+    <string name="ID_WELCOME_WOMEN">It’s a delight to have you on SHEROES, a community of over 1 Million women.</string>
     <string name="ID_WELCOME_DETAIL"> We are team SHEROES, we understand things that you care about and we find want you are looking for, everyday.</string>
     <!--string related client travel page-->
 
@@ -902,4 +902,5 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_LAST_NAME_HINT_SIGNUP"><font size="10">LAST NAME</font></string>
     <string name="ID_EMAIL_ID_HINT_SIGNUP"><font size="10">EMAIL ID</font></string>
     <string name="ID_PASSWORD_STRENTH">Password should be greater than 5 characters.</string>
+    <string name="ID_NAME_CHECK">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
 </resources>
