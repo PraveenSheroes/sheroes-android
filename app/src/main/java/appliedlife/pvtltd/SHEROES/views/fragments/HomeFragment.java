@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.f2prateek.rx.preferences.Preference;
+import com.moengage.push.PushManager;
 
 import java.util.List;
 
@@ -190,6 +191,7 @@ public class HomeFragment extends BaseFragment {
             public void onSuccess(String registrationId, boolean isNewRegistration) {
                 LogUtils.info(TAG, "*************Registarion" + registrationId);
                 mGcmId = registrationId;
+                PushManager.getInstance().refreshToken(getActivity(), mGcmId);
                 if (StringUtil.isNotNullOrEmptyString(registrationId)) {
                     if (null != mInstallUpdatePreference && mInstallUpdatePreference.isSet() && null != mInstallUpdatePreference.get()) {
                         if (mInstallUpdatePreference.get().isFirstOpen()) {

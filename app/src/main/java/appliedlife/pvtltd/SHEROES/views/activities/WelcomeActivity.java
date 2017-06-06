@@ -19,6 +19,7 @@ import com.f2prateek.rx.preferences.Preference;
 import com.facebook.login.LoginManager;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
+import com.moengage.push.PushManager;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -166,6 +167,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                 LogUtils.info(TAG, "******* ******Registarion" + registrationId);
                 mGcmId = registrationId;
                 if (StringUtil.isNotNullOrEmptyString(mGcmId)) {
+                    PushManager.getInstance().refreshToken(getApplicationContext(), mGcmId);
                     mGetStarted.setEnabled(true);
                     mOtherLoginOption.setEnabled(true);
                 } else {
@@ -364,7 +366,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     }
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         if(mFragmentOpen.isSignupFragment())
         {
             mFragmentOpen.setSignupFragment(false);

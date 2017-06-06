@@ -8,9 +8,9 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class Device {
-    @SerializedName("uid")
+    @SerializedName("id")
     @Expose
-    private Integer id;
+    private String id;
     @SerializedName("type")
     @Expose
     private String type;
@@ -18,11 +18,11 @@ public class Device {
     @Expose
     private String gmcApnsId;
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -41,4 +41,5 @@ public class Device {
     public void setGmcApnsId(String gmcApnsId) {
         this.gmcApnsId = gmcApnsId;
     }
+
 }

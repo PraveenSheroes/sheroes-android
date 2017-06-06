@@ -38,7 +38,7 @@ android {
     buildTypes {
         debug {
             buildConfigField "String", "BASE_URL", "\"http://34.193.138.177/\""
-            buildConfigField "String", "GOOGLE_PLUS_URL","\"http://52.71.218.71/sheroes/APIUsers/gplogin.json\""
+            buildConfigField "String", "GOOGLE_PLUS_URL", "\"https://sheroes.com/APIUsers/gplogin.json\""
             buildConfigField 'Boolean', 'enableCrashlytics', 'false'
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'

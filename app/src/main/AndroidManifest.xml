@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -15,9 +16,7 @@
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <!-- If you have specified applicationId in build.gradle file then replace [YOUR_PACKAGE_NAME] with applicationId-->
-    <permission android:name="appliedlife.pvtltd.SHEROES.permission.C2D_MESSAGE" android:protectionLevel="signature" />
-    <uses-permission android:name="appliedlife.pvtltd.SHEROES.permission.C2D_MESSAGE" />
+
     <application
         android:name="appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication"
         android:allowBackup="false"
@@ -59,12 +58,24 @@
         <!-- MANDATORY FIELD: THE NOTIFICATION SMALL ICON WHICH WILL BE USED TO SET TO NOTIFICATIONS POSTED -->
         <meta-data
             android:name="NOTIFICATION_ICON"
-            android:value="@drawable/ic_anonomous" />
+            android:value="@drawable/ic_combined_shape" />
 
         <!-- MANDATORY FIELD: THE NOTIFICATION LARGE ICON WHICH WILL BE USED TO SET TO NOTIFICATIONS POSTED -->
         <meta-data
             android:name="NOTIFICATION_LARGE_ICON"
-            android:value="@drawable/ic_add_post" />
+            android:value="@drawable/ic_combined_shape" />
+        <meta-data
+            android:name="SKIP_GCM_REGISTRATION"
+            android:value="true" />
+
+        <activity
+            android:name="com.moe.pushlibrary.activities.MoEActivity"
+            android:parentActivityName="appliedlife.pvtltd.SHEROES.views.activities.HomeActivity">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="appliedlife.pvtltd.SHEROES.views.activities.HomeActivity"/>
+        </activity>
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.OnBoardingActivity"
             android:windowSoftInputMode="stateHidden"
@@ -181,6 +192,8 @@
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+                <action android:name="com.google.android.gms.iid.InstanceID"/>
             </intent-filter>
         </service>
 
@@ -193,26 +206,6 @@
                 <category android:name="appliedlife.pvtltd.SHEROES.service" />
             </intent-filter>
         </receiver>
-
-        <!-- Listener for Receiving push payload from GCM -->
-        <service
-            android:name="com.moengage.worker.MoEGCMListenerService"
-            android:exported="false" >
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
-            </intent-filter>
-        </service>
-
-        <!-- Listener for refresh token callback -->
-        <service
-            android:name="com.moengage.receiver.MoEInstanceIDListener"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.android.gms.iid.InstanceID"/>
-            </intent-filter>
-        </service>
-
     </application>
 
 </manifest>

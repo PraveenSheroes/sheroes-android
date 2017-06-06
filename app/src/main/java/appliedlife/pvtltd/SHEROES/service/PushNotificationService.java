@@ -16,6 +16,8 @@ import android.support.v4.content.ContextCompat;
 import com.google.android.gms.gcm.GcmListenerService;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
+import com.moengage.push.PushManager;
+import com.moengage.pushbase.push.MoEngageNotificationUtils;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
@@ -41,30 +43,32 @@ public class PushNotificationService extends GcmListenerService {
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
         String message = "";
-        if (null != data) {
-            if (StringUtil.isNotNullOrEmptyString(data.getString(AppConstants.MESSAGE))) {
-                message = data.getString(AppConstants.MESSAGE);
-            }
-            if (StringUtil.isNotNullOrEmptyString(data.getString(AppConstants.TITLE))) {
-                from = data.getString("title");
-            }
-            if (StringUtil.isNotNullOrEmptyString(data.getString(AppConstants.DEEP_LINK_URL))) {
-                url = data.getString(AppConstants.DEEP_LINK_URL);
-            }
+        if (null == data) return;
+        if (MoEngageNotificationUtils.isFromMoEngagePlatform(data)) {
+            //If the message is not sent from MoEngage it will be rejected
+            PushManager.getInstance().getPushHandler().handlePushPayload(getApplicationContext(), data);
+        }
+        if (StringUtil.isNotNullOrEmptyString(data.getString(AppConstants.MESSAGE))) {
+            message = data.getString(AppConstants.MESSAGE);
+        }
+        if (StringUtil.isNotNullOrEmptyString(data.getString(AppConstants.TITLE))) {
+            from = data.getString("title");
+        }
+        if (StringUtil.isNotNullOrEmptyString(data.getString(AppConstants.DEEP_LINK_URL))) {
+            url = data.getString(AppConstants.DEEP_LINK_URL);
+        }
+        if (StringUtil.isNotNullOrEmptyString(url)) {
             if (StringUtil.isNotNullOrEmptyString(url)) {
-                if (StringUtil.isNotNullOrEmptyString(url)) {
-                    sendNotification(from, message, url);
-                }
-                if (url.contains(AppConstants.ARTICLE_URL) ||url.contains(AppConstants.ARTICLE_URL_COM)) {
-                    moEngageUtills.entityMoEngagePushNotification(this, mMoEHelper, payloadBuilder, this.getString(R.string.ID_ARTICLE), from, from);
-                } else if (url.contains(AppConstants.COMMUNITY_URL)||url.contains(AppConstants.COMMUNITY_URL_COM)) {
-                    moEngageUtills.entityMoEngagePushNotification(this, mMoEHelper, payloadBuilder, this.getString(R.string.ID_COMMUNITIY), from, from);
-                } else if (url.contains(AppConstants.JOB_URL)||url.contains(AppConstants.JOB_URL_COM)) {
-                    moEngageUtills.entityMoEngagePushNotification(this, mMoEHelper, payloadBuilder, this.getString(R.string.ID_JOB), from, from);
-                }
+                sendNotification(from, message, url);
+            }
+            if (url.contains(AppConstants.ARTICLE_URL) || url.contains(AppConstants.ARTICLE_URL_COM)) {
+                moEngageUtills.entityMoEngagePushNotification(this, mMoEHelper, payloadBuilder, this.getString(R.string.ID_ARTICLE), from, from);
+            } else if (url.contains(AppConstants.COMMUNITY_URL) || url.contains(AppConstants.COMMUNITY_URL_COM)) {
+                moEngageUtills.entityMoEngagePushNotification(this, mMoEHelper, payloadBuilder, this.getString(R.string.ID_COMMUNITIY), from, from);
+            } else if (url.contains(AppConstants.JOB_URL) || url.contains(AppConstants.JOB_URL_COM)) {
+                moEngageUtills.entityMoEngagePushNotification(this, mMoEHelper, payloadBuilder, this.getString(R.string.ID_JOB), from, from);
             }
         }
-
     }
 
     private void sendNotification(String title, String body, String urltext) {

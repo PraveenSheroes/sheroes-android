@@ -9,8 +9,6 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.InputType;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,12 +41,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.Scopes;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.plus.Plus;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
+import com.moengage.push.PushManager;
 
 import org.json.JSONObject;
 
@@ -198,6 +196,7 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
 
     private void signIn() {
         //Creating an intent
+        signOut();
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         //Starting intent for result
         showDialog(CustomSocialDialog.LOGGING_IN_DIALOG);
@@ -380,6 +379,7 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
                 LogUtils.info(TAG, "******* ******Registarion" + registrationId);
                 mGcmId = registrationId;
                 if (StringUtil.isNotNullOrEmptyString(mGcmId)) {
+                    PushManager.getInstance().refreshToken(getActivity(), mGcmId);
                     mSignUp.setEnabled(true);
                     mFbSignUp.setEnabled(true);
                 } else {

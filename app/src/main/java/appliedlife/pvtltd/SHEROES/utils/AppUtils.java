@@ -1687,7 +1687,7 @@ public class AppUtils {
         AppUtils appUtils = AppUtils.getInstance();
         Device device=new Device();
         device.setGmcApnsId(SheroesApplication.mContext.getString(R.string.ID_PROJECT_ID));
-        device.setId(appUtils.getAppVersionCode());
+        device.setId(appUtils.getDeviceId());
         device.setType(appUtils.getDeviceModel());
         googlePlusRequest.setUser(user);
         googlePlusRequest.setDevice(device);
