@@ -89,12 +89,15 @@ public class SHEPresenter extends BasePresenter<SHEView> {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_GET_ICC_MEMBERS);
             return;
         }
+        getMvpView().startProgressBar();
         Subscription subscription = mSheModel.getAllICCMembers(iccMemberRequest).subscribe(new Subscriber<ICCMemberListResponse>() {
             @Override
             public void onCompleted() {
+                getMvpView().stopProgressBar();
             }
             @Override
             public void onError(Throwable e) {
+                getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_SERVER_PROBLEM),ERROR_GET_ICC_MEMBERS);
                 if(null!=e&& StringUtil.isNotNullOrEmptyString(e.getMessage())) {
                     StringBuilder stringBuilder = new StringBuilder();
@@ -105,6 +108,7 @@ public class SHEPresenter extends BasePresenter<SHEView> {
 
             @Override
             public void onNext(ICCMemberListResponse iccMemberListResponse) {
+                getMvpView().stopProgressBar();
                 getMvpView().getAllICCMembers(iccMemberListResponse);
             }
         });

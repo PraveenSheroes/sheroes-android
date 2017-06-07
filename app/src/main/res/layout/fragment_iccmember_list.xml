@@ -32,6 +32,10 @@
         app:layoutManager="LinearLayoutManager"
         android:layout_marginTop="@dimen/dp_size_10"
        />
-
+    <ProgressBar
+        android:id="@+id/pb_icc_member_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
 </LinearLayout>
 

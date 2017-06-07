@@ -535,6 +535,10 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
         openReactionList();
     }
 
+    @OnClick(R.id.li_user_comment_post_type_selection)
+    public void onCommentSelection() {
+
+    }
     private void openReactionList() {
         mTvUserCommentHeaderText.setText(getString(R.string.ID_REACTION));
         mFragmentOpen.setReactionList(true);

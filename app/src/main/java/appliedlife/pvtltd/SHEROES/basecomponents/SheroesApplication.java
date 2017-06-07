@@ -6,6 +6,7 @@ import android.support.multidex.MultiDexApplication;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
 import com.moe.pushlibrary.MoEHelper;
+import com.moengage.core.Logger;
 
 import java.io.File;
 
@@ -44,6 +45,7 @@ public class SheroesApplication extends MultiDexApplication  {
         Crashlytics crashlytics = new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build();
         Fabric.with(this,crashlytics);
         MoEHelper.getInstance(getApplicationContext()).autoIntegrate(this);
+        MoEHelper.getInstance(getApplicationContext()).setLogLevel(Logger.VERBOSE);
         File cacheFile = new File(getCacheDir(), "responses");
         mSheroesAppComponent = DaggerSheroesAppComponent.builder().sheroesAppModule(new SheroesAppModule(cacheFile,this)).build();
         setAppComponent(mSheroesAppComponent);

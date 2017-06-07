@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
@@ -42,6 +43,8 @@ public class ICCMemberListFragment extends BaseFragment implements SHEView {
 
     @Bind(R.id.rv_list_icc)
     RecyclerView mRecyclerView;
+    @Bind(R.id.pb_icc_member_progress_bar)
+    ProgressBar pbIccMemberProgreeBar;
 
     GenericRecyclerViewAdapter mAdapter;
 
@@ -56,6 +59,7 @@ public class ICCMemberListFragment extends BaseFragment implements SHEView {
         View view = inflater.inflate(R.layout.fragment_iccmember_list, container, false);
         ButterKnife.bind(this, view);
         shePresenter.attachView(this);
+        setProgressBar(pbIccMemberProgreeBar);
         assignNavigationRecyclerListView();
         payloadBuilder = new PayloadBuilder();
         mMoEHelper = MoEHelper.getInstance(getActivity());
