@@ -43,7 +43,7 @@ public class ICCMemberListFragment extends BaseFragment implements SHEView {
 
     @Bind(R.id.rv_list_icc)
     RecyclerView mRecyclerView;
-    @Bind(R.id.pb_icc_member_progress_bar)
+    @Bind(R.id.pb_icc_progress_bar)
     ProgressBar pbIccMemberProgreeBar;
 
     GenericRecyclerViewAdapter mAdapter;

@@ -65,9 +65,11 @@ public class SHEPresenter extends BasePresenter<SHEView> {
         Subscription subscription = mSheModel.getAllFAQS(faqsRequest).subscribe(new Subscriber<FAQSResponse>() {
             @Override
             public void onCompleted() {
+                getMvpView().stopProgressBar();
             }
             @Override
             public void onError(Throwable e) {
+                getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_SERVER_PROBLEM),ERROR_GET_FAQS);
                 if(null!=e&& StringUtil.isNotNullOrEmptyString(e.getMessage())) {
                     StringBuilder stringBuilder = new StringBuilder();
@@ -78,6 +80,7 @@ public class SHEPresenter extends BasePresenter<SHEView> {
 
             @Override
             public void onNext(FAQSResponse faqsResponse) {
+                getMvpView().stopProgressBar();
                 getMvpView().getAllFAQs(faqsResponse);
             }
         });

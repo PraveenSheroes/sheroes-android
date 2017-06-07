@@ -13,6 +13,7 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
@@ -52,6 +53,9 @@ public class FAQSFragment extends BaseFragment implements SHEView {
     @Bind(R.id.rv_list_faqs)
     RecyclerView mRecyclerView;
 
+    @Bind(R.id.pb_faqs_progress_bar)
+    ProgressBar pbFAQsProgreeBar;
+
     GenericRecyclerViewAdapter mAdapter;
 
     private MoEHelper mMoEHelper;
@@ -66,6 +70,7 @@ public class FAQSFragment extends BaseFragment implements SHEView {
         View view = inflater.inflate(R.layout.fragment_faq, container, false);
         ButterKnife.bind(this, view);
         shePresenter.attachView(this);
+        setProgressBar(pbFAQsProgreeBar);
         assignNavigationRecyclerListView();
         payloadBuilder = new PayloadBuilder();
         mMoEHelper = MoEHelper.getInstance(getActivity());

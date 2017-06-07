@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -12,9 +12,15 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_list_faqs"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         app:layoutManager="LinearLayoutManager"
         android:layout_marginTop="@dimen/dp_size_minus_20"
         android:fitsSystemWindows="true"/>
 
-</LinearLayout>
+    <ProgressBar
+        android:id="@+id/pb_faqs_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+
+</FrameLayout>

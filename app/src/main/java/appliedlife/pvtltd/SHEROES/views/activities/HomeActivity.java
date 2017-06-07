@@ -431,7 +431,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     startActivity(intent);
                     overridePendingTransition(R.anim.fade_in_dialog, R.anim.fade_out_dialog);
                     totalTimeSpentOnFeed();
-
                     break;
                 case AppConstants.TWO_CONSTANT:
                     checkForAllOpenFragments();
@@ -488,8 +487,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     if(!mFragmentOpen.isFeedFragment()) {
                         checkForAllOpenFragments();
                         mFragmentOpen.setFeedFragment(true);
-                        renderHomeFragmentView();
-                        totalTimeSpentOnFeed();
+                        renderFeedFragment();
                     }
                     break;
                 default:
@@ -539,6 +537,13 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             Fragment fragment =  getSupportFragmentManager().findFragmentByTag(FAQSFragment.class.getName());
             ((FAQSFragment) fragment).setDataChange((FAQS) baseResponse);
         }
+    }
+
+    private void renderFeedFragment() {
+        mICSheroes.setVisibility(View.VISIBLE);
+        mTitleText.setVisibility(View.GONE);
+        homeOnClick();
+        mFlHomeFooterList.setVisibility(View.VISIBLE);
     }
 
     private void sharePostOnFacebook(ChallengeDataItem challengeDataItem) {
@@ -677,8 +682,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         mTitleText.setText(getString(R.string.ID_ICC_MEMBERS));
         mTitleText.setVisibility(View.VISIBLE);
         mICSheroes.setVisibility(View.GONE);
-        mTvHome.setVisibility(View.GONE);
-        mTvCommunities.setText(AppConstants.EMPTY_STRING);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fl_article_card_view, iccMemberListFragment, ICCMemberListFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
     }
@@ -819,9 +822,9 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         // if (!mFragmentOpen.isCommunityOpen()) {
         //     mFragmentOpen.setCommunityOpen(true);
         initCommunityViewPagerAndTabs();
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && false != mUserPreference.get().isSheUser() ) {
-            initCommunityViewPagerAndTabs();
-        }
+//        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && false != mUserPreference.get().isSheUser() ) {
+//            initCommunityViewPagerAndTabs();
+//        }
         //  }
         totalTimeSpentOnFeed();
     }
@@ -1056,12 +1059,26 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             setHomeFeedCommunityData();
             mFlHomeFooterList.setVisibility(View.VISIBLE);
             mTvHome.setVisibility(View.VISIBLE);
+            mTitleText.setVisibility(View.GONE);
+            mICSheroes.setVisibility(View.VISIBLE);
         } else if(mFragmentOpen.isICCMemberListFragment()){
             mFragmentOpen.setICCMemberListFragment(false);
             getSupportFragmentManager().popBackStackImmediate();
+            initHomeViewPagerAndTabs();
+            setHomeFeedCommunityData();
+            mFlHomeFooterList.setVisibility(View.VISIBLE);
+            mTvHome.setVisibility(View.VISIBLE);
+            mTitleText.setVisibility(View.GONE);
+            mICSheroes.setVisibility(View.VISIBLE);
         } else if(mFragmentOpen.isFAQSFragment()){
             mFragmentOpen.setFAQSFragment(false);
             getSupportFragmentManager().popBackStackImmediate();
+            initHomeViewPagerAndTabs();
+            setHomeFeedCommunityData();
+            mFlHomeFooterList.setVisibility(View.VISIBLE);
+            mTvHome.setVisibility(View.VISIBLE);
+            mTitleText.setVisibility(View.GONE);
+            mICSheroes.setVisibility(View.VISIBLE);
         } else if(mFragmentOpen.isFeedFragment()) {
             mFragmentOpen.setFeedFragment(false);
             getSupportFragmentManager().popBackStackImmediate();
