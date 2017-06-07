@@ -542,8 +542,10 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     private void renderFeedFragment() {
         mICSheroes.setVisibility(View.VISIBLE);
         mTitleText.setVisibility(View.GONE);
+        mTitleText.setText(AppConstants.EMPTY_STRING);
         homeOnClick();
         mFlHomeFooterList.setVisibility(View.VISIBLE);
+        mFragmentOpen.setFeedFragment(true);
     }
 
     private void sharePostOnFacebook(ChallengeDataItem challengeDataItem) {
@@ -1102,7 +1104,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
 
     private void gotBackToFragmentForSheUSer() {
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && false != mUserPreference.get().isSheUser() ) {
-            if(mTitleText.getText()!=null && mTitleText.getText() instanceof String){
+            if(mTitleText.getText()!=null && mTitleText.getText() instanceof String ){
                 if(((String)mTitleText.getText()).equals(getString(R.string.ID_ICC_MEMBERS))){
                     checkForAllOpenFragments();
                     mFragmentOpen.setICCMemberListFragment(true);
@@ -1114,6 +1116,11 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 } else if(((String)mTitleText.getText()).equals(getString(R.string.ID_APP_NAME))){
                     checkForAllOpenFragments();
                     openHelplineFragment();
+                } else if(((String)mTitleText.getText()).equals(AppConstants.EMPTY_STRING)){
+                    checkForAllOpenFragments();
+                    mFragmentOpen.setFeedFragment(true);
+                    renderHomeFragmentView();
+                    totalTimeSpentOnFeed();
                 }
             }else {
                 checkForAllOpenFragments();
