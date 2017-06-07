@@ -40,6 +40,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineChatDoc;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadResponse;
@@ -61,6 +62,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_RESPONSE;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.feedRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.helplineGetChatThreadRequestBuilder;
 
@@ -81,6 +83,8 @@ public class HelplineFragment extends BaseFragment {
     SwipeRefreshLayout mSwipeView;
     @Bind(R.id.et_question_chat)
     EditText questionText;
+    @Bind(R.id.btn_chat_send)
+    Button sendChatButton;
     private FragmentListRefreshData mFragmentListRefreshData;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
@@ -118,6 +122,7 @@ public class HelplineFragment extends BaseFragment {
         String text = questionText.getText().toString();
         if (StringUtil.isNotNullOrEmptyString(text)) {
             text = text.trim();
+            sendChatButton.setEnabled(false);
             mHelplinePresenter.postQuestionHelpline(AppUtils.helplineQuestionBuilder(text));
         } else {
             Toast.makeText(getContext(), AppConstants.HELPlINE_NO_MESSAGE, Toast.LENGTH_SHORT).show();
@@ -207,6 +212,7 @@ public class HelplineFragment extends BaseFragment {
 
     @Override
     public void getPostQuestionSuccess(HelplinePostQuestionResponse helplinePostQuestionResponse) {
+        sendChatButton.setEnabled(true);
         if (helplinePostQuestionResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
             questionText.setText(AppConstants.EMPTY_STRING);
             AppUtils.hideKeyboard(getView(), TAG);
@@ -244,5 +250,10 @@ public class HelplineFragment extends BaseFragment {
         super.setInitializationForHelpline(mFragmentListRefreshData, mAdapter, mLayoutManager, mRecyclerView, mAppUtils, mProgressBar);
         mHelplinePresenter.getHelplineChatDetails(helplineGetChatThreadRequestBuilder(AppConstants.ONE_CONSTANT));
     }
+    @Override
+    public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
+        super.showError(errorMsg,feedParticipationEnum);
+        sendChatButton.setEnabled(true);
+           }
 }
 
