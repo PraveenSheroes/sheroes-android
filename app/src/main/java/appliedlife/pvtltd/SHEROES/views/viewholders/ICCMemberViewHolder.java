@@ -1,7 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
-import android.net.Uri;
 import android.view.View;
 import android.widget.TextView;
 
@@ -13,6 +12,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMember;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -37,9 +37,9 @@ public class ICCMemberViewHolder extends BaseViewHolder<ICCMember> {
     TextView tvICCDescription;
 
 
-    public ICCMemberViewHolder(View view, BaseHolderInterface baseHolderInterface){
+    public ICCMemberViewHolder(View view, BaseHolderInterface baseHolderInterface) {
         super(view);
-        ButterKnife.bind(this,  view);
+        ButterKnife.bind(this, view);
         this.baseHolderInterface = baseHolderInterface;
         SheroesApplication.getAppComponent(view.getContext()).inject(this);
     }
@@ -47,28 +47,28 @@ public class ICCMemberViewHolder extends BaseViewHolder<ICCMember> {
     @Override
     public void bindData(ICCMember iccMember, Context context, int position) {
         this.iccMember = iccMember;
-        if(iccMember.getPhotoUrl()!=null){
+        if (StringUtil.isNotNullOrEmptyString(iccMember.getPhotoUrl())) {
             Glide.with(context)
                     .load(iccMember.getPhotoUrl())
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .skipMemoryCache(true)
                     .into(ivICCProfileCircleIcon);
         }
-        if(iccMember.getName()!=null){
+        if (StringUtil.isNotNullOrEmptyString(iccMember.getName())) {
             tvICCName.setText(iccMember.getName());
         }
         String description = null;
-        if(iccMember.getTitle() != null){
-            description  = iccMember.getTitle();
+        if (StringUtil.isNotNullOrEmptyString(iccMember.getTitle())) {
+            description = iccMember.getTitle();
 
-            if(iccMember.getOrganization()!=null){
+            if (StringUtil.isNotNullOrEmptyString(iccMember.getOrganization())) {
                 description = description + " - " + iccMember.getOrganization();
             }
-        }else if(iccMember.getOrganization()!=null){
+        } else if (StringUtil.isNotNullOrEmptyString(iccMember.getOrganization())) {
             description = iccMember.getOrganization();
         }
 
-        if(iccMember.getTitle()!=null || iccMember.getOrganization()!=null){
+        if (StringUtil.isNotNullOrEmptyString(iccMember.getTitle()) || StringUtil.isNotNullOrEmptyString(iccMember.getOrganization())) {
             tvICCDescription.setText(description);
         }
     }

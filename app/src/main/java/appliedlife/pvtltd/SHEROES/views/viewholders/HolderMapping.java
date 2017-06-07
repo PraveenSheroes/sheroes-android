@@ -375,23 +375,21 @@ public enum HolderMapping {
             return new HelplineQuestionCardHolder(view, viewInterface);
         }
     },
-        HELPLINE_CHAT_ANSWER_CARD(R.layout.helpline_answer_card) {
-            @Override
-            public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-                return new HelplineAnswerCardHolder(view, viewInterface);
-            }
-        }, ICC_MEMBER_CARD(R.layout.icc_member_card){
-                @Override
-                public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-                    return new ICCMemberViewHolder(view, viewInterface);
-                }
-    }, FAQS_CARD(R.layout.faqs_card){
+    HELPLINE_CHAT_ANSWER_CARD(R.layout.helpline_answer_card) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new HelplineAnswerCardHolder(view, viewInterface);
+        }
+    }, ICC_MEMBER_CARD(R.layout.icc_member_card) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new ICCMemberViewHolder(view, viewInterface);
+        }
+    }, FAQS_CARD(R.layout.faqs_card) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new FAQViewHolder(view, viewInterface);
         }
-
-
     };
     public Object object;
     public int layout;
@@ -412,7 +410,8 @@ public enum HolderMapping {
     }
 
     public static int getOrdinal(BaseResponse item, int totalCount, String callFromType) {
-        int  returnView =BLANK_LIST.ordinal();;
+        int returnView = BLANK_LIST.ordinal();
+        ;
         if (null != item) {
             if (callFromType.equalsIgnoreCase(AppConstants.FEED_SUB_TYPE)) {
                 if (item instanceof FeedDetail) {
@@ -539,7 +538,6 @@ public enum HolderMapping {
                     } else if (tagType.equalsIgnoreCase(AppConstants.USER_VISITING_CARD1)) {
                         returnView = PROFILE_PERSONAL_VISITING_CARD.ordinal();
                     }
-
                 } else if (item instanceof EducationEntity) {
                     returnView = EDUCATION_LIST.ordinal();
                 } else if (item instanceof GoodAt) {
@@ -579,27 +577,17 @@ public enum HolderMapping {
                 } else if (item instanceof HelplineChatDoc) {
                     if (((HelplineChatDoc) item).getSubType().equalsIgnoreCase(AppConstants.HELPLINE_SUB_TYPE_QUESTION)) {
                         HelplineChatDoc helplineChatDoc = (HelplineChatDoc) item;
-                        if (StringUtil.isNotNullOrEmptyString(helplineChatDoc.getSearchText()))
-                        {
+                        if (StringUtil.isNotNullOrEmptyString(helplineChatDoc.getSearchText())) {
                             returnView = HELPLINE_CHAT_QUESTION_CARD.ordinal();
                         }
-
                     } else {
                         returnView = HELPLINE_CHAT_ANSWER_CARD.ordinal();
                     }
-                }else if (item instanceof ChallengeDataItem) {
-                    returnView = CHALLENGE_LIST_ITEM_HOLDER.ordinal();
-                }  else if(item instanceof ICCMember){
+                } else if (item instanceof ICCMember) {
                     returnView = ICC_MEMBER_CARD.ordinal();
-                } else if(item instanceof FAQS){
-                    returnView =  FAQS_CARD.ordinal();
+                } else if (item instanceof FAQS) {
+                    returnView = FAQS_CARD.ordinal();
                 }
-                else if(item instanceof HelplineChatDoc){
-                    if(((HelplineChatDoc) item).getSubType().equalsIgnoreCase(AppConstants.HELPLINE_SUB_TYPE_QUESTION)) {
-                        returnView =  HELPLINE_CHAT_QUESTION_CARD.ordinal();
-                    }
-                }
-
             }
         }
         return returnView;

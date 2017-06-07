@@ -219,9 +219,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         moEngageUtills = MoEngageUtills.getInstance();
         startedTime = System.currentTimeMillis();
         renderHomeFragmentView();
-
-        openHelplineIfPushNotification();
-
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && false != mUserPreference.get().isSheUser() && startedFirstTime() ) {
             openHelplineFragment();
             mTitleText.setText(getString(R.string.ID_APP_NAME));
@@ -253,8 +250,13 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         mFragmentOpen = new FragmentOpen();
         setAllValues(mFragmentOpen);
         if (null != getIntent() && null != getIntent().getExtras()) {
-            if(getIntent().getExtras().get(AppConstants.CHALLENGE_ID)!=null) {
+            if (getIntent().getExtras().get(AppConstants.CHALLENGE_ID) != null) {
                 mChallengeId = (long) getIntent().getExtras().get(AppConstants.CHALLENGE_ID);
+            }
+            if (getIntent().getExtras().get(AppConstants.HELPLINE_CHAT) != null) {
+                checkForAllOpenFragments();
+                openHelplineFragment();
+                totalTimeSpentOnFeed();
             }
         }
         initHomeViewPagerAndTabs();
@@ -292,11 +294,13 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     });*/
         }
     }
+
     @Override
     protected void onResume() {
         super.onResume();
 
     }
+
     private void setArticleCategoryFilterValues() {
         if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && null != mUserPreferenceMasterData.get().getData()) {
             HashMap<String, HashMap<String, ArrayList<LabelValue>>> masterDataResult = mUserPreferenceMasterData.get().getData();
@@ -510,7 +514,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     updateChallengeDataWithStatus((ChallengeDataItem) baseResponse, AppConstants.COMPLETE, AppConstants.EMPTY_STRING, AppConstants.EMPTY_STRING);
                     break;
                 case R.id.iv_fb_share:
-                   sharePostOnFacebook((ChallengeDataItem) baseResponse);
+                    sharePostOnFacebook((ChallengeDataItem) baseResponse);
                     break;
               /*  case R.id.tv_share_progress:
                     sharePostOnFacebook((ChallengeDataItem) baseResponse);
@@ -538,10 +542,10 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     }
 
     private void sharePostOnFacebook(ChallengeDataItem challengeDataItem) {
-        String urlToShare =  challengeDataItem.getDeepLinkUrl();
+        String urlToShare = challengeDataItem.getDeepLinkUrl();
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
-        intent.putExtra(Intent.EXTRA_TEXT,urlToShare);
+        intent.putExtra(Intent.EXTRA_TEXT, urlToShare);
 // See if official Facebook app is found
         boolean facebookAppFound = false;
         List<ResolveInfo> matches = getPackageManager().queryIntentActivities(intent, 0);
@@ -884,7 +888,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             ((MyCommunitiesFragment) community).commentListRefresh(feedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
         }
     }
-    private void openHelplineFragment(){
+
+    private void openHelplineFragment() {
         liHomeCommunityButtonLayout.setVisibility(View.GONE);
         mFlHomeFooterList.setVisibility(View.GONE);
         mToolbar.setVisibility(View.VISIBLE);
@@ -1274,9 +1279,9 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     break;
                 case AppConstants.REQUEST_CODE_FOR_IMAGE_CROPPING:
                     imageCropping(intent);
-                      break;
+                    break;
                 case AppConstants.REQ_CODE_SPEECH_INPUT:
-                    helplineSpeechActivityResponse(intent,resultCode);
+                    helplineSpeechActivityResponse(intent, resultCode);
                     break;
                 default:
                     LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);
@@ -1403,7 +1408,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     }
 
     private void editCommunityPostResponse(Intent intent) {
-        if(null!=intent&&null!=intent.getExtras()) {
+        if (null != intent && null != intent.getExtras()) {
             mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITY_POST_FRAGMENT);
             if (null != mFeedDetail) {
                 Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
@@ -1429,7 +1434,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     }
 
     private void createCommunityActivityResponse(Intent intent) {
-        if(null!=intent&&null!=intent.getExtras()) {
+        if (null != intent && null != intent.getExtras()) {
             mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITIES_DETAIL);
             Fragment community = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.ONE_CONSTANT);
             if (AppUtils.isFragmentUIActive(community)) {
@@ -1443,7 +1448,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     }
 
     private void articleDetailActivityResponse(Intent intent) {
-        if(null!=intent&&null!=intent.getExtras()) {
+        if (null != intent && null != intent.getExtras()) {
             mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.HOME_FRAGMENT);
             if (mFragmentOpen.isArticleFragment()) {
                 Fragment fragmentArticle = getSupportFragmentManager().findFragmentByTag(ArticlesFragment.class.getName());
@@ -1461,18 +1466,18 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
 
     private void helplineSpeechActivityResponse(Intent intent, int resultCode) {
 
-            Fragment fragment = getSupportFragmentManager().findFragmentByTag(HelplineFragment.class.getName());
-            if (AppUtils.isFragmentUIActive(fragment)) {
-                if (resultCode == Activity.RESULT_OK && null != intent) {
-                    ArrayList<String> result = intent
-                            .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    ((HelplineFragment) fragment).getSpeechText(result.get(0));
-                }
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(HelplineFragment.class.getName());
+        if (AppUtils.isFragmentUIActive(fragment)) {
+            if (resultCode == Activity.RESULT_OK && null != intent) {
+                ArrayList<String> result = intent
+                        .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                ((HelplineFragment) fragment).getSpeechText(result.get(0));
             }
+        }
     }
 
     private void jobDetailActivityResponse(Intent intent) {
-        if(null!=intent&&null!=intent.getExtras()) {
+        if (null != intent && null != intent.getExtras()) {
             mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.JOB_FRAGMENT);
             if (mFragmentOpen.isJobFragment()) {
                 Fragment fragmentJob = getSupportFragmentManager().findFragmentByTag(JobFragment.class.getName());
@@ -1489,7 +1494,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     }
 
     private void communityDetailActivityResponse(Intent intent) {
-        if(null!=intent&&null!=intent.getExtras()) {
+        if (null != intent && null != intent.getExtras()) {
             mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITIES_DETAIL);
             CommunityEnum communityEnum = (CommunityEnum) intent.getExtras().get(AppConstants.MY_COMMUNITIES_FRAGMENT);
             if (null != communityEnum) {
@@ -1607,14 +1612,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 }
             } else {
                 onShowErrorDialog(result, JOIN_INVITE);
-            }
-        }
-    }
-    private void openHelplineIfPushNotification(){
-        if (null != getIntent() && null != getIntent().getExtras()) {
-            if(getIntent().getExtras().get(AppConstants.HELPLINE_CHAT)!=null) {
-                checkForAllOpenFragments();
-                openHelplineFragment();
             }
         }
     }

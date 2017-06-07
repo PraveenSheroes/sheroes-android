@@ -2,12 +2,9 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
 import android.graphics.Matrix;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import appliedlife.pvtltd.SHEROES.R;
@@ -15,7 +12,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQS;
-import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -55,10 +52,10 @@ public class FAQViewHolder extends BaseViewHolder<FAQS> {
     public void bindData(final FAQS faqs, final Context context, final int position) {
         this.faqs = faqs;
         faqs.setItemPosition(position);
-        if(faqs.getAnswer()!=null){
+        if(StringUtil.isNotNullOrEmptyString(faqs.getAnswer())){
             tvFAQSAnswer.setText(faqs.getAnswer());
         }
-        if(faqs.getQuestion()!=null){
+        if(StringUtil.isNotNullOrEmptyString(faqs.getQuestion())){
             tvFAQSQuestion.setText(faqs.getQuestion());
         }
 
