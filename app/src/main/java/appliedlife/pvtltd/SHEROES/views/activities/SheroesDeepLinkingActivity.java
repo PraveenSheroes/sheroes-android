@@ -1,105 +1,144 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
 import android.widget.Toast;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import com.moe.pushlibrary.MoEHelper;
+import com.moe.pushlibrary.PayloadBuilder;
 
-import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 
 /**
  * Created by Ajit Kumar on 11-04-2017.
  */
 
-public class SheroesDeepLinkingActivity extends Activity {
+public class SheroesDeepLinkingActivity extends BaseActivity {
     private Uri mData;
     private int indexOfFourthBackSlace;
+    private MoEHelper mMoEHelper;
+    private MoEngageUtills moEngageUtills;
+    private PayloadBuilder payloadBuilder;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.deeplinking_layout);
+        mMoEHelper = MoEHelper.getInstance(this);
+        payloadBuilder = new PayloadBuilder();
+        moEngageUtills = MoEngageUtills.getInstance();
+        moEngageUtills.entityMoEngageDeeplink(this, mMoEHelper, payloadBuilder);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (null != mMoEHelper) {
+            mMoEHelper.onStart(this);
+        }
+        callDeepLinkingData();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mMoEHelper.onResume(this);
+    }
+
+    private void callDeepLinkingData() {
         if (null != getIntent()) {
-            String baseUrl = "";
-            int fullLength = 0;
             Intent intent = getIntent();
             if (null != intent.getData()) {
                 mData = intent.getData();
-                if (StringUtil.isNotNullOrEmptyString(mData.toString())) {
-                    String urlOfSharedCard;
-                    urlOfSharedCard = mData.toString();
-                    try {
-                        if (StringUtil.isNotNullOrEmptyString(urlOfSharedCard)) {
+                getDeeplinkUrlFromNotification(mData.toString());
+            }else
+            {
+                if(null!=intent.getExtras()) {
+                    String deepLink =intent.getExtras().getString(AppConstants.DEEP_LINK_URL);
+                    getDeeplinkUrlFromNotification(deepLink);
+                }
+            }
+        }else
+        {
+            Intent into = new Intent(this, HomeActivity.class);
+            into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+            startActivity(into);
+            finish();
+        }
+    }
 
-                              if (urlOfSharedCard.contains(AppConstants.CHALLENGE_URL)||urlOfSharedCard.contains(AppConstants.CHALLENGE_URL_COM)) {
-                                try {
-                                    Intent into = new Intent(SheroesDeepLinkingActivity.this, HomeActivity.class);
-                                int indexOfFirstEqual = findNthIndexOf(urlOfSharedCard,"=",1);
-                                 String   challengeUrl = urlOfSharedCard.substring(indexOfFirstEqual+1,urlOfSharedCard.length());
-                                    if(StringUtil.isNotNullOrEmptyString(challengeUrl)) {
-                                        String ChallengeId = challengeUrl;
-                                        byte[] challengeBytes = Base64.decode(ChallengeId, Base64.DEFAULT);
-                                        String newChallengeId = new String(challengeBytes, AppConstants.UTF_8);
-                                        into.putExtra(AppConstants.CHALLENGE_ID, Long.parseLong(newChallengeId));
-                                        startActivity(into);
-                                        finish();
-                                    }
-                                } catch (Exception e) {
-                                    Intent into = new Intent(this, HomeActivity.class);
-                                    startActivity(into);
-                                    finish();
-                                }
-                            }else if(urlOfSharedCard.contains(AppConstants.HELPLINE_URL)||urlOfSharedCard.contains(AppConstants.HELPLINE_URL_COM)){
-                                  Intent helplineIntent = new Intent(SheroesDeepLinkingActivity.this, HomeActivity.class);
-                                  helplineIntent.putExtra(AppConstants.HELPLINE_CHAT,AppConstants.HELPLINE_CHAT);
-                                  startActivity(helplineIntent);
-                                  finish();
-                              }
-
-
-                            else {
-
-
-                                  indexOfFourthBackSlace = findNthIndexOf(urlOfSharedCard, AppConstants.BACK_SLASH, 4);
-                                  if (indexOfFourthBackSlace > 0) {
-                                      baseUrl = urlOfSharedCard.substring(0, indexOfFourthBackSlace);
-                                      //When Fourth back slace not available
-                                      if (baseUrl.equalsIgnoreCase(AppConstants.EMPTY_STRING)) {
-                                          baseUrl = urlOfSharedCard;
-                                      } else {
-                                          if (baseUrl.equalsIgnoreCase(AppConstants.USER_URL)) {
-                                              baseUrl = urlOfSharedCard;
-                                          }
-                                      }
-                                  }
-                              }
-                        } else {
-                            Intent homeFeed = new Intent(this, HomeActivity.class);
-                            startActivity(homeFeed);
+    private void getDeeplinkUrlFromNotification(String urlOfSharedCard)
+    {
+        String baseUrl = "";
+        int fullLength = 0;
+        if (StringUtil.isNotNullOrEmptyString(urlOfSharedCard)) {
+            try {
+                if (StringUtil.isNotNullOrEmptyString(urlOfSharedCard)) {
+                    if (urlOfSharedCard.contains(AppConstants.CHALLENGE_URL) || urlOfSharedCard.contains(AppConstants.CHALLENGE_URL_COM)) {
+                        try {
+                            Intent into = new Intent(SheroesDeepLinkingActivity.this, HomeActivity.class);
+                            int indexOfFirstEqual = AppUtils.findNthIndexOf(urlOfSharedCard, "=", 1);
+                            String challengeUrl = urlOfSharedCard.substring(indexOfFirstEqual + 1, urlOfSharedCard.length());
+                            if (StringUtil.isNotNullOrEmptyString(challengeUrl)) {
+                                String ChallengeId = challengeUrl;
+                                byte[] challengeBytes = Base64.decode(ChallengeId, Base64.DEFAULT);
+                                String newChallengeId = new String(challengeBytes, AppConstants.UTF_8);
+                                into.putExtra(AppConstants.CHALLENGE_ID, Long.parseLong(newChallengeId));
+                                into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                                startActivity(into);
+                                finish();
+                            }
+                        } catch (Exception e) {
+                            Intent into = new Intent(this, HomeActivity.class);
+                            into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                            startActivity(into);
                             finish();
                         }
-                    } catch (Exception e) {
-                        Intent homeFeed = new Intent(this, HomeActivity.class);
-                        startActivity(homeFeed);
+                    } else if (urlOfSharedCard.contains(AppConstants.HELPLINE_URL) || urlOfSharedCard.contains(AppConstants.HELPLINE_URL_COM)) {
+                        Intent helplineIntent = new Intent(SheroesDeepLinkingActivity.this, HomeActivity.class);
+                        helplineIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                        helplineIntent.putExtra(AppConstants.HELPLINE_CHAT, AppConstants.HELPLINE_CHAT);
+                        startActivity(helplineIntent);
                         finish();
+                    } else {
+                        indexOfFourthBackSlace = AppUtils.findNthIndexOf(urlOfSharedCard, AppConstants.BACK_SLASH, 4);
+                        if (indexOfFourthBackSlace > 0) {
+                            baseUrl = urlOfSharedCard.substring(0, indexOfFourthBackSlace);
+                            //When Fourth back slace not available
+                            if (baseUrl.equalsIgnoreCase(AppConstants.EMPTY_STRING)) {
+                                baseUrl = urlOfSharedCard;
+                            } else {
+                                if (baseUrl.equalsIgnoreCase(AppConstants.USER_URL)) {
+                                    baseUrl = urlOfSharedCard;
+                                }
+                            }
+                        }
                     }
-                    fullLength = urlOfSharedCard.length();
-
-                    if (StringUtil.isNotNullOrEmptyString(baseUrl)) {
-
-                        callActivities(urlOfSharedCard, baseUrl, fullLength);
-                    }
+                } else {
+                    Intent homeFeed = new Intent(this, HomeActivity.class);
+                    homeFeed.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    startActivity(homeFeed);
+                    finish();
                 }
-            } else {
-                Toast.makeText(getApplicationContext(), AppConstants.INVALID_URL, Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                Intent homeFeed = new Intent(this, HomeActivity.class);
+                homeFeed.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                startActivity(homeFeed);
+                finish();
             }
+            fullLength = urlOfSharedCard.length();
+
+            if (StringUtil.isNotNullOrEmptyString(baseUrl)) {
+                callActivities(urlOfSharedCard, baseUrl, fullLength);
+            }
+
+        } else {
+            Toast.makeText(getApplicationContext(), AppConstants.INVALID_URL, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -115,10 +154,12 @@ public class SheroesDeepLinkingActivity extends Activity {
                 dataIdString = new String(id1, AppConstants.UTF_8);
                 Intent articleDetail = new Intent(SheroesDeepLinkingActivity.this, ArticleDetailActivity.class);
                 articleDetail.putExtra(AppConstants.ARTICLE_ID, Long.parseLong(dataIdString));
+                articleDetail.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(articleDetail);
                 finish();
             } catch (Exception e) {
                 Intent into = new Intent(this, HomeActivity.class);
+                into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(into);
                 finish();
             }
@@ -130,10 +171,12 @@ public class SheroesDeepLinkingActivity extends Activity {
                 dataIdString = new String(id1, AppConstants.UTF_8);
                 Intent jobDetail = new Intent(SheroesDeepLinkingActivity.this, JobDetailActivity.class);
                 jobDetail.putExtra(AppConstants.JOB_ID, Long.parseLong(dataIdString));
+                jobDetail.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(jobDetail);
                 finish();
             } catch (Exception e) {
                 Intent into = new Intent(this, HomeActivity.class);
+                into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(into);
                 finish();
             }
@@ -167,16 +210,18 @@ public class SheroesDeepLinkingActivity extends Activity {
                         }
                     }
                 } else {
-                    int indexOfSecondBackSlace = findNthIndexOf(communityDetail, AppConstants.BACK_SLASH, 2);
+                    int indexOfSecondBackSlace = AppUtils.findNthIndexOf(communityDetail, AppConstants.BACK_SLASH, 2);
                     String communityId = communityDetail.substring(indexOfSecondBackSlace + 1, communityDetail.length());
                     byte[] communityBytes = Base64.decode(communityId, Base64.DEFAULT);
                     String newCommunityId = new String(communityBytes, AppConstants.UTF_8);
                     into.putExtra(AppConstants.COMMUNITY_ID, Long.parseLong(newCommunityId));
                 }
+                into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(into);
                 finish();
             } catch (Exception e) {
                 Intent into = new Intent(this, HomeActivity.class);
+                into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(into);
                 finish();
 
@@ -186,31 +231,19 @@ public class SheroesDeepLinkingActivity extends Activity {
         //In case of profile
         else if ((AppConstants.USER_PROFILE_URL).equalsIgnoreCase(baseUrl) || AppConstants.USER_PROFILE_URL_COM.equalsIgnoreCase(baseUrl) && AppConstants.USER_PROFILE_URL.length() < fullLength) {
             Intent into = new Intent(this, ProfileActicity.class);
+            into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(into);
             finish();
 
         } else {
             Toast.makeText(SheroesDeepLinkingActivity.this, AppConstants.WEB_BROWSER_MASSAGE, Toast.LENGTH_SHORT).show();
-            Intent i = new Intent(Intent.ACTION_VIEW);
-            i.setData(Uri.parse(urlSharedViaSocial));
-            startActivity(i);
+            Intent into = new Intent(Intent.ACTION_VIEW);
+            into.setData(Uri.parse(urlSharedViaSocial));
+            into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+            startActivity(into);
             finish();
         }
 
-    }
-
-    public static int findNthIndexOf(String str, String needle, int occurence) throws IndexOutOfBoundsException {
-        int index = -1;
-        Pattern p = Pattern.compile(needle, Pattern.MULTILINE);
-        Matcher m = p.matcher(str);
-        while (m.find()) {
-            if (--occurence == 0) {
-                index = m.start();
-                break;
-            }
-        }
-        if (index < 0) throw new IndexOutOfBoundsException();
-        return index;
     }
 
     private int countBackSlash(String url) {
@@ -222,5 +255,4 @@ public class SheroesDeepLinkingActivity extends Activity {
         }
         return counter;
     }
-
 }

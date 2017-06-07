@@ -81,6 +81,7 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 
@@ -1675,6 +1676,19 @@ public class AppUtils {
     }
 
 
+    public static int findNthIndexOf(String str, String needle, int occurence) throws IndexOutOfBoundsException {
+        int index = -1;
+        Pattern p = Pattern.compile(needle, Pattern.MULTILINE);
+        Matcher m = p.matcher(str);
+        while (m.find()) {
+            if (--occurence == 0) {
+                index = m.start();
+                break;
+            }
+        }
+        if (index < 0) throw new IndexOutOfBoundsException();
+        return index;
+    }
     /**
      * Disable the long press on the given edit text
      *

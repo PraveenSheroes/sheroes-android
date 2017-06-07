@@ -36,7 +36,8 @@ public class PushNotificationService extends GcmListenerService {
     private MoEHelper mMoEHelper;
     private MoEngageUtills moEngageUtills;
     private PayloadBuilder payloadBuilder;
-
+    private static String MOENGAGE_ALERT_MSG="gcm_alert";
+    private static String MOENGAGE_TITLE="gcm_title";
     @Override
     public void onMessageReceived(String from, Bundle data) {
         mMoEHelper = MoEHelper.getInstance(this);
@@ -47,26 +48,27 @@ public class PushNotificationService extends GcmListenerService {
         if (MoEngageNotificationUtils.isFromMoEngagePlatform(data)) {
             //If the message is not sent from MoEngage it will be rejected
             PushManager.getInstance().getPushHandler().handlePushPayload(getApplicationContext(), data);
-        }
-        if (StringUtil.isNotNullOrEmptyString(data.getString(AppConstants.MESSAGE))) {
-            message = data.getString(AppConstants.MESSAGE);
-        }
-        if (StringUtil.isNotNullOrEmptyString(data.getString(AppConstants.TITLE))) {
-            from = data.getString("title");
-        }
-        if (StringUtil.isNotNullOrEmptyString(data.getString(AppConstants.DEEP_LINK_URL))) {
-            url = data.getString(AppConstants.DEEP_LINK_URL);
-        }
-        if (StringUtil.isNotNullOrEmptyString(url)) {
-            if (StringUtil.isNotNullOrEmptyString(url)) {
-                sendNotification(from, message, url);
+        }else {
+            if (StringUtil.isNotNullOrEmptyString(data.getString(AppConstants.MESSAGE))) {
+                message = data.getString(AppConstants.MESSAGE);
             }
-            if (url.contains(AppConstants.ARTICLE_URL) || url.contains(AppConstants.ARTICLE_URL_COM)) {
-                moEngageUtills.entityMoEngagePushNotification(this, mMoEHelper, payloadBuilder, this.getString(R.string.ID_ARTICLE), from, from);
-            } else if (url.contains(AppConstants.COMMUNITY_URL) || url.contains(AppConstants.COMMUNITY_URL_COM)) {
-                moEngageUtills.entityMoEngagePushNotification(this, mMoEHelper, payloadBuilder, this.getString(R.string.ID_COMMUNITIY), from, from);
-            } else if (url.contains(AppConstants.JOB_URL) || url.contains(AppConstants.JOB_URL_COM)) {
-                moEngageUtills.entityMoEngagePushNotification(this, mMoEHelper, payloadBuilder, this.getString(R.string.ID_JOB), from, from);
+            if (StringUtil.isNotNullOrEmptyString(data.getString(AppConstants.TITLE))) {
+                from = data.getString("title");
+            }
+            if (StringUtil.isNotNullOrEmptyString(data.getString(AppConstants.DEEP_LINK_URL))) {
+                url = data.getString(AppConstants.DEEP_LINK_URL);
+            }
+            if (StringUtil.isNotNullOrEmptyString(url)) {
+                if (StringUtil.isNotNullOrEmptyString(url)) {
+                    sendNotification(from, message, url);
+                }
+                if (url.contains(AppConstants.ARTICLE_URL) || url.contains(AppConstants.ARTICLE_URL_COM)) {
+                    moEngageUtills.entityMoEngagePushNotification(this, mMoEHelper, payloadBuilder, this.getString(R.string.ID_ARTICLE), from, from);
+                } else if (url.contains(AppConstants.COMMUNITY_URL) || url.contains(AppConstants.COMMUNITY_URL_COM)) {
+                    moEngageUtills.entityMoEngagePushNotification(this, mMoEHelper, payloadBuilder, this.getString(R.string.ID_COMMUNITIY), from, from);
+                } else if (url.contains(AppConstants.JOB_URL) || url.contains(AppConstants.JOB_URL_COM)) {
+                    moEngageUtills.entityMoEngagePushNotification(this, mMoEHelper, payloadBuilder, this.getString(R.string.ID_JOB), from, from);
+                }
             }
         }
     }
@@ -81,8 +83,7 @@ public class PushNotificationService extends GcmListenerService {
         NotificationManager notificationManager = (NotificationManager) PushNotificationService.this
                 .getSystemService(Activity.NOTIFICATION_SERVICE);
 
-        notificationIntent = new Intent(
-                PushNotificationService.this, SheroesDeepLinkingActivity.class);
+        notificationIntent = new Intent(PushNotificationService.this, SheroesDeepLinkingActivity.class);
         notificationIntent.setData(url);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(PushNotificationService.this);
@@ -90,8 +91,7 @@ public class PushNotificationService extends GcmListenerService {
         stackBuilder.addNextIntent(notificationIntent);
         notificationIntent.setAction(AppConstants.SHEROES + mCount);
 
-        PendingIntent pIntent = stackBuilder.getPendingIntent(AppConstants.NO_REACTION_CONSTANT,
-                PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pIntent = stackBuilder.getPendingIntent(AppConstants.NO_REACTION_CONSTANT,PendingIntent.FLAG_ONE_SHOT);
         Notification notification = new NotificationCompat.Builder(PushNotificationService.this)
                 .setContentTitle(title)
                 .setTicker(AppConstants.TICKER)

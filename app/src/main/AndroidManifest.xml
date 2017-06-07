@@ -63,7 +63,7 @@
         <!-- MANDATORY FIELD: THE NOTIFICATION LARGE ICON WHICH WILL BE USED TO SET TO NOTIFICATIONS POSTED -->
         <meta-data
             android:name="NOTIFICATION_LARGE_ICON"
-            android:value="@drawable/ic_combined_shape" />
+            android:value="@drawable/ic_notification_larg_icon" />
         <meta-data
             android:name="SKIP_GCM_REGISTRATION"
             android:value="true" />
@@ -175,8 +175,7 @@
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity"
             android:screenOrientation="portrait"
-            android:label="@string/app_name"
-            android:noHistory="true">
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>

@@ -32,6 +32,9 @@ public class MoEngageUtills {
     public void entityMoEngageAppOpened(Context context, MoEHelper mMoEHelper, PayloadBuilder payloadBuilder) {
         mMoEHelper.trackEvent(MoEngageEvent.EVENT_APP_OPEN.value, payloadBuilder.build());
     }
+    public void entityMoEngageDeeplink(Context context, MoEHelper mMoEHelper, PayloadBuilder payloadBuilder) {
+        mMoEHelper.trackEvent(MoEngageEvent.EVENT_DEEP_LINK.value, payloadBuilder.build());
+    }
 
     public void entityMoEngageUserAttribute(Context context, MoEHelper mMoEHelper, PayloadBuilder payloadBuilder, LoginResponse loginResponse) {
         if (null != loginResponse.getUserSummary() && loginResponse.getUserSummary().getUserId() > 0) {

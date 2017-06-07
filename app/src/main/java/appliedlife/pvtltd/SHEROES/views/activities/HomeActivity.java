@@ -34,6 +34,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -55,6 +56,7 @@ import com.moe.pushlibrary.PayloadBuilder;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -117,7 +119,6 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.JOIN_INVITE
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MENU;
 
 public class HomeActivity extends BaseActivity implements CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, CommentReactionFragment.HomeActivityIntractionListner, HomeSpinnerFragment.HomeSpinnerFragmentListner {
-    //  implements CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
     @Inject
     Preference<LoginResponse> mUserPreference;
@@ -197,7 +198,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     Preference<MasterDataResponse> mUserPreferenceMasterData;
     private ViewPagerAdapter mViewPagerAdapter;
     private MyCommunityInviteMemberDialogFragment myCommunityInviteMemberDialogFragment;
-    private BellNotificationFragment bellNotificationFragment;
     boolean doubleBackToExitPressedOnce = false;
     private MoEHelper mMoEHelper;
     private PayloadBuilder payloadBuilder;
@@ -207,8 +207,9 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     AppUtils mAppUtils;
     private Uri mImageCaptureUri;
     public ChallengeSuccessDialogFragment mChallengeSuccessDialogFragment;
-    File local;
+    private File localImageSaveForChallenge;
     private long mChallengeId;
+    private String mHelpLineChat;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -219,22 +220,25 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         moEngageUtills = MoEngageUtills.getInstance();
         startedTime = System.currentTimeMillis();
         renderHomeFragmentView();
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && false != mUserPreference.get().isSheUser() && startedFirstTime() ) {
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && false != mUserPreference.get().isSheUser() && startedFirstTime()) {
             openHelplineFragment();
             mTitleText.setText(getString(R.string.ID_APP_NAME));
             mTitleText.setVisibility(View.VISIBLE);
             mICSheroes.setVisibility(View.GONE);
         }
+        if (StringUtil.isNotNullOrEmptyString(mHelpLineChat) && mHelpLineChat.equalsIgnoreCase(AppConstants.HELPLINE_CHAT)) {
+            handleHelpLineFragmentFromDeepLinkAndLoading();
+        }
     }
 
     private boolean startedFirstTime() {
-        if (null != getIntent() && null != getIntent().getExtras() ) {
-            if((long) getIntent().getExtras().get(AppConstants.CHALLENGE_ID) == 0){
+        if (null != getIntent() && null != getIntent().getExtras()) {
+            if (getIntent().getExtras().getLong(AppConstants.CHALLENGE_ID) == 0) {
                 return true;
-            }else{
+            } else {
                 return false;
             }
-        }else{
+        } else {
             return true;
         }
     }
@@ -251,12 +255,10 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         setAllValues(mFragmentOpen);
         if (null != getIntent() && null != getIntent().getExtras()) {
             if (getIntent().getExtras().get(AppConstants.CHALLENGE_ID) != null) {
-                mChallengeId = (long) getIntent().getExtras().get(AppConstants.CHALLENGE_ID);
+                mChallengeId = getIntent().getExtras().getLong(AppConstants.CHALLENGE_ID);
             }
             if (getIntent().getExtras().get(AppConstants.HELPLINE_CHAT) != null) {
-                checkForAllOpenFragments();
-                openHelplineFragment();
-                totalTimeSpentOnFeed();
+                mHelpLineChat = getIntent().getExtras().getString(AppConstants.HELPLINE_CHAT);
             }
         }
         initHomeViewPagerAndTabs();
@@ -273,7 +275,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             if (null != mUserPreference.get().getUserSummary().getUserBO() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getUserBO().getCityMaster())) {
                 mTvUserLocation.setText(mUserPreference.get().getUserSummary().getUserBO().getCityMaster());
             }
-            if(false != mUserPreference.get().isSheUser() && mUserPreference.get().getUserSummary().getEmailId()!=null){
+            if (false != mUserPreference.get().isSheUser() && mUserPreference.get().getUserSummary().getEmailId() != null) {
                 mTvUserLocation.setText(mUserPreference.get().getUserSummary().getEmailId());
             }
             Glide.with(this)
@@ -293,12 +295,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                         }
                     });*/
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
     }
 
     private void setArticleCategoryFilterValues() {
@@ -371,16 +367,40 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         if (mFragmentOpen.isBellNotificationFragment()) {
             moEngageUtills.entityMoEngageLogOut(this, mMoEHelper, payloadBuilder, getString(R.string.ID_NOTIFICATION));
         }
-        if( mFragmentOpen.isICCMemberListFragment()){
+        if (mFragmentOpen.isICCMemberListFragment()) {
             moEngageUtills.entityMoEngageLogOut(this, mMoEHelper, payloadBuilder, getString(R.string.ID_ICC_MEMBERS));
         }
-        if( mFragmentOpen.isFAQSFragment()){
+        if (mFragmentOpen.isFAQSFragment()) {
             moEngageUtills.entityMoEngageLogOut(this, mMoEHelper, payloadBuilder, getString(R.string.ID_FAQS));
         }
-        if( mFragmentOpen.isFeedFragment()){
+        if (mFragmentOpen.isFeedFragment()) {
             moEngageUtills.entityMoEngageLogOut(this, mMoEHelper, payloadBuilder, AppConstants.FEED_SCREEN);
         }
 
+    }
+
+    private void challengeIdHandle(String urlOfSharedCard) {
+        if (urlOfSharedCard.contains(AppConstants.CHALLENGE_URL) || urlOfSharedCard.contains(AppConstants.CHALLENGE_URL_COM)) {
+            try {
+                int indexOfFirstEqual =AppUtils.findNthIndexOf(urlOfSharedCard, "=", 1);
+                String challengeUrl = urlOfSharedCard.substring(indexOfFirstEqual + 1, urlOfSharedCard.length());
+                if (StringUtil.isNotNullOrEmptyString(challengeUrl)) {
+                    String ChallengeId = challengeUrl;
+                    byte[] challengeBytes = Base64.decode(ChallengeId, Base64.DEFAULT);
+                    String newChallengeId = new String(challengeBytes, AppConstants.UTF_8);
+                    mChallengeId = Long.parseLong(newChallengeId);
+                    homeOnClick();
+                }
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }else
+        {
+            Uri url = Uri.parse(urlOfSharedCard);
+            Intent intent = new Intent(this, SheroesDeepLinkingActivity.class);
+            intent.setData(url);
+            startActivity(intent);
+        }
     }
 
 
@@ -391,10 +411,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             if (StringUtil.isNotNullOrEmptyString(bellNotificationResponse.getScreenName())) {
                 if (StringUtil.isNotNullOrEmptyString(bellNotificationResponse.getSolrIgnoreDeepLinkUrl())) {
                     String urlStr = bellNotificationResponse.getSolrIgnoreDeepLinkUrl();
-                    Uri url = Uri.parse(urlStr);
-                    Intent intent = new Intent(this, SheroesDeepLinkingActivity.class);
-                    intent.setData(url);
-                    startActivity(intent);
+                    challengeIdHandle(urlStr);
                 } else if (bellNotificationResponse.getScreenName().contains(AppConstants.COMMUNITY_URL)) {
                     communityOnClick();
                 } else {
@@ -453,12 +470,10 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     totalTimeSpentOnFeed();
                     break;
                 case 6:
-                    checkForAllOpenFragments();
-                    openHelplineFragment();
-                    totalTimeSpentOnFeed();
+                    handleHelpLineFragmentFromDeepLinkAndLoading();
                     break;
                 case AppConstants.SEVENTH_CONSTANT:
-                    if(!mFragmentOpen.isHelplineFragment()){
+                    if (!mFragmentOpen.isHelplineFragment()) {
                         checkForAllOpenFragments();
                         openHelplineFragment();
                         mTitleText.setText(getString(R.string.ID_APP_NAME));
@@ -468,7 +483,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     }
                     break;
                 case AppConstants.EIGHTH_CONSTANT:
-                    if(!mFragmentOpen.isICCMemberListFragment()){
+                    if (!mFragmentOpen.isICCMemberListFragment()) {
                         checkForAllOpenFragments();
                         mFragmentOpen.setICCMemberListFragment(true);
                         renderICCMemberListView();
@@ -476,7 +491,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     }
                     break;
                 case AppConstants.NINTH_CONSTANT:
-                    if(!mFragmentOpen.isFAQSFragment()){
+                    if (!mFragmentOpen.isFAQSFragment()) {
                         checkForAllOpenFragments();
                         mFragmentOpen.setFAQSFragment(true);
                         renderFAQSView();
@@ -484,7 +499,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     }
                     break;
                 case AppConstants.TENTH_CONSTANT:
-                    if(!mFragmentOpen.isFeedFragment()) {
+                    if (!mFragmentOpen.isFeedFragment()) {
                         checkForAllOpenFragments();
                         mFragmentOpen.setFeedFragment(true);
                         renderFeedFragment();
@@ -533,10 +548,16 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             setAllValues(mFragmentOpen);
              /* Comment mCurrentStatusDialog list  comment menu option edit,delete */
             super.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU);
-        } else if(baseResponse instanceof FAQS){
-            Fragment fragment =  getSupportFragmentManager().findFragmentByTag(FAQSFragment.class.getName());
+        } else if (baseResponse instanceof FAQS) {
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag(FAQSFragment.class.getName());
             ((FAQSFragment) fragment).setDataChange((FAQS) baseResponse);
         }
+    }
+
+    private void handleHelpLineFragmentFromDeepLinkAndLoading() {
+        checkForAllOpenFragments();
+        openHelplineFragment();
+        totalTimeSpentOnFeed();
     }
 
     private void renderFeedFragment() {
@@ -594,7 +615,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     }
 
     public DialogFragment challengeSuccessDialog(ChallengeDataItem challengeDataItem) {
-        local = new File(Environment.getExternalStorageDirectory(), AppConstants.IMAGE + AppConstants.JPG_FORMATE);
+        localImageSaveForChallenge = new File(Environment.getExternalStorageDirectory(), AppConstants.IMAGE + AppConstants.JPG_FORMATE);
         mChallengeSuccessDialogFragment = (ChallengeSuccessDialogFragment) getFragmentManager().findFragmentByTag(ChallengeSuccessDialogFragment.class.getName());
         if (mChallengeSuccessDialogFragment == null) {
             mChallengeSuccessDialogFragment = new ChallengeSuccessDialogFragment();
@@ -642,9 +663,9 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         LinearLayoutManager manager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(manager);
         boolean isSheUser = false;
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && false != mUserPreference.get().isSheUser() ) {
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && false != mUserPreference.get().isSheUser()) {
             isSheUser = true;
-        }else{
+        } else {
             isSheUser = false;
         }
         mAdapter.setSheroesGenericListData(CustomeDataList.makeDrawerItemList(isSheUser));
@@ -670,7 +691,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     }
 
 
-    private void renderICCMemberListView(){
+    private void renderICCMemberListView() {
 
         setAllValues(mFragmentOpen);
         ICCMemberListFragment iccMemberListFragment = new ICCMemberListFragment();
@@ -824,10 +845,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         // if (!mFragmentOpen.isCommunityOpen()) {
         //     mFragmentOpen.setCommunityOpen(true);
         initCommunityViewPagerAndTabs();
-//        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && false != mUserPreference.get().isSheUser() ) {
-//            initCommunityViewPagerAndTabs();
-//        }
-        //  }
         totalTimeSpentOnFeed();
     }
 
@@ -1054,7 +1071,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             mFragmentOpen.setBellNotificationFragment(false);
             getSupportFragmentManager().popBackStackImmediate();
             gotBackToFragmentForSheUSer();
-        }else if(mFragmentOpen.isHelplineFragment()){
+        } else if (mFragmentOpen.isHelplineFragment()) {
             mFragmentOpen.setHelplineFragment(false);
             getSupportFragmentManager().popBackStackImmediate();
             initHomeViewPagerAndTabs();
@@ -1063,7 +1080,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             mTvHome.setVisibility(View.VISIBLE);
             mTitleText.setVisibility(View.GONE);
             mICSheroes.setVisibility(View.VISIBLE);
-        } else if(mFragmentOpen.isICCMemberListFragment()){
+        } else if (mFragmentOpen.isICCMemberListFragment()) {
             mFragmentOpen.setICCMemberListFragment(false);
             getSupportFragmentManager().popBackStackImmediate();
             initHomeViewPagerAndTabs();
@@ -1072,7 +1089,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             mTvHome.setVisibility(View.VISIBLE);
             mTitleText.setVisibility(View.GONE);
             mICSheroes.setVisibility(View.VISIBLE);
-        } else if(mFragmentOpen.isFAQSFragment()){
+        } else if (mFragmentOpen.isFAQSFragment()) {
             mFragmentOpen.setFAQSFragment(false);
             getSupportFragmentManager().popBackStackImmediate();
             initHomeViewPagerAndTabs();
@@ -1081,7 +1098,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             mTvHome.setVisibility(View.VISIBLE);
             mTitleText.setVisibility(View.GONE);
             mICSheroes.setVisibility(View.VISIBLE);
-        } else if(mFragmentOpen.isFeedFragment()) {
+        } else if (mFragmentOpen.isFeedFragment()) {
             mFragmentOpen.setFeedFragment(false);
             getSupportFragmentManager().popBackStackImmediate();
         } else {
@@ -1109,11 +1126,11 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     checkForAllOpenFragments();
                     mFragmentOpen.setICCMemberListFragment(true);
                     renderICCMemberListView();
-                } else if(((String)mTitleText.getText()).equals(getString(R.string.ID_FAQS))){
+                } else if (((String) mTitleText.getText()).equals(getString(R.string.ID_FAQS))) {
                     checkForAllOpenFragments();
                     mFragmentOpen.setFAQSFragment(true);
                     renderFAQSView();
-                } else if(((String)mTitleText.getText()).equals(getString(R.string.ID_APP_NAME))){
+                } else if (((String) mTitleText.getText()).equals(getString(R.string.ID_APP_NAME))) {
                     checkForAllOpenFragments();
                     openHelplineFragment();
                 } else if(((String)mTitleText.getText()).equals(AppConstants.EMPTY_STRING)){
@@ -1122,7 +1139,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     renderHomeFragmentView();
                     totalTimeSpentOnFeed();
                 }
-            }else {
+            } else {
                 checkForAllOpenFragments();
                 mFragmentOpen.setFeedFragment(true);
                 renderHomeFragmentView();
@@ -1328,14 +1345,14 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         if (Build.VERSION.SDK_INT >= 23) {
             if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                mImageCaptureUri = Uri.fromFile(local);
+                mImageCaptureUri = Uri.fromFile(localImageSaveForChallenge);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
                 intent.putExtra("return-data", true);
                 startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_CAMERA);
             }
         } else {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            mImageCaptureUri = Uri.fromFile(local);
+            mImageCaptureUri = Uri.fromFile(localImageSaveForChallenge);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
             intent.putExtra("return-data", true);
             startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_CAMERA);
@@ -1368,7 +1385,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         intent.setType("image/*");
         List list = getPackageManager().queryIntentActivities(intent, 0);
         intent.setData(mImageCaptureUri);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(local));
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(localImageSaveForChallenge));
         if (StringUtil.isNotEmptyCollection(list)) {
             Intent i = new Intent(intent);
             ResolveInfo res = (ResolveInfo) list.get(0);
@@ -1392,8 +1409,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             e.printStackTrace();
         }*/
         try {
-            if (local.exists()) {
-                Bitmap photo = decodeFile(local);
+            if (localImageSaveForChallenge.exists()) {
+                Bitmap photo = decodeFile(localImageSaveForChallenge);
                 if (null != mChallengeSuccessDialogFragment) {
                     mChallengeSuccessDialogFragment.setImageOnHolder(photo);
                 }
