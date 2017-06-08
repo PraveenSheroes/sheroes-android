@@ -5,6 +5,7 @@
     <color name="colorPrimaryDark">#6e2f95</color>
     <color name="unAcceptColor">#3023ae</color>
     <color name="colorAccent">#6e2f95</color>
+    <color name="once_card">#6d3493</color>
     <color name="comment_box_edit_border">#66aaaaaa</color>
     <color name="challenge_count">#303F9F</color>
     <color name="white">#ffffff</color>

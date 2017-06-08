@@ -34,7 +34,6 @@ public class MyCountDownTimer extends CountDownTimer {
     @Override
     public void onFinish() {
         textView.setText(context.getString(R.string.ID_COMPLETED));
-        viewInterface.handleOnClick(dataItem, textView);
     }
 
 

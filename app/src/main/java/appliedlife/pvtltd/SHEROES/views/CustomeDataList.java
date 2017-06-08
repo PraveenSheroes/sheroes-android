@@ -64,6 +64,7 @@ public class CustomeDataList {
             drawerItemsList.add(firstDrawerItem);
             drawerItemsList.add(secondDrawerItem);
             drawerItemsList.add(thirdDrawerItem);
+          //  drawerItemsList.add(fourthDrawerItem);
             drawerItemsList.add(sixthDrawerItem);
         }
 

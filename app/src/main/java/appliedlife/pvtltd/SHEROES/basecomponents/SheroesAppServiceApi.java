@@ -148,6 +148,8 @@ public interface SheroesAppServiceApi {
 
     @POST("participant/user/fbsignup")
     Observable<LoginResponse> getFbSignUpToken(@Body LoginRequest loginRequest);
+    @POST("participant/user/gpsignup")
+    Observable<LoginResponse> getGpSignUpToken(@Body LoginRequest loginRequest);
 
     @GET("participant/auth/refresh")
     Observable<LoginResponse> getRefreshToken();

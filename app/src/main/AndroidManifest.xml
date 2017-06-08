@@ -63,7 +63,7 @@
         <!-- MANDATORY FIELD: THE NOTIFICATION LARGE ICON WHICH WILL BE USED TO SET TO NOTIFICATIONS POSTED -->
         <meta-data
             android:name="NOTIFICATION_LARGE_ICON"
-            android:value="@drawable/ic_notification_larg_icon" />
+            android:value="@drawable/appicon" />
         <meta-data
             android:name="SKIP_GCM_REGISTRATION"
             android:value="true" />

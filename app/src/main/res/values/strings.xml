@@ -9,8 +9,9 @@
     <string name="ID_DD">DD</string>
     <string name="ID_MM">MM</string>
     <string name="ID_YYYY">YYYY</string>
-    <string name="IDS_GOOGLE_CLIENT_SERVER_ID">382892394734-m6crti3onae6glei1bdgghvfr9re5lun.apps.googleusercontent.com</string>
     <!--text names in SHEROES-->
+
+    <string name="IDS_PLAY_SERVICE">Please update you Google play services</string>
     <string name="IDS_STR_NETWORK_TIME_OUT_TITLE">Connectivity Failure</string>
     <string name="IDS_STR_NETWORK_TIME_OUT_DESCRIPTION">No internet connection or connectivity low. Please check your connection and try again.</string>
     <string name="IDS_STR_TRY_AGAIN_TEXT">Try again</string>
@@ -30,7 +31,6 @@
     <string name="ID_NEW">NEW</string>
     <string name="ID_FB_VERIFY_MSG">Please verify account by linking your SHEROES account with your Facebook account.</string>
     <string name="ID_LETS_GET_TO">Let’s get to know each other </string>
-    <string name="ID_FACEBOOK_ERROR">Oops! SHEROES is a women-only plaform. Facebook says you are a gentleman.</string>
     <string name="ID_TELL_US_MESSAGE">This will help you connect with other SHEROES and find relevant opportunities</string>
     <string name="ID_TELL_US_FORM_VALIDATION">Oops! You need to enter all details.</string>
     <string name="ID_MOBILE_NUMBER">Please enter valid mobile number</string>
@@ -881,6 +881,11 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_ADD_PHOTO">Let\'s make this moment more special by adding a photo.</string>
     <string name="ID_CHOOSE_PHOTO">Choose Photo From gallery</string>
     <string name="ID_ADD_YOU_TUBE_LINK">Add Youtube link..</string>
+    <string name="ID_ONCE_CARD_TITLE">Welcome To The SHEROES Feed</string>
+    <string name="ID_CIRCLE_SUPPORT">Your Circle OF Support</string>
+    <string name="ID_ONCE_CARD_DETAIL1">Connect, Network and Hangout with peers and influencres</string>
+    <string name="ID_ONCE_CARD_DETAIL2">from ypur field and other walks of life.</string>
+    <string name="ID_ONCE_CARD_DETAIL3">Share your everyday achievements and inspire others.</string>
     <string name="ID_JUST">Just</string>
     <string name="ID_STARTED">Started</string>
     <string name="ID_SHARE_MSG">Please choose photo or add youtube link.</string>
@@ -893,7 +898,6 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_SIGN_UP">SIGN UP</string>
     <string name="ID_SIGN_UP_MOBILE_HINT"><font size="10">MOBILE NUMBER</font></string>
     <string name="ID_SIGN_UP_PASSWORD_HINT"><font size="10">PASSWORD</font></string>
-    <string name="ID_STR_USER_ALREADY_EXIST_ERROR">A user with this email ID or mobile number already exists.</string>
     <string name="ID_FIRST_NAME">Please enter the first name</string>
     <string name="ID_LAST_NAME">Please enter the last name</string>
 

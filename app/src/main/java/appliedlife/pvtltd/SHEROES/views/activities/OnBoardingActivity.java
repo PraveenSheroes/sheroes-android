@@ -558,28 +558,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
         loginResponse.setNextScreen(AppConstants.FEED_SCREEN);
         userPreference.set(loginResponse);
         Intent homeIntent = new Intent(this, HomeActivity.class);
-        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(homeIntent);
-      /*  if (StringUtil.isNotEmptyCollection(mSelectedTag)) {
-            boolean flag = false;
-            for (LabelValue labelValue : mSelectedTag) {
-                String value = labelValue.getLabel();
-                if (value.equalsIgnoreCase(AppConstants.WORK_FROM_HOME) || value.equalsIgnoreCase(AppConstants.FREELANCING) || value.equalsIgnoreCase(AppConstants.OFFICE_JOB) || value.equalsIgnoreCase(AppConstants.INTERNSHIP) || value.equalsIgnoreCase(AppConstants.RETURN_FROM_BREAK)) {
-                    flag = true;
-                }
-            }
-            mHowCanSheroes.setVisibility(View.GONE);
-            if (flag) {
-                mJobAt.setVisibility(View.VISIBLE);
-                mFragmentOpen.setLookingForHowCanOpen(false);
-                setOnJobAtFragment();
-            } else {
-                mInterest.setVisibility(View.VISIBLE);
-                mFragmentOpen.setLookingForHowCanOpen(false);
-                setOnBoardingInterestFragment();
-            }
-        }*/
-
     }
 
     @OnClick(R.id.iv_interest_next)

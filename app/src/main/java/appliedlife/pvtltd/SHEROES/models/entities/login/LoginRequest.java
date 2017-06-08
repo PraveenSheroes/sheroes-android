@@ -29,6 +29,7 @@ public class LoginRequest extends BaseRequest {
     @SerializedName("username")
     @Expose
     private String username;
+    private String callForSignUp;
     public String getAdvertisementid() {
         return advertisementid;
     }
@@ -83,5 +84,13 @@ public class LoginRequest extends BaseRequest {
 
     public void setAccessToken(String accessToken) {
         this.accessToken = accessToken;
+    }
+
+    public String getCallForSignUp() {
+        return callForSignUp;
+    }
+
+    public void setCallForSignUp(String callForSignUp) {
+        this.callForSignUp = callForSignUp;
     }
 }

@@ -58,12 +58,11 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.SignupRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.GooglePlusRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.User;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.LoginPresenter;
@@ -143,7 +142,8 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
     //google api client
     public static GoogleApiClient mGoogleApiClient;
     private String mToken = null;
-    private  String loginViaSocial=MoEngageConstants.GOOGLE;
+    private String loginViaSocial = MoEngageConstants.GOOGLE;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -169,8 +169,8 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
         mPasswordView.getBackground().setColorFilter(getResources().getColor(R.color.blue), PorterDuff.Mode.SRC_ATOP);
         setProgressBar(mProgressBar);
         mFbSignUp.setFragment(this);
-       // setGooglePlusButtonText(btnLoginGoogle, getString(R.string.IDS_GOOGLE_BUTTON));
-        mFbSignUp.setCompoundDrawablesWithIntrinsicBounds(null,null,null,null);
+        // setGooglePlusButtonText(btnLoginGoogle, getString(R.string.IDS_GOOGLE_BUTTON));
+        mFbSignUp.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
         return view;
     }
 
@@ -197,6 +197,7 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
     private void signIn() {
         //Creating an intent
         signOut();
+        btnLoginGoogle.setEnabled(false);
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         //Starting intent for result
         showDialog(CustomSocialDialog.LOGGING_IN_DIALOG);
@@ -342,12 +343,11 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
             // form field with an error.
             focusView.requestFocus();
 
-        }else if(password.length()<6){
-                focusView = mPasswordView;
-                mPasswordView.setError(getString(R.string.ID_PASSWORD_STRENTH));
-                focusView.requestFocus();
-            }
-        else{
+        } else if (password.length() < 6) {
+            focusView = mPasswordView;
+            mPasswordView.setError(getString(R.string.ID_PASSWORD_STRENTH));
+            focusView.requestFocus();
+        } else {
             if (StringUtil.isNotNullOrEmptyString(mGcmId)) {
                 SignupRequest signupRequest = AppUtils.signupRequestBuilder();
                 signupRequest.setEmailId(email);
@@ -418,12 +418,14 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
         };
         accessTokenTracker.startTracking();
         profileTracker.startTracking();
+        LoginManager.getInstance().logOut();
     }
 
     @Override
     public void getLogInResponse(LoginResponse loginResponse) {
         mSignUp.setEnabled(true);
         mFbSignUp.setEnabled(true);
+        btnLoginGoogle.setEnabled(true);
         dismissDialog();
         if (loginResponse != null) {
             switch (loginResponse.getStatus()) {
@@ -436,13 +438,13 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
                         mUserPreference.set(loginResponse);
                         if (null != loginResponse.getUserSummary() && null != loginResponse.getUserSummary().getUserBO() && StringUtil.isNotNullOrEmptyString(loginResponse.getUserSummary().getUserBO().getCrdt())) {
                             long createdDate = Long.parseLong(loginResponse.getUserSummary().getUserBO().getCrdt());
-                            if (createdDate < System.currentTimeMillis()) {
-                                moEngageUtills.entityMoEngageLoggedIn(getActivity(), mMoEHelper, payloadBuilder,loginViaSocial);
+                            if (createdDate <= System.currentTimeMillis()) {
+                                moEngageUtills.entityMoEngageLoggedIn(getActivity(), mMoEHelper, payloadBuilder, loginViaSocial);
                             } else {
-                                moEngageUtills.entityMoEngageSignUp(getActivity(), mMoEHelper, payloadBuilder,loginViaSocial);
+                                moEngageUtills.entityMoEngageSignUp(getActivity(), mMoEHelper, payloadBuilder, loginViaSocial);
                             }
                         }
-                        mMoEHelper.setUserAttribute(MoEngageConstants.ACQUISITION_CHANNEL,loginViaSocial);
+                        mMoEHelper.setUserAttribute(MoEngageConstants.ACQUISITION_CHANNEL, loginViaSocial);
                         openHomeScreen();
                     } else {
                         mUserPreference.delete();
@@ -457,19 +459,14 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
                 case AppConstants.FAILED:
                     mUserPreference.delete();
                     signOut();
+                    LoginManager.getInstance().logOut();
                     String errorMessage = loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA);
-                    if (errorMessage.equalsIgnoreCase(AppConstants.USER_ALREADY_EXIST_ERROR)) {
-                        ((WelcomeActivity) getActivity()).showNetworkTimeoutDoalog(true, false, getString(R.string.ID_STR_USER_ALREADY_EXIST_ERROR));
+                    if (StringUtil.isNotNullOrEmptyString(errorMessage)) {
+                        ((WelcomeActivity) getActivity()).showFaceBookError(errorMessage);
                     } else {
-                        LoginManager.getInstance().logOut();
-                        ((WelcomeActivity) getActivity()).showFaceBookError(loginResponse.getFieldErrorMessageMap().get(AppConstants.ERROR));
+                        errorMessage = loginResponse.getFieldErrorMessageMap().get(AppConstants.ERROR);
+                        ((WelcomeActivity) getActivity()).showFaceBookError(errorMessage);
                     }
-              /*  LoginManager.getInstance().logOut();
-                String errorMessage = loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA);
-                if (!StringUtil.isNotNullOrEmptyString(errorMessage)) {
-                    errorMessage = getString(R.string.ID_GENERIC_ERROR);
-                }
-                showNetworkTimeoutDoalog(true, false, errorMessage);*/
                     break;
             }
         } else {
@@ -479,12 +476,12 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
 
     @Override
     public void getGoogleExpireInResponse(ExpireInResponse expireInResponse) {
-        if (null != expireInResponse.getGooglePlusResponse()) {
+       /* if (null != expireInResponse.getGooglePlusResponse()) {
             if (expireInResponse.getGooglePlusResponse().getStatus() && StringUtil.isNotNullOrEmptyString(expireInResponse.getGooglePlusResponse().getMessage()) && AppConstants.SUCCESS.equalsIgnoreCase(expireInResponse.getGooglePlusResponse().getMessage()) && StringUtil.isNotNullOrEmptyString(expireInResponse.getGooglePlusResponse().getGooglePlusLogInAuthToken())) {
                 LoginResponse loginResponse = new LoginResponse();
                 loginResponse.setToken(expireInResponse.getGooglePlusResponse().getGooglePlusLogInAuthToken());
                 mUserPreference.set(loginResponse);
-                loginViaSocial=MoEngageConstants.GOOGLE;
+                loginViaSocial = MoEngageConstants.GOOGLE;
                 mLoginPresenter.getGooglePlusUserResponse();
             }
         } else {
@@ -497,7 +494,22 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
                 GooglePlusRequest googlePlusRequest = mAppUtils.googlePlusRequestBuilder(user);
                 mLoginPresenter.getGoogleLoginFromPresenter(googlePlusRequest);
             }
+        }*/
+
+        if (expireInResponse.getExpiresIn() > 0 && StringUtil.isNotNullOrEmptyString(mToken)) {
+            LoginRequest loginRequest = loginRequestBuilder();
+            loginRequest.setAccessToken(mToken);
+            AppUtils appUtils = AppUtils.getInstance();
+            loginRequest.setAppVersion(appUtils.getAppVersionName());
+            //TODO:: NEED to Change
+            loginRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+            loginRequest.setDeviceUniqueId(appUtils.getDeviceId());
+            loginRequest.setGcmorapnsid(mGcmId);
+            loginRequest.setCallForSignUp(AppConstants.GOOGLE_PLUS);
+            loginViaSocial = MoEngageConstants.GOOGLE;
+            mLoginPresenter.getLoginAuthTokeInPresenter(loginRequest, true);
         }
+
     }
 
     @OnClick(R.id.click_to_join_fb_signup)
@@ -517,7 +529,6 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
     }
 
     private void fbSignIn() {
-        LoginManager.getInstance().logOut();
         mFbSignUp.setReadPermissions(Arrays.asList("public_profile", "email", "user_birthday", "user_friends"));
         mFbSignUp.registerCallback(callbackManager, callback);
     }
@@ -550,7 +561,7 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
                                 loginRequest.setCloudMessagingId(appUtils.getCloudMessaging());
                                 loginRequest.setDeviceUniqueId(appUtils.getDeviceId());
                                 loginRequest.setGcmorapnsid(mGcmId);
-                                loginViaSocial=MoEngageConstants.FACEBOOK;
+                                loginViaSocial = MoEngageConstants.FACEBOOK;
                                 mLoginPresenter.getLoginAuthTokeInPresenter(loginRequest, true);
                             }
                         }
@@ -722,5 +733,14 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Toast.makeText(getActivity(), "Connection failed", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
+        mSignUp.setEnabled(true);
+        mFbSignUp.setEnabled(true);
+        btnLoginGoogle.setEnabled(true);
+        mUserPreference.delete();
+        super.showError(errorMsg, feedParticipationEnum);
     }
 }

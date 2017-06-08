@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
-
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar_login"
         android:layout_width="match_parent"
@@ -56,6 +55,13 @@
 
             </android.support.v7.widget.Toolbar>
 </appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.CustomCollapsingToolbarLayout>
+
+        <ImageView
+            android:layout_width="@dimen/dp_size_140"
+            android:layout_height="@dimen/dp_size_20"
+            android:layout_gravity="center|bottom"
+            android:background="@drawable/ic_sheroes"
+            android:layout_marginTop="@dimen/dp_size_20" />
     </android.support.design.widget.AppBarLayout>
 
     <include

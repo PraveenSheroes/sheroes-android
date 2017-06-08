@@ -24,7 +24,7 @@
                     android:layout_height="@dimen/dp_size_36"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="@dimen/dp_size_40"
+                    android:layout_marginTop="@dimen/dp_size_20"
                     android:fontFamily="@string/ID_ROBOTO_LIGHT"
                     android:text="@string/ID_SIGNUP_TEXT"
                     android:textAlignment="center"
@@ -167,7 +167,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_size_150"
+                android:layout_height="@dimen/dp_size_170"
                 android:layout_below="@+id/rlsignupin"
                 android:background="@color/grey8">
 

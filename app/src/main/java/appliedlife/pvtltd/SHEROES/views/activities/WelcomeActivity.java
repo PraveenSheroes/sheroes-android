@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.f2prateek.rx.preferences.Preference;
@@ -94,6 +95,8 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     TextView mOtherLoginOption;
     @Bind(R.id.btn_get_started)
     Button mGetStarted;
+    @Bind(R.id.scroll_view_welcome)
+    ScrollView mScrollView;
     private PayloadBuilder payloadBuilder;
     private int currentPage = 0;
     private Timer timer;
@@ -142,6 +145,12 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             initHomeViewPagerAndTabs();
             mGetStarted.setEnabled(false);
             mOtherLoginOption.setEnabled(false);
+            mScrollView.post(new Runnable() {
+                public void run() {
+                    mScrollView.fullScroll(mScrollView.FOCUS_DOWN);
+                }
+            });
+            mScrollView.scrollTo(0, mScrollView.getBottom()+1);
             if (!NetworkUtil.isConnected(mSheroesApplication)) {
                 showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
                 return;
@@ -153,6 +162,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                     getGcmId();
                 }
             }
+
         }
 
     }

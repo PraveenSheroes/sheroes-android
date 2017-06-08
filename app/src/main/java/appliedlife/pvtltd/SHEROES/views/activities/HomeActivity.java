@@ -959,6 +959,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     private void openBookMarkFragment() {
         mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_FEED));
         liHomeCommunityButtonLayout.setVisibility(View.GONE);
+        mICSheroes.setVisibility(View.GONE);
         mFragmentOpen.setBookmarkFragment(true);
         mViewPager.setVisibility(View.GONE);
         mTabLayout.setVisibility(View.GONE);
@@ -1056,6 +1057,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 initHomeViewPagerAndTabs();
                 setHomeFeedCommunityData();
                 mFragmentOpen.setBookmarkFragment(false);
+                mICSheroes.setVisibility(View.VISIBLE);
             }
         } else if (mFragmentOpen.isJobFragment()) {
             mJobFragment.setVisibility(View.GONE);

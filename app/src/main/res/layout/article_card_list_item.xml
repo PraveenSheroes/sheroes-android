@@ -92,7 +92,7 @@
         <LinearLayout
             android:id="@+id/li_article_cover_image"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_size_160"
+            android:layout_height="@dimen/dp_size_185"
             android:background="@color/white"
             android:orientation="vertical" />
 

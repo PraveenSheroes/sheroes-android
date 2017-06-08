@@ -18,8 +18,8 @@ android {
         multiDexEnabled true
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 45
-        versionName "5.1.0"
+        versionCode 46
+        versionName "5.1.1"
     }
     signingConfigs {
         debug {
@@ -38,6 +38,7 @@ android {
     buildTypes {
         debug {
             buildConfigField "String", "BASE_URL", "\"http://34.193.138.177/\""
+         //   buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
             buildConfigField "String", "GOOGLE_PLUS_URL", "\"https://sheroes.com/APIUsers/gplogin.json\""
             buildConfigField 'Boolean', 'enableCrashlytics', 'false'
             shrinkResources false

@@ -183,7 +183,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
     private MoEHelper mMoEHelper;
     private PayloadBuilder payloadBuilder;
     private MoEngageUtills moEngageUtills;
-
+    private  int positionOfFeedItem;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -546,6 +546,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
                 case AppConstants.SUCCESS:
                     mTv_community_post_submit.setVisibility(View.VISIBLE);
                     if (null != mFeedDetail) {
+                        positionOfFeedItem=mFeedDetail.getItemPosition();
                         moEngageUtills.entityMoEngageCreatePost(getActivity(), mMoEHelper, payloadBuilder, mFeedDetail.getNameOrTitle(), mFeedDetail.getIdOfEntityOrParticipant(), mFeedDetail.getCommunityId(), mFeedDetail.isClosedCommunity(), MoEngageConstants.COMMUNITY_POST_TAG, TAG);
                         Toast.makeText(getActivity(), messageForSuccess, Toast.LENGTH_LONG).show();
                         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getCallFromName()) && AppConstants.COMMUNITIES_DETAIL.equalsIgnoreCase(mFeedDetail.getCallFromName())) {
@@ -558,6 +559,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
                         if (messageForSuccess.equalsIgnoreCase(getString(R.string.ID_POSTED))) {
                             mFeedDetail.setFromHome(true);
                         }
+                        mFeedDetail.setItemPosition(positionOfFeedItem);
                         ((CreateCommunityPostActivity) getActivity()).editedSuccessFully(mFeedDetail);
                     } else {
                         Toast.makeText(getActivity(), getString(R.string.ID_POSTED), Toast.LENGTH_LONG).show();

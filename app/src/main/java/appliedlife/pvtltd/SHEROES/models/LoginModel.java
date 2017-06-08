@@ -12,7 +12,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.SignupRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.GooglePlusRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.GooglePlusResponse;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
@@ -42,15 +44,28 @@ public class LoginModel {
     public Observable<LoginResponse> getLoginAuthTokenFromModel(LoginRequest loginRequest, boolean isSignUp) {
         LogUtils.info(TAG,"*******************"+new Gson().toJson(loginRequest));
         if (isSignUp) {
-            return sheroesAppServiceApi.getFbSignUpToken(loginRequest)
-                    .map(new Func1<LoginResponse, LoginResponse>() {
-                        @Override
-                        public LoginResponse call(LoginResponse loginResponse) {
-                            return loginResponse;
-                        }
-                    })
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread());
+            if(StringUtil.isNotNullOrEmptyString(loginRequest.getCallForSignUp())&&loginRequest.getCallForSignUp().equalsIgnoreCase(AppConstants.GOOGLE_PLUS))
+            {
+                return sheroesAppServiceApi.getGpSignUpToken(loginRequest)
+                        .map(new Func1<LoginResponse, LoginResponse>() {
+                            @Override
+                            public LoginResponse call(LoginResponse loginResponse) {
+                                return loginResponse;
+                            }
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread());
+            }else {
+                return sheroesAppServiceApi.getFbSignUpToken(loginRequest)
+                        .map(new Func1<LoginResponse, LoginResponse>() {
+                            @Override
+                            public LoginResponse call(LoginResponse loginResponse) {
+                                return loginResponse;
+                            }
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread());
+            }
         } else {
             return sheroesAppServiceApi.getLoginAuthToken(loginRequest)
                     .map(new Func1<LoginResponse, LoginResponse>() {

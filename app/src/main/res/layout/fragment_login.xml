@@ -18,14 +18,6 @@
             android:layout_marginLeft="@dimen/dp_size_20"
             android:layout_marginRight="@dimen/dp_size_20"
             android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="@dimen/dp_size_140"
-                android:layout_height="@dimen/dp_size_20"
-                android:layout_gravity="center|bottom"
-                android:background="@drawable/ic_sheroes"
-                android:layout_marginTop="@dimen/dp_size_10" />
-
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
