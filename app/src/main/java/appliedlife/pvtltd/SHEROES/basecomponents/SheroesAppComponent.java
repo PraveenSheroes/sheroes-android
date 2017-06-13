@@ -162,6 +162,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.MemberHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MyCommunitiesCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.NoCommunityHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OnBoardingHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.OnceWelcomeCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OwnerHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OwnerListHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.PandingRequestHolder;
@@ -469,7 +470,9 @@ public interface SheroesAppComponent {
     void inject(ProfileHorListHolder profileHorListHolder);
 
     void inject(ProfileWorkExperienceSelfEmploymentFragment profileWorkExperienceSelfEmploymentFragment);
+
     void inject(ProfileWorkExperienceSelfEmploymentDialogFragment profileWorkExperienceSelfEmploymentDialogFragment);
+
     void inject(InviteCommunityMemberDialogFragment inviteCommunityMember);
 
     void inject(InviteCommunityOwner inviteCommunityMember);
@@ -561,14 +564,16 @@ public interface SheroesAppComponent {
     void inject(ProfilePersonelHowCanLookingForFragment profilePersonelHowCanLookingForFragment);
 
     void inject(HelplineFragment helplineFragment);
+
     void inject(HelplineQuestionCardHolder helplineQuestionCardHolder);
+
     void inject(HelplineAnswerCardHolder helplineAnswerCardHolder);
 
     void inject(ChallengeUpdateProgressDialogFragment challengeUpdateProgressDialogFragment);
 
     void inject(ChallengeSuccessDialogFragment challengeSuccessDialogFragment);
 
-    void inject (SignupFragment signupFragment);
+    void inject(SignupFragment signupFragment);
 
     void inject(ICCMemberViewHolder iccMemberViewHolder);
 
@@ -577,5 +582,7 @@ public interface SheroesAppComponent {
     void inject(FAQSFragment faqsFragment);
 
     void inject(FAQViewHolder faqViewHolder);
+
+    void inject(OnceWelcomeCardHolder onceWelcomeCardHolder);
 
 }

@@ -171,6 +171,7 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
         mFbSignUp.setFragment(this);
         // setGooglePlusButtonText(btnLoginGoogle, getString(R.string.IDS_GOOGLE_BUTTON));
         mFbSignUp.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+        fbSignIn();
         return view;
     }
 
@@ -197,7 +198,6 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
     private void signIn() {
         //Creating an intent
         signOut();
-        btnLoginGoogle.setEnabled(false);
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         //Starting intent for result
         showDialog(CustomSocialDialog.LOGGING_IN_DIALOG);
@@ -206,7 +206,7 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
 
     public void signOut() {
         //Check is required otherwise illegal state exception might be thrown
-        if (mGoogleApiClient.isConnected()) {
+        if (null!=mGoogleApiClient&&mGoogleApiClient.isConnected()) {
             Auth.GoogleSignInApi.signOut(mGoogleApiClient);
         }
     }
@@ -529,6 +529,7 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
     }
 
     private void fbSignIn() {
+        LoginManager.getInstance().logOut();
         mFbSignUp.setReadPermissions(Arrays.asList("public_profile", "email", "user_birthday", "user_friends"));
         mFbSignUp.registerCallback(callbackManager, callback);
     }
@@ -684,12 +685,21 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
             mLoginPresenter.googleTokenExpireInFromPresenter(URL_ACCESS_TOKEN);
         }
     }
-
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.stopAutoManage(getActivity());
+            mGoogleApiClient.disconnect();
+        }
+    }
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mGoogleApiClient.stopAutoManage(getActivity());
-        mGoogleApiClient.disconnect();
+        if(null!=mGoogleApiClient&& mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.stopAutoManage(getActivity());
+            mGoogleApiClient.disconnect();
+        }
     }
 
     @Override

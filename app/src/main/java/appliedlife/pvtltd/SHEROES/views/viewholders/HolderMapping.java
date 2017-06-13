@@ -362,6 +362,11 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new ChallengeHorizontalView(view, viewInterface);
         }
+    }, ONCE_WELCOME_VIEW(R.layout.once_open_circle_support_card) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new OnceWelcomeCardHolder(view, viewInterface);
+        }
     }, CHALLENGE_LIST_ITEM_HOLDER(R.layout.challenge_list_item_holder) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
@@ -431,8 +436,11 @@ public enum HolderMapping {
                             break;
                         case AppConstants.CHALLENGE_SUB_TYPE:
                             returnView = CHALLENGE_HORIZONTAL_VIEW.ordinal();
+                            break;
+                        case AppConstants.ONCE_WELCOME:
+                            returnView = ONCE_WELCOME_VIEW.ordinal();
+                            break;
                         default:
-
                     }
                 } else if (item instanceof BoardingInterestJobSearch) {
                     returnView = INTEREST_SEARCH.ordinal();

@@ -116,6 +116,7 @@ public class AppConstants {
     public static final String INVITE_MEMBER = "invite_member";
     public static final String MY_COMMUNITIES_HEADER = "COMMUNITY_HEADER";
     public static final String CHALLENGE_SUB_TYPE = "CHALLENGE_TYPE";
+    public static final String ONCE_WELCOME = "ONCE_WELCOME";
     public static final String NO_COMMUNITIES = "NO_COMMUNITIES";
     public static final String COMMUNITIES_DETAIL = "community_detail";
     public static final String JOB_FILTER = "job_filter";

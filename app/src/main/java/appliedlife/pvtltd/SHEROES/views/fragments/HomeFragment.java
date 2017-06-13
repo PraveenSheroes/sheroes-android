@@ -103,7 +103,7 @@ public class HomeFragment extends BaseFragment {
     @Bind(R.id.tv_refresh)
     TextView tvRefresh;
     private String mGcmId;
-    private FeedDetail challengeFeedDetail;
+    private FeedDetail challengeFeedDetail,onceWelcomeDataItem;
     private ChallengeDataItem mChallengeDataItem;
     private int mPercentCompleted;
     private long mChallengeId;
@@ -128,7 +128,6 @@ public class HomeFragment extends BaseFragment {
         mAdapter = new GenericRecyclerViewAdapter(getContext(), (HomeActivity) getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
-
         mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager, mFragmentListRefreshData) {
             @Override
             public void onHide() {
@@ -185,7 +184,7 @@ public class HomeFragment extends BaseFragment {
     private void getGcmId() {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        GCMClientManager pushClientManager = new GCMClientManager(getActivity(),getString(R.string.ID_PROJECT_ID));
+        GCMClientManager pushClientManager = new GCMClientManager(getActivity(), getString(R.string.ID_PROJECT_ID));
         pushClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
             @Override
             public void onSuccess(String registrationId, boolean isNewRegistration) {
@@ -198,6 +197,8 @@ public class HomeFragment extends BaseFragment {
                             LoginRequest loginRequest = loginRequestBuilder();
                             loginRequest.setGcmorapnsid(registrationId);
                             mHomePresenter.getNewGCMidFromPresenter(loginRequest);
+                            onceWelcomeDataItem = new FeedDetail();
+                            onceWelcomeDataItem.setSubType(AppConstants.ONCE_WELCOME);
                         } else {
                             if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getGcmId())) {
                                 String mOldGcmId = mUserPreference.get().getGcmId();
@@ -331,13 +332,17 @@ public class HomeFragment extends BaseFragment {
                         challengeFeedDetail = new FeedDetail();
                         challengeFeedDetail.setSubType(AppConstants.CHALLENGE_SUB_TYPE);
                         challengeFeedDetail.setCommunityId(mChallengeId);
-                        if(null!=mChallengeDataItem) {
+                        if (null != mChallengeDataItem) {
                             challengeFeedDetail.setNoOfMembers(mChallengeDataItem.getItemPosition());
-                        }else {
+                        } else {
                             challengeFeedDetail.setNoOfMembers(0);
                         }
                         challengeFeedDetail.setChallengeDataItems(challengeListResponse.getReponseList());
                         challengeAddOnFeed(challengeFeedDetail);
+                    }
+                    if(null!=onceWelcomeDataItem)
+                    {
+                        challengeAddOnFeed(onceWelcomeDataItem);
                     }
                 }
                 break;
