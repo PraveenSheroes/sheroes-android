@@ -1,4 +1,5 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
+
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -48,12 +49,13 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
 /**
  * Created by priyanka on 22/03/17.
  * Personal Basic Details Fragment
  */
 
-public class PersonalBasicDetailsFragment extends BaseFragment implements ProfileView,View.OnClickListener{
+public class PersonalBasicDetailsFragment extends BaseFragment implements ProfileView, View.OnClickListener {
     private final String TAG = LogUtils.makeLogTag(ProfessionalEditBasicDetailsFragment.class);
     private final String SCREEN_NAME = "Personal_edit_basic_details_screen";
     @Inject
@@ -79,7 +81,7 @@ public class PersonalBasicDetailsFragment extends BaseFragment implements Profil
     @Bind(R.id.tv_email_value)
     TextView mTvEmailNo;
     ProfileView mProfileBasicDetailsCallBack;
-    String mCitiId,mcityNm;
+    String mCitiId, mcityNm;
     MyProfileView myProfileView;
     @Bind(R.id.pb_profile_progress_bar)
     ProgressBar mProgress;
@@ -107,6 +109,7 @@ public class PersonalBasicDetailsFragment extends BaseFragment implements Profil
         }
 
     }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -123,32 +126,32 @@ public class PersonalBasicDetailsFragment extends BaseFragment implements Profil
             if (myProfileView != null && myProfileView.getUserDetails() != null) {
                 UserDetails userDetails = myProfileView.getUserDetails();
                 if (userDetails != null) {
-                    if(StringUtil.isNotNullOrEmptyString(userDetails.getFirstName())) {
+                    if (StringUtil.isNotNullOrEmptyString(userDetails.getFirstName())) {
                         mEtFirstName.setText(userDetails.getFirstName());
                     }
-                    if(StringUtil.isNotNullOrEmptyString(userDetails.getLastName())) {
+                    if (StringUtil.isNotNullOrEmptyString(userDetails.getLastName())) {
                         mEtLastName.setText(userDetails.getLastName());
                     }
-                    if(StringUtil.isNotNullOrEmptyString(userDetails.getCityMaster())) {
+                    if (StringUtil.isNotNullOrEmptyString(userDetails.getCityMaster())) {
                         mEtCurrntLocation.setText(userDetails.getCityMaster());
                     }
-                    if(userDetails.getNoOfChildren()>0) {
+                    if (userDetails.getNoOfChildren() > 0) {
                         mEtChildNumber.setText(String.valueOf(userDetails.getNoOfChildren()));
                     }
                     if (getString(R.string.married).equalsIgnoreCase(userDetails.getMaritalStatus())) {
-                        mSpinnerRelationStatus.setSelection(0,true);
+                        mSpinnerRelationStatus.setSelection(0, true);
                     } else {
-                        mSpinnerRelationStatus.setSelection(1,true);
+                        mSpinnerRelationStatus.setSelection(1, true);
                     }
                     mTvMobileNo.setText(userDetails.getMobile());
                     mTvEmailNo.setText(userDetails.getEmailid());
                     if (userDetails.getCityMasterId() > 0) {
                         mCitiId = String.valueOf(myProfileView.getUserDetails().getCityMasterId());
                     }
-                    if(null !=myProfileView.getUserDetails().getDob()){
+                    if (null != myProfileView.getUserDetails().getDob()) {
                         Calendar cal = new GregorianCalendar();
                         cal.setTime(new Date(myProfileView.getUserDetails().getDob()));
-                        fromDateEtxt.setText(cal.get(Calendar.DAY_OF_MONTH) +" "+ new SimpleDateFormat("MMM").format(cal.getTime()) +" "+cal.get(Calendar.YEAR));
+                        fromDateEtxt.setText(cal.get(Calendar.DAY_OF_MONTH) + " " + new SimpleDateFormat("MMM").format(cal.getTime()) + " " + cal.get(Calendar.YEAR));
                     }
                 }
             }
@@ -175,7 +178,7 @@ public class PersonalBasicDetailsFragment extends BaseFragment implements Profil
                 fromDateEtxt.setText(dateFormatter.format(newDate.getTime()));
             }
 
-        },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
 
         toDatePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
 
@@ -185,17 +188,13 @@ public class PersonalBasicDetailsFragment extends BaseFragment implements Profil
 
             }
 
-        },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
     }
 
 
-
-
-
-    public void submitLocation(String cityId,String city)
-    {
-        mcityNm=city;
-        mCitiId=cityId;
+    public void submitLocation(String cityId, String city) {
+        mcityNm = city;
+        mCitiId = cityId;
         mEtCurrntLocation.setText(city);
 
     }
@@ -203,52 +202,60 @@ public class PersonalBasicDetailsFragment extends BaseFragment implements Profil
 
     @OnClick(R.id.btn_personal_basic_details_save)
     public void Save_Basic_Details() {
-        PersonalBasicDetailsRequest personalBasicDetailsRequest = new PersonalBasicDetailsRequest();
-        AppUtils appUtils = AppUtils.getInstance();
-        personalBasicDetailsRequest.setAppVersion(appUtils.getAppVersionName());
-        //TODO:change Messageid
-        personalBasicDetailsRequest.setCloudMessagingId(appUtils.getCloudMessaging());
-        personalBasicDetailsRequest.setDeviceUniqueId(appUtils.getDeviceId());
-        personalBasicDetailsRequest.setLastScreenName("string");
-        personalBasicDetailsRequest.setScreenName("string");
-        personalBasicDetailsRequest.setType("BASIC_PROFILE");
-        personalBasicDetailsRequest.setSubType("BASIC_USER_PROFILE_SERVICE");
-        personalBasicDetailsRequest.setSource(AppConstants.SOURCE_NAME);
+        if (!StringUtil.isNotNullOrEmptyString(mEtFirstName.getText().toString()) || !StringUtil.isNotNullOrEmptyString(mEtLastName.getText().toString())) {
+            Toast.makeText(getActivity(), "Please enter First and Last Name", Toast.LENGTH_SHORT).show();
+            return;
+        } else if (!StringUtil.isNotNullOrEmptyString(mEtCurrntLocation.getText().toString())) {
+            Toast.makeText(getActivity(), "Please enter Current location", Toast.LENGTH_SHORT).show();
+            return;
+        } else if (!StringUtil.isNotNullOrEmptyString(fromDateEtxt.getText().toString())) {
+            Toast.makeText(getActivity(), "Please enter Date of birth", Toast.LENGTH_SHORT).show();
+            return;
+        } else {
 
-        if (StringUtil.isNotNullOrEmptyString(mCitiId)) {
-            personalBasicDetailsRequest.setCityMasterId(Integer.parseInt(mCitiId));
+            PersonalBasicDetailsRequest personalBasicDetailsRequest = new PersonalBasicDetailsRequest();
+            AppUtils appUtils = AppUtils.getInstance();
+            personalBasicDetailsRequest.setAppVersion(appUtils.getAppVersionName());
+            //TODO:change Messageid
+            personalBasicDetailsRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+            personalBasicDetailsRequest.setDeviceUniqueId(appUtils.getDeviceId());
+            personalBasicDetailsRequest.setLastScreenName("string");
+            personalBasicDetailsRequest.setScreenName("string");
+            personalBasicDetailsRequest.setType("BASIC_PROFILE");
+            personalBasicDetailsRequest.setSubType("BASIC_USER_PROFILE_SERVICE");
+            personalBasicDetailsRequest.setSource(AppConstants.SOURCE_NAME);
+
+            if (StringUtil.isNotNullOrEmptyString(mCitiId)) {
+                personalBasicDetailsRequest.setCityMasterId(Integer.parseInt(mCitiId));
+            }
+            personalBasicDetailsRequest.setMaritalStatus(mSpinnerRelationStatus.getSelectedItem().toString());
+            if (StringUtil.isNotNullOrEmptyString(mEtChildNumber.getText().toString())) {
+                personalBasicDetailsRequest.setNoOfChildren(Integer.parseInt(mEtChildNumber.getText().toString()));
+            }
+            personalBasicDetailsRequest.setFirstName(mEtFirstName.getText().toString());
+            personalBasicDetailsRequest.setLastName(mEtLastName.getText().toString());
+
+            try {
+                thedate = (Date) new SimpleDateFormat("yyyy-MM-dd").parse(fromDateEtxt.getText().toString());
+                personalBasicDetailsRequest.setDateOfBirth(new SimpleDateFormat("yyyy-MM-dd").format(thedate));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            mProfilePresenter.getPersonalBasicDetailsAuthTokeInPresenter(personalBasicDetailsRequest);
         }
-        personalBasicDetailsRequest.setMaritalStatus(mSpinnerRelationStatus.getSelectedItem().toString());
-        if (StringUtil.isNotNullOrEmptyString(mEtChildNumber.getText().toString())) {
-            personalBasicDetailsRequest.setNoOfChildren(Integer.parseInt(mEtChildNumber.getText().toString()));
-        }
-        personalBasicDetailsRequest.setFirstName(mEtFirstName.getText().toString());
-        personalBasicDetailsRequest.setLastName(mEtLastName.getText().toString());
-
-        try {
-             thedate = (Date) new SimpleDateFormat("yyyy-MM-dd").parse(fromDateEtxt.getText().toString());
-            personalBasicDetailsRequest.setDateOfBirth(new SimpleDateFormat("yyyy-MM-dd").format(thedate));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-
-        mProfilePresenter.getPersonalBasicDetailsAuthTokeInPresenter(personalBasicDetailsRequest);
     }
 
     @OnClick(R.id.et_currnt_location)
-    public void onLocationClick()
-    {
+    public void onLocationClick() {
 
-        ((ProfileActicity)getActivity()).callProfileLocation();
+        ((ProfileActicity) getActivity()).callProfileLocation();
 
     }
 
     @OnClick(R.id.iv_back_profile)
 
-    public void OnbackClick()
-    {
-        AppUtils.hideKeyboard(mEtChildNumber,TAG);
+    public void OnbackClick() {
+        AppUtils.hideKeyboard(mEtChildNumber, TAG);
         mProfileBasicDetailsCallBack.onBackPressed(R.id.iv_back_profile);
 
     }
@@ -259,7 +266,7 @@ public class PersonalBasicDetailsFragment extends BaseFragment implements Profil
 
 
         int id = view.getId();
-        if(view == fromDateEtxt) {
+        if (view == fromDateEtxt) {
             fromDatePickerDialog.show();
         }
 
@@ -267,8 +274,6 @@ public class PersonalBasicDetailsFragment extends BaseFragment implements Profil
 
     @Override
     public void onBackPressed(int id) {
-
-
 
 
     }
@@ -287,7 +292,6 @@ public class PersonalBasicDetailsFragment extends BaseFragment implements Profil
     public void getEducationResponse(BoardingDataResponse boardingDataResponse) {
 
     }
-
 
 
     @Override
@@ -310,7 +314,6 @@ public class PersonalBasicDetailsFragment extends BaseFragment implements Profil
     }
 
 
-
     @Override
     public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
 
@@ -325,7 +328,6 @@ public class PersonalBasicDetailsFragment extends BaseFragment implements Profil
     public void getProfessionalWorkLocationResponse(BoardingDataResponse boardingDataResponse) {
 
     }
-
 
 
     @Override

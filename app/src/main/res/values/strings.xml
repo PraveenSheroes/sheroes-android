@@ -1,6 +1,7 @@
 <resources>
     <string name="ID_APP_NAME">SHEROES</string>
     <string name="ID_PROJECT_ID">409228886131</string>
+    <string name="ID_APPS_FLYER_DEV_ID">CDkJAsj9hBUkp2V6ERGWd9</string>
     <string name="ID_ROBOTO_REGULAR">sans-serif</string>
     <string name="ID_ROBOTO_LIGHT">sans-serif-light</string>
     <string name="ID_ROBOTO_CONDENSED">sans-serif-condensed</string>
@@ -882,9 +883,9 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_CHOOSE_PHOTO">Choose Photo From gallery</string>
     <string name="ID_ADD_YOU_TUBE_LINK">Add Youtube link..</string>
     <string name="ID_ONCE_CARD_TITLE">Welcome To The SHEROES Feed</string>
-    <string name="ID_CIRCLE_SUPPORT">Your Circle OF Support</string>
-    <string name="ID_ONCE_CARD_DETAIL1">Connect, Network and Hangout with peers and influencres</string>
-    <string name="ID_ONCE_CARD_DETAIL2">from ypur field and other walks of life.</string>
+    <string name="ID_CIRCLE_SUPPORT">Your Circle Of Support</string>
+    <string name="ID_ONCE_CARD_DETAIL1">Connect, Network and Hangout with peers and influencers</string>
+    <string name="ID_ONCE_CARD_DETAIL2">from your field and other walks of life.</string>
     <string name="ID_ONCE_CARD_DETAIL3">Share your everyday achievements and inspire others.</string>
     <string name="ID_JUST">Just</string>
     <string name="ID_STARTED">Started</string>

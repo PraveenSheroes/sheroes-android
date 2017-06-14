@@ -339,21 +339,15 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             if (mViewMoreDescription.length() > AppConstants.WORD_LENGTH) {
                 tvFeedCommunityPostViewMore.setVisibility(View.VISIBLE);
                 tvFeedCommunityPostViewMore.setTag(mViewMore);
-                if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                    tvFeedCommunityPostText.setText(Html.fromHtml(mViewMoreDescription, 0)); // for 24 api and more
-                } else {
-                    tvFeedCommunityPostText.setText(Html.fromHtml(mViewMoreDescription));// or for older api
-                }
+                tvFeedCommunityPostText.setText(mViewMoreDescription); // for 24 api and more
+
                 tvFeedCommunityPostViewMore.setText(mContext.getString(R.string.ID_VIEW_MORE));
             } else {
                 tvFeedCommunityPostViewMore.setText(mContext.getString(R.string.ID_LESS));
                 tvFeedCommunityPostViewMore.setTag(mLess);
                 tvFeedCommunityPostViewMore.setVisibility(View.GONE);
-                if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                    tvFeedCommunityPostText.setText(Html.fromHtml(mViewMoreDescription, 0));
-                } else {
-                    tvFeedCommunityPostText.setText(Html.fromHtml(mViewMoreDescription));
-                }
+                tvFeedCommunityPostText.setText(mViewMoreDescription);
+
             }
         } else {
             tvFeedCommunityPostViewMore.setText(mContext.getString(R.string.ID_LESS));
@@ -733,17 +727,13 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         }
     }
 
-    @TargetApi(AppConstants.ANDROID_SDK_24)
     private void viewMoreTextClick() {
         if (tvFeedCommunityPostViewMore.getTag().toString().equalsIgnoreCase(mViewMore)) {
             // String lessWithColor = LEFT_HTML_VEIW_TAG_FOR_COLOR + mLess + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
             //  StringBuilder lessWithColor = new StringBuilder();
             //  lessWithColor.append(LEFT_HTML_VEIW_TAG_FOR_COLOR).append(mLess).append(RIGHT_HTML_VIEW_TAG_FOR_COLOR);
-            if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                tvFeedCommunityPostTextFullView.setText(Html.fromHtml(mViewMoreDescription, 0)); // for 24 api and more
-            } else {
-                tvFeedCommunityPostTextFullView.setText(Html.fromHtml(mViewMoreDescription));// or for older api
-            }
+            tvFeedCommunityPostTextFullView.setText(mViewMoreDescription); // for 24 api and more
+
             tvFeedCommunityPostViewMore.setText(mContext.getString(R.string.ID_LESS));
             tvFeedCommunityPostViewMore.setTag(mLess);
             tvFeedCommunityPostText.setTag(mLess);
@@ -756,21 +746,15 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             tvFeedCommunityPostText.setTag(mViewMore);
             tvFeedCommunityPostTextFullView.setTag(mViewMore);
             if (mViewMoreDescription.length() > AppConstants.WORD_LENGTH) {
-                if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                    tvFeedCommunityPostText.setText(Html.fromHtml(mViewMoreDescription, 0)); // for 24 api and more
-                } else {
-                    tvFeedCommunityPostText.setText(Html.fromHtml(mViewMoreDescription));// or for older api
-                }
+                tvFeedCommunityPostText.setText(mViewMoreDescription); // for 24 api and more
+
                 tvFeedCommunityPostViewMore.setVisibility(View.VISIBLE);
                 tvFeedCommunityPostViewMore.setText(mContext.getString(R.string.ID_VIEW_MORE));
                 tvFeedCommunityPostViewMore.setTag(mViewMore);
             } else {
                 tvFeedCommunityPostViewMore.setVisibility(View.GONE);
-                if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                    tvFeedCommunityPostText.setText(Html.fromHtml(mViewMoreDescription, 0));
-                } else {
-                    tvFeedCommunityPostText.setText(Html.fromHtml(mViewMoreDescription));
-                }
+                tvFeedCommunityPostText.setText(mViewMoreDescription);
+
                 tvFeedCommunityPostViewMore.setText(mContext.getString(R.string.ID_LESS));
                 tvFeedCommunityPostViewMore.setTag(mLess);
             }

@@ -425,7 +425,6 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
     public void getLogInResponse(LoginResponse loginResponse) {
         mSignUp.setEnabled(true);
         mFbSignUp.setEnabled(true);
-        btnLoginGoogle.setEnabled(true);
         dismissDialog();
         if (loginResponse != null) {
             switch (loginResponse.getStatus()) {
@@ -749,7 +748,6 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
         mSignUp.setEnabled(true);
         mFbSignUp.setEnabled(true);
-        btnLoginGoogle.setEnabled(true);
         mUserPreference.delete();
         super.showError(errorMsg, feedParticipationEnum);
     }

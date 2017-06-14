@@ -22,7 +22,7 @@
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
                 app:title=" "
-                app:contentScrim="@color/search_tab_text"
+                app:contentScrim="@color/once_card"
                 app:layout_scrollFlags="scroll|snap">
 
                 <appliedlife.pvtltd.SHEROES.views.cutomeviews.SquareImageView

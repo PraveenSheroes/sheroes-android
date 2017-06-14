@@ -88,7 +88,6 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
     private MoEHelper mMoEHelper;
     private PayloadBuilder payloadBuilder;
     private MoEngageUtills moEngageUtills;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

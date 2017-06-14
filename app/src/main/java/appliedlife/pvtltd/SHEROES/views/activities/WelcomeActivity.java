@@ -16,6 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.appsflyer.AppsFlyerLib;
 import com.f2prateek.rx.preferences.Preference;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
@@ -44,6 +45,7 @@ import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.LoginPresenter;
 import appliedlife.pvtltd.SHEROES.service.GCMClientManager;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -106,6 +108,8 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     private MoEHelper mMoEHelper;
     private MoEngageUtills moEngageUtills;
     private FragmentOpen mFragmentOpen;
+    @Inject
+    AppUtils appUtils;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -115,6 +119,9 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
         moEngageUtills.entityMoEngageAppOpened(this, mMoEHelper, payloadBuilder);
+        AppsFlyerLib.getInstance().startTracking(getApplication(),getString(R.string.ID_APPS_FLYER_DEV_ID));
+        AppsFlyerLib.getInstance().setImeiData(appUtils.getIMEI());
+        AppsFlyerLib.getInstance().setAndroidIdData(appUtils.getDeviceId());
         initializeAllDataAfterGCMId();
     }
 
@@ -149,7 +156,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                     mScrollView.fullScroll(mScrollView.FOCUS_DOWN);
                 }
             });
-            mScrollView.scrollTo(0, mScrollView.getBottom()+1);
+            mScrollView.scrollTo(0, mScrollView.getBottom() + 1);
             if (!NetworkUtil.isConnected(mSheroesApplication)) {
                 showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
                 return;
@@ -205,6 +212,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         startActivity(boardingIntent);
         finish();
     }
+
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void initHomeViewPagerAndTabs() {
         mFragmentOpen = new FragmentOpen();
@@ -248,15 +256,16 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             }
         }, 500, 3000);
     }
+
     @OnClick(R.id.btn_get_started)
     public void getStartedOnClick() {
-            SignupFragment signupFragment = new SignupFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString(AppConstants.GCM_ID, mGcmId);
-            signupFragment.setArguments(bundle);
-            mFragmentOpen.setSignupFragment(true);
-            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
-                    .replace(R.id.fragment_welcome_sign_up, signupFragment).addToBackStack(null).commitAllowingStateLoss();
+        SignupFragment signupFragment = new SignupFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(AppConstants.GCM_ID, mGcmId);
+        signupFragment.setArguments(bundle);
+        mFragmentOpen.setSignupFragment(true);
+        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
+                .replace(R.id.fragment_welcome_sign_up, signupFragment).addToBackStack(null).commitAllowingStateLoss();
     }
 
     @OnClick(R.id.tv_other_login_option)
@@ -280,6 +289,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             }
         }
     }
+
     @Override
     public void onShowErrorDialog(String errorReason, FeedParticipationEnum feedParticipationEnum) {
         switch (errorReason) {
@@ -358,6 +368,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     public void onPageScrollStateChanged(int state) {
 
     }
+
     public DialogFragment showFaceBookError(String message) {
         FacebookErrorDialog fragment = (FacebookErrorDialog) getFragmentManager().findFragmentByTag(FacebookErrorDialog.class.getName());
         if (fragment == null) {
@@ -372,19 +383,20 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         }
         return fragment;
     }
+
     @Override
     public void onBackPressed() {
-        if(mFragmentOpen.isSignupFragment())
-        {
+        if (mFragmentOpen.isSignupFragment()) {
             mFragmentOpen.setSignupFragment(false);
             getSupportFragmentManager().popBackStack();
+        } else {
+            finish();
         }
-        else{ finish();}
     }
 
     @Override
     public void startProgressBar() {
-        if(null!=mProgressBar) {
+        if (null != mProgressBar) {
             mProgressBar.setVisibility(View.VISIBLE);
             mProgressBar.bringToFront();
         }
@@ -392,7 +404,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     @Override
     public void stopProgressBar() {
-        if(null!=mProgressBar) {
+        if (null != mProgressBar) {
             mProgressBar.setVisibility(View.GONE);
         }
     }
@@ -411,6 +423,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
 
     }
+
     @Override
     public void getLogInResponse(LoginResponse loginResponse) {
 
