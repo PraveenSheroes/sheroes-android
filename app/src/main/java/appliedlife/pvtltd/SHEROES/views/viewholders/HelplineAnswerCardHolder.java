@@ -1,6 +1,9 @@
 package appliedlife.pvtltd.SHEROES.views.viewholders;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
+import android.text.Html;
 import android.view.View;
 import android.widget.TextView;
 
@@ -9,6 +12,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineChatDoc;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import butterknife.Bind;
@@ -38,11 +42,16 @@ public class HelplineAnswerCardHolder extends BaseViewHolder<HelplineChatDoc> {
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
     }
 
+    @TargetApi(AppConstants.ANDROID_SDK_24)
     @Override
     public void bindData(HelplineChatDoc helplineChatDoc, Context context, int position) {
         this.dataItem = helplineChatDoc;
         if(StringUtil.isNotNullOrEmptyString(dataItem.getSearchText())){
-            answer.setText(dataItem.getSearchText());
+            if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                answer.setText(Html.fromHtml(dataItem.getSearchText(), 0).toString());
+            } else {
+                answer.setText(Html.fromHtml(dataItem.getSearchText()).toString());
+            }
         }
         if(StringUtil.isNotNullOrEmptyString(dataItem.getFormatedDate())) {
             answerTime.setText(dataItem.getFormatedDate());
