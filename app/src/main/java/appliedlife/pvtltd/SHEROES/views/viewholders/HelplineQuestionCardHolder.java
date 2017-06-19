@@ -9,8 +9,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineChatDoc;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ExprienceEntity;
-import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import butterknife.Bind;
