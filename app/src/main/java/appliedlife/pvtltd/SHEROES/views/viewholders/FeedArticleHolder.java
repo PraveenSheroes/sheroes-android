@@ -73,6 +73,8 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     CircleImageView ivFeedArticleUserPic;
     @Bind(R.id.iv_feed_article_register_user_pic)
     CircleImageView ivFeedArticleRegisterUserPic;
+    @Bind(R.id.tv_feed_article_user_share)
+    TextView tvFeedArticleUserShare;
     @Bind(R.id.tv_feed_article_user_bookmark)
     TextView tvFeedArticleUserBookmark;
     @Bind(R.id.tv_feed_article_card_title)
@@ -138,6 +140,13 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         onBookMarkClick();
         if (!dataItem.isTrending()) {
             imageOperations(context);
+        }
+        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
+            if (dataItem.getAuthorId() == userPreference.get().getUserSummary().getUserId() || dataItem.isOwner()) {
+                tvFeedArticleUserMenu.setVisibility(View.VISIBLE);
+            } else {
+                tvFeedArticleUserMenu.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -425,7 +434,10 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         }
         onBookMarkClick();
     }
-
+    @OnClick(R.id.tv_feed_article_user_share)
+    public void tvShareClick() {
+        viewInterface.handleOnClick(dataItem, tvFeedArticleUserShare);
+    }
     @OnClick(R.id.li_feed_article_join_conversation)
     public void joinConversationClick() {
         dataItem.setCallFromName(AppConstants.EMPTY_STRING);

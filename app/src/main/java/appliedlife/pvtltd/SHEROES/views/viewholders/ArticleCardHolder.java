@@ -58,8 +58,8 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
     TextView tvArticleTrendingLabel;
     @Bind(R.id.tv_article_bookmark)
     TextView tvArticleBookmark;
-    @Bind(R.id.tv_article_menu)
-    TextView tvArticleMenu;
+    @Bind(R.id.tv_article_share)
+    TextView tvArticleShare;
     @Bind(R.id.tv_article_description_header)
     TextView tvArticleDescriptionHeader;
     @Bind(R.id.tv_article_description_text)
@@ -224,9 +224,9 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
 
     }
 
-    @OnClick(R.id.tv_article_menu)
+    @OnClick(R.id.tv_article_share)
     public void tvMenuClick() {
-        viewInterface.handleOnClick(dataItem, tvArticleMenu);
+        viewInterface.handleOnClick(dataItem, tvArticleShare);
     }
 
     @OnClick(R.id.li_article_cover_image)

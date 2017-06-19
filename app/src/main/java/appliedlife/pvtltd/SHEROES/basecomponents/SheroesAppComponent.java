@@ -107,6 +107,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityOption
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityRequestedDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunitySearchTagsDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityTypeDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.FunctionalAreaDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.InviteCommunityMemberDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.JobLocationSearchDialogFragment;
@@ -139,6 +140,8 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.CommunityCardDetailHeader;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CurrentStatusHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.EducationListHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.EventDetailHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.EventSpeakerHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FAQViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeatureCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedArticleHolder;
@@ -584,5 +587,12 @@ public interface SheroesAppComponent {
     void inject(FAQViewHolder faqViewHolder);
 
     void inject(OnceWelcomeCardHolder onceWelcomeCardHolder);
+
+    void inject(EventDetailDialogFragment eventDetailDialogFragment);
+
+    void inject(EventDetailHolder eventDetailHolder);
+
+    void inject(EventSpeakerHolder eventSpeakerHolder);
+
 
 }

@@ -47,7 +47,6 @@ import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_BOOKMARK_UNBOOKMARK;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
-import static appliedlife.pvtltd.SHEROES.utils.AppUtils.feedDetailRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.jobApplyRequestBuilder;
 
 /**
@@ -115,7 +114,7 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
         super.setAllInitializationForFeeds(mFragmentListRefreshData, mAdapter, mLayoutManager, mFeedDetail, mRecyclerView, 0, 0, false, mHomePresenter, mAppUtils, mProgressBar);
-        mHomePresenter.getFeedFromPresenter(feedDetailRequestBuilder(AppConstants.FEED_JOB, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getIdFeedDetail()));
+        mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_JOB, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getIdFeedDetail()));
         return view;
     }
 

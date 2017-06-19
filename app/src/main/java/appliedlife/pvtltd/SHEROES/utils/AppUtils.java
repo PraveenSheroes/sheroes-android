@@ -107,6 +107,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.home.EventRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCount;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobApplyRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
@@ -1939,11 +1940,16 @@ public class AppUtils {
         return jobApplyRequest;
     }
 
-    public static FeedRequestPojo feedDetailRequestBuilder(String typeOfFeed, int pageNo, long idForDetail) {
+    public  FeedRequestPojo feedDetailRequestBuilder(String typeOfFeed, int pageNo, long idForDetail) {
 
         FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, pageNo);
         feedRequestPojo.setIdForFeedDetail(idForDetail);
         return feedRequestPojo;
+    }
+    public EventRequest eventRequestBuilder(long idForDetail) {
+
+        EventRequest eventRequest = new EventRequest();
+        return eventRequest;
     }
 
     private static FeedRequestPojo makeFeedRequest(String typeOfFeed, int pageNo) {

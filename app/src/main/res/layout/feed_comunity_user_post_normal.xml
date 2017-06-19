@@ -6,6 +6,7 @@
     android:layout_marginBottom="@dimen/dp_size_10">
 
     <LinearLayout
+        android:id="@+id/li_community_post_main_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -27,7 +28,7 @@
                 <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
                     android:id="@+id/iv_feed_community_post_circle_icon"
                     android:layout_width="@dimen/feed_profile_icon_size"
-                    android:layout_height="@dimen/feed_profile_icon_size"/>
+                    android:layout_height="@dimen/feed_profile_icon_size" />
 
                 <ImageView
                     android:id="@+id/iv_feed_community_post_circle_icon_verified"
@@ -49,8 +50,8 @@
                     android:id="@+id/tv_feed_community_post_card_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/feed_article_label"
                     android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                    android:textColor="@color/feed_article_label"
                     android:textSize="@dimen/sp_size_15" />
 
                 <TextView
@@ -81,14 +82,15 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_size_16"
             android:layout_marginRight="@dimen/dp_size_18"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:lineSpacingExtra="@dimen/dp_size_3"
-            android:maxLines="@integer/int_value_for_line_2"
             android:autoLink="web"
             android:ellipsize="end"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:lineSpacingExtra="@dimen/dp_size_3"
             android:linksClickable="true"
+            android:maxLines="@integer/int_value_for_line_2"
             android:textColor="@color/feed_article_label"
             android:textSize="@dimen/sp_size_14" />
+
         <TextView
             android:id="@+id/tv_feed_community_post_text_full_view"
             android:layout_width="match_parent"
@@ -97,11 +99,12 @@
             android:layout_marginRight="@dimen/dp_size_16"
             android:autoLink="web"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:visibility="gone"
-            android:linksClickable="true"
             android:lineSpacingExtra="@dimen/dp_size_3"
+            android:linksClickable="true"
             android:textColor="@color/feed_article_label"
-            android:textSize="@dimen/sp_size_14" />
+            android:textSize="@dimen/sp_size_14"
+            android:visibility="gone" />
+
         <TextView
             android:id="@+id/tv_feed_community_post_view_more"
             android:layout_width="wrap_content"
@@ -111,11 +114,11 @@
             android:layout_marginRight="@dimen/dp_size_20"
             android:background="@color/white"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:visibility="gone"
             android:gravity="center"
             android:text="@string/ID_VIEW_MORE"
             android:textColor="@color/feed_job_card_new"
-            android:textSize="@dimen/sp_size_14" />
+            android:textSize="@dimen/sp_size_14"
+            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/li_feed_community_user_post_images"
@@ -130,8 +133,8 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_size_0.5"
             android:layout_marginLeft="@dimen/dp_size_13"
-            android:layout_marginTop="@dimen/dp_size_8"
             android:layout_marginRight="@dimen/dp_size_13"
+            android:layout_marginTop="@dimen/dp_size_8"
             android:background="@color/search_tab_unselected_text" />
 
         <LinearLayout
@@ -176,18 +179,27 @@
                 android:layout_width="@dimen/dp_size_40"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_marginLeft="@dimen/dp_size_100"
+                android:layout_marginLeft="@dimen/dp_size_60"
                 android:drawableRight="@drawable/ic_bookmark_in_active"
                 android:gravity="center"
                 android:paddingRight="@dimen/dp_size_20" />
 
+            <TextView
+                android:id="@+id/tv_feed_community_post_user_share"
+                android:layout_width="@dimen/dp_size_40"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dp_size_15"
+                android:drawableRight="@drawable/ic_share_card"
+                android:gravity="center"
+                android:paddingRight="@dimen/dp_size_10" />
 
             <TextView
                 android:id="@+id/tv_feed_community_post_user_menu"
                 android:layout_width="@dimen/dp_size_20"
                 android:layout_height="match_parent"
                 android:layout_gravity="right"
-                android:layout_marginLeft="@dimen/dp_size_40"
+                android:layout_marginLeft="@dimen/dp_size_25"
                 android:drawableRight="@drawable/ic_menu_dashboard"
                 android:paddingRight="@dimen/dp_size_10" />
         </LinearLayout>
@@ -270,7 +282,7 @@
                 <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
                     android:id="@+id/iv_feed_community_post_user_pic"
                     android:layout_width="@dimen/comment_icon"
-                    android:layout_height="@dimen/comment_icon"/>
+                    android:layout_height="@dimen/comment_icon" />
 
                 <ImageView
                     android:id="@+id/iv_feed_community_post_user_icon_verified"
@@ -341,4 +353,10 @@
                 android:textSize="@dimen/sp_size_12" />
         </LinearLayout>
     </LinearLayout>
+
+    <include
+        android:id="@+id/li_event_card_main_layout"
+        layout="@layout/feed_event_card"
+        android:visibility="gone" />
+
 </android.support.v7.widget.CardView>

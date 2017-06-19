@@ -24,6 +24,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineChatDoc;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.DrawerItems;
+import appliedlife.pvtltd.SHEROES.models.entities.home.EventDetailPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.home.EventSpeakerData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.models.entities.home.ProfileItems;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobDetailPojo;
@@ -395,6 +397,16 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new FAQViewHolder(view, viewInterface);
         }
+    }, EVENT_DETAIL_HOLDER(R.layout.event_detail_holder) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new EventDetailHolder(view, viewInterface);
+        }
+    },EVENT_SPEAKER_HOLDER(R.layout.event_speaker_holder) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new EventSpeakerHolder(view, viewInterface);
+        }
     };
     public Object object;
     public int layout;
@@ -508,7 +520,7 @@ public enum HolderMapping {
                 } else if (item instanceof HomeSpinnerItem) {
                     returnView = HOME_SPINNER_ITEMS.ordinal();
                 } else if (item instanceof ArticleDetailPojo) {
-                    returnView = ARTICLE_DETAIL_HOLDER.ordinal();//TODO: Home related changes
+                    returnView = ARTICLE_DETAIL_HOLDER.ordinal();
                 } else if (item instanceof JobDetailPojo) {
                     returnView = JOB_DETAIL_HOLDER.ordinal();
                 } else if (item instanceof ProfileHorList) {
@@ -595,6 +607,10 @@ public enum HolderMapping {
                     returnView = ICC_MEMBER_CARD.ordinal();
                 } else if (item instanceof FAQS) {
                     returnView = FAQS_CARD.ordinal();
+                }else if (item instanceof EventDetailPojo) {
+                    returnView = EVENT_DETAIL_HOLDER.ordinal();
+                }else if (item instanceof EventSpeakerData) {
+                    returnView = EVENT_SPEAKER_HOLDER.ordinal();
                 }
             }
         }

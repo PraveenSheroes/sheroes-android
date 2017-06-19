@@ -62,6 +62,8 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
     ImageView ivFeedJobMenu;
     @Bind(R.id.li_feed_job_card)
     LinearLayout liFeedJobCard;
+    @Bind(R.id.tv_feed_job_user_share)
+    TextView tvFeedJobUserShare;
     BaseHolderInterface viewInterface;
     private FeedDetail dataItem;
     @Inject
@@ -193,7 +195,10 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
         dataItem.setItemPosition(getAdapterPosition());
         viewInterface.handleOnClick(dataItem, liFeedJobCard);
     }
-
+    @OnClick(R.id.tv_feed_job_user_share)
+    public void tvFeedJobShare() {
+        viewInterface.handleOnClick(dataItem, tvFeedJobUserShare);
+    }
     @Override
     public void viewRecycled() {
 

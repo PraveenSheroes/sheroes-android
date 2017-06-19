@@ -23,12 +23,10 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.f2prateek.rx.preferences.Preference;
-import com.google.android.gms.vision.text.Line;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -49,10 +47,10 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LastComment;
-import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineChatDoc;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.home.EventDetailPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
@@ -536,6 +534,11 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
 
     @Override
     public void getNotificationReadCountSuccess(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
+
+    }
+
+    @Override
+    public void getEventListResponse(EventDetailPojo eventDetailPojo) {
 
     }
 

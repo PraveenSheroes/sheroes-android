@@ -88,6 +88,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
     private MoEHelper mMoEHelper;
     private PayloadBuilder payloadBuilder;
     private MoEngageUtills moEngageUtills;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,7 +102,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
     @Override
     protected void onStart() {
         super.onStart();
-        if(null!=mMoEHelper) {
+        if (null != mMoEHelper) {
             mMoEHelper.onStart(this);
         }
     }
@@ -293,6 +294,18 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
             case R.id.tv_article_bookmark:
                 bookMarkTrending();
                 break;
+            case R.id.tv_feed_community_post_user_share:
+                shareCardViaSocial(baseResponse);
+                break;
+            case R.id.tv_feed_article_user_share:
+                shareCardViaSocial(baseResponse);
+                break;
+            case R.id.tv_feed_job_user_share:
+                shareCardViaSocial(baseResponse);
+                break;
+            case R.id.tv_article_share:
+                shareCardViaSocial(baseResponse);
+                break;
             /*Card menu option depend on Feed type like post,article etc */
             case R.id.tv_feed_community_post_user_menu:
                 clickMenuItem(view, baseResponse, FEED_CARD_MENU);
@@ -301,9 +314,6 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 clickMenuItem(view, baseResponse, FEED_CARD_MENU);
                 break;
             case R.id.tv_feed_job_user_menu:
-                clickMenuItem(view, baseResponse, FEED_CARD_MENU);
-                break;
-            case R.id.tv_article_menu:
                 clickMenuItem(view, baseResponse, FEED_CARD_MENU);
                 break;
             /* All user comment menu option edit,delete */
@@ -435,6 +445,15 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
         }
     }
 
+    private void shareCardViaSocial(BaseResponse baseResponse) {
+        FeedDetail feedDetail = (FeedDetail) baseResponse;
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType(AppConstants.SHARE_MENU_TYPE);
+        intent.putExtra(Intent.EXTRA_TEXT, feedDetail.getDeepLinkUrl());
+        startActivity(Intent.createChooser(intent, AppConstants.SHARE));
+        moEngageUtills.entityMoEngageCardShareVia(getApplicationContext(), mMoEHelper, payloadBuilder, feedDetail, MoEngageConstants.SHARE_VIA_SOCIAL);
+    }
+
     protected void clickMenuItem(View view, final BaseResponse baseResponse, final MenuEnum menuEnum) {
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         popupView = layoutInflater.inflate(R.layout.menu_option_layout, null);
@@ -483,12 +502,6 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                         ((HomeFragment) fragment).commentListRefresh(mFeedDetail);
                     }
                 }*/
-                FeedDetail feedDetail = (FeedDetail) baseResponse;
-                Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setType(AppConstants.SHARE_MENU_TYPE);
-                intent.putExtra(Intent.EXTRA_TEXT, feedDetail.getDeepLinkUrl());
-                startActivity(Intent.createChooser(intent, AppConstants.SHARE));
-                moEngageUtills.entityMoEngageCardShareVia(getApplicationContext(), mMoEHelper, payloadBuilder, feedDetail, MoEngageConstants.SHARE_VIA_SOCIAL);
                 popupWindow.dismiss();
             }
         });
@@ -499,11 +512,11 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 popupWindow.dismiss();
             }
         });
-        setMenuOptionVisibility(view, tvEdit, tvDelete, tvShare, tvReport, baseResponse);
+        setMenuOptionVisibility(view, tvEdit, tvDelete, tvShare, tvReport, baseResponse,liFeedMenu);
     }
 
 
-    private void setMenuOptionVisibility(View view, TextView tvEdit, TextView tvDelete, TextView tvShare, TextView tvReport, BaseResponse baseResponse) {
+    private void setMenuOptionVisibility(View view, TextView tvEdit, TextView tvDelete, TextView tvShare, TextView tvReport, BaseResponse baseResponse,LinearLayout liFeedMenu) {
         int id = view.getId();
         switch (id) {
             case R.id.tv_feed_article_user_comment_post_menu:
@@ -511,10 +524,10 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 tvDelete.setVisibility(View.VISIBLE);
                 break;
             case R.id.tv_feed_article_user_menu:
-                tvShare.setVisibility(View.VISIBLE);
+                // tvShare.setVisibility(View.VISIBLE);
                 break;
             case R.id.tv_feed_job_user_menu:
-                tvShare.setVisibility(View.VISIBLE);
+                //  tvShare.setVisibility(View.VISIBLE);
                 break;
             case R.id.tv_user_comment_list_menu:
                 tvEdit.setVisibility(View.VISIBLE);
@@ -527,9 +540,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 tvEdit.setVisibility(View.VISIBLE);
                 tvDelete.setVisibility(View.VISIBLE);
                 break;
-            case R.id.tv_article_menu:
-                tvShare.setVisibility(View.VISIBLE);
-                break;
+
             case R.id.tv_feed_community_post_user_menu:
                 mFeedDetail = (FeedDetail) baseResponse;
                 if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
@@ -543,7 +554,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                         }
                         tvReport.setVisibility(View.GONE);
                     }
-                    tvShare.setVisibility(View.VISIBLE);
+                    //  tvShare.setVisibility(View.VISIBLE);
                 }
                 break;
             default:

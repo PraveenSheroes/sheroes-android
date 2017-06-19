@@ -17,7 +17,6 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.articleCategoryRequestBuilder;
-import static appliedlife.pvtltd.SHEROES.utils.AppUtils.feedDetailRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.feedRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.getBookMarks;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.getCommentRequestBuilder;
@@ -150,10 +149,10 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                         mHomePresenter.getFeedFromPresenter(feedRequestBuilder(AppConstants.FEED_JOB,pageNo));
                         break;
                     case AppConstants.COMMUNITY_DETAIL:
-                        mHomePresenter.getFeedFromPresenter(feedDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST,pageNo,mFragmentListRefreshData.getIdFeedDetail()));
+                        mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST,pageNo,mFragmentListRefreshData.getIdFeedDetail()));
                         break;
                     case AppConstants.ARTICLE_DETAIL:
-                        mHomePresenter.getFeedFromPresenter(feedDetailRequestBuilder(AppConstants.FEED_ARTICLE,pageNo,mFragmentListRefreshData.getIdFeedDetail()));
+                        mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_ARTICLE,pageNo,mFragmentListRefreshData.getIdFeedDetail()));
                         break;
                     case AppConstants.BOOKMARKS:
                         mHomePresenter.getBookMarkFromPresenter(getBookMarks(pageNo));

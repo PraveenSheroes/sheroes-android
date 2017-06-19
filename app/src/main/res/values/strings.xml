@@ -89,6 +89,8 @@
     <string name="ID_CELL_PHONE_NUMBER">CELL PHONE NUMBER</string>
     <string name="ID_VIEW_MORE_COMMENT">View more replies</string>
     <string name="ID_JOIN">Join</string>
+    <string name="ID_INTERESTED">Interested</string>
+    <string name="ID_GOING">Going</string>
     <string name="ID_REQUESTED">Requested</string>
     <string name="ID_JOINED">Joined</string>
     <string name="ID_VIEW">View</string>
@@ -882,6 +884,9 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_ADD_PHOTO">Let\'s make this moment more special by adding a photo.</string>
     <string name="ID_CHOOSE_PHOTO">Choose Photo From gallery</string>
     <string name="ID_ADD_YOU_TUBE_LINK">Add Youtube link..</string>
+    <string name="ID_DETAIL_ABOUT_EVENT">Details about the event</string>
+    <string name="ID_SPEAKER">Speaker</string>
+    <string name="ID_SPONSORS">Sponsors</string>
     <string name="ID_ONCE_CARD_TITLE">Welcome To The SHEROES Feed</string>
     <string name="ID_CIRCLE_SUPPORT">Your Circle Of Support</string>
     <string name="ID_ONCE_CARD_DETAIL1">Connect, Network and Hangout with peers and influencers</string>

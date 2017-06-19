@@ -61,6 +61,36 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     DateUtil mDateUtil;
     @Inject
     Preference<LoginResponse> userPreference;
+    //Event handling
+    @Bind(R.id.li_event_card_main_layout)
+    LinearLayout liEventCardMainLayout;
+    @Bind(R.id.li_community_post_main_layout)
+    LinearLayout liCommunityPostMainLayout;
+    @Bind(R.id.li_feed_event_images)
+    LinearLayout liFeedEventImages;
+    @Bind(R.id.tv_event_interested_btn)
+    TextView tvEventInterestedBtn;
+    @Bind(R.id.tv_event_going_btn)
+    TextView tvEventGoingBtn;
+    @Bind(R.id.tv_event_share_btn)
+    TextView tvEventShareBtn;
+    @Bind(R.id.tv_event_interested_people)
+    TextView tvEventInterestedPeople;
+    @Bind(R.id.tv_event_title)
+    TextView tvEventTitle;
+    @Bind(R.id.tv_event_month)
+    TextView tvEventMonth;
+    @Bind(R.id.tv_event_day)
+    TextView tvEventDay;
+    @Bind(R.id.iv_feed_event_icon)
+    CircleImageView ivFeedEventIcon;
+    @Bind(R.id.tv_feed_event_card_title)
+    TextView tvFeedEventCardTitle;
+    @Bind(R.id.tv_feed_event_time)
+    TextView tvFeedEventTime;
+
+
+    //Communitypost handling
     @Bind(R.id.li_feed_community_post_user_comments)
     LinearLayout liFeedCommunityPostUserComments;
     @Bind(R.id.li_feed_community_user_post_images)
@@ -71,6 +101,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     CircleImageView ivFeedCommunityPostCircleIcon;
     @Bind(R.id.line_for_no_image)
     View lineForNoImage;
+    @Bind(R.id.tv_feed_community_post_user_share)
+    TextView tvFeedCommunityPostUserShare;
     @Bind(R.id.tv_feed_community_post_user_reaction)
     TextView tvFeedCommunityPostUserReaction;
     @Bind(R.id.tv_feed_community_post_user_reaction_text)
@@ -135,34 +167,87 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     public void bindData(FeedDetail item, final Context context, int position) {
         this.dataItem = item;
         mContext = context;
-        mViewMore = context.getString(R.string.ID_VIEW_MORE);
-        mLess = context.getString(R.string.ID_LESS);
         dataItem.setItemPosition(position);
-        tvFeedCommunityPostText.setTag(mViewMore);
-        tvFeedCommunityPostTextFullView.setTag(mViewMore);
-        tvFeedCommunityPostUserBookmark.setEnabled(true);
-        tvFeedCommunityPostUserReaction.setEnabled(true);
-        tvFeedCommunityPostUserReactionText.setEnabled(true);
-        dataItem.setLastReactionValue(dataItem.getReactionValue());
-        if (!dataItem.isTrending()) {
-            imageOperations(context);
-            multipleImageURLs();
-        }
-        //TODO:: Need to verify when share and mark spam option
-      /*  if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
-            if (dataItem.getAuthorId() == userPreference.get().getUserSummary().getUserId() || dataItem.isOwner()) {
-                tvFeedCommunityPostUserMenu.setVisibility(View.VISIBLE);
-            } else {
-                tvFeedCommunityPostUserMenu.setVisibility(View.GONE);
+        if (dataItem.getCommunityId() == 299) {
+            liCommunityPostMainLayout.setVisibility(View.GONE);
+            liEventCardMainLayout.setVisibility(View.VISIBLE);
+            imageSetOnEventBackground();
+
+        } else {
+            liCommunityPostMainLayout.setVisibility(View.VISIBLE);
+            liEventCardMainLayout.setVisibility(View.GONE);
+            mViewMore = context.getString(R.string.ID_VIEW_MORE);
+            mLess = context.getString(R.string.ID_LESS);
+            tvFeedCommunityPostText.setTag(mViewMore);
+            tvFeedCommunityPostTextFullView.setTag(mViewMore);
+            tvFeedCommunityPostUserBookmark.setEnabled(true);
+            tvFeedCommunityPostUserReaction.setEnabled(true);
+            tvFeedCommunityPostUserReactionText.setEnabled(true);
+            dataItem.setLastReactionValue(dataItem.getReactionValue());
+            if (!dataItem.isTrending()) {
+                imageOperations(context);
+                multipleImageURLs();
             }
-        }*/
-        onBookMarkClick();
-        allTextViewStringOperations(context);
+            onBookMarkClick();
+            allTextViewStringOperations(context);
+            if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
+                if (dataItem.getAuthorId() == userPreference.get().getUserSummary().getUserId() || dataItem.isOwner()) {
+                    tvFeedCommunityPostUserMenu.setVisibility(View.VISIBLE);
+                } else {
+                    tvFeedCommunityPostUserMenu.setVisibility(View.GONE);
+                }
+            }
+        }
+
+    }
+
+    @TargetApi(AppConstants.ANDROID_SDK_24)
+    private void imageSetOnEventBackground() {
+        if (StringUtil.isNotNullOrEmptyString(dataItem.getAuthorName())) {
+            StringBuilder posted = new StringBuilder();
+            String feedTitle = dataItem.getAuthorName();
+            String feedCommunityName = dataItem.getPostCommunityName();
+            if (!feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_ADMIN))) {
+                posted.append(feedTitle).append(AppConstants.SPACE).append(LEFT_POSTED).append(mContext.getString(R.string.ID_POSTED_IN)).append(RIGHT_POSTED).append(AppConstants.SPACE);
+            }
+            posted.append(feedCommunityName);
+            if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                tvFeedCommunityPostCardTitle.setText(Html.fromHtml(posted.toString(), 0)); // for 24 api and more
+            } else {
+                tvFeedCommunityPostCardTitle.setText(Html.fromHtml(posted.toString()));// or for older api
+            }
+        }
+        if (StringUtil.isNotNullOrEmptyString(dataItem.getCreatedDate())) {
+            long createdDate = mDateUtil.getTimeInMillis(dataItem.getCreatedDate(), AppConstants.DATE_FORMAT);
+            tvFeedCommunityPostTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
+        }
+
+        String authorImageUrl = dataItem.getAuthorImageUrl();
+        if (StringUtil.isNotNullOrEmptyString(authorImageUrl)) {
+            ivFeedEventIcon.setCircularImage(true);
+            ivFeedEventIcon.bindImage(authorImageUrl);
+        }
+
+        LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View child = layoutInflater.inflate(R.layout.challenge_image, null);
+        ImageView ivChallenge = (ImageView) child.findViewById(R.id.iv_feed_challenge);
+        LinearLayout liImageText = (LinearLayout) child.findViewById(R.id.li_image_text);
+        liImageText.setVisibility(View.GONE);
+        if (StringUtil.isNotEmptyCollection(dataItem.getImageUrls())) {
+            Glide.with(mContext)
+                    .load(dataItem.getImageUrls().get(0))
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .skipMemoryCache(true)
+                    .into(ivChallenge);
+        }
+        liFeedEventImages.addView(child);
+
 
     }
 
     private void multipleImageURLs() {
         if (dataItem.getCommunityId() == AppConstants.NO_REACTION_CONSTANT) {
+            tvFeedCommunityPostUserShare.setVisibility(View.GONE);
             liFeedCommunityUserPostImages.removeAllViews();
             liFeedCommunityUserPostImages.removeAllViewsInLayout();
             liFeedCommunityUserPostImages.setVisibility(View.VISIBLE);
@@ -190,6 +275,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             }
             liFeedCommunityUserPostImages.addView(child);
         } else {
+            tvFeedCommunityPostUserShare.setVisibility(View.VISIBLE);
             ivFeedCommunityPostMenu.setBackgroundResource(R.drawable.ic_search_group_icon);
             if (StringUtil.isNotEmptyCollection(dataItem.getImageUrls())) {
                 liFeedCommunityUserPostImages.setVisibility(View.VISIBLE);
@@ -677,16 +763,22 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         liFeedCommunityUserPostImages.addView(child);
     }
 
+    @OnClick(R.id.li_event_card_main_layout)
+    public void onEventClick() {
+        viewInterface.handleOnClick(dataItem, liEventCardMainLayout);
+    }
     @OnClick(R.id.tv_feed_community_post_total_replies)
     public void repliesClick() {
         dataItem.setCallFromName(mContext.getString(R.string.ID_REPLY));
         viewInterface.handleOnClick(dataItem, liFeedCommunityPostJoinConversation);
     }
-
+    @OnClick(R.id.li_feed_event_images)
+    public void eventImageClick() {
+        viewInterface.dataOperationOnClick(dataItem);
+    }
     @OnClick(R.id.li_feed_community_user_post_images)
     public void communityPostImageClick() {
         viewInterface.dataOperationOnClick(dataItem);
-        //  viewInterface.handleOnClick(dataItem, liFeedCommunityUserPostImages);
     }
 
     @OnClick(R.id.li_feed_community_post_join_conversation)
@@ -869,6 +961,11 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         onBookMarkClick();
     }
 
+    @OnClick(R.id.tv_feed_community_post_user_share)
+    public void tvShareClick() {
+        viewInterface.handleOnClick(dataItem, tvFeedCommunityPostUserShare);
+    }
+
     @OnClick(R.id.tv_feed_community_post_total_reactions)
     public void reactionClick() {
         viewInterface.handleOnClick(dataItem, tvFeedCommunityPostTotalReactions);
@@ -927,5 +1024,21 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         vibe.vibrate(100);
         dataItem.setLongPress(true);
         viewInterface.handleOnClick(dataItem, tvFeedCommunityPostUserReaction);
+    }
+
+
+    @OnClick(R.id.tv_event_interested_btn)
+    public void onEventInterestedClick() {
+        viewInterface.handleOnClick(dataItem, tvEventInterestedBtn);
+    }
+
+    @OnClick(R.id.tv_event_going_btn)
+    public void onEventGoingClick() {
+        viewInterface.handleOnClick(dataItem, tvEventGoingBtn);
+    }
+
+    @OnClick(R.id.tv_event_share_btn)
+    public void onEventShareClick() {
+        viewInterface.handleOnClick(dataItem, tvEventShareBtn);
     }
 }

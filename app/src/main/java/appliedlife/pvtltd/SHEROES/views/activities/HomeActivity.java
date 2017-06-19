@@ -108,6 +108,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.SettingFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SettingTermsAndConditionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ChallengeSuccessDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ChallengeUpdateProgressDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.MyCommunityInviteMemberDialogFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -283,17 +284,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .skipMemoryCache(true)
                     .into(mIvSideDrawerProfileBlurBackground);
-          /*  Glide.with(this)
-                    .load(profile).asBitmap()
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .skipMemoryCache(true)
-                    .into(new SimpleTarget<Bitmap>() {
-                        @Override
-                        public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
-                            Bitmap blurred = BlurrImage.blurRenderScript(HomeActivity.this, profileImage, 10);
-                            mIvSideDrawerProfileBlurBackground.setImageBitmap(blurred);
-                        }
-                    });*/
         }
     }
 
@@ -382,7 +372,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     private void challengeIdHandle(String urlOfSharedCard) {
         if (urlOfSharedCard.contains(AppConstants.CHALLENGE_URL) || urlOfSharedCard.contains(AppConstants.CHALLENGE_URL_COM)) {
             try {
-                int indexOfFirstEqual =AppUtils.findNthIndexOf(urlOfSharedCard, "=", 1);
+                int indexOfFirstEqual = AppUtils.findNthIndexOf(urlOfSharedCard, "=", 1);
                 String challengeUrl = urlOfSharedCard.substring(indexOfFirstEqual + 1, urlOfSharedCard.length());
                 if (StringUtil.isNotNullOrEmptyString(challengeUrl)) {
                     String ChallengeId = challengeUrl;
@@ -394,8 +384,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
-        }else
-        {
+        } else {
             Uri url = Uri.parse(urlOfSharedCard);
             Intent intent = new Intent(this, SheroesDeepLinkingActivity.class);
             intent.setData(url);
@@ -429,6 +418,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                         myCommunityInviteMemberDialogFragment.onAddMemberClick(mFeedDetail);
                     }
                 }
+            } else if (id == R.id.li_event_card_main_layout) {
+                eventDetailDialog();
             } else {
                 mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.ONE_CONSTANT);
                 setAllValues(mFragmentOpen);
@@ -629,6 +620,19 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         return mChallengeSuccessDialogFragment;
     }
 
+    public DialogFragment eventDetailDialog() {
+        EventDetailDialogFragment eventDetailDialogFragment = (EventDetailDialogFragment) getFragmentManager().findFragmentByTag(EventDetailDialogFragment.class.getName());
+        if (eventDetailDialogFragment == null) {
+            eventDetailDialogFragment = new EventDetailDialogFragment();
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(AppConstants.SUCCESS, mFeedDetail);
+            eventDetailDialogFragment.setArguments(bundle);
+        }
+        if (!eventDetailDialogFragment.isVisible() && !eventDetailDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
+            eventDetailDialogFragment.show(getFragmentManager(), EventDetailDialogFragment.class.getName());
+        }
+        return eventDetailDialogFragment;
+    }
 
     private void totalTimeSpentOnFeed() {
         long timeSpentFeed = System.currentTimeMillis() - startedTime;
@@ -1122,9 +1126,9 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     }
 
     private void gotBackToFragmentForSheUSer() {
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && false != mUserPreference.get().isSheUser() ) {
-            if(mTitleText.getText()!=null && mTitleText.getText() instanceof String ){
-                if(((String)mTitleText.getText()).equals(getString(R.string.ID_ICC_MEMBERS))){
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && false != mUserPreference.get().isSheUser()) {
+            if (mTitleText.getText() != null && mTitleText.getText() instanceof String) {
+                if (((String) mTitleText.getText()).equals(getString(R.string.ID_ICC_MEMBERS))) {
                     checkForAllOpenFragments();
                     mFragmentOpen.setICCMemberListFragment(true);
                     renderICCMemberListView();
@@ -1135,7 +1139,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 } else if (((String) mTitleText.getText()).equals(getString(R.string.ID_APP_NAME))) {
                     checkForAllOpenFragments();
                     openHelplineFragment();
-                } else if(((String)mTitleText.getText()).equals(AppConstants.EMPTY_STRING)){
+                } else if (((String) mTitleText.getText()).equals(AppConstants.EMPTY_STRING)) {
                     checkForAllOpenFragments();
                     mFragmentOpen.setFeedFragment(true);
                     renderHomeFragmentView();
@@ -1537,7 +1541,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     }
 
     private void communityDetailActivityResponse(Intent intent) {
-        if (null != intent && null != intent.getExtras()) {
+        if (null != intent && null != intent.getExtras() && null != (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITIES_DETAIL)) {
             mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITIES_DETAIL);
             CommunityEnum communityEnum = (CommunityEnum) intent.getExtras().get(AppConstants.MY_COMMUNITIES_FRAGMENT);
             if (null != communityEnum) {

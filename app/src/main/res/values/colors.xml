@@ -20,6 +20,7 @@
     <color name="added_member">#56596b</color>
     <color name="dashboard_text">#323940</color>
     <color name="detail_page_text">#4a4a4a</color>
+    <color name="event_text">#898989</color>
     <color name="logging">#8793de</color>
     <color name="dashboard_fed_text">#757e87</color>
     <color name="noConnection">#2f2f2f</color>
