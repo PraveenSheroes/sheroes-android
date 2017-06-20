@@ -13,8 +13,10 @@
         android:scaleType="fitXY" />
 
     <FrameLayout
+        android:id="@+id/profile_link"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:clickable="true">
 
         <TextView
             android:layout_width="match_parent"
@@ -50,7 +52,7 @@
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:textAllCaps="true"
                 android:textColor="@color/white"
-                android:textSize="@dimen/dp_size_15" />
+                android:textSize="@dimen/sp_size_15" />
 
             <TextView
                 android:id="@+id/tv_user_location"
@@ -60,7 +62,7 @@
                 android:layout_marginTop="@dimen/dp_size_10"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:textColor="@color/white"
-                android:textSize="@dimen/dp_size_12" />
+                android:textSize="@dimen/sp_size_12" />
         </LinearLayout>
     </FrameLayout>
 </FrameLayout>

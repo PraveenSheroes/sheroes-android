@@ -89,6 +89,16 @@ public class MoEngageUtills {
         mMoEHelper.trackEvent(MoEngageEvent.EVENT_VIEWED_FAQS.value, payloadBuilder.build());
     }
 
+    public void entityMoEngageVerifyEmail(Context context, MoEHelper mMoEHelper, PayloadBuilder payloadBuilder, long timeSpentFeed) {
+        payloadBuilder.putAttrLong(MoEngageConstants.TIME_SPENT, timeSpentFeed);
+        mMoEHelper.trackEvent(MoEngageEvent.EVENT_VERIFY_EMAIL.value, payloadBuilder.build());
+    }
+
+    public void entityMoEngageForgotPassword(Context context, MoEHelper mMoEHelper, PayloadBuilder payloadBuilder, long timeSpentFeed) {
+        payloadBuilder.putAttrLong(MoEngageConstants.TIME_SPENT, timeSpentFeed);
+        mMoEHelper.trackEvent(MoEngageEvent.EVENT_FORGET_PWD.value, payloadBuilder.build());
+    }
+
     private String getCardTag(FeedDetail feedDetail) {
         StringBuilder mergeTags = new StringBuilder();
         if (StringUtil.isNotEmptyCollection(feedDetail.getTags())) {

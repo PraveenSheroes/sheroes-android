@@ -36,6 +36,7 @@ public class AppConstants {
     public static final String CASE_NOT_HANDLED = "Case not handled on : ";
     public static final String EMPTY_STRING = "";
     public static final String COMMA = ",";
+    public static final String AT_THE_RATE_OF = "@";
     public static final String PRESENT = "PRESENT";
     public static final String PER_ANUM = "/ Annum";
     public static final String HOME_SPINNER_FRAGMENT = "spinner_fragment";
@@ -131,6 +132,7 @@ public class AppConstants {
     public static final String SHARE = "Share";
     public static final String EMAIL_OPTION = "Send email...";
     public static final String MAIL_TO = "mailto";
+    public static final String EMAIL = "email";
 
     public static final int WORD_COUNT = 95;
     public static final int WORD_LENGTH = 95;
@@ -323,4 +325,6 @@ public class AppConstants {
     public static final String HELPLINE_URL = "https://sheroes.in/helpline";
     public static final String HELPLINE_URL_COM = "https://sheroes.com/helpline";
     public static final String HELPLINE_CHAT = "helpline_chat";
+    public static final String EMAIL_VERIFICATION = "email_verification";
+    public static final String FORGOT_PASSWORD = "forgot_password";
 }

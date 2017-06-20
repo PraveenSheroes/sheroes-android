@@ -1732,4 +1732,15 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             }
         }
     }
+
+    @OnClick(R.id.profile_link)
+    public void onClickProfile(){
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && false != mUserPreference.get().isSheUser() ) {
+            Intent intent = new Intent(this, ProfileActicity.class);
+            intent.putExtra(AppConstants.EXTRA_IMAGE, profile);
+            startActivity(intent);
+            overridePendingTransition(R.anim.fade_in_dialog, R.anim.fade_out_dialog);
+            totalTimeSpentOnFeed();
+        }
+    }
 }

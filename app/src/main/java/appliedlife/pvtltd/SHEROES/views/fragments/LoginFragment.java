@@ -35,6 +35,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.LoginActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.LoginView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -187,6 +188,15 @@ public class LoginFragment extends BaseFragment implements LoginView{
         sheroesLogIn();
     }
 
+    @OnClick(R.id.forgot_password)
+    public void onForgotPasswordClick() {
+
+        ResetPasswordFragment resetPasswordFragment = new ResetPasswordFragment();
+        this.getFragmentManager().beginTransaction()
+                .replace(R.id.fragment_login, resetPasswordFragment, ResetPasswordFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+
+    }
+
     /**
      * Attempts to sign in or register the account specified by the login form.
      * If there are form errors (invalid email, missing fields, etc.), the
@@ -270,5 +280,10 @@ public class LoginFragment extends BaseFragment implements LoginView{
                 mGcmId = ex;
             }
         });
+    }
+
+    @OnClick(R.id.iv_login_back)
+    public void backOnClick() {
+        ((LoginActivity)getActivity()).onBackPressed();
     }
 }

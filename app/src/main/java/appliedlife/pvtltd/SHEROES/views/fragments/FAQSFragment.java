@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
@@ -55,6 +56,9 @@ public class FAQSFragment extends BaseFragment implements SHEView {
 
     @Bind(R.id.pb_faqs_progress_bar)
     ProgressBar pbFAQsProgreeBar;
+
+    @Bind(R.id.scroll_view_faqs)
+    ScrollView svFaqs;
 
     GenericRecyclerViewAdapter mAdapter;
 
@@ -115,7 +119,15 @@ public class FAQSFragment extends BaseFragment implements SHEView {
         if(faqsResponse!=null && faqsResponse.getListOfFAQs()!=null){
             List<FAQS> newFaqList = new ArrayList<>();
 
+            int i = 1;
+            int size = faqsResponse.getListOfFAQs().size();
             for(FAQS faqs : faqsResponse.getListOfFAQs()){
+
+                if(i == size){
+                    faqs.setLast(true);
+                }else{
+                    faqs.setLast(false);
+                }
 
                 faqs.setItemSelected(false);
 
@@ -135,6 +147,7 @@ public class FAQSFragment extends BaseFragment implements SHEView {
                 }
                 newFaqList.add(faqs);
 
+                i++;
             }
             mAdapter.setSheroesGenericListData(newFaqList);
             mAdapter.notifyDataSetChanged();
@@ -145,7 +158,20 @@ public class FAQSFragment extends BaseFragment implements SHEView {
         mAdapter.setFAQOnPosition(faqs, faqs.getItemPosition());
         mLayoutManager.scrollToPosition(faqs.getItemPosition());
         mAdapter.notifyDataSetChanged();
+        if(faqs.isLast()){
+            goToLastInScrollView();
+        }
     }
+
+    public void goToLastInScrollView() {
+        svFaqs.post(new Runnable() {
+            @Override
+            public void run() {
+                svFaqs.fullScroll(ScrollView.FOCUS_DOWN);
+            }
+        });
+    }
+
     @Override
     public void getAllICCMembers(ICCMemberListResponse iccMemberListResponse) {
 

@@ -53,7 +53,12 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListRespon
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
+import appliedlife.pvtltd.SHEROES.models.entities.login.EmailVerificationRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.login.EmailVerificationResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.login.ForgotPasswordRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.login.ForgotPasswordResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCardResponse;
@@ -72,6 +77,7 @@ import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithAc
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CommunityView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HelplineView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.LoginView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FOR_REFRESH_FRAGMENT_LIST;
@@ -92,7 +98,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.MARK_AS_SPA
  * Title: Base fragment for all child fragment.
  * all the common behaviour.
  */
-public class BaseFragment extends Fragment implements View.OnClickListener, HomeView, CommunityView, ProfileView, HelplineView {
+public class BaseFragment extends Fragment implements View.OnClickListener, HomeView, CommunityView, ProfileView, HelplineView, LoginView {
     private final String TAG = LogUtils.makeLogTag(BaseFragment.class);
     public FragmentActivity mActivity;
     private FragmentListRefreshData mFragmentListRefreshData;
@@ -575,6 +581,16 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     public void getLogInResponse(LoginResponse loginResponse) {
     }
 
+    @Override
+    public void getGoogleExpireInResponse(ExpireInResponse expireInResponse) {
+
+    }
+
+    @Override
+    public void sendVerificationEmailSuccess(EmailVerificationResponse emailVerificationResponse) {
+
+    }
+
     /**
      * this method will be use for fragment pop
      */
@@ -726,4 +742,8 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
 
     }
 
+    @Override
+    public void sendForgotPasswordEmail(ForgotPasswordResponse forgotPasswordResponse){
+
+    }
 }

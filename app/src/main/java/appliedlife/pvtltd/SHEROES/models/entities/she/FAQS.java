@@ -27,6 +27,8 @@ public class FAQS extends BaseResponse{
     @Expose
     public int itemPosition;
 
+    private boolean isLast;
+
     public String getQuestion() {
         return question;
     }
@@ -57,5 +59,13 @@ public class FAQS extends BaseResponse{
 
     public void setItemSelected(boolean itemSelected) {
         this.itemSelected = itemSelected;
+    }
+
+    public boolean isLast() {
+        return isLast;
+    }
+
+    public void setLast(boolean last) {
+        isLast = last;
     }
 }

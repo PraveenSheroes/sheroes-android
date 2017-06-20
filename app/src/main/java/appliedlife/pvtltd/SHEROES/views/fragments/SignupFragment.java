@@ -535,10 +535,20 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
     }
 
     private void openHomeScreen() {
-        Intent boardingIntent = new Intent(getActivity(), OnBoardingActivity.class);
-        boardingIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
-        startActivity(boardingIntent);
-        getActivity().finish();
+        if(null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getNextScreen()) && mUserPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.EMAIL_VERIFICATION) && mUserPreference.get().isSheUser()){
+            Intent loginIntent = new Intent(getContext(), LoginActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString(AppConstants.SHEROES_AUTH_TOKEN, mGcmId);
+            loginIntent.putExtras(bundle);
+            loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+            startActivity(loginIntent);
+            getActivity().finish();
+        } else {
+            Intent boardingIntent = new Intent(getActivity(), OnBoardingActivity.class);
+            boardingIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+            startActivity(boardingIntent);
+            getActivity().finish();
+        }
     }
 
     public FacebookCallback<LoginResult> callback = new FacebookCallback<LoginResult>() {

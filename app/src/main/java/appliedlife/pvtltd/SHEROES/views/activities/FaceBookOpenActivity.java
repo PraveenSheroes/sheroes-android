@@ -39,6 +39,8 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.login.EmailVerificationResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.login.ForgotPasswordResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
@@ -277,6 +279,10 @@ public class FaceBookOpenActivity extends BaseActivity implements LoginView {
 
     }
 
+    @Override
+    public void sendForgotPasswordEmail(ForgotPasswordResponse forgotPasswordResponse) {
+
+    }
 
     @Override
     public void startProgressBar() {
@@ -324,6 +330,11 @@ public class FaceBookOpenActivity extends BaseActivity implements LoginView {
 
     @Override
     public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
+
+    }
+
+    @Override
+    public void sendVerificationEmailSuccess(EmailVerificationResponse emailVerificationResponse){
 
     }
 }

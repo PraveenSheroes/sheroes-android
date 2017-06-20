@@ -6,6 +6,10 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
+import appliedlife.pvtltd.SHEROES.models.entities.login.EmailVerificationRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.login.EmailVerificationResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.login.ForgotPasswordRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.login.ForgotPasswordResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.SignupRequest;
@@ -135,6 +139,33 @@ public class LoginModel {
                     @Override
                     public LoginResponse call(LoginResponse loginResponse) {
                         return loginResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+    }
+
+    public Observable<ForgotPasswordResponse> sendForgetPasswordLinkFromModel(ForgotPasswordRequest forgotPasswordRequest) {
+        LogUtils.info(TAG,"*******************"+new Gson().toJson(forgotPasswordRequest));
+        return sheroesAppServiceApi.forgotPasswordResponse(forgotPasswordRequest)
+                .map(new Func1<ForgotPasswordResponse, ForgotPasswordResponse>() {
+                    @Override
+                    public ForgotPasswordResponse call(ForgotPasswordResponse forgotPasswordResponse) {
+                        return forgotPasswordResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+    }
+    public Observable<EmailVerificationResponse> getEmailVerificationFromModel(EmailVerificationRequest emailVerificationRequest) {
+        LogUtils.info(TAG,"*******************"+new Gson().toJson(emailVerificationRequest));
+        return sheroesAppServiceApi.emailVerificationResponse(emailVerificationRequest)
+                .map(new Func1<EmailVerificationResponse, EmailVerificationResponse>() {
+                    @Override
+                    public EmailVerificationResponse call(EmailVerificationResponse emailVerificationResponse) {
+                        return emailVerificationResponse;
                     }
                 })
                 .subscribeOn(Schedulers.io())

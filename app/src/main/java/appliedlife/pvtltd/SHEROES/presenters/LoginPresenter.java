@@ -4,10 +4,15 @@ import com.f2prateek.rx.preferences.Preference;
 
 import javax.inject.Inject;
 
+import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.LoginModel;
 import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
+import appliedlife.pvtltd.SHEROES.models.entities.login.EmailVerificationRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.login.EmailVerificationResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.login.ForgotPasswordRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.login.ForgotPasswordResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.SignupRequest;
@@ -17,6 +22,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.GooglePlusRes
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.Tracking.GoogleAnalyticsTracing;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.LoginView;
 import rx.Subscriber;
@@ -235,6 +241,67 @@ public class LoginPresenter extends BasePresenter<LoginView> {
         registerSubscription(subscription);
     }
 
+    public void getForgetPasswordResponseInPresenter(ForgotPasswordRequest forgotPasswordRequest) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = mLoginModel.sendForgetPasswordLinkFromModel(forgotPasswordRequest).subscribe(new Subscriber<ForgotPasswordResponse>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                getMvpView().stopProgressBar();
+                getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
+
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append(AppConstants.FORGOT_PASSWORD).append(mSheroesApplication.getString(R.string.ID_VIEWS)).append(AppConstants.SPACE).append( e.getMessage());
+                GoogleAnalyticsTracing.screenNameTracking(mSheroesApplication,stringBuilder.toString());
+            }
+
+            @Override
+            public void onNext(ForgotPasswordResponse forgotPasswordResponse) {
+                getMvpView().stopProgressBar();
+                getMvpView().sendForgotPasswordEmail(forgotPasswordResponse);
+            }
+        });
+        registerSubscription(subscription);
+    }
+
+    public void getEmailVerificationResponseInPresenter(EmailVerificationRequest emailVerificationRequest) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = mLoginModel.getEmailVerificationFromModel(emailVerificationRequest).subscribe(new Subscriber<EmailVerificationResponse>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                getMvpView().stopProgressBar();
+                getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
+
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append(AppConstants.EMAIL_VERIFICATION).append(mSheroesApplication.getString(R.string.ID_VIEWS)).append(AppConstants.SPACE).append( e.getMessage());
+                GoogleAnalyticsTracing.screenNameTracking(mSheroesApplication,stringBuilder.toString());
+            }
+
+            @Override
+            public void onNext(EmailVerificationResponse emailVerificationResponse) {
+                getMvpView().stopProgressBar();
+                getMvpView().sendVerificationEmailSuccess(emailVerificationResponse);
+            }
+        });
+        registerSubscription(subscription);
+    }
 
     public void onStop() {
         detachView();

@@ -15,9 +15,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.fragments.EmailVerificationFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LoginFragment;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 
 /**
@@ -41,7 +41,9 @@ public class LoginActivity extends BaseActivity implements LoginFragment.LoginAc
             if (userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.FEED_SCREEN)) {
                 Intent homeIntent = new Intent(this, HomeActivity.class);
                 startActivity(homeIntent);
-            } else {
+            } else if ( userPreference.get().isSheUser() && userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.EMAIL_VERIFICATION)){
+                renderEmailVerifyFragmentView();
+            }else {
                 Intent boardingIntent = new Intent(this, OnBoardingActivity.class);
                 boardingIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(boardingIntent);
@@ -75,9 +77,13 @@ public class LoginActivity extends BaseActivity implements LoginFragment.LoginAc
 
     @Override
     public void onLoginAuthToken() {
-        Intent boardingIntent = new Intent(this, OnBoardingActivity.class);
-        boardingIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
-        startActivity(boardingIntent);
+        if ( userPreference.get().isSheUser()  && userPreference.get().getNextScreen()!=null && userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.EMAIL_VERIFICATION)) {
+            renderEmailVerifyFragmentView();
+        } else {
+            Intent boardingIntent = new Intent(this, OnBoardingActivity.class);
+            boardingIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+            startActivity(boardingIntent);
+        }
     }
 
     @Override
@@ -102,11 +108,6 @@ public class LoginActivity extends BaseActivity implements LoginFragment.LoginAc
         } else {
             showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
         }
-    }
-
-    @OnClick(R.id.iv_login_back)
-    public void backOnClick() {
-        onBackPressed();
     }
 
     @Override
@@ -135,6 +136,13 @@ public class LoginActivity extends BaseActivity implements LoginFragment.LoginAc
                 onBackPressed();
             }
         }
+    }
+
+    public void renderEmailVerifyFragmentView(){
+        setContentView(R.layout.activity_login);
+        EmailVerificationFragment emailVerificationFragment = new EmailVerificationFragment();
+        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
+                .replace(R.id.fragment_login, emailVerificationFragment, EmailVerificationFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
     }
 }
 

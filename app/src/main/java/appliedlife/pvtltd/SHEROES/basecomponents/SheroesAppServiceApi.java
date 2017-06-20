@@ -47,6 +47,10 @@ import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobApplyRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobApplyResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.login.EmailVerificationRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.login.EmailVerificationResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.login.ForgotPasswordRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.login.ForgotPasswordResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.GcmIdResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -317,4 +321,10 @@ public interface SheroesAppServiceApi {
 
     @POST("entity/she/all_icc_members")
     Observable<ICCMemberListResponse> getAllSHEICCMemberList(@Body ICCMemberRequest iccMemberRequest);
+
+    @POST("participant/user/email_verification_resend")
+    Observable<EmailVerificationResponse> emailVerificationResponse(@Body EmailVerificationRequest emailVerificationRequest);
+
+    @POST("participant/user/reset_password")
+    Observable<ForgotPasswordResponse> forgotPasswordResponse(@Body ForgotPasswordRequest forgotPasswordRequest);
 }

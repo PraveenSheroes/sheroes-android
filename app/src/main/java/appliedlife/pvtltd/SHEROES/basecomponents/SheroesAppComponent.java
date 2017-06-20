@@ -55,6 +55,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.JobFunctionalAreaFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobLocationFilter;
 import appliedlife.pvtltd.SHEROES.views.fragments.LoginFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunitiesFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.EmailVerificationFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingHowCanSheroesHelpYouFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingJobAtFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingShareYourInterestFragment;
@@ -80,6 +81,8 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ProfileTravelClientFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileVisitingCardView;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileWorkExperienceFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileWorkExperienceSelfEmploymentFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ResetPasswordFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ResetPasswordSuccessFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SearchArticleFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SearchCommunitiesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SearchIAmInterestIn;
@@ -597,5 +600,10 @@ public interface SheroesAppComponent {
 
     void inject(EventSponsorHolder eventSponsorHolder);
 
+    void inject(EmailVerificationFragment emailVerificationFragment);
+
+    void inject(ResetPasswordFragment resetPasswordFragment);
+
+    void inject(ResetPasswordSuccessFragment resetPasswordSuccessFragment);
 
 }

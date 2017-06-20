@@ -36,6 +36,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
+import appliedlife.pvtltd.SHEROES.models.entities.login.EmailVerificationResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.login.ForgotPasswordResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.InstallUpdateForMoEngage;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
@@ -207,10 +209,15 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     }
 
     private void openHomeScreen() {
-        Intent boardingIntent = new Intent(this, OnBoardingActivity.class);
-        boardingIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
-        startActivity(boardingIntent);
-        finish();
+        if(null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getNextScreen()) && userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.EMAIL_VERIFICATION) && userPreference.get().isSheUser() ){
+            openLoginActivity();
+        } else {
+            Intent boardingIntent = new Intent(this, OnBoardingActivity.class);
+            boardingIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+            startActivity(boardingIntent);
+            finish();
+        }
+
     }
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
@@ -271,13 +278,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     @OnClick(R.id.tv_other_login_option)
     public void otherLoginOption() {
         if (StringUtil.isNotNullOrEmptyString(mGcmId)) {
-            Intent loginIntent = new Intent(this, LoginActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString(AppConstants.SHEROES_AUTH_TOKEN, mGcmId);
-            loginIntent.putExtras(bundle);
-            loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
-            startActivity(loginIntent);
-            finish();
+            openLoginActivity();
         } else {
             mGetStarted.setEnabled(false);
             mOtherLoginOption.setEnabled(false);
@@ -288,6 +289,16 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                 getGcmId();
             }
         }
+    }
+
+    private void openLoginActivity() {
+        Intent loginIntent = new Intent(this, LoginActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString(AppConstants.SHEROES_AUTH_TOKEN, mGcmId);
+        loginIntent.putExtras(bundle);
+        loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+        startActivity(loginIntent);
+        finish();
     }
 
     @Override
@@ -431,6 +442,16 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     @Override
     public void getGoogleExpireInResponse(ExpireInResponse expireInResponse) {
+
+    }
+
+    @Override
+    public void sendForgotPasswordEmail(ForgotPasswordResponse forgotPasswordResponse){
+
+    }
+
+    @Override
+    public void sendVerificationEmailSuccess(EmailVerificationResponse emailVerificationResponse){
 
     }
 }

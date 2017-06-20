@@ -45,6 +45,7 @@
     <dimen name="dp_size_0.1">0.1dp</dimen>
     <dimen name="dp_size_5">5dp</dimen>
     <dimen name="dp_size_minus_5"> -5dp</dimen>
+    <dimen name="dp_size_minus_3"> -3dp</dimen>
     <dimen name="dp_size_minus_20"> -20dp</dimen>
     <dimen name="dp_size_6">6dp</dimen>
     <dimen name="dp_size_50">50dp</dimen>
@@ -171,7 +172,6 @@
     <dimen name="tell_us_image_height">207dp</dimen>
     <dimen name="challenge_card">320dp</dimen>
     <dimen name="dp_size_minus_7">-7dp</dimen>
-
 
     <!--Text sizes for SHEROES-->
     <!-- Default screen margins, per the Android Design guidelines. -->

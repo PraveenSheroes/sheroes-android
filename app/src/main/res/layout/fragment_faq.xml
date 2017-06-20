@@ -9,13 +9,28 @@
     android:layout_marginBottom="@dimen/dp_size_minus_7"
     tools:context="appliedlife.pvtltd.SHEROES.views.fragments.FAQSFragment">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_list_faqs"
+    <ScrollView
+        android:id="@+id/scroll_view_faqs"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layoutManager="LinearLayoutManager"
-        android:layout_marginTop="@dimen/dp_size_minus_20"
-        android:fitsSystemWindows="true"/>
+        android:layout_centerVertical="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_list_faqs"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layoutManager="LinearLayoutManager"
+                android:layout_marginTop="@dimen/dp_size_minus_20"
+                android:fitsSystemWindows="true"/>
+
+        </LinearLayout>
+
+    </ScrollView>
 
     <ProgressBar
         android:id="@+id/pb_faqs_progress_bar"
