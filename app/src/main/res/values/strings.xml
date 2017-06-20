@@ -52,6 +52,8 @@
     <!--Fragment classes-->
     <string name="ID_ALL">All</string>
     <string name="ID_COMMUNITIES">Communities</string>
+    <string name="ID_PEOPLE_INTERESTED">people are interested</string>
+    <string name="ID_TOTAL_GOING"> are going</string>
     <string name="ID_NO_MEMBER">No Member Selected</string>
     <string name="ID_NOTIFICATION">Notification</string>
     <string name="ID_JOBS">Jobs</string>
@@ -205,6 +207,7 @@
     <string name="ID_HOW_CAN_SHEROES">How can SHEROES help you? </string>
     <string name="ID_TERMS_AND_CONDITIONS">TERMS AND CONDITIONS</string>
     <string name="ID_LOGOUT">Logout</string>
+    <string name="ID_INVITE_WOMEN_FRIEND">Invite Women Friends</string>
     <string name="ID_CELL_PHONE">Cell Phone number</string>
     <string name="ID_LOCATION">Location</string>
     <!--string setting_feedback page-->
@@ -918,5 +921,5 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_FAQS">FAQ</string>
     <string name="ID_TRAINING">Training</string>
     <string name="ID_ICC_MEMBER_TITLE">The Internal Complaints Committee (ICC) is responsible for the investigation and redressal of complaints regarding sexual harassment.</string>
-
+    <string name="ID_EVENT">Event</string>
 </resources>

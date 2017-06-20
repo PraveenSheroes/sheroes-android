@@ -24,7 +24,6 @@ import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.Profile;
@@ -206,7 +205,7 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
 
     public void signOut() {
         //Check is required otherwise illegal state exception might be thrown
-        if (null!=mGoogleApiClient&&mGoogleApiClient.isConnected()) {
+        if (null != mGoogleApiClient && mGoogleApiClient.isConnected()) {
             Auth.GoogleSignInApi.signOut(mGoogleApiClient);
         }
     }
@@ -402,7 +401,6 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
     }
 
     private void faceBookInitialization() {
-        FacebookSdk.sdkInitialize(getContext());
         callbackManager = CallbackManager.Factory.create();
         accessTokenTracker = new AccessTokenTracker() {
             @Override
@@ -434,6 +432,9 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
                         loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
                         loginResponse.setGcmId(mGcmId);
                         moEngageUtills.entityMoEngageUserAttribute(getActivity(), mMoEHelper, payloadBuilder, loginResponse);
+                        if (StringUtil.isNotNullOrEmptyString(mobileNo)) {
+                            mMoEHelper.setNumber(mobileNo);
+                        }
                         mUserPreference.set(loginResponse);
                         if (null != loginResponse.getUserSummary() && null != loginResponse.getUserSummary().getUserBO() && StringUtil.isNotNullOrEmptyString(loginResponse.getUserSummary().getUserBO().getCrdt())) {
                             long createdDate = Long.parseLong(loginResponse.getUserSummary().getUserBO().getCrdt());
@@ -684,6 +685,7 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
             mLoginPresenter.googleTokenExpireInFromPresenter(URL_ACCESS_TOKEN);
         }
     }
+
     @Override
     public void onStop() {
         super.onStop();
@@ -692,10 +694,11 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
             mGoogleApiClient.disconnect();
         }
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(null!=mGoogleApiClient&& mGoogleApiClient.isConnected()) {
+        if (null != mGoogleApiClient && mGoogleApiClient.isConnected()) {
             mGoogleApiClient.stopAutoManage(getActivity());
             mGoogleApiClient.disconnect();
         }

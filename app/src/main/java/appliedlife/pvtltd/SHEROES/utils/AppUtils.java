@@ -107,7 +107,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.home.EventRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCount;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobApplyRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
@@ -1946,12 +1945,6 @@ public class AppUtils {
         feedRequestPojo.setIdForFeedDetail(idForDetail);
         return feedRequestPojo;
     }
-    public EventRequest eventRequestBuilder(long idForDetail) {
-
-        EventRequest eventRequest = new EventRequest();
-        return eventRequest;
-    }
-
     private static FeedRequestPojo makeFeedRequest(String typeOfFeed, int pageNo) {
         AppUtils appUtils = AppUtils.getInstance();
         FeedRequestPojo feedRequestPojo = new FeedRequestPojo();
@@ -2040,7 +2033,7 @@ public class AppUtils {
     /**
      * Request for feed api
      */
-    public static LikeRequestPojo likeRequestBuilder(long entityId, int reactionValue) {
+    public  LikeRequestPojo likeRequestBuilder(long entityId, int reactionValue) {
         AppUtils appUtils = AppUtils.getInstance();
         LikeRequestPojo likeRequestPojo = new LikeRequestPojo();
         likeRequestPojo.setAppVersion(appUtils.getAppVersionName());
@@ -2055,7 +2048,7 @@ public class AppUtils {
     /**
      * Request for feed api
      */
-    public static LikeRequestPojo unLikeRequestBuilder(long entityId) {
+    public  LikeRequestPojo unLikeRequestBuilder(long entityId) {
         AppUtils appUtils = AppUtils.getInstance();
         LikeRequestPojo likeRequestPojo = new LikeRequestPojo();
         likeRequestPojo.setAppVersion(appUtils.getAppVersionName());
@@ -2129,7 +2122,7 @@ public class AppUtils {
         communityPostCreateRequest.setDeleteImagesIds(deletedImageId);
         return communityPostCreateRequest;
     }
-    public static SelectCommunityRequest selectCommunityRequestBuilder() {
+    public SelectCommunityRequest selectCommunityRequestBuilder() {
         AppUtils appUtils = AppUtils.getInstance();
         SelectCommunityRequest selectCommunityRequest=new SelectCommunityRequest();
         selectCommunityRequest.setAppVersion(appUtils.getAppVersionName());
@@ -2138,7 +2131,7 @@ public class AppUtils {
         selectCommunityRequest.setMasterDataType(AppConstants.JOB_AT_GET_ALL_DATA_KEY);
         return selectCommunityRequest;
     }
-    public static BookmarkRequestPojo bookMarkRequestBuilder(long entityId) {
+    public BookmarkRequestPojo bookMarkRequestBuilder(long entityId) {
         AppUtils appUtils = AppUtils.getInstance();
         BookmarkRequestPojo bookmarkRequestPojo = new BookmarkRequestPojo();
         bookmarkRequestPojo.setAppVersion(appUtils.getAppVersionName());

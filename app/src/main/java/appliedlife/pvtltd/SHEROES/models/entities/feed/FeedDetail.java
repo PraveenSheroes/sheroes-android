@@ -13,7 +13,7 @@ import java.util.List;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeDataItem;
 
-public class FeedDetail extends BaseResponse implements Parcelable,Cloneable{
+public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
 
     int itemPosition;
     boolean isLongPress;
@@ -21,9 +21,12 @@ public class FeedDetail extends BaseResponse implements Parcelable,Cloneable{
     boolean isTrending;
     boolean isFromHome;
     private List<ChallengeDataItem> challengeDataItems = null;
+    @SerializedName("solr_ignore_posting_date_only_dt")
+    @Expose
+    private String postedOnlyDateFormat;
     @SerializedName("solr_ignore_posting_date_dt")
     @Expose
-    private String  postedDate;
+    private String postedDate;
     @SerializedName("solr_ignore_deep_link_url")
     @Expose
     private String deepLinkUrl;
@@ -463,8 +466,51 @@ public class FeedDetail extends BaseResponse implements Parcelable,Cloneable{
     @SerializedName("solr_ignore_is_request_pending")
     @Expose
     private boolean isRequestPending;
-
-
+    @SerializedName("solr_ignore_no_of_bookmarks")
+    @Expose
+    private int noOfBookmarks;
+    @SerializedName("display_id_speaker_id")
+    @Expose
+    private List<Integer> speakerId;
+    @SerializedName("display_text_speaker_name")
+    @Expose
+    private List<String> speakerName;
+    @SerializedName("display_text_speaker_designation")
+    @Expose
+    private List<String> speakerDesignation;
+    @SerializedName("display_text_speaker_desc")
+    @Expose
+    private List<String> speakerDescription;
+    @SerializedName("display_text_speaker_image_url")
+    @Expose
+    private List<String> speakerImageUrl;
+    @SerializedName("display_id_sponser_id")
+    @Expose
+    private List<Integer> sponsorId;
+    @SerializedName("display_text_sponser_name")
+    @Expose
+    private List<String> sponsorName;
+    @SerializedName("display_text_sponser_url")
+    @Expose
+    private List<String> sponsorUrl;
+    @SerializedName("display_text_sponser_logo_url")
+    @Expose
+    private List<String> sponsorLogoUrl;
+    @SerializedName("s_disp_start_hour")
+    @Expose
+    private String displayTextStartHour;
+    @SerializedName("s_disp_start_minute")
+    @Expose
+    private String displayTextStartMinute;
+    @SerializedName("s_disp_end_hour")
+    @Expose
+    private String displayTextEndHour;
+    @SerializedName("s_disp_end_minute")
+    @Expose
+    private String displayTextEndMinute;
+    @SerializedName("s_disp_event_venue")
+    @Expose
+    private String eventVenu;
     public int getItemPosition() {
         return itemPosition;
     }
@@ -1608,6 +1654,134 @@ public class FeedDetail extends BaseResponse implements Parcelable,Cloneable{
         this.challengeDataItems = challengeDataItems;
     }
 
+    public String getPostedOnlyDateFormat() {
+        return postedOnlyDateFormat;
+    }
+
+    public void setPostedOnlyDateFormat(String postedOnlyDateFormat) {
+        this.postedOnlyDateFormat = postedOnlyDateFormat;
+    }
+
+    public int getNoOfBookmarks() {
+        return noOfBookmarks;
+    }
+
+    public void setNoOfBookmarks(int noOfBookmarks) {
+        this.noOfBookmarks = noOfBookmarks;
+    }
+
+    public List<String> getSpeakerName() {
+        return speakerName;
+    }
+
+    public void setSpeakerName(List<String> speakerName) {
+        this.speakerName = speakerName;
+    }
+
+    public List<String> getSpeakerDesignation() {
+        return speakerDesignation;
+    }
+
+    public void setSpeakerDesignation(List<String> speakerDesignation) {
+        this.speakerDesignation = speakerDesignation;
+    }
+
+    public List<String> getSpeakerDescription() {
+        return speakerDescription;
+    }
+
+    public void setSpeakerDescription(List<String> speakerDescription) {
+        this.speakerDescription = speakerDescription;
+    }
+
+    public List<String> getSpeakerImageUrl() {
+        return speakerImageUrl;
+    }
+
+    public void setSpeakerImageUrl(List<String> speakerImageUrl) {
+        this.speakerImageUrl = speakerImageUrl;
+    }
+
+    public List<String> getSponsorName() {
+        return sponsorName;
+    }
+
+    public void setSponsorName(List<String> sponsorName) {
+        this.sponsorName = sponsorName;
+    }
+
+    public List<String> getSponsorUrl() {
+        return sponsorUrl;
+    }
+
+    public void setSponsorUrl(List<String> sponsorUrl) {
+        this.sponsorUrl = sponsorUrl;
+    }
+
+    public List<String> getSponsorLogoUrl() {
+        return sponsorLogoUrl;
+    }
+
+    public void setSponsorLogoUrl(List<String> sponsorLogoUrl) {
+        this.sponsorLogoUrl = sponsorLogoUrl;
+    }
+
+    public String getDisplayTextStartHour() {
+        return displayTextStartHour;
+    }
+
+    public void setDisplayTextStartHour(String displayTextStartHour) {
+        this.displayTextStartHour = displayTextStartHour;
+    }
+
+    public String getDisplayTextStartMinute() {
+        return displayTextStartMinute;
+    }
+
+    public void setDisplayTextStartMinute(String displayTextStartMinute) {
+        this.displayTextStartMinute = displayTextStartMinute;
+    }
+
+    public String getDisplayTextEndHour() {
+        return displayTextEndHour;
+    }
+
+    public void setDisplayTextEndHour(String displayTextEndHour) {
+        this.displayTextEndHour = displayTextEndHour;
+    }
+
+    public String getDisplayTextEndMinute() {
+        return displayTextEndMinute;
+    }
+
+    public void setDisplayTextEndMinute(String displayTextEndMinute) {
+        this.displayTextEndMinute = displayTextEndMinute;
+    }
+
+    public void setSpeakerId(List<Integer> speakerId) {
+        this.speakerId = speakerId;
+    }
+
+    public void setSponsorId(List<Integer> sponsorId) {
+        this.sponsorId = sponsorId;
+    }
+
+    public List<Integer> getSpeakerId() {
+        return speakerId;
+    }
+
+    public List<Integer> getSponsorId() {
+        return sponsorId;
+    }
+
+    public String getEventVenu() {
+        return eventVenu;
+    }
+
+    public void setEventVenu(String eventVenu) {
+        this.eventVenu = eventVenu;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -1622,6 +1796,7 @@ public class FeedDetail extends BaseResponse implements Parcelable,Cloneable{
         dest.writeByte(this.isTrending ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isFromHome ? (byte) 1 : (byte) 0);
         dest.writeTypedList(this.challengeDataItems);
+        dest.writeString(this.postedOnlyDateFormat);
         dest.writeString(this.postedDate);
         dest.writeString(this.deepLinkUrl);
         dest.writeList(this.imagesIds);
@@ -1758,6 +1933,21 @@ public class FeedDetail extends BaseResponse implements Parcelable,Cloneable{
         dest.writeByte(this.isOwner ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isMember ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isRequestPending ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.noOfBookmarks);
+        dest.writeList(this.speakerId);
+        dest.writeStringList(this.speakerName);
+        dest.writeStringList(this.speakerDesignation);
+        dest.writeStringList(this.speakerDescription);
+        dest.writeStringList(this.speakerImageUrl);
+        dest.writeList(this.sponsorId);
+        dest.writeStringList(this.sponsorName);
+        dest.writeStringList(this.sponsorUrl);
+        dest.writeStringList(this.sponsorLogoUrl);
+        dest.writeString(this.displayTextStartHour);
+        dest.writeString(this.displayTextStartMinute);
+        dest.writeString(this.displayTextEndHour);
+        dest.writeString(this.displayTextEndMinute);
+        dest.writeString(this.eventVenu);
     }
 
     protected FeedDetail(Parcel in) {
@@ -1768,6 +1958,7 @@ public class FeedDetail extends BaseResponse implements Parcelable,Cloneable{
         this.isTrending = in.readByte() != 0;
         this.isFromHome = in.readByte() != 0;
         this.challengeDataItems = in.createTypedArrayList(ChallengeDataItem.CREATOR);
+        this.postedOnlyDateFormat = in.readString();
         this.postedDate = in.readString();
         this.deepLinkUrl = in.readString();
         this.imagesIds = new ArrayList<Long>();
@@ -1920,6 +2111,23 @@ public class FeedDetail extends BaseResponse implements Parcelable,Cloneable{
         this.isOwner = in.readByte() != 0;
         this.isMember = in.readByte() != 0;
         this.isRequestPending = in.readByte() != 0;
+        this.noOfBookmarks = in.readInt();
+        this.speakerId = new ArrayList<Integer>();
+        in.readList(this.speakerId, Integer.class.getClassLoader());
+        this.speakerName = in.createStringArrayList();
+        this.speakerDesignation = in.createStringArrayList();
+        this.speakerDescription = in.createStringArrayList();
+        this.speakerImageUrl = in.createStringArrayList();
+        this.sponsorId = new ArrayList<Integer>();
+        in.readList(this.sponsorId, Integer.class.getClassLoader());
+        this.sponsorName = in.createStringArrayList();
+        this.sponsorUrl = in.createStringArrayList();
+        this.sponsorLogoUrl = in.createStringArrayList();
+        this.displayTextStartHour = in.readString();
+        this.displayTextStartMinute = in.readString();
+        this.displayTextEndHour = in.readString();
+        this.displayTextEndMinute = in.readString();
+        this.eventVenu = in.readString();
     }
 
     public static final Creator<FeedDetail> CREATOR = new Creator<FeedDetail>() {

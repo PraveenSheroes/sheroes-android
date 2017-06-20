@@ -4,6 +4,7 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 import android.Manifest;
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -50,6 +51,11 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.f2prateek.rx.preferences.Preference;
+import com.facebook.appevents.AppEventsConstants;
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginManager;
+import com.facebook.share.model.AppInviteContent;
+import com.facebook.share.widget.AppInviteDialog;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
@@ -74,6 +80,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.DrawerItems;
+import appliedlife.pvtltd.SHEROES.models.entities.home.EventDetailPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -211,6 +218,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     private File localImageSaveForChallenge;
     private long mChallengeId;
     private String mHelpLineChat;
+    private EventDetailDialogFragment eventDetailDialogFragment;
+    private ProgressDialog mProgressDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -230,6 +239,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         if (StringUtil.isNotNullOrEmptyString(mHelpLineChat) && mHelpLineChat.equalsIgnoreCase(AppConstants.HELPLINE_CHAT)) {
             handleHelpLineFragmentFromDeepLinkAndLoading();
         }
+        faceBookInitialization();
     }
 
     private boolean startedFirstTime() {
@@ -331,7 +341,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
     }
 
-    @OnClick(R.id.tv_logout)
     public void logOut() {
         mUserPreference.delete();
         MoEHelper.getInstance(getApplicationContext()).logoutUser();
@@ -392,22 +401,28 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         }
     }
 
+    private void faceBookInitialization() {
+       /* if (null != getIntent() ) {
+            Uri targetUrl = AppLinks.getTargetUrlFromInboundIntent(this, getIntent());
+            if (null!=targetUrl) {
+
+            } else {
+                AppLinkData.fetchDeferredAppLinkData(this,
+                        new AppLinkData.CompletionHandler() {
+                            @Override
+                            public void onDeferredAppLinkDataFetched(AppLinkData appLinkData) {
+                                if(null!=appLinkData&&null!= appLinkData.getArgumentBundle()&&null!=appLinkData.getArgumentBundle().get("target_url")) {
+                                  String url=appLinkData.getArgumentBundle().get("target_url").toString();
+                                }
+                            }
+                        });
+            }
+        }*/
+    }
 
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
-        if (baseResponse instanceof BellNotificationResponse) {
-            BellNotificationResponse bellNotificationResponse = (BellNotificationResponse) baseResponse;
-            if (StringUtil.isNotNullOrEmptyString(bellNotificationResponse.getScreenName())) {
-                if (StringUtil.isNotNullOrEmptyString(bellNotificationResponse.getSolrIgnoreDeepLinkUrl())) {
-                    String urlStr = bellNotificationResponse.getSolrIgnoreDeepLinkUrl();
-                    challengeIdHandle(urlStr);
-                } else if (bellNotificationResponse.getScreenName().contains(AppConstants.COMMUNITY_URL)) {
-                    communityOnClick();
-                } else {
-                    homeOnClick();
-                }
-            }
-        } else if (baseResponse instanceof FeedDetail) {
+        if (baseResponse instanceof FeedDetail) {
             mFeedDetail = (FeedDetail) baseResponse;
             int id = view.getId();
             if (id == R.id.tv_community_detail_invite) {
@@ -496,6 +511,12 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                         renderFeedFragment();
                     }
                     break;
+                case AppConstants.ELEVENTH_CONSTANT:
+                    logOut();
+                    break;
+                case 12:
+                    inviteMyCommunityDialog();
+                    break;
                 default:
 
             }
@@ -542,6 +563,35 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         } else if (baseResponse instanceof FAQS) {
             Fragment fragment = getSupportFragmentManager().findFragmentByTag(FAQSFragment.class.getName());
             ((FAQSFragment) fragment).setDataChange((FAQS) baseResponse);
+        } else if (baseResponse instanceof BellNotificationResponse) {
+            BellNotificationResponse bellNotificationResponse = (BellNotificationResponse) baseResponse;
+            if (StringUtil.isNotNullOrEmptyString(bellNotificationResponse.getScreenName())) {
+                if (StringUtil.isNotNullOrEmptyString(bellNotificationResponse.getSolrIgnoreDeepLinkUrl())) {
+                    String urlStr = bellNotificationResponse.getSolrIgnoreDeepLinkUrl();
+                    challengeIdHandle(urlStr);
+                } else if (bellNotificationResponse.getScreenName().contains(AppConstants.COMMUNITY_URL)) {
+                    communityOnClick();
+                } else {
+                    homeOnClick();
+                }
+            }
+        } else if (baseResponse instanceof EventDetailPojo) {
+            int id = view.getId();
+            switch (id) {
+                case R.id.tv_event_detail_interested_btn:
+                    if (null != eventDetailDialogFragment) {
+                        eventDetailDialogFragment.eventInterestedListData();
+                    }
+                    break;
+                case R.id.tv_event_detail_going_btn:
+                    if (null != eventDetailDialogFragment) {
+                        eventDetailDialogFragment.eventGoingListData();
+                    }
+                    break;
+
+                default:
+                    LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + id);
+            }
         }
     }
 
@@ -621,11 +671,11 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     }
 
     public DialogFragment eventDetailDialog() {
-        EventDetailDialogFragment eventDetailDialogFragment = (EventDetailDialogFragment) getFragmentManager().findFragmentByTag(EventDetailDialogFragment.class.getName());
+        eventDetailDialogFragment = (EventDetailDialogFragment) getFragmentManager().findFragmentByTag(EventDetailDialogFragment.class.getName());
         if (eventDetailDialogFragment == null) {
             eventDetailDialogFragment = new EventDetailDialogFragment();
             Bundle bundle = new Bundle();
-            bundle.putParcelable(AppConstants.SUCCESS, mFeedDetail);
+            bundle.putParcelable(AppConstants.EVENT_DETAIL, mFeedDetail);
             eventDetailDialogFragment.setArguments(bundle);
         }
         if (!eventDetailDialogFragment.isVisible() && !eventDetailDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
@@ -890,8 +940,25 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         mliArticleSpinnerIcon.setVisibility(View.VISIBLE);
     }
 
-    public DialogFragment inviteMyCommunityDialog() {
-        myCommunityInviteMemberDialogFragment = (MyCommunityInviteMemberDialogFragment) getFragmentManager().findFragmentByTag(MyCommunityInviteMemberDialogFragment.class.getName());
+    public void inviteMyCommunityDialog() {
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setMessage(getString(R.string.ID_INVITE_WOMEN_FRIEND));
+        mProgressDialog.setCancelable(true);
+        mProgressDialog.show();
+        LoginManager.getInstance().logOut();
+        String appLinkUrl, previewImageUrl;
+        appLinkUrl = AppConstants.FB_APP_LINK_URL;
+        previewImageUrl = AppConstants.FB_APP_LINK_URL_PREVIEW_IMAGE;
+        if (AppInviteDialog.canShow()) {
+            AppEventsLogger logger = AppEventsLogger.newLogger(this);
+            logger.logEvent(AppEventsConstants.EVENT_NAME_VIEWED_CONTENT);
+            AppInviteContent content = new AppInviteContent.Builder()
+                    .setApplinkUrl(appLinkUrl)
+                    .setPreviewImageUrl(previewImageUrl)
+                    .build();
+            AppInviteDialog.show(this, content);
+        }
+      /*  myCommunityInviteMemberDialogFragment = (MyCommunityInviteMemberDialogFragment) getFragmentManager().findFragmentByTag(MyCommunityInviteMemberDialogFragment.class.getName());
         if (myCommunityInviteMemberDialogFragment == null) {
             myCommunityInviteMemberDialogFragment = new MyCommunityInviteMemberDialogFragment();
             Bundle bundle = new Bundle();
@@ -901,7 +968,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         if (!myCommunityInviteMemberDialogFragment.isVisible() && !myCommunityInviteMemberDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
             myCommunityInviteMemberDialogFragment.show(getFragmentManager(), MyCommunityInviteMemberDialogFragment.class.getName());
         }
-        return myCommunityInviteMemberDialogFragment;
+        return myCommunityInviteMemberDialogFragment;*/
     }
 
     public void updateMyCommunitiesFragment(FeedDetail feedDetail) {
@@ -1331,6 +1398,9 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     helplineSpeechActivityResponse(intent, resultCode);
                     break;
                 default:
+                    if (null != mProgressDialog) {
+                        mProgressDialog.dismiss();
+                    }
                     LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);
             }
         } else {

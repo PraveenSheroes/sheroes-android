@@ -55,19 +55,30 @@ public class CustomeDataList {
         tenthDrawerItem.setName("Feed");
         tenthDrawerItem.setIconName("ic_feed");
 
+        DrawerItems elevenDrawerItem = new DrawerItems();
+        elevenDrawerItem.setId(11);
+        elevenDrawerItem.setName("Login");
+        elevenDrawerItem.setIconName("ic_feed");
+        DrawerItems twelveDraerItem = new DrawerItems();
+        twelveDraerItem.setIconName("ic_bookmark");
+        twelveDraerItem.setId(12);
+        twelveDraerItem.setName("Settings");
+        twelveDraerItem.setIconName("ic_setting");
+
         if(isSheUser){
             drawerItemsList.add(seventhDrawerItem);
             drawerItemsList.add(eighthDrawerItem);
             drawerItemsList.add(ninthDrawerItem);
-            drawerItemsList.add(tenthDrawerItem);
+          //  drawerItemsList.add(tenthDrawerItem);
         } else{
             drawerItemsList.add(firstDrawerItem);
             drawerItemsList.add(secondDrawerItem);
             drawerItemsList.add(thirdDrawerItem);
           //  drawerItemsList.add(fourthDrawerItem);
             drawerItemsList.add(sixthDrawerItem);
+            drawerItemsList.add(twelveDraerItem);
         }
-
+        drawerItemsList.add(elevenDrawerItem);
         return  drawerItemsList;
     }
 }

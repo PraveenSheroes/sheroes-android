@@ -91,7 +91,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                android:text="JUN"
+                android:textAllCaps="true"
                 android:textColor="@color/footer_icon_text"
                 android:textSize="@dimen/sp_size_10" />
 
@@ -100,7 +100,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                android:text="01"
                 android:textColor="@color/faq_question_color"
                 android:textSize="@dimen/sp_size_18" />
 
@@ -113,7 +112,6 @@
             android:layout_marginLeft="@dimen/dp_size_30"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:lineSpacingExtra="@dimen/dp_size_4"
-            android:text="Undergrind Death Metal fest with Dying Fetus"
             android:textColor="@color/detail_page_text"
             android:textSize="@dimen/sp_size_16" />
 
@@ -127,7 +125,6 @@
         android:layout_marginLeft="@dimen/dp_size_70"
         android:layout_marginTop="@dimen/dp_size_6"
         android:fontFamily="@string/ID_ROBOTO_REGULAR"
-        android:text="40 people are interested"
         android:textColor="@color/event_text"
         android:textSize="@dimen/sp_size_10" />
 
@@ -167,10 +164,10 @@
 
         <TextView
             android:id="@+id/tv_event_share_btn"
-            android:layout_width="@dimen/dp_size_30"
-            android:layout_height="@dimen/dp_size_30"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/dp_size_52"
-            android:background="@drawable/rectangle_feed_commnity_join"
+            android:background="@drawable/ic_share_un_filled"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:gravity="center"
             android:textAllCaps="true"

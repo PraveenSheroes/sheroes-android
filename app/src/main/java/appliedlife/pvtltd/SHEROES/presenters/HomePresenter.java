@@ -17,6 +17,8 @@ import appliedlife.pvtltd.SHEROES.models.RecentSearchDataModel;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeAcceptRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.BellNotificationRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
@@ -24,10 +26,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeListResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.home.EventDetailPojo;
-import appliedlife.pvtltd.SHEROES.models.entities.home.EventRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCount;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
@@ -554,37 +552,6 @@ public class HomePresenter extends BasePresenter<HomeView> {
         registerSubscription(subscription);
     }
 
-    public void getEventDataFromPresenter(EventRequest eventRequest) {
-        if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
-            return;
-        }
-        getMvpView().startProgressBar();
-        Subscription subscription = mHomeModel.getEventDataFromModel(eventRequest).subscribe(new Subscriber<EventDetailPojo>() {
-            @Override
-            public void onCompleted() {
-                getMvpView().stopProgressBar();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_SEARCH_DATA);
-                if(null!=e&&StringUtil.isNotNullOrEmptyString(e.getMessage())) {
-                    StringBuilder stringBuilder=new StringBuilder();
-                    stringBuilder.append(mSheroesApplication.getString(R.string.ID_DETAIL_ABOUT_EVENT)).append(AppConstants.SPACE).append( e.getMessage());
-                    GoogleAnalyticsTracing.screenNameTracking(mSheroesApplication,stringBuilder.toString());
-                }
-            }
-            @Override
-            public void onNext(EventDetailPojo eventDetailPojo) {
-                if (null != eventDetailPojo) {
-                    getMvpView().getEventListResponse(eventDetailPojo);
-                }
-            }
-        });
-        registerSubscription(subscription);
-    }
 
     public void saveMasterDataTypes(List<RecentSearchData> recentSearchData) {
         Subscription subscribe = mRecentSearchDataModel.saveRecentSearchTypes(recentSearchData).subscribe(new Subscriber<List<RecentSearchData>>() {
@@ -605,7 +572,6 @@ public class HomePresenter extends BasePresenter<HomeView> {
         });
         registerSubscription(subscribe);
     }
-
 
     public void fetchMasterDataTypes() {
         Subscription subscribe = mRecentSearchDataModel.getAllRecentSearch().subscribe(new Subscriber<List<RecentSearchData>>() {

@@ -8,5 +8,4 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 
 public class LikeResponse extends BaseResponse{
 
-
 }

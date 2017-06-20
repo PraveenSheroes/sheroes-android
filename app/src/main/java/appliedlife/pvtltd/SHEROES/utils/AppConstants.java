@@ -41,6 +41,7 @@ public class AppConstants {
     public static final String HOME_SPINNER_FRAGMENT = "spinner_fragment";
     public static final String ANDROID_VIEW_PAGER = "android:switcher:";
     public static final String COLON = ":";
+    public static final String HOURS = "hrs";
     public static final String APASTROPH =  "'s";
 
     public static final String DASH = "-";
@@ -81,6 +82,7 @@ public class AppConstants {
     public static final String FEED_COMMUNITY = "C";
     public static final String FEED_JOB = "J";
     public static final String FEED_ARTICLE = "A";
+    public static final String FEED_EVENT = "E";
     public static final String FEED_COMMUNITY_POST = "P";
     public static final String FEATURED_COMMUNITY = "T";
     public static final String FRAGMENT_FLAG_CHECK = "is_fragment_open";
@@ -134,6 +136,8 @@ public class AppConstants {
     public static final int WORD_LENGTH = 95;
     public static final String IMAGE_FULL_VIEW = "image_view";
     public static final String BACK_SLASH = "/";
+    public static final String SLASH_N = "\n";
+    public static final String EVENT_DETAIL = "event_detail";
     public static final String ARTICLE_DETAIL = "article_detail";
     public static final String HOW_SHEROES_CAN_HELP = "how_can_sheroes";
     public static final String YOUR_INTEREST = "your_interest";
@@ -168,6 +172,7 @@ public class AppConstants {
     public static final int EIGHTH_CONSTANT = 8;
     public static final int NINTH_CONSTANT = 9;
     public static final int TENTH_CONSTANT = 10;
+    public static final int ELEVENTH_CONSTANT = 11;
     public static final int PAGE_SIZE = 10;
     public static final int PAGE_SIZE_CHAT = 20;
     public static final int MEMBER_PAGE_SIZE = 100;
@@ -178,6 +183,7 @@ public class AppConstants {
     public static final int EMOJI_SECOND_REACTION_CONSTANT = 30;
     public static final int EMOJI_THIRD_REACTION_CONSTANT = 40;
     public static final int EMOJI_FOURTH_REACTION_CONSTANT = 50;
+    public static final int EVENT_CONSTANT = 70;
     public static final int SEARCH_CONSTANT_DELAY = 500;
     public static final int NOT_TIME = 50000;
     public static final String SELECT_ALL_QUERY = "Select * from ";
@@ -267,7 +273,8 @@ public class AppConstants {
     public static final String WORK_EXPERIENCE_CATE = "work_exp_cate";
 
     public static final String INVALID_URL = "Invalid Url";
-
+    public static final String FB_APP_LINK_URL = "https://fb.me/1358166177608524";
+    public static final String FB_APP_LINK_URL_PREVIEW_IMAGE = "https://img.sheroes.in/img/uploads/sheroespage/logoes/1498221415fb-share-(1).jpg";
     public static final String WEB_BROWSER_MASSAGE = "Please select a web browser";
     public static final String JOB_URL = "https://sheroes.in/jobs";
     public static final String JOB_URL_COM = "https://sheroes.com/jobs";
@@ -282,6 +289,7 @@ public class AppConstants {
     public static final String CHALLENGE_URL = "https://sheroes.in/feed";
     public static final String CHALLENGE_URL_COM = "https://sheroes.com/feed";
     public static final String JOB_ID = "job_id";
+    public static final String EVENT_ID = "event_id";
     public static final String ARTICLE_ID = "article_id";
     public static final String COMMUNITY_ID = "community_id";
     public static final String COMMUNITY_POST_ID = "community_post_id";

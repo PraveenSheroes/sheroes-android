@@ -7,6 +7,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <RelativeLayout
             android:id="@+id/rlsignup1"
             android:layout_width="match_parent"
@@ -45,8 +46,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:backgroundTint="@color/signup_text_color"
-                        android:hint="@string/ID_FIRST_NAME_HINT_SIGNUP"
                         android:digits="@string/ID_NAME_CHECK"
+                        android:hint="@string/ID_FIRST_NAME_HINT_SIGNUP"
                         android:inputType="textPersonName"
                         android:maxLines="@integer/int_value_for_line_1"
                         android:textSize="@dimen/sp_size_14" />
@@ -67,8 +68,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:backgroundTint="@color/signup_text_color"
-                        android:hint="@string/ID_LAST_NAME_HINT_SIGNUP"
                         android:digits="@string/ID_NAME_CHECK"
+                        android:hint="@string/ID_LAST_NAME_HINT_SIGNUP"
                         android:inputType="textPersonName"
                         android:maxLines="@integer/int_value_for_line_1"
                         android:textSize="@dimen/sp_size_14" />
@@ -157,58 +158,65 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/btn_sign_up"
-                    android:layout_marginTop="@dimen/dp_size_10"
                     android:layout_centerInParent="true"
-                    android:padding="@dimen/dp_size_15"
+                    android:layout_marginTop="@dimen/dp_size_10"
                     android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                    android:padding="@dimen/dp_size_15"
                     android:text="@string/ID_SIGNUP_ALREADY_LOGIN" />
 
             </RelativeLayout>
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_size_170"
                 android:layout_below="@+id/rlsignupin"
-                android:background="@color/grey8">
+                android:background="@color/grey8"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/tv_continue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:padding="@dimen/dp_size_10"
+                    android:layout_gravity="center"
                     android:layout_marginTop="@dimen/dp_size_10"
                     android:fontFamily="@string/ID_ROBOTO_BOLD"
+                    android:padding="@dimen/dp_size_10"
                     android:text="@string/ID_OR_CONTINUE"
                     android:textAlignment="center" />
 
-                <com.facebook.login.widget.LoginButton
-                    android:id="@+id/click_to_join_fb_signup"
-                    android:layout_width="@dimen/dp_size_158"
-                    android:layout_height="@dimen/dp_size_42"
-                    android:layout_below="@+id/tv_continue"
-                    android:layout_marginLeft="@dimen/dp_size_18"
-                    android:layout_marginTop="@dimen/dp_size_15"
-                    android:background="@drawable/ic_fb_signup"
-                    android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/sp_size_12"
-                    android:textStyle="normal"
-                    fb:login_text=""
-                    fb:logout_text="" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dp_size_10"
+                    android:layout_marginRight="@dimen/dp_size_10"
+                    android:gravity="center|top">
 
-                <Button
-                    android:id="@+id/btn_login_google"
-                    android:layout_width="@dimen/dp_size_158"
-                    android:layout_height="@dimen/dp_size_42"
-                    android:layout_below="@+id/tv_continue"
-                    android:background="@drawable/ic_google_plus"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="@dimen/dp_size_18"
-                    android:layout_marginTop="@dimen/dp_size_15"/>
-            </RelativeLayout>
+                    <com.facebook.login.widget.LoginButton
+                        android:id="@+id/click_to_join_fb_signup"
+                        android:layout_width="@dimen/dp_size_140"
+                        android:layout_height="@dimen/dp_size_42"
+                        android:layout_marginTop="@dimen/dp_size_15"
+                        android:background="@drawable/ic_fb_signup"
+                        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/sp_size_12"
+                        android:textStyle="normal"
+                        fb:login_text=""
+                        fb:logout_text="" />
+                    <Button
+                        android:id="@+id/btn_login_google"
+                        android:layout_width="@dimen/dp_size_140"
+                        android:layout_height="@dimen/dp_size_42"
+                        android:layout_marginLeft="@dimen/dp_size_10"
+                        android:layout_marginTop="@dimen/dp_size_15"
+                        android:background="@drawable/ic_google_plus" />
+                </LinearLayout>
+
+            </LinearLayout>
         </RelativeLayout>
     </ScrollView>
+
     <include layout="@layout/progress_bar_login" />
 
 </FrameLayout>

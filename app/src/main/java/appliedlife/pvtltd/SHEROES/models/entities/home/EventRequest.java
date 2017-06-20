@@ -7,4 +7,13 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
  */
 
 public class EventRequest extends BaseRequest {
+    Long idOfEntityParticipant;
+
+    public Long getIdOfEntityParticipant() {
+        return idOfEntityParticipant;
+    }
+
+    public void setIdOfEntityParticipant(Long idOfEntityParticipant) {
+        this.idOfEntityParticipant = idOfEntityParticipant;
+    }
 }

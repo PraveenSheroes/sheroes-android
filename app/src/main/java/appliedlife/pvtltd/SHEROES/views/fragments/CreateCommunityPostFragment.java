@@ -98,7 +98,6 @@ import butterknife.OnClick;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_LIKE_UNLIKE;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.createCommunityPostRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.editCommunityPostRequestBuilder;
-import static appliedlife.pvtltd.SHEROES.utils.AppUtils.selectCommunityRequestBuilder;
 
 /**
  * Created by Ajit Kumar on 20-01-2017.
@@ -271,7 +270,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
 
     private void checkIntentWithImageUrls() {
         if (null != mFeedDetail) {
-            mCreateCommunityPresenter.getSelectCommunityFromPresenter(selectCommunityRequestBuilder());
+            mCreateCommunityPresenter.getSelectCommunityFromPresenter(mAppUtils.selectCommunityRequestBuilder());
             mVg_image_container.removeAllViews();
             mVg_image_container.removeAllViewsInLayout();
             mTvcreate_community_post.setText(getString(R.string.ID_EDIT_POST));

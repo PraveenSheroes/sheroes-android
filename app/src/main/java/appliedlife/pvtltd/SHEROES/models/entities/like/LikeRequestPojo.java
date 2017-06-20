@@ -12,24 +12,24 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
 public class LikeRequestPojo extends BaseRequest {
     @SerializedName("entity_id")
     @Expose
-    private long entityId;
+    private Long entityId;
     @SerializedName("value")
     @Expose
-    private int reactionValue;
+    private Integer reactionValue;
 
-    public int getReactionValue() {
+    public Integer getReactionValue() {
         return reactionValue;
     }
 
-    public void setReactionValue(int reactionValue) {
+    public void setReactionValue(Integer reactionValue) {
         this.reactionValue = reactionValue;
     }
 
-    public long getEntityId() {
+    public Long getEntityId() {
         return entityId;
     }
 
-    public void setEntityId(long entityId) {
+    public void setEntityId(Long entityId) {
         this.entityId = entityId;
     }
 }

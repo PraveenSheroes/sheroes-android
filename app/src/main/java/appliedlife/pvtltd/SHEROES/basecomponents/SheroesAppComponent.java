@@ -142,6 +142,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.EducationListHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.EventDetailHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.EventSpeakerHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.EventSponsorHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FAQViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeatureCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedArticleHolder;
@@ -593,6 +594,8 @@ public interface SheroesAppComponent {
     void inject(EventDetailHolder eventDetailHolder);
 
     void inject(EventSpeakerHolder eventSpeakerHolder);
+
+    void inject(EventSponsorHolder eventSponsorHolder);
 
 
 }

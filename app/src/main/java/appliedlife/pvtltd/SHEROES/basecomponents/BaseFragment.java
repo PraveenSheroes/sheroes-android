@@ -50,7 +50,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.LastComment;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.home.EventDetailPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
@@ -464,7 +463,6 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                     MoEHelper mMoEHelper = MoEHelper.getInstance(getActivity());
                     PayloadBuilder payloadBuilder = new PayloadBuilder();
                     MoEngageUtills moEngageUtills = MoEngageUtills.getInstance();
-                    ;
                     moEngageUtills.entityMoEngageReaction(getActivity(), mMoEHelper, payloadBuilder, mFeedDetail, mPressedEmoji, mPosition);
                     break;
                 case AppConstants.FAILED:
@@ -536,12 +534,6 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     public void getNotificationReadCountSuccess(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
 
     }
-
-    @Override
-    public void getEventListResponse(EventDetailPojo eventDetailPojo) {
-
-    }
-
 
     @Override
     public void startProgressBar() {

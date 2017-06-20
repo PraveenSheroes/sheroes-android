@@ -150,7 +150,7 @@
             android:clickable="false"
             android:background="@color/white"
             android:orientation="horizontal"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/tv_post_as_label"

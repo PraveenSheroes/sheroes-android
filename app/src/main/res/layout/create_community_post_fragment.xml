@@ -12,37 +12,40 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:descendantFocusability="beforeDescendants"
-            android:focusableInTouchMode="true"
             android:orientation="vertical">
 
-            <include layout="@layout/community_header" />
+            <include
+                layout="@layout/community_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_size_8"/>
 
             <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
                 android:id="@+id/iv_community_post_icon"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/dp_size_45"
-                android:scaleType="fitXY"
+                android:layout_marginTop="@dimen/dp_size_20"
                 android:padding="@dimen/dp_size_5"
+                android:scaleType="fitXY"
                 android:src="@drawable/ic_community_post" />
 
 
             <TextView
                 android:id="@+id/txt_choose_community_spinner"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/dp_size_38"
-                android:layout_marginTop="@dimen/dp_size_15"
-                android:padding="@dimen/dp_size_10"
+                android:layout_marginTop="@dimen/dp_size_10"
                 android:drawableRight="@drawable/drop_down_shap"
-                android:gravity="center"
                 android:ellipsize="end"
+                android:gravity="center"
                 android:hint="@string/ID_CHOOSE_COMMUNITY"
                 android:maxLines="1"
+                android:padding="@dimen/dp_size_10"
                 android:textSize="@dimen/sp_size_14" />
 
 
@@ -52,7 +55,7 @@
                 android:layout_height="@dimen/dp_size_1"
                 android:layout_marginLeft="@dimen/dp_size_38"
                 android:layout_marginRight="@dimen/dp_size_38"
-                android:layout_marginTop="@dimen/dp_size_30"
+                android:layout_marginTop="@dimen/dp_size_20"
                 android:background="@color/line_color" />
 
             <LinearLayout
@@ -61,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/r1"
                 android:layout_gravity="center"
-                android:layout_marginTop="53dp"
+                android:layout_marginTop="@dimen/dp_size_25"
                 android:gravity="center">
 
                 <HorizontalScrollView
@@ -101,44 +104,65 @@
                 android:layout_gravity="right"
                 android:layout_marginLeft="@dimen/dp_size_38"
                 android:layout_marginRight="@dimen/dp_size_38"
-                android:textColor="@color/blue"
-                android:visibility="gone"
-                android:paddingTop="@dimen/dp_size_15"
+                android:paddingTop="@dimen/dp_size_10"
                 android:text="@string/ID_ADDMORE"
-                 />
+                android:textColor="@color/blue"
+                android:visibility="gone" />
 
-            <RelativeLayout
+            <LinearLayout
+                android:id="@+id/li_user_comment"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_size_30"
-                android:layout_marginLeft="@dimen/dp_size_38"
-                android:layout_marginRight="@dimen/dp_size_38"
-                android:layout_marginTop="@dimen/dp_size_25">
+                android:layout_height="@dimen/dp_size_80"
+                android:layout_marginTop="@dimen/dp_size_8"
+                android:gravity="bottom"
+                android:orientation="vertical">
 
-                <EditText
-                    android:id="@+id/et_share_community_post_text"
+                <LinearLayout
+                    android:id="@+id/li_edit_text_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@android:color/transparent"
-                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:imeOptions="actionUnspecified"
-                    android:inputType="textMultiLine"
-                    android:hint="@string/ID_SHARE_WITH_COMMUNITY"
-                    android:maxLength="4000"
-                    android:textSize="@dimen/sp_size_12"
-                    android:windowSoftInputMode="stateHidden" />
-
-                <TextView
-                    android:id="@+id/txt_counter"
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_below="@+id/et_share_community_post_text"
-                    android:fontFamily="@string/ID_ROBOTO_LIGHT"
-                    android:textColor="@color/dashboard_fed_text"
-                    android:textSize="@dimen/sp_size_10"
-                    android:visibility="gone" />
-            </RelativeLayout>
+                    android:background="@color/white"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_size_8"
+                        android:layout_weight="1">
+
+                        <EditText
+                            android:id="@+id/et_share_community_post_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/fully_transparent"
+                            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                            android:hint="@string/ID_SHARE_WITH_COMMUNITY"
+                            android:inputType="textCapSentences|textMultiLine"
+                            android:lineSpacingExtra="@dimen/dp_size_4"
+                            android:maxLength="4000"
+                            android:layout_marginLeft="@dimen/dp_size_30"
+                            android:minHeight="@dimen/dp_size_48"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/user_comment_text"
+                            android:textSize="@dimen/sp_size_12"
+                            android:windowSoftInputMode="stateHidden" />
+
+                    </FrameLayout>
+
+
+                    <TextView
+                        android:id="@+id/txt_counter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/et_share_community_post_text"
+                        android:layout_gravity="bottom"
+                        android:fontFamily="@string/ID_ROBOTO_LIGHT"
+                        android:textColor="@color/dashboard_fed_text"
+                        android:textSize="@dimen/sp_size_10" />
+                </LinearLayout>
+            </LinearLayout>
+
 
             <TextView
                 android:layout_width="match_parent"
@@ -153,7 +177,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_size_38"
                 android:layout_marginRight="@dimen/dp_size_38"
-                android:layout_marginTop="@dimen/dp_size_25"
+                android:layout_marginTop="@dimen/dp_size_15"
                 android:text="@string/ID_POST"
                 android:textColor="@color/text_color_close"
                 android:textSize="@dimen/sp_size_12"
@@ -161,11 +185,11 @@
 
             <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp_size_20"
                 android:layout_marginRight="@dimen/dp_size_20"
-                android:layout_marginTop="@dimen/dp_size_40"
+                android:layout_marginTop="@dimen/dp_size_20"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -174,9 +198,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:orientation="vertical"
                     android:gravity="center"
-                    >
+                    android:orientation="vertical">
 
                     <FrameLayout
                         android:layout_width="wrap_content"
@@ -212,23 +235,23 @@
 
                     <FrameLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        >
+                        android:layout_height="match_parent">
 
                         <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
                             android:id="@+id/iv_community_owner"
                             android:layout_width="@dimen/dp_size_35"
-                            android:layout_height="@dimen/dp_size_35"/>
+                            android:layout_height="@dimen/dp_size_35" />
                     </FrameLayout>
 
                     <TextView
                         android:id="@+id/tv_community_owner"
-                        android:layout_width="@dimen/dp_size_80"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
-                        android:lines="@integer/int_value_for_line_1"
-                        android:text="@string/ID_COMMUNITIY"
                         android:gravity="center_horizontal"
+                        android:lines="@integer/int_value_for_line_1"
+                        android:paddingLeft="@dimen/dp_size_4"
+                        android:text="@string/ID_COMMUNITIY"
                         android:textAllCaps="true"
                         android:textColor="@color/searchbox_text_color"
                         android:textSize="@dimen/sp_size_12" />
@@ -270,21 +293,21 @@
                 </LinearLayout>
 
             </RelativeLayout>
+
             <TextView
                 android:id="@+id/tv_community_post_submit"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="@dimen/dp_size_45"
+                android:layout_marginBottom="@dimen/dp_size_10"
                 android:layout_marginLeft="@dimen/dp_size_45"
                 android:layout_marginRight="@dimen/dp_size_45"
-                android:layout_marginTop="@dimen/dp_size_35"
-                android:layout_marginBottom="@dimen/dp_size_10"
+                android:layout_marginTop="@dimen/dp_size_25"
                 android:background="@drawable/rectangle_btn"
                 android:gravity="center"
                 android:textAllCaps="true"
                 android:textColor="@color/white" />
-
         </LinearLayout>
-
     </ScrollView>
+
     <include layout="@layout/progress_bar_login" />
-    </FrameLayout>
+</FrameLayout>

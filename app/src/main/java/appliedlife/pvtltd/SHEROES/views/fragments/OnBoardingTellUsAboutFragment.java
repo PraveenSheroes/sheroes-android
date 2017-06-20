@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.f2prateek.rx.preferences.Preference;
+import com.moe.pushlibrary.MoEHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -149,6 +150,8 @@ public class OnBoardingTellUsAboutFragment extends BaseFragment implements OnBoa
             Toast.makeText(getContext(), getString(R.string.ID_MOBILE_NUMBER), Toast.LENGTH_SHORT).show();
         } else {
             if (null != labelValue && null != getAllDataDocument) {
+                MoEHelper  mMoEHelper = MoEHelper.getInstance(getActivity());
+                mMoEHelper.setNumber(mMobileNumber.getText().toString());
                 InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(mMobileNumber.getWindowToken(), 0);
                 mOnBoardingPresenter.getCurrentDataStatusToPresenter(boardingTellUsFormDataRequestBuilder(AppConstants.CURRENT_STATUS, AppConstants.CURRENT_STATUS_TYPE, labelValue, getAllDataDocument, mMobileNumber.getText().toString()));

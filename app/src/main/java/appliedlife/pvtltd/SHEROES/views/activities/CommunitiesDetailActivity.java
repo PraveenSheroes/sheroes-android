@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.app.DialogFragment;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
@@ -22,6 +23,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.facebook.appevents.AppEventsConstants;
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginManager;
+import com.facebook.share.model.AppInviteContent;
+import com.facebook.share.widget.AppInviteDialog;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
@@ -46,16 +52,16 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.CustomCollapsingToolbarLayout;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityRequestedDialogFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.AllMembersDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOpenAboutFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.InviteCommunityOwner;
+import appliedlife.pvtltd.SHEROES.views.fragments.ShareCommunityFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.AllMembersDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityRequestedDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CurrentStatusDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.InviteCommunityMemberDialogFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.InviteCommunityOwner;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.OwnerRemoveDialog;
-import appliedlife.pvtltd.SHEROES.views.fragments.ShareCommunityFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -109,7 +115,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
     private MoEngageUtills moEngageUtills;
     private PayloadBuilder payloadBuilder;
     private long startedTime;
-
+    private ProgressDialog mProgressDialog;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -419,8 +425,25 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
         }
     }
 
-    public DialogFragment inviteCommunityMemberDialog() {
-        mInviteCommunityMemberDialogFragment = (InviteCommunityMemberDialogFragment) getFragmentManager().findFragmentByTag(InviteCommunityMemberDialogFragment.class.getName());
+    public void inviteCommunityMemberDialog() {
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setMessage(getString(R.string.ID_INVITE_WOMEN_FRIEND));
+        mProgressDialog.setCancelable(true);
+        mProgressDialog.show();
+        LoginManager.getInstance().logOut();
+        String appLinkUrl, previewImageUrl;
+        appLinkUrl = AppConstants.FB_APP_LINK_URL;
+        previewImageUrl=AppConstants.FB_APP_LINK_URL_PREVIEW_IMAGE;
+        if (AppInviteDialog.canShow()) {
+            AppEventsLogger logger = AppEventsLogger.newLogger(this);
+            logger.logEvent(AppEventsConstants.EVENT_NAME_VIEWED_CONTENT);
+            AppInviteContent content = new AppInviteContent.Builder()
+                    .setApplinkUrl(appLinkUrl)
+                    .setPreviewImageUrl(previewImageUrl)
+                    .build();
+            AppInviteDialog.show(this, content);
+        }
+      /*  mInviteCommunityMemberDialogFragment = (InviteCommunityMemberDialogFragment) getFragmentManager().findFragmentByTag(InviteCommunityMemberDialogFragment.class.getName());
         if (mInviteCommunityMemberDialogFragment == null) {
             mInviteCommunityMemberDialogFragment = new InviteCommunityMemberDialogFragment();
             Bundle bundle = new Bundle();
@@ -430,7 +453,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
         if (!mInviteCommunityMemberDialogFragment.isVisible() && !mInviteCommunityMemberDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
             mInviteCommunityMemberDialogFragment.show(getFragmentManager(), InviteCommunityMemberDialogFragment.class.getName());
         }
-        return mInviteCommunityMemberDialogFragment;
+        return mInviteCommunityMemberDialogFragment;*/
     }
 
     public void addOwnerOnClick() {
@@ -596,6 +619,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
         setResult(RESULT_OK, intent);
         finish();
         long timeSpent = System.currentTimeMillis() - startedTime;
+        if(null!=mFeedDetail&&StringUtil.isNotNullOrEmptyString(mFeedDetail.getNameOrTitle()))
         moEngageUtills.entityMoEngageCommunityDetail(this, mMoEHelper, payloadBuilder, timeSpent, mFeedDetail.getNameOrTitle(), mFeedDetail.getIdOfEntityOrParticipant(),mFeedDetail.isClosedCommunity(), MoEngageConstants.COMMUNITY_TAG);
 
     }
@@ -651,6 +675,9 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
                     }
                     break;
                 default:
+                    if (null != mProgressDialog) {
+                        mProgressDialog.dismiss();
+                    }
                     LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);
             }
         }

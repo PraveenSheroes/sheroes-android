@@ -25,7 +25,6 @@ public class DrawerViewHolder extends BaseViewHolder<DrawerItems> {
     private DrawerItems dataItem;
     @Bind(R.id.tv_drawer_item)
     TextView tvDrawerItem;
-
     public DrawerViewHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
@@ -61,7 +60,6 @@ public class DrawerViewHolder extends BaseViewHolder<DrawerItems> {
                 break;
             case 6:
                 tvDrawerItem.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_ask_sheroes), null, null, null);
-                tvDrawerItem.setTextColor(ContextCompat.getColor(context, R.color.ask_sheroes));
                 tvDrawerItem.setText(context.getString(R.string.ID_ASK_SHEROES));
                 break;
             case 7:
@@ -79,6 +77,17 @@ public class DrawerViewHolder extends BaseViewHolder<DrawerItems> {
             case 10:
                 tvDrawerItem.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_feed), null, null, null);
                 tvDrawerItem.setText(context.getString(R.string.ID_FEED));
+                break;
+            case AppConstants.ELEVENTH_CONSTANT:
+                tvDrawerItem.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_logout), null, null, null);
+                tvDrawerItem.setText(context.getString(R.string.ID_LOGOUT));
+                tvDrawerItem.setTextColor(ContextCompat.getColor(context, R.color.blue));
+                tvDrawerItem.setTextSize(16.0f);
+                break;
+            case 12:
+                tvDrawerItem.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_invite_friend), null, null, null);
+                tvDrawerItem.setText(context.getString(R.string.ID_INVITE_WOMEN_FRIEND));
+                tvDrawerItem.setTextColor(ContextCompat.getColor(context, R.color.ask_sheroes));
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE+ TAG +  AppConstants.SPACE + drawerItemId);

@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ProgressBar;
 
 import java.util.List;
 
@@ -40,8 +41,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CommunityView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-import static appliedlife.pvtltd.SHEROES.utils.AppUtils.selectCommunityRequestBuilder;
-
 /**
  * Created by Ajit Kumar on 24-01-2017.
  */
@@ -51,6 +50,8 @@ public class SelectCommunityDialogFragment extends BaseDialogFragment implements
     CreateCommunityPresenter mCreateCommunityPresenter;
     @Bind(R.id.rv_home_list)
     RecyclerView mRecyclerView;
+    @Bind(R.id.pb_dialog_progress_bar)
+    ProgressBar mProgressBar;
     @Inject
     AppUtils mAppUtils;
     private MyDialogFragmentListener mHomeActivityIntractionListner;
@@ -80,7 +81,7 @@ public class SelectCommunityDialogFragment extends BaseDialogFragment implements
         mAdapter = new GenericRecyclerViewAdapter(getActivity(), this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
-        mCreateCommunityPresenter.getSelectCommunityFromPresenter(selectCommunityRequestBuilder());
+        mCreateCommunityPresenter.getSelectCommunityFromPresenter(mAppUtils.selectCommunityRequestBuilder());
         return v;
     }
 
@@ -95,7 +96,20 @@ public class SelectCommunityDialogFragment extends BaseDialogFragment implements
             setDilogSize();
         }
     }
+    @Override
+    public void startProgressBar() {
+        if (null != mProgressBar) {
+            mProgressBar.setVisibility(View.VISIBLE);
+            mProgressBar.bringToFront();
+        }
+    }
 
+    @Override
+    public void stopProgressBar() {
+        if (null != mProgressBar) {
+            mProgressBar.setVisibility(View.GONE);
+        }
+    }
     @Override
     public void getOwnerListSuccess(OwnerListResponse ownerListResponse) {
 

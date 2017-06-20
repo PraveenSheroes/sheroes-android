@@ -172,6 +172,7 @@ public class ArticlesFragment extends BaseFragment {
                 List<FeedDetail> trendingWithNormalArticleList = new ArrayList<>();
                 List<FeedDetail> normalArticleList = feedResponsePojo.getFeedDetails();
                 if (StringUtil.isNotEmptyCollection(normalArticleList)) {
+                    trendingWithNormalArticleList.addAll(mTrendingFeedDetail);
                     trendingWithNormalArticleList.addAll(normalArticleList);
                     if (StringUtil.isNotEmptyCollection(mTrendingFeedDetail)) {
                         for (FeedDetail normalArticle : normalArticleList) {

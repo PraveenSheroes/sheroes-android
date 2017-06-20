@@ -10,8 +10,11 @@ import android.graphics.drawable.LevelListDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
+import android.text.style.URLSpan;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -41,6 +44,7 @@ import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.URLSpanNoUnderline;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -50,7 +54,7 @@ import butterknife.OnLongClick;
  * Created by Praveen_Singh on 08-02-2017.
  */
 
-public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> implements Html.ImageGetter{
+public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> implements Html.ImageGetter {
     private final String TAG = LogUtils.makeLogTag(ArticleCardHolder.class);
     private static final String LEFT_HTML_TAG_FOR_COLOR = "<b><font color='#323940'>";
     private static final String RIGHT_HTML_TAG_FOR_COLOR = "</font></b>";
@@ -164,17 +168,24 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> imple
         }
         String description = mFeedDetail.getDescription();
         if (StringUtil.isNotNullOrEmptyString(description)) {
-            if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                Spanned spanned = Html.fromHtml(description, this, null);
-                tvHtmlData.setText(spanned);
-            } else {
-                Spanned spanned = Html.fromHtml(description, this, null);
-                tvHtmlData.setText(spanned);// or for older api
-            }
+            Spanned spanned = Html.fromHtml(description, this, null);
+            tvHtmlData.setText(spanned);
             tvHtmlData.setMovementMethod(LinkMovementMethod.getInstance());
         }
+        stripUnderlines(tvHtmlData);
     }
-
+    private void stripUnderlines(TextView textView) {
+        Spannable s = new SpannableString(textView.getText());
+        URLSpan[] spans = s.getSpans(0, s.length(), URLSpan.class);
+        for (URLSpan span: spans) {
+            int start = s.getSpanStart(span);
+            int end = s.getSpanEnd(span);
+            s.removeSpan(span);
+            span = new URLSpanNoUnderline(span.getURL());
+            s.setSpan(span, start, end, 0);
+        }
+        textView.setText(s);
+    }
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void allTextViewStringOperations(Context context) {
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getNameOrTitle())) {
@@ -183,20 +194,20 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> imple
         if (StringUtil.isNotEmptyCollection(mFeedDetail.getTags())) {
             List<String> tags = mFeedDetail.getTags();
             //String mergeTags = AppConstants.EMPTY_STRING;
-            StringBuilder mergeTags=new StringBuilder();
+            StringBuilder mergeTags = new StringBuilder();
             boolean isFirst = true;
             for (String tag : tags) {
-                if(isFirst) {
-                    isFirst=false;
+                if (isFirst) {
+                    isFirst = false;
                 } else {
                     mergeTags.append(AppConstants.COMMA).append(AppConstants.SPACE);
                 }
                 mergeTags.append(tag);
             }
-            StringBuilder tagHeader=new StringBuilder();
+            StringBuilder tagHeader = new StringBuilder();
             tagHeader.append(LEFT_HTML_TAG).append(mContext.getString(R.string.ID_TAGS)).
-                    append(END_HTML_TAG).append(RIGHT_HTML_TAG).append( AppConstants.COLON ).append( AppConstants.SPACE).append(mergeTags).append(END_HTML_FONT_TAG);
-         //   String tagHeader = LEFT_HTML_TAG + mContext.getString(R.string.ID_TAGS) + RIGHT_HTML_TAG;
+                    append(END_HTML_TAG).append(RIGHT_HTML_TAG).append(AppConstants.COLON).append(AppConstants.SPACE).append(mergeTags).append(END_HTML_FONT_TAG);
+            //   String tagHeader = LEFT_HTML_TAG + mContext.getString(R.string.ID_TAGS) + RIGHT_HTML_TAG;
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                 tvArticleDetailTag.setText(Html.fromHtml(tagHeader.toString(), 0)); // for 24 api and more
             } else {
@@ -211,8 +222,8 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> imple
             ivArticleDetailRegisterUserPic.bindImage(userPreference.get().getUserSummary().getPhotoUrl());
         }
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getPostedDate())) {
-          //  long createdDate = mDateUtil.getTimeInMillis(mFeedDetail.getCreatedDate(), AppConstants.DATE_FORMAT);
-        //    tvArticleDetailTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
+            //  long createdDate = mDateUtil.getTimeInMillis(mFeedDetail.getCreatedDate(), AppConstants.DATE_FORMAT);
+            //    tvArticleDetailTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
             tvArticleDetailTime.setText(mFeedDetail.getPostedDate());
         }
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getAuthorShortDescription())) {
@@ -227,12 +238,9 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> imple
             tvArticleDetailUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
             flArticleDetailNoReactionComment.setVisibility(View.GONE);
         }
-        if(mFeedDetail.getNoOfComments()>AppConstants.THREE_CONSTANT)
-        {
+        if (mFeedDetail.getNoOfComments() > AppConstants.THREE_CONSTANT) {
             tvArticleDetailViewMore.setVisibility(View.VISIBLE);
-        }
-        else
-        {
+        } else {
             tvArticleDetailViewMore.setVisibility(View.GONE);
         }
         tvFeedArticleDetailReaction1.setVisibility(View.VISIBLE);
@@ -434,28 +442,30 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> imple
         userReactionLongPress();
         return true;
     }
+
     @OnLongClick(R.id.tv_feed_article_detail_reaction_text)
     public boolean userReactionLongByTextClick() {
         userReactionLongPress();
         return true;
     }
-    private void userReactionLongPress()
-    {
+
+    private void userReactionLongPress() {
         mFeedDetail.setItemPosition(getAdapterPosition());
         mFeedDetail.setLongPress(true);
         viewInterface.handleOnClick(mFeedDetail, tvArticleDetailUserReaction);
     }
+
     @OnClick(R.id.tv_article_detail_user_reaction)
     public void userReactionClick() {
         userReactionWithoutLong();
     }
+
     @OnClick(R.id.tv_feed_article_detail_reaction_text)
     public void userReactionByTextClick() {
         userReactionWithoutLong();
     }
 
-    private void userReactionWithoutLong()
-    {
+    private void userReactionWithoutLong() {
         tvArticleDetailUserReaction.setEnabled(false);
         tvArticleDetailUserReactionText.setEnabled(false);
         mFeedDetail.setLongPress(false);
@@ -478,6 +488,7 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> imple
         }
         allTextViewStringOperations(mContext);
     }
+
     @OnClick(R.id.tv_article_detail_user_comment)
     public void userCommentClick() {
         mFeedDetail.setItemPosition(getAdapterPosition());
@@ -559,25 +570,21 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> imple
             String source = (String) params[0];
             mDrawable = (LevelListDrawable) params[1];
             try {
-                LogUtils.info("url=",source);
-                 is = new URL(source).openStream();
+                LogUtils.info("url=", source);
+                is = new URL(source).openStream();
                 return BitmapFactory.decodeStream(is);
-            }
-            catch (OutOfMemoryError oom) {
-               // System.gc();
+            } catch (OutOfMemoryError oom) {
+                // System.gc();
                 try {
                     BitmapFactory.Options options = new BitmapFactory.Options();
 
                     options.inSampleSize = 2;
                     Bitmap bitmapFactory = BitmapFactory.decodeStream(is, null, options);
                     return BitmapFactory.decodeStream(is, null, options);
-                }
-                catch (Exception e){
-                    
-                }
-            }
+                } catch (Exception e) {
 
-            catch (FileNotFoundException e) {
+                }
+            } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (MalformedURLException e) {
                 e.printStackTrace();
@@ -596,7 +603,7 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> imple
                 mDrawable.setLevel(1);
                 // i don't know yet a better way to refresh TextView
                 // mTv.invalidate() doesn't work as expected
-                CharSequence t =   tvHtmlData.getText();
+                CharSequence t = tvHtmlData.getText();
                 tvHtmlData.setText(t);
             }
         }

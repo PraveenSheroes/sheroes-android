@@ -162,10 +162,12 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
             }*/ else {
                Intent homeIntent = new Intent(this, HomeActivity.class);
                startActivity(homeIntent);
+                finish();
             }
         } else {
             Intent homeIntent = new Intent(this, HomeActivity.class);
             startActivity(homeIntent);
+            finish();
         }
     }
 

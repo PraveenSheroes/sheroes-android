@@ -41,8 +41,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThread
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.home.EventDetailPojo;
-import appliedlife.pvtltd.SHEROES.models.entities.home.EventRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCount;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobApplyRequest;
@@ -296,9 +294,6 @@ public interface SheroesAppServiceApi {
 
     @POST("participation/challenge/accept")
     Observable<ChallengeListResponse> challengeAccept(@Body ChallengeAcceptRequest challengeAcceptRequest);
-
-    @POST("http://www.mocky.io/v2/59450b4113000053055b6f4b")
-    Observable<EventDetailPojo> getEventData(@Body EventRequest eventRequest);
 
     @POST(BuildConfig.GOOGLE_PLUS_URL)
     Observable<GooglePlusResponse> getUserGoogleLogin(@Body GooglePlusRequest loginRequest);

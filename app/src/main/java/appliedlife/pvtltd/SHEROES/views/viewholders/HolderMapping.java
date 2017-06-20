@@ -26,6 +26,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.DrawerItems;
 import appliedlife.pvtltd.SHEROES.models.entities.home.EventDetailPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.EventSpeakerData;
+import appliedlife.pvtltd.SHEROES.models.entities.home.EventSponsorData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.models.entities.home.ProfileItems;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobDetailPojo;
@@ -407,6 +408,11 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new EventSpeakerHolder(view, viewInterface);
         }
+    },EVENT_SPONSOR_HOLDER(R.layout.event_sponsor_holder) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new EventSponsorHolder(view, viewInterface);
+        }
     };
     public Object object;
     public int layout;
@@ -611,6 +617,9 @@ public enum HolderMapping {
                     returnView = EVENT_DETAIL_HOLDER.ordinal();
                 }else if (item instanceof EventSpeakerData) {
                     returnView = EVENT_SPEAKER_HOLDER.ordinal();
+                }
+                else if (item instanceof EventSponsorData) {
+                    returnView = EVENT_SPONSOR_HOLDER.ordinal();
                 }
             }
         }
