@@ -142,7 +142,6 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
         }
     }
 
-
     private void callActivities(String urlSharedViaSocial, String baseUrl, int fullLength) {
         String dataIdString = AppConstants.EMPTY_STRING;
         //In case of Article
@@ -227,6 +226,24 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
 
             }
 
+        } else if (AppConstants.EVENT_URL.equalsIgnoreCase(baseUrl) || AppConstants.EVENT_URL_COM.equalsIgnoreCase(baseUrl) && AppConstants.EVENT_URL.length() < fullLength) {
+            try {
+                int sareid = urlSharedViaSocial.lastIndexOf(AppConstants.BACK_SLASH);
+                String id = urlSharedViaSocial.substring(sareid + 1, fullLength);
+                byte[] id1 = Base64.decode(id, Base64.DEFAULT);
+                dataIdString = new String(id1, AppConstants.UTF_8);
+                dataIdString = dataIdString.replaceAll("\\D+","");
+                Intent eventDetail = new Intent(SheroesDeepLinkingActivity.this, HomeActivity.class);
+                eventDetail.putExtra(AppConstants.EVENT_ID, Long.parseLong(dataIdString));
+                eventDetail.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                startActivity(eventDetail);
+                finish();
+            } catch (Exception e) {
+                Intent into = new Intent(this, HomeActivity.class);
+                into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                startActivity(into);
+                finish();
+            }
         }
         //In case of profile
         else if ((AppConstants.USER_PROFILE_URL).equalsIgnoreCase(baseUrl) || AppConstants.USER_PROFILE_URL_COM.equalsIgnoreCase(baseUrl) && AppConstants.USER_PROFILE_URL.length() < fullLength) {

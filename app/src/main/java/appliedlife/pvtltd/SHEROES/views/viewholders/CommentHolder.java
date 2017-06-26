@@ -90,7 +90,6 @@ public class CommentHolder extends BaseViewHolder<CommentReactionDoc> {
         }
         ivListCommentProfilePic.setCircularImage(true);
         if (item.isAnonymous()) {
-            String userName = LEFT_HTML_TAG_FOR_COLOR + mContext.getString(R.string.ID_ANONYMOUS) + RIGHT_HTML_TAG_FOR_COLOR;
             ivListCommentProfilePic.setImageResource(R.drawable.ic_anonomous);
             StringBuilder stringBuilder=new StringBuilder();
             stringBuilder.append(dataItem.getParticipantName()).append(AppConstants.COLON).append(AppConstants.SPACE).append(dataItem.getComment());
@@ -100,7 +99,6 @@ public class CommentHolder extends BaseViewHolder<CommentReactionDoc> {
             getCommentString.setSpan(new StyleSpan(Typeface.BOLD), 0, size, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
             tvUserComment.setText(getCommentString);
         } else {
-            String userName = LEFT_HTML_TAG_FOR_COLOR + dataItem.getParticipantName() + RIGHT_HTML_TAG_FOR_COLOR;
             if (StringUtil.isNotNullOrEmptyString(dataItem.getComment())) {
                 ivListCommentProfilePic.bindImage(dataItem.getParticipantImageUrl());
                 StringBuilder stringBuilder=new StringBuilder();

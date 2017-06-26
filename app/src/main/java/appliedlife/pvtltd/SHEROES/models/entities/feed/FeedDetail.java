@@ -21,6 +21,13 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
     boolean isTrending;
     boolean isFromHome;
     private List<ChallengeDataItem> challengeDataItems = null;
+
+    @SerializedName("s_disp_third_party_unique_id")
+    @Expose
+    private String dispThirdPartyUniqueId;
+    @SerializedName("start_date_dt")
+    @Expose
+    private String startDateForEvent;
     @SerializedName("solr_ignore_posting_date_only_dt")
     @Expose
     private String postedOnlyDateFormat;
@@ -1782,6 +1789,22 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         this.eventVenu = eventVenu;
     }
 
+    public String getDispThirdPartyUniqueId() {
+        return dispThirdPartyUniqueId;
+    }
+
+    public void setDispThirdPartyUniqueId(String dispThirdPartyUniqueId) {
+        this.dispThirdPartyUniqueId = dispThirdPartyUniqueId;
+    }
+
+    public String getStartDateForEvent() {
+        return startDateForEvent;
+    }
+
+    public void setStartDateForEvent(String startDateForEvent) {
+        this.startDateForEvent = startDateForEvent;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -1796,6 +1819,8 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         dest.writeByte(this.isTrending ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isFromHome ? (byte) 1 : (byte) 0);
         dest.writeTypedList(this.challengeDataItems);
+        dest.writeString(this.dispThirdPartyUniqueId);
+        dest.writeString(this.startDateForEvent);
         dest.writeString(this.postedOnlyDateFormat);
         dest.writeString(this.postedDate);
         dest.writeString(this.deepLinkUrl);
@@ -1958,6 +1983,8 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         this.isTrending = in.readByte() != 0;
         this.isFromHome = in.readByte() != 0;
         this.challengeDataItems = in.createTypedArrayList(ChallengeDataItem.CREATOR);
+        this.dispThirdPartyUniqueId = in.readString();
+        this.startDateForEvent = in.readString();
         this.postedOnlyDateFormat = in.readString();
         this.postedDate = in.readString();
         this.deepLinkUrl = in.readString();

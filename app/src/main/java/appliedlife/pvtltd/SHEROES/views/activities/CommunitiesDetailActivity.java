@@ -116,6 +116,10 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
     private PayloadBuilder payloadBuilder;
     private long startedTime;
     private ProgressDialog mProgressDialog;
+    private long communityId;
+    private long idOFEntityParticipant;
+    private boolean isFromFeedPost;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -143,6 +147,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
             } else {
                 mFeedDetail = getIntent().getParcelableExtra(AppConstants.COMMUNITY_DETAIL);
                 communityEnum = (CommunityEnum) getIntent().getSerializableExtra(AppConstants.MY_COMMUNITIES_FRAGMENT);
+                isFromFeedPost = getIntent().getBooleanExtra(AppConstants.COMMUNITY_POST_ID, false);
             }
         }
         setPagerAndLayouts();
@@ -153,6 +158,12 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
         supportPostponeEnterTransition();
         setSupportActionBar(mToolbarCommunitiesDetail);
         if (null != mFeedDetail && null != communityEnum) {
+            idOFEntityParticipant = mFeedDetail.getIdOfEntityOrParticipant();
+            communityId = mFeedDetail.getCommunityId();
+            if (isFromFeedPost) {
+                mFeedDetail.setIdOfEntityOrParticipant(communityId);
+                mFeedDetail.setCommunityId(idOFEntityParticipant);
+            }
             if (mFeedDetail.isClosedCommunity() && !mFeedDetail.isOwner()) {
                 isCommunityDetailFragment = true;
                 mCommunityDetailActivity.setVisibility(View.GONE);
@@ -433,7 +444,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
         LoginManager.getInstance().logOut();
         String appLinkUrl, previewImageUrl;
         appLinkUrl = AppConstants.FB_APP_LINK_URL;
-        previewImageUrl=AppConstants.FB_APP_LINK_URL_PREVIEW_IMAGE;
+        previewImageUrl = AppConstants.FB_APP_LINK_URL_PREVIEW_IMAGE;
         if (AppInviteDialog.canShow()) {
             AppEventsLogger logger = AppEventsLogger.newLogger(this);
             logger.logEvent(AppEventsConstants.EVENT_NAME_VIEWED_CONTENT);
@@ -613,14 +624,18 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
     public void onBackClick() {
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
+        if (isFromFeedPost) {
+            mFeedDetail.setCommunityId(communityId);
+            mFeedDetail.setIdOfEntityOrParticipant(idOFEntityParticipant);
+        }
         bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, mFeedDetail);
         bundle.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, communityEnum);
         intent.putExtras(bundle);
         setResult(RESULT_OK, intent);
         finish();
         long timeSpent = System.currentTimeMillis() - startedTime;
-        if(null!=mFeedDetail&&StringUtil.isNotNullOrEmptyString(mFeedDetail.getNameOrTitle()))
-        moEngageUtills.entityMoEngageCommunityDetail(this, mMoEHelper, payloadBuilder, timeSpent, mFeedDetail.getNameOrTitle(), mFeedDetail.getIdOfEntityOrParticipant(),mFeedDetail.isClosedCommunity(), MoEngageConstants.COMMUNITY_TAG);
+        if (null != mFeedDetail && StringUtil.isNotNullOrEmptyString(mFeedDetail.getNameOrTitle()))
+            moEngageUtills.entityMoEngageCommunityDetail(this, mMoEHelper, payloadBuilder, timeSpent, mFeedDetail.getNameOrTitle(), mFeedDetail.getIdOfEntityOrParticipant(), mFeedDetail.isClosedCommunity(), MoEngageConstants.COMMUNITY_TAG);
 
     }
 

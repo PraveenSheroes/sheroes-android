@@ -196,9 +196,9 @@ public class HomeFragment extends BaseFragment {
                         if (mInstallUpdatePreference.get().isFirstOpen()) {
                             LoginRequest loginRequest = loginRequestBuilder();
                             loginRequest.setGcmorapnsid(registrationId);
-                            mHomePresenter.getNewGCMidFromPresenter(loginRequest);
                             onceWelcomeDataItem = new FeedDetail();
                             onceWelcomeDataItem.setSubType(AppConstants.ONCE_WELCOME);
+                            mHomePresenter.getNewGCMidFromPresenter(loginRequest);
                         } else {
                             if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getGcmId())) {
                                 String mOldGcmId = mUserPreference.get().getGcmId();
@@ -209,6 +209,14 @@ public class HomeFragment extends BaseFragment {
                                         mHomePresenter.getNewGCMidFromPresenter(loginRequest);
                                     }
                                 }
+                            }
+                            if (mInstallUpdatePreference.get().isWelcome())
+                            {
+                                onceWelcomeDataItem = new FeedDetail();
+                                onceWelcomeDataItem.setSubType(AppConstants.ONCE_WELCOME);
+                                InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
+                                installUpdateForMoEngage.setWelcome(false);
+                                mInstallUpdatePreference.set(installUpdateForMoEngage);
                             }
                         }
                     }

@@ -20,6 +20,7 @@
     <string name="IDS_UN_AUTHORIZE">The server encountered an error and could not complete your request.</string>
     <!-- Strings related to login -->
     <string name="ID_PROMPT_EMAIL">Email ID</string>
+    <string name="ID_TODAY">Today</string>
     <string name="ID_CREATE">Create</string>
     <string name="ID_CREATED">Created</string>
     <string name="ID_PROMPT_PASSWORD">Password</string>
@@ -27,6 +28,7 @@
     <string name="ID_ERROR_INVALID_EMAIL">This email address is invalid</string>
     <string name="ID_ERROR_INVALID_PASSWORD">Enter password</string>
     <string name="ID_POSTED_IN">posted in</string>
+    <string name="ID_POSTED_AN">posted an</string>
     <string name="ID_CHALLENGE_ACCEPTED">Challenge Accepted</string>
     <string name="ID_CHALLENGE_COMPLETED">Challenge Completed</string>
     <string name="ID_NEW">NEW</string>

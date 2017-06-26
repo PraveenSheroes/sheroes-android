@@ -83,6 +83,8 @@
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
+                    android:textColor="@color/pure_black"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:textSize="@dimen/sp_size_14"
                     android:backgroundTint="@color/blue"
                     android:hint="@string/ID_PROMPT_EMAIL"/>
@@ -101,6 +103,8 @@
                     android:imeOptions="actionUnspecified"
                     android:inputType="textPassword"
                     android:textSize="@dimen/sp_size_14"
+                    android:textColor="@color/pure_black"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:maxLines="1"
                     android:backgroundTint="@color/blue"
                     android:hint="@string/ID_PROMPT_PASSWORD"/>
@@ -136,7 +140,6 @@
 
         </LinearLayout>
     </ScrollView>
-
-    <include layout="@layout/progress_bar_login" />
     </LinearLayout>
+    <include layout="@layout/progress_bar_login" />
 </FrameLayout>

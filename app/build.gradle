@@ -38,7 +38,7 @@ android {
     buildTypes {
         debug {
             buildConfigField "String", "BASE_URL", "\"http://34.193.138.177/\""
-          //   buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
+           // buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
             buildConfigField "String", "GOOGLE_PLUS_URL", "\"https://sheroes.com/APIUsers/gplogin.json\""
             buildConfigField 'Boolean', 'enableCrashlytics', 'false'
             shrinkResources false
@@ -107,6 +107,7 @@ dependencies {
     }
     compile 'com.moengage:moe-android-sdk:7.7.01'
     compile 'com.appsflyer:af-android-sdk:4.6.7@aar'
+    compile 'org.apache.commons:commons-lang3:3.5'
 }
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'io.fabric'

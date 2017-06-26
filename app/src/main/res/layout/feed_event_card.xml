@@ -162,12 +162,12 @@
             android:textColor="@color/footer_icon_text"
             android:textSize="@dimen/sp_size_12" />
 
-        <TextView
+        <Button
             android:id="@+id/tv_event_share_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/dp_size_30"
+            android:layout_height="@dimen/dp_size_30"
             android:layout_marginRight="@dimen/dp_size_52"
-            android:background="@drawable/ic_share_un_filled"
+            android:background="@drawable/selector_event_share"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:gravity="center"
             android:textAllCaps="true"

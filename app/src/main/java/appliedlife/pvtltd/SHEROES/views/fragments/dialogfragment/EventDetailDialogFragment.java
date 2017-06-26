@@ -43,6 +43,7 @@ import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_BOOKMARK_UNBOOKMARK;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_LIKE_UNLIKE;
@@ -64,12 +65,14 @@ public class EventDetailDialogFragment extends BaseDialogFragment implements Hom
     private LinearLayoutManager mLayoutManager;
     @Bind(R.id.rv_event_detail_list)
     RecyclerView mRecyclerView;
-   @Bind(R.id.iv_event_detail)
-   ImageView ivEventDetail;
+    @Bind(R.id.iv_event_detail)
+    ImageView ivEventDetail;
     private EventDetailPojo mEventDetailPojo;
     private long mEventId;
     private ArrayList<EventDetailPojo> eventList;
     private EventDetailPojo eventDetailPojo;
+    private boolean isOperationPerformed;
+    private FeedDetail feedDetailCard;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -84,7 +87,7 @@ public class EventDetailDialogFragment extends BaseDialogFragment implements Hom
                 mEventId = bundle.getLong(AppConstants.EVENT_ID);
                 if (mEventId > 0) {
                     mFeedDetail = new FeedDetail();
-                    mFeedDetail.setIdOfEntityOrParticipant(mEventId);
+                    mFeedDetail.setDispThirdPartyUniqueId(String.valueOf(mEventId));
                 }
             }
             if (null != mFeedDetail) {
@@ -94,8 +97,15 @@ public class EventDetailDialogFragment extends BaseDialogFragment implements Hom
                 mAdapter = new GenericRecyclerViewAdapter(getActivity(), (HomeActivity) getActivity());
                 mRecyclerView.setLayoutManager(mLayoutManager);
                 mRecyclerView.setAdapter(mAdapter);
-                mFeedDetail.setIdOfEntityOrParticipant(4666);
-                mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_ARTICLE, 1, mFeedDetail.getIdOfEntityOrParticipant()));
+                if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getDispThirdPartyUniqueId())) {
+                    Long uniqueId = Long.parseLong(mFeedDetail.getDispThirdPartyUniqueId());
+                    mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_EVENT, 1, uniqueId));
+                    try {
+                        feedDetailCard = (FeedDetail) mFeedDetail.clone();
+                    } catch (CloneNotSupportedException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
         return view;
@@ -128,19 +138,28 @@ public class EventDetailDialogFragment extends BaseDialogFragment implements Hom
             eventList = new ArrayList<>();
             eventDetailPojo = new EventDetailPojo();
             eventDetailPojo.setId(AppConstants.ONE_CONSTANT);
-            setImageBackground(feedDetailList.get(0));
-            eventDetailPojo.setFeedDetail(feedDetailList.get(0));
+            FeedDetail feedDetail = feedDetailList.get(0);
+            mFeedDetail = feedDetail;
+            feedDetail.setItemPosition(mFeedDetail.getItemPosition());
+            setImageBackground(feedDetail);
+            eventDetailPojo.setFeedDetail(feedDetail);
             eventList.add(eventDetailPojo);
             mAdapter.setSheroesGenericListData(eventList);
             mAdapter.notifyDataSetChanged();
         }
     }
 
-    public void eventInterestedListData() {
-        mHomePresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(mFeedDetail.getEntityOrParticipantId(), AppConstants.EVENT_CONSTANT));
+    public void eventInterestedListData(FeedDetail feedDetail) {
+        mFeedDetail.setReactionValue(feedDetail.getReactionValue());
+        if (mFeedDetail.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
+            mHomePresenter.getUnLikesFromPresenter(mAppUtils.unLikeRequestBuilder(mFeedDetail.getEntityOrParticipantId()));
+        } else {
+            mHomePresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(mFeedDetail.getEntityOrParticipantId(), AppConstants.EVENT_CONSTANT));
+        }
     }
 
-    public void eventGoingListData() {
+    public void eventGoingListData(FeedDetail feedDetail) {
+        mFeedDetail.setBookmarked(feedDetail.isBookmarked());
         mHomePresenter.addBookMarkFromPresenter(mAppUtils.bookMarkRequestBuilder(mFeedDetail.getEntityOrParticipantId()), mFeedDetail.isBookmarked());
     }
 
@@ -149,20 +168,23 @@ public class EventDetailDialogFragment extends BaseDialogFragment implements Hom
     public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
         switch (feedParticipationEnum) {
             case LIKE_UNLIKE:
-                  interested(baseResponse);
+                interested(baseResponse);
                 break;
             case BOOKMARK_UNBOOKMARK:
-                 going(baseResponse);
+                going(baseResponse);
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
         }
     }
+
     protected void going(BaseResponse baseResponse) {
         if (null != mFeedDetail) {
             if (baseResponse instanceof BookmarkResponsePojo) {
                 switch (baseResponse.getStatus()) {
                     case AppConstants.SUCCESS:
+                        isOperationPerformed = true;
+                        feedDetailCard.setBookmarked(mFeedDetail.isBookmarked());
                         eventDetailPojo.setFeedDetail(mFeedDetail);
                         eventList.clear();
                         eventList.add(eventDetailPojo);
@@ -190,31 +212,27 @@ public class EventDetailDialogFragment extends BaseDialogFragment implements Hom
 
     protected void interested(BaseResponse baseResponse) {
         if (StringUtil.isNotNullOrEmptyString(baseResponse.getStatus()) && baseResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS) && null != mFeedDetail) {
-                if (mFeedDetail.getReactionValue() == AppConstants.NO_REACTION_CONSTANT) {
-                    mFeedDetail.setReactionValue(AppConstants.EVENT_CONSTANT);
-                    mFeedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
-                } else {
-                    mFeedDetail.setReactionValue(AppConstants.EVENT_CONSTANT);
-                }
+            isOperationPerformed = true;
+            feedDetailCard.setReactionValue(mFeedDetail.getReactionValue());
             eventDetailPojo.setFeedDetail(mFeedDetail);
             eventList.clear();
             eventList.add(eventDetailPojo);
             mAdapter.notifyDataSetChanged();
 
         } else {
-                if (mFeedDetail.getReactionValue()!= AppConstants.NO_REACTION_CONSTANT) {
-                    mFeedDetail.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
-                    mFeedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() - AppConstants.ONE_CONSTANT);
-                } else {
-                    mFeedDetail.setReactionValue(AppConstants.EVENT_CONSTANT);
-                    mFeedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
-                }
-                eventDetailPojo.setFeedDetail(mFeedDetail);
-                eventList.clear();
-                eventList.add(eventDetailPojo);
-                mAdapter.notifyDataSetChanged();
+            if (mFeedDetail.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
+                mFeedDetail.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
+                mFeedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() - AppConstants.ONE_CONSTANT);
+            } else {
+                mFeedDetail.setReactionValue(AppConstants.EVENT_CONSTANT);
+                mFeedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
             }
-            showError(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_LIKE_UNLIKE);
+            eventDetailPojo.setFeedDetail(mFeedDetail);
+            eventList.clear();
+            eventList.add(eventDetailPojo);
+            mAdapter.notifyDataSetChanged();
+        }
+        showError(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_LIKE_UNLIKE);
     }
 
     @Override
@@ -237,9 +255,21 @@ public class EventDetailDialogFragment extends BaseDialogFragment implements Hom
         return new Dialog(getActivity(), R.style.Theme_Material_Light_Dialog_NoMinWidth) {
             @Override
             public void onBackPressed() {
-                dismissAllowingStateLoss();//dismiss dialog on back button press
+                if (isOperationPerformed) {
+                    ((HomeActivity) getActivity()).refreshHomeFragment(feedDetailCard);
+                } else {
+                    dismissAllowingStateLoss();//dismiss dialog on back button press
+                }
                 dismiss();
             }
         };
+    }
+
+    @OnClick(R.id.tv_event_detail_back)
+    public void onEventDetailBack() {
+        if (isOperationPerformed) {
+            ((HomeActivity) getActivity()).refreshHomeFragment(feedDetailCard);
+        }
+        dismiss();
     }
 }

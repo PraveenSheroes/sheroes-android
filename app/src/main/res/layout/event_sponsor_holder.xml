@@ -8,8 +8,7 @@
         android:id="@+id/iv_event_sponsor_icon"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/dp_size_100"
-        android:layout_gravity="center"
-        android:src="@drawable/ic_anonomous" />
+        android:layout_gravity="center" />
 
 </LinearLayout>
 

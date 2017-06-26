@@ -172,7 +172,7 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> imple
             tvHtmlData.setText(spanned);
             tvHtmlData.setMovementMethod(LinkMovementMethod.getInstance());
         }
-        stripUnderlines(tvHtmlData);
+     //   stripUnderlines(tvHtmlData);
     }
     private void stripUnderlines(TextView textView) {
         Spannable s = new SpannableString(textView.getText());

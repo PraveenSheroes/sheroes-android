@@ -41,7 +41,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                        android:text="JUN"
                         android:textAllCaps="true"
                         android:textColor="@color/footer_icon_text"
                         android:textSize="@dimen/sp_size_10" />
@@ -51,7 +50,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                        android:text="01"
                         android:textColor="@color/faq_question_color"
                         android:textSize="@dimen/sp_size_18" />
 
@@ -64,7 +62,6 @@
                     android:layout_marginLeft="@dimen/dp_size_30"
                     android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                     android:lineSpacingExtra="@dimen/dp_size_4"
-                    android:text="Undergrind Death Metal fest with Dying Fetus"
                     android:textColor="@color/detail_page_text"
                     android:textSize="@dimen/sp_size_16" />
 
@@ -116,12 +113,12 @@
                     android:textColor="@color/footer_icon_text"
                     android:textSize="@dimen/sp_size_12" />
 
-                <TextView
+                <Button
                     android:id="@+id/tv_event_share_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/dp_size_52"
-                    android:background="@drawable/ic_share_filled"
+                    android:layout_width="@dimen/dp_size_30"
+                    android:layout_height="@dimen/dp_size_30"
+                    android:layout_marginRight="@dimen/dp_size_17"
+                    android:background="@drawable/selector_event_share"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:gravity="center"
                     android:textAllCaps="true"
@@ -132,18 +129,18 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_size_65"
+                android:layout_marginLeft="@dimen/dp_size_70"
                 android:gravity="left"
                 android:orientation="horizontal">
-
                 <TextView
                     android:id="@+id/tv_event_detail_going_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/dp_size_8"
+                    android:drawablePadding="@dimen/dp_size_5"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:drawableLeft="@drawable/ic_going_check"
                     android:gravity="center"
-                    android:text="@string/ID_GOING"
                     android:textColor="@color/event_text"
                     android:textSize="@dimen/sp_size_12" />
 
@@ -153,7 +150,8 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:gravity="center"
-                    android:text="@string/ID_INTERESTED"
+                    android:drawablePadding="@dimen/dp_size_5"
+                    android:drawableLeft="@drawable/ic_interested_check"
                     android:textColor="@color/event_text"
                     android:textSize="@dimen/sp_size_12" />
 
@@ -205,8 +203,7 @@
                         android:layout_height="wrap_content"
                         android:drawableLeft="@drawable/ic_job_location"
                         android:drawablePadding="@dimen/dp_size_35"
-                        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-                        android:text="SHEROES OFFICE"
+                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
                         android:textColor="@color/detail_page_text"
                         android:textSize="@dimen/sp_size_14" />
 
@@ -215,9 +212,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dp_size_48"
-                        android:layout_marginTop="@dimen/dp_size_8"
                         android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                        android:text="F- 213/C, 1 st floor, SIS House, Lado Sarai"
                         android:textColor="@color/event_text"
                         android:textSize="@dimen/sp_size_12" />
                 </LinearLayout>
@@ -253,13 +248,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_size_40"
                 android:fontFamily="@string/ID_ROBOTO_LIGHT"
-                android:text="@string/ID_DETAIL_ABOUT_EVENT"
+                android:lineSpacingExtra="@dimen/dp_size_3"
                 android:textColor="@color/detail_page_text"
                 android:textSize="@dimen/sp_size_12" />
         </LinearLayout>
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView
+        android:id="@+id/card_view_speaker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/dp_size_10">
@@ -282,6 +278,7 @@
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView
+        android:id="@+id/card_view_sponsor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/dp_size_10">

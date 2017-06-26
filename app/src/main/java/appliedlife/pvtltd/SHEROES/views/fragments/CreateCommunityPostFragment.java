@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ComponentName;
@@ -182,7 +183,8 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
     private MoEHelper mMoEHelper;
     private PayloadBuilder payloadBuilder;
     private MoEngageUtills moEngageUtills;
-    private  int positionOfFeedItem;
+    private int positionOfFeedItem;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -423,11 +425,12 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
         }
     }
 
+    @TargetApi(AppConstants.ANDROID_SDK_24)
     @OnClick(R.id.tv_community_post_submit)
     public void communityPostSubmitClick() {
         if (null != mCommunityId && null != mCreaterType && StringUtil.isNotNullOrEmptyString(mCreaterType) && StringUtil.isNotNullOrEmptyString(mEtShareCommunityPostText.getText().toString())) {
             pbCreateCommunityPost.setVisibility(View.VISIBLE);
-            String description = mEtShareCommunityPostText.getText().toString();
+            String description=mEtShareCommunityPostText.getText().toString();
             if (null != mFeedDetail) {
                 if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getCallFromName()) && mFeedDetail.getCallFromName().equalsIgnoreCase(AppConstants.FEED_COMMUNITY_POST)) {
                     List<String> imag = new ArrayList<>();
@@ -545,7 +548,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
                 case AppConstants.SUCCESS:
                     mTv_community_post_submit.setVisibility(View.VISIBLE);
                     if (null != mFeedDetail) {
-                        positionOfFeedItem=mFeedDetail.getItemPosition();
+                        positionOfFeedItem = mFeedDetail.getItemPosition();
                         moEngageUtills.entityMoEngageCreatePost(getActivity(), mMoEHelper, payloadBuilder, mFeedDetail.getNameOrTitle(), mFeedDetail.getIdOfEntityOrParticipant(), mFeedDetail.getCommunityId(), mFeedDetail.isClosedCommunity(), MoEngageConstants.COMMUNITY_POST_TAG, TAG);
                         Toast.makeText(getActivity(), messageForSuccess, Toast.LENGTH_LONG).show();
                         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getCallFromName()) && AppConstants.COMMUNITIES_DETAIL.equalsIgnoreCase(mFeedDetail.getCallFromName())) {

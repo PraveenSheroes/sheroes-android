@@ -134,6 +134,8 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                 InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
                 installUpdateForMoEngage.setFirstOpen(true);
                 installUpdateForMoEngage.setAppVersion(versionCode);
+                installUpdateForMoEngage.setWelcome(true);
+                mInstallUpdatePreference.set(installUpdateForMoEngage);
             }
             mMoEHelper.setExistingUser(true);
         } else {

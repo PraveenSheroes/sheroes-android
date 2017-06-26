@@ -80,7 +80,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.DrawerItems;
-import appliedlife.pvtltd.SHEROES.models.entities.home.EventDetailPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -217,6 +216,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     public ChallengeSuccessDialogFragment mChallengeSuccessDialogFragment;
     private File localImageSaveForChallenge;
     private long mChallengeId;
+    private long mEventId;
     private String mHelpLineChat;
     private EventDetailDialogFragment eventDetailDialogFragment;
     private ProgressDialog mProgressDialog;
@@ -239,7 +239,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         if (StringUtil.isNotNullOrEmptyString(mHelpLineChat) && mHelpLineChat.equalsIgnoreCase(AppConstants.HELPLINE_CHAT)) {
             handleHelpLineFragmentFromDeepLinkAndLoading();
         }
-        faceBookInitialization();
     }
 
     private boolean startedFirstTime() {
@@ -271,6 +270,9 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             if (getIntent().getExtras().get(AppConstants.HELPLINE_CHAT) != null) {
                 mHelpLineChat = getIntent().getExtras().getString(AppConstants.HELPLINE_CHAT);
             }
+            if (getIntent().getExtras().get(AppConstants.EVENT_ID) != null) {
+                mEventId = getIntent().getExtras().getLong(AppConstants.EVENT_ID);
+            }
         }
         initHomeViewPagerAndTabs();
         assignNavigationRecyclerListView();
@@ -294,6 +296,9 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .skipMemoryCache(true)
                     .into(mIvSideDrawerProfileBlurBackground);
+        }
+        if (mEventId > 0) {
+            eventDetailDialog(mEventId);
         }
     }
 
@@ -401,24 +406,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         }
     }
 
-    private void faceBookInitialization() {
-       /* if (null != getIntent() ) {
-            Uri targetUrl = AppLinks.getTargetUrlFromInboundIntent(this, getIntent());
-            if (null!=targetUrl) {
-
-            } else {
-                AppLinkData.fetchDeferredAppLinkData(this,
-                        new AppLinkData.CompletionHandler() {
-                            @Override
-                            public void onDeferredAppLinkDataFetched(AppLinkData appLinkData) {
-                                if(null!=appLinkData&&null!= appLinkData.getArgumentBundle()&&null!=appLinkData.getArgumentBundle().get("target_url")) {
-                                  String url=appLinkData.getArgumentBundle().get("target_url").toString();
-                                }
-                            }
-                        });
-            }
-        }*/
-    }
 
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
@@ -434,13 +421,22 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     }
                 }
             } else if (id == R.id.li_event_card_main_layout) {
-                eventDetailDialog();
+                eventDetailDialog(0);
+            } else if (id == R.id.tv_event_detail_interested_btn) {
+                if (null != eventDetailDialogFragment) {
+                    eventDetailDialogFragment.eventInterestedListData(mFeedDetail);
+                }
+            } else if (id == R.id.tv_event_detail_going_btn) {
+                if (null != eventDetailDialogFragment) {
+                    eventDetailDialogFragment.eventGoingListData(mFeedDetail);
+                }
             } else {
                 mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.ONE_CONSTANT);
                 setAllValues(mFragmentOpen);
                 setViewPagerAndViewAdapter(mViewPagerAdapter, mViewPager);
                 super.feedCardsHandled(view, baseResponse);
             }
+
         } else if (baseResponse instanceof DrawerItems) {
             int drawerItem = ((DrawerItems) baseResponse).getId();
             if (mDrawer.isDrawerOpen(GravityCompat.START)) {
@@ -541,17 +537,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 case R.id.iv_fb_share:
                     sharePostOnFacebook((ChallengeDataItem) baseResponse);
                     break;
-              /*  case R.id.tv_share_progress:
-                    sharePostOnFacebook((ChallengeDataItem) baseResponse);
-                    break;
-                case R.id.tv_complete_share:
-                    sharePostOnFacebook((ChallengeDataItem) baseResponse);
-                    *//*ChallengeDataItem challengeDataItem = (ChallengeDataItem) baseResponse;
-                    Intent intent = new Intent(Intent.ACTION_SEND);
-                    intent.setType(AppConstants.SHARE_MENU_TYPE);
-                    intent.putExtra(Intent.EXTRA_TEXT, challengeDataItem.getDeepLinkUrl());
-                    startActivity(Intent.createChooser(intent, AppConstants.SHARE));*//*
-                    break;*/
+
                 default:
                     LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + id);
             }
@@ -575,23 +561,13 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     homeOnClick();
                 }
             }
-        } else if (baseResponse instanceof EventDetailPojo) {
-            int id = view.getId();
-            switch (id) {
-                case R.id.tv_event_detail_interested_btn:
-                    if (null != eventDetailDialogFragment) {
-                        eventDetailDialogFragment.eventInterestedListData();
-                    }
-                    break;
-                case R.id.tv_event_detail_going_btn:
-                    if (null != eventDetailDialogFragment) {
-                        eventDetailDialogFragment.eventGoingListData();
-                    }
-                    break;
+        }
+    }
 
-                default:
-                    LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + id);
-            }
+    public void refreshHomeFragment(FeedDetail feedDetail) {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+        if (AppUtils.isFragmentUIActive(fragment)) {
+            ((HomeFragment) fragment).commentListRefresh(feedDetail, COMMENT_REACTION);
         }
     }
 
@@ -630,7 +606,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             String sharerUrl = AppConstants.FACEBOOK_SHARE_VIA_BROSWER + urlToShare;
             intent = new Intent(Intent.ACTION_VIEW, Uri.parse(sharerUrl));
         }
-
         startActivity(intent);
     }
 
@@ -670,11 +645,12 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         return mChallengeSuccessDialogFragment;
     }
 
-    public DialogFragment eventDetailDialog() {
+    public DialogFragment eventDetailDialog(long eventID) {
         eventDetailDialogFragment = (EventDetailDialogFragment) getFragmentManager().findFragmentByTag(EventDetailDialogFragment.class.getName());
         if (eventDetailDialogFragment == null) {
             eventDetailDialogFragment = new EventDetailDialogFragment();
             Bundle bundle = new Bundle();
+            bundle.putLong(AppConstants.EVENT_ID, eventID);
             bundle.putParcelable(AppConstants.EVENT_DETAIL, mFeedDetail);
             eventDetailDialogFragment.setArguments(bundle);
         }
@@ -1630,9 +1606,11 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getCallFromName()) && mFeedDetail.getCallFromName().equalsIgnoreCase(AppConstants.FEATURE_FRAGMENT)) {
                             communityOnClick();
                         } else {
-                            Fragment community = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.ONE_CONSTANT);
-                            if (AppUtils.isFragmentUIActive(community)) {
-                                ((MyCommunitiesFragment) community).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+                            if (null != mViewPagerAdapter) {
+                                Fragment community = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.ONE_CONSTANT);
+                                if (AppUtils.isFragmentUIActive(community)) {
+                                    ((MyCommunitiesFragment) community).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+                                }
                             }
                         }
                         break;
@@ -1734,8 +1712,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     }
 
     @OnClick(R.id.profile_link)
-    public void onClickProfile(){
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && false != mUserPreference.get().isSheUser() ) {
+    public void onClickProfile() {
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && false != mUserPreference.get().isSheUser()) {
             Intent intent = new Intent(this, ProfileActicity.class);
             intent.putExtra(AppConstants.EXTRA_IMAGE, profile);
             startActivity(intent);

@@ -42,7 +42,7 @@ public class AppConstants {
     public static final String HOME_SPINNER_FRAGMENT = "spinner_fragment";
     public static final String ANDROID_VIEW_PAGER = "android:switcher:";
     public static final String COLON = ":";
-    public static final String HOURS = "hrs";
+    public static final String HOURS = " Hrs ";
     public static final String APASTROPH =  "'s";
 
     public static final String DASH = "-";
@@ -284,6 +284,8 @@ public class AppConstants {
     public static final String ARTICLE_URL_COM = "https://sheroes.com/articles";
     public static final String COMMUNITY_URL = "https://sheroes.in/communities";
     public static final String COMMUNITY_URL_COM = "https://sheroes.com/communities";
+    public static final String EVENT_URL = "https://sheroes.in/event";
+    public static final String EVENT_URL_COM = "https://sheroes.com/event";
     public static final String USER_PROFILE_URL = "https://sheroes.in/users/edit_profile";
     public static final String USER_PROFILE_URL_COM = "https://sheroes.com/users/edit_profile";
     public static final String USER_URL = "https://sheroes.in/users";
@@ -321,6 +323,7 @@ public class AppConstants {
     public static final String HELPlINE_NO_MESSAGE="Please enter your message";
     public static final String HELPlINE_NO_CHAT="No Chat found";
     public static final int REQ_CODE_SPEECH_INPUT = 100;
+    public static final int EVENT_COMMUNITY_ID = 299;
     public static final String GOOGLE_PLUS = "Google plus";
     public static final String HELPLINE_URL = "https://sheroes.in/helpline";
     public static final String HELPLINE_URL_COM = "https://sheroes.com/helpline";

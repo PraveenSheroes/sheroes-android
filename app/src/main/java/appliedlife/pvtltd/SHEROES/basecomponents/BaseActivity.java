@@ -306,6 +306,9 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
             case R.id.tv_article_share:
                 shareCardViaSocial(baseResponse);
                 break;
+            case R.id.tv_event_share_btn:
+                shareCardViaSocial(baseResponse);
+                break;
             /*Card menu option depend on Feed type like post,article etc */
             case R.id.tv_feed_community_post_user_menu:
                 clickMenuItem(view, baseResponse, FEED_CARD_MENU);
@@ -381,6 +384,16 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 bundleFeature.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.FEATURE_COMMUNITY);
                 intetFeature.putExtras(bundleFeature);
                 startActivityForResult(intetFeature, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+                overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
+                break;
+            case  R.id.tv_feed_community_post_card_title:
+                Intent intentFromCommunityPost = new Intent(this, CommunitiesDetailActivity.class);
+                Bundle bundleFromPost = new Bundle();
+                bundleFromPost.putBoolean(AppConstants.COMMUNITY_POST_ID, true);
+                bundleFromPost.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
+                bundleFromPost.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.MY_COMMUNITY);
+                intentFromCommunityPost.putExtras(bundleFromPost);
+                startActivityForResult(intentFromCommunityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
                 overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
                 break;
             default:
