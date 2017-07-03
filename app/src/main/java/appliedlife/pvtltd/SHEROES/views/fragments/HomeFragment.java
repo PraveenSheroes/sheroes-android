@@ -1,12 +1,20 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +26,7 @@ import android.widget.Toast;
 import com.f2prateek.rx.preferences.Preference;
 import com.moengage.push.PushManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -34,6 +43,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
+import appliedlife.pvtltd.SHEROES.models.entities.home.UserContactDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.home.UserPhoneContactsListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.GcmIdResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.InstallUpdateForMoEngage;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
@@ -51,9 +62,13 @@ import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import rx.Observable;
+import rx.Subscriber;
+import rx.schedulers.Schedulers;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FOR_REFRESH_FRAGMENT_LIST;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_RESPONSE;
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.PERMISSIONS_REQUEST_READ_CONTACTS;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.acceptChallengeRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.challengetRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.feedRequestBuilder;
@@ -103,7 +118,7 @@ public class HomeFragment extends BaseFragment {
     @Bind(R.id.tv_refresh)
     TextView tvRefresh;
     private String mGcmId;
-    private FeedDetail challengeFeedDetail,onceWelcomeDataItem;
+    private FeedDetail challengeFeedDetail, onceWelcomeDataItem;
     private ChallengeDataItem mChallengeDataItem;
     private int mPercentCompleted;
     private long mChallengeId;
@@ -210,8 +225,7 @@ public class HomeFragment extends BaseFragment {
                                     }
                                 }
                             }
-                            if (mInstallUpdatePreference.get().isWelcome())
-                            {
+                            if (mInstallUpdatePreference.get().isWelcome()) {
                                 onceWelcomeDataItem = new FeedDetail();
                                 onceWelcomeDataItem.setSubType(AppConstants.ONCE_WELCOME);
                                 InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
@@ -262,6 +276,9 @@ public class HomeFragment extends BaseFragment {
                 break;
             case CHALLENGE_ACCEPT:
                 challengeAcceptedResponse(baseResponse);
+                break;
+            case USER_CONTACTS_ACCESS_SUCCESS:
+                getAppContactsListSuccess(baseResponse);
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
@@ -348,8 +365,7 @@ public class HomeFragment extends BaseFragment {
                         challengeFeedDetail.setChallengeDataItems(challengeListResponse.getReponseList());
                         challengeAddOnFeed(challengeFeedDetail);
                     }
-                    if(null!=onceWelcomeDataItem)
-                    {
+                    if (null != onceWelcomeDataItem) {
                         challengeAddOnFeed(onceWelcomeDataItem);
                     }
                 }
@@ -409,6 +425,9 @@ public class HomeFragment extends BaseFragment {
         if (mFragmentListRefreshData.getPageNo() == AppConstants.TWO_CONSTANT) {
             mHomePresenter.getChallengeListFromPresenter(challengetRequestBuilder(TAG));
         }
+        if (null != mUserPreference && !mUserPreference.get().isAppContactAccessed()) {
+            getUserContacts();
+        }
     }
 
     public void acceptChallenge(ChallengeDataItem challengeDataItem, int completionPercent, boolean isAccepted, boolean isUpdated, String imageUrl, String videoUrl) {
@@ -465,5 +484,84 @@ public class HomeFragment extends BaseFragment {
     public void onClickTryAgainOnError() {
         mLiNoResult.setVisibility(View.GONE);
         mHomePresenter.getFeedFromPresenter(feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
+    }
+
+    private Observable<Void> getUserPhoneContactsAndSend() {
+
+        return Observable.create(new Observable.OnSubscribe<Void>() {
+
+            @Override
+            public void call(Subscriber<? super Void> subscriber) {
+                UserPhoneContactsListRequest userPhoneContactsListRequest = new UserPhoneContactsListRequest();
+                List<UserContactDetail> userContactDetailsList = new ArrayList<>();
+                long startnow;
+                long endnow;
+
+                startnow = android.os.SystemClock.uptimeMillis();
+                UserContactDetail userContactDetail = null;
+                Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
+                Cursor cursor = ((HomeActivity) getActivity()).getContentResolver().query(uri, new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME, ContactsContract.CommonDataKinds.Phone._ID}, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
+                if(cursor!= null && cursor.getCount()>0) {
+                    try {
+                        cursor.moveToFirst();
+                        while (cursor.isAfterLast() == false) {
+                            String contactNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                            String contactName = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+
+                            userContactDetail = new UserContactDetail(contactName, contactNumber);
+                            if (userContactDetail != null) {
+                                userContactDetailsList.add(userContactDetail);
+                            }
+                            userContactDetail = null;
+                            cursor.moveToNext();
+                        }
+                    } catch (Exception e) {
+                        Log.e(TAG, e.getMessage());
+                    } finally {
+                        cursor.close();
+                    }
+                }
+                endnow = android.os.SystemClock.uptimeMillis();
+                Log.d("END", "TimeForContacts " + (endnow - startnow) + " ms");
+                userPhoneContactsListRequest.setContactDetailList(userContactDetailsList);
+                mHomePresenter.getAppContactsResponseInPresenter(userPhoneContactsListRequest);
+                subscriber.onCompleted();
+            }
+        });
+    }
+
+    private void getAppContactsListSuccess(BaseResponse baseResponse) {
+        switch (baseResponse.getStatus()) {
+            case AppConstants.SUCCESS:
+                LoginResponse loginResponse = mUserPreference.get();
+                loginResponse.setAppContactAccessed(true);
+                mUserPreference.set(loginResponse);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST_READ_CONTACTS: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    getUserPhoneContactsAndSend().subscribeOn(Schedulers.newThread()).subscribe();;
+                } else {
+                    Log.d(TAG, "No permission for contacts ");
+                }
+                return;
+            }
+        }
+    }
+
+    private void getUserContacts() {
+        {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSIONS_REQUEST_READ_CONTACTS);
+            } else {
+                getUserPhoneContactsAndSend().subscribeOn(Schedulers.newThread()).subscribe();;
+            }
+        }
     }
 }

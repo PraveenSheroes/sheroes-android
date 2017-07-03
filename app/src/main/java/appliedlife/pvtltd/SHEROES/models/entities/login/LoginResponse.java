@@ -34,6 +34,9 @@ public class LoginResponse extends BaseResponse implements Parcelable {
     @SerializedName("next_screen")
     @Expose
     private String nextScreen;
+    @SerializedName("is_app_contact_accessed")
+    @Expose
+    private boolean isAppContactAccessed;
     public String getToken() {
         return token;
     }
@@ -93,6 +96,14 @@ public class LoginResponse extends BaseResponse implements Parcelable {
         this.sheUser = sheUser;
     }
 
+    public boolean isAppContactAccessed() {
+        return isAppContactAccessed;
+    }
+
+    public void setAppContactAccessed(boolean appContactAccessed) {
+        isAppContactAccessed = appContactAccessed;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -108,6 +119,7 @@ public class LoginResponse extends BaseResponse implements Parcelable {
         dest.writeString(this.gcmId);
         dest.writeString(this.nextScreen);
         dest.writeByte((byte) (this.sheUser ? 1 : 0));
+        dest.writeByte((byte) (this.isAppContactAccessed ? 1 : 0));
     }
 
     protected LoginResponse(Parcel in) {
@@ -119,6 +131,7 @@ public class LoginResponse extends BaseResponse implements Parcelable {
         this.gcmId = in.readString();
         this.nextScreen = in.readString();
         this.sheUser = in.readByte() != 0;
+        this.isAppContactAccessed = in.readByte() != 0;
     }
 
     public static final Creator<LoginResponse> CREATOR = new Creator<LoginResponse>() {

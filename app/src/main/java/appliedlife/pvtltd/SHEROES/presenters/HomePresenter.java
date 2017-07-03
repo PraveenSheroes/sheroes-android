@@ -28,6 +28,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCount;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.home.UserPhoneContactsListRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.home.UserPhoneContactsListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.GcmIdResponse;
@@ -63,6 +65,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.JOIN_INVITE
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.LIKE_UNLIKE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.MARK_AS_SPAM;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.NOTIFICATION_COUNT;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.USER_CONTACTS_ACCESS_SUCCESS;
 
 /**
  * Created by Praveen Singh on 29/12/2016.
@@ -594,7 +597,36 @@ public class HomePresenter extends BasePresenter<HomeView> {
         });
         registerSubscription(subscribe);
     }
+    public void getAppContactsResponseInPresenter(UserPhoneContactsListRequest userPhoneContactsListRequest) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
+            return;
+        };
+        Subscription subscription = mHomeModel.getAppContactsResponseInModel(userPhoneContactsListRequest).subscribe(new Subscriber<UserPhoneContactsListResponse>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
 
+            @Override
+            public void onError(Throwable e) {
+                getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
+
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append(AppConstants.USER_CONTACTS_ACCESS).append(mSheroesApplication.getString(R.string.ID_VIEWS)).append(AppConstants.SPACE).append( e.getMessage());
+                GoogleAnalyticsTracing.screenNameTracking(mSheroesApplication,stringBuilder.toString());
+            }
+
+            @Override
+            public void onNext(UserPhoneContactsListResponse userPhoneContactsListResponse) {
+                getMvpView().stopProgressBar();
+                if (null != userPhoneContactsListResponse) {
+                    getMvpView().getNotificationReadCountSuccess(userPhoneContactsListResponse,USER_CONTACTS_ACCESS_SUCCESS);
+                }
+            }
+        });
+        registerSubscription(subscription);
+    }
     public void onStop() {
         detachView();
     }

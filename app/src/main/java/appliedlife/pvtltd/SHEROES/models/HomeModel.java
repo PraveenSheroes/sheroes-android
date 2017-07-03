@@ -21,6 +21,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCount;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.home.UserPhoneContactsListRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.home.UserPhoneContactsListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.GcmIdResponse;
@@ -261,5 +263,20 @@ public class HomeModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
+    public Observable<UserPhoneContactsListResponse> getAppContactsResponseInModel(UserPhoneContactsListRequest userPhoneContactsListRequest) {
+        LogUtils.info(TAG,"*******************"+new Gson().toJson(userPhoneContactsListRequest));
+        return sheroesAppServiceApi.getPhoneContactListResponse(userPhoneContactsListRequest)
+                .map(new Func1<UserPhoneContactsListResponse, UserPhoneContactsListResponse>() {
+                    @Override
+                    public UserPhoneContactsListResponse call(UserPhoneContactsListResponse userPhoneContactsListResponse) {
+                        return userPhoneContactsListResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+    }
+
 
 }

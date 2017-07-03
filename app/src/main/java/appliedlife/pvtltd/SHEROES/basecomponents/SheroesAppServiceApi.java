@@ -43,6 +43,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionR
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCount;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.home.UserPhoneContactsListRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.home.UserPhoneContactsListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobApplyRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobApplyResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
@@ -327,4 +329,7 @@ public interface SheroesAppServiceApi {
 
     @POST("participant/user/reset_password")
     Observable<ForgotPasswordResponse> forgotPasswordResponse(@Body ForgotPasswordRequest forgotPasswordRequest);
+
+    @POST("participant/user/get_app_user_contact_list")
+    Observable<UserPhoneContactsListResponse> getPhoneContactListResponse(@Body UserPhoneContactsListRequest userPhoneContactsListRequest);
 }
