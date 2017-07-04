@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import com.f2prateek.rx.preferences.Preference;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +22,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.MyProfileView;
@@ -29,6 +33,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.profile.UserDetails;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePersenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActicity;
@@ -36,6 +41,8 @@ import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_LIKE_UNLIKE;
 
 /**
  * Created by Priyanka  on 13-02-2017.
@@ -50,7 +57,10 @@ public class PersonalProfileFragment extends BaseFragment implements ProfileView
     RecyclerView mRecyclerView;
     @Bind(R.id.pb_profile_progress_bar)
     ProgressBar mProgressBar;
-
+    @Inject
+    AppUtils mAppUtils;
+    @Inject
+    Preference<LoginResponse> mUserPreference;
     GenericRecyclerViewAdapter mAdapter;
     private HomeActivityIntractionWithPersonalProfile mHomeActivityIntractionWithpersonalProfile;
     private static PersonalProfileFragment personalProfileFragment = new PersonalProfileFragment();
@@ -98,6 +108,10 @@ public class PersonalProfileFragment extends BaseFragment implements ProfileView
 
     private void callGetAllDetailsAPI() {
         profilePersenter.getALLUserDetails();
+    }
+
+    public void updateProfileData(String imageUrl) {
+        profilePersenter.getUserSummaryDetailsAuthTokeInPresenter(mAppUtils.getUserProfileRequestBuilder(AppConstants.PROFILE_PIC_SUB_TYPE, AppConstants.PROFILE_PIC_TYPE, imageUrl));
     }
 
     @Override
@@ -150,7 +164,23 @@ public class PersonalProfileFragment extends BaseFragment implements ProfileView
 
     @Override
     public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
-
+        switch (boardingDataResponse.getStatus()) {
+            case AppConstants.SUCCESS:
+                LoginResponse loginResponse = mUserPreference.get();
+                if(null!=loginResponse&&StringUtil.isNotNullOrEmptyString(boardingDataResponse.getResponse())) {
+                    UserSummary userSummary = loginResponse.getUserSummary();
+                    userSummary.setPhotoUrl(boardingDataResponse.getResponse());
+                    loginResponse.setUserSummary(userSummary);
+                    mUserPreference.set(loginResponse);
+                    ((ProfileActicity) getActivity()).setProfileNameData();
+                }
+                break;
+            case AppConstants.FAILED:
+                showError(boardingDataResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_LIKE_UNLIKE);
+                break;
+            default:
+                showError(getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
+        }
     }
 
     @Override

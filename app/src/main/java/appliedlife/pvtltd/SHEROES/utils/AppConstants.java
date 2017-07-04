@@ -330,4 +330,6 @@ public class AppConstants {
     public static final String HELPLINE_CHAT = "helpline_chat";
     public static final String EMAIL_VERIFICATION = "email_verification";
     public static final String FORGOT_PASSWORD = "forgot_password";
+    public static final String PROFILE_PIC_TYPE = "PROFILE_PHOTO";
+    public static final String PROFILE_PIC_SUB_TYPE = "USER_PROFILE_PHOTO_SERVICE";
 }

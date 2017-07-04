@@ -40,6 +40,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOpenAboutFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOwnerSearchFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CreateCommunityFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CreateCommunityPostFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.EmailVerificationFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FAQSFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
@@ -55,7 +56,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.JobFunctionalAreaFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobLocationFilter;
 import appliedlife.pvtltd.SHEROES.views.fragments.LoginFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunitiesFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.EmailVerificationFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingHowCanSheroesHelpYouFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingJobAtFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingShareYourInterestFragment;
@@ -121,6 +121,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.OwnerRemoveDial
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.PreferencesDeactiveAccountDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileAddEditEducationFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileDegreeDialog;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileImageDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileSchoolDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileSearchLanguageDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileSectoreDialog;
@@ -605,5 +606,8 @@ public interface SheroesAppComponent {
     void inject(ResetPasswordFragment resetPasswordFragment);
 
     void inject(ResetPasswordSuccessFragment resetPasswordSuccessFragment);
+
+    void inject(ProfileImageDialogFragment profileImageDialogFragment);
+
 
 }

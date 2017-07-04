@@ -203,7 +203,7 @@ public class ProfileAboutMeFragment extends BaseFragment implements ProfileView 
             userSummaryRequest.setDeviceUniqueId(appUtils.getDeviceId());
             userSummaryRequest.setLastScreenName(AppConstants.STRING);
             userSummaryRequest.setScreenName(AppConstants.STRING);
-            userSummaryRequest.setSource(AppConstants.STRING);
+            userSummaryRequest.setSource(AppConstants.SOURCE_NAME);
             userSummaryRequest.setType(AppConstants.SUMMARY);
             userSummaryRequest.setSummary(mAbout_Me_Des);
             userSummaryRequest.setSubType(AppConstants.USER_SUMMARY_SERVICE);

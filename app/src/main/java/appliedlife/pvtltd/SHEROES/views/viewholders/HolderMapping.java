@@ -438,27 +438,30 @@ public enum HolderMapping {
         if (null != item) {
             if (callFromType.equalsIgnoreCase(AppConstants.FEED_SUB_TYPE)) {
                 if (item instanceof FeedDetail) {
-                    String feedType = ((FeedDetail) item).getSubType().toUpperCase();
-                    switch (feedType) {
-                        case AppConstants.FEED_ARTICLE:
-                            returnView = FEED_ARTICLE.ordinal();
-                            break;
-                        case AppConstants.FEED_JOB:
-                            returnView = FEED_JOB.ordinal();
-                            break;
-                        case AppConstants.FEED_COMMUNITY_POST:
-                            returnView = FEED_COMMUNITY_POST.ordinal();
-                            break;
-                        case AppConstants.USER_SUB_TYPE:
-                            returnView = INVITE_MEMBER_MODULE.ordinal();
-                            break;
-                        case AppConstants.CHALLENGE_SUB_TYPE:
-                            returnView = CHALLENGE_HORIZONTAL_VIEW.ordinal();
-                            break;
-                        case AppConstants.ONCE_WELCOME:
-                            returnView = ONCE_WELCOME_VIEW.ordinal();
-                            break;
-                        default:
+                    FeedDetail feedDetail = ((FeedDetail) item);
+                    if(StringUtil.isNotNullOrEmptyString(feedDetail.getSubType())) {
+                        String feedType = feedDetail.getSubType().toUpperCase();
+                        switch (feedType) {
+                            case AppConstants.FEED_ARTICLE:
+                                returnView = FEED_ARTICLE.ordinal();
+                                break;
+                            case AppConstants.FEED_JOB:
+                                returnView = FEED_JOB.ordinal();
+                                break;
+                            case AppConstants.FEED_COMMUNITY_POST:
+                                returnView = FEED_COMMUNITY_POST.ordinal();
+                                break;
+                            case AppConstants.USER_SUB_TYPE:
+                                returnView = INVITE_MEMBER_MODULE.ordinal();
+                                break;
+                            case AppConstants.CHALLENGE_SUB_TYPE:
+                                returnView = CHALLENGE_HORIZONTAL_VIEW.ordinal();
+                                break;
+                            case AppConstants.ONCE_WELCOME:
+                                returnView = ONCE_WELCOME_VIEW.ordinal();
+                                break;
+                            default:
+                        }
                     }
                 } else if (item instanceof BoardingInterestJobSearch) {
                     returnView = INTEREST_SEARCH.ordinal();
@@ -485,32 +488,34 @@ public enum HolderMapping {
             } else if (callFromType.equalsIgnoreCase(AppConstants.FOR_ALL)) {
                 if (item instanceof FeedDetail) {
                     FeedDetail feedDetail = ((FeedDetail) item);
-                    String feedType = feedDetail.getSubType().toUpperCase();
-                    switch (feedType) {
-                        case AppConstants.FEED_ARTICLE:
-                            returnView = ARTICLE_CARD_HOLDER.ordinal();
-                            break;
-                        case AppConstants.FEED_COMMUNITY:
-                            boolean isFeatured = feedDetail.isFeatured();
-                            if (isFeatured && !feedDetail.isOwner() && !feedDetail.isMember()) {
-                                returnView = FEATURE_CARD.ordinal();
-                            } else {
-                                returnView = MY_COMMUNITIES_CARD.ordinal();
-                            }
-                            break;
-                        case AppConstants.FEED_JOB:
-                            returnView = FEED_JOB.ordinal();
-                            break;
-                        case AppConstants.FEED_COMMUNITY_POST:
-                            returnView = FEED_COMMUNITY_POST.ordinal();
-                            break;
-                        case AppConstants.MY_COMMUNITIES_HEADER:
-                            returnView = COMMUNITY_DETAIL_HEADER.ordinal();
-                            break;
-                        case AppConstants.NO_COMMUNITIES:
-                            returnView = NO_COMMUNITIES.ordinal();
-                            break;
-                        default:
+                    if(StringUtil.isNotNullOrEmptyString(feedDetail.getSubType())) {
+                        String feedType = feedDetail.getSubType().toUpperCase();
+                        switch (feedType) {
+                            case AppConstants.FEED_ARTICLE:
+                                returnView = ARTICLE_CARD_HOLDER.ordinal();
+                                break;
+                            case AppConstants.FEED_COMMUNITY:
+                                boolean isFeatured = feedDetail.isFeatured();
+                                if (isFeatured && !feedDetail.isOwner() && !feedDetail.isMember()) {
+                                    returnView = FEATURE_CARD.ordinal();
+                                } else {
+                                    returnView = MY_COMMUNITIES_CARD.ordinal();
+                                }
+                                break;
+                            case AppConstants.FEED_JOB:
+                                returnView = FEED_JOB.ordinal();
+                                break;
+                            case AppConstants.FEED_COMMUNITY_POST:
+                                returnView = FEED_COMMUNITY_POST.ordinal();
+                                break;
+                            case AppConstants.MY_COMMUNITIES_HEADER:
+                                returnView = COMMUNITY_DETAIL_HEADER.ordinal();
+                                break;
+                            case AppConstants.NO_COMMUNITIES:
+                                returnView = NO_COMMUNITIES.ordinal();
+                                break;
+                            default:
+                        }
                     }
                 } else if (item instanceof CommunityPostResponse) {
                     returnView = SELECT_DIALOG.ordinal();

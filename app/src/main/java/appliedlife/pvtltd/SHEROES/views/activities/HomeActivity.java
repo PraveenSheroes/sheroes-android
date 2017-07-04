@@ -241,6 +241,12 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setProfileImage();
+    }
+
     private boolean startedFirstTime() {
         if (null != getIntent() && null != getIntent().getExtras()) {
             if (getIntent().getExtras().getLong(AppConstants.CHALLENGE_ID) == 0) {
@@ -276,6 +282,12 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         }
         initHomeViewPagerAndTabs();
         assignNavigationRecyclerListView();
+        if (mEventId > 0) {
+            eventDetailDialog(mEventId);
+        }
+    }
+
+    private void setProfileImage() {
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
             //TODO: this data to be removed
             profile = mUserPreference.get().getUserSummary().getPhotoUrl(); //"https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAhNAAAAJDYwZWIyZTg5LWFmOTItNGIwYS05YjQ5LTM2YTRkNGQ2M2JlNw.jpg";
@@ -296,9 +308,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .skipMemoryCache(true)
                     .into(mIvSideDrawerProfileBlurBackground);
-        }
-        if (mEventId > 0) {
-            eventDetailDialog(mEventId);
         }
     }
 
@@ -444,12 +453,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             }
             switch (drawerItem) {
                 case AppConstants.ONE_CONSTANT:
-                    //   ProfileActicity.navigate(this, view, profile);
-                    Intent intent = new Intent(this, ProfileActicity.class);
-                    intent.putExtra(AppConstants.EXTRA_IMAGE, profile);
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.fade_in_dialog, R.anim.fade_out_dialog);
-                    totalTimeSpentOnFeed();
+                    openProfileActivity();
                     break;
                 case AppConstants.TWO_CONSTANT:
                     checkForAllOpenFragments();
@@ -467,7 +471,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     totalTimeSpentOnFeed();
                     break;
                 case 5:
-                    //   checkForAllOpenFragments();
                     openSettingFragment();
                     totalTimeSpentOnFeed();
                     break;
@@ -562,6 +565,14 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 }
             }
         }
+    }
+
+    private void openProfileActivity() {
+        Intent intent = new Intent(this, ProfileActicity.class);
+        intent.putExtra(AppConstants.EXTRA_IMAGE, profile);
+        startActivity(intent);
+        overridePendingTransition(R.anim.fade_in_dialog, R.anim.fade_out_dialog);
+        totalTimeSpentOnFeed();
     }
 
     public void refreshHomeFragment(FeedDetail feedDetail) {
@@ -1713,12 +1724,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
 
     @OnClick(R.id.profile_link)
     public void onClickProfile() {
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && false != mUserPreference.get().isSheUser()) {
-            Intent intent = new Intent(this, ProfileActicity.class);
-            intent.putExtra(AppConstants.EXTRA_IMAGE, profile);
-            startActivity(intent);
-            overridePendingTransition(R.anim.fade_in_dialog, R.anim.fade_out_dialog);
-            totalTimeSpentOnFeed();
-        }
+        openProfileActivity();
     }
 }

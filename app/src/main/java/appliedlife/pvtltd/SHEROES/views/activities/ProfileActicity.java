@@ -1,29 +1,36 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.DialogFragment;
+import android.content.ComponentName;
 import android.content.Intent;
-import android.content.res.ColorStateList;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
-import android.transition.Slide;
+import android.util.Base64;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -32,6 +39,10 @@ import com.google.gson.Gson;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +51,6 @@ import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
-import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
@@ -67,37 +77,39 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.SearchGoodAtDialogFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunitySearchTagsDialogFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CurrentStatusDialog;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.FunctionalAreaDialogFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.JobLocationSearchDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.PersonalBasicDetailsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.PersonalProfileFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfessionalEditBasicDetailsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProffestionalProfileFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileAboutMeFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileAddEditEducationFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileAddEducationFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileAddOtherFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileCityWorkFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileDegreeDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileEditVisitingCardFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileGoodAtFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileOpportunityTypeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileOtherFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfilePersonelHowCanLookingForFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileSchoolDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileSearchIntrestIn;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileSearchLanguageDialogFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileSectoreDialog;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileSelectCurrentStatusDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileShareYourIntrestFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileStudyDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileTravelClientFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileVisitingCardView;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileWorkExperienceFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ChallengeSuccessDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunitySearchTagsDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CurrentStatusDialog;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.FunctionalAreaDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.JobLocationSearchDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileAddEditEducationFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileDegreeDialog;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileImageDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileSchoolDialog;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileSearchLanguageDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileSectoreDialog;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileSelectCurrentStatusDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileStudyDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileWorkExperienceSelfEmploymentDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.SearchGoodAtDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.SearchProfileLocationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
 import butterknife.Bind;
@@ -108,7 +120,7 @@ import butterknife.OnClick;
  * Created by Priyanka on 13-02-2017.
  */
 
-public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragment.ProfileGoodAtListener, ProfileView, BaseHolderInterface, AppBarLayout.OnOffsetChangedListener, ProfileTravelClientFragment.ProfileTravelClientFragmentListener, ProfileCityWorkFragment.ProfileWorkLocationFragmentListener, ProfileAboutMeFragment.ProfileAboutMeFragmentListener, ProfileOpportunityTypeFragment.ProfileOpportunityTypeListiner, ProfileShareYourIntrestFragment.MyProfileyYourInterestListener,
+public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragment.ProfileGoodAtListener, ProfileView, AppBarLayout.OnOffsetChangedListener, ProfileTravelClientFragment.ProfileTravelClientFragmentListener, ProfileCityWorkFragment.ProfileWorkLocationFragmentListener, ProfileAboutMeFragment.ProfileAboutMeFragmentListener, ProfileOpportunityTypeFragment.ProfileOpportunityTypeListiner, ProfileShareYourIntrestFragment.MyProfileyYourInterestListener,
         ProfessionalEditBasicDetailsFragment.EditProfileCallable, ProfileOpportunityTypeFragment.OppertunitiesCallback, ProfileAddEditEducationFragment.ProfileEducationListener {
     private final String TAG = LogUtils.makeLogTag(ProfileActicity.class);
     @Bind(R.id.iv_profile_full_view_icon)
@@ -137,6 +149,9 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
     FrameLayout flprofile_container;
     @Bind(R.id.tv_profile_full_view_name)
     TextView tvProfileFullName;
+    private Uri mImageCaptureUri;
+    public ChallengeSuccessDialogFragment mChallengeSuccessDialogFragment;
+    private File localImageSaveForChallenge;
     private SearchProfileLocationDialogFragment searchProfileLocationDialogFragment;
     private FunctionalAreaDialogFragment functionalAreaDialogFragment;
     private JobLocationSearchDialogFragment jobLocationSearchDialogFragment;
@@ -160,13 +175,9 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
     private MoEHelper mMoEHelper;
     private MoEngageUtills moEngageUtills;
     private PayloadBuilder payloadBuilder;
-    private  long startedTime;
-    public static void navigate(AppCompatActivity activity, View transitionImage, String profile) {
-        Intent intent = new Intent(activity, ProfileActicity.class);
-        intent.putExtra(AppConstants.EXTRA_IMAGE, profile);
-      //  ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, transitionImage, EXTRA_IMAGE);
-      //  ActivityCompat.startActivity(activity, intent, options.toBundle());
-    }
+    private long startedTime;
+    private ProfileImageDialogFragment profileImageDialogFragment;
+    private String mEncodeImageUrl;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -177,18 +188,31 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
         mMoEHelper = MoEHelper.getInstance(this);
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
-        startedTime=System.currentTimeMillis();
+        startedTime = System.currentTimeMillis();
         mFragmentOpen = new FragmentOpen();
-        setName();
+        setProfileNameData();
         setAllValues(mFragmentOpen);
         setPagerAndLayouts();
         setprogressbar();
-      //  initActivityTransitions();
     }
 
-    private void setName() {
+    public void setProfileNameData() {
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
             tvProfileFullName.setText(mUserPreference.get().getUserSummary().getFirstName() + AppConstants.SPACE + mUserPreference.get().getUserSummary().getLastName());
+            Glide.with(this)
+                    .load(mUserPreference.get().getUserSummary().getPhotoUrl())
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .skipMemoryCache(true)
+                    .into(mProfileIcon);
+            Glide.with(this)
+                    .load(mUserPreference.get().getUserSummary().getPhotoUrl())
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .skipMemoryCache(true)
+                    .into(ivProfile_bg_img);
+        }
+        localImageSaveForChallenge = new File(Environment.getExternalStorageDirectory(), AppConstants.IMAGE + AppConstants.JPG_FORMATE);
+        if (null != profileImageDialogFragment) {
+            profileImageDialogFragment.dismiss();
         }
     }
 
@@ -222,8 +246,8 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
             updateProffesstionalWorkExpListItem();
         } else {
             super.onBackPressed();
-            long timeSpent=System.currentTimeMillis()-startedTime;
-            moEngageUtills.entityMoEngageViewMyProfile(this,mMoEHelper,payloadBuilder,timeSpent,TAG);
+            long timeSpent = System.currentTimeMillis() - startedTime;
+            moEngageUtills.entityMoEngageViewMyProfile(this, mMoEHelper, payloadBuilder, timeSpent, TAG);
             overridePendingTransition(R.anim.fade_in_dialog, R.anim.fade_out_dialog);
         }
     }
@@ -266,8 +290,6 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
     }
 
     private void setPagerAndLayouts() {
-      //  ViewCompat.setTransitionName(mAppBarLayout, EXTRA_IMAGE);
-      //  supportPostponeEnterTransition();
         setSupportActionBar(mToolbar);
 
         mCollapsingToolbarLayout.setTitle(AppConstants.SPACE);
@@ -275,71 +297,9 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         viewPagerAdapter.addFragment(PersonalProfileFragment.getInstance(), getString(R.string.ID_PERSONAL));
         viewPagerAdapter.addFragment(ProffestionalProfileFragment.getInstance(), getString(R.string.ID_PROFESSIONAL));
-
         mViewPager.setAdapter(viewPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
-
-            Glide.with(this)
-                    .load(mUserPreference.get().getUserSummary().getPhotoUrl())
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .skipMemoryCache(true)
-                    .into(mProfileIcon);
-            Glide.with(this)
-                    .load(mUserPreference.get().getUserSummary().getPhotoUrl())
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .skipMemoryCache(true)
-                    .into(ivProfile_bg_img);
-           /* Glide.with(this)
-                    .load(mUserPreference.get().getUserSummary().getPhotoUrl()).asBitmap()
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .skipMemoryCache(true)
-                    .into(new SimpleTarget<Bitmap>() {
-                        @Override
-                        public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
-                            Bitmap blurred = BlurrImage.blurRenderScript(ProfileActicity.this, profileImage, 10);
-                            ivProfile_bg_img.setImageBitmap(blurred);
-                            Palette.from(profileImage).generate(new Palette.PaletteAsyncListener() {
-                                public void onGenerated(Palette palette) {
-                                    applyPalette(palette);
-                                }
-                            });
-                        }
-                    });*/
-        }
         mAppBarLayout.addOnOffsetChangedListener(this);
-
-    }
-
-    private void initActivityTransitions() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Slide transition = new Slide();
-            transition.excludeTarget(android.R.id.statusBarBackground, true);
-            getWindow().setEnterTransition(transition);
-            getWindow().setReturnTransition(transition);
-        }
-    }
-
-
-    private void applyPalette(Palette palette) {
-        int primaryDark = ContextCompat.getColor(getApplication(), R.color.colorPrimaryDark);
-        int primary = ContextCompat.getColor(getApplication(), R.color.colorPrimary);
-        //  mCollapsingToolbarLayout.setContentScrimColor(palette.getMutedColor(primary));
-        //   mCollapsingToolbarLayout.setStatusBarScrimColor(palette.getDarkMutedColor(primaryDark));
-        //  updateBackground((FloatingActionButton) findViewById(R.id.fab), palette);
-        supportStartPostponedEnterTransition();
-    }
-
-    private void updateBackground(FloatingActionButton fab, Palette palette) {
-        int lightVibrantColor = palette.getLightVibrantColor(getResources().getColor(android.R.color.white));
-        int vibrantColor = palette.getVibrantColor(getResources().getColor(R.color.colorPrimary));
-        fab.setRippleColor(lightVibrantColor);
-        fab.setBackgroundTintList(ColorStateList.valueOf(vibrantColor));
-    }
-
-    @Override
-    public void startActivityFromHolder(Intent intent) {
-
     }
 
     @Override
@@ -712,28 +672,6 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
         return profileSchoolDialog;
     }
 
-
-    @Override
-    public void dataOperationOnClick(BaseResponse baseResponse) {
-
-
-    }
-
-    @Override
-    public void setListData(BaseResponse data, boolean flag) {
-
-    }
-
-    @Override
-    public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-
-    }
-
-    @Override
-    public List getListData() {
-        return null;
-    }
-
     /**
      * Called when the {@link AppBarLayout}'s layout offset has been changed. This allows
      * child views to implement custom behavior based on the offset (for instance pinning a
@@ -792,8 +730,6 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
 
     @Override
     public void visitingCardOpen(ProfileEditVisitingCardResponse profileEditVisitingCardResponse) {
-
-
         flprofile_container.setVisibility(View.VISIBLE);
         Gson gson1 = new Gson();
         String jsonSections1 = gson1.toJson(profileEditVisitingCardResponse);
@@ -803,16 +739,11 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
         profileEditVisitingCardFragment.setArguments(bundle1);
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
                 .replace(R.id.profile_container, profileEditVisitingCardFragment, ProfileEditVisitingCardFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
-
-
     }
 
     @Override
     public void callFragment(int id) {
-
-
         switch (id) {
-
             case R.id.fab_add_other:
                 ProfileAddOtherFragment profileAddOtherFragment = new ProfileAddOtherFragment();
                 Bundle bundleAddOther = new Bundle();
@@ -820,20 +751,15 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
                 getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
                         .replace(R.id.profile_container, profileAddOtherFragment, ProfileAddOtherFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
                 break;
-
-
             case R.id.tv_edit_other_textline:
                 ProfileAddOtherFragment profileEditOtherFragment = new ProfileAddOtherFragment();
                 Bundle bundleEditOther = new Bundle();
                 profileEditOtherFragment.setArguments(bundleEditOther);
                 getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
                         .replace(R.id.profile_container, profileEditOtherFragment, ProfileAddOtherFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
-
                 break;
             default:
-
         }
-
     }
 
     @Override
@@ -1124,5 +1050,181 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
         }
     }
 
+    @OnClick(R.id.collapsing_toolbar_profile)
+    public void onProfileImageClick() {
+        profileImageDialog();
+    }
+
+    public DialogFragment profileImageDialog() {
+        profileImageDialogFragment = (ProfileImageDialogFragment) getFragmentManager().findFragmentByTag(ProfileImageDialogFragment.class.getName());
+        if (profileImageDialogFragment == null) {
+            profileImageDialogFragment = new ProfileImageDialogFragment();
+            Bundle bundle = new Bundle();
+            profileImageDialogFragment.setArguments(bundle);
+        }
+        if (!profileImageDialogFragment.isVisible() && !profileImageDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
+            profileImageDialogFragment.show(getFragmentManager(), ProfileImageDialogFragment.class.getName());
+        }
+        return profileImageDialogFragment;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+         /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
+        if (null != intent) {
+            switch (requestCode) {
+                case AppConstants.REQUEST_CODE_FOR_GALLERY:
+                    mImageCaptureUri = intent.getData();
+                    if (resultCode == Activity.RESULT_OK) {
+                        cropingIMG();
+                    }
+                    break;
+                case AppConstants.REQUEST_CODE_FOR_CAMERA:
+                    if (resultCode == Activity.RESULT_OK) {
+                        cropingIMG();
+                    }
+                    break;
+                case AppConstants.REQUEST_CODE_FOR_IMAGE_CROPPING:
+                    imageCropping(intent);
+                    break;
+                default:
+                    LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);
+            }
+        } else {
+            switch (requestCode) {
+                case AppConstants.REQUEST_CODE_FOR_CAMERA:
+                    if (resultCode == Activity.RESULT_OK) {
+                        cropingIMG();
+                    }
+                    break;
+                default:
+                    LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);
+            }
+        }
+
+    }
+
+    private void cropingIMG() {
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setType("image/*");
+        List list = getPackageManager().queryIntentActivities(intent, 0);
+        intent.setData(mImageCaptureUri);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(localImageSaveForChallenge));
+        if (StringUtil.isNotEmptyCollection(list)) {
+            Intent i = new Intent(intent);
+            ResolveInfo res = (ResolveInfo) list.get(0);
+            i.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
+            startActivityForResult(i, AppConstants.REQUEST_CODE_FOR_IMAGE_CROPPING);
+        }
+    }
+
+    private void imageCropping(Intent intent) {
+        try {
+            if (localImageSaveForChallenge.exists()) {
+                Bitmap photo = decodeFile(localImageSaveForChallenge);
+                mEncodeImageUrl = setImageOnHolder(photo);
+                if (null != profileImageDialogFragment) {
+                    profileImageDialogFragment.setUserProfileData(true,photo);
+                }
+            } else {
+                Toast.makeText(this, "Error while save image", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void requestForUpdateProfileImage() {
+        if (StringUtil.isNotNullOrEmptyString(mEncodeImageUrl)) {
+            if (null != viewPagerAdapter) {
+                Fragment personelProfile = viewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
+                if (AppUtils.isFragmentUIActive(personelProfile)) {
+                    ((PersonalProfileFragment) personelProfile).updateProfileData(mEncodeImageUrl);
+                }
+            }
+        }
+    }
+
+    public String setImageOnHolder(Bitmap photo) {
+        byte[] buffer = new byte[4096];
+        if (null != photo) {
+            buffer = getBytesFromBitmap(photo);
+            if (null != buffer) {
+                return Base64.encodeToString(buffer, Base64.DEFAULT);
+            }
+        }
+        return null;
+    }
+
+    public byte[] getBytesFromBitmap(Bitmap bitmap) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
+        return stream.toByteArray();
+    }
+
+    private Bitmap decodeFile(File f) {
+        try {
+            // decode image size
+            BitmapFactory.Options o = new BitmapFactory.Options();
+            o.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(new FileInputStream(f), null, o);
+            // Find the correct scale value. It should be the power of 2.
+            final int REQUIRED_SIZE = 512;
+            int width_tmp = o.outWidth, height_tmp = o.outHeight;
+            int scale = 1;
+            while (true) {
+                if (width_tmp / 2 < REQUIRED_SIZE || height_tmp / 2 < REQUIRED_SIZE)
+                    break;
+                width_tmp /= 2;
+                height_tmp /= 2;
+                scale *= 2;
+            }
+            BitmapFactory.Options o2 = new BitmapFactory.Options();
+            o2.inSampleSize = scale;
+            return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
+        } catch (FileNotFoundException e) {
+        }
+        return null;
+    }
+
+    public void selectImageFrmGallery() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                try {
+                    Intent galIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    galIntent.setType("image/*");
+                    startActivityForResult(galIntent, AppConstants.REQUEST_CODE_FOR_GALLERY);
+                } catch (Exception e) {
+                }
+            }
+        } else {
+            try {
+                Intent galIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                galIntent.setType("image/*");
+                startActivityForResult(galIntent, AppConstants.REQUEST_CODE_FOR_GALLERY);
+            } catch (Exception e) {
+            }
+        }
+    }
+
+    public void selectImageFrmCamera() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                mImageCaptureUri = Uri.fromFile(localImageSaveForChallenge);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
+                intent.putExtra("return-data", true);
+                startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_CAMERA);
+            }
+        } else {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            mImageCaptureUri = Uri.fromFile(localImageSaveForChallenge);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
+            intent.putExtra("return-data", true);
+            startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_CAMERA);
+        }
+
+    }
 
 }

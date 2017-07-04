@@ -23,7 +23,6 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.getCommentRequestBuilder
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.getPandingMemberRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.helplineGetChatThreadRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.myCommunityRequestBuilder;
-import static appliedlife.pvtltd.SHEROES.utils.AppUtils.searchRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.userCommunityPostRequestBuilder;
 
 /*
@@ -170,11 +169,13 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                         mHomePresenter.getFeedFromPresenter(userCommunityPostRequestBuilder(AppConstants.FEED_COMMUNITY_POST,pageNo,mFragmentListRefreshData.getCommunityId()));
                         break;
                     case AppConstants.INVITE_MEMBER:
-                        mHomePresenter.getFeedFromPresenter(searchRequestBuilder(AppConstants.USER_SUB_TYPE, mFragmentListRefreshData.getSearchStringName(), mFragmentListRefreshData.getPageNo(), AppConstants.INVITE_MEMBER,mFragmentListRefreshData.getEnitityOrParticpantid(),AppConstants.INVITE_PAGE_SIZE));
+                        mHomePresenter.getFeedFromPresenter(mAppUtils.searchRequestBuilder(AppConstants.USER_SUB_TYPE, mFragmentListRefreshData.getSearchStringName(), mFragmentListRefreshData.getPageNo(), AppConstants.INVITE_MEMBER,mFragmentListRefreshData.getEnitityOrParticpantid(),AppConstants.INVITE_PAGE_SIZE));
                         break;
                     case AppConstants.HELPLINE_FRAGMENT:
                         mHelplinePresenter.getHelplineChatDetails(helplineGetChatThreadRequestBuilder(pageNo));
                         break;
+                    case AppConstants.ALL_SEARCH:
+                        mHomePresenter.getFeedFromPresenter(mAppUtils.searchRequestBuilder(AppConstants.FEED_JOB,mFragmentListRefreshData.getSearchStringName() ,mFragmentListRefreshData.getPageNo(),AppConstants.ALL_SEARCH,null,AppConstants.PAGE_SIZE));
                     default:
                         LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + mFragmentListRefreshData.getCallFromFragment());
                 }

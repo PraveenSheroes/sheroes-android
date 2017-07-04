@@ -79,7 +79,6 @@ public class ImageUploadFragment extends BaseFragment implements View.OnKeyListe
 
     public interface ImageUploadCallable {
         void onCameraSelection();
-
         void onGallerySelection();
     }
 }

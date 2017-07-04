@@ -37,6 +37,9 @@ public class UserSummaryRequest {
     @SerializedName("summary")
     @Expose
     private String summary;
+    @SerializedName("image_string")
+    @Expose
+    private String imageString;
 
     public String getSubType() {
         return subType;
@@ -111,4 +114,11 @@ public class UserSummaryRequest {
     }
 
 
+    public String getImageString() {
+        return imageString;
+    }
+
+    public void setImageString(String imageString) {
+        this.imageString = imageString;
+    }
 }

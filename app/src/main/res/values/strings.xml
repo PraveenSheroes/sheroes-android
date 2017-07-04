@@ -135,6 +135,7 @@
     <string name="ID_ADMIN">Admin</string>
     <string name="ID_OWNER_REMOVED">Owner removed</string>
     <string name="ID_REMOTE">Remote</string>
+    <string name="ID_REMOVE">Remove</string>
     <string name="ID_INVITE">Invite</string>
     <string name="ID_TOTAL_IMAGES">4+</string>
     <string name="ID_SHARE">Share</string>
@@ -196,7 +197,7 @@
     <string name="ID_OPEN">Open</string>
     <string name="ID_CLOSE_PRIVACY"> Close </string>
     <string name="ID_OPEN_MO">open</string>
-    <string name="ID_CLOSED"> closed </string>
+    <string name="ID_CLOSED">closed</string>
     <string name="ID_APPLY">Apply</string>
     <string name="ID_FEED_REFRESH"> Your feed has been refreshed.</string>
     <string name="ID_FEED_ALREADY_REFRESH"> Your feed is already updated.</string>

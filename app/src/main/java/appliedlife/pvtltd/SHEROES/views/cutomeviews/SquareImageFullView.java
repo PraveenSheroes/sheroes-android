@@ -27,6 +27,7 @@ public class SquareImageFullView extends ImageView {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
         int width = getMeasuredWidth();
-        setMeasuredDimension(width, width);
+        int height = getMeasuredHeight();
+        setMeasuredDimension(width, height);
     }
 }

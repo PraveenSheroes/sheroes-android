@@ -124,6 +124,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ExprienceEntity;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileAddEditEducationRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.sharemail.ShareViaMail;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQSRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMemberRequest;
@@ -1979,6 +1980,15 @@ public class AppUtils {
         feedRequestPojo.setPageSize(AppConstants.PAGE_SIZE);
         return feedRequestPojo;
     }
+
+    public  UserSummaryRequest getUserProfileRequestBuilder(String subType,String type,  String imageUrl) {
+        UserSummaryRequest userSummaryRequest = new UserSummaryRequest();
+        userSummaryRequest.setSource(AppConstants.SOURCE_NAME);
+        userSummaryRequest.setType(type);
+        userSummaryRequest.setSubType(subType);
+        userSummaryRequest.setImageString(imageUrl);
+        return userSummaryRequest;
+    }
     /**
      * Request for feed api
      */
@@ -1998,7 +2008,7 @@ public class AppUtils {
     /**
      * Request for feed api
      */
-    public static FeedRequestPojo searchRequestBuilder(String typeOfFeed, String queryName, int pageNo, String screenName,Long communityId,int pageSize) {
+    public  FeedRequestPojo searchRequestBuilder(String typeOfFeed, String queryName, int pageNo, String screenName,Long communityId,int pageSize) {
         AppUtils appUtils = AppUtils.getInstance();
         FeedRequestPojo feedRequestPojo = new FeedRequestPojo();
         feedRequestPojo.setAppVersion(appUtils.getAppVersionName());

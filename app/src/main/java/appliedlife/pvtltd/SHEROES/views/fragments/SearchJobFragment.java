@@ -3,6 +3,7 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -28,6 +29,7 @@ import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
+import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -35,6 +37,7 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeSearchActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -57,9 +60,14 @@ public class SearchJobFragment extends BaseFragment implements HomeView {
     LinearLayout mLiNoSearchResult;
     @Bind(R.id.tv_search_result)
     TextView mTvSearchResult;
+    @Bind(R.id.swipe_view_search)
+    SwipeRefreshLayout mSwipeView;
     private String mSearchDataName = AppConstants.EMPTY_STRING;
     private GenericRecyclerViewAdapter mAdapter;
     private FragmentListRefreshData mFragmentListRefreshData;
+    private LinearLayoutManager mLayoutManager;
+    private SwipPullRefreshList mPullRefreshList;
+    private int mPageNo = AppConstants.ONE_CONSTANT;
     private Handler mHandler = new Handler();
     public static SearchJobFragment createInstance() {
         SearchJobFragment searchJobFragment = new SearchJobFragment();
@@ -73,15 +81,40 @@ public class SearchJobFragment extends BaseFragment implements HomeView {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         ButterKnife.bind(this, view);
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ALL_SEARCH, AppConstants.NO_REACTION_CONSTANT);
-        mHomePresenter.attachView(this);
         editTextWatcher();
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mAdapter = new GenericRecyclerViewAdapter(getContext(), (HomeSearchActivity) getActivity());
-        LinearLayoutManager manager = new LinearLayoutManager(getContext());
-        mRecyclerView.setLayoutManager(manager);
-        mRecyclerView.setAdapter(mAdapter);
-        super.setAllInitializationForFeeds(mFragmentListRefreshData,  mAdapter, manager, mRecyclerView, mHomePresenter, mAppUtils, mProgressBar);
+        jobSearcgPagination(mFragmentListRefreshData);
         return view;
+    }
+
+    private void jobSearcgPagination(FragmentListRefreshData fragmentListRefreshData) {
+        mHomePresenter.attachView(this);
+        mLayoutManager = new LinearLayoutManager(getContext());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mAdapter = new GenericRecyclerViewAdapter(getContext(), (HomeSearchActivity) getActivity());
+        mRecyclerView.setAdapter(mAdapter);
+        mPullRefreshList = new SwipPullRefreshList();
+        mPullRefreshList.setPullToRefresh(false);
+        mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager, mFragmentListRefreshData) {
+            @Override
+            public void onHide() {
+            }
+
+            @Override
+            public void onShow() {
+            }
+
+            @Override
+            public void dismissReactions() {
+
+            }
+        });
+        super.setAllInitializationForFeeds(mFragmentListRefreshData,  mAdapter, mLayoutManager, mRecyclerView, mHomePresenter, mAppUtils, mProgressBar);
+        mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+            }
+        });
     }
 
 
@@ -90,9 +123,18 @@ public class SearchJobFragment extends BaseFragment implements HomeView {
         List<FeedDetail> feedDetailList=feedResponsePojo.getFeedDetails();
         if(StringUtil.isNotEmptyCollection(feedDetailList)&&mAdapter!=null) {
             mLiNoSearchResult.setVisibility(View.GONE);
+            mPageNo = mFragmentListRefreshData.getPageNo();
+            mFragmentListRefreshData.setPageNo(++mPageNo);
+            mPullRefreshList.allListData(feedDetailList);
+            mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
             mAdapter.setCallForRecycler(AppConstants.ALL_SEARCH);
-            mAdapter.setSheroesGenericListData(feedDetailList);
             mAdapter.notifyDataSetChanged();
+            if (!mPullRefreshList.isPullToRefresh()) {
+                mLayoutManager.scrollToPositionWithOffset(mPullRefreshList.getFeedResponses().size() - feedDetailList.size(), 0);
+            } else {
+                mLayoutManager.scrollToPositionWithOffset(0, 0);
+            }
+            mSwipeView.setRefreshing(false);
         }
         else
         {
@@ -182,7 +224,10 @@ public class SearchJobFragment extends BaseFragment implements HomeView {
             if (!isDetached())
             {
                 mSearchDataName = mSearchDataName.trim();
-                mHomePresenter.getFeedFromPresenter(mAppUtils.searchRequestBuilder(AppConstants.FEED_JOB,mSearchDataName ,mFragmentListRefreshData.getPageNo(),AppConstants.ALL_SEARCH,null,AppConstants.PAGE_SIZE));
+             //   mHomePresenter.getFeedFromPresenter(mAppUtils.searchRequestBuilder(AppConstants.FEED_JOB,mSearchDataName ,mFragmentListRefreshData.getPageNo(),AppConstants.ALL_SEARCH,null,AppConstants.PAGE_SIZE));
+                mFragmentListRefreshData.setSearchStringName(mSearchDataName);
+                mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ALL_SEARCH, AppConstants.NO_REACTION_CONSTANT);
+                jobSearcgPagination(mFragmentListRefreshData);
             }
         }
     };

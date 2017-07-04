@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/image_upload_bg_color"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_profile_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/dp_size_50"
+        android:fontFamily="@string/ID_ROBOTO_LIGHT"
+        android:text="Name"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_size_17" />
+    <LinearLayout
+        android:id="@+id/li_user_profile_images"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_size_300"
+        android:layout_marginTop="@dimen/dp_size_50"
+        android:orientation="vertical" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/dp_size_40"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/iv_profile_image_from_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_size_10"
+            android:src="@drawable/ic_camera_profile" />
+
+        <ImageView
+            android:id="@+id/iv_profile_image_from_gall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_size_120"
+            android:padding="@dimen/dp_size_10"
+            android:src="@drawable/ic_camera_profile" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_size_30">
+
+        <TextView
+            android:id="@+id/tv_profile_image_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_size_30"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:padding="@dimen/dp_size_10"
+            android:text="@string/ID_SAVE"
+            android:textAllCaps="true"
+            android:textColor="@color/add_member_line"
+            android:textSize="@dimen/sp_size_15" />
+
+        <TextView
+            android:id="@+id/tv_profile_image_remove"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_size_50"
+            android:layout_toRightOf="@+id/tv_profile_image_save"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:padding="@dimen/dp_size_10"
+            android:text="@string/ID_REMOVE"
+            android:visibility="gone"
+            android:textAllCaps="true"
+            android:textColor="@color/add_member_line"
+            android:textSize="@dimen/sp_size_15" />
+        <TextView
+            android:id="@+id/tv_profile_image_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="@dimen/dp_size_30"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:padding="@dimen/dp_size_10"
+            android:text="@string/ID_CLOSE"
+            android:textAllCaps="true"
+            android:textColor="@color/add_member_line"
+            android:textSize="@dimen/sp_size_15" />
+    </RelativeLayout>
+</LinearLayout>

@@ -46,11 +46,11 @@
         android:drawableLeft="@drawable/ic_search_box_icon"
         android:drawablePadding="@dimen/dp_size_12"
         android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:visibility="gone"
         android:layerType="software"
         android:padding="@dimen/dp_size_12"
         android:textColor="@color/search_box_text"
-        android:textSize="@dimen/sp_size_12"
-        android:visibility="gone" />
+        android:textSize="@dimen/sp_size_12" />
 
     <TextView
         android:id="@+id/tv_setting"

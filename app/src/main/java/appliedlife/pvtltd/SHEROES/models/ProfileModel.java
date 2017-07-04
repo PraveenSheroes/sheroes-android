@@ -116,11 +116,7 @@ public class ProfileModel {
  /*for  user personal Summary details details */
 
     public Observable<BoardingDataResponse> getPersonalUserSummaryDetailsAuthTokenFromModel(UserSummaryRequest userSummaryRequest) {
-        LogUtils.error("user_get_preference_request req: ",gson.toJson(userSummaryRequest));
         return sheroesAppServiceApi.getPersonalUserSummaryDetailsAuthToken(userSummaryRequest)
-
-
-
                 .map(new Func1<BoardingDataResponse, BoardingDataResponse>() {
 
                     @Override
