@@ -9,6 +9,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.LoginModel;
 import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
+import appliedlife.pvtltd.SHEROES.models.entities.home.UserPhoneContactsListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.EmailVerificationRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.EmailVerificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.ForgotPasswordRequest;
@@ -16,6 +17,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.ForgotPasswordResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.SignupRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.login.UserFromReferralRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.login.UserFromReferralResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.GooglePlusRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.GooglePlusResponse;
@@ -298,6 +301,32 @@ public class LoginPresenter extends BasePresenter<LoginView> {
             public void onNext(EmailVerificationResponse emailVerificationResponse) {
                 getMvpView().stopProgressBar();
                 getMvpView().sendVerificationEmailSuccess(emailVerificationResponse);
+            }
+        });
+        registerSubscription(subscription);
+    }
+
+    public void updateUserReferralInPresenter(UserFromReferralRequest userFromReferralRequest) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
+            return;
+        }
+        Subscription subscription = mLoginModel.updateUserReferralInModel(userFromReferralRequest).subscribe(new Subscriber<UserFromReferralResponse>() {
+            @Override
+            public void onCompleted() {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
+
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append(AppConstants.GOOGLE_PLAY_URL_TRACKER).append(mSheroesApplication.getString(R.string.ID_VIEWS)).append(AppConstants.SPACE).append( e.getMessage());
+                GoogleAnalyticsTracing.screenNameTracking(mSheroesApplication,stringBuilder.toString());
+            }
+
+            @Override
+            public void onNext(UserFromReferralResponse userFromReferralResponse) {
             }
         });
         registerSubscription(subscription);

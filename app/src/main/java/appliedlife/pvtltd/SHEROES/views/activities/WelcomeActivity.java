@@ -2,13 +2,16 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.annotation.TargetApi;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
 import android.support.v4.view.ViewPager;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -17,6 +20,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.appsflyer.AppsFlyerLib;
+import com.bumptech.glide.util.ExceptionCatchingInputStream;
 import com.f2prateek.rx.preferences.Preference;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
@@ -40,11 +44,13 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.EmailVerificationRespons
 import appliedlife.pvtltd.SHEROES.models.entities.login.ForgotPasswordResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.InstallUpdateForMoEngage;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.login.UserFromReferralRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.LoginPresenter;
+import appliedlife.pvtltd.SHEROES.service.CustomInstallTrackersReceiver;
 import appliedlife.pvtltd.SHEROES.service.GCMClientManager;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -456,5 +462,29 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     public void sendVerificationEmailSuccess(EmailVerificationResponse emailVerificationResponse){
 
     }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+            Intent intent = getIntent();
+            if (intent != null) {
+                Bundle extras = intent.getExtras();
+                if(extras!=null && extras.getString(AppConstants.GOOGLE_PLAY_URL_REFERRAL_CONTACT_ID)!= null) {
+                    if (StringUtil.isNotNullOrEmptyString(extras.getString(AppConstants.GOOGLE_PLAY_URL_REFERRAL_CONTACT_ID))) {
+                        String appContactId = extras.getString(AppConstants.GOOGLE_PLAY_URL_REFERRAL_CONTACT_ID);
+                        UserFromReferralRequest userFromReferralRequest = new UserFromReferralRequest();
+                        userFromReferralRequest.setAppUserContactTableId(Long.parseLong(appContactId));
+                        mLoginPresenter.updateUserReferralInPresenter(userFromReferralRequest);
+                    }
+                }
+            }
+        }
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+    }
+
 }
 

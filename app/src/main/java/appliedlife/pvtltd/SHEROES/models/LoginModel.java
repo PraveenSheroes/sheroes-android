@@ -13,6 +13,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.ForgotPasswordResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.SignupRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.login.UserFromReferralRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.login.UserFromReferralResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.GooglePlusRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.GooglePlusResponse;
@@ -166,6 +168,20 @@ public class LoginModel {
                     @Override
                     public EmailVerificationResponse call(EmailVerificationResponse emailVerificationResponse) {
                         return emailVerificationResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+    }
+
+    public Observable<UserFromReferralResponse> updateUserReferralInModel(UserFromReferralRequest userFromReferralRequest) {
+        LogUtils.info(TAG,"*******************"+new Gson().toJson(userFromReferralRequest));
+        return sheroesAppServiceApi.updateUserReferral(userFromReferralRequest)
+                .map(new Func1<UserFromReferralResponse, UserFromReferralResponse>() {
+                    @Override
+                    public UserFromReferralResponse call(UserFromReferralResponse userFromReferralResponse) {
+                        return userFromReferralResponse;
                     }
                 })
                 .subscribeOn(Schedulers.io())
