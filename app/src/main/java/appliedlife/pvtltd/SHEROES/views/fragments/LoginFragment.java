@@ -1,5 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -69,6 +70,7 @@ public class LoginFragment extends BaseFragment implements LoginView{
     ProgressBar mProgressBar;
     @Bind(R.id.email_sign_in_button)
     Button mEmailSign;
+    private  ProgressDialog mProgressDialog;
     private LoginActivityIntractionListner mLoginActivityIntractionListner;
     private MoEHelper mMoEHelper;
     private String mGcmId;
@@ -243,6 +245,10 @@ public class LoginFragment extends BaseFragment implements LoginView{
                     showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
                     return;
                 } else {
+                    mProgressDialog = new ProgressDialog(getActivity());
+                    mProgressDialog.setMessage(getString(R.string.ID_PLAY_STORE_DATA));
+                    mProgressDialog.setCancelable(false);
+                    mProgressDialog.show();
                     getGcmId();
                 }
             }
@@ -265,6 +271,10 @@ public class LoginFragment extends BaseFragment implements LoginView{
             public void onSuccess(String registrationId, boolean isNewRegistration) {
                 mGcmId = registrationId;
                 if (StringUtil.isNotNullOrEmptyString(mGcmId)) {
+                    if(null!=mProgressDialog)
+                    {
+                        mProgressDialog.dismiss();
+                    }
                     LoginRequest loginRequest = AppUtils.loginRequestBuilder();
                     loginRequest.setUsername(email);
                     loginRequest.setPassword(password);

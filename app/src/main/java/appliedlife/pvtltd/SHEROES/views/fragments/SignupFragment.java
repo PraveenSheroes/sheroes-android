@@ -187,11 +187,14 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
                 .requestScopes(new Scope(Scopes.PROFILE))
                 .requestScopes(new Scope(Scopes.PLUS_LOGIN))
                 .build();
-        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
-                .enableAutoManage(getActivity(), this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .addApi(Plus.API)
-                .build();
+        if (null == mGoogleApiClient) {
+            mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+                    .enableAutoManage(getActivity(), this)
+                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                    .addApi(Plus.API)
+                    .build();
+        }
+
     }
 
     private void signIn() {
@@ -521,7 +524,7 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
     }
 
     private void openHomeScreen() {
-        if(null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getNextScreen()) && mUserPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.EMAIL_VERIFICATION) && mUserPreference.get().isSheUser()){
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getNextScreen()) && mUserPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.EMAIL_VERIFICATION) && mUserPreference.get().isSheUser()) {
             Intent loginIntent = new Intent(getContext(), LoginActivity.class);
             Bundle bundle = new Bundle();
             bundle.putString(AppConstants.SHEROES_AUTH_TOKEN, mGcmId);
@@ -685,7 +688,7 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
     @Override
     public void onStop() {
         super.onStop();
-        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+        if (mGoogleApiClient != null ) {
             mGoogleApiClient.stopAutoManage(getActivity());
             mGoogleApiClient.disconnect();
         }
@@ -694,7 +697,7 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (null != mGoogleApiClient && mGoogleApiClient.isConnected()) {
+        if (null != mGoogleApiClient ) {
             mGoogleApiClient.stopAutoManage(getActivity());
             mGoogleApiClient.disconnect();
         }

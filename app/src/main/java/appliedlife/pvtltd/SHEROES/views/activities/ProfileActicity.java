@@ -1108,6 +1108,9 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
         List list = getPackageManager().queryIntentActivities(intent, 0);
         intent.setData(mImageCaptureUri);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(localImageSaveForChallenge));
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        intent.putExtra("scale", true);
         if (StringUtil.isNotEmptyCollection(list)) {
             Intent i = new Intent(intent);
             ResolveInfo res = (ResolveInfo) list.get(0);

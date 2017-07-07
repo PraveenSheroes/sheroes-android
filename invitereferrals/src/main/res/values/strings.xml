@@ -5,8 +5,10 @@
     <string name="tnc">Terms And Conditions</string>
     <string name="how_it_works">How It Works</string>
 
-    <string name="name">Name</string>
-    <string name="email">Email</string>
-    <string name="register">Register</string>
+    <string name="ir_login_userNameHint">Name</string>
+    <string name="ir_login_userEmailHint">Email</string>
+    <string name="ir_login_buttonText">Register</string>
+    <string name="loading_message">Please wait. Page is loading...</string>
     <string name="valid_email">Enter Valid Email ID</string>
+    <string name="err_msg">Something went wrong</string>
 </resources>

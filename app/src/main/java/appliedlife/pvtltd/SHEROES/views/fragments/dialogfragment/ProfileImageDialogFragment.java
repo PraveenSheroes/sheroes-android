@@ -75,10 +75,8 @@ public class ProfileImageDialogFragment extends BaseDialogFragment {
             liUserProfileImages.removeAllViews();
             liUserProfileImages.removeAllViewsInLayout();
             LayoutInflater layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View child = layoutInflater.inflate(R.layout.challenge_image, null);
-            ImageView ivUserProfileImage = (ImageView) child.findViewById(R.id.iv_feed_challenge);
-            LinearLayout liImageText = (LinearLayout) child.findViewById(R.id.li_image_text);
-            liImageText.setVisibility(View.GONE);
+            View child = layoutInflater.inflate(R.layout.profile_single_image, null);
+            ImageView ivUserProfileImage = (ImageView) child.findViewById(R.id.iv_profile_single_image);
             Glide.with(getActivity())
                     .load(mUserPreference.get().getUserSummary().getPhotoUrl())
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
@@ -91,10 +89,8 @@ public class ProfileImageDialogFragment extends BaseDialogFragment {
             liUserProfileImages.removeAllViews();
             liUserProfileImages.removeAllViewsInLayout();
             LayoutInflater layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View child = layoutInflater.inflate(R.layout.challenge_image, null);
-            ImageView ivUserProfileImage = (ImageView) child.findViewById(R.id.iv_feed_challenge);
-            LinearLayout liImageText = (LinearLayout) child.findViewById(R.id.li_image_text);
-            liImageText.setVisibility(View.GONE);
+            View child = layoutInflater.inflate(R.layout.profile_single_image, null);
+            ImageView ivUserProfileImage = (ImageView) child.findViewById(R.id.iv_profile_single_image);
             ivUserProfileImage.setImageBitmap(imageUrl);
             liUserProfileImages.addView(child);
         } else {

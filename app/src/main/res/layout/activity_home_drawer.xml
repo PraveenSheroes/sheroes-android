@@ -38,7 +38,6 @@
                 android:layout_height="@dimen/drawer_profile_icon_size"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/dp_size_70"
-                android:scaleType="center"
                 app:riv_border_width="@dimen/dp_size_6"
                 app:riv_corner_radius="@dimen/dp_size_12"
                 app:riv_oval="true" />

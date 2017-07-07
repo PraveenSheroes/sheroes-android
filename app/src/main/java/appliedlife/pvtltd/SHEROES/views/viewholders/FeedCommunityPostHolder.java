@@ -623,16 +623,18 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail>  {
             lastComment = lastCommentList.get(mItemPosition);
             ivFeedCommunityPostUserPic.setCircularImage(true);
             if (lastComment.isAnonymous()) {
-                ivFeedCommunityPostUserPic.setImageResource(R.drawable.ic_anonomous);
-                StringBuilder stringBuilder=new StringBuilder();
-                stringBuilder.append(lastComment.getParticipantName()).append(AppConstants.COLON).append(AppConstants.SPACE).append(lastComment.getComment());
-                Spannable getCommentString = new SpannableString(stringBuilder.toString());
-                int size=lastComment.getParticipantName().length()+1;
-                getCommentString.setSpan(new ForegroundColorSpan(Color.BLACK), 0, size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                getCommentString.setSpan(new StyleSpan(Typeface.BOLD), 0, size, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-                tvFeedCommunityPostUserCommentPost.setText(getCommentString);
+                if (StringUtil.isNotNullOrEmptyString(lastComment.getParticipantName())) {
+                    ivFeedCommunityPostUserPic.setImageResource(R.drawable.ic_anonomous);
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append(lastComment.getParticipantName()).append(AppConstants.COLON).append(AppConstants.SPACE).append(lastComment.getComment());
+                    Spannable getCommentString = new SpannableString(stringBuilder.toString());
+                    int size = lastComment.getParticipantName().length() + 1;
+                    getCommentString.setSpan(new ForegroundColorSpan(Color.BLACK), 0, size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    getCommentString.setSpan(new StyleSpan(Typeface.BOLD), 0, size, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                    tvFeedCommunityPostUserCommentPost.setText(getCommentString);
+                }
             } else {
-                if (StringUtil.isNotNullOrEmptyString(lastComment.getComment())) {
+                if (StringUtil.isNotNullOrEmptyString(lastComment.getComment())&&StringUtil.isNotNullOrEmptyString(lastComment.getParticipantName())) {
                     ivFeedCommunityPostUserPic.bindImage(lastComment.getParticipantImageUrl());
                     StringBuilder stringBuilder=new StringBuilder();
                     stringBuilder.append(lastComment.getParticipantName()).append(AppConstants.COLON).append(AppConstants.SPACE).append(lastComment.getComment());

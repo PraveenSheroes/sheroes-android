@@ -4,8 +4,15 @@
     <application>
 
         <activity android:name=".CampaignLogin"></activity>
-
         <activity android:name=".ShareScreen"></activity>
+
+        <receiver
+            android:name=".AppUpdateReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
 
         <receiver
             android:name="com.invitereferrals.invitereferrals.InviteReferrerBroadcastReceiver"

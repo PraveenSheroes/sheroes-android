@@ -434,7 +434,6 @@ public enum HolderMapping {
 
     public static int getOrdinal(BaseResponse item, int totalCount, String callFromType) {
         int returnView = BLANK_LIST.ordinal();
-        ;
         if (null != item) {
             if (callFromType.equalsIgnoreCase(AppConstants.FEED_SUB_TYPE)) {
                 if (item instanceof FeedDetail) {

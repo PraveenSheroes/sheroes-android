@@ -71,19 +71,20 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
 
     private void initHomeViewPagerAndTabs() {
         mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        if (mFragmentOpen.isFeedOpen()) {
-            String search = getString(R.string.ID_SEARCH_IN_FEED);
-            mSearchEditText.setHint(search);
-            mViewPagerAdapter.addFragment(AllSearchFragment.createInstance(), getString(R.string.ID_ALL));
-            mViewPagerAdapter.addFragment(SearchRecentFragment.createInstance(), getString(R.string.ID_RECENT));
-            mViewPagerAdapter.addFragment(SearchArticleFragment.createInstance(), getString(R.string.ID_ARTICLE));
-            mViewPagerAdapter.addFragment(SearchCommunitiesFragment.createInstance(), getString(R.string.ID_COMMUNITIES));
-            mViewPagerAdapter.addFragment(SearchJobFragment.createInstance(), getString(R.string.ID_JOBS));
-        } else {
-            mSearchEditText.setHint(getString(R.string.ID_SEARCH_IN_COMMUNITIES));
-            mTabLayout.setVisibility(View.GONE);
-            mViewPagerAdapter.addFragment(SearchCommunitiesFragment.createInstance(), getString(R.string.ID_COMMUNITIES));
-        }
+        // if (mFragmentOpen.isFeedOpen()) {
+        String search = getString(R.string.ID_SEARCH_IN_JOBS);
+        mSearchEditText.setHint(search);
+        mTabLayout.setVisibility(View.GONE);
+//            mViewPagerAdapter.addFragment(AllSearchFragment.createInstance(), getString(R.string.ID_ALL));
+//            mViewPagerAdapter.addFragment(SearchRecentFragment.createInstance(), getString(R.string.ID_RECENT));
+//            mViewPagerAdapter.addFragment(SearchArticleFragment.createInstance(), getString(R.string.ID_ARTICLE));
+//            mViewPagerAdapter.addFragment(SearchCommunitiesFragment.createInstance(), getString(R.string.ID_COMMUNITIES));
+        mViewPagerAdapter.addFragment(SearchJobFragment.createInstance(), getString(R.string.ID_JOBS));
+        //  } else {
+        // mSearchEditText.setHint(getString(R.string.ID_SEARCH_IN_COMMUNITIES));
+        //    mTabLayout.setVisibility(View.GONE);
+        //    mViewPagerAdapter.addFragment(SearchCommunitiesFragment.createInstance(), getString(R.string.ID_COMMUNITIES));
+        //   }
         mViewPager.setAdapter(mViewPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
         setFragmentLocation();
@@ -182,7 +183,7 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
             mSearchEditText.setHint(getString(R.string.ID_SEARCH_IN_FEED));
             mSearchEditText.setEnabled(true);
             if (AppUtils.isFragmentUIActive(fragment)) {
-                    ((AllSearchFragment) fragment).setEditText(mSearchEditText.getText().toString());
+                ((AllSearchFragment) fragment).setEditText(mSearchEditText.getText().toString());
             }
         } else if (fragment instanceof SearchRecentFragment) {
             mSearchEditText.setHint(getString(R.string.ID_RECENT_SEARCH));
@@ -193,21 +194,21 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
             mSearchEditText.setHint(string);
             mSearchEditText.setEnabled(true);
             if (AppUtils.isFragmentUIActive(fragment)) {
-                    ((SearchArticleFragment) fragment).setEditText(mSearchEditText.getText().toString());
+                ((SearchArticleFragment) fragment).setEditText(mSearchEditText.getText().toString());
             }
         } else if (fragment instanceof SearchCommunitiesFragment) {
             String string = getString(R.string.ID_SEARCH) + AppConstants.SPACE + getString(R.string.ID_COMMUNITIES);
             mSearchEditText.setHint(string);
             mSearchEditText.setEnabled(true);
             if (AppUtils.isFragmentUIActive(fragment)) {
-                    ((SearchCommunitiesFragment) fragment).setEditText(mSearchEditText.getText().toString());
+                ((SearchCommunitiesFragment) fragment).setEditText(mSearchEditText.getText().toString());
             }
         } else if (fragment instanceof SearchJobFragment) {
             String string = getString(R.string.ID_SEARCH) + AppConstants.SPACE + getString(R.string.ID_JOB) + AppConstants.S;
             mSearchEditText.setHint(string);
             mSearchEditText.setEnabled(true);
             if (AppUtils.isFragmentUIActive(fragment)) {
-                    ((SearchJobFragment) fragment).setEditText(mSearchEditText.getText().toString());
+                ((SearchJobFragment) fragment).setEditText(mSearchEditText.getText().toString());
             }
         }
 
@@ -220,7 +221,7 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
 
     @OnClick(R.id.tv_search_back)
     public void searchOnBackClick() {
-      finish();
+        finish();
         overridePendingTransition(R.anim.fade_in_dialog, R.anim.fade_out_dialog);
     }
 
@@ -256,8 +257,7 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
                 if (fragment instanceof AllSearchFragment) {
                     ((AllSearchFragment) fragment).setEditText(mSearchEditText.getText().toString());
                     ((AllSearchFragment) fragment).saveRecentSearchData(mFeedDetail);
-                }else if(fragment instanceof SearchCommunitiesFragment)
-                {
+                } else if (fragment instanceof SearchCommunitiesFragment) {
                     ((SearchCommunitiesFragment) fragment).setEditText(mSearchEditText.getText().toString());
                     ((SearchCommunitiesFragment) fragment).saveRecentSearchData(mFeedDetail);
                 }
@@ -279,9 +279,10 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
         }
 
     }
+
     @Override
     public void onShowErrorDialog(String errorReason, FeedParticipationEnum feedParticipationEnum) {
-        if(StringUtil.isNotNullOrEmptyString(errorReason)) {
+        if (StringUtil.isNotNullOrEmptyString(errorReason)) {
             switch (errorReason) {
                 case AppConstants.CHECK_NETWORK_CONNECTION:
                     showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
@@ -289,8 +290,7 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
                 default:
                     showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
             }
-        }else
-        {
+        } else {
             showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
         }
     }

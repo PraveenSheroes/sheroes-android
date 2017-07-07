@@ -38,11 +38,10 @@
 
         <ImageView
             android:id="@+id/iv_profile_image_from_gall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/dp_size_22"
+            android:layout_height="@dimen/dp_size_20"
             android:layout_marginLeft="@dimen/dp_size_120"
-            android:padding="@dimen/dp_size_10"
-            android:src="@drawable/ic_camera_profile" />
+            android:src="@drawable/gallery" />
     </LinearLayout>
 
     <RelativeLayout

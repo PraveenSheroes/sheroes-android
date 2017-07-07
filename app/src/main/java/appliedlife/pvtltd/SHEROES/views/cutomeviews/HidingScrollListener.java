@@ -175,6 +175,9 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                         mHelplinePresenter.getHelplineChatDetails(helplineGetChatThreadRequestBuilder(pageNo));
                         break;
                     case AppConstants.ALL_SEARCH:
+                        if(mAppUtils==null) {
+                            mAppUtils = AppUtils.getInstance();
+                        }
                         mHomePresenter.getFeedFromPresenter(mAppUtils.searchRequestBuilder(AppConstants.FEED_JOB,mFragmentListRefreshData.getSearchStringName() ,mFragmentListRefreshData.getPageNo(),AppConstants.ALL_SEARCH,null,AppConstants.PAGE_SIZE));
                     default:
                         LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + mFragmentListRefreshData.getCallFromFragment());

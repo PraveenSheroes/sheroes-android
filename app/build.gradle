@@ -107,6 +107,7 @@ dependencies {
     compile 'com.moengage:moe-android-sdk:7.7.01'
     compile 'com.appsflyer:af-android-sdk:4.6.7@aar'
     compile 'org.apache.commons:commons-lang3:3.5'
+    compile files('libs/invitereferrals.jar')
     compile project(':invitereferrals')
 }
 apply plugin: 'com.google.gms.google-services'

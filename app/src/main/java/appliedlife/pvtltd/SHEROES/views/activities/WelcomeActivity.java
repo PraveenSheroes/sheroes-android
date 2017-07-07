@@ -2,16 +2,14 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.annotation.TargetApi;
 import android.app.DialogFragment;
-import android.content.Context;
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
 import android.support.v4.view.ViewPager;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -20,7 +18,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.appsflyer.AppsFlyerLib;
-import com.bumptech.glide.util.ExceptionCatchingInputStream;
 import com.f2prateek.rx.preferences.Preference;
 import com.invitereferrals.invitereferrals.InviteReferralsApi;
 import com.moe.pushlibrary.MoEHelper;
@@ -51,7 +48,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.LoginPresenter;
-import appliedlife.pvtltd.SHEROES.service.CustomInstallTrackersReceiver;
 import appliedlife.pvtltd.SHEROES.service.GCMClientManager;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -119,7 +115,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     private FragmentOpen mFragmentOpen;
     @Inject
     AppUtils appUtils;
-
+    private ProgressDialog mProgressDialog;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,6 +128,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         AppsFlyerLib.getInstance().setImeiData(appUtils.getIMEI());
         AppsFlyerLib.getInstance().setAndroidIdData(appUtils.getDeviceId());
         initializeAllDataAfterGCMId();
+        InviteReferralsApi.getInstance(this).tracking("install", null, 0,null);
     }
 
     private void initializeAllDataAfterGCMId() {
@@ -152,7 +149,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             mInstallUpdatePreference.set(installUpdateForMoEngage);
             mMoEHelper.setExistingUser(false);
             mMoEHelper.setUserAttribute(MoEngageConstants.FIRST_APP_OPEN, new Date());
-            InviteReferralsApi.getInstance(this).tracking("install", null, 0);
         }
         mMoEHelper.setUserAttribute(MoEngageConstants.LAST_APP_OPEN, new Date());
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getToken())) {
@@ -161,6 +157,10 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             setContentView(R.layout.welcome_activity);
             ButterKnife.bind(this);
             initHomeViewPagerAndTabs();
+            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setMessage(getString(R.string.ID_PLAY_STORE_DATA));
+            mProgressDialog.setCancelable(false);
+            mProgressDialog.show();
             mGetStarted.setEnabled(false);
             mOtherLoginOption.setEnabled(false);
             mScrollView.post(new Runnable() {
@@ -198,6 +198,10 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                     PushManager.getInstance().refreshToken(getApplicationContext(), mGcmId);
                     mGetStarted.setEnabled(true);
                     mOtherLoginOption.setEnabled(true);
+                    if(null!=mProgressDialog)
+                    {
+                        mProgressDialog.dismiss();
+                    }
                 } else {
                     mGetStarted.setEnabled(false);
                     mOtherLoginOption.setEnabled(false);
@@ -472,11 +476,18 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             Intent intent = getIntent();
             if (intent != null) {
                 Bundle extras = intent.getExtras();
-                if(extras!=null && extras.getString(AppConstants.GOOGLE_PLAY_URL_REFERRAL_CONTACT_ID)!= null) {
+                if(extras!=null && null!=extras.getString(AppConstants.GOOGLE_PLAY_URL_REFERRAL_CONTACT_ID)) {
                     if (StringUtil.isNotNullOrEmptyString(extras.getString(AppConstants.GOOGLE_PLAY_URL_REFERRAL_CONTACT_ID))) {
                         String appContactId = extras.getString(AppConstants.GOOGLE_PLAY_URL_REFERRAL_CONTACT_ID);
                         UserFromReferralRequest userFromReferralRequest = new UserFromReferralRequest();
-                        userFromReferralRequest.setAppUserContactTableId(Long.parseLong(appContactId));
+                        if(StringUtil.isNotNullOrEmptyString(appContactId)) {
+                            try {
+                                userFromReferralRequest.setAppUserContactTableId(Long.parseLong(appContactId));
+                            }catch (Exception e)
+                            {
+
+                            }
+                        }
                         mLoginPresenter.updateUserReferralInPresenter(userFromReferralRequest);
                     }
                 }

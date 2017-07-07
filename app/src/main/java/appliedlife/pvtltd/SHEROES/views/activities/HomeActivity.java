@@ -173,7 +173,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     public ImageView mIvSpinner;
     @Bind(R.id.appbar_layout)
     public AppBarLayout mAppBarLayout;
-
     @Bind(R.id.fl_feed_full_view)
     public FrameLayout flFeedFullView;
     @Bind(R.id.iv_side_drawer_profile_blur_background)
@@ -222,6 +221,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     private String mHelpLineChat;
     private EventDetailDialogFragment eventDetailDialogFragment;
     private ProgressDialog mProgressDialog;
+    private boolean isInviteReferral;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -241,12 +241,20 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         if (StringUtil.isNotNullOrEmptyString(mHelpLineChat) && mHelpLineChat.equalsIgnoreCase(AppConstants.HELPLINE_CHAT)) {
             handleHelpLineFragmentFromDeepLinkAndLoading();
         }
+        InviteReferralsApi.getInstance(this).showWelcomeMessage();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        setProfileImage();
+        if (isInviteReferral) {
+            if (null != mProgressDialog) {
+                mProgressDialog.dismiss();
+            }
+            isInviteReferral=false;
+        } else {
+            setProfileImage();
+        }
     }
 
     private boolean startedFirstTime() {
@@ -519,12 +527,17 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     inviteMyCommunityDialog();
                     break;
                 case 13:
-                    if (null != mUserPreference  && mUserPreference.isSet()&& null != mUserPreference.get()) {
+                    mProgressDialog = new ProgressDialog(this);
+                    mProgressDialog.setMessage(getString(R.string.ID_INVITE_REFERRAL_FRIEND));
+                    mProgressDialog.setCancelable(true);
+                    mProgressDialog.show();
+                    if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get()) {
                         LoginResponse loginResponse = mUserPreference.get();
                         if (null != loginResponse)
-                            referralUserAttribute(this,loginResponse);
+                            referralUserAttribute(this, loginResponse);
                     }
-                    InviteReferralsApi.getInstance(this).inline_btn(AppConstants.CAMPAIGN_ID);
+                    InviteReferralsApi.getInstance(HomeActivity.this).inline_btn(AppConstants.CAMPAIGN_ID);
+                    isInviteReferral = true;
                     break;
                 default:
 
@@ -576,10 +589,11 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             }
         }
     }
+
     public void referralUserAttribute(Context context, LoginResponse loginResponse) {
         if (null != loginResponse.getUserSummary() && loginResponse.getUserSummary().getUserId() > 0) {
             StringBuilder fullName = new StringBuilder();
-            StringBuilder emailId  = new StringBuilder();
+            StringBuilder emailId = new StringBuilder();
             StringBuilder mobile = new StringBuilder();
             StringBuilder subscriptionID = new StringBuilder();
             StringBuilder customValues = new StringBuilder();
@@ -598,10 +612,10 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     mobile.append(loginResponse.getUserSummary().getUserBO().getMobile());
                 }
             }
-            InviteReferralsApi.getInstance(context).userDetails(fullName.toString(), emailId.toString(),mobile.toString(),AppConstants.CAMPAIGN_ID, subscriptionID.toString(),customValues.toString());
-            InviteReferralsApi.getInstance(context).tracking("register", emailId.toString(), 0);
+            InviteReferralsApi.getInstance(context).userDetails(fullName.toString(), emailId.toString(), mobile.toString(), AppConstants.CAMPAIGN_ID, subscriptionID.toString(), customValues.toString());
         }
     }
+
     private void openProfileActivity() {
         Intent intent = new Intent(this, ProfileActicity.class);
         intent.putExtra(AppConstants.EXTRA_IMAGE, profile);
@@ -1077,6 +1091,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
 
     public void openJobFragment() {
         mJobFragment.setVisibility(View.VISIBLE);
+        mTvSearchBox.setVisibility(View.VISIBLE);
+        mICSheroes.setVisibility(View.GONE);
         mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_JOBS));
         liHomeCommunityButtonLayout.setVisibility(View.GONE);
         mFlHomeFooterList.setVisibility(View.VISIBLE);
@@ -1154,6 +1170,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             }
         } else if (mFragmentOpen.isJobFragment()) {
             mJobFragment.setVisibility(View.GONE);
+            mTvSearchBox.setVisibility(View.GONE);
+            mICSheroes.setVisibility(View.VISIBLE);
             getSupportFragmentManager().popBackStackImmediate();
             initHomeViewPagerAndTabs();
             setHomeFeedCommunityData();

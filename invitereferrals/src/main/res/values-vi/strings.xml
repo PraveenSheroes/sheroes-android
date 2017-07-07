@@ -5,8 +5,11 @@
     <string name="tnc">Các điều khoản và điều kiện</string>
     <string name="how_it_works">Làm thế nào nó hoạt động</string>
 
-    <string name="name">Tên</string>
-    <string name="email">E-mail</string>
-    <string name="register">Ghi danh</string>
+    <string name="ir_login_userNameHint">Tên</string>
+    <string name="ir_login_userEmailHint">E-mail</string>
+    <string name="ir_login_buttonText">Ghi danh</string>
     <string name="valid_email">Nhập ID Email hợp lệ</string>
+
+    <string name="err_msg">Đã xảy ra lỗi</string>
+    <string name="loading_message">Xin chờ. Đang tải trang...</string>
 </resources>

@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">invitereferrals</string>
+    <string name="more_options">Weitere Optionen zu teilen</string>
+    <string name="stats">Meine Empfehlungsstatistik</string>
+    <string name="tnc">Geschäftsbedingungen</string>
+    <string name="how_it_works">Wie es funktioniert</string>
+
+    <string name="ir_login_userNameHint">Name</string>
+    <string name="ir_login_userEmailHint">Email</string>
+    <string name="ir_login_buttonText">Neu registrieren</string>
+    <string name="valid_email">Geben Sie die gültige E-Mail-ID ein</string>
+
+
+    <string name="err_msg">Etwas ist schief gelaufen</string>
+    <string name="loading_message">Warten Sie mal. Seite wird geladen...</string>
+</resources>
