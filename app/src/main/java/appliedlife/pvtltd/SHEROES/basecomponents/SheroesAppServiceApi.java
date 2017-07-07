@@ -57,6 +57,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.GcmIdResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.SignupRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.login.UserFromReferralRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.login.UserFromReferralResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.GooglePlusRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.GooglePlusResponse;
@@ -332,4 +334,7 @@ public interface SheroesAppServiceApi {
 
     @POST("participant/user/get_app_user_contact_list")
     Observable<UserPhoneContactsListResponse> getPhoneContactListResponse(@Body UserPhoneContactsListRequest userPhoneContactsListRequest);
+
+    @POST("participant/user/update_app_user_contact_referral")
+    Observable<UserFromReferralResponse> updateUserReferral(@Body UserFromReferralRequest userFromReferralRequest);
 }

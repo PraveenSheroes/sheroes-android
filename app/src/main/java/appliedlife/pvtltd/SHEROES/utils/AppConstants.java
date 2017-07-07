@@ -190,6 +190,9 @@ public class AppConstants {
     public static final int SEARCH_CONSTANT_DELAY = 500;
     public static final int NOT_TIME = 50000;
     public static final String SELECT_ALL_QUERY = "Select * from ";
+    public static final String EQUAL_SIGN = "=";
+    public static final String AND_SIGN = "&";
+
 
     /*Master data keys for pages*/
     public static final String MASTER_DATA_ARTICLE_KEY = "ARTICLE_CATEGORY";//article category drop down
@@ -337,5 +340,10 @@ public class AppConstants {
 
     public static final String USER_CONTACTS_ACCESS = "user_contacts_accessed";
     public static final int PERMISSIONS_REQUEST_READ_CONTACTS = 79;
+
+    public static final String GOOGLE_PLAY_URL_TRACKER = "google_play_url_tracker";
+    public static final String GOOGLE_PLAY_URL_REFERRAL = "referrer";
+    public static final String GOOGLE_PLAY_URL_REFERRAL_CONTACT_ID = "app_user_contact_id";
+
 
 }
