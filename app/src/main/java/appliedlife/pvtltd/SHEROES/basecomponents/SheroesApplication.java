@@ -7,6 +7,7 @@ import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
+import com.invitereferrals.invitereferrals.InviteReferralsApplication;
 import com.moe.pushlibrary.MoEHelper;
 
 import java.io.File;
@@ -48,6 +49,7 @@ public class SheroesApplication extends MultiDexApplication  {
         MoEHelper.getInstance(getApplicationContext()).autoIntegrate(this);
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
+        InviteReferralsApplication.register(this);
         File cacheFile = new File(getCacheDir(), "responses");
         mSheroesAppComponent = DaggerSheroesAppComponent.builder().sheroesAppModule(new SheroesAppModule(cacheFile,this)).build();
         setAppComponent(mSheroesAppComponent);

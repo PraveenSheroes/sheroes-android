@@ -178,7 +178,6 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onCompleted() {
                 getMvpView().stopProgressBar();
             }
-
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();

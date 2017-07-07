@@ -89,6 +89,11 @@ public class DrawerViewHolder extends BaseViewHolder<DrawerItems> {
                 tvDrawerItem.setText(context.getString(R.string.ID_INVITE_WOMEN_FRIEND));
                 tvDrawerItem.setTextColor(ContextCompat.getColor(context, R.color.ask_sheroes));
                 break;
+            case 13:
+                tvDrawerItem.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context,R.drawable.ic_invite_friend), null, null, null);
+                tvDrawerItem.setText(context.getString(R.string.ID_INVITE_REFERRAL_FRIEND));
+                tvDrawerItem.setTextColor(ContextCompat.getColor(context, R.color.ask_sheroes));
+                break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE+ TAG +  AppConstants.SPACE + drawerItemId);
         }

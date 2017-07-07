@@ -248,20 +248,6 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
         }
     }
 
-    /*protected void setGooglePlusButtonText(SignInButton signInButton, String buttonText) {
-        for (int i = 0; i < signInButton.getChildCount(); i++) {
-            View v = signInButton.getChildAt(i);
-            if (v instanceof TextView) {
-                TextView tv = (TextView) v;
-                tv.setText(buttonText);
-                tv.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
-                tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
-                tv.setPadding(0, 0, 0, 0);
-                return;
-            }
-        }
-    }*/
-
     @OnClick(R.id.btn_login_google)
     public void googleLoginClick() {
         launchGooglePlusLogin();

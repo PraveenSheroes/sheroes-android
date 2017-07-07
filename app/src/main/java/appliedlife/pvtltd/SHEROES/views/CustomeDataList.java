@@ -59,11 +59,15 @@ public class CustomeDataList {
         elevenDrawerItem.setId(11);
         elevenDrawerItem.setName("Login");
         elevenDrawerItem.setIconName("ic_feed");
+
         DrawerItems twelveDraerItem = new DrawerItems();
         twelveDraerItem.setIconName("ic_bookmark");
         twelveDraerItem.setId(12);
         twelveDraerItem.setName("Settings");
         twelveDraerItem.setIconName("ic_setting");
+
+        DrawerItems thirteenItem = new DrawerItems();
+        thirteenItem.setId(13);
 
         if(isSheUser){
             drawerItemsList.add(seventhDrawerItem);
@@ -77,6 +81,7 @@ public class CustomeDataList {
           //  drawerItemsList.add(fourthDrawerItem);
             drawerItemsList.add(sixthDrawerItem);
             drawerItemsList.add(twelveDraerItem);
+            drawerItemsList.add(thirteenItem);
         }
         drawerItemsList.add(elevenDrawerItem);
         return  drawerItemsList;

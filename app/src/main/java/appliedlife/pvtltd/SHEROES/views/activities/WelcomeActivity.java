@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.appsflyer.AppsFlyerLib;
 import com.f2prateek.rx.preferences.Preference;
+import com.invitereferrals.invitereferrals.InviteReferralsApi;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 import com.moengage.push.PushManager;
@@ -121,7 +122,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
         moEngageUtills.entityMoEngageAppOpened(this, mMoEHelper, payloadBuilder);
-        AppsFlyerLib.getInstance().startTracking(getApplication(),getString(R.string.ID_APPS_FLYER_DEV_ID));
+        AppsFlyerLib.getInstance().startTracking(getApplication(), getString(R.string.ID_APPS_FLYER_DEV_ID));
         AppsFlyerLib.getInstance().setImeiData(appUtils.getIMEI());
         AppsFlyerLib.getInstance().setAndroidIdData(appUtils.getDeviceId());
         initializeAllDataAfterGCMId();
@@ -145,6 +146,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             mInstallUpdatePreference.set(installUpdateForMoEngage);
             mMoEHelper.setExistingUser(false);
             mMoEHelper.setUserAttribute(MoEngageConstants.FIRST_APP_OPEN, new Date());
+            InviteReferralsApi.getInstance(this).tracking("install", null, 0);
         }
         mMoEHelper.setUserAttribute(MoEngageConstants.LAST_APP_OPEN, new Date());
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getToken())) {
@@ -211,7 +213,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     }
 
     private void openHomeScreen() {
-        if(null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getNextScreen()) && userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.EMAIL_VERIFICATION) && userPreference.get().isSheUser() ){
+        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getNextScreen()) && userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.EMAIL_VERIFICATION) && userPreference.get().isSheUser()) {
             openLoginActivity();
         } else {
             Intent boardingIntent = new Intent(this, OnBoardingActivity.class);
@@ -448,12 +450,12 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     }
 
     @Override
-    public void sendForgotPasswordEmail(ForgotPasswordResponse forgotPasswordResponse){
+    public void sendForgotPasswordEmail(ForgotPasswordResponse forgotPasswordResponse) {
 
     }
 
     @Override
-    public void sendVerificationEmailSuccess(EmailVerificationResponse emailVerificationResponse){
+    public void sendVerificationEmailSuccess(EmailVerificationResponse emailVerificationResponse) {
 
     }
 }

@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -56,6 +57,7 @@ import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.share.model.AppInviteContent;
 import com.facebook.share.widget.AppInviteDialog;
+import com.invitereferrals.invitereferrals.InviteReferralsApi;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
@@ -516,6 +518,14 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 case 12:
                     inviteMyCommunityDialog();
                     break;
+                case 13:
+                    if (null != mUserPreference  && mUserPreference.isSet()&& null != mUserPreference.get()) {
+                        LoginResponse loginResponse = mUserPreference.get();
+                        if (null != loginResponse)
+                            referralUserAttribute(this,loginResponse);
+                    }
+                    InviteReferralsApi.getInstance(this).inline_btn(AppConstants.CAMPAIGN_ID);
+                    break;
                 default:
 
             }
@@ -566,7 +576,32 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             }
         }
     }
-
+    public void referralUserAttribute(Context context, LoginResponse loginResponse) {
+        if (null != loginResponse.getUserSummary() && loginResponse.getUserSummary().getUserId() > 0) {
+            StringBuilder fullName = new StringBuilder();
+            StringBuilder emailId  = new StringBuilder();
+            StringBuilder mobile = new StringBuilder();
+            StringBuilder subscriptionID = new StringBuilder();
+            StringBuilder customValues = new StringBuilder();
+            // If you have first and last name separately
+            if (StringUtil.isNotNullOrEmptyString(loginResponse.getUserSummary().getFirstName())) {
+                fullName.append(loginResponse.getUserSummary().getFirstName()).append(AppConstants.SPACE);
+            }
+            if (StringUtil.isNotNullOrEmptyString(loginResponse.getUserSummary().getLastName())) {
+                fullName.append(loginResponse.getUserSummary().getLastName());
+            }
+            if (StringUtil.isNotNullOrEmptyString(loginResponse.getUserSummary().getEmailId())) {
+                emailId.append(loginResponse.getUserSummary().getEmailId());
+            }
+            if (null != loginResponse.getUserSummary().getUserBO()) {
+                if (StringUtil.isNotNullOrEmptyString(loginResponse.getUserSummary().getUserBO().getMobile())) {
+                    mobile.append(loginResponse.getUserSummary().getUserBO().getMobile());
+                }
+            }
+            InviteReferralsApi.getInstance(context).userDetails(fullName.toString(), emailId.toString(),mobile.toString(),AppConstants.CAMPAIGN_ID, subscriptionID.toString(),customValues.toString());
+            InviteReferralsApi.getInstance(context).tracking("register", emailId.toString(), 0);
+        }
+    }
     private void openProfileActivity() {
         Intent intent = new Intent(this, ProfileActicity.class);
         intent.putExtra(AppConstants.EXTRA_IMAGE, profile);

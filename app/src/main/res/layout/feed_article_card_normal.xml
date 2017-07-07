@@ -196,8 +196,8 @@
         <TextView
             android:id="@+id/tv_feed_article_reaction1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_emoji_xo_xo" />
+            android:layout_height="@dimen/dp_size_22"
+            android:drawableLeft="@drawable/ic_heart_active" />
 
         <TextView
             android:id="@+id/tv_feed_article_reaction2"

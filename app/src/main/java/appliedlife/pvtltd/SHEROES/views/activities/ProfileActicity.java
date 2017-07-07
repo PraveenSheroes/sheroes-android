@@ -211,9 +211,6 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
                     .into(ivProfile_bg_img);
         }
         localImageSaveForChallenge = new File(Environment.getExternalStorageDirectory(), AppConstants.IMAGE + AppConstants.JPG_FORMATE);
-        if (null != profileImageDialogFragment) {
-            profileImageDialogFragment.dismiss();
-        }
     }
 
     @Override
@@ -1141,6 +1138,9 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
                 Fragment personelProfile = viewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
                 if (AppUtils.isFragmentUIActive(personelProfile)) {
                     ((PersonalProfileFragment) personelProfile).updateProfileData(mEncodeImageUrl);
+                    if (null != profileImageDialogFragment) {
+                        profileImageDialogFragment.dismiss();
+                    }
                 }
             }
         }

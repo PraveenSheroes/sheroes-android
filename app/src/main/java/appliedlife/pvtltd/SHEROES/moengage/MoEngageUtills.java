@@ -39,6 +39,7 @@ public class MoEngageUtills {
     public void entityMoEngageUserAttribute(Context context, MoEHelper mMoEHelper, PayloadBuilder payloadBuilder, LoginResponse loginResponse) {
         if (null != loginResponse.getUserSummary() && loginResponse.getUserSummary().getUserId() > 0) {
             mMoEHelper.setUniqueId(loginResponse.getUserSummary().getUserId());
+
             // If you have first and last name separately
             if (StringUtil.isNotNullOrEmptyString(loginResponse.getUserSummary().getFirstName())) {
                 mMoEHelper.setFirstName(loginResponse.getUserSummary().getFirstName());

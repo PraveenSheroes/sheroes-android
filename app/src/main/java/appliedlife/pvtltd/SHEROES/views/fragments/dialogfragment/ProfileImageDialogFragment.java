@@ -45,6 +45,8 @@ public class ProfileImageDialogFragment extends BaseDialogFragment {
     ImageView mIvProfileImageFromCamera;
     @Bind(R.id.iv_profile_image_from_gall)
     ImageView mIvProfileImageFromGall;
+    @Bind(R.id.tv_profile_image_save)
+    TextView mTvProfileImageSave;
     @Bind(R.id.tv_profile_image_remove)
     TextView mTvProfileImageRemove;
     @Bind(R.id.tv_profile_image_close)
@@ -61,18 +63,22 @@ public class ProfileImageDialogFragment extends BaseDialogFragment {
         View view = inflater.inflate(R.layout.profile_image_dialog_fragment, container, false);
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         ButterKnife.bind(this, view);
+
         setUserProfileData(false, null);
         return view;
     }
 
     public void setUserProfileData(boolean isSelectedImage, Bitmap imageUrl) {
+        mTvProfileImageSave.setEnabled(true);
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
             mTvProfileName.setText(mUserPreference.get().getUserSummary().getFirstName() + AppConstants.SPACE + mUserPreference.get().getUserSummary().getLastName());
             liUserProfileImages.removeAllViews();
             liUserProfileImages.removeAllViewsInLayout();
             LayoutInflater layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View child = layoutInflater.inflate(R.layout.feed_article_single_image, null);
-            ImageView ivUserProfileImage = (ImageView) child.findViewById(R.id.iv_feed_article_single_image);
+            View child = layoutInflater.inflate(R.layout.challenge_image, null);
+            ImageView ivUserProfileImage = (ImageView) child.findViewById(R.id.iv_feed_challenge);
+            LinearLayout liImageText = (LinearLayout) child.findViewById(R.id.li_image_text);
+            liImageText.setVisibility(View.GONE);
             Glide.with(getActivity())
                     .load(mUserPreference.get().getUserSummary().getPhotoUrl())
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
@@ -81,16 +87,18 @@ public class ProfileImageDialogFragment extends BaseDialogFragment {
             liUserProfileImages.addView(child);
         }
         if (isSelectedImage) {
-            mTvProfileImageRemove.setVisibility(View.GONE);
+            mTvProfileImageSave.setVisibility(View.VISIBLE);
             liUserProfileImages.removeAllViews();
             liUserProfileImages.removeAllViewsInLayout();
             LayoutInflater layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View child = layoutInflater.inflate(R.layout.feed_article_single_image, null);
-            ImageView ivUserProfileImage = (ImageView) child.findViewById(R.id.iv_feed_article_single_image);
+            View child = layoutInflater.inflate(R.layout.challenge_image, null);
+            ImageView ivUserProfileImage = (ImageView) child.findViewById(R.id.iv_feed_challenge);
+            LinearLayout liImageText = (LinearLayout) child.findViewById(R.id.li_image_text);
+            liImageText.setVisibility(View.GONE);
             ivUserProfileImage.setImageBitmap(imageUrl);
             liUserProfileImages.addView(child);
         } else {
-            mTvProfileImageRemove.setVisibility(View.GONE);
+            mTvProfileImageSave.setVisibility(View.GONE);
         }
     }
 
@@ -141,7 +149,8 @@ public class ProfileImageDialogFragment extends BaseDialogFragment {
 
     @OnClick(R.id.tv_profile_image_save)
     public void onProfileImageSaveClick() {
-            ((ProfileActicity) getActivity()).requestForUpdateProfileImage();
+        mTvProfileImageSave.setEnabled(false);
+        ((ProfileActicity) getActivity()).requestForUpdateProfileImage();
     }
 
     @OnClick(R.id.tv_profile_image_remove)
@@ -149,8 +158,10 @@ public class ProfileImageDialogFragment extends BaseDialogFragment {
         liUserProfileImages.removeAllViews();
         liUserProfileImages.removeAllViewsInLayout();
         LayoutInflater layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View child = layoutInflater.inflate(R.layout.feed_article_single_image, null);
-        ImageView ivUserProfileImage = (ImageView) child.findViewById(R.id.iv_feed_article_single_image);
+        View child = layoutInflater.inflate(R.layout.challenge_image, null);
+        ImageView ivUserProfileImage = (ImageView) child.findViewById(R.id.iv_feed_challenge);
+        LinearLayout liImageText = (LinearLayout) child.findViewById(R.id.li_image_text);
+        liImageText.setVisibility(View.GONE);
         liUserProfileImages.addView(child);
     }
 
