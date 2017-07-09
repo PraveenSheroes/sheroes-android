@@ -120,6 +120,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
+        InviteReferralsApi.getInstance(this).tracking(AppConstants.INSTALL, null, 0,null);
         mMoEHelper = MoEHelper.getInstance(this);
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
@@ -128,7 +129,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         AppsFlyerLib.getInstance().setImeiData(appUtils.getIMEI());
         AppsFlyerLib.getInstance().setAndroidIdData(appUtils.getDeviceId());
         initializeAllDataAfterGCMId();
-        InviteReferralsApi.getInstance(this).tracking("install", null, 0,null);
+
     }
 
     private void initializeAllDataAfterGCMId() {

@@ -45,7 +45,7 @@ public class AppConstants {
     public static final String COLON = ":";
     public static final String HOURS = " Hrs ";
     public static final String APASTROPH =  "'s";
-
+    public static final String HOME ="home";
     public static final String DASH = "-";
     public static final String DOTS = "...";
     public static final String S = "s";
@@ -65,7 +65,7 @@ public class AppConstants {
     public static final String SOURCE_NAME = "android";
     public static final String UTF_8 = "UTF-8";
     public static final String CITY_NAME_DEFAULT = "Delhi";
-
+    public static final String INSTALL = "install";
     public static final String HOW_CAN_SHEROES_AKA_LOOKING_FOR_SCREEN = "looking_for";
     public static final String GOOD_AT_SCREEN = "good_at";
     public static final String TOTAL_WORK_EXPERIENCE_SCREEN = "total_exp";
