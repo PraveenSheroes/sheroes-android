@@ -54,13 +54,13 @@ public class RequestedPresenter extends BasePresenter<RequestedView> {
     }
 
 
-    public void getAllMembers(MemberRequest memberRequest) {
+    public void getAllPendingRequest(MemberRequest memberRequest) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = requestedListModel.getMemberList(memberRequest).subscribe(new Subscriber<RequestedListResponse>() {
+        Subscription subscription = requestedListModel.getPendingList(memberRequest).subscribe(new Subscriber<RequestedListResponse>() {
             @Override
             public void onCompleted() {
                 getMvpView().stopProgressBar();

@@ -22,7 +22,16 @@ public class GoogleAnalyticsTracing {
         GoogleAnalytics analytics= GoogleAnalytics.getInstance(cn);
         Tracker tr=analytics.newTracker(AppConstants.GOOGLE_ANALYTICS);
         tr.setScreenName(screenname);
-
         tr.send(new HitBuilders.ScreenViewBuilder().build());
+    }
+    public static void setUserIdTracking(Context cn,String userId)
+    {
+        GoogleAnalytics analytics= GoogleAnalytics.getInstance(cn);
+        Tracker tr=analytics.newTracker(AppConstants.GOOGLE_ANALYTICS);
+        tr.set("&uid", userId);
+        tr.send(new HitBuilders.EventBuilder()
+                .setCategory("UX")
+                .setAction("User Sign In")
+                .build());
     }
 }

@@ -202,7 +202,7 @@ public interface SheroesAppServiceApi {
     Observable<JobApplyResponse> getJobApply(@Body JobApplyRequest jobApplyRequest);
 
     @POST("participant/community/pending_request")
-    Observable<RequestedListResponse> getRequestList(@Body MemberRequest memberRequest);
+    Observable<RequestedListResponse> getPendingRequestList(@Body MemberRequest memberRequest);
 
     @POST("entity/master/get_data")
     Observable<GetTagData> getTagFromApi(@Body GetAllDataRequest getAllDataRequest);

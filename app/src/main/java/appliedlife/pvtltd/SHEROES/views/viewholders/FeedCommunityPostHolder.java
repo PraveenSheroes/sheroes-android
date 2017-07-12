@@ -29,7 +29,9 @@ import com.f2prateek.rx.preferences.Preference;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -245,18 +247,30 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail>  {
             ivFeedEventIcon.setCircularImage(true);
             ivFeedEventIcon.bindImage(authorImageUrl);
         }
-        String postedDateOnly = dataItem.getPostedOnlyDateFormat();
-        if (StringUtil.isNotNullOrEmptyString(postedDateOnly)) {
-            String[] splitDate = postedDateOnly.split(AppConstants.SPACE);
-            if (splitDate.length > 1) {
-                if (StringUtil.isNotNullOrEmptyString(splitDate[1])) {
-                    tvEventMonth.setText(splitDate[1]);
-                }
-                if (StringUtil.isNotNullOrEmptyString(splitDate[0])) {
-                    tvEventDay.setText(splitDate[0]);
-                }
+        if (StringUtil.isNotNullOrEmptyString(dataItem.getStartDateForEvent())) {
+            long time = mDateUtil.getTimeInMillis(dataItem.getStartDateForEvent(), AppConstants.DATE_FORMAT);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(time);
+            String month = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
+            if (StringUtil.isNotNullOrEmptyString(month)) {
+                tvEventMonth.setText(month);
             }
+            if (StringUtil.isNotNullOrEmptyString(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH))))
+            {
+                StringBuilder stringBuilder=new StringBuilder();
+                if(calendar.get(Calendar.DAY_OF_MONTH)<10)
+                {
+                    stringBuilder.append("0").append(calendar.get(Calendar.DAY_OF_MONTH));
+                    tvEventDay.setText(stringBuilder.toString());
+                }else
+                {
+                    tvEventDay.setText(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
+                }
+
+            }
+
         }
+
         if (StringUtil.isNotNullOrEmptyString(dataItem.getListDescription())) {
             tvEventTitle.setText(dataItem.getListDescription());
         }

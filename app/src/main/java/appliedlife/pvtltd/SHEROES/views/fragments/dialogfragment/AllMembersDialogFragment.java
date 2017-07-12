@@ -45,7 +45,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_
 public class AllMembersDialogFragment extends BaseDialogFragment implements AllMembersView {
     private final String TAG = LogUtils.makeLogTag(AllMembersDialogFragment.class);
     @Inject
-    MembersPresenter mmemberpresenter;
+    MembersPresenter mMemberpresenter;
     @Bind(R.id.rv_member_list)
     RecyclerView mRecyclerView;
     @Bind(R.id.pb_member_progress_bar)
@@ -67,7 +67,7 @@ public class AllMembersDialogFragment extends BaseDialogFragment implements AllM
         View view = inflater.inflate(R.layout.fragment_members, container, false);
         ButterKnife.bind(this, view);
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MEMBER_FRAGMENT, AppConstants.NO_REACTION_CONSTANT);
-        mmemberpresenter.attachView(this);
+        mMemberpresenter.attachView(this);
         if (null != getArguments()) {
             mFeedDetail = getArguments().getParcelable(AppConstants.COMMUNITY_DETAIL);
         }
@@ -76,7 +76,7 @@ public class AllMembersDialogFragment extends BaseDialogFragment implements AllM
         manager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.addOnScrollListener(new HidingScrollListener(mmemberpresenter, mRecyclerView, manager, mFragmentListRefreshData) {
+        mRecyclerView.addOnScrollListener(new HidingScrollListener(mMemberpresenter, mRecyclerView, manager, mFragmentListRefreshData) {
             @Override
             public void onHide() {
             }
@@ -90,7 +90,7 @@ public class AllMembersDialogFragment extends BaseDialogFragment implements AllM
 
             }
         });
-        mmemberpresenter.getAllMembers(mAppUtils.getPandingMemberRequestBuilder(mFeedDetail.getIdOfEntityOrParticipant(), mFragmentListRefreshData.getPageNo()));
+        mMemberpresenter.getAllMembers(mAppUtils.getPandingMemberRequestBuilder(mFeedDetail.getIdOfEntityOrParticipant(), mFragmentListRefreshData.getPageNo()));
         mFragmentListRefreshData.setEnitityOrParticpantid(mFeedDetail.getIdOfEntityOrParticipant());
         return view;
     }
@@ -103,7 +103,7 @@ public class AllMembersDialogFragment extends BaseDialogFragment implements AllM
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mmemberpresenter.detachView();
+        mMemberpresenter.detachView();
     }
 
     @Override
@@ -147,7 +147,7 @@ public class AllMembersDialogFragment extends BaseDialogFragment implements AllM
 
     public void callRemoveMember(Long userId, Long communityId, int position) {
         this.position = position;
-        mmemberpresenter.leaveCommunityAndRemoveMemberToPresenter(mAppUtils.removeMemberRequestBuilder(communityId,userId));
+        mMemberpresenter.leaveCommunityAndRemoveMemberToPresenter(mAppUtils.removeMemberRequestBuilder(communityId,userId));
     }
 
     @Override

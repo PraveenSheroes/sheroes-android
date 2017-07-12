@@ -62,7 +62,7 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
         this.mFragmentListRefreshData=fragmentListRefreshData;
     }
     public HidingScrollListener(RequestedPresenter requestedPresenter, RecyclerView recyclerView, LinearLayoutManager manager, FragmentListRefreshData fragmentListRefreshData) {
-        requestedPresenter=requestedPresenter;
+        this.requestedPresenter=requestedPresenter;
         mRecyclerView=recyclerView;
         mManager=manager;
         this.mFragmentListRefreshData=fragmentListRefreshData;
@@ -163,7 +163,7 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                         mMembersPresenter.getAllMembers(getPandingMemberRequestBuilder(mFragmentListRefreshData.getEnitityOrParticpantid(),pageNo));
                         break;
                     case AppConstants.PANDING_MEMBER_FRAGMENT:
-                        requestedPresenter.getAllMembers(getPandingMemberRequestBuilder(mFragmentListRefreshData.getEnitityOrParticpantid(),pageNo));
+                        requestedPresenter.getAllPendingRequest(getPandingMemberRequestBuilder(mFragmentListRefreshData.getEnitityOrParticpantid(),pageNo));
                         break;
                     case AppConstants.USER_COMMUNITY_POST_FRAGMENT:
                         mHomePresenter.getFeedFromPresenter(userCommunityPostRequestBuilder(AppConstants.FEED_COMMUNITY_POST,pageNo,mFragmentListRefreshData.getCommunityId()));

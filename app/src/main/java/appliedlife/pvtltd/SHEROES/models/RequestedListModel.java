@@ -28,10 +28,10 @@ public class RequestedListModel {
         this.gson= gson;
     }
 
-    public rx.Observable<RequestedListResponse> getMemberList(MemberRequest memberRequest){
+    public rx.Observable<RequestedListResponse> getPendingList(MemberRequest memberRequest){
         LogUtils.error("Community Requested req: ",gson.toJson(memberRequest));
 
-        return sheroesAppServiceApi.getRequestList(memberRequest)
+        return sheroesAppServiceApi.getPendingRequestList(memberRequest)
                 .map(new Func1<RequestedListResponse, RequestedListResponse>() {
                     @Override
                     public RequestedListResponse call(RequestedListResponse memberListResponse) {

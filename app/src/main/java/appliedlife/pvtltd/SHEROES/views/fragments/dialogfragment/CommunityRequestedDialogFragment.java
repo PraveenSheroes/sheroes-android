@@ -23,7 +23,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.MemberListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.PandingMember;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
-import appliedlife.pvtltd.SHEROES.presenters.MembersPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.RequestedPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -47,8 +46,6 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.getPandingMemberRequestB
 public class CommunityRequestedDialogFragment extends BaseDialogFragment implements RequestedView {
     private final String TAG = LogUtils.makeLogTag(CommunityRequestedDialogFragment.class);
     @Inject
-    MembersPresenter mmemberpresenter;
-    @Inject
     RequestedPresenter requestedPresenter;
     @Bind(R.id.rv_community_requested_list)
     RecyclerView mRecyclerView;
@@ -67,7 +64,7 @@ public class CommunityRequestedDialogFragment extends BaseDialogFragment impleme
         SheroesApplication.getAppComponent(getActivity()).inject(this);
         View view = inflater.inflate(R.layout.fragment_request, container, false);
         ButterKnife.bind(this, view);
-        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MEMBER_FRAGMENT, AppConstants.NO_REACTION_CONSTANT);
+        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.PANDING_MEMBER_FRAGMENT, AppConstants.NO_REACTION_CONSTANT);
         if (null != getArguments()) {
             mFeedDetail = getArguments().getParcelable(AppConstants.COMMUNITY_DETAIL);
         }
@@ -92,7 +89,7 @@ public class CommunityRequestedDialogFragment extends BaseDialogFragment impleme
             }
         });
         mFragmentListRefreshData.setEnitityOrParticpantid(mFeedDetail.getIdOfEntityOrParticipant());
-        requestedPresenter.getAllMembers(getPandingMemberRequestBuilder(mFeedDetail.getIdOfEntityOrParticipant(), mFragmentListRefreshData.getPageNo()));
+        requestedPresenter.getAllPendingRequest(getPandingMemberRequestBuilder(mFeedDetail.getIdOfEntityOrParticipant(), mFragmentListRefreshData.getPageNo()));
 
         return view;
     }

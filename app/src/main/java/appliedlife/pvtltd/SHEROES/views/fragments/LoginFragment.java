@@ -34,6 +34,7 @@ import appliedlife.pvtltd.SHEROES.service.GCMClientManager;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.Tracking.GoogleAnalyticsTracing;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.LoginActivity;
@@ -54,7 +55,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
  * Title: A login screen that offers login via email/password.
  */
 
-public class LoginFragment extends BaseFragment implements LoginView{
+public class LoginFragment extends BaseFragment implements LoginView {
     private final String TAG = LogUtils.makeLogTag(LoginFragment.class);
     @Inject
     Preference<LoginResponse> mUserPreference;
@@ -70,7 +71,7 @@ public class LoginFragment extends BaseFragment implements LoginView{
     ProgressBar mProgressBar;
     @Bind(R.id.email_sign_in_button)
     Button mEmailSign;
-    private  ProgressDialog mProgressDialog;
+    private ProgressDialog mProgressDialog;
     private LoginActivityIntractionListner mLoginActivityIntractionListner;
     private MoEHelper mMoEHelper;
     private String mGcmId;
@@ -133,6 +134,9 @@ public class LoginFragment extends BaseFragment implements LoginView{
                         moEngageUtills.entityMoEngageUserAttribute(getActivity(), mMoEHelper, payloadBuilder, loginResponse);
                         mUserPreference.set(loginResponse);
                         moEngageUtills.entityMoEngageLoggedIn(getActivity(), mMoEHelper, payloadBuilder, MoEngageConstants.EMAIL);
+                        if (null != loginResponse.getUserSummary()) {
+                            GoogleAnalyticsTracing.setUserIdTracking(getActivity(), String.valueOf(loginResponse.getUserSummary().getUserId()));
+                        }
                         mLoginActivityIntractionListner.onLoginAuthToken();
                         break;
                     case AppConstants.FAILED:
@@ -158,6 +162,7 @@ public class LoginFragment extends BaseFragment implements LoginView{
                     moEngageUtills.entityMoEngageUserAttribute(getActivity(), mMoEHelper, payloadBuilder, loginResponse);
                     mUserPreference.set(loginResponse);
                     moEngageUtills.entityMoEngageLoggedIn(getActivity(), mMoEHelper, payloadBuilder, MoEngageConstants.EMAIL);
+                    GoogleAnalyticsTracing.setUserIdTracking(getActivity(), String.valueOf(loginResponse.getUserSummary().getUserId()));
                     mLoginActivityIntractionListner.onLoginAuthToken();
                 } else {
                     LoginManager.getInstance().logOut();
@@ -271,8 +276,7 @@ public class LoginFragment extends BaseFragment implements LoginView{
             public void onSuccess(String registrationId, boolean isNewRegistration) {
                 mGcmId = registrationId;
                 if (StringUtil.isNotNullOrEmptyString(mGcmId)) {
-                    if(null!=mProgressDialog)
-                    {
+                    if (null != mProgressDialog) {
                         mProgressDialog.dismiss();
                     }
                     LoginRequest loginRequest = AppUtils.loginRequestBuilder();
@@ -294,6 +298,6 @@ public class LoginFragment extends BaseFragment implements LoginView{
 
     @OnClick(R.id.iv_login_back)
     public void backOnClick() {
-        ((LoginActivity)getActivity()).onBackPressed();
+        ((LoginActivity) getActivity()).onBackPressed();
     }
 }

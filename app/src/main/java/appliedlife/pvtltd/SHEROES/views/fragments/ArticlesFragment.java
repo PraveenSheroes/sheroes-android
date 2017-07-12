@@ -188,11 +188,11 @@ public class ArticlesFragment extends BaseFragment {
                 mFragmentListRefreshData.setPageNo(++mPageNo);
                 mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
                 mAdapter.notifyDataSetChanged();
-                if (!mPullRefreshList.isPullToRefresh()) {
+               /* if (!mPullRefreshList.isPullToRefresh()) {
                     mLayoutManager.scrollToPositionWithOffset(mPullRefreshList.getFeedResponses().size() - trendingWithNormalArticleList.size(), 0);
                 } else {
                     mLayoutManager.scrollToPositionWithOffset(0, 0);
-                }
+                }*/
 
             } else {
                 if (StringUtil.isNotEmptyCollection(mTrendingFeedDetail)) {

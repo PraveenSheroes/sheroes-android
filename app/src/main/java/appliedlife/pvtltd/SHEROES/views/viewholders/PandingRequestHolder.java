@@ -4,8 +4,6 @@ import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
 
-import java.util.HashMap;
-
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
@@ -78,22 +76,13 @@ public void onClick(View view) {
     switch (view.getId()) {
 
         case R.id.tv_panding_member_cross:
-            HashMap<String,Object> map = new HashMap<String,Object>();
-            //   map.put("collection name",dataItem.getTitle());
-            map.put("collection id",dataItem.getId());
-            // map.put("collection type",dataItem.getType());
             viewInterface.handleOnClick(this.dataItem,view);
             break;
         case R.id.tv_panding_member_check:
-            HashMap<String,Object> map1 = new HashMap<String,Object>();
-            //   map.put("collection name",dataItem.getTitle());
-            map1.put("collection id",dataItem.getId());
-            // map.put("collection type",dataItem.getType());
             viewInterface.handleOnClick(this.dataItem,view);
             break;
     }
 
-        //createCommunityViewInterface.closeDialog("communityDialog");
 
 
         }

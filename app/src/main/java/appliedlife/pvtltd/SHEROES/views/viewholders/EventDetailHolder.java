@@ -86,12 +86,14 @@ public class EventDetailHolder extends BaseViewHolder<EventDetailPojo> {
     private GridLayoutManager mGridManager;
     Context mContext;
     private FeedDetail mFeedDetail;
+
     public EventDetailHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
         this.viewInterface = baseHolderInterface;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
     }
+
     @TargetApi(AppConstants.ANDROID_SDK_24)
     @Override
     public void bindData(EventDetailPojo item, Context context, int position) {
@@ -116,15 +118,13 @@ public class EventDetailHolder extends BaseViewHolder<EventDetailPojo> {
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getEventVenu())) {
             mTvEventAddressTitle.setText(mFeedDetail.getEventVenu());
         }
-        StringBuilder stringBuilder=new StringBuilder();
+        StringBuilder stringBuilder = new StringBuilder();
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getStartDateForEvent())) {
 
-            long time=mDateUtil.getTimeInMillis(mFeedDetail.getStartDateForEvent(),AppConstants.DATE_FORMAT);
-            if(System.currentTimeMillis()==time)
-            {
+            long time = mDateUtil.getTimeInMillis(mFeedDetail.getStartDateForEvent(), AppConstants.DATE_FORMAT);
+            if (System.currentTimeMillis() == time) {
                 stringBuilder.append(mContext.getString(R.string.ID_TODAY));
-            }
-           else {
+            } else {
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTimeInMillis(time);
                 stringBuilder.append(calendar.get(Calendar.DAY_OF_MONTH));
@@ -136,69 +136,50 @@ public class EventDetailHolder extends BaseViewHolder<EventDetailPojo> {
             stringBuilder.append(AppConstants.SPACE);
         }
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getDisplayTextStartHour())) {
-            int hour=Integer.parseInt(mFeedDetail.getDisplayTextStartHour());
-            if(hour<10&&mFeedDetail.getDisplayTextStartHour().length()<2)
-            {
+            int hour = Integer.parseInt(mFeedDetail.getDisplayTextStartHour());
+            if (hour < 10 && mFeedDetail.getDisplayTextStartHour().length() < 2) {
                 stringBuilder.append("0").append(mFeedDetail.getDisplayTextStartHour());
-            }else
-            {
+            } else {
                 stringBuilder.append(mFeedDetail.getDisplayTextStartHour());
             }
             stringBuilder.append(AppConstants.COLON);
         }
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getDisplayTextStartMinute())) {
             stringBuilder.append(mFeedDetail.getDisplayTextStartMinute());
-            int minut=Integer.parseInt(mFeedDetail.getDisplayTextStartMinute());
-            if(minut<10&&mFeedDetail.getDisplayTextStartMinute().length()<2)
-            {
+            int minut = Integer.parseInt(mFeedDetail.getDisplayTextStartMinute());
+            if (minut < 10 && mFeedDetail.getDisplayTextStartMinute().length() < 2) {
                 stringBuilder.append(mFeedDetail.getDisplayTextStartMinute());
-            }else
-            {
+            } else {
                 stringBuilder.append(mFeedDetail.getDisplayTextStartMinute());
             }
             stringBuilder.append(AppConstants.HOURS);
         }
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getDisplayTextEndHour())) {
             stringBuilder.append(AppConstants.DASH);
-            int hour=Integer.parseInt(mFeedDetail.getDisplayTextEndHour());
-            if(hour<10&&mFeedDetail.getDisplayTextEndHour().length()<2)
-            {
+            int hour = Integer.parseInt(mFeedDetail.getDisplayTextEndHour());
+            if (hour < 10 && mFeedDetail.getDisplayTextEndHour().length() < 2) {
                 stringBuilder.append("0").append(mFeedDetail.getDisplayTextEndHour());
-            }else
-            {
+            } else {
                 stringBuilder.append(mFeedDetail.getDisplayTextEndHour());
             }
             stringBuilder.append(AppConstants.COLON);
         }
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getDisplayTextEndMinute())) {
             stringBuilder.append(mFeedDetail.getDisplayTextEndMinute());
-            int minut=Integer.parseInt(mFeedDetail.getDisplayTextEndMinute());
-            if(minut<10&&mFeedDetail.getDisplayTextEndMinute().length()<2)
-            {
+            int minut = Integer.parseInt(mFeedDetail.getDisplayTextEndMinute());
+            if (minut < 10 && mFeedDetail.getDisplayTextEndMinute().length() < 2) {
                 stringBuilder.append(mFeedDetail.getDisplayTextEndMinute());
-            }else
-            {
+            } else {
                 stringBuilder.append(mFeedDetail.getDisplayTextEndMinute());
             }
             stringBuilder.append(AppConstants.HOURS);
         }
-        if(StringUtil.isNotNullOrEmptyString(stringBuilder.toString())) {
+        if (StringUtil.isNotNullOrEmptyString(stringBuilder.toString())) {
             mTvStartEndTime.setText(stringBuilder.toString());
         }
         setInterested();
         goingOnEvent();
-        String postedDateOnly = mFeedDetail.getPostedOnlyDateFormat();
-        if (StringUtil.isNotNullOrEmptyString(postedDateOnly)) {
-            String[] splitDate = postedDateOnly.split(AppConstants.SPACE);
-            if (splitDate.length>1) {
-                if (StringUtil.isNotNullOrEmptyString(splitDate[1])) {
-                    mTvEventDetailMonth.setText(splitDate[1]);
-                }
-                if (StringUtil.isNotNullOrEmptyString(splitDate[0])) {
-                    mTvEventDetailDay.setText(splitDate[0]);
-                }
-            }
-        }
+        setEventDate();
         if (null != mFeedDetail && StringUtil.isNotEmptyCollection(mFeedDetail.getSpeakerId())) {
             mCardViewSpeaker.setVisibility(View.VISIBLE);
             List<EventSpeakerData> speakerList = new ArrayList<>();
@@ -216,8 +197,7 @@ public class EventDetailHolder extends BaseViewHolder<EventDetailPojo> {
                 speakerList.add(eventSpeakerData);
             }
             setSpeakerListItem(speakerList);
-        }else
-        {
+        } else {
             mCardViewSpeaker.setVisibility(View.GONE);
         }
         if (null != mFeedDetail && StringUtil.isNotEmptyCollection(mFeedDetail.getSpeakerId())) {
@@ -237,9 +217,34 @@ public class EventDetailHolder extends BaseViewHolder<EventDetailPojo> {
                 sponsorList.add(eventSponsorData);
             }
             setSponsersListItem(sponsorList);
-        }else
-        {
+        } else {
             mCardViewSponsor.setVisibility(View.GONE);
+        }
+    }
+
+    private void setEventDate() {
+        if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getStartDateForEvent())) {
+            long time = mDateUtil.getTimeInMillis(mFeedDetail.getStartDateForEvent(), AppConstants.DATE_FORMAT);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(time);
+            String month = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
+            if (StringUtil.isNotNullOrEmptyString(month)) {
+                mTvEventDetailMonth.setText(month);
+            }
+            if (StringUtil.isNotNullOrEmptyString(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH))))
+            {
+                StringBuilder stringBuilder=new StringBuilder();
+                if(calendar.get(Calendar.DAY_OF_MONTH)<10)
+                {
+                    stringBuilder.append("0").append(calendar.get(Calendar.DAY_OF_MONTH));
+                    mTvEventDetailDay.setText(stringBuilder.toString());
+                }else
+                {
+                    mTvEventDetailDay.setText(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
+                }
+
+            }
+
         }
     }
 
@@ -249,7 +254,7 @@ public class EventDetailHolder extends BaseViewHolder<EventDetailPojo> {
                 int value = mFeedDetail.getNoOfLikes() / 1000;
                 mTvEventDetailInterestedCount.setText(value + AppConstants.THOUSANDS + AppConstants.SPACE + mContext.getString(R.string.ID_PEOPLE_INTERESTED));
             } else {
-                mTvEventDetailInterestedCount.setText(mFeedDetail.getNoOfLikes()+ AppConstants.SPACE + mContext.getString(R.string.ID_PEOPLE_INTERESTED));
+                mTvEventDetailInterestedCount.setText(mFeedDetail.getNoOfLikes() + AppConstants.SPACE + mContext.getString(R.string.ID_PEOPLE_INTERESTED));
             }
             mTvEventDetailInterestedCount.setVisibility(View.VISIBLE);
         } else {
@@ -351,6 +356,7 @@ public class EventDetailHolder extends BaseViewHolder<EventDetailPojo> {
     public void onShareClick() {
         viewInterface.handleOnClick(mFeedDetail, mTvEventShareBtn);
     }
+
     @Override
     public void onClick(View view) {
 
