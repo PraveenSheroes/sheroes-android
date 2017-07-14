@@ -42,7 +42,7 @@ public class CustomInstallTrackersReceiver extends BroadcastReceiver {
                         if (StringUtil.isNotNullOrEmptyString(referrers[3])) {
                             String appContactTableidArray[] = referrers[3].split(AppConstants.EQUAL_SIGN);
                             if (StringUtil.isNotNullOrEmptyString(appContactTableidArray[1])) {
-                                String appUserContactid = appContactTableidArray[1].substring(0, appContactTableidArray[1].length() - 1);
+                                String appUserContactid = appContactTableidArray[1];
                                 Log.d("User contact table id", "app user contact id :" + appUserContactid);
                                 Intent i = new Intent(context, WelcomeActivity.class);
                                 Bundle bundle = new Bundle();
