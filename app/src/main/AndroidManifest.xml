@@ -206,7 +206,7 @@
                 <category android:name="appliedlife.pvtltd.SHEROES.service" />
             </intent-filter>
         </receiver>
-        <receiver android:name="com.appsflyer.SingleInstallBroadcastReceiver" android:exported="true">
+        <receiver android:name="com.appsflyer.MultipleInstallBroadcastReceiver" android:exported="true">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
