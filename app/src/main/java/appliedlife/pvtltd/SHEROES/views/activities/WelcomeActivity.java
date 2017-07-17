@@ -480,16 +480,17 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                 if(extras!=null && null!=extras.getString(AppConstants.GOOGLE_PLAY_URL_REFERRAL_CONTACT_ID)) {
                     if (StringUtil.isNotNullOrEmptyString(extras.getString(AppConstants.GOOGLE_PLAY_URL_REFERRAL_CONTACT_ID))) {
                         String appContactId = extras.getString(AppConstants.GOOGLE_PLAY_URL_REFERRAL_CONTACT_ID);
+                        LogUtils.info(TAG, "********Id of  new Intent ***********"+appContactId);
                         UserFromReferralRequest userFromReferralRequest = new UserFromReferralRequest();
                         if(StringUtil.isNotNullOrEmptyString(appContactId)) {
                             try {
                                 userFromReferralRequest.setAppUserContactTableId(Long.parseLong(appContactId));
+                                mLoginPresenter.updateUserReferralInPresenter(userFromReferralRequest);
                             }catch (Exception e)
                             {
 
                             }
                         }
-                        mLoginPresenter.updateUserReferralInPresenter(userFromReferralRequest);
                     }
                 }
             }
@@ -497,6 +498,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        LogUtils.info(TAG, "********For new Intent ***********");
         setIntent(intent);
     }
 

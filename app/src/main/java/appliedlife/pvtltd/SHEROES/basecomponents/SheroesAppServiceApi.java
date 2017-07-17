@@ -179,6 +179,8 @@ public interface SheroesAppServiceApi {
 
     @POST("participant/community/edit")
     Observable<CreateCommunityResponse> postEditCommunity(@Body EditCommunityRequest editCommunityRequest);
+    @POST("participation/link/render")
+    Observable<CreateCommunityResponse>linkRender(@Body CommunityPostCreateRequest communityPostCreateRequest);
 
     @POST("participation/post/add")
     Observable<CreateCommunityResponse> createCommunityPost(@Body CommunityPostCreateRequest communityPostCreateRequest);

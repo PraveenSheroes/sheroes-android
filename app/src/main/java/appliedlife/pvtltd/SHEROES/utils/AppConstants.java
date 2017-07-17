@@ -12,6 +12,10 @@ public class AppConstants {
     public static final String GOOGLE_PLAY_ANDROID_APP_URL = "https://play.google.com/store/apps/details?id=appliedlife.pvtltd.sheroesask&hl=en";
     public static final String GOOGLE_PLAY_BROWSER_URL = "https:/android.intent.action.MAIN/play.google.com/store/apps/details?id=appliedlife.pvtltd.sheroesask";
     //public static final String GOOGLE_PLUS_LOGIN ="https://sheroes.com/APIUsers/gplogin.json";
+    public static final String YOUTUBE_DEVELOPER_KEY = "AIzaSyBb6FQ0snY-RF9QjGV_RdGSgpWtclRMSvk";
+
+    // YouTube video id
+    public static final String YOUTUBE_VIDEO_CODE = "cU3v6nuuaHs";
     public static final int CAMPAIGN_ID = 14983;
     public static final int ONEGIGABYTE = 1024 * 1024 * 1024;
     public static final int ANDROID_SDK_24 = 24;

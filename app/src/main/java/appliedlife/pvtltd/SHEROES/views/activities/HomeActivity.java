@@ -241,15 +241,9 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         if (StringUtil.isNotNullOrEmptyString(mHelpLineChat) && mHelpLineChat.equalsIgnoreCase(AppConstants.HELPLINE_CHAT)) {
             handleHelpLineFragmentFromDeepLinkAndLoading();
         }
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get()) {
-            LoginResponse loginResponse = mUserPreference.get();
-            if (null != loginResponse)
-                referralUserAttribute(this, loginResponse);
-        }
         InviteReferralsApi.getInstance(this).showWelcomeMessage();
         InviteReferralsApi.getInstance(this).invite(AppConstants.HOME);
     }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -537,6 +531,11 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     mProgressDialog.setMessage(getString(R.string.ID_INVITE_REFERRAL_FRIEND));
                     mProgressDialog.setCancelable(true);
                     mProgressDialog.show();
+                    if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get()) {
+                        LoginResponse loginResponse = mUserPreference.get();
+                        if (null != loginResponse)
+                            referralUserAttribute(this, loginResponse);
+                    }
                     InviteReferralsApi.getInstance(HomeActivity.this).inline_btn(AppConstants.CAMPAIGN_ID);
                     isInviteReferral = true;
                     break;

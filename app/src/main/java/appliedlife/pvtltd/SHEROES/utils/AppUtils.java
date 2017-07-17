@@ -152,7 +152,8 @@ public class AppUtils {
     public static final String DEVICE_SCREEN_RESOLUTION_XXDPI_FOR_LOGO = "xxdpi";
     public static final String DEVICE_SCREEN_RESOLUTION_XXXDPI_FOR_LOGO = "xxxdpi";
 
-
+    public final Pattern URL_WITH_HTTP_ADDRESS_PATTERN = Pattern.compile("(http|ftp|https)://([\\w_-]+(?:(?:\\.[\\w_-]+)+))([\\w.,@?^=%&:/~+#-]*[\\w@?^=%&/~+#-])?");
+    public final Pattern URL_START_WWW_ADDRESS_PATTERN = Pattern.compile("([\\w_-]+(?:(?:\\.[\\w_-]+)+))([\\w.,@?^=%&:/~+#-]*[\\w@?^=%&/~+#-])?");
     public final Pattern EMAIL_ADDRESS_PATTERN = Pattern.compile("[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" + "\\@"
             + "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" + "(" + "\\." + "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" + ")+");
 
@@ -492,7 +493,12 @@ public class AppUtils {
         return new DecimalFormat("###,##,###", new DecimalFormatSymbols(Locale.ENGLISH));
     }
 
-
+    public boolean checkUrl(String url) {
+        return URL_WITH_HTTP_ADDRESS_PATTERN.matcher(url).matches();
+    }
+    public boolean checkWWWUrl(String url) {
+        return URL_START_WWW_ADDRESS_PATTERN.matcher(url).matches();
+    }
     public boolean checkEmail(String email) {
         return EMAIL_ADDRESS_PATTERN.matcher(email).matches();
     }
@@ -2116,6 +2122,14 @@ public class AppUtils {
         communityPostCreateRequest.setDescription(description);
         communityPostCreateRequest.setImages(imag);
         communityPostCreateRequest.setId(mIdForEditPost);
+        return communityPostCreateRequest;
+    }
+    public  CommunityPostCreateRequest linkRequestBuilder(String linkData) {
+        AppUtils appUtils = AppUtils.getInstance();
+        CommunityPostCreateRequest communityPostCreateRequest=new CommunityPostCreateRequest();
+        communityPostCreateRequest.setAppVersion(appUtils.getAppVersionName());
+        communityPostCreateRequest.setSource(AppConstants.SOURCE_NAME);
+        communityPostCreateRequest.setLinkUrl(linkData);
         return communityPostCreateRequest;
     }
     public static CommunityPostCreateRequest editCommunityPostRequestBuilder(Long  communityId, String createType,String description,List<String> imag,Long mIdForEditPost,List<Long> deletedImageId) {

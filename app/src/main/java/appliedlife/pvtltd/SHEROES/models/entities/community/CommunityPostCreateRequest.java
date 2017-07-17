@@ -12,6 +12,14 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
  */
 
 public class CommunityPostCreateRequest extends BaseRequest{
+
+    @SerializedName("entity_start_date")
+    @Expose
+    private String entityStartDate;
+    @SerializedName("og_link_url")
+    @Expose
+    private String linkUrl;
+
     @SerializedName("id")
     @Expose
     private Long id=null;
@@ -33,6 +41,9 @@ public class CommunityPostCreateRequest extends BaseRequest{
     @SerializedName("is_active")
     @Expose
     private boolean isActive =true;
+
+
+
 
     public Long getId() {
         return id;
@@ -89,5 +100,22 @@ public class CommunityPostCreateRequest extends BaseRequest{
 
     public void setDeleteImagesIds(List<Long> deleteImagesIds) {
         this.deleteImagesIds = deleteImagesIds;
+    }
+
+    public String getEntityStartDate() {
+        return entityStartDate;
+    }
+
+    public void setEntityStartDate(String entityStartDate) {
+        this.entityStartDate = entityStartDate;
+    }
+
+
+    public String getLinkUrl() {
+        return linkUrl;
+    }
+
+    public void setLinkUrl(String linkUrl) {
+        this.linkUrl = linkUrl;
     }
 }

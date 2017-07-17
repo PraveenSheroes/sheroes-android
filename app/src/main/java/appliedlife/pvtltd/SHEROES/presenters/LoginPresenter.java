@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
 import com.f2prateek.rx.preferences.Preference;
+import com.google.gson.Gson;
 
 import javax.inject.Inject;
 
@@ -9,7 +10,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.LoginModel;
 import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
-import appliedlife.pvtltd.SHEROES.models.entities.home.UserPhoneContactsListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.EmailVerificationRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.EmailVerificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.ForgotPasswordRequest;
@@ -327,6 +327,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
 
             @Override
             public void onNext(UserFromReferralResponse userFromReferralResponse) {
+                LogUtils.info(TAG,"************updateUserReferralInModel Response*******"+new Gson().toJson(userFromReferralResponse));
             }
         });
         registerSubscription(subscription);

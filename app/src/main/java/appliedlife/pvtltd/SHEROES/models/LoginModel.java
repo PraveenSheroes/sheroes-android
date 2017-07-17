@@ -176,7 +176,7 @@ public class LoginModel {
     }
 
     public Observable<UserFromReferralResponse> updateUserReferralInModel(UserFromReferralRequest userFromReferralRequest) {
-        LogUtils.info(TAG,"*******************"+new Gson().toJson(userFromReferralRequest));
+        LogUtils.info(TAG,"************updateUserReferralInModel*******"+new Gson().toJson(userFromReferralRequest));
         return sheroesAppServiceApi.updateUserReferral(userFromReferralRequest)
                 .map(new Func1<UserFromReferralResponse, UserFromReferralResponse>() {
                     @Override

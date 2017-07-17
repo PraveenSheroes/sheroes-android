@@ -152,6 +152,14 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
     ScrollView scroll_community_post;
     @Bind(R.id.pb_login_progress_bar)
     ProgressBar pbCreateCommunityPost;
+    @Bind(R.id.iv_link_thumbnail)
+    ImageView ivLinkThumbnail;
+    @Bind(R.id.li_link_render)
+    LinearLayout liLinkThumbnail;
+    @Bind(R.id.tv_link_title)
+    TextView tvLinkTitle;
+    @Bind(R.id.tv_link_sub_title)
+    TextView tvLinkSubTitle;
     String encCoverImage;
     private Long mCommunityId;
     private Long mIdForEditPost;
@@ -236,6 +244,19 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
                 if (s.length() > 0) {
                     mCounterTxt.setVisibility(View.VISIBLE);
                     mCounterTxt.setText(String.valueOf(AppConstants.MAX_WORD_COUNTER - s.toString().length()));
+
+                    if (StringUtil.isNotNullOrEmptyString(mEtShareCommunityPostText.getText().toString())) {
+                        String editTextDescription = mEtShareCommunityPostText.getText().toString();
+                        if (editTextDescription.contains("https") || editTextDescription.contains("Http") || editTextDescription.contains("www")) {
+                            if (mAppUtils.checkUrl(editTextDescription)) {
+                                mCreateCommunityPresenter.postCommunityList(mAppUtils.linkRequestBuilder(editTextDescription));
+                            } else if (mAppUtils.checkWWWUrl(editTextDescription)) {
+                                mCreateCommunityPresenter.postCommunityList(mAppUtils.linkRequestBuilder(editTextDescription));
+                            }
+                        }
+                    }
+
+
                 } else {
                     mCounterTxt.setVisibility(View.GONE);
                 }
@@ -430,7 +451,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements CreateC
     public void communityPostSubmitClick() {
         if (null != mCommunityId && null != mCreaterType && StringUtil.isNotNullOrEmptyString(mCreaterType) && StringUtil.isNotNullOrEmptyString(mEtShareCommunityPostText.getText().toString())) {
             pbCreateCommunityPost.setVisibility(View.VISIBLE);
-            String description=mEtShareCommunityPostText.getText().toString();
+            String description = mEtShareCommunityPostText.getText().toString();
             if (null != mFeedDetail) {
                 if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getCallFromName()) && mFeedDetail.getCallFromName().equalsIgnoreCase(AppConstants.FEED_COMMUNITY_POST)) {
                     List<String> imag = new ArrayList<>();

@@ -186,7 +186,12 @@ public class HomeFragment extends BaseFragment {
             mHomePresenter.getAuthTokenRefreshPresenter();
         }
         mHomePresenter.getNotificationCountFromPresenter(notificationReadCountRequestBuilder(TAG));
-        getGcmId();
+        try {
+            getGcmId();
+        }catch (Exception e)
+        {
+
+        }
         mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

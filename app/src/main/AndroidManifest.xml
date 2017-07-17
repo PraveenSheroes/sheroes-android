@@ -98,7 +98,10 @@
             </intent-filter>
 
         </activity>
-
+        <activity
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.MainActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.LoginActivity"
             android:screenOrientation="portrait"

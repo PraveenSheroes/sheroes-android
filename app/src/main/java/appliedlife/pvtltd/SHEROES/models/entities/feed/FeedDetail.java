@@ -20,6 +20,37 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
     String callFromName;
     boolean isTrending;
     boolean isFromHome;
+
+    @SerializedName("community_participant_id_l")
+    @Expose
+    private int communityParticipantIdL;
+
+    @SerializedName("is_og_video_link_b")
+    @Expose
+    private boolean isOgVideoLinkB;
+
+    @SerializedName("og_description_s")
+    @Expose
+    private String ogDescriptionS;
+    @SerializedName("og_image_url_s")
+    @Expose
+    private String ogImageUrlS;
+    @SerializedName("og_requested_url_s")
+    @Expose
+    private String ogRequestedUrlS;
+    @SerializedName("og_title_s")
+    @Expose
+    private String ogTitleS;
+    @SerializedName("solr_ignore_p_crdt")
+    @Expose
+    private String solrIgnorePCrdt;
+    @SerializedName("solr_ignore_p_last_modified_on")
+    @Expose
+    private String solrIgnorePLastModifiedOn;
+    @SerializedName("solr_ignore_post_community_logo")
+    @Expose
+    private String solrIgnorePostCommunityLogo;
+
     private List<ChallengeDataItem> challengeDataItems = null;
 
     @SerializedName("s_disp_third_party_unique_id")
@@ -1805,6 +1836,78 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         this.startDateForEvent = startDateForEvent;
     }
 
+    public int getCommunityParticipantIdL() {
+        return communityParticipantIdL;
+    }
+
+    public void setCommunityParticipantIdL(int communityParticipantIdL) {
+        this.communityParticipantIdL = communityParticipantIdL;
+    }
+
+    public boolean isOgVideoLinkB() {
+        return isOgVideoLinkB;
+    }
+
+    public void setOgVideoLinkB(boolean ogVideoLinkB) {
+        isOgVideoLinkB = ogVideoLinkB;
+    }
+
+    public String getOgDescriptionS() {
+        return ogDescriptionS;
+    }
+
+    public void setOgDescriptionS(String ogDescriptionS) {
+        this.ogDescriptionS = ogDescriptionS;
+    }
+
+    public String getOgImageUrlS() {
+        return ogImageUrlS;
+    }
+
+    public void setOgImageUrlS(String ogImageUrlS) {
+        this.ogImageUrlS = ogImageUrlS;
+    }
+
+    public String getOgRequestedUrlS() {
+        return ogRequestedUrlS;
+    }
+
+    public void setOgRequestedUrlS(String ogRequestedUrlS) {
+        this.ogRequestedUrlS = ogRequestedUrlS;
+    }
+
+    public String getOgTitleS() {
+        return ogTitleS;
+    }
+
+    public void setOgTitleS(String ogTitleS) {
+        this.ogTitleS = ogTitleS;
+    }
+
+    public String getSolrIgnorePCrdt() {
+        return solrIgnorePCrdt;
+    }
+
+    public void setSolrIgnorePCrdt(String solrIgnorePCrdt) {
+        this.solrIgnorePCrdt = solrIgnorePCrdt;
+    }
+
+    public String getSolrIgnorePLastModifiedOn() {
+        return solrIgnorePLastModifiedOn;
+    }
+
+    public void setSolrIgnorePLastModifiedOn(String solrIgnorePLastModifiedOn) {
+        this.solrIgnorePLastModifiedOn = solrIgnorePLastModifiedOn;
+    }
+
+    public String getSolrIgnorePostCommunityLogo() {
+        return solrIgnorePostCommunityLogo;
+    }
+
+    public void setSolrIgnorePostCommunityLogo(String solrIgnorePostCommunityLogo) {
+        this.solrIgnorePostCommunityLogo = solrIgnorePostCommunityLogo;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -1818,6 +1921,15 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         dest.writeString(this.callFromName);
         dest.writeByte(this.isTrending ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isFromHome ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.communityParticipantIdL);
+        dest.writeByte(this.isOgVideoLinkB ? (byte) 1 : (byte) 0);
+        dest.writeString(this.ogDescriptionS);
+        dest.writeString(this.ogImageUrlS);
+        dest.writeString(this.ogRequestedUrlS);
+        dest.writeString(this.ogTitleS);
+        dest.writeString(this.solrIgnorePCrdt);
+        dest.writeString(this.solrIgnorePLastModifiedOn);
+        dest.writeString(this.solrIgnorePostCommunityLogo);
         dest.writeTypedList(this.challengeDataItems);
         dest.writeString(this.dispThirdPartyUniqueId);
         dest.writeString(this.startDateForEvent);
@@ -1982,6 +2094,15 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         this.callFromName = in.readString();
         this.isTrending = in.readByte() != 0;
         this.isFromHome = in.readByte() != 0;
+        this.communityParticipantIdL = in.readInt();
+        this.isOgVideoLinkB = in.readByte() != 0;
+        this.ogDescriptionS = in.readString();
+        this.ogImageUrlS = in.readString();
+        this.ogRequestedUrlS = in.readString();
+        this.ogTitleS = in.readString();
+        this.solrIgnorePCrdt = in.readString();
+        this.solrIgnorePLastModifiedOn = in.readString();
+        this.solrIgnorePostCommunityLogo = in.readString();
         this.challengeDataItems = in.createTypedArrayList(ChallengeDataItem.CREATOR);
         this.dispThirdPartyUniqueId = in.readString();
         this.startDateForEvent = in.readString();
