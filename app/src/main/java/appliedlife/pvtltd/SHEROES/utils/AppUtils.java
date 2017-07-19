@@ -99,6 +99,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwner
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.LinkRenderResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.LinkRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMemberRequest;
@@ -2111,7 +2113,7 @@ public class AppUtils {
         bellNotificationRequest.setDeviceUniqueId(appUtils.getDeviceId());
         return bellNotificationRequest;
     }
-    public static CommunityPostCreateRequest createCommunityPostRequestBuilder(Long  communityId, String createType,String description,List<String> imag,Long mIdForEditPost) {
+    public static CommunityPostCreateRequest createCommunityPostRequestBuilder(Long  communityId, String createType, String description, List<String> imag, Long mIdForEditPost, LinkRenderResponse linkRenderResponse) {
         AppUtils appUtils = AppUtils.getInstance();
         CommunityPostCreateRequest communityPostCreateRequest=new CommunityPostCreateRequest();
         communityPostCreateRequest.setAppVersion(appUtils.getAppVersionName());
@@ -2122,17 +2124,31 @@ public class AppUtils {
         communityPostCreateRequest.setDescription(description);
         communityPostCreateRequest.setImages(imag);
         communityPostCreateRequest.setId(mIdForEditPost);
+        if (null!=linkRenderResponse) {
+            communityPostCreateRequest.setOgTitleS(linkRenderResponse.getOgTitleS());
+            communityPostCreateRequest.setOgDescriptionS(linkRenderResponse.getOgDescriptionS());
+            communityPostCreateRequest.setOgImageUrlS(linkRenderResponse.getOgImageUrlS());
+            communityPostCreateRequest.setOgVideoLinkB(linkRenderResponse.isOgVideoLinkB());
+            communityPostCreateRequest.setOgRequestedUrlS(linkRenderResponse.getOgRequestedUrlS());
+        }else
+        {
+            communityPostCreateRequest.setOgTitleS(AppConstants.EMPTY_STRING);
+            communityPostCreateRequest.setOgDescriptionS(AppConstants.EMPTY_STRING);
+            communityPostCreateRequest.setOgImageUrlS(AppConstants.EMPTY_STRING);
+            communityPostCreateRequest.setOgVideoLinkB(false);
+            communityPostCreateRequest.setOgRequestedUrlS(AppConstants.EMPTY_STRING);
+        }
         return communityPostCreateRequest;
     }
-    public  CommunityPostCreateRequest linkRequestBuilder(String linkData) {
+    public LinkRequest linkRequestBuilder(String linkData) {
         AppUtils appUtils = AppUtils.getInstance();
-        CommunityPostCreateRequest communityPostCreateRequest=new CommunityPostCreateRequest();
-        communityPostCreateRequest.setAppVersion(appUtils.getAppVersionName());
-        communityPostCreateRequest.setSource(AppConstants.SOURCE_NAME);
-        communityPostCreateRequest.setLinkUrl(linkData);
-        return communityPostCreateRequest;
+        LinkRequest linkRequest=new LinkRequest();
+        linkRequest.setAppVersion(appUtils.getAppVersionName());
+        linkRequest.setSource(AppConstants.SOURCE_NAME);
+        linkRequest.setLinkUrl(linkData);
+        return linkRequest;
     }
-    public static CommunityPostCreateRequest editCommunityPostRequestBuilder(Long  communityId, String createType,String description,List<String> imag,Long mIdForEditPost,List<Long> deletedImageId) {
+    public static CommunityPostCreateRequest editCommunityPostRequestBuilder(Long  communityId, String createType,String description,List<String> imag,Long mIdForEditPost,List<Long> deletedImageId,LinkRenderResponse linkRenderResponse) {
         AppUtils appUtils = AppUtils.getInstance();
         CommunityPostCreateRequest communityPostCreateRequest=new CommunityPostCreateRequest();
         communityPostCreateRequest.setAppVersion(appUtils.getAppVersionName());
@@ -2144,6 +2160,20 @@ public class AppUtils {
         communityPostCreateRequest.setImages(imag);
         communityPostCreateRequest.setId(mIdForEditPost);
         communityPostCreateRequest.setDeleteImagesIds(deletedImageId);
+        if (null!=linkRenderResponse) {
+            communityPostCreateRequest.setOgTitleS(linkRenderResponse.getOgTitleS());
+            communityPostCreateRequest.setOgDescriptionS(linkRenderResponse.getOgDescriptionS());
+            communityPostCreateRequest.setOgImageUrlS(linkRenderResponse.getOgImageUrlS());
+            communityPostCreateRequest.setOgVideoLinkB(linkRenderResponse.isOgVideoLinkB());
+            communityPostCreateRequest.setOgRequestedUrlS(linkRenderResponse.getOgRequestedUrlS());
+        }else
+        {
+            communityPostCreateRequest.setOgTitleS(AppConstants.EMPTY_STRING);
+            communityPostCreateRequest.setOgDescriptionS(AppConstants.EMPTY_STRING);
+            communityPostCreateRequest.setOgImageUrlS(AppConstants.EMPTY_STRING);
+            communityPostCreateRequest.setOgVideoLinkB(false);
+            communityPostCreateRequest.setOgRequestedUrlS(AppConstants.EMPTY_STRING);
+        }
         return communityPostCreateRequest;
     }
     public SelectCommunityRequest selectCommunityRequestBuilder() {

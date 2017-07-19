@@ -11,6 +11,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwner
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.EditCommunityRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.LinkRenderResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.LinkRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectedCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.sharemail.ShareMailResponse;
@@ -68,6 +70,18 @@ public class CommunityModel {
                     @Override
                     public CreateCommunityResponse call(CreateCommunityResponse communityTagsListResponse) {
                         return communityTagsListResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+    public Observable<LinkRenderResponse> linkRenderFromModel(LinkRequest linkRequest){
+        LogUtils.info(TAG,"***************Link Render****"+new Gson().toJson(linkRequest));
+        return sheroesAppServiceApi.linkRenderApi(linkRequest)
+                .map(new Func1<LinkRenderResponse, LinkRenderResponse>() {
+                    @Override
+                    public LinkRenderResponse call(LinkRenderResponse linkRenderResponse) {
+                        return linkRenderResponse;
                     }
                 })
                 .subscribeOn(Schedulers.io())

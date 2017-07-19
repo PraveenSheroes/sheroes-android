@@ -96,10 +96,9 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity
-            android:name="appliedlife.pvtltd.SHEROES.views.activities.MainActivity"
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.VideoPlayActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"/>
         <activity

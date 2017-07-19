@@ -39,7 +39,6 @@ import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
@@ -637,9 +636,10 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     }
 
     @Override
-    public void createCommunitySuccess(CreateCommunityResponse createCommunityResponse) {
+    public void createCommunitySuccess(BaseResponse baseResponse) {
 
     }
+
 
     @Override
     public void getOwnerListDeactivateSuccess(DeactivateOwnerResponse deactivateOwnerResponse) {

@@ -51,6 +51,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.EditCommunityRequest;
@@ -615,24 +616,28 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
 
     }
     @Override
-    public void createCommunitySuccess(CreateCommunityResponse createCommunityResponse) {
-        mTvCreate.setEnabled(true);
-        switch (createCommunityResponse.getStatus()) {
-            case AppConstants.SUCCESS:
-                if (null != mFeedDetail && StringUtil.isNotNullOrEmptyString(mFeedDetail.getId())) {
-                    mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_COMMUNITY, AppConstants.ONE_CONSTANT,  mFeedDetail.getIdOfEntityOrParticipant()));
-                }else
-                {
-                    Toast.makeText(getActivity(),messageForSuccess, Toast.LENGTH_SHORT).show();
-                    ((CreateCommunityActivity) getActivity()).onBackClickHandle(mFeedDetail);
-                }
-                break;
-            case AppConstants.FAILED:
-                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(createCommunityResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), COMMUNITY_OWNER);
-                break;
-            default:
-                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), COMMUNITY_OWNER);
+    public void createCommunitySuccess(BaseResponse baseResponse) {
+        if (baseResponse instanceof CreateCommunityResponse) {
+            CreateCommunityResponse createCommunityResponse = ((CreateCommunityResponse) baseResponse);
+            mTvCreate.setEnabled(true);
+            switch (createCommunityResponse.getStatus()) {
+                case AppConstants.SUCCESS:
+                    if (null != mFeedDetail && StringUtil.isNotNullOrEmptyString(mFeedDetail.getId())) {
+                        mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_COMMUNITY, AppConstants.ONE_CONSTANT,  mFeedDetail.getIdOfEntityOrParticipant()));
+                    }else
+                    {
+                        Toast.makeText(getActivity(),messageForSuccess, Toast.LENGTH_SHORT).show();
+                        ((CreateCommunityActivity) getActivity()).onBackClickHandle(mFeedDetail);
+                    }
+                    break;
+                case AppConstants.FAILED:
+                    mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(createCommunityResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), COMMUNITY_OWNER);
+                    break;
+                default:
+                    mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), COMMUNITY_OWNER);
+            }
         }
+
     }
 
     private void openImageOption() {

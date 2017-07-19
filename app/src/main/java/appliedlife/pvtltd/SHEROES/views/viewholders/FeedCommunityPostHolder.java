@@ -2,12 +2,16 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -19,6 +23,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -47,6 +52,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.VideoPlayActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -57,7 +63,7 @@ import butterknife.OnLongClick;
  * Created by Praveen_Singh on 22-01-2017.
  */
 
-public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail>  {
+public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     private final String TAG = LogUtils.makeLogTag(FeedCommunityPostHolder.class);
     private static final String LEFT_HTML_TAG_FOR_COLOR = "<b><font color='#323940'>";
     private static final String RIGHT_HTML_TAG_FOR_COLOR = "</font></b>";
@@ -159,6 +165,22 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail>  {
     FrameLayout flFeedCommunityPostNoReactionComment;
     @Bind(R.id.tv_feed_community_post_user_comment_post_menu)
     TextView tvFeedCommunityPostUserCommentPostMenu;
+    @Bind(R.id.progress_bar_post_link)
+    ProgressBar pbLink;
+
+    @Bind(R.id.iv_play)
+    ImageView ivPlay;
+    @Bind(R.id.fm_image_thumb)
+    FrameLayout fmImageThumb;
+    @Bind(R.id.iv_post_link_thumbnail)
+    ImageView ivLinkThumbnail;
+    @Bind(R.id.card_post_link_render)
+    CardView cardViewLinkRender;
+    @Bind(R.id.tv_post_link_title)
+    TextView tvLinkTitle;
+    @Bind(R.id.tv_post_link_sub_title)
+    TextView tvLinkSubTitle;
+
     BaseHolderInterface viewInterface;
     private FeedDetail dataItem;
     private String mViewMoreDescription;
@@ -203,6 +225,16 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail>  {
             if (!dataItem.isTrending()) {
                 imageOperations(context);
                 multipleImageURLs();
+               /* if (StringUtil.isNotNullOrEmptyString(dataItem.getOgRequestedUrlS())) {
+                    liFeedCommunityUserPostImages.removeAllViews();
+                    liFeedCommunityUserPostImages.removeAllViewsInLayout();
+                    liFeedCommunityUserPostImages.setVisibility(View.GONE);
+                    cardViewLinkRender.setVisibility(View.VISIBLE);
+                    setLinkData();
+                } else {
+                    cardViewLinkRender.setVisibility(View.GONE);
+                    multipleImageURLs();
+                }*/
             }
             onBookMarkClick();
             allTextViewStringOperations(context);
@@ -218,6 +250,49 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail>  {
                     tvFeedCommunityPostUserMenu.setVisibility(View.GONE);
                 }
             }
+        }
+    }
+
+    @OnClick(R.id.card_post_link_render)
+    public void tvLinkClick() {
+        if (null!=dataItem&&dataItem.isOgVideoLinkB()&&StringUtil.isNotNullOrEmptyString(dataItem.getOgRequestedUrlS())) {
+            Intent youTube = new Intent(mContext, VideoPlayActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString(AppConstants.YOUTUBE_VIDEO_CODE, dataItem.getOgRequestedUrlS());
+            youTube.putExtras(bundle);
+            mContext.startActivity(youTube);
+        }else
+        {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(dataItem.getOgRequestedUrlS()));
+           mContext.startActivity(browserIntent);
+        }
+    }
+
+    private void setLinkData() {
+        if (StringUtil.isNotNullOrEmptyString(dataItem.getOgTitleS())) {
+            tvLinkTitle.setText(dataItem.getOgTitleS());
+        }
+        if (StringUtil.isNotNullOrEmptyString(dataItem.getOgDescriptionS())) {
+            tvLinkSubTitle.setText(dataItem.getOgDescriptionS());
+        }
+        if (StringUtil.isNotNullOrEmptyString(dataItem.getOgImageUrlS())) {
+            Glide.with(mContext)
+                    .load(dataItem.getOgImageUrlS()).asBitmap()
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .skipMemoryCache(true)
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
+                            ivLinkThumbnail.setImageBitmap(profileImage);
+                            fmImageThumb.setVisibility(View.VISIBLE);
+                            pbLink.setVisibility(View.GONE);
+                            if(dataItem.isOgVideoLinkB()) {
+                                ivPlay.setVisibility(View.VISIBLE);
+                            }else {
+                                ivPlay.setVisibility(View.GONE);
+                            }
+                        }
+                    });
         }
     }
 
@@ -255,15 +330,12 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail>  {
             if (StringUtil.isNotNullOrEmptyString(month)) {
                 tvEventMonth.setText(month);
             }
-            if (StringUtil.isNotNullOrEmptyString(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH))))
-            {
-                StringBuilder stringBuilder=new StringBuilder();
-                if(calendar.get(Calendar.DAY_OF_MONTH)<10)
-                {
+            if (StringUtil.isNotNullOrEmptyString(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)))) {
+                StringBuilder stringBuilder = new StringBuilder();
+                if (calendar.get(Calendar.DAY_OF_MONTH) < 10) {
                     stringBuilder.append("0").append(calendar.get(Calendar.DAY_OF_MONTH));
                     tvEventDay.setText(stringBuilder.toString());
-                }else
-                {
+                } else {
                     tvEventDay.setText(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
                 }
 
@@ -648,12 +720,12 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail>  {
                     tvFeedCommunityPostUserCommentPost.setText(getCommentString);
                 }
             } else {
-                if (StringUtil.isNotNullOrEmptyString(lastComment.getComment())&&StringUtil.isNotNullOrEmptyString(lastComment.getParticipantName())) {
+                if (StringUtil.isNotNullOrEmptyString(lastComment.getComment()) && StringUtil.isNotNullOrEmptyString(lastComment.getParticipantName())) {
                     ivFeedCommunityPostUserPic.bindImage(lastComment.getParticipantImageUrl());
-                    StringBuilder stringBuilder=new StringBuilder();
+                    StringBuilder stringBuilder = new StringBuilder();
                     stringBuilder.append(lastComment.getParticipantName()).append(AppConstants.COLON).append(AppConstants.SPACE).append(lastComment.getComment());
                     Spannable getCommentString = new SpannableString(stringBuilder.toString());
-                    int size=lastComment.getParticipantName().length()+1;
+                    int size = lastComment.getParticipantName().length() + 1;
                     getCommentString.setSpan(new ForegroundColorSpan(Color.BLACK), 0, size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     getCommentString.setSpan(new StyleSpan(Typeface.BOLD), 0, size, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
                     tvFeedCommunityPostUserCommentPost.setText(getCommentString);
@@ -921,6 +993,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail>  {
             }
         }
     }
+
     private void viewMoreTextClick() {
         if (tvFeedCommunityPostViewMore.getTag().toString().equalsIgnoreCase(mViewMore)) {
             tvFeedCommunityPostViewMore.setText(mContext.getString(R.string.ID_LESS));

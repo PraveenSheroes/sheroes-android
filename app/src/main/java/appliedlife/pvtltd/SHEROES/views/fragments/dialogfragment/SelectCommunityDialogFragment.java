@@ -28,7 +28,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
 import appliedlife.pvtltd.SHEROES.presenters.CreateCommunityPresenter;
@@ -116,7 +115,7 @@ public class SelectCommunityDialogFragment extends BaseDialogFragment implements
     }
 
     @Override
-    public void createCommunitySuccess(CreateCommunityResponse createCommunityResponse) {
+    public void createCommunitySuccess(BaseResponse baseResponse) {
 
     }
 

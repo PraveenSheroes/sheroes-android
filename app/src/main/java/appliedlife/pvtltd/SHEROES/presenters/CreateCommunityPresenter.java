@@ -15,6 +15,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwner
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.EditCommunityRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.LinkRenderResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.LinkRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectedCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -116,7 +118,34 @@ public class CreateCommunityPresenter extends BasePresenter<CommunityView> {
         });
         registerSubscription(subscription);
     }
+    public void linkRenderFromPresenter(LinkRequest linkRequest) {
+        if (!NetworkUtil.isConnected(sheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_COMMUNITY_OWNER);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = communityModel.linkRenderFromModel(linkRequest).subscribe(new Subscriber<LinkRenderResponse>() {
 
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                getMvpView().showError(sheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_CREATE_COMMUNITY);
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onNext(LinkRenderResponse linkRenderResponse) {
+                getMvpView().stopProgressBar();
+                getMvpView().createCommunitySuccess(linkRenderResponse);
+            }
+
+        });
+        registerSubscription(subscription);
+    }
     public void postCommunityList(CommunityPostCreateRequest communityPostCreateRequest) {
         if (!NetworkUtil.isConnected(sheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_COMMUNITY_OWNER);
@@ -145,6 +174,7 @@ public class CreateCommunityPresenter extends BasePresenter<CommunityView> {
         });
         registerSubscription(subscription);
     }
+
     public void editCommunityPost(CommunityPostCreateRequest communityPostCreateRequest) {
         if (!NetworkUtil.isConnected(sheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_COMMUNITY_OWNER);

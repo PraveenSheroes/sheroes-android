@@ -29,7 +29,6 @@ import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityType;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.PopularTag;
@@ -197,7 +196,7 @@ public class CommunityTypeDialogFragment extends BaseDialogFragment implements C
     }
 
     @Override
-    public void createCommunitySuccess(CreateCommunityResponse createCommunityResponse) {
+    public void createCommunitySuccess(BaseResponse baseResponse) {
 
     }
 

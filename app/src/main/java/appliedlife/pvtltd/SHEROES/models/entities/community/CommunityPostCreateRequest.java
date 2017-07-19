@@ -16,9 +16,28 @@ public class CommunityPostCreateRequest extends BaseRequest{
     @SerializedName("entity_start_date")
     @Expose
     private String entityStartDate;
-    @SerializedName("og_link_url")
+
+    @SerializedName("is_og_video_link_b")
     @Expose
-    private String linkUrl;
+    private boolean isOgVideoLinkB;
+    @SerializedName("og_description_s")
+    @Expose
+    private String ogDescriptionS;
+    @SerializedName("og_image_url_s")
+    @Expose
+    private String ogImageUrlS;
+    @SerializedName("og_requested_url_s")
+    @Expose
+    private String ogRequestedUrlS;
+    @SerializedName("og_title_s")
+    @Expose
+    private String ogTitleS;
+    @SerializedName("source_entity_id")
+    @Expose
+    private Integer sourceEntityId;
+    @SerializedName("videoLink")
+    @Expose
+    private boolean videoLink;
 
     @SerializedName("id")
     @Expose
@@ -110,12 +129,61 @@ public class CommunityPostCreateRequest extends BaseRequest{
         this.entityStartDate = entityStartDate;
     }
 
-
-    public String getLinkUrl() {
-        return linkUrl;
+    public boolean isOgVideoLinkB() {
+        return isOgVideoLinkB;
     }
 
-    public void setLinkUrl(String linkUrl) {
-        this.linkUrl = linkUrl;
+    public void setOgVideoLinkB(boolean ogVideoLinkB) {
+        isOgVideoLinkB = ogVideoLinkB;
+    }
+
+
+    public String getOgDescriptionS() {
+        return ogDescriptionS;
+    }
+
+    public void setOgDescriptionS(String ogDescriptionS) {
+        this.ogDescriptionS = ogDescriptionS;
+    }
+
+    public String getOgImageUrlS() {
+        return ogImageUrlS;
+    }
+
+    public void setOgImageUrlS(String ogImageUrlS) {
+        this.ogImageUrlS = ogImageUrlS;
+    }
+
+    public String getOgRequestedUrlS() {
+        return ogRequestedUrlS;
+    }
+
+    public void setOgRequestedUrlS(String ogRequestedUrlS) {
+        this.ogRequestedUrlS = ogRequestedUrlS;
+    }
+
+    public String getOgTitleS() {
+        return ogTitleS;
+    }
+
+    public void setOgTitleS(String ogTitleS) {
+        this.ogTitleS = ogTitleS;
+    }
+
+
+    public Integer getSourceEntityId() {
+        return sourceEntityId;
+    }
+
+    public void setSourceEntityId(Integer sourceEntityId) {
+        this.sourceEntityId = sourceEntityId;
+    }
+
+    public boolean isVideoLink() {
+        return videoLink;
+    }
+
+    public void setVideoLink(boolean videoLink) {
+        this.videoLink = videoLink;
     }
 }

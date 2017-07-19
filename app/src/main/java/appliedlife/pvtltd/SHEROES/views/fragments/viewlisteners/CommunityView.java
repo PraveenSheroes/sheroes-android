@@ -7,7 +7,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
 
@@ -20,7 +19,7 @@ public interface CommunityView extends BaseMvpView {
 
     void getOwnerListSuccess(OwnerListResponse ownerListResponse);
 
-    void createCommunitySuccess(CreateCommunityResponse createCommunityResponse);
+    void createCommunitySuccess(BaseResponse baseResponse);
 
     void getOwnerListDeactivateSuccess(DeactivateOwnerResponse deactivateOwnerResponse);
 

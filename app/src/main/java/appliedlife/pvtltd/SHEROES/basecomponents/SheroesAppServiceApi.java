@@ -25,6 +25,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.EditCommunityRequest
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllData;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
+import appliedlife.pvtltd.SHEROES.models.entities.community.LinkRenderResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.LinkRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MemberListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListRequest;
@@ -180,7 +182,7 @@ public interface SheroesAppServiceApi {
     @POST("participant/community/edit")
     Observable<CreateCommunityResponse> postEditCommunity(@Body EditCommunityRequest editCommunityRequest);
     @POST("participation/link/render")
-    Observable<CreateCommunityResponse>linkRender(@Body CommunityPostCreateRequest communityPostCreateRequest);
+    Observable<LinkRenderResponse>linkRenderApi(@Body LinkRequest linkRequest);
 
     @POST("participation/post/add")
     Observable<CreateCommunityResponse> createCommunityPost(@Body CommunityPostCreateRequest communityPostCreateRequest);
