@@ -224,8 +224,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             dataItem.setLastReactionValue(dataItem.getReactionValue());
             if (!dataItem.isTrending()) {
                 imageOperations(context);
-                multipleImageURLs();
-               /* if (StringUtil.isNotNullOrEmptyString(dataItem.getOgRequestedUrlS())) {
+                if (StringUtil.isNotNullOrEmptyString(dataItem.getOgRequestedUrlS())) {
                     liFeedCommunityUserPostImages.removeAllViews();
                     liFeedCommunityUserPostImages.removeAllViewsInLayout();
                     liFeedCommunityUserPostImages.setVisibility(View.GONE);
@@ -233,8 +232,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                     setLinkData();
                 } else {
                     cardViewLinkRender.setVisibility(View.GONE);
-                    multipleImageURLs();
-                }*/
+                }
+                multipleImageURLs();
             }
             onBookMarkClick();
             allTextViewStringOperations(context);
@@ -255,16 +254,15 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.card_post_link_render)
     public void tvLinkClick() {
-        if (null!=dataItem&&dataItem.isOgVideoLinkB()&&StringUtil.isNotNullOrEmptyString(dataItem.getOgRequestedUrlS())) {
+        if (null != dataItem && dataItem.isOgVideoLinkB() && StringUtil.isNotNullOrEmptyString(dataItem.getOgRequestedUrlS())) {
             Intent youTube = new Intent(mContext, VideoPlayActivity.class);
             Bundle bundle = new Bundle();
             bundle.putString(AppConstants.YOUTUBE_VIDEO_CODE, dataItem.getOgRequestedUrlS());
             youTube.putExtras(bundle);
             mContext.startActivity(youTube);
-        }else
-        {
+        } else {
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(dataItem.getOgRequestedUrlS()));
-           mContext.startActivity(browserIntent);
+            mContext.startActivity(browserIntent);
         }
     }
 
@@ -275,7 +273,23 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         if (StringUtil.isNotNullOrEmptyString(dataItem.getOgDescriptionS())) {
             tvLinkSubTitle.setText(dataItem.getOgDescriptionS());
         }
+
+        LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View child = layoutInflater.inflate(R.layout.challenge_image, null);
+        ImageView ivChallenge = (ImageView) child.findViewById(R.id.iv_feed_challenge);
+        LinearLayout liImageText = (LinearLayout) child.findViewById(R.id.li_image_text);
+        liImageText.setVisibility(View.GONE);
+        if (StringUtil.isNotEmptyCollection(dataItem.getImageUrls())) {
+            Glide.with(mContext)
+                    .load(dataItem.getImageUrls().get(0))
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .skipMemoryCache(true)
+                    .into(ivChallenge);
+        }
+        liFeedEventImages.addView(child);
         if (StringUtil.isNotNullOrEmptyString(dataItem.getOgImageUrlS())) {
+
+
             Glide.with(mContext)
                     .load(dataItem.getOgImageUrlS()).asBitmap()
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
@@ -286,13 +300,16 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                             ivLinkThumbnail.setImageBitmap(profileImage);
                             fmImageThumb.setVisibility(View.VISIBLE);
                             pbLink.setVisibility(View.GONE);
-                            if(dataItem.isOgVideoLinkB()) {
+                            if (dataItem.isOgVideoLinkB()) {
                                 ivPlay.setVisibility(View.VISIBLE);
-                            }else {
+                            } else {
                                 ivPlay.setVisibility(View.GONE);
                             }
                         }
                     });
+            cardViewLinkRender.setVisibility(View.VISIBLE);
+        } else {
+            cardViewLinkRender.setVisibility(View.GONE);
         }
     }
 

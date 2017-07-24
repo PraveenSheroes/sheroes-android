@@ -162,6 +162,7 @@ public class HomeFragment extends BaseFragment {
                     ((HomeActivity) getActivity()).popupWindow.dismiss();
                 }
             }
+
         });
 
         super.setAllInitializationForFeeds(mFragmentListRefreshData, mPullRefreshList, mAdapter, mLayoutManager, mPageNo, mSwipeView, mLiNoResult, mFeedDetail, mRecyclerView, mPosition, mPressedEmoji, mListLoad, mIsEdit, mHomePresenter, mAppUtils, mProgressBar);

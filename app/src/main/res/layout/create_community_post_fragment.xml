@@ -226,6 +226,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/dp_size_4"
                                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                                android:maxLines="@integer/int_value_for_line_3"
+                                android:ellipsize="end"
                                 android:textColor="@color/detail_page_text"
                                 android:textSize="@dimen/sp_size_12" />
                         </LinearLayout>

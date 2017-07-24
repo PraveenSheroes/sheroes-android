@@ -33,7 +33,7 @@ public class VideoPlayActivity extends YouTubeBaseActivity implements YouTubePla
         youTubeView.initialize(AppConstants.YOUTUBE_DEVELOPER_KEY, this);
         playerStateChangeListener = new MyPlayerStateChangeListener();
         playbackEventListener = new MyPlaybackEventListener();
-
+       // player.seekToMillis(1000);
 		/*final EditText seekToText = (EditText) findViewById(R.id.seek_to_text);
         Button seekToButton = (Button) findViewById(R.id.seek_to_button);
 		seekToButton.setOnClickListener(new View.OnClickListener() {
@@ -50,12 +50,24 @@ public class VideoPlayActivity extends YouTubeBaseActivity implements YouTubePla
         this.player = player;
         player.setPlayerStateChangeListener(playerStateChangeListener);
         player.setPlaybackEventListener(playbackEventListener);
-
         if (!wasRestored) {
-            String[] youTubeUrl = vedioString.split("=");
+            String[] youTubeUrl = vedioString.split(AppConstants.BACK_SLASH);
             if (null != youTubeUrl && youTubeUrl.length > 1) {
-                if (StringUtil.isNotNullOrEmptyString(youTubeUrl[1])) {
-                    player.cueVideo(youTubeUrl[1]); // Plays https://www.youtube.com/watch?v=fhWaJi1Hsfo
+                if (StringUtil.isNotNullOrEmptyString(youTubeUrl[youTubeUrl.length-1])) {
+                    if(youTubeUrl[youTubeUrl.length-1].contains(AppConstants.EQUAL_SIGN))
+                    {
+                        String[] videoUrl = youTubeUrl[youTubeUrl.length-1].split(AppConstants.EQUAL_SIGN);
+                        if (videoUrl.length > 1) {
+                            if (StringUtil.isNotNullOrEmptyString(videoUrl[videoUrl.length-1]))
+                            {
+                                player.loadVideo(videoUrl[videoUrl.length-1]); // Plays https://www.youtube.com/watch?v=fhWaJi1Hsfo
+                            }
+                        }
+                    }else
+                    {
+                        player.loadVideo(youTubeUrl[youTubeUrl.length-1]);
+                      //  player.cueVideo(youTubeUrl[1]); // Plays https://www.youtube.com/watch?v=fhWaJi1Hsfo
+                    }
                 }
             } else {
                 showMessage("Sorry can not play video please check link");

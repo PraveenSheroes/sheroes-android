@@ -113,11 +113,12 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
             tvFeaturedCommunityJoin.setBackgroundResource(R.drawable.rectangle_feed_community_requested);
             tvFeaturedCommunityJoin.setVisibility(View.VISIBLE);
         } else if (dataItem.isOwner() || dataItem.isMember()) {
-            tvFeaturedCommunityJoin.setTextColor(ContextCompat.getColor(mContext, R.color.white));
-            tvFeaturedCommunityJoin.setText(mContext.getString(R.string.ID_JOINED));
-            tvFeaturedCommunityJoin.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
             tvFeaturedCommunityJoin.setVisibility(View.VISIBLE);
+            tvFeaturedCommunityJoin.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+            tvFeaturedCommunityJoin.setText(mContext.getString(R.string.ID_INVITE));
+            tvFeaturedCommunityJoin.setBackgroundResource(R.drawable.rectangle_community_invite);
         }
+
         //TODO:: change for UI
         if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
             tvFeaturedCommunityCardTitle.setText(dataItem.getNameOrTitle());

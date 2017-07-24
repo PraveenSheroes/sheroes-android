@@ -100,8 +100,8 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getScreenName()) && dataItem.getScreenName().equalsIgnoreCase(AppConstants.FEATURE_FRAGMENT)) {
             tvCommunityInvite.setTextColor(ContextCompat.getColor(mContext, R.color.white));
-            tvCommunityInvite.setText(mContext.getString(R.string.ID_JOINED));
-            tvCommunityInvite.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
+            tvCommunityInvite.setText(mContext.getString(R.string.ID_INVITE));
+            tvCommunityInvite.setBackgroundResource(R.drawable.rectangle_community_invite);
             tvCommunityInvite.setVisibility(View.VISIBLE);
             dataItem.setCallFromName(AppConstants.FEATURE_FRAGMENT);
         } else {

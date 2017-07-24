@@ -119,20 +119,12 @@
             android:textColor="@color/feed_job_card_new"
             android:textSize="@dimen/sp_size_14"
             android:visibility="gone" />
-
-        <LinearLayout
-            android:id="@+id/li_feed_community_user_post_images"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/dp_size_minus_5"
-            android:layout_marginTop="@dimen/dp_size_13"
-            android:orientation="vertical" />
         <android.support.v7.widget.CardView
             android:id="@+id/card_post_link_render"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/dp_size_10"
             android:visibility="gone"
+            android:layout_margin="@dimen/dp_size_10"
             android:elevation="@dimen/dp_size_5">
 
             <LinearLayout
@@ -140,6 +132,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/dp_size_5"
                 android:orientation="vertical">
+
                 <FrameLayout
                     android:id="@+id/fm_image_thumb"
                     android:layout_width="match_parent"
@@ -148,50 +141,59 @@
                     <ImageView
                         android:id="@+id/iv_post_link_thumbnail"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/article_default"
-                        android:layout_marginLeft="@dimen/dp_size_5" />
+                        android:adjustViewBounds="true"
+                        android:layout_height="wrap_content"/>
                     <ImageView
                         android:id="@+id/iv_play"
                         android:layout_width="@dimen/dp_size_50"
                         android:layout_height="@dimen/dp_size_50"
+                        android:visibility="gone"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_media_play_light"
-                        android:layout_marginLeft="@dimen/dp_size_5" />
+                        android:src="@drawable/ic_media_play_dark" />
 
                     <ProgressBar
                         android:id="@+id/progress_bar_post_link"
                         android:layout_width="@dimen/dp_size_70"
                         android:layout_height="@dimen/dp_size_70"
                         android:layout_gravity="center"
-                        android:layout_marginLeft="@dimen/dp_size_5"
                         android:backgroundTint="@color/added_member_text" />
                 </FrameLayout>
-                    <LinearLayout
-                        android:layout_width="wrap_content"
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_size_10"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_post_link_title"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/dp_size_10"
-                        android:orientation="vertical">
+                        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                        android:textColor="@color/pure_black"
+                        android:textSize="@dimen/sp_size_14" />
 
-                        <TextView
-                            android:id="@+id/tv_post_link_title"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-                            android:textColor="@color/pure_black"
-                            android:textSize="@dimen/sp_size_14" />
-
-                        <TextView
-                            android:id="@+id/tv_post_link_sub_title"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/dp_size_4"
-                            android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                            android:textColor="@color/detail_page_text"
-                            android:textSize="@dimen/sp_size_12" />
-                    </LinearLayout>
+                    <TextView
+                        android:id="@+id/tv_post_link_sub_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_size_4"
+                        android:maxLines="@integer/int_value_for_line_3"
+                        android:ellipsize="end"
+                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                        android:textColor="@color/detail_page_text"
+                        android:textSize="@dimen/sp_size_12" />
+                </LinearLayout>
             </LinearLayout>
         </android.support.v7.widget.CardView>
+
+        <LinearLayout
+            android:id="@+id/li_feed_community_user_post_images"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dp_size_minus_5"
+            android:layout_marginTop="@dimen/dp_size_13"
+            android:orientation="vertical" />
 
         <View
             android:id="@+id/line_for_no_image"
@@ -265,9 +267,9 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="right"
                 android:layout_marginLeft="@dimen/dp_size_25"
-                android:visibility="gone"
                 android:drawableRight="@drawable/ic_menu_dashboard"
-                android:paddingRight="@dimen/dp_size_10" />
+                android:paddingRight="@dimen/dp_size_10"
+                android:visibility="gone" />
         </LinearLayout>
 
 

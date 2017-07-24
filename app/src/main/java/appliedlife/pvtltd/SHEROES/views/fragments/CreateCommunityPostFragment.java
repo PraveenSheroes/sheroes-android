@@ -198,7 +198,9 @@ public class CreateCommunityPostFragment extends BaseFragment implements SelectC
     private PayloadBuilder payloadBuilder;
     private MoEngageUtills moEngageUtills;
     private int positionOfFeedItem;
-    private LinkRenderResponse mLinkRenderResponse=null;
+    private LinkRenderResponse mLinkRenderResponse = null;
+    private boolean isLinkRendered;
+    ;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -252,16 +254,28 @@ public class CreateCommunityPostFragment extends BaseFragment implements SelectC
                     mCounterTxt.setVisibility(View.VISIBLE);
                     mCounterTxt.setText(String.valueOf(AppConstants.MAX_WORD_COUNTER - s.toString().length()));
 
-                   /* if (StringUtil.isNotNullOrEmptyString(mEtShareCommunityPostText.getText().toString())) {
+                    if (StringUtil.isNotNullOrEmptyString(mEtShareCommunityPostText.getText().toString()) && !isLinkRendered) {
                         String editTextDescription = mEtShareCommunityPostText.getText().toString().trim();
-                        if (editTextDescription.contains("https") || editTextDescription.contains("Http") || editTextDescription.contains("www")) {
-                            if (mAppUtils.checkUrl(editTextDescription)) {
-                                mCreateCommunityPresenter.linkRenderFromPresenter(mAppUtils.linkRequestBuilder(editTextDescription));
-                            } else if (mAppUtils.checkWWWUrl(editTextDescription)) {
-                                mCreateCommunityPresenter.linkRenderFromPresenter(mAppUtils.linkRequestBuilder(editTextDescription));
+                        if (editTextDescription.contains("https") || editTextDescription.contains("Http")) {
+                            int indexOfFirstHttp = AppUtils.findNthIndexOf(editTextDescription.toLowerCase(), "https", 1);
+                            int urlLength=getUrlLength(editTextDescription,indexOfFirstHttp);
+                            if(urlLength<=editTextDescription.length()) {
+                                String httpString = editTextDescription.substring(indexOfFirstHttp, urlLength);
+                                if (mAppUtils.checkUrl(httpString)) {
+                                    mCreateCommunityPresenter.linkRenderFromPresenter(mAppUtils.linkRequestBuilder(httpString));
+                                }
+                            }
+                        } else if (editTextDescription.contains("www") || editTextDescription.contains("WWW")) {
+                            int indexOfFirstWWW = AppUtils.findNthIndexOf(editTextDescription.toLowerCase(), "www", 1);
+                            int urlLength=getUrlLength(editTextDescription,indexOfFirstWWW);
+                            if(urlLength<=editTextDescription.length()) {
+                                String wwwString = editTextDescription.substring(indexOfFirstWWW,urlLength);
+                            if (mAppUtils.checkWWWUrl(wwwString)) {
+                                mCreateCommunityPresenter.linkRenderFromPresenter(mAppUtils.linkRequestBuilder(wwwString));
+                            }
                             }
                         }
-                    }*/
+                    }
 
                 } else {
                     mCounterTxt.setVisibility(View.GONE);
@@ -284,7 +298,18 @@ public class CreateCommunityPostFragment extends BaseFragment implements SelectC
         // iv_community_user.setImageBitmap(loginResponse);
         return view;
     }
-
+    private int getUrlLength(String editTextDescription,int indexOfFirstPattern)
+    {
+        int urlLength = indexOfFirstPattern;
+        for (int i = indexOfFirstPattern; i < editTextDescription.length(); i++) {
+            if (editTextDescription.charAt(i) == ' ') {
+                break;
+            } else {
+                urlLength++;
+            }
+        }
+        return urlLength;
+    }
     private void communityValue() {
         mIvcommunity_post_icon.setCircularImage(true);
         mIvcommunity_post_icon.bindImage(mFeedDetail.getThumbnailImageUrl());
@@ -339,7 +364,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements SelectC
                     mVg_image_container.addView(layout2);
                 }
             }
-          /*  if (mFeedDetail.isOgVideoLinkB()) {
+            if (mFeedDetail.isOgVideoLinkB()) {
                 mLinkRenderResponse = new LinkRenderResponse();
 
                 if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getOgTitleS())) {
@@ -367,7 +392,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements SelectC
                                 }
                             });
                 }
-            }*/
+            }
         }
     }
 
@@ -604,7 +629,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements SelectC
             communityPostResponse(createCommunityResponse);
         } else if (baseResponse instanceof LinkRenderResponse) {
             LinkRenderResponse linkRenderResponse = ((LinkRenderResponse) baseResponse);
-         //   linkRenderResponse(linkRenderResponse);
+            linkRenderResponse(linkRenderResponse);
         }
 
     }
@@ -631,6 +656,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements SelectC
         if (StringUtil.isNotNullOrEmptyString(linkRenderResponse.getStatus())) {
             switch (linkRenderResponse.getStatus()) {
                 case AppConstants.SUCCESS:
+                    isLinkRendered = true;
                     cardViewLinkRender.setVisibility(View.VISIBLE);
                     scroll_community_post.post(new Runnable() {
                         public void run() {
@@ -673,7 +699,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements SelectC
 
     @OnClick(R.id.tv_close_link)
     public void tvCloseLink() {
-        mLinkRenderResponse=null;
+        mLinkRenderResponse = null;
         cardViewLinkRender.setVisibility(View.GONE);
     }
 

@@ -799,7 +799,10 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                     if (AppConstants.BAD_RQUEST.contains(errorReason)) {
                         showNetworkTimeoutDoalog(true, false, getString(R.string.ID_BAD_RQUEST));
                     } else if (AppConstants.HTTP_401_UNAUTHORIZED.contains(errorReason)) {
-                        showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_INVALID_USER_PASSWORD));
+                        showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_UN_AUTHORIZE));
+                     /*   if (this instanceof HomeActivity) {
+                            ((HomeActivity)this).logOut();
+                        }*/
                     } else {
                         showNetworkTimeoutDoalog(true, false, errorReason);
                     }
