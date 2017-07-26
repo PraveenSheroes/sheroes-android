@@ -555,9 +555,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             if (dataItem.getCommunityId() == AppConstants.NO_REACTION_CONSTANT) {
                 tvFeedCommunityPostText.setVisibility(View.GONE);
                 String feedTitle = dataItem.getAuthorName();
-                // String challengerName = dataItem.getNameOrTitle();
                 posted.append(feedTitle).append(AppConstants.SPACE).append(LEFT_POSTED).append(mContext.getString(R.string.ID_HAS_ACCEPTED)).append(RIGHT_POSTED).append(AppConstants.SPACE).append(mContext.getString(R.string.ID_HAS_ACCEPTED_CHALLENGE));
-                // posted.append(challengerName).append(AppConstants.APASTROPH).append(LEFT_POSTED).append(mContext.getString(R.string.ID_HAS_ACCEPTED_CHALLENGE)).append(RIGHT_POSTED);
                 if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                     tvFeedCommunityPostCardTitle.setText(Html.fromHtml(posted.toString(), 0)); // for 24 api and more
                 } else {
@@ -601,12 +599,14 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 tvFeedCommunityPostViewMore.setTag(mViewMore);
                 tvFeedCommunityPostViewMore.setText(mContext.getString(R.string.ID_VIEW_MORE));
                 tvFeedCommunityPostText.setText(StringEscapeUtils.unescapeHtml4(mViewMoreDescription));
+                tvFeedCommunityPostText.scrollTo(0,0);
 
             } else {
                 tvFeedCommunityPostViewMore.setText(mContext.getString(R.string.ID_LESS));
                 tvFeedCommunityPostViewMore.setTag(mLess);
                 tvFeedCommunityPostViewMore.setVisibility(View.GONE);
                 tvFeedCommunityPostText.setText(StringEscapeUtils.unescapeHtml4(mViewMoreDescription));
+                tvFeedCommunityPostText.scrollTo(0,0);
             }
          /*   Pattern EMAIL_ADDRESS_PATTERN = Pattern.compile("/(www|http|ftp|https):\\/\\/[\\w-]+(\\.[\\w-]+)+([\\w.,@?^=%&amp;:\\/~+#-]*[\\w@?^=%&amp;\\/~+#-])?/gi");
             if (EMAIL_ADDRESS_PATTERN.matcher(tvFeedCommunityPostText.getText().toString()).matches()) {
@@ -1044,7 +1044,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 tvFeedCommunityPostViewMore.setVisibility(View.GONE);
                 tvFeedCommunityPostViewMore.setText(mContext.getString(R.string.ID_LESS));
                 tvFeedCommunityPostViewMore.setTag(mLess);
-                tvFeedCommunityPostTextFullView.setText(StringEscapeUtils.unescapeHtml4(mViewMoreDescription));
+                tvFeedCommunityPostText.setText(StringEscapeUtils.unescapeHtml4(mViewMoreDescription));
+                tvFeedCommunityPostText.scrollTo(0,0);
             }
         }
     }

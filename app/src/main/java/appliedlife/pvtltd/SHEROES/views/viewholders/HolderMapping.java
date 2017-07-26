@@ -365,7 +365,13 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new ChallengeHorizontalView(view, viewInterface);
         }
-    }, ONCE_WELCOME_VIEW(R.layout.once_open_circle_support_card) {
+    }, APP_INTRO_VIEW(R.layout.app_intro_card) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new AppIntroCardHolder(view, viewInterface);
+        }
+    }
+    , ONCE_WELCOME_VIEW(R.layout.once_open_circle_support_card) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new OnceWelcomeCardHolder(view, viewInterface);
@@ -456,6 +462,9 @@ public enum HolderMapping {
                             case AppConstants.CHALLENGE_SUB_TYPE:
                                 returnView = CHALLENGE_HORIZONTAL_VIEW.ordinal();
                                 break;
+                            case AppConstants.APP_INTRO_SUB_TYPE:
+                                returnView = APP_INTRO_VIEW.ordinal();
+                                break;
                             case AppConstants.ONCE_WELCOME:
                                 returnView = ONCE_WELCOME_VIEW.ordinal();
                                 break;
@@ -494,12 +503,13 @@ public enum HolderMapping {
                                 returnView = ARTICLE_CARD_HOLDER.ordinal();
                                 break;
                             case AppConstants.FEED_COMMUNITY:
-                                boolean isFeatured = feedDetail.isFeatured();
-                                if (isFeatured && !feedDetail.isOwner() && !feedDetail.isMember()) {
+                                returnView = MY_COMMUNITIES_CARD.ordinal();
+                               /* boolean isFeatured = feedDetail.isFeatured();
+                                if (isFeatured ) {
                                     returnView = FEATURE_CARD.ordinal();
                                 } else {
                                     returnView = MY_COMMUNITIES_CARD.ordinal();
-                                }
+                                }*/
                                 break;
                             case AppConstants.FEED_JOB:
                                 returnView = FEED_JOB.ordinal();

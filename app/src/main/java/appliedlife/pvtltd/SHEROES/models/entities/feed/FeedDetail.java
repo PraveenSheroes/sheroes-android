@@ -12,6 +12,7 @@ import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeDataItem;
+import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroData;
 
 public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
 
@@ -20,7 +21,7 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
     String callFromName;
     boolean isTrending;
     boolean isFromHome;
-
+    private AppIntroData appIntroDataItems = null;
     @SerializedName("community_participant_id_l")
     @Expose
     private int communityParticipantIdL;
@@ -1908,6 +1909,14 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         this.solrIgnorePostCommunityLogo = solrIgnorePostCommunityLogo;
     }
 
+    public AppIntroData getAppIntroDataItems() {
+        return appIntroDataItems;
+    }
+
+    public void setAppIntroDataItems(AppIntroData appIntroDataItems) {
+        this.appIntroDataItems = appIntroDataItems;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -1921,6 +1930,7 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         dest.writeString(this.callFromName);
         dest.writeByte(this.isTrending ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isFromHome ? (byte) 1 : (byte) 0);
+        dest.writeParcelable(this.appIntroDataItems, flags);
         dest.writeInt(this.communityParticipantIdL);
         dest.writeByte(this.isOgVideoLinkB ? (byte) 1 : (byte) 0);
         dest.writeString(this.ogDescriptionS);
@@ -2094,6 +2104,7 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         this.callFromName = in.readString();
         this.isTrending = in.readByte() != 0;
         this.isFromHome = in.readByte() != 0;
+        this.appIntroDataItems = in.readParcelable(AppIntroData.class.getClassLoader());
         this.communityParticipantIdL = in.readInt();
         this.isOgVideoLinkB = in.readByte() != 0;
         this.ogDescriptionS = in.readString();

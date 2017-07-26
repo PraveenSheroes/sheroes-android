@@ -109,6 +109,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroScreenRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCount;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobApplyRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
@@ -1887,6 +1888,11 @@ public class AppUtils {
         challengeRequest.setLastScreenName(screenName);
         challengeRequest.setScreenName(screenName);
         return challengeRequest;
+    }
+    public  AppIntroScreenRequest appIntroRequestBuilder(int pageId) {
+        AppIntroScreenRequest appIntroScreenRequest = new AppIntroScreenRequest();
+        appIntroScreenRequest.setSheroesPageId(pageId);
+        return appIntroScreenRequest;
     }
     public static ChallengeAcceptRequest acceptChallengeRequestBuilder(Long challengeId,boolean isActive,boolean isDeleted,int completionPercent,boolean isAccepted,boolean isUpdated,String imageUrl,String videoUrl) {
         ChallengeAcceptRequest challengeAcceptRequest = new ChallengeAcceptRequest();

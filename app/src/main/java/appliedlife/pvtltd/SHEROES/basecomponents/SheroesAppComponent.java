@@ -130,6 +130,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileWorkExpe
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.SearchGoodAtDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.SearchProfileLocationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.SelectCommunityDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.viewholders.AppIntroCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleDetailHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleDetailSuggestedHolder;
@@ -608,6 +609,7 @@ public interface SheroesAppComponent {
     void inject(ResetPasswordSuccessFragment resetPasswordSuccessFragment);
 
     void inject(ProfileImageDialogFragment profileImageDialogFragment);
+    void inject(AppIntroCardHolder appIntroCardHolder);
 
 
 }

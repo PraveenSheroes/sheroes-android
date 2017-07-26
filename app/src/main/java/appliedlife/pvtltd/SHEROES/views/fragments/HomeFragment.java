@@ -40,6 +40,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeDataItem;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroData;
+import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroScreenResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
@@ -118,7 +120,7 @@ public class HomeFragment extends BaseFragment {
     @Bind(R.id.tv_refresh)
     TextView tvRefresh;
     private String mGcmId;
-    private FeedDetail challengeFeedDetail, onceWelcomeDataItem;
+    private FeedDetail challengeFeedDetail, onceWelcomeDataItem, appIntroFeedCard;
     private ChallengeDataItem mChallengeDataItem;
     private int mPercentCompleted;
     private long mChallengeId;
@@ -189,8 +191,7 @@ public class HomeFragment extends BaseFragment {
         mHomePresenter.getNotificationCountFromPresenter(notificationReadCountRequestBuilder(TAG));
         try {
             getGcmId();
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
 
         }
         mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -217,8 +218,13 @@ public class HomeFragment extends BaseFragment {
                         if (mInstallUpdatePreference.get().isFirstOpen()) {
                             LoginRequest loginRequest = loginRequestBuilder();
                             loginRequest.setGcmorapnsid(registrationId);
-                            onceWelcomeDataItem = new FeedDetail();
-                            onceWelcomeDataItem.setSubType(AppConstants.ONCE_WELCOME);
+                            if (mInstallUpdatePreference.get().isWelcome()) {
+                                onceWelcomeDataItem = new FeedDetail();
+                                onceWelcomeDataItem.setSubType(AppConstants.ONCE_WELCOME);
+                                InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
+                                installUpdateForMoEngage.setWelcome(false);
+                                mInstallUpdatePreference.set(installUpdateForMoEngage);
+                            }
                             mHomePresenter.getNewGCMidFromPresenter(loginRequest);
                         } else {
                             if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getGcmId())) {
@@ -285,6 +291,9 @@ public class HomeFragment extends BaseFragment {
                 break;
             case USER_CONTACTS_ACCESS_SUCCESS:
                 getAppContactsListSuccess(baseResponse);
+                break;
+            case APP_INTRO:
+                appIntroResponse(baseResponse);
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
@@ -355,6 +364,7 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void challengeResponse(BaseResponse baseResponse) {
+        mHomePresenter.getAppIntroFromPresenter(mAppUtils.appIntroRequestBuilder(AppConstants.APP_INTRO));
         switch (baseResponse.getStatus()) {
             case AppConstants.SUCCESS:
                 if (baseResponse instanceof ChallengeListResponse) {
@@ -392,6 +402,27 @@ public class HomeFragment extends BaseFragment {
                     InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
                     installUpdateForMoEngage.setFirstOpen(false);
                     mInstallUpdatePreference.set(installUpdateForMoEngage);
+                }
+                break;
+            case AppConstants.FAILED:
+                break;
+            default:
+        }
+    }
+
+    private void appIntroResponse(BaseResponse baseResponse) {
+
+        switch (baseResponse.getStatus()) {
+            case AppConstants.SUCCESS:
+                if (baseResponse instanceof AppIntroScreenResponse) {
+                    AppIntroScreenResponse appIntroScreenResponse = (AppIntroScreenResponse) baseResponse;
+                    if (StringUtil.isNotEmptyCollection(appIntroScreenResponse.getData())) {
+                        appIntroFeedCard = new FeedDetail();
+                        appIntroFeedCard.setSubType(AppConstants.APP_INTRO_SUB_TYPE);
+                        AppIntroData appIntroData = appIntroScreenResponse.getData().get(0);
+                        appIntroFeedCard.setAppIntroDataItems(appIntroData);
+                        challengeAddOnFeed(appIntroFeedCard);
+                    }
                 }
                 break;
             case AppConstants.FAILED:
@@ -507,7 +538,7 @@ public class HomeFragment extends BaseFragment {
                 UserContactDetail userContactDetail = null;
                 Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
                 Cursor cursor = ((HomeActivity) getActivity()).getContentResolver().query(uri, new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME, ContactsContract.CommonDataKinds.Phone._ID}, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
-                if(cursor!= null && cursor.getCount()>0) {
+                if (cursor != null && cursor.getCount() > 0) {
                     try {
                         cursor.moveToFirst();
                         while (cursor.isAfterLast() == false) {
@@ -545,6 +576,7 @@ public class HomeFragment extends BaseFragment {
         }
     }
 
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
@@ -552,7 +584,8 @@ public class HomeFragment extends BaseFragment {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    getUserPhoneContactsAndSend().subscribeOn(Schedulers.newThread()).subscribe();;
+                    getUserPhoneContactsAndSend().subscribeOn(Schedulers.newThread()).subscribe();
+                    ;
                 } else {
                     Log.d(TAG, "No permission for contacts ");
                 }
@@ -566,7 +599,8 @@ public class HomeFragment extends BaseFragment {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSIONS_REQUEST_READ_CONTACTS);
             } else {
-                getUserPhoneContactsAndSend().subscribeOn(Schedulers.newThread()).subscribe();;
+                getUserPhoneContactsAndSend().subscribeOn(Schedulers.newThread()).subscribe();
+                ;
             }
         }
     }

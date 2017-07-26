@@ -18,6 +18,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroScreenRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroScreenResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCount;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
@@ -246,6 +248,18 @@ public class HomeModel {
                     @Override
                     public ChallengeListResponse call(ChallengeListResponse challengeListResponse) {
                         return challengeListResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+    public Observable<AppIntroScreenResponse> getAppIntroFromModel(AppIntroScreenRequest appIntroScreenRequest){
+        LogUtils.info(TAG," **********Appintro  request"+new Gson().toJson(appIntroScreenRequest));
+        return sheroesAppServiceApi.appIntroScreen(appIntroScreenRequest)
+                .map(new Func1<AppIntroScreenResponse, AppIntroScreenResponse>() {
+                    @Override
+                    public AppIntroScreenResponse call(AppIntroScreenResponse appIntroScreenResponse) {
+                        return appIntroScreenResponse;
                     }
                 })
                 .subscribeOn(Schedulers.io())

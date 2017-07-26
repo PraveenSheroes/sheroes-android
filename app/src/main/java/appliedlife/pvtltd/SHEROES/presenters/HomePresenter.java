@@ -25,6 +25,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroScreenRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroScreenResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCount;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
@@ -46,6 +48,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import rx.Subscriber;
 import rx.Subscription;
 
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.APP_INTRO;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.BOOKMARK_UNBOOKMARK;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.CHALLENGE_ACCEPT;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.CHALLENGE_LIST;
@@ -547,6 +550,25 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onNext(ChallengeListResponse challengeListResponse) {
                 if (null != challengeListResponse) {
                     getMvpView().getNotificationReadCountSuccess(challengeListResponse,CHALLENGE_ACCEPT);
+                }
+            }
+        });
+        registerSubscription(subscription);
+    }
+    public void getAppIntroFromPresenter(AppIntroScreenRequest appIntroScreenRequest) {
+        Subscription subscription = mHomeModel.getAppIntroFromModel(appIntroScreenRequest).subscribe(new Subscriber<AppIntroScreenResponse>() {
+            @Override
+            public void onCompleted() {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+            }
+
+            @Override
+            public void onNext(AppIntroScreenResponse appIntroScreenResponse) {
+                if (null != appIntroScreenResponse) {
+                    getMvpView().getNotificationReadCountSuccess(appIntroScreenResponse,APP_INTRO);
                 }
             }
         });

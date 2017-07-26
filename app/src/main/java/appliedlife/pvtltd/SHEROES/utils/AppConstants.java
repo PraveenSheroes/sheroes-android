@@ -17,6 +17,7 @@ public class AppConstants {
     // YouTube video id
     public static final String YOUTUBE_VIDEO_CODE = "cU3v6nuuaHs";
     public static final int CAMPAIGN_ID = 14983;
+    public static final int APP_INTRO = 34;
     public static final int ONEGIGABYTE = 1024 * 1024 * 1024;
     public static final int ANDROID_SDK_24 = 24;
     public static final int READ_TIME_OUT = 180;
@@ -123,6 +124,7 @@ public class AppConstants {
     public static final String INVITE_MEMBER = "invite_member";
     public static final String MY_COMMUNITIES_HEADER = "COMMUNITY_HEADER";
     public static final String CHALLENGE_SUB_TYPE = "CHALLENGE_TYPE";
+    public static final String APP_INTRO_SUB_TYPE = "APP_INTRO_TYPE";
     public static final String ONCE_WELCOME = "ONCE_WELCOME";
     public static final String NO_COMMUNITIES = "NO_COMMUNITIES";
     public static final String COMMUNITIES_DETAIL = "community_detail";

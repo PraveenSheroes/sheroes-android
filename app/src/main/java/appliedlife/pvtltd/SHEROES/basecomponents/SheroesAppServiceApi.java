@@ -42,6 +42,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThread
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroScreenRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroScreenResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCount;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
@@ -341,4 +343,6 @@ public interface SheroesAppServiceApi {
 
     @POST("participant/user/update_app_user_contact_referral")
     Observable<UserFromReferralResponse> updateUserReferral(@Body UserFromReferralRequest userFromReferralRequest);
+    @POST("/entity/master/app_intro_screen")
+    Observable<AppIntroScreenResponse> appIntroScreen(@Body AppIntroScreenRequest appIntroScreenRequest);
 }
