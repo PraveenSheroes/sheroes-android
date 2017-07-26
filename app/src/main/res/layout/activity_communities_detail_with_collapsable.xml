@@ -134,5 +134,5 @@
         app:backgroundTint="@color/footer_icon_text"
         android:layout_marginRight="@dimen/dp_size_10"
         android:layout_marginBottom="@dimen/dp_size_10"
-        android:src="@drawable/ic_add_education"/>
+        android:src="@drawable/ic_fab_icon"/>
 </android.support.design.widget.CoordinatorLayout>

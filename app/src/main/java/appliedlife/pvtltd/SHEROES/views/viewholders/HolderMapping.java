@@ -503,13 +503,12 @@ public enum HolderMapping {
                                 returnView = ARTICLE_CARD_HOLDER.ordinal();
                                 break;
                             case AppConstants.FEED_COMMUNITY:
-                                returnView = MY_COMMUNITIES_CARD.ordinal();
-                               /* boolean isFeatured = feedDetail.isFeatured();
-                                if (isFeatured ) {
+                                boolean isFeatured = feedDetail.isFeatured();
+                                if (isFeatured && !feedDetail.isOwner() && !feedDetail.isMember()) {
                                     returnView = FEATURE_CARD.ordinal();
                                 } else {
                                     returnView = MY_COMMUNITIES_CARD.ordinal();
-                                }*/
+                                }
                                 break;
                             case AppConstants.FEED_JOB:
                                 returnView = FEED_JOB.ordinal();
