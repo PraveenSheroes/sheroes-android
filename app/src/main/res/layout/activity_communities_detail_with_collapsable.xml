@@ -120,20 +120,19 @@
 
         </appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.CustomCollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
-
-
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager_communities_detail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-    <ImageView
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_post_community"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right|bottom"
-        android:layout_marginBottom="@dimen/dp_size_5"
-        android:layout_marginRight="@dimen/dp_size_5"
-        android:background="@drawable/ic_add_post"
-        android:padding="@dimen/dp_size_30" />
+        android:layout_gravity="bottom|end"
+        android:background="@color/footer_icon_text"
+        app:backgroundTint="@color/footer_icon_text"
+        android:layout_marginRight="@dimen/dp_size_10"
+        android:layout_marginBottom="@dimen/dp_size_10"
+        android:src="@drawable/ic_fab_icon"/>
 </android.support.design.widget.CoordinatorLayout>

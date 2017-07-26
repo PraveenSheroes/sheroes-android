@@ -8,17 +8,13 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.HelplineModel;
-import appliedlife.pvtltd.SHEROES.models.JobModel;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobApplyRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobApplyResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.utils.Tracking.GoogleAnalyticsTracing;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HelplineView;
@@ -73,7 +69,7 @@ public class HelplinePresenter extends BasePresenter<HelplineView>{
                 if(null!=e&& StringUtil.isNotNullOrEmptyString(e.getMessage())) {
                     StringBuilder stringBuilder=new StringBuilder();
                     stringBuilder.append(AppConstants.HELPLINE_SCREEN).append(AppConstants.SPACE).append( e.getMessage());
-                    GoogleAnalyticsTracing.screenNameTracking(mSheroesApplication,stringBuilder.toString());
+                    SheroesApplication.mContext.trackScreenView(stringBuilder.toString());
                 }
             }
 
@@ -106,7 +102,7 @@ public class HelplinePresenter extends BasePresenter<HelplineView>{
                 if(null!=e&& StringUtil.isNotNullOrEmptyString(e.getMessage())) {
                     StringBuilder stringBuilder=new StringBuilder();
                     stringBuilder.append(AppConstants.HELPLINE_SCREEN).append(AppConstants.SPACE).append( e.getMessage());
-                    GoogleAnalyticsTracing.screenNameTracking(mSheroesApplication,stringBuilder.toString());
+                    SheroesApplication.mContext.trackScreenView(stringBuilder.toString());
                 }
             }
 

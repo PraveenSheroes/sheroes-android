@@ -34,7 +34,6 @@ import appliedlife.pvtltd.SHEROES.service.GCMClientManager;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.utils.Tracking.GoogleAnalyticsTracing;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.LoginActivity;
@@ -135,7 +134,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                         mUserPreference.set(loginResponse);
                         moEngageUtills.entityMoEngageLoggedIn(getActivity(), mMoEHelper, payloadBuilder, MoEngageConstants.EMAIL);
                         if (null != loginResponse.getUserSummary()) {
-                            GoogleAnalyticsTracing.setUserIdTracking(getActivity(), String.valueOf(loginResponse.getUserSummary().getUserId()));
+                            SheroesApplication.mContext.trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
                         }
                         mLoginActivityIntractionListner.onLoginAuthToken();
                         break;
@@ -162,7 +161,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                     moEngageUtills.entityMoEngageUserAttribute(getActivity(), mMoEHelper, payloadBuilder, loginResponse);
                     mUserPreference.set(loginResponse);
                     moEngageUtills.entityMoEngageLoggedIn(getActivity(), mMoEHelper, payloadBuilder, MoEngageConstants.EMAIL);
-                    GoogleAnalyticsTracing.setUserIdTracking(getActivity(), String.valueOf(loginResponse.getUserSummary().getUserId()));
+                    SheroesApplication.mContext.trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
                     mLoginActivityIntractionListner.onLoginAuthToken();
                 } else {
                     LoginManager.getInstance().logOut();

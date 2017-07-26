@@ -403,12 +403,12 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new EventDetailHolder(view, viewInterface);
         }
-    },EVENT_SPEAKER_HOLDER(R.layout.event_speaker_holder) {
+    }, EVENT_SPEAKER_HOLDER(R.layout.event_speaker_holder) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new EventSpeakerHolder(view, viewInterface);
         }
-    },EVENT_SPONSOR_HOLDER(R.layout.event_sponsor_holder) {
+    }, EVENT_SPONSOR_HOLDER(R.layout.event_sponsor_holder) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new EventSponsorHolder(view, viewInterface);
@@ -438,7 +438,7 @@ public enum HolderMapping {
             if (callFromType.equalsIgnoreCase(AppConstants.FEED_SUB_TYPE)) {
                 if (item instanceof FeedDetail) {
                     FeedDetail feedDetail = ((FeedDetail) item);
-                    if(StringUtil.isNotNullOrEmptyString(feedDetail.getSubType())) {
+                    if (StringUtil.isNotNullOrEmptyString(feedDetail.getSubType())) {
                         String feedType = feedDetail.getSubType().toUpperCase();
                         switch (feedType) {
                             case AppConstants.FEED_ARTICLE:
@@ -487,7 +487,7 @@ public enum HolderMapping {
             } else if (callFromType.equalsIgnoreCase(AppConstants.FOR_ALL)) {
                 if (item instanceof FeedDetail) {
                     FeedDetail feedDetail = ((FeedDetail) item);
-                    if(StringUtil.isNotNullOrEmptyString(feedDetail.getSubType())) {
+                    if (StringUtil.isNotNullOrEmptyString(feedDetail.getSubType())) {
                         String feedType = feedDetail.getSubType().toUpperCase();
                         switch (feedType) {
                             case AppConstants.FEED_ARTICLE:
@@ -495,8 +495,7 @@ public enum HolderMapping {
                                 break;
                             case AppConstants.FEED_COMMUNITY:
                                 boolean isFeatured = feedDetail.isFeatured();
-                                //if (isFeatured && !feedDetail.isOwner() && !feedDetail.isMember())
-                                if (isFeatured) {
+                                if (isFeatured && !feedDetail.isOwner() && !feedDetail.isMember()) {
                                     returnView = FEATURE_CARD.ordinal();
                                 } else {
                                     returnView = MY_COMMUNITIES_CARD.ordinal();
@@ -618,12 +617,11 @@ public enum HolderMapping {
                     returnView = ICC_MEMBER_CARD.ordinal();
                 } else if (item instanceof FAQS) {
                     returnView = FAQS_CARD.ordinal();
-                }else if (item instanceof EventDetailPojo) {
+                } else if (item instanceof EventDetailPojo) {
                     returnView = EVENT_DETAIL_HOLDER.ordinal();
-                }else if (item instanceof EventSpeakerData) {
+                } else if (item instanceof EventSpeakerData) {
                     returnView = EVENT_SPEAKER_HOLDER.ordinal();
-                }
-                else if (item instanceof EventSponsorData) {
+                } else if (item instanceof EventSponsorData) {
                     returnView = EVENT_SPONSOR_HOLDER.ordinal();
                 }
             }

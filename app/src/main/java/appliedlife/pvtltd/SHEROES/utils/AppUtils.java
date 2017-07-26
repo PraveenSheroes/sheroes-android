@@ -1686,7 +1686,7 @@ public class AppUtils {
 
 
     public static int findNthIndexOf(String str, String needle, int occurence) throws IndexOutOfBoundsException {
-        int index = -1;
+        int index = 0;
         Pattern p = Pattern.compile(needle, Pattern.MULTILINE);
         Matcher m = p.matcher(str);
         while (m.find()) {
@@ -1695,7 +1695,6 @@ public class AppUtils {
                 break;
             }
         }
-        if (index < 0) throw new IndexOutOfBoundsException();
         return index;
     }
     /**

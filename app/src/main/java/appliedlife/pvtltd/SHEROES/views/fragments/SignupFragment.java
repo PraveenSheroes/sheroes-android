@@ -73,7 +73,6 @@ import appliedlife.pvtltd.SHEROES.social.SocialPerson;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.utils.Tracking.GoogleAnalyticsTracing;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.LoginActivity;
@@ -433,7 +432,7 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
                             } else {
                                 moEngageUtills.entityMoEngageSignUp(getActivity(), mMoEHelper, payloadBuilder, loginViaSocial);
                             }
-                            GoogleAnalyticsTracing.setUserIdTracking(getActivity(),String.valueOf(loginResponse.getUserSummary().getUserId()));
+                            SheroesApplication.mContext.trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
                         }
                         mMoEHelper.setUserAttribute(MoEngageConstants.ACQUISITION_CHANNEL, loginViaSocial);
                         openHomeScreen();

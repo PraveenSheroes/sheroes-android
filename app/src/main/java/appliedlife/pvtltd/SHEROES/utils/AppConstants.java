@@ -21,7 +21,6 @@ public class AppConstants {
     public static final int ANDROID_SDK_24 = 24;
     public static final int READ_TIME_OUT = 180;
     public static final int CONNECTION_TIME_OUT = 60;
-    public static final String GOOGLE_ANALYTICS = "UA-43289318-4";
     public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
     public static final String DATE_FORMAT_FOR_JOB = "dd MMM, yyyy";
     public static final String COMMENT_DATE_TIME = "dd MMM, yyyy h:mm a";

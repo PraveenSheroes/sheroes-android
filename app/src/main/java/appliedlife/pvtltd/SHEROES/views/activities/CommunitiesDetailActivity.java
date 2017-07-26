@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
@@ -110,7 +111,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
     @Bind(R.id.li_header)
     public LinearLayout mLiHeader;
     @Bind(R.id.fab_post_community)
-    public ImageView ivFabPostCommunity;
+    public FloatingActionButton ivFabPostCommunity;
     private MoEHelper mMoEHelper;
     private MoEngageUtills moEngageUtills;
     private PayloadBuilder payloadBuilder;

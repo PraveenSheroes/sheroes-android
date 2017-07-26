@@ -43,7 +43,12 @@ public abstract class BaseRequest {
     @SerializedName("source")
     @Expose
     private String source= AppConstants.SOURCE_NAME;
-
+    @SerializedName("lat")
+    @Expose
+    private Float lattitude;
+    @SerializedName("long")
+    @Expose
+    private Float longitude;
     public BaseRequest(TrackingParams trackingParams, DeviceInfo deviceInfo, String appVersion, String cloudMessagingId, String deviceUniqueId, String screenName, String lastScreenName, int pageNo, int pageSize) {
         this.trackingParams = trackingParams;
         this.deviceInfo = deviceInfo;

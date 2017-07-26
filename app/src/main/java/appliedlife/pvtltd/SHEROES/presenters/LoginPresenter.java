@@ -25,7 +25,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.GooglePlusRes
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.utils.Tracking.GoogleAnalyticsTracing;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.LoginView;
 import rx.Subscriber;
@@ -263,7 +262,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
 
                 StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.append(AppConstants.FORGOT_PASSWORD).append(mSheroesApplication.getString(R.string.ID_VIEWS)).append(AppConstants.SPACE).append( e.getMessage());
-                GoogleAnalyticsTracing.screenNameTracking(mSheroesApplication,stringBuilder.toString());
+                SheroesApplication.mContext.trackScreenView(stringBuilder.toString());
             }
 
             @Override
@@ -294,7 +293,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
 
                 StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.append(AppConstants.EMAIL_VERIFICATION).append(mSheroesApplication.getString(R.string.ID_VIEWS)).append(AppConstants.SPACE).append( e.getMessage());
-                GoogleAnalyticsTracing.screenNameTracking(mSheroesApplication,stringBuilder.toString());
+                SheroesApplication.mContext.trackScreenView(stringBuilder.toString());
             }
 
             @Override
@@ -322,7 +321,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
 
                 StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.append(AppConstants.GOOGLE_PLAY_URL_TRACKER).append(mSheroesApplication.getString(R.string.ID_VIEWS)).append(AppConstants.SPACE).append( e.getMessage());
-                GoogleAnalyticsTracing.screenNameTracking(mSheroesApplication,stringBuilder.toString());
+                SheroesApplication.mContext.trackScreenView(stringBuilder.toString());
             }
 
             @Override

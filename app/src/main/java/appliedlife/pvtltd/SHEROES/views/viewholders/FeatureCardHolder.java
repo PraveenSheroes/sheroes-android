@@ -112,19 +112,21 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
             tvFeaturedCommunityJoin.setText(mContext.getString(R.string.ID_REQUESTED));
             tvFeaturedCommunityJoin.setBackgroundResource(R.drawable.rectangle_feed_community_requested);
             tvFeaturedCommunityJoin.setVisibility(View.VISIBLE);
-        } else if (dataItem.isOwner() || dataItem.isMember()) {
-            tvFeaturedCommunityJoin.setVisibility(View.VISIBLE);
+        } else if (dataItem.isMember() && dataItem.isFeatured()) {
             tvFeaturedCommunityJoin.setTextColor(ContextCompat.getColor(mContext, R.color.white));
             tvFeaturedCommunityJoin.setText(mContext.getString(R.string.ID_INVITE));
             tvFeaturedCommunityJoin.setBackgroundResource(R.drawable.rectangle_community_invite);
+        } else if (dataItem.isOwner() || dataItem.isMember()) {
+            tvFeaturedCommunityJoin.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+            tvFeaturedCommunityJoin.setText(mContext.getString(R.string.ID_JOINED));
+            tvFeaturedCommunityJoin.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
+            tvFeaturedCommunityJoin.setVisibility(View.VISIBLE);
         }
-
         //TODO:: change for UI
         if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
             tvFeaturedCommunityCardTitle.setText(dataItem.getNameOrTitle());
         }
-        if (StringUtil.isNotNullOrEmptyString(dataItem.getCommunityType()))
-        {
+        if (StringUtil.isNotNullOrEmptyString(dataItem.getCommunityType())) {
             tvFeaturedCommunityTime.setText(dataItem.getCommunityType());
         }
 
@@ -158,9 +160,9 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
             mergeTags = mergeTags.substring(0, mergeTags.length() - 1);
             String tagHeader = LEFT_HTML_TAG + context.getString(R.string.ID_TAGS) + RIGHT_HTML_TAG;
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                tvFeaturedCommunityTagLable.setText(Html.fromHtml(tagHeader +AppConstants.SPACE+ AppConstants.COLON + AppConstants.SPACE + mergeTags, 0)); // for 24 api and more
+                tvFeaturedCommunityTagLable.setText(Html.fromHtml(tagHeader + AppConstants.SPACE + AppConstants.COLON + AppConstants.SPACE + mergeTags, 0)); // for 24 api and more
             } else {
-                tvFeaturedCommunityTagLable.setText(Html.fromHtml(tagHeader+AppConstants.SPACE+ AppConstants.COLON + AppConstants.SPACE + mergeTags));// or for older api
+                tvFeaturedCommunityTagLable.setText(Html.fromHtml(tagHeader + AppConstants.SPACE + AppConstants.COLON + AppConstants.SPACE + mergeTags));// or for older api
             }
         }
 
@@ -214,6 +216,7 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
             }
         }
     }
+
     @OnClick(R.id.tv_featured_community_text_full_view)
     public void viewMoreFullViewClick() {
         if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {

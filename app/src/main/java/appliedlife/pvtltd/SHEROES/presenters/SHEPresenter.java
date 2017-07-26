@@ -14,7 +14,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.she.FAQSResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMemberListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMemberRequest;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
-import appliedlife.pvtltd.SHEROES.utils.Tracking.GoogleAnalyticsTracing;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SHEView;
@@ -74,7 +73,7 @@ public class SHEPresenter extends BasePresenter<SHEView> {
                 if(null!=e&& StringUtil.isNotNullOrEmptyString(e.getMessage())) {
                     StringBuilder stringBuilder = new StringBuilder();
                     stringBuilder.append(mSheroesApplication.getString(R.string.ID_FAQS)).append(mSheroesApplication.getString(R.string.ID_VIEWS)).append(AppConstants.SPACE).append( e.getMessage());
-                    GoogleAnalyticsTracing.screenNameTracking(mSheroesApplication,stringBuilder.toString());
+                    SheroesApplication.mContext.trackScreenView(stringBuilder.toString());
                 }
             }
 
@@ -105,7 +104,7 @@ public class SHEPresenter extends BasePresenter<SHEView> {
                 if(null!=e&& StringUtil.isNotNullOrEmptyString(e.getMessage())) {
                     StringBuilder stringBuilder = new StringBuilder();
                     stringBuilder.append(mSheroesApplication.getString(R.string.ID_ICC_MEMBERS)).append(mSheroesApplication.getString(R.string.ID_VIEWS)).append(AppConstants.SPACE).append( e.getMessage());
-                    GoogleAnalyticsTracing.screenNameTracking(mSheroesApplication,stringBuilder.toString());
+                    SheroesApplication.mContext.trackScreenView(stringBuilder.toString());
                 }
             }
 
