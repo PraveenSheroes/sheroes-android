@@ -98,6 +98,7 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
         } else {
             tvCommunityTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         }
+
         if (StringUtil.isNotNullOrEmptyString(dataItem.getScreenName()) && dataItem.getScreenName().equalsIgnoreCase(AppConstants.FEATURE_FRAGMENT)) {
             tvCommunityInvite.setTextColor(ContextCompat.getColor(mContext, R.color.white));
             tvCommunityInvite.setText(mContext.getString(R.string.ID_JOINED));

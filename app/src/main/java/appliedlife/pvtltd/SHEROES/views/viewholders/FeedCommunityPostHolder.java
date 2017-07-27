@@ -1020,6 +1020,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             tvFeedCommunityPostTextFullView.setVisibility(View.VISIBLE);
             tvFeedCommunityPostText.setVisibility(View.GONE);
             tvFeedCommunityPostTextFullView.setText(StringEscapeUtils.unescapeHtml4(mViewMoreDescription));
+            tvFeedCommunityPostTextFullView.scrollTo(0,0);
         } else {
             tvFeedCommunityPostTextFullView.setVisibility(View.GONE);
             tvFeedCommunityPostText.setVisibility(View.VISIBLE);
@@ -1039,12 +1040,13 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 tvFeedCommunityPostViewMore.setVisibility(View.VISIBLE);
                 tvFeedCommunityPostViewMore.setText(mContext.getString(R.string.ID_VIEW_MORE));
                 tvFeedCommunityPostViewMore.setTag(mViewMore);
-                tvFeedCommunityPostTextFullView.setText(StringEscapeUtils.unescapeHtml4(mViewMoreDescription));
+                tvFeedCommunityPostText.setText(StringEscapeUtils.unescapeHtml4(mViewMoreDescription));
+                tvFeedCommunityPostTextFullView.scrollTo(0,0);
             } else {
                 tvFeedCommunityPostViewMore.setVisibility(View.GONE);
                 tvFeedCommunityPostViewMore.setText(mContext.getString(R.string.ID_LESS));
                 tvFeedCommunityPostViewMore.setTag(mLess);
-                tvFeedCommunityPostText.setText(StringEscapeUtils.unescapeHtml4(mViewMoreDescription));
+                tvFeedCommunityPostTextFullView.setText(StringEscapeUtils.unescapeHtml4(mViewMoreDescription));
                 tvFeedCommunityPostText.scrollTo(0,0);
             }
         }

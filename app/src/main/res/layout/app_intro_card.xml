@@ -5,11 +5,9 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/dp_size_10"
     android:background="@color/white">
-
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
+        android:layout_height="match_parent">
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -45,7 +43,6 @@
                 android:maxLines="@integer/int_value_for_line_3"
                 android:textColor="@color/text_color_follow"
                 android:textSize="@dimen/sp_size_12" />
-
             <ImageView
                 android:id="@+id/iv_app_intro_image"
                 android:layout_width="match_parent"

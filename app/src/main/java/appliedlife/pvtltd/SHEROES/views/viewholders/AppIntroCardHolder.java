@@ -68,17 +68,17 @@ public class AppIntroCardHolder extends BaseViewHolder<FeedDetail> {
         }
 
         if (StringUtil.isNotNullOrEmptyString(appIntroData.getCategory())) {
-            Glide.with(mContext)
-                    .load(appIntroData.getCategory()).asBitmap()
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .skipMemoryCache(true)
-                    .into(new SimpleTarget<Bitmap>() {
-                        @Override
-                        public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
-                            ivAppIntroImage.setImageBitmap(profileImage);
-                        }
-                    });
-        }
+
+        } Glide.with(mContext)
+                .load(appIntroData.getCategory()).asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .skipMemoryCache(true)
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
+                        ivAppIntroImage.setImageBitmap(profileImage);
+                    }
+                });
 
     }
 

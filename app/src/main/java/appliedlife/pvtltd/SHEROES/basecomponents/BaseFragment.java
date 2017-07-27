@@ -276,6 +276,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
             mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
             mAdapter.setCallForRecycler(AppConstants.FEED_SUB_TYPE);
             mAdapter.notifyDataSetChanged();
+
         } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
             // mLiNoResult.setVisibility(View.VISIBLE);
         } else {
@@ -288,6 +289,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
         if (null != feedDetail) {
             mAdapter.addDataOnPosition(feedDetail, 0);
             mAdapter.notifyDataSetChanged();
+            mRecyclerView.smoothScrollBy(0,0);
         }
     }
 
