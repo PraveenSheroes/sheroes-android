@@ -20,17 +20,21 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.LinkRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectedCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.MakeIndiaSafeRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.MakeIndiaSafeResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.sharemail.ShareMailResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.sharemail.ShareViaMail;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CommunityView;
 import rx.Subscriber;
 import rx.Subscription;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_COMMUNITY_OWNER;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_CREATE_COMMUNITY;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_RESPONSE;
 
 /**
  * Created by Ajit Kumar on 03-03-2017.
@@ -60,7 +64,37 @@ public class CreateCommunityPresenter extends BasePresenter<CommunityView> {
         return super.isViewAttached();
     }
 
+    public void getMakeIndiaSafeFromPresenter(final MakeIndiaSafeRequest feedRequestPojo) {
+        if (!NetworkUtil.isConnected(sheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = communityModel.getMakeIndiaSafeFromModel(feedRequestPojo).subscribe(new Subscriber<MakeIndiaSafeResponse>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+            @Override
+            public void onError(Throwable e) {
+                getMvpView().stopProgressBar();
+                getMvpView().showError(sheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
+                if(null!=e&& StringUtil.isNotNullOrEmptyString(e.getMessage())) {
+                    StringBuilder stringBuilder=new StringBuilder();
+                    stringBuilder.append(AppConstants.FEED_SCREEN).append(AppConstants.SPACE).append( e.getMessage());
+                    SheroesApplication.mContext.trackScreenView(stringBuilder.toString());
+                }
+            }
 
+            @Override
+            public void onNext(MakeIndiaSafeResponse makeIndiaSafeResponse) {
+                LogUtils.info(TAG, "********make india response***********");
+                getMvpView().stopProgressBar();
+                getMvpView().createCommunitySuccess(makeIndiaSafeResponse);
+            }
+        });
+        registerSubscription(subscription);
+    }
     public void postCreateCommunityList(CreateCommunityRequest createCommunityRequest) {
         if (!NetworkUtil.isConnected(sheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_COMMUNITY_OWNER);

@@ -599,14 +599,12 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 tvFeedCommunityPostViewMore.setTag(mViewMore);
                 tvFeedCommunityPostViewMore.setText(mContext.getString(R.string.ID_VIEW_MORE));
                 tvFeedCommunityPostText.setText(StringEscapeUtils.unescapeHtml4(mViewMoreDescription));
-                tvFeedCommunityPostText.scrollTo(0,0);
 
             } else {
                 tvFeedCommunityPostViewMore.setText(mContext.getString(R.string.ID_LESS));
                 tvFeedCommunityPostViewMore.setTag(mLess);
                 tvFeedCommunityPostViewMore.setVisibility(View.GONE);
                 tvFeedCommunityPostText.setText(StringEscapeUtils.unescapeHtml4(mViewMoreDescription));
-                tvFeedCommunityPostText.scrollTo(0,0);
             }
          /*   Pattern EMAIL_ADDRESS_PATTERN = Pattern.compile("/(www|http|ftp|https):\\/\\/[\\w-]+(\\.[\\w-]+)+([\\w.,@?^=%&amp;:\\/~+#-]*[\\w@?^=%&amp;\\/~+#-])?/gi");
             if (EMAIL_ADDRESS_PATTERN.matcher(tvFeedCommunityPostText.getText().toString()).matches()) {
@@ -1253,7 +1251,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     public void onCommunityPostCardTitleClick() {
         viewInterface.handleOnClick(dataItem, tvFeedCommunityPostCardTitle);
     }
-
     private void interestedPress() {
         tvEventInterestedBtn.setEnabled(false);
         dataItem.setTrending(true);

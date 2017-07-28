@@ -66,6 +66,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.UserFromReferralResponse
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.GooglePlusRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.GooglePlusResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.MakeIndiaSafeRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.MakeIndiaSafeResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingInterestRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingJobAtRequest;
@@ -118,6 +120,8 @@ import rx.Observable;
  */
 public interface SheroesAppServiceApi {
     /*Participant*/
+    @POST("participation/reaction/add_location_activity")
+    Observable<MakeIndiaSafeResponse> getMakeIndiaSafeFromApi(@Body MakeIndiaSafeRequest makeIndiaSafeRequest);
     @POST("participant/feed/")
     Observable<FeedResponsePojo> getFeedFromApi(@Body FeedRequestPojo feedRequestPojo);
 

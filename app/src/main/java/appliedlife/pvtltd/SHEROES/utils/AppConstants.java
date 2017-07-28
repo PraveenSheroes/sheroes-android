@@ -101,6 +101,7 @@ public class AppConstants {
     public static final String FRAGMENT = "Fragment";
     public static final String MASTER_SKILL = "master_data_skill";
     public static final String FEED_RESPONSE_CALL_BACK = "feed_response";
+    public static final int REQUEST_CODE_FOR_LOCATION = 1401;
     public static final int REQUEST_CODE_FOR_ARTICLE_DETAIL = 1001;
     public static final int REQUEST_CODE_FOR_COMMUNITY_DETAIL = 2001;
     public static final int REQUEST_CODE_FOR_JOB_DETAIL = 3001;
@@ -145,6 +146,7 @@ public class AppConstants {
     public static final String IMAGE_FULL_VIEW = "image_view";
     public static final String BACK_SLASH = "/";
     public static final String SLASH_N = "\n";
+    public static final String LAT_LONG_DETAIL = "lat_long_detail";
     public static final String EVENT_DETAIL = "event_detail";
     public static final String ARTICLE_DETAIL = "article_detail";
     public static final String HOW_SHEROES_CAN_HELP = "how_can_sheroes";

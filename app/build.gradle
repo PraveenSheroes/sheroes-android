@@ -18,8 +18,9 @@ android {
         multiDexEnabled true
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 53
-        versionName "5.1.8"
+        versionCode 54
+        versionName "5.1.9"
+        useLibrary 'org.apache.http.legacy'
     }
     signingConfigs {
         debug {
@@ -107,9 +108,9 @@ dependencies {
     compile 'com.moengage:moe-android-sdk:7.7.01'
     compile 'com.appsflyer:af-android-sdk:4.6.7@aar'
     compile 'org.apache.commons:commons-lang3:3.5'
+    compile files('libs/YouTubeAndroidPlayerApi.jar')
     compile project(':invitereferrals')
     compile files('libs/invitereferrals.jar')
-    compile files('libs/YouTubeAndroidPlayerApi.jar')
 }
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'io.fabric'

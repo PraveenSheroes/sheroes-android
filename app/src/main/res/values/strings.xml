@@ -93,6 +93,13 @@
     <string name="ID_CELL_PHONE_NUMBER">CELL PHONE NUMBER</string>
     <string name="ID_VIEW_MORE_COMMENT">View more replies</string>
     <string name="ID_JOIN">Join</string>
+    <string name="ID_POST_AS_ON_SHEROES">Post on SHEROES as</string>
+    <string name="ID_SHARE_WITH_FRIENDS">Share with friends</string>
+    <string name="ID_DO_YOU_SEE">Do you see women getting harassed in</string>
+    <string name="ID_YOUR_LOCALITY">your locality</string>
+    <string name="ID_LOCALITY_NAME"> pretty safe for Women</string>
+    <string name="ID_TELL_YOUR_FRIENDS">Tell You Friends About It</string>
+    <string name="ID_CLICK_PIC_TELL_FRIENDS">Click a pic and tell friends </string>
     <string name="ID_INTERESTED">Interested</string>
     <string name="ID_GOING">Going</string>
     <string name="ID_REQUESTED">Requested</string>
@@ -109,6 +116,8 @@
     <string name="ID_APPLIED">Applied</string>
     <string name="ID_VIEWS">Views</string>
     <string name="ID_MIN_READ">min read</string>
+    <string name="ID_COMMUNITY_ANNONYMOUS">ANONYMOUS</string>
+    <string name="ID_DON_STAY_QUIET">Don\'t Stay Quiet </string>
     <string name="ID_JOIN_CONVERSATION">Join the conversation...</string>
     <string name="ID_SHARE_INTEREST">Share Your Interest</string>
     <string name="ID_WHAT_GOOD_AT">What Are You Good At?</string>
@@ -617,7 +626,7 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_LOCAL">Local</string>
     <string name="ID_MY_COUNTRY">My Country</string>
     <string name="ID_WORDSIDE">Worldwide</string>
-
+    <string name="ID_MAKE_INDIA_SAFE_HASHTAG">#MakeIndiaSafe, A SHEROES initiative</string>
 
     <!--string related professional work_experience page -->
 

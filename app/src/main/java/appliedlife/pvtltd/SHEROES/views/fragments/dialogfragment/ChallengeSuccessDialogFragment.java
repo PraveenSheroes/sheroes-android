@@ -134,11 +134,9 @@ public class ChallengeSuccessDialogFragment extends BaseDialogFragment implement
     private void checkGalleryPermission() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (getActivity().checkSelfPermission(android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED && getActivity().checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && getActivity().checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                LogUtils.info("testing", "Permission is granted");
                 ((HomeActivity) getActivity()).selectImageFrmGallery();
             } else {
                 ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.CAMERA, android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 101);
-                LogUtils.info("testing", "Permission is revoked");
             }
         } else { //permission is automatically granted on sdk<23 upon installation
             ((HomeActivity) getActivity()).selectImageFrmGallery();
@@ -148,14 +146,11 @@ public class ChallengeSuccessDialogFragment extends BaseDialogFragment implement
     private void checkCameraPermission() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (getActivity().checkSelfPermission(android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED && getActivity().checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && getActivity().checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                LogUtils.info("testing", "Permission is granted");
                 ((HomeActivity) getActivity()).selectImageFrmCamera();
             } else {
                 ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.CAMERA, android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 101);
-                LogUtils.info("testing", "Permission is revoked");
             }
         } else { //permission is automatically granted on sdk<23 upon installation
-            LogUtils.info("testing", "Permission is already granted");
             ((HomeActivity) getActivity()).selectImageFrmCamera();
         }
     }

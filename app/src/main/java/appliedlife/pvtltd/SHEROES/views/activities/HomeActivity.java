@@ -12,6 +12,8 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,6 +29,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -64,10 +67,12 @@ import com.moe.pushlibrary.PayloadBuilder;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -85,10 +90,12 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.DrawerItems;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.LatLongWithLocation;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQS;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
+import appliedlife.pvtltd.SHEROES.service.GPSTracker;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -117,6 +124,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.SettingTermsAndConditionFragme
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ChallengeSuccessDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ChallengeUpdateProgressDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.MakeIndiaSafeDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.MyCommunityInviteMemberDialogFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -220,6 +228,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     private long mEventId;
     private String mHelpLineChat;
     private EventDetailDialogFragment eventDetailDialogFragment;
+    private MakeIndiaSafeDialogFragment makeIndiaSafeDialogFragment;
     private ProgressDialog mProgressDialog;
     private boolean isInviteReferral;
 
@@ -244,6 +253,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         InviteReferralsApi.getInstance(this).showWelcomeMessage();
         InviteReferralsApi.getInstance(this).invite(AppConstants.HOME);
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -251,7 +261,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             if (null != mProgressDialog) {
                 mProgressDialog.dismiss();
             }
-            isInviteReferral=false;
+            isInviteReferral = false;
         } else {
             setProfileImage();
         }
@@ -718,6 +728,60 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             eventDetailDialogFragment.show(getFragmentManager(), EventDetailDialogFragment.class.getName());
         }
         return eventDetailDialogFragment;
+    }
+
+    private void locationTracker() {
+        GPSTracker gps = new GPSTracker(this);
+        // check if GPS enabled
+        if (gps.canGetLocation()) {
+            LatLongWithLocation latLongWithLocation = new LatLongWithLocation();
+            double latitude = gps.getLatitude();
+            double longitude = gps.getLongitude();
+            latLongWithLocation.setLatitude(latitude);
+            latLongWithLocation.setLongitude(longitude);
+            String cityName, locality, state;
+            Geocoder geocoder = new Geocoder(HomeActivity.this, Locale.getDefault());
+            List<Address> addresses = null;
+            try {
+                addresses = geocoder.getFromLocation(latitude, longitude, 1);
+                if (StringUtil.isNotEmptyCollection(addresses)) {
+                    if (StringUtil.isNotNullOrEmptyString(addresses.get(0).getLocality())) {
+                        cityName = addresses.get(0).getLocality();
+                        latLongWithLocation.setCityName(cityName);
+                    }
+                    if (StringUtil.isNotNullOrEmptyString(addresses.get(0).getAddressLine(1))) {
+                        locality = addresses.get(0).getAddressLine(1);
+                        latLongWithLocation.setLocality(locality);
+                    }
+                    if (StringUtil.isNotNullOrEmptyString(addresses.get(0).getAddressLine(2))) {
+                        state = addresses.get(0).getAddressLine(2);
+                        latLongWithLocation.setState(state);
+                    }
+
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            makeWomenSafeDialog(latLongWithLocation);
+        } else {
+            // can't get location
+            // GPS or Network is not enabled
+            // Ask user to enable GPS/network in settings
+            gps.showSettingsAlert();
+        }
+    }
+    public DialogFragment makeWomenSafeDialog(LatLongWithLocation latLongWithLocation) {
+        makeIndiaSafeDialogFragment = (MakeIndiaSafeDialogFragment) getFragmentManager().findFragmentByTag(MakeIndiaSafeDialogFragment.class.getName());
+        if (makeIndiaSafeDialogFragment == null) {
+            makeIndiaSafeDialogFragment = new MakeIndiaSafeDialogFragment();
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(AppConstants.LAT_LONG_DETAIL, latLongWithLocation);
+            makeIndiaSafeDialogFragment.setArguments(bundle);
+        }
+        if (!makeIndiaSafeDialogFragment.isVisible() && !makeIndiaSafeDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
+            makeIndiaSafeDialogFragment.show(getFragmentManager(), MakeIndiaSafeDialogFragment.class.getName());
+        }
+        return makeIndiaSafeDialogFragment;
     }
 
     private void totalTimeSpentOnFeed() {
@@ -1302,6 +1366,11 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         callBellNotification();
     }
 
+    @OnClick(R.id.tv_make_india_safe)
+    public void tvOnClickMakeIndiasafe() {
+        locationTracker();
+
+    }
 
     @OnClick(R.id.tv_drawer_navigation)
     public void drawerNavigationClick() {
@@ -1459,12 +1528,24 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
 
     public void selectImageFrmCamera() {
         if (Build.VERSION.SDK_INT >= 23) {
-            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                mImageCaptureUri = Uri.fromFile(localImageSaveForChallenge);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
-                intent.putExtra("return-data", true);
-                startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_CAMERA);
+                if (null == localImageSaveForChallenge&&null==mImageCaptureUri) {
+                    Uri imageCaptureUri;
+                    File localImageSaveForChallenge;
+                    localImageSaveForChallenge = new File(Environment.getExternalStorageDirectory(), AppConstants.IMAGE + AppConstants.JPG_FORMATE);
+                    imageCaptureUri = Uri.fromFile(localImageSaveForChallenge);
+                    this.localImageSaveForChallenge=localImageSaveForChallenge;
+                    mImageCaptureUri=imageCaptureUri;
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, imageCaptureUri);
+                    intent.putExtra("return-data", true);
+                    startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_CAMERA);
+                } else {
+                    mImageCaptureUri = Uri.fromFile(localImageSaveForChallenge);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
+                    intent.putExtra("return-data", true);
+                    startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_CAMERA);
+                }
             }
         } else {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -1478,7 +1559,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
 
     public void selectImageFrmGallery() {
         if (Build.VERSION.SDK_INT >= 23) {
-            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 try {
                     Intent galIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     galIntent.setType("image/*");
@@ -1529,6 +1610,9 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 Bitmap photo = decodeFile(localImageSaveForChallenge);
                 if (null != mChallengeSuccessDialogFragment) {
                     mChallengeSuccessDialogFragment.setImageOnHolder(photo);
+                }
+                if (null != makeIndiaSafeDialogFragment) {
+                    makeIndiaSafeDialogFragment.setImageOnHolder(photo, localImageSaveForChallenge);
                 }
             } else {
                 Toast.makeText(this, "Error while save image", Toast.LENGTH_SHORT).show();

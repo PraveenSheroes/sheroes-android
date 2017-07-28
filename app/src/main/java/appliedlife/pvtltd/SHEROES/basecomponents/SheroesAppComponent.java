@@ -114,6 +114,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDial
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.FunctionalAreaDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.InviteCommunityMemberDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.JobLocationSearchDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.MakeIndiaSafeDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.MyCommunityInviteMemberDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.OnBoardingDailogHeySuccess;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.OnBoardingSearchDialogFragment;
@@ -610,6 +611,8 @@ public interface SheroesAppComponent {
 
     void inject(ProfileImageDialogFragment profileImageDialogFragment);
     void inject(AppIntroCardHolder appIntroCardHolder);
+
+    void inject(MakeIndiaSafeDialogFragment makeIndiaSafeDialogFragment);
 
 
 }
