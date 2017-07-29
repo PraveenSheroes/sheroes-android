@@ -168,6 +168,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     TextView mTvSetting;
     @Bind(R.id.tv_home)
     TextView mTvHome;
+    @Bind(R.id.tv_make_india_safe)
+    TextView mTvMakeIndiaSafe;
     @Bind(R.id.tv_communities)
     TextView mTvCommunities;
     @Bind(R.id.li_article_spinner_icon)
@@ -730,6 +732,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     }
 
     private void locationTracker() {
+
         GPSTracker gps = new GPSTracker(this);
         // check if GPS enabled
         if (gps.canGetLocation()) {
@@ -756,12 +759,11 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                         state = addresses.get(0).getAddressLine(2);
                         latLongWithLocation.setState(state);
                     }
-
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            makeWomenSafeDialog(latLongWithLocation);
+           makeWomenSafeDialog(latLongWithLocation);
         } else {
             // can't get location
             // GPS or Network is not enabled
@@ -1368,8 +1370,15 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
 
     @OnClick(R.id.tv_make_india_safe)
     public void tvOnClickMakeIndiasafe() {
-        locationTracker();
-
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                locationTracker();
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, AppConstants.REQUEST_CODE_FOR_LOCATION);
+            }
+        } else {
+            locationTracker();
+        }
     }
 
     @OnClick(R.id.tv_drawer_navigation)

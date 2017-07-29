@@ -70,7 +70,7 @@
                     android:layout_marginRight="@dimen/dp_size_20"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:text="Doy you see"
-                    android:textColor="@color/once_card"
+                    android:textColor="@color/dashboard_text"
                     android:textSize="@dimen/sp_size_14" />
 
                 <TextView
@@ -127,18 +127,64 @@
                     android:layout_marginLeft="@dimen/dp_size_20"
                     android:layout_marginRight="@dimen/dp_size_20"
                     android:layout_marginTop="@dimen/dp_size_50"
+                    android:padding="@dimen/dp_size_10"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:text="No,Locality Pretty Safe for Women"
                     android:textAlignment="center"
-                    android:textColor="@color/pure_black"
+                    android:textColor="@color/search_tab_text"
                     android:textSize="@dimen/sp_size_14" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_size_20"
+                    android:layout_marginRight="@dimen/dp_size_20"
+                    android:layout_marginTop="@dimen/dp_size_30"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:text="@string/ID_POST_AS_ON_SHEROES"
+                    android:textColor="@color/detail_page_text"
+                    android:textSize="@dimen/sp_size_14" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dp_size_50"
+                    android:layout_marginLeft="@dimen/dp_size_15"
+                    android:layout_marginTop="@dimen/dp_size_20"
+                    android:layout_marginRight="@dimen/dp_size_15">
+
+                    <CheckBox
+                        android:id="@+id/cb_post_as_annonyms_by_link"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginBottom="@dimen/dp_size_10"
+                        android:button="@drawable/customecheckbox"
+                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                        android:paddingLeft="@dimen/dp_size_10"
+                        android:text="@string/ID_ANONYMOUS"
+                        android:checked="false"
+                        android:textAllCaps="true"
+                        android:textSize="@dimen/sp_size_14" />
+
+                    <CheckBox
+                        android:id="@+id/cb_post_as_first_name_by_link"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_size_25"
+                        android:layout_toRightOf="@+id/cb_post_as_annonyms_by_link"
+                        android:button="@drawable/customecheckbox"
+                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                        android:text="@string/ID_USER_NAME"
+                        android:paddingLeft="@dimen/dp_size_10"
+                        android:textAllCaps="true"
+                        android:textSize="@dimen/sp_size_14" />
+                </RelativeLayout>
             </LinearLayout>
         </ScrollView>
         <ScrollView
             android:id="@+id/scroll_make_india_safe_image_holder"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone">
+            android:visibility="gone"
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -151,17 +197,38 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/dp_size_16"
                     android:adjustViewBounds="true" />
-
-                <TextView
-                    android:id="@+id/tv_make_india_safe_description"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_size_20"
-                    android:layout_marginRight="@dimen/dp_size_20"
-                    android:layout_marginTop="@dimen/dp_size_50"
-                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:textColor="@color/detail_page_text"
-                    android:textSize="@dimen/sp_size_14" />
+                    android:layout_height="@dimen/dp_size_80"
+                    android:layout_marginTop="@dimen/dp_size_8"
+                    android:gravity="bottom"
+                    android:orientation="vertical">
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/dp_size_8"
+                            android:layout_weight="1">
+
+                            <EditText
+                                android:id="@+id/et_make_india_safe_description"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/dp_size_10"
+                                android:layout_marginRight="@dimen/dp_size_10"
+                                android:background="@color/fully_transparent"
+                                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                                android:cursorVisible="true"
+                                android:hint="@string/ID_SHARE_WITH_COMMUNITY"
+                                android:inputType="textCapSentences|textMultiLine"
+                                android:lineSpacingExtra="@dimen/dp_size_4"
+                                android:minHeight="@dimen/dp_size_48"
+                                android:textColor="@color/black"
+                                android:textColorHint="@color/user_comment_text"
+                                android:textSize="@dimen/sp_size_12"
+                                android:windowSoftInputMode="stateHidden" />
+                        </FrameLayout>
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/tv_share_with_friends"
@@ -200,7 +267,7 @@
                     android:layout_marginRight="@dimen/dp_size_15">
 
                     <CheckBox
-                        android:id="@+id/cb_post_as_first_name"
+                        android:id="@+id/cb_post_as_annonyms"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
@@ -208,21 +275,21 @@
                         android:button="@drawable/customecheckbox"
                         android:fontFamily="@string/ID_ROBOTO_REGULAR"
                         android:paddingLeft="@dimen/dp_size_10"
-                        android:text="@string/ID_OPEN"
+                        android:text="@string/ID_ANONYMOUS"
+                        android:checked="false"
                         android:textAllCaps="true"
                         android:textSize="@dimen/sp_size_14" />
 
                     <CheckBox
-                        android:id="@+id/cb_post_as_annonyms"
+                        android:id="@+id/cb_post_as_first_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dp_size_25"
-                        android:layout_toRightOf="@+id/cb_post_as_first_name"
+                        android:layout_toRightOf="@+id/cb_post_as_annonyms"
                         android:button="@drawable/customecheckbox"
-                        android:checked="false"
                         android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                        android:text="@string/ID_USER_NAME"
                         android:paddingLeft="@dimen/dp_size_10"
-                        android:text="@string/ID_ANONYMOUS"
                         android:textAllCaps="true"
                         android:textSize="@dimen/sp_size_14" />
                 </RelativeLayout>

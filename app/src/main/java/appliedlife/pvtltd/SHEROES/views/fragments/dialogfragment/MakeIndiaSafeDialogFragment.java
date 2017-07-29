@@ -15,10 +15,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.f2prateek.rx.preferences.Preference;
 
@@ -34,6 +36,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
@@ -72,8 +75,8 @@ public class MakeIndiaSafeDialogFragment extends BaseDialogFragment implements C
     TextView tvTvDonotStayQuiet;
     @Bind(R.id.tv_message_for_safe)
     TextView tvTvMessageForSafe;
-    @Bind(R.id.tv_make_india_safe_description)
-    TextView tvTvMakeIndiaSafeDescription;
+    @Bind(R.id.et_make_india_safe_description)
+    EditText etTvMakeIndiaSafeDescription;
     @Inject
     Preference<LoginResponse> mUserPreference;
     LatLongWithLocation mLatLongWithLocation;
@@ -83,6 +86,10 @@ public class MakeIndiaSafeDialogFragment extends BaseDialogFragment implements C
     CheckBox mCbPostName;
     @Bind(R.id.cb_post_as_annonyms)
     CheckBox mCbPostAsAnnoyms;
+    @Bind(R.id.cb_post_as_first_name_by_link)
+    CheckBox mCbPostNameByLink;
+    @Bind(R.id.cb_post_as_annonyms_by_link)
+    CheckBox mCbPostAsAnnoymsByLink;
     @Bind(R.id.scroll_make_india_safe_events)
     ScrollView scrollMakeIndiaSafeEvent;
     @Bind(R.id.scroll_make_india_safe_image_holder)
@@ -97,6 +104,7 @@ public class MakeIndiaSafeDialogFragment extends BaseDialogFragment implements C
     private String mCreaterType;
     private File localImageSaveForChallenge;
     private boolean isCreatedPost;
+    private boolean isLinkClicked;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -116,21 +124,26 @@ public class MakeIndiaSafeDialogFragment extends BaseDialogFragment implements C
     }
 
     private void initialize() {
-        mCreaterType = AppConstants.USER;
-        mCbPostName.setChecked(true);
+        mCreaterType = getString(R.string.ID_COMMUNITY_ANNONYMOUS);
+        mCbPostAsAnnoyms.setChecked(true);
+        mCbPostAsAnnoymsByLink.setChecked(true);
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
             mCbPostName.setText(mUserPreference.get().getUserSummary().getFirstName());
+            mCbPostNameByLink.setText(mUserPreference.get().getUserSummary().getFirstName());
         }
         if (null != mLatLongWithLocation) {
             if (StringUtil.isNotNullOrEmptyString(mLatLongWithLocation.getLocality())) {
-                String title = getString(R.string.ID_DO_YOU_SEE) + AppConstants.SPACE + mLatLongWithLocation.getLocality() + AppConstants.SPACE + getString(R.string.ID_YOUR_LOCALITY);
+                String title = getString(R.string.ID_DO_YOU_SEE) + AppConstants.SPACE + mLatLongWithLocation.getLocality() + AppConstants.SPACE + "?";
                 tvTitleMakeIndiaSafe.setText(title);
             } else {
-                String title = getString(R.string.ID_DO_YOU_SEE) + local + getString(R.string.ID_YOUR_LOCALITY);
+                String title = getString(R.string.ID_DO_YOU_SEE) + getString(R.string.ID_YOUR_LOCALITY);
                 tvTitleMakeIndiaSafe.setText(title);
             }
             if (StringUtil.isNotNullOrEmptyString(mLatLongWithLocation.getLocality())) {
                 String locality = getString(R.string.ID_NO) + AppConstants.COMMA + mLatLongWithLocation.getLocality() + AppConstants.SPACE + getString(R.string.ID_LOCALITY_NAME);
+                tvTvMessageForSafe.setText(locality);
+            } else {
+                String locality = getString(R.string.ID_NO) + AppConstants.COMMA + local + AppConstants.SPACE + getString(R.string.ID_LOCALITY_NAME);
                 tvTvMessageForSafe.setText(locality);
             }
         }
@@ -152,6 +165,24 @@ public class MakeIndiaSafeDialogFragment extends BaseDialogFragment implements C
         };
     }
 
+    @OnClick(R.id.tv_message_for_safe)
+    public void onMessafeForSafe() {
+        if (null != mLatLongWithLocation) {
+            StringBuilder desc = new StringBuilder();
+            if (StringUtil.isNotNullOrEmptyString(mLatLongWithLocation.getLocality())) {
+                desc.append("My locality,").append(AppConstants.SPACE).append(mLatLongWithLocation.getLocality()).append(AppConstants.SPACE).append(mLatLongWithLocation.getCityName()).append(AppConstants.SPACE).append("is a pretty safe place for women. #MakeIndiaSafe");
+            } else {
+                desc.append("My locality,").append("is a pretty safe place for women. #MakeIndiaSafe");
+            }
+            isLinkClicked = true;
+            mLatLongWithLocation.setDescription(desc.toString());
+            CommunityPostCreateRequest communityPostCreateRequest = createCommunityPostRequestBuilder(mCommunityId, mCreaterType, mLatLongWithLocation.getDescription(), null, null, null);
+            communityPostCreateRequest.setLattitude(mLatLongWithLocation.getLatitude());
+            communityPostCreateRequest.setLongitude(mLatLongWithLocation.getLongitude());
+            mCreateCommunityPresenter.postCommunityList(communityPostCreateRequest);
+        }
+    }
+
     @OnClick(R.id.tv_click_pic_and_tell_friends)
     public void onClickPicTellFriend() {
         checkCameraPermission();
@@ -171,15 +202,6 @@ public class MakeIndiaSafeDialogFragment extends BaseDialogFragment implements C
         startActivity(Intent.createChooser(intent, AppConstants.SHARE));
     }
 
-    private void shareWithFriend() {
-        StringBuilder shareData = new StringBuilder();
-        if (StringUtil.isNotNullOrEmptyString(mLatLongWithLocation.getLocality())) {
-            shareData.append(messageFirst).append(AppConstants.SPACE).append(mLatLongWithLocation.getLocality()).append(AppConstants.SPACE).append(messageSecond);
-        } else {
-            shareData.append(messageFirst).append(local).append(messageSecond);
-        }
-    }
-
     @OnClick(R.id.cb_post_as_first_name)
     public void OnPostAsNameClick() {
         mCbPostAsAnnoyms.setChecked(false);
@@ -189,6 +211,18 @@ public class MakeIndiaSafeDialogFragment extends BaseDialogFragment implements C
     @OnClick(R.id.cb_post_as_annonyms)
     public void OnPostAnnonymsClick() {
         mCbPostName.setChecked(false);
+        mCreaterType = getString(R.string.ID_COMMUNITY_ANNONYMOUS);
+    }
+
+    @OnClick(R.id.cb_post_as_first_name_by_link)
+    public void OnPostAsNameByLinkClick() {
+        mCbPostAsAnnoymsByLink.setChecked(false);
+        mCreaterType = AppConstants.USER;
+    }
+
+    @OnClick(R.id.cb_post_as_annonyms_by_link)
+    public void OnPostAnnonymsByLinkClick() {
+        mCbPostNameByLink.setChecked(false);
         mCreaterType = getString(R.string.ID_COMMUNITY_ANNONYMOUS);
     }
 
@@ -208,11 +242,14 @@ public class MakeIndiaSafeDialogFragment extends BaseDialogFragment implements C
         if (null != mLatLongWithLocation) {
             List<String> imag = new ArrayList<>();
             Long mIdForEditPost = null;
-            mLatLongWithLocation.setDescription(tvTvMakeIndiaSafeDescription.getText().toString());
+            mLatLongWithLocation.setDescription(etTvMakeIndiaSafeDescription.getText().toString());
             if (StringUtil.isNotNullOrEmptyString(encodedImageUrl)) {
                 imag.add(encodedImageUrl);
             }
-            mCreateCommunityPresenter.postCommunityList(createCommunityPostRequestBuilder(mCommunityId, mCreaterType, tvTvMakeIndiaSafeDescription.getText().toString(), imag, mIdForEditPost, null));
+            CommunityPostCreateRequest communityPostCreateRequest = createCommunityPostRequestBuilder(mCommunityId, mCreaterType, etTvMakeIndiaSafeDescription.getText().toString(), imag, mIdForEditPost, null);
+            communityPostCreateRequest.setLattitude(mLatLongWithLocation.getLatitude());
+            communityPostCreateRequest.setLongitude(mLatLongWithLocation.getLongitude());
+            mCreateCommunityPresenter.postCommunityList(communityPostCreateRequest);
         }
     }
 
@@ -227,7 +264,11 @@ public class MakeIndiaSafeDialogFragment extends BaseDialogFragment implements C
         } else {
             shareData.append(messageFirst).append(local).append(messageSecond);
         }
-        tvTvMakeIndiaSafeDescription.setText(shareData.toString());
+        etTvMakeIndiaSafeDescription.setText(shareData.toString());
+        etTvMakeIndiaSafeDescription.setSelection(shareData.toString().length());
+        etTvMakeIndiaSafeDescription.setCursorVisible(true);
+        etTvMakeIndiaSafeDescription.setFocusableInTouchMode(true);
+        etTvMakeIndiaSafeDescription.requestFocus();
         byte[] buffer = new byte[4096];
         if (null != photo) {
             buffer = getBytesFromBitmap(photo);
@@ -280,11 +321,17 @@ public class MakeIndiaSafeDialogFragment extends BaseDialogFragment implements C
         if (StringUtil.isNotNullOrEmptyString(createCommunityResponse.getStatus())) {
             switch (createCommunityResponse.getStatus()) {
                 case AppConstants.SUCCESS:
-                    isCreatedPost = true;
-                    FeedDetail feedDetail = createCommunityResponse.getFeedDetail();
-                    if (null != feedDetail) {
-                        mLatLongWithLocation.setEntityOrParticipantId(feedDetail.getEntityOrParticipantId());
-                        mCreateCommunityPresenter.getMakeIndiaSafeFromPresenter(mAppUtils.makeIndiaSafeRequestBuilder(mLatLongWithLocation));
+                    if (isLinkClicked) {
+                        Toast.makeText(getActivity(), "Awesome! Thanks for helping SHEROES #MakeIndiaSafe", Toast.LENGTH_SHORT).show();
+                        ((HomeActivity) getActivity()).homeOnClick();
+                        dismiss();
+                    } else {
+                        isCreatedPost = true;
+                        FeedDetail feedDetail = createCommunityResponse.getFeedDetail();
+                        if (null != feedDetail) {
+                            mLatLongWithLocation.setEntityOrParticipantId(feedDetail.getEntityOrParticipantId());
+                            mCreateCommunityPresenter.getMakeIndiaSafeFromPresenter(mAppUtils.makeIndiaSafeRequestBuilder(mLatLongWithLocation));
+                        }
                     }
                     break;
                 case AppConstants.FAILED:
