@@ -89,7 +89,7 @@ public class MakeIndiaSafeDialogFragment extends BaseDialogFragment implements C
     ScrollView scrollMakeIndiaSafeImageHolder;
     @Bind(R.id.pb_login_progress_bar)
     ProgressBar mProgressBar;
-    private Long mCommunityId=273l;
+    private Long mCommunityId = 273l;
     private String encodedImageUrl;
     private String messageFirst = "Hey, I have been seeing events of women getting harassed in";
     private String messageSecond = "I think we should do something about it. How should we go ahead? #MakeIndiaSafe I shared this via SHEROES app- a women only safe space to talk openly without getting judged. You should also install the app from play store here: tinyurl.com/sheroes-app-safe-india";
@@ -97,6 +97,7 @@ public class MakeIndiaSafeDialogFragment extends BaseDialogFragment implements C
     private String mCreaterType;
     private File localImageSaveForChallenge;
     private boolean isCreatedPost;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getActivity()).inject(this);
@@ -129,7 +130,7 @@ public class MakeIndiaSafeDialogFragment extends BaseDialogFragment implements C
                 tvTitleMakeIndiaSafe.setText(title);
             }
             if (StringUtil.isNotNullOrEmptyString(mLatLongWithLocation.getLocality())) {
-                String locality = getString(R.string.ID_NO)+ AppConstants.SPACE+ mLatLongWithLocation.getLocality() + AppConstants.SPACE + getString(R.string.ID_LOCALITY_NAME);
+                String locality = getString(R.string.ID_NO) + AppConstants.COMMA + mLatLongWithLocation.getLocality() + AppConstants.SPACE + getString(R.string.ID_LOCALITY_NAME);
                 tvTvMessageForSafe.setText(locality);
             }
         }
@@ -140,8 +141,12 @@ public class MakeIndiaSafeDialogFragment extends BaseDialogFragment implements C
         return new Dialog(getActivity(), R.style.Theme_Material_Light_Dialog_NoMinWidth) {
             @Override
             public void onBackPressed() {
-                if(!isCreatedPost) {
+                if (!isCreatedPost) {
                     dismiss();
+                } else {
+                    dismiss();
+                    ((HomeActivity) getActivity()).homeOnClick();
+
                 }
             }
         };
@@ -162,7 +167,7 @@ public class MakeIndiaSafeDialogFragment extends BaseDialogFragment implements C
         }
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
-        intent.putExtra(Intent.EXTRA_TEXT,shareData.toString());
+        intent.putExtra(Intent.EXTRA_TEXT, shareData.toString());
         startActivity(Intent.createChooser(intent, AppConstants.SHARE));
     }
 
@@ -189,8 +194,12 @@ public class MakeIndiaSafeDialogFragment extends BaseDialogFragment implements C
 
     @OnClick(R.id.tv_make_india_safe_back)
     public void backMakeIndiaSafe() {
-        if(!isCreatedPost) {
+        if (!isCreatedPost) {
             dismiss();
+        } else {
+            dismiss();
+            ((HomeActivity) getActivity()).homeOnClick();
+
         }
     }
 
@@ -203,13 +212,12 @@ public class MakeIndiaSafeDialogFragment extends BaseDialogFragment implements C
             if (StringUtil.isNotNullOrEmptyString(encodedImageUrl)) {
                 imag.add(encodedImageUrl);
             }
-            isCreatedPost=true;
             mCreateCommunityPresenter.postCommunityList(createCommunityPostRequestBuilder(mCommunityId, mCreaterType, tvTvMakeIndiaSafeDescription.getText().toString(), imag, mIdForEditPost, null));
         }
     }
 
-    public void setImageOnHolder(Bitmap photo,File localImageSaveForChallenge) {
-        this.localImageSaveForChallenge=localImageSaveForChallenge;
+    public void setImageOnHolder(Bitmap photo, File localImageSaveForChallenge) {
+        this.localImageSaveForChallenge = localImageSaveForChallenge;
         ivMakeIndiaSafePic.setImageBitmap(photo);
         scrollMakeIndiaSafeEvent.setVisibility(View.GONE);
         scrollMakeIndiaSafeImageHolder.setVisibility(View.VISIBLE);
@@ -237,7 +245,7 @@ public class MakeIndiaSafeDialogFragment extends BaseDialogFragment implements C
 
     private void checkCameraPermission() {
         if (Build.VERSION.SDK_INT >= 23) {
-            if (ActivityCompat.checkSelfPermission(getActivity(),android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(),android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(),android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 ((HomeActivity) getActivity()).selectImageFrmCamera();
             } else {
                 ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.CAMERA, android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 101);
@@ -266,13 +274,13 @@ public class MakeIndiaSafeDialogFragment extends BaseDialogFragment implements C
             MakeIndiaSafeResponse makeIndiaSafeResponse = ((MakeIndiaSafeResponse) baseResponse);
             makeIndiaSafeResponse(makeIndiaSafeResponse);
         }
-
     }
 
     private void communityPostResponse(CreateCommunityResponse createCommunityResponse) {
         if (StringUtil.isNotNullOrEmptyString(createCommunityResponse.getStatus())) {
             switch (createCommunityResponse.getStatus()) {
                 case AppConstants.SUCCESS:
+                    isCreatedPost = true;
                     FeedDetail feedDetail = createCommunityResponse.getFeedDetail();
                     if (null != feedDetail) {
                         mLatLongWithLocation.setEntityOrParticipantId(feedDetail.getEntityOrParticipantId());
@@ -283,7 +291,6 @@ public class MakeIndiaSafeDialogFragment extends BaseDialogFragment implements C
                     break;
                 default:
             }
-            isCreatedPost=false;
         }
     }
 
@@ -291,7 +298,7 @@ public class MakeIndiaSafeDialogFragment extends BaseDialogFragment implements C
         if (StringUtil.isNotNullOrEmptyString(makeIndiaSafeResponse.getStatus())) {
             switch (makeIndiaSafeResponse.getStatus()) {
                 case AppConstants.SUCCESS:
-                    Uri uri = Uri.parse("file://"+localImageSaveForChallenge.getAbsolutePath());
+                    Uri uri = Uri.parse("file://" + localImageSaveForChallenge.getAbsolutePath());
                     Intent share = new Intent(Intent.ACTION_SEND);
                     share.putExtra(Intent.EXTRA_STREAM, uri);
                     share.putExtra(Intent.EXTRA_TEXT, mLatLongWithLocation.getDescription());
@@ -320,6 +327,7 @@ public class MakeIndiaSafeDialogFragment extends BaseDialogFragment implements C
     public void getSuccessForAllResponse(BaseResponse baseResponse, CommunityEnum communityEnum) {
 
     }
+
     @Override
     public void startProgressBar() {
         if (null != mProgressBar) {

@@ -14,35 +14,39 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_size_3"
+        android:weightSum="@integer/int_value_for_line_1"
         android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/iv_feed_community_post_second_image_landscape"
-            android:layout_width="@dimen/multiple_image_rectangle"
+            android:layout_width="0dp"
+            android:layout_weight=".33"
             android:layout_height="@dimen/multiple_image_rectangle"
             android:scaleType="centerCrop" />
 
         <ImageView
             android:id="@+id/iv_feed_community_post_third_image_landscape"
-            android:layout_width="@dimen/multiple_image_rectangle"
+            android:layout_width="0dp"
+            android:layout_weight=".33"
             android:layout_height="@dimen/multiple_image_rectangle"
             android:layout_marginLeft="@dimen/dp_size_3"
             android:scaleType="centerCrop" />
 
         <FrameLayout
-            android:layout_width="@dimen/multiple_image_rectangle"
+            android:layout_width="0dp"
+            android:layout_weight=".33"
             android:layout_height="@dimen/multiple_image_rectangle"
             android:layout_marginLeft="@dimen/dp_size_3">
 
             <ImageView
                 android:id="@+id/iv_feed_community_post_fourth_image_landscape"
-                android:layout_width="@dimen/multiple_image_rectangle"
+                android:layout_width="match_parent"
                 android:layout_height="@dimen/multiple_image_rectangle"
                 android:scaleType="centerCrop" />
 
             <TextView
                 android:id="@+id/tv_feed_community_image_more"
-                android:layout_width="@dimen/multiple_image_rectangle"
+                android:layout_width="match_parent"
                 android:layout_height="@dimen/multiple_image_rectangle"
                 android:alpha=".7"
                 android:background="@color/black"
@@ -51,7 +55,7 @@
 
             <TextView
                 android:id="@+id/tv_feed_community_post_landscape_total_images"
-                android:layout_width="@dimen/multiple_image_rectangle"
+                android:layout_width="match_parent"
                 android:layout_height="@dimen/multiple_image_rectangle"
                 android:fontFamily="@string/ID_ROBOTO_LIGHT"
                 android:gravity="center"
