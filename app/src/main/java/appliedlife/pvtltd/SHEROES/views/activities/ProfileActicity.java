@@ -1213,21 +1213,46 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
 
     public void selectImageFrmCamera() {
         if (Build.VERSION.SDK_INT >= 23) {
-            if (ActivityCompat.checkSelfPermission(this,android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&ActivityCompat.checkSelfPermission(this,android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if (null == localImageSaveForChallenge && null == mImageCaptureUri) {
+                    Uri imageCaptureUri;
+                    File localImageSaveForChallenge;
+                    localImageSaveForChallenge = new File(Environment.getExternalStorageDirectory(), AppConstants.IMAGE + AppConstants.JPG_FORMATE);
+                    imageCaptureUri = Uri.fromFile(localImageSaveForChallenge);
+                    this.localImageSaveForChallenge = localImageSaveForChallenge;
+                    mImageCaptureUri = imageCaptureUri;
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, imageCaptureUri);
+                    intent.putExtra("return-data", true);
+                    startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_CAMERA);
+                } else {
+                    mImageCaptureUri = Uri.fromFile(localImageSaveForChallenge);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
+                    intent.putExtra("return-data", true);
+                    startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_CAMERA);
+                }
+            }
+        } else {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if (null == localImageSaveForChallenge && null == mImageCaptureUri) {
+                Uri imageCaptureUri;
+                File localImageSaveForChallenge;
+                localImageSaveForChallenge = new File(Environment.getExternalStorageDirectory(), AppConstants.IMAGE + AppConstants.JPG_FORMATE);
+                imageCaptureUri = Uri.fromFile(localImageSaveForChallenge);
+                this.localImageSaveForChallenge = localImageSaveForChallenge;
+                mImageCaptureUri = imageCaptureUri;
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
+                intent.putExtra("return-data", true);
+                startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_CAMERA);
+
+            } else {
                 mImageCaptureUri = Uri.fromFile(localImageSaveForChallenge);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
                 intent.putExtra("return-data", true);
                 startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_CAMERA);
             }
-        } else {
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            mImageCaptureUri = Uri.fromFile(localImageSaveForChallenge);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
-            intent.putExtra("return-data", true);
-            startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_CAMERA);
+
         }
 
     }
-
 }

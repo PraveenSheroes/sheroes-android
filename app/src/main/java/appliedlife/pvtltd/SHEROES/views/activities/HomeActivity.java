@@ -169,7 +169,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     @Bind(R.id.tv_home)
     TextView mTvHome;
     @Bind(R.id.tv_make_india_safe)
-    TextView mTvMakeIndiaSafe;
+    ImageView mTvMakeIndiaSafe;
     @Bind(R.id.tv_communities)
     TextView mTvCommunities;
     @Bind(R.id.li_article_spinner_icon)
@@ -732,7 +732,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     }
 
     private void locationTracker() {
-
         GPSTracker gps = new GPSTracker(this);
         // check if GPS enabled
         if (gps.canGetLocation()) {
@@ -763,7 +762,15 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             } catch (IOException e) {
                 e.printStackTrace();
             }
-           makeWomenSafeDialog(latLongWithLocation);
+            makeWomenSafeDialog(latLongWithLocation);
+           /* if(latitude>0&&longitude>0)
+            {
+                makeWomenSafeDialog(latLongWithLocation);
+            }else
+            {
+                showNetworkTimeoutDoalog(true, true, "Please Goto setting->Permission control->Get loc-> SHEROES app allow");
+            }*/
+
         } else {
             // can't get location
             // GPS or Network is not enabled
@@ -1156,6 +1163,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     }
 
     public void openJobFragment() {
+        mTvMakeIndiaSafe.setVisibility(View.GONE);
         mJobFragment.setVisibility(View.VISIBLE);
         mTvSearchBox.setVisibility(View.VISIBLE);
         mICSheroes.setVisibility(View.GONE);
@@ -1238,6 +1246,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             mJobFragment.setVisibility(View.GONE);
             mTvSearchBox.setVisibility(View.GONE);
             mICSheroes.setVisibility(View.VISIBLE);
+            mTvMakeIndiaSafe.setVisibility(View.VISIBLE);
             getSupportFragmentManager().popBackStackImmediate();
             initHomeViewPagerAndTabs();
             setHomeFeedCommunityData();

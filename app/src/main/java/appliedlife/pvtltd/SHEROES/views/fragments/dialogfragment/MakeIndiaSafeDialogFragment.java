@@ -98,7 +98,7 @@ public class MakeIndiaSafeDialogFragment extends BaseDialogFragment implements C
     ProgressBar mProgressBar;
     private Long mCommunityId = 273l;
     private String encodedImageUrl;
-    private String messageFirst = "Hey, I have been seeing events of women getting harassed in";
+    private String messageFirst = "Hey, I have been seeing events of women getting harassed in ";
     private String messageSecond = "I think we should do something about it. How should we go ahead? #MakeIndiaSafe I shared this via SHEROES app- a women only safe space to talk openly without getting judged. You should also install the app from play store here: tinyurl.com/sheroes-app-safe-india";
     private String local = " my locality ";
     private String mCreaterType;
