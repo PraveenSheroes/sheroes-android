@@ -32,6 +32,10 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.MentorFollowUnfollowResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.MentorFollowerRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.PublicProfileListRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.PublicProfileListResponse;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -55,6 +59,54 @@ public class HomeModel {
     public HomeModel(SheroesAppServiceApi sheroesAppServiceApi,Gson gson) {
         this.sheroesAppServiceApi = sheroesAppServiceApi;
         this.gson= gson;
+    }
+    public Observable<PublicProfileListResponse> getPublicProfileMentorListFromModel(PublicProfileListRequest publicProfileListRequest){
+        LogUtils.info(TAG,"*******************"+new Gson().toJson(publicProfileListRequest));
+        return sheroesAppServiceApi.getPublicProfileListFromApi(publicProfileListRequest)
+                .map(new Func1<PublicProfileListResponse, PublicProfileListResponse>() {
+                    @Override
+                    public PublicProfileListResponse call(PublicProfileListResponse publicProfileListResponse) {
+                        return publicProfileListResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+    public Observable<PublicProfileListResponse> getCountOfFollowerFromModel(MentorFollowerRequest mentorFollowerRequest){
+        LogUtils.info(TAG,"*******************"+new Gson().toJson(mentorFollowerRequest));
+        return sheroesAppServiceApi.getCountOfFollowerFromApi(mentorFollowerRequest)
+                .map(new Func1<PublicProfileListResponse, PublicProfileListResponse>() {
+                    @Override
+                    public PublicProfileListResponse call(PublicProfileListResponse publicProfileListResponse) {
+                        return publicProfileListResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+    public Observable<MentorFollowUnfollowResponse> getFollowFromModel(PublicProfileListRequest publicProfileListRequest){
+        LogUtils.info(TAG,"*******************"+new Gson().toJson(publicProfileListRequest));
+        return sheroesAppServiceApi.getMentorFollowFromApi(publicProfileListRequest)
+                .map(new Func1<MentorFollowUnfollowResponse, MentorFollowUnfollowResponse>() {
+                    @Override
+                    public MentorFollowUnfollowResponse call(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
+                        return mentorFollowUnfollowResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+    public Observable<MentorFollowUnfollowResponse> getUnFollowFromModel(PublicProfileListRequest publicProfileListRequest){
+        LogUtils.info(TAG,"*******************"+new Gson().toJson(publicProfileListRequest));
+        return sheroesAppServiceApi.getMentorUnFollowFromApi(publicProfileListRequest)
+                .map(new Func1<MentorFollowUnfollowResponse, MentorFollowUnfollowResponse>() {
+                    @Override
+                    public MentorFollowUnfollowResponse call(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
+                        return mentorFollowUnfollowResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
     public Observable<FeedResponsePojo> getFeedFromModel(FeedRequestPojo  feedRequestPojo){
         LogUtils.info(TAG,"*******************"+new Gson().toJson(feedRequestPojo));

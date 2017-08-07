@@ -14,6 +14,7 @@
     <color name="challenge_post">#ff4531</color>
     <color name="spinner">#f1f1f1</color>
     <color name="grey2">#b7b7b7</color>
+    <color name="public_profile_text">#eaccff</color>
     <color name="welcome_footer">#ccffffff</color>
     <color name="facebook_btn">#33ffffff</color>
     <color name="red">#d50000</color>
@@ -46,8 +47,11 @@
     <color name="footer_icon_text">#f2403c</color>
     <color name="search_tab_text">#3949ab</color>
     <color name="search_box">#273691</color>
+    <color name="growth_buddies_name">#343434</color>
+
     <color name="search_box_text">#aeb7ee</color>
     <color name="ask_sheroes">#03d3f3</color>
+    <color name="champions">#dc4541</color>
     <color name="search_tab_unselected_text">#bec5cc</color>
     <color name="search_shortcut_icon_color">#f8f8f8</color>
     <color name="default_color_expanded">#F0F0F0</color>

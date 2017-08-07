@@ -54,6 +54,7 @@
     <!--Fragment classes-->
     <string name="ID_ALL">All</string>
     <string name="ID_COMMUNITIES">Communities</string>
+    <string name="ID_GROWTH_BUDDIES_PUBLIC_PROFILE">ACTIVITY FEED</string>
     <string name="ID_PEOPLE_INTERESTED">people are interested</string>
     <string name="ID_TOTAL_GOING"> are going</string>
     <string name="ID_NO_MEMBER">No Member Selected</string>
@@ -154,6 +155,7 @@
     <string name="ID_DELETE">Delete</string>
     <string name="ID_REPORT">Report as spam</string>
     <string name="ID_REFRESH">Refresh feed</string>
+    <string name="ID_NO_GROWTH_BUDDIES">No, Mentors found</string>
     <string name="ID_NO_RESULT_FOUND">No Result found ,Please Click For Try again</string>
     <string name="ID_FEATURE_COMMUNITY"> We are coming up with new and exciting communities very soon.</string>
     <string name="ID_NO_RESULT_FOUND_TRY">Try another search</string>
@@ -188,6 +190,8 @@
     <string name="ID_COMMUNITES">COMMUNITY</string>
     <string name="ID_PREFERENCES">PREFERENCES</string>
     <string name="ID_DASH">-</string>
+    <string name="ID_FOLLOWERS">Follwers</string>
+    <string name="ID_GROWTH_BUDDIES_POST">Posts</string>
 
     <string name="ID_ABOUT">ABOUT</string>
     <string name="ID_LETS_TALK"> Let’s Start Talking</string>
@@ -573,7 +577,8 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_THANK_YOU">THANK YOU</string>
     <string name="ID_FOLLOW_US">FOLLOW US</string>
     <string name="ID_SUBMIT">SUBMIT</string>
-
+    <string name="ID_GROWTH_BUDDIES_UNFOLLOW">Follow</string>
+    <string name="ID_GROWTH_BUDDIES_FOLLOWING">Following</string>
     <!--String Related personal contact details edit page-->
     <string name="ID_FIRST_NAME_HINT">FIRST NAME</string>
     <string name="ID_LAST_NAME_HINT">LAST NAME</string>
@@ -897,6 +902,8 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_ADD_PHOTO">Let\'s make this moment more special by adding a photo.</string>
     <string name="ID_CHOOSE_PHOTO">Choose Photo From gallery</string>
     <string name="ID_ADD_YOU_TUBE_LINK">Add Youtube link..</string>
+    <string name="ID_MENTOR_FOR">Mentor For</string>
+    <string name="ID_GROWTH_BUDDIES">Champions</string>
     <string name="ID_DETAIL_ABOUT_EVENT">Details about the event</string>
     <string name="ID_SPEAKER">Speaker</string>
     <string name="ID_SPONSORS">Sponsors</string>

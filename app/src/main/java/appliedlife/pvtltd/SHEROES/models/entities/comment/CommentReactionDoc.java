@@ -60,7 +60,7 @@ public class CommentReactionDoc extends BaseResponse implements Parcelable {
     private boolean myOwnParticipation;
     @SerializedName("solr_ignore_created_on")
     @Expose
-    private String  postedDate;
+    private String postedDate;
 
     @SerializedName("solr_ignore_city")
     @Expose
@@ -74,6 +74,9 @@ public class CommentReactionDoc extends BaseResponse implements Parcelable {
     @SerializedName("solr_ignore_is_participant_active")
     @Expose
     private boolean participantActive = false;
+    @SerializedName("solr_ignore_is_mentor")
+    @Expose
+    private boolean isVerifiedMentor;
 
 
     public boolean isEdit() {
@@ -247,6 +250,14 @@ public class CommentReactionDoc extends BaseResponse implements Parcelable {
         this.participantActive = participantActive;
     }
 
+    public boolean isVerifiedMentor() {
+        return isVerifiedMentor;
+    }
+
+    public void setVerifiedMentor(boolean verifiedMentor) {
+        isVerifiedMentor = verifiedMentor;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -254,6 +265,7 @@ public class CommentReactionDoc extends BaseResponse implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
         dest.writeInt(this.byDefaultMenuOpen);
         dest.writeByte(this.isEdit ? (byte) 1 : (byte) 0);
         dest.writeInt(this.itemPosition);
@@ -275,9 +287,11 @@ public class CommentReactionDoc extends BaseResponse implements Parcelable {
         dest.writeString(this.city);
         dest.writeValue(this.entityAuthorUserId);
         dest.writeByte(this.participantActive ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isVerifiedMentor ? (byte) 1 : (byte) 0);
     }
 
     protected CommentReactionDoc(Parcel in) {
+        super(in);
         this.byDefaultMenuOpen = in.readInt();
         this.isEdit = in.readByte() != 0;
         this.itemPosition = in.readInt();
@@ -299,6 +313,7 @@ public class CommentReactionDoc extends BaseResponse implements Parcelable {
         this.city = in.readString();
         this.entityAuthorUserId = (Long) in.readValue(Long.class.getClassLoader());
         this.participantActive = in.readByte() != 0;
+        this.isVerifiedMentor = in.readByte() != 0;
     }
 
     public static final Creator<CommentReactionDoc> CREATOR = new Creator<CommentReactionDoc>() {

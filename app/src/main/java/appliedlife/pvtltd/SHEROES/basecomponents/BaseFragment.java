@@ -429,7 +429,6 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                     MoEHelper mMoEHelper = MoEHelper.getInstance(getActivity());
                     PayloadBuilder payloadBuilder = new PayloadBuilder();
                     MoEngageUtills moEngageUtills = MoEngageUtills.getInstance();
-                    ;
                     moEngageUtills.entityMoEngageBookMarkData(getActivity(), mMoEHelper, payloadBuilder, mFeedDetail);
                     break;
                 case AppConstants.FAILED:

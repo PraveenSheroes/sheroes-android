@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/li_growth_buddies_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_margin="@dimen/dp_size_10">
+
+    <appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView
+        android:id="@+id/iv_growth_buddies_icon"
+        android:layout_width="@dimen/dp_size_40"
+        android:layout_height="@dimen/dp_size_40"
+        android:layout_gravity="top"
+        app:riv_border_width="@dimen/dp_size_0.5"
+        android:layout_marginTop="@dimen/dp_size_16"
+        android:layout_marginBottom="@dimen/dp_size_15"
+        app:riv_corner_radius="@dimen/dp_size_10"
+        app:riv_oval="false" />
+
+    <LinearLayout
+
+        android:layout_width="@dimen/dp_size_180"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_size_13"
+        android:layout_marginTop="@dimen/dp_size_16"
+        android:layout_marginBottom="@dimen/dp_size_15"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_growth_buddies_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:textColor="@color/growth_buddies_name"
+            android:textSize="@dimen/sp_size_16" />
+
+        <TextView
+            android:id="@+id/tv_growth_buddies_profession"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:layout_marginTop="@dimen/dp_size_5"
+            android:textColor="@color/communities_post_button_color"
+            android:textSize="@dimen/sp_size_12" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_growth_buddies_follow"
+        android:layout_width="@dimen/dp_size_80"
+        android:layout_height="@dimen/dp_size_30"
+        android:layout_marginTop="@dimen/dp_size_16"
+        android:layout_marginBottom="@dimen/dp_size_15"
+        android:layout_marginLeft="@dimen/dp_size_10"
+        android:background="@drawable/rectangle_feed_commnity_join"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:gravity="center"
+        android:text="@string/ID_GROWTH_BUDDIES_UNFOLLOW"
+        android:textColor="@color/footer_icon_text"
+        android:textSize="@dimen/sp_size_10"
+        android:visibility="visible" />
+</LinearLayout>

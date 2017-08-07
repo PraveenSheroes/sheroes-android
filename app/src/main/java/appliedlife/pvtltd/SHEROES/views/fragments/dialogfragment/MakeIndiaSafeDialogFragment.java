@@ -4,6 +4,8 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,8 +28,10 @@ import com.f2prateek.rx.preferences.Preference;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -47,6 +51,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.LatLongWithLocation;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.MakeIndiaSafeResponse;
 import appliedlife.pvtltd.SHEROES.presenters.CreateCommunityPresenter;
+import appliedlife.pvtltd.SHEROES.service.GPSTracker;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -113,13 +118,24 @@ public class MakeIndiaSafeDialogFragment extends BaseDialogFragment implements C
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         ButterKnife.bind(this, view);
         mCreateCommunityPresenter.attachView(this);
+        mProgressBar.setVisibility(View.VISIBLE);
+        mProgressBar.bringToFront();
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                locationTracker();
+            } else {
+                ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, AppConstants.REQUEST_CODE_FOR_LOCATION);
+            }
+        } else {
+            locationTracker();
+        }
+
         scrollMakeIndiaSafeEvent.setVisibility(View.VISIBLE);
         scrollMakeIndiaSafeImageHolder.setVisibility(View.GONE);
         if (null != getArguments()) {
             Bundle bundle = getArguments();
-            mLatLongWithLocation = bundle.getParcelable(AppConstants.LAT_LONG_DETAIL);
+            //     mLatLongWithLocation = bundle.getParcelable(AppConstants.LAT_LONG_DETAIL);
         }
-        initialize();
         return view;
     }
 
@@ -146,6 +162,45 @@ public class MakeIndiaSafeDialogFragment extends BaseDialogFragment implements C
                 String locality = getString(R.string.ID_NO) + AppConstants.COMMA + local + AppConstants.SPACE + getString(R.string.ID_LOCALITY_NAME);
                 tvTvMessageForSafe.setText(locality);
             }
+        }
+    }
+
+    private void locationTracker() {
+        GPSTracker gps = new GPSTracker(getActivity());
+        // check if GPS enabled
+        if (gps.canGetLocation()) {
+            LatLongWithLocation latLongWithLocation = new LatLongWithLocation();
+            double latitude = gps.getLatitude();
+            double longitude = gps.getLongitude();
+            latLongWithLocation.setLatitude(latitude);
+            latLongWithLocation.setLongitude(longitude);
+            String cityName, locality, state;
+            Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
+            List<Address> addresses = null;
+            try {
+                addresses = geocoder.getFromLocation(latitude, longitude, 1);
+                if (StringUtil.isNotEmptyCollection(addresses)) {
+                    if (StringUtil.isNotNullOrEmptyString(addresses.get(0).getLocality())) {
+                        cityName = addresses.get(0).getLocality();
+                        latLongWithLocation.setCityName(cityName);
+                    }
+                    if (StringUtil.isNotNullOrEmptyString(addresses.get(0).getAddressLine(1))) {
+                        locality = addresses.get(0).getAddressLine(1);
+                        latLongWithLocation.setLocality(locality);
+                    }
+                    if (StringUtil.isNotNullOrEmptyString(addresses.get(0).getAddressLine(2))) {
+                        state = addresses.get(0).getAddressLine(2);
+                        latLongWithLocation.setState(state);
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            mProgressBar.setVisibility(View.GONE);
+            mLatLongWithLocation=latLongWithLocation;
+            initialize();
+        } else {
+            gps.showSettingsAlert();
         }
     }
 
@@ -233,7 +288,6 @@ public class MakeIndiaSafeDialogFragment extends BaseDialogFragment implements C
         } else {
             dismiss();
             ((HomeActivity) getActivity()).homeOnClick();
-
         }
     }
 

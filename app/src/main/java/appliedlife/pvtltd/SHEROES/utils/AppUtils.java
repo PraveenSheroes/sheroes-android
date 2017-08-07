@@ -130,6 +130,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPost
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ExprienceEntity;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileAddEditEducationRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.MentorFollowerRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.sharemail.ShareViaMail;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQSRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMemberRequest;
@@ -1928,6 +1930,12 @@ public class AppUtils {
         myCommunityRequest.setSubType(typeOfFeed);
         return myCommunityRequest;
     }
+    public PublicProfileListRequest pubicProfileRequestBuilder( int pageNo) {
+        PublicProfileListRequest publicProfileListRequest = new PublicProfileListRequest();
+        publicProfileListRequest.setPageNo(pageNo);
+        publicProfileListRequest.setPageSize(AppConstants.PAGE_SIZE);
+        return publicProfileListRequest;
+    }
     public static FeedRequestPojo articleCategoryRequestBuilder(String typeOfFeed, int pageNo, List<Long> categoryIds) {
         FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, pageNo);
         feedRequestPojo.setCategoryIds(categoryIds);
@@ -1965,6 +1973,14 @@ public class AppUtils {
         return jobApplyRequest;
     }
 
+    public  MentorFollowerRequest countFollowerRequestBuilder(Long mentorId) {
+        AppUtils appUtils = AppUtils.getInstance();
+        MentorFollowerRequest mentorFollowerRequest =new MentorFollowerRequest();
+        mentorFollowerRequest.setAppVersion(appUtils.getAppVersionName());
+        mentorFollowerRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        mentorFollowerRequest.setMentorId(mentorId);
+        return mentorFollowerRequest;
+    }
     public  FeedRequestPojo feedDetailRequestBuilder(String typeOfFeed, int pageNo, long idForDetail) {
 
         FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, pageNo);

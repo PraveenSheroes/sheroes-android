@@ -88,6 +88,10 @@ import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfilePreferredWorkLo
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTravelFLexibilityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.MentorFollowUnfollowResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.MentorFollowerRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.PublicProfileListRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.PublicProfileListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingChangeUserPreferenceRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingChangeUserPreferenseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingDeActivateRequest;
@@ -124,6 +128,14 @@ public interface SheroesAppServiceApi {
     Observable<MakeIndiaSafeResponse> getMakeIndiaSafeFromApi(@Body MakeIndiaSafeRequest makeIndiaSafeRequest);
     @POST("participant/feed/")
     Observable<FeedResponsePojo> getFeedFromApi(@Body FeedRequestPojo feedRequestPojo);
+    @POST("participant/user/get_mentor_list")
+    Observable<PublicProfileListResponse> getPublicProfileListFromApi(@Body PublicProfileListRequest publicProfileListRequest);
+    @POST("participation/reaction/follow")
+    Observable<MentorFollowUnfollowResponse> getMentorFollowFromApi(@Body PublicProfileListRequest publicProfileListRequest);
+    @POST("/participation/reaction/unfollow")
+    Observable<MentorFollowUnfollowResponse> getMentorUnFollowFromApi(@Body PublicProfileListRequest publicProfileListRequest);
+    @POST("/participant/user/get_number_of_followers")
+    Observable<PublicProfileListResponse> getCountOfFollowerFromApi(@Body MentorFollowerRequest mentorFollowerRequest);
 
     @POST("participant/feed/my_communities")
     Observable<FeedResponsePojo> getMyCommunityFromApi(@Body MyCommunityRequest myCommunityRequest);

@@ -19,7 +19,9 @@ public class FeedRequestPojo extends BaseRequest implements Parcelable {
     @SerializedName("id_of_entity_or_participant")
     @Expose
     private Long idForFeedDetail=null;
-
+    @SerializedName("author_id")
+    @Expose
+    private Integer autherId;
     @SerializedName("sub_type")
     @Expose
     private String subType;
@@ -158,6 +160,17 @@ public class FeedRequestPojo extends BaseRequest implements Parcelable {
         this.skills = skills;
     }
 
+    public FeedRequestPojo() {
+    }
+
+    public Integer getAutherId() {
+        return autherId;
+    }
+
+    public void setAutherId(Integer autherId) {
+        this.autherId = autherId;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -166,6 +179,7 @@ public class FeedRequestPojo extends BaseRequest implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(this.idForFeedDetail);
+        dest.writeValue(this.autherId);
         dest.writeString(this.subType);
         dest.writeString(this.question);
         dest.writeStringList(this.articleCategories);
@@ -179,11 +193,9 @@ public class FeedRequestPojo extends BaseRequest implements Parcelable {
         dest.writeStringList(this.skills);
     }
 
-    public FeedRequestPojo() {
-    }
-
     protected FeedRequestPojo(Parcel in) {
         this.idForFeedDetail = (Long) in.readValue(Long.class.getClassLoader());
+        this.autherId = (Integer) in.readValue(Integer.class.getClassLoader());
         this.subType = in.readString();
         this.question = in.readString();
         this.articleCategories = in.createStringArrayList();

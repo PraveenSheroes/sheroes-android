@@ -68,6 +68,8 @@ public class CustomeDataList {
 
         DrawerItems thirteenItem = new DrawerItems();
         thirteenItem.setId(13);
+        DrawerItems fourteenItem = new DrawerItems();
+        fourteenItem.setId(14);
 
         if(isSheUser){
             drawerItemsList.add(seventhDrawerItem);
@@ -83,7 +85,9 @@ public class CustomeDataList {
          //   drawerItemsList.add(twelveDraerItem);
             drawerItemsList.add(thirteenItem);
         }
+        drawerItemsList.add(fourteenItem);
         drawerItemsList.add(elevenDrawerItem);
+
         return  drawerItemsList;
     }
 }

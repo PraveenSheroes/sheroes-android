@@ -92,6 +92,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.LatLongWithLocation;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.MentorDetailItem;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQS;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.service.GPSTracker;
@@ -125,6 +126,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ChallengeUpdate
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.MakeIndiaSafeDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.MyCommunityInviteMemberDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.PublicProfileGrowthBuddiesDialogFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -232,6 +234,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     private MakeIndiaSafeDialogFragment makeIndiaSafeDialogFragment;
     private ProgressDialog mProgressDialog;
     private boolean isInviteReferral;
+    private PublicProfileGrowthBuddiesDialogFragment mPublicProfileGrowthBuddiesDialogFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -550,6 +553,9 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     InviteReferralsApi.getInstance(HomeActivity.this).inline_btn(AppConstants.CAMPAIGN_ID);
                     isInviteReferral = true;
                     break;
+                case 14:
+                    growthBuddiesInPublicProfile();
+                    break;
                 default:
 
             }
@@ -598,6 +604,36 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     homeOnClick();
                 }
             }
+        } else if (baseResponse instanceof MentorDetailItem) {
+            MentorDetailItem mentorDetailItem = (MentorDetailItem) baseResponse;
+            mentorItemClick(view, mentorDetailItem);
+        }
+    }
+
+    private void mentorItemClick(View view, MentorDetailItem mentorDetailItem) {
+        int id = view.getId();
+        switch (id) {
+            case R.id.li_growth_buddies_layout:
+                Intent intent = new Intent(this, PublicProfileGrowthBuddiesDetailActivity.class);
+                Bundle bundle = new Bundle();
+                mFeedDetail = new FeedDetail();
+                mFeedDetail.setIdOfEntityOrParticipant(mentorDetailItem.getEntityOrParticipantId());
+                //   mFeedDetail.setIdOfEntityOrParticipant(157);
+                mFeedDetail.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
+                bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
+                bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, mentorDetailItem);
+                intent.putExtras(bundle);
+                startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+                overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
+                break;
+            case R.id.tv_growth_buddies_follow:
+                if (null != mPublicProfileGrowthBuddiesDialogFragment) {
+                    mPublicProfileGrowthBuddiesDialogFragment.followUnfollowRequest(mentorDetailItem);
+                }
+                break;
+
+            default:
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + id);
         }
     }
 
@@ -784,7 +820,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         if (makeIndiaSafeDialogFragment == null) {
             makeIndiaSafeDialogFragment = new MakeIndiaSafeDialogFragment();
             Bundle bundle = new Bundle();
-            bundle.putParcelable(AppConstants.LAT_LONG_DETAIL, latLongWithLocation);
+            //   bundle.putParcelable(AppConstants.LAT_LONG_DETAIL, latLongWithLocation);
             makeIndiaSafeDialogFragment.setArguments(bundle);
         }
         if (!makeIndiaSafeDialogFragment.isVisible() && !makeIndiaSafeDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
@@ -1379,7 +1415,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
 
     @OnClick(R.id.tv_make_india_safe)
     public void tvOnClickMakeIndiasafe() {
-        if (Build.VERSION.SDK_INT >= 23) {
+        makeWomenSafeDialog(null);
+       /* if (Build.VERSION.SDK_INT >= 23) {
             if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 locationTracker();
             } else {
@@ -1387,7 +1424,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             }
         } else {
             locationTracker();
-        }
+        }*/
     }
 
     @OnClick(R.id.tv_drawer_navigation)
@@ -1524,6 +1561,10 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 case AppConstants.REQ_CODE_SPEECH_INPUT:
                     helplineSpeechActivityResponse(intent, resultCode);
                     break;
+                case AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL:
+                    checkPublicProfileMentorFollow(intent);
+                    break;
+
                 default:
                     if (null != mProgressDialog) {
                         mProgressDialog.dismiss();
@@ -1542,6 +1583,15 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             }
         }
 
+    }
+
+    private void checkPublicProfileMentorFollow(Intent intent) {
+        if (null != mPublicProfileGrowthBuddiesDialogFragment) {
+            if (null != intent && null != intent.getExtras() && null != intent.getExtras().get(AppConstants.GROWTH_PUBLIC_PROFILE)) {
+                MentorDetailItem mentorDetailItem = (MentorDetailItem) intent.getExtras().get(AppConstants.GROWTH_PUBLIC_PROFILE);
+                mPublicProfileGrowthBuddiesDialogFragment.notifyList(mentorDetailItem);
+            }
+        }
     }
 
     public void selectImageFrmCamera() {
@@ -1895,4 +1945,21 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     public void onClickProfile() {
         openProfileActivity();
     }
+
+
+    public DialogFragment growthBuddiesInPublicProfile() {
+        mPublicProfileGrowthBuddiesDialogFragment = (PublicProfileGrowthBuddiesDialogFragment) getFragmentManager().findFragmentByTag(PublicProfileGrowthBuddiesDialogFragment.class.getName());
+        if (mPublicProfileGrowthBuddiesDialogFragment == null) {
+            mPublicProfileGrowthBuddiesDialogFragment = new PublicProfileGrowthBuddiesDialogFragment();
+            Bundle bundle = new Bundle();
+            // bundle.putSerializable(AppConstants.BOARDING_SEARCH, onBoardingEnum);
+            // bundle.putString(AppConstants.MASTER_SKILL, masterDataSkill);
+            mPublicProfileGrowthBuddiesDialogFragment.setArguments(bundle);
+        }
+        if (!mPublicProfileGrowthBuddiesDialogFragment.isVisible() && !mPublicProfileGrowthBuddiesDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
+            mPublicProfileGrowthBuddiesDialogFragment.show(getFragmentManager(), PublicProfileGrowthBuddiesDialogFragment.class.getName());
+        }
+        return mPublicProfileGrowthBuddiesDialogFragment;
+    }
+
 }

@@ -1,0 +1,120 @@
+package appliedlife.pvtltd.SHEROES.models.entities.publicprofile;
+
+import android.os.Parcel;
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+
+/**
+ * Created by Praveen_Singh on 03-08-2017.
+ */
+
+public class MentorDetailItem extends BaseResponse {
+    private int itemPosition;
+    @SerializedName("mentor_name")
+    @Expose
+    private String mentorName;
+    @SerializedName("experties_in")
+    @Expose
+    private String expertiesIn;
+    @SerializedName("is_followed")
+    @Expose
+    private boolean isFollowed;
+    @SerializedName("entity_or_participant_id")
+    @Expose
+    private int entityOrParticipantId;
+    @SerializedName("mentor_image_url")
+    @Expose
+    private String mentorImageUrl;
+
+    public String getMentorName() {
+        return mentorName;
+    }
+
+    public void setMentorName(String mentorName) {
+        this.mentorName = mentorName;
+    }
+
+    public String getExpertiesIn() {
+        return expertiesIn;
+    }
+
+    public void setExpertiesIn(String expertiesIn) {
+        this.expertiesIn = expertiesIn;
+    }
+
+    public boolean isFollowed() {
+        return isFollowed;
+    }
+
+    public void setFollowed(boolean followed) {
+        isFollowed = followed;
+    }
+
+    public int getEntityOrParticipantId() {
+        return entityOrParticipantId;
+    }
+
+    public void setEntityOrParticipantId(int entityOrParticipantId) {
+        this.entityOrParticipantId = entityOrParticipantId;
+    }
+
+    public String getMentorImageUrl() {
+        return mentorImageUrl;
+    }
+
+    public void setMentorImageUrl(String mentorImageUrl) {
+        this.mentorImageUrl = mentorImageUrl;
+    }
+
+    public int getItemPosition() {
+        return itemPosition;
+    }
+
+    public void setItemPosition(int itemPosition) {
+        this.itemPosition = itemPosition;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
+        dest.writeInt(this.itemPosition);
+        dest.writeString(this.mentorName);
+        dest.writeString(this.expertiesIn);
+        dest.writeByte(this.isFollowed ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.entityOrParticipantId);
+        dest.writeString(this.mentorImageUrl);
+    }
+
+    public MentorDetailItem() {
+    }
+
+    protected MentorDetailItem(Parcel in) {
+        super(in);
+        this.itemPosition = in.readInt();
+        this.mentorName = in.readString();
+        this.expertiesIn = in.readString();
+        this.isFollowed = in.readByte() != 0;
+        this.entityOrParticipantId = in.readInt();
+        this.mentorImageUrl = in.readString();
+    }
+
+    public static final Creator<MentorDetailItem> CREATOR = new Creator<MentorDetailItem>() {
+        @Override
+        public MentorDetailItem createFromParcel(Parcel source) {
+            return new MentorDetailItem(source);
+        }
+
+        @Override
+        public MentorDetailItem[] newArray(int size) {
+            return new MentorDetailItem[size];
+        }
+    };
+}

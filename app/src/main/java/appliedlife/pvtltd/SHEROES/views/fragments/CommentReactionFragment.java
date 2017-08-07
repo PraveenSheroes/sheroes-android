@@ -50,6 +50,7 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.PublicProfileGrowthBuddiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
@@ -242,6 +243,9 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
                 break;
             case AppConstants.THREE_CONSTANT:
                 mAdapter = new GenericRecyclerViewAdapter(getContext(), (CommunitiesDetailActivity) getActivity());
+                break;
+            case AppConstants.FOURTH_CONSTANT:
+                mAdapter = new GenericRecyclerViewAdapter(getContext(), (PublicProfileGrowthBuddiesDetailActivity) getActivity());
                 break;
         }
         mLayoutManager = new LinearLayoutManager(getContext());

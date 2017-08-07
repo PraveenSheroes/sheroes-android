@@ -25,6 +25,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.OnBoardingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfessionalAddEducationActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfessionalWorkExperienceActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActicity;
+import appliedlife.pvtltd.SHEROES.views.activities.PublicProfileGrowthBuddiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.SettingPreferencesActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.VisitingCardActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.WelcomeActivity;
@@ -128,6 +129,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileSearchLa
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileSectoreDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileStudyDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileWorkExperienceSelfEmploymentDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.PublicProfileGrowthBuddiesDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.SearchGoodAtDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.SearchProfileLocationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.SelectCommunityDialogFragment;
@@ -157,6 +159,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.FeedJobHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FooterViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.GetAllDataBoardingSearchHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.GoodAtHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.GrowthBuddiesHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HelplineAnswerCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HelplineQuestionCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HomeSpinnerSelectorHolder;
@@ -610,9 +613,16 @@ public interface SheroesAppComponent {
     void inject(ResetPasswordSuccessFragment resetPasswordSuccessFragment);
 
     void inject(ProfileImageDialogFragment profileImageDialogFragment);
+
     void inject(AppIntroCardHolder appIntroCardHolder);
 
     void inject(MakeIndiaSafeDialogFragment makeIndiaSafeDialogFragment);
+
+    void inject(PublicProfileGrowthBuddiesDialogFragment publicProfileGrowthBuddiesDialogFragment);
+
+    void inject(GrowthBuddiesHolder growthBuddiesHolder);
+    void inject(PublicProfileGrowthBuddiesDetailActivity publicProfileGrowthBuddiesDetailActivity);
+
 
 
 }

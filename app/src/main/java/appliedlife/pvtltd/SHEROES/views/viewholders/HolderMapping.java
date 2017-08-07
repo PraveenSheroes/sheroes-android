@@ -39,6 +39,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.profile.ExprienceEntity;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.GoodAt;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.MyProfileView;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileHorList;
+import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.MentorDetailItem;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleDetailPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQS;
 import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMember;
@@ -419,6 +420,11 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new EventSponsorHolder(view, viewInterface);
         }
+    }, GROWTH_BUDDIES_HOLDER(R.layout.growth_buddies_holder) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new GrowthBuddiesHolder(view, viewInterface);
+        }
     };
     public Object object;
     public int layout;
@@ -632,6 +638,8 @@ public enum HolderMapping {
                     returnView = EVENT_SPEAKER_HOLDER.ordinal();
                 } else if (item instanceof EventSponsorData) {
                     returnView = EVENT_SPONSOR_HOLDER.ordinal();
+                }else if (item instanceof MentorDetailItem) {
+                    returnView = GROWTH_BUDDIES_HOLDER.ordinal();
                 }
             }
         }
