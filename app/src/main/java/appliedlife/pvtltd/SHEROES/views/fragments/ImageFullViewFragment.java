@@ -69,9 +69,9 @@ public class ImageFullViewFragment extends BaseFragment implements ViewPager.OnP
     public void onPageScrollStateChanged(int state) {
         //Nothing to do here
     }
-
     @OnClick(R.id.tv_full_image_back)
     public void dismissCommentDialog() {
-        (getActivity()).onBackPressed();
+      //  (getActivity()).onBackPressed();
+        (getActivity()).getSupportFragmentManager().popBackStackImmediate();
     }
 }

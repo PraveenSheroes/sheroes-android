@@ -41,6 +41,8 @@
             android:layout_height="wrap_content"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:layout_marginTop="@dimen/dp_size_5"
+            android:maxLines="@integer/int_value_for_line_1"
+            android:ellipsize="end"
             android:textColor="@color/communities_post_button_color"
             android:textSize="@dimen/sp_size_12" />
 

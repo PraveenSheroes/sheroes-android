@@ -536,6 +536,10 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     break;
                 case AppConstants.ELEVENTH_CONSTANT:
                     logOut();
+                    /*Intent youTube = new Intent(this, MapActivity.class);
+                    Bundle bundle = new Bundle();
+                    youTube.putExtras(bundle);
+                    startActivity(youTube);*/
                     break;
                 case 12:
                     inviteMyCommunityDialog();

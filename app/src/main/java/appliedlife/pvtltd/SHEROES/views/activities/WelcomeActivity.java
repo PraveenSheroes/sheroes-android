@@ -199,7 +199,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                     PushManager.getInstance().refreshToken(getApplicationContext(), mGcmId);
                     mGetStarted.setEnabled(true);
                     mOtherLoginOption.setEnabled(true);
-                    if(null!=mProgressDialog)
+                    if(null!=mProgressDialog&& mProgressDialog.isShowing())
                     {
                         mProgressDialog.dismiss();
                     }

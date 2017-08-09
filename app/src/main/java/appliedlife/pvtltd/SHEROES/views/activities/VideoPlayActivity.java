@@ -33,16 +33,7 @@ public class VideoPlayActivity extends YouTubeBaseActivity implements YouTubePla
         youTubeView.initialize(AppConstants.YOUTUBE_DEVELOPER_KEY, this);
         playerStateChangeListener = new MyPlayerStateChangeListener();
         playbackEventListener = new MyPlaybackEventListener();
-       // player.seekToMillis(1000);
-		/*final EditText seekToText = (EditText) findViewById(R.id.seek_to_text);
-        Button seekToButton = (Button) findViewById(R.id.seek_to_button);
-		seekToButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				int skipToSecs = Integer.valueOf(seekToText.getText().toString());
-				player.seekToMillis(skipToSecs * 1000);
-			}
-		});*/
+
     }
 
     @Override

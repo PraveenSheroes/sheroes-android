@@ -206,56 +206,58 @@ public class HomeFragment extends BaseFragment {
     private void getGcmId() {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        GCMClientManager pushClientManager = new GCMClientManager(getActivity(), getString(R.string.ID_PROJECT_ID));
-        pushClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
-            @Override
-            public void onSuccess(String registrationId, boolean isNewRegistration) {
-                LogUtils.info(TAG, "*************Registarion" + registrationId);
-                mGcmId = registrationId;
-                PushManager.getInstance().refreshToken(getActivity(), mGcmId);
-                if (StringUtil.isNotNullOrEmptyString(registrationId)) {
-                    if (null != mInstallUpdatePreference && mInstallUpdatePreference.isSet() && null != mInstallUpdatePreference.get()) {
-                        if (mInstallUpdatePreference.get().isFirstOpen()) {
-                            LoginRequest loginRequest = loginRequestBuilder();
-                            loginRequest.setGcmorapnsid(registrationId);
-                            if (mInstallUpdatePreference.get().isWelcome()) {
-                                onceWelcomeDataItem = new FeedDetail();
-                                onceWelcomeDataItem.setSubType(AppConstants.ONCE_WELCOME);
-                                InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
-                                installUpdateForMoEngage.setWelcome(false);
-                                mInstallUpdatePreference.set(installUpdateForMoEngage);
-                            }
-                            mHomePresenter.getNewGCMidFromPresenter(loginRequest);
-                        } else {
-                            if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getGcmId())) {
-                                String mOldGcmId = mUserPreference.get().getGcmId();
-                                if (StringUtil.isNotNullOrEmptyString(mOldGcmId)) {
-                                    if (!mOldGcmId.equalsIgnoreCase(registrationId)) {
-                                        LoginRequest loginRequest = loginRequestBuilder();
-                                        loginRequest.setGcmorapnsid(registrationId);
-                                        mHomePresenter.getNewGCMidFromPresenter(loginRequest);
+        if (null != getActivity() && isAdded()) {
+            GCMClientManager pushClientManager = new GCMClientManager(getActivity(), getString(R.string.ID_PROJECT_ID));
+            pushClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
+                @Override
+                public void onSuccess(String registrationId, boolean isNewRegistration) {
+                    LogUtils.info(TAG, "*************Registarion" + registrationId);
+                    mGcmId = registrationId;
+                    PushManager.getInstance().refreshToken(getActivity(), mGcmId);
+                    if (StringUtil.isNotNullOrEmptyString(registrationId)) {
+                        if (null != mInstallUpdatePreference && mInstallUpdatePreference.isSet() && null != mInstallUpdatePreference.get()) {
+                            if (mInstallUpdatePreference.get().isFirstOpen()) {
+                                LoginRequest loginRequest = loginRequestBuilder();
+                                loginRequest.setGcmorapnsid(registrationId);
+                                if (mInstallUpdatePreference.get().isWelcome()) {
+                                    onceWelcomeDataItem = new FeedDetail();
+                                    onceWelcomeDataItem.setSubType(AppConstants.ONCE_WELCOME);
+                                    InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
+                                    installUpdateForMoEngage.setWelcome(false);
+                                    mInstallUpdatePreference.set(installUpdateForMoEngage);
+                                }
+                                mHomePresenter.getNewGCMidFromPresenter(loginRequest);
+                            } else {
+                                if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getGcmId())) {
+                                    String mOldGcmId = mUserPreference.get().getGcmId();
+                                    if (StringUtil.isNotNullOrEmptyString(mOldGcmId)) {
+                                        if (!mOldGcmId.equalsIgnoreCase(registrationId)) {
+                                            LoginRequest loginRequest = loginRequestBuilder();
+                                            loginRequest.setGcmorapnsid(registrationId);
+                                            mHomePresenter.getNewGCMidFromPresenter(loginRequest);
+                                        }
                                     }
                                 }
-                            }
-                            if (mInstallUpdatePreference.get().isWelcome()) {
-                                onceWelcomeDataItem = new FeedDetail();
-                                onceWelcomeDataItem.setSubType(AppConstants.ONCE_WELCOME);
-                                InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
-                                installUpdateForMoEngage.setWelcome(false);
-                                mInstallUpdatePreference.set(installUpdateForMoEngage);
+                                if (mInstallUpdatePreference.get().isWelcome()) {
+                                    onceWelcomeDataItem = new FeedDetail();
+                                    onceWelcomeDataItem.setSubType(AppConstants.ONCE_WELCOME);
+                                    InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
+                                    installUpdateForMoEngage.setWelcome(false);
+                                    mInstallUpdatePreference.set(installUpdateForMoEngage);
+                                }
                             }
                         }
+                    } else {
+                        getGcmId();
                     }
-                } else {
-                    getGcmId();
                 }
-            }
 
-            @Override
-            public void onFailure(String ex) {
-                LogUtils.info(TAG, "*************Fail Registarion" + ex);
-            }
-        });
+                @Override
+                public void onFailure(String ex) {
+                    LogUtils.info(TAG, "*************Fail Registarion" + ex);
+                }
+            });
+        }
     }
 
     @OnClick(R.id.tv_refresh)

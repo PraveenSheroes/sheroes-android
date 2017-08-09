@@ -13,22 +13,36 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.location.gps" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
+
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+
+    <!-- Required to show current location -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <permission
+        android:name="appliedlife.pvtltd.SHEROES.permission.MAPS_RECEIVE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="appliedlife.pvtltd.SHEROES.permission.MAPS_RECEIVE" />
+
     <application
         android:name="appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication"
         android:allowBackup="false"
         android:icon="@mipmap/ic_sheroes_launcher"
         android:label="@string/ID_APP_NAME"
-        tools:replace="android:label"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:largeHeap="true"
+        android:theme="@style/AppTheme"
+        tools:replace="android:label">
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -36,15 +50,19 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths"/>
+                android:resource="@xml/provider_paths" />
         </provider>
-        <provider android:authorities="com.facebook.app.FacebookContentProvider"
+        <provider
             android:name="com.facebook.FacebookContentProvider"
-            android:exported="true"/>
+            android:authorities="com.facebook.app.FacebookContentProvider"
+            android:exported="true" />
+
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/ID_FACEBOOK_APP_ID" />
-
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyBb6FQ0snY-RF9QjGV_RdGSgpWtclRMSvk" />
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -71,28 +89,33 @@
         <meta-data
             android:name="SKIP_GCM_REGISTRATION"
             android:value="true" />
-        <meta-data android:name="invitereferrals_bid" android:value="16935"/>
-        <meta-data android:name="invitereferrals_bid_e" android:value="EFF2E267671D89492971FE6B5DAC0E44"/>
+        <meta-data
+            android:name="invitereferrals_bid"
+            android:value="16935" />
+        <meta-data
+            android:name="invitereferrals_bid_e"
+            android:value="EFF2E267671D89492971FE6B5DAC0E44" />
+
         <activity
             android:name="com.moe.pushlibrary.activities.MoEActivity"
             android:parentActivityName="appliedlife.pvtltd.SHEROES.views.activities.HomeActivity">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="appliedlife.pvtltd.SHEROES.views.activities.HomeActivity"/>
+                android:value="appliedlife.pvtltd.SHEROES.views.activities.HomeActivity" />
         </activity>
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.OnBoardingActivity"
-            android:windowSoftInputMode="stateHidden"
+            android:noHistory="true"
             android:screenOrientation="portrait"
-            android:noHistory="true"/>
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.WelcomeActivity"
+            android:clearTaskOnLaunch="true"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
-            android:windowSoftInputMode="stateHidden"
-            android:launchMode="singleTask"
-            android:clearTaskOnLaunch="true">
+            android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -101,24 +124,28 @@
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.PublicProfileGrowthBuddiesDetailActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.MapActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.VideoPlayActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.LoginActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.FaceBookOpenActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.ProfessionalWorkExperienceActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
@@ -172,8 +199,8 @@
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.ProfileActicity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.ArticleDetailActivity"
             android:screenOrientation="portrait"
@@ -182,21 +209,24 @@
             android:name="appliedlife.pvtltd.SHEROES.views.activities.ProfessionalAddEducationActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:host="sheroes.com"> </data>
-                <data android:scheme="https"/>
-                <data android:pathPattern="/.*"/>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:host="sheroes.com"></data>
+                <data android:scheme="https" />
+                <data android:pathPattern="/.*" />
             </intent-filter>
         </activity>
         <activity android:name=".views.activities.WorkExperienceActivity" />
+
         <service
             android:name="appliedlife.pvtltd.SHEROES.service.PushNotificationService"
             android:exported="false">
@@ -204,6 +234,7 @@
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
         </service>
+
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"
@@ -213,14 +244,19 @@
                 <category android:name="appliedlife.pvtltd.SHEROES.service" />
             </intent-filter>
         </receiver>
-        <receiver android:name="com.appsflyer.MultipleInstallBroadcastReceiver" android:exported="true">
+        <receiver
+            android:name="com.appsflyer.MultipleInstallBroadcastReceiver"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
         </receiver>
 
-        <service android:name="com.google.android.gms.analytics.CampaignTrackingService"/>
-        <receiver android:name="appliedlife.pvtltd.SHEROES.service.CustomInstallTrackersReceiver" android:exported="true">
+        <service android:name="com.google.android.gms.analytics.CampaignTrackingService" />
+
+        <receiver
+            android:name="appliedlife.pvtltd.SHEROES.service.CustomInstallTrackersReceiver"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>

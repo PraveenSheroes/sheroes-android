@@ -50,6 +50,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawablePadding="@dimen/dp_size_10"
+                android:textAllCaps="true"
                 android:drawableRight="@drawable/ic_verified"
                 android:fontFamily="@string/ID_ROBOTO_BOLD"
                 android:textColor="@color/white"
@@ -89,6 +90,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_size_10"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:visibility="gone"
                 android:textColor="@color/public_profile_text"
                 android:textSize="@dimen/sp_size_12" />
         </LinearLayout>

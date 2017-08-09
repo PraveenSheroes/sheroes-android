@@ -2284,9 +2284,11 @@ public class AppUtils {
         profileAddEditEducationRequest.setSubType("EDUCATION_SERVICE");
         profileAddEditEducationRequest.setDegreeNameMasterId(mDeegreeId);
         profileAddEditEducationRequest.setActive(true);
-        profileAddEditEducationRequest.setSessionStartMonth(Integer.parseInt(startTime[0]));
-        profileAddEditEducationRequest.setSessionStartYear(Integer.parseInt(startTime[1]));
-        if(null!=endTime) {
+        if(null!=startTime&&startTime.length>0) {
+            profileAddEditEducationRequest.setSessionStartMonth(Integer.parseInt(startTime[0]));
+            profileAddEditEducationRequest.setSessionStartYear(Integer.parseInt(startTime[1]));
+        }
+        if(null!=endTime&&endTime.length>0) {
             profileAddEditEducationRequest.setSessionEndMonth(Integer.parseInt(endTime[0]));
             profileAddEditEducationRequest.setSessionEndYear(Integer.parseInt(endTime[1]));
         }

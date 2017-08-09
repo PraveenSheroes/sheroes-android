@@ -9,6 +9,7 @@ import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -45,6 +46,8 @@ public class CommentHolder extends BaseViewHolder<CommentReactionDoc> {
     private static final String RIGHT_HTML_TAG_FOR_COLOR = "</font></b>";
     @Bind(R.id.li_list_comment)
     LinearLayout liListComment;
+    @Bind(R.id.iv_list_comment_profile_pic_verified)
+    ImageView ivListCommentProfilePicVerified;
     @Bind(R.id.iv_list_comment_profile_pic)
     CircleImageView ivListCommentProfilePic;
     @Bind(R.id.tv_list_user_comment)
@@ -78,8 +81,7 @@ public class CommentHolder extends BaseViewHolder<CommentReactionDoc> {
                 tvListCommentTime.setText(AppConstants.JUST_NOW);
             }*/
             tvListCommentTime.setText(dataItem.getPostedDate());
-        }else
-        {
+        } else {
             tvListCommentTime.setText(mContext.getString(R.string.ID_JUST_NOW));
         }
 
@@ -89,25 +91,30 @@ public class CommentHolder extends BaseViewHolder<CommentReactionDoc> {
             tvUserCommentListMenu.setVisibility(View.GONE);
         }
         ivListCommentProfilePic.setCircularImage(true);
-        if (item.isAnonymous()) {
+        if (item.isAnonymous()&&StringUtil.isNotNullOrEmptyString(dataItem.getParticipantName())) {
             ivListCommentProfilePic.setImageResource(R.drawable.ic_anonomous);
-            StringBuilder stringBuilder=new StringBuilder();
+            StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append(dataItem.getParticipantName()).append(AppConstants.COLON).append(AppConstants.SPACE).append(dataItem.getComment());
             Spannable getCommentString = new SpannableString(stringBuilder.toString());
-            int size=dataItem.getParticipantName().length()+1;
+            int size = dataItem.getParticipantName().length() + 1;
             getCommentString.setSpan(new ForegroundColorSpan(Color.BLACK), 0, size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             getCommentString.setSpan(new StyleSpan(Typeface.BOLD), 0, size, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
             tvUserComment.setText(getCommentString);
         } else {
-            if (StringUtil.isNotNullOrEmptyString(dataItem.getComment())) {
+            if (StringUtil.isNotNullOrEmptyString(dataItem.getComment())&&StringUtil.isNotNullOrEmptyString(dataItem.getParticipantName())) {
                 ivListCommentProfilePic.bindImage(dataItem.getParticipantImageUrl());
-                StringBuilder stringBuilder=new StringBuilder();
+                StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.append(dataItem.getParticipantName()).append(AppConstants.COLON).append(AppConstants.SPACE).append(dataItem.getComment());
                 Spannable getCommentString = new SpannableString(stringBuilder.toString());
-                int size=dataItem.getParticipantName().length()+1;
+                int size = dataItem.getParticipantName().length() + 1;
                 getCommentString.setSpan(new ForegroundColorSpan(Color.BLACK), 0, size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 getCommentString.setSpan(new StyleSpan(Typeface.BOLD), 0, size, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
                 tvUserComment.setText(getCommentString);
+                if (dataItem.isVerifiedMentor()) {
+                    ivListCommentProfilePicVerified.setVisibility(View.VISIBLE);
+                } else {
+                    ivListCommentProfilePicVerified.setVisibility(View.GONE);
+                }
             }
         }
     }

@@ -119,6 +119,10 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     CircleImageView ivFeedCommunityPostCircleIcon;
     @Bind(R.id.line_for_no_image)
     View lineForNoImage;
+    @Bind(R.id.iv_feed_community_post_circle_icon_verified)
+    ImageView ivFeedCommunityPostCircleIconVerified;
+    @Bind(R.id.iv_feed_community_post_user_icon_verified)
+    ImageView ivFeedCommunityPostUserIconVerified;
     @Bind(R.id.tv_feed_community_post_user_share)
     TextView tvFeedCommunityPostUserShare;
     @Bind(R.id.tv_feed_community_post_user_reaction)
@@ -744,6 +748,13 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                     getCommentString.setSpan(new ForegroundColorSpan(Color.BLACK), 0, size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     getCommentString.setSpan(new StyleSpan(Typeface.BOLD), 0, size, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
                     tvFeedCommunityPostUserCommentPost.setText(getCommentString);
+                    if(dataItem.isVerifiedMentor())
+                    {
+                        ivFeedCommunityPostUserIconVerified.setVisibility(View.VISIBLE);
+                    }else
+                    {
+                        ivFeedCommunityPostUserIconVerified.setVisibility(View.GONE);
+                    }
                 }
             }
 
@@ -764,6 +775,13 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         if (StringUtil.isNotNullOrEmptyString(authorImageUrl)) {
             ivFeedCommunityPostCircleIcon.setCircularImage(true);
             ivFeedCommunityPostCircleIcon.bindImage(authorImageUrl);
+            if(dataItem.isVerifiedMentor())
+            {
+                ivFeedCommunityPostCircleIconVerified.setVisibility(View.VISIBLE);
+            }else
+            {
+                ivFeedCommunityPostCircleIconVerified.setVisibility(View.GONE);
+            }
         }
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getPhotoUrl())) {
             ivFeedCommunityPostRegisterUserPic.setCircularImage(true);

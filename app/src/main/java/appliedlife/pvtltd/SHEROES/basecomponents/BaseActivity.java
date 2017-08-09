@@ -182,9 +182,14 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
 
     @Override
     protected void onDestroy() {
-        mIsDestroyed = true;
-        clearReferences();
-        super.onDestroy();
+        try {
+            mIsDestroyed = true;
+            clearReferences();
+            super.onDestroy();
+        } catch (Exception e) {
+
+        }
+
     }
 
     @Override
@@ -384,7 +389,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 startActivityForResult(intetFeature, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
                 overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
                 break;
-            case  R.id.tv_feed_community_post_card_title:
+            case R.id.tv_feed_community_post_card_title:
                 Intent intentFromCommunityPost = new Intent(this, CommunitiesDetailActivity.class);
                 Bundle bundleFromPost = new Bundle();
                 bundleFromPost.putBoolean(AppConstants.COMMUNITY_POST_ID, true);
@@ -523,11 +528,11 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 popupWindow.dismiss();
             }
         });
-        setMenuOptionVisibility(view, tvEdit, tvDelete, tvShare, tvReport, baseResponse,liFeedMenu);
+        setMenuOptionVisibility(view, tvEdit, tvDelete, tvShare, tvReport, baseResponse, liFeedMenu);
     }
 
 
-    private void setMenuOptionVisibility(View view, TextView tvEdit, TextView tvDelete, TextView tvShare, TextView tvReport, BaseResponse baseResponse,LinearLayout liFeedMenu) {
+    private void setMenuOptionVisibility(View view, TextView tvEdit, TextView tvDelete, TextView tvShare, TextView tvReport, BaseResponse baseResponse, LinearLayout liFeedMenu) {
         int id = view.getId();
         switch (id) {
             case R.id.tv_feed_article_user_comment_post_menu:

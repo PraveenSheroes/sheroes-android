@@ -167,6 +167,9 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
             } else {
                 tvMentorDescription.setText(Html.fromHtml(mFeedDetail.getDescription()));// or for older api
             }
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("\"").append(tvMentorDescription.getText().toString()).append("\"");
+            tvMentorDescription.setText(stringBuilder.toString());
         }
         if (StringUtil.isNotEmptyCollection(mFeedDetail.getCanHelpIns())) {
             StringBuilder stringBuilder = new StringBuilder();
@@ -287,6 +290,9 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
             getSupportFragmentManager().popBackStack();
             mFragmentOpen.setReactionList(false);
             mFragmentOpen.setCommentList(true);
+        } else if (mFragmentOpen.isOpenImageViewer()) {
+            mFragmentOpen.setOpenImageViewer(false);
+            getSupportFragmentManager().popBackStackImmediate();
         } else {
             onBackClick();
         }
@@ -388,6 +394,7 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
     protected void mentorFollowUnFollowSuccess(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
         switch (mentorFollowUnfollowResponse.getStatus()) {
             case AppConstants.SUCCESS:
+                mHomePresenter.getCountOfFollowerFromPresenter(mAppUtils.countFollowerRequestBuilder(mFeedDetail.getIdOfEntityOrParticipant()));
                 break;
             case AppConstants.FAILED:
                 if (!mMentorDetailItem.isFollowed()) {
@@ -418,5 +425,12 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
     @Override
     public void getNotificationReadCountSuccess(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
 
+    }
+
+    @Override
+    public void dataOperationOnClick(BaseResponse baseResponse) {
+        mFragmentOpen.setOpenImageViewer(true);
+        setAllValues(mFragmentOpen);
+        super.dataOperationOnClick(baseResponse);
     }
 }

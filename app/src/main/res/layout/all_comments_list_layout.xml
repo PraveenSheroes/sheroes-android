@@ -11,12 +11,23 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_margin="@dimen/dp_size_10">
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-        <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
-            android:id="@+id/iv_list_comment_profile_pic"
-            android:layout_width="@dimen/comment_icon"
-            android:layout_height="@dimen/comment_icon"
-            android:src="@drawable/ic_createc_ommunity_icon" />
+            <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
+                android:id="@+id/iv_list_comment_profile_pic"
+                android:layout_width="@dimen/comment_icon"
+                android:layout_height="@dimen/comment_icon"
+                android:src="@drawable/ic_createc_ommunity_icon" />
+            <ImageView
+                android:id="@+id/iv_list_comment_profile_pic_verified"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|bottom"
+                android:visibility="gone"
+                android:background="@drawable/ic_verified" />
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="@dimen/dp_size_295"
