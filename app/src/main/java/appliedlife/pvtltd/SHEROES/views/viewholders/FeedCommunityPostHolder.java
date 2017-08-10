@@ -748,11 +748,9 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                     getCommentString.setSpan(new ForegroundColorSpan(Color.BLACK), 0, size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     getCommentString.setSpan(new StyleSpan(Typeface.BOLD), 0, size, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
                     tvFeedCommunityPostUserCommentPost.setText(getCommentString);
-                    if(dataItem.isVerifiedMentor())
-                    {
+                    if (lastComment.isVerifiedMentor()) {
                         ivFeedCommunityPostUserIconVerified.setVisibility(View.VISIBLE);
-                    }else
-                    {
+                    } else {
                         ivFeedCommunityPostUserIconVerified.setVisibility(View.GONE);
                     }
                 }
@@ -775,11 +773,9 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         if (StringUtil.isNotNullOrEmptyString(authorImageUrl)) {
             ivFeedCommunityPostCircleIcon.setCircularImage(true);
             ivFeedCommunityPostCircleIcon.bindImage(authorImageUrl);
-            if(dataItem.isVerifiedMentor())
-            {
+            if (dataItem.isVerifiedMentor()) {
                 ivFeedCommunityPostCircleIconVerified.setVisibility(View.VISIBLE);
-            }else
-            {
+            } else {
                 ivFeedCommunityPostCircleIconVerified.setVisibility(View.GONE);
             }
         }
@@ -1036,7 +1032,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             tvFeedCommunityPostTextFullView.setVisibility(View.VISIBLE);
             tvFeedCommunityPostText.setVisibility(View.GONE);
             tvFeedCommunityPostTextFullView.setText(StringEscapeUtils.unescapeHtml4(mViewMoreDescription));
-            tvFeedCommunityPostTextFullView.scrollTo(0,0);
+            tvFeedCommunityPostTextFullView.scrollTo(0, 0);
         } else {
             tvFeedCommunityPostTextFullView.setVisibility(View.GONE);
             tvFeedCommunityPostText.setVisibility(View.VISIBLE);
@@ -1057,13 +1053,13 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 tvFeedCommunityPostViewMore.setText(mContext.getString(R.string.ID_VIEW_MORE));
                 tvFeedCommunityPostViewMore.setTag(mViewMore);
                 tvFeedCommunityPostText.setText(StringEscapeUtils.unescapeHtml4(mViewMoreDescription));
-                tvFeedCommunityPostTextFullView.scrollTo(0,0);
+                tvFeedCommunityPostTextFullView.scrollTo(0, 0);
             } else {
                 tvFeedCommunityPostViewMore.setVisibility(View.GONE);
                 tvFeedCommunityPostViewMore.setText(mContext.getString(R.string.ID_LESS));
                 tvFeedCommunityPostViewMore.setTag(mLess);
                 tvFeedCommunityPostTextFullView.setText(StringEscapeUtils.unescapeHtml4(mViewMoreDescription));
-                tvFeedCommunityPostText.scrollTo(0,0);
+                tvFeedCommunityPostText.scrollTo(0, 0);
             }
         }
     }
@@ -1268,7 +1264,13 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     @OnClick(R.id.tv_feed_community_post_card_title)
     public void onCommunityPostCardTitleClick() {
         viewInterface.handleOnClick(dataItem, tvFeedCommunityPostCardTitle);
+        if (dataItem.isVerifiedMentor()) {
+
+        } else {
+
+        }
     }
+
     private void interestedPress() {
         tvEventInterestedBtn.setEnabled(false);
         dataItem.setTrending(true);

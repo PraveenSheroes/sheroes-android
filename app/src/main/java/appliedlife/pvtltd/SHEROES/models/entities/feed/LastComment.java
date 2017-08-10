@@ -59,6 +59,10 @@ public class LastComment implements Parcelable {
     @Expose
     private boolean myOwnParticipation;
 
+    @SerializedName("solr_ignore_is_mentor")
+    @Expose
+    private boolean isVerifiedMentor;
+
     public int getId() {
         return id;
     }
@@ -198,6 +202,14 @@ public class LastComment implements Parcelable {
         this.myOwnParticipation = myOwnParticipation;
     }
 
+    public boolean isVerifiedMentor() {
+        return isVerifiedMentor;
+    }
+
+    public void setVerifiedMentor(boolean verifiedMentor) {
+        isVerifiedMentor = verifiedMentor;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -220,6 +232,7 @@ public class LastComment implements Parcelable {
         dest.writeString(this.participantImageUrl);
         dest.writeInt(this.entityAuthorUserIdL);
         dest.writeByte(this.myOwnParticipation ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isVerifiedMentor ? (byte) 1 : (byte) 0);
     }
 
     protected LastComment(Parcel in) {
@@ -238,6 +251,7 @@ public class LastComment implements Parcelable {
         this.participantImageUrl = in.readString();
         this.entityAuthorUserIdL = in.readInt();
         this.myOwnParticipation = in.readByte() != 0;
+        this.isVerifiedMentor = in.readByte() != 0;
     }
 
     public static final Creator<LastComment> CREATOR = new Creator<LastComment>() {

@@ -535,7 +535,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     }
                     break;
                 case AppConstants.ELEVENTH_CONSTANT:
-                    logOut();
+                     logOut();
                     /*Intent youTube = new Intent(this, MapActivity.class);
                     Bundle bundle = new Bundle();
                     youTube.putExtras(bundle);
@@ -618,17 +618,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         int id = view.getId();
         switch (id) {
             case R.id.li_growth_buddies_layout:
-                Intent intent = new Intent(this, PublicProfileGrowthBuddiesDetailActivity.class);
-                Bundle bundle = new Bundle();
-                mFeedDetail = new FeedDetail();
-                mFeedDetail.setIdOfEntityOrParticipant(mentorDetailItem.getEntityOrParticipantId());
-                //   mFeedDetail.setIdOfEntityOrParticipant(157);
-                mFeedDetail.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
-                bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
-                bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, mentorDetailItem);
-                intent.putExtras(bundle);
-                startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
-                overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
+                openMentorProfileDetail(mentorDetailItem);
                 break;
             case R.id.tv_growth_buddies_follow:
                 if (null != mPublicProfileGrowthBuddiesDialogFragment) {
@@ -639,6 +629,20 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + id);
         }
+    }
+
+    private void openMentorProfileDetail(MentorDetailItem mentorDetailItem) {
+        Intent intent = new Intent(this, PublicProfileGrowthBuddiesDetailActivity.class);
+        Bundle bundle = new Bundle();
+        mFeedDetail = new FeedDetail();
+        mFeedDetail.setIdOfEntityOrParticipant(mentorDetailItem.getEntityOrParticipantId());
+        //   mFeedDetail.setIdOfEntityOrParticipant(157);
+        mFeedDetail.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
+        bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
+        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, mentorDetailItem);
+        intent.putExtras(bundle);
+        startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
     }
 
     public void referralUserAttribute(Context context, LoginResponse loginResponse) {
