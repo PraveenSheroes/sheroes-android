@@ -406,6 +406,7 @@ public class MakeIndiaSafeDialogFragment extends BaseDialogFragment implements C
                     share.setType("image/*");
                     share.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     getActivity().startActivity(Intent.createChooser(share, "Share image File"));
+                    dismiss();
                     break;
                 case AppConstants.FAILED:
                     break;

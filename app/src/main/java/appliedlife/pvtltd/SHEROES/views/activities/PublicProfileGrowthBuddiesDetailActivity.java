@@ -182,7 +182,7 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
             StringBuilder stringBuilder = new StringBuilder();
             for (String str : mFeedDetail.getCanHelpIns()) {
                 stringBuilder.append(str).append(AppConstants.COMMA).append(AppConstants.SPACE);
-                tvMentorExpertise.setText(stringBuilder.toString().trim().substring(0, stringBuilder.toString().length() - 1));
+                tvMentorExpertise.setText(stringBuilder.toString().substring(0, stringBuilder.toString().trim().length() - 1));
             }
         }
     }
