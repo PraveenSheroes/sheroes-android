@@ -88,6 +88,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfilePreferredWorkLo
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTravelFLexibilityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.FollowedResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.MentorFollowUnfollowResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.MentorFollowerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.PublicProfileListRequest;
@@ -136,7 +137,8 @@ public interface SheroesAppServiceApi {
     Observable<MentorFollowUnfollowResponse> getMentorUnFollowFromApi(@Body PublicProfileListRequest publicProfileListRequest);
     @POST("/participant/user/get_number_of_followers")
     Observable<PublicProfileListResponse> getCountOfFollowerFromApi(@Body MentorFollowerRequest mentorFollowerRequest);
-
+    @POST("/participant/user/get_is_followed")
+    Observable<FollowedResponse> isFollowedCheckFromApi(@Body MentorFollowerRequest mentorFollowerRequest);
     @POST("participant/feed/my_communities")
     Observable<FeedResponsePojo> getMyCommunityFromApi(@Body MyCommunityRequest myCommunityRequest);
 

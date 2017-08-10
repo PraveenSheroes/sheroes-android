@@ -40,6 +40,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.FollowedResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.MentorFollowUnfollowResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.MentorFollowerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.PublicProfileListRequest;
@@ -303,6 +304,37 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onNext(PublicProfileListResponse publicProfileListResponse) {
                 getMvpView().stopProgressBar();
                 getMvpView().getSuccessForAllResponse(publicProfileListResponse, FOLLOW_UNFOLLOW);
+            }
+        });
+        registerSubscription(subscription);
+    }
+    public void getFollowedFromPresenter(MentorFollowerRequest mentorFollowerRequest) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, FOLLOW_UNFOLLOW);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = mHomeModel.getFollowedFromModel(mentorFollowerRequest).subscribe(new Subscriber<FollowedResponse>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                getMvpView().stopProgressBar();
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), FOLLOW_UNFOLLOW);
+                if(null!=e&&StringUtil.isNotNullOrEmptyString(e.getMessage())) {
+                    StringBuilder stringBuilder=new StringBuilder();
+                    stringBuilder.append(AppConstants.REACTION_ON_CARD).append(AppConstants.SPACE).append( e.getMessage());
+                    SheroesApplication.mContext.trackScreenView(stringBuilder.toString());
+                }
+            }
+
+            @Override
+            public void onNext(FollowedResponse followedResponse) {
+                getMvpView().stopProgressBar();
+                getMvpView().getSuccessForAllResponse(followedResponse, FOLLOW_UNFOLLOW);
             }
         });
         registerSubscription(subscription);

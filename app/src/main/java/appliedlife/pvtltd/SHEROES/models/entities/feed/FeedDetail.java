@@ -23,9 +23,9 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
     boolean isFromHome;
     private AppIntroData appIntroDataItems = null;
 
-    @SerializedName("solr_ignore_is_mentor")
+    @SerializedName("solr_ignore_is_author_mentor")
     @Expose
-    private boolean isVerifiedMentor;
+    private boolean isAuthorMentor;
     @SerializedName("community_participant_id_l")
     @Expose
     private int communityParticipantIdL;
@@ -1921,12 +1921,12 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         this.appIntroDataItems = appIntroDataItems;
     }
 
-    public boolean isVerifiedMentor() {
-        return isVerifiedMentor;
+    public boolean isAuthorMentor() {
+        return isAuthorMentor;
     }
 
-    public void setVerifiedMentor(boolean verifiedMentor) {
-        isVerifiedMentor = verifiedMentor;
+    public void setAuthorMentor(boolean authorMentor) {
+        isAuthorMentor = authorMentor;
     }
 
     @Override
@@ -1943,7 +1943,7 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         dest.writeByte(this.isTrending ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isFromHome ? (byte) 1 : (byte) 0);
         dest.writeParcelable(this.appIntroDataItems, flags);
-        dest.writeByte(this.isVerifiedMentor ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isAuthorMentor ? (byte) 1 : (byte) 0);
         dest.writeInt(this.communityParticipantIdL);
         dest.writeByte(this.isOgVideoLinkB ? (byte) 1 : (byte) 0);
         dest.writeString(this.ogDescriptionS);
@@ -2118,7 +2118,7 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         this.isTrending = in.readByte() != 0;
         this.isFromHome = in.readByte() != 0;
         this.appIntroDataItems = in.readParcelable(AppIntroData.class.getClassLoader());
-        this.isVerifiedMentor = in.readByte() != 0;
+        this.isAuthorMentor = in.readByte() != 0;
         this.communityParticipantIdL = in.readInt();
         this.isOgVideoLinkB = in.readByte() != 0;
         this.ogDescriptionS = in.readString();

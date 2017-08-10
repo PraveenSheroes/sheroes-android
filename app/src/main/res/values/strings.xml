@@ -90,6 +90,7 @@
     <string name="ID_OR">OR</string>
     <string name="ID_CANCEL">Cancel</string>
     <string name="ID_VIEW_MORE">View More</string>
+    <string name="ID_VIEW_MORE_MENTOR">...View More</string>
     <string name="ID_STD">+91</string>
     <string name="ID_CELL_PHONE_NUMBER">CELL PHONE NUMBER</string>
     <string name="ID_VIEW_MORE_COMMENT">View more replies</string>
@@ -169,6 +170,7 @@
     <string name="ID_OWNER">Owner (S)</string>
     <string name="ID_OWNER_Mo">owner</string>
     <string name="ID_LESS">View Less</string>
+    <string name="ID_LESS_MENTOR">...View Less</string>
     <string name="ID_RECENT">Recent</string>
     <string name="ID_RELATED_ARTICLES">Related Articles</string>
     <string name="ID_TAGS">Tags</string>

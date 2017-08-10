@@ -24,7 +24,7 @@ public class MentorDetailItem extends BaseResponse {
     private boolean isFollowed;
     @SerializedName("entity_or_participant_id")
     @Expose
-    private int entityOrParticipantId;
+    private long entityOrParticipantId;
     @SerializedName("mentor_image_url")
     @Expose
     private String mentorImageUrl;
@@ -53,13 +53,6 @@ public class MentorDetailItem extends BaseResponse {
         isFollowed = followed;
     }
 
-    public int getEntityOrParticipantId() {
-        return entityOrParticipantId;
-    }
-
-    public void setEntityOrParticipantId(int entityOrParticipantId) {
-        this.entityOrParticipantId = entityOrParticipantId;
-    }
 
     public String getMentorImageUrl() {
         return mentorImageUrl;
@@ -77,6 +70,17 @@ public class MentorDetailItem extends BaseResponse {
         this.itemPosition = itemPosition;
     }
 
+    public MentorDetailItem() {
+    }
+
+    public long getEntityOrParticipantId() {
+        return entityOrParticipantId;
+    }
+
+    public void setEntityOrParticipantId(long entityOrParticipantId) {
+        this.entityOrParticipantId = entityOrParticipantId;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -89,11 +93,8 @@ public class MentorDetailItem extends BaseResponse {
         dest.writeString(this.mentorName);
         dest.writeString(this.expertiesIn);
         dest.writeByte(this.isFollowed ? (byte) 1 : (byte) 0);
-        dest.writeInt(this.entityOrParticipantId);
+        dest.writeLong(this.entityOrParticipantId);
         dest.writeString(this.mentorImageUrl);
-    }
-
-    public MentorDetailItem() {
     }
 
     protected MentorDetailItem(Parcel in) {
@@ -102,7 +103,7 @@ public class MentorDetailItem extends BaseResponse {
         this.mentorName = in.readString();
         this.expertiesIn = in.readString();
         this.isFollowed = in.readByte() != 0;
-        this.entityOrParticipantId = in.readInt();
+        this.entityOrParticipantId = in.readLong();
         this.mentorImageUrl = in.readString();
     }
 

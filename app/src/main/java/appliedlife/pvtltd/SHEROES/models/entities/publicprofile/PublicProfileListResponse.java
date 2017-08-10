@@ -23,4 +23,6 @@ public class PublicProfileListResponse extends BaseResponse {
     public void setMentorDetailItems(List<MentorDetailItem> mentorDetailItems) {
         this.mentorDetailItems = mentorDetailItems;
     }
+
+
 }

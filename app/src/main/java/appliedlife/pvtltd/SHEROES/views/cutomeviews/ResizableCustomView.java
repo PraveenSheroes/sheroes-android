@@ -17,11 +17,10 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 
 public class ResizableCustomView {
     private final String TAG = LogUtils.makeLogTag(ResizableCustomView.class);
+
     public static void doResizeTextView(final TextView tv, final int maxLine, final String expandText, final boolean viewMore) {
 
-        if (tv.getTag() == null) {
-            tv.setTag(tv.getText());
-        }
+        tv.setTag(tv.getText());
         ViewTreeObserver vto = tv.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -34,34 +33,34 @@ public class ResizableCustomView {
                     int lineEndIndex = tv.getLayout().getLineEnd(0);
                     String text = tv.getText().subSequence(0, lineEndIndex - expandText.length() + 1) + " " + expandText;
                     tv.setText(text);
-                    LogUtils.info("Hi","**************maxline*****"+text);
+                    LogUtils.info("Hi", "**************maxline*****" + text);
                     tv.setMovementMethod(LinkMovementMethod.getInstance());
-                    String data=LEFT_HTML_VEIW_TAG_FOR_COLOR+text.substring(text.length()-10,text.length())+RIGHT_HTML_VIEW_TAG_FOR_COLOR;
-                    text=text.substring(0,text.length()-20)+ AppConstants.DOTS;
+                    String data = LEFT_HTML_VEIW_TAG_FOR_COLOR + text.substring(text.length() - 10, text.length()) + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
+                    text = text.substring(0, text.length() - 20) + AppConstants.DOTS;
                     tv.setText(
-                            addClickablePartTextViewResizable(Html.fromHtml(text+data), tv, maxLine, expandText,
+                            addClickablePartTextViewResizable(Html.fromHtml(text + data), tv, maxLine, expandText,
                                     viewMore), TextView.BufferType.SPANNABLE);
                 } else if (maxLine > 0 && tv.getLineCount() >= maxLine) {
 
                     int lineEndIndex = tv.getLayout().getLineEnd(maxLine - 1);
                     String text = tv.getText().subSequence(0, lineEndIndex - expandText.length() + 1) + " " + expandText;
-                    String data=LEFT_HTML_VEIW_TAG_FOR_COLOR+text.substring(text.length()-10,text.length())+RIGHT_HTML_VIEW_TAG_FOR_COLOR;
-                    LogUtils.info("Hi","**************maxline >0*****"+text+data);
+                    String data = LEFT_HTML_VEIW_TAG_FOR_COLOR + text.substring(text.length() - 10, text.length()) + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
+                    LogUtils.info("Hi", "**************maxline >0*****" + text + data);
                     //  tv.setText(text+data);
                     tv.setMovementMethod(LinkMovementMethod.getInstance());
-                    text=text.substring(0,text.length()-20)+ AppConstants.DOTS;
-                    tv.setText(addClickablePartTextViewResizable(Html.fromHtml(text+data), tv, maxLine, expandText,
-                                    viewMore), TextView.BufferType.SPANNABLE);
+                    text = text.substring(0, text.length() - 20) + AppConstants.DOTS;
+                    tv.setText(addClickablePartTextViewResizable(Html.fromHtml(text + data), tv, maxLine, expandText,
+                            viewMore), TextView.BufferType.SPANNABLE);
                 } else {
                     int lineEndIndex = tv.getLayout().getLineEnd(tv.getLayout().getLineCount() - 1);
                     String text = tv.getText().subSequence(0, lineEndIndex) + " " + expandText;
-                    String data=LEFT_HTML_VEIW_TAG_FOR_COLOR+text.substring(text.length()-10,text.length())+RIGHT_HTML_VIEW_TAG_FOR_COLOR;
-                    LogUtils.info("Hi","**************else*****"+text+data);
-                   // tv.setText(text+data);
-                    text=text.substring(0,text.length()-20);
+                    String data = LEFT_HTML_VEIW_TAG_FOR_COLOR + text.substring(text.length() - 10, text.length()) + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
+                    LogUtils.info("Hi", "**************else*****" + text + data);
+                    // tv.setText(text+data);
+                    text = text.substring(0, text.length() - 20);
                     tv.setMovementMethod(LinkMovementMethod.getInstance());
-                    tv.setText(addClickablePartTextViewResizable(Html.fromHtml(text+data), tv, lineEndIndex, expandText,
-                                    viewMore), TextView.BufferType.SPANNABLE);
+                    tv.setText(addClickablePartTextViewResizable(Html.fromHtml(text + data), tv, lineEndIndex, expandText,
+                            viewMore), TextView.BufferType.SPANNABLE);
                 }
             }
         });
@@ -73,7 +72,7 @@ public class ResizableCustomView {
         String str = strSpanned.toString();
         SpannableStringBuilder ssb = new SpannableStringBuilder(strSpanned);
         if (str.contains(spanableText)) {
-            ssb.setSpan(new MySpannable(false){
+            ssb.setSpan(new MySpannable(false) {
 
                 @Override
                 public void onClick(View widget) {

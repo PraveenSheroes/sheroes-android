@@ -32,6 +32,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.FollowedResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.MentorFollowUnfollowResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.MentorFollowerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.PublicProfileListRequest;
@@ -41,6 +42,7 @@ import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
+
 /**
  * Created by Praveen Singh on 29/12/2016.
  *
@@ -55,13 +57,15 @@ public class HomeModel {
     private final String TAG = LogUtils.makeLogTag(HomeModel.class);
     private final SheroesAppServiceApi sheroesAppServiceApi;
     Gson gson;
+
     @Inject
-    public HomeModel(SheroesAppServiceApi sheroesAppServiceApi,Gson gson) {
+    public HomeModel(SheroesAppServiceApi sheroesAppServiceApi, Gson gson) {
         this.sheroesAppServiceApi = sheroesAppServiceApi;
-        this.gson= gson;
+        this.gson = gson;
     }
-    public Observable<PublicProfileListResponse> getPublicProfileMentorListFromModel(PublicProfileListRequest publicProfileListRequest){
-        LogUtils.info(TAG,"*******************"+new Gson().toJson(publicProfileListRequest));
+
+    public Observable<PublicProfileListResponse> getPublicProfileMentorListFromModel(PublicProfileListRequest publicProfileListRequest) {
+        LogUtils.info(TAG, "*******************" + new Gson().toJson(publicProfileListRequest));
         return sheroesAppServiceApi.getPublicProfileListFromApi(publicProfileListRequest)
                 .map(new Func1<PublicProfileListResponse, PublicProfileListResponse>() {
                     @Override
@@ -72,8 +76,10 @@ public class HomeModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-    public Observable<PublicProfileListResponse> getCountOfFollowerFromModel(MentorFollowerRequest mentorFollowerRequest){
-        LogUtils.info(TAG,"*******************"+new Gson().toJson(mentorFollowerRequest));
+
+    public Observable<PublicProfileListResponse> getCountOfFollowerFromModel(MentorFollowerRequest mentorFollowerRequest) {
+        LogUtils.info(TAG, "*******************" + new Gson().toJson(mentorFollowerRequest));
+
         return sheroesAppServiceApi.getCountOfFollowerFromApi(mentorFollowerRequest)
                 .map(new Func1<PublicProfileListResponse, PublicProfileListResponse>() {
                     @Override
@@ -84,8 +90,23 @@ public class HomeModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-    public Observable<MentorFollowUnfollowResponse> getFollowFromModel(PublicProfileListRequest publicProfileListRequest){
-        LogUtils.info(TAG,"*******************"+new Gson().toJson(publicProfileListRequest));
+
+    public Observable<FollowedResponse> getFollowedFromModel(MentorFollowerRequest mentorFollowerRequest) {
+        LogUtils.info(TAG, "*******************" + new Gson().toJson(mentorFollowerRequest));
+        return sheroesAppServiceApi.isFollowedCheckFromApi(mentorFollowerRequest)
+                .map(new Func1<FollowedResponse, FollowedResponse>() {
+                    @Override
+                    public FollowedResponse call(FollowedResponse followedResponse) {
+                        return followedResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+    }
+
+    public Observable<MentorFollowUnfollowResponse> getFollowFromModel(PublicProfileListRequest publicProfileListRequest) {
+        LogUtils.info(TAG, "*******************" + new Gson().toJson(publicProfileListRequest));
         return sheroesAppServiceApi.getMentorFollowFromApi(publicProfileListRequest)
                 .map(new Func1<MentorFollowUnfollowResponse, MentorFollowUnfollowResponse>() {
                     @Override
@@ -96,8 +117,9 @@ public class HomeModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-    public Observable<MentorFollowUnfollowResponse> getUnFollowFromModel(PublicProfileListRequest publicProfileListRequest){
-        LogUtils.info(TAG,"*******************"+new Gson().toJson(publicProfileListRequest));
+
+    public Observable<MentorFollowUnfollowResponse> getUnFollowFromModel(PublicProfileListRequest publicProfileListRequest) {
+        LogUtils.info(TAG, "*******************" + new Gson().toJson(publicProfileListRequest));
         return sheroesAppServiceApi.getMentorUnFollowFromApi(publicProfileListRequest)
                 .map(new Func1<MentorFollowUnfollowResponse, MentorFollowUnfollowResponse>() {
                     @Override
@@ -108,8 +130,9 @@ public class HomeModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-    public Observable<FeedResponsePojo> getFeedFromModel(FeedRequestPojo  feedRequestPojo){
-        LogUtils.info(TAG,"*******************"+new Gson().toJson(feedRequestPojo));
+
+    public Observable<FeedResponsePojo> getFeedFromModel(FeedRequestPojo feedRequestPojo) {
+        LogUtils.info(TAG, "*******************" + new Gson().toJson(feedRequestPojo));
         return sheroesAppServiceApi.getFeedFromApi(feedRequestPojo)
                 .map(new Func1<FeedResponsePojo, FeedResponsePojo>() {
                     @Override
@@ -120,20 +143,22 @@ public class HomeModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-    public Observable<FeedResponsePojo> getMyCommunityFromModel(MyCommunityRequest myCommunityRequest){
+
+    public Observable<FeedResponsePojo> getMyCommunityFromModel(MyCommunityRequest myCommunityRequest) {
 
         return sheroesAppServiceApi.getMyCommunityFromApi(myCommunityRequest).map(new Func1<FeedResponsePojo, FeedResponsePojo>() {
-                    @Override
-                    public FeedResponsePojo call(FeedResponsePojo feedResponsePojo) {
+            @Override
+            public FeedResponsePojo call(FeedResponsePojo feedResponsePojo) {
 
-                        return feedResponsePojo;
-                    }
-                })
+                return feedResponsePojo;
+            }
+        })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-    public Observable<FeedResponsePojo> getBookMarkFromModel(FeedRequestPojo feedRequestPojo){
-        LogUtils.info(TAG,"*******************"+new Gson().toJson(feedRequestPojo));
+
+    public Observable<FeedResponsePojo> getBookMarkFromModel(FeedRequestPojo feedRequestPojo) {
+        LogUtils.info(TAG, "*******************" + new Gson().toJson(feedRequestPojo));
         return sheroesAppServiceApi.getBookMarkFromApi(feedRequestPojo)
                 .map(new Func1<FeedResponsePojo, FeedResponsePojo>() {
                     @Override
@@ -144,9 +169,10 @@ public class HomeModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-    public Observable<BookmarkResponsePojo> addBookmarkFromModel(BookmarkRequestPojo bookmarkRequestPojo,boolean isBookmarked){
-        LogUtils.info(TAG,"*******************"+new Gson().toJson(bookmarkRequestPojo));
-        if(!isBookmarked) {
+
+    public Observable<BookmarkResponsePojo> addBookmarkFromModel(BookmarkRequestPojo bookmarkRequestPojo, boolean isBookmarked) {
+        LogUtils.info(TAG, "*******************" + new Gson().toJson(bookmarkRequestPojo));
+        if (!isBookmarked) {
             return sheroesAppServiceApi.addBookMarkToApi(bookmarkRequestPojo)
                     .map(new Func1<BookmarkResponsePojo, BookmarkResponsePojo>() {
                         @Override
@@ -156,9 +182,7 @@ public class HomeModel {
                     })
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread());
-        }
-        else
-        {
+        } else {
             return sheroesAppServiceApi.UnBookMarkToApi(bookmarkRequestPojo)
                     .map(new Func1<BookmarkResponsePojo, BookmarkResponsePojo>() {
                         @Override
@@ -171,8 +195,8 @@ public class HomeModel {
         }
     }
 
-    public Observable<LikeResponse> getLikesFromModel(LikeRequestPojo  likeRequestPojo){
-        LogUtils.info(TAG,"*******************"+new Gson().toJson(likeRequestPojo));
+    public Observable<LikeResponse> getLikesFromModel(LikeRequestPojo likeRequestPojo) {
+        LogUtils.info(TAG, "*******************" + new Gson().toJson(likeRequestPojo));
         return sheroesAppServiceApi.getLikesFromApi(likeRequestPojo)
                 .map(new Func1<LikeResponse, LikeResponse>() {
                     @Override
@@ -183,8 +207,9 @@ public class HomeModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-    public Observable<LikeResponse> getUnLikesFromModel(LikeRequestPojo  likeRequestPojo){
-        LogUtils.info(TAG,"*******************"+new Gson().toJson(likeRequestPojo));
+
+    public Observable<LikeResponse> getUnLikesFromModel(LikeRequestPojo likeRequestPojo) {
+        LogUtils.info(TAG, "*******************" + new Gson().toJson(likeRequestPojo));
         return sheroesAppServiceApi.getUnLikesFromApi(likeRequestPojo)
                 .map(new Func1<LikeResponse, LikeResponse>() {
                     @Override
@@ -195,8 +220,9 @@ public class HomeModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-    public Observable<CommunityResponse> communityJoinFromModel(CommunityRequest communityRequest){
-        LogUtils.info(TAG,"*******************"+new Gson().toJson(communityRequest));
+
+    public Observable<CommunityResponse> communityJoinFromModel(CommunityRequest communityRequest) {
+        LogUtils.info(TAG, "*******************" + new Gson().toJson(communityRequest));
         return sheroesAppServiceApi.getCommunityJoinResponse(communityRequest)
                 .map(new Func1<CommunityResponse, CommunityResponse>() {
                     @Override
@@ -207,8 +233,9 @@ public class HomeModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-    public Observable<DeleteCommunityPostResponse> deleteCommunityPostFromModel(DeleteCommunityPostRequest deleteCommunityPostRequest){
-        LogUtils.info(TAG,"*******************"+new Gson().toJson(deleteCommunityPostRequest));
+
+    public Observable<DeleteCommunityPostResponse> deleteCommunityPostFromModel(DeleteCommunityPostRequest deleteCommunityPostRequest) {
+        LogUtils.info(TAG, "*******************" + new Gson().toJson(deleteCommunityPostRequest));
         return sheroesAppServiceApi.getCommunityPostDeleteResponse(deleteCommunityPostRequest)
                 .map(new Func1<DeleteCommunityPostResponse, DeleteCommunityPostResponse>() {
                     @Override
@@ -219,8 +246,9 @@ public class HomeModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-    public Observable<BookmarkResponsePojo> markAsSpamFromModel(BookmarkRequestPojo bookmarkResponsePojo){
-        LogUtils.info(TAG,"*******************"+new Gson().toJson(bookmarkResponsePojo));
+
+    public Observable<BookmarkResponsePojo> markAsSpamFromModel(BookmarkRequestPojo bookmarkResponsePojo) {
+        LogUtils.info(TAG, "*******************" + new Gson().toJson(bookmarkResponsePojo));
         return sheroesAppServiceApi.markAsSpam(bookmarkResponsePojo)
                 .map(new Func1<BookmarkResponsePojo, BookmarkResponsePojo>() {
                     @Override
@@ -231,21 +259,23 @@ public class HomeModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-    public Observable<CommunityResponse> communityOwnerFromModel(CommunityRequest communityRequest){
-        LogUtils.info("Community Join req: ",gson.toJson(communityRequest));
+
+    public Observable<CommunityResponse> communityOwnerFromModel(CommunityRequest communityRequest) {
+        LogUtils.info("Community Join req: ", gson.toJson(communityRequest));
 
         return sheroesAppServiceApi.getCommunityJoinResponse(communityRequest)
                 .map(new Func1<CommunityResponse, CommunityResponse>() {
                     @Override
                     public CommunityResponse call(CommunityResponse communityResponse) {
-                        LogUtils.info("Community Join res: ",gson.toJson(communityResponse));
+                        LogUtils.info("Community Join res: ", gson.toJson(communityResponse));
                         return communityResponse;
                     }
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-     public Observable<LoginResponse> getAuthTokenRefreshFromModel() {
+
+    public Observable<LoginResponse> getAuthTokenRefreshFromModel() {
         return sheroesAppServiceApi.getRefreshToken()
                 .map(new Func1<LoginResponse, LoginResponse>() {
                     @Override
@@ -257,8 +287,9 @@ public class HomeModel {
                 .observeOn(AndroidSchedulers.mainThread());
 
     }
-    public Observable<BelNotificationListResponse> getNotificationFromModel(BellNotificationRequest bellNotificationRequest){
-        LogUtils.info(TAG,"Bell notification request"+new Gson().toJson(bellNotificationRequest));
+
+    public Observable<BelNotificationListResponse> getNotificationFromModel(BellNotificationRequest bellNotificationRequest) {
+        LogUtils.info(TAG, "Bell notification request" + new Gson().toJson(bellNotificationRequest));
         return sheroesAppServiceApi.bellNotification(bellNotificationRequest)
                 .map(new Func1<BelNotificationListResponse, BelNotificationListResponse>() {
                     @Override
@@ -269,8 +300,9 @@ public class HomeModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-    public Observable<NotificationReadCountResponse> getNotificationReadCountFromModel(NotificationReadCount notificationReadCount){
-        LogUtils.info(TAG," notification read count request"+new Gson().toJson(notificationReadCount));
+
+    public Observable<NotificationReadCountResponse> getNotificationReadCountFromModel(NotificationReadCount notificationReadCount) {
+        LogUtils.info(TAG, " notification read count request" + new Gson().toJson(notificationReadCount));
         return sheroesAppServiceApi.notificationReadCount(notificationReadCount)
                 .map(new Func1<NotificationReadCountResponse, NotificationReadCountResponse>() {
                     @Override
@@ -281,8 +313,9 @@ public class HomeModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-    public Observable<ChallengeListResponse> getChallengeListFromModel(ChallengeRequest challengeRequest){
-        LogUtils.info(TAG," **********challenge request"+new Gson().toJson(challengeRequest));
+
+    public Observable<ChallengeListResponse> getChallengeListFromModel(ChallengeRequest challengeRequest) {
+        LogUtils.info(TAG, " **********challenge request" + new Gson().toJson(challengeRequest));
         return sheroesAppServiceApi.challengeList(challengeRequest)
                 .map(new Func1<ChallengeListResponse, ChallengeListResponse>() {
                     @Override
@@ -293,8 +326,9 @@ public class HomeModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-    public Observable<ChallengeListResponse> getChallengeAcceptFromModel(ChallengeAcceptRequest challengeAcceptRequest){
-        LogUtils.info(TAG," **********challenge request"+new Gson().toJson(challengeAcceptRequest));
+
+    public Observable<ChallengeListResponse> getChallengeAcceptFromModel(ChallengeAcceptRequest challengeAcceptRequest) {
+        LogUtils.info(TAG, " **********challenge request" + new Gson().toJson(challengeAcceptRequest));
         return sheroesAppServiceApi.challengeAccept(challengeAcceptRequest)
                 .map(new Func1<ChallengeListResponse, ChallengeListResponse>() {
                     @Override
@@ -305,8 +339,9 @@ public class HomeModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-    public Observable<AppIntroScreenResponse> getAppIntroFromModel(AppIntroScreenRequest appIntroScreenRequest){
-        LogUtils.info(TAG," **********Appintro  request"+new Gson().toJson(appIntroScreenRequest));
+
+    public Observable<AppIntroScreenResponse> getAppIntroFromModel(AppIntroScreenRequest appIntroScreenRequest) {
+        LogUtils.info(TAG, " **********Appintro  request" + new Gson().toJson(appIntroScreenRequest));
         return sheroesAppServiceApi.appIntroScreen(appIntroScreenRequest)
                 .map(new Func1<AppIntroScreenResponse, AppIntroScreenResponse>() {
                     @Override
@@ -317,8 +352,9 @@ public class HomeModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-    public Observable<GcmIdResponse> getNewGCMidFromModel(LoginRequest loginRequest){
-        LogUtils.info(TAG," Gcm id  request"+new Gson().toJson(loginRequest));
+
+    public Observable<GcmIdResponse> getNewGCMidFromModel(LoginRequest loginRequest) {
+        LogUtils.info(TAG, " Gcm id  request" + new Gson().toJson(loginRequest));
         return sheroesAppServiceApi.getNewGCMidFromApi(loginRequest)
                 .map(new Func1<GcmIdResponse, GcmIdResponse>() {
                     @Override
@@ -331,7 +367,7 @@ public class HomeModel {
     }
 
     public Observable<UserPhoneContactsListResponse> getAppContactsResponseInModel(UserPhoneContactsListRequest userPhoneContactsListRequest) {
-        LogUtils.info(TAG,"*******************"+new Gson().toJson(userPhoneContactsListRequest));
+        LogUtils.info(TAG, "*******************" + new Gson().toJson(userPhoneContactsListRequest));
         return sheroesAppServiceApi.getPhoneContactListResponse(userPhoneContactsListRequest)
                 .map(new Func1<UserPhoneContactsListResponse, UserPhoneContactsListResponse>() {
                     @Override

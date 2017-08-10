@@ -12,13 +12,14 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
 public class PublicProfileListRequest extends BaseRequest {
     @SerializedName("id_of_entity_or_participant")
     @Expose
-    protected Integer idOfEntityParticipant;
+    protected Long idOfEntityParticipant;
 
-    public Integer getIdOfEntityParticipant() {
+
+    public Long getIdOfEntityParticipant() {
         return idOfEntityParticipant;
     }
 
-    public void setIdOfEntityParticipant(Integer idOfEntityParticipant) {
+    public void setIdOfEntityParticipant(Long idOfEntityParticipant) {
         this.idOfEntityParticipant = idOfEntityParticipant;
     }
 }

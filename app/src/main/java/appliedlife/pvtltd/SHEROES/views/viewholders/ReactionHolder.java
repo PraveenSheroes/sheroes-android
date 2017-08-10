@@ -21,10 +21,12 @@ import butterknife.ButterKnife;
 /**
  * Created by Praveen_Singh on 24-01-2017.
  */
-public class ReactionHolder  extends BaseViewHolder<CommentReactionDoc> {
+public class ReactionHolder extends BaseViewHolder<CommentReactionDoc> {
     private final String TAG = LogUtils.makeLogTag(ReactionHolder.class);
     @Bind(R.id.li_reaction)
     LinearLayout liReaction;
+    @Bind(R.id.iv_reaction_profile_pic_verified)
+    ImageView ivReactionProfilePicVerified;
     @Bind(R.id.iv_reaction_profile_pic)
     CircleImageView ivReactionProfilePic;
     @Bind(R.id.tv_user_name_reaction)
@@ -36,6 +38,7 @@ public class ReactionHolder  extends BaseViewHolder<CommentReactionDoc> {
 
     BaseHolderInterface viewInterface;
     private CommentReactionDoc dataItem;
+
     public ReactionHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
@@ -46,22 +49,27 @@ public class ReactionHolder  extends BaseViewHolder<CommentReactionDoc> {
     @Override
     public void bindData(CommentReactionDoc item, final Context context, int position) {
         this.dataItem = item;
-        if(StringUtil.isNotNullOrEmptyString(item.getParticipantName())) {
+        if (StringUtil.isNotNullOrEmptyString(item.getParticipantName())) {
             tvUserName.setText(item.getParticipantName());
         }
-        if(StringUtil.isNotNullOrEmptyString(item.getCity())) {
+        if (StringUtil.isNotNullOrEmptyString(item.getCity())) {
             tvUserLoaction.setText(item.getCity());
         }
-        if(StringUtil.isNotNullOrEmptyString(item.getParticipantImageUrl())) {
+        if (StringUtil.isNotNullOrEmptyString(item.getParticipantImageUrl())) {
             String images = dataItem.getParticipantImageUrl();
             ivReactionProfilePic.setCircularImage(true);
             ivReactionProfilePic.bindImage(images);
+
         }
-        switch (item.getLikeValue())
-        {
+        if (dataItem.isVerifiedMentor()) {
+            ivReactionProfilePicVerified.setVisibility(View.VISIBLE);
+        } else {
+            ivReactionProfilePicVerified.setVisibility(View.GONE);
+        }
+        switch (item.getLikeValue()) {
             case AppConstants.HEART_REACTION_CONSTANT:
                 ivUserReactionEmoji.setImageResource(R.drawable.ic_heart_active);
-            break;
+                break;
             case AppConstants.EMOJI_FIRST_REACTION_CONSTANT:
                 ivUserReactionEmoji.setImageResource(R.drawable.ic_emoji3_whistel);
                 break;
@@ -74,7 +82,8 @@ public class ReactionHolder  extends BaseViewHolder<CommentReactionDoc> {
             case AppConstants.EMOJI_FOURTH_REACTION_CONSTANT:
                 ivUserReactionEmoji.setImageResource(R.drawable.ic_emoji4_face_palm);
                 break;
-            default:  LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + "  " + TAG + " " + item.getLikeValue());
+            default:
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + "  " + TAG + " " + item.getLikeValue());
         }
     }
 

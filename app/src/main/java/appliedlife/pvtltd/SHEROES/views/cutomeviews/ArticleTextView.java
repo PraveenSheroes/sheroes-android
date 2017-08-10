@@ -6,7 +6,6 @@ import android.view.ViewTreeObserver;
 import android.widget.TextView;
 
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
-import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 
 /**
  * Created by Praveen_Singh on 17-04-2017.
@@ -30,7 +29,6 @@ public class ArticleTextView {
                     int lineEndIndex = tv.getLayout().getLineEnd(0);
                     String text = tv.getText().subSequence(0, lineEndIndex - expandText.length() + 1) + " " + expandText;
                     tv.setText(text);
-                    LogUtils.info("Hi", "**************maxline*****" + text);
                     tv.setMovementMethod(LinkMovementMethod.getInstance());
                     if (text.length() > 10) {
                         String data = LEFT_HTML_VEIW_TAG_FOR_COLOR + text.substring(text.length() - 10, text.length()) + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
@@ -45,7 +43,6 @@ public class ArticleTextView {
                     String text = tv.getText().subSequence(0, lineEndIndex - expandText.length() + 1) + " " + expandText;
                     if (text.length() > 10) {
                         String data = LEFT_HTML_VEIW_TAG_FOR_COLOR + text.substring(text.length() - 10, text.length()) + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
-                        LogUtils.info("Hi", "**************maxline >0*****" + text + data);
                         //  tv.setText(text+data);
                         tv.setMovementMethod(LinkMovementMethod.getInstance());
                         if (text.length() > 20) {
@@ -58,7 +55,6 @@ public class ArticleTextView {
                     String text = tv.getText().subSequence(0, lineEndIndex) + " " + expandText;
                     if (text.length() > 10) {
                         String data = LEFT_HTML_VEIW_TAG_FOR_COLOR + text.substring(text.length() - 10, text.length()) + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
-                        LogUtils.info("Hi", "**************else*****" + text + data);
                         // tv.setText(text+data);
                         if (text.length() > 20) {
                             text = text.substring(0, text.length() - 20) + AppConstants.DOTS;

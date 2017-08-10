@@ -569,14 +569,23 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 tvFeedCommunityPostText.setVisibility(View.VISIBLE);
                 String feedTitle = dataItem.getAuthorName();
                 String feedCommunityName = dataItem.getPostCommunityName();
-                if (!feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_ADMIN))) {
-                    posted.append(feedTitle).append(AppConstants.SPACE).append(LEFT_POSTED).append(mContext.getString(R.string.ID_POSTED_IN)).append(RIGHT_POSTED).append(AppConstants.SPACE);
-                }
-                posted.append(LEFT_HTML_VEIW_TAG_FOR_COLOR).append(feedCommunityName).append(RIGHT_HTML_VIEW_TAG_FOR_COLOR);
-                if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                    tvFeedCommunityPostCardTitle.setText(Html.fromHtml(posted.toString(), 0)); // for 24 api and more
-                } else {
-                    tvFeedCommunityPostCardTitle.setText(Html.fromHtml(posted.toString()));// or for older api
+                if(StringUtil.isNotNullOrEmptyString(feedTitle)) {
+                    if (!feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
+                        if (dataItem.isAuthorMentor()) {
+                            ivFeedCommunityPostCircleIconVerified.setVisibility(View.VISIBLE);
+                        } else {
+                            ivFeedCommunityPostCircleIconVerified.setVisibility(View.GONE);
+                        }
+                    }
+                    if (!feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_ADMIN))) {
+                        posted.append(feedTitle).append(AppConstants.SPACE).append(LEFT_POSTED).append(mContext.getString(R.string.ID_POSTED_IN)).append(RIGHT_POSTED).append(AppConstants.SPACE);
+                    }
+                    posted.append(LEFT_HTML_VEIW_TAG_FOR_COLOR).append(feedCommunityName).append(RIGHT_HTML_VIEW_TAG_FOR_COLOR);
+                    if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                        tvFeedCommunityPostCardTitle.setText(Html.fromHtml(posted.toString(), 0)); // for 24 api and more
+                    } else {
+                        tvFeedCommunityPostCardTitle.setText(Html.fromHtml(posted.toString()));// or for older api
+                    }
                 }
             }
         }
@@ -773,11 +782,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         if (StringUtil.isNotNullOrEmptyString(authorImageUrl)) {
             ivFeedCommunityPostCircleIcon.setCircularImage(true);
             ivFeedCommunityPostCircleIcon.bindImage(authorImageUrl);
-            if (dataItem.isVerifiedMentor()) {
-                ivFeedCommunityPostCircleIconVerified.setVisibility(View.VISIBLE);
-            } else {
-                ivFeedCommunityPostCircleIconVerified.setVisibility(View.GONE);
-            }
         }
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getPhotoUrl())) {
             ivFeedCommunityPostRegisterUserPic.setCircularImage(true);
@@ -1263,11 +1267,10 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_feed_community_post_card_title)
     public void onCommunityPostCardTitleClick() {
-        viewInterface.handleOnClick(dataItem, tvFeedCommunityPostCardTitle);
-        if (dataItem.isVerifiedMentor()) {
-
+        if (dataItem.isAuthorMentor()) {
+            viewInterface.userCommentLikeRequest(dataItem, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL, getAdapterPosition());
         } else {
-
+            viewInterface.handleOnClick(dataItem, tvFeedCommunityPostCardTitle);
         }
     }
 

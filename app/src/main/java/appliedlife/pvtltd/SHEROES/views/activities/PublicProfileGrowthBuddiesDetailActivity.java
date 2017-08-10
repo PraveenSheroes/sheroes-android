@@ -41,6 +41,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListRespon
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
+import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.FollowedResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.MentorDetailItem;
 import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.MentorFollowUnfollowResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.PublicProfileListRequest;
@@ -51,6 +52,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.ResizableCustomView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
@@ -122,6 +124,7 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
     AppUtils mAppUtils;
     @Inject
     HomePresenter mHomePresenter;
+    private String mViewMoreDescription;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -154,6 +157,8 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
         }
         if (null != mMentorDetailItem) {
             isFollowUnfollow();
+        } else {
+            mHomePresenter.getFollowedFromPresenter(mAppUtils.countFollowerRequestBuilder(mFeedDetail.getIdOfEntityOrParticipant()));
         }
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getNameOrTitle())) {
             mTvMentorName.setText(mFeedDetail.getNameOrTitle());
@@ -169,16 +174,19 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
             }
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append("\"").append(tvMentorDescription.getText().toString()).append("\"");
-            tvMentorDescription.setText(stringBuilder.toString());
+            mViewMoreDescription = stringBuilder.toString();
+            tvMentorDescription.setText(mViewMoreDescription);
+            ResizableCustomView.doResizeTextView(tvMentorDescription, 2, AppConstants.VIEW_MORE, true);
         }
         if (StringUtil.isNotEmptyCollection(mFeedDetail.getCanHelpIns())) {
             StringBuilder stringBuilder = new StringBuilder();
             for (String str : mFeedDetail.getCanHelpIns()) {
-                stringBuilder.append(str).append(AppConstants.COMMA);
-                tvMentorExpertise.setText(stringBuilder.toString().substring(0, stringBuilder.toString().length() - 1));
+                stringBuilder.append(str).append(AppConstants.COMMA).append(AppConstants.SPACE);
+                tvMentorExpertise.setText(stringBuilder.toString().trim().substring(0, stringBuilder.toString().length() - 1));
             }
         }
     }
+
 
     private void setPagerAndLayouts() {
         ViewCompat.setTransitionName(mAppBarLayout, AppConstants.COMMUNITY_DETAIL);
@@ -216,9 +224,9 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
 
     private void isFollowUnfollow() {
         if (mMentorDetailItem.isFollowed()) {
-            tvFollowUnfollowPublicProfile.setTextColor(ContextCompat.getColor(this, R.color.white));
+            tvFollowUnfollowPublicProfile.setTextColor(ContextCompat.getColor(this, R.color.growth_followed));
             tvFollowUnfollowPublicProfile.setText(getString(R.string.ID_GROWTH_BUDDIES_FOLLOWING));
-            tvFollowUnfollowPublicProfile.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
+            tvFollowUnfollowPublicProfile.setBackgroundResource(R.drawable.rectangle_growth_followed);
         } else {
             tvFollowUnfollowPublicProfile.setTextColor(ContextCompat.getColor(this, R.color.white));
             tvFollowUnfollowPublicProfile.setText(getString(R.string.ID_GROWTH_BUDDIES_UNFOLLOW));
@@ -365,7 +373,27 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
         } else if (baseResponse instanceof PublicProfileListResponse) {
             PublicProfileListResponse publicProfileListResponse = (PublicProfileListResponse) baseResponse;
             countFollowerSuccess(publicProfileListResponse);
+        } else if (baseResponse instanceof FollowedResponse) {
+            FollowedResponse followedResponse = (FollowedResponse) baseResponse;
+            followedSuccess(followedResponse);
         }
+    }
+
+    private void followedSuccess(FollowedResponse followedResponse) {
+        switch (followedResponse.getStatus()) {
+            case AppConstants.SUCCESS:
+                MentorDetailItem mentorDetailItem = new MentorDetailItem();
+                mentorDetailItem.setEntityOrParticipantId(mFeedDetail.getIdOfEntityOrParticipant());
+                mentorDetailItem.setFollowed(followedResponse.isFollowed());
+                mMentorDetailItem = mentorDetailItem;
+                isFollowUnfollow();
+                break;
+            case AppConstants.FAILED:
+
+                break;
+            default:
+        }
+
     }
 
     private void countFollowerSuccess(PublicProfileListResponse publicProfileListResponse) {

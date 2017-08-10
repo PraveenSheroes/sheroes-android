@@ -22,4 +22,6 @@ public class MentorFollowerRequest extends BaseRequest{
     public void setMentorId(Long mentorId) {
         this.mentorId = mentorId;
     }
+
+
 }
