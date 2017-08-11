@@ -585,6 +585,10 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                     if (!feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_ADMIN))) {
                         //posted.append(feedTitle).append(AppConstants.SPACE).append(LEFT_POSTED).append(mContext.getString(R.string.ID_POSTED_IN)).append(RIGHT_POSTED).append(AppConstants.SPACE);
                         posted.append(feedTitle).append(AppConstants.SPACE).append(mContext.getString(R.string.ID_POSTED_IN)).append(AppConstants.SPACE);
+                    }else
+                    {
+                        feedTitle=mContext.getString(R.string.ID_ANONYMOUS);
+                        posted.append(feedTitle).append(AppConstants.SPACE).append(mContext.getString(R.string.ID_POSTED_IN)).append(AppConstants.SPACE);
                     }
                     // posted.append(LEFT_HTML_VEIW_TAG_FOR_COLOR).append(feedCommunityName).append(RIGHT_HTML_VIEW_TAG_FOR_COLOR);
                     posted.append(feedCommunityName);
@@ -1328,16 +1332,19 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 textPaint.setUnderlineText(false);
             }
         };
-
-        SpanString.setSpan(authorTitle, 0, feedTitle.length(), 0);
-        SpanString.setSpan(postedInClick, feedTitle.length(), feedTitle.length() + postedIn.length(), 0);
-        SpanString.setSpan(community, feedTitle.length() + postedIn.length(), nameAndCommunity.length(), 0);
-        SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_article_label)), 0, feedTitle.length(), 0);
-        SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.posted_in)), feedTitle.length(), feedTitle.length() + postedIn.length() + 1, 0);
-        SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.footer_icon_text)), feedTitle.length() + 11, nameAndCommunity.length(), 0);
-        tvFeedCommunityPostCardTitle.setMovementMethod(LinkMovementMethod.getInstance());
-        tvFeedCommunityPostCardTitle.setText(SpanString, TextView.BufferType.SPANNABLE);
-        tvFeedCommunityPostCardTitle.setSelected(true);
+        if(StringUtil.isNotNullOrEmptyString(feedTitle)) {
+            SpanString.setSpan(authorTitle, 0, feedTitle.length(), 0);
+            SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_article_label)), 0, feedTitle.length(), 0);
+            if(StringUtil.isNotNullOrEmptyString(postedIn)&&StringUtil.isNotNullOrEmptyString(nameAndCommunity)) {
+                SpanString.setSpan(postedInClick, feedTitle.length(), feedTitle.length() + postedIn.length()-1, 0);
+                SpanString.setSpan(community, feedTitle.length() + postedIn.length()-1, nameAndCommunity.length(), 0);
+                SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.posted_in)),  feedTitle.length(), feedTitle.length() + postedIn.length()-1, 0);
+                SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.footer_icon_text)),feedTitle.length() + postedIn.length()-1, nameAndCommunity.length(), 0);
+            }
+            tvFeedCommunityPostCardTitle.setMovementMethod(LinkMovementMethod.getInstance());
+            tvFeedCommunityPostCardTitle.setText(SpanString, TextView.BufferType.SPANNABLE);
+            tvFeedCommunityPostCardTitle.setSelected(true);
+        }
     }
 
     private void interestedPress() {
