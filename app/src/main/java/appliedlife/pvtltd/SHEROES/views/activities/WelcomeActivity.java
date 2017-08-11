@@ -19,7 +19,6 @@ import android.widget.TextView;
 
 import com.appsflyer.AppsFlyerLib;
 import com.f2prateek.rx.preferences.Preference;
-import com.invitereferrals.invitereferrals.InviteReferralsApi;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 import com.moengage.push.PushManager;
@@ -120,7 +119,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
-        InviteReferralsApi.getInstance(this).tracking(AppConstants.INSTALL, null, 0,null);
+     //   InviteReferralsApi.getInstance(this).tracking(AppConstants.INSTALL, null, 0,null);
         mMoEHelper = MoEHelper.getInstance(this);
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();

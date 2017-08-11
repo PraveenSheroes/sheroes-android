@@ -11,7 +11,6 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.StandardExceptionParser;
 import com.google.android.gms.analytics.Tracker;
-import com.invitereferrals.invitereferrals.InviteReferralsApplication;
 import com.moe.pushlibrary.MoEHelper;
 
 import java.io.File;
@@ -54,7 +53,7 @@ public class SheroesApplication extends MultiDexApplication  {
         MoEHelper.getInstance(getApplicationContext()).autoIntegrate(this);
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
-        InviteReferralsApplication.register(this);
+      //  InviteReferralsApplication.register(this);
         AnalyticsTrackers.initialize(this);
         AnalyticsTrackers.getInstance().get(AnalyticsTrackers.Target.APP);
         File cacheFile = new File(getCacheDir(), "responses");

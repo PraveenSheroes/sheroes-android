@@ -1,1 +1,1 @@
-include ':app', ':invitereferrals'
+include ':app'

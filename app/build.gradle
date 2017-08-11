@@ -38,7 +38,6 @@ android {
     buildTypes {
         debug {
             buildConfigField "String", "BASE_URL", "\"http://34.193.138.177/\""
-            //buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
             buildConfigField "String", "GOOGLE_PLUS_URL", "\"https://sheroes.com/APIUsers/gplogin.json\""
             buildConfigField 'Boolean', 'enableCrashlytics', 'false'
             shrinkResources false
@@ -46,7 +45,6 @@ android {
             signingConfig signingConfigs.debug
         }
         release {
-            // buildConfigField "String", "BASE_URL", "\"http://52.44.245.191/\""
             buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
             buildConfigField "String", "GOOGLE_PLUS_URL", "\"https://sheroes.com/APIUsers/gplogin.json\""
             buildConfigField 'Boolean', 'enableCrashlytics', 'true'
@@ -108,8 +106,7 @@ dependencies {
     compile 'com.appsflyer:af-android-sdk:4.6.7@aar'
     compile 'org.apache.commons:commons-lang3:3.5'
     compile files('libs/YouTubeAndroidPlayerApi.jar')
-    compile project(':invitereferrals')
-    compile files('libs/invitereferrals.jar')
+
 }
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'io.fabric'

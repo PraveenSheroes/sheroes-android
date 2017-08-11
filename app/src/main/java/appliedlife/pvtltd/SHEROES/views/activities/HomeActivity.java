@@ -59,7 +59,6 @@ import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.share.model.AppInviteContent;
 import com.facebook.share.widget.AppInviteDialog;
-import com.invitereferrals.invitereferrals.InviteReferralsApi;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
@@ -170,8 +169,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     TextView mTvSetting;
     @Bind(R.id.tv_home)
     TextView mTvHome;
-    @Bind(R.id.tv_make_india_safe)
-    ImageView mTvMakeIndiaSafe;
+   // @Bind(R.id.tv_make_india_safe)
+   // ImageView mTvMakeIndiaSafe;
     @Bind(R.id.tv_communities)
     TextView mTvCommunities;
     @Bind(R.id.li_article_spinner_icon)
@@ -254,8 +253,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         if (StringUtil.isNotNullOrEmptyString(mHelpLineChat) && mHelpLineChat.equalsIgnoreCase(AppConstants.HELPLINE_CHAT)) {
             handleHelpLineFragmentFromDeepLinkAndLoading();
         }
-        InviteReferralsApi.getInstance(this).showWelcomeMessage();
-        InviteReferralsApi.getInstance(this).invite(AppConstants.HOME);
+       // InviteReferralsApi.getInstance(this).showWelcomeMessage();
+        //InviteReferralsApi.getInstance(this).invite(AppConstants.HOME);
     }
 
     @Override
@@ -554,7 +553,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                         if (null != loginResponse)
                             referralUserAttribute(this, loginResponse);
                     }
-                    InviteReferralsApi.getInstance(HomeActivity.this).inline_btn(AppConstants.CAMPAIGN_ID);
+                    //InviteReferralsApi.getInstance(HomeActivity.this).inline_btn(AppConstants.CAMPAIGN_ID);
                     isInviteReferral = true;
                     break;
                 case 14:
@@ -667,7 +666,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     mobile.append(loginResponse.getUserSummary().getUserBO().getMobile());
                 }
             }
-            InviteReferralsApi.getInstance(context).userDetails(fullName.toString(), emailId.toString(), mobile.toString(), AppConstants.CAMPAIGN_ID, subscriptionID.toString(), customValues.toString());
+            //InviteReferralsApi.getInstance(context).userDetails(fullName.toString(), emailId.toString(), mobile.toString(), AppConstants.CAMPAIGN_ID, subscriptionID.toString(), customValues.toString());
         }
     }
 
@@ -1207,7 +1206,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     }
 
     public void openJobFragment() {
-        mTvMakeIndiaSafe.setVisibility(View.GONE);
+        //mTvMakeIndiaSafe.setVisibility(View.GONE);
         mJobFragment.setVisibility(View.VISIBLE);
         mTvSearchBox.setVisibility(View.VISIBLE);
         mICSheroes.setVisibility(View.GONE);
@@ -1290,7 +1289,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             mJobFragment.setVisibility(View.GONE);
             mTvSearchBox.setVisibility(View.GONE);
             mICSheroes.setVisibility(View.VISIBLE);
-            mTvMakeIndiaSafe.setVisibility(View.VISIBLE);
+            //mTvMakeIndiaSafe.setVisibility(View.VISIBLE);
             getSupportFragmentManager().popBackStackImmediate();
             initHomeViewPagerAndTabs();
             setHomeFeedCommunityData();
@@ -1421,10 +1420,10 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         callBellNotification();
     }
 
-    @OnClick(R.id.tv_make_india_safe)
+ /*   @OnClick(R.id.tv_make_india_safe)
     public void tvOnClickMakeIndiasafe() {
         makeWomenSafeDialog(null);
-       /* if (Build.VERSION.SDK_INT >= 23) {
+      if (Build.VERSION.SDK_INT >= 23) {
             if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 locationTracker();
             } else {
@@ -1432,8 +1431,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             }
         } else {
             locationTracker();
-        }*/
-    }
+        }
+    }*/
 
     @OnClick(R.id.tv_drawer_navigation)
     public void drawerNavigationClick() {
