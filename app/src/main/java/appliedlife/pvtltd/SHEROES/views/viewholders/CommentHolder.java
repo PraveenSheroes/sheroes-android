@@ -56,6 +56,7 @@ public class CommentHolder extends BaseViewHolder<CommentReactionDoc> {
     TextView tvUserCommentListMenu;
     @Bind(R.id.tv_list_user_comment_time)
     TextView tvListCommentTime;
+
     Context mContext;
     BaseHolderInterface viewInterface;
     private CommentReactionDoc dataItem;
@@ -129,6 +130,13 @@ public class CommentHolder extends BaseViewHolder<CommentReactionDoc> {
         dataItem.setItemPosition(getAdapterPosition());
         viewInterface.handleOnClick(dataItem, tvUserCommentListMenu);
     }
+    @OnClick(R.id.tv_list_user_comment)
+    public void onCommentWithNameClick() {
+        if (dataItem.isVerifiedMentor()) {
+            viewInterface.userCommentLikeRequest(dataItem, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL, getAdapterPosition());
+        }
+    }
+
 
     @Override
     public void onClick(View view) {

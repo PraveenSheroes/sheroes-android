@@ -14,6 +14,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -106,6 +107,8 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
     public View viewLine1;
     @Bind(R.id.view_line2)
     public View viewLine2;
+    @Bind(R.id.iv_public_profile_image)
+    ImageView ivPublicProfileImage;
     @Bind(R.id.tv_follow_unfollow_public_profile)
     TextView tvFollowUnfollowPublicProfile;
     @Inject
@@ -154,6 +157,11 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .skipMemoryCache(true)
                     .into(mProfileIcon);
+            Glide.with(this)
+                    .load(mFeedDetail.getImageUrl())
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .skipMemoryCache(true)
+                    .into(ivPublicProfileImage);
         }
         if (null != mMentorDetailItem) {
             isFollowUnfollow();

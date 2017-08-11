@@ -9,12 +9,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_size_40">
+        android:layout_marginTop="@dimen/dp_size_30">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_size_12"
+            android:layout_marginLeft="@dimen/dp_size_10"
             android:orientation="vertical">
 
             <appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView
@@ -41,7 +41,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_size_12"
+            android:layout_marginLeft="@dimen/dp_size_16"
             android:layout_marginTop="@dimen/dp_size_10"
             android:orientation="vertical">
 
@@ -51,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:drawablePadding="@dimen/dp_size_10"
                 android:drawableRight="@drawable/ic_verified"
-                android:fontFamily="@string/ID_ROBOTO_BOLD"
+                android:textStyle="bold"
                 android:textAllCaps="true"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sp_size_14" />
@@ -59,7 +59,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_size_25"
+                android:layout_marginTop="@dimen/dp_size_16"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:text="@string/ID_MENTOR_FOR"
                 android:textAllCaps="true"
@@ -70,7 +70,7 @@
                 android:id="@+id/tv_mentor_expertise"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_size_10"
+                android:layout_marginTop="@dimen/dp_size_8"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:textColor="@color/public_profile_text"
                 android:textSize="@dimen/sp_size_12" />
@@ -79,7 +79,7 @@
                 android:id="@+id/tv_mentor_city_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_size_20"
+                android:layout_marginTop="@dimen/dp_size_16"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sp_size_12" />
@@ -101,10 +101,9 @@
         android:id="@+id/view_line1"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_size_1"
-        android:layout_marginBottom="@dimen/dp_size_10"
-        android:layout_marginLeft="@dimen/dp_size_20"
+        android:layout_marginLeft="@dimen/dp_size_14"
         android:layout_marginRight="@dimen/dp_size_20"
-        android:layout_marginTop="@dimen/dp_size_16"
+        android:layout_marginTop="@dimen/dp_size_8"
         android:alpha=".5"
         android:background="@color/public_profile_text"
         android:visibility="invisible" />
@@ -113,11 +112,11 @@
         android:id="@+id/tv_mentor_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp_size_20"
+        android:layout_marginLeft="@dimen/dp_size_14"
         android:layout_marginRight="@dimen/dp_size_20"
-        android:layout_marginTop="@dimen/dp_size_12"
-        android:fontFamily="@string/ID_ROBOTO_REGULAR"
-        android:lineSpacingExtra="@dimen/dp_size_3"
+        android:layout_marginTop="@dimen/dp_size_10"
+        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+        android:lineSpacingExtra="@dimen/dp_size_5"
         android:textColor="@color/white"
         android:textSize="@dimen/sp_size_12" />
 
@@ -125,9 +124,9 @@
         android:id="@+id/view_line2"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_size_1"
-        android:layout_marginLeft="@dimen/dp_size_20"
+        android:layout_marginLeft="@dimen/dp_size_14"
         android:layout_marginRight="@dimen/dp_size_20"
-        android:layout_marginTop="@dimen/dp_size_20"
+        android:layout_marginTop="@dimen/dp_size_12"
         android:alpha=".5"
         android:background="@color/public_profile_text"
         android:visibility="invisible" />
@@ -141,7 +140,7 @@
             android:id="@+id/tv_followers_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_size_20"
+            android:layout_marginLeft="@dimen/dp_size_14"
             android:fontFamily="@string/ID_ROBOTO_LIGHT"
             android:textColor="@color/white"
             android:textSize="@dimen/sp_size_16" />
@@ -160,7 +159,7 @@
             android:id="@+id/tv_post_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_size_20"
+            android:layout_marginLeft="@dimen/dp_size_45"
             android:fontFamily="@string/ID_ROBOTO_LIGHT"
             android:textColor="@color/white"
             android:textSize="@dimen/sp_size_16" />
@@ -180,7 +179,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
-        android:layout_marginBottom="@dimen/dp_size_40"
+        android:layout_marginTop="@dimen/dp_size_35"
+        android:layout_marginBottom="@dimen/dp_size_10"
         android:gravity="right">
 
         <TextView

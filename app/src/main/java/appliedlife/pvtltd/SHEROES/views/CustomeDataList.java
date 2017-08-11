@@ -78,14 +78,14 @@ public class CustomeDataList {
           //  drawerItemsList.add(tenthDrawerItem);
         } else{
             drawerItemsList.add(firstDrawerItem);
+            drawerItemsList.add(fourteenItem);
             drawerItemsList.add(secondDrawerItem);
             drawerItemsList.add(thirdDrawerItem);
           //  drawerItemsList.add(fourthDrawerItem);
             drawerItemsList.add(sixthDrawerItem);
-         //   drawerItemsList.add(twelveDraerItem);
-            drawerItemsList.add(thirteenItem);
+            drawerItemsList.add(twelveDraerItem);
+           // drawerItemsList.add(thirteenItem);
         }
-        drawerItemsList.add(fourteenItem);
         drawerItemsList.add(elevenDrawerItem);
 
         return  drawerItemsList;

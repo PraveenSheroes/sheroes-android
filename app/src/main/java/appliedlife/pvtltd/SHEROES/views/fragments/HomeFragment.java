@@ -467,6 +467,7 @@ public class HomeFragment extends BaseFragment {
         if (null != mUserPreference && !mUserPreference.get().isAppContactAccessed()) {
             getUserContacts();
         }
+        mHomePresenter.getNotificationCountFromPresenter(notificationReadCountRequestBuilder(TAG));
     }
 
     public void acceptChallenge(ChallengeDataItem challengeDataItem, int completionPercent, boolean isAccepted, boolean isUpdated, String imageUrl, String videoUrl) {

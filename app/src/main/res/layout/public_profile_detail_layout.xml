@@ -23,7 +23,7 @@
             app:layout_scrollFlags="scroll|snap"
             app:title=" ">
 
-            <appliedlife.pvtltd.SHEROES.views.cutomeviews.SquareImageView
+            <ImageView
                 android:id="@+id/iv_public_profile_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -42,7 +42,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|bottom"
-                android:layout_margin="@dimen/dp_size_13">
+                android:layout_marginTop="@dimen/dp_size_9"
+                android:layout_marginLeft="@dimen/dp_size_8"
+                android:layout_marginBottom="@dimen/dp_size_10">
 
                 <include
                     android:id="@+id/li_profile_full_view_header"
@@ -68,7 +70,10 @@
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:padding="@dimen/dp_size_10"
+                    android:paddingRight="@dimen/dp_size_12"
+                    android:paddingTop="@dimen/dp_size_10"
+                    android:paddingBottom="@dimen/dp_size_10"
+                   android:paddingLeft="@dimen/dp_size_6"
                     android:src="@drawable/ic_back_white" />
             </android.support.v7.widget.Toolbar>
         </android.support.design.widget.CollapsingToolbarLayout>

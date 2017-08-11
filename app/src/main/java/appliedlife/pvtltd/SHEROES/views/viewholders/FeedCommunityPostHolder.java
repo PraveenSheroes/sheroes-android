@@ -15,6 +15,9 @@ import android.support.v7.widget.CardView;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
@@ -569,7 +572,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 tvFeedCommunityPostText.setVisibility(View.VISIBLE);
                 String feedTitle = dataItem.getAuthorName();
                 String feedCommunityName = dataItem.getPostCommunityName();
-                if(StringUtil.isNotNullOrEmptyString(feedTitle)) {
+                if (StringUtil.isNotNullOrEmptyString(feedTitle)) {
                     if (!feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
                         if (dataItem.isAuthorMentor()) {
                             ivFeedCommunityPostCircleIconVerified.setVisibility(View.VISIBLE);
@@ -578,14 +581,13 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                         }
                     }
                     if (!feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_ADMIN))) {
-                        posted.append(feedTitle).append(AppConstants.SPACE).append(LEFT_POSTED).append(mContext.getString(R.string.ID_POSTED_IN)).append(RIGHT_POSTED).append(AppConstants.SPACE);
+                        //posted.append(feedTitle).append(AppConstants.SPACE).append(LEFT_POSTED).append(mContext.getString(R.string.ID_POSTED_IN)).append(RIGHT_POSTED).append(AppConstants.SPACE);
+                        posted.append(feedTitle).append(AppConstants.SPACE).append(mContext.getString(R.string.ID_POSTED_IN)).append(AppConstants.SPACE);
                     }
-                    posted.append(LEFT_HTML_VEIW_TAG_FOR_COLOR).append(feedCommunityName).append(RIGHT_HTML_VIEW_TAG_FOR_COLOR);
-                    if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                        tvFeedCommunityPostCardTitle.setText(Html.fromHtml(posted.toString(), 0)); // for 24 api and more
-                    } else {
-                        tvFeedCommunityPostCardTitle.setText(Html.fromHtml(posted.toString()));// or for older api
-                    }
+                    // posted.append(LEFT_HTML_VEIW_TAG_FOR_COLOR).append(feedCommunityName).append(RIGHT_HTML_VIEW_TAG_FOR_COLOR);
+                    posted.append(feedCommunityName);
+                    clickOnMentorAndCommunityName(posted.toString(), feedTitle, mContext.getString(R.string.ID_POSTED_IN));
+
                 }
             }
         }
@@ -1265,13 +1267,58 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         viewInterface.handleOnClick(dataItem, tvEventShareBtn);
     }
 
-    @OnClick(R.id.tv_feed_community_post_card_title)
-    public void onCommunityPostCardTitleClick() {
-        if (dataItem.isAuthorMentor()) {
-            viewInterface.userCommentLikeRequest(dataItem, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL, getAdapterPosition());
-        } else {
-            viewInterface.handleOnClick(dataItem, tvFeedCommunityPostCardTitle);
-        }
+    private void clickOnMentorAndCommunityName(String nameAndCommunity, String feedTitle, String postedIn) {
+
+        SpannableString SpanString = new SpannableString(nameAndCommunity);
+
+        ClickableSpan authorTitle = new ClickableSpan() {
+            @Override
+            public void onClick(View textView) {
+
+                if (dataItem.isAuthorMentor()) {
+                    viewInterface.userCommentLikeRequest(dataItem, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL, getAdapterPosition());
+                }
+            }
+
+            @Override
+            public void updateDrawState(final TextPaint textPaint) {
+                textPaint.setUnderlineText(false);
+            }
+        };
+        ClickableSpan postedInClick = new ClickableSpan() {
+            @Override
+            public void onClick(View textView) {
+
+
+            }
+
+            @Override
+            public void updateDrawState(final TextPaint textPaint) {
+                textPaint.setUnderlineText(false);
+            }
+        };
+
+        ClickableSpan community = new ClickableSpan() {
+            @Override
+            public void onClick(View textView) {
+                viewInterface.handleOnClick(dataItem, tvFeedCommunityPostCardTitle);
+            }
+
+            @Override
+            public void updateDrawState(final TextPaint textPaint) {
+                textPaint.setUnderlineText(false);
+            }
+        };
+
+        SpanString.setSpan(authorTitle, 0, feedTitle.length(), 0);
+        SpanString.setSpan(postedInClick, feedTitle.length(), feedTitle.length() + postedIn.length(), 0);
+        SpanString.setSpan(community, feedTitle.length() + postedIn.length(), nameAndCommunity.length(), 0);
+        SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_article_label)), 0, feedTitle.length(), 0);
+        SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.posted_in)), feedTitle.length(), feedTitle.length() + postedIn.length() + 1, 0);
+        SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.footer_icon_text)), feedTitle.length() + 11, nameAndCommunity.length(), 0);
+        tvFeedCommunityPostCardTitle.setMovementMethod(LinkMovementMethod.getInstance());
+        tvFeedCommunityPostCardTitle.setText(SpanString, TextView.BufferType.SPANNABLE);
+        tvFeedCommunityPostCardTitle.setSelected(true);
     }
 
     private void interestedPress() {

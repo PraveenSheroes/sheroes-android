@@ -30,6 +30,7 @@
         </FrameLayout>
 
         <LinearLayout
+            android:id="@+id/li_user_comment_with_name"
             android:layout_width="@dimen/dp_size_295"
             android:layout_height="wrap_content"
             android:orientation="vertical">

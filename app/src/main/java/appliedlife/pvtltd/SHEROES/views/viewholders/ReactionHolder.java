@@ -17,6 +17,7 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Praveen_Singh on 24-01-2017.
@@ -92,7 +93,12 @@ public class ReactionHolder extends BaseViewHolder<CommentReactionDoc> {
 
     }
 
-
+    @OnClick(R.id.li_user_reaction_with_name)
+    public void onReactionWithNameClick() {
+        if (dataItem.isVerifiedMentor()) {
+            viewInterface.userCommentLikeRequest(dataItem, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL, getAdapterPosition());
+        }
+    }
     @Override
     public void onClick(View view) {
         int id = view.getId();
