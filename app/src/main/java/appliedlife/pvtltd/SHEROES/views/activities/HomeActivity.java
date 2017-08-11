@@ -1600,6 +1600,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 mPublicProfileGrowthBuddiesDialogFragment.notifyList(mentorDetailItem);
             }
         }
+        homeOnClick();
     }
 
     public void selectImageFrmCamera() {
@@ -1849,6 +1850,9 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                                 if (AppUtils.isFragmentUIActive(community)) {
                                     ((MyCommunitiesFragment) community).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
                                 }
+                            }else
+                            {
+                             homeOnClick();
                             }
                         }
                         break;

@@ -301,6 +301,7 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
             if (AppUtils.isFragmentUIActive(mFragment)) {
                 ((CommunitiesDetailFragment) mFragment).commentListRefresh(mMyCommunityPostFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
             }
+            mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.USER_SUB_TYPE, AppConstants.ONE_CONSTANT, mFeedDetail.getIdOfEntityOrParticipant()));
             mFragmentOpen.setCommentList(false);
         } else if (mFragmentOpen.isReactionList()) {
             getSupportFragmentManager().popBackStack();
@@ -493,7 +494,8 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
         super.onActivityResult(requestCode, resultCode, intent);
          /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
         if (null != intent) {
-            switch (requestCode) {
+
+           /* switch (requestCode) {
                 case AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST:
                     FeedDetail feedCommunityPost = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITY_POST_FRAGMENT);
                     Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
@@ -515,7 +517,7 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
                 default:
 
                     LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);
-            }
+            }*/
         }
 
     }
