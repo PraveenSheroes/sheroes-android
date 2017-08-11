@@ -352,30 +352,35 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
     }
 
     @Override
+    public void championProfile(BaseResponse baseResponse, int championValue) {
+        if (baseResponse instanceof FeedDetail) {
+            FeedDetail feedDetail = (FeedDetail) baseResponse;
+            championDetailActivity(feedDetail.getCreatedBy());
+        } else if (baseResponse instanceof CommentReactionDoc) {
+            CommentReactionDoc commentReactionDoc = (CommentReactionDoc) baseResponse;
+            championDetailActivity(commentReactionDoc.getEntityAuthorUserId());
+        }
+    }
+    private void championDetailActivity(Long userId) {
+        Intent intent = new Intent(this, PublicProfileGrowthBuddiesDetailActivity.class);
+        Bundle bundle = new Bundle();
+        mFeedDetail = new FeedDetail();
+        mFeedDetail.setIdOfEntityOrParticipant(userId);
+        mFeedDetail.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
+        bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
+        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, null);
+        intent.putExtras(bundle);
+        startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
+    }
+    @Override
     public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-        if (reactionValue == AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL) {
-            if (baseResponse instanceof FeedDetail) {
-                FeedDetail feedDetail = (FeedDetail) baseResponse;
-                Intent intent = new Intent(this, PublicProfileGrowthBuddiesDetailActivity.class);
-                Bundle bundle = new Bundle();
-                mFeedDetail = new FeedDetail();
-                mFeedDetail.setIdOfEntityOrParticipant(feedDetail.getCreatedBy());
-                mFeedDetail.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
-                bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
-                bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, null);
-                intent.putExtras(bundle);
-                startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
-                overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
-            }
-        } else {
-            mFragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
-            if (AppUtils.isFragmentUIActive(mFragment)) {
-                if (mFragment instanceof CommunitiesDetailFragment) {
-                    ((CommunitiesDetailFragment) mFragment).likeAndUnlikeRequest(baseResponse, reactionValue, position);
-                }
+        mFragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
+        if (AppUtils.isFragmentUIActive(mFragment)) {
+            if (mFragment instanceof CommunitiesDetailFragment) {
+                ((CommunitiesDetailFragment) mFragment).likeAndUnlikeRequest(baseResponse, reactionValue, position);
             }
         }
-
     }
 
     public void updateOpenAboutFragment(FeedDetail feedDetail) {

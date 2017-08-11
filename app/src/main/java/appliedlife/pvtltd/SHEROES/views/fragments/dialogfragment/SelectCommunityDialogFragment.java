@@ -170,6 +170,12 @@ public class SelectCommunityDialogFragment extends BaseDialogFragment implements
     public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
 
     }
+
+    @Override
+    public void championProfile(BaseResponse baseResponse, int championValue) {
+
+    }
+
     @Override
     public void onStart() {
         super.onStart();

@@ -69,8 +69,8 @@
             android:layout_marginRight="@dimen/dp_size_16"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:lineSpacingExtra="@dimen/dp_size_3"
-            android:maxLines="4"
             android:lines="4"
+            android:maxLines="4"
             android:minLines="1"
             android:textColor="@color/feed_article_label"
             android:textSize="@dimen/sp_size_14" />
@@ -83,8 +83,8 @@
             android:layout_marginRight="@dimen/dp_size_15"
             android:layout_marginTop="@dimen/dp_size_5"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:maxLines="@integer/int_value_for_line_2"
             android:lineSpacingExtra="@dimen/dp_size_3"
+            android:maxLines="@integer/int_value_for_line_2"
             android:textColor="@color/feed_article_label"
             android:textSize="@dimen/sp_size_14" />
 
@@ -99,212 +99,215 @@
             android:background="@color/white"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:gravity="right"
-            android:visibility="gone"
             android:text="@string/ID_VIEW_MORE"
             android:textColor="@color/feed_job_card_new"
-            android:textSize="@dimen/sp_size_14" />
-
-
-    <LinearLayout
-        android:id="@+id/li_feed_article_images"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_size_180"
-        android:layout_marginTop="@dimen/dp_size_13"
-        android:background="@drawable/ic_image_holder"
-        android:orientation="vertical" />
-
-
-    <LinearLayout
-        android:id="@+id/li_feed_article_user_reactions"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_size_35"
-        android:layout_marginLeft="@dimen/dp_size_6"
-        android:layout_marginRight="@dimen/dp_size_6"
-        android:layout_marginTop="@dimen/dp_size_7"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/tv_feed_article_user_reaction"
-            android:layout_width="@dimen/dp_size_40"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:drawableLeft="@drawable/ic_heart_in_active"
-            android:paddingLeft="@dimen/dp_size_11" />
-
-        <TextView
-            android:id="@+id/tv_feed_article_user_reaction_text"
-            android:layout_width="@dimen/dp_size_60"
-            android:layout_height="match_parent"
-            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-            android:gravity="center|left"
-            android:textColor="@color/emoji_text"
-            android:textSize="@dimen/sp_size_11" />
-
-        <TextView
-            android:id="@+id/tv_feed_article_user_comment"
-            android:layout_width="@dimen/dp_size_40"
-            android:layout_height="match_parent"
-            android:drawableLeft="@drawable/ic_comment_icon"
-            android:paddingLeft="@dimen/dp_size_10" />
-
-        <TextView
-            android:id="@+id/tv_feed_article_user_bookmark"
-            android:layout_width="@dimen/dp_size_40"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_marginLeft="@dimen/dp_size_60"
-            android:drawableRight="@drawable/ic_bookmark_in_active"
-            android:gravity="center"
-            android:paddingRight="@dimen/dp_size_20" />
-        <TextView
-            android:id="@+id/tv_feed_article_user_share"
-            android:layout_width="@dimen/dp_size_40"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_marginLeft="@dimen/dp_size_15"
-            android:drawableRight="@drawable/ic_share_card"
-            android:gravity="center"
-            android:paddingRight="@dimen/dp_size_10" />
-        <TextView
-            android:id="@+id/tv_feed_article_user_menu"
-            android:layout_width="@dimen/dp_size_20"
-            android:layout_height="match_parent"
-            android:layout_gravity="right"
-            android:layout_marginLeft="@dimen/dp_size_25"
-            android:drawableRight="@drawable/ic_menu_dashboard"
-            android:paddingRight="@dimen/dp_size_10" />
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_size_0.5"
-        android:layout_marginLeft="@dimen/dp_size_13"
-        android:layout_marginRight="@dimen/dp_size_13"
-        android:layout_marginTop="@dimen/dp_size_7"
-        android:background="@color/search_tab_unselected_text" />
-
-
-    <FrameLayout
-        android:id="@+id/fl_feed_article_no_reaction_comments"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:layout_marginLeft="@dimen/dp_size_17"
-        android:layout_marginRight="@dimen/dp_size_17"
-        android:layout_marginTop="@dimen/dp_size_10">
-
-        <TextView
-            android:id="@+id/tv_feed_article_reaction1"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/dp_size_22"
-            android:drawableLeft="@drawable/ic_heart_active" />
-
-        <TextView
-            android:id="@+id/tv_feed_article_reaction2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_size_12"
-            android:drawableLeft="@drawable/ic_emoji2_with_you" />
-
-        <TextView
-            android:id="@+id/tv_feed_article_reaction3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_size_25"
-            android:drawableLeft="@drawable/ic_emoji3_whistel" />
-
-        <TextView
-            android:id="@+id/tv_feed_article_total_replies"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginLeft="@dimen/dp_size_15"
-            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-            android:gravity="right"
-            android:textColor="@color/feed_article_comment"
-            android:textSize="@dimen/sp_size_12"
+            android:textSize="@dimen/sp_size_14"
             android:visibility="gone" />
 
-        <TextView
-            android:id="@+id/tv_feed_article_total_reactions"
-            android:layout_width="wrap_content"
+
+        <LinearLayout
+            android:id="@+id/li_feed_article_images"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_size_180"
+            android:layout_marginTop="@dimen/dp_size_13"
+            android:background="@drawable/ic_image_holder"
+            android:orientation="vertical" />
+
+
+        <LinearLayout
+            android:id="@+id/li_feed_article_user_reactions"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_size_35"
+            android:layout_marginLeft="@dimen/dp_size_6"
+            android:layout_marginRight="@dimen/dp_size_6"
+            android:layout_marginTop="@dimen/dp_size_7"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_feed_article_user_reaction"
+                android:layout_width="@dimen/dp_size_40"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:drawableLeft="@drawable/ic_heart_in_active"
+                android:paddingLeft="@dimen/dp_size_11" />
+
+            <TextView
+                android:id="@+id/tv_feed_article_user_reaction_text"
+                android:layout_width="@dimen/dp_size_60"
+                android:layout_height="match_parent"
+                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                android:gravity="center|left"
+                android:textColor="@color/emoji_text"
+                android:textSize="@dimen/sp_size_11" />
+
+            <TextView
+                android:id="@+id/tv_feed_article_user_comment"
+                android:layout_width="@dimen/dp_size_40"
+                android:layout_height="match_parent"
+                android:drawableLeft="@drawable/ic_comment_icon"
+                android:paddingLeft="@dimen/dp_size_10" />
+
+            <TextView
+                android:id="@+id/tv_feed_article_user_bookmark"
+                android:layout_width="@dimen/dp_size_40"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dp_size_60"
+                android:drawableRight="@drawable/ic_bookmark_in_active"
+                android:gravity="center"
+                android:paddingRight="@dimen/dp_size_20" />
+
+            <TextView
+                android:id="@+id/tv_feed_article_user_share"
+                android:layout_width="@dimen/dp_size_40"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dp_size_15"
+                android:drawableRight="@drawable/ic_share_card"
+                android:gravity="center"
+                android:paddingRight="@dimen/dp_size_10" />
+
+            <TextView
+                android:id="@+id/tv_feed_article_user_menu"
+                android:layout_width="@dimen/dp_size_20"
+                android:layout_height="match_parent"
+                android:layout_gravity="right"
+                android:layout_marginLeft="@dimen/dp_size_25"
+                android:drawableRight="@drawable/ic_menu_dashboard"
+                android:paddingRight="@dimen/dp_size_10" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_size_0.5"
+            android:layout_marginLeft="@dimen/dp_size_13"
+            android:layout_marginRight="@dimen/dp_size_13"
+            android:layout_marginTop="@dimen/dp_size_7"
+            android:background="@color/search_tab_unselected_text" />
+
+
+        <FrameLayout
+            android:id="@+id/fl_feed_article_no_reaction_comments"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginRight="@dimen/dp_size_74"
-            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-            android:gravity="center"
-            android:textColor="@color/feed_article_comment"
-            android:textSize="@dimen/sp_size_12" />
-
-    </FrameLayout>
-
-    <LinearLayout
-        android:id="@+id/li_feed_article_user_comments"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp_size_16"
-        android:layout_marginRight="@dimen/dp_size_10"
-        android:layout_marginTop="@dimen/dp_size_20"
-        android:orientation="horizontal"
-        android:weightSum="@integer/int_value_for_line_1">
-
-        <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
-            android:id="@+id/iv_feed_article_user_pic"
-            android:layout_width="@dimen/comment_icon"
-            android:layout_height="@dimen/comment_icon" />
-
-        <TextView
-            android:id="@+id/tv_feed_article_user_comment_post"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="@dimen/dp_size_10"
-            android:layout_weight="@integer/int_value_for_line_1"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:gravity="center|left"
-            android:lineSpacingExtra="@dimen/dp_size_3"
-            android:lines="@integer/int_value_for_line_2"
-            android:textColor="@color/feed_conversation"
-            android:textSize="@dimen/sp_size_12" />
-
-        <TextView
-            android:id="@+id/tv_feed_article_user_comment_post_menu"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
             android:layout_gravity="right"
-            android:drawableRight="@drawable/ic_menu_dashboard"
-            android:paddingLeft="@dimen/dp_size_10"
-            android:paddingRight="@dimen/dp_size_10" />
-    </LinearLayout>
+            android:layout_marginLeft="@dimen/dp_size_17"
+            android:layout_marginRight="@dimen/dp_size_17"
+            android:layout_marginTop="@dimen/dp_size_10">
 
-    <LinearLayout
-        android:id="@+id/li_feed_article_join_conversation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/dp_size_12"
-        android:layout_marginLeft="@dimen/dp_size_16"
-        android:layout_marginRight="@dimen/dp_size_16"
-        android:layout_marginTop="@dimen/dp_size_10"
-        android:background="@drawable/rectangle_comment_background"
-        android:weightSum="1">
+            <TextView
+                android:id="@+id/tv_feed_article_reaction1"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_size_22"
+                android:drawableLeft="@drawable/ic_heart_active" />
 
-        <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
-            android:id="@+id/iv_feed_article_register_user_pic"
-            android:layout_width="@dimen/comment_icon"
-            android:layout_height="@dimen/comment_icon"
-            android:layout_marginBottom="@dimen/dp_size_4"
-            android:layout_marginLeft="@dimen/dp_size_4"
-            android:layout_marginTop="@dimen/dp_size_4" />
+            <TextView
+                android:id="@+id/tv_feed_article_reaction2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_size_12"
+                android:drawableLeft="@drawable/ic_emoji2_with_you" />
 
-        <TextView
-            android:id="@+id/tv_feed_article_register_user_comment"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/tv_feed_article_reaction3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_size_25"
+                android:drawableLeft="@drawable/ic_emoji3_whistel" />
+
+            <TextView
+                android:id="@+id/tv_feed_article_total_replies"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginLeft="@dimen/dp_size_15"
+                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                android:gravity="right"
+                android:textColor="@color/feed_article_comment"
+                android:textSize="@dimen/sp_size_12"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tv_feed_article_total_reactions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginRight="@dimen/dp_size_74"
+                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                android:gravity="center"
+                android:textColor="@color/feed_article_comment"
+                android:textSize="@dimen/sp_size_12" />
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/li_feed_article_user_comments"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="@dimen/dp_size_10"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:text="@string/ID_JOIN_CONVERSATION"
-            android:textColor="@color/feed_conversation"
-            android:textSize="@dimen/sp_size_12" />
+            android:layout_marginLeft="@dimen/dp_size_16"
+            android:layout_marginRight="@dimen/dp_size_10"
+            android:layout_marginTop="@dimen/dp_size_20"
+            android:orientation="horizontal"
+            android:weightSum="@integer/int_value_for_line_1">
+
+            <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
+                android:id="@+id/iv_feed_article_user_pic"
+                android:layout_width="@dimen/comment_icon"
+                android:layout_height="@dimen/comment_icon" />
+
+            <TextView
+                android:id="@+id/tv_feed_article_user_comment_post"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dp_size_10"
+                android:layout_weight="@integer/int_value_for_line_1"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:gravity="center|left"
+                android:lineSpacingExtra="@dimen/dp_size_3"
+                android:lines="@integer/int_value_for_line_2"
+                android:textColor="@color/feed_conversation"
+                android:textSize="@dimen/sp_size_12" />
+
+            <TextView
+                android:id="@+id/tv_feed_article_user_comment_post_menu"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="right"
+                android:drawableRight="@drawable/ic_menu_dashboard"
+                android:paddingLeft="@dimen/dp_size_10"
+                android:paddingRight="@dimen/dp_size_10" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/li_feed_article_join_conversation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp_size_12"
+            android:layout_marginLeft="@dimen/dp_size_16"
+            android:layout_marginRight="@dimen/dp_size_16"
+            android:layout_marginTop="@dimen/dp_size_10"
+            android:background="@drawable/rectangle_comment_background"
+            android:weightSum="1">
+
+            <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
+                android:id="@+id/iv_feed_article_register_user_pic"
+                android:layout_width="@dimen/comment_icon"
+                android:layout_height="@dimen/comment_icon"
+                android:layout_marginBottom="@dimen/dp_size_4"
+                android:layout_marginLeft="@dimen/dp_size_4"
+                android:layout_marginTop="@dimen/dp_size_4" />
+
+            <TextView
+                android:id="@+id/tv_feed_article_register_user_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dp_size_10"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:text="@string/ID_JOIN_CONVERSATION"
+                android:textColor="@color/feed_conversation"
+                android:textSize="@dimen/sp_size_12" />
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout></android.support.v7.widget.CardView>
+</android.support.v7.widget.CardView>

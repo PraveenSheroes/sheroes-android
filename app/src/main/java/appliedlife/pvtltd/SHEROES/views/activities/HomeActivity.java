@@ -1971,21 +1971,15 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     }
 
     @Override
-    public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-        if (reactionValue == AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL) {
-            if (baseResponse instanceof FeedDetail) {
-                FeedDetail feedDetail = (FeedDetail) baseResponse;
-                championDetailActivity(feedDetail.getCreatedBy());
-            } else if (baseResponse instanceof CommentReactionDoc) {
-                CommentReactionDoc commentReactionDoc = (CommentReactionDoc) baseResponse;
-
-                championDetailActivity(commentReactionDoc.getEntityAuthorUserId());
-            }
-        } else {
-            super.userCommentLikeRequest(baseResponse, reactionValue, position);
+    public void championProfile(BaseResponse baseResponse,int championValue) {
+        if (baseResponse instanceof FeedDetail) {
+            FeedDetail feedDetail = (FeedDetail) baseResponse;
+            championDetailActivity(feedDetail.getCreatedBy());
+        } else if (baseResponse instanceof CommentReactionDoc) {
+            CommentReactionDoc commentReactionDoc = (CommentReactionDoc) baseResponse;
+            championDetailActivity(commentReactionDoc.getParticipantId());
         }
     }
-
     private void championDetailActivity(Long userId) {
         Intent intent = new Intent(this, PublicProfileGrowthBuddiesDetailActivity.class);
         Bundle bundle = new Bundle();

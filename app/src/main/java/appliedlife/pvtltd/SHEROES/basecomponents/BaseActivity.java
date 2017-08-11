@@ -752,6 +752,11 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
     }
 
     @Override
+    public void championProfile(BaseResponse baseResponse,int championValue) {
+
+    }
+
+    @Override
     public boolean onTouch(View view, MotionEvent event) {
         popupWindow.dismiss();
         return true;

@@ -96,7 +96,7 @@ public class ReactionHolder extends BaseViewHolder<CommentReactionDoc> {
     @OnClick(R.id.li_user_reaction_with_name)
     public void onReactionWithNameClick() {
         if (dataItem.isVerifiedMentor()) {
-            viewInterface.userCommentLikeRequest(dataItem, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL, getAdapterPosition());
+            viewInterface.championProfile(dataItem, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
         }
     }
     @Override

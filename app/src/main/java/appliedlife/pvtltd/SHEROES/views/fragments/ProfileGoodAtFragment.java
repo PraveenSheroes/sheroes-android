@@ -742,6 +742,11 @@ public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInt
 
     }
 
+    @Override
+    public void championProfile(BaseResponse baseResponse, int championValue) {
+
+    }
+
 
     @Override
     public void startActivityFromHolder(Intent intent) {

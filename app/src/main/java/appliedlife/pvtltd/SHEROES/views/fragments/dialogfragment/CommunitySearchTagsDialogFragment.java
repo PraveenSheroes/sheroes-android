@@ -496,6 +496,11 @@ public class CommunitySearchTagsDialogFragment extends BaseDialogFragment implem
 
     }
 
+    @Override
+    public void championProfile(BaseResponse baseResponse, int championValue) {
+
+    }
+
 
     @Override
     public List getListData() {

@@ -389,6 +389,11 @@ public class SearchIAmInterestIn extends BaseFragment implements BaseHolderInter
 
     }
 
+    @Override
+    public void championProfile(BaseResponse baseResponse, int championValue) {
+
+    }
+
 
     @Override
     public List getListData() {

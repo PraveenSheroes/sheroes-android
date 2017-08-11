@@ -579,6 +579,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                         } else {
                             ivFeedCommunityPostCircleIconVerified.setVisibility(View.GONE);
                         }
+                    }else {
+                        ivFeedCommunityPostCircleIconVerified.setVisibility(View.GONE);
                     }
                     if (!feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_ADMIN))) {
                         //posted.append(feedTitle).append(AppConstants.SPACE).append(LEFT_POSTED).append(mContext.getString(R.string.ID_POSTED_IN)).append(RIGHT_POSTED).append(AppConstants.SPACE);
@@ -748,6 +750,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                     getCommentString.setSpan(new ForegroundColorSpan(Color.BLACK), 0, size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     getCommentString.setSpan(new StyleSpan(Typeface.BOLD), 0, size, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
                     tvFeedCommunityPostUserCommentPost.setText(getCommentString);
+                    ivFeedCommunityPostUserIconVerified.setVisibility(View.GONE);
                 }
             } else {
                 if (StringUtil.isNotNullOrEmptyString(lastComment.getComment()) && StringUtil.isNotNullOrEmptyString(lastComment.getParticipantName())) {
@@ -759,11 +762,15 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                     getCommentString.setSpan(new ForegroundColorSpan(Color.BLACK), 0, size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     getCommentString.setSpan(new StyleSpan(Typeface.BOLD), 0, size, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
                     tvFeedCommunityPostUserCommentPost.setText(getCommentString);
-                    if (lastComment.isVerifiedMentor()) {
-                        ivFeedCommunityPostUserIconVerified.setVisibility(View.VISIBLE);
-                    } else {
-                        ivFeedCommunityPostUserIconVerified.setVisibility(View.GONE);
-                    }
+                        if (!lastComment.getParticipantName().equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
+                            if (lastComment.isVerifiedMentor()) {
+                                ivFeedCommunityPostUserIconVerified.setVisibility(View.VISIBLE);
+                            } else {
+                                ivFeedCommunityPostUserIconVerified.setVisibility(View.GONE);
+                            }
+                        }else {
+                            ivFeedCommunityPostUserIconVerified.setVisibility(View.GONE);
+                        }
                 }
             }
 
@@ -1187,6 +1194,18 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     public void reactionClick() {
         viewInterface.handleOnClick(dataItem, tvFeedCommunityPostTotalReactions);
     }
+    @OnClick(R.id.tv_feed_community_post_reaction1)
+    public void reaction1Click() {
+        viewInterface.handleOnClick(dataItem, tvFeedCommunityPostTotalReactions);
+    }
+    @OnClick(R.id.tv_feed_community_post_reaction2)
+    public void reaction2Click() {
+        viewInterface.handleOnClick(dataItem, tvFeedCommunityPostTotalReactions);
+    }
+    @OnClick(R.id.tv_feed_community_post_reaction3)
+    public void reaction3Click() {
+        viewInterface.handleOnClick(dataItem, tvFeedCommunityPostTotalReactions);
+    }
 
     @OnClick(R.id.tv_feed_community_post_user_reaction)
     public void userReactionClick() {
@@ -1276,7 +1295,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             public void onClick(View textView) {
 
                 if (dataItem.isAuthorMentor()) {
-                    viewInterface.userCommentLikeRequest(dataItem, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL, getAdapterPosition());
+                    viewInterface.championProfile(dataItem, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
                 }
             }
 

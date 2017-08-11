@@ -410,6 +410,18 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     public void reactionClick() {
         viewInterface.handleOnClick(dataItem, tvFeedArticleTotalReactions);
     }
+    @OnClick(R.id.tv_feed_article_reaction1)
+    public void reaction1Click() {
+        viewInterface.handleOnClick(dataItem, tvFeedArticleTotalReactions);
+    }
+    @OnClick(R.id.tv_feed_article_reaction2)
+    public void reaction2Click() {
+        viewInterface.handleOnClick(dataItem, tvFeedArticleTotalReactions);
+    }
+    @OnClick(R.id.tv_feed_article_reaction3)
+    public void reaction3Click() {
+        viewInterface.handleOnClick(dataItem, tvFeedArticleTotalReactions);
+    }
 
     @OnClick(R.id.tv_feed_article_total_replies)
     public void repliesClick() {

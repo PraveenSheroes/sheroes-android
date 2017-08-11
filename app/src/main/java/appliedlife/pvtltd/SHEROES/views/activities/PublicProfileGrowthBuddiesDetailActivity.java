@@ -469,4 +469,54 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
         setAllValues(mFragmentOpen);
         super.dataOperationOnClick(baseResponse);
     }
+    private void championDetailActivity(Long userId) {
+        Intent intent = new Intent(this, PublicProfileGrowthBuddiesDetailActivity.class);
+        Bundle bundle = new Bundle();
+        mFeedDetail = new FeedDetail();
+        mFeedDetail.setIdOfEntityOrParticipant(userId);
+        mFeedDetail.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
+        bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
+        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, null);
+        intent.putExtras(bundle);
+        startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
+    }
+    @Override
+    public void championProfile(BaseResponse baseResponse,int championValue) {
+        if (baseResponse instanceof CommentReactionDoc) {
+            CommentReactionDoc commentReactionDoc = (CommentReactionDoc) baseResponse;
+            championDetailActivity(commentReactionDoc.getParticipantId());
+        }
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+         /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
+        if (null != intent) {
+            switch (requestCode) {
+                case AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST:
+                    FeedDetail feedCommunityPost = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITY_POST_FRAGMENT);
+                    Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
+                    if (AppUtils.isFragmentUIActive(fragment)) {
+                        if (fragment instanceof CommunitiesDetailFragment) {
+                            ((CommunitiesDetailFragment) fragment).updateUiAccordingToFeedDetail(feedCommunityPost);
+                        }
+                    }
+                    break;
+                case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
+                    FeedDetail feedCommunityPostEdit = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITY_POST_FRAGMENT);
+                    Fragment fragmentCommunity = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
+                    if (AppUtils.isFragmentUIActive(fragmentCommunity)) {
+                        if (fragmentCommunity instanceof CommunitiesDetailFragment) {
+                            ((CommunitiesDetailFragment) fragmentCommunity).updateUiAccordingToFeedDetail(feedCommunityPostEdit);
+                        }
+                    }
+                    break;
+                default:
+
+                    LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);
+            }
+        }
+
+    }
 }

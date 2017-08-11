@@ -101,6 +101,7 @@ public class CommentHolder extends BaseViewHolder<CommentReactionDoc> {
             getCommentString.setSpan(new ForegroundColorSpan(Color.BLACK), 0, size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             getCommentString.setSpan(new StyleSpan(Typeface.BOLD), 0, size, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
             tvUserComment.setText(getCommentString);
+            ivListCommentProfilePicVerified.setVisibility(View.GONE);
         } else {
             if (StringUtil.isNotNullOrEmptyString(dataItem.getComment())&&StringUtil.isNotNullOrEmptyString(dataItem.getParticipantName())) {
                 ivListCommentProfilePic.bindImage(dataItem.getParticipantImageUrl());
@@ -111,9 +112,13 @@ public class CommentHolder extends BaseViewHolder<CommentReactionDoc> {
                 getCommentString.setSpan(new ForegroundColorSpan(Color.BLACK), 0, size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 getCommentString.setSpan(new StyleSpan(Typeface.BOLD), 0, size, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
                 tvUserComment.setText(getCommentString);
-                if (dataItem.isVerifiedMentor()) {
-                    ivListCommentProfilePicVerified.setVisibility(View.VISIBLE);
-                } else {
+                if (!dataItem.getParticipantName().equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
+                    if (dataItem.isVerifiedMentor()) {
+                        ivListCommentProfilePicVerified.setVisibility(View.VISIBLE);
+                    } else {
+                        ivListCommentProfilePicVerified.setVisibility(View.GONE);
+                    }
+                }else {
                     ivListCommentProfilePicVerified.setVisibility(View.GONE);
                 }
             }
@@ -133,7 +138,7 @@ public class CommentHolder extends BaseViewHolder<CommentReactionDoc> {
     @OnClick(R.id.tv_list_user_comment)
     public void onCommentWithNameClick() {
         if (dataItem.isVerifiedMentor()) {
-            viewInterface.userCommentLikeRequest(dataItem, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL, getAdapterPosition());
+            viewInterface.championProfile(dataItem, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
         }
     }
 

@@ -78,7 +78,8 @@ public class ResizableCustomView {
                 public void onClick(View widget) {
                     if (viewMore) {
                         tv.setLayoutParams(tv.getLayoutParams());
-                        tv.setText(tv.getTag().toString(), TextView.BufferType.SPANNABLE);
+                        String str=tv.getTag().toString()+"\"";
+                        tv.setText(str, TextView.BufferType.SPANNABLE);
                         tv.invalidate();
                         doResizeTextView(tv, -1, AppConstants.VIEW_LESS, false);
                     } else {
