@@ -16,6 +16,7 @@ public class FragmentListRefreshData {
     private long communityId;
     private List<Long> categoryIdList;
     private String searchStringName;
+    private String callForNameUser;
     public FragmentListRefreshData() {
 
     }
@@ -107,5 +108,13 @@ public class FragmentListRefreshData {
 
     public void setSearchStringName(String searchStringName) {
         this.searchStringName = searchStringName;
+    }
+
+    public String getCallForNameUser() {
+        return callForNameUser;
+    }
+
+    public void setCallForNameUser(String callForNameUser) {
+        this.callForNameUser = callForNameUser;
     }
 }

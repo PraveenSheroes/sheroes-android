@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 
 import javax.inject.Inject;
 
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.presenters.CommentReactionPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.HelplinePresenter;
@@ -23,6 +24,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.getCommentRequestBuilder
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.getPandingMemberRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.helplineGetChatThreadRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.myCommunityRequestBuilder;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.userCommunityDetailRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.userCommunityPostRequestBuilder;
 
 /*
@@ -177,7 +179,16 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                         requestedPresenter.getAllPendingRequest(getPandingMemberRequestBuilder(mFragmentListRefreshData.getEnitityOrParticpantid(), pageNo));
                         break;
                     case AppConstants.USER_COMMUNITY_POST_FRAGMENT:
-                        mHomePresenter.getFeedFromPresenter(userCommunityPostRequestBuilder(AppConstants.FEED_COMMUNITY_POST, pageNo, mFragmentListRefreshData.getCommunityId()));
+                        if (StringUtil.isNotNullOrEmptyString(mFragmentListRefreshData.getCallForNameUser()) && mFragmentListRefreshData.getCallForNameUser().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
+                            FeedRequestPojo feedRequestPojo = userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCommunityId());
+                            feedRequestPojo.setIdForFeedDetail(null);
+                            Integer autherId = (int) mFragmentListRefreshData.getCommunityId();
+                            feedRequestPojo.setAutherId(autherId);
+                            mHomePresenter.getFeedFromPresenter(feedRequestPojo);
+                        } else {
+                            mHomePresenter.getFeedFromPresenter(userCommunityPostRequestBuilder(AppConstants.FEED_COMMUNITY_POST, pageNo, mFragmentListRefreshData.getCommunityId()));
+                        }
+
                         break;
                     case AppConstants.INVITE_MEMBER:
                         mHomePresenter.getFeedFromPresenter(mAppUtils.searchRequestBuilder(AppConstants.USER_SUB_TYPE, mFragmentListRefreshData.getSearchStringName(), mFragmentListRefreshData.getPageNo(), AppConstants.INVITE_MEMBER, mFragmentListRefreshData.getEnitityOrParticpantid(), AppConstants.INVITE_PAGE_SIZE));

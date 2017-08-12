@@ -1336,10 +1336,10 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             SpanString.setSpan(authorTitle, 0, feedTitle.length(), 0);
             SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_article_label)), 0, feedTitle.length(), 0);
             if(StringUtil.isNotNullOrEmptyString(postedIn)&&StringUtil.isNotNullOrEmptyString(nameAndCommunity)) {
-                SpanString.setSpan(postedInClick, feedTitle.length(), feedTitle.length() + postedIn.length()-1, 0);
-                SpanString.setSpan(community, feedTitle.length() + postedIn.length()-1, nameAndCommunity.length(), 0);
-                SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.posted_in)),  feedTitle.length(), feedTitle.length() + postedIn.length()-1, 0);
-                SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.footer_icon_text)),feedTitle.length() + postedIn.length()-1, nameAndCommunity.length(), 0);
+                SpanString.setSpan(postedInClick, feedTitle.length(), feedTitle.length() + postedIn.length()+3, 0);
+                SpanString.setSpan(community, feedTitle.length() + postedIn.length()+2, nameAndCommunity.length(), 0);
+                SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.posted_in)),  feedTitle.length(), feedTitle.length() + postedIn.length()+3, 0);
+                SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.footer_icon_text)),feedTitle.length() + postedIn.length()+2, nameAndCommunity.length(), 0);
             }
             tvFeedCommunityPostCardTitle.setMovementMethod(LinkMovementMethod.getInstance());
             tvFeedCommunityPostCardTitle.setText(SpanString, TextView.BufferType.SPANNABLE);
