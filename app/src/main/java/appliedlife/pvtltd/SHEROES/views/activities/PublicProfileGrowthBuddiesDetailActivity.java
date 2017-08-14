@@ -195,7 +195,7 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
             }
         }
         if(StringUtil.isNotNullOrEmptyString(mFeedDetail.getId()) && StringUtil.isNotNullOrEmptyString(mFeedDetail.getListDescription()) && null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && mUserPreference.get().getUserSummary() !=null){
-            ((SheroesApplication) getApplication()).trackEvent(AppConstants.IMPRESSIONS,AppConstants.COMMUNITY_POST_IMPRESSION, mFeedDetail.getId() + "-" +mUserPreference.get().getUserSummary().getUserId() +"-" + mFeedDetail.getListDescription() );
+            ((SheroesApplication) getApplication()).trackEvent(AppConstants.IMPRESSIONS,AppConstants.COMMUNITY_POST_IMPRESSION, mFeedDetail.getId() + AppConstants.DASH +mUserPreference.get().getUserSummary().getUserId() +AppConstants.DASH + mFeedDetail.getListDescription() );
         }
 
     }

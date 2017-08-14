@@ -94,7 +94,7 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
         }
         textRelatedOperation();
         onBookMarkClick();
-        if(dataItem != null && null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && mUserPreference.get().getUserSummary() !=null){
+        if(dataItem != null && null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && mUserPreference.get().getUserSummary() !=null&&StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())){
             ((SheroesApplication)mContext).trackEvent(AppConstants.IMPRESSIONS,AppConstants.ARTICLE_IMPRSSION, dataItem.getId() + AppConstants.DASH +mUserPreference.get().getUserSummary().getUserId() + AppConstants.DASH + dataItem.getNameOrTitle() );
         }
 
