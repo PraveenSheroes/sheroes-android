@@ -26,6 +26,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -35,6 +36,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -94,8 +96,9 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
         }
         textRelatedOperation();
         onBookMarkClick();
-        if(dataItem != null && null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && mUserPreference.get().getUserSummary() !=null&&StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())){
-            ((SheroesApplication)mContext).trackEvent(AppConstants.IMPRESSIONS,AppConstants.ARTICLE_IMPRSSION, dataItem.getId() + AppConstants.DASH +mUserPreference.get().getUserSummary().getUserId() + AppConstants.DASH + dataItem.getNameOrTitle() );
+
+        if(dataItem != null && StringUtil.isNotNullOrEmptyString(dataItem.getId() )&&StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle()) && null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && mUserPreference.get().getUserSummary() !=null){
+            ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(AppConstants.IMPRESSIONS,AppConstants.ARTICLE_IMPRSSION, dataItem.getId() + AppConstants.DASH +mUserPreference.get().getUserSummary().getUserId() + AppConstants.DASH + dataItem.getNameOrTitle() );
         }
 
     }

@@ -32,6 +32,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -43,6 +44,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.URLSpanNoUnderline;
 import butterknife.Bind;
@@ -157,8 +159,8 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> imple
             allTextViewStringOperations(context);
         }
 
-        if(dataItem != null&&null!=dataItem.getFeedDetail()&&StringUtil.isNotNullOrEmptyString(dataItem.getFeedDetail().getNameOrTitle()) && null != userPreference && userPreference.isSet() && null != userPreference.get() && userPreference.get().getUserSummary() !=null){
-            ((SheroesApplication)mContext).trackEvent(AppConstants.IMPRESSIONS,AppConstants.ARTICLE_IMPRSSION, dataItem.getId() + AppConstants.DASH +userPreference.get().getUserSummary().getUserId() + AppConstants.DASH + dataItem.getFeedDetail().getNameOrTitle() );
+        if(dataItem != null && null != dataItem.getFeedDetail() && StringUtil.isNotNullOrEmptyString(dataItem.getFeedDetail().getNameOrTitle()) && null != userPreference && userPreference.isSet() && null != userPreference.get() && userPreference.get().getUserSummary() !=null){
+            ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(AppConstants.IMPRESSIONS,AppConstants.ARTICLE_IMPRSSION, dataItem.getId() + AppConstants.DASH +userPreference.get().getUserSummary().getUserId() + AppConstants.DASH + dataItem.getFeedDetail().getNameOrTitle() );
         }
 
     }

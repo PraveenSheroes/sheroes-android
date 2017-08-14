@@ -19,6 +19,7 @@ import com.f2prateek.rx.preferences.Preference;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -112,8 +113,8 @@ public class CommunityCardDetailHeader extends BaseViewHolder<FeedDetail> {
             tvJoin.setVisibility(View.GONE);
         }
 
-        if(dataItem != null &&StringUtil.isNotNullOrEmptyString(dataItem.getId() )&&StringUtil.isNotNullOrEmptyString(dataItem.getListDescription())&& null != userPreference && userPreference.isSet() && null != userPreference.get() && userPreference.get().getUserSummary() !=null){
-            ((SheroesApplication)mContext).trackEvent(AppConstants.IMPRESSIONS,AppConstants.COMMUNITY_POST_IMPRESSION, dataItem.getId() + AppConstants.DASH +userPreference.get().getUserSummary().getUserId() + AppConstants.DASH + dataItem.getListDescription() );
+        if(dataItem != null && StringUtil.isNotNullOrEmptyString(dataItem.getId() )&&StringUtil.isNotNullOrEmptyString(dataItem.getListDescription()) && null != userPreference && userPreference.isSet() && null != userPreference.get() && userPreference.get().getUserSummary() !=null){
+            ((SheroesApplication)((BaseActivity)mContext).getApplication()).trackEvent(AppConstants.IMPRESSIONS,AppConstants.COMMUNITY_POST_IMPRESSION, dataItem.getId() + AppConstants.DASH +userPreference.get().getUserSummary().getUserId() + AppConstants.DASH + dataItem.getListDescription() );
         }
 
     }
