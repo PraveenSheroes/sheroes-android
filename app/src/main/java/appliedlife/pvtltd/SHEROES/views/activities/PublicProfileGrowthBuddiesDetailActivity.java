@@ -146,6 +146,7 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
             mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.USER_SUB_TYPE, AppConstants.ONE_CONSTANT, mFeedDetail.getIdOfEntityOrParticipant()));
             setPagerAndLayouts();
             mHomePresenter.getCountOfFollowerFromPresenter(mAppUtils.countFollowerRequestBuilder(mFeedDetail.getIdOfEntityOrParticipant()));
+            ((SheroesApplication) getApplication()).trackScreenView(AppConstants.PUBLIC_PROFILE);
         }
     }
 
@@ -193,6 +194,10 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
                 tvMentorExpertise.setText(stringBuilder.toString().substring(0, stringBuilder.toString().trim().length() - 1));
             }
         }
+        if(StringUtil.isNotNullOrEmptyString(mFeedDetail.getId()) && StringUtil.isNotNullOrEmptyString(mFeedDetail.getListDescription()) && null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && mUserPreference.get().getUserSummary() !=null){
+            ((SheroesApplication) getApplication()).trackEvent(AppConstants.IMPRESSIONS,AppConstants.COMMUNITY_POST_IMPRESSION, mFeedDetail.getId() + "-" +mUserPreference.get().getUserSummary().getUserId() +"-" + mFeedDetail.getListDescription() );
+        }
+
     }
 
 

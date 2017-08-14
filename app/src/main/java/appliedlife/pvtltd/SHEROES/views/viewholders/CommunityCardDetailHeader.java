@@ -14,12 +14,17 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
+import com.f2prateek.rx.preferences.Preference;
+
+import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import butterknife.Bind;
@@ -45,6 +50,8 @@ public class CommunityCardDetailHeader extends BaseViewHolder<FeedDetail> {
     BaseHolderInterface viewInterface;
     private FeedDetail dataItem;
     private Context mContext;
+    @Inject
+    Preference<LoginResponse> userPreference;
 
 
     public CommunityCardDetailHeader(View itemView, BaseHolderInterface baseHolderInterface) {
@@ -104,6 +111,11 @@ public class CommunityCardDetailHeader extends BaseViewHolder<FeedDetail> {
         } else {
             tvJoin.setVisibility(View.GONE);
         }
+
+        if(dataItem != null && null != userPreference && userPreference.isSet() && null != userPreference.get() && userPreference.get().getUserSummary() !=null){
+            ((SheroesApplication)mContext).trackEvent(AppConstants.IMPRESSIONS,AppConstants.COMMUNITY_POST_IMPRESSION, dataItem.getId() + AppConstants.DASH +userPreference.get().getUserSummary().getUserId() + AppConstants.DASH + dataItem.getListDescription() );
+        }
+
     }
 
     @OnClick(R.id.card_community_detail)

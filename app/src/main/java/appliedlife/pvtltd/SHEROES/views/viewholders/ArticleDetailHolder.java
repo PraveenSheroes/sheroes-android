@@ -156,6 +156,11 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> imple
             imageOperations(context);
             allTextViewStringOperations(context);
         }
+
+        if(dataItem != null && null != userPreference && userPreference.isSet() && null != userPreference.get() && userPreference.get().getUserSummary() !=null){
+            ((SheroesApplication)mContext).trackEvent(AppConstants.IMPRESSIONS,AppConstants.ARTICLE_IMPRSSION, dataItem.getId() + AppConstants.DASH +userPreference.get().getUserSummary().getUserId() + AppConstants.DASH + dataItem.getFeedDetail().getNameOrTitle() );
+        }
+
     }
 
     @TargetApi(AppConstants.ANDROID_SDK_24)

@@ -200,6 +200,8 @@ public class HomeFragment extends BaseFragment {
                 refreshFeedMethod();
             }
         });
+
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_FEEDS));
         return view;
     }
 

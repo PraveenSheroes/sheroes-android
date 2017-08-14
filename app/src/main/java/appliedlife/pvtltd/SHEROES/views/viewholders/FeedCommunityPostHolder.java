@@ -255,6 +255,10 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 } else {
                     tvFeedCommunityPostUserMenu.setVisibility(View.GONE);
                 }
+                if(dataItem != null && null != userPreference && userPreference.isSet() && null != userPreference.get() && userPreference.get().getUserSummary() !=null){
+                    ((SheroesApplication) mContext).trackEvent(AppConstants.IMPRESSIONS, AppConstants.COMMUNITY_POST_IMPRESSION, dataItem.getId() + AppConstants.DASH + userPreference.get().getUserSummary().getUserId() + AppConstants.DASH + dataItem.getListDescription());
+                }
+
             }
         }
     }
