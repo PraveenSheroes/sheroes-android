@@ -63,6 +63,7 @@
     <string name="ID_FEATURED">Featured</string>
     <string name="ID_MY_COMMUNITIES">My Communities</string>
     <string name="ID_FEED">Feed</string>
+    <string name="ID_FEED_IMPRESSION">feed</string>
     <string name="ID_COMMUNITIY">Community</string>
     <string name="ID_COMMUNITIY_POST">Community post</string>
     <string name="ID_BAD_RQUEST">Special characters are not allowed</string>
@@ -95,13 +96,12 @@
     <string name="ID_CELL_PHONE_NUMBER">CELL PHONE NUMBER</string>
     <string name="ID_VIEW_MORE_COMMENT">View more replies</string>
     <string name="ID_JOIN">Join</string>
-    <string name="ID_POST_AS_ON_SHEROES">Post on SHEROES as</string>
+    <string name="ID_POST_AS_ON_SHEROES">Post on SHEROES as :</string>
     <string name="ID_SHARE_WITH_FRIENDS">Share with friends</string>
     <string name="ID_DO_YOU_SEE">Do you see women getting harassed in</string>
     <string name="ID_YOUR_LOCALITY">your locality?</string>
     <string name="ID_LOCALITY_NAME"> pretty safe for Women</string>
-    <string name="ID_TELL_YOUR_FRIENDS">Tell You Friends About It</string>
-    <string name="ID_CLICK_PIC_TELL_FRIENDS">Click a pic and tell friends </string>
+    <string name="ID_TELL_YOUR_FRIENDS">YES, Tell You Friends About It</string>
     <string name="ID_INTERESTED">Interested</string>
     <string name="ID_GOING">Going</string>
     <string name="ID_REQUESTED">Requested</string>
@@ -190,6 +190,7 @@
     <string name="ID_FEEDBACK">FEEDBACK</string>
     <string name="ID_FEEDS">FEEDS</string>
     <string name="ID_COMMUNITES">COMMUNITY</string>
+
     <string name="ID_PREFERENCES">PREFERENCES</string>
     <string name="ID_DASH">-</string>
     <string name="ID_FOLLOWERS">Followers</string>
@@ -964,5 +965,16 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_RESET_PASSWORD_SUCCESS_LINK_TEXT">Click here to login</string>
     <string name="ID_FORGOT_PASSWORD_TEXT">Forgot Password?</string>
     <string name="ID_ERROR_NO_EMAIL">Please enter any email ID.</string>
+
+
+
+    <!--Google Analytics Screen Names-->
+    <string name="ID_VIEW_COMMUNITY">view community</string>
+    <string name="ID_PUBLIC_PROFILE">public profile</string>
+    <string name="ID_ARTICLE_LISTING">article listing</string>
+    <string name="ID_VIEW_ARTICLE">view article</string>
+    <string name="ID_INTRO_SCREEN">intro screen</string>
+    <string name="ID_SIGN_UP_FORM">sign up (form) screen</string>
+    <string name="ID_LOGIN">login</string>
 
 </resources>

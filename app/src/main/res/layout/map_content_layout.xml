@@ -1,8 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/map"
-    android:name="com.google.android.gms.maps.SupportMapFragment"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cl_map_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="appliedlife.pvtltd.SHEROES.views.activities.MapActivity" />
+    android:fitsSystemWindows="true">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar_map_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/fully_transparent"
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar_map_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:contentScrim="@color/once_card"
+            app:layout_scrollFlags="scroll|snap"
+            app:title=" ">
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_size_250"
+                android:layout_gravity="end|bottom"
+                android:layout_marginTop="?attr/actionBarSize">
+                <fragment
+                    android:id="@+id/map"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="@dimen/dp_size_10"
+                    android:layout_height="match_parent" />
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:alpha=".8"
+                        android:paddingTop="@dimen/dp_size_20"
+                        android:background="@drawable/view_holder_gradiant"
+                        android:gravity="bottom">
+                        <TextView
+                            android:id="@+id/tv_loc_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/dp_size_20"
+                            android:layout_marginRight="@dimen/dp_size_20"
+                            android:drawablePadding="@dimen/dp_size_10"
+                            android:layout_marginBottom="@dimen/dp_size_10"
+                            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                            android:text="Do you see"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/sp_size_16" />
+                    </RelativeLayout>
+                </FrameLayout>
+
+            </FrameLayout>
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar_map_layout"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_gravity="right"
+                android:gravity="right"
+                app:layout_collapseMode="pin"
+                android:background="@color/once_card"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+                <ImageView
+                    android:id="@+id/iv_back_map_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:paddingBottom="@dimen/dp_size_10"
+                    android:paddingLeft="@dimen/dp_size_6"
+                    android:paddingRight="@dimen/dp_size_12"
+                    android:paddingTop="@dimen/dp_size_10"
+                    android:src="@drawable/ic_back_white" />
+                <LinearLayout
+                    android:id="@+id/li_make_india_safe_header"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_make_india_safe_hash_tag"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                        android:lines="@integer/int_value_for_line_1"
+                        android:text="@string/ID_MAKE_INDIA_SAFE_HASHTAG"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/sp_size_14" />
+
+                </LinearLayout>
+            </android.support.v7.widget.Toolbar>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tab_map_layout"
+            style="@style/NavigationTabTextAppeareance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:background="@color/white"
+            app:tabIndicatorColor="@color/footer_icon_text"
+            app:tabIndicatorHeight="@dimen/dp_size_5"
+            android:visibility="gone"
+            app:tabSelectedTextColor="@color/footer_icon_text"
+            app:tabTextColor="@color/text_color_setting_preference_basicdetails" />
+    </android.support.design.widget.AppBarLayout>
+
+    <ProgressBar
+        android:id="@+id/pb_map_layout_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/view_pager_map_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+</android.support.design.widget.CoordinatorLayout>
+

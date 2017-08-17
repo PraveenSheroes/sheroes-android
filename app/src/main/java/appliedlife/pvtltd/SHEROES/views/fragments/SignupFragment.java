@@ -171,6 +171,7 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
         // setGooglePlusButtonText(btnLoginGoogle, getString(R.string.IDS_GOOGLE_BUTTON));
         mFbSignUp.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
         fbSignIn();
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_SIGN_UP_FORM));
         return view;
     }
 

@@ -56,7 +56,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.VideoPlayActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
@@ -220,6 +219,9 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             if (!dataItem.isTrending()) {
                 imageSetOnEventBackground();
             }
+            if(dataItem != null &&StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle()) && null != userPreference && userPreference.isSet() && null != userPreference.get() && userPreference.get().getUserSummary() !=null){
+                ((SheroesApplication) mContext).trackEvent(AppConstants.IMPRESSIONS, AppConstants.EVENT_IMPRESSION, dataItem.getIdOfEntityOrParticipant() + AppConstants.DASH + userPreference.get().getUserSummary().getUserId() + AppConstants.DASH + dataItem.getNameOrTitle());
+            }
         } else {
             liCommunityPostMainLayout.setVisibility(View.VISIBLE);
             liEventCardMainLayout.setVisibility(View.GONE);
@@ -257,10 +259,9 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 } else {
                     tvFeedCommunityPostUserMenu.setVisibility(View.GONE);
                 }
-                if(dataItem != null && StringUtil.isNotNullOrEmptyString(dataItem.getId() )&&StringUtil.isNotNullOrEmptyString(dataItem.getListDescription()) && null != userPreference && userPreference.isSet() && null != userPreference.get() && userPreference.get().getUserSummary() !=null){
-                    ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(AppConstants.IMPRESSIONS, AppConstants.COMMUNITY_POST_IMPRESSION, dataItem.getId() + AppConstants.DASH + userPreference.get().getUserSummary().getUserId() + AppConstants.DASH + dataItem.getListDescription());
+                if(dataItem != null&&StringUtil.isNotNullOrEmptyString(dataItem.getListDescription()) && null != userPreference && userPreference.isSet() && null != userPreference.get() && userPreference.get().getUserSummary() !=null){
+                    ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(AppConstants.IMPRESSIONS, AppConstants.COMMUNITY_POST_IMPRESSION,dataItem.getIdOfEntityOrParticipant()+ AppConstants.DASH + userPreference.get().getUserSummary().getUserId() + AppConstants.DASH + dataItem.getListDescription());
                 }
-
             }
         }
     }
@@ -301,8 +302,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         }
         liFeedEventImages.addView(child);
         if (StringUtil.isNotNullOrEmptyString(dataItem.getOgImageUrlS())) {
-
-
             Glide.with(mContext)
                     .load(dataItem.getOgImageUrlS()).asBitmap()
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
@@ -591,8 +590,11 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                     if (!feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_ADMIN))) {
                         //posted.append(feedTitle).append(AppConstants.SPACE).append(LEFT_POSTED).append(mContext.getString(R.string.ID_POSTED_IN)).append(RIGHT_POSTED).append(AppConstants.SPACE);
                         posted.append(feedTitle).append(AppConstants.SPACE).append(mContext.getString(R.string.ID_POSTED_IN)).append(AppConstants.SPACE);
-                    }else
-                    {
+                    }else if (feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_ADMIN))) {
+                        feedTitle=dataItem.getPostCommunityName();
+                        posted.append(feedTitle).append(AppConstants.SPACE).append(mContext.getString(R.string.ID_POSTED_IN)).append(AppConstants.SPACE);
+                    }
+                    else{
                         feedTitle=mContext.getString(R.string.ID_ANONYMOUS);
                         posted.append(feedTitle).append(AppConstants.SPACE).append(mContext.getString(R.string.ID_POSTED_IN)).append(AppConstants.SPACE);
                     }

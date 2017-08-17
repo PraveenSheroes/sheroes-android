@@ -21,6 +21,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.HomeSearchActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.JobDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.JobFilterActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.LoginActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.MapActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.OnBoardingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfessionalAddEducationActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfessionalWorkExperienceActivity;
@@ -115,7 +116,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDial
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.FunctionalAreaDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.InviteCommunityMemberDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.JobLocationSearchDialogFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.MakeIndiaSafeDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.MakeIndiaSafeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.MyCommunityInviteMemberDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.OnBoardingDailogHeySuccess;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.OnBoardingSearchDialogFragment;
@@ -171,6 +172,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.JobDetailHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.JobLocationHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.JobLocationSearchHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.JobSearchHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.MakeIndiaSafeHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MemberHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MyCommunitiesCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.NoCommunityHolder;
@@ -616,13 +618,17 @@ public interface SheroesAppComponent {
 
     void inject(AppIntroCardHolder appIntroCardHolder);
 
-    void inject(MakeIndiaSafeDialogFragment makeIndiaSafeDialogFragment);
+    void inject(MakeIndiaSafeFragment makeIndiaSafeFragment);
 
     void inject(PublicProfileGrowthBuddiesDialogFragment publicProfileGrowthBuddiesDialogFragment);
 
     void inject(GrowthBuddiesHolder growthBuddiesHolder);
+
     void inject(PublicProfileGrowthBuddiesDetailActivity publicProfileGrowthBuddiesDetailActivity);
 
+    void inject(MapActivity mapActivity);
+
+    void inject(MakeIndiaSafeHolder makeIndiaSafeHolder);
 
 
 }

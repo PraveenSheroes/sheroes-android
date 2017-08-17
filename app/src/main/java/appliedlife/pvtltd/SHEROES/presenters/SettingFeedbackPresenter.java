@@ -203,14 +203,6 @@ public class SettingFeedbackPresenter extends BasePresenter<SettingFeedbackView>
     }
 
 
-
-
-
-
-
-
-
-
     public void getUserChangePreferenceAuthTokeInPresenter(SettingChangeUserPreferenceRequest settingChangeUserPreferenceRequest) {
 
         if (!NetworkUtil.isConnected(sheroesApplication)) {

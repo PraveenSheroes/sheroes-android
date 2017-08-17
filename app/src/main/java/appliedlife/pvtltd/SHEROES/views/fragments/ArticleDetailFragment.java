@@ -97,7 +97,8 @@ public class ArticleDetailFragment extends BaseFragment {
             super.setAllInitializationForFeeds(mFragmentListRefreshData, mAdapter, mLayoutManager, mFeedDetail, mRecyclerView, mPosition, mPressedEmoji, mListLoad, mHomePresenter, mAppUtils, mProgressBar);
             mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getIdFeedDetail()));
         }
-        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_ARTICLE));
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_VIEW_ARTICLE));
+
         return view;
     }
     @Override

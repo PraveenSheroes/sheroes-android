@@ -15,7 +15,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMemberListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMemberRequest;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
-import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SHEView;
 import rx.Subscriber;
 import rx.Subscription;
@@ -70,11 +69,7 @@ public class SHEPresenter extends BasePresenter<SHEView> {
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_SERVER_PROBLEM),ERROR_GET_FAQS);
-                if(null!=e&& StringUtil.isNotNullOrEmptyString(e.getMessage())) {
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append(mSheroesApplication.getString(R.string.ID_FAQS)).append(mSheroesApplication.getString(R.string.ID_VIEWS)).append(AppConstants.SPACE).append( e.getMessage());
-                    SheroesApplication.mContext.trackScreenView(stringBuilder.toString());
-                }
+
             }
 
             @Override
@@ -101,11 +96,7 @@ public class SHEPresenter extends BasePresenter<SHEView> {
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_SERVER_PROBLEM),ERROR_GET_ICC_MEMBERS);
-                if(null!=e&& StringUtil.isNotNullOrEmptyString(e.getMessage())) {
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append(mSheroesApplication.getString(R.string.ID_ICC_MEMBERS)).append(mSheroesApplication.getString(R.string.ID_VIEWS)).append(AppConstants.SPACE).append( e.getMessage());
-                    SheroesApplication.mContext.trackScreenView(stringBuilder.toString());
-                }
+
             }
 
             @Override

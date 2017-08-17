@@ -11,8 +11,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.location.Address;
-import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -65,12 +63,10 @@ import com.moe.pushlibrary.PayloadBuilder;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -88,13 +84,11 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.DrawerItems;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.LatLongWithLocation;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.MentorDetailItem;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQS;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
-import appliedlife.pvtltd.SHEROES.service.GPSTracker;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -123,7 +117,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.SettingTermsAndConditionFragme
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ChallengeSuccessDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ChallengeUpdateProgressDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.MakeIndiaSafeDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.MyCommunityInviteMemberDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.PublicProfileGrowthBuddiesDialogFragment;
 import butterknife.Bind;
@@ -169,8 +162,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     TextView mTvSetting;
     @Bind(R.id.tv_home)
     TextView mTvHome;
-   // @Bind(R.id.tv_make_india_safe)
-   // ImageView mTvMakeIndiaSafe;
+     @Bind(R.id.tv_make_india_safe)
+     ImageView mTvMakeIndiaSafe;
     @Bind(R.id.tv_communities)
     TextView mTvCommunities;
     @Bind(R.id.li_article_spinner_icon)
@@ -230,7 +223,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     private long mEventId;
     private String mHelpLineChat;
     private EventDetailDialogFragment eventDetailDialogFragment;
-    private MakeIndiaSafeDialogFragment makeIndiaSafeDialogFragment;
     private ProgressDialog mProgressDialog;
     private boolean isInviteReferral;
     private PublicProfileGrowthBuddiesDialogFragment mPublicProfileGrowthBuddiesDialogFragment;
@@ -253,7 +245,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         if (StringUtil.isNotNullOrEmptyString(mHelpLineChat) && mHelpLineChat.equalsIgnoreCase(AppConstants.HELPLINE_CHAT)) {
             handleHelpLineFragmentFromDeepLinkAndLoading();
         }
-       // InviteReferralsApi.getInstance(this).showWelcomeMessage();
+        // InviteReferralsApi.getInstance(this).showWelcomeMessage();
         //InviteReferralsApi.getInstance(this).invite(AppConstants.HOME);
     }
 
@@ -535,10 +527,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     break;
                 case AppConstants.ELEVENTH_CONSTANT:
                     logOut();
-                    /*Intent youTube = new Intent(this, MapActivity.class);
-                    Bundle bundle = new Bundle();
-                    youTube.putExtras(bundle);
-                    startActivity(youTube);*/
                     break;
                 case 12:
                     inviteMyCommunityDialog();
@@ -774,67 +762,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         return eventDetailDialogFragment;
     }
 
-    private void locationTracker() {
-        GPSTracker gps = new GPSTracker(this);
-        // check if GPS enabled
-        if (gps.canGetLocation()) {
-            LatLongWithLocation latLongWithLocation = new LatLongWithLocation();
-            double latitude = gps.getLatitude();
-            double longitude = gps.getLongitude();
-            latLongWithLocation.setLatitude(latitude);
-            latLongWithLocation.setLongitude(longitude);
-            String cityName, locality, state;
-            Geocoder geocoder = new Geocoder(HomeActivity.this, Locale.getDefault());
-            List<Address> addresses = null;
-            try {
-                addresses = geocoder.getFromLocation(latitude, longitude, 1);
-                if (StringUtil.isNotEmptyCollection(addresses)) {
-                    if (StringUtil.isNotNullOrEmptyString(addresses.get(0).getLocality())) {
-                        cityName = addresses.get(0).getLocality();
-                        latLongWithLocation.setCityName(cityName);
-                    }
-                    if (StringUtil.isNotNullOrEmptyString(addresses.get(0).getAddressLine(1))) {
-                        locality = addresses.get(0).getAddressLine(1);
-                        latLongWithLocation.setLocality(locality);
-                    }
-                    if (StringUtil.isNotNullOrEmptyString(addresses.get(0).getAddressLine(2))) {
-                        state = addresses.get(0).getAddressLine(2);
-                        latLongWithLocation.setState(state);
-                    }
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            makeWomenSafeDialog(latLongWithLocation);
-           /* if(latitude>0&&longitude>0)
-            {
-                makeWomenSafeDialog(latLongWithLocation);
-            }else
-            {
-                showNetworkTimeoutDoalog(true, true, "Please Goto setting->Permission control->Get loc-> SHEROES app allow");
-            }*/
 
-        } else {
-            // can't get location
-            // GPS or Network is not enabled
-            // Ask user to enable GPS/network in settings
-            gps.showSettingsAlert();
-        }
-    }
-
-    public DialogFragment makeWomenSafeDialog(LatLongWithLocation latLongWithLocation) {
-        makeIndiaSafeDialogFragment = (MakeIndiaSafeDialogFragment) getFragmentManager().findFragmentByTag(MakeIndiaSafeDialogFragment.class.getName());
-        if (makeIndiaSafeDialogFragment == null) {
-            makeIndiaSafeDialogFragment = new MakeIndiaSafeDialogFragment();
-            Bundle bundle = new Bundle();
-            //   bundle.putParcelable(AppConstants.LAT_LONG_DETAIL, latLongWithLocation);
-            makeIndiaSafeDialogFragment.setArguments(bundle);
-        }
-        if (!makeIndiaSafeDialogFragment.isVisible() && !makeIndiaSafeDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
-            makeIndiaSafeDialogFragment.show(getFragmentManager(), MakeIndiaSafeDialogFragment.class.getName());
-        }
-        return makeIndiaSafeDialogFragment;
-    }
 
     private void totalTimeSpentOnFeed() {
         long timeSpentFeed = System.currentTimeMillis() - startedTime;
@@ -1206,7 +1134,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     }
 
     public void openJobFragment() {
-        //mTvMakeIndiaSafe.setVisibility(View.GONE);
+        mTvMakeIndiaSafe.setVisibility(View.GONE);
         mJobFragment.setVisibility(View.VISIBLE);
         mTvSearchBox.setVisibility(View.VISIBLE);
         mICSheroes.setVisibility(View.GONE);
@@ -1289,7 +1217,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             mJobFragment.setVisibility(View.GONE);
             mTvSearchBox.setVisibility(View.GONE);
             mICSheroes.setVisibility(View.VISIBLE);
-            //mTvMakeIndiaSafe.setVisibility(View.VISIBLE);
+            mTvMakeIndiaSafe.setVisibility(View.VISIBLE);
             getSupportFragmentManager().popBackStackImmediate();
             initHomeViewPagerAndTabs();
             setHomeFeedCommunityData();
@@ -1420,19 +1348,18 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         callBellNotification();
     }
 
- /*   @OnClick(R.id.tv_make_india_safe)
+    @OnClick(R.id.tv_make_india_safe)
     public void tvOnClickMakeIndiasafe() {
-        makeWomenSafeDialog(null);
-      if (Build.VERSION.SDK_INT >= 23) {
-            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                locationTracker();
-            } else {
-                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, AppConstants.REQUEST_CODE_FOR_LOCATION);
-            }
-        } else {
-            locationTracker();
-        }
-    }*/
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setMessage(getString(R.string.ID_MAKE_INDIA_SAFE_HASHTAG));
+        mProgressDialog.setCancelable(true);
+        mProgressDialog.show();
+        Intent mapIntent = new Intent(this, MapActivity.class);
+        Bundle bundle = new Bundle();
+      //  bundle.putParcelable(AppConstants.LAT_LONG_DETAIL, latLongWithLocation);
+        mapIntent.putExtras(bundle);
+        startActivityForResult(mapIntent, AppConstants.REQUEST_CODE_FOR_GOOGLE_MAP);
+    }
 
     @OnClick(R.id.tv_drawer_navigation)
     public void drawerNavigationClick() {
@@ -1571,11 +1498,10 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 case AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL:
                     checkPublicProfileMentorFollow(intent);
                     break;
-
+                case AppConstants.REQUEST_CODE_FOR_GOOGLE_MAP:
+                    checkMapData(intent);
+                    break;
                 default:
-                    if (null != mProgressDialog) {
-                        mProgressDialog.dismiss();
-                    }
                     LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);
             }
         } else {
@@ -1589,9 +1515,16 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);
             }
         }
-
+        if (null != mProgressDialog) {
+            mProgressDialog.dismiss();
+        }
     }
-
+    private void checkMapData(Intent intent) {
+            if (null != intent && null != intent.getExtras() && null != intent.getExtras().get(AppConstants.MAKE_INDIA_SAFE)) {
+                String string = intent.getExtras().getString(AppConstants.MAKE_INDIA_SAFE);
+                homeOnClick();
+            }
+    }
     private void checkPublicProfileMentorFollow(Intent intent) {
         if (null != mPublicProfileGrowthBuddiesDialogFragment) {
             if (null != intent && null != intent.getExtras() && null != intent.getExtras().get(AppConstants.GROWTH_PUBLIC_PROFILE)) {
@@ -1700,9 +1633,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 Bitmap photo = decodeFile(localImageSaveForChallenge);
                 if (null != mChallengeSuccessDialogFragment) {
                     mChallengeSuccessDialogFragment.setImageOnHolder(photo);
-                }
-                if (null != makeIndiaSafeDialogFragment) {
-                    makeIndiaSafeDialogFragment.setImageOnHolder(photo, localImageSaveForChallenge);
                 }
             } else {
                 Toast.makeText(this, "Error while save image", Toast.LENGTH_SHORT).show();
@@ -1849,9 +1779,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                                 if (AppUtils.isFragmentUIActive(community)) {
                                     ((MyCommunitiesFragment) community).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
                                 }
-                            }else
-                            {
-                             homeOnClick();
+                            } else {
+                                homeOnClick();
                             }
                         }
                         break;
@@ -1974,7 +1903,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     }
 
     @Override
-    public void championProfile(BaseResponse baseResponse,int championValue) {
+    public void championProfile(BaseResponse baseResponse, int championValue) {
         if (baseResponse instanceof FeedDetail) {
             FeedDetail feedDetail = (FeedDetail) baseResponse;
             championDetailActivity(feedDetail.getCreatedBy());
@@ -1983,6 +1912,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             championDetailActivity(commentReactionDoc.getParticipantId());
         }
     }
+
     private void championDetailActivity(Long userId) {
         Intent intent = new Intent(this, PublicProfileGrowthBuddiesDetailActivity.class);
         Bundle bundle = new Bundle();

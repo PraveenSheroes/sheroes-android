@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.models.entities.home.DrawerItems;
+import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.LatLongWithLocation;
+import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.MakeIndiaSafeDetail;
 
 /**
  * Created by Praveen_Singh on 30-01-2017.
@@ -11,8 +13,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.DrawerItems;
 
 public class CustomeDataList {
     //TODO:: Remove static content
-    public static List<DrawerItems> makeDrawerItemList(boolean isSheUser)
-    {
+    public static List<DrawerItems> makeDrawerItemList(boolean isSheUser) {
         List<DrawerItems> drawerItemsList = new ArrayList<>();
         DrawerItems firstDrawerItem = new DrawerItems();
         firstDrawerItem.setId(1);
@@ -71,23 +72,32 @@ public class CustomeDataList {
         DrawerItems fourteenItem = new DrawerItems();
         fourteenItem.setId(14);
 
-        if(isSheUser){
+        if (isSheUser) {
             drawerItemsList.add(seventhDrawerItem);
             drawerItemsList.add(eighthDrawerItem);
             drawerItemsList.add(ninthDrawerItem);
-          //  drawerItemsList.add(tenthDrawerItem);
-        } else{
+            //  drawerItemsList.add(tenthDrawerItem);
+        } else {
             drawerItemsList.add(firstDrawerItem);
             drawerItemsList.add(fourteenItem);
             drawerItemsList.add(secondDrawerItem);
             drawerItemsList.add(thirdDrawerItem);
-          //  drawerItemsList.add(fourthDrawerItem);
+            //  drawerItemsList.add(fourthDrawerItem);
             drawerItemsList.add(sixthDrawerItem);
             drawerItemsList.add(twelveDraerItem);
-           // drawerItemsList.add(thirteenItem);
+            // drawerItemsList.add(thirteenItem);
         }
         drawerItemsList.add(elevenDrawerItem);
 
-        return  drawerItemsList;
+        return drawerItemsList;
+    }
+
+    public static List<MakeIndiaSafeDetail> makeIndiaSafeItemList(LatLongWithLocation latLongWithLocation) {
+        List<MakeIndiaSafeDetail> makeItemsList = new ArrayList<>();
+        MakeIndiaSafeDetail firstItem = new MakeIndiaSafeDetail();
+        firstItem.setId(1);
+        firstItem.setLatLongWithLocation(latLongWithLocation);
+        makeItemsList.add(firstItem);
+        return makeItemsList;
     }
 }

@@ -31,6 +31,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.models.entities.home.ProfileItems;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobDetailPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobLocationList;
+import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.MakeIndiaSafeDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingInterestJobSearch;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.OnBoardingData;
@@ -371,8 +372,7 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new AppIntroCardHolder(view, viewInterface);
         }
-    }
-    , ONCE_WELCOME_VIEW(R.layout.once_open_circle_support_card) {
+    }, ONCE_WELCOME_VIEW(R.layout.once_open_circle_support_card) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new OnceWelcomeCardHolder(view, viewInterface);
@@ -424,6 +424,11 @@ public enum HolderMapping {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new GrowthBuddiesHolder(view, viewInterface);
+        }
+    }, MAKE_INDIA_SAFE_HOLDER(R.layout.make_india_safe_holder) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new MakeIndiaSafeHolder(view, viewInterface);
         }
     };
     public Object object;
@@ -638,8 +643,10 @@ public enum HolderMapping {
                     returnView = EVENT_SPEAKER_HOLDER.ordinal();
                 } else if (item instanceof EventSponsorData) {
                     returnView = EVENT_SPONSOR_HOLDER.ordinal();
-                }else if (item instanceof MentorDetailItem) {
+                } else if (item instanceof MentorDetailItem) {
                     returnView = GROWTH_BUDDIES_HOLDER.ordinal();
+                } else if (item instanceof MakeIndiaSafeDetail) {
+                    returnView = MAKE_INDIA_SAFE_HOLDER.ordinal();
                 }
             }
         }

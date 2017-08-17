@@ -194,10 +194,7 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
                 tvMentorExpertise.setText(stringBuilder.toString().substring(0, stringBuilder.toString().trim().length() - 1));
             }
         }
-        if(StringUtil.isNotNullOrEmptyString(mFeedDetail.getId()) && StringUtil.isNotNullOrEmptyString(mFeedDetail.getListDescription()) && null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && mUserPreference.get().getUserSummary() !=null){
-            ((SheroesApplication) getApplication()).trackEvent(AppConstants.IMPRESSIONS,AppConstants.COMMUNITY_POST_IMPRESSION, mFeedDetail.getId() + AppConstants.DASH +mUserPreference.get().getUserSummary().getUserId() +AppConstants.DASH + mFeedDetail.getListDescription() );
-        }
-
+        ((SheroesApplication)getApplication()).trackScreenView(getString(R.string.ID_PUBLIC_PROFILE));
     }
 
 

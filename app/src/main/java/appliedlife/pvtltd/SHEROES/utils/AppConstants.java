@@ -115,6 +115,7 @@ public class AppConstants {
     public static final int REQUEST_CODE_FOR_IMAGE_CROPPING = 1201;
     public static final int REQUEST_CODE_FOR_GOOGLE_PLUS =1301;
     public static final int REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL = 1501;
+    public static final int REQUEST_CODE_FOR_GOOGLE_MAP = 1601;
     public static final String JOB_FRAGMENT = "job";
     public static final String GROWTH_PUBLIC_PROFILE = "growth_public_profile";
     public static final String HELPLINE_FRAGMENT ="helpline";
@@ -135,6 +136,7 @@ public class AppConstants {
     public static final String BOARDING_SEARCH = "boarding_Search";
     public static final String ALL_SEARCH = "search";
     public static final String IMAGE = "Img";
+    public static final String MAKE_INDIA_SAFE = "make_india_safe";
     public static final String MONTH_YEAR_PICKER_DIALOG = "MonthYearPickerDialog";
     public static final String PANDING_MEMBER = "PandingMember";
     public static final String NETWORK_TIMEOUT = "network_timout";

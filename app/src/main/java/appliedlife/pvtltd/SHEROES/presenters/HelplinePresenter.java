@@ -16,7 +16,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
-import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HelplineView;
 import rx.Subscriber;
 import rx.Subscription;
@@ -66,11 +65,6 @@ public class HelplinePresenter extends BasePresenter<HelplineView>{
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
-                if(null!=e&& StringUtil.isNotNullOrEmptyString(e.getMessage())) {
-                    StringBuilder stringBuilder=new StringBuilder();
-                    stringBuilder.append(AppConstants.HELPLINE_SCREEN).append(AppConstants.SPACE).append( e.getMessage());
-                    SheroesApplication.mContext.trackScreenView(stringBuilder.toString());
-                }
             }
 
             @Override
@@ -99,11 +93,6 @@ public class HelplinePresenter extends BasePresenter<HelplineView>{
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
-                if(null!=e&& StringUtil.isNotNullOrEmptyString(e.getMessage())) {
-                    StringBuilder stringBuilder=new StringBuilder();
-                    stringBuilder.append(AppConstants.HELPLINE_SCREEN).append(AppConstants.SPACE).append( e.getMessage());
-                    SheroesApplication.mContext.trackScreenView(stringBuilder.toString());
-                }
             }
 
             @Override

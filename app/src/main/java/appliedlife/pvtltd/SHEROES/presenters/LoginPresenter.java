@@ -5,7 +5,6 @@ import com.google.gson.Gson;
 
 import javax.inject.Inject;
 
-import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.LoginModel;
@@ -259,10 +258,6 @@ public class LoginPresenter extends BasePresenter<LoginView> {
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
                 getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
-
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append(AppConstants.FORGOT_PASSWORD).append(mSheroesApplication.getString(R.string.ID_VIEWS)).append(AppConstants.SPACE).append( e.getMessage());
-                SheroesApplication.mContext.trackScreenView(stringBuilder.toString());
             }
 
             @Override
@@ -291,9 +286,6 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                 getMvpView().stopProgressBar();
                 getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
 
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append(AppConstants.EMAIL_VERIFICATION).append(mSheroesApplication.getString(R.string.ID_VIEWS)).append(AppConstants.SPACE).append( e.getMessage());
-                SheroesApplication.mContext.trackScreenView(stringBuilder.toString());
             }
 
             @Override
@@ -319,9 +311,6 @@ public class LoginPresenter extends BasePresenter<LoginView> {
             public void onError(Throwable e) {
                 getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
 
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append(AppConstants.GOOGLE_PLAY_URL_TRACKER).append(mSheroesApplication.getString(R.string.ID_VIEWS)).append(AppConstants.SPACE).append( e.getMessage());
-                SheroesApplication.mContext.trackScreenView(stringBuilder.toString());
             }
 
             @Override

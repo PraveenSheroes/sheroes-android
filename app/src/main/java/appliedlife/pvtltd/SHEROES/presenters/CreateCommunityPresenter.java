@@ -27,7 +27,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.sharemail.ShareViaMail;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
-import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CommunityView;
 import rx.Subscriber;
 import rx.Subscription;
@@ -79,11 +78,6 @@ public class CreateCommunityPresenter extends BasePresenter<CommunityView> {
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
                 getMvpView().showError(sheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
-                if(null!=e&& StringUtil.isNotNullOrEmptyString(e.getMessage())) {
-                    StringBuilder stringBuilder=new StringBuilder();
-                    stringBuilder.append(AppConstants.FEED_SCREEN).append(AppConstants.SPACE).append( e.getMessage());
-                    SheroesApplication.mContext.trackScreenView(stringBuilder.toString());
-                }
             }
 
             @Override

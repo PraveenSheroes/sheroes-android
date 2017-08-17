@@ -195,7 +195,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
             });
         }
 
-        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_COMMUNITES));
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_VIEW_COMMUNITY));
         return view;
     }
 

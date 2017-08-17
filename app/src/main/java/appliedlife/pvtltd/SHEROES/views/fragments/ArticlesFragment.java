@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
-import com.google.android.gms.analytics.Tracker;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
@@ -135,7 +134,7 @@ public class ArticlesFragment extends BaseFragment {
             }
         });
 
-        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_ARTICLE));
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_ARTICLE_LISTING));
 
         return view;
     }

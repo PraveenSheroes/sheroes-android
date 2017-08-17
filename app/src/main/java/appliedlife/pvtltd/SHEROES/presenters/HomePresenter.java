@@ -48,7 +48,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.PublicProfileLis
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
-import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import rx.Subscriber;
 import rx.Subscription;
@@ -128,11 +127,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onError(Throwable e) {
             //    getMvpView().showError(e.getMessage(),ERROR_AUTH_TOKEN);
-                if(null!=e&&StringUtil.isNotNullOrEmptyString(e.getMessage())) {
-                    StringBuilder stringBuilder=new StringBuilder();
-                    stringBuilder.append(AppConstants.GCM_ID).append(AppConstants.SPACE).append( e.getMessage());
-                    SheroesApplication.mContext.trackScreenView(stringBuilder.toString());
-                }
+
             }
 
             @Override
@@ -160,11 +155,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
                 getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
-                if(null!=e&&StringUtil.isNotNullOrEmptyString(e.getMessage())) {
-                    StringBuilder stringBuilder=new StringBuilder();
-                    stringBuilder.append(AppConstants.SHEROES_AUTH_TOKEN).append(AppConstants.SPACE).append( e.getMessage());
-                    SheroesApplication.mContext.trackScreenView(stringBuilder.toString());
-                }
+
             }
 
             @Override
@@ -191,11 +182,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
-                if(null!=e&&StringUtil.isNotNullOrEmptyString(e.getMessage())) {
-                    StringBuilder stringBuilder=new StringBuilder();
-                    stringBuilder.append(AppConstants.FEED_SCREEN).append(AppConstants.SPACE).append( e.getMessage());
-                    SheroesApplication.mContext.trackScreenView(stringBuilder.toString());
-                }
+
             }
 
             @Override
@@ -226,11 +213,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_MY_COMMUNITIES);
-                if(null!=e&&StringUtil.isNotNullOrEmptyString(e.getMessage())) {
-                    StringBuilder stringBuilder=new StringBuilder();
-                    stringBuilder.append(AppConstants.MY_COMMUNITIES_FRAGMENT).append(AppConstants.SPACE).append( e.getMessage());
-                    SheroesApplication.mContext.trackScreenView(stringBuilder.toString());
-                }
+
             }
 
             @Override
@@ -260,11 +243,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_BOOK_MARK_LIST);
-                if(null!=e&&StringUtil.isNotNullOrEmptyString(e.getMessage())) {
-                    StringBuilder stringBuilder=new StringBuilder();
-                    stringBuilder.append(AppConstants.BOOKMARKS).append(AppConstants.FRAGMENT).append(AppConstants.SPACE).append( e.getMessage());
-                    SheroesApplication.mContext.trackScreenView(stringBuilder.toString());
-                }
+
             }
 
             @Override
@@ -293,11 +272,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), FOLLOW_UNFOLLOW);
-                if(null!=e&&StringUtil.isNotNullOrEmptyString(e.getMessage())) {
-                    StringBuilder stringBuilder=new StringBuilder();
-                    stringBuilder.append(AppConstants.REACTION_ON_CARD).append(AppConstants.SPACE).append( e.getMessage());
-                    SheroesApplication.mContext.trackScreenView(stringBuilder.toString());
-                }
+
             }
 
             @Override
@@ -324,11 +299,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), FOLLOW_UNFOLLOW);
-                if(null!=e&&StringUtil.isNotNullOrEmptyString(e.getMessage())) {
-                    StringBuilder stringBuilder=new StringBuilder();
-                    stringBuilder.append(AppConstants.REACTION_ON_CARD).append(AppConstants.SPACE).append( e.getMessage());
-                    SheroesApplication.mContext.trackScreenView(stringBuilder.toString());
-                }
+
             }
 
             @Override
@@ -355,11 +326,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), FOLLOW_UNFOLLOW);
-                if(null!=e&&StringUtil.isNotNullOrEmptyString(e.getMessage())) {
-                    StringBuilder stringBuilder=new StringBuilder();
-                    stringBuilder.append(AppConstants.REACTION_ON_CARD).append(AppConstants.SPACE).append( e.getMessage());
-                    SheroesApplication.mContext.trackScreenView(stringBuilder.toString());
-                }
+
             }
 
             @Override
@@ -386,11 +353,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), FOLLOW_UNFOLLOW);
-                if(null!=e&&StringUtil.isNotNullOrEmptyString(e.getMessage())) {
-                    StringBuilder stringBuilder=new StringBuilder();
-                    stringBuilder.append(AppConstants.REACTION_ON_CARD).append(AppConstants.SPACE).append( e.getMessage());
-                    SheroesApplication.mContext.trackScreenView(stringBuilder.toString());
-                }
+
             }
 
             @Override
@@ -417,11 +380,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
-                if(null!=e&&StringUtil.isNotNullOrEmptyString(e.getMessage())) {
-                    StringBuilder stringBuilder=new StringBuilder();
-                    stringBuilder.append(AppConstants.REACTION_ON_CARD).append(AppConstants.SPACE).append( e.getMessage());
-                    SheroesApplication.mContext.trackScreenView(stringBuilder.toString());
-                }
+
             }
 
             @Override
@@ -449,11 +408,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
-                if(null!=e&&StringUtil.isNotNullOrEmptyString(e.getMessage())) {
-                    StringBuilder stringBuilder=new StringBuilder();
-                    stringBuilder.append(AppConstants.REACTION_ON_CARD).append(AppConstants.SPACE).append( e.getMessage());
-                    SheroesApplication.mContext.trackScreenView(stringBuilder.toString());
-                }
+
             }
 
             @Override
@@ -481,11 +436,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_BOOKMARK_UNBOOKMARK);
-                if(null!=e&&StringUtil.isNotNullOrEmptyString(e.getMessage())) {
-                    StringBuilder stringBuilder=new StringBuilder();
-                    stringBuilder.append(AppConstants.BOOKMARKS).append(AppConstants.SPACE).append( e.getMessage());
-                    SheroesApplication.mContext.trackScreenView(stringBuilder.toString());
-                }
+
             }
 
             @Override
@@ -513,11 +464,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_JOIN_INVITE);
-                if(null!=e&&StringUtil.isNotNullOrEmptyString(e.getMessage())) {
-                    StringBuilder stringBuilder=new StringBuilder();
-                    stringBuilder.append(AppConstants.MY_COMMUNITIES_FRAGMENT).append(mSheroesApplication.getString(R.string.ID_JOIN)).append(AppConstants.SPACE).append( e.getMessage());
-                    SheroesApplication.mContext.trackScreenView(stringBuilder.toString());
-                }
+
             }
 
             @Override
@@ -545,11 +492,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
-                if(null!=e&&StringUtil.isNotNullOrEmptyString(e.getMessage())) {
-                    StringBuilder stringBuilder=new StringBuilder();
-                    stringBuilder.append(AppConstants.COMMUNITY_POST_FRAGMENT).append(mSheroesApplication.getString(R.string.ID_DELETE)).append(AppConstants.SPACE).append( e.getMessage());
-                    SheroesApplication.mContext.trackScreenView(stringBuilder.toString());
-                }
+
             }
 
             @Override
@@ -577,11 +520,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
-                if(null!=e&&StringUtil.isNotNullOrEmptyString(e.getMessage())) {
-                    StringBuilder stringBuilder=new StringBuilder();
-                    stringBuilder.append(AppConstants.FEED_SCREEN).append(mSheroesApplication.getString(R.string.ID_REPORTED_AS_SPAM)).append(AppConstants.SPACE).append( e.getMessage());
-                    SheroesApplication.mContext.trackScreenView(stringBuilder.toString());
-                }
+
             }
 
             @Override
@@ -609,11 +548,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_SEARCH_DATA);
-                if(null!=e&&StringUtil.isNotNullOrEmptyString(e.getMessage())) {
-                    StringBuilder stringBuilder=new StringBuilder();
-                    stringBuilder.append(mSheroesApplication.getString(R.string.ID_NOTIFICATION)).append(AppConstants.SPACE).append( e.getMessage());
-                    SheroesApplication.mContext.trackScreenView(stringBuilder.toString());
-                }
+
             }
 
             @Override
@@ -719,11 +654,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
-                if(null!=e&&StringUtil.isNotNullOrEmptyString(e.getMessage())) {
-                    StringBuilder stringBuilder=new StringBuilder();
-                    stringBuilder.append(AppConstants.FEED_SCREEN).append(AppConstants.PROFILE_FRAGMENT).append(AppConstants.SPACE).append( e.getMessage());
-                    SheroesApplication.mContext.trackScreenView(stringBuilder.toString());
-                }
+
             }
 
             @Override
@@ -795,10 +726,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
 
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append(AppConstants.USER_CONTACTS_ACCESS).append(mSheroesApplication.getString(R.string.ID_VIEWS)).append(AppConstants.SPACE).append( e.getMessage());
-                SheroesApplication.mContext.trackScreenView(stringBuilder.toString());
-            }
+                    }
 
             @Override
             public void onNext(UserPhoneContactsListResponse userPhoneContactsListResponse) {

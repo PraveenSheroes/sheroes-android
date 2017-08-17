@@ -28,6 +28,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -146,6 +147,9 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
                 tvFeedArticleUserMenu.setVisibility(View.VISIBLE);
             } else {
                 tvFeedArticleUserMenu.setVisibility(View.GONE);
+            }
+            if(dataItem != null&&StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())){
+                ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(AppConstants.IMPRESSIONS,AppConstants.ARTICLE_IMPRSSION, dataItem.getIdOfEntityOrParticipant() + AppConstants.DASH +userPreference.get().getUserSummary().getUserId() + AppConstants.DASH + dataItem.getNameOrTitle() );
             }
         }
     }

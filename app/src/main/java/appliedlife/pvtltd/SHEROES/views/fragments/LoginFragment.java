@@ -112,6 +112,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
         mPasswordView.getBackground().setColorFilter(getResources().getColor(R.color.blue), PorterDuff.Mode.SRC_ATOP);
         setProgressBar(mProgressBar);
         //  mLoginPresenter.getMasterDataToPresenter();
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_LOGIN));
         return view;
     }
 

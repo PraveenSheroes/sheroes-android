@@ -1,8 +1,12 @@
 package appliedlife.pvtltd.SHEROES.models.entities.community;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
@@ -11,7 +15,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
  * Created by SHEROES-TECH on 22-03-2017.
  */
 
-public class CommunityPostCreateRequest extends BaseRequest{
+public class CommunityPostCreateRequest extends BaseRequest implements Parcelable {
 
     @SerializedName("entity_start_date")
     @Expose
@@ -186,4 +190,62 @@ public class CommunityPostCreateRequest extends BaseRequest{
     public void setVideoLink(boolean videoLink) {
         this.videoLink = videoLink;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.entityStartDate);
+        dest.writeByte(this.isOgVideoLinkB ? (byte) 1 : (byte) 0);
+        dest.writeString(this.ogDescriptionS);
+        dest.writeString(this.ogImageUrlS);
+        dest.writeString(this.ogRequestedUrlS);
+        dest.writeString(this.ogTitleS);
+        dest.writeValue(this.sourceEntityId);
+        dest.writeByte(this.videoLink ? (byte) 1 : (byte) 0);
+        dest.writeValue(this.id);
+        dest.writeValue(this.communityId);
+        dest.writeString(this.creatorType);
+        dest.writeString(this.description);
+        dest.writeStringList(this.images);
+        dest.writeList(this.deleteImagesIds);
+        dest.writeByte(this.isActive ? (byte) 1 : (byte) 0);
+    }
+
+    public CommunityPostCreateRequest() {
+    }
+
+    protected CommunityPostCreateRequest(Parcel in) {
+        this.entityStartDate = in.readString();
+        this.isOgVideoLinkB = in.readByte() != 0;
+        this.ogDescriptionS = in.readString();
+        this.ogImageUrlS = in.readString();
+        this.ogRequestedUrlS = in.readString();
+        this.ogTitleS = in.readString();
+        this.sourceEntityId = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.videoLink = in.readByte() != 0;
+        this.id = (Long) in.readValue(Long.class.getClassLoader());
+        this.communityId = (Long) in.readValue(Long.class.getClassLoader());
+        this.creatorType = in.readString();
+        this.description = in.readString();
+        this.images = in.createStringArrayList();
+        this.deleteImagesIds = new ArrayList<Long>();
+        in.readList(this.deleteImagesIds, Long.class.getClassLoader());
+        this.isActive = in.readByte() != 0;
+    }
+
+    public static final Parcelable.Creator<CommunityPostCreateRequest> CREATOR = new Parcelable.Creator<CommunityPostCreateRequest>() {
+        @Override
+        public CommunityPostCreateRequest createFromParcel(Parcel source) {
+            return new CommunityPostCreateRequest(source);
+        }
+
+        @Override
+        public CommunityPostCreateRequest[] newArray(int size) {
+            return new CommunityPostCreateRequest[size];
+        }
+    };
 }

@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <LinearLayout
+        android:id="@+id/scroll_make_india_safe_image_holder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/iv_make_india_safe_pic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_size_16"
+            android:adjustViewBounds="true" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_size_80"
+            android:layout_marginTop="@dimen/dp_size_8"
+            android:gravity="bottom"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_size_8"
+                android:layout_weight="1">
+
+                <EditText
+                    android:id="@+id/et_make_india_safe_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_size_10"
+                    android:layout_marginRight="@dimen/dp_size_10"
+                    android:background="@color/fully_transparent"
+                    android:cursorVisible="true"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:hint="@string/ID_SHARE_WITH_COMMUNITY"
+                    android:inputType="textCapSentences|textMultiLine"
+                    android:lineSpacingExtra="@dimen/dp_size_4"
+                    android:minHeight="@dimen/dp_size_48"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/user_comment_text"
+                    android:textSize="@dimen/sp_size_12"
+                    android:windowSoftInputMode="stateHidden" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_share_with_friends"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/dp_size_20"
+            android:layout_marginRight="@dimen/dp_size_20"
+            android:layout_marginTop="@dimen/dp_size_40"
+            android:background="@drawable/selecter_make_india_safe"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:gravity="center"
+            android:padding="@dimen/dp_size_20"
+            android:text="@string/ID_SHARE_WITH_FRIENDS"
+            android:textColor="@color/once_card"
+            android:textSize="@dimen/sp_size_18" />
+
+        <TextView
+            android:id="@+id/tv_make_india_safe_post_as"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_size_20"
+            android:layout_marginRight="@dimen/dp_size_20"
+            android:layout_marginTop="@dimen/dp_size_50"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:text="@string/ID_POST_AS_ON_SHEROES"
+            android:textColor="@color/detail_page_text"
+            android:textSize="@dimen/sp_size_14" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp_size_50"
+            android:layout_marginLeft="@dimen/dp_size_15"
+            android:layout_marginRight="@dimen/dp_size_15"
+            android:layout_marginTop="@dimen/dp_size_20">
+
+            <CheckBox
+                android:id="@+id/cb_post_as_annonyms"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginBottom="@dimen/dp_size_10"
+                android:button="@drawable/customecheckbox"
+                android:checked="false"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:paddingLeft="@dimen/dp_size_10"
+                android:text="@string/ID_ANONYMOUS"
+                android:textAllCaps="true"
+                android:textSize="@dimen/sp_size_14" />
+
+            <CheckBox
+                android:id="@+id/cb_post_as_first_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_size_25"
+                android:layout_toRightOf="@+id/cb_post_as_annonyms"
+                android:button="@drawable/customecheckbox"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:paddingLeft="@dimen/dp_size_10"
+                android:text="@string/ID_USER_NAME"
+                android:textAllCaps="true"
+                android:textSize="@dimen/sp_size_14" />
+        </RelativeLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/scroll_make_india_safe_events"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tv_click_pic_and_tell_friends"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/dp_size_20"
+            android:layout_marginRight="@dimen/dp_size_20"
+            android:layout_marginTop="@dimen/dp_size_40"
+            android:background="@drawable/selecter_make_india_safe"
+            android:drawableRight="@drawable/ic_challenge_camera"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:gravity="center"
+            android:paddingBottom="@dimen/dp_size_20"
+            android:paddingLeft="@dimen/dp_size_20"
+            android:paddingRight="@dimen/dp_size_50"
+            android:paddingTop="@dimen/dp_size_20"
+            android:text="@string/ID_TELL_YOUR_FRIENDS"
+            android:textColor="@color/once_card"
+            android:textSize="@dimen/sp_size_14" />
+
+
+        <TextView
+            android:id="@+id/tv_message_for_safe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_size_20"
+            android:layout_marginRight="@dimen/dp_size_20"
+            android:layout_marginTop="@dimen/dp_size_22"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:padding="@dimen/dp_size_10"
+            android:text="sage"
+            android:textAlignment="center"
+            android:textColor="@color/once_card"
+            android:textSize="@dimen/sp_size_14" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_size_20"
+            android:layout_marginRight="@dimen/dp_size_20"
+            android:layout_marginTop="@dimen/dp_size_30"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:text="@string/ID_POST_AS_ON_SHEROES"
+            android:textColor="@color/detail_page_text"
+            android:textSize="@dimen/sp_size_14" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp_size_50"
+            android:layout_marginLeft="@dimen/dp_size_15"
+            android:layout_marginRight="@dimen/dp_size_15"
+            android:layout_marginTop="@dimen/dp_size_20">
+
+            <CheckBox
+                android:id="@+id/cb_post_as_annonyms_by_link"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginBottom="@dimen/dp_size_10"
+                android:button="@drawable/customecheckbox"
+                android:checked="false"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:paddingLeft="@dimen/dp_size_10"
+                android:text="@string/ID_ANONYMOUS"
+                android:textAllCaps="true"
+                android:textColor="@color/detail_page_text"
+                android:textSize="@dimen/sp_size_16" />
+
+            <CheckBox
+                android:id="@+id/cb_post_as_first_name_by_link"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_size_25"
+                android:layout_toRightOf="@+id/cb_post_as_annonyms_by_link"
+                android:button="@drawable/customecheckbox"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:paddingLeft="@dimen/dp_size_10"
+                android:text="@string/ID_USER_NAME"
+                android:textAllCaps="true"
+                android:textColor="@color/detail_page_text"
+                android:textSize="@dimen/sp_size_16" />
+        </RelativeLayout>
+    </LinearLayout>
+
+
+</android.support.v7.widget.CardView >
