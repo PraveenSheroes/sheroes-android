@@ -51,6 +51,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Calendar;
 
 import javax.inject.Inject;
 
@@ -144,7 +145,7 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
     public static GoogleApiClient mGoogleApiClient;
     private String mToken = null;
     private String loginViaSocial = MoEngageConstants.GOOGLE;
-
+    private  long currentTime;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -164,6 +165,7 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
             mGcmId = getArguments().getString(AppConstants.GCM_ID);
         }
         mLoginPresenter.attachView(this);
+        currentTime=System.currentTimeMillis();
         // initGoogleLogin();
         googlePlusLogin();
         mEmailView.getBackground().setColorFilter(getResources().getColor(R.color.blue), PorterDuff.Mode.SRC_ATOP);
@@ -436,7 +438,7 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
                         mUserPreference.set(loginResponse);
                         if (null != loginResponse.getUserSummary() && null != loginResponse.getUserSummary().getUserBO() && StringUtil.isNotNullOrEmptyString(loginResponse.getUserSummary().getUserBO().getCrdt())) {
                             long createdDate = Long.parseLong(loginResponse.getUserSummary().getUserBO().getCrdt());
-                            if (createdDate <System.currentTimeMillis()) {
+                            if (createdDate<currentTime) {
                                 moEngageUtills.entityMoEngageLoggedIn(getActivity(), mMoEHelper, payloadBuilder, loginViaSocial);
                                 if(loginViaSocial==MoEngageConstants.FACEBOOK)
                                 {

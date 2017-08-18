@@ -147,7 +147,7 @@
                     android:layout_below="@+id/passwordwidget"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="@dimen/dp_size_20"
-                    android:background="@drawable/rounded_rectangle_signup"
+                    android:background="@drawable/selecter_make_india_safe"
                     android:fontFamily="@string/ID_ROBOTO_BOLD"
                     android:text="@string/ID_SIGN_UP"
                     android:textColor="@color/signup_text_color"
