@@ -89,6 +89,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.MentorDetailItem;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQS;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
+import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -105,8 +106,8 @@ import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FAQSFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.HomeArticleCategorySpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.HomeSpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ICCMemberListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunitiesFragment;
@@ -128,7 +129,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.COMMENT_REA
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.JOIN_INVITE;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MENU;
 
-public class HomeActivity extends BaseActivity implements CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, CommentReactionFragment.HomeActivityIntractionListner, HomeSpinnerFragment.HomeSpinnerFragmentListner {
+public class HomeActivity extends BaseActivity implements CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, CommentReactionFragment.HomeActivityIntractionListner, HomeArticleCategorySpinnerFragment.HomeSpinnerFragmentListner {
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
     @Inject
     Preference<LoginResponse> mUserPreference;
@@ -200,7 +201,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     ImageView mICSheroes;
     GenericRecyclerViewAdapter mAdapter;
     private List<HomeSpinnerItem> mHomeSpinnerItemList = new ArrayList<>();
-    private HomeSpinnerFragment mHomeSpinnerFragment;
+    private HomeArticleCategorySpinnerFragment mHomeArticleCategorySpinnerFragment;
     private FragmentOpen mFragmentOpen;
     private CustiomActionBarToggle mCustiomActionBarToggle;
     private FeedDetail mFeedDetail;
@@ -404,7 +405,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         if (mFragmentOpen.isFeedFragment()) {
             moEngageUtills.entityMoEngageLogOut(this, mMoEHelper, payloadBuilder, AppConstants.FEED_SCREEN);
         }
-
+        ((SheroesApplication)this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOG_OUT, GoogleAnalyticsEventActions.LOG_OUT_OF_APP, AppConstants.EMPTY_STRING);
     }
 
     private void challengeIdHandle(String urlOfSharedCard) {
@@ -887,12 +888,12 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 mHomeSpinnerItemList = mFragmentOpen.getHomeSpinnerItemList();
             }
             mFragmentOpen.setArticleFragment(false);
-            mHomeSpinnerFragment = new HomeSpinnerFragment();
+            mHomeArticleCategorySpinnerFragment = new HomeArticleCategorySpinnerFragment();
             Bundle bundle = new Bundle();
             bundle.putParcelableArrayList(AppConstants.HOME_SPINNER_FRAGMENT, (ArrayList<? extends Parcelable>) mHomeSpinnerItemList);
-            mHomeSpinnerFragment.setArguments(bundle);
+            mHomeArticleCategorySpinnerFragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
-                    .replace(R.id.fl_article_card_view, mHomeSpinnerFragment, HomeSpinnerFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+                    .replace(R.id.fl_article_card_view, mHomeArticleCategorySpinnerFragment, HomeArticleCategorySpinnerFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
             mFragmentOpen.setOpen(true);
 
         }
@@ -1038,6 +1039,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     .build();
             AppInviteDialog.show(this, content);
         }
+        ((SheroesApplication)this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_INVITES, GoogleAnalyticsEventActions.OPEN_INVITE_FB_FRDZ, AppConstants.EMPTY_STRING);
       /*  myCommunityInviteMemberDialogFragment = (MyCommunityInviteMemberDialogFragment) getFragmentManager().findFragmentByTag(MyCommunityInviteMemberDialogFragment.class.getName());
         if (myCommunityInviteMemberDialogFragment == null) {
             myCommunityInviteMemberDialogFragment = new MyCommunityInviteMemberDialogFragment();

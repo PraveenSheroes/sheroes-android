@@ -94,6 +94,7 @@ public class OnBoardingHowCanSheroesHelpYouFragment extends BaseFragment impleme
 
             }
         });
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_ONBOARDING_LOOKING_FOR));
         return view;
     }
 

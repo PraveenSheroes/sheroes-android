@@ -126,6 +126,7 @@ public class JobFragment extends BaseFragment {
         jobFilterIds(feedRequestBuilder(AppConstants.FEED_JOB, mFragmentListRefreshData.getPageNo()));
         long timeSpent=System.currentTimeMillis()-startedTime;
         moEngageUtills.entityMoEngageJobListing(getActivity(),mMoEHelper,payloadBuilder,timeSpent);
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_JOB_LISTING));
         mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

@@ -40,11 +40,11 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LastComment;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleDetailPojo;
+import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.URLSpanNoUnderline;
 import butterknife.Bind;
@@ -460,6 +460,7 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> imple
         mFeedDetail.setItemPosition(getAdapterPosition());
         mFeedDetail.setLongPress(true);
         viewInterface.handleOnClick(mFeedDetail, tvArticleDetailUserReaction);
+        ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_CHANGED_REACTIONS, GoogleAnalyticsEventActions.CHANGED_REACTIONS_ON_ARTICLE, AppConstants.EMPTY_STRING);
     }
 
     @OnClick(R.id.tv_article_detail_user_reaction)
@@ -479,8 +480,10 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> imple
         mFeedDetail.setItemPosition(getAdapterPosition());
         if (mFeedDetail.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
             viewInterface.userCommentLikeRequest(mFeedDetail, AppConstants.NO_REACTION_CONSTANT, getAdapterPosition());
+            ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_UNDO_REACTIONS, GoogleAnalyticsEventActions.UNDO_REACTIONS_ON_ARTICLE, AppConstants.EMPTY_STRING);
         } else {
             viewInterface.userCommentLikeRequest(mFeedDetail, AppConstants.HEART_REACTION_CONSTANT, getAdapterPosition());
+            ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_REACTIONS, GoogleAnalyticsEventActions.REACTED_TO_ARTICLE, AppConstants.EMPTY_STRING);
         }
         if (mFeedDetail.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
             mFeedDetail.setReactionValue(AppConstants.NO_REACTION_CONSTANT);

@@ -31,6 +31,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
+import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -83,6 +84,7 @@ public class SearchJobFragment extends BaseFragment implements HomeView {
         mHomePresenter.attachView(this);
      //   mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ALL_SEARCH, AppConstants.NO_REACTION_CONSTANT);
         editTextWatcher();
+        ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_SEARCH_JOB_SCREEN, GoogleAnalyticsEventActions.USED_SEARCH_JOB_SCREEN, AppConstants.EMPTY_STRING);
      //   jobSearcgPagination(mFragmentListRefreshData);
         return view;
     }
@@ -109,6 +111,7 @@ public class SearchJobFragment extends BaseFragment implements HomeView {
         });
         super.setAllInitializationForFeeds(mFragmentListRefreshData,  mAdapter, mLayoutManager, mRecyclerView, mHomePresenter, mAppUtils, mProgressBar);
         mHomePresenter.getFeedFromPresenter(mAppUtils.searchRequestBuilder(AppConstants.FEED_JOB,mFragmentListRefreshData.getSearchStringName() ,mFragmentListRefreshData.getPageNo(),AppConstants.ALL_SEARCH,null,AppConstants.PAGE_SIZE));
+
         mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -135,6 +138,7 @@ public class SearchJobFragment extends BaseFragment implements HomeView {
                 mLayoutManager.scrollToPositionWithOffset(0, 0);
             }
             mSwipeView.setRefreshing(false);
+            ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_JOB_SEARCH_RESULT));
         }
         else  if(StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())&&mAdapter!=null)
         {

@@ -109,12 +109,14 @@ public class MyCommunitiesFragment extends BaseFragment implements HomeView {
         mHomePresenter.getMyCommunityFromPresenter(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
         long timeSpent=System.currentTimeMillis()-startedTime;
         moEngageUtills.entityMoEngageMyCommunity(getActivity(),mMoEHelper,payloadBuilder,timeSpent);
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_COMMUNITY_LISTING_MY_COMMUNITIES));
         mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 swipeAndRefreshList();
             }
         });
+
         return view;
     }
 

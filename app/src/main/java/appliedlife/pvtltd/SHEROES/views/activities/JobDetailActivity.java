@@ -35,6 +35,7 @@ import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
+import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -158,6 +159,8 @@ public class JobDetailActivity extends BaseActivity implements  AppBarLayout.OnO
         intent.putExtra(Intent.EXTRA_TEXT, mFeedDetail.getDeepLinkUrl());
         startActivity(Intent.createChooser(intent, AppConstants.SHARE));
         moEngageUtills.entityMoEngageCardShareVia(getApplicationContext(),mMoEHelper,payloadBuilder,mFeedDetail, MoEngageConstants.SHARE_VIA_SOCIAL);
+        ((SheroesApplication)this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_JOB, AppConstants.EMPTY_STRING);
+        ((SheroesApplication)this.getApplication()).trackScreenView(getString(R.string.ID_REFER_SHARE_JOB));
     }
 
     private void setPagerAndLayouts() {
@@ -279,10 +282,13 @@ public class JobDetailActivity extends BaseActivity implements  AppBarLayout.OnO
         bookmarkCall();
         if (!mFeedDetail.isBookmarked()) {
             mFeedDetail.setBookmarked(true);
+            ((SheroesApplication)this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_BOOKMARK, GoogleAnalyticsEventActions.BOOKMARK_ON_JOB, AppConstants.EMPTY_STRING);
         } else {
             mFeedDetail.setBookmarked(false);
+            ((SheroesApplication)this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_UN_BOOKMARK, GoogleAnalyticsEventActions.UN_BOOKMARK_ON_JOB, AppConstants.EMPTY_STRING);
         }
         setBookMarkImage();
+
     }
 
     private void bookmarkCall() {

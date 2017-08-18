@@ -72,6 +72,7 @@ public class ProffestionalProfileFragment extends BaseFragment implements Profil
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mAdapter);
         onDataRefresh();
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_MY_PROFILE_PROFESSIONAL));
         return view;
 
     }

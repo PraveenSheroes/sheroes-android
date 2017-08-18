@@ -22,6 +22,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.profile.ExprienceEntity;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.WorkExpListResponse;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePersenter;
+import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -80,6 +82,7 @@ public class ProfileWorkExperienceFragment extends BaseFragment implements Profi
             }
         });
         initializeAllWorkExpData();
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_MY_PROFILE_PROFESSIONAL_VIEW_ADDED_WORK_EXPERIENCE));
         return view;
     }
 
@@ -103,7 +106,10 @@ public class ProfileWorkExperienceFragment extends BaseFragment implements Profi
 
     @OnClick(R.id.fab_add_other_work_experience)
     public void fabon_click() {
+
         ((ProfileActicity) getActivity()).openEditAddWorkExpFragment(null);
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_MY_PROFILE_PROFESSIONAL_ADD_WORK_EXPERIENCE));
+        ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_PROFILE_EDITS, GoogleAnalyticsEventActions.ADDED_NEW_WORK_EXP, AppConstants.EMPTY_STRING);
     }
 
     @OnClick(R.id.tv_profile_workexperience_back)

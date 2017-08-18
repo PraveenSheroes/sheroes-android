@@ -123,6 +123,7 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
         mHomePresenter.getFeedFromPresenter(feedRequestBuilder(AppConstants.FEATURED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
         long timeSpent=System.currentTimeMillis()-startedTime;
         moEngageUtills.entityMoEngageFeatureCommunity(getActivity(),mMoEHelper,payloadBuilder,timeSpent);
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_COMMUNITY_LISTING_ALL_COMMUNITIES));
         mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

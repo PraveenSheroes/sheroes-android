@@ -109,6 +109,7 @@ public class InviteCommunityOwner extends BaseFragment implements CommunityView,
         mRecyclerView.setAdapter(mAdapter);
         liInviteMember.setVisibility(View.VISIBLE);
         super.setAllInitializationForFeeds(mFragmentListRefreshData, mAdapter, manager, mRecyclerView, mHomePresenter, mAppUtils, mProgressBar);
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_ADD_COMMUNITY_OWNERS));
         return view;
     }
 

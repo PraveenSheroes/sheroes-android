@@ -154,6 +154,7 @@ public class SearchGoodAtDialogFragment extends BaseDialogFragment implements Co
         mAdapter = new GenericRecyclerViewAdapter(getActivity(), this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_MY_PROFILE_PROFESSIONAL_EDIT_GOOD_AT_SEARCH_AT));
         return v;
     }
 

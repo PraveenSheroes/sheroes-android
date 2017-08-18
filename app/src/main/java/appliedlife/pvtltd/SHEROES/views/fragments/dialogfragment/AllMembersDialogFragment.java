@@ -92,6 +92,7 @@ public class AllMembersDialogFragment extends BaseDialogFragment implements AllM
         });
         mMemberpresenter.getAllMembers(mAppUtils.getPandingMemberRequestBuilder(mFeedDetail.getIdOfEntityOrParticipant(), mFragmentListRefreshData.getPageNo()));
         mFragmentListRefreshData.setEnitityOrParticpantid(mFeedDetail.getIdOfEntityOrParticipant());
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_COMMUNITY_MEMBERS));
         return view;
     }
 

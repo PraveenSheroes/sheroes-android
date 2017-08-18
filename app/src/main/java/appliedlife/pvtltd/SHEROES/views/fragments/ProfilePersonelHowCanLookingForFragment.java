@@ -36,6 +36,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.OnBoardingData;
 import appliedlife.pvtltd.SHEROES.presenters.OnBoardingPresenter;
+import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -119,6 +120,7 @@ public class ProfilePersonelHowCanLookingForFragment extends BaseFragment implem
 
             }
         });
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_MY_PROFILE_PERSONAL_EDIT_LOOKING_FOR));
         return view;
     }
 
@@ -176,7 +178,9 @@ public class ProfilePersonelHowCanLookingForFragment extends BaseFragment implem
         }
         if (skillIds.size() > 0) {
             mOnBoardingPresenter.getLookingForHowCanToPresenter(profileOpertunityTypeRequestBuilder(skillIds, AppConstants.LOOKING_FOR_HOW_CAN, AppConstants.LOOKING_FOR_HOW_CAN_TYPE));
+            ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_PROFILE_EDITS, GoogleAnalyticsEventActions.EDIT_LOOKING_FOR, AppConstants.EMPTY_STRING);
         }
+
     }
 
     @Override

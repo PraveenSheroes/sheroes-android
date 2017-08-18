@@ -46,8 +46,8 @@ import appliedlife.pvtltd.SHEROES.views.fragments.EmailVerificationFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FAQSFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.HomeArticleCategorySpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.HomeSpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ICCMemberListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ImageFullViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.InviteCommunityOwner;
@@ -238,7 +238,7 @@ public interface SheroesAppComponent {
 
     void inject(LoginFragment loginFragment);
 
-    void inject(HomeSpinnerFragment homeSpinnerFragment);
+    void inject(HomeArticleCategorySpinnerFragment homeArticleCategorySpinnerFragment);
 
     void inject(SearchCommunitiesFragment searchCommunitiesFragment);
 

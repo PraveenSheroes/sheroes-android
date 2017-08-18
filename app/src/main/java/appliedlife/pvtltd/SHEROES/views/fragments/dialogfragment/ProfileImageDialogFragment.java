@@ -27,6 +27,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActicity;
@@ -147,6 +148,7 @@ public class ProfileImageDialogFragment extends BaseDialogFragment {
     public void onProfileImageSaveClick() {
         mTvProfileImageSave.setEnabled(false);
         ((ProfileActicity) getActivity()).requestForUpdateProfileImage();
+        ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_PROFILE_EDITS, GoogleAnalyticsEventActions.UPDATED_PROFILE_PICTURE, AppConstants.EMPTY_STRING);
     }
 
     @OnClick(R.id.tv_profile_image_remove)

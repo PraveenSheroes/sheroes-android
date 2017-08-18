@@ -26,6 +26,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
+import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -41,8 +42,8 @@ import butterknife.OnClick;
  * Created by Praveen_Singh on 05-01-2017.
  */
 
-public class HomeSpinnerFragment extends BaseFragment implements HomeView {
-    private final String TAG = LogUtils.makeLogTag(HomeSpinnerFragment.class);
+public class HomeArticleCategorySpinnerFragment extends BaseFragment implements HomeView {
+    private final String TAG = LogUtils.makeLogTag(HomeArticleCategorySpinnerFragment.class);
     @Inject
     HomePresenter mHomePresenter;
     @Bind(R.id.rv_spinner_list)
@@ -92,6 +93,8 @@ public class HomeSpinnerFragment extends BaseFragment implements HomeView {
         } else {
             mHomePresenter.getMasterDataToPresenter();
         }
+
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_ARTICLE_SELECT_CATEGORY));
         return view;
     }
 
@@ -114,6 +117,7 @@ public class HomeSpinnerFragment extends BaseFragment implements HomeView {
     @OnClick(R.id.tv_done)
     public void onDoneClick() {
         homeSpinnerFragmentListner.onCancelDone(AppConstants.ONE_CONSTANT);
+        ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_SEARCH_FILTER, GoogleAnalyticsEventActions.USED_FILTER_ON_ARTICLES, AppConstants.EMPTY_STRING);
     }
 
     public interface HomeSpinnerFragmentListner {

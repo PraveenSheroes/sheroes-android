@@ -40,9 +40,10 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.moengage.MoEngageEvent;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageEvent;
 import appliedlife.pvtltd.SHEROES.presenters.CommentReactionPresenter;
+import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -126,6 +127,8 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
     private boolean addedComment;
     private MoEHelper mMoEHelper;
     private PayloadBuilder payloadBuilder;
+    private int typeOfPost;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -159,19 +162,31 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
         initializeUiComponent();
         super.setCommentReaction(mFragmentListRefreshData, mAdapter, mLayoutManager, mFeedDetail, mRecyclerView, mCommentReactionPresenter, mAppUtils, mProgressBar);
         if (mFragmentOpen.isCommentList()) {
-            if (null != mFeedDetail &&!StringUtil.isNotNullOrEmptyString(mFeedDetail.getCallFromName())) {
+            if (null != mFeedDetail && !StringUtil.isNotNullOrEmptyString(mFeedDetail.getCallFromName())) {
                 AppUtils.keyboardToggle(mEtUserCommentDescription, TAG);
             }
             mCommentReactionPresenter.getAllCommentListFromPresenter(getCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId(), mFragmentListRefreshData.getPageNo()), mFragmentOpen.isReactionList(), AppConstants.NO_REACTION_CONSTANT);
+            ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_VIEW_REPLIES));
         } else if (mFragmentOpen.isReactionList()) {
             mFlCommentReaction.setVisibility(View.GONE);
             liUserComment.setVisibility(View.GONE);
             mViewLineReaction.setVisibility(View.GONE);
             mCommentReactionPresenter.getAllCommentListFromPresenter(getCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId(), mFragmentListRefreshData.getPageNo()), mFragmentOpen.isReactionList(), AppConstants.NO_REACTION_CONSTANT);
+            ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_VIEW_REACTION));
         }
         mEtUserCommentDescription.addTextChangedListener(dataSearchTextWatcher());
         mEtUserCommentDescription.setFocusableInTouchMode(true);
         mEtUserCommentDescription.requestFocus();
+        if (null != mFeedDetail) {
+            if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getSubType())) {
+                if (mFeedDetail.getSubType().equalsIgnoreCase(AppConstants.FEED_ARTICLE)) {
+                    typeOfPost = AppConstants.ONE_CONSTANT;
+                } else if (mFeedDetail.getSubType().equalsIgnoreCase(AppConstants.FEED_COMMUNITY_POST)) {
+                    typeOfPost = AppConstants.TWO_CONSTANT;
+                }
+
+            }
+        }
         mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -210,26 +225,22 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
         if (mFragmentOpen.isCommentList()) {
             if (mFeedDetail.getNoOfComments() > 1) {
                 mTvUserCommentHeaderText.setText(getString(R.string.ID_REPLIES) + getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mFeedDetail.getNoOfComments()) + getString(R.string.ID_CLOSE_BRACKET));
-            } else if(mTotalComments==1) {
+            } else if (mTotalComments == 1) {
                 mTvUserCommentHeaderText.setText(getString(R.string.ID_REPLY) + getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mTotalComments) + getString(R.string.ID_CLOSE_BRACKET));
-            }else
-            {
+            } else {
                 mTvUserCommentHeaderText.setText(getString(R.string.ID_NO_REPLIES));
             }
-            if(mFeedDetail.getNoOfLikes()>1)
-            {
-                mTvReaction.setText(getString(R.string.ID_REACTIONS)+getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mFeedDetail.getNoOfLikes()) + getString(R.string.ID_CLOSE_BRACKET));
-            }else if(mFeedDetail.getNoOfLikes()==1){
+            if (mFeedDetail.getNoOfLikes() > 1) {
+                mTvReaction.setText(getString(R.string.ID_REACTIONS) + getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mFeedDetail.getNoOfLikes()) + getString(R.string.ID_CLOSE_BRACKET));
+            } else if (mFeedDetail.getNoOfLikes() == 1) {
                 mTvReaction.setText(getString(R.string.ID_REACTION) + getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mFeedDetail.getNoOfLikes()) + getString(R.string.ID_CLOSE_BRACKET));
             }
         } else if (mFragmentOpen.isReactionList()) {
-            if(mFeedDetail.getNoOfLikes()>1)
-            {
-                mTvUserCommentHeaderText.setText(getString(R.string.ID_REACTIONS)+getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mFeedDetail.getNoOfLikes()) + getString(R.string.ID_CLOSE_BRACKET));
-            }else if(mFeedDetail.getNoOfLikes()==1){
+            if (mFeedDetail.getNoOfLikes() > 1) {
+                mTvUserCommentHeaderText.setText(getString(R.string.ID_REACTIONS) + getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mFeedDetail.getNoOfLikes()) + getString(R.string.ID_CLOSE_BRACKET));
+            } else if (mFeedDetail.getNoOfLikes() == 1) {
                 mTvUserCommentHeaderText.setText(getString(R.string.ID_REACTION) + getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mFeedDetail.getNoOfLikes()) + getString(R.string.ID_CLOSE_BRACKET));
-            }else
-            {
+            } else {
                 mTvUserCommentHeaderText.setText(getString(R.string.ID_NO_REACTION));
             }
         }
@@ -268,29 +279,28 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
             }
         });
     }
+
     private void entityData(FeedDetail feedDetail) {
         if (StringUtil.isNotNullOrEmptyString(feedDetail.getSubType())) {
             String subType = feedDetail.getSubType();
             switch (subType) {
                 case AppConstants.FEED_ARTICLE:
-                    entityMoEngageReaction(getString(R.string.ID_ARTICLE), feedDetail.getEntityOrParticipantId(),feedDetail.getNameOrTitle(), MoEngageConstants.ARTICLE_CATEGORY, MoEngageConstants.ARTICLE_TAG, feedDetail.getAuthorName(), AppConstants.FEED_SCREEN, feedDetail.getItemPosition());
+                    entityMoEngageReaction(getString(R.string.ID_ARTICLE), feedDetail.getEntityOrParticipantId(), feedDetail.getNameOrTitle(), MoEngageConstants.ARTICLE_CATEGORY, MoEngageConstants.ARTICLE_TAG, feedDetail.getAuthorName(), AppConstants.FEED_SCREEN, feedDetail.getItemPosition());
                     break;
                 case AppConstants.FEED_COMMUNITY_POST:
-                    entityMoEngageReaction(getString(R.string.ID_COMMUNITIY), feedDetail.getEntityOrParticipantId(),feedDetail.getNameOrTitle(), MoEngageConstants.COMMUNITY_POST_CATEGORY, MoEngageConstants.COMMUNITY_TAG, feedDetail.getAuthorName(), AppConstants.FEED_SCREEN, feedDetail.getItemPosition());
+                    entityMoEngageReaction(getString(R.string.ID_COMMUNITIY), feedDetail.getEntityOrParticipantId(), feedDetail.getNameOrTitle(), MoEngageConstants.COMMUNITY_POST_CATEGORY, MoEngageConstants.COMMUNITY_TAG, feedDetail.getAuthorName(), AppConstants.FEED_SCREEN, feedDetail.getItemPosition());
                     break;
             }
         }
     }
 
-    private void entityMoEngageReaction(String entityValue, long entityId,String entityTitle, String entityType, String entityTag, String entityCreator, String screenName, int position) {
+    private void entityMoEngageReaction(String entityValue, long entityId, String entityTitle, String entityType, String entityTag, String entityCreator, String screenName, int position) {
         payloadBuilder.putAttrString(MoEngageConstants.ENTITY, entityValue);
         payloadBuilder.putAttrLong(MoEngageConstants.ENTITY_ID, entityId);
-        if(mIsAnonymous)
-        {
-            payloadBuilder.putAttrString(MoEngageConstants.AS,getString(R.string.ID_ANONYMOUS));
-        }else
-        {
-            payloadBuilder.putAttrString(MoEngageConstants.AS,AppConstants.USER);
+        if (mIsAnonymous) {
+            payloadBuilder.putAttrString(MoEngageConstants.AS, getString(R.string.ID_ANONYMOUS));
+        } else {
+            payloadBuilder.putAttrString(MoEngageConstants.AS, AppConstants.USER);
         }
         payloadBuilder.putAttrString(MoEngageConstants.ENTITY_TITLE, entityTitle);
         payloadBuilder.putAttrString(MoEngageConstants.ENTITY_TYPE, entityType);
@@ -323,7 +333,7 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
         if (addEditOperation == AppConstants.ONE_CONSTANT) {
             if (StringUtil.isNotEmptyCollection(commentReactionResponsePojo.getCommentReactionDocList())) {
                 mCommentReactionDocList = commentReactionResponsePojo.getCommentReactionDocList();
-                mCommentReactionDoc=null;
+                mCommentReactionDoc = null;
                 setLastComments();
                 setAdapterData();
                 addedComment = true;
@@ -409,7 +419,7 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
         tvPostComment.setEnabled(true);
         switch (commentAddDelete.getStatus()) {
             case AppConstants.SUCCESS:
-               AppUtils.hideKeyboard(mEtUserCommentDescription, TAG);
+                AppUtils.hideKeyboard(mEtUserCommentDescription, TAG);
                 switch (operationId) {
                     case AppConstants.NO_REACTION_CONSTANT:
                         mCommentReactionPresenter.getAllCommentListFromPresenter(getCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId(), AppConstants.ONE_CONSTANT), mFragmentOpen.isReactionList(), AppConstants.ONE_CONSTANT);
@@ -433,15 +443,14 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
                         mTotalComments--;
                         if (null != mCommentReactionDoc) {
                             mCommentReactionDocList.remove(mCommentReactionDoc.getItemPosition());
-                            mCommentReactionDoc=null;
+                            mCommentReactionDoc = null;
                         }
                         if (mFragmentOpen.isCommentList()) {
                             if (mCommentReactionDocList.size() > 1) {
                                 mTvUserCommentHeaderText.setText(getString(R.string.ID_REPLIES) + getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mCommentReactionDocList.size()) + getString(R.string.ID_CLOSE_BRACKET));
-                            } else if(mTotalComments==1) {
+                            } else if (mTotalComments == 1) {
                                 mTvUserCommentHeaderText.setText(getString(R.string.ID_REPLY) + getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mTotalComments) + getString(R.string.ID_CLOSE_BRACKET));
-                            }else
-                            {
+                            } else {
                                 mTvUserCommentHeaderText.setText(getString(R.string.ID_NO_REPLIES));
                             }
                         }
@@ -484,10 +493,9 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
             if (mFragmentOpen.isCommentList()) {
                 if (mTotalComments > 1) {
                     mTvUserCommentHeaderText.setText(getString(R.string.ID_REPLIES) + getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mTotalComments) + getString(R.string.ID_CLOSE_BRACKET));
-                } else if(mTotalComments==1) {
+                } else if (mTotalComments == 1) {
                     mTvUserCommentHeaderText.setText(getString(R.string.ID_REPLY) + getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mTotalComments) + getString(R.string.ID_CLOSE_BRACKET));
-                }else
-                {
+                } else {
                     mTvUserCommentHeaderText.setText(getString(R.string.ID_NO_REPLIES));
                 }
             }
@@ -543,6 +551,7 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
     public void onCommentSelection() {
 
     }
+
     private void openReactionList() {
         mTvUserCommentHeaderText.setText(getString(R.string.ID_REACTION));
         mFragmentOpen.setReactionList(true);
@@ -571,10 +580,24 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
         if (null != mCommentReactionDoc && mCommentReactionDoc.isEdit()) {
             mTotalComments--;
             mCommentReactionPresenter.editCommentListFromPresenter(mAppUtils.editCommentRequestBuilder(mCommentReactionDoc.getEntityId(), mCommentReactionDoc.getComment(), mIsAnonymous, false, mCommentReactionDoc.getId()), AppConstants.ONE_CONSTANT);
+
+            if (typeOfPost == AppConstants.ONE_CONSTANT) {
+                ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EDITED_REPLIED, GoogleAnalyticsEventActions.EDITED_REPLIED_TO_ARTICLE, AppConstants.EMPTY_STRING);
+            } else if (typeOfPost == AppConstants.TWO_CONSTANT) {
+                ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EDITED_REPLIED, GoogleAnalyticsEventActions.EDITED_REPLIED_ON_COMMUNITY_POST, AppConstants.EMPTY_STRING);
+            }
+
         } else {
             tvPostComment.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_post_comment_active, 0, 0, 0);
             mCommentReactionPresenter.addCommentListFromPresenter(postCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId(), mEtUserCommentDescription.getText().toString(), mIsAnonymous), AppConstants.NO_REACTION_CONSTANT);
+            if (typeOfPost == AppConstants.ONE_CONSTANT) {
+                ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_REPLIED, GoogleAnalyticsEventActions.REPLIED_TO_ARTICLE, AppConstants.EMPTY_STRING);
+            } else if (typeOfPost == AppConstants.TWO_CONSTANT) {
+                ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_REPLIED, GoogleAnalyticsEventActions.REPLIED_TO_COMMUNITY_POST, AppConstants.EMPTY_STRING);
+            }
+
         }
+
     }
 
     public void editCommentInList(CommentReactionDoc commentReactionDoc) {
@@ -590,12 +613,19 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
             //  mEtUserCommentDescription.setRawInputType(InputType.TYPE_CLASS_TEXT);
             //  mEtUserCommentDescription.setTextIsSelectable(true);
         }
-          setAdapterData();
+        setAdapterData();
     }
 
     public void deleteCommentFromList(CommentReactionDoc commentReactionDoc) {
         mCommentReactionDoc = commentReactionDoc;
         mCommentReactionPresenter.editCommentListFromPresenter(mAppUtils.editCommentRequestBuilder(commentReactionDoc.getEntityId(), commentReactionDoc.getComment(), mIsAnonymous, commentReactionDoc.isActive(), commentReactionDoc.getId()), AppConstants.TWO_CONSTANT);
+        if (typeOfPost == AppConstants.ONE_CONSTANT) {
+            if (!commentReactionDoc.isActive()) {
+                ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DELETED_REPLIED, GoogleAnalyticsEventActions.DELETED_REPLIED_TO_ARTICLE, AppConstants.EMPTY_STRING);
+            }
+        } else if (typeOfPost == AppConstants.TWO_CONSTANT) {
+            ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DELETED_REPLIED, GoogleAnalyticsEventActions.DELETED_REPLIED_ON_COMMUNITY_POST, AppConstants.EMPTY_STRING);
+        }
     }
 
     /**

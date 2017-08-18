@@ -78,6 +78,7 @@ public class BellNotificationFragment extends BaseFragment implements HomeView {
         mHomePresenter.getBellNotificationFromPresenter(mAppUtils.getBellNotificationRequest());
         long timeSpent=System.currentTimeMillis()-startedTime;
         moEngageUtills.entityMoEngageNotification(getActivity(),mMoEHelper,payloadBuilder,timeSpent);
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_NOTIFICATION_SCREEN));
         return v;
         }
 

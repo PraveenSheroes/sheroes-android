@@ -70,6 +70,7 @@ import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.MakeIndiaSafeFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * An activity that displays a map showing the place at the device's current location.
@@ -85,6 +86,8 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Goo
     ViewPagerAdapter mViewPagerAdapter;
     @Bind(R.id.tab_map_layout)
     public TabLayout mTabLayout;
+    @Bind(R.id.fm_map_layout)
+    public FrameLayout mFlMapLayout;
     private GoogleMap mMap;
     private CameraPosition mCameraPosition;
 
@@ -611,7 +614,10 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Goo
     public void onBackPressed() {
         finish();
     }
-
+    @OnClick(R.id.iv_back_map_layout)
+    public void onBackButton() {
+        onBackPressed();
+    }
     public void backClick() {
         Intent intent = new Intent();
         Bundle bundle = new Bundle();

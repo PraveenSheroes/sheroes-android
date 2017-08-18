@@ -71,6 +71,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCar
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.WorkExpListResponse;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
+import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -288,7 +289,6 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
 
     private void setPagerAndLayouts() {
         setSupportActionBar(mToolbar);
-
         mCollapsingToolbarLayout.setTitle(AppConstants.SPACE);
         mCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -297,6 +297,7 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
         mViewPager.setAdapter(viewPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
         mAppBarLayout.addOnOffsetChangedListener(this);
+        ((SheroesApplication)this.getApplication()).trackScreenView(getString(R.string.ID_MY_PROFILE_PERSONAL_SCREEN));
     }
 
     @Override
@@ -305,6 +306,8 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
             profileCardHandled(view.getId(), ((MyProfileView) baseResponse).getType(), baseResponse);
         } else if (baseResponse instanceof EducationEntity) {
             EducationEntity educationEntity = (EducationEntity) baseResponse;
+            ((SheroesApplication)this.getApplication()).trackScreenView(getString(R.string.ID_MY_PROFILE_PROFESSIONAL_EDIT_EDUCATION));
+            ((SheroesApplication)this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_PROFILE_EDITS, GoogleAnalyticsEventActions.EDITED_EXISTING_EDUCATION, AppConstants.EMPTY_STRING);
             callEditEducation(educationEntity);
         } else if (baseResponse instanceof GetAllDataDocument) {
             dataOnClickForCardItem(view, baseResponse);
@@ -338,6 +341,7 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
         } else if (baseResponse instanceof ExprienceEntity) {
             ExprienceEntity exprienceEntity = (ExprienceEntity) baseResponse;
             mExprienceEntity = exprienceEntity;
+            ((SheroesApplication)this.getApplication()).trackScreenView(getString(R.string.ID_MY_PROFILE_PROFESSIONAL_EDIT_WORK_EXPERIENCE));
             openEditAddWorkExpFragment(exprienceEntity);
         } else if (baseResponse instanceof OnBoardingData) {
             OnBoardingData onBoardingData = (OnBoardingData) baseResponse;

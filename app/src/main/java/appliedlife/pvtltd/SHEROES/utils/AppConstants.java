@@ -301,6 +301,8 @@ public class AppConstants {
     public static final String COMMUNITY_URL_COM = "https://sheroes.com/communities";
     public static final String EVENT_URL = "https://sheroes.in/event";
     public static final String EVENT_URL_COM = "https://sheroes.com/event";
+    public static final String MAKE_INDIA_SAFE_URL = "https://sheroes.in/make-india-safe";
+    public static final String MAKE_INDIA_SAFE_URL_COM = "https://sheroes.com/make-india-safe";
     public static final String USER_PROFILE_URL = "https://sheroes.in/users/edit_profile";
     public static final String USER_PROFILE_URL_COM = "https://sheroes.com/users/edit_profile";
     public static final String USER_URL = "https://sheroes.in/users";

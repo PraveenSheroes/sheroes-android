@@ -89,6 +89,7 @@ public class MakeIndiaSafeFragment extends BaseFragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new GenericRecyclerViewAdapter(getContext(), (MapActivity) getActivity());
         mAdapter.setSheroesGenericListData(CustomeDataList.makeIndiaSafeItemList(mLatLongWithLocation));
+        ((MapActivity)getActivity()).mFlMapLayout.setVisibility(View.VISIBLE);
         mRecyclerView.setAdapter(mAdapter);
         return view;
     }
@@ -133,6 +134,7 @@ public class MakeIndiaSafeFragment extends BaseFragment {
         if (StringUtil.isNotNullOrEmptyString(makeIndiaSafeResponse.getStatus())) {
             switch (makeIndiaSafeResponse.getStatus()) {
                 case AppConstants.SUCCESS:
+                    ((MapActivity) getActivity()).backClick();
                     Uri uri = Uri.parse("file://" + localImageSaveForChallenge.getAbsolutePath());
                     Intent share = new Intent(Intent.ACTION_SEND);
                     share.putExtra(Intent.EXTRA_STREAM, uri);
@@ -175,6 +177,7 @@ public class MakeIndiaSafeFragment extends BaseFragment {
         makeItemsList.add(makeIndiaSafeDetail);
         mAdapter.setSheroesGenericListData(makeItemsList);
         mAdapter.notifyDataSetChanged();
+        ((MapActivity)getActivity()).mFlMapLayout.setVisibility(View.GONE);
     }
 
 

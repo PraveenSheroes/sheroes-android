@@ -35,6 +35,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCar
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserDetails;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePersenter;
+import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -140,7 +141,7 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment implement
         } else {
             mprofilePersenter.getMasterDataToPresenter();
         }
-
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_MY_PROFILE_PROFESSIONAL_EDIT_BASIC_DETAIL));
         return view;
     }
 
@@ -255,6 +256,7 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment implement
         professionalBasicDetailsRequest.setTotalExpYear(year);
         }
         mprofilePersenter.getProfessionalBasicDetailsAuthTokeInPresenter(professionalBasicDetailsRequest);
+        ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_PROFILE_EDITS, GoogleAnalyticsEventActions.EDITING_BASIC_DETAIL_PROFESSIONAL, AppConstants.EMPTY_STRING);
     }
 
     @Override

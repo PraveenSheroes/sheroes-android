@@ -67,6 +67,7 @@ import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.LoginPresenter;
 import appliedlife.pvtltd.SHEROES.service.GCMClientManager;
 import appliedlife.pvtltd.SHEROES.social.CustomSocialDialog;
+import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.social.GooglePlusHelper;
 import appliedlife.pvtltd.SHEROES.social.SocialListener;
 import appliedlife.pvtltd.SHEROES.social.SocialPerson;
@@ -125,6 +126,7 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
     private String mobileNo;
     private String firstName;
     private String lastName;
+    private int mSignUpVia;
     private AccessTokenTracker accessTokenTracker;
     private ProfileTracker profileTracker;
     private CallbackManager callbackManager;
@@ -172,6 +174,7 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
         mFbSignUp.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
         fbSignIn();
         ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_SIGN_UP_FORM));
+
         return view;
     }
 
@@ -345,7 +348,9 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
                 signupRequest.setMobile(mobileNo);
                 signupRequest.setPassword(password);
                 signupRequest.setGcmorapnsid(mGcmId);
+                mSignUpVia = AppConstants.ONE_CONSTANT;
                 mLoginPresenter.getAuthTokenSignupInPresenter(signupRequest);
+
             } else {
                 if (!NetworkUtil.isConnected(getContext())) {
                     showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
@@ -422,21 +427,40 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
                         loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
                         loginResponse.setGcmId(mGcmId);
                         moEngageUtills.entityMoEngageUserAttribute(getActivity(), mMoEHelper, payloadBuilder, loginResponse);
+                        if (mSignUpVia == AppConstants.ONE_CONSTANT) {
+                            ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_SIGN_UP, GoogleAnalyticsEventActions.SIGN_UP_WITH_EMAIL, AppConstants.EMPTY_STRING);
+                        }
                         if (StringUtil.isNotNullOrEmptyString(mobileNo)) {
                             mMoEHelper.setNumber(mobileNo);
                         }
                         mUserPreference.set(loginResponse);
                         if (null != loginResponse.getUserSummary() && null != loginResponse.getUserSummary().getUserBO() && StringUtil.isNotNullOrEmptyString(loginResponse.getUserSummary().getUserBO().getCrdt())) {
                             long createdDate = Long.parseLong(loginResponse.getUserSummary().getUserBO().getCrdt());
-                            if (createdDate <= System.currentTimeMillis()) {
+                            if (createdDate <System.currentTimeMillis()) {
                                 moEngageUtills.entityMoEngageLoggedIn(getActivity(), mMoEHelper, payloadBuilder, loginViaSocial);
+                                if(loginViaSocial==MoEngageConstants.FACEBOOK)
+                                {
+                                    ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_WITH_FACEBOOK, AppConstants.EMPTY_STRING);
+                                }else
+                                {
+                                    ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_WITH_GOOGLE, AppConstants.EMPTY_STRING);
+                                }
+
                             } else {
                                 moEngageUtills.entityMoEngageSignUp(getActivity(), mMoEHelper, payloadBuilder, loginViaSocial);
+                                if(loginViaSocial==MoEngageConstants.FACEBOOK)
+                                {
+                                    ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_SIGN_UP, GoogleAnalyticsEventActions.SIGN_UP_WITH_FACEBOOK, AppConstants.EMPTY_STRING);
+                                }else
+                                {
+                                    ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_SIGN_UP, GoogleAnalyticsEventActions.SIGN_UP_WITH_GOOGLE, AppConstants.EMPTY_STRING);
+                                }
                             }
                             SheroesApplication.mContext.trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
                         }
                         mMoEHelper.setUserAttribute(MoEngageConstants.ACQUISITION_CHANNEL, loginViaSocial);
                         openHomeScreen();
+
                     } else {
                         mUserPreference.delete();
                         LoginManager.getInstance().logOut();
@@ -690,7 +714,7 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
     @Override
     public void onStop() {
         super.onStop();
-        if (mGoogleApiClient != null ) {
+        if (mGoogleApiClient != null) {
             mGoogleApiClient.stopAutoManage(getActivity());
             mGoogleApiClient.disconnect();
         }
@@ -699,7 +723,7 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (null != mGoogleApiClient ) {
+        if (null != mGoogleApiClient) {
             mGoogleApiClient.stopAutoManage(getActivity());
             mGoogleApiClient.disconnect();
         }

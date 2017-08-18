@@ -25,6 +25,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.CreateCommunityPresenter;
+import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -89,7 +90,7 @@ public class ShareCommunityFragment extends BaseFragment {
         }
         mTvCommunityTitle.setText(getString(R.string.ID_SHARE));
         //Fabric.with(getActivity(), new Crashlytics());
-
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_SHARE_COMMUNITY_SCREEN));
         return view;
     }
 
@@ -99,6 +100,7 @@ public class ShareCommunityFragment extends BaseFragment {
         intent.setType(AppConstants.SHARE_MENU_TYPE);
         intent.putExtra(Intent.EXTRA_TEXT, mFeedDetail.getDeepLinkUrl());
         startActivity(Intent.createChooser(intent, AppConstants.SHARE));
+        ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_COMMUNITY_LINK, AppConstants.EMPTY_STRING);
         moEngageUtills.entityMoEngageCardShareVia(getActivity(),mMoEHelper,payloadBuilder,mFeedDetail, MoEngageConstants.SHARE_VIA_SOCIAL);
     }
 
@@ -118,6 +120,7 @@ public class ShareCommunityFragment extends BaseFragment {
             } else {
                 mTvShare.setEnabled(false);
                 mCreateCommunityPresenter.shareViaEmailPresenter(mAppUtils.shareRequestBuilder(mFeedDetail.getDeepLinkUrl(), mFeedDetail.getIdOfEntityOrParticipant(), mEtShareViaEmail.getText().toString(), getString(R.string.ID_COMM_SHARE_EMAIL_LINK)));
+                ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_COMMUNITY_LINK_ON_EMAIL, AppConstants.EMPTY_STRING);
             }
 
         } else {

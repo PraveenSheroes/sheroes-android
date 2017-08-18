@@ -33,6 +33,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobDetailPojo;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.presenters.JobPresenter;
+import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -115,13 +116,18 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
         mRecyclerView.setAdapter(mAdapter);
         super.setAllInitializationForFeeds(mFragmentListRefreshData, mAdapter, mLayoutManager, mFeedDetail, mRecyclerView, 0, 0, false, mHomePresenter, mAppUtils, mProgressBar);
         mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_JOB, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getIdFeedDetail()));
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_VIEW_JOBS_DETAIL));
+        ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_REVIEW_PROFILE, GoogleAnalyticsEventActions.REVIEW_PROFILE, AppConstants.EMPTY_STRING);
         return view;
     }
 
     @OnClick(R.id.tv_apply_job)
     public void clickApplyButton() {
+
         JobApplyRequest jobApplyRequest = jobApplyRequestBuilder(mFeedDetail.getIdOfEntityOrParticipant(), AppConstants.JOB_DETAIL);
         mJobpresenter.getJobApply(jobApplyRequest);
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_JOBS_APPLIED_TO));
+        ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_JOB_APPLICATION, GoogleAnalyticsEventActions.APPLIED_JOB, AppConstants.EMPTY_STRING);
     }
 
     @Override

@@ -976,5 +976,43 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_INTRO_SCREEN">intro screen</string>
     <string name="ID_SIGN_UP_FORM">sign up (form) screen</string>
     <string name="ID_LOGIN">login</string>
+    <string name="ID_ONBOARDING_WELCOME">onboarding- welcome screen</string>
+    <string name="ID_ONBOARDING_CURRENT_STATUS">onboarding- current status</string>
+    <string name="ID_ONBOARDING_LOOKING_FOR">onboarding- looking for</string>
+    <string name="ID_NOTIFICATION_SCREEN">notifications</string>
+    <string name="ID_COMMUNITY_LISTING_ALL_COMMUNITIES">community listing- all communties</string>
+    <string name="ID_COMMUNITY_LISTING_MY_COMMUNITIES">community listing- my communities</string>
+    <string name="ID_CREATE_COMMUNITY_POST">create community post</string>
+    <string name="ID_ABOUT_COMMUNITY_SCREEN">about community</string>
+    <string name="ID_ADD_COMMUNITY_OWNERS">add community owners</string>
+    <string name="ID_COMMUNITY_MEMBERS">community members</string>
+    <string name="ID_SHARE_COMMUNITY_SCREEN">share community</string>
+    <string name="ID_MY_PROFILE_PERSONAL_SCREEN">my profile- personal</string>
+    <string name="ID_MY_PROFILE_PERSONAL_EDIT_LOOKING_FOR">my profile- personal- edit looking for</string>
+    <string name="ID_MY_PROFILE_PERSONAL_EDIT_BASIC_DETAIL">my profile- personal- edit basic details</string>
+    <string name="ID_MY_PROFILE_PERSONAL_EDIT_ABOUT_ME">my profile- personal- edit about me</string>
+    <string name="ID_MY_PROFILE_PROFESSIONAL">my profile- professional</string>
+    <string name="ID_MY_PROFILE_PROFESSIONAL_EDIT_GOOD_AT">my profile- professional- edit good at</string>
+    <string name="ID_MY_PROFILE_PROFESSIONAL_EDIT_GOOD_AT_SEARCH_AT">my profile- professional- edit good at- search good at</string>
+    <string name="ID_MY_PROFILE_PROFESSIONAL_VIEW_ADDED_EDUCATION">my profile- professional- view added educations</string>
+    <string name="ID_MY_PROFILE_PROFESSIONAL_ADD_EDUCATION">my profile- professional- add education</string>
+    <string name="ID_MY_PROFILE_PROFESSIONAL_EDIT_EDUCATION">my profile- professional- edit education</string>
+    <string name="ID_MY_PROFILE_PROFESSIONAL_VIEW_ADDED_WORK_EXPERIENCE">my profile- professional- view added work experiences</string>
+    <string name="ID_MY_PROFILE_PROFESSIONAL_ADD_WORK_EXPERIENCE">my profile- professional- add work exprience</string>
+    <string name="ID_MY_PROFILE_PROFESSIONAL_EDIT_WORK_EXPERIENCE">my profile- professional- edit work exprience</string>
+    <string name="ID_MY_PROFILE_PROFESSIONAL_EDIT_BASIC_DETAIL">my profile- professional- edit basic details</string>
+    <string name="ID_JOBS_APPLIED_TO">jobs applied to</string>
+    <string name="ID_VIEW_JOBS_DETAIL">view job details</string>
+    <string name="ID_JOB_LISTING">job listing</string>
+    <string name="ID_JOB_SEARCH_RESULT">job search results</string>
+    <string name="ID_JOB_FILTERS">jobs filters</string>
+    <string name="ID_JOB_FILTERS_SELECT_LOCATION">jobs filters- select locations</string>
+    <string name="ID_REFER_SHARE_JOB">refer/ share job</string>
+    <string name="ID_ARTICLE_SELECT_CATEGORY">article select category</string>
+    <string name="ID_VIEW_REACTION">view reactions</string>
+    <string name="ID_VIEW_REPLIES">view replies</string>
+
+
+
 
 </resources>

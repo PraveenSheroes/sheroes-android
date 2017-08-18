@@ -35,7 +35,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_size_10"
                     android:layout_marginRight="@dimen/dp_size_10"
-                    android:background="@color/fully_transparent"
                     android:cursorVisible="true"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:hint="@string/ID_SHARE_WITH_COMMUNITY"

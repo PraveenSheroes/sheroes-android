@@ -56,6 +56,7 @@ import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.presenters.MembersPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.OwnerPresenter;
+import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -157,6 +158,7 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
         mAboutCommunityOwnerRecyclerView.setLayoutManager(mLayoutManager);
         mAboutCommunityOwnerRecyclerView.setAdapter(mAdapter);
         mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_COMMUNITY, AppConstants.ONE_CONSTANT, mFeedDetail.getIdOfEntityOrParticipant()));
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_ABOUT_COMMUNITY_SCREEN));
         return view;
     }
     @Override
@@ -316,8 +318,16 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
             if (joinTxt.equalsIgnoreCase(getString(R.string.ID_JOIN))) {
                 if (mFeedDetail.isClosedCommunity()) {
                     ((CommunitiesDetailActivity) getActivity()).showCommunityJoinReason(mFeedDetail);
+                    ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.REQUEST_JOIN_CLOSE_COMMUNITY, AppConstants.EMPTY_STRING);
                 } else {
                     callJoinApi();
+                    if(mFeedDetail.isRequestPending())
+                    {
+                        ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.UNDO_REQUEST_JOIN_CLOSE_COMMUNITY, AppConstants.EMPTY_STRING);
+                    }else
+                    {
+                        ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.REQUEST_JOIN_OPEN_COMMUNITY, AppConstants.EMPTY_STRING);
+                    }
                 }
             } else if (joinTxt.equalsIgnoreCase(getString(R.string.ID_INVITE))) {
                 ((CommunitiesDetailActivity) getActivity()).inviteJoinEventClick(joinTxt, mFeedDetail);
@@ -394,6 +404,7 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
             public void onClick(View view) {
                 // mShareCommunityIntractionListner.
                 callRemoveMember();
+                ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.LEAVE_COMMUNITY, AppConstants.EMPTY_STRING);
                 popupWindow.dismiss();
             }
         });

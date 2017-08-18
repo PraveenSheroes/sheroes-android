@@ -47,6 +47,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
+import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -448,10 +449,18 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
             if (feedDetail.isClosedCommunity()) {
                 feedDetail.setScreenName(AppConstants.COMMUNITY_DETAIL);
                 showCommunityJoinReason(feedDetail);
+                ((SheroesApplication)this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.REQUEST_JOIN_CLOSE_COMMUNITY, AppConstants.EMPTY_STRING);
             } else {
                 Fragment fragmentCommunityDetail = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
                 if (AppUtils.isFragmentUIActive(fragmentCommunityDetail)) {
                     ((CommunitiesDetailFragment) fragmentCommunityDetail).joinRequestForOpenCommunity(mFeedDetail, pressedEventName);
+                }
+                if(mFeedDetail.isRequestPending())
+                {
+                    ((SheroesApplication)this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.UNDO_REQUEST_JOIN_CLOSE_COMMUNITY, AppConstants.EMPTY_STRING);
+                }else
+                {
+                    ((SheroesApplication)this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.REQUEST_JOIN_OPEN_COMMUNITY, AppConstants.EMPTY_STRING);
                 }
             }
         } else if (pressedEventName.equalsIgnoreCase(getString(R.string.ID_INVITE))) {
@@ -477,6 +486,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
                     .build();
             AppInviteDialog.show(this, content);
         }
+        ((SheroesApplication)this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_INVITES, GoogleAnalyticsEventActions.OPEN_INVITE_FB_FRDZ, AppConstants.EMPTY_STRING);
       /*  mInviteCommunityMemberDialogFragment = (InviteCommunityMemberDialogFragment) getFragmentManager().findFragmentByTag(InviteCommunityMemberDialogFragment.class.getName());
         if (mInviteCommunityMemberDialogFragment == null) {
             mInviteCommunityMemberDialogFragment = new InviteCommunityMemberDialogFragment();

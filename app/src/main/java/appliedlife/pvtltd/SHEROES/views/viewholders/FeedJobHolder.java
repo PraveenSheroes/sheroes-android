@@ -17,10 +17,12 @@ import java.util.List;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -173,8 +175,10 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
         tvFeedJobUserBookmark.setEnabled(false);
         if (dataItem.isBookmarked()) {
             viewInterface.handleOnClick(dataItem, tvFeedJobUserBookmark);
+            ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_UN_BOOKMARK, GoogleAnalyticsEventActions.UN_BOOKMARK_ON_JOB, AppConstants.EMPTY_STRING);
         } else {
             viewInterface.handleOnClick(dataItem, tvFeedJobUserBookmark);
+            ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_BOOKMARK, GoogleAnalyticsEventActions.BOOKMARK_ON_JOB, AppConstants.EMPTY_STRING);
         }
         if (!dataItem.isBookmarked()) {
             dataItem.setBookmarked(true);
@@ -182,6 +186,7 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
             dataItem.setBookmarked(false);
         }
         onBookMarkClick();
+
     }
 
     @OnClick(R.id.tv_feed_job_user_menu)
@@ -198,6 +203,8 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
     @OnClick(R.id.tv_feed_job_user_share)
     public void tvFeedJobShare() {
         viewInterface.handleOnClick(dataItem, tvFeedJobUserShare);
+        ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_JOB, AppConstants.EMPTY_STRING);
+        ((SheroesApplication) mContext).trackScreenView(mContext.getString(R.string.ID_REFER_SHARE_JOB));
     }
     @Override
     public void viewRecycled() {

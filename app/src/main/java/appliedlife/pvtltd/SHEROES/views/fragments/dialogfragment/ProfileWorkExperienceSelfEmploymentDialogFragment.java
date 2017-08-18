@@ -32,6 +32,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ExprienceEntity;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCardResponse;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePersenter;
+import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -433,6 +434,8 @@ public class ProfileWorkExperienceSelfEmploymentDialogFragment extends BaseDialo
             mExprienceEntity.setStartDay(1);
             mExprienceEntity.setEndDay(1);
             mProfilePersenter.getWorkExpResponseInPresenter(mExprienceEntity);
+            ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_PROFILE_EDITS, GoogleAnalyticsEventActions.EDITING_WORK_EXP, AppConstants.EMPTY_STRING);
+
         }
     }
 

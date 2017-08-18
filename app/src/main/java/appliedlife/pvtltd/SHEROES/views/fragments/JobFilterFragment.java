@@ -26,6 +26,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.OnBoardingData;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
+import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -93,7 +94,7 @@ public class JobFilterFragment extends BaseFragment {
         seekBar.setNotifyWhileDragging(true);
 
         opportunityRecyclerDataList();
-
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_JOB_FILTERS));
         return view;
     }
     private void opportunityRecyclerDataList()
@@ -158,6 +159,7 @@ public class JobFilterFragment extends BaseFragment {
     public void applyFilterOnClick() {
         FeedRequestPojo feedRequestPojo = jobCategoryRequestBuilder(AppConstants.FEED_JOB, AppConstants.ONE_CONSTANT, cities, experienceFrom, experienceTo,  ((JobFilterActivity) getActivity()).mFunctionArea, ((JobFilterActivity) getActivity()).mListOfOpportunity, skill);
         ((JobFilterActivity) getActivity()).applyFilterData(feedRequestPojo);
+        ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_SEARCH_FILTER, GoogleAnalyticsEventActions.USED_FILTER_ON_JOBS, AppConstants.EMPTY_STRING);
     }
 
     @OnClick(R.id.tv_close_community)
@@ -174,6 +176,7 @@ public class JobFilterFragment extends BaseFragment {
     public void locationJob() {
         tvLocationData.setVisibility(View.VISIBLE);
         ((JobFilterActivity) getActivity()).searchLocationData(AppConstants.LOCATION_CITY_GET_ALL_DATA_KEY, LOCATION);
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_JOB_FILTERS_SELECT_LOCATION));
     }
 
     @OnClick(R.id.tv_functional_area_lable)

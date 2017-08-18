@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -8,6 +9,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.f2prateek.rx.preferences.Preference;
 
 import javax.inject.Inject;
 
@@ -15,10 +17,13 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.MentorDetailItem;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.ProfileActicity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -45,6 +50,8 @@ public class GrowthBuddiesHolder extends BaseViewHolder<MentorDetailItem> {
     LinearLayout liGrowthBuddieslayout;
     @Bind(R.id.tv_growth_buddies_follow)
     TextView tvGrowthBuddiesFollow;
+    @Inject
+    Preference<LoginResponse> userPreference;
 
     public GrowthBuddiesHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
@@ -72,7 +79,16 @@ public class GrowthBuddiesHolder extends BaseViewHolder<MentorDetailItem> {
         if (StringUtil.isNotNullOrEmptyString(dataItem.getExpertiesIn())) {
             tvGrowthBuddiesProfession.setText(dataItem.getExpertiesIn());
         }
-        isFollowUnfollow();
+        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
+            if (userPreference.get().getUserSummary().getUserId() == dataItem.getEntityOrParticipantId()) {
+                tvGrowthBuddiesFollow.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
+                tvGrowthBuddiesFollow.setText(mContext.getString(R.string.ID_EDIT));
+                tvGrowthBuddiesFollow.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
+            } else {
+                isFollowUnfollow();
+            }
+        }
+
     }
 
     @OnClick(R.id.li_growth_buddies_layout)
@@ -87,14 +103,21 @@ public class GrowthBuddiesHolder extends BaseViewHolder<MentorDetailItem> {
 
     @OnClick(R.id.tv_growth_buddies_follow)
     public void onGrowthBuddiesFollowUnfollow() {
-        tvGrowthBuddiesFollow.setEnabled(false);
-        viewInterface.handleOnClick(dataItem, tvGrowthBuddiesFollow);
-        if (!dataItem.isFollowed()) {
-            dataItem.setFollowed(true);
+        if (tvGrowthBuddiesFollow.getText().toString().equalsIgnoreCase(mContext.getString(R.string.ID_EDIT))) {
+            String profile = userPreference.get().getUserSummary().getPhotoUrl();
+            Intent intent = new Intent(mContext, ProfileActicity.class);
+            intent.putExtra(AppConstants.EXTRA_IMAGE, profile);
+            mContext.startActivity(intent);
         } else {
-            dataItem.setFollowed(false);
+            tvGrowthBuddiesFollow.setEnabled(false);
+            viewInterface.handleOnClick(dataItem, tvGrowthBuddiesFollow);
+            if (!dataItem.isFollowed()) {
+                dataItem.setFollowed(true);
+            } else {
+                dataItem.setFollowed(false);
+            }
+            isFollowUnfollow();
         }
-        isFollowUnfollow();
     }
 
     private void isFollowUnfollow() {

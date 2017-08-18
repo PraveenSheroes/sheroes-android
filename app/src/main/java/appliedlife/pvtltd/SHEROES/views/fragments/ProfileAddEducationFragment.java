@@ -21,6 +21,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.profile.EducationEntity;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.MyProfileView;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePersenter;
+import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -142,7 +143,7 @@ public class ProfileAddEducationFragment extends BaseFragment implements Profile
             }
 
         }
-
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_MY_PROFILE_PROFESSIONAL_VIEW_ADDED_EDUCATION));
         return view;
 
     }
@@ -160,8 +161,9 @@ public class ProfileAddEducationFragment extends BaseFragment implements Profile
 
         public  void fab_add_education_click()
         {
+            ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_MY_PROFILE_PROFESSIONAL_ADD_EDUCATION));
             ((ProfileActicity)getActivity()).callEditEducation(null);
-
+            ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_PROFILE_EDITS, GoogleAnalyticsEventActions.ADDED_NEW_EDUCATION, AppConstants.EMPTY_STRING);
         }
 
     //click on edit icon

@@ -35,6 +35,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LastComment;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -440,8 +441,10 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         tvFeedArticleUserBookmark.setEnabled(false);
         if (dataItem.isBookmarked()) {
             viewInterface.handleOnClick(dataItem, tvFeedArticleUserBookmark);
+            ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_UN_BOOKMARK, GoogleAnalyticsEventActions.UN_BOOKMARKED_ON_ARTICLE, AppConstants.EMPTY_STRING);
         } else {
             viewInterface.handleOnClick(dataItem, tvFeedArticleUserBookmark);
+            ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_BOOKMARK, GoogleAnalyticsEventActions.BOOKMARKED_ON_ARTICLE, AppConstants.EMPTY_STRING);
         }
         if (!dataItem.isBookmarked()) {
             dataItem.setBookmarked(true);
@@ -453,6 +456,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     @OnClick(R.id.tv_feed_article_user_share)
     public void tvShareClick() {
         viewInterface.handleOnClick(dataItem, tvFeedArticleUserShare);
+        ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_ARTICLE, AppConstants.EMPTY_STRING);
     }
     @OnClick(R.id.li_feed_article_join_conversation)
     public void joinConversationClick() {
@@ -494,8 +498,10 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         dataItem.setLongPress(false);
         if (dataItem.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
             viewInterface.userCommentLikeRequest(dataItem, AppConstants.NO_REACTION_CONSTANT, getAdapterPosition());
+            ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_UNDO_REACTIONS, GoogleAnalyticsEventActions.UNDO_REACTIONS_ON_ARTICLE, AppConstants.EMPTY_STRING);
         } else {
             viewInterface.userCommentLikeRequest(dataItem, AppConstants.HEART_REACTION_CONSTANT, getAdapterPosition());
+            ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_REACTIONS, GoogleAnalyticsEventActions.REACTED_TO_ARTICLE, AppConstants.EMPTY_STRING);
         }
         if (dataItem.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
             dataItem.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
@@ -509,6 +515,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             tvFeedArticleUserReactionText.setText(mContext.getString(R.string.ID_LOVE));
         }
         allTextViewStringOperations(mContext);
+
     }
 
 
@@ -530,6 +537,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         vibe.vibrate(100);
         dataItem.setLongPress(true);
         viewInterface.handleOnClick(dataItem, tvFeedArticleUserReaction);
+        ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_CHANGED_REACTIONS, GoogleAnalyticsEventActions.CHANGED_REACTIONS_ON_ARTICLE, AppConstants.EMPTY_STRING);
     }
 
     @OnClick(R.id.tv_feed_article_header_lebel)

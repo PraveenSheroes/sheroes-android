@@ -5,10 +5,12 @@ import android.view.View;
 import android.widget.TextView;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerList;
+import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
@@ -31,7 +33,7 @@ public class OwnerListHolder extends BaseViewHolder<OwnerList> {
     BaseHolderInterface viewInterface;
     private OwnerList dataItem;
     private int position;
-
+    private Context mContext;
     public OwnerListHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this,itemView);
@@ -42,6 +44,7 @@ public class OwnerListHolder extends BaseViewHolder<OwnerList> {
     @Override
     public void bindData(OwnerList obj, Context context, int position) {
         this.dataItem = obj;
+        mContext=context;
         mTvownerclose.setOnClickListener(this);
 
         tvCity.setText(dataItem.getName());
@@ -66,7 +69,8 @@ public class OwnerListHolder extends BaseViewHolder<OwnerList> {
         switch (id) {
             case R.id.tv_owner_add:
                 mTvownerclose.setBackgroundResource(R.drawable.selected_add_btn_shap);
-                viewInterface.handleOnClick(this.dataItem,view);
+                viewInterface.handleOnClick(dataItem,view);
+                ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.ADDED_MEMBER, AppConstants.EMPTY_STRING);
                 break;
             default:
                 LogUtils.error("", AppConstants.CASE_NOT_HANDLED + " " + "" + " " + id);

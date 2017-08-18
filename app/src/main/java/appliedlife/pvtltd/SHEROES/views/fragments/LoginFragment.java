@@ -31,6 +31,7 @@ import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.LoginPresenter;
 import appliedlife.pvtltd.SHEROES.service.GCMClientManager;
+import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -137,6 +138,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                         if (null != loginResponse.getUserSummary()) {
                             SheroesApplication.mContext.trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
                         }
+                        ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_USING_EMAIL, AppConstants.EMPTY_STRING);
                         mLoginActivityIntractionListner.onLoginAuthToken();
                         break;
                     case AppConstants.FAILED:

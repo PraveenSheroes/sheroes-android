@@ -88,6 +88,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.CreateCommunityPresenter;
+import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -295,6 +296,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements SelectC
                 tv_community_poster_user.setText(mUserPreference.get().getUserSummary().getFirstName());
             }
         }
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_CREATE_COMMUNITY_POST));
         // iv_community_user.setImageBitmap(loginResponse);
         return view;
     }
@@ -545,6 +547,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements SelectC
                         }
                     }
                     mCreateCommunityPresenter.postCommunityList(createCommunityPostRequestBuilder(mCommunityId, mCreaterType, description, imag, mIdForEditPost, mLinkRenderResponse));
+                    ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_CREATED_CONTENT, GoogleAnalyticsEventActions.CREATED_COMMUNITY_POST, AppConstants.EMPTY_STRING);
                 }
             } else {
                 List<String> imag = new ArrayList<>();
@@ -560,6 +563,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements SelectC
                     }
                 }
                 mCreateCommunityPresenter.postCommunityList(createCommunityPostRequestBuilder(mCommunityId, mCreaterType, description, imag, mIdForEditPost, mLinkRenderResponse));
+                ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_CREATED_CONTENT, GoogleAnalyticsEventActions.CREATED_COMMUNITY_POST, AppConstants.EMPTY_STRING);
             }
             mTv_community_post_submit.setEnabled(false);
         } else {

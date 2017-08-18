@@ -42,6 +42,7 @@ public class OnBoardingDailogHeySuccess extends BaseDialogFragment {
             mTvName.setText(userPreference.get().getUserSummary().getFirstName());
         }
         setCancelable(false);
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_ONBOARDING_WELCOME));
         return view;
     }
 

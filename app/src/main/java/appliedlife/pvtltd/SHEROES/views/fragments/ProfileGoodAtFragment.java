@@ -49,6 +49,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCar
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 import appliedlife.pvtltd.SHEROES.presenters.OnBoardingPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePersenter;
+import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -245,7 +246,7 @@ public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInt
         mEtSearchEditTextProfile.setHint("Search Skill");
         mtv_no_of_skill.setVisibility(View.GONE);
         super.setInitializationForProfile(mFragmentListRefreshData, mAdapter, mLayoutManager, mRecyclerView, mAppUtils, mProgressBar);
-
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_MY_PROFILE_PROFESSIONAL_EDIT_GOOD_AT));
         return v;
     }
 
@@ -279,6 +280,7 @@ public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInt
         }*/
         if (StringUtil.isNotEmptyCollection(skillsid)) {
             mOnBoardingPresenter.getJobAtToPresenter(mAppUtils.boardingJobAtRequestBuilder(new HashSet<Long>(skillsid)));
+            ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_PROFILE_EDITS, GoogleAnalyticsEventActions.EDIT_GOOD_AT, AppConstants.EMPTY_STRING);
         }
 
 

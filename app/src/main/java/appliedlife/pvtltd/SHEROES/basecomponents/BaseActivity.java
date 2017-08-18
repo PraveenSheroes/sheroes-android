@@ -39,6 +39,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
+import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -275,7 +276,15 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 if (mFeedDetail.isClosedCommunity()) {
                     mFeedDetail.setFromHome(true);
                     showCommunityJoinReason(mFeedDetail);
+                    ((SheroesApplication)((BaseActivity)this).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.REQUEST_JOIN_CLOSE_COMMUNITY, AppConstants.EMPTY_STRING);
                 } else {
+                    if(mFeedDetail.isRequestPending())
+                    {
+                        ((SheroesApplication)((BaseActivity)this).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.UNDO_REQUEST_JOIN_CLOSE_COMMUNITY, AppConstants.EMPTY_STRING);
+                    }else
+                    {
+                        ((SheroesApplication)((BaseActivity)this).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.REQUEST_JOIN_OPEN_COMMUNITY, AppConstants.EMPTY_STRING);
+                    }
                     if (null != mViewPagerAdapter) {
                         Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
                         if (AppUtils.isFragmentUIActive(fragment)) {
@@ -628,6 +637,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                     intetFeature.putExtras(bundle);
                     startActivityForResult(intetFeature, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST);
                     overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
+                    ((SheroesApplication)this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EDITED_CONTENT, GoogleAnalyticsEventActions.EDITED_COMMUNITY_POST, AppConstants.EMPTY_STRING);
                 }
                 break;
 
@@ -674,6 +684,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                             ((HomeFragment) fragment).deleteCommunityPost(mFeedDetail);
                         }
                     }*/
+                    ((SheroesApplication)this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DELETED_CONTENT, GoogleAnalyticsEventActions.DELETED_COMMUNITY_POST, AppConstants.EMPTY_STRING);
                 }
                 break;
 

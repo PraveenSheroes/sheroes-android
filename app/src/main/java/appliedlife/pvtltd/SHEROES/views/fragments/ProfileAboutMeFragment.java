@@ -34,6 +34,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCar
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryRequest;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePersenter;
+import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -156,7 +157,7 @@ public class ProfileAboutMeFragment extends BaseFragment implements ProfileView 
             }
         });
 
-
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_MY_PROFILE_PERSONAL_EDIT_ABOUT_ME));
         return view;
 
     }
@@ -208,7 +209,7 @@ public class ProfileAboutMeFragment extends BaseFragment implements ProfileView 
             userSummaryRequest.setSummary(mAbout_Me_Des);
             userSummaryRequest.setSubType(AppConstants.USER_SUMMARY_SERVICE);
             mProfilePresenter.getUserSummaryDetailsAuthTokeInPresenter(userSummaryRequest);
-
+            ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_PROFILE_EDITS, GoogleAnalyticsEventActions.EDIT_ABOUT_ME, AppConstants.EMPTY_STRING);
         } else
 
         {

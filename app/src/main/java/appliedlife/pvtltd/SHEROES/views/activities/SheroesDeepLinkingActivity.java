@@ -105,6 +105,15 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                         helplineIntent.putExtra(AppConstants.HELPLINE_CHAT, AppConstants.HELPLINE_CHAT);
                         startActivity(helplineIntent);
                         finish();
+                    }else if (urlOfSharedCard.contains(AppConstants.MAKE_INDIA_SAFE_URL)||urlOfSharedCard.contains(AppConstants.MAKE_INDIA_SAFE_URL_COM)) {
+                        try {
+                            Intent makeIndiaSafe = new Intent(this, MapActivity.class);
+                            makeIndiaSafe.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                            startActivity(makeIndiaSafe);
+                            finish();
+                        } catch (Exception e) {
+
+                        }
                     } else {
                         indexOfFourthBackSlace = AppUtils.findNthIndexOf(urlOfSharedCard, AppConstants.BACK_SLASH, 4);
                         if (indexOfFourthBackSlace > 0) {

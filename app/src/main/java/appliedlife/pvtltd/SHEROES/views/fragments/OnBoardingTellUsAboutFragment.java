@@ -120,6 +120,7 @@ public class OnBoardingTellUsAboutFragment extends BaseFragment implements OnBoa
         } else {
             mOnBoardingPresenter.getMasterDataToPresenter();
         }
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_ONBOARDING_CURRENT_STATUS));
         return view;
     }
 

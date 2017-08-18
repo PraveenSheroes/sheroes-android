@@ -9,8 +9,8 @@
         android:id="@+id/app_bar_article_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
         android:background="@color/fully_transparent"
+        android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.CustomCollapsingToolbarLayout
@@ -52,14 +52,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
+                    android:layout_marginBottom="@dimen/dp_size_10"
+                    android:layout_marginRight="@dimen/dp_size_16"
                     android:alpha=".8"
                     android:background="@drawable/rectangle_detail_round"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:paddingBottom="@dimen/dp_size_5"
                     android:paddingLeft="@dimen/dp_size_15"
                     android:paddingRight="@dimen/dp_size_15"
-                    android:layout_marginBottom="@dimen/dp_size_10"
-                    android:layout_marginRight="@dimen/dp_size_16"
                     android:paddingTop="@dimen/dp_size_5"
                     android:textColor="@color/white"
                     android:textSize="@dimen/sp_size_10" />
@@ -80,34 +80,35 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="left|top"
                     android:layout_marginRight="@dimen/dp_size_20"
-                    android:padding="@dimen/dp_size_10"
-                    android:drawableLeft="@drawable/ic_back_white" />
+                    android:drawableLeft="@drawable/ic_back_white"
+                    android:padding="@dimen/dp_size_10" />
+
                 <LinearLayout
                     android:id="@+id/li_header"
                     android:layout_width="@dimen/dp_size_212"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+
                     <TextView
                         android:id="@+id/tv_article_detail_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/sp_size_14"
-                        android:lines="@integer/int_value_for_line_1"
-                        android:gravity="center"
                         android:ellipsize="end"
-                        android:textColor="@color/white"
                         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-                        />
+                        android:gravity="center"
+                        android:lines="@integer/int_value_for_line_1"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/sp_size_14" />
+
                     <TextView
                         android:id="@+id/tv_article_detail_subtitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/sp_size_12"
+                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
                         android:gravity="center"
                         android:lines="@integer/int_value_for_line_1"
                         android:textColor="@color/white"
-                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                        />
+                        android:textSize="@dimen/sp_size_12" />
                 </LinearLayout>
 
                 <TextView
@@ -115,24 +116,24 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
-                    android:drawableRight="@drawable/ic_share_icon"
-                    app:cardElevation="@dimen/dp_size_10"
-                    android:padding="@dimen/dp_size_10"
                     android:layout_marginRight="@dimen/dp_size_5"
-                     />
+                    android:drawableRight="@drawable/ic_share_icon"
+                    android:padding="@dimen/dp_size_10"
+                    app:cardElevation="@dimen/dp_size_10" />
 
                 <TextView
                     android:id="@+id/tv_article_detail_bookmark"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_bookmark_detail_white"
-                    app:cardElevation="@dimen/dp_size_10"
                     android:layout_marginLeft="@dimen/dp_size_5"
-                    android:padding="@dimen/dp_size_10"/>
+                    android:drawableLeft="@drawable/ic_bookmark_detail_white"
+                    android:padding="@dimen/dp_size_10"
+                    app:cardElevation="@dimen/dp_size_10" />
             </android.support.v7.widget.Toolbar>
 
         </appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.CustomCollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
+
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager_article_detail"
         android:layout_width="match_parent"
