@@ -165,6 +165,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                     mUserPreference.set(loginResponse);
                     moEngageUtills.entityMoEngageLoggedIn(getActivity(), mMoEHelper, payloadBuilder, MoEngageConstants.EMAIL);
                     SheroesApplication.mContext.trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
+                    ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_USING_EMAIL, AppConstants.EMPTY_STRING);
                     mLoginActivityIntractionListner.onLoginAuthToken();
                 } else {
                     LoginManager.getInstance().logOut();
