@@ -19,7 +19,6 @@ import appliedlife.pvtltd.SHEROES.BuildConfig;
 import appliedlife.pvtltd.SHEROES.social.AnalyticsTrackers;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import io.fabric.sdk.android.Fabric;
 
 /**
@@ -138,10 +137,10 @@ public class SheroesApplication extends MultiDexApplication  {
      */
     public void trackEvent(String category, String action, String label) {
         Tracker t = getGoogleAnalyticsTracker();
-        if(!StringUtil.isNotNullOrEmptyString(label))
+       /* if(!StringUtil.isNotNullOrEmptyString(label))
         {
-            label="-lable";
-        }
+            label="-";
+        }*/
         // Build and send an Event.
         t.send(new HitBuilders.EventBuilder().setCategory(category).setAction(action).setLabel(label).build());
     }
