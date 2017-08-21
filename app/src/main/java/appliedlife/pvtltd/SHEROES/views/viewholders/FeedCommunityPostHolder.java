@@ -1374,9 +1374,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             @Override
             public void onClick(View textView) {
 
-                if (dataItem.isAuthorMentor()) {
-                    viewInterface.championProfile(dataItem, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
-                }
+                viewInterface.handleOnClick(dataItem, tvFeedCommunityPostCardTitle);
             }
 
             @Override
@@ -1387,7 +1385,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         ClickableSpan postedInClick = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-
 
             }
 
