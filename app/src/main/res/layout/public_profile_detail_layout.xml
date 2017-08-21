@@ -20,7 +20,7 @@
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
             app:contentScrim="@color/once_card"
-            app:layout_scrollFlags="scroll|snap"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:title=" ">
 
             <ImageView
@@ -74,6 +74,33 @@
                     android:paddingBottom="@dimen/dp_size_10"
                    android:paddingLeft="@dimen/dp_size_6"
                     android:src="@drawable/ic_back_white" />
+                <LinearLayout
+                    android:id="@+id/li_header_public_profile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_champion_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                        android:gravity="center"
+                        android:lines="@integer/int_value_for_line_1"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/sp_size_14" />
+
+                    <TextView
+                        android:id="@+id/tv_champion_subtitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                        android:gravity="center"
+                        android:lines="@integer/int_value_for_line_1"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/sp_size_12" />
+                </LinearLayout>
             </android.support.v7.widget.Toolbar>
         </android.support.design.widget.CollapsingToolbarLayout>
 

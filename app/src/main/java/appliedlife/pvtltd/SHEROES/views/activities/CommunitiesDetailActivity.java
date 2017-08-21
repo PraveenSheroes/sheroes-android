@@ -359,7 +359,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
             championDetailActivity(feedDetail.getCreatedBy());
         } else if (baseResponse instanceof CommentReactionDoc) {
             CommentReactionDoc commentReactionDoc = (CommentReactionDoc) baseResponse;
-            championDetailActivity(commentReactionDoc.getEntityAuthorUserId());
+            championDetailActivity(commentReactionDoc.getParticipantId());
         }
     }
     private void championDetailActivity(Long userId) {

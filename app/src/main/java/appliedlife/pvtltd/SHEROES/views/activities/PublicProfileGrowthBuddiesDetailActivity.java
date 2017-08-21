@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -71,7 +72,7 @@ import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MEN
  * Created by Praveen_Singh on 04-08-2017.
  */
 
-public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity implements CommentReactionFragment.HomeActivityIntractionListner, HomeView {
+public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity implements CommentReactionFragment.HomeActivityIntractionListner, HomeView , AppBarLayout.OnOffsetChangedListener {
     private final String TAG = LogUtils.makeLogTag(PublicProfileGrowthBuddiesDetailActivity.class);
     @Bind(R.id.iv_public_profile_full_view_icon)
     RoundedImageView mProfileIcon;
@@ -111,6 +112,12 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
     ImageView ivPublicProfileImage;
     @Bind(R.id.tv_follow_unfollow_public_profile)
     TextView tvFollowUnfollowPublicProfile;
+    @Bind(R.id.tv_champion_title)
+    TextView tvChampionTitle;
+    @Bind(R.id.tv_champion_subtitle)
+    TextView tvChampionSubTitle;
+    @Bind(R.id.li_header_public_profile)
+    public LinearLayout mLiHeader;
     @Inject
     Preference<LoginResponse> mUserPreference;
     ViewPagerAdapter mViewPagerAdapter;
@@ -136,6 +143,8 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
         setContentView(R.layout.public_profile_growth_buddies_activity);
         mHomePresenter.attachView(this);
         ButterKnife.bind(this);
+        mAppBarLayout.addOnOffsetChangedListener(this);
+        mCollapsingToolbarLayout.setTitle(AppConstants.EMPTY_STRING);
         if (null != getIntent() && null != getIntent().getExtras()) {
             mFeedDetail = getIntent().getParcelableExtra(AppConstants.COMMUNITY_DETAIL);
             mMentorDetailItem = getIntent().getParcelableExtra(AppConstants.GROWTH_PUBLIC_PROFILE);
@@ -171,6 +180,7 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
         }
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getNameOrTitle())) {
             mTvMentorName.setText(mFeedDetail.getNameOrTitle());
+           // tvChampionTitle.setText(mFeedDetail.getNameOrTitle());
         }
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getCityName())) {
             tvMentorCityName.setText(mFeedDetail.getCityName());
@@ -521,6 +531,17 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
                     LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);
             }*/
         }
+
+    }
+    @Override
+    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+        LogUtils.info(TAG, "****************offset***" + verticalOffset);
+        /*if (verticalOffset >= AppConstants.NO_REACTION_CONSTANT) {
+            mCollapsingToolbarLayout.setTitle(AppConstants.EMPTY_STRING);
+            mLiHeader.setVisibility(View.INVISIBLE);
+        } else {
+            mLiHeader.setVisibility(View.VISIBLE);
+        }*/
 
     }
 }

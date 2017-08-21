@@ -221,7 +221,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 imageSetOnEventBackground();
             }
             if(dataItem != null &&StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle()) && null != userPreference && userPreference.isSet() && null != userPreference.get() && userPreference.get().getUserSummary() !=null){
-                ((SheroesApplication) mContext).trackEvent(AppConstants.IMPRESSIONS, AppConstants.EVENT_IMPRESSION, dataItem.getIdOfEntityOrParticipant() + AppConstants.DASH + userPreference.get().getUserSummary().getUserId() + AppConstants.DASH + dataItem.getNameOrTitle());
+                ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(AppConstants.IMPRESSIONS, AppConstants.EVENT_IMPRESSION, dataItem.getIdOfEntityOrParticipant() + AppConstants.DASH + userPreference.get().getUserSummary().getUserId() + AppConstants.DASH + dataItem.getNameOrTitle());
             }
         } else {
             liCommunityPostMainLayout.setVisibility(View.VISIBLE);
@@ -588,6 +588,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                     }else {
                         ivFeedCommunityPostCircleIconVerified.setVisibility(View.GONE);
                     }
+
                     if (!feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_ADMIN))) {
                         //posted.append(feedTitle).append(AppConstants.SPACE).append(LEFT_POSTED).append(mContext.getString(R.string.ID_POSTED_IN)).append(RIGHT_POSTED).append(AppConstants.SPACE);
                         posted.append(feedTitle).append(AppConstants.SPACE).append(mContext.getString(R.string.ID_POSTED_IN)).append(AppConstants.SPACE);
@@ -1354,7 +1355,16 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         };
         if(StringUtil.isNotNullOrEmptyString(feedTitle)) {
             SpanString.setSpan(authorTitle, 0, feedTitle.length(), 0);
-            SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_article_label)), 0, feedTitle.length(), 0);
+            if (!feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
+                if (dataItem.isAuthorMentor()) {
+                    SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.footer_icon_text)), 0, feedTitle.length(), 0);
+                } else {
+                    SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_article_label)), 0, feedTitle.length(), 0);
+                }
+            }else {
+                SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_article_label)), 0, feedTitle.length(), 0);
+            }
+
             if(StringUtil.isNotNullOrEmptyString(postedIn)&&StringUtil.isNotNullOrEmptyString(nameAndCommunity)) {
                 SpanString.setSpan(postedInClick, feedTitle.length(), feedTitle.length() + postedIn.length()+3, 0);
                 SpanString.setSpan(community, feedTitle.length() + postedIn.length()+2, nameAndCommunity.length(), 0);
