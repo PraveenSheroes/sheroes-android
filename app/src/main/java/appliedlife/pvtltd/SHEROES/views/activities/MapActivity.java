@@ -197,7 +197,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Goo
                 String title = getString(R.string.ID_DO_YOU_SEE) + AppConstants.SPACE + latLongWithLocation.getLocality() + AppConstants.SPACE + "?";
                 tvLocText.setText(title);
             } else {
-                String title = getString(R.string.ID_DO_YOU_SEE) + getString(R.string.ID_YOUR_LOCALITY);
+                String title = getString(R.string.ID_DO_YOU_SEE) + AppConstants.SPACE + getString(R.string.ID_YOUR_LOCALITY);
                 tvLocText.setText(title);
             }
 

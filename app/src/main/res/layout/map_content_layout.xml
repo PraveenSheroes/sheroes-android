@@ -19,6 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
+            android:background="@color/once_card"
             app:contentScrim="@color/once_card"
             app:layout_scrollFlags="scroll|snap"
             app:title=" ">
@@ -64,7 +65,7 @@
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar_map_layout"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
+                android:layout_height="@dimen/dp_size_70"
                 android:layout_gravity="right"
                 android:gravity="right"
                 app:layout_collapseMode="pin"
@@ -78,10 +79,10 @@
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:paddingBottom="@dimen/dp_size_10"
+                    android:paddingBottom="@dimen/dp_size_12"
                     android:paddingLeft="@dimen/dp_size_6"
                     android:paddingRight="@dimen/dp_size_12"
-                    android:paddingTop="@dimen/dp_size_10"
+                    android:paddingTop="@dimen/dp_size_25"
                     android:src="@drawable/ic_back_white" />
                 <LinearLayout
                     android:id="@+id/li_make_india_safe_header"
@@ -96,6 +97,7 @@
                         android:ellipsize="end"
                         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                         android:lines="@integer/int_value_for_line_1"
+                        android:layout_marginTop="@dimen/dp_size_15"
                         android:text="@string/ID_MAKE_INDIA_SAFE_HASHTAG"
                         android:textColor="@color/white"
                         android:textSize="@dimen/sp_size_14" />
