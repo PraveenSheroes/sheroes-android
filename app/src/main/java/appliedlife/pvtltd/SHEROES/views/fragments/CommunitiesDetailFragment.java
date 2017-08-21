@@ -292,16 +292,19 @@ public class CommunitiesDetailFragment extends BaseFragment {
                 mPullRefreshList.allListData(feedDetailList);
                 mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
                 mAdapter.notifyDataSetChanged();
-                if (feedResponsePojo.getNumFound() > 0) {
-                    ((PublicProfileGrowthBuddiesDetailActivity) getActivity()).viewLine1.setVisibility(View.VISIBLE);
-                    ((PublicProfileGrowthBuddiesDetailActivity) getActivity()).viewLine2.setVisibility(View.VISIBLE);
-                    ((PublicProfileGrowthBuddiesDetailActivity) getActivity()).tvPostCountLable.setVisibility(View.VISIBLE);
-                    ((PublicProfileGrowthBuddiesDetailActivity) getActivity()).tvPostCount.setVisibility(View.VISIBLE);
-                    ((PublicProfileGrowthBuddiesDetailActivity) getActivity()).tvPostCount.setText(String.valueOf(feedResponsePojo.getNumFound()));
-                } else {
-                    ((PublicProfileGrowthBuddiesDetailActivity) getActivity()).tvPostCountLable.setVisibility(View.GONE);
-                    ((PublicProfileGrowthBuddiesDetailActivity) getActivity()).tvPostCount.setVisibility(View.GONE);
+                if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getCallFromName()) && mFeedDetail.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
+                    if (feedResponsePojo.getNumFound() > 0) {
+                        ((PublicProfileGrowthBuddiesDetailActivity) getActivity()).viewLine1.setVisibility(View.VISIBLE);
+                        ((PublicProfileGrowthBuddiesDetailActivity) getActivity()).viewLine2.setVisibility(View.VISIBLE);
+                        ((PublicProfileGrowthBuddiesDetailActivity) getActivity()).tvPostCountLable.setVisibility(View.VISIBLE);
+                        ((PublicProfileGrowthBuddiesDetailActivity) getActivity()).tvPostCount.setVisibility(View.VISIBLE);
+                        ((PublicProfileGrowthBuddiesDetailActivity) getActivity()).tvPostCount.setText(String.valueOf(feedResponsePojo.getNumFound()));
+                    } else {
+                        ((PublicProfileGrowthBuddiesDetailActivity) getActivity()).tvPostCountLable.setVisibility(View.GONE);
+                        ((PublicProfileGrowthBuddiesDetailActivity) getActivity()).tvPostCount.setVisibility(View.GONE);
+                    }
                 }
+
             } else {
                 if (StringUtil.isNotNullOrEmptyString(mFragmentListRefreshData.getSearchStringName()) && mFragmentListRefreshData.getSearchStringName().equalsIgnoreCase(AppConstants.COMMUNITY_POST_FRAGMENT) && mCommunityPostId > 0) {
                     mCommunityPostDetail = feedDetailList.get(0);
