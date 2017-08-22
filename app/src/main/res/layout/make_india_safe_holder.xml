@@ -7,6 +7,7 @@
         android:id="@+id/scroll_make_india_safe_image_holder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="gone"
         android:orientation="vertical">
 
         <ImageView
@@ -18,7 +19,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_size_80"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_size_8"
             android:gravity="bottom"
             android:orientation="vertical">
@@ -53,15 +54,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="@dimen/dp_size_20"
-            android:layout_marginRight="@dimen/dp_size_20"
+            android:layout_marginLeft="@dimen/dp_size_16"
+            android:layout_marginRight="@dimen/dp_size_16"
             android:layout_marginTop="@dimen/dp_size_40"
             android:background="@drawable/selecter_make_india_safe"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:gravity="center"
             android:padding="@dimen/dp_size_20"
             android:text="@string/ID_SHARE_WITH_FRIENDS"
-            android:textColor="@color/once_card"
+            android:textColor="@drawable/selecter_text_color_change"
             android:textSize="@dimen/sp_size_18" />
 
         <TextView
@@ -115,17 +116,16 @@
     <LinearLayout
         android:id="@+id/scroll_make_india_safe_events"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:visibility="gone">
+        android:layout_height="600dp"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/tv_click_pic_and_tell_friends"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="@dimen/dp_size_20"
-            android:layout_marginRight="@dimen/dp_size_20"
+            android:layout_marginLeft="@dimen/dp_size_16"
+            android:layout_marginRight="@dimen/dp_size_16"
             android:layout_marginTop="@dimen/dp_size_40"
             android:background="@drawable/selecter_make_india_safe"
             android:drawableRight="@drawable/ic_challenge_camera"
@@ -133,10 +133,10 @@
             android:gravity="center"
             android:paddingBottom="@dimen/dp_size_20"
             android:paddingLeft="@dimen/dp_size_20"
-            android:paddingRight="@dimen/dp_size_50"
+            android:paddingRight="@dimen/dp_size_30"
             android:paddingTop="@dimen/dp_size_20"
             android:text="@string/ID_TELL_YOUR_FRIENDS"
-            android:textColor="@color/once_card"
+            android:textColor="@drawable/selecter_text_color_change"
             android:textSize="@dimen/sp_size_14" />
 
 
@@ -148,11 +148,18 @@
             android:layout_marginRight="@dimen/dp_size_20"
             android:layout_marginTop="@dimen/dp_size_22"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:padding="@dimen/dp_size_10"
-            android:text="sage"
-            android:textAlignment="center"
+            android:paddingTop="@dimen/dp_size_10"
+            android:paddingLeft="@dimen/dp_size_10"
             android:textColor="@color/once_card"
             android:textSize="@dimen/sp_size_14" />
+
+        <View
+            android:id="@+id/line_for_no_image"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_size_1"
+            android:layout_marginLeft="@dimen/dp_size_30"
+            android:layout_marginRight="@dimen/dp_size_20"
+            android:background="@color/once_card" />
 
         <TextView
             android:layout_width="match_parent"
@@ -202,6 +209,7 @@
                 android:textColor="@color/detail_page_text"
                 android:textSize="@dimen/sp_size_16" />
         </RelativeLayout>
+
     </LinearLayout>
 
 

@@ -33,7 +33,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.ProfessionalAddEducationActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActicity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
 import butterknife.Bind;
@@ -47,7 +46,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.MARK_AS_SPA
  */
 
 public class ProfileAddEditEducationFragment extends BaseDialogFragment implements DayPickerProfile.MyDayPickerListener, ProfileView, View.OnClickListener {
-    private final String TAG = LogUtils.makeLogTag(ProfessionalAddEducationActivity.class);
+    private final String TAG = LogUtils.makeLogTag(ProfileAddEditEducationFragment.class);
     private final String SCREEN_NAME = "Proffesional_Add_Edi_Education_screen";
     @Inject
     ProfilePersenter mProfilePresenter;

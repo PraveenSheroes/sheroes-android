@@ -138,7 +138,6 @@ public class SearchJobFragment extends BaseFragment implements HomeView {
                 mLayoutManager.scrollToPositionWithOffset(0, 0);
             }
             mSwipeView.setRefreshing(false);
-            ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_JOB_SEARCH_RESULT));
         }
         else  if(StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())&&mAdapter!=null)
         {

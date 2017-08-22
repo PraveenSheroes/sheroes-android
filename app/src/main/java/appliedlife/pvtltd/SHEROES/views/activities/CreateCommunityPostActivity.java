@@ -40,6 +40,7 @@ public class CreateCommunityPostActivity extends BaseActivity implements BaseHol
         }
 
         renderLoginFragmentView();
+        ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_CREATE_COMMUNITY_POST));
     }
 
     public void renderLoginFragmentView() {

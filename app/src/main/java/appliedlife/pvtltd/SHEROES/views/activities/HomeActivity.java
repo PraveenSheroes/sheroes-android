@@ -857,6 +857,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         homeFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_feed_full_view, homeFragment, HomeFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
         totalTimeSpentOnFeed();
+        ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_FEED_IMPRESSION));
     }
 
     private void initCommunityViewPagerAndTabs() {
@@ -1353,10 +1354,10 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     @OnClick(R.id.tv_make_india_safe)
     public void tvOnClickMakeIndiasafe() {
         mProgressDialog = new ProgressDialog(this);
-        mProgressDialog.setMessage(getString(R.string.ID_MAKE_INDIA_SAFE_HASHTAG));
+        mProgressDialog.setMessage(getString(R.string.ID_MAKE_INDIA_SAFE_DIALOG));
         mProgressDialog.setCancelable(true);
         mProgressDialog.show();
-        Intent mapIntent = new Intent(this, MapActivity.class);
+        Intent mapIntent = new Intent(this, MakeIndiaSafeMapActivity.class);
         Bundle bundle = new Bundle();
       //  bundle.putParcelable(AppConstants.LAT_LONG_DETAIL, latLongWithLocation);
         mapIntent.putExtras(bundle);
@@ -1367,6 +1368,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     public void drawerNavigationClick() {
         AppUtils.hideKeyboard(mTvUserName, TAG);
         mDrawer.openDrawer(Gravity.LEFT);
+        ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_DRAWER_NAVIGATION));
     }
 
     @Override

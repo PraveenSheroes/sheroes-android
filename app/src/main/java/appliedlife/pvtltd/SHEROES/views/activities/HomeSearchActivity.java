@@ -61,6 +61,7 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
             mFragmentOpen = getIntent().getParcelableExtra(AppConstants.ALL_SEARCH);
         }
         renderSearchFragmentView();
+        ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_JOB_SEARCH_RESULT));
     }
 
     public void renderSearchFragmentView() {

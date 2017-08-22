@@ -96,6 +96,7 @@ public class HelplineFragment extends BaseFragment {
         setUpRecyclerView();
         mSwipeView.setRefreshing(false);
         mSwipeView.setEnabled(false);
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_HELP_FRAGMENT));
         return view;
     }
 

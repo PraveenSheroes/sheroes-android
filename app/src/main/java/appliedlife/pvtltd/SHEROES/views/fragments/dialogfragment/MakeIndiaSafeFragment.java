@@ -40,7 +40,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.CustomeDataList;
-import appliedlife.pvtltd.SHEROES.views.activities.MapActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.MakeIndiaSafeMapActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -87,9 +87,9 @@ public class MakeIndiaSafeFragment extends BaseFragment {
         }
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new GenericRecyclerViewAdapter(getContext(), (MapActivity) getActivity());
+        mAdapter = new GenericRecyclerViewAdapter(getContext(), (MakeIndiaSafeMapActivity) getActivity());
         mAdapter.setSheroesGenericListData(CustomeDataList.makeIndiaSafeItemList(mLatLongWithLocation));
-        ((MapActivity)getActivity()).mFlMapLayout.setVisibility(View.VISIBLE);
+        ((MakeIndiaSafeMapActivity)getActivity()).mFlMapLayout.setVisibility(View.VISIBLE);
         mRecyclerView.setAdapter(mAdapter);
         return view;
     }
@@ -113,7 +113,7 @@ public class MakeIndiaSafeFragment extends BaseFragment {
                     if (null != mMakeIndiaSafeDetail) {
                         if (mMakeIndiaSafeDetail.isLinkClicked()) {
                             Toast.makeText(getActivity(), "Awesome! Thanks for helping SHEROES #MakeIndiaSafe", Toast.LENGTH_SHORT).show();
-                            ((MapActivity) getActivity()).backClick();
+                            ((MakeIndiaSafeMapActivity) getActivity()).backClick();
                         } else {
                             FeedDetail feedDetail = createCommunityResponse.getFeedDetail();
                             if (null != feedDetail) {
@@ -134,7 +134,7 @@ public class MakeIndiaSafeFragment extends BaseFragment {
         if (StringUtil.isNotNullOrEmptyString(makeIndiaSafeResponse.getStatus())) {
             switch (makeIndiaSafeResponse.getStatus()) {
                 case AppConstants.SUCCESS:
-                    ((MapActivity) getActivity()).backClick();
+                    ((MakeIndiaSafeMapActivity) getActivity()).backClick();
                     Uri uri = Uri.parse("file://" + localImageSaveForChallenge.getAbsolutePath());
                     Intent share = new Intent(Intent.ACTION_SEND);
                     share.putExtra(Intent.EXTRA_STREAM, uri);
@@ -158,12 +158,12 @@ public class MakeIndiaSafeFragment extends BaseFragment {
     public void checkCameraPermission() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                ((MapActivity) getActivity()).selectImageFrmCamera();
+                ((MakeIndiaSafeMapActivity) getActivity()).selectImageFrmCamera();
             } else {
-                ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.CAMERA, android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 101);
+                ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.CAMERA, android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, AppConstants.REQUEST_CODE_FOR_LOCATION);
             }
         } else { //permission is automatically granted on sdk<23 upon installation
-            ((MapActivity) getActivity()).selectImageFrmCamera();
+            ((MakeIndiaSafeMapActivity) getActivity()).selectImageFrmCamera();
         }
     }
 
@@ -177,7 +177,7 @@ public class MakeIndiaSafeFragment extends BaseFragment {
         makeItemsList.add(makeIndiaSafeDetail);
         mAdapter.setSheroesGenericListData(makeItemsList);
         mAdapter.notifyDataSetChanged();
-        ((MapActivity)getActivity()).mFlMapLayout.setVisibility(View.GONE);
+        ((MakeIndiaSafeMapActivity)getActivity()).mFlMapLayout.setVisibility(View.GONE);
     }
 
 

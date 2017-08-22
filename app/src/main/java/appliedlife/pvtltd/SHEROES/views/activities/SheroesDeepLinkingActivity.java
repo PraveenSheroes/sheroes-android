@@ -9,7 +9,9 @@ import android.widget.Toast;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
+import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -42,6 +44,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
             mMoEHelper.onStart(this);
         }
         callDeepLinkingData();
+
     }
 
     @Override
@@ -65,10 +68,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
             }
         }else
         {
-            Intent into = new Intent(this, HomeActivity.class);
-            into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
-            startActivity(into);
-            finish();
+          homeActivityCall();
         }
     }
 
@@ -93,11 +93,9 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                                 startActivity(into);
                                 finish();
                             }
+                            ((SheroesApplication)this.getApplication()).trackScreenView(getString(R.string.ID_DEEP_LINK_HOME_CHALLENGE));
                         } catch (Exception e) {
-                            Intent into = new Intent(this, HomeActivity.class);
-                            into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
-                            startActivity(into);
-                            finish();
+                            homeActivityCall();
                         }
                     } else if (urlOfSharedCard.contains(AppConstants.HELPLINE_URL) || urlOfSharedCard.contains(AppConstants.HELPLINE_URL_COM)) {
                         Intent helplineIntent = new Intent(SheroesDeepLinkingActivity.this, HomeActivity.class);
@@ -105,12 +103,14 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                         helplineIntent.putExtra(AppConstants.HELPLINE_CHAT, AppConstants.HELPLINE_CHAT);
                         startActivity(helplineIntent);
                         finish();
+                        ((SheroesApplication)this.getApplication()).trackScreenView(getString(R.string.ID_DEEP_LINK_HELPLINE));
                     }else if (urlOfSharedCard.contains(AppConstants.MAKE_INDIA_SAFE_URL)||urlOfSharedCard.contains(AppConstants.MAKE_INDIA_SAFE_URL_COM)) {
                         try {
-                            Intent makeIndiaSafe = new Intent(this, MapActivity.class);
+                            Intent makeIndiaSafe = new Intent(this, MakeIndiaSafeMapActivity.class);
                             makeIndiaSafe.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
                             startActivity(makeIndiaSafe);
                             finish();
+                            ((SheroesApplication)this.getApplication()).trackScreenView(getString(R.string.ID_DEEP_LINK_MAKE_INDIA_SAFE));
                         } catch (Exception e) {
 
                         }
@@ -129,16 +129,10 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                         }
                     }
                 } else {
-                    Intent homeFeed = new Intent(this, HomeActivity.class);
-                    homeFeed.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
-                    startActivity(homeFeed);
-                    finish();
+                    homeActivityCall();
                 }
             } catch (Exception e) {
-                Intent homeFeed = new Intent(this, HomeActivity.class);
-                homeFeed.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
-                startActivity(homeFeed);
-                finish();
+                homeActivityCall();
             }
             fullLength = urlOfSharedCard.length();
 
@@ -165,11 +159,9 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 articleDetail.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(articleDetail);
                 finish();
+                ((SheroesApplication)this.getApplication()).trackScreenView(getString(R.string.ID_DEEP_LINK_ARTICLE));
             } catch (Exception e) {
-                Intent into = new Intent(this, HomeActivity.class);
-                into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
-                startActivity(into);
-                finish();
+                homeActivityCall();
             }
         } else if (AppConstants.JOB_URL.equalsIgnoreCase(baseUrl) || AppConstants.JOB_URL_COM.equalsIgnoreCase(baseUrl) && AppConstants.JOB_URL.length() < fullLength) {
             try {
@@ -182,11 +174,9 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 jobDetail.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(jobDetail);
                 finish();
+                ((SheroesApplication)this.getApplication()).trackScreenView(getString(R.string.ID_DEEP_LINK_JOB));
             } catch (Exception e) {
-                Intent into = new Intent(this, HomeActivity.class);
-                into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
-                startActivity(into);
-                finish();
+                homeActivityCall();
             }
 
         }
@@ -227,11 +217,9 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(into);
                 finish();
+                ((SheroesApplication)this.getApplication()).trackScreenView(getString(R.string.ID_DEEP_LINK_COMMUNITY));
             } catch (Exception e) {
-                Intent into = new Intent(this, HomeActivity.class);
-                into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
-                startActivity(into);
-                finish();
+                homeActivityCall();
 
             }
 
@@ -247,11 +235,9 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 eventDetail.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(eventDetail);
                 finish();
+                ((SheroesApplication)this.getApplication()).trackScreenView(getString(R.string.ID_DEEP_LINK_EVENT));
             } catch (Exception e) {
-                Intent into = new Intent(this, HomeActivity.class);
-                into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
-                startActivity(into);
-                finish();
+                homeActivityCall();
             }
         }
         //In case of profile
@@ -260,6 +246,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
             into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(into);
             finish();
+            ((SheroesApplication)this.getApplication()).trackScreenView(getString(R.string.ID_DEEP_LINK_PROFILE));
 
         } else {
             Toast.makeText(SheroesDeepLinkingActivity.this, AppConstants.WEB_BROWSER_MASSAGE, Toast.LENGTH_SHORT).show();
@@ -268,6 +255,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
             into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(into);
             finish();
+            ((SheroesApplication)this.getApplication()).trackScreenView(getString(R.string.ID_DEEP_LINK_WEB));
         }
 
     }
@@ -280,5 +268,13 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
             }
         }
         return counter;
+    }
+    private void homeActivityCall()
+    {
+        ((SheroesApplication)this.getApplication()).trackScreenView(getString(R.string.ID_DEEP_LINK_HOME));
+        Intent into = new Intent(this, HomeActivity.class);
+        into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+        startActivity(into);
+        finish();
     }
 }

@@ -116,7 +116,6 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
         mRecyclerView.setAdapter(mAdapter);
         super.setAllInitializationForFeeds(mFragmentListRefreshData, mAdapter, mLayoutManager, mFeedDetail, mRecyclerView, 0, 0, false, mHomePresenter, mAppUtils, mProgressBar);
         mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_JOB, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getIdFeedDetail()));
-        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_VIEW_JOBS_DETAIL));
         ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_REVIEW_PROFILE, GoogleAnalyticsEventActions.REVIEW_PROFILE, AppConstants.EMPTY_STRING);
         return view;
     }

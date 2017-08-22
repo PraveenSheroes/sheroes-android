@@ -85,7 +85,7 @@ public class FaceBookOpenActivity extends BaseActivity implements LoginView {
         setContentView(R.layout.facebook_verification);
         ButterKnife.bind(this);
         initHomeViewPagerAndTabs();
-
+        ((SheroesApplication)this.getApplication()).trackScreenView(getString(R.string.ID_FACEBOOK_SCREEN));
     }
 
     private void faceBookInitialization() {

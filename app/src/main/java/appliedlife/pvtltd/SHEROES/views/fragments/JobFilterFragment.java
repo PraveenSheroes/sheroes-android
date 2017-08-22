@@ -94,7 +94,6 @@ public class JobFilterFragment extends BaseFragment {
         seekBar.setNotifyWhileDragging(true);
 
         opportunityRecyclerDataList();
-        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_JOB_FILTERS));
         return view;
     }
     private void opportunityRecyclerDataList()

@@ -75,8 +75,8 @@ import butterknife.OnClick;
 /**
  * An activity that displays a map showing the place at the device's current location.
  */
-public class MapActivity extends BaseActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
-    private final String TAG = LogUtils.makeLogTag(MapActivity.class);
+public class MakeIndiaSafeMapActivity extends BaseActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+    private final String TAG = LogUtils.makeLogTag(MakeIndiaSafeMapActivity.class);
     @Bind(R.id.app_bar_map_layout)
     AppBarLayout mAppBarLayout;
     @Bind(R.id.view_pager_map_layout)
@@ -133,12 +133,12 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Goo
             if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 locationTracker();
             } else {
-                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, AppConstants.REQUEST_CODE_FOR_LOCATION);
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
             }
         } else {
             locationTracker();
         }
-
+        ((SheroesApplication) getApplication()).trackScreenView(getString(R.string.ID_MAKE_INDIA_SAFE_SCREEN));
        /* if (null != getIntent() && null != getIntent().getExtras()) {
             mLatLongWithLocation = getIntent().getExtras().getParcelable(AppConstants.LAT_LONG_DETAIL);
             if (null != mLatLongWithLocation) {
@@ -150,6 +150,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Goo
     }
 
     private void setPagerAndLayouts() {
+
         ViewCompat.setTransitionName(mAppBarLayout, AppConstants.LAT_LONG_DETAIL);
         supportPostponeEnterTransition();
         setSupportActionBar(mToolbar);
@@ -170,7 +171,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Goo
             latLongWithLocation.setLatitude(latitude);
             latLongWithLocation.setLongitude(longitude);
             String cityName, locality, state;
-            Geocoder geocoder = new Geocoder(MapActivity.this, Locale.getDefault());
+            Geocoder geocoder = new Geocoder(MakeIndiaSafeMapActivity.this, Locale.getDefault());
             List<Address> addresses = null;
             try {
                 addresses = geocoder.getFromLocation(latitude, longitude, 1);
@@ -211,7 +212,6 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Goo
                     .addApi(Places.PLACE_DETECTION_API)
                     .build();
             mGoogleApiClient.connect();
-
            /* if(latitude>0&&longitude>0)
             {
                 makeWomenSafeDialog(mLatLongWithLocation);
@@ -290,7 +290,6 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Goo
                 return infoWindow;
             }
         });
-
         // Turn on the My Location layer and the related control on the map.
         updateLocationUI();
 
@@ -323,8 +322,18 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Goo
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     mLocationPermissionGranted = true;
+                    locationTracker();
                 }
             }
+            break;
+            case AppConstants.REQUEST_CODE_FOR_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                  selectImageFrmCamera();
+                }
+            }
+
         }
         updateLocationUI();
     }
@@ -422,6 +431,20 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Goo
      */
     private void updateLocationUI() {
         if (mMap == null) {
+            if (null!=mLatLongWithLocation&&StringUtil.isNotNullOrEmptyString(mLatLongWithLocation.getLocality())) {
+                String title = getString(R.string.ID_DO_YOU_SEE) + AppConstants.SPACE + mLatLongWithLocation.getLocality() + AppConstants.SPACE + "?";
+                tvLocText.setText(title);
+            } else {
+                String title = getString(R.string.ID_DO_YOU_SEE) + AppConstants.SPACE + getString(R.string.ID_YOUR_LOCALITY);
+                tvLocText.setText(title);
+            }
+            if(null==mLatLongWithLocation)
+            {
+                mLatLongWithLocation=new LatLongWithLocation();
+                mLatLongWithLocation.setLongitude(20.5937);
+                mLatLongWithLocation.setLatitude(78.9629);
+            }
+            setPagerAndLayouts();
             return;
         }
 
@@ -445,6 +468,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Goo
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
             mLastKnownLocation = null;
         }
+
     }
 
 

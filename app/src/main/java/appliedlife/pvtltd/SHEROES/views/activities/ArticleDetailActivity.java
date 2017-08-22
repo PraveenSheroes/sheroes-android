@@ -113,6 +113,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
             }
         }
         setPagerAndLayouts();
+        ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_VIEW_ARTICLE));
     }
 
     @Override

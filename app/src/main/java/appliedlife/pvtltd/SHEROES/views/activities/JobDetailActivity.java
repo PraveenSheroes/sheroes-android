@@ -117,6 +117,7 @@ public class JobDetailActivity extends BaseActivity implements  AppBarLayout.OnO
             }
         }
         setPagerAndLayouts();
+        ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_VIEW_JOBS_DETAIL));
     }
 
     @OnClick(R.id.iv_job_detail_back)

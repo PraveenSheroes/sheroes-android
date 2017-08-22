@@ -296,7 +296,6 @@ public class CreateCommunityPostFragment extends BaseFragment implements SelectC
                 tv_community_poster_user.setText(mUserPreference.get().getUserSummary().getFirstName());
             }
         }
-        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_CREATE_COMMUNITY_POST));
         // iv_community_user.setImageBitmap(loginResponse);
         return view;
     }

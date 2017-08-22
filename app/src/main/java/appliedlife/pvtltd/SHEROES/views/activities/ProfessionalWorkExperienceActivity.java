@@ -37,6 +37,7 @@ public class ProfessionalWorkExperienceActivity extends BaseActivity implements 
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
         renderLoginFragmentView();
+        ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_MY_PROFILE_PROFESSIONAL_VIEW_ADDED_WORK_EXPERIENCE));
     }
 
     private void renderLoginFragmentView() {

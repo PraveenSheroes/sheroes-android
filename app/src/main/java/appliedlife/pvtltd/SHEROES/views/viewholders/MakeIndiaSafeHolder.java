@@ -80,7 +80,7 @@ public class MakeIndiaSafeHolder extends BaseViewHolder<MakeIndiaSafeDetail> {
     private String encodedImageUrl;
     private String messageFirst = "Hey, I have been seeing events of women getting harassed in ";
     private String messageSecond = "I think we should do something about it. How should we go ahead? #MakeIndiaSafe I shared this via SHEROES app- a women only safe space to talk openly without getting judged. You should also install the app from play store here: tinyurl.com/sheroes-app-safe-india";
-    private String local = " my locality ";
+    private String local = " This area is ";
     private String mCreaterType;
     private File localImageSaveForChallenge;
     private boolean isCreatedPost;
@@ -119,13 +119,15 @@ public class MakeIndiaSafeHolder extends BaseViewHolder<MakeIndiaSafeDetail> {
             scrollMakeIndiaSafeEvent.setVisibility(View.VISIBLE);
             scrollMakeIndiaSafeImageHolder.setVisibility(View.GONE);
             if (null != mLatLongWithLocation) {
-                if (StringUtil.isNotNullOrEmptyString(mLatLongWithLocation.getLocality())) {
+              /*  if (StringUtil.isNotNullOrEmptyString(mLatLongWithLocation.getLocality())) {
                     String locality = mContext.getString(R.string.ID_NO) + AppConstants.COMMA+ AppConstants.SPACE  + mLatLongWithLocation.getLocality() + AppConstants.SPACE + mContext.getString(R.string.ID_LOCALITY_NAME);
                     tvTvMessageForSafe.setText(locality);
                 } else {
                     String locality = mContext.getString(R.string.ID_NO) + AppConstants.COMMA + AppConstants.SPACE + local + AppConstants.SPACE + mContext.getString(R.string.ID_LOCALITY_NAME);
                     tvTvMessageForSafe.setText(locality);
-                }
+                }*/
+                String locality = mContext.getString(R.string.ID_NO) + AppConstants.COMMA + AppConstants.SPACE + local + AppConstants.SPACE + mContext.getString(R.string.ID_LOCALITY_NAME);
+                tvTvMessageForSafe.setText(locality);
             }
         }
     }

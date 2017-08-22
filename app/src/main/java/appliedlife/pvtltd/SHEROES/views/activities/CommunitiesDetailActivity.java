@@ -153,6 +153,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
             }
         }
         setPagerAndLayouts();
+        ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_VIEW_COMMUNITY));
     }
 
     private void setPagerAndLayouts() {

@@ -21,7 +21,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.HomeSearchActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.JobDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.JobFilterActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.LoginActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.MapActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.MakeIndiaSafeMapActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.OnBoardingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfessionalAddEducationActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfessionalWorkExperienceActivity;
@@ -626,7 +626,7 @@ public interface SheroesAppComponent {
 
     void inject(PublicProfileGrowthBuddiesDetailActivity publicProfileGrowthBuddiesDetailActivity);
 
-    void inject(MapActivity mapActivity);
+    void inject(MakeIndiaSafeMapActivity makeIndiaSafeMapActivity);
 
     void inject(MakeIndiaSafeHolder makeIndiaSafeHolder);
 

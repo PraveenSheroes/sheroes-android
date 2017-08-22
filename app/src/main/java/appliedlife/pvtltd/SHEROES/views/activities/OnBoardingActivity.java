@@ -121,6 +121,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
             mMasterDataResult = mUserPreferenceMasterData.get().getData();
         }
         setPagerAndLayouts();
+        ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_ONBOARDING_WELCOME));
     }
 
     public void setPagerAndLayouts() {

@@ -18,8 +18,8 @@ android {
         multiDexEnabled true
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 55
-        versionName "5.1.10"
+        versionCode 56
+        versionName "5.2.0"
     }
     signingConfigs {
         debug {

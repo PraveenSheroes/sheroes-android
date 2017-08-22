@@ -126,7 +126,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="appliedlife.pvtltd.SHEROES.views.activities.MapActivity"
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.MakeIndiaSafeMapActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
@@ -225,7 +225,6 @@
                 <data android:pathPattern="/.*" />
             </intent-filter>
         </activity>
-        <activity android:name=".views.activities.WorkExperienceActivity" />
 
         <service
             android:name="appliedlife.pvtltd.SHEROES.service.PushNotificationService"

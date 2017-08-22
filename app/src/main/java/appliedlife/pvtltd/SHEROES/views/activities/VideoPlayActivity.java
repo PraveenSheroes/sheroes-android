@@ -10,6 +10,7 @@ import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 
@@ -33,7 +34,7 @@ public class VideoPlayActivity extends YouTubeBaseActivity implements YouTubePla
         youTubeView.initialize(AppConstants.YOUTUBE_DEVELOPER_KEY, this);
         playerStateChangeListener = new MyPlayerStateChangeListener();
         playbackEventListener = new MyPlaybackEventListener();
-
+        ((SheroesApplication) getApplication()).trackScreenView(getString(R.string.ID_VEDIO_PLAYER_SCREEN));
     }
 
     @Override

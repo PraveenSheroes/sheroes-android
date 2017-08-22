@@ -70,7 +70,7 @@ public class ProfessionalAddEducationActivity extends BaseActivity implements Da
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
         renderAddEducationFragmentView();
-
+        ((SheroesApplication)this.getApplication()).trackScreenView(getString(R.string.ID_MY_PROFILE_PROFESSIONAL_EDIT_EDUCATION));
     }
 
     public void renderAddEducationFragmentView() {

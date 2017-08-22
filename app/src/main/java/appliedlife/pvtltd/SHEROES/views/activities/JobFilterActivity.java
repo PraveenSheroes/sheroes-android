@@ -44,6 +44,7 @@ public class JobFilterActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
         renderLoginFragmentView();
+        ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_JOB_FILTERS));
     }
 
     public void renderLoginFragmentView() {
