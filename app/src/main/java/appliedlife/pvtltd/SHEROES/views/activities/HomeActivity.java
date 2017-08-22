@@ -1892,6 +1892,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
 
 
     public DialogFragment growthBuddiesInPublicProfile() {
+        ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_CHAMPION_LISTING));
         mPublicProfileGrowthBuddiesDialogFragment = (PublicProfileGrowthBuddiesDialogFragment) getFragmentManager().findFragmentByTag(PublicProfileGrowthBuddiesDialogFragment.class.getName());
         if (mPublicProfileGrowthBuddiesDialogFragment == null) {
             mPublicProfileGrowthBuddiesDialogFragment = new PublicProfileGrowthBuddiesDialogFragment();

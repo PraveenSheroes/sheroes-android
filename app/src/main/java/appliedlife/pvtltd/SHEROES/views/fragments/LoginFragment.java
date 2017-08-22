@@ -136,7 +136,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                         mUserPreference.set(loginResponse);
                         moEngageUtills.entityMoEngageLoggedIn(getActivity(), mMoEHelper, payloadBuilder, MoEngageConstants.EMAIL);
                         if (null != loginResponse.getUserSummary()) {
-                            SheroesApplication.mContext.trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
+                            ((SheroesApplication) getActivity().getApplication()).trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
                         }
                         ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_USING_EMAIL, AppConstants.EMPTY_STRING);
                         mLoginActivityIntractionListner.onLoginAuthToken();
@@ -164,7 +164,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                     moEngageUtills.entityMoEngageUserAttribute(getActivity(), mMoEHelper, payloadBuilder, loginResponse);
                     mUserPreference.set(loginResponse);
                     moEngageUtills.entityMoEngageLoggedIn(getActivity(), mMoEHelper, payloadBuilder, MoEngageConstants.EMAIL);
-                    SheroesApplication.mContext.trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
+                    ((SheroesApplication) getActivity().getApplication()).trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
                     ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_USING_EMAIL, AppConstants.EMPTY_STRING);
                     mLoginActivityIntractionListner.onLoginAuthToken();
                 } else {

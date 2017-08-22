@@ -51,7 +51,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Calendar;
 
 import javax.inject.Inject;
 
@@ -458,7 +457,7 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
                                     ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_SIGN_UP, GoogleAnalyticsEventActions.SIGN_UP_WITH_GOOGLE, AppConstants.EMPTY_STRING);
                                 }
                             }
-                            SheroesApplication.mContext.trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
+                            ((SheroesApplication) getActivity().getApplication()).trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
                         }
                         mMoEHelper.setUserAttribute(MoEngageConstants.ACQUISITION_CHANNEL, loginViaSocial);
                         openHomeScreen();

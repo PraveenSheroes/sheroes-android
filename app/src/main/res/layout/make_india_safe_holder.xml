@@ -148,6 +148,7 @@
             android:layout_marginRight="@dimen/dp_size_20"
             android:layout_marginTop="@dimen/dp_size_22"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:gravity="center"
             android:paddingTop="@dimen/dp_size_10"
             android:paddingLeft="@dimen/dp_size_10"
             android:textColor="@color/once_card"
@@ -157,8 +158,9 @@
             android:id="@+id/line_for_no_image"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_size_1"
-            android:layout_marginLeft="@dimen/dp_size_30"
-            android:layout_marginRight="@dimen/dp_size_20"
+            android:layout_marginLeft="@dimen/dp_size_60"
+            android:layout_marginRight="@dimen/dp_size_50"
+            android:gravity="center"
             android:background="@color/once_card" />
 
         <TextView

@@ -64,6 +64,7 @@
     <string name="ID_MY_COMMUNITIES">My Communities</string>
     <string name="ID_FEED">Feed</string>
     <string name="ID_FEED_IMPRESSION">feed</string>
+    <string name="ID_CHAMPION_LISTING">champion listing</string>
     <string name="ID_HELP_FRAGMENT">helpline</string>
     <string name="ID_DRAWER_NAVIGATION">drawer navigation</string>
     <string name="ID_COMMUNITIY">Community</string>
@@ -102,8 +103,8 @@
     <string name="ID_SHARE_WITH_FRIENDS">Share with friends</string>
     <string name="ID_DO_YOU_SEE">Do you see women getting harassed in</string>
     <string name="ID_YOUR_LOCALITY">your locality?</string>
-    <string name="ID_LOCALITY_NAME"> pretty safe for Women</string>
-    <string name="ID_TELL_YOUR_FRIENDS">YES, Tell Your Friends About It</string>
+    <string name="ID_LOCALITY_NAME"> pretty safe for women.</string>
+    <string name="ID_TELL_YOUR_FRIENDS">Yes, Tell Your Friends About It</string>
     <string name="ID_INTERESTED">Interested</string>
     <string name="ID_GOING">Going</string>
     <string name="ID_REQUESTED">Requested</string>

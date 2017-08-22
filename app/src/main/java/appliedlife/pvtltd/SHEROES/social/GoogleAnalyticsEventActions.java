@@ -62,8 +62,6 @@ public class GoogleAnalyticsEventActions {
     public static final String USED_SEARCH_JOB_SCREEN = "used search on jobs";
     public static final String CATEGORY_SEARCH_FILTER = "search filters";
     public static final String USED_FILTER_ON_JOBS = "used filters on jobs";
-    public static final String CATEGORY_REVIEW_PROFILE = "reviewed profile";
-    public static final String REVIEW_PROFILE = "reviewed profile";
     public static final String CATEGORY_JOB_APPLICATION = "applications";
     public static final String APPLIED_JOB = "applied to a job";
     public static final String USED_SEARCH_ARTICLE_SCREEN = "used search on articles";
