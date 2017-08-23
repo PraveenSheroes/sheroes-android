@@ -42,7 +42,7 @@ import butterknife.OnClick;
  * Use the {@link EmailVerificationFragment} factory method to
  * create an instance of this fragment.
  */
-public class EmailVerificationFragment extends BaseFragment implements LoginView{
+public class EmailVerificationFragment extends BaseFragment implements LoginView {
 
     private final String TAG = LogUtils.makeLogTag(EmailVerificationFragment.class);
 
@@ -76,44 +76,46 @@ public class EmailVerificationFragment extends BaseFragment implements LoginView
         mMoEHelper = MoEHelper.getInstance(getActivity());
         moEngageUtills = MoEngageUtills.getInstance();
         startedTime = System.currentTimeMillis();
-        moEngageUtills.entityMoEngageVerifyEmail(getActivity(),mMoEHelper,payloadBuilder,startedTime);
+        moEngageUtills.entityMoEngageVerifyEmail(getActivity(), mMoEHelper, payloadBuilder, startedTime);
 
-        if(null != userPreference && userPreference.isSet() && null != userPreference.get() && userPreference.get().getUserSummary()!=null && StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getEmailId())){
+        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && userPreference.get().getUserSummary() != null && StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getEmailId())) {
             int index = userPreference.get().getUserSummary().getEmailId().indexOf(AppConstants.AT_THE_RATE_OF);
-            if(index < userPreference.get().getUserSummary().getEmailId().length()){
+            if (index < userPreference.get().getUserSummary().getEmailId().length()) {
                 String domain = userPreference.get().getUserSummary().getEmailId().substring(index);
-                tvEmailVerification.setText(getString(R.string.ID_EMAIL_VERIFICATION_TEXT_PART_1)+ domain + getString(R.string.ID_EMAIL_VERIFICATION_TEXT_PART_2));
+                tvEmailVerification.setText(getString(R.string.ID_EMAIL_VERIFICATION_TEXT_PART_1) + domain + getString(R.string.ID_EMAIL_VERIFICATION_TEXT_PART_2));
             }
         }
         return view;
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         mLoginPresenter.detachView();
 
         long timeSpent = System.currentTimeMillis() - startedTime;
-        moEngageUtills.entityMoEngageVerifyEmail(getActivity(),mMoEHelper,payloadBuilder,timeSpent);
+        moEngageUtills.entityMoEngageVerifyEmail(getActivity(), mMoEHelper, payloadBuilder, timeSpent);
     }
 
     @OnClick(R.id.tv_email_verify_link)
-    public void sendEmailVerifyLink(){
+    public void sendEmailVerifyLink() {
         mLoginPresenter.getEmailVerificationResponseInPresenter(new EmailVerificationRequest());
     }
 
     @Override
     public void sendVerificationEmailSuccess(EmailVerificationResponse emailVerificationResponse) {
-        if(emailVerificationResponse!=null){
-            if(emailVerificationResponse.getStatus().equalsIgnoreCase(ResponseStatus.SUCCESS.toString())){
+        if (emailVerificationResponse != null) {
+            if (emailVerificationResponse.getStatus().equalsIgnoreCase(ResponseStatus.SUCCESS.toString())) {
                 Toast.makeText(getActivity(), getString(R.string.ID_EMAIL_VERIFICATION_SUCCESS_TEXT), Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(getActivity(),getString(R.string.ID_EMAIL_VERIFICATION_FAILURE_TEXT), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getString(R.string.ID_EMAIL_VERIFICATION_FAILURE_TEXT), Toast.LENGTH_SHORT).show();
             }
         }
     }
 
     @OnClick(R.id.iv_login_back)
     public void backOnClick() {
-        ((LoginActivity)getActivity()).renderLoginFragmentView();
+        getActivity().getSupportFragmentManager().popBackStack();
+        ((LoginActivity) getActivity()).renderLoginFragmentView();
     }
 }
