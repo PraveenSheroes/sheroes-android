@@ -135,7 +135,7 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
     @Inject
     HomePresenter mHomePresenter;
     private String mViewMoreDescription;
-
+    private  String screenName=AppConstants.GROWTH_PUBLIC_PROFILE;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -381,6 +381,7 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
         List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
             mFeedDetail = feedDetailList.get(0);
+            mFeedDetail.setCallFromName(screenName);
             setProfileNameData();
         }
     }
@@ -507,29 +508,19 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
          /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
         if (null != intent) {
 
-           /* switch (requestCode) {
+            switch (requestCode) {
                 case AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST:
-                    FeedDetail feedCommunityPost = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITY_POST_FRAGMENT);
                     Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
                     if (AppUtils.isFragmentUIActive(fragment)) {
                         if (fragment instanceof CommunitiesDetailFragment) {
-                            ((CommunitiesDetailFragment) fragment).updateUiAccordingToFeedDetail(feedCommunityPost);
-                        }
-                    }
-                    break;
-                case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
-                    FeedDetail feedCommunityPostEdit = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITY_POST_FRAGMENT);
-                    Fragment fragmentCommunity = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
-                    if (AppUtils.isFragmentUIActive(fragmentCommunity)) {
-                        if (fragmentCommunity instanceof CommunitiesDetailFragment) {
-                            ((CommunitiesDetailFragment) fragmentCommunity).updateUiAccordingToFeedDetail(feedCommunityPostEdit);
+                            ((CommunitiesDetailFragment) fragment).updateUiAccordingToFeedDetail(mFeedDetail);
                         }
                     }
                     break;
                 default:
 
                     LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);
-            }*/
+            }
         }
 
     }
@@ -543,5 +534,22 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
             mLiHeader.setVisibility(View.VISIBLE);
         }*/
 
+    }
+    public void createCommunityPostClick(FeedDetail feedDetail) {
+        Intent intent = new Intent(this, CreateCommunityPostActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(AppConstants.COMMUNITY_POST_FRAGMENT, feedDetail);
+        intent.putExtras(bundle);
+        startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST);
+        // overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
+    }
+    @OnClick(R.id.fab_champion_community_post)
+    public void communityPostClick() {
+        mFragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
+        if (AppUtils.isFragmentUIActive(mFragment)) {
+            if (mFragment instanceof CommunitiesDetailFragment) {
+                ((CommunitiesDetailFragment) mFragment).communityPostClick();
+            }
+        }
     }
 }

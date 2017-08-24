@@ -127,5 +127,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_champion_community_post"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:background="@color/footer_icon_text"
+        app:backgroundTint="@color/footer_icon_text"
+        android:layout_marginRight="@dimen/dp_size_10"
+        android:layout_marginBottom="@dimen/dp_size_10"
+        android:src="@drawable/ic_add_education"/>
 </android.support.design.widget.CoordinatorLayout>
 

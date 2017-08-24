@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import appliedlife.pvtltd.SHEROES.R;
@@ -12,12 +13,15 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostRespons
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Ajit Kumar on 22-01-2017.
  */
 
 public class SelectDilogHolder extends BaseViewHolder<CommunityPostResponse> {
+    @Bind(R.id.rl_community_name)
+    RelativeLayout rlCommunityname;
     @Bind(R.id.textView1)
     TextView tvCity;
     @Bind(R.id.img1)
@@ -35,7 +39,6 @@ public class SelectDilogHolder extends BaseViewHolder<CommunityPostResponse> {
     public void bindData(CommunityPostResponse obj, Context context, int position) {
         communityPostResponse =obj;
         tvCity.setText(communityPostResponse.getTitle());
-        tvCity.setOnClickListener(this);
         String images = communityPostResponse.getLogo();
         if(communityPostResponse.isClosedCommunity()) {
             tvCity.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_lock, 0);
@@ -55,6 +58,13 @@ public class SelectDilogHolder extends BaseViewHolder<CommunityPostResponse> {
 
     @Override
     public void onClick(View view) {
-        viewInterface.handleOnClick(this.communityPostResponse,view);
+    }
+    @OnClick(R.id.rl_community_name)
+    public void onItemClick(View view) {
+        viewInterface.handleOnClick(communityPostResponse,tvCity);
+    }
+    @OnClick(R.id.textView1)
+    public void onTextViewClick(View view) {
+        viewInterface.handleOnClick(communityPostResponse,tvCity);
     }
 }

@@ -200,9 +200,19 @@ public class CommunitiesDetailFragment extends BaseFragment {
     }
 
     public void communityPostClick() {
-        FeedDetail feedDetail = mFeedDetail;
-        feedDetail.setCallFromName(AppConstants.COMMUNITIES_DETAIL);
-        ((CommunitiesDetailActivity) getActivity()).createCommunityPostClick(feedDetail);
+        if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getCallFromName()) && mFeedDetail.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
+            try {
+                FeedDetail feedDetail = (FeedDetail) mFeedDetail.clone();
+                feedDetail.setCallFromName(AppConstants.COMMUNITIES_DETAIL);
+                ((PublicProfileGrowthBuddiesDetailActivity) getActivity()).createCommunityPostClick(feedDetail);
+            } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+            }
+        } else {
+            FeedDetail feedDetail = mFeedDetail;
+            feedDetail.setCallFromName(AppConstants.COMMUNITIES_DETAIL);
+            ((CommunitiesDetailActivity) getActivity()).createCommunityPostClick(feedDetail);
+        }
     }
 
     private void swipeToRefreshList() {
@@ -245,7 +255,10 @@ public class CommunitiesDetailFragment extends BaseFragment {
                     }
                     break;
                 case FEATURE_COMMUNITY:
-                    ((CommunitiesDetailActivity) getActivity()).ivFabPostCommunity.setVisibility(View.INVISIBLE);
+                    if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getCallFromName()) && mFeedDetail.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
+                    } else {
+                        ((CommunitiesDetailActivity) getActivity()).ivFabPostCommunity.setVisibility(View.INVISIBLE);
+                    }
                     mScreenName = AppConstants.FEATURE_FRAGMENT;
                     if (!feedDetail.isMember() && !feedDetail.isOwner() && !feedDetail.isRequestPending() && feedDetail.isFeatured()) {
                         mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.footer_icon_text));
@@ -258,7 +271,11 @@ public class CommunitiesDetailFragment extends BaseFragment {
                     }
                     break;
                 case MY_COMMUNITY:
-                    ((CommunitiesDetailActivity) getActivity()).ivFabPostCommunity.setVisibility(View.VISIBLE);
+                    if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getCallFromName()) && mFeedDetail.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
+                    } else {
+                        ((CommunitiesDetailActivity) getActivity()).ivFabPostCommunity.setVisibility(View.VISIBLE);
+                    }
+
                     mTvJoinView.setVisibility(View.GONE);
                     mScreenName = AppConstants.MY_COMMUNITIES_FRAGMENT;
                     mTvJoinView.setTag(false);
