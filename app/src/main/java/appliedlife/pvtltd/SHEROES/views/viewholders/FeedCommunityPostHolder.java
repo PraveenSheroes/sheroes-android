@@ -1310,6 +1310,12 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     public void onEventShareClick() {
         viewInterface.handleOnClick(dataItem, tvEventShareBtn);
     }
+    @OnClick(R.id.iv_feed_community_post_circle_icon)
+    public void onFeedCommunityPostCircleIconClick() {
+        if (dataItem.isAuthorMentor()) {
+            viewInterface.championProfile(dataItem, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        }
+    }
 
     private void clickOnMentorAndCommunityName(String nameAndCommunity, String feedTitle, String postedIn) {
 

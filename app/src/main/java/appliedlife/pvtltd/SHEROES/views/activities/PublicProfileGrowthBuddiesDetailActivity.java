@@ -72,7 +72,7 @@ import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MEN
  * Created by Praveen_Singh on 04-08-2017.
  */
 
-public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity implements CommentReactionFragment.HomeActivityIntractionListner, HomeView , AppBarLayout.OnOffsetChangedListener {
+public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity implements CommentReactionFragment.HomeActivityIntractionListner, HomeView, AppBarLayout.OnOffsetChangedListener {
     private final String TAG = LogUtils.makeLogTag(PublicProfileGrowthBuddiesDetailActivity.class);
     @Bind(R.id.iv_public_profile_full_view_icon)
     RoundedImageView mProfileIcon;
@@ -135,7 +135,8 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
     @Inject
     HomePresenter mHomePresenter;
     private String mViewMoreDescription;
-    private  String screenName=AppConstants.GROWTH_PUBLIC_PROFILE;
+    private String screenName = AppConstants.GROWTH_PUBLIC_PROFILE;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -174,13 +175,21 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
                     .into(ivPublicProfileImage);
         }
         if (null != mMentorDetailItem) {
-            isFollowUnfollow();
+            if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
+                if (mUserPreference.get().getUserSummary().getUserId() == mMentorDetailItem.getEntityOrParticipantId()) {
+                    tvFollowUnfollowPublicProfile.setTextColor(ContextCompat.getColor(this, R.color.footer_icon_text));
+                    tvFollowUnfollowPublicProfile.setText(getString(R.string.ID_EDIT));
+                    tvFollowUnfollowPublicProfile.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
+                } else {
+                    isFollowUnfollow();
+                }
+            }
         } else {
             mHomePresenter.getFollowedFromPresenter(mAppUtils.countFollowerRequestBuilder(mFeedDetail.getIdOfEntityOrParticipant()));
         }
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getNameOrTitle())) {
             mTvMentorName.setText(mFeedDetail.getNameOrTitle());
-           // tvChampionTitle.setText(mFeedDetail.getNameOrTitle());
+            // tvChampionTitle.setText(mFeedDetail.getNameOrTitle());
         }
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getCityName())) {
             tvMentorCityName.setText(mFeedDetail.getCityName());
@@ -204,7 +213,7 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
                 tvMentorExpertise.setText(stringBuilder.toString().substring(0, stringBuilder.toString().trim().length() - 1));
             }
         }
-        ((SheroesApplication)getApplication()).trackScreenView(getString(R.string.ID_PUBLIC_PROFILE));
+        ((SheroesApplication) getApplication()).trackScreenView(getString(R.string.ID_PUBLIC_PROFILE));
     }
 
 
@@ -230,16 +239,25 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
 
     @OnClick(R.id.tv_follow_unfollow_public_profile)
     public void onFollowUnfollowClick() {
-        if (null != mMentorDetailItem) {
-            tvFollowUnfollowPublicProfile.setEnabled(false);
-            followUnfollowRequest(mMentorDetailItem);
-            if (!mMentorDetailItem.isFollowed()) {
-                mMentorDetailItem.setFollowed(true);
-            } else {
-                mMentorDetailItem.setFollowed(false);
+
+        if (tvFollowUnfollowPublicProfile.getText().toString().equalsIgnoreCase(getString(R.string.ID_EDIT))) {
+            String profile = mUserPreference.get().getUserSummary().getPhotoUrl();
+            Intent intent = new Intent(this, ProfileActicity.class);
+            intent.putExtra(AppConstants.EXTRA_IMAGE, profile);
+            startActivity(intent);
+        } else {
+            if (null != mMentorDetailItem) {
+                tvFollowUnfollowPublicProfile.setEnabled(false);
+                followUnfollowRequest(mMentorDetailItem);
+                if (!mMentorDetailItem.isFollowed()) {
+                    mMentorDetailItem.setFollowed(true);
+                } else {
+                    mMentorDetailItem.setFollowed(false);
+                }
+                isFollowUnfollow();
             }
-            isFollowUnfollow();
         }
+
     }
 
     private void isFollowUnfollow() {
@@ -483,6 +501,7 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
         setAllValues(mFragmentOpen);
         super.dataOperationOnClick(baseResponse);
     }
+
     private void championDetailActivity(Long userId) {
         Intent intent = new Intent(this, PublicProfileGrowthBuddiesDetailActivity.class);
         Bundle bundle = new Bundle();
@@ -495,13 +514,15 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
         overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
     }
+
     @Override
-    public void championProfile(BaseResponse baseResponse,int championValue) {
+    public void championProfile(BaseResponse baseResponse, int championValue) {
         if (baseResponse instanceof CommentReactionDoc) {
             CommentReactionDoc commentReactionDoc = (CommentReactionDoc) baseResponse;
             championDetailActivity(commentReactionDoc.getParticipantId());
         }
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
@@ -523,6 +544,7 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
         }
 
     }
+
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
         LogUtils.info(TAG, "****************offset***" + verticalOffset);
@@ -534,6 +556,7 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
         }*/
 
     }
+
     public void createCommunityPostClick(FeedDetail feedDetail) {
         Intent intent = new Intent(this, CreateCommunityPostActivity.class);
         Bundle bundle = new Bundle();
@@ -542,6 +565,7 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST);
         // overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
     }
+
     @OnClick(R.id.fab_champion_community_post)
     public void communityPostClick() {
         mFragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
@@ -551,20 +575,5 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
             }
         }
     }
-    @OnClick(R.id.iv_public_profile_full_view_icon)
-    public void profileOpenByImageClick() {
-        openProfileActivity();
-    }
-    @OnClick(R.id.tv_mentor_name)
-    public void profileOpenByNameClick() {
-        openProfileActivity();
-    }
-    private void openProfileActivity() {
-        if(StringUtil.isNotNullOrEmptyString(mFeedDetail.getImageUrl())) {
-            Intent intent = new Intent(this, ProfileActicity.class);
-            intent.putExtra(AppConstants.EXTRA_IMAGE, mFeedDetail.getImageUrl());
-            startActivity(intent);
-            overridePendingTransition(R.anim.fade_in_dialog, R.anim.fade_out_dialog);
-        }
-    }
+
 }
