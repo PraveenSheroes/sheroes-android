@@ -137,6 +137,7 @@
     <string name="ID_PROFILE">Profile</string>
     <string name="ID_ARTICLE">Articles</string>
     <string name="ID_BOOKMARK">Bookmarks</string>
+    <string name="ID_ARE_FEMALE">Please check for female</string>
     <string name="ID_SETTING">Settings</string>
     <string name="ID_ASK_SHEROES">Ask SHEROES</string>
     <string name="ID_HELPLINE">Helpline</string>
@@ -170,6 +171,7 @@
     <string name="ID_GROUP">Group</string>
     <string name="ID_SEE_MORE">See more like this</string>
     <string name="ID_ANONYMOUS">Anonymous</string>
+    <string name="ID_FEMALE">Female</string>
     <string name="ID_OWNER">Owner (S)</string>
     <string name="ID_OWNER_Mo">owner</string>
     <string name="ID_LESS">View Less</string>

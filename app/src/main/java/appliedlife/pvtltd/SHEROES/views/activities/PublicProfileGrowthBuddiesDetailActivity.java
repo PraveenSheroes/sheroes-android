@@ -507,7 +507,6 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
         super.onActivityResult(requestCode, resultCode, intent);
          /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
         if (null != intent) {
-
             switch (requestCode) {
                 case AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST:
                     Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
@@ -550,6 +549,22 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
             if (mFragment instanceof CommunitiesDetailFragment) {
                 ((CommunitiesDetailFragment) mFragment).communityPostClick();
             }
+        }
+    }
+    @OnClick(R.id.iv_public_profile_full_view_icon)
+    public void profileOpenByImageClick() {
+        openProfileActivity();
+    }
+    @OnClick(R.id.tv_mentor_name)
+    public void profileOpenByNameClick() {
+        openProfileActivity();
+    }
+    private void openProfileActivity() {
+        if(StringUtil.isNotNullOrEmptyString(mFeedDetail.getImageUrl())) {
+            Intent intent = new Intent(this, ProfileActicity.class);
+            intent.putExtra(AppConstants.EXTRA_IMAGE, mFeedDetail.getImageUrl());
+            startActivity(intent);
+            overridePendingTransition(R.anim.fade_in_dialog, R.anim.fade_out_dialog);
         }
     }
 }

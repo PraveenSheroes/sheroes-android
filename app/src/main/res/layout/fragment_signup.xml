@@ -139,12 +139,34 @@
                         android:textSize="@dimen/sp_size_14" />
 
                 </android.support.design.widget.TextInputLayout>
+                <RelativeLayout
+                    android:id="@+id/rl_check_male_female"
+                    android:layout_below="@+id/passwordwidget"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_size_50"
+                    android:layout_marginRight="@dimen/dp_size_40"
+                    android:layout_marginTop="@dimen/dp_size_20">
 
+                    <CheckBox
+                        android:id="@+id/cb_female"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:button="@drawable/customecheckbox"
+                        android:checked="false"
+                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                        android:paddingLeft="@dimen/dp_size_10"
+                        android:text="@string/ID_FEMALE"
+                        android:textColor="@color/detail_page_text"
+                        android:textSize="@dimen/sp_size_16" />
+
+                </RelativeLayout>
                 <Button
                     android:id="@+id/btn_sign_up"
                     android:layout_width="@dimen/dp_size_209"
                     android:layout_height="@dimen/dp_size_42"
-                    android:layout_below="@+id/passwordwidget"
+                    android:layout_below="@+id/rl_check_male_female"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="@dimen/dp_size_20"
                     android:background="@drawable/selecter_make_india_safe"
@@ -159,8 +181,8 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/btn_sign_up"
                     android:layout_centerInParent="true"
-                    android:layout_marginTop="@dimen/dp_size_10"
                     android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                    android:layout_marginTop="@dimen/dp_size_40"
                     android:padding="@dimen/dp_size_15"
                     android:text="@string/ID_SIGNUP_ALREADY_LOGIN" />
 

@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -145,6 +146,8 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
     private String mToken = null;
     private String loginViaSocial = MoEngageConstants.GOOGLE;
     private  long currentTime;
+    @Bind(R.id.cb_female)
+    CheckBox mCbFemale;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -342,16 +345,19 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
             focusView.requestFocus();
         } else {
             if (StringUtil.isNotNullOrEmptyString(mGcmId)) {
-                SignupRequest signupRequest = AppUtils.signupRequestBuilder();
-                signupRequest.setEmailId(email);
-                signupRequest.setFirstName(firstName);
-                signupRequest.setLastName(lastName);
-                signupRequest.setMobile(mobileNo);
-                signupRequest.setPassword(password);
-                signupRequest.setGcmorapnsid(mGcmId);
-                mSignUpVia = AppConstants.ONE_CONSTANT;
-                mLoginPresenter.getAuthTokenSignupInPresenter(signupRequest);
-
+                if(mCbFemale.isChecked()) {
+                    SignupRequest signupRequest = AppUtils.signupRequestBuilder();
+                    signupRequest.setEmailId(email);
+                    signupRequest.setFirstName(firstName);
+                    signupRequest.setLastName(lastName);
+                    signupRequest.setMobile(mobileNo);
+                    signupRequest.setPassword(password);
+                    signupRequest.setGcmorapnsid(mGcmId);
+                    mSignUpVia = AppConstants.ONE_CONSTANT;
+                    mLoginPresenter.getAuthTokenSignupInPresenter(signupRequest);
+                }else {
+                    Toast.makeText(getActivity(),getString(R.string.ID_ARE_FEMALE), Toast.LENGTH_SHORT).show();
+                }
             } else {
                 if (!NetworkUtil.isConnected(getContext())) {
                     showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
@@ -779,5 +785,14 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
         mFbSignUp.setEnabled(true);
         mUserPreference.delete();
         super.showError(errorMsg, feedParticipationEnum);
+    }
+    @OnClick(R.id.cb_female)
+    public void OnCheckFemaleByClick() {
+        if(mCbFemale.isChecked())
+        {
+            mCbFemale.setChecked(true);
+        }else {
+            mCbFemale.setChecked(false);
+        }
     }
 }
