@@ -19,6 +19,14 @@
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/dp_size_20"
             android:src="@drawable/ic_male_gender" />
+        <ImageView
+            android:id="@+id/iv_women_error"
+            android:layout_width="@dimen/dp_size_54"
+            android:layout_height="@dimen/dp_size_54"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:layout_marginTop="@dimen/dp_size_20"
+            android:src="@drawable/ic_women_error_dilog" />
         <TextView
             android:id="@+id/tv_message"
             android:layout_width="@dimen/dp_size_250"
@@ -29,7 +37,7 @@
             android:layout_marginTop="@dimen/dp_size_25"
             android:text="@string/ID_GENERIC_ERROR"
             android:lineSpacingExtra="@dimen/dp_size_5"
-            android:textColor="@color/black"
+            android:textColor="@color/pure_black"
             android:textSize="@dimen/sp_size_13" />
 
         <TextView
@@ -38,11 +46,13 @@
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:text="@string/ID_OK"
-            android:layout_gravity="right"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/dp_size_10"
+            android:layout_marginLeft="@dimen/dp_size_70"
             android:padding="@dimen/dp_size_14"
             android:layout_marginRight="@dimen/dp_size_70"
             android:textAllCaps="true"
-            android:textColor="@color/blue"
+            android:textColor="@color/email"
             android:textSize="@dimen/sp_size_14" />
 
     </LinearLayout>

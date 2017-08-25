@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import appliedlife.pvtltd.SHEROES.R;
@@ -26,8 +27,13 @@ public class FacebookErrorDialog extends BaseDialogFragment {
     TextView mTvCacel;
     @Bind(R.id.tv_message)
     TextView mTvMessage;
+    @Bind(R.id.iv_women_error)
+    ImageView mIvWomenError;
+    @Bind(R.id.iv_hey_success_next)
+    ImageView mIvHeySuccessNext;
     int callFor = 0;
     String message;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -37,7 +43,14 @@ public class FacebookErrorDialog extends BaseDialogFragment {
             callFor = getArguments().getInt(AppConstants.FACEBOOK_VERIFICATION);
             message = getArguments().getString(AppConstants.SHEROES_AUTH_TOKEN);
         }
-        if(StringUtil.isNotNullOrEmptyString(message)) {
+        if (StringUtil.isNotNullOrEmptyString(message)) {
+            if (message.equalsIgnoreCase(getString(R.string.ID_WOMEN_ERROR))) {
+                mIvHeySuccessNext.setVisibility(View.GONE);
+                mIvWomenError.setVisibility(View.VISIBLE);
+            } else {
+                mIvHeySuccessNext.setVisibility(View.VISIBLE);
+                mIvWomenError.setVisibility(View.GONE);
+            }
             mTvMessage.setText(message);
         }
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);

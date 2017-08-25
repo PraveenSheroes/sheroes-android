@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.text.Html;
 import android.view.View;
@@ -115,11 +116,13 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     @Inject
     AppUtils appUtils;
     private ProgressDialog mProgressDialog;
+    public static int isSignUpOpen = AppConstants.NO_REACTION_CONSTANT;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
-     //   InviteReferralsApi.getInstance(this).tracking(AppConstants.INSTALL, null, 0,null);
+        //   InviteReferralsApi.getInstance(this).tracking(AppConstants.INSTALL, null, 0,null);
         mMoEHelper = MoEHelper.getInstance(this);
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
@@ -180,7 +183,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                     getGcmId();
                 }
             }
-            ((SheroesApplication)this.getApplication()).trackScreenView(getString(R.string.ID_INTRO_SCREEN));
+            ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_INTRO_SCREEN));
         }
 
     }
@@ -198,8 +201,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                     PushManager.getInstance().refreshToken(getApplicationContext(), mGcmId);
                     mGetStarted.setEnabled(true);
                     mOtherLoginOption.setEnabled(true);
-                    if(null!=mProgressDialog&& mProgressDialog.isShowing())
-                    {
+                    if (null != mProgressDialog && mProgressDialog.isShowing()) {
                         mProgressDialog.dismiss();
                     }
                 } else {
@@ -286,7 +288,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         signupFragment.setArguments(bundle);
         mFragmentOpen.setSignupFragment(true);
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
-                .replace(R.id.fragment_welcome_sign_up, signupFragment).addToBackStack(null).commitAllowingStateLoss();
+                .replace(R.id.fragment_welcome_sign_up, signupFragment, SignupFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
     }
 
     @OnClick(R.id.tv_other_login_option)
@@ -411,12 +413,20 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     @Override
     public void onBackPressed() {
-        if (mFragmentOpen.isSignupFragment()) {
-            mFragmentOpen.setSignupFragment(false);
-            getSupportFragmentManager().popBackStack();
+        if (isSignUpOpen == AppConstants.ONE_CONSTANT) {
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag(SignupFragment.class.getName());
+            if (AppUtils.isFragmentUIActive(fragment)) {
+                ((SignupFragment) fragment).OnSignUpBackClick();
+            }
         } else {
-            finish();
+            if (mFragmentOpen.isSignupFragment()) {
+                mFragmentOpen.setSignupFragment(false);
+                getSupportFragmentManager().popBackStack();
+            } else {
+                finish();
+            }
         }
+
     }
 
     @Override
@@ -473,27 +483,27 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     @Override
     protected void onResume() {
         super.onResume();
-            Intent intent = getIntent();
-            if (intent != null) {
-                Bundle extras = intent.getExtras();
-                if(extras!=null && null!=extras.getString(AppConstants.GOOGLE_PLAY_URL_REFERRAL_CONTACT_ID)) {
-                    if (StringUtil.isNotNullOrEmptyString(extras.getString(AppConstants.GOOGLE_PLAY_URL_REFERRAL_CONTACT_ID))) {
-                        String appContactId = extras.getString(AppConstants.GOOGLE_PLAY_URL_REFERRAL_CONTACT_ID);
-                        LogUtils.info(TAG, "********Id of  new Intent ***********"+appContactId);
-                        UserFromReferralRequest userFromReferralRequest = new UserFromReferralRequest();
-                        if(StringUtil.isNotNullOrEmptyString(appContactId)) {
-                            try {
-                                userFromReferralRequest.setAppUserContactTableId(Long.parseLong(appContactId));
-                                mLoginPresenter.updateUserReferralInPresenter(userFromReferralRequest);
-                            }catch (Exception e)
-                            {
+        Intent intent = getIntent();
+        if (intent != null) {
+            Bundle extras = intent.getExtras();
+            if (extras != null && null != extras.getString(AppConstants.GOOGLE_PLAY_URL_REFERRAL_CONTACT_ID)) {
+                if (StringUtil.isNotNullOrEmptyString(extras.getString(AppConstants.GOOGLE_PLAY_URL_REFERRAL_CONTACT_ID))) {
+                    String appContactId = extras.getString(AppConstants.GOOGLE_PLAY_URL_REFERRAL_CONTACT_ID);
+                    LogUtils.info(TAG, "********Id of  new Intent ***********" + appContactId);
+                    UserFromReferralRequest userFromReferralRequest = new UserFromReferralRequest();
+                    if (StringUtil.isNotNullOrEmptyString(appContactId)) {
+                        try {
+                            userFromReferralRequest.setAppUserContactTableId(Long.parseLong(appContactId));
+                            mLoginPresenter.updateUserReferralInPresenter(userFromReferralRequest);
+                        } catch (Exception e) {
 
-                            }
                         }
                     }
                 }
             }
         }
+    }
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);

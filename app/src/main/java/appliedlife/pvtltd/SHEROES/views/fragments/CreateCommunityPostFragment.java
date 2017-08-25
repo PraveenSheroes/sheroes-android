@@ -218,7 +218,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements SelectC
         if (null != getArguments()) {
             mFeedDetail = getArguments().getParcelable(AppConstants.COMMUNITY_POST_FRAGMENT);
             if (null != mFeedDetail) {
-                if (null != mFeedDetail.getNameOrTitle()) {
+                if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getNameOrTitle())) {
                     mEtchoosecommunity.setText(mFeedDetail.getNameOrTitle());
                 }
                 communityValue();

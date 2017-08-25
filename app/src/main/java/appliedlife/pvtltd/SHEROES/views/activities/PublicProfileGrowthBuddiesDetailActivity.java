@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -130,6 +131,8 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
     private MentorDetailItem mMentorDetailItem;
     @Bind(R.id.pb_mentor_detail_progress_bar)
     ProgressBar mProgressBar;
+    @Bind(R.id.fab_champion_community_post)
+    FloatingActionButton fabChampionCommunityPost;
     @Inject
     AppUtils mAppUtils;
     @Inject
@@ -150,6 +153,7 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
             mFeedDetail = getIntent().getParcelableExtra(AppConstants.COMMUNITY_DETAIL);
             mMentorDetailItem = getIntent().getParcelableExtra(AppConstants.GROWTH_PUBLIC_PROFILE);
         }
+
         if (null != mFeedDetail) {
             mFragmentOpen = new FragmentOpen();
             setAllValues(mFragmentOpen);
@@ -177,10 +181,13 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
         if (null != mMentorDetailItem) {
             if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
                 if (mUserPreference.get().getUserSummary().getUserId() == mMentorDetailItem.getEntityOrParticipantId()) {
-                    tvFollowUnfollowPublicProfile.setTextColor(ContextCompat.getColor(this, R.color.footer_icon_text));
+                    tvFollowUnfollowPublicProfile.setTextColor(ContextCompat.getColor(this, R.color.white));
                     tvFollowUnfollowPublicProfile.setText(getString(R.string.ID_EDIT));
-                    tvFollowUnfollowPublicProfile.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
+                    tvFollowUnfollowPublicProfile.setBackgroundResource(R.drawable.rectangle_follow_unfollow);
+                    fabChampionCommunityPost.setVisibility(View.VISIBLE);
+
                 } else {
+                    fabChampionCommunityPost.setVisibility(View.GONE);
                     isFollowUnfollow();
                 }
             }
@@ -537,6 +544,14 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
                         }
                     }
                     break;
+                case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
+                    Fragment activeFragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
+                    if (AppUtils.isFragmentUIActive(activeFragment)) {
+                        if (activeFragment instanceof CommunitiesDetailFragment) {
+                            ((CommunitiesDetailFragment) activeFragment).updateUiAccordingToFeedDetail(mFeedDetail);
+                        }
+                    }
+                    break;
                 default:
 
                     LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);
@@ -560,12 +575,12 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
     public void createCommunityPostClick(FeedDetail feedDetail) {
         Intent intent = new Intent(this, CreateCommunityPostActivity.class);
         Bundle bundle = new Bundle();
+        feedDetail.setNameOrTitle(AppConstants.EMPTY_STRING);
         bundle.putParcelable(AppConstants.COMMUNITY_POST_FRAGMENT, feedDetail);
         intent.putExtras(bundle);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST);
         // overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
     }
-
     @OnClick(R.id.fab_champion_community_post)
     public void communityPostClick() {
         mFragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);

@@ -70,6 +70,7 @@
     <string name="ID_COMMUNITIY">Community</string>
     <string name="ID_COMMUNITIY_POST">Community post</string>
     <string name="ID_BAD_RQUEST">Special characters are not allowed</string>
+    <string name="ID_WOMEN_ERROR">Please declare that you are a woman by ticking the box.</string>
     <string name="ID_GENERIC_ERROR"> Oops, something went wrong. We are working on it, we will get it fixed as soon as we can.</string>
     <string name="ID_UNABLE_TO_COMMENT"> Sorry, unable to comment. Please try again in a few minutes.</string>
     <string name="ID_UNABLE_TO_EDIT_DELETE"> Sorry unable to edit,delete the comment. Please try again in a few minutes.</string>
@@ -171,7 +172,7 @@
     <string name="ID_GROUP">Group</string>
     <string name="ID_SEE_MORE">See more like this</string>
     <string name="ID_ANONYMOUS">Anonymous</string>
-    <string name="ID_FEMALE">Female</string>
+    <string name="ID_FEMALE">SHEROES is a women only community and I declare I am a female. </string>
     <string name="ID_OWNER">Owner (S)</string>
     <string name="ID_OWNER_Mo">owner</string>
     <string name="ID_LESS">View Less</string>
@@ -760,7 +761,6 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_WELCOME_TEXT2">Talk, share, celebrate, inspire in a community that cares</string>
     <string name="ID_WELCOME_TEXT3">Discover things that matter to you Career, Life, Love</string>
     <string name="ID_ALL_OF_YOU">All For You</string>
-    <string name="ID_CONTINUE_WITH_FACEBOOK">CONTINUE WITH FACEBOOK</string>
     <string name="ID_FACEBOOK_LONGING">LOGGING IN...</string>
     <string name="IDS_GOOGLE_BUTTON">Login with Google</string>
     <string name="ID_LINK_TO_FACEBOOK">Link to Facebook</string>
@@ -804,11 +804,14 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_CREATEPOST">CREATE A POST</string>
     <string name="ID_COMM_SHARE_EMAIL_LINK">SHARE COMMUNITY LINK ON EMAIL</string>
     <string name="ID_EMAIL_HINT_TEXT">Enter emails to share...</string>
+    <string name="ID_CONTINUE_WITH_GOOGLE">Continue with Google</string>
+    <string name="ID_CONTINUE_WITH_FACEBOOK">Continue with Facebook</string>
     <string name="ID_SAHRE_TEXT">SHARE</string>
     <string name="ID_COMM_SHARE_BUTTON">SHARE VIA SOCIAL MEDIA</string>
 
     <string name="COMMUNITY_TYPE">COMMUNITY TYPE</string>
     <string name="ID_ADDMORE">Add More</string>
+    <string name="ID_EMAIL">Or, Sign Up Using Email</string>
 
     <string name="ID_ORGANISATION">Organization</string>
     <string name="ID_TAG_TEXT">Helth, Education, Family Welfare</string>
@@ -911,6 +914,7 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_ADD_PHOTO">Let\'s make this moment more special by adding a photo.</string>
     <string name="ID_CHOOSE_PHOTO">Choose Photo From gallery</string>
     <string name="ID_ADD_YOU_TUBE_LINK">Add Youtube link..</string>
+    <string name="ID_JOIN_SHEROES_NETWORK">Join The SHEROES Network</string>
     <string name="ID_MENTOR_FOR">CAN HELP IN</string>
     <string name="ID_GROWTH_BUDDIES">Champions</string>
     <string name="ID_DETAIL_ABOUT_EVENT">Details about the event</string>
@@ -926,11 +930,11 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_SHARE_MSG">Please choose photo or add youtube link.</string>
     <string name="ID_CHALLENGE_COMPLETED_SUCCESS">Success</string>
 
-    <string name="ID_SIGNUP_ALREADY_LOGIN"><font size="11">Already have an account? Log In</font></string>
+    <string name="ID_SIGNUP_LOGIN">Already have an account? Log In</string>
     <string name="ID_GET_STARTED">GET STARTED</string>
-    <string name="ID_SIGNUP_TEXT">Sign Up Using Your Email Address</string>
-    <string name="ID_OR_CONTINUE">OR CONTINUE USING</string>
-    <string name="ID_SIGN_UP">SIGN UP</string>
+    <string name="ID_SIGNUP_TEXT">Signup Using Your Email Address</string>
+    <string name="ID_PROMISE">Promise we won\'t share your personal information</string>
+    <string name="ID_SIGN_UP">Sign Up</string>
     <string name="ID_SIGN_UP_MOBILE_HINT"><font size="10">MOBILE NUMBER</font></string>
     <string name="ID_SIGN_UP_PASSWORD_HINT"><font size="10">PASSWORD</font></string>
     <string name="ID_FIRST_NAME">Please enter the first name</string>
