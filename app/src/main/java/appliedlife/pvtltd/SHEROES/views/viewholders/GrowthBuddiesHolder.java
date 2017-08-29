@@ -103,7 +103,7 @@ public class GrowthBuddiesHolder extends BaseViewHolder<MentorDetailItem> {
 
     @OnClick(R.id.tv_growth_buddies_follow)
     public void onGrowthBuddiesFollowUnfollow() {
-        if (tvGrowthBuddiesFollow.getText().toString().equalsIgnoreCase(mContext.getString(R.string.ID_EDIT))) {
+        if (tvGrowthBuddiesFollow.getText().toString().equalsIgnoreCase(mContext.getString(R.string.ID_EDIT_PROFILE))) {
             String profile = userPreference.get().getUserSummary().getPhotoUrl();
             Intent intent = new Intent(mContext, ProfileActicity.class);
             intent.putExtra(AppConstants.EXTRA_IMAGE, profile);

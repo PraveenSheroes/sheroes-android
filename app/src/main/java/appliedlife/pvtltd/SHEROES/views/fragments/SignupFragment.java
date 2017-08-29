@@ -830,6 +830,7 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
     }
     @OnClick(R.id.tv_sign_up_back)
     public void OnSignUpBackClick() {
+        AppUtils.hideKeyboard(mobile, TAG);
         WelcomeActivity.isSignUpOpen=AppConstants.NO_REACTION_CONSTANT;
         liLoginViaFbGoogle.setVisibility(View.VISIBLE);
         rlSignUpForm.setVisibility(View.GONE);

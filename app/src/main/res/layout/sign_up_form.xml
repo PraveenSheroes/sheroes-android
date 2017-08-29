@@ -202,7 +202,17 @@
                 android:textColor="@color/email"
                 android:textSize="@dimen/sp_size_14" />
         </LinearLayout>
-
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:visibility="invisible"
+            android:fontFamily="@string/ID_ROBOTO_BOLD"
+            android:paddingBottom="@dimen/dp_size_30"
+            android:paddingLeft="@dimen/dp_size_5"
+            android:paddingRight="@dimen/dp_size_10"
+            />
     </LinearLayout>
 
     <include layout="@layout/progress_bar_login" />

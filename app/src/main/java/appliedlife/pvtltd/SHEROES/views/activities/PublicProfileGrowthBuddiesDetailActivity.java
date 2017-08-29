@@ -246,7 +246,7 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
     @OnClick(R.id.tv_follow_unfollow_public_profile)
     public void onFollowUnfollowClick() {
 
-        if (tvFollowUnfollowPublicProfile.getText().toString().equalsIgnoreCase(getString(R.string.ID_EDIT))) {
+        if (tvFollowUnfollowPublicProfile.getText().toString().equalsIgnoreCase(getString(R.string.ID_EDIT_PROFILE))) {
             String profile = mUserPreference.get().getUserSummary().getPhotoUrl();
             Intent intent = new Intent(this, ProfileActicity.class);
             intent.putExtra(AppConstants.EXTRA_IMAGE, profile);
