@@ -157,6 +157,7 @@
     <string name="ID_SHARE">Share</string>
     <string name="ID_SHARE_WITH_COMMUNITY">Type here to share what you are thinking...</string>
     <string name="ID_EDIT">Edit</string>
+    <string name="ID_EDIT_PROFILE">Edit Profile</string>
     <string name="ID_EDIT_POST">EDIT POST</string>
     <string name="ID_DELETE">Delete</string>
     <string name="ID_REPORT">Report as spam</string>
@@ -806,6 +807,7 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_EMAIL_HINT_TEXT">Enter emails to share...</string>
     <string name="ID_CONTINUE_WITH_GOOGLE">Continue with Google</string>
     <string name="ID_CONTINUE_WITH_FACEBOOK">Continue with Facebook</string>
+    <string name="ID_LOGGIN_FACEBOOK">Logging in...</string>
     <string name="ID_SAHRE_TEXT">SHARE</string>
     <string name="ID_COMM_SHARE_BUTTON">SHARE VIA SOCIAL MEDIA</string>
 

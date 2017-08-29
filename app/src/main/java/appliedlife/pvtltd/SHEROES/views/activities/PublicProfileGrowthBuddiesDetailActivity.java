@@ -182,10 +182,9 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
             if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
                 if (mUserPreference.get().getUserSummary().getUserId() == mMentorDetailItem.getEntityOrParticipantId()) {
                     tvFollowUnfollowPublicProfile.setTextColor(ContextCompat.getColor(this, R.color.white));
-                    tvFollowUnfollowPublicProfile.setText(getString(R.string.ID_EDIT));
+                    tvFollowUnfollowPublicProfile.setText(getString(R.string.ID_EDIT_PROFILE));
                     tvFollowUnfollowPublicProfile.setBackgroundResource(R.drawable.rectangle_follow_unfollow);
                     fabChampionCommunityPost.setVisibility(View.VISIBLE);
-
                 } else {
                     fabChampionCommunityPost.setVisibility(View.GONE);
                     isFollowUnfollow();

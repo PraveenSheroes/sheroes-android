@@ -76,7 +76,7 @@
             android:textSize="@dimen/sp_size_16"
             android:textStyle="normal"
             fb:login_text="@string/ID_CONTINUE_WITH_FACEBOOK"
-            fb:logout_text="" />
+            fb:logout_text="@string/ID_LOGGIN_FACEBOOK" />
 
         <TextView
             android:layout_width="wrap_content"

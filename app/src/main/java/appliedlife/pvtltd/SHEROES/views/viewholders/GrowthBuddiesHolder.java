@@ -82,7 +82,7 @@ public class GrowthBuddiesHolder extends BaseViewHolder<MentorDetailItem> {
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
             if (userPreference.get().getUserSummary().getUserId() == dataItem.getEntityOrParticipantId()) {
                 tvGrowthBuddiesFollow.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
-                tvGrowthBuddiesFollow.setText(mContext.getString(R.string.ID_EDIT));
+                tvGrowthBuddiesFollow.setText(mContext.getString(R.string.ID_EDIT_PROFILE));
                 tvGrowthBuddiesFollow.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
             } else {
                 isFollowUnfollow();
