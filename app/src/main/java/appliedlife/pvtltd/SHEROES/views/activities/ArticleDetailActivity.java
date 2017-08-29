@@ -38,6 +38,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionDoc;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
+import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.MentorDetailItem;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
@@ -549,5 +550,31 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
             mLiHeader.setVisibility(View.VISIBLE);
         }
 
+    }
+    @Override
+    public void championProfile(BaseResponse baseResponse, int championValue) {
+        if (baseResponse instanceof FeedDetail) {
+            FeedDetail feedDetail = (FeedDetail) baseResponse;
+            championDetailActivity(feedDetail.getCreatedBy());
+        } else if (baseResponse instanceof CommentReactionDoc) {
+            CommentReactionDoc commentReactionDoc = (CommentReactionDoc) baseResponse;
+            championDetailActivity(commentReactionDoc.getParticipantId());
+        }
+    }
+
+    private void championDetailActivity(Long userId) {
+        Intent intent = new Intent(this, PublicProfileGrowthBuddiesDetailActivity.class);
+        Bundle bundle = new Bundle();
+        mFeedDetail = new FeedDetail();
+        mFeedDetail.setIdOfEntityOrParticipant(userId);
+        mFeedDetail.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
+        MentorDetailItem mentorDetailItem=new MentorDetailItem();
+        mentorDetailItem.setEntityOrParticipantId(userId);
+        bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
+
+        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, mentorDetailItem);
+        intent.putExtras(bundle);
+        startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
     }
 }

@@ -227,7 +227,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     private ProgressDialog mProgressDialog;
     private boolean isInviteReferral;
     private PublicProfileGrowthBuddiesDialogFragment mPublicProfileGrowthBuddiesDialogFragment;
-
+    private int commentReactionList=AppConstants.NO_REACTION_CONSTANT;;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -1178,6 +1178,11 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         else if (mFragmentOpen.isCommentList()) {
             mFragmentOpen.setCommentList(false);
             getSupportFragmentManager().popBackStackImmediate();
+            if(commentReactionList==AppConstants.ONE_CONSTANT)
+            {
+                commentReactionList=AppConstants.NO_REACTION_CONSTANT;
+                getSupportFragmentManager().popBackStackImmediate();
+            }
             if (mFragmentOpen.isBookmarkFragment()) {
                 Fragment fragment = getSupportFragmentManager().findFragmentByTag(BookmarksFragment.class.getName());
                 if (AppUtils.isFragmentUIActive(fragment)) {
@@ -1193,6 +1198,11 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             mFragmentOpen.setReactionList(false);
             mFragmentOpen.setCommentList(true);
             getSupportFragmentManager().popBackStackImmediate();
+            if(commentReactionList==AppConstants.ONE_CONSTANT)
+            {
+                commentReactionList=AppConstants.NO_REACTION_CONSTANT;
+                getSupportFragmentManager().popBackStackImmediate();
+            }
         } else if (mFragmentOpen.isArticleFragment()) {
             getSupportFragmentManager().popBackStackImmediate();
             initHomeViewPagerAndTabs();
@@ -1913,6 +1923,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             FeedDetail feedDetail = (FeedDetail) baseResponse;
             championDetailActivity(feedDetail.getCreatedBy());
         } else if (baseResponse instanceof CommentReactionDoc) {
+            commentReactionList=AppConstants.ONE_CONSTANT;
             CommentReactionDoc commentReactionDoc = (CommentReactionDoc) baseResponse;
             championDetailActivity(commentReactionDoc.getParticipantId());
         }
