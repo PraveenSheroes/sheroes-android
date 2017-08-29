@@ -204,7 +204,7 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
     public void tvFeedJobShare() {
         viewInterface.handleOnClick(dataItem, tvFeedJobUserShare);
         ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_JOB, AppConstants.EMPTY_STRING);
-        ((SheroesApplication) mContext).trackScreenView(mContext.getString(R.string.ID_REFER_SHARE_JOB));
+        ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackScreenView(mContext.getString(R.string.ID_REFER_SHARE_JOB));
     }
     @Override
     public void viewRecycled() {
