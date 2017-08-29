@@ -34,7 +34,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
+
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionDoc;
@@ -191,7 +191,18 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
                 }
             }
         } else {
-            mHomePresenter.getFollowedFromPresenter(mAppUtils.countFollowerRequestBuilder(mFeedDetail.getIdOfEntityOrParticipant()));
+            if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
+                if (mUserPreference.get().getUserSummary().getUserId() == mFeedDetail.getIdOfEntityOrParticipant()) {
+                    tvFollowUnfollowPublicProfile.setTextColor(ContextCompat.getColor(this, R.color.white));
+                    tvFollowUnfollowPublicProfile.setText(getString(R.string.ID_EDIT_PROFILE));
+                    tvFollowUnfollowPublicProfile.setBackgroundResource(R.drawable.rectangle_follow_unfollow);
+                    fabChampionCommunityPost.setVisibility(View.VISIBLE);
+                } else {
+                    fabChampionCommunityPost.setVisibility(View.GONE);
+                    mHomePresenter.getFollowedFromPresenter(mAppUtils.countFollowerRequestBuilder(mFeedDetail.getIdOfEntityOrParticipant()));
+                }
+            }
+
         }
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getNameOrTitle())) {
             mTvMentorName.setText(mFeedDetail.getNameOrTitle());
@@ -238,6 +249,7 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
         bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, mMentorDetailItem);
+        bundle.putParcelable(AppConstants.FEED_SCREEN, mFeedDetail);
         intent.putExtras(bundle);
         setResult(RESULT_OK, intent);
         finish();
@@ -485,11 +497,6 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
 
     }
 
-
-    @Override
-    public void getDB(List<RecentSearchData> recentSearchDatas) {
-
-    }
 
     @Override
     public void getNotificationListSuccess(BelNotificationListResponse bellNotificationResponse) {

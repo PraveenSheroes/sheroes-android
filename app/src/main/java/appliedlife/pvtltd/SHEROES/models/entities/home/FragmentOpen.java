@@ -44,6 +44,7 @@ public class FragmentOpen implements Parcelable{
     private boolean isICCMemberListFragment;
     private boolean isFAQSFragment;
     private boolean isFeedFragment;
+    private int championViaCommentReaction;
 
     public FragmentOpen() {
     }
@@ -313,6 +314,14 @@ public class FragmentOpen implements Parcelable{
         isFeedFragment = feedFragment;
     }
 
+    public int getChampionViaCommentReaction() {
+        return championViaCommentReaction;
+    }
+
+    public void setChampionViaCommentReaction(int championViaCommentReaction) {
+        this.championViaCommentReaction = championViaCommentReaction;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -353,6 +362,7 @@ public class FragmentOpen implements Parcelable{
         dest.writeByte(this.isICCMemberListFragment ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isFAQSFragment ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isFeedFragment ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.championViaCommentReaction);
     }
 
     protected FragmentOpen(Parcel in) {
@@ -389,6 +399,7 @@ public class FragmentOpen implements Parcelable{
         this.isICCMemberListFragment = in.readByte() != 0;
         this.isFAQSFragment = in.readByte() != 0;
         this.isFeedFragment = in.readByte() != 0;
+        this.championViaCommentReaction = in.readInt();
     }
 
     public static final Creator<FragmentOpen> CREATOR = new Creator<FragmentOpen>() {

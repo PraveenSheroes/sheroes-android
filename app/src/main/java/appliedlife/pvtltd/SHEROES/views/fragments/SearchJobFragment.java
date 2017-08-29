@@ -25,7 +25,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
+
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
@@ -175,14 +175,7 @@ public class SearchJobFragment extends BaseFragment implements HomeView {
     }
     public void saveRecentSearchData(FeedDetail feedDetail)
     {
-        List<RecentSearchData> recentSearchData= new ArrayList<>();
-        RecentSearchData masterData=new RecentSearchData();
-        masterData.setEntityOrParticipantId(feedDetail.getEntityOrParticipantId());
-        Gson gson = new Gson();
-        String feedObject=gson.toJson(feedDetail, FeedDetail.class);
-        masterData.setRecentSearchFeed(feedObject);
-        recentSearchData.add(masterData);
-        mHomePresenter.saveMasterDataTypes(recentSearchData);
+
     }
 
     @Override

@@ -9,7 +9,7 @@ import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
+
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
@@ -108,10 +108,7 @@ public class BaseDialogFragment extends DialogFragment implements BaseMvpView,Ho
 
     }
 
-    @Override
-    public void getDB(List<RecentSearchData> recentSearchDatas) {
 
-    }
 
     @Override
     public void getNotificationListSuccess(BelNotificationListResponse bellNotificationResponse) {

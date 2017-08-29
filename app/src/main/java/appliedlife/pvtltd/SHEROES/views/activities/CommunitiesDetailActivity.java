@@ -358,26 +358,30 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
     public void championProfile(BaseResponse baseResponse, int championValue) {
         if (baseResponse instanceof FeedDetail) {
             FeedDetail feedDetail = (FeedDetail) baseResponse;
-            championDetailActivity(feedDetail.getCreatedBy());
+            championDetailActivity(feedDetail.getCreatedBy(),feedDetail.getItemPosition());
         } else if (baseResponse instanceof CommentReactionDoc) {
+
             CommentReactionDoc commentReactionDoc = (CommentReactionDoc) baseResponse;
-            championDetailActivity(commentReactionDoc.getParticipantId());
+            championDetailActivity(commentReactionDoc.getParticipantId(),commentReactionDoc.getItemPosition());
         }
     }
-    private void championDetailActivity(Long userId) {
+
+    private void championDetailActivity(Long userId,int position) {
         Intent intent = new Intent(this, PublicProfileGrowthBuddiesDetailActivity.class);
         Bundle bundle = new Bundle();
         mFeedDetail = new FeedDetail();
         mFeedDetail.setIdOfEntityOrParticipant(userId);
         mFeedDetail.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
-        MentorDetailItem mentorDetailItem=new MentorDetailItem();
-        mentorDetailItem.setEntityOrParticipantId(userId);
+        mFeedDetail.setItemPosition(position);
         bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
-        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, mentorDetailItem);
+        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, null);
         intent.putExtras(bundle);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
         overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
     }
+
+
+
     @Override
     public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
         mFragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);

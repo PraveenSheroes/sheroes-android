@@ -34,7 +34,7 @@ import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
+
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostResponse;
@@ -520,9 +520,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
         }
     }
 
-    @Override
-    public void getDB(List<RecentSearchData> recentSearchDatas) {
-    }
+
 
     @Override
     public void getNotificationListSuccess(BelNotificationListResponse bellNotificationResponse) {

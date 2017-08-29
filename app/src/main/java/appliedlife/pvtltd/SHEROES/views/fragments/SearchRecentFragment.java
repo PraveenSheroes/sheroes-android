@@ -21,7 +21,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
+
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -53,7 +53,7 @@ public class SearchRecentFragment extends BaseFragment implements HomeView {
     @Bind(R.id.tv_search_result)
     TextView mTvSearchResult;
     private GenericRecyclerViewAdapter mAdapter;
-    private List<RecentSearchData> recentSearchDatas;
+
 
     public static SearchRecentFragment createInstance() {
         SearchRecentFragment searchRecentFragment = new SearchRecentFragment();
@@ -66,7 +66,7 @@ public class SearchRecentFragment extends BaseFragment implements HomeView {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         ButterKnife.bind(this, view);
         mHomePresenter.attachView(this);
-        mHomePresenter.fetchMasterDataTypes();
+
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new GenericRecyclerViewAdapter(getContext(), (HomeSearchActivity) getActivity());
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
@@ -76,33 +76,9 @@ public class SearchRecentFragment extends BaseFragment implements HomeView {
         return view;
     }
 
-    @Override
-    public void getDB(List<RecentSearchData> recentSearchDatas) {
-        this.recentSearchDatas = recentSearchDatas;
-    }
 
     public void updateUiAfterSwip() {
-        if (StringUtil.isNotEmptyCollection(recentSearchDatas)) {
-            List<FeedDetail> feedDetailList = new ArrayList<>();
-            for (RecentSearchData master : recentSearchDatas) {
-                Gson gson = new Gson();
-                FeedDetail feedObject = gson.fromJson(master.getRecentSearchFeed(), FeedDetail.class);
-                feedDetailList.add(feedObject);
-            }
-            if (StringUtil.isNotEmptyCollection(feedDetailList) && mAdapter != null) {
-                mLiNoSearchResult.setVisibility(View.GONE);
-                mAdapter.setCallForRecycler(AppConstants.ALL_SEARCH);
-                mAdapter.setSheroesGenericListData(feedDetailList);
-                mAdapter.notifyDataSetChanged();
 
-            } else {
-                mLiNoSearchResult.setVisibility(View.VISIBLE);
-                mTvSearchResult.setText(getString(R.string.ID_NO_RESULT_FOUND_SEARCH)+((HomeSearchActivity)getActivity()).mSearchEditText.getText().toString());
-            }
-        } else {
-            mLiNoSearchResult.setVisibility(View.VISIBLE);
-            mTvSearchResult.setText(getString(R.string.ID_NO_RESULT_FOUND_SEARCH)+((HomeSearchActivity)getActivity()).mSearchEditText.getText().toString());
-        }
     }
 
     @Override

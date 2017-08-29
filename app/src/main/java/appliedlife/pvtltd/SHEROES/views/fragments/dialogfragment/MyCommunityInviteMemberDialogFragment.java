@@ -29,7 +29,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
+
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -218,10 +218,6 @@ public class MyCommunityInviteMemberDialogFragment extends BaseDialogFragment im
         }
     }
 
-    @Override
-    public void getDB(List<RecentSearchData> recentSearchDatas) {
-
-    }
 
     private void joinSuccess(BaseResponse baseResponse) {
         if (baseResponse instanceof CommunityResponse) {

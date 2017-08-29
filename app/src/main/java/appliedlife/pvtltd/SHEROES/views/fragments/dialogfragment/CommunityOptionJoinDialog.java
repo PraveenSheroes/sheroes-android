@@ -21,7 +21,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
+
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
@@ -160,10 +160,7 @@ public class CommunityOptionJoinDialog extends BaseDialogFragment implements Hom
         payloadBuilder.putAttrInt(MoEngageConstants.POSITION_OF_ENTITY, position);
         mMoEHelper.trackEvent(MoEngageEvent.EVENT_JOINED_COMMUNITY.value, payloadBuilder.build());
     }
-    @Override
-    public void getDB(List<RecentSearchData> recentSearchDatas) {
 
-    }
 
 
 }

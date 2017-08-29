@@ -227,7 +227,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     private ProgressDialog mProgressDialog;
     private boolean isInviteReferral;
     private PublicProfileGrowthBuddiesDialogFragment mPublicProfileGrowthBuddiesDialogFragment;
-    private int commentReactionList=AppConstants.NO_REACTION_CONSTANT;;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -597,6 +597,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 }
             }
         } else if (baseResponse instanceof MentorDetailItem) {
+            mFragmentOpen.setChampionViaCommentReaction(AppConstants.ONE_CONSTANT);
             MentorDetailItem mentorDetailItem = (MentorDetailItem) baseResponse;
             mentorItemClick(view, mentorDetailItem);
         }
@@ -1178,11 +1179,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         else if (mFragmentOpen.isCommentList()) {
             mFragmentOpen.setCommentList(false);
             getSupportFragmentManager().popBackStackImmediate();
-            if(commentReactionList==AppConstants.ONE_CONSTANT)
-            {
-                commentReactionList=AppConstants.NO_REACTION_CONSTANT;
-                getSupportFragmentManager().popBackStackImmediate();
-            }
+
             if (mFragmentOpen.isBookmarkFragment()) {
                 Fragment fragment = getSupportFragmentManager().findFragmentByTag(BookmarksFragment.class.getName());
                 if (AppUtils.isFragmentUIActive(fragment)) {
@@ -1198,11 +1195,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             mFragmentOpen.setReactionList(false);
             mFragmentOpen.setCommentList(true);
             getSupportFragmentManager().popBackStackImmediate();
-            if(commentReactionList==AppConstants.ONE_CONSTANT)
-            {
-                commentReactionList=AppConstants.NO_REACTION_CONSTANT;
-                getSupportFragmentManager().popBackStackImmediate();
-            }
+
+
         } else if (mFragmentOpen.isArticleFragment()) {
             getSupportFragmentManager().popBackStackImmediate();
             initHomeViewPagerAndTabs();
@@ -1544,9 +1538,19 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             if (null != intent && null != intent.getExtras() && null != intent.getExtras().get(AppConstants.GROWTH_PUBLIC_PROFILE)) {
                 MentorDetailItem mentorDetailItem = (MentorDetailItem) intent.getExtras().get(AppConstants.GROWTH_PUBLIC_PROFILE);
                 mPublicProfileGrowthBuddiesDialogFragment.notifyList(mentorDetailItem);
+                if(mFragmentOpen.getChampionViaCommentReaction()!=AppConstants.ONE_CONSTANT)
+                {
+                    mFragmentOpen.setChampionViaCommentReaction(AppConstants.NO_REACTION_CONSTANT);
+                    FeedDetail feedDetail = intent.getParcelableExtra(AppConstants.FEED_SCREEN);
+                    Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+                    if (AppUtils.isFragmentUIActive(fragment)) {
+                        ((HomeFragment) fragment).commentListRefresh(feedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+                    }
+                }
+
             }
         }
-        homeOnClick();
+
     }
 
     public void selectImageFrmCamera() {
@@ -1921,25 +1925,23 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     public void championProfile(BaseResponse baseResponse, int championValue) {
         if (baseResponse instanceof FeedDetail) {
             FeedDetail feedDetail = (FeedDetail) baseResponse;
-            championDetailActivity(feedDetail.getCreatedBy());
+            championDetailActivity(feedDetail.getCreatedBy(),feedDetail.getItemPosition());
         } else if (baseResponse instanceof CommentReactionDoc) {
-            commentReactionList=AppConstants.ONE_CONSTANT;
             CommentReactionDoc commentReactionDoc = (CommentReactionDoc) baseResponse;
-            championDetailActivity(commentReactionDoc.getParticipantId());
+            championDetailActivity(commentReactionDoc.getParticipantId(),commentReactionDoc.getItemPosition());
         }
     }
 
-    private void championDetailActivity(Long userId) {
+    private void championDetailActivity(Long userId,int position) {
         Intent intent = new Intent(this, PublicProfileGrowthBuddiesDetailActivity.class);
         Bundle bundle = new Bundle();
         mFeedDetail = new FeedDetail();
         mFeedDetail.setIdOfEntityOrParticipant(userId);
         mFeedDetail.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
-        MentorDetailItem mentorDetailItem=new MentorDetailItem();
-        mentorDetailItem.setEntityOrParticipantId(userId);
+        mFeedDetail.setItemPosition(position);
         bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
 
-        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, mentorDetailItem);
+        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, null);
         intent.putExtras(bundle);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
         overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);

@@ -18,8 +18,8 @@ android {
         multiDexEnabled true
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 57
-        versionName "5.2.1"
+        versionCode 58
+        versionName "5.2.2"
     }
     signingConfigs {
         debug {
@@ -64,7 +64,6 @@ repositories {
     maven { url 'https://maven.fabric.io/public' }
     maven { url "https://jitpack.io" }
 }
-final STORIO_VERSION = "1.8.0"
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.facebook.android:facebook-android-sdk:4.0.0'
@@ -91,9 +90,6 @@ dependencies {
     compile 'com.google.dagger:dagger:2.2'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.android.support:support-v4:25.3.1'
-    compile "com.pushtorefresh.storio:sqlite:$STORIO_VERSION"
-    compile "com.pushtorefresh.storio:sqlite-annotations:$STORIO_VERSION"
-    apt "com.pushtorefresh.storio:sqlite-annotations-processor:$STORIO_VERSION"
     compile 'com.yahoo.mobile.client.android.util.rangeseekbar:rangeseekbar-library:0.1.0'
     testCompile 'junit:junit:4.12'
     apt 'com.google.dagger:dagger-compiler:2.2'

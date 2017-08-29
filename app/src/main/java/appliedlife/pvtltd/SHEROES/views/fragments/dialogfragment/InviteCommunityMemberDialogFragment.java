@@ -29,7 +29,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
+
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
@@ -245,10 +245,7 @@ public class InviteCommunityMemberDialogFragment extends BaseDialogFragment impl
         }
     }
 
-    @Override
-    public void getDB(List<RecentSearchData> recentSearchDatas) {
 
-    }
 
     @OnClick(R.id.tv_back_community)
     public void inviteSearchBack() {

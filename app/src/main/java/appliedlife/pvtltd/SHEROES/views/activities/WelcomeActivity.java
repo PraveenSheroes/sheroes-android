@@ -67,6 +67,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.FOLLOW_UNFOLLOW;
 
 /**
  * Created by sheroes on 06/03/17.
@@ -130,8 +131,13 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         AppsFlyerLib.getInstance().startTracking(getApplication(), getString(R.string.ID_APPS_FLYER_DEV_ID));
         AppsFlyerLib.getInstance().setImeiData(appUtils.getIMEI());
         AppsFlyerLib.getInstance().setAndroidIdData(appUtils.getDeviceId());
-        initializeAllDataAfterGCMId();
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            showError(AppConstants.CHECK_NETWORK_CONNECTION, FOLLOW_UNFOLLOW);
 
+        }else
+        {
+            initializeAllDataAfterGCMId();
+        }
     }
 
     private void initializeAllDataAfterGCMId() {

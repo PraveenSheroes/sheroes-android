@@ -23,7 +23,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
+
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostResponse;
@@ -240,10 +240,6 @@ public class CommunityTypeDialogFragment extends BaseDialogFragment implements C
 
     }
 
-    @Override
-    public void getDB(List<RecentSearchData> recentSearchDatas) {
-
-    }
 
     public interface MyDialogFragmentListener {
         void onAddFriendSubmit(String communitynm, Long typeId);

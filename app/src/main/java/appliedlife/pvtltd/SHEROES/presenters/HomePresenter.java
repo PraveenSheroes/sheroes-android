@@ -3,17 +3,13 @@ package appliedlife.pvtltd.SHEROES.presenters;
 
 import com.f2prateek.rx.preferences.Preference;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.database.dbentities.RecentSearchData;
 import appliedlife.pvtltd.SHEROES.models.HomeModel;
 import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
-import appliedlife.pvtltd.SHEROES.models.RecentSearchDataModel;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeAcceptRequest;
@@ -89,17 +85,16 @@ public class HomePresenter extends BasePresenter<HomeView> {
     SheroesApplication mSheroesApplication;
     @Inject
     Preference<LoginResponse> mUserPreference;
-    RecentSearchDataModel mRecentSearchDataModel;
     @Inject
     Preference<MasterDataResponse> mUserPreferenceMasterData;
     MasterDataModel mMasterDataModel;
 
     @Inject
-    public HomePresenter(MasterDataModel masterDataModel, HomeModel homeModel, SheroesApplication sheroesApplication, Preference<LoginResponse> userPreference, RecentSearchDataModel recentSearchDataModel, Preference<MasterDataResponse> mUserPreferenceMasterData) {
+    public HomePresenter(MasterDataModel masterDataModel, HomeModel homeModel, SheroesApplication sheroesApplication, Preference<LoginResponse> userPreference, Preference<MasterDataResponse> mUserPreferenceMasterData) {
         this.mHomeModel = homeModel;
         this.mSheroesApplication = sheroesApplication;
         this.mUserPreference = userPreference;
-        this.mRecentSearchDataModel = recentSearchDataModel;
+
         this.mMasterDataModel = masterDataModel;
         this.mUserPreferenceMasterData = mUserPreferenceMasterData;
 
@@ -670,47 +665,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
     }
 
 
-    public void saveMasterDataTypes(List<RecentSearchData> recentSearchData) {
-        Subscription subscribe = mRecentSearchDataModel.saveRecentSearchTypes(recentSearchData).subscribe(new Subscriber<List<RecentSearchData>>() {
-            @Override
-            public void onCompleted() {
-            }
 
-            @Override
-            public void onError(Throwable e) {
-                getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_SEARCH_DATA);
-            }
-
-            @Override
-            public void onNext(List<RecentSearchData> masterDatas) {
-                getMvpView().stopProgressBar();
-            }
-        });
-        registerSubscription(subscribe);
-    }
-
-    public void fetchMasterDataTypes() {
-        Subscription subscribe = mRecentSearchDataModel.getAllRecentSearch().subscribe(new Subscriber<List<RecentSearchData>>() {
-            @Override
-            public void onCompleted() {
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-                getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_SEARCH_DATA);
-            }
-
-            @Override
-            public void onNext(List<RecentSearchData> masterDatas) {
-                getMvpView().stopProgressBar();
-                getMvpView().getDB(masterDatas);
-            }
-        });
-        registerSubscription(subscribe);
-    }
     public void getAppContactsResponseInPresenter(UserPhoneContactsListRequest userPhoneContactsListRequest) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);

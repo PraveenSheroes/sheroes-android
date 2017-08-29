@@ -8,7 +8,7 @@ import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.pushtorefresh.storio.sqlite.StorIOSQLite;
+
 
 import java.io.File;
 import java.io.IOException;
@@ -172,11 +172,7 @@ public class SheroesAppModule {
         return retrofit.create(SheroesAppServiceApi.class);
     }
 
-    @Singleton
-    @Provides
-    public StorIOSQLite getStorIOSQLite(SheroesSqliteOpenHelper openHelper) {
-        return SheroesSqliteOpenHelper.getStorIOSQLite(openHelper);
-    }
+
 
 }
 
