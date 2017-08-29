@@ -1924,8 +1924,11 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         mFeedDetail = new FeedDetail();
         mFeedDetail.setIdOfEntityOrParticipant(userId);
         mFeedDetail.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
+        MentorDetailItem mentorDetailItem=new MentorDetailItem();
+        mentorDetailItem.setEntityOrParticipantId(userId);
         bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
-        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, null);
+
+        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, mentorDetailItem);
         intent.putExtras(bundle);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
         overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
