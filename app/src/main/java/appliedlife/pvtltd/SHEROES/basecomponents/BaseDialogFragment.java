@@ -39,6 +39,7 @@ public class BaseDialogFragment extends DialogFragment implements BaseMvpView,Ho
     public static final String DISMISS_PARENT_ON_OK_OR_BACK = "DISMISS_PARENT_ON_OK_OR_BACK";
     public static final String IS_CANCELABLE = "is_cancelable";
     public static final String ERROR_MESSAGE = "error_msg";
+
     @Override
     public void onStart() {
         super.onStart();

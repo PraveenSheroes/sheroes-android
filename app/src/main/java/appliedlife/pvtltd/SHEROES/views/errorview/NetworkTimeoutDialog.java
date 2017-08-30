@@ -12,6 +12,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.WelcomeActivity;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -37,6 +38,7 @@ public class NetworkTimeoutDialog extends BaseDialogFragment {
         finishParent = getArguments().getBoolean(DISMISS_PARENT_ON_OK_OR_BACK);
         isCancellable = getArguments().getBoolean(IS_CANCELABLE);
         errorMessage = getArguments().getString(ERROR_MESSAGE);
+
         if(AppConstants.MARK_AS_SPAM.equalsIgnoreCase(errorMessage)||AppConstants.FACEBOOK_VERIFICATION.equalsIgnoreCase(errorMessage))
         {
             mTvTryAgain.setText(getString(R.string.ID_DONE));
@@ -57,7 +59,10 @@ public class NetworkTimeoutDialog extends BaseDialogFragment {
         dismissAllowingStateLoss();
         if (finishParent) {
             dismiss();
-            //  getActivity().finish();
+        }else
+        {
+            dismiss();
+              getActivity().recreate();
         }
     }
 
@@ -72,9 +77,13 @@ public class NetworkTimeoutDialog extends BaseDialogFragment {
         return new Dialog(getActivity(), getTheme()) {
             @Override
             public void onBackPressed() {
-                dismissAllowingStateLoss();//dismiss dialog on back button press
+                dismissAllowingStateLoss();
                 if (finishParent) {
                     dismiss();
+                }else
+                {
+                    dismiss();
+                    getActivity().recreate();
                 }
             }
         };

@@ -35,6 +35,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.BuildConfig;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
@@ -55,6 +56,7 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
+import appliedlife.pvtltd.SHEROES.views.errorview.NetworkTimeoutDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.SignupFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeScreenFirstFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeScreenFourthFragment;
@@ -123,6 +125,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
+        LogUtils.info(TAG, "*************onCreate welcome");
         //   InviteReferralsApi.getInstance(this).tracking(AppConstants.INSTALL, null, 0,null);
         mMoEHelper = MoEHelper.getInstance(this);
         payloadBuilder = new PayloadBuilder();
@@ -131,13 +134,8 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         AppsFlyerLib.getInstance().startTracking(getApplication(), getString(R.string.ID_APPS_FLYER_DEV_ID));
         AppsFlyerLib.getInstance().setImeiData(appUtils.getIMEI());
         AppsFlyerLib.getInstance().setAndroidIdData(appUtils.getDeviceId());
-        if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            showError(AppConstants.CHECK_NETWORK_CONNECTION, FOLLOW_UNFOLLOW);
-
-        }else
-        {
             initializeAllDataAfterGCMId();
-        }
+
     }
 
     private void initializeAllDataAfterGCMId() {
@@ -163,9 +161,16 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getToken())) {
             openHomeScreen();
         } else {
+            LogUtils.info(TAG, "*************before UI deploye");
             setContentView(R.layout.welcome_activity);
             ButterKnife.bind(this);
             initHomeViewPagerAndTabs();
+            if (!NetworkUtil.isConnected(mSheroesApplication)) {
+                showNetworkTimeoutDoalog(false, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
+                return;
+            } else {
+                LogUtils.info(TAG, "*************dialog starts");
+            mLoginPresenter.getMasterDataToPresenter();
             mProgressDialog = new ProgressDialog(this);
             mProgressDialog.setMessage(getString(R.string.ID_PLAY_STORE_DATA));
             mProgressDialog.setCancelable(false);
@@ -178,10 +183,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                 }
             });
             mScrollView.scrollTo(0, mScrollView.getBottom() + 1);
-            if (!NetworkUtil.isConnected(mSheroesApplication)) {
-                showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
-                return;
-            } else {
+
                 if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getGcmId())) {
                     mGcmId = userPreference.get().getGcmId();
                     mOtherLoginOption.setEnabled(true);
@@ -189,9 +191,9 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                     getGcmId();
                 }
             }
-            ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_INTRO_SCREEN));
-        }
 
+        }
+        ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_INTRO_SCREEN));
     }
 
     private void getGcmId() {
@@ -201,9 +203,10 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         pushClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
             @Override
             public void onSuccess(String registrationId, boolean isNewRegistration) {
-                LogUtils.info(TAG, "******* ******Registarion" + registrationId);
+                LogUtils.info(TAG, "******* ******Key Value of Registarion" + registrationId);
                 mGcmId = registrationId;
                 if (StringUtil.isNotNullOrEmptyString(mGcmId)) {
+                    LogUtils.info(TAG, "******* ******success Registarion" + registrationId);
                     PushManager.getInstance().refreshToken(getApplicationContext(), mGcmId);
                     mGetStarted.setEnabled(true);
                     mOtherLoginOption.setEnabled(true);
@@ -211,10 +214,11 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                         mProgressDialog.dismiss();
                     }
                 } else {
+                    LogUtils.info(TAG, "******* ******again hit Registarion" + registrationId);
                     mGetStarted.setEnabled(false);
                     mOtherLoginOption.setEnabled(false);
                     if (!NetworkUtil.isConnected(mSheroesApplication)) {
-                        showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
+                        showNetworkTimeoutDoalog(false, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
                         return;
                     } else {
                         getGcmId();
@@ -265,7 +269,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         mViewPager.setAdapter(mViewPagerAdapter);
         mViewPager.addOnPageChangeListener(this);
         mLoginPresenter.attachView(this);
-        mLoginPresenter.getMasterDataToPresenter();
+
         //fbSignIn();
         final Handler handler = new Handler();
         final Runnable Update = new Runnable() {
@@ -288,14 +292,30 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     @OnClick(R.id.btn_get_started)
     public void getStartedOnClick() {
-        SignupFragment signupFragment = new SignupFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString(AppConstants.GCM_ID, mGcmId);
-        signupFragment.setArguments(bundle);
-        mFragmentOpen.setSignupFragment(true);
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
-                .replace(R.id.fragment_welcome_sign_up, signupFragment, SignupFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
-    }
+        if (StringUtil.isNotNullOrEmptyString(mGcmId)) {
+            SignupFragment signupFragment = new SignupFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString(AppConstants.GCM_ID, mGcmId);
+            signupFragment.setArguments(bundle);
+            mFragmentOpen.setSignupFragment(true);
+            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
+                    .replace(R.id.fragment_welcome_sign_up, signupFragment, SignupFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+
+        } else {
+            mGetStarted.setEnabled(false);
+            mOtherLoginOption.setEnabled(false);
+            if (!NetworkUtil.isConnected(mSheroesApplication)) {
+                showNetworkTimeoutDoalog(false, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
+                return;
+            } else {
+                mProgressDialog = new ProgressDialog(this);
+                mProgressDialog.setMessage(getString(R.string.ID_PLAY_STORE_DATA));
+                mProgressDialog.setCancelable(false);
+                mProgressDialog.show();
+                getGcmId();
+            }
+}
+           }
 
     @OnClick(R.id.tv_other_login_option)
     public void otherLoginOption() {
@@ -305,9 +325,13 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             mGetStarted.setEnabled(false);
             mOtherLoginOption.setEnabled(false);
             if (!NetworkUtil.isConnected(mSheroesApplication)) {
-                showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
+                showNetworkTimeoutDoalog(false, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
                 return;
             } else {
+                mProgressDialog = new ProgressDialog(this);
+                mProgressDialog.setMessage(getString(R.string.ID_PLAY_STORE_DATA));
+                mProgressDialog.setCancelable(false);
+                mProgressDialog.show();
                 getGcmId();
             }
         }
