@@ -483,13 +483,13 @@ public class CreateCommunityPostFragment extends BaseFragment implements SelectC
 
     @OnClick(R.id.tv_add_more_community_post_image)
     public void addMoreClick() {
-        checkCameraPermission();
+       // checkCameraPermission();
         openImageOption();
     }
 
     @OnClick(R.id.fl_camera_btn_for_post_images)
     public void camerabtnClick() {
-        checkCameraPermission();
+      //  checkCameraPermission();
         openImageOption();
     }
 
@@ -920,7 +920,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements SelectC
         builder.show();
     }
 
-    @Override
+   /* @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         super.onActivityResult(requestCode, resultCode, data);
@@ -948,10 +948,10 @@ public class CreateCommunityPostFragment extends BaseFragment implements SelectC
                 e.printStackTrace();
             }
         }
-    }
+    }*/
 
-    public void setImages() {
-        Bitmap photo = decodeFile(mOutPutFile);
+    public void setImages(File file) {
+        Bitmap photo = decodeFile(file);
         mRoundBitmap = getRoundedCroppedBitmap(photo, 500);
         //  btn_profile_pic.setImageBitmap(photo);//**********************set image on imageview
         // profilepic.setImageBitmap(photo);

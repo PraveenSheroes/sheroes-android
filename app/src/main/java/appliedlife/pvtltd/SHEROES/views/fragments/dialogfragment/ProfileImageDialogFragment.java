@@ -112,12 +112,14 @@ public class ProfileImageDialogFragment extends BaseDialogFragment {
 
     @OnClick(R.id.iv_profile_image_from_camera)
     public void onCameraClick() {
-        checkCameraPermission();
+        ((ProfileActicity) getActivity()).selectImageFrmCamera();
+       // checkCameraPermission();
     }
 
     @OnClick(R.id.iv_profile_image_from_gall)
     public void onGalleryClick() {
-        checkGalleryPermission();
+        ((ProfileActicity) getActivity()).selectImageFrmGallery();
+        //checkGalleryPermission();
     }
 
     private void checkGalleryPermission() {

@@ -31,7 +31,6 @@ public class NetworkTimeoutDialog extends BaseDialogFragment {
     private String errorMessage;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.dialog_network_timeout, container, false);
         ButterKnife.bind(this,view);
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
@@ -85,8 +84,8 @@ public class NetworkTimeoutDialog extends BaseDialogFragment {
                     dismiss();
                     getActivity().recreate();
                 }
-            }
-        };
-    }
+        }
+    };
+}
 
 }

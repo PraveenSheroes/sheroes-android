@@ -55,6 +55,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.enums.OnBoardingEnum;
+import appliedlife.pvtltd.SHEROES.imageoperationns.CropImage;
+import appliedlife.pvtltd.SHEROES.imageoperationns.CropImageView;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
@@ -101,6 +103,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunitySearch
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CurrentStatusDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.FunctionalAreaDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.JobLocationSearchDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.MakeIndiaSafeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileAddEditEducationFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileDegreeDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileImageDialogFragment;
@@ -1089,6 +1092,27 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
                 case AppConstants.REQUEST_CODE_FOR_IMAGE_CROPPING:
                     imageCropping(intent);
                     break;
+
+                case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
+                    CropImage.ActivityResult result = CropImage.getActivityResult(intent);
+                    if (resultCode == RESULT_OK) {
+                         try {
+                            File file=new File(result.getUri().getPath());
+                            Bitmap photo = decodeFile(file);
+                             if(null!=profileImageDialogFragment) {
+                                 profileImageDialogFragment.setUserProfileData(true, photo);
+                             }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                        Toast.makeText(this, "Cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
+                    }
+
+                    break;
+
                 default:
                     LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);
             }
@@ -1196,11 +1220,14 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
     }
 
     public void selectImageFrmGallery() {
-        if (Build.VERSION.SDK_INT >= 23) {
+
+
+        CropImage.activity(null,AppConstants.TWO_CONSTANT).setGuidelines(CropImageView.Guidelines.ON).start(this);
+        /*if (Build.VERSION.SDK_INT >= 23) {
             if (ActivityCompat.checkSelfPermission(this,android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&ActivityCompat.checkSelfPermission(this,android.Manifest.permission.READ_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED) {
                 try {
                     Intent galIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    galIntent.setType("image/*");
+                    galIntent.setType("image*//*");
                     startActivityForResult(galIntent, AppConstants.REQUEST_CODE_FOR_GALLERY);
                 } catch (Exception e) {
                 }
@@ -1208,15 +1235,17 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
         } else {
             try {
                 Intent galIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                galIntent.setType("image/*");
+                galIntent.setType("image*//*");
                 startActivityForResult(galIntent, AppConstants.REQUEST_CODE_FOR_GALLERY);
             } catch (Exception e) {
             }
-        }
+        }*/
     }
 
     public void selectImageFrmCamera() {
-        if (Build.VERSION.SDK_INT >= 23) {
+
+        CropImage.activity(null,AppConstants.ONE_CONSTANT).setGuidelines(CropImageView.Guidelines.ON).start(this);
+       /* if (Build.VERSION.SDK_INT >= 23) {
             if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 if (null == localImageSaveForChallenge && null == mImageCaptureUri) {
@@ -1256,7 +1285,7 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
                 startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_CAMERA);
             }
 
-        }
+        }*/
 
     }
 }

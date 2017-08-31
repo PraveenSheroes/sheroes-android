@@ -981,6 +981,7 @@ Our website www.sheroes.in offers services for certain products and services. By
 
 
     <!--Google Analytics Screen Names-->
+    <string name="ID_CROP_IMAGE">image cropping screen</string>
     <string name="ID_FACEBOOK_SCREEN">facebook screen</string>
     <string name="ID_MAKE_INDIA_SAFE_SCREEN">make india safe</string>
     <string name="ID_VEDIO_PLAYER_SCREEN">video play</string>
@@ -1040,5 +1041,6 @@ Our website www.sheroes.in offers services for certain products and services. By
 
 
 
+    <string name="ID_INTENT_CHOOSER">Select source</string>
 
 </resources>

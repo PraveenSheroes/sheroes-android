@@ -1,13 +1,18 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
+import java.io.File;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
@@ -16,18 +21,26 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.imageoperationns.CropImage;
+import appliedlife.pvtltd.SHEROES.imageoperationns.CropImageView;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityList;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
+import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CreateCommunityPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ImageUploadFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.MakeIndiaSafeFragment;
 import butterknife.ButterKnife;
+
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FOR_REFRESH_FRAGMENT_LIST;
 
 
 public class CreateCommunityPostActivity extends BaseActivity implements BaseHolderInterface, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, ImageUploadFragment.ImageUploadCallable {
+    private final String TAG = LogUtils.makeLogTag(CreateCommunityPostActivity.class);
     private FeedDetail mFeedDetail;
     private CreateCommunityPostFragment mCommunityFragment;
 
@@ -156,11 +169,47 @@ public class CreateCommunityPostActivity extends BaseActivity implements BaseHol
     }
     @Override
     public void onCameraSelection() {
-        mCommunityFragment.selectImageFrmCamera();
+        CropImage.activity(null,AppConstants.ONE_CONSTANT).setGuidelines(CropImageView.Guidelines.ON).start(this);
+
+       // mCommunityFragment.selectImageFrmCamera();
     }
 
     @Override
     public void onGallerySelection() {
-        mCommunityFragment.selectImageFrmGallery();
+        CropImage.activity(null,AppConstants.TWO_CONSTANT).setGuidelines(CropImageView.Guidelines.ON).start(this);
+       // mCommunityFragment.selectImageFrmGallery();
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+         /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
+        if (null != intent) {
+            switch (requestCode) {
+                case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
+                    CropImage.ActivityResult result = CropImage.getActivityResult(intent);
+                    if (resultCode == RESULT_OK) {
+                        // ((ImageView) findViewById(R.id.quick_start_cropped_image)).setImageURI(result.getUri());
+                        try {
+                            Fragment fragmentCommunityPost = getSupportFragmentManager().findFragmentByTag(CreateCommunityPostFragment.class.getName());
+                            if (AppUtils.isFragmentUIActive(fragmentCommunityPost)) {
+                                File file=new File(result.getUri().getPath());;
+                                ((CreateCommunityPostFragment) fragmentCommunityPost).setImages(file);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                        Toast.makeText(this, "Cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
+                    }
+
+                    break;
+
+                default:
+                    LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);
+            }
+        }
+
+    }
+
 }
+

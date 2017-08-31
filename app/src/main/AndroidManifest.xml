@@ -128,7 +128,8 @@
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.MakeIndiaSafeMapActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan"
+            android:theme="@style/AppTheme"/>
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.VideoPlayActivity"
             android:screenOrientation="portrait"
@@ -225,7 +226,8 @@
                 <data android:pathPattern="/.*" />
             </intent-filter>
         </activity>
-
+        <activity android:name="appliedlife.pvtltd.SHEROES.imageoperationns.CropImageActivity"
+            android:screenOrientation="portrait"/>
         <service
             android:name="appliedlife.pvtltd.SHEROES.service.PushNotificationService"
             android:exported="false">

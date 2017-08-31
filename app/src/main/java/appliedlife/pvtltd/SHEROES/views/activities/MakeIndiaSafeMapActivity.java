@@ -28,6 +28,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,6 +60,8 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.imageoperationns.CropImage;
+import appliedlife.pvtltd.SHEROES.imageoperationns.CropImageView;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.LatLongWithLocation;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.MakeIndiaSafeDetail;
 import appliedlife.pvtltd.SHEROES.service.GPSTracker;
@@ -460,6 +463,7 @@ public class MakeIndiaSafeMapActivity extends BaseActivity implements OnMapReady
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
         }
 
+
         if (mLocationPermissionGranted) {
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(true);
@@ -468,7 +472,6 @@ public class MakeIndiaSafeMapActivity extends BaseActivity implements OnMapReady
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
             mLastKnownLocation = null;
         }
-
     }
 
 
@@ -492,6 +495,27 @@ public class MakeIndiaSafeMapActivity extends BaseActivity implements OnMapReady
                     break;
                 case AppConstants.REQUEST_CODE_FOR_IMAGE_CROPPING:
                     imageCropping(intent);
+                    break;
+                case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
+                    CropImage.ActivityResult result = CropImage.getActivityResult(intent);
+                    if (resultCode == RESULT_OK) {
+                       // ((ImageView) findViewById(R.id.quick_start_cropped_image)).setImageURI(result.getUri());
+
+                        try {
+                            File file=new File(result.getUri().getPath());
+                            Bitmap photo = decodeFile(file);
+                            Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
+                            if (AppUtils.isFragmentUIActive(fragment)) {
+                                ((MakeIndiaSafeFragment) fragment).setImageOnHolder(mMakeIndiaSafeDetail,photo, file);
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                        Toast.makeText(this, "Cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
+                    }
+
                     break;
 
                 default:
@@ -660,7 +684,8 @@ public class MakeIndiaSafeMapActivity extends BaseActivity implements OnMapReady
             if (id == R.id.tv_click_pic_and_tell_friends) {
                 Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
                 if (AppUtils.isFragmentUIActive(fragment)) {
-                    ((MakeIndiaSafeFragment) fragment).checkCameraPermission();
+                   // ((MakeIndiaSafeFragment) fragment).checkCameraPermission();
+                    CropImage.activity(null,AppConstants.ONE_CONSTANT).setGuidelines(CropImageView.Guidelines.ON).start(this);
                 }
 
             } else if (id == R.id.tv_share_with_friends) {
@@ -671,4 +696,5 @@ public class MakeIndiaSafeMapActivity extends BaseActivity implements OnMapReady
             }
         }
     }
+
 }
