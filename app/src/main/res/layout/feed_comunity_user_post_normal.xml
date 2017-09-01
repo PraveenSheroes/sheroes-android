@@ -213,7 +213,7 @@
             android:layout_height="@dimen/dp_size_35"
             android:layout_marginLeft="@dimen/dp_size_6"
             android:layout_marginRight="@dimen/dp_size_6"
-            android:layout_marginTop="@dimen/dp_size_7"
+            android:layout_marginTop="@dimen/dp_size_9"
             android:clickable="false"
             android:orientation="horizontal"
             android:saveEnabled="false">
@@ -275,7 +275,11 @@
                 android:visibility="gone" />
         </LinearLayout>
 
-
+<LinearLayout
+    android:id="@+id/li_reaction_comment_block"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_size_0.5"
@@ -426,7 +430,25 @@
                 android:textSize="@dimen/sp_size_12" />
         </LinearLayout>
     </LinearLayout>
+    </LinearLayout>
 
+    <FrameLayout
+        android:id="@+id/fl_spam_post_ui"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="@dimen/dp_size_11"
+            android:text="@string/ID_NEED_TO_BE_REVIEWED"
+            android:textColor="@color/pure_black"
+            android:textSize="@dimen/sp_size_14"
+            android:lineSpacingExtra="@dimen/dp_size_6"
+            android:layout_marginRight="@dimen/dp_size_30"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"/>
+    </FrameLayout>
     <include
         android:id="@+id/li_event_card_main_layout"
         layout="@layout/feed_event_card"

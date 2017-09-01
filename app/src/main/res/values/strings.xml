@@ -611,6 +611,7 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_GOFOR_SETTING_LINK">To change mobile no.or email go to settings</string>
     <string name="ID_SAVE">SAVE</string>
     <string name="ID_MY_CONTACT_CARD">MY CONTACT CARD</string>
+    <string name="ID_NEED_TO_BE_REVIEWED">This post is needed to be reviewed by community owner</string>
 
     <!--String Related personal About_me details page-->
     <string name="ID_ABOUT_ME">ABOUT ME</string>

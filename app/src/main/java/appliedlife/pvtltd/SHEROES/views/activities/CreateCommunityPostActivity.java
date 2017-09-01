@@ -12,6 +12,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
+
 import java.io.File;
 import java.util.List;
 
@@ -21,8 +24,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
-import appliedlife.pvtltd.SHEROES.imageoperationns.CropImage;
-import appliedlife.pvtltd.SHEROES.imageoperationns.CropImageView;
+
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityList;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -169,14 +171,18 @@ public class CreateCommunityPostActivity extends BaseActivity implements BaseHol
     }
     @Override
     public void onCameraSelection() {
-        CropImage.activity(null,AppConstants.ONE_CONSTANT).setGuidelines(CropImageView.Guidelines.ON).start(this);
 
+        CropImage.activity(null,AppConstants.ONE_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
+                .setRequestedSize(400, 400)
+                .start(this);
        // mCommunityFragment.selectImageFrmCamera();
     }
 
     @Override
     public void onGallerySelection() {
-        CropImage.activity(null,AppConstants.TWO_CONSTANT).setGuidelines(CropImageView.Guidelines.ON).start(this);
+        CropImage.activity(null,AppConstants.TWO_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
+                .setRequestedSize(400, 400)
+                .start(this);
        // mCommunityFragment.selectImageFrmGallery();
     }
     @Override

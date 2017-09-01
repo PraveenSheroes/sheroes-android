@@ -74,7 +74,6 @@ dependencies {
     compile 'com.google.android.gms:play-services-plus:11.0.4'
     compile 'com.google.android.gms:play-services-auth:11.0.4'
     compile 'com.android.support:multidex:1.0.1'
-
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:design:25.3.1'
     compile 'com.android.support:recyclerview-v7:25.3.1'
@@ -89,8 +88,6 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-scalars:2.1.0'
     compile 'io.reactivex:rxandroid:1.2.1'
     compile 'io.reactivex:rxjava:1.1.6'
-
-
     compile 'com.google.dagger:dagger:2.2'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.android.support:support-v4:25.3.1'
@@ -107,9 +104,7 @@ dependencies {
     compile 'com.appsflyer:af-android-sdk:4.6.7@aar'
     compile 'org.apache.commons:commons-lang3:3.5'
     compile files('libs/YouTubeAndroidPlayerApi.jar')
-
-
-
+    compile project(':cropper')
 }
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'io.fabric'

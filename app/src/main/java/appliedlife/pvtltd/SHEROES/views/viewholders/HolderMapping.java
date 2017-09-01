@@ -4,6 +4,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.f2prateek.rx.preferences.Preference;
+
+import javax.inject.Inject;
+
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
@@ -31,6 +35,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.models.entities.home.ProfileItems;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobDetailPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobLocationList;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.MakeIndiaSafeDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingInterestJobSearch;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;

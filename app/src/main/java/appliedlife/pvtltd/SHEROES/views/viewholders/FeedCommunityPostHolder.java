@@ -84,6 +84,16 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     DateUtil mDateUtil;
     @Inject
     Preference<LoginResponse> userPreference;
+    @Bind(R.id.feed_community_card)
+    CardView mFeedCommunityCard;
+
+    //spam handling
+    @Bind(R.id.fl_spam_post_ui)
+    FrameLayout flSpamPostUi;
+
+    @Bind(R.id.li_reaction_comment_block)
+    LinearLayout liReactionCommentBlock;
+
     //Event handling
     @Bind(R.id.li_event_card_main_layout)
     LinearLayout liEventCardMainLayout;
@@ -211,6 +221,14 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         this.dataItem = item;
         mContext = context;
         dataItem.setItemPosition(position);
+        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
+            long userId = userPreference.get().getUserSummary().getUserId();
+            if (dataItem.isSpamPost()) {
+                handlingSpamUi(userId);
+            }else {
+                mFeedCommunityCard.setVisibility(View.VISIBLE);
+            }
+
         if (dataItem.getCommunityId() == AppConstants.EVENT_COMMUNITY_ID) {
             liCommunityPostMainLayout.setVisibility(View.GONE);
             liEventCardMainLayout.setVisibility(View.VISIBLE);
@@ -220,8 +238,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             if (!dataItem.isTrending()) {
                 imageSetOnEventBackground();
             }
-            if(dataItem != null &&StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle()) && null != userPreference && userPreference.isSet() && null != userPreference.get() && userPreference.get().getUserSummary() !=null){
-                ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(AppConstants.IMPRESSIONS, AppConstants.EVENT_IMPRESSION, dataItem.getIdOfEntityOrParticipant() + AppConstants.DASH + userPreference.get().getUserSummary().getUserId() + AppConstants.DASH + dataItem.getNameOrTitle());
+            if(dataItem != null &&StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle()) ){
+                ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(AppConstants.IMPRESSIONS, AppConstants.EVENT_IMPRESSION, dataItem.getIdOfEntityOrParticipant() + AppConstants.DASH + userId + AppConstants.DASH + dataItem.getNameOrTitle());
             }
         } else {
             liCommunityPostMainLayout.setVisibility(View.VISIBLE);
@@ -249,21 +267,22 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             }
             onBookMarkClick();
             allTextViewStringOperations(context);
-            if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
-                if (dataItem.getAuthorId() == userPreference.get().getUserSummary().getUserId() || dataItem.isOwner()) {
+                if (dataItem.getAuthorId() == userId|| dataItem.isCommunityOwner()) {
                     tvFeedCommunityPostUserMenu.setVisibility(View.VISIBLE);
                     if (dataItem.getCommunityId() == AppConstants.NO_REACTION_CONSTANT) {
                         tvFeedCommunityPostUserMenu.setVisibility(View.GONE);
                     } else {
                         tvFeedCommunityPostUserMenu.setVisibility(View.VISIBLE);
                     }
+
                 } else {
                     tvFeedCommunityPostUserMenu.setVisibility(View.GONE);
                 }
-                if(dataItem != null&&StringUtil.isNotNullOrEmptyString(dataItem.getListDescription()) && null != userPreference && userPreference.isSet() && null != userPreference.get() && userPreference.get().getUserSummary() !=null){
-                    ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(AppConstants.IMPRESSIONS, AppConstants.COMMUNITY_POST_IMPRESSION,dataItem.getIdOfEntityOrParticipant()+ AppConstants.DASH + userPreference.get().getUserSummary().getUserId() + AppConstants.DASH + dataItem.getListDescription());
+                if(dataItem != null&&StringUtil.isNotNullOrEmptyString(dataItem.getListDescription())){
+                    ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(AppConstants.IMPRESSIONS, AppConstants.COMMUNITY_POST_IMPRESSION,dataItem.getIdOfEntityOrParticipant()+ AppConstants.DASH + userId + AppConstants.DASH + dataItem.getListDescription());
                 }
-            }
+
+        }
         }
     }
 
@@ -811,7 +830,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             ivFeedCommunityPostCircleIcon.setCircularImage(true);
             ivFeedCommunityPostCircleIcon.bindImage(authorImageUrl);
         }
-        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getPhotoUrl())) {
+        if (StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getPhotoUrl())) {
             ivFeedCommunityPostRegisterUserPic.setCircularImage(true);
             ivFeedCommunityPostRegisterUserPic.bindImage(userPreference.get().getUserSummary().getPhotoUrl());
         }
@@ -1444,5 +1463,23 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             tvEventInterestedBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.rectangle_feed_community_joined_active, 0, 0, 0);
         }
         setInterested();
+    }
+    private void handlingSpamUi(long userId)
+    {
+        if (dataItem.getAuthorId() == userId||dataItem.isCommunityOwner()) {
+            mFeedCommunityCard.setVisibility(View.VISIBLE);
+            liCommunityPostMainLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.profile_text));
+            liCommunityPostMainLayout.setAlpha(.5f);
+            flSpamPostUi.setVisibility(View.VISIBLE);
+            liReactionCommentBlock.setVisibility(View.GONE);
+        }
+        else
+        {
+            mFeedCommunityCard.setVisibility(View.GONE);
+            liCommunityPostMainLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.white));
+            liCommunityPostMainLayout.setAlpha(1f);
+            flSpamPostUi.setVisibility(View.GONE);
+            liReactionCommentBlock.setVisibility(View.VISIBLE);
+        }
     }
 }

@@ -39,6 +39,9 @@ import com.google.gson.Gson;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView.*;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -55,8 +58,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.enums.OnBoardingEnum;
-import appliedlife.pvtltd.SHEROES.imageoperationns.CropImage;
-import appliedlife.pvtltd.SHEROES.imageoperationns.CropImageView;
+
 import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
@@ -119,6 +121,8 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.theartofdev.edmodo.cropper.R.styleable.CropImageView;
 
 /**
  * Created by Priyanka on 13-02-2017.
@@ -1101,7 +1105,9 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
                             Bitmap photo = decodeFile(file);
                              if(null!=profileImageDialogFragment) {
                                  profileImageDialogFragment.setUserProfileData(true, photo);
+                                 mEncodeImageUrl = setImageOnHolder(photo);
                              }
+
 
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -1222,7 +1228,9 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
     public void selectImageFrmGallery() {
 
 
-        CropImage.activity(null,AppConstants.TWO_CONSTANT).setGuidelines(CropImageView.Guidelines.ON).start(this);
+        CropImage.activity(null,AppConstants.TWO_CONSTANT).setCropShape(CropShape.RECTANGLE)
+                .setRequestedSize(400, 400)
+                .start(this);
         /*if (Build.VERSION.SDK_INT >= 23) {
             if (ActivityCompat.checkSelfPermission(this,android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&ActivityCompat.checkSelfPermission(this,android.Manifest.permission.READ_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED) {
                 try {
@@ -1244,7 +1252,9 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
 
     public void selectImageFrmCamera() {
 
-        CropImage.activity(null,AppConstants.ONE_CONSTANT).setGuidelines(CropImageView.Guidelines.ON).start(this);
+        CropImage.activity(null,AppConstants.ONE_CONSTANT).setCropShape(CropShape.RECTANGLE)
+                .setRequestedSize(400, 400)
+                .start(this);
        /* if (Build.VERSION.SDK_INT >= 23) {
             if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);

@@ -29,6 +29,8 @@
     <color name="added_member_text">#cbcddd</color>
     <color name="black">#de000000</color>
     <color name="pure_black">#000000</color>
+    <color name="spam_post">#1e000000</color>
+
     <color name="black_current">#1a1818</color>
     <color name="black_gradiant">#80000000</color>
     <color name="add_member_line">#e4e9ec</color>

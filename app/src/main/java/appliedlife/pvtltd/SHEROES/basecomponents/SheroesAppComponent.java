@@ -3,7 +3,7 @@ package appliedlife.pvtltd.SHEROES.basecomponents;
 
 import javax.inject.Singleton;
 
-import appliedlife.pvtltd.SHEROES.imageoperationns.CropImageActivity;
+
 import appliedlife.pvtltd.SHEROES.models.InviteSearchModel;
 import appliedlife.pvtltd.SHEROES.models.RequestedListModel;
 import appliedlife.pvtltd.SHEROES.presenters.CommunityTagsPresenter;
@@ -630,7 +630,7 @@ public interface SheroesAppComponent {
     void inject(MakeIndiaSafeMapActivity makeIndiaSafeMapActivity);
 
     void inject(MakeIndiaSafeHolder makeIndiaSafeHolder);
-    void inject(CropImageActivity cropImageActivity);
+
 
 
 }

@@ -23,6 +23,12 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
     boolean isFromHome;
     private AppIntroData appIntroDataItems = null;
 
+    @SerializedName(" is_spam_post_b")
+    @Expose
+    private boolean isSpamPost;
+    @SerializedName(" solr_ignore_is_community_owner")
+    @Expose
+    private boolean isCommunityOwner;
     @SerializedName("solr_ignore_is_author_mentor")
     @Expose
     private boolean isAuthorMentor;
@@ -1929,6 +1935,22 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         isAuthorMentor = authorMentor;
     }
 
+    public boolean isSpamPost() {
+        return isSpamPost;
+    }
+
+    public void setSpamPost(boolean spamPost) {
+        isSpamPost = spamPost;
+    }
+
+    public boolean isCommunityOwner() {
+        return isCommunityOwner;
+    }
+
+    public void setCommunityOwner(boolean communityOwner) {
+        isCommunityOwner = communityOwner;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -1943,6 +1965,8 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         dest.writeByte(this.isTrending ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isFromHome ? (byte) 1 : (byte) 0);
         dest.writeParcelable(this.appIntroDataItems, flags);
+        dest.writeByte(this.isSpamPost ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isCommunityOwner ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isAuthorMentor ? (byte) 1 : (byte) 0);
         dest.writeInt(this.communityParticipantIdL);
         dest.writeByte(this.isOgVideoLinkB ? (byte) 1 : (byte) 0);
@@ -2118,6 +2142,8 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         this.isTrending = in.readByte() != 0;
         this.isFromHome = in.readByte() != 0;
         this.appIntroDataItems = in.readParcelable(AppIntroData.class.getClassLoader());
+        this.isSpamPost = in.readByte() != 0;
+        this.isCommunityOwner = in.readByte() != 0;
         this.isAuthorMentor = in.readByte() != 0;
         this.communityParticipantIdL = in.readInt();
         this.isOgVideoLinkB = in.readByte() != 0;

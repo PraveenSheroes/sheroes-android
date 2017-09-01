@@ -48,6 +48,8 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -60,8 +62,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.imageoperationns.CropImage;
-import appliedlife.pvtltd.SHEROES.imageoperationns.CropImageView;
+
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.LatLongWithLocation;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.MakeIndiaSafeDetail;
 import appliedlife.pvtltd.SHEROES.service.GPSTracker;
@@ -685,7 +686,9 @@ public class MakeIndiaSafeMapActivity extends BaseActivity implements OnMapReady
                 Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
                 if (AppUtils.isFragmentUIActive(fragment)) {
                    // ((MakeIndiaSafeFragment) fragment).checkCameraPermission();
-                    CropImage.activity(null,AppConstants.ONE_CONSTANT).setGuidelines(CropImageView.Guidelines.ON).start(this);
+                    CropImage.activity(null,AppConstants.ONE_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
+                            .setRequestedSize(400, 400)
+                            .start(this);
                 }
 
             } else if (id == R.id.tv_share_with_friends) {
