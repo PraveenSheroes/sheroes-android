@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/feed_community_card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/dp_size_10">
@@ -437,17 +436,77 @@
         android:layout_width="match_parent"
         android:visibility="gone"
         android:layout_height="match_parent">
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="@integer/int_value_for_line_1"
+            android:layout_gravity="bottom">
+            <TextView
+                android:id="@+id/tv_review_description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="@integer/int_value_for_line_1"
+                android:layout_marginLeft="@dimen/dp_size_11"
+                android:text="@string/ID_NEED_TO_BE_REVIEWED"
+                android:textColor="@color/pure_black"
+
+                android:textSize="@dimen/sp_size_14"
+                android:lineSpacingExtra="@dimen/dp_size_3"
+
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"/>
+            <TextView
+                android:id="@+id/tv_spam_post_menu"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="right"
+                android:background="@color/white"
+                android:drawableRight="@drawable/ic_menu_dashboard"
+                android:padding="@dimen/dp_size_20"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/li_approve_delete"
+            android:layout_width="match_parent"
+            android:weightSum="@integer/int_value_for_line_1"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_marginLeft="@dimen/dp_size_11"
-            android:text="@string/ID_NEED_TO_BE_REVIEWED"
-            android:textColor="@color/pure_black"
-            android:textSize="@dimen/sp_size_14"
-            android:lineSpacingExtra="@dimen/dp_size_6"
-            android:layout_marginRight="@dimen/dp_size_30"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"/>
+            android:gravity="center"
+            android:visibility="gone"
+            android:background="@color/spam_post"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tv_delete_spam_post"
+                android:layout_width="0dp"
+                android:layout_weight=".5"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dp_size_14"
+                android:textColor="@color/email"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:textSize="@dimen/sp_size_14"
+                android:textAllCaps="true"
+                android:gravity="center"
+                android:text="@string/ID_DELETE"/>
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/dp_size_5"
+                android:layout_marginBottom="@dimen/dp_size_5"
+                android:background="@color/divide_approve_delete"
+                />
+            <TextView
+                android:id="@+id/tv_approve_spam_post"
+                android:layout_width="0dp"
+                android:layout_weight=".5"
+                android:layout_height="match_parent"
+                android:padding="@dimen/dp_size_14"
+                android:textColor="@color/approve_admin"
+                android:textAllCaps="true"
+                android:gravity="center"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:textSize="@dimen/sp_size_14"
+                android:text="@string/ID_APPROVE"/>
+
+        </LinearLayout>
     </FrameLayout>
     <include
         android:id="@+id/li_event_card_main_layout"

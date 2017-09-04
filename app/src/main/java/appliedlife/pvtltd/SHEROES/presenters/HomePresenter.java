@@ -693,6 +693,9 @@ public class HomePresenter extends BasePresenter<HomeView> {
         });
         registerSubscription(subscription);
     }
+
+
+
     public void onStop() {
         detachView();
     }

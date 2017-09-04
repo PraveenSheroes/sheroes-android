@@ -11,5 +11,5 @@
 
     <string name="pick_image_intent_chooser_title">Select source</string>
     <string name="ID_ROBOTO_MEDIUM">sans-serif-medium</string>
-    <string name="ID_SAVE">Save</string>
+    <string name="ID_OK">OK</string>
 </resources>

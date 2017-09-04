@@ -454,7 +454,7 @@ public enum HolderMapping {
         return layout;
     }
 
-    public static int getOrdinal(BaseResponse item, int totalCount, String callFromType) {
+    public static int getOrdinal(BaseResponse item, long userId, String callFromType) {
         int returnView = BLANK_LIST.ordinal();
         if (null != item) {
             if (callFromType.equalsIgnoreCase(AppConstants.FEED_SUB_TYPE)) {
@@ -470,7 +470,18 @@ public enum HolderMapping {
                                 returnView = FEED_JOB.ordinal();
                                 break;
                             case AppConstants.FEED_COMMUNITY_POST:
-                                returnView = FEED_COMMUNITY_POST.ordinal();
+                                if(feedDetail.isSpamPost())
+                                {
+                                    if(userId==feedDetail.getAuthorId()||feedDetail.isCommunityOwner())
+                                    {
+                                        returnView = FEED_COMMUNITY_POST.ordinal();
+                                    }else {
+                                        returnView = BLANK_LIST.ordinal();
+                                    }
+                                }else
+                                {
+                                    returnView = FEED_COMMUNITY_POST.ordinal();
+                                }
                                 break;
                             case AppConstants.USER_SUB_TYPE:
                                 returnView = INVITE_MEMBER_MODULE.ordinal();

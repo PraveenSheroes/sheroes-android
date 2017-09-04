@@ -119,7 +119,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     private List<FeedDetail> mfeedDetailList = new ArrayList<>();
     @Inject
     Preference<LoginResponse> userPreference;
-
+    private long mUserId;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
@@ -188,7 +188,9 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
         this.mProgressBar = mProgressBar;
     }
 
-
+    public void setUserId(long userId) {
+        mUserId = userId;
+    }
     public void setListLoadFlag(boolean mListLoad) {
         this.mListLoad = mListLoad;
     }

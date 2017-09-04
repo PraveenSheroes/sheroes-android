@@ -1,9 +1,5 @@
 [
     {
-        "merged": "/Users/sheroes/Documents/praveen-data/work-space/SHEROES_RELEASE/sheroes-android/cropper/build/intermediates/res/merged/release/color/abc_background_cache_hint_selector_material_dark.xml",
-        "source": "/Users/sheroes/.android/build-cache/e21474b25c9daa6193148b4f976f53d967fc09b1/output/res/color/abc_background_cache_hint_selector_material_dark.xml"
-    },
-    {
         "merged": "/Users/sheroes/Documents/praveen-data/work-space/SHEROES_RELEASE/sheroes-android/cropper/build/intermediates/res/merged/release/color/abc_tint_btn_checkable.xml",
         "source": "/Users/sheroes/.android/build-cache/e21474b25c9daa6193148b4f976f53d967fc09b1/output/res/color/abc_tint_btn_checkable.xml"
     },
@@ -74,10 +70,6 @@
     {
         "merged": "/Users/sheroes/Documents/praveen-data/work-space/SHEROES_RELEASE/sheroes-android/cropper/build/intermediates/res/merged/release/color/switch_thumb_material_dark.xml",
         "source": "/Users/sheroes/.android/build-cache/e21474b25c9daa6193148b4f976f53d967fc09b1/output/res/color/switch_thumb_material_dark.xml"
-    },
-    {
-        "merged": "/Users/sheroes/Documents/praveen-data/work-space/SHEROES_RELEASE/sheroes-android/cropper/build/intermediates/res/merged/release/color/abc_background_cache_hint_selector_material_light.xml",
-        "source": "/Users/sheroes/.android/build-cache/e21474b25c9daa6193148b4f976f53d967fc09b1/output/res/color/abc_background_cache_hint_selector_material_light.xml"
     },
     {
         "merged": "/Users/sheroes/Documents/praveen-data/work-space/SHEROES_RELEASE/sheroes-android/cropper/build/intermediates/res/merged/release/color/abc_tint_default.xml",

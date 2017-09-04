@@ -32,12 +32,12 @@
         "source": "/Users/sheroes/.android/build-cache/e21474b25c9daa6193148b4f976f53d967fc09b1/output/res/drawable-mdpi-v4/notification_bg_normal_pressed.9.png"
     },
     {
-        "merged": "/Users/sheroes/Documents/praveen-data/work-space/SHEROES_RELEASE/sheroes-android/cropper/build/intermediates/res/merged/debug/drawable-mdpi-v4/abc_scrubber_track_mtrl_alpha.9.png",
-        "source": "/Users/sheroes/.android/build-cache/e21474b25c9daa6193148b4f976f53d967fc09b1/output/res/drawable-mdpi-v4/abc_scrubber_track_mtrl_alpha.9.png"
-    },
-    {
         "merged": "/Users/sheroes/Documents/praveen-data/work-space/SHEROES_RELEASE/sheroes-android/cropper/build/intermediates/res/merged/debug/drawable-mdpi-v4/abc_ic_star_half_black_36dp.png",
         "source": "/Users/sheroes/.android/build-cache/e21474b25c9daa6193148b4f976f53d967fc09b1/output/res/drawable-mdpi-v4/abc_ic_star_half_black_36dp.png"
+    },
+    {
+        "merged": "/Users/sheroes/Documents/praveen-data/work-space/SHEROES_RELEASE/sheroes-android/cropper/build/intermediates/res/merged/debug/drawable-mdpi-v4/abc_scrubber_track_mtrl_alpha.9.png",
+        "source": "/Users/sheroes/.android/build-cache/e21474b25c9daa6193148b4f976f53d967fc09b1/output/res/drawable-mdpi-v4/abc_scrubber_track_mtrl_alpha.9.png"
     },
     {
         "merged": "/Users/sheroes/Documents/praveen-data/work-space/SHEROES_RELEASE/sheroes-android/cropper/build/intermediates/res/merged/debug/drawable-mdpi-v4/abc_ic_star_black_36dp.png",

@@ -23,10 +23,10 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
     boolean isFromHome;
     private AppIntroData appIntroDataItems = null;
 
-    @SerializedName(" is_spam_post_b")
+    @SerializedName("is_spam_post_b")
     @Expose
     private boolean isSpamPost;
-    @SerializedName(" solr_ignore_is_community_owner")
+    @SerializedName("solr_ignore_is_community_owner")
     @Expose
     private boolean isCommunityOwner;
     @SerializedName("solr_ignore_is_author_mentor")

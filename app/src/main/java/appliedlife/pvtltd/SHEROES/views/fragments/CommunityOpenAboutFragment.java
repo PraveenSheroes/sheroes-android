@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -48,6 +50,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.MembersList;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
@@ -71,6 +74,7 @@ import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.communityRequestBuilder;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.feedRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.ownerRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.removeMemberRequestBuilder;
 
@@ -110,6 +114,9 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
 
     @Bind(R.id.iv_community_post_icon)
     ImageView mFbAboutCommunityLogo;
+
+    @Bind(R.id.li_spam_post_ui)
+    LinearLayout liSpamPostUi;
 
     @Bind(R.id.tv_community_join_invite)
     TextView mTvJoinInviteView;
@@ -158,6 +165,17 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
         mAboutCommunityOwnerRecyclerView.setLayoutManager(mLayoutManager);
         mAboutCommunityOwnerRecyclerView.setAdapter(mAdapter);
         mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_COMMUNITY, AppConstants.ONE_CONSTANT, mFeedDetail.getIdOfEntityOrParticipant()));
+        int adminId=0;
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()&&null != mUserPreference.get().getUserSummary().getUserBO()) {
+            adminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
+        }
+        if(mFeedDetail.isCommunityOwner()||adminId==AppConstants.TWO_CONSTANT)
+        {
+           liSpamPostUi.setVisibility(View.VISIBLE);
+       }else
+       {
+           liSpamPostUi.setVisibility(View.VISIBLE);
+       }
         ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_ABOUT_COMMUNITY_SCREEN));
         return view;
     }
@@ -588,5 +606,12 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
         super.onDestroyView();
         long timeSpent=System.currentTimeMillis()-startedTime;
         moEngageUtills.entityMoEngageAboutCommunity(getActivity(),mMoEHelper,payloadBuilder,mFeedDetail.getIdOfEntityOrParticipant(),timeSpent);
+    }
+
+    @OnClick(R.id.tv_post_in_moderation)
+    public void tvPostModerationClick() {
+        FeedRequestPojo feedRequestPojo = feedRequestBuilder(AppConstants.FEED_COMMUNITY_POST,AppConstants.ONE_CONSTANT);
+        //feedRequestPojo.setSpamPost(true);
+        ((CommunitiesDetailActivity)getActivity()).spamPostListFragment(feedRequestPojo);
     }
 }

@@ -755,8 +755,8 @@ public final class R {
         public static final int support_simple_spinner_dropdown_item = 0x7f03002f;
     }
     public static final class string {
-        public static final int ID_ROBOTO_MEDIUM = 0x7f050015;
-        public static final int ID_SAVE = 0x7f050016;
+        public static final int ID_OK = 0x7f050015;
+        public static final int ID_ROBOTO_MEDIUM = 0x7f050016;
         public static final int abc_action_bar_home_description = 0x7f050000;
         public static final int abc_action_bar_home_description_format = 0x7f050001;
         public static final int abc_action_bar_home_subtitle_description_format = 0x7f050002;

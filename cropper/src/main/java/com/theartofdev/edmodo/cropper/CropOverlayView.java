@@ -504,7 +504,7 @@ public class CropOverlayView extends View {
         float leftLimit = Math.max(BitmapUtils.getRectLeft(mBoundsPoints), 0);
         float topLimit = Math.max(BitmapUtils.getRectTop(mBoundsPoints), 0);
         float rightLimit = Math.min(BitmapUtils.getRectRight(mBoundsPoints), getWidth());
-        float bottomLimit = Math.min(BitmapUtils.getRectBottom(mBoundsPoints), getHeight());
+        float bottomLimit = Math.min(BitmapUtils.getRectRight(mBoundsPoints), getWidth());//Math.min(BitmapUtils.getRectBottom(mBoundsPoints), getHeight());
 
         if (rightLimit <= leftLimit || bottomLimit <= topLimit) {
             return;
@@ -523,7 +523,7 @@ public class CropOverlayView extends View {
             rect.left = leftLimit + mInitialCropWindowRect.left / mCropWindowHandler.getScaleFactorWidth();
             rect.top = topLimit + mInitialCropWindowRect.top / mCropWindowHandler.getScaleFactorHeight();
             rect.right = rect.left + mInitialCropWindowRect.width() / mCropWindowHandler.getScaleFactorWidth();
-            rect.bottom = rect.top + mInitialCropWindowRect.height() / mCropWindowHandler.getScaleFactorHeight();
+            rect.bottom = rect.top + mInitialCropWindowRect.width() / mCropWindowHandler.getScaleFactorWidth();//mInitialCropWindowRect.height() / mCropWindowHandler.getScaleFactorHeight();
 
             // Correct for floating point errors. Crop rect boundaries should not exceed the source Bitmap bounds.
             rect.left = Math.max(leftLimit, rect.left);
@@ -590,7 +590,8 @@ public class CropOverlayView extends View {
             rect.right += adj;
         }
         if (rect.height() < mCropWindowHandler.getMinCropHeight()) {
-            float adj = (mCropWindowHandler.getMinCropHeight() - rect.height()) / 2;
+          //  float adj = (mCropWindowHandler.getMinCropHeight() - rect.height()) / 2;
+            float adj = (mCropWindowHandler.getMinCropWidth() - rect.width()) / 2;
             rect.top -= adj;
             rect.bottom += adj;
         }
@@ -600,7 +601,8 @@ public class CropOverlayView extends View {
             rect.right -= adj;
         }
         if (rect.height() > mCropWindowHandler.getMaxCropHeight()) {
-            float adj = (rect.height() - mCropWindowHandler.getMaxCropHeight()) / 2;
+            //float adj = (rect.height() - mCropWindowHandler.getMaxCropHeight()) / 2;
+            float adj = (rect.width() - mCropWindowHandler.getMaxCropWidth()) / 2;
             rect.top += adj;
             rect.bottom -= adj;
         }
@@ -610,7 +612,7 @@ public class CropOverlayView extends View {
             float leftLimit = Math.max(mCalcBounds.left, 0);
             float topLimit = Math.max(mCalcBounds.top, 0);
             float rightLimit = Math.min(mCalcBounds.right, getWidth());
-            float bottomLimit = Math.min(mCalcBounds.bottom, getHeight());
+            float bottomLimit =Math.min(mCalcBounds.right, getWidth()); //Math.min(mCalcBounds.bottom, getHeight());
             if (rect.left < leftLimit) {
                 rect.left = leftLimit;
             }
@@ -630,7 +632,8 @@ public class CropOverlayView extends View {
                 rect.left += adj;
                 rect.right -= adj;
             } else {
-                float adj = Math.abs(rect.width() / mTargetAspectRatio - rect.height()) / 2;
+               // float adj = Math.abs(rect.width() / mTargetAspectRatio - rect.height()) / 2;
+                float adj = Math.abs(rect.height() * mTargetAspectRatio - rect.width()) / 2;
                 rect.top += adj;
                 rect.bottom -= adj;
             }
@@ -720,7 +723,7 @@ public class CropOverlayView extends View {
             rect.inset(sw, sw);
 
             float oneThirdCropWidth = rect.width() / 3;
-            float oneThirdCropHeight = rect.height() / 3;
+            float oneThirdCropHeight = rect.height() / 2;
 
             if (mCropShape == CropImageView.CropShape.OVAL) {
 

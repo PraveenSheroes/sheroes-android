@@ -10,6 +10,8 @@
     <string name="ID_DD">DD</string>
     <string name="ID_MM">MM</string>
     <string name="ID_YYYY">YYYY</string>
+    <string name="ID_POST_IN_MODERATION">Posts in Moderation</string>
+
     <!--text names in SHEROES-->
 
     <string name="IDS_PLAY_SERVICE">Please update you Google play services</string>
@@ -160,10 +162,13 @@
     <string name="ID_EDIT_PROFILE">Edit Profile</string>
     <string name="ID_EDIT_POST">EDIT POST</string>
     <string name="ID_DELETE">Delete</string>
+    <string name="ID_APPROVE">Approve</string>
+
     <string name="ID_REPORT">Report as spam</string>
     <string name="ID_REFRESH">Refresh feed</string>
     <string name="ID_NO_GROWTH_BUDDIES">No, Mentors found</string>
     <string name="ID_NO_RESULT_FOUND">No Result found ,Please Click For Try again</string>
+    <string name="ID_NO_POST_MODERATION">No post to moderation</string>
     <string name="ID_FEATURE_COMMUNITY"> We are coming up with new and exciting communities very soon.</string>
     <string name="ID_NO_RESULT_FOUND_TRY">Try another search</string>
     <string name="ID_NO_RESULT_FOUND_SEARCH">No Result found for</string>
@@ -577,6 +582,7 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_DEACTIVATE">Why do you want to deactivate?</string>
     <string name="ID_NOTFINDTEXT">I don’t find SHEROES useful</string>
     <string name="ID_SPAMMED">I feel spammed</string>
+    <string name="ID_SPAM">Spam</string>
     <string name="ID_PRIVACY">I have privacy issues</string>
     <string name="ID_OTHER">Other</string>
     <string name="ID_WRITE_RESON">Write reason</string>
@@ -611,7 +617,7 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_GOFOR_SETTING_LINK">To change mobile no.or email go to settings</string>
     <string name="ID_SAVE">SAVE</string>
     <string name="ID_MY_CONTACT_CARD">MY CONTACT CARD</string>
-    <string name="ID_NEED_TO_BE_REVIEWED">This post is needed to be reviewed by community owner</string>
+    <string name="ID_NEED_TO_BE_REVIEWED">Potential Community Guidelines Violation! Post Is Under Review</string>
 
     <!--String Related personal About_me details page-->
     <string name="ID_ABOUT_ME">ABOUT ME</string>

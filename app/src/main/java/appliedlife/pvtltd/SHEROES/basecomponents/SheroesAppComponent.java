@@ -135,6 +135,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.PublicProfileGr
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.SearchGoodAtDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.SearchProfileLocationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.SelectCommunityDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.SpamPostListDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.viewholders.AppIntroCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleDetailHolder;
@@ -630,6 +631,7 @@ public interface SheroesAppComponent {
     void inject(MakeIndiaSafeMapActivity makeIndiaSafeMapActivity);
 
     void inject(MakeIndiaSafeHolder makeIndiaSafeHolder);
+    void inject(SpamPostListDialogFragment spamPostListDialogFragment);
 
 
 

@@ -16,6 +16,10 @@ import java.util.List;
 import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
 
 public class FeedRequestPojo extends BaseRequest implements Parcelable {
+
+    @SerializedName("is_spam_post_b")
+    @Expose
+    private boolean isSpamPost;
     @SerializedName("id_of_entity_or_participant")
     @Expose
     private Long idForFeedDetail=null;
@@ -171,6 +175,14 @@ public class FeedRequestPojo extends BaseRequest implements Parcelable {
         this.autherId = autherId;
     }
 
+    public boolean isSpamPost() {
+        return isSpamPost;
+    }
+
+    public void setSpamPost(boolean spamPost) {
+        isSpamPost = spamPost;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -178,6 +190,7 @@ public class FeedRequestPojo extends BaseRequest implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeByte(this.isSpamPost ? (byte) 1 : (byte) 0);
         dest.writeValue(this.idForFeedDetail);
         dest.writeValue(this.autherId);
         dest.writeString(this.subType);
@@ -194,6 +207,7 @@ public class FeedRequestPojo extends BaseRequest implements Parcelable {
     }
 
     protected FeedRequestPojo(Parcel in) {
+        this.isSpamPost = in.readByte() != 0;
         this.idForFeedDetail = (Long) in.readValue(Long.class.getClassLoader());
         this.autherId = (Integer) in.readValue(Integer.class.getClassLoader());
         this.subType = in.readString();

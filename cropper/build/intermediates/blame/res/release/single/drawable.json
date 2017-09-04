@@ -20,12 +20,12 @@
         "source": "/Users/sheroes/.android/build-cache/e21474b25c9daa6193148b4f976f53d967fc09b1/output/res/drawable/abc_list_selector_background_transition_holo_dark.xml"
     },
     {
-        "merged": "/Users/sheroes/Documents/praveen-data/work-space/SHEROES_RELEASE/sheroes-android/cropper/build/intermediates/res/merged/release/drawable/abc_spinner_textfield_background_material.xml",
-        "source": "/Users/sheroes/.android/build-cache/e21474b25c9daa6193148b4f976f53d967fc09b1/output/res/drawable/abc_spinner_textfield_background_material.xml"
-    },
-    {
         "merged": "/Users/sheroes/Documents/praveen-data/work-space/SHEROES_RELEASE/sheroes-android/cropper/build/intermediates/res/merged/release/drawable/abc_list_selector_holo_dark.xml",
         "source": "/Users/sheroes/.android/build-cache/e21474b25c9daa6193148b4f976f53d967fc09b1/output/res/drawable/abc_list_selector_holo_dark.xml"
+    },
+    {
+        "merged": "/Users/sheroes/Documents/praveen-data/work-space/SHEROES_RELEASE/sheroes-android/cropper/build/intermediates/res/merged/release/drawable/abc_spinner_textfield_background_material.xml",
+        "source": "/Users/sheroes/.android/build-cache/e21474b25c9daa6193148b4f976f53d967fc09b1/output/res/drawable/abc_spinner_textfield_background_material.xml"
     },
     {
         "merged": "/Users/sheroes/Documents/praveen-data/work-space/SHEROES_RELEASE/sheroes-android/cropper/build/intermediates/res/merged/release/drawable/abc_dialog_material_background.xml",

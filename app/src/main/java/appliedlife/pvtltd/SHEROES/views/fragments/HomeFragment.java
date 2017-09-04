@@ -38,6 +38,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeDataItem;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.LinkRenderResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroData;
@@ -51,12 +53,15 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.GcmIdResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.InstallUpdateForMoEngage;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
+import appliedlife.pvtltd.SHEROES.presenters.CreateCommunityPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.service.GCMClientManager;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.LoginActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
@@ -69,10 +74,12 @@ import rx.Subscriber;
 import rx.schedulers.Schedulers;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FOR_REFRESH_FRAGMENT_LIST;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.DELETE_COMMUNITY_POST;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_RESPONSE;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.PERMISSIONS_REQUEST_READ_CONTACTS;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.acceptChallengeRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.challengetRequestBuilder;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.editCommunityPostRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.feedRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.loginRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.notificationReadCountRequestBuilder;
@@ -95,6 +102,8 @@ public class HomeFragment extends BaseFragment {
     Preference<InstallUpdateForMoEngage> mInstallUpdatePreference;
     @Inject
     HomePresenter mHomePresenter;
+    @Inject
+    CreateCommunityPresenter mCreateCommunityPresenter;
     @Bind(R.id.rv_home_list)
     RecyclerView mRecyclerView;
     @Bind(R.id.pb_home_progress_bar)
@@ -124,7 +133,6 @@ public class HomeFragment extends BaseFragment {
     private ChallengeDataItem mChallengeDataItem;
     private int mPercentCompleted;
     private long mChallengeId;
-
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -139,6 +147,7 @@ public class HomeFragment extends BaseFragment {
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
         mHomePresenter.attachView(this);
+        mCreateCommunityPresenter.attachView(this);
         mLayoutManager = new LinearLayoutManager(getContext());
         mLayoutManager.setInitialPrefetchItemCount(1);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -174,9 +183,7 @@ public class HomeFragment extends BaseFragment {
             startActivity(loginIntent);
         } else if (null != mUserPreference.get()) {
             if (!StringUtil.isNotNullOrEmptyString(mUserPreference.get().getToken())) {
-                Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
-                loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
-                startActivity(loginIntent);
+                ((HomeActivity)getActivity()).logOut();
             } else {
                 long daysDifference = System.currentTimeMillis() - mUserPreference.get().getTokenTime();
                 if (daysDifference >= AppConstants.SAVED_DAYS_TIME) {
@@ -184,6 +191,10 @@ public class HomeFragment extends BaseFragment {
                 } else {
                     mHomePresenter.getFeedFromPresenter(feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
                 }
+            }
+            if(null != mUserPreference.get().getUserSummary()) {
+                long userId = mUserPreference.get().getUserSummary().getUserId();
+                super.setUserId(userId);
             }
         } else {
             mHomePresenter.getAuthTokenRefreshPresenter();
@@ -413,7 +424,6 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void appIntroResponse(BaseResponse baseResponse) {
-
         switch (baseResponse.getStatus()) {
             case AppConstants.SUCCESS:
                 if (baseResponse instanceof AppIntroScreenResponse) {
@@ -502,7 +512,9 @@ public class HomeFragment extends BaseFragment {
         super.likeAndUnlikeRequest(baseResponse, reactionValue, position);
     }
 
-
+    public void approveSpamPost(FeedDetail feedDetail) {
+        mCreateCommunityPresenter.editCommunityPost(mAppUtils.spamPostApprovedRequestBuilder(feedDetail.getIdOfEntityOrParticipant(),false,true));
+    }
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -511,7 +523,6 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     public void getLogInResponse(LoginResponse loginResponse) {
-
         if (null != loginResponse && StringUtil.isNotNullOrEmptyString(loginResponse.getToken())) {
             loginResponse.setTokenTime(System.currentTimeMillis());
             loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
@@ -534,10 +545,6 @@ public class HomeFragment extends BaseFragment {
             public void call(Subscriber<? super Void> subscriber) {
                 UserPhoneContactsListRequest userPhoneContactsListRequest = new UserPhoneContactsListRequest();
                 List<UserContactDetail> userContactDetailsList = new ArrayList<>();
-                long startnow;
-                long endnow;
-
-                startnow = android.os.SystemClock.uptimeMillis();
                 UserContactDetail userContactDetail = null;
                 Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
                 Cursor cursor = ((HomeActivity) getActivity()).getContentResolver().query(uri, new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME, ContactsContract.CommonDataKinds.Phone._ID}, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
@@ -561,8 +568,6 @@ public class HomeFragment extends BaseFragment {
                         cursor.close();
                     }
                 }
-                endnow = android.os.SystemClock.uptimeMillis();
-                Log.d("END", "TimeForContacts " + (endnow - startnow) + " ms");
                 userPhoneContactsListRequest.setContactDetailList(userContactDetailsList);
                 mHomePresenter.getAppContactsResponseInPresenter(userPhoneContactsListRequest);
                 subscriber.onCompleted();
@@ -585,12 +590,8 @@ public class HomeFragment extends BaseFragment {
         switch (requestCode) {
             case PERMISSIONS_REQUEST_READ_CONTACTS: {
                 // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     getUserPhoneContactsAndSend().subscribeOn(Schedulers.newThread()).subscribe();
-                    ;
-                } else {
-                    Log.d(TAG, "No permission for contacts ");
                 }
                 return;
             }
@@ -603,8 +604,31 @@ public class HomeFragment extends BaseFragment {
                 requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSIONS_REQUEST_READ_CONTACTS);
             } else {
                 getUserPhoneContactsAndSend().subscribeOn(Schedulers.newThread()).subscribe();
-                ;
+
             }
         }
     }
+    public void createCommunitySuccess(BaseResponse baseResponse) {
+        if (baseResponse instanceof CreateCommunityResponse) {
+            CreateCommunityResponse createCommunityResponse = ((CreateCommunityResponse) baseResponse);
+            communityPostResponse(createCommunityResponse);
+        }
+    }
+    private void communityPostResponse(CreateCommunityResponse createCommunityResponse) {
+        if (StringUtil.isNotNullOrEmptyString(createCommunityResponse.getStatus())) {
+            switch (createCommunityResponse.getStatus()) {
+                case AppConstants.SUCCESS:
+                    commentListRefresh(createCommunityResponse.getFeedDetail(), ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+                    break;
+                case AppConstants.FAILED:
+                    mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(createCommunityResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), DELETE_COMMUNITY_POST);
+                    break;
+                default:
+                    mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), DELETE_COMMUNITY_POST);
+            }
+        } else {
+            mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), DELETE_COMMUNITY_POST);
+        }
+    }
+
 }

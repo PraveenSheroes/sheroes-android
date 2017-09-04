@@ -128,6 +128,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FO
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.COMMENT_REACTION;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.JOIN_INVITE;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MENU;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.editCommunityPostRequestBuilder;
 
 public class HomeActivity extends BaseActivity implements CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, CommentReactionFragment.HomeActivityIntractionListner, HomeArticleCategorySpinnerFragment.HomeSpinnerFragmentListner {
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
@@ -454,6 +455,11 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             } else if (id == R.id.tv_event_detail_going_btn) {
                 if (null != eventDetailDialogFragment) {
                     eventDetailDialogFragment.eventGoingListData(mFeedDetail);
+                }
+            }else if (id == R.id.tv_approve_spam_post) {
+                Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+                if (AppUtils.isFragmentUIActive(fragment)) {
+                    ((HomeFragment) fragment).approveSpamPost(mFeedDetail);
                 }
             } else {
                 mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.ONE_CONSTANT);
@@ -1363,7 +1369,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         mProgressDialog.show();
         Intent mapIntent = new Intent(this, MakeIndiaSafeMapActivity.class);
         Bundle bundle = new Bundle();
-      //  bundle.putParcelable(AppConstants.LAT_LONG_DETAIL, latLongWithLocation);
         mapIntent.putExtras(bundle);
         startActivityForResult(mapIntent, AppConstants.REQUEST_CODE_FOR_GOOGLE_MAP);
     }

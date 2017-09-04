@@ -325,6 +325,16 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
             case R.id.tv_feed_community_post_user_menu:
                 clickMenuItem(view, baseResponse, FEED_CARD_MENU);
                 break;
+            case R.id.tv_delete_spam_post:
+                Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+                if (AppUtils.isFragmentUIActive(fragment)) {
+                    ((HomeFragment) fragment).deleteCommunityPost(mFeedDetail);
+                } else {
+                    if (AppUtils.isFragmentUIActive(mFragment)) {
+                        ((CommunitiesDetailFragment) mFragment).deleteCommunityPost(mFeedDetail);
+                    }
+                }
+                break;
             case R.id.tv_feed_article_user_menu:
                 clickMenuItem(view, baseResponse, FEED_CARD_MENU);
                 break;

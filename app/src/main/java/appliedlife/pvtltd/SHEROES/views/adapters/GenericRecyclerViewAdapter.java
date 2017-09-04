@@ -8,13 +8,18 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 
+import com.f2prateek.rx.preferences.Preference;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.MentorDetailItem;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQS;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -37,7 +42,7 @@ public class GenericRecyclerViewAdapter<T extends BaseResponse> extends Recycler
     BaseHolderInterface viewHolderInterface;
     protected List<T> filterListData;
     private String mCallFromType = AppConstants.FOR_ALL;
-
+    private long mUserId;
     public GenericRecyclerViewAdapter(Context context, BaseHolderInterface viewHolderInterface) {
         this.context = context;
         this.viewHolderInterface = viewHolderInterface;
@@ -47,7 +52,9 @@ public class GenericRecyclerViewAdapter<T extends BaseResponse> extends Recycler
         this.mSheroesGenericListData = mSheroesGenericListData;
         this.filterListData = mSheroesGenericListData;
     }
-
+    public void setUserId(long userId) {
+        mUserId = userId;
+    }
     public void setCallForRecycler(String callFromType) {
         this.mCallFromType = callFromType;
     }
@@ -111,7 +118,7 @@ public class GenericRecyclerViewAdapter<T extends BaseResponse> extends Recycler
 
     @Override
     public int getItemViewType(int position) {
-        return HolderMapping.getOrdinal(filterListData.get(position), filterListData.size(), mCallFromType);
+        return HolderMapping.getOrdinal(filterListData.get(position),mUserId , mCallFromType);
     }
 
     @Override

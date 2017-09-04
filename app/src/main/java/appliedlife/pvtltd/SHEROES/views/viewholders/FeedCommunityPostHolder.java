@@ -84,12 +84,19 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     DateUtil mDateUtil;
     @Inject
     Preference<LoginResponse> userPreference;
-    @Bind(R.id.feed_community_card)
-    CardView mFeedCommunityCard;
 
     //spam handling
     @Bind(R.id.fl_spam_post_ui)
     FrameLayout flSpamPostUi;
+    @Bind(R.id.tv_review_description)
+    TextView tvReviewDescription;
+    @Bind(R.id.li_approve_delete)
+    LinearLayout liApproveDelete;
+    @Bind(R.id.tv_delete_spam_post)
+    TextView tvDeleteSpamPost;
+    @Bind(R.id.tv_approve_spam_post)
+    TextView tvApproveSpamPost;
+
 
     @Bind(R.id.li_reaction_comment_block)
     LinearLayout liReactionCommentBlock;
@@ -223,69 +230,73 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         dataItem.setItemPosition(position);
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
             long userId = userPreference.get().getUserSummary().getUserId();
-            if (dataItem.isSpamPost()) {
-                handlingSpamUi(userId);
-            }else {
-                mFeedCommunityCard.setVisibility(View.VISIBLE);
-            }
 
         if (dataItem.getCommunityId() == AppConstants.EVENT_COMMUNITY_ID) {
-            liCommunityPostMainLayout.setVisibility(View.GONE);
-            liEventCardMainLayout.setVisibility(View.VISIBLE);
-            tvEventInterestedBtn.setEnabled(true);
-            setInterested();
-            goingOnEvent();
-            if (!dataItem.isTrending()) {
-                imageSetOnEventBackground();
-            }
-            if(dataItem != null &&StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle()) ){
-                ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(AppConstants.IMPRESSIONS, AppConstants.EVENT_IMPRESSION, dataItem.getIdOfEntityOrParticipant() + AppConstants.DASH + userId + AppConstants.DASH + dataItem.getNameOrTitle());
-            }
+            eventPostUI(userId);
         } else {
-            liCommunityPostMainLayout.setVisibility(View.VISIBLE);
-            liEventCardMainLayout.setVisibility(View.GONE);
-            mViewMore = context.getString(R.string.ID_VIEW_MORE);
-            mLess = context.getString(R.string.ID_LESS);
-            tvFeedCommunityPostText.setTag(mViewMore);
-            tvFeedCommunityPostTextFullView.setTag(mViewMore);
-            tvFeedCommunityPostUserBookmark.setEnabled(true);
-            tvFeedCommunityPostUserReaction.setEnabled(true);
-            tvFeedCommunityPostUserReactionText.setEnabled(true);
-            dataItem.setLastReactionValue(dataItem.getReactionValue());
-            if (!dataItem.isTrending()) {
-                imageOperations(context);
-                if (StringUtil.isNotNullOrEmptyString(dataItem.getOgRequestedUrlS())) {
-                    liFeedCommunityUserPostImages.removeAllViews();
-                    liFeedCommunityUserPostImages.removeAllViewsInLayout();
-                    liFeedCommunityUserPostImages.setVisibility(View.GONE);
-                    cardViewLinkRender.setVisibility(View.VISIBLE);
-                    setLinkData();
-                } else {
-                    cardViewLinkRender.setVisibility(View.GONE);
-                }
-                multipleImageURLs();
-            }
-            onBookMarkClick();
-            allTextViewStringOperations(context);
-                if (dataItem.getAuthorId() == userId|| dataItem.isCommunityOwner()) {
-                    tvFeedCommunityPostUserMenu.setVisibility(View.VISIBLE);
-                    if (dataItem.getCommunityId() == AppConstants.NO_REACTION_CONSTANT) {
-                        tvFeedCommunityPostUserMenu.setVisibility(View.GONE);
-                    } else {
-                        tvFeedCommunityPostUserMenu.setVisibility(View.VISIBLE);
-                    }
 
-                } else {
-                    tvFeedCommunityPostUserMenu.setVisibility(View.GONE);
-                }
-                if(dataItem != null&&StringUtil.isNotNullOrEmptyString(dataItem.getListDescription())){
-                    ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(AppConstants.IMPRESSIONS, AppConstants.COMMUNITY_POST_IMPRESSION,dataItem.getIdOfEntityOrParticipant()+ AppConstants.DASH + userId + AppConstants.DASH + dataItem.getListDescription());
-                }
-
+            normalCommunityPostUi(userId);
         }
+                handlingSpamUi(userId);
+
         }
     }
+    private void eventPostUI(long userId)
+    {
+        liCommunityPostMainLayout.setVisibility(View.GONE);
+        liEventCardMainLayout.setVisibility(View.VISIBLE);
+        tvEventInterestedBtn.setEnabled(true);
+        setInterested();
+        goingOnEvent();
+        if (!dataItem.isTrending()) {
+            imageSetOnEventBackground();
+        }
+        if(dataItem != null &&StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle()) ){
+            ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(AppConstants.IMPRESSIONS, AppConstants.EVENT_IMPRESSION, dataItem.getIdOfEntityOrParticipant() + AppConstants.DASH + userId + AppConstants.DASH + dataItem.getNameOrTitle());
+        }
+    }
+private void normalCommunityPostUi(long userId)
+{
+    liCommunityPostMainLayout.setVisibility(View.VISIBLE);
+    liEventCardMainLayout.setVisibility(View.GONE);
+    mViewMore = mContext.getString(R.string.ID_VIEW_MORE);
+    mLess = mContext.getString(R.string.ID_LESS);
+    tvFeedCommunityPostText.setTag(mViewMore);
+    tvFeedCommunityPostTextFullView.setTag(mViewMore);
+    tvFeedCommunityPostUserBookmark.setEnabled(true);
+    tvFeedCommunityPostUserReaction.setEnabled(true);
+    tvFeedCommunityPostUserReactionText.setEnabled(true);
+    dataItem.setLastReactionValue(dataItem.getReactionValue());
+    if (!dataItem.isTrending()) {
+        imageOperations(mContext);
+        if (StringUtil.isNotNullOrEmptyString(dataItem.getOgRequestedUrlS())) {
+            liFeedCommunityUserPostImages.removeAllViews();
+            liFeedCommunityUserPostImages.removeAllViewsInLayout();
+            liFeedCommunityUserPostImages.setVisibility(View.GONE);
+            cardViewLinkRender.setVisibility(View.VISIBLE);
+            setLinkData();
+        } else {
+            cardViewLinkRender.setVisibility(View.GONE);
+        }
+        multipleImageURLs();
+    }
+    onBookMarkClick();
+    allTextViewStringOperations(mContext);
+    if (dataItem.getAuthorId() == userId|| dataItem.isCommunityOwner()) {
+        tvFeedCommunityPostUserMenu.setVisibility(View.VISIBLE);
+        if (dataItem.getCommunityId() == AppConstants.NO_REACTION_CONSTANT) {
+            tvFeedCommunityPostUserMenu.setVisibility(View.GONE);
+        } else {
+            tvFeedCommunityPostUserMenu.setVisibility(View.VISIBLE);
+        }
 
+    } else {
+        tvFeedCommunityPostUserMenu.setVisibility(View.GONE);
+    }
+    if(dataItem != null&&StringUtil.isNotNullOrEmptyString(dataItem.getListDescription())){
+        ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(AppConstants.IMPRESSIONS, AppConstants.COMMUNITY_POST_IMPRESSION,dataItem.getIdOfEntityOrParticipant()+ AppConstants.DASH + userId + AppConstants.DASH + dataItem.getListDescription());
+    }
+}
     @OnClick(R.id.card_post_link_render)
     public void tvLinkClick() {
         if (null != dataItem && dataItem.isOgVideoLinkB() && StringUtil.isNotNullOrEmptyString(dataItem.getOgRequestedUrlS())) {
@@ -1048,6 +1059,11 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     public void userMenuClick() {
         viewInterface.handleOnClick(dataItem, tvFeedCommunityPostUserMenu);
     }
+    @OnClick(R.id.tv_spam_post_menu)
+    public void spamMenuClick() {
+        viewInterface.handleOnClick(dataItem, tvFeedCommunityPostUserMenu);
+    }
+
 
     @OnClick(R.id.tv_feed_community_post_user_comment_post_menu)
     public void userCommentMenuClick() {
@@ -1466,20 +1482,41 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     }
     private void handlingSpamUi(long userId)
     {
-        if (dataItem.getAuthorId() == userId||dataItem.isCommunityOwner()) {
-            mFeedCommunityCard.setVisibility(View.VISIBLE);
-            liCommunityPostMainLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.profile_text));
-            liCommunityPostMainLayout.setAlpha(.5f);
-            flSpamPostUi.setVisibility(View.VISIBLE);
-            liReactionCommentBlock.setVisibility(View.GONE);
+        int adminId=0;
+        if(null != userPreference.get().getUserSummary().getUserBO()) {
+            adminId = userPreference.get().getUserSummary().getUserBO().getUserTypeId();
         }
-        else
-        {
-            mFeedCommunityCard.setVisibility(View.GONE);
-            liCommunityPostMainLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.white));
-            liCommunityPostMainLayout.setAlpha(1f);
-            flSpamPostUi.setVisibility(View.GONE);
-            liReactionCommentBlock.setVisibility(View.VISIBLE);
-        }
+            if (adminId == AppConstants.TWO_CONSTANT||dataItem.isCommunityOwner()) {
+                liCommunityPostMainLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.white));
+                liCommunityPostMainLayout.setAlpha(1f);
+                flSpamPostUi.setVisibility(View.VISIBLE);
+                liReactionCommentBlock.setVisibility(View.GONE);
+                liApproveDelete.setVisibility(View.VISIBLE);
+                tvReviewDescription.setVisibility(View.GONE);
+            }else if (dataItem.getAuthorId() == userId) {
+                liCommunityPostMainLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.spam_post));
+                liCommunityPostMainLayout.setAlpha(.2f);
+                flSpamPostUi.setVisibility(View.VISIBLE);
+                liReactionCommentBlock.setVisibility(View.GONE);
+                liApproveDelete.setVisibility(View.GONE);
+                tvReviewDescription.setVisibility(View.VISIBLE);
+            } else {
+                liCommunityPostMainLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.white));
+                liCommunityPostMainLayout.setAlpha(1f);
+                flSpamPostUi.setVisibility(View.GONE);
+                liReactionCommentBlock.setVisibility(View.VISIBLE);
+                liApproveDelete.setVisibility(View.GONE);
+                tvReviewDescription.setVisibility(View.VISIBLE);
+            }
+
+    }
+
+    @OnClick(R.id.tv_approve_spam_post)
+    public void onApproveSpamPostClick() {
+        viewInterface.handleOnClick(dataItem, tvApproveSpamPost);
+    }
+    @OnClick(R.id.tv_delete_spam_post)
+    public void onDeleteSpamPostClick() {
+        viewInterface.handleOnClick(dataItem, tvDeleteSpamPost);
     }
 }

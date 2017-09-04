@@ -29,13 +29,17 @@
     <color name="added_member_text">#cbcddd</color>
     <color name="black">#de000000</color>
     <color name="pure_black">#000000</color>
-    <color name="spam_post">#1e000000</color>
+    <color name="spam_post">#f6f6f6</color>
 
     <color name="black_current">#1a1818</color>
     <color name="black_gradiant">#80000000</color>
     <color name="add_member_line">#e4e9ec</color>
     <color name="shadow">#3b99fc</color>
     <color name="profile_text">#999999</color>
+    <color name="divide_approve_delete">#979797</color>
+    <color name="approve_admin">#13c221</color>
+
+
     <color name="verify_fb">#2d3340</color>
     <color name="searchbox_text_color">#9b9b9b</color>
     <color name="selected_on_boarding">#eaecf6</color>

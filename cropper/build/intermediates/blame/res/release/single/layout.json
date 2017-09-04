@@ -1,11 +1,11 @@
 [
     {
-        "merged": "/Users/sheroes/Documents/praveen-data/work-space/SHEROES_RELEASE/sheroes-android/cropper/build/intermediates/res/merged/release/layout/crop_image_activity.xml",
-        "source": "/Users/sheroes/Documents/praveen-data/work-space/SHEROES_RELEASE/sheroes-android/cropper/src/main/res/layout/crop_image_activity.xml"
-    },
-    {
         "merged": "/Users/sheroes/Documents/praveen-data/work-space/SHEROES_RELEASE/sheroes-android/cropper/build/intermediates/res/merged/release/layout/abc_screen_simple.xml",
         "source": "/Users/sheroes/.android/build-cache/e21474b25c9daa6193148b4f976f53d967fc09b1/output/res/layout/abc_screen_simple.xml"
+    },
+    {
+        "merged": "/Users/sheroes/Documents/praveen-data/work-space/SHEROES_RELEASE/sheroes-android/cropper/build/intermediates/res/merged/release/layout/crop_image_activity.xml",
+        "source": "/Users/sheroes/Documents/praveen-data/work-space/SHEROES_RELEASE/sheroes-android/cropper/src/main/res/layout/crop_image_activity.xml"
     },
     {
         "merged": "/Users/sheroes/Documents/praveen-data/work-space/SHEROES_RELEASE/sheroes-android/cropper/build/intermediates/res/merged/release/layout/notification_action.xml",
@@ -22,10 +22,6 @@
     {
         "merged": "/Users/sheroes/Documents/praveen-data/work-space/SHEROES_RELEASE/sheroes-android/cropper/build/intermediates/res/merged/release/layout/abc_alert_dialog_material.xml",
         "source": "/Users/sheroes/.android/build-cache/e21474b25c9daa6193148b4f976f53d967fc09b1/output/res/layout/abc_alert_dialog_material.xml"
-    },
-    {
-        "merged": "/Users/sheroes/Documents/praveen-data/work-space/SHEROES_RELEASE/sheroes-android/cropper/build/intermediates/res/merged/release/layout/notification_template_custom_big.xml",
-        "source": "/Users/sheroes/.android/build-cache/e21474b25c9daa6193148b4f976f53d967fc09b1/output/res/layout/notification_template_custom_big.xml"
     },
     {
         "merged": "/Users/sheroes/Documents/praveen-data/work-space/SHEROES_RELEASE/sheroes-android/cropper/build/intermediates/res/merged/release/layout/abc_dialog_title_material.xml",

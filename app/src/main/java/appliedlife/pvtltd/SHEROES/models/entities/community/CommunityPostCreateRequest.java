@@ -64,8 +64,9 @@ public class CommunityPostCreateRequest extends BaseRequest implements Parcelabl
     @SerializedName("is_active")
     @Expose
     private boolean isActive =true;
-
-
+    @SerializedName("is_spam")
+    @Expose
+    private boolean isSpam;
 
 
     public Long getId() {
@@ -191,6 +192,17 @@ public class CommunityPostCreateRequest extends BaseRequest implements Parcelabl
         this.videoLink = videoLink;
     }
 
+    public CommunityPostCreateRequest() {
+    }
+
+    public boolean isSpam() {
+        return isSpam;
+    }
+
+    public void setSpam(boolean spam) {
+        isSpam = spam;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -213,9 +225,7 @@ public class CommunityPostCreateRequest extends BaseRequest implements Parcelabl
         dest.writeStringList(this.images);
         dest.writeList(this.deleteImagesIds);
         dest.writeByte(this.isActive ? (byte) 1 : (byte) 0);
-    }
-
-    public CommunityPostCreateRequest() {
+        dest.writeByte(this.isSpam ? (byte) 1 : (byte) 0);
     }
 
     protected CommunityPostCreateRequest(Parcel in) {
@@ -235,9 +245,10 @@ public class CommunityPostCreateRequest extends BaseRequest implements Parcelabl
         this.deleteImagesIds = new ArrayList<Long>();
         in.readList(this.deleteImagesIds, Long.class.getClassLoader());
         this.isActive = in.readByte() != 0;
+        this.isSpam = in.readByte() != 0;
     }
 
-    public static final Parcelable.Creator<CommunityPostCreateRequest> CREATOR = new Parcelable.Creator<CommunityPostCreateRequest>() {
+    public static final Creator<CommunityPostCreateRequest> CREATOR = new Creator<CommunityPostCreateRequest>() {
         @Override
         public CommunityPostCreateRequest createFromParcel(Parcel source) {
             return new CommunityPostCreateRequest(source);

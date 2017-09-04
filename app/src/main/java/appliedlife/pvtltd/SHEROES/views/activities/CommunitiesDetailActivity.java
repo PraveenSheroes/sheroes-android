@@ -44,6 +44,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.MembersList;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerList;
 import appliedlife.pvtltd.SHEROES.models.entities.community.PandingMember;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.MentorDetailItem;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
@@ -63,8 +64,10 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ShareCommunityFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.AllMembersDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityRequestedDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CurrentStatusDialog;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.InviteCommunityMemberDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.OwnerRemoveDialog;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.SpamPostListDialogFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -767,5 +770,19 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
                 ((CommunitiesDetailFragment) mFragment).communityPostClick();
             }
         }
+    }
+
+    public DialogFragment spamPostListFragment(FeedRequestPojo feedRequestPojo) {
+        SpamPostListDialogFragment  spamPostDialogFragment = (SpamPostListDialogFragment) getFragmentManager().findFragmentByTag(SpamPostListDialogFragment.class.getName());
+        if (spamPostDialogFragment == null) {
+            spamPostDialogFragment = new SpamPostListDialogFragment();
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(AppConstants.SPAM_POST, feedRequestPojo);
+            spamPostDialogFragment.setArguments(bundle);
+        }
+        if (!spamPostDialogFragment.isVisible() && !spamPostDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
+            spamPostDialogFragment.show(getFragmentManager(), SpamPostListDialogFragment.class.getName());
+        }
+        return spamPostDialogFragment;
     }
 }

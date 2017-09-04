@@ -2209,6 +2209,18 @@ public class AppUtils {
         }
         return communityPostCreateRequest;
     }
+    public  CommunityPostCreateRequest spamPostApprovedRequestBuilder(Long communityId,boolean isSpam,boolean isActive) {
+        AppUtils appUtils = AppUtils.getInstance();
+        CommunityPostCreateRequest communityPostCreateRequest=new CommunityPostCreateRequest();
+        communityPostCreateRequest.setAppVersion(appUtils.getAppVersionName());
+        communityPostCreateRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+        communityPostCreateRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        communityPostCreateRequest.setCommunityId(communityId);
+        communityPostCreateRequest.setActive(isActive);
+        communityPostCreateRequest.setSpam(isSpam);
+
+        return communityPostCreateRequest;
+    }
     public SelectCommunityRequest selectCommunityRequestBuilder() {
         AppUtils appUtils = AppUtils.getInstance();
         SelectCommunityRequest selectCommunityRequest=new SelectCommunityRequest();
