@@ -105,6 +105,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.MemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectCommunityRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadRequest;
@@ -2209,15 +2210,25 @@ public class AppUtils {
         }
         return communityPostCreateRequest;
     }
-    public  CommunityPostCreateRequest spamPostApprovedRequestBuilder(Long communityId,boolean isSpam,boolean isActive) {
+    public  CommunityPostCreateRequest spamPostApprovedRequestBuilder(Long idOfEntityOrParticipant, Long communityId, boolean isActive, String createType, FeedDetail feedDetail) {
         AppUtils appUtils = AppUtils.getInstance();
         CommunityPostCreateRequest communityPostCreateRequest=new CommunityPostCreateRequest();
         communityPostCreateRequest.setAppVersion(appUtils.getAppVersionName());
         communityPostCreateRequest.setCloudMessagingId(appUtils.getCloudMessaging());
         communityPostCreateRequest.setDeviceUniqueId(appUtils.getDeviceId());
         communityPostCreateRequest.setCommunityId(communityId);
+        communityPostCreateRequest.setId(idOfEntityOrParticipant);
         communityPostCreateRequest.setActive(isActive);
-        communityPostCreateRequest.setSpam(isSpam);
+        communityPostCreateRequest.setSpam(false);
+        communityPostCreateRequest.setCreatorType(createType);
+        communityPostCreateRequest.setDescription(feedDetail.getListDescription());
+        communityPostCreateRequest.setImages(feedDetail.getImageUrls());
+            communityPostCreateRequest.setOgTitleS(feedDetail.getOgTitleS());
+            communityPostCreateRequest.setOgDescriptionS(feedDetail.getOgDescriptionS());
+            communityPostCreateRequest.setOgImageUrlS(feedDetail.getOgImageUrlS());
+            communityPostCreateRequest.setOgVideoLinkB(feedDetail.isOgVideoLinkB());
+            communityPostCreateRequest.setOgRequestedUrlS(feedDetail.getOgRequestedUrlS());
+
 
         return communityPostCreateRequest;
     }

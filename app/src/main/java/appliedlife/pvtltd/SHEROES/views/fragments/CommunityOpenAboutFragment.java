@@ -43,6 +43,7 @@ import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Member;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MemberListResponse;
@@ -56,6 +57,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
+import appliedlife.pvtltd.SHEROES.presenters.CreateCommunityPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.presenters.MembersPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.OwnerPresenter;
@@ -72,6 +74,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FOR_REFRESH_FRAGMENT_LIST;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.DELETE_COMMUNITY_POST;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.communityRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.feedRequestBuilder;
@@ -141,6 +145,7 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
     private MoEHelper mMoEHelper;
     private PayloadBuilder payloadBuilder;
     private long startedTime;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -169,12 +174,12 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()&&null != mUserPreference.get().getUserSummary().getUserBO()) {
             adminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
         }
-        if(mFeedDetail.isCommunityOwner()||adminId==AppConstants.TWO_CONSTANT)
+        if(mFeedDetail.isOwner()||adminId==AppConstants.TWO_CONSTANT)
         {
            liSpamPostUi.setVisibility(View.VISIBLE);
        }else
        {
-           liSpamPostUi.setVisibility(View.VISIBLE);
+           liSpamPostUi.setVisibility(View.GONE);
        }
         ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_ABOUT_COMMUNITY_SCREEN));
         return view;
@@ -518,20 +523,6 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
 
     }
 
-    @Override
-    public void createCommunitySuccess(BaseResponse baseResponse) {
-
-    }
-
-    @Override
-    public void getOwnerListDeactivateSuccess(DeactivateOwnerResponse deactivateOwnerResponse) {
-
-    }
-
-    @Override
-    public void postCreateCommunityOwner(CreateCommunityOwnerResponse createCommunityOwnerResponse) {
-
-    }
 
     @Override
     public void getAllMembers(List<MembersList> data) {
@@ -547,7 +538,6 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
                 mTvJoinInviteView.setText(getString(R.string.ID_JOIN));
                 mTvJoinInviteView.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
                 ((CommunitiesDetailActivity) getActivity()).onLeaveClick(CommunityEnum.FEATURE_COMMUNITY);
-
                 if(null!=mFeedDetail)
                 {
                     moEngageUtills.entityMoEngageLeaveCommunity(getActivity(),mMoEHelper,payloadBuilder,mFeedDetail.getNameOrTitle(), mFeedDetail.getIdOfEntityOrParticipant(), mFeedDetail.isClosedCommunity(), MoEngageConstants.COMMUNITY_TAG, mFeedDetail.isMember());
@@ -611,7 +601,8 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
     @OnClick(R.id.tv_post_in_moderation)
     public void tvPostModerationClick() {
         FeedRequestPojo feedRequestPojo = feedRequestBuilder(AppConstants.FEED_COMMUNITY_POST,AppConstants.ONE_CONSTANT);
-        //feedRequestPojo.setSpamPost(true);
+        feedRequestPojo.setSpamPost(true);
         ((CommunitiesDetailActivity)getActivity()).spamPostListFragment(feedRequestPojo);
     }
+
 }

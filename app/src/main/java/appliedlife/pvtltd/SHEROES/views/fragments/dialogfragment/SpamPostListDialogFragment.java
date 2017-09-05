@@ -21,6 +21,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.f2prateek.rx.preferences.Preference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,14 +32,22 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.EventDetailPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.presenters.CreateCommunityPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -48,11 +57,14 @@ import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CommunityView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FOR_REFRESH_FRAGMENT_LIST;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.DELETE_COMMUNITY_POST;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_BOOKMARK_UNBOOKMARK;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_LIKE_UNLIKE;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.feedRequestBuilder;
@@ -62,7 +74,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.notificationReadCountReq
  * Created by Praveen on 04/09/17.
  */
 
-public class SpamPostListDialogFragment extends BaseDialogFragment implements HomeView {
+public class SpamPostListDialogFragment extends BaseDialogFragment implements CommunityView {
     private final String TAG = LogUtils.makeLogTag(SpamPostListDialogFragment.class);
     @Inject
     AppUtils mAppUtils;
@@ -82,12 +94,19 @@ public class SpamPostListDialogFragment extends BaseDialogFragment implements Ho
     @Bind(R.id.li_no_spam_post_result)
     LinearLayout mLiNoResult;
     private int mPageNo = AppConstants.ONE_CONSTANT;
+    @Inject
+    Preference<LoginResponse> mUserPreference;
+    private long mUserId;
+    @Inject
+    CreateCommunityPresenter mCreateCommunityPresenter;
+    private int itemPosition;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getActivity()).inject(this);
         View view = inflater.inflate(R.layout.spam_post_list_dialog_fragment, container, false);
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         ButterKnife.bind(this, view);
+        mCreateCommunityPresenter.attachView(this);
         if (null != getArguments()) {
             Bundle bundle = getArguments();
             feedRequestPojo = bundle.getParcelable(AppConstants.SPAM_POST);
@@ -120,6 +139,10 @@ public class SpamPostListDialogFragment extends BaseDialogFragment implements Ho
             }
 
         });
+
+        if(null!=mUserPreference&&null != mUserPreference.get().getUserSummary()) {
+            mUserId = mUserPreference.get().getUserSummary().getUserId();
+        }
         mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -141,18 +164,19 @@ public class SpamPostListDialogFragment extends BaseDialogFragment implements Ho
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
         List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
-        mLiNoResult.setVisibility(View.GONE);
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
             mPageNo = mFragmentListRefreshData.getPageNo();
             mFragmentListRefreshData.setPageNo(++mPageNo);
             mPullRefreshList.allListData(feedDetailList);
             mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
             mAdapter.setCallForRecycler(AppConstants.FEED_SUB_TYPE);
+            mAdapter.setUserId(mUserId);
             mAdapter.notifyDataSetChanged();
-
+            mLiNoResult.setVisibility(View.VISIBLE);
         } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
-            // mLiNoResult.setVisibility(View.VISIBLE);
-        } else {
+            mLiNoResult.setVisibility(View.VISIBLE);
+        }else
+        {
             mLiNoResult.setVisibility(View.GONE);
         }
         mSwipeView.setRefreshing(false);
@@ -187,5 +211,63 @@ public class SpamPostListDialogFragment extends BaseDialogFragment implements Ho
     public void onEventDetailBack() {
         dismissAllowingStateLoss();
         dismiss();
+    }
+    public void approveSpamPost(FeedDetail feedDetail) {
+        itemPosition=feedDetail.getItemPosition();
+        mCreateCommunityPresenter.editCommunityPost(mAppUtils.spamPostApprovedRequestBuilder(feedDetail.getIdOfEntityOrParticipant(),feedDetail.getCommunityId(),true,AppConstants.USER,feedDetail));
+    }
+
+    public void createCommunitySuccess(BaseResponse baseResponse) {
+        if (baseResponse instanceof CreateCommunityResponse) {
+            CreateCommunityResponse createCommunityResponse = ((CreateCommunityResponse) baseResponse);
+            communityPostResponse(createCommunityResponse);
+        }
+    }
+    private void communityPostResponse(CreateCommunityResponse createCommunityResponse) {
+        if (StringUtil.isNotNullOrEmptyString(createCommunityResponse.getStatus())) {
+            switch (createCommunityResponse.getStatus()) {
+                case AppConstants.SUCCESS:
+                    FeedDetail feedDetail=createCommunityResponse.getFeedDetail();
+                    feedDetail.setItemPosition(itemPosition);
+                    mAdapter.setDataOnPosition(feedDetail,itemPosition);
+                    mLayoutManager.scrollToPosition(itemPosition);
+                    mAdapter.notifyDataSetChanged();
+                    break;
+                case AppConstants.FAILED:
+                    ((CommunitiesDetailActivity) getActivity()).onShowErrorDialog(createCommunityResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), DELETE_COMMUNITY_POST);
+                    break;
+                default:
+                    ((CommunitiesDetailActivity) getActivity()).onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), DELETE_COMMUNITY_POST);
+            }
+        } else {
+            ((CommunitiesDetailActivity) getActivity()).onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), DELETE_COMMUNITY_POST);
+        }
+    }
+
+
+    @Override
+    public void getSelectedCommunityListSuccess(List<CommunityPostResponse> selected_community_response) {
+
+    }
+
+    @Override
+    public void getOwnerListSuccess(OwnerListResponse ownerListResponse) {
+
+    }
+
+
+    @Override
+    public void getOwnerListDeactivateSuccess(DeactivateOwnerResponse deactivateOwnerResponse) {
+
+    }
+
+    @Override
+    public void postCreateCommunityOwner(CreateCommunityOwnerResponse createCommunityOwnerResponse) {
+
+    }
+
+    @Override
+    public void getSuccessForAllResponse(BaseResponse baseResponse, CommunityEnum communityEnum) {
+
     }
 }

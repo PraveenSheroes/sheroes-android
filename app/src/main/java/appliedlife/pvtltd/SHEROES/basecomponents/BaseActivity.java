@@ -47,6 +47,7 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityPostActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.JobDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.errorview.NetworkTimeoutDialog;
@@ -579,7 +580,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
             case R.id.tv_feed_community_post_user_menu:
                 mFeedDetail = (FeedDetail) baseResponse;
                 if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
-                    if (mFeedDetail.getAuthorId() == userPreference.get().getUserSummary().getUserId() || mFragmentOpen.isOwner()) {
+                    if (mFeedDetail.getAuthorId() == userPreference.get().getUserSummary().getUserId() || mFragmentOpen.isOwner()||mFeedDetail.isCommunityOwner()) {
                         tvDelete.setVisibility(View.VISIBLE);
                         tvEdit.setVisibility(View.VISIBLE);
                     } else {
@@ -829,9 +830,9 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                         showNetworkTimeoutDoalog(true, false, getString(R.string.ID_BAD_RQUEST));
                     } else if (AppConstants.HTTP_401_UNAUTHORIZED.contains(errorReason)) {
                         showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_UN_AUTHORIZE));
-                     /*   if (this instanceof HomeActivity) {
+                        if (this instanceof HomeActivity) {
                             ((HomeActivity)this).logOut();
-                        }*/
+                        }
                     } else {
                         showNetworkTimeoutDoalog(true, false, errorReason);
                     }

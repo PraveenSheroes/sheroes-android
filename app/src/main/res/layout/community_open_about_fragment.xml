@@ -250,7 +250,7 @@
                 android:layout_width="@dimen/dp_size_100"
                 android:layout_height="@dimen/dp_size_20"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/dp_size_20"
+                android:layout_marginTop="@dimen/dp_size_10"
                 android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:gravity="center"
                 android:maxLines="1"

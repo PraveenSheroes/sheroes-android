@@ -276,6 +276,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
             mFragmentListRefreshData.setPageNo(++mPageNo);
             mPullRefreshList.allListData(feedDetailList);
             mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
+            mAdapter.setUserId(mUserId);
             mAdapter.setCallForRecycler(AppConstants.FEED_SUB_TYPE);
             mAdapter.notifyDataSetChanged();
 

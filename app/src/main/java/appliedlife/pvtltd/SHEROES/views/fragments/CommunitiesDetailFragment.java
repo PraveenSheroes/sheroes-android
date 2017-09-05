@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.f2prateek.rx.preferences.Preference;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
@@ -29,13 +30,16 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
+import appliedlife.pvtltd.SHEROES.presenters.CreateCommunityPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -49,6 +53,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FOR_REFRESH_FRAGMENT_LIST;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.DELETE_COMMUNITY_POST;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.userCommunityDetailRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.userCommunityPostRequestBuilder;
@@ -90,7 +96,11 @@ public class CommunitiesDetailFragment extends BaseFragment {
     private MoEHelper mMoEHelper;
     private PayloadBuilder payloadBuilder;
     private MoEngageUtills moEngageUtills;
-
+    @Inject
+    Preference<LoginResponse> mUserPreference;
+    @Inject
+    CreateCommunityPresenter mCreateCommunityPresenter;
+    private long mUserId;
     public static CommunitiesDetailFragment createInstance(FeedDetail feedDetail, CommunityEnum communityEnum, long communityPostId) {
         CommunitiesDetailFragment communitiesDetailFragment = new CommunitiesDetailFragment();
         Bundle bundle = new Bundle();
@@ -122,6 +132,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
             mPullRefreshList = new SwipPullRefreshList();
             mPullRefreshList.setPullToRefresh(false);
             mHomePresenter.attachView(this);
+            mCreateCommunityPresenter.attachView(this);
             mLayoutManager = new LinearLayoutManager(getContext());
             mRecyclerView.setLayoutManager(mLayoutManager);
             if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getCallFromName()) && mFeedDetail.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
@@ -186,6 +197,10 @@ public class CommunitiesDetailFragment extends BaseFragment {
             } else {
                 mFragmentListRefreshData.setSearchStringName(AppConstants.COMMUNITIES_DETAIL);
                 mHomePresenter.getFeedFromPresenter(userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCommunityId()));
+            }
+
+            if(null!=mUserPreference&&null != mUserPreference.get().getUserSummary()) {
+                mUserId = mUserPreference.get().getUserSummary().getUserId();
             }
             mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
@@ -363,6 +378,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
                     mProgressBar.setVisibility(View.GONE);
                     mPullRefreshList.allListData(feedDetailList);
                     mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
+                    mAdapter.setUserId(mUserId);
                     mAdapter.notifyDataSetChanged();
                 }
             }
@@ -478,6 +494,31 @@ public class CommunitiesDetailFragment extends BaseFragment {
     public void stopProgressBar() {
         if (mFragmentListRefreshData.getPageNo() != AppConstants.ONE_CONSTANT) {
             mProgressBar.setVisibility(View.GONE);
+        }
+    }
+    public void approveSpamPost(FeedDetail feedDetail) {
+        mCreateCommunityPresenter.editCommunityPost(mAppUtils.spamPostApprovedRequestBuilder(feedDetail.getIdOfEntityOrParticipant(),feedDetail.getCommunityId(),true,AppConstants.USER,feedDetail));
+    }
+    public void createCommunitySuccess(BaseResponse baseResponse) {
+        if (baseResponse instanceof CreateCommunityResponse) {
+            CreateCommunityResponse createCommunityResponse = ((CreateCommunityResponse) baseResponse);
+            communityPostResponse(createCommunityResponse);
+        }
+    }
+    private void communityPostResponse(CreateCommunityResponse createCommunityResponse) {
+        if (StringUtil.isNotNullOrEmptyString(createCommunityResponse.getStatus())) {
+            switch (createCommunityResponse.getStatus()) {
+                case AppConstants.SUCCESS:
+                    commentListRefresh(createCommunityResponse.getFeedDetail(), ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+                    break;
+                case AppConstants.FAILED:
+                    mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(createCommunityResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), DELETE_COMMUNITY_POST);
+                    break;
+                default:
+                    mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), DELETE_COMMUNITY_POST);
+            }
+        } else {
+            mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), DELETE_COMMUNITY_POST);
         }
     }
 

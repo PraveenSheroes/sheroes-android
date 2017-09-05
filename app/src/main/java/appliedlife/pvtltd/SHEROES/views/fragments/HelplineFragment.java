@@ -126,8 +126,6 @@ public class HelplineFragment extends BaseFragment {
         params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
         appBarLayoutParams.setBehavior(new AppBarLayout.Behavior());
         ((HomeActivity) getActivity()).mAppBarLayout.setLayoutParams(appBarLayoutParams);
-
-
         mHelplinePresenter.detachView();
         long timeSpent = System.currentTimeMillis() - startedTime;
     }

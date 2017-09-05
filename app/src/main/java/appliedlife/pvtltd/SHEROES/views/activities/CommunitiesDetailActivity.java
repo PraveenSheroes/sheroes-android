@@ -59,6 +59,7 @@ import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.Cu
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOpenAboutFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.InviteCommunityOwner;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareCommunityFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.AllMembersDialogFragment;
@@ -125,7 +126,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
     private long communityId;
     private long idOFEntityParticipant;
     private boolean isFromFeedPost;
-
+    private SpamPostListDialogFragment  spamPostDialogFragment;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -336,7 +337,17 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
             case R.id.tv_owner_add:
                 CallCommunityOwnerSearchFragment(feedDetail, feedDetail.getIdOfEntityOrParticipant());
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
-
+                break;
+            case R.id.tv_approve_spam_post:
+                if(null!=spamPostDialogFragment)
+                {
+                    spamPostDialogFragment.approveSpamPost(feedDetail);
+                }else {
+                    Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
+                    if (AppUtils.isFragmentUIActive(fragment)) {
+                        ((CommunitiesDetailFragment) fragment).approveSpamPost(feedDetail);
+                    }
+                }
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + id);
@@ -773,7 +784,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
     }
 
     public DialogFragment spamPostListFragment(FeedRequestPojo feedRequestPojo) {
-        SpamPostListDialogFragment  spamPostDialogFragment = (SpamPostListDialogFragment) getFragmentManager().findFragmentByTag(SpamPostListDialogFragment.class.getName());
+          spamPostDialogFragment = (SpamPostListDialogFragment) getFragmentManager().findFragmentByTag(SpamPostListDialogFragment.class.getName());
         if (spamPostDialogFragment == null) {
             spamPostDialogFragment = new SpamPostListDialogFragment();
             Bundle bundle = new Bundle();

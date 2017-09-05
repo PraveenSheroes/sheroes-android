@@ -237,7 +237,17 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
             normalCommunityPostUi(userId);
         }
-                handlingSpamUi(userId);
+        if(dataItem.isSpamPost()) {
+            handlingSpamUi(userId);
+        }else
+        {
+            liCommunityPostMainLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.white));
+            liCommunityPostMainLayout.setAlpha(1f);
+            flSpamPostUi.setVisibility(View.GONE);
+            liReactionCommentBlock.setVisibility(View.VISIBLE);
+            liApproveDelete.setVisibility(View.GONE);
+            tvReviewDescription.setVisibility(View.VISIBLE);
+        }
 
         }
     }
@@ -1510,7 +1520,10 @@ private void normalCommunityPostUi(long userId)
             }
 
     }
+    @OnClick(R.id.tv_review_description)
+    public void onReviewDescriptionClick() {
 
+    }
     @OnClick(R.id.tv_approve_spam_post)
     public void onApproveSpamPostClick() {
         viewInterface.handleOnClick(dataItem, tvApproveSpamPost);

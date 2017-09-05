@@ -457,7 +457,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements SelectC
 
         mTv_community_post_submit.setText("POST AS COMMUNITY");
         mTv_community_post_submit.setVisibility(View.VISIBLE);
-        mCreaterType = "COMMUNITY_OWNER";
+        mCreaterType = AppConstants.COMMUNITY_OWNER;
     }
 
     @OnClick(R.id.lnr_community_post2)
