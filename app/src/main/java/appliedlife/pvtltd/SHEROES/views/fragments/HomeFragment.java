@@ -52,6 +52,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.GcmIdResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.InstallUpdateForMoEngage;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostResponse;
 import appliedlife.pvtltd.SHEROES.presenters.CreateCommunityPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.service.GCMClientManager;
@@ -73,6 +74,7 @@ import rx.schedulers.Schedulers;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FOR_REFRESH_FRAGMENT_LIST;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.DELETE_COMMUNITY_POST;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_RESPONSE;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.SPAM_POST_APPROVE;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.PERMISSIONS_REQUEST_READ_CONTACTS;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.acceptChallengeRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.challengetRequestBuilder;
@@ -98,8 +100,6 @@ public class HomeFragment extends BaseFragment {
     Preference<InstallUpdateForMoEngage> mInstallUpdatePreference;
     @Inject
     HomePresenter mHomePresenter;
-    @Inject
-    CreateCommunityPresenter mCreateCommunityPresenter;
     @Bind(R.id.rv_home_list)
     RecyclerView mRecyclerView;
     @Bind(R.id.pb_home_progress_bar)
@@ -129,7 +129,7 @@ public class HomeFragment extends BaseFragment {
     private ChallengeDataItem mChallengeDataItem;
     private int mPercentCompleted;
     private long mChallengeId;
-    private int mItemPosition;
+    private boolean mIsSpam;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -144,7 +144,6 @@ public class HomeFragment extends BaseFragment {
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
         mHomePresenter.attachView(this);
-        mCreateCommunityPresenter.attachView(this);
         mLayoutManager = new LinearLayoutManager(getContext());
         mLayoutManager.setInitialPrefetchItemCount(1);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -303,8 +302,35 @@ public class HomeFragment extends BaseFragment {
             case APP_INTRO:
                 appIntroResponse(baseResponse);
                 break;
+            case SPAM_POST_APPROVE:
+                approveSpamPostResponse(baseResponse);
+                break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
+        }
+    }
+    private void approveSpamPostResponse(BaseResponse baseResponse) {
+        switch (baseResponse.getStatus()) {
+            case AppConstants.SUCCESS:
+                if (baseResponse instanceof ApproveSpamPostResponse) {
+                    try {
+                        FeedDetail feedDetail = (FeedDetail) mFeedDetail.clone();
+                        if(mIsSpam)
+                        {
+                            commentListRefresh(feedDetail, DELETE_COMMUNITY_POST);
+                        }else {
+                            feedDetail.setSpamPost(false);
+                            commentListRefresh(feedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+                        }
+                    } catch (CloneNotSupportedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+            case AppConstants.FAILED:
+                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), SPAM_POST_APPROVE);
+                break;
+            default:
         }
     }
 
@@ -507,9 +533,10 @@ public class HomeFragment extends BaseFragment {
         super.likeAndUnlikeRequest(baseResponse, reactionValue, position);
     }
 
-    public void approveSpamPost(FeedDetail feedDetail) {
-        mItemPosition =feedDetail.getItemPosition();
-            mCreateCommunityPresenter.editCommunityPost(mAppUtils.spamPostApprovedRequestBuilder(feedDetail.getIdOfEntityOrParticipant(),feedDetail.getCommunityId(),true,AppConstants.USER,feedDetail));
+    public void approveSpamPost(FeedDetail feedDetail,boolean isActive,boolean isSpam,boolean isApproved) {
+        mFeedDetail=feedDetail;
+        mIsSpam=isSpam;
+        mHomePresenter.getSpamPostApproveFromPresenter(mAppUtils.spamPostApprovedRequestBuilder(feedDetail,isActive,isSpam,isApproved));
     }
     @Override
     public void onDestroyView() {
@@ -602,30 +629,6 @@ public class HomeFragment extends BaseFragment {
                 getUserPhoneContactsAndSend().subscribeOn(Schedulers.newThread()).subscribe();
 
             }
-        }
-    }
-    public void createCommunitySuccess(BaseResponse baseResponse) {
-        if (baseResponse instanceof CreateCommunityResponse) {
-            CreateCommunityResponse createCommunityResponse = ((CreateCommunityResponse) baseResponse);
-            communityPostResponse(createCommunityResponse);
-        }
-    }
-    private void communityPostResponse(CreateCommunityResponse createCommunityResponse) {
-        if (StringUtil.isNotNullOrEmptyString(createCommunityResponse.getStatus())) {
-            switch (createCommunityResponse.getStatus()) {
-                case AppConstants.SUCCESS:
-                    FeedDetail feedDetail=createCommunityResponse.getFeedDetail();
-                    feedDetail.setItemPosition(mItemPosition);
-                    commentListRefresh(feedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
-                    break;
-                case AppConstants.FAILED:
-                    mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(createCommunityResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), DELETE_COMMUNITY_POST);
-                    break;
-                default:
-                    mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), DELETE_COMMUNITY_POST);
-            }
-        } else {
-            mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), DELETE_COMMUNITY_POST);
         }
     }
 

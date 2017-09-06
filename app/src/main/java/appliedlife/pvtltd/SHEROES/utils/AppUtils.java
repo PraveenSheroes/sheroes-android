@@ -119,6 +119,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.SignupRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.Device;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.GooglePlusRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.User;
+import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.LatLongWithLocation;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.MakeIndiaSafeRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingInterestRequest;
@@ -2210,27 +2211,17 @@ public class AppUtils {
         }
         return communityPostCreateRequest;
     }
-    public  CommunityPostCreateRequest spamPostApprovedRequestBuilder(Long idOfEntityOrParticipant, Long communityId, boolean isActive, String createType, FeedDetail feedDetail) {
+    public ApproveSpamPostRequest spamPostApprovedRequestBuilder(FeedDetail feedDetail,boolean isActive,boolean isSpam,boolean isApproved) {
         AppUtils appUtils = AppUtils.getInstance();
-        CommunityPostCreateRequest communityPostCreateRequest=new CommunityPostCreateRequest();
-        communityPostCreateRequest.setAppVersion(appUtils.getAppVersionName());
-        communityPostCreateRequest.setCloudMessagingId(appUtils.getCloudMessaging());
-        communityPostCreateRequest.setDeviceUniqueId(appUtils.getDeviceId());
-        communityPostCreateRequest.setCommunityId(communityId);
-        communityPostCreateRequest.setId(idOfEntityOrParticipant);
-        communityPostCreateRequest.setActive(isActive);
-        communityPostCreateRequest.setSpam(false);
-        communityPostCreateRequest.setCreatorType(createType);
-        communityPostCreateRequest.setDescription(feedDetail.getListDescription());
-        communityPostCreateRequest.setImages(feedDetail.getImageUrls());
-            communityPostCreateRequest.setOgTitleS(feedDetail.getOgTitleS());
-            communityPostCreateRequest.setOgDescriptionS(feedDetail.getOgDescriptionS());
-            communityPostCreateRequest.setOgImageUrlS(feedDetail.getOgImageUrlS());
-            communityPostCreateRequest.setOgVideoLinkB(feedDetail.isOgVideoLinkB());
-            communityPostCreateRequest.setOgRequestedUrlS(feedDetail.getOgRequestedUrlS());
-
-
-        return communityPostCreateRequest;
+        ApproveSpamPostRequest approveSpamPostRequest=new ApproveSpamPostRequest();
+        approveSpamPostRequest.setAppVersion(appUtils.getAppVersionName());
+        approveSpamPostRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+        approveSpamPostRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        approveSpamPostRequest.setApproved(isApproved);
+        approveSpamPostRequest.setId(feedDetail.getIdOfEntityOrParticipant());
+        approveSpamPostRequest.setActive(isActive);
+        approveSpamPostRequest.setSpam(isSpam);
+        return approveSpamPostRequest;
     }
     public SelectCommunityRequest selectCommunityRequestBuilder() {
         AppUtils appUtils = AppUtils.getInstance();

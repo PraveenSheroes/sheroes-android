@@ -66,6 +66,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.UserFromReferralResponse
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.GooglePlusRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.GooglePlusResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.MakeIndiaSafeRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.MakeIndiaSafeResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
@@ -320,6 +322,8 @@ public interface SheroesAppServiceApi {
 
     @POST("participation/notification/bell/unread")
     Observable<NotificationReadCountResponse> notificationReadCount(@Body NotificationReadCount notificationReadCount);
+    @POST("participation/post/approve_or_delete")
+    Observable<ApproveSpamPostResponse> spamPostApprove(@Body ApproveSpamPostRequest approveSpamPostRequest);
 
     @POST("participation/challenge/get/challenges")
     Observable<ChallengeListResponse> challengeList(@Body ChallengeRequest challengeRequest);

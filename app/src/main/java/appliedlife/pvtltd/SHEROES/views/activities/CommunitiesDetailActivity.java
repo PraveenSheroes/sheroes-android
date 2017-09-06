@@ -249,7 +249,6 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
             communityDetailHandled(view, baseResponse);
         } else if (baseResponse instanceof OwnerList) {
             showOwnerRemoveDialog(true, baseResponse);
-
         } else if (baseResponse instanceof Member) {
             switch (id) {
                 case R.id.tv_owner_cross_from_open_about:
@@ -341,14 +340,27 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
             case R.id.tv_approve_spam_post:
                 if(null!=spamPostDialogFragment)
                 {
-                    spamPostDialogFragment.approveSpamPost(feedDetail);
+                    spamPostDialogFragment.approveSpamPost(mFeedDetail,true,false,true);
                 }else {
                     Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
                     if (AppUtils.isFragmentUIActive(fragment)) {
-                        ((CommunitiesDetailFragment) fragment).approveSpamPost(feedDetail);
+                        ((CommunitiesDetailFragment) fragment).approveSpamPost(mFeedDetail,true,false,true);
                     }
                 }
                 break;
+
+            case R.id.tv_delete_spam_post:
+                if(null!=spamPostDialogFragment)
+                {
+                    spamPostDialogFragment.approveSpamPost(mFeedDetail,true,true,false);
+                }else {
+                    Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
+                    if (AppUtils.isFragmentUIActive(fragment)) {
+                        ((CommunitiesDetailFragment) fragment).approveSpamPost(mFeedDetail,true,true,false);
+                    }
+                }
+                break;
+
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + id);
         }
@@ -677,16 +689,24 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
 
     @OnClick(R.id.iv_community_detail_back)
     public void onBackClick() {
-        Intent intent = new Intent();
-        Bundle bundle = new Bundle();
-        if (isFromFeedPost) {
-            mFeedDetail.setCommunityId(communityId);
-            mFeedDetail.setIdOfEntityOrParticipant(idOFEntityParticipant);
+        if(mCommunityId>0||mCommunityPostId>0)
+        {
+            Intent intent = new Intent(this,HomeActivity.class);
+            startActivity(intent);
         }
-        bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, mFeedDetail);
-        bundle.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, communityEnum);
-        intent.putExtras(bundle);
-        setResult(RESULT_OK, intent);
+        else
+            {
+            Intent intent = new Intent();
+            Bundle bundle = new Bundle();
+            if (isFromFeedPost) {
+                mFeedDetail.setCommunityId(communityId);
+                mFeedDetail.setIdOfEntityOrParticipant(idOFEntityParticipant);
+            }
+            bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, mFeedDetail);
+            bundle.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, communityEnum);
+            intent.putExtras(bundle);
+            setResult(RESULT_OK, intent);
+               }
         finish();
         long timeSpent = System.currentTimeMillis() - startedTime;
         if (null != mFeedDetail && StringUtil.isNotNullOrEmptyString(mFeedDetail.getNameOrTitle()))

@@ -33,6 +33,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.GcmIdResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostResponse;
@@ -69,6 +71,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.JOIN_INVITE
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.LIKE_UNLIKE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.MARK_AS_SPAM;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.NOTIFICATION_COUNT;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.SPAM_POST_APPROVE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.USER_CONTACTS_ACCESS_SUCCESS;
 
 /**
@@ -575,7 +578,27 @@ public class HomePresenter extends BasePresenter<HomeView> {
         });
         registerSubscription(subscription);
     }
+    public void getSpamPostApproveFromPresenter(ApproveSpamPostRequest approveSpamPostRequest) {
+        Subscription subscription = mHomeModel.getSpamPostApproveFromModel(approveSpamPostRequest).subscribe(new Subscriber<ApproveSpamPostResponse>() {
+            @Override
+            public void onCompleted() {
+            }
 
+            @Override
+            public void onError(Throwable e) {
+                getMvpView().stopProgressBar();
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
+            }
+
+            @Override
+            public void onNext(ApproveSpamPostResponse approveSpamPostResponse) {
+                if (null != approveSpamPostResponse) {
+                    getMvpView().getNotificationReadCountSuccess(approveSpamPostResponse,SPAM_POST_APPROVE);
+                }
+            }
+        });
+        registerSubscription(subscription);
+    }
     public void getChallengeListFromPresenter(ChallengeRequest challengeRequest) {
         Subscription subscription = mHomeModel.getChallengeListFromModel(challengeRequest).subscribe(new Subscriber<ChallengeListResponse>() {
             @Override

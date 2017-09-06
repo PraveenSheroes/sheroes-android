@@ -47,6 +47,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.EventDetailPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostResponse;
 import appliedlife.pvtltd.SHEROES.presenters.CreateCommunityPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -67,6 +68,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FO
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.DELETE_COMMUNITY_POST;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_BOOKMARK_UNBOOKMARK;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_LIKE_UNLIKE;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.SPAM_POST_APPROVE;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.feedRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.notificationReadCountRequestBuilder;
 
@@ -74,7 +76,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.notificationReadCountReq
  * Created by Praveen on 04/09/17.
  */
 
-public class SpamPostListDialogFragment extends BaseDialogFragment implements CommunityView {
+public class SpamPostListDialogFragment extends BaseDialogFragment  {
     private final String TAG = LogUtils.makeLogTag(SpamPostListDialogFragment.class);
     @Inject
     AppUtils mAppUtils;
@@ -97,16 +99,14 @@ public class SpamPostListDialogFragment extends BaseDialogFragment implements Co
     @Inject
     Preference<LoginResponse> mUserPreference;
     private long mUserId;
-    @Inject
-    CreateCommunityPresenter mCreateCommunityPresenter;
-    private int itemPosition;
+    private FeedDetail mApprovePostFeedDetail;
+    private boolean mIsSpam;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getActivity()).inject(this);
         View view = inflater.inflate(R.layout.spam_post_list_dialog_fragment, container, false);
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         ButterKnife.bind(this, view);
-        mCreateCommunityPresenter.attachView(this);
         if (null != getArguments()) {
             Bundle bundle = getArguments();
             feedRequestPojo = bundle.getParcelable(AppConstants.SPAM_POST);
@@ -172,7 +172,6 @@ public class SpamPostListDialogFragment extends BaseDialogFragment implements Co
             mAdapter.setCallForRecycler(AppConstants.FEED_SUB_TYPE);
             mAdapter.setUserId(mUserId);
             mAdapter.notifyDataSetChanged();
-            mLiNoResult.setVisibility(View.VISIBLE);
         } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
             mLiNoResult.setVisibility(View.VISIBLE);
         }else
@@ -212,62 +211,46 @@ public class SpamPostListDialogFragment extends BaseDialogFragment implements Co
         dismissAllowingStateLoss();
         dismiss();
     }
-    public void approveSpamPost(FeedDetail feedDetail) {
-        itemPosition=feedDetail.getItemPosition();
-        mCreateCommunityPresenter.editCommunityPost(mAppUtils.spamPostApprovedRequestBuilder(feedDetail.getIdOfEntityOrParticipant(),feedDetail.getCommunityId(),true,AppConstants.USER,feedDetail));
+    public void approveSpamPost(FeedDetail feedDetail,boolean isActive,boolean isSpam,boolean isApproved) {
+        mApprovePostFeedDetail=feedDetail;
+        mIsSpam=isSpam;
+        mHomePresenter.getSpamPostApproveFromPresenter(mAppUtils.spamPostApprovedRequestBuilder(feedDetail,isActive,isSpam,isApproved));
     }
 
-    public void createCommunitySuccess(BaseResponse baseResponse) {
-        if (baseResponse instanceof CreateCommunityResponse) {
-            CreateCommunityResponse createCommunityResponse = ((CreateCommunityResponse) baseResponse);
-            communityPostResponse(createCommunityResponse);
+    @Override
+    public void getNotificationReadCountSuccess(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
+        switch (feedParticipationEnum) {
+            case SPAM_POST_APPROVE:
+                approveSpamPostResponse(baseResponse);
+                break;
+            default:
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
         }
     }
-    private void communityPostResponse(CreateCommunityResponse createCommunityResponse) {
-        if (StringUtil.isNotNullOrEmptyString(createCommunityResponse.getStatus())) {
-            switch (createCommunityResponse.getStatus()) {
-                case AppConstants.SUCCESS:
-                    FeedDetail feedDetail=createCommunityResponse.getFeedDetail();
-                    feedDetail.setItemPosition(itemPosition);
-                    mAdapter.setDataOnPosition(feedDetail,itemPosition);
-                    mLayoutManager.scrollToPosition(itemPosition);
-                    mAdapter.notifyDataSetChanged();
-                    break;
-                case AppConstants.FAILED:
-                    ((CommunitiesDetailActivity) getActivity()).onShowErrorDialog(createCommunityResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), DELETE_COMMUNITY_POST);
-                    break;
-                default:
-                    ((CommunitiesDetailActivity) getActivity()).onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), DELETE_COMMUNITY_POST);
-            }
-        } else {
-            ((CommunitiesDetailActivity) getActivity()).onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), DELETE_COMMUNITY_POST);
+    private void approveSpamPostResponse(BaseResponse baseResponse) {
+        switch (baseResponse.getStatus()) {
+            case AppConstants.SUCCESS:
+                if (baseResponse instanceof ApproveSpamPostResponse) {
+                    if(null!=mApprovePostFeedDetail) {
+                        if(mIsSpam)
+                        {
+                            mAdapter.removeDataOnPosition(mApprovePostFeedDetail, mApprovePostFeedDetail.getItemPosition());
+                            mLayoutManager.scrollToPosition(mApprovePostFeedDetail.getItemPosition());
+                            mAdapter.notifyDataSetChanged();
+                        }else {
+                            mApprovePostFeedDetail.setSpamPost(false);
+                            mAdapter.setDataOnPosition(mApprovePostFeedDetail,mApprovePostFeedDetail.getItemPosition());
+                            mLayoutManager.scrollToPosition(mApprovePostFeedDetail.getItemPosition());
+                            mAdapter.notifyDataSetChanged();
+                        }
+                    }
+                }
+                break;
+            case AppConstants.FAILED:
+                ((CommunitiesDetailActivity) getActivity()).onShowErrorDialog(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), SPAM_POST_APPROVE);
+                break;
+            default:
+                ((CommunitiesDetailActivity) getActivity()).onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), DELETE_COMMUNITY_POST);
         }
-    }
-
-
-    @Override
-    public void getSelectedCommunityListSuccess(List<CommunityPostResponse> selected_community_response) {
-
-    }
-
-    @Override
-    public void getOwnerListSuccess(OwnerListResponse ownerListResponse) {
-
-    }
-
-
-    @Override
-    public void getOwnerListDeactivateSuccess(DeactivateOwnerResponse deactivateOwnerResponse) {
-
-    }
-
-    @Override
-    public void postCreateCommunityOwner(CreateCommunityOwnerResponse createCommunityOwnerResponse) {
-
-    }
-
-    @Override
-    public void getSuccessForAllResponse(BaseResponse baseResponse, CommunityEnum communityEnum) {
-
     }
 }

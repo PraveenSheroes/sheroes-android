@@ -30,6 +30,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.GcmIdResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.FollowedResponse;
@@ -308,6 +310,18 @@ public class HomeModel {
                     @Override
                     public NotificationReadCountResponse call(NotificationReadCountResponse notificationReadCountResponse) {
                         return notificationReadCountResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+    public Observable<ApproveSpamPostResponse> getSpamPostApproveFromModel(ApproveSpamPostRequest approveSpamPostRequest) {
+        LogUtils.info(TAG, " Spam post  request" + new Gson().toJson(approveSpamPostRequest));
+        return sheroesAppServiceApi.spamPostApprove(approveSpamPostRequest)
+                .map(new Func1<ApproveSpamPostResponse, ApproveSpamPostResponse>() {
+                    @Override
+                    public ApproveSpamPostResponse call(ApproveSpamPostResponse approveSpamPostResponse) {
+                        return approveSpamPostResponse;
                     }
                 })
                 .subscribeOn(Schedulers.io())

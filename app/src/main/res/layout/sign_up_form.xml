@@ -137,7 +137,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/visiting_card_backgroung"
             android:hint="@string/ID_SIGN_UP_PASSWORD_HINT"
-            android:inputType="text"
+            android:inputType="textPassword"
             android:maxLines="@integer/int_value_for_line_1"
             android:textSize="@dimen/sp_size_14" />
 

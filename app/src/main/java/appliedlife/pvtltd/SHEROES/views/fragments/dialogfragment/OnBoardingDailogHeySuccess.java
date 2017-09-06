@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.f2prateek.rx.preferences.Preference;
@@ -31,7 +32,8 @@ public class OnBoardingDailogHeySuccess extends BaseDialogFragment {
     TextView mTvName;
     @Inject
     Preference<LoginResponse> userPreference;
-
+    @Bind(R.id.sv_welcome_sheroes_boardinng)
+    ScrollView mScrollView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getActivity()).inject(this);
@@ -41,6 +43,13 @@ public class OnBoardingDailogHeySuccess extends BaseDialogFragment {
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getFirstName())) {
             mTvName.setText(userPreference.get().getUserSummary().getFirstName());
         }
+        mScrollView.post(new Runnable() {
+            public void run() {
+                mScrollView.fullScroll(mScrollView.FOCUS_DOWN);
+            }
+        });
+        mScrollView.scrollTo(0, mScrollView.getBottom() + 1);
+
         setCancelable(false);
         return view;
     }

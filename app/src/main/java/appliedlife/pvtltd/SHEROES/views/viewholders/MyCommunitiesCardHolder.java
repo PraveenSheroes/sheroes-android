@@ -147,9 +147,9 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
             List<String> tags = dataItem.getTags();
             String mergeTags = AppConstants.EMPTY_STRING;
             for (String tag : tags) {
-                mergeTags += tag + AppConstants.COMMA;
+                mergeTags += tag + AppConstants.COMMA+AppConstants.SPACE;
             }
-            mergeTags = mergeTags.substring(0, mergeTags.length() - 1);
+            mergeTags = mergeTags.substring(0, mergeTags.length() - 2);
             String tagHeader = LEFT_HTML_TAG + context.getString(R.string.ID_TAGS) + RIGHT_HTML_TAG;
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                 tvCommunityTag.setText(Html.fromHtml(tagHeader +AppConstants.SPACE+ AppConstants.COLON + AppConstants.SPACE + mergeTags, 0)); // for 24 api and more

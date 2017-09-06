@@ -484,12 +484,18 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
 
     @OnClick(R.id.tv_article_detail_back)
     public void onBackClick() {
-        Intent intent = new Intent();
-        Bundle bundle = new Bundle();
-        mFeedDetail.setItemPosition(feedDetailPosition);
-        bundle.putParcelable(AppConstants.HOME_FRAGMENT, mFeedDetail);
-        intent.putExtras(bundle);
-        setResult(RESULT_OK, intent);
+        if(mArticleId>0)
+        {
+            Intent intent = new Intent(this,HomeActivity.class);
+            startActivity(intent);
+        }else {
+            Intent intent = new Intent();
+            Bundle bundle = new Bundle();
+            mFeedDetail.setItemPosition(feedDetailPosition);
+            bundle.putParcelable(AppConstants.HOME_FRAGMENT, mFeedDetail);
+            intent.putExtras(bundle);
+            setResult(RESULT_OK, intent);
+        }
         finish();
         moEngageData(mFeedDetail);
         overridePendingTransition(R.anim.right_to_left_anim_enter, R.anim.right_to_left_anim_exit);

@@ -22,6 +22,7 @@
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:gravity="bottom|center_horizontal"
             android:text="@string/ID_FEED"
+            android:padding="@dimen/dp_size_8"
             android:drawableTop="@drawable/ic_home_selected_icon"
             android:textAllCaps="true"
             android:textColor="@color/footer_icon_text"
@@ -33,11 +34,12 @@
             android:layout_gravity="center"
             android:layout_weight=".5"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:padding="@dimen/dp_size_8"
             android:gravity="bottom|center_horizontal"
             android:text="@string/ID_COMMUNITIY"
             android:textAllCaps="true"
             android:drawableTop="@drawable/ic_community_unselected_icon"
-            android:textColor="@color/footer_icon_text"
+            android:textColor="@color/teg_text_color"
             android:textSize="@dimen/sp_size_12" />
 
     </LinearLayout>

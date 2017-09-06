@@ -31,6 +31,7 @@
             android:fontFamily="@string/ID_ROBOTO_BOLD"/>
     </RelativeLayout>
     <ScrollView
+        android:id="@+id/sv_welcome_sheroes_boardinng"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="10dp">
