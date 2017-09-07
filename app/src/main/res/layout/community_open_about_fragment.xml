@@ -225,9 +225,19 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true" />
                 <TextView
+                    android:id="@+id/tv_post_moderation_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/sp_size_16"
+                    android:padding="@dimen/dp_size_8"
+                    android:layout_marginRight="@dimen/dp_size_50"
+                    android:textColor="@color/email"
+                    android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                    android:layout_alignParentRight="true"
+                />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:gravity="center"
                     android:padding="@dimen/dp_size_10"
                     android:layout_marginRight="@dimen/dp_size_14"

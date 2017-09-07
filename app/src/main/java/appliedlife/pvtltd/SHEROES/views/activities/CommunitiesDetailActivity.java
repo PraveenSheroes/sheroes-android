@@ -340,11 +340,11 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
             case R.id.tv_approve_spam_post:
                 if(null!=spamPostDialogFragment)
                 {
-                    spamPostDialogFragment.approveSpamPost(mFeedDetail,true,false,true);
+                    spamPostDialogFragment.approveSpamPost(feedDetail,true,false,true);
                 }else {
                     Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
                     if (AppUtils.isFragmentUIActive(fragment)) {
-                        ((CommunitiesDetailFragment) fragment).approveSpamPost(mFeedDetail,true,false,true);
+                        ((CommunitiesDetailFragment) fragment).approveSpamPost(feedDetail,true,false,true);
                     }
                 }
                 break;

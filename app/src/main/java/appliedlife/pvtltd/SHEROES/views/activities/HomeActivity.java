@@ -242,6 +242,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             mTitleText.setText(getString(R.string.ID_APP_NAME));
             mTitleText.setVisibility(View.VISIBLE);
             mICSheroes.setVisibility(View.GONE);
+            mTvMakeIndiaSafe.setVisibility(View.GONE);
         }
         if (StringUtil.isNotNullOrEmptyString(mHelpLineChat) && mHelpLineChat.equalsIgnoreCase(AppConstants.HELPLINE_CHAT)) {
             handleHelpLineFragmentFromDeepLinkAndLoading();

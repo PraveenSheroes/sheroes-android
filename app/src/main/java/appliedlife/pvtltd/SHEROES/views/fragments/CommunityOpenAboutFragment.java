@@ -1,7 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
@@ -42,9 +41,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Member;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MemberListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MembersList;
@@ -57,7 +53,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
-import appliedlife.pvtltd.SHEROES.presenters.CreateCommunityPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.presenters.MembersPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.OwnerPresenter;
@@ -74,11 +69,10 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FOR_REFRESH_FRAGMENT_LIST;
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.DELETE_COMMUNITY_POST;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.communityRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.feedRequestBuilder;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.makeFeedRequest;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.ownerRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.removeMemberRequestBuilder;
 
@@ -124,7 +118,8 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
 
     @Bind(R.id.tv_community_join_invite)
     TextView mTvJoinInviteView;
-
+    @Bind(R.id.tv_post_moderation_count)
+    TextView tvPostModerationCount;
     @Bind(R.id.tv_community_add_more)
     TextView tvCommunityAddMore;
     @Bind(R.id.pb_communities_open_about_progress_bar)
@@ -145,7 +140,7 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
     private MoEHelper mMoEHelper;
     private PayloadBuilder payloadBuilder;
     private long startedTime;
-
+    private boolean isSpamPostCount;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -181,18 +176,33 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
        {
            liSpamPostUi.setVisibility(View.GONE);
        }
+
+       FeedRequestPojo  feedRequestPojo =makeFeedRequest(AppConstants.FEED_COMMUNITY_POST,AppConstants.ONE_CONSTANT);
+        feedRequestPojo.setCommunityId(mFeedDetail.getIdOfEntityOrParticipant());
+        feedRequestPojo.setSpamPost(true);
+        mHomePresenter.getFeedFromPresenter(feedRequestPojo);
+
         ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_ABOUT_COMMUNITY_SCREEN));
         return view;
     }
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
-        List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
-        if (StringUtil.isNotEmptyCollection(feedDetailList)) {
-            mFeedDetail = feedDetailList.get(0);
-            mcommunityid = mFeedDetail.getIdOfEntityOrParticipant();
-            mOwnerPresenter.getCommunityOwnerList(ownerRequestBuilder(mcommunityid));
-            refreshOpeAboutCommunityContent(mFeedDetail);
-            mTvJoinInviteView.setVisibility(View.VISIBLE);
+        if(isSpamPostCount)
+        {
+            isSpamPostCount=false;
+            if(feedResponsePojo.getNumFound()>0) {
+                tvPostModerationCount.setText(String.valueOf(feedResponsePojo.getNumFound()));
+            }
+        }else {
+            List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
+            if (StringUtil.isNotEmptyCollection(feedDetailList)) {
+                isSpamPostCount=true;
+                mFeedDetail = feedDetailList.get(0);
+                mcommunityid = mFeedDetail.getIdOfEntityOrParticipant();
+                mOwnerPresenter.getCommunityOwnerList(ownerRequestBuilder(mcommunityid));
+                refreshOpeAboutCommunityContent(mFeedDetail);
+                mTvJoinInviteView.setVisibility(View.VISIBLE);
+            }
         }
     }
     public void refreshOpeAboutCommunityContent(FeedDetail feedDetail) {

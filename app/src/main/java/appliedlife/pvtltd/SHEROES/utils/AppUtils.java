@@ -1989,7 +1989,7 @@ public class AppUtils {
         feedRequestPojo.setIdForFeedDetail(idForDetail);
         return feedRequestPojo;
     }
-    private static FeedRequestPojo makeFeedRequest(String typeOfFeed, int pageNo) {
+    public static FeedRequestPojo makeFeedRequest(String typeOfFeed, int pageNo) {
         AppUtils appUtils = AppUtils.getInstance();
         FeedRequestPojo feedRequestPojo = new FeedRequestPojo();
         feedRequestPojo.setAppVersion(appUtils.getAppVersionName());

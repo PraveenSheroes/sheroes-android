@@ -566,11 +566,10 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 tvEdit.setVisibility(View.VISIBLE);
                 tvDelete.setVisibility(View.VISIBLE);
                 break;
-
             case R.id.tv_feed_community_post_user_menu:
                 mFeedDetail = (FeedDetail) baseResponse;
                 if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
-                    if (mFeedDetail.getAuthorId() == userPreference.get().getUserSummary().getUserId() || mFragmentOpen.isOwner()||mFeedDetail.isCommunityOwner()) {
+                    if (mFeedDetail.getAuthorId() == userPreference.get().getUserSummary().getUserId() || mFragmentOpen.isOwner()) {
                         tvDelete.setVisibility(View.VISIBLE);
                         tvEdit.setVisibility(View.VISIBLE);
                     } else {
@@ -674,6 +673,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                             ((CommunitiesDetailFragment) mFragment).deleteCommunityPost(mFeedDetail);
                         }
                     }
+
                    /* if (mFragmentOpen.isBookmarkFragment()) {
                         Fragment fragmentBookMark = getSupportFragmentManager().findFragmentByTag(BookmarksFragment.class.getName());
                         if (AppUtils.isFragmentUIActive(fragmentBookMark)) {

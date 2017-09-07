@@ -230,11 +230,9 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         dataItem.setItemPosition(position);
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
             long userId = userPreference.get().getUserSummary().getUserId();
-
         if (dataItem.getCommunityId() == AppConstants.EVENT_COMMUNITY_ID) {
             eventPostUI(userId);
         } else {
-
             normalCommunityPostUi(userId);
         }
         if(dataItem.isSpamPost()) {
@@ -292,17 +290,17 @@ private void normalCommunityPostUi(long userId)
     }
     onBookMarkClick();
     allTextViewStringOperations(mContext);
-    if (dataItem.getAuthorId() == userId|| dataItem.isCommunityOwner()) {
+    if (dataItem.getAuthorId() == userId) {
         tvFeedCommunityPostUserMenu.setVisibility(View.VISIBLE);
         if (dataItem.getCommunityId() == AppConstants.NO_REACTION_CONSTANT) {
             tvFeedCommunityPostUserMenu.setVisibility(View.GONE);
         } else {
             tvFeedCommunityPostUserMenu.setVisibility(View.VISIBLE);
         }
-
     } else {
         tvFeedCommunityPostUserMenu.setVisibility(View.GONE);
     }
+
     if(dataItem != null&&StringUtil.isNotNullOrEmptyString(dataItem.getListDescription())){
         ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(AppConstants.IMPRESSIONS, AppConstants.COMMUNITY_POST_IMPRESSION,dataItem.getIdOfEntityOrParticipant()+ AppConstants.DASH + userId + AppConstants.DASH + dataItem.getListDescription());
     }
