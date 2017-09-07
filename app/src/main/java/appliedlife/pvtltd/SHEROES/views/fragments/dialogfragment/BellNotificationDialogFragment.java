@@ -1,11 +1,13 @@
-package appliedlife.pvtltd.SHEROES.views.fragments;
+package appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -16,7 +18,7 @@ import com.moe.pushlibrary.PayloadBuilder;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
@@ -37,7 +39,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_
  * Created by Ajit Kumar on 17-04-2017.
  */
 
-public class BellNotificationFragment extends BaseFragment implements HomeView {
+public class BellNotificationDialogFragment extends BaseDialogFragment implements HomeView {
     private FragmentListRefreshData mFragmentListRefreshData;
     @Inject
     HomePresenter mHomePresenter;
@@ -58,16 +60,16 @@ public class BellNotificationFragment extends BaseFragment implements HomeView {
     private PayloadBuilder payloadBuilder;
     private long startedTime;
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getActivity()).inject(this);
         View v = inflater.inflate(R.layout.community_bell_notification_list, container, false);
+        getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         ButterKnife.bind(this, v);
         mMoEHelper = MoEHelper.getInstance(getActivity());
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
         startedTime=System.currentTimeMillis();
-        setProgressBar(mProgressBar);
+
         tvTitle.setText(getString(R.string.ID_NOTIFICATION));
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new GenericRecyclerViewAdapter(getActivity(), (HomeActivity) getActivity());
@@ -92,17 +94,17 @@ public class BellNotificationFragment extends BaseFragment implements HomeView {
                 }
                 break;
             case AppConstants.FAILED:
-                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(bellNotificationResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA),ERROR_FEED_RESPONSE);
+                ((HomeActivity)getActivity()).onShowErrorDialog(bellNotificationResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA),ERROR_FEED_RESPONSE);
                 break;
             default:
-                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR),ERROR_FEED_RESPONSE);
+                ((HomeActivity)getActivity()).onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR),ERROR_FEED_RESPONSE);
 
         }
     }
     @OnClick(R.id.iv_back_setting)
     public void backClick()
     {
-        ((HomeActivity) getActivity()).onBackPressed();
+        dismiss();
     }
     @Override
     public void startProgressBar() {
@@ -120,5 +122,14 @@ public class BellNotificationFragment extends BaseFragment implements HomeView {
         mHomePresenter.detachView();
         long timeSpent=System.currentTimeMillis()-startedTime;
         moEngageUtills.entityMoEngageNotification(getActivity(),mMoEHelper,payloadBuilder,timeSpent);
+    }
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        return new Dialog(getActivity(), R.style.Theme_Material_Light_Dialog_NoMinWidth) {
+            @Override
+            public void onBackPressed() {
+                backClick();
+            }
+        };
     }
 }

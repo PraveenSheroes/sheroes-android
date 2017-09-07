@@ -34,7 +34,6 @@ public class FragmentOpen implements Parcelable{
     private boolean isInviteCommunityOwner;
     private boolean isGoodAtFragment;
     private boolean isCreateCommunity;
-    private boolean isBellNotificationFragment;
     private boolean isProfileWorkExpEditFragment;
     private boolean isWorkExpFragment;
     private boolean isEducationFragment;
@@ -234,13 +233,6 @@ public class FragmentOpen implements Parcelable{
         isCreateCommunity = createCommunity;
     }
 
-    public boolean isBellNotificationFragment() {
-        return isBellNotificationFragment;
-    }
-
-    public void setBellNotificationFragment(boolean bellNotificationFragment) {
-        isBellNotificationFragment = bellNotificationFragment;
-    }
 
     public boolean isProfileWorkExpEditFragment() {
         return isProfileWorkExpEditFragment;
@@ -352,7 +344,7 @@ public class FragmentOpen implements Parcelable{
         dest.writeByte(this.isInviteCommunityOwner ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isGoodAtFragment ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isCreateCommunity ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.isBellNotificationFragment ? (byte) 1 : (byte) 0);
+
         dest.writeByte(this.isProfileWorkExpEditFragment ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isWorkExpFragment ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isEducationFragment ? (byte) 1 : (byte) 0);
@@ -389,7 +381,7 @@ public class FragmentOpen implements Parcelable{
         this.isInviteCommunityOwner = in.readByte() != 0;
         this.isGoodAtFragment = in.readByte() != 0;
         this.isCreateCommunity = in.readByte() != 0;
-        this.isBellNotificationFragment = in.readByte() != 0;
+
         this.isProfileWorkExpEditFragment = in.readByte() != 0;
         this.isWorkExpFragment = in.readByte() != 0;
         this.isEducationFragment = in.readByte() != 0;

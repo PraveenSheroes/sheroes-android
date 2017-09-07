@@ -100,10 +100,9 @@ import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.BellNotificationFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FAQSFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
@@ -129,7 +128,6 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FO
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.COMMENT_REACTION;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.JOIN_INVITE;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MENU;
-import static appliedlife.pvtltd.SHEROES.utils.AppUtils.editCommunityPostRequestBuilder;
 
 public class HomeActivity extends BaseActivity implements CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, CommentReactionFragment.HomeActivityIntractionListner, HomeArticleCategorySpinnerFragment.HomeSpinnerFragmentListner {
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
@@ -394,9 +392,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         }
         if (mFragmentOpen.isSettingFragment()) {
             moEngageUtills.entityMoEngageLogOut(this, mMoEHelper, payloadBuilder, getString(R.string.ID_SETTING));
-        }
-        if (mFragmentOpen.isBellNotificationFragment()) {
-            moEngageUtills.entityMoEngageLogOut(this, mMoEHelper, payloadBuilder, getString(R.string.ID_NOTIFICATION));
         }
         if (mFragmentOpen.isICCMemberListFragment()) {
             moEngageUtills.entityMoEngageLogOut(this, mMoEHelper, payloadBuilder, getString(R.string.ID_ICC_MEMBERS));
@@ -952,10 +947,6 @@ private void feedRelatedOptions(View view,BaseResponse baseResponse)
             onBackPressed();
             mFragmentOpen.setSettingFragment(false);
         }
-        if (mFragmentOpen.isBellNotificationFragment()) {
-            onBackPressed();
-            mFragmentOpen.setBellNotificationFragment(false);
-        }
         if (mFragmentOpen.isHelplineFragment()) {
             onBackPressed();
             mFragmentOpen.setHelplineFragment(false);
@@ -1264,38 +1255,27 @@ private void feedRelatedOptions(View view,BaseResponse baseResponse)
         } else if (mFragmentOpen.isOpenImageViewer()) {
             mFragmentOpen.setOpenImageViewer(false);
             getSupportFragmentManager().popBackStackImmediate();
-        } else if (mFragmentOpen.isBellNotificationFragment()) {
-            mFlNotification.setEnabled(true);
-            mFragmentOpen.setBellNotificationFragment(false);
-            getSupportFragmentManager().popBackStackImmediate();
-            gotBackToFragmentForSheUSer();
-        } else if (mFragmentOpen.isHelplineFragment()) {
+        }  else if (mFragmentOpen.isHelplineFragment()) {
             mFragmentOpen.setHelplineFragment(false);
             getSupportFragmentManager().popBackStackImmediate();
-            initHomeViewPagerAndTabs();
-            setHomeFeedCommunityData();
-            mFlHomeFooterList.setVisibility(View.VISIBLE);
-            mTvHome.setVisibility(View.VISIBLE);
-            mTitleText.setVisibility(View.GONE);
-            mICSheroes.setVisibility(View.VISIBLE);
+            openHelplineFragment();
+            mTitleText.setText(getString(R.string.ID_APP_NAME));
+            mTitleText.setVisibility(View.VISIBLE);
+            mICSheroes.setVisibility(View.GONE);
         } else if (mFragmentOpen.isICCMemberListFragment()) {
             mFragmentOpen.setICCMemberListFragment(false);
             getSupportFragmentManager().popBackStackImmediate();
-            initHomeViewPagerAndTabs();
-            setHomeFeedCommunityData();
-            mFlHomeFooterList.setVisibility(View.VISIBLE);
-            mTvHome.setVisibility(View.VISIBLE);
-            mTitleText.setVisibility(View.GONE);
-            mICSheroes.setVisibility(View.VISIBLE);
+            openHelplineFragment();
+            mTitleText.setText(getString(R.string.ID_APP_NAME));
+            mTitleText.setVisibility(View.VISIBLE);
+            mICSheroes.setVisibility(View.GONE);
         } else if (mFragmentOpen.isFAQSFragment()) {
             mFragmentOpen.setFAQSFragment(false);
             getSupportFragmentManager().popBackStackImmediate();
-            initHomeViewPagerAndTabs();
-            setHomeFeedCommunityData();
-            mFlHomeFooterList.setVisibility(View.VISIBLE);
-            mTvHome.setVisibility(View.VISIBLE);
-            mTitleText.setVisibility(View.GONE);
-            mICSheroes.setVisibility(View.VISIBLE);
+            openHelplineFragment();
+            mTitleText.setText(getString(R.string.ID_APP_NAME));
+            mTitleText.setVisibility(View.VISIBLE);
+            mICSheroes.setVisibility(View.GONE);
         } else if (mFragmentOpen.isFeedFragment()) {
             mFragmentOpen.setFeedFragment(false);
             getSupportFragmentManager().popBackStackImmediate();
@@ -1314,35 +1294,6 @@ private void feedRelatedOptions(View view,BaseResponse baseResponse)
                     doubleBackToExitPressedOnce = false;
                 }
             }, 2000);
-        }
-    }
-
-    private void gotBackToFragmentForSheUSer() {
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && false != mUserPreference.get().isSheUser()) {
-            if (mTitleText.getText() != null && mTitleText.getText() instanceof String) {
-                if (((String) mTitleText.getText()).equals(getString(R.string.ID_ICC_MEMBERS))) {
-                    checkForAllOpenFragments();
-                    mFragmentOpen.setICCMemberListFragment(true);
-                    renderICCMemberListView();
-                } else if (((String) mTitleText.getText()).equals(getString(R.string.ID_FAQS))) {
-                    checkForAllOpenFragments();
-                    mFragmentOpen.setFAQSFragment(true);
-                    renderFAQSView();
-                } else if (((String) mTitleText.getText()).equals(getString(R.string.ID_APP_NAME))) {
-                    checkForAllOpenFragments();
-                    openHelplineFragment();
-                } else if (((String) mTitleText.getText()).equals(AppConstants.EMPTY_STRING)) {
-                    checkForAllOpenFragments();
-                    mFragmentOpen.setFeedFragment(true);
-                    renderHomeFragmentView();
-                    totalTimeSpentOnFeed();
-                }
-            } else {
-                checkForAllOpenFragments();
-                mFragmentOpen.setFeedFragment(true);
-                renderHomeFragmentView();
-                totalTimeSpentOnFeed();
-            }
         }
     }
 
@@ -1383,9 +1334,21 @@ private void feedRelatedOptions(View view,BaseResponse baseResponse)
     public void notificationClick() {
         // mDrawer.openDrawer(Gravity.LEFT);
         AppUtils.hideKeyboard(mTvUserName, TAG);
-        checkForAllOpenFragments();
-        callBellNotification();
+        bellNotificationDialog();
     }
+    public DialogFragment bellNotificationDialog() {
+        BellNotificationDialogFragment bellNotificationDialogFragment = (BellNotificationDialogFragment) getFragmentManager().findFragmentByTag(BellNotificationDialogFragment.class.getName());
+        if (bellNotificationDialogFragment == null) {
+            bellNotificationDialogFragment = new BellNotificationDialogFragment();
+            Bundle bundle = new Bundle();
+            bellNotificationDialogFragment.setArguments(bundle);
+        }
+        if (!bellNotificationDialogFragment.isVisible() && !bellNotificationDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
+            bellNotificationDialogFragment.show(getFragmentManager(), BellNotificationDialogFragment.class.getName());
+        }
+        return bellNotificationDialogFragment;
+    }
+
 
     @OnClick(R.id.tv_make_india_safe)
     public void tvOnClickMakeIndiasafe() {
@@ -1437,15 +1400,6 @@ private void feedRelatedOptions(View view,BaseResponse baseResponse)
         mHomeSpinnerItemList.addAll(localList);
     }
 
-    public void callBellNotification() {
-        mFlNotification.setEnabled(false);
-        flNotificationReadCount.setVisibility(View.GONE);
-        mFragmentOpen.setBellNotificationFragment(true);
-        setAllValues(mFragmentOpen);
-        BellNotificationFragment bellNotificationFragment = new BellNotificationFragment();
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.right_to_left_anim_enter, 0, 0, R.anim.right_to_left_anim_exit)
-                .add(R.id.fl_feed_comments, bellNotificationFragment, BellNotificationFragment.class.getName()).addToBackStack(BellNotificationFragment.class.getName()).commitAllowingStateLoss();
-    }
 
     @Override
     public void onClickReactionList(FragmentOpen isFragmentOpen, FeedDetail feedDetail) {
@@ -1980,5 +1934,4 @@ private void feedRelatedOptions(View view,BaseResponse baseResponse)
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
         overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
     }
-
 }

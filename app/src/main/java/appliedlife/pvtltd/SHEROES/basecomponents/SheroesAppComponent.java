@@ -34,7 +34,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.WelcomeActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.AllSearchFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticleDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.BellNotificationFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
@@ -558,7 +558,7 @@ public interface SheroesAppComponent {
 
     void inject(ProfileAddEditEducationFragment profileAddEditEducationFragment);
 
-    void inject(BellNotificationFragment bellNotificationFragment);
+    void inject(BellNotificationDialogFragment bellNotificationDialogFragment);
 
     void inject(BellNotificationHolder bellNotificationHolder);
 

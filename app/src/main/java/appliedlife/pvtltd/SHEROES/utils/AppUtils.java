@@ -2139,7 +2139,7 @@ public class AppUtils {
         memberRequest.setPageSize(AppConstants.MEMBER_PAGE_SIZE);
         return memberRequest;
     }
-    public static BellNotificationRequest getBellNotificationRequest() {
+    public  BellNotificationRequest getBellNotificationRequest() {
         AppUtils appUtils = AppUtils.getInstance();
 
         BellNotificationRequest bellNotificationRequest=new BellNotificationRequest();
