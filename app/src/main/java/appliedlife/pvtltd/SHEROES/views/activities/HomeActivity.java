@@ -424,6 +424,9 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         } else {
             Uri url = Uri.parse(urlOfSharedCard);
             Intent intent = new Intent(this, SheroesDeepLinkingActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putInt(AppConstants.BELL_NOTIFICATION, AppConstants.ONE_CONSTANT);
+            intent.putExtras(bundle);
             intent.setData(url);
             startActivity(intent);
         }

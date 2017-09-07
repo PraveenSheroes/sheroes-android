@@ -127,6 +127,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
     private long idOFEntityParticipant;
     private boolean isFromFeedPost;
     private SpamPostListDialogFragment  spamPostDialogFragment;
+    private int mFromNotification;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -142,20 +143,17 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
         initActivityTransitions();
         mAppBarLayout.addOnOffsetChangedListener(this);
         if (null != getIntent() && null != getIntent().getExtras()) {
-            if (null != getIntent().getExtras().get(AppConstants.COMMUNITY_ID)) {
-                mCommunityId = (long) getIntent().getExtras().get(AppConstants.COMMUNITY_ID);
-                if (null != getIntent().getExtras().get(AppConstants.COMMUNITY_POST_ID)) {
-                    mCommunityPostId = (long) getIntent().getExtras().get(AppConstants.COMMUNITY_POST_ID);
-                }
+            mFromNotification = getIntent().getExtras().getInt(AppConstants.BELL_NOTIFICATION);
+            mCommunityId = getIntent().getExtras().getLong(AppConstants.COMMUNITY_ID);
+            mCommunityPostId = getIntent().getExtras().getLong(AppConstants.COMMUNITY_POST_ID);
                 if (mCommunityId > 0) {
                     mFeedDetail = new FeedDetail();
                     mFeedDetail.setIdOfEntityOrParticipant(mCommunityId);
                 }
-            } else {
                 mFeedDetail = getIntent().getParcelableExtra(AppConstants.COMMUNITY_DETAIL);
                 communityEnum = (CommunityEnum) getIntent().getSerializableExtra(AppConstants.MY_COMMUNITIES_FRAGMENT);
                 isFromFeedPost = getIntent().getBooleanExtra(AppConstants.COMMUNITY_POST_ID, false);
-            }
+
         }
         setPagerAndLayouts();
         ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_VIEW_COMMUNITY));
@@ -689,7 +687,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
 
     @OnClick(R.id.iv_community_detail_back)
     public void onBackClick() {
-        if(mCommunityId>0||mCommunityPostId>0)
+        if(mFromNotification==AppConstants.NO_REACTION_CONSTANT)
         {
             Intent intent = new Intent(this,HomeActivity.class);
             startActivity(intent);

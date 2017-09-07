@@ -91,6 +91,7 @@ public class JobDetailActivity extends BaseActivity implements  AppBarLayout.OnO
     private MoEngageUtills moEngageUtills;
     private PayloadBuilder payloadBuilder;
     private long startedTime;
+    private int mFromNotification;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,17 +105,13 @@ public class JobDetailActivity extends BaseActivity implements  AppBarLayout.OnO
         startedTime=System.currentTimeMillis();
         mAppBarLayout.addOnOffsetChangedListener(this);
         if (null != getIntent() && null != getIntent().getExtras()) {
-            //&& null != getIntent().getExtras().get(AppConstants.COMMUNITY_POST_ID)
-            if (null != getIntent().getExtras().get(AppConstants.JOB_ID)) {
-                mJobId = (long) getIntent().getExtras().get(AppConstants.JOB_ID);
-                // mCommunityPostId = (long) getIntent().getExtras().get(AppConstants.COMMUNITY_POST_ID);
+            mFromNotification = getIntent().getExtras().getInt(AppConstants.BELL_NOTIFICATION);
+                mJobId = getIntent().getExtras().getLong(AppConstants.JOB_ID);
                 if (mJobId > 0) {
                     mFeedDetail = new FeedDetail();
                     mFeedDetail.setIdOfEntityOrParticipant(mJobId);
                 }
-            } else {
-                mFeedDetail = getIntent().getParcelableExtra(AppConstants.JOB_DETAIL);
-            }
+            mFeedDetail = getIntent().getParcelableExtra(AppConstants.JOB_DETAIL);
         }
         setPagerAndLayouts();
         ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_VIEW_JOBS_DETAIL));
@@ -122,7 +119,7 @@ public class JobDetailActivity extends BaseActivity implements  AppBarLayout.OnO
 
     @OnClick(R.id.iv_job_detail_back)
     public void onBackClick() {
-        if(mJobId>0)
+        if(mFromNotification==AppConstants.NO_REACTION_CONSTANT)
         {
             Intent intent = new Intent(this,HomeActivity.class);
             startActivity(intent);

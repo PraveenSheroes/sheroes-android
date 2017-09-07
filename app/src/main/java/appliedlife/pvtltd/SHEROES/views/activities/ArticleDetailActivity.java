@@ -91,6 +91,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
     private MoEngageUtills moEngageUtills;
     private PayloadBuilder payloadBuilder;
     private long startedTime;
+    private int mFromNotification;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,15 +104,14 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
         startedTime=System.currentTimeMillis();
         mAppBarLayout.addOnOffsetChangedListener(this);
         mFragmentOpen = new FragmentOpen();
-        if (null != getIntent()) {
+        if (null != getIntent()&&null!=getIntent().getExtras()) {
             mFeedDetail = getIntent().getParcelableExtra(AppConstants.ARTICLE_DETAIL);
-            if (null != getIntent().getExtras().get(AppConstants.ARTICLE_ID)) {
-                mArticleId = (long) getIntent().getExtras().get(AppConstants.ARTICLE_ID);
+                mFromNotification = getIntent().getExtras().getInt(AppConstants.BELL_NOTIFICATION);
+                mArticleId = getIntent().getExtras().getLong(AppConstants.ARTICLE_ID);
                 if (mArticleId > 0) {
                     mFeedDetail = new FeedDetail();
                     mFeedDetail.setIdOfEntityOrParticipant(mArticleId);
                 }
-            }
         }
         setPagerAndLayouts();
         ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_VIEW_ARTICLE));
@@ -484,7 +484,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
 
     @OnClick(R.id.tv_article_detail_back)
     public void onBackClick() {
-        if(mArticleId>0)
+        if(mFromNotification==AppConstants.NO_REACTION_CONSTANT)
         {
             Intent intent = new Intent(this,HomeActivity.class);
             startActivity(intent);

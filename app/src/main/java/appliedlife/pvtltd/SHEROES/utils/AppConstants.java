@@ -155,6 +155,7 @@ public class AppConstants {
     public static final String SLASH_N = "\n";
     public static final String LAT_LONG_DETAIL = "lat_long_detail";
     public static final String EVENT_DETAIL = "event_detail";
+    public static final String BELL_NOTIFICATION = "bell_notification";
     public static final String SPAM_POST = "spam_post";
     public static final String ARTICLE_DETAIL = "article_detail";
     public static final String HOW_SHEROES_CAN_HELP = "how_can_sheroes";

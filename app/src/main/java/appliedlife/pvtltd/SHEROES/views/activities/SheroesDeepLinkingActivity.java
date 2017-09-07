@@ -27,7 +27,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
     private MoEHelper mMoEHelper;
     private MoEngageUtills moEngageUtills;
     private PayloadBuilder payloadBuilder;
-
+    private int mFromNotification;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +56,10 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
     private void callDeepLinkingData() {
         if (null != getIntent()) {
             Intent intent = getIntent();
+           if(null != getIntent().getExtras())
+           {
+               mFromNotification = getIntent().getExtras().getInt(AppConstants.BELL_NOTIFICATION);
+           }
             if (null != intent.getData()) {
                 mData = intent.getData();
                 getDeeplinkUrlFromNotification(mData.toString());
@@ -108,6 +112,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                         try {
                             Intent makeIndiaSafe = new Intent(this, MakeIndiaSafeMapActivity.class);
                             makeIndiaSafe.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                            makeIndiaSafe.putExtra(AppConstants.BELL_NOTIFICATION, mFromNotification);
                             startActivity(makeIndiaSafe);
                             finish();
                             ((SheroesApplication)this.getApplication()).trackScreenView(getString(R.string.ID_DEEP_LINK_MAKE_INDIA_SAFE));
@@ -155,6 +160,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 byte[] id1 = Base64.decode(id, Base64.DEFAULT);
                 dataIdString = new String(id1, AppConstants.UTF_8);
                 Intent articleDetail = new Intent(SheroesDeepLinkingActivity.this, ArticleDetailActivity.class);
+                articleDetail.putExtra(AppConstants.BELL_NOTIFICATION, mFromNotification);
                 articleDetail.putExtra(AppConstants.ARTICLE_ID, Long.parseLong(dataIdString));
                 articleDetail.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(articleDetail);
@@ -170,6 +176,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 byte[] id1 = Base64.decode(id, Base64.DEFAULT);
                 dataIdString = new String(id1, AppConstants.UTF_8);
                 Intent jobDetail = new Intent(SheroesDeepLinkingActivity.this, JobDetailActivity.class);
+                jobDetail.putExtra(AppConstants.BELL_NOTIFICATION, mFromNotification);
                 jobDetail.putExtra(AppConstants.JOB_ID, Long.parseLong(dataIdString));
                 jobDetail.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(jobDetail);
@@ -215,6 +222,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                     into.putExtra(AppConstants.COMMUNITY_ID, Long.parseLong(newCommunityId));
                 }
                 into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                into.putExtra(AppConstants.BELL_NOTIFICATION, mFromNotification);
                 startActivity(into);
                 finish();
                 ((SheroesApplication)this.getApplication()).trackScreenView(getString(R.string.ID_DEEP_LINK_COMMUNITY));
