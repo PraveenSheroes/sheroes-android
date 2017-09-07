@@ -1002,9 +1002,6 @@ private void feedRelatedOptions(View view,BaseResponse baseResponse)
         mTabLayout.setVisibility(View.VISIBLE);
         mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
         mTvHome.setText(getString(R.string.ID_FEED));
-        //  didTapButton(mTvCommunities);
-        // if (!mFragmentOpen.isCommunityOpen()) {
-        //     mFragmentOpen.setCommunityOpen(true);
         initCommunityViewPagerAndTabs();
         totalTimeSpentOnFeed();
     }
@@ -1033,10 +1030,12 @@ private void feedRelatedOptions(View view,BaseResponse baseResponse)
         mTabLayout.setVisibility(View.GONE);
         flFeedFullView.setVisibility(View.GONE);
         mliArticleSpinnerIcon.setVisibility(View.GONE);
-        mTvHome.setText(AppConstants.EMPTY_STRING);
         mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_unselected_icon), null, null);
         mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_unselected_icon), null, null);
-        mTvCommunities.setText(AppConstants.EMPTY_STRING);
+        mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
+        mTvHome.setText(getString(R.string.ID_FEED));
+        mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.teg_text_color));
+        mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.teg_text_color));
         setAllValues(mFragmentOpen);
         ArticlesFragment articlesFragment = new ArticlesFragment();
         Bundle bundleArticle = new Bundle();
@@ -1117,13 +1116,15 @@ private void feedRelatedOptions(View view,BaseResponse baseResponse)
         mTabLayout.setVisibility(View.GONE);
         flFeedFullView.setVisibility(View.GONE);
         mliArticleSpinnerIcon.setVisibility(View.GONE);
-        mTvHome.setText(AppConstants.EMPTY_STRING);
         mTvSearchBox.setVisibility(View.GONE);
         mTvSetting.setVisibility(View.VISIBLE);
         mTvSetting.setText(R.string.ID_SETTINGS);
         mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_unselected_icon), null, null);
         mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_unselected_icon), null, null);
-        mTvCommunities.setText(AppConstants.EMPTY_STRING);
+        mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
+        mTvHome.setText(getString(R.string.ID_FEED));
+        mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.teg_text_color));
+        mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.teg_text_color));
         setAllValues(mFragmentOpen);
         SettingFragment settingFragment = new SettingFragment();
         Bundle bundle = new Bundle();
@@ -1144,13 +1145,15 @@ private void feedRelatedOptions(View view,BaseResponse baseResponse)
         mTabLayout.setVisibility(View.GONE);
         flFeedFullView.setVisibility(View.GONE);
         mliArticleSpinnerIcon.setVisibility(View.GONE);
-        mTvHome.setText(AppConstants.EMPTY_STRING);
         mTvSearchBox.setVisibility(View.GONE);
         mTvSetting.setVisibility(View.VISIBLE);
         mTvSetting.setText(R.string.ID_BOOKMARKS);
         mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_unselected_icon), null, null);
         mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_unselected_icon), null, null);
-        mTvCommunities.setText(AppConstants.EMPTY_STRING);
+        mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
+        mTvHome.setText(getString(R.string.ID_FEED));
+        mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.teg_text_color));
+        mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.teg_text_color));
         setAllValues(mFragmentOpen);
         BookmarksFragment bookmarksFragment = new BookmarksFragment();
         Bundle bundleBookMarks = new Bundle();
@@ -1175,10 +1178,12 @@ private void feedRelatedOptions(View view,BaseResponse baseResponse)
         mTabLayout.setVisibility(View.GONE);
         flFeedFullView.setVisibility(View.GONE);
         mliArticleSpinnerIcon.setVisibility(View.GONE);
-        mTvHome.setText(AppConstants.EMPTY_STRING);
         mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_unselected_icon), null, null);
         mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_unselected_icon), null, null);
-        mTvCommunities.setText(AppConstants.EMPTY_STRING);
+        mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
+        mTvHome.setText(getString(R.string.ID_FEED));
+        mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.teg_text_color));
+        mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.teg_text_color));
         setAllValues(mFragmentOpen);
         JobFragment jobFragment = new JobFragment();
         Bundle jobBookMarks = new Bundle();
@@ -1258,11 +1263,20 @@ private void feedRelatedOptions(View view,BaseResponse baseResponse)
             getSupportFragmentManager().popBackStackImmediate();
         }  else if (mFragmentOpen.isHelplineFragment()) {
             mFragmentOpen.setHelplineFragment(false);
-            getSupportFragmentManager().popBackStackImmediate();
-            openHelplineFragment();
-            mTitleText.setText(getString(R.string.ID_APP_NAME));
-            mTitleText.setVisibility(View.VISIBLE);
-            mICSheroes.setVisibility(View.GONE);
+            if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && false != mUserPreference.get().isSheUser()) {
+                mTitleText.setText(getString(R.string.ID_APP_NAME));
+                mTitleText.setVisibility(View.VISIBLE);
+                mICSheroes.setVisibility(View.GONE);
+            }else
+            {
+                getSupportFragmentManager().popBackStackImmediate();
+                initHomeViewPagerAndTabs();
+                setHomeFeedCommunityData();
+                mFlHomeFooterList.setVisibility(View.VISIBLE);
+                mTvHome.setVisibility(View.VISIBLE);
+                mTitleText.setVisibility(View.GONE);
+                mICSheroes.setVisibility(View.VISIBLE);
+            }
         } else if (mFragmentOpen.isICCMemberListFragment()) {
             mFragmentOpen.setICCMemberListFragment(false);
             getSupportFragmentManager().popBackStackImmediate();
@@ -1620,18 +1634,6 @@ private void feedRelatedOptions(View view,BaseResponse baseResponse)
     }
 
     private void imageCropping(Intent intent) {
-       /* try {
-            if (intent != null&&null!=intent.getExtras()) {
-                Bundle bundle = intent.getExtras();
-                Bitmap bitmap = bundle.getParcelable("data");
-                if (null != mChallengeSuccessDialogFragment) {
-                    mChallengeSuccessDialogFragment.setImageOnHolder(bitmap);
-                }
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
         try {
             if (localImageSaveForChallenge.exists()) {
                 Bitmap photo = decodeFile(localImageSaveForChallenge);
