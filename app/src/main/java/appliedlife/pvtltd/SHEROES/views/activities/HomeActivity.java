@@ -227,7 +227,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     private ProgressDialog mProgressDialog;
     private boolean isInviteReferral;
     private PublicProfileGrowthBuddiesDialogFragment mPublicProfileGrowthBuddiesDialogFragment;
-
+    private BellNotificationDialogFragment bellNotificationDialogFragment;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -967,10 +967,15 @@ private void feedRelatedOptions(View view,BaseResponse baseResponse)
             onBackPressed();
             mFragmentOpen.setFeedFragment(false);
         }
+        if(null!=bellNotificationDialogFragment)
+        {
+            bellNotificationDialogFragment.dismiss();
+        }
     }
 
     @OnClick(R.id.tv_home)
     public void homeOnClick() {
+
         checkForAllOpenFragments();
         liHomeCommunityButtonLayout.setVisibility(View.GONE);
         mFragmentOpen.setFeedOpen(true);
@@ -1355,7 +1360,7 @@ private void feedRelatedOptions(View view,BaseResponse baseResponse)
         bellNotificationDialog();
     }
     public DialogFragment bellNotificationDialog() {
-        BellNotificationDialogFragment bellNotificationDialogFragment = (BellNotificationDialogFragment) getFragmentManager().findFragmentByTag(BellNotificationDialogFragment.class.getName());
+         bellNotificationDialogFragment = (BellNotificationDialogFragment) getFragmentManager().findFragmentByTag(BellNotificationDialogFragment.class.getName());
         if (bellNotificationDialogFragment == null) {
             bellNotificationDialogFragment = new BellNotificationDialogFragment();
             Bundle bundle = new Bundle();

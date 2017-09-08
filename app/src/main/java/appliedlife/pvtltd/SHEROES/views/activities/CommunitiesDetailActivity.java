@@ -149,10 +149,11 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
                 if (mCommunityId > 0) {
                     mFeedDetail = new FeedDetail();
                     mFeedDetail.setIdOfEntityOrParticipant(mCommunityId);
+                }else {
+                    mFeedDetail = getIntent().getParcelableExtra(AppConstants.COMMUNITY_DETAIL);
+                    communityEnum = (CommunityEnum) getIntent().getSerializableExtra(AppConstants.MY_COMMUNITIES_FRAGMENT);
+                    isFromFeedPost = getIntent().getBooleanExtra(AppConstants.COMMUNITY_POST_ID, false);
                 }
-                mFeedDetail = getIntent().getParcelableExtra(AppConstants.COMMUNITY_DETAIL);
-                communityEnum = (CommunityEnum) getIntent().getSerializableExtra(AppConstants.MY_COMMUNITIES_FRAGMENT);
-                isFromFeedPost = getIntent().getBooleanExtra(AppConstants.COMMUNITY_POST_ID, false);
 
         }
         setPagerAndLayouts();
@@ -384,7 +385,6 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
             FeedDetail feedDetail = (FeedDetail) baseResponse;
             championDetailActivity(feedDetail.getCreatedBy(),feedDetail.getItemPosition());
         } else if (baseResponse instanceof CommentReactionDoc) {
-
             CommentReactionDoc commentReactionDoc = (CommentReactionDoc) baseResponse;
             championDetailActivity(commentReactionDoc.getParticipantId(),commentReactionDoc.getItemPosition());
         }
