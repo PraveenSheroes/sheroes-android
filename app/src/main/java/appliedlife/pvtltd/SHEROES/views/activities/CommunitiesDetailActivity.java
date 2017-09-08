@@ -657,6 +657,10 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
                 mCommunityDetailActivity.setVisibility(View.VISIBLE);
                 mFragmentOpen.setOpenAboutFragment(false);
             }
+            if(null!=spamPostDialogFragment)
+            {
+                spamPostDialogFragment=null;
+            }
         } else if (mFragmentOpen.isInviteCommunityOwner()) {
             mFragmentOpen.setInviteCommunityOwner(false);
             Fragment fragment = getSupportFragmentManager().findFragmentByTag(InviteCommunityOwner.class.getName());
@@ -687,23 +691,20 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
 
     @OnClick(R.id.iv_community_detail_back)
     public void onBackClick() {
-        if(mFromNotification==AppConstants.NO_REACTION_CONSTANT)
+
+        if(mCommunityId>0||mCommunityPostId>0)
         {
-            Intent intent = new Intent(this,HomeActivity.class);
-            startActivity(intent);
+            if(mFromNotification==AppConstants.NO_REACTION_CONSTANT) {
+                Intent intent = new Intent(this, HomeActivity.class);
+                startActivity(intent);
+            }else
+            {
+                deepLinkBackPressHandle();
+            }
         }
         else
             {
-            Intent intent = new Intent();
-            Bundle bundle = new Bundle();
-            if (isFromFeedPost) {
-                mFeedDetail.setCommunityId(communityId);
-                mFeedDetail.setIdOfEntityOrParticipant(idOFEntityParticipant);
-            }
-            bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, mFeedDetail);
-            bundle.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, communityEnum);
-            intent.putExtras(bundle);
-            setResult(RESULT_OK, intent);
+                deepLinkBackPressHandle();
                }
         finish();
         long timeSpent = System.currentTimeMillis() - startedTime;
@@ -711,7 +712,19 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
             moEngageUtills.entityMoEngageCommunityDetail(this, mMoEHelper, payloadBuilder, timeSpent, mFeedDetail.getNameOrTitle(), mFeedDetail.getIdOfEntityOrParticipant(), mFeedDetail.isClosedCommunity(), MoEngageConstants.COMMUNITY_TAG);
 
     }
-
+private void deepLinkBackPressHandle()
+{
+    Intent intent = new Intent();
+    Bundle bundle = new Bundle();
+    if (isFromFeedPost) {
+        mFeedDetail.setCommunityId(communityId);
+        mFeedDetail.setIdOfEntityOrParticipant(idOFEntityParticipant);
+    }
+    bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, mFeedDetail);
+    bundle.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, communityEnum);
+    intent.putExtras(bundle);
+    setResult(RESULT_OK, intent);
+}
 
     @Override
     public void onShowErrorDialog(String errorReason, FeedParticipationEnum feedParticipationEnum) {

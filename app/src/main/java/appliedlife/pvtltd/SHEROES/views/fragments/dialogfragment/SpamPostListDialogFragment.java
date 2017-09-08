@@ -121,7 +121,10 @@ public class SpamPostListDialogFragment extends BaseDialogFragment  {
         mAdapter = new GenericRecyclerViewAdapter(getActivity(), (CommunitiesDetailActivity) getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
-        mHomePresenter.getFeedFromPresenter(feedRequestPojo);
+        if(null!=feedRequestPojo) {
+            mFragmentListRefreshData.setCommunityId(feedRequestPojo.getCommunityId());
+            mHomePresenter.getFeedFromPresenter(feedRequestPojo);
+        }
         mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager, mFragmentListRefreshData) {
             @Override
             public void onHide() {
@@ -157,6 +160,7 @@ public class SpamPostListDialogFragment extends BaseDialogFragment  {
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
         FeedRequestPojo feedRequestPojo=feedRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo());
         feedRequestPojo.setSpamPost(true);
+        feedRequestPojo.setCommunityId(mFragmentListRefreshData.getCommunityId());
         mHomePresenter.getFeedFromPresenter(feedRequestPojo);
 
     }

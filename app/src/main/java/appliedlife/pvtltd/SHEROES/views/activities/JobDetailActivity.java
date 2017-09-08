@@ -119,22 +119,27 @@ public class JobDetailActivity extends BaseActivity implements  AppBarLayout.OnO
 
     @OnClick(R.id.iv_job_detail_back)
     public void onBackClick() {
-        if(mFromNotification==AppConstants.NO_REACTION_CONSTANT)
-        {
-            Intent intent = new Intent(this,HomeActivity.class);
-            startActivity(intent);
-        }else
-        {
-            Intent intent = new Intent();
-            Bundle bundle = new Bundle();
-            bundle.putParcelable(AppConstants.JOB_FRAGMENT, mFeedDetail);
-            intent.putExtras(bundle);
-            setResult(RESULT_OK, intent);
+        if(mJobId>0) {
+            if (mFromNotification == AppConstants.NO_REACTION_CONSTANT) {
+                Intent intent = new Intent(this, HomeActivity.class);
+                startActivity(intent);
+            } else {
+                deepLinkBackPress();
+            }
+        }else {
+            deepLinkBackPress();
         }
-
         finish();
         moEngageData(mFeedDetail);
         overridePendingTransition(R.anim.fade_in_dialog, R.anim.fade_out_dialog);
+    }
+    private void deepLinkBackPress()
+    {
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(AppConstants.JOB_FRAGMENT, mFeedDetail);
+        intent.putExtras(bundle);
+        setResult(RESULT_OK, intent);
     }
     private void moEngageData(FeedDetail feedDetail) {
         StringBuilder mergeJobTypes=new StringBuilder();

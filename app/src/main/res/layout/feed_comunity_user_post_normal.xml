@@ -265,13 +265,13 @@
 
             <TextView
                 android:id="@+id/tv_feed_community_post_user_menu"
-                android:layout_width="@dimen/dp_size_20"
+                android:layout_width="@dimen/dp_size_30"
                 android:layout_height="match_parent"
                 android:layout_gravity="right"
-                android:layout_marginLeft="@dimen/dp_size_25"
+                android:layout_marginLeft="@dimen/dp_size_20"
                 android:drawableRight="@drawable/ic_menu_dashboard"
-                android:paddingRight="@dimen/dp_size_10"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:paddingRight="@dimen/dp_size_10" />
         </LinearLayout>
 
 <LinearLayout

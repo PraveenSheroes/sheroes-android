@@ -484,21 +484,28 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
 
     @OnClick(R.id.tv_article_detail_back)
     public void onBackClick() {
-        if(mFromNotification==AppConstants.NO_REACTION_CONSTANT)
-        {
-            Intent intent = new Intent(this,HomeActivity.class);
-            startActivity(intent);
+        if(mArticleId>0) {
+            if (mFromNotification == AppConstants.NO_REACTION_CONSTANT) {
+                Intent intent = new Intent(this, HomeActivity.class);
+                startActivity(intent);
+            }else {
+                deepLinkPressHandle();
+            }
         }else {
-            Intent intent = new Intent();
-            Bundle bundle = new Bundle();
-            mFeedDetail.setItemPosition(feedDetailPosition);
-            bundle.putParcelable(AppConstants.HOME_FRAGMENT, mFeedDetail);
-            intent.putExtras(bundle);
-            setResult(RESULT_OK, intent);
+            deepLinkPressHandle();
         }
         finish();
         moEngageData(mFeedDetail);
         overridePendingTransition(R.anim.right_to_left_anim_enter, R.anim.right_to_left_anim_exit);
+    }
+    private void deepLinkPressHandle()
+    {
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        mFeedDetail.setItemPosition(feedDetailPosition);
+        bundle.putParcelable(AppConstants.HOME_FRAGMENT, mFeedDetail);
+        intent.putExtras(bundle);
+        setResult(RESULT_OK, intent);
     }
     private void moEngageData(FeedDetail feedDetail) {
         StringBuilder mergeTags =new StringBuilder();
@@ -510,7 +517,6 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
         }
         long timeSpent=System.currentTimeMillis()-startedTime;
         moEngageUtills.entityMoEngageArticleDetail(this, mMoEHelper, payloadBuilder,timeSpent,feedDetail.getNameOrTitle(), feedDetail.getIdOfEntityOrParticipant(), feedDetail.getArticleCategoryNameS(), mergeTags.toString(),feedDetail.getAuthorName(),feedDetail.getCharCount());
-
     }
 
     @OnClick(R.id.tv_article_detail_share)

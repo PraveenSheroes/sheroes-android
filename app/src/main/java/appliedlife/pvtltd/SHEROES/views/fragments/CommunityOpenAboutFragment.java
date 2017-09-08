@@ -141,6 +141,7 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
     private PayloadBuilder payloadBuilder;
     private long startedTime;
     private boolean isSpamPostCount;
+    private FeedRequestPojo  feedRequestPojo;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -172,16 +173,14 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
         if(mFeedDetail.isOwner()||adminId==AppConstants.TWO_CONSTANT)
         {
            liSpamPostUi.setVisibility(View.VISIBLE);
-       }else
-       {
+        }else
+        {
            liSpamPostUi.setVisibility(View.GONE);
-       }
-
-       FeedRequestPojo  feedRequestPojo =makeFeedRequest(AppConstants.FEED_COMMUNITY_POST,AppConstants.ONE_CONSTANT);
+        }
+        feedRequestPojo =makeFeedRequest(AppConstants.FEED_COMMUNITY_POST,AppConstants.ONE_CONSTANT);
         feedRequestPojo.setCommunityId(mFeedDetail.getIdOfEntityOrParticipant());
         feedRequestPojo.setSpamPost(true);
         mHomePresenter.getFeedFromPresenter(feedRequestPojo);
-
         ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_ABOUT_COMMUNITY_SCREEN));
         return view;
     }
@@ -610,8 +609,6 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
 
     @OnClick(R.id.tv_post_in_moderation)
     public void tvPostModerationClick() {
-        FeedRequestPojo feedRequestPojo = feedRequestBuilder(AppConstants.FEED_COMMUNITY_POST,AppConstants.ONE_CONSTANT);
-        feedRequestPojo.setSpamPost(true);
         ((CommunitiesDetailActivity)getActivity()).spamPostListFragment(feedRequestPojo);
     }
 
