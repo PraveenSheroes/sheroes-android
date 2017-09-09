@@ -128,6 +128,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
     private boolean isFromFeedPost;
     private SpamPostListDialogFragment  spamPostDialogFragment;
     private int mFromNotification;
+    private FeedDetail feedDetailForHomeFeed;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -157,6 +158,13 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
 
         }
         setPagerAndLayouts();
+        try {
+            if(null!=mFeedDetail) {
+                feedDetailForHomeFeed = (FeedDetail) mFeedDetail.clone();
+            }
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
         ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_VIEW_COMMUNITY));
     }
 
@@ -337,6 +345,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
                 break;
             case R.id.tv_approve_spam_post:
+                feedDetailForHomeFeed.setViewed(true);
                 if(null!=spamPostDialogFragment)
                 {
                     spamPostDialogFragment.approveSpamPost(feedDetail,true,false,true);
@@ -349,13 +358,14 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
                 break;
 
             case R.id.tv_delete_spam_post:
+                feedDetailForHomeFeed.setViewed(true);
                 if(null!=spamPostDialogFragment)
                 {
-                    spamPostDialogFragment.approveSpamPost(mFeedDetail,true,true,false);
+                    spamPostDialogFragment.approveSpamPost(feedDetail,true,true,false);
                 }else {
                     Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
                     if (AppUtils.isFragmentUIActive(fragment)) {
-                        ((CommunitiesDetailFragment) fragment).approveSpamPost(mFeedDetail,true,true,false);
+                        ((CommunitiesDetailFragment) fragment).approveSpamPost(feedDetail,true,true,false);
                     }
                 }
                 break;
@@ -691,7 +701,6 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
 
     @OnClick(R.id.iv_community_detail_back)
     public void onBackClick() {
-
         if(mCommunityId>0||mCommunityPostId>0)
         {
             if(mFromNotification==AppConstants.NO_REACTION_CONSTANT) {
@@ -717,10 +726,12 @@ private void deepLinkBackPressHandle()
     Intent intent = new Intent();
     Bundle bundle = new Bundle();
     if (isFromFeedPost) {
-        mFeedDetail.setCommunityId(communityId);
-        mFeedDetail.setIdOfEntityOrParticipant(idOFEntityParticipant);
+        feedDetailForHomeFeed.setCommunityId(communityId);
+        feedDetailForHomeFeed.setIdOfEntityOrParticipant(idOFEntityParticipant);
+        bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, feedDetailForHomeFeed);
+    }else {
+        bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, mFeedDetail);
     }
-    bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, mFeedDetail);
     bundle.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, communityEnum);
     intent.putExtras(bundle);
     setResult(RESULT_OK, intent);
@@ -826,5 +837,13 @@ private void deepLinkBackPressHandle()
             spamPostDialogFragment.show(getFragmentManager(), SpamPostListDialogFragment.class.getName());
         }
         return spamPostDialogFragment;
+    }
+    public void postModerationListItemCount(int count)
+    {
+         Fragment fragmentCommunityOpenAbout = getSupportFragmentManager().findFragmentByTag(CommunityOpenAboutFragment.class.getName());
+        if (AppUtils.isFragmentUIActive(fragmentCommunityOpenAbout)) {
+
+            ((CommunityOpenAboutFragment) fragmentCommunityOpenAbout).setTvPostModerationCount(count);
+        }
     }
 }

@@ -571,7 +571,14 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
                     if (mFeedDetail.getAuthorId() == userPreference.get().getUserSummary().getUserId() || mFragmentOpen.isOwner()) {
                         tvDelete.setVisibility(View.VISIBLE);
-                        tvEdit.setVisibility(View.VISIBLE);
+                        if(mFeedDetail.isCommunityOwner())
+                        {
+                            tvEdit.setVisibility(View.GONE);
+                        }else
+                        {
+                            tvEdit.setVisibility(View.VISIBLE);
+                        }
+
                     } else {
                         if (mFeedDetail.isFromHome()) {
                             tvReport.setText(getString(R.string.ID_REPORTED_AS_SPAM));

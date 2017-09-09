@@ -190,7 +190,7 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
         {
             isSpamPostCount=false;
             if(feedResponsePojo.getNumFound()>0) {
-                tvPostModerationCount.setText(String.valueOf(feedResponsePojo.getNumFound()));
+                setTvPostModerationCount(feedResponsePojo.getNumFound());
             }
         }else {
             List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
@@ -203,6 +203,10 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
                 mTvJoinInviteView.setVisibility(View.VISIBLE);
             }
         }
+    }
+    public void setTvPostModerationCount(int count)
+    {
+        tvPostModerationCount.setText(String.valueOf(count));
     }
     public void refreshOpeAboutCommunityContent(FeedDetail feedDetail) {
         mFeedDetail = feedDetail;

@@ -513,7 +513,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements SelectC
     public void communityPostSubmitClick() {
         if (null != mCommunityId && null != mCreaterType && StringUtil.isNotNullOrEmptyString(mCreaterType) && StringUtil.isNotNullOrEmptyString(mEtShareCommunityPostText.getText().toString())) {
             pbCreateCommunityPost.setVisibility(View.VISIBLE);
-            String description = mEtShareCommunityPostText.getText().toString();
+            String description = mEtShareCommunityPostText.getText().toString().trim();
             if (null != mFeedDetail) {
                 if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getCallFromName()) && mFeedDetail.getCallFromName().equalsIgnoreCase(AppConstants.FEED_COMMUNITY_POST)) {
                     List<String> imag = new ArrayList<>();

@@ -214,6 +214,7 @@ public class SpamPostListDialogFragment extends BaseDialogFragment  {
     public void onEventDetailBack() {
         dismissAllowingStateLoss();
         dismiss();
+        ((CommunitiesDetailActivity)getActivity()).postModerationListItemCount(mAdapter.getItemCount());
     }
     public void approveSpamPost(FeedDetail feedDetail,boolean isActive,boolean isSpam,boolean isApproved) {
         mApprovePostFeedDetail=feedDetail;

@@ -625,6 +625,7 @@ private void feedRelatedOptions(View view,BaseResponse baseResponse)
             break;
         default:
             mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.ONE_CONSTANT);
+            mFragmentOpen.setOwner(mFeedDetail.isCommunityOwner());
             setAllValues(mFragmentOpen);
             setViewPagerAndViewAdapter(mViewPagerAdapter, mViewPager);
             super.feedCardsHandled(view, baseResponse);
@@ -975,7 +976,6 @@ private void feedRelatedOptions(View view,BaseResponse baseResponse)
 
     @OnClick(R.id.tv_home)
     public void homeOnClick() {
-
         checkForAllOpenFragments();
         liHomeCommunityButtonLayout.setVisibility(View.GONE);
         mFragmentOpen.setFeedOpen(true);
@@ -1794,9 +1794,14 @@ private void feedRelatedOptions(View view,BaseResponse baseResponse)
                                     ((MyCommunitiesFragment) community).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
                                 }
                             } else {
-                                Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-                                if (AppUtils.isFragmentUIActive(fragment)) {
-                                    ((HomeFragment) fragment).commentListRefresh(mFeedDetail,ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+                                if(mFeedDetail.isViewed())
+                                {
+                                   homeOnClick();
+                                }else {
+                                    Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+                                    if (AppUtils.isFragmentUIActive(fragment)) {
+                                        ((HomeFragment) fragment).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+                                    }
                                 }
                             }
                         }

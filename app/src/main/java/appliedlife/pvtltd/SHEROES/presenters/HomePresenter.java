@@ -561,6 +561,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
     }
     public void getNotificationCountFromPresenter(NotificationReadCount notificationReadCount) {
         Subscription subscription = mHomeModel.getNotificationReadCountFromModel(notificationReadCount).subscribe(new Subscriber<NotificationReadCountResponse>() {
+
             @Override
             public void onCompleted() {
             }
@@ -579,7 +580,9 @@ public class HomePresenter extends BasePresenter<HomeView> {
         registerSubscription(subscription);
     }
     public void getSpamPostApproveFromPresenter(ApproveSpamPostRequest approveSpamPostRequest) {
+        getMvpView().startProgressBar();
         Subscription subscription = mHomeModel.getSpamPostApproveFromModel(approveSpamPostRequest).subscribe(new Subscriber<ApproveSpamPostResponse>() {
+
             @Override
             public void onCompleted() {
             }
@@ -592,6 +595,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
             @Override
             public void onNext(ApproveSpamPostResponse approveSpamPostResponse) {
+                getMvpView().stopProgressBar();
                 if (null != approveSpamPostResponse) {
                     getMvpView().getNotificationReadCountSuccess(approveSpamPostResponse,SPAM_POST_APPROVE);
                 }

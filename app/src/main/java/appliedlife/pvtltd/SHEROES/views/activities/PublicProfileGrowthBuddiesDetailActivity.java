@@ -309,7 +309,7 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
         mFragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
         setFragment(mFragment);
         mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.FOURTH_CONSTANT);
-        mFragmentOpen.setOwner(mFeedDetail.isOwner());
+        mFragmentOpen.setOwner(feedDetail.isCommunityOwner());
         setAllValues(mFragmentOpen);
         super.feedCardsHandled(view, baseResponse);
     }

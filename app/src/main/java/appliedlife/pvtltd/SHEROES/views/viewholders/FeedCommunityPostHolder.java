@@ -290,7 +290,7 @@ private void normalCommunityPostUi(long userId)
     }
     onBookMarkClick();
     allTextViewStringOperations(mContext);
-    if (dataItem.getAuthorId() == userId) {
+    if (dataItem.getAuthorId() == userId||dataItem.isCommunityOwner()) {
         tvFeedCommunityPostUserMenu.setVisibility(View.VISIBLE);
         if (dataItem.getCommunityId() == AppConstants.NO_REACTION_CONSTANT) {
             tvFeedCommunityPostUserMenu.setVisibility(View.GONE);

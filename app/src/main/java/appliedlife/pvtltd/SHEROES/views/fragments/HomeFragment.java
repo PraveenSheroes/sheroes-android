@@ -303,6 +303,7 @@ public class HomeFragment extends BaseFragment {
                 appIntroResponse(baseResponse);
                 break;
             case SPAM_POST_APPROVE:
+                setProgressBar(mProgressBar);
                 approveSpamPostResponse(baseResponse);
                 break;
             default:
@@ -534,6 +535,7 @@ public class HomeFragment extends BaseFragment {
     }
 
     public void approveSpamPost(FeedDetail feedDetail,boolean isActive,boolean isSpam,boolean isApproved) {
+        setProgressBar(mProgressBarFirstLoad);
         mFeedDetail=feedDetail;
         mIsSpam=isSpam;
         mHomePresenter.getSpamPostApproveFromPresenter(mAppUtils.spamPostApprovedRequestBuilder(feedDetail,isActive,isSpam,isApproved));
