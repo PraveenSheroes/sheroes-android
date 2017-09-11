@@ -241,6 +241,13 @@ public class SpamPostListDialogFragment extends BaseDialogFragment  {
                         mAdapter.removeDataOnPosition(mApprovePostFeedDetail, mApprovePostFeedDetail.getItemPosition());
                         mLayoutManager.scrollToPosition(mApprovePostFeedDetail.getItemPosition());
                         mAdapter.notifyDataSetChanged();
+                        if(mAdapter.getItemCount()>0)
+                        {
+                            mLiNoResult.setVisibility(View.GONE);
+                        }else
+                        {
+                            mLiNoResult.setVisibility(View.VISIBLE);
+                        }
                     }
                 }
                 break;

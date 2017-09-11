@@ -169,10 +169,13 @@ public class PersonalProfileFragment extends BaseFragment implements ProfileView
                 LoginResponse loginResponse = mUserPreference.get();
                 if(null!=loginResponse&&StringUtil.isNotNullOrEmptyString(boardingDataResponse.getResponse())) {
                     UserSummary userSummary = loginResponse.getUserSummary();
-                    userSummary.setPhotoUrl(boardingDataResponse.getResponse());
-                    loginResponse.setUserSummary(userSummary);
-                    mUserPreference.set(loginResponse);
-                    ((ProfileActicity) getActivity()).setProfileNameData();
+                    if(null!=userSummary) {
+                        userSummary.setPhotoUrl(boardingDataResponse.getResponse());
+                        loginResponse.setUserSummary(userSummary);
+                        mUserPreference.set(loginResponse);
+                    }
+                        ((ProfileActicity) getActivity()).setProfileNameData();
+
                 }
                 break;
             case AppConstants.FAILED:
@@ -205,6 +208,17 @@ public class PersonalProfileFragment extends BaseFragment implements ProfileView
         if (null != userProfileResponse && StringUtil.isNotEmptyCollection(renderAllProfileViews(userProfileResponse))) {
             mAdapter.setSheroesGenericListData((renderAllProfileViews(userProfileResponse)));
             mAdapter.notifyDataSetChanged();
+            LoginResponse loginResponse = mUserPreference.get();
+            UserDetails userDetails=userProfileResponse.getUserDetails();
+            if(null!=loginResponse.getUserSummary()&&null!=userDetails) {
+                if (StringUtil.isNotNullOrEmptyString(userDetails.getFirstName())) {
+                    loginResponse.getUserSummary().setFirstName(userDetails.getFirstName());
+                }
+                if (StringUtil.isNotNullOrEmptyString(userDetails.getLastName())) {
+                    loginResponse.getUserSummary().setLastName(userDetails.getLastName());
+                }
+            }
+            mUserPreference.set(loginResponse);
         }
     }
 

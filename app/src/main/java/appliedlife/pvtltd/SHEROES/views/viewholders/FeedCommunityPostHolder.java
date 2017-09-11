@@ -1518,7 +1518,7 @@ private void normalCommunityPostUi(long userId,int adminId)
             }
 
     }
-    @OnClick(R.id.tv_review_description)
+    @OnClick(R.id.card_view_post)
     public void onReviewDescriptionClick() {
 
     }

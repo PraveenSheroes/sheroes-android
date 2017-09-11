@@ -34,6 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/dp_size_10"
+            android:layout_marginLeft="@dimen/dp_size_20"
             android:src="@drawable/ic_camera_profile" />
 
         <ImageView
@@ -42,6 +43,10 @@
             android:layout_height="@dimen/dp_size_20"
             android:layout_marginLeft="@dimen/dp_size_120"
             android:src="@drawable/gallery" />
+        <TextView
+            android:id="@+id/tv_gallery"
+            android:layout_width="@dimen/dp_size_50"
+            android:layout_height="@dimen/dp_size_30" />
     </LinearLayout>
 
     <RelativeLayout

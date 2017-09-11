@@ -121,6 +121,11 @@ public class ProfileImageDialogFragment extends BaseDialogFragment {
         ((ProfileActicity) getActivity()).selectImageFrmGallery();
         //checkGalleryPermission();
     }
+    @OnClick(R.id.tv_gallery)
+    public void onGalleryIconClick() {
+        ((ProfileActicity) getActivity()).selectImageFrmGallery();
+    }
+
 
     private void checkGalleryPermission() {
         if (Build.VERSION.SDK_INT >= 23) {

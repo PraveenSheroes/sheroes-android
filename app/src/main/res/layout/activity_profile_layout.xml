@@ -24,13 +24,18 @@
                 app:title=" "
                 app:contentScrim="@color/once_card"
                 app:layout_scrollFlags="scroll|snap">
-
                 <appliedlife.pvtltd.SHEROES.views.cutomeviews.SquareImageView
                     android:id="@+id/iv_profile_image"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:scaleType="centerCrop"
                     app:layout_collapseMode="parallax" />
+                <ProgressBar
+                    android:id="@+id/progress_bar_profile_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:indeterminateTint="@color/white"
+                    android:layout_gravity="center"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

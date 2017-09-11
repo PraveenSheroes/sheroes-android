@@ -34,6 +34,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.f2prateek.rx.preferences.Preference;
 import com.google.gson.Gson;
 import com.moe.pushlibrary.MoEHelper;
@@ -137,6 +139,8 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
     AppBarLayout mAppBarLayout;
     @Bind(R.id.iv_profile_image)
     ImageView ivProfile_bg_img;
+    @Bind(R.id.progress_bar_profile_image)
+    ProgressBar progressBarProfileImage;
     @Bind(R.id.view_pager_profile)
     ViewPager mViewPager;
     @Bind(R.id.toolbar_profile)
@@ -207,16 +211,21 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
     public void setProfileNameData() {
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
             tvProfileFullName.setText(mUserPreference.get().getUserSummary().getFirstName() + AppConstants.SPACE + mUserPreference.get().getUserSummary().getLastName());
+            ivProfile_bg_img.setImageBitmap(null);
+            mProfileIcon.setImageBitmap(null);
             Glide.with(this)
-                    .load(mUserPreference.get().getUserSummary().getPhotoUrl())
+                    .load(mUserPreference.get().getUserSummary().getPhotoUrl()).asBitmap()
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .skipMemoryCache(true)
-                    .into(mProfileIcon);
-            Glide.with(this)
-                    .load(mUserPreference.get().getUserSummary().getPhotoUrl())
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .skipMemoryCache(true)
-                    .into(ivProfile_bg_img);
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
+                            ivProfile_bg_img.setImageBitmap(profileImage);
+                            mProfileIcon.setImageBitmap(profileImage);
+                            progressBarProfileImage.setVisibility(View.GONE);
+                        }
+                    });
+
         }
         localImageSaveForChallenge = new File(Environment.getExternalStorageDirectory(), AppConstants.IMAGE + AppConstants.JPG_FORMATE);
     }
@@ -1170,6 +1179,7 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
     }
 
     public void requestForUpdateProfileImage() {
+        progressBarProfileImage.setVisibility(View.VISIBLE);
         if (StringUtil.isNotNullOrEmptyString(mEncodeImageUrl)) {
             if (null != viewPagerAdapter) {
                 Fragment personelProfile = viewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
