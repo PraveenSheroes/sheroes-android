@@ -300,6 +300,8 @@ public class AppConstants {
     public static final String WEB_BROWSER_MASSAGE = "Please select a web browser";
     public static final String JOB_URL = "https://sheroes.in/jobs";
     public static final String JOB_URL_COM = "https://sheroes.com/jobs";
+    public static final String CHAMPION_URL = "https://sheroes.in/champions";
+    public static final String CHAMPION_URL_COM = "https://sheroes.com/champions";
     public static final String ARTICLE_URL = "https://sheroes.in/articles";
     public static final String ARTICLE_URL_COM = "https://sheroes.com/articles";
     public static final String COMMUNITY_URL = "https://sheroes.in/communities";
@@ -317,6 +319,7 @@ public class AppConstants {
     public static final String JOB_ID = "job_id";
     public static final String EVENT_ID = "event_id";
     public static final String ARTICLE_ID = "article_id";
+    public static final String CHAMPION_ID = "champion_id";
     public static final String COMMUNITY_ID = "community_id";
     public static final String COMMUNITY_POST_ID = "community_post_id";
     public static final String CHALLENGE_ID = "challenge_id";

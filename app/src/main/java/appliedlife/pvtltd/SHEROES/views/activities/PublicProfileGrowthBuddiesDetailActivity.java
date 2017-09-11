@@ -139,7 +139,8 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
     HomePresenter mHomePresenter;
     private String mViewMoreDescription;
     private String screenName = AppConstants.GROWTH_PUBLIC_PROFILE;
-
+    private Long mChampionId;
+    private int mFromNotification;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -152,8 +153,16 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
         if (null != getIntent() && null != getIntent().getExtras()) {
             mFeedDetail = getIntent().getParcelableExtra(AppConstants.COMMUNITY_DETAIL);
             mMentorDetailItem = getIntent().getParcelableExtra(AppConstants.GROWTH_PUBLIC_PROFILE);
-        }
-
+                mFromNotification = getIntent().getExtras().getInt(AppConstants.BELL_NOTIFICATION);
+                mChampionId = getIntent().getExtras().getLong(AppConstants.CHAMPION_ID);
+                if (mChampionId > 0) {
+                    mFeedDetail = new FeedDetail();
+                    mFeedDetail.setIdOfEntityOrParticipant(mChampionId);
+                    mMentorDetailItem=new MentorDetailItem();
+                    mMentorDetailItem.setEntityOrParticipantId(mChampionId);
+                    mFeedDetail.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
+                }
+            }
         if (null != mFeedDetail) {
             mFragmentOpen = new FragmentOpen();
             setAllValues(mFragmentOpen);
@@ -246,13 +255,27 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
 
     @OnClick(R.id.iv_back_public_profile)
     public void onBackClick() {
+        if(mChampionId>0) {
+            if (mFromNotification == AppConstants.NO_REACTION_CONSTANT) {
+                Intent intent = new Intent(this, HomeActivity.class);
+                startActivity(intent);
+            }else {
+                deepLinkPressHandle();
+            }
+        }else {
+            deepLinkPressHandle();
+        }
+        finish();
+        overridePendingTransition(R.anim.right_to_left_anim_enter, R.anim.right_to_left_anim_exit);
+    }
+    private void deepLinkPressHandle()
+    {
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
         bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, mMentorDetailItem);
         bundle.putParcelable(AppConstants.FEED_SCREEN, mFeedDetail);
         intent.putExtras(bundle);
         setResult(RESULT_OK, intent);
-        finish();
     }
 
     @OnClick(R.id.tv_follow_unfollow_public_profile)

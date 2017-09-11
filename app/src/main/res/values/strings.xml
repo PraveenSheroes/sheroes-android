@@ -1040,6 +1040,7 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_DEEP_LINK_HELPLINE">deep link to help line</string>
     <string name="ID_DEEP_LINK_MAKE_INDIA_SAFE">deep link to make india safe</string>
     <string name="ID_DEEP_LINK_ARTICLE">deep link to article</string>
+    <string name="ID_DEEP_LINK_CHAMPION">deep link to champion</string>
     <string name="ID_DEEP_LINK_JOB">deep link to job</string>
     <string name="ID_DEEP_LINK_COMMUNITY">deep link to community</string>
     <string name="ID_DEEP_LINK_EVENT">deep link to event</string>

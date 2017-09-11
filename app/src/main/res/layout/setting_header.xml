@@ -35,7 +35,7 @@
         android:layout_below="@+id/tv_setting_tittle"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="@dimen/dp_size_7"
-        android:layout_marginTop="@dimen/dp_size_25"
+        android:layout_marginTop="@dimen/dp_size_5"
         android:fontFamily="@string/ID_ROBOTO_LIGHT"
         android:layerType="software"
         android:textColor="@color/text_color_setting_header"

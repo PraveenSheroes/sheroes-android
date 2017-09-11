@@ -248,6 +248,23 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 homeActivityCall();
             }
         }
+       else if (AppConstants.CHAMPION_URL.equalsIgnoreCase(baseUrl) || AppConstants.CHAMPION_URL_COM.equalsIgnoreCase(baseUrl) && AppConstants.CHAMPION_URL.length() < fullLength) {
+            try {
+                int champId = urlSharedViaSocial.lastIndexOf(AppConstants.BACK_SLASH);
+                String id = urlSharedViaSocial.substring(champId + 1, fullLength);
+                byte[] id1 = Base64.decode(id, Base64.DEFAULT);
+                dataIdString = new String(id1, AppConstants.UTF_8);
+                Intent articleDetail = new Intent(SheroesDeepLinkingActivity.this, PublicProfileGrowthBuddiesDetailActivity.class);
+                articleDetail.putExtra(AppConstants.BELL_NOTIFICATION, mFromNotification);
+                articleDetail.putExtra(AppConstants.CHAMPION_ID, Long.parseLong(dataIdString));
+                articleDetail.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                startActivity(articleDetail);
+                finish();
+                ((SheroesApplication)this.getApplication()).trackScreenView(getString(R.string.ID_DEEP_LINK_CHAMPION));
+            } catch (Exception e) {
+                homeActivityCall();
+            }
+        }
         //In case of profile
         else if ((AppConstants.USER_PROFILE_URL).equalsIgnoreCase(baseUrl) || AppConstants.USER_PROFILE_URL_COM.equalsIgnoreCase(baseUrl) && AppConstants.USER_PROFILE_URL.length() < fullLength) {
             Intent into = new Intent(this, ProfileActicity.class);

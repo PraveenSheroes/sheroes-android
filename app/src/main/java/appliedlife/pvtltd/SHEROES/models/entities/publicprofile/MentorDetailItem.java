@@ -28,6 +28,10 @@ public class MentorDetailItem extends BaseResponse {
     @SerializedName("mentor_image_url")
     @Expose
     private String mentorImageUrl;
+    @SerializedName("solr_ignor_deep_link_url")
+    @Expose
+    private String solarIgnoreDeepLink;
+
 
     public String getMentorName() {
         return mentorName;
@@ -81,6 +85,14 @@ public class MentorDetailItem extends BaseResponse {
         this.entityOrParticipantId = entityOrParticipantId;
     }
 
+    public String getSolarIgnoreDeepLink() {
+        return solarIgnoreDeepLink;
+    }
+
+    public void setSolarIgnoreDeepLink(String solarIgnoreDeepLink) {
+        this.solarIgnoreDeepLink = solarIgnoreDeepLink;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -95,6 +107,7 @@ public class MentorDetailItem extends BaseResponse {
         dest.writeByte(this.isFollowed ? (byte) 1 : (byte) 0);
         dest.writeLong(this.entityOrParticipantId);
         dest.writeString(this.mentorImageUrl);
+        dest.writeString(this.solarIgnoreDeepLink);
     }
 
     protected MentorDetailItem(Parcel in) {
@@ -105,6 +118,7 @@ public class MentorDetailItem extends BaseResponse {
         this.isFollowed = in.readByte() != 0;
         this.entityOrParticipantId = in.readLong();
         this.mentorImageUrl = in.readString();
+        this.solarIgnoreDeepLink = in.readString();
     }
 
     public static final Creator<MentorDetailItem> CREATOR = new Creator<MentorDetailItem>() {
