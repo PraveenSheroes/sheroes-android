@@ -1518,7 +1518,7 @@ private void normalCommunityPostUi(long userId,int adminId)
             }
 
     }
-    @OnClick(R.id.card_view_post)
+    @OnClick(R.id.fl_spam_post_ui)
     public void onReviewDescriptionClick() {
 
     }

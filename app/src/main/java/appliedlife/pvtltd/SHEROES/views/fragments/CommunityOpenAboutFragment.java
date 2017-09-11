@@ -206,7 +206,12 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
     }
     public void setTvPostModerationCount(int count)
     {
-        tvPostModerationCount.setText(String.valueOf(count));
+        if(count>0) {
+            tvPostModerationCount.setText(String.valueOf(count));
+        }else
+        {
+            tvPostModerationCount.setText(AppConstants.EMPTY_STRING);
+        }
     }
     public void refreshOpeAboutCommunityContent(FeedDetail feedDetail) {
         mFeedDetail = feedDetail;
