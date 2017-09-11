@@ -20,40 +20,40 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
  */
 public class UserBO implements Parcelable {
 
-	@SerializedName("home_town")
+	@SerializedName("homeTown")
 	@Expose
 	private String homeTown;
-	@SerializedName("home_town_id")
+	@SerializedName("homeTownId")
 	@Expose
 	private long homeTownId;
-	@SerializedName("language_id")
+	@SerializedName("languageId")
 	@Expose
 	private long languageId;
 	@SerializedName("id")
 	@Expose
 	private long id;
-	@SerializedName("participant_id")
+	@SerializedName("participantId")
 	@Expose
 	private long participantId;
-	@SerializedName("user_type_id")
+	@SerializedName("userTypeId")
 	@Expose
 	private int userTypeId;
-	@SerializedName("city_master_id")
+	@SerializedName("cityMasterId")
 	@Expose
 	private long cityMasterId;
-	@SerializedName("city_master")
+	@SerializedName("cityMaster")
 	@Expose
 	private String cityMaster;
-	@SerializedName("email_id")
+	@SerializedName("emailid")
 	@Expose
 	private String emailid;
 	@SerializedName("mobile")
 	@Expose
 	private String mobile;
-	@SerializedName("first_name")
+	@SerializedName("firstName")
 	@Expose
 	private String firstName;
-	@SerializedName("last_name")
+	@SerializedName("lastName")
 	@Expose
 	private String lastName;
 	@SerializedName("address")
@@ -62,40 +62,40 @@ public class UserBO implements Parcelable {
 	@SerializedName("crdt")
 	@Expose
 	private String crdt;
-	@SerializedName("last_login")
+	@SerializedName("lastLogin")
 	@Expose
 	private String lastLogin;
-	@SerializedName("last_modified_on")
+	@SerializedName("lastModifiedOn")
 	@Expose
 	private String lastModifiedOn;
-	@SerializedName("is_active")
+	@SerializedName("isActive")
 	@Expose
 	private boolean isActive;
-	@SerializedName("photo_url_path")
+	@SerializedName("photoUrlPath")
 	@Expose
 	private String photoUrlPath;
-	@SerializedName("job_function_id")
+	@SerializedName("jobFunctionId")
 	@Expose
 	private long jobFunctionId;
-	@SerializedName("marital_status")
+	@SerializedName("maritalStatus")
 	@Expose
 	private String maritalStatus;
 	@SerializedName("dob")
 	@Expose
 	private String dob;
-	@SerializedName("sector_id")
+	@SerializedName("sectorId")
 	@Expose
 	private long sectorId;
-	@SerializedName("job_title")
+	@SerializedName("jobTitle")
 	@Expose
 	private String jobTitle;
-	@SerializedName("employment_type_id")
+	@SerializedName("employmentTypeId")
 	@Expose
 	private long employmentTypeId;
-	@SerializedName("total_exp")
+	@SerializedName("totalExp")
 	@Expose
 	private int totalExp;
-	@SerializedName("personal_bios")
+	@SerializedName("personalBios")
 	@Expose
 	private String personalBios;
 	@SerializedName("interest")
@@ -104,25 +104,25 @@ public class UserBO implements Parcelable {
 	@SerializedName("industry")
 	@Expose
 	private String industry;
-	@SerializedName("opportunity_type_id")
+	@SerializedName("opportunityTypeId")
 	@Expose
 	private long opportunityTypeId;
-	@SerializedName("job_tag_id")
+	@SerializedName("jobTagId")
 	@Expose
 	private long jobTagId;
-	@SerializedName("company_profile_id")
+	@SerializedName("companyProfileid")
 	@Expose
 	private long companyProfileid;
-	@SerializedName("profile_weight")
+	@SerializedName("profileWeight")
 	@Expose
 	private long profileWeight;
-	@SerializedName("is_email_verified")
+	@SerializedName("isEmailVerified")
 	@Expose
 	private boolean isEmailVerified;
 	@SerializedName("gender")
 	@Expose
 	private String gender;
-	@SerializedName("is_company_admin")
+	@SerializedName("isCompanyAdmin")
 	@Expose
 	private boolean isCompanyAdmin;
 	@SerializedName("department")
@@ -134,10 +134,10 @@ public class UserBO implements Parcelable {
 	@SerializedName("collage")
 	@Expose
 	private String collage;
-	@SerializedName("user_job_view_count")
+	@SerializedName("userJobViewCount")
 	@Expose
 	private int userJobViewCount;
-	@SerializedName("user_job_apply_count")
+	@SerializedName("userJobApplyCount")
 	@Expose
 	private int userJobApplyCount;
 	@SerializedName("pincode")
@@ -149,46 +149,60 @@ public class UserBO implements Parcelable {
 	@SerializedName("longitude")
 	@Expose
 	private double longitude;
-	@SerializedName("number_of_followers")
+	@SerializedName("numberOfFollowers")
 	@Expose
 	private String numberOfFollowers;
-	@SerializedName("current_ctc")
+	@SerializedName("currentCtc")
 	@Expose
 	private int currentCtc;
-	@SerializedName("user_summary")
+	@SerializedName("userSummary")
 	@Expose
 	private String userSummary;
 	@SerializedName("name")
 	@Expose
 	private String name;
-	@SerializedName("twitter_username")
+	@SerializedName("twitterUsername")
 	@Expose
 	private String twitterUsername;
-	@SerializedName("no_of_children")
+	@SerializedName("noOfChildren")
 	@Expose
 	private int noOfChildren;
-	@SerializedName("profile_id")
+	@SerializedName("profileId")
 	@Expose
 	private long profileId;
 
+	@SerializedName("proficiencyLevel")
+	@Expose
+	private String proficiencyLevel;
+	@SerializedName("skills")
+	@Expose
 	private List<LabelValue> skills;
-	
+	@SerializedName("interests")
+	@Expose
 	private List<LabelValue> interests;
-	
+	@SerializedName("opportunityTypes")
+	@Expose
 	private List<LabelValue> opportunityTypes;
-	
+	@SerializedName("canHelpIns")
+	@Expose
 	private List<LabelValue> canHelpIns;
-
+	@SerializedName("sector")
+	@Expose
 	private String sector;
-	
+	@SerializedName("employmentType")
+	@Expose
 	private String employmentType;
-	
+	@SerializedName("jobFunction")
+	@Expose
 	private String jobFunction;
-	
+	@SerializedName("jobTag")
+	@Expose
 	private String jobTag;
-	
+	@SerializedName("travelFlexibility")
+	@Expose
 	private int travelFlexibility;
-	
+	@SerializedName("clientSideVisitPreference")
+	@Expose
 	private int clientSideVisitPreference;
 
 	/**
@@ -941,6 +955,14 @@ public class UserBO implements Parcelable {
 		this.languageId = languageId;
 	}
 
+	public String getProficiencyLevel() {
+		return proficiencyLevel;
+	}
+
+	public void setProficiencyLevel(String proficiencyLevel) {
+		this.proficiencyLevel = proficiencyLevel;
+	}
+
 	@Override
 	public int describeContents() {
 		return 0;
@@ -998,6 +1020,7 @@ public class UserBO implements Parcelable {
 		dest.writeString(this.twitterUsername);
 		dest.writeInt(this.noOfChildren);
 		dest.writeLong(this.profileId);
+		dest.writeString(this.proficiencyLevel);
 		dest.writeTypedList(this.skills);
 		dest.writeTypedList(this.interests);
 		dest.writeTypedList(this.opportunityTypes);
@@ -1061,6 +1084,7 @@ public class UserBO implements Parcelable {
 		this.twitterUsername = in.readString();
 		this.noOfChildren = in.readInt();
 		this.profileId = in.readLong();
+		this.proficiencyLevel = in.readString();
 		this.skills = in.createTypedArrayList(LabelValue.CREATOR);
 		this.interests = in.createTypedArrayList(LabelValue.CREATOR);
 		this.opportunityTypes = in.createTypedArrayList(LabelValue.CREATOR);
