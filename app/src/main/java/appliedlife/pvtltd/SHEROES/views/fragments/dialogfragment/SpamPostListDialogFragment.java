@@ -237,17 +237,10 @@ public class SpamPostListDialogFragment extends BaseDialogFragment  {
             case AppConstants.SUCCESS:
                 if (baseResponse instanceof ApproveSpamPostResponse) {
                     if(null!=mApprovePostFeedDetail) {
-                        if(mIsSpam)
-                        {
-                            mAdapter.removeDataOnPosition(mApprovePostFeedDetail, mApprovePostFeedDetail.getItemPosition());
-                            mLayoutManager.scrollToPosition(mApprovePostFeedDetail.getItemPosition());
-                            mAdapter.notifyDataSetChanged();
-                        }else {
-                            mApprovePostFeedDetail.setSpamPost(false);
-                            mAdapter.setDataOnPosition(mApprovePostFeedDetail,mApprovePostFeedDetail.getItemPosition());
-                            mLayoutManager.scrollToPosition(mApprovePostFeedDetail.getItemPosition());
-                            mAdapter.notifyDataSetChanged();
-                        }
+                        mApprovePostFeedDetail.setSpamPost(mIsSpam);
+                        mAdapter.removeDataOnPosition(mApprovePostFeedDetail, mApprovePostFeedDetail.getItemPosition());
+                        mLayoutManager.scrollToPosition(mApprovePostFeedDetail.getItemPosition());
+                        mAdapter.notifyDataSetChanged();
                     }
                 }
                 break;

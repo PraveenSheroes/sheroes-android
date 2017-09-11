@@ -57,6 +57,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="top"
                 android:layout_marginRight="@dimen/dp_size_5"
+                android:visibility="invisible"
                 android:layout_marginTop="@dimen/dp_size_13"
                 android:background="@drawable/ic_feed_article_top_left" />
         </LinearLayout>

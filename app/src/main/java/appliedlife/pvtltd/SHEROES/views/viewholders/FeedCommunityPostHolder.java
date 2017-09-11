@@ -230,13 +230,17 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         dataItem.setItemPosition(position);
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
             long userId = userPreference.get().getUserSummary().getUserId();
+            int adminId=0;
+            if(null != userPreference.get().getUserSummary().getUserBO()) {
+                adminId = userPreference.get().getUserSummary().getUserBO().getUserTypeId();
+            }
         if (dataItem.getCommunityId() == AppConstants.EVENT_COMMUNITY_ID) {
             eventPostUI(userId);
         } else {
-            normalCommunityPostUi(userId);
+            normalCommunityPostUi(userId,adminId);
         }
         if(dataItem.isSpamPost()) {
-            handlingSpamUi(userId);
+            handlingSpamUi(userId,adminId);
         }else
         {
             liCommunityPostMainLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.white));
@@ -263,7 +267,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(AppConstants.IMPRESSIONS, AppConstants.EVENT_IMPRESSION, dataItem.getIdOfEntityOrParticipant() + AppConstants.DASH + userId + AppConstants.DASH + dataItem.getNameOrTitle());
         }
     }
-private void normalCommunityPostUi(long userId)
+private void normalCommunityPostUi(long userId,int adminId)
 {
     liCommunityPostMainLayout.setVisibility(View.VISIBLE);
     liEventCardMainLayout.setVisibility(View.GONE);
@@ -290,7 +294,7 @@ private void normalCommunityPostUi(long userId)
     }
     onBookMarkClick();
     allTextViewStringOperations(mContext);
-    if (dataItem.getAuthorId() == userId||dataItem.isCommunityOwner()) {
+    if (dataItem.getAuthorId() == userId||dataItem.isCommunityOwner()||adminId==AppConstants.TWO_CONSTANT) {
         tvFeedCommunityPostUserMenu.setVisibility(View.VISIBLE);
         if (dataItem.getCommunityId() == AppConstants.NO_REACTION_CONSTANT) {
             tvFeedCommunityPostUserMenu.setVisibility(View.GONE);
@@ -1488,12 +1492,8 @@ private void normalCommunityPostUi(long userId)
         }
         setInterested();
     }
-    private void handlingSpamUi(long userId)
+    private void handlingSpamUi(long userId,int adminId)
     {
-        int adminId=0;
-        if(null != userPreference.get().getUserSummary().getUserBO()) {
-            adminId = userPreference.get().getUserSummary().getUserBO().getUserTypeId();
-        }
             if (adminId == AppConstants.TWO_CONSTANT||dataItem.isCommunityOwner()) {
                 liCommunityPostMainLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.white));
                 liCommunityPostMainLayout.setAlpha(1f);

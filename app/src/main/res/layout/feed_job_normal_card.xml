@@ -62,6 +62,7 @@
                 android:layout_marginRight="@dimen/dp_size_5"
                 android:layout_marginTop="@dimen/dp_size_13"
                 android:layout_gravity="top"
+                android:visibility="invisible"
                 android:background="@drawable/ic_search_proffesion_icon" />
 
         </LinearLayout>
