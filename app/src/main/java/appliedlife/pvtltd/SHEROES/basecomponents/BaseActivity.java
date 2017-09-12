@@ -57,9 +57,12 @@ import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.GenericWebViewFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ImageFullViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityOptionJoinDialog;
 
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.FEED_CARD_MENU;
@@ -89,6 +92,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
     private MoEHelper mMoEHelper;
     private PayloadBuilder payloadBuilder;
     private MoEngageUtills moEngageUtills;
+    private GenericWebViewFragment genericWebViewFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -310,6 +314,9 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
             case R.id.tv_feed_community_post_user_share:
                 shareCardViaSocial(baseResponse);
                 break;
+            case R.id.tv_feed_review_post_user_share_ic:
+                shareCardViaSocial(baseResponse);
+                break;
             case R.id.tv_feed_article_user_share:
                 shareCardViaSocial(baseResponse);
                 break;
@@ -400,19 +407,52 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
                 break;
             case R.id.tv_feed_community_post_card_title:
-                Intent intentFromCommunityPost = new Intent(this, CommunitiesDetailActivity.class);
-                Bundle bundleFromPost = new Bundle();
-                bundleFromPost.putBoolean(AppConstants.COMMUNITY_POST_ID, true);
-                bundleFromPost.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
-                bundleFromPost.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.MY_COMMUNITY);
-                intentFromCommunityPost.putExtras(bundleFromPost);
-                startActivityForResult(intentFromCommunityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
-                overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
+                if(mFeedDetail.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID){
+                    openGenericCardInWebView(mFeedDetail.getDeepLinkUrl());
+                }else {
+                    Intent intentFromCommunityPost = new Intent(this, CommunitiesDetailActivity.class);
+                    Bundle bundleFromPost = new Bundle();
+                    bundleFromPost.putBoolean(AppConstants.COMMUNITY_POST_ID, true);
+                    bundleFromPost.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
+                    bundleFromPost.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.MY_COMMUNITY);
+                    intentFromCommunityPost.putExtras(bundleFromPost);
+                    startActivityForResult(intentFromCommunityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+                    overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
+                }
+                break;
+            case R.id.tv_feed_review_card_title:
+                openGenericCardInWebView(mFeedDetail.getDeepLinkUrl());
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + id);
         }
     }
+
+    private DialogFragment openGenericCardInWebView(String url){
+
+       /*// GenericWebViewFragment genericWebViewFragment = new GenericWebViewFragment();
+        mFragmentOpen.setGenericWebViewFragment(true);
+        //Bundle bundle = new Bundle();
+        //bundle.putString(AppConstants.WEB_URL,url);
+        genericWebViewFragment.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.bottom_to_top_slide_reverse_anim)
+                .replace(R.id.fl_feed_comments, genericWebViewFragment, GenericWebViewFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+*/
+
+        genericWebViewFragment = (GenericWebViewFragment) getFragmentManager().findFragmentByTag(GenericWebViewFragment.class.getName());
+        if(genericWebViewFragment == null) {
+            genericWebViewFragment = new GenericWebViewFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString(AppConstants.WEB_URL, url);
+            genericWebViewFragment.setArguments(bundle);
+        }
+        if (!genericWebViewFragment.isVisible() && !genericWebViewFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
+            genericWebViewFragment.show(getFragmentManager(), GenericWebViewFragment.class.getName());
+        }
+        return genericWebViewFragment;
+
+    }
+
 
     private void userReactionDialogLongPress(View view) {
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -569,11 +609,11 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
             case R.id.tv_feed_community_post_user_menu:
                 mFeedDetail = (FeedDetail) baseResponse;
                 if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
-                        int adminId=0;
-                        Long userId=userPreference.get().getUserSummary().getUserId();
-                        if(null != userPreference.get().getUserSummary().getUserBO()) {
-                            adminId = userPreference.get().getUserSummary().getUserBO().getUserTypeId();
-                        }
+                    int adminId=0;
+                    Long userId=userPreference.get().getUserSummary().getUserId();
+                    if(null != userPreference.get().getUserSummary().getUserBO()) {
+                        adminId = userPreference.get().getUserSummary().getUserBO().getUserTypeId();
+                    }
                     if (mFeedDetail.getAuthorId() == userId|| mFragmentOpen.isOwner()||adminId==AppConstants.TWO_CONSTANT) {
                         tvDelete.setVisibility(View.VISIBLE);
                         if(mFeedDetail.isCommunityOwner()||adminId==AppConstants.TWO_CONSTANT)
@@ -815,6 +855,9 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
             case R.id.tv_reaction4:
                 userCommentLikeRequest(mFeedDetail, AppConstants.EMOJI_FOURTH_REACTION_CONSTANT, mFeedDetail.getItemPosition());
                 popupWindow.dismiss();
+                break;
+            case R.id.tv_review_upvote_reacted:
+                userCommentLikeRequest(mFeedDetail, AppConstants.HEART_REACTION_CONSTANT, mFeedDetail.getItemPosition());
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + "  " + TAG + " " + id);

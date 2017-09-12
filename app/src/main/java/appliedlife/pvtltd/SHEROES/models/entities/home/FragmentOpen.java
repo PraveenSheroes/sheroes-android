@@ -44,6 +44,7 @@ public class FragmentOpen implements Parcelable{
     private boolean isFAQSFragment;
     private boolean isFeedFragment;
     private int championViaCommentReaction;
+    private boolean isGenericWebViewFragment;
 
     public FragmentOpen() {
     }
@@ -314,6 +315,14 @@ public class FragmentOpen implements Parcelable{
         this.championViaCommentReaction = championViaCommentReaction;
     }
 
+    public boolean isGenericWebViewFragment() {
+        return isGenericWebViewFragment;
+    }
+
+    public void setGenericWebViewFragment(boolean genericWebViewFragment) {
+        isGenericWebViewFragment = genericWebViewFragment;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -354,6 +363,7 @@ public class FragmentOpen implements Parcelable{
         dest.writeByte(this.isICCMemberListFragment ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isFAQSFragment ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isFeedFragment ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isGenericWebViewFragment ? (byte) 1 : (byte) 0);
         dest.writeInt(this.championViaCommentReaction);
     }
 
@@ -391,6 +401,7 @@ public class FragmentOpen implements Parcelable{
         this.isICCMemberListFragment = in.readByte() != 0;
         this.isFAQSFragment = in.readByte() != 0;
         this.isFeedFragment = in.readByte() != 0;
+        this.isGenericWebViewFragment = in.readByte() != 0;
         this.championViaCommentReaction = in.readInt();
     }
 

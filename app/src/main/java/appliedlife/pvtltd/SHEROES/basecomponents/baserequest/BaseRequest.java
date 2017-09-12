@@ -49,6 +49,12 @@ public abstract class BaseRequest {
     @SerializedName("long")
     @Expose
     private Double longitude;
+
+    @SerializedName("test_user_type")
+    @Expose
+    private String testUserType;
+    // For getting org cards
+    //private String testUserType= AppConstants.orgUserType;
     public BaseRequest(TrackingParams trackingParams, DeviceInfo deviceInfo, String appVersion, String cloudMessagingId, String deviceUniqueId, String screenName, String lastScreenName, int pageNo, int pageSize) {
         this.trackingParams = trackingParams;
         this.deviceInfo = deviceInfo;
@@ -159,6 +165,14 @@ public abstract class BaseRequest {
 
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
+    }
+
+    public String getTestUserType() {
+        return testUserType;
+    }
+
+    public void setTestUserType(String testUserType) {
+        this.testUserType = testUserType;
     }
 }
 

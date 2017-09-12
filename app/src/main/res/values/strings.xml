@@ -1047,7 +1047,14 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_DEEP_LINK_PROFILE">deep link to profile</string>
     <string name="ID_DEEP_LINK_WEB">deep link to web</string>
 
+    <string name="ID_POSTED_REVIEW">posted a review for</string>
+    <string name="ID_POSTED_ASK_FEEDBACK">is looking for feedback on</string>
 
+    <!-- String related to review post -->
+
+    <string name="ID_REVIEW_POST_SHARE">Share</string>
+    <string name="ID_REVIEW_POST_NO_UPVOTE">Upvote</string>
+    <string name="ID_REVIEW_POST_NON_ZERO_UPVOTES">Upvotes</string>
 
     <string name="ID_INTENT_CHOOSER">Select source</string>
 

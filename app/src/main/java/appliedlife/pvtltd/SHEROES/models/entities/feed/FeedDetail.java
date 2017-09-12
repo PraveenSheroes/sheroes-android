@@ -560,6 +560,21 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
     @SerializedName("s_disp_event_venue")
     @Expose
     private String eventVenu;
+
+    @SerializedName("solr_ignore_community_type_id")
+    @Expose
+    private long communityTypeId;
+
+    @SerializedName("rating_i")
+    @Expose
+    private int rating;
+
+    @SerializedName("is_comment_allowed_b")
+    @Expose
+    private boolean isCommentAllowed;
+
+
+
     public int getItemPosition() {
         return itemPosition;
     }
@@ -1959,6 +1974,31 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         this.imageHeight = imageHeight;
     }
 
+    public long getCommunityTypeId() {
+        return communityTypeId;
+    }
+
+    public void setCommunityTypeId(long communityTypeId) {
+        this.communityTypeId = communityTypeId;
+    }
+
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
+
+    public boolean isCommentAllowed() {
+        return isCommentAllowed;
+    }
+
+    public void setCommentAllowed(boolean commentAllowed) {
+        isCommentAllowed = commentAllowed;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -2141,6 +2181,9 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         dest.writeString(this.displayTextEndHour);
         dest.writeString(this.displayTextEndMinute);
         dest.writeString(this.eventVenu);
+        dest.writeLong(this.communityTypeId);
+        dest.writeInt(this.rating);
+        dest.writeByte(this.isCommentAllowed ? (byte) 1 : (byte) 0);
     }
 
     protected FeedDetail(Parcel in) {
@@ -2337,6 +2380,9 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         this.displayTextEndHour = in.readString();
         this.displayTextEndMinute = in.readString();
         this.eventVenu = in.readString();
+        this.communityTypeId = in.readLong();
+        this.rating = in.readInt();
+        this.isCommentAllowed = in.readByte() != 0;
     }
 
     public static final Creator<FeedDetail> CREATOR = new Creator<FeedDetail>() {

@@ -372,6 +372,9 @@ public class AppConstants {
     public static final String ARTICLE_IMPRSSION = "article impression";
     public static final String EVENT_IMPRESSION = "event impression";
     public static final String PUBLIC_PROFILE = "public profile";
+    public static final long ORGANISATION_COMMUNITY_TYPE_ID = 10L;
+    public static final String orgUserType = "organisations_test_user";
+    public static final String WEB_URL = "web_view_url";
 
 
 }

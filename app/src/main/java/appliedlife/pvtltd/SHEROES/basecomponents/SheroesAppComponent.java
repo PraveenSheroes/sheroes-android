@@ -46,6 +46,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.CreateCommunityPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.EmailVerificationFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FAQSFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.GenericWebViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeArticleCategorySpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
@@ -582,6 +583,8 @@ public interface SheroesAppComponent {
     void inject(ProfilePersonelHowCanLookingForFragment profilePersonelHowCanLookingForFragment);
 
     void inject(HelplineFragment helplineFragment);
+
+    void inject(GenericWebViewFragment genericWebViewFragment);
 
     void inject(HelplineQuestionCardHolder helplineQuestionCardHolder);
 
