@@ -244,7 +244,6 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
                 mTvUserCommentHeaderText.setText(getString(R.string.ID_NO_REACTION));
             }
         }
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         switch (mFragmentOpen.getOpenCommentReactionFragmentFor()) {
             case AppConstants.ONE_CONSTANT:
                 mAdapter = new GenericRecyclerViewAdapter(getContext(), (HomeActivity) getActivity());
@@ -260,6 +259,8 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
                 break;
         }
         mLayoutManager = new LinearLayoutManager(getContext());
+        mLayoutManager.setReverseLayout(true);
+        mLayoutManager.setStackFromEnd(true);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addOnScrollListener(new HidingScrollListener(mCommentReactionPresenter, mRecyclerView, mLayoutManager, mFragmentListRefreshData) {
