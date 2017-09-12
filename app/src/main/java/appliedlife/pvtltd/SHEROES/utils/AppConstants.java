@@ -133,6 +133,7 @@ public class AppConstants {
     public static final String CHALLENGE_SUB_TYPE = "CHALLENGE_TYPE";
     public static final String APP_INTRO_SUB_TYPE = "APP_INTRO_TYPE";
     public static final String ONCE_WELCOME = "ONCE_WELCOME";
+    public static final String FEED_PROGRESS_BAR = "FEED_PROGRESS_BAR";
     public static final String NO_COMMUNITIES = "NO_COMMUNITIES";
     public static final String COMMUNITIES_DETAIL = "community_detail";
     public static final String JOB_FILTER = "job_filter";

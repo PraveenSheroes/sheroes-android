@@ -116,7 +116,6 @@ public class MyCommunitiesFragment extends BaseFragment implements HomeView {
                 swipeAndRefreshList();
             }
         });
-
         return view;
     }
 

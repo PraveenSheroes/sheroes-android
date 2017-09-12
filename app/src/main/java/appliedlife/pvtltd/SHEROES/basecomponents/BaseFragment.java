@@ -275,7 +275,16 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
             }
             mFragmentListRefreshData.setPageNo(++mPageNo);
             mPullRefreshList.allListData(feedDetailList);
-            mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
+            List<FeedDetail> data=null;
+            FeedDetail feedProgressBar=new FeedDetail();
+            feedProgressBar.setSubType(AppConstants.FEED_PROGRESS_BAR);
+            data=mPullRefreshList.getFeedResponses();
+            int position=data.size()- feedDetailList.size();
+            if(position>0) {
+                data.remove(position-1);
+            }
+            data.add(feedProgressBar);
+            mAdapter.setSheroesGenericListData(data);
             mAdapter.setUserId(mUserId);
             mAdapter.setCallForRecycler(AppConstants.FEED_SUB_TYPE);
             mAdapter.notifyDataSetChanged();

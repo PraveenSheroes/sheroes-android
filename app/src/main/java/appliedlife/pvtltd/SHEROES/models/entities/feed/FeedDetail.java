@@ -15,7 +15,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeDataItem;
 import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroData;
 
 public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
-
+    int imageHeight=600;
     int itemPosition;
     boolean isLongPress;
     String callFromName;
@@ -1951,6 +1951,14 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         isCommunityOwner = communityOwner;
     }
 
+    public int getImageHeight() {
+        return imageHeight;
+    }
+
+    public void setImageHeight(int imageHeight) {
+        this.imageHeight = imageHeight;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -1959,6 +1967,7 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
+        dest.writeInt(this.imageHeight);
         dest.writeInt(this.itemPosition);
         dest.writeByte(this.isLongPress ? (byte) 1 : (byte) 0);
         dest.writeString(this.callFromName);
@@ -2136,6 +2145,7 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
 
     protected FeedDetail(Parcel in) {
         super(in);
+        this.imageHeight = in.readInt();
         this.itemPosition = in.readInt();
         this.isLongPress = in.readByte() != 0;
         this.callFromName = in.readString();

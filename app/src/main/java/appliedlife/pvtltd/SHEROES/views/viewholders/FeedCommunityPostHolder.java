@@ -22,6 +22,7 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -505,14 +506,12 @@ private void normalCommunityPostUi(long userId,int adminId)
                 int listSize = coverImageList.size();
                 if (listSize > AppConstants.NO_REACTION_CONSTANT) {
                     switch (listSize) {
-
                         case AppConstants.ONE_CONSTANT:
                             liFeedCommunityUserPostImages.removeAllViews();
                             liFeedCommunityUserPostImages.removeAllViewsInLayout();
                             if (StringUtil.isNotEmptyCollection(coverImageList) && StringUtil.isNotNullOrEmptyString(coverImageList.get(0))) {
                                 oneImagesSetting(mContext, coverImageList.get(0));
                             }
-
                             break;
                         case AppConstants.TWO_CONSTANT:
                             liFeedCommunityUserPostImages.removeAllViews();
@@ -862,33 +861,155 @@ private void normalCommunityPostUi(long userId,int adminId)
     private void oneImagesSetting(Context context, String firstImage) {
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View child = layoutInflater.inflate(R.layout.feed_community_post_single_image, null);
-        ImageView ivFirstLandscape = (ImageView) child.findViewById(R.id.iv_feed_community_post_single);
+       final ImageView ivFirstLandscape = (ImageView) child.findViewById(R.id.iv_feed_community_post_single);
+        final  FrameLayout flShadow=(FrameLayout) child.findViewById(R.id.fl_shadow_image);
+        flShadow.getLayoutParams().height=dataItem.getImageHeight();
         Glide.with(context)
-                .load(firstImage)
+                .load(firstImage).asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .skipMemoryCache(true)
-                .into(ivFirstLandscape);
-
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
+                        ivFirstLandscape.setImageBitmap(profileImage);
+                        flShadow.setVisibility(View.GONE);
+                    }
+                });
         liFeedCommunityUserPostImages.addView(child);
     }
 
     private void twoImagesSetting(Context context, String firstImage, String secondImage) {
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View child = layoutInflater.inflate(R.layout.feed_community_post_two_images, null);
-        ImageView ivFirstLandscape = (ImageView) child.findViewById(R.id.iv_feed_community_post_first);
+       final ImageView ivFirstLandscape = (ImageView) child.findViewById(R.id.iv_feed_community_post_first);
+        final  FrameLayout flShadowPostFirst=(FrameLayout) child.findViewById(R.id.fl_shadow_image_post_first);
+        ivFirstLandscape.setOnClickListener(this);
+        Glide.with(context)
+                .load(firstImage).asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .skipMemoryCache(true)
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
+                         ivFirstLandscape.setImageBitmap(profileImage);
+                        ivFirstLandscape.setVisibility(View.VISIBLE);
+                       flShadowPostFirst.setVisibility(View.GONE);
+                    }
+                });
+
+       final ImageView ivSecond = (ImageView) child.findViewById(R.id.iv_feed_comunity_post_second);
+        final  FrameLayout flShadowPostSecond=(FrameLayout) child.findViewById(R.id.fl_shadow_image_post_second);
+        ivSecond.setOnClickListener(this);
+        Glide.with(context)
+                .load(secondImage).asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .skipMemoryCache(true)
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
+                         ivSecond.setImageBitmap(profileImage);
+                        ivSecond.setVisibility(View.VISIBLE);
+                        flShadowPostSecond.setVisibility(View.GONE);
+                    }
+                });
+        liFeedCommunityUserPostImages.addView(child);
+    }
+
+
+    private void feedFirstLandscapWIthTwoImageModeSetting(Context context, String firstImage, String secondImage, String thirdImage) {
+
+        LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View child = layoutInflater.inflate(R.layout.feed_community_post_first_landscape_with_two_images, null);
+        final ImageView ivFirstLandscape = (ImageView) child.findViewById(R.id.iv_feed_community_post_first_landscape_with_two_images);
+        final  FrameLayout flShadowPostFirst=(FrameLayout) child.findViewById(R.id.fl_shadow_image_with_landscap);
+        flShadowPostFirst.getLayoutParams().height=dataItem.getImageHeight();
+        ivFirstLandscape.setOnClickListener(this);
+        Glide.with(context)
+                .load(firstImage).asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .skipMemoryCache(true)
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
+                         ivFirstLandscape.setImageBitmap(profileImage);
+                         ivFirstLandscape.setVisibility(View.VISIBLE);
+                        flShadowPostFirst.setVisibility(View.GONE);
+                    }
+                });
+
+      final   ImageView ivSecond = (ImageView) child.findViewById(R.id.iv_feed_community_post_second_image_landscape_with_two_images);
+        final  FrameLayout flShadowPostFirstWithLandscap=(FrameLayout) child.findViewById(R.id.fl_shadow_image_post_first_with_landscap);
+        ivSecond.setOnClickListener(this);
+
+        Glide.with(context)
+                .load(secondImage).asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .skipMemoryCache(true)
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
+                         ivSecond.setImageBitmap(profileImage);
+                        ivSecond.setVisibility(View.VISIBLE);
+                        flShadowPostFirstWithLandscap.setVisibility(View.GONE);
+                    }
+                });
+
+       final ImageView ivThird = (ImageView) child.findViewById(R.id.iv_feed_community_post_third_image_landscape_with_two_images);
+        final  FrameLayout flShadowPostSecondWithLandscap=(FrameLayout) child.findViewById(R.id.fl_shadow_image_post_second_with_landscap);
+        ivThird.setOnClickListener(this);
+        Glide.with(context)
+                .load(thirdImage).asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .skipMemoryCache(true)
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
+                         ivThird.setImageBitmap(profileImage);
+                       ivThird.setVisibility(View.VISIBLE);
+                        flShadowPostSecondWithLandscap.setVisibility(View.GONE);
+                    }
+                });
+        liFeedCommunityUserPostImages.addView(child);
+    }
+
+    private void feedFirstLandscapImageModeSetting(Context context, String firstImage, String secondImage, String thirdImage, String fourthImage, int listSize) {
+
+        LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View child = layoutInflater.inflate(R.layout.feed_community_post_first_landscape_with_multiple, null);
+        TextView tvFeedCommunityPost = (TextView) child.findViewById(R.id.tv_feed_community_post_landscape_total_images);
+        TextView tvFeedCommunityPostMore = (TextView) child.findViewById(R.id.tv_feed_community_image_more);
+        if (listSize > AppConstants.FOURTH_CONSTANT) {
+            tvFeedCommunityPost.setVisibility(View.VISIBLE);
+            tvFeedCommunityPostMore.setVisibility(View.VISIBLE);
+        }
+        ImageView ivFirstLandscape = (ImageView) child.findViewById(R.id.iv_feed_community_post_first_landscape);
         ivFirstLandscape.setOnClickListener(this);
         Glide.with(context)
                 .load(firstImage)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .skipMemoryCache(true)
                 .into(ivFirstLandscape);
-        ImageView ivSecond = (ImageView) child.findViewById(R.id.iv_feed_comunity_post_second);
+        ImageView ivSecond = (ImageView) child.findViewById(R.id.iv_feed_community_post_second_image_landscape);
         ivSecond.setOnClickListener(this);
         Glide.with(context)
                 .load(secondImage)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .skipMemoryCache(true)
                 .into(ivSecond);
+        ImageView ivThird = (ImageView) child.findViewById(R.id.iv_feed_community_post_third_image_landscape);
+        ivThird.setOnClickListener(this);
+        Glide.with(context)
+                .load(thirdImage)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .skipMemoryCache(true)
+                .into(ivThird);
+        ImageView ivFourth = (ImageView) child.findViewById(R.id.iv_feed_community_post_fourth_image_landscape);
+        ivFourth.setOnClickListener(this);
+        Glide.with(context)
+                .load(fourthImage)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .skipMemoryCache(true)
+                .into(ivFourth);
         liFeedCommunityUserPostImages.addView(child);
     }
 
@@ -957,75 +1078,7 @@ private void normalCommunityPostUi(long userId,int adminId)
         liFeedCommunityUserPostImages.addView(child);
     }
 
-    private void feedFirstLandscapWIthTwoImageModeSetting(Context context, String firstImage, String secondImage, String thirdImage) {
 
-        LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View child = layoutInflater.inflate(R.layout.feed_community_post_first_landscape_with_two_images, null);
-        ImageView ivFirstLandscape = (ImageView) child.findViewById(R.id.iv_feed_community_post_first_landscape_with_two_images);
-        ivFirstLandscape.setOnClickListener(this);
-        Glide.with(context)
-                .load(firstImage)
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .skipMemoryCache(true)
-                .into(ivFirstLandscape);
-
-        ImageView ivSecond = (ImageView) child.findViewById(R.id.iv_feed_community_post_second_image_landscape_with_two_images);
-        ivSecond.setOnClickListener(this);
-        Glide.with(context)
-                .load(secondImage)
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .skipMemoryCache(true)
-                .into(ivSecond);
-        ImageView ivThird = (ImageView) child.findViewById(R.id.iv_feed_community_post_third_image_landscape_with_two_images);
-        ivThird.setOnClickListener(this);
-        Glide.with(context)
-                .load(thirdImage)
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .skipMemoryCache(true)
-                .into(ivThird);
-        liFeedCommunityUserPostImages.addView(child);
-    }
-
-    private void feedFirstLandscapImageModeSetting(Context context, String firstImage, String secondImage, String thirdImage, String fourthImage, int listSize) {
-
-        LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View child = layoutInflater.inflate(R.layout.feed_community_post_first_landscape_with_multiple, null);
-        TextView tvFeedCommunityPost = (TextView) child.findViewById(R.id.tv_feed_community_post_landscape_total_images);
-        TextView tvFeedCommunityPostMore = (TextView) child.findViewById(R.id.tv_feed_community_image_more);
-        if (listSize > AppConstants.FOURTH_CONSTANT) {
-            tvFeedCommunityPost.setVisibility(View.VISIBLE);
-            tvFeedCommunityPostMore.setVisibility(View.VISIBLE);
-        }
-        ImageView ivFirstLandscape = (ImageView) child.findViewById(R.id.iv_feed_community_post_first_landscape);
-        ivFirstLandscape.setOnClickListener(this);
-        Glide.with(context)
-                .load(firstImage)
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .skipMemoryCache(true)
-                .into(ivFirstLandscape);
-        ImageView ivSecond = (ImageView) child.findViewById(R.id.iv_feed_community_post_second_image_landscape);
-        ivSecond.setOnClickListener(this);
-        Glide.with(context)
-                .load(secondImage)
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .skipMemoryCache(true)
-                .into(ivSecond);
-        ImageView ivThird = (ImageView) child.findViewById(R.id.iv_feed_community_post_third_image_landscape);
-        ivThird.setOnClickListener(this);
-        Glide.with(context)
-                .load(thirdImage)
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .skipMemoryCache(true)
-                .into(ivThird);
-        ImageView ivFourth = (ImageView) child.findViewById(R.id.iv_feed_community_post_fourth_image_landscape);
-        ivFourth.setOnClickListener(this);
-        Glide.with(context)
-                .load(fourthImage)
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .skipMemoryCache(true)
-                .into(ivFourth);
-        liFeedCommunityUserPostImages.addView(child);
-    }
 
     @OnClick(R.id.li_event_card_main_layout)
     public void onEventClick() {

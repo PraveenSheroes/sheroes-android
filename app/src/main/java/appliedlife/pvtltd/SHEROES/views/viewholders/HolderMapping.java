@@ -331,6 +331,12 @@ public enum HolderMapping {
             return new ProfileViewHolder(view, viewInterface);
         }
     },
+    FEED_PROGRESS_BAR_HOLDER(R.layout.feed_progress_bar_holder) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new FeedProgressBarHolder(view, viewInterface);
+        }
+    },
     BLANK_LIST(R.layout.blank_holder) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
@@ -495,6 +501,9 @@ public enum HolderMapping {
                             case AppConstants.ONCE_WELCOME:
                                 returnView = ONCE_WELCOME_VIEW.ordinal();
                                 break;
+                            case AppConstants.FEED_PROGRESS_BAR:
+                                returnView = FEED_PROGRESS_BAR_HOLDER.ordinal();
+                                break;
                             default:
                         }
                     }
@@ -559,6 +568,9 @@ public enum HolderMapping {
                                 break;
                             case AppConstants.NO_COMMUNITIES:
                                 returnView = NO_COMMUNITIES.ordinal();
+                                break;
+                            case AppConstants.FEED_PROGRESS_BAR:
+                                returnView = FEED_PROGRESS_BAR_HOLDER.ordinal();
                                 break;
                             default:
                         }
