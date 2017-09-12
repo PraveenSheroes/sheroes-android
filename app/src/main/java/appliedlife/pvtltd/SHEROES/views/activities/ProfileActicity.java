@@ -41,8 +41,8 @@ import com.google.gson.Gson;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
-import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView.*;
+import appliedlife.pvtltd.SHEROES.imageops.CropImage;
+import appliedlife.pvtltd.SHEROES.imageops.CropImageView.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -124,7 +124,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.theartofdev.edmodo.cropper.R.styleable.CropImageView;
+
 
 /**
  * Created by Priyanka on 13-02-2017.

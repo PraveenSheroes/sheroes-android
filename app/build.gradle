@@ -104,7 +104,7 @@ dependencies {
     compile 'com.appsflyer:af-android-sdk:4.6.7@aar'
     compile 'org.apache.commons:commons-lang3:3.5'
     compile files('libs/YouTubeAndroidPlayerApi.jar')
-    compile project(':cropper')
+    compile "com.android.support:exifinterface:25.3.1"
 }
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'io.fabric'
