@@ -201,7 +201,6 @@ public class CreateCommunityPostFragment extends BaseFragment implements SelectC
     private int positionOfFeedItem;
     private LinkRenderResponse mLinkRenderResponse = null;
     private boolean isLinkRendered;
-    ;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -478,7 +477,8 @@ public class CreateCommunityPostFragment extends BaseFragment implements SelectC
 
     @OnClick(R.id.tv_close_community)
     public void onCloseClick() {
-        ((CreateCommunityPostActivity) getActivity()).editedSuccessFully(mFeedDetail);
+
+        getActivity().onBackPressed();
     }
 
     @OnClick(R.id.tv_add_more_community_post_image)

@@ -20,8 +20,6 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.f2prateek.rx.preferences.Preference;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 
 import java.util.List;
 
@@ -115,20 +113,26 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     FrameLayout flFeedArticleNoReactionComment;
     @Bind(R.id.tv_feed_article_user_comment_post_menu)
     TextView tvFeedArticleUserCommentPostMenu;
-    // @Bind(R.id.tv_feed_article_view_more)
-    // TextView tvFeedArticleView;
     BaseHolderInterface viewInterface;
     private FeedDetail dataItem;
     private Context mContext;
     private String mViewMoreDescription;
     private int mItemPosition;
+    private long mUserId;
+    private String mPhotoUrl;
     public FeedArticleHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
         this.viewInterface = baseHolderInterface;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
+        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
+            mUserId =userPreference.get().getUserSummary().getUserId();
+            if(StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getPhotoUrl()))
+            {
+                mPhotoUrl =userPreference.get().getUserSummary().getPhotoUrl();
+            }
+        }
     }
-
     @Override
     public void bindData(FeedDetail item, final Context context, int position) {
         this.dataItem = item;
@@ -138,21 +142,22 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         tvFeedArticleUserReactionText.setEnabled(true);
         dataItem.setItemPosition(position);
         dataItem.setLastReactionValue(dataItem.getReactionValue());
+        dataItem.setListDescription(null);
+        dataItem.setShortDescription(null);
         allTextViewStringOperations(context);
         onBookMarkClick();
         if (!dataItem.isTrending()) {
             imageOperations(context);
         }
-        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
-            if (dataItem.getAuthorId() == userPreference.get().getUserSummary().getUserId() || dataItem.isOwner()) {
+            if (dataItem.getAuthorId() == mUserId || dataItem.isOwner()) {
                 tvFeedArticleUserMenu.setVisibility(View.VISIBLE);
             } else {
                 tvFeedArticleUserMenu.setVisibility(View.GONE);
             }
             if(dataItem != null&&StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())){
-                ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(AppConstants.IMPRESSIONS,AppConstants.ARTICLE_IMPRSSION, dataItem.getIdOfEntityOrParticipant() + AppConstants.DASH +userPreference.get().getUserSummary().getUserId() + AppConstants.DASH + dataItem.getNameOrTitle() );
+                ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(AppConstants.IMPRESSIONS,AppConstants.ARTICLE_IMPRSSION, dataItem.getIdOfEntityOrParticipant() + AppConstants.DASH + mUserId + AppConstants.DASH + dataItem.getNameOrTitle() );
             }
-        }
+
     }
 
     private void onBookMarkClick() {
@@ -165,37 +170,20 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void allTextViewStringOperations(Context context) {
-        mViewMoreDescription = dataItem.getListDescription();
+        mViewMoreDescription = dataItem.getShortDescription();
         if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
-            Document documentString = Jsoup.parse(mViewMoreDescription);
-            String text = documentString.text().trim();
+           // Document documentString = Jsoup.parse(mViewMoreDescription);
+          //  String text = documentString.text().trim();
             tvFeedArticleHeaderLebel.setVisibility(View.VISIBLE);
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                tvFeedArticleHeaderLebel.setText(Html.fromHtml(text, 0)); // for 24 api and more
-                // Spanned html = Html.fromHtml(documentString.text(),0);
-                //  tvFeedArticleHeaderLebel.setText(html);
+                tvFeedArticleHeaderLebel.setText(Html.fromHtml(mViewMoreDescription, 0)); // for 24 api and more
             } else {
-                tvFeedArticleHeaderLebel.setText(Html.fromHtml(text));// or for older api
-                //  Spanned html = Html.fromHtml(documentString.text());
-                // tvFeedArticleHeaderLebel.setText(html);
+                tvFeedArticleHeaderLebel.setText(Html.fromHtml(mViewMoreDescription));// or for older api
             }
-            //   String dots = LEFT_VIEW_MORE + AppConstants.DOTS + RIGHT_VIEW_MORE;
-            //   StringBuilder dots=new StringBuilder();
-            //   dots.append(LEFT_VIEW_MORE).append(AppConstants.DOTS).append(RIGHT_VIEW_MORE).append(mContext.getString(R.string.ID_VIEW_MORE));
-            //  StringBuilder viewColor=new StringBuilder();
-            //  viewColor.append(LEFT_HTML_VEIW_TAG_FOR_COLOR).append(mViewMore).append(RIGHT_HTML_VIEW_TAG_FOR_COLOR);
-            // tvFeedArticleHeaderLebel.setText(mViewMoreDescription);
             ArticleTextView.doResizeTextView(tvFeedArticleHeaderLebel, 2, AppConstants.VIEW_MORE, true);
-           /* if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                tvFeedArticleView.setText(Html.fromHtml(dots.toString(), 0)); // for 24 api and more
-            } else {
-                tvFeedArticleView.setText(Html.fromHtml(dots.toString()));// or for older api
-            }*/
         } else {
-            //tvFeedArticleView.setVisibility(View.GONE);
             tvFeedArticleHeaderLebel.setVisibility(View.GONE);
         }
-        //TODO:: change for UI
         if (StringUtil.isNotNullOrEmptyString(dataItem.getAuthorName())) {
             tvFeedArticleCardTitle.setText(dataItem.getAuthorName());
         }
@@ -314,11 +302,9 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             // String userName;
             StringBuilder userName = new StringBuilder();
             if (lastComment.isAnonymous()) {
-                //  userName = LEFT_HTML_TAG_FOR_COLOR + mContext.getString(R.string.ID_ANONYMOUS) + RIGHT_HTML_TAG_FOR_COLOR;
                 userName.append(LEFT_HTML_TAG_FOR_COLOR).append(mContext.getString(R.string.ID_ANONYMOUS)).append(RIGHT_HTML_TAG_FOR_COLOR).append(AppConstants.SPACE).append(lastComment.getComment());
                 ivFeedArticleUserPic.setImageResource(R.drawable.ic_anonomous);
             } else {
-                //  userName = LEFT_HTML_TAG_FOR_COLOR + lastComment.getParticipantName() + RIGHT_HTML_TAG_FOR_COLOR;
                 userName.append(LEFT_HTML_TAG_FOR_COLOR).append(lastComment.getParticipantName()).append(RIGHT_HTML_TAG_FOR_COLOR).append(AppConstants.SPACE).append(lastComment.getComment());
                 ivFeedArticleUserPic.bindImage(feedUserIconUrl);
             }
@@ -345,10 +331,9 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             ivFeedArticleCircleIcon.setCircularImage(true);
             ivFeedArticleCircleIcon.bindImage(feedCircleIconUrl);
         }
-        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getPhotoUrl())) {
             ivFeedArticleRegisterUserPic.setCircularImage(true);
-            ivFeedArticleRegisterUserPic.bindImage(userPreference.get().getUserSummary().getPhotoUrl());
-        }
+            ivFeedArticleRegisterUserPic.bindImage(mPhotoUrl);
+
         String backgrndImageUrl = dataItem.getImageUrl();
         if (StringUtil.isNotNullOrEmptyString(backgrndImageUrl)) {
             liFeedArticleImages.removeAllViews();
@@ -382,8 +367,6 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
 
             Glide.with(mContext)
                     .load(backgrndImageUrl).asBitmap()
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .skipMemoryCache(true)
                     .into(new SimpleTarget<Bitmap>() {
                         @Override
                         public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {

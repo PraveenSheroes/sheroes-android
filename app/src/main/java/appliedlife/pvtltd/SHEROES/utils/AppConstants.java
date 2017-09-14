@@ -193,7 +193,7 @@ public class AppConstants {
     public static final int NINTH_CONSTANT = 9;
     public static final int TENTH_CONSTANT = 10;
     public static final int ELEVENTH_CONSTANT = 11;
-    public static final int PAGE_SIZE = 10;
+    public static final int PAGE_SIZE = 20;
     public static final int PAGE_SIZE_CHAT = 20;
     public static final int MEMBER_PAGE_SIZE = 100;
     public static final int INVITE_PAGE_SIZE = 200;
@@ -234,7 +234,6 @@ public class AppConstants {
 
     public static final String MASTER_DATA_OPRTUNITY = "Opportunities"; // on second map lavele key
     public static final String MASTER_DATA_POPULAR_CATEGORY = "POPULAR"; // on second map lavele key
-
     public static final String DAY = " day";
     public static final String HOUR = " hour";
     public static final String MINUT = " minute";
@@ -249,7 +248,6 @@ public class AppConstants {
     public static final String DOWNLOAD_COMPLETE = "Download Complete. Open PDF Application installed in the device.";
     public static final String ERROR_OCCUR = "Some error occured. Press back and try again.";
     public static final String DOWNLOAD_COMPLETED_IMAGE = "Failed to download image. Please check your internet connection.";
-
     //Community
     public static final int MAX_WORD_COUNTER = 4000;
     public static final String WORK_FROM_HOME = "Work from home";
@@ -285,16 +283,13 @@ public class AppConstants {
     public static final String USER_PROFILE1 = "PROFESSINAL BASIC DETAILS";
     public static final String USER_VISITING_CARD = "My Contact Card";
     public static final String USER_VISITING_CARD1 = "My Contact Card";
-
     public static final String CLIENTSIDE = "Horizontal";
-
     public static final String DEGREE_KEY = "degree";
     public static final String FIELD_OF_STUDY_KEY = "field_of_study";
     public static final String SCHOOL_KEY = "school_name";
     public static final String MASTER_DATA_SECTOR_KEY = "SECTOR";//for sector search
     public static final String MASTER_DATA_LANGUAGE_KEY = "LANGUAGE";
     public static final String WORK_EXPERIENCE_CATE = "work_exp_cate";
-
     public static final String INVALID_URL = "Invalid Url";
     public static final String FB_APP_LINK_URL = "https://fb.me/1358166177608524";
     public static final String FB_APP_LINK_URL_PREVIEW_IMAGE = "https://img.sheroes.in/img/uploads/sheroespage/logoes/1498221415fb-share-(1).jpg";
@@ -356,17 +351,13 @@ public class AppConstants {
     public static final String HELPLINE_CHAT = "helpline_chat";
     public static final String EMAIL_VERIFICATION = "email_verification";
     public static final String FORGOT_PASSWORD = "forgot_password";
-
     public static final String PROFILE_PIC_TYPE = "PROFILE_PHOTO";
     public static final String PROFILE_PIC_SUB_TYPE = "USER_PROFILE_PHOTO_SERVICE";
-
     public static final String USER_CONTACTS_ACCESS = "user_contacts_accessed";
     public static final int PERMISSIONS_REQUEST_READ_CONTACTS = 79;
-
     public static final String GOOGLE_PLAY_URL_TRACKER = "google_play_url_tracker";
     public static final String GOOGLE_PLAY_URL_REFERRAL = "referrer";
     public static final String GOOGLE_PLAY_URL_REFERRAL_CONTACT_ID = "app_user_contact_id";
-
     public static final String IMPRESSIONS = "impressions";
     public static final String COMMUNITY_POST_IMPRESSION = "community post impression";
     public static final String ARTICLE_IMPRSSION = "article impression";
@@ -375,6 +366,4 @@ public class AppConstants {
     public static final long ORGANISATION_COMMUNITY_TYPE_ID = 10L;
     public static final String orgUserType = "organisations_test_user";
     public static final String WEB_URL = "web_view_url";
-
-
 }

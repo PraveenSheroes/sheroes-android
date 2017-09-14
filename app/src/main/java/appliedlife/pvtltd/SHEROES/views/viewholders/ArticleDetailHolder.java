@@ -64,7 +64,6 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> imple
     private static final String RIGHT_HTML_TAG = "<font color='#868788'>";
     private static final String END_HTML_TAG = "</font></b>";
     private static final String END_HTML_FONT_TAG = "</font>";
-
     @Inject
     Preference<LoginResponse> userPreference;
     @Inject

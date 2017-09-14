@@ -4,10 +4,22 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical">
-
+    <FrameLayout
+        android:id="@+id/fl_shadow_image_with_multiple_landscap"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:background="@color/comment_box_edit_border"
+        android:layout_height="wrap_content">
+        <ProgressBar
+            android:layout_width="@dimen/dp_size_30"
+            android:layout_height="@dimen/dp_size_30"
+            android:layout_gravity="center"
+            android:indeterminateTint="@color/white"/>
+    </FrameLayout>
     <ImageView
         android:id="@+id/iv_feed_community_post_first_landscape"
         android:layout_width="match_parent"
+        android:adjustViewBounds="true"
         android:layout_height="wrap_content"/>
 
     <LinearLayout
@@ -21,17 +33,43 @@
             android:id="@+id/iv_feed_community_post_second_image_landscape"
             android:layout_width="0dp"
             android:layout_weight=".33"
+            android:visibility="gone"
             android:layout_height="@dimen/multiple_image_rectangle"
             android:scaleType="centerCrop" />
+        <FrameLayout
+            android:id="@+id/fl_shadow_image_post_second_landscap_multiple"
+            android:layout_width="0dp"
+            android:layout_weight=".33"
+            android:layout_height="@dimen/multiple_image_rectangle"
+            android:background="@color/comment_box_edit_border">
+            <ProgressBar
+                android:layout_width="@dimen/dp_size_30"
+                android:layout_height="@dimen/dp_size_30"
+                android:layout_gravity="center"
+                android:indeterminateTint="@color/white"/>
+        </FrameLayout>
 
         <ImageView
             android:id="@+id/iv_feed_community_post_third_image_landscape"
             android:layout_width="0dp"
             android:layout_weight=".33"
+            android:visibility="gone"
             android:layout_height="@dimen/multiple_image_rectangle"
             android:layout_marginLeft="@dimen/dp_size_3"
             android:scaleType="centerCrop" />
-
+        <FrameLayout
+            android:id="@+id/fl_shadow_image_post_third_landscap_multiple"
+            android:layout_width="0dp"
+            android:layout_weight=".33"
+            android:layout_marginLeft="@dimen/dp_size_3"
+            android:layout_height="@dimen/multiple_image_rectangle"
+            android:background="@color/comment_box_edit_border">
+            <ProgressBar
+                android:layout_width="@dimen/dp_size_30"
+                android:layout_height="@dimen/dp_size_30"
+                android:layout_gravity="center"
+                android:indeterminateTint="@color/white"/>
+        </FrameLayout>
         <FrameLayout
             android:layout_width="0dp"
             android:layout_weight=".33"
@@ -43,7 +81,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/multiple_image_rectangle"
                 android:scaleType="centerCrop" />
-
+            <FrameLayout
+                android:id="@+id/fl_shadow_image_post_fourth_landscap_multiple"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/multiple_image_rectangle"
+                android:background="@color/comment_box_edit_border">
+                <ProgressBar
+                    android:layout_width="@dimen/dp_size_30"
+                    android:layout_height="@dimen/dp_size_30"
+                    android:layout_gravity="center"
+                    android:indeterminateTint="@color/white"/>
+            </FrameLayout>
             <TextView
                 android:id="@+id/tv_feed_community_image_more"
                 android:layout_width="match_parent"

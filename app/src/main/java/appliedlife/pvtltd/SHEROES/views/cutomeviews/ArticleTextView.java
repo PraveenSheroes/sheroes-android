@@ -27,27 +27,31 @@ public class ArticleTextView {
                 obs.removeGlobalOnLayoutListener(this);
                 if (maxLine == 0) {
                     int lineEndIndex = tv.getLayout().getLineEnd(0);
-                    String text = tv.getText().subSequence(0, lineEndIndex - expandText.length() + 1) + " " + expandText;
-                    tv.setText(text);
-                    tv.setMovementMethod(LinkMovementMethod.getInstance());
-                    if (text.length() > 10) {
-                        String data = LEFT_HTML_VEIW_TAG_FOR_COLOR + text.substring(text.length() - 10, text.length()) + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
-                        if (text.length() > 20) {
-                            text = text.substring(0, text.length() - 20) + AppConstants.DOTS;
-                            tv.setText(Html.fromHtml(text + data));
+                    if(lineEndIndex>=expandText.length()) {
+                        String text = tv.getText().subSequence(0, lineEndIndex - expandText.length() + 1) + " " + expandText;
+                        tv.setText(text);
+                        tv.setMovementMethod(LinkMovementMethod.getInstance());
+                        if (text.length() > 10) {
+                            String data = LEFT_HTML_VEIW_TAG_FOR_COLOR + text.substring(text.length() - 10, text.length()) + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
+                            if (text.length() > 20) {
+                                text = text.substring(0, text.length() - 20) + AppConstants.DOTS;
+                                tv.setText(Html.fromHtml(text + data));
+                            }
                         }
                     }
                 } else if (maxLine > 0 && tv.getLineCount() >= maxLine) {
 
                     int lineEndIndex = tv.getLayout().getLineEnd(maxLine - 1);
-                    String text = tv.getText().subSequence(0, lineEndIndex - expandText.length() + 1) + " " + expandText;
-                    if (text.length() > 10) {
-                        String data = LEFT_HTML_VEIW_TAG_FOR_COLOR + text.substring(text.length() - 10, text.length()) + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
-                        //  tv.setText(text+data);
-                        tv.setMovementMethod(LinkMovementMethod.getInstance());
-                        if (text.length() > 20) {
-                            text = text.substring(0, text.length() - 20) + AppConstants.DOTS;
-                            tv.setText(Html.fromHtml(text + data));
+                    if(lineEndIndex>=expandText.length()) {
+                        String text = tv.getText().subSequence(0, lineEndIndex - expandText.length() + 1) + " " + expandText;
+                        if (text.length() > 10) {
+                            String data = LEFT_HTML_VEIW_TAG_FOR_COLOR + text.substring(text.length() - 10, text.length()) + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
+                            //  tv.setText(text+data);
+                            tv.setMovementMethod(LinkMovementMethod.getInstance());
+                            if (text.length() > 20) {
+                                text = text.substring(0, text.length() - 20) + AppConstants.DOTS;
+                                tv.setText(Html.fromHtml(text + data));
+                            }
                         }
                     }
                 } else {

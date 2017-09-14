@@ -15,7 +15,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeDataItem;
 import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroData;
 
 public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
-    int imageHeight=600;
+    int imageHeight=0;
     int itemPosition;
     boolean isLongPress;
     String callFromName;

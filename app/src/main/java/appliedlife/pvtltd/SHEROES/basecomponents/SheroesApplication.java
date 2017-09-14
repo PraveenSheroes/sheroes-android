@@ -53,7 +53,6 @@ public class SheroesApplication extends MultiDexApplication  {
         MoEHelper.getInstance(getApplicationContext()).autoIntegrate(this);
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
-      //  InviteReferralsApplication.register(this);
         AnalyticsTrackers.initialize(this);
         AnalyticsTrackers.getInstance().get(AnalyticsTrackers.Target.APP);
         File cacheFile = new File(getCacheDir(), "responses");

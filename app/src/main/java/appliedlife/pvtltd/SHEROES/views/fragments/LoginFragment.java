@@ -200,7 +200,6 @@ public class LoginFragment extends BaseFragment implements LoginView {
 
     @OnClick(R.id.forgot_password)
     public void onForgotPasswordClick() {
-
         ResetPasswordFragment resetPasswordFragment = new ResetPasswordFragment();
         this.getFragmentManager().beginTransaction()
                 .replace(R.id.fragment_login, resetPasswordFragment, ResetPasswordFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();

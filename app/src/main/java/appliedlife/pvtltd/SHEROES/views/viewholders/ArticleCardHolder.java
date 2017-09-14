@@ -7,8 +7,10 @@ import android.os.Build;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -18,8 +20,6 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.f2prateek.rx.preferences.Preference;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 
 import java.util.List;
 
@@ -37,6 +37,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.ArticleTextView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -74,15 +75,18 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
     private FeedDetail dataItem;
     Context mContext;
     String mViewMoreDescription;
-    @Bind(R.id.tv_article_view_more)
-    TextView tvArticleView;
     @Inject
     Preference<LoginResponse> mUserPreference;
+    private long mUserId;
+    private String mPhotoUrl;
     public ArticleCardHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
         this.viewInterface = baseHolderInterface;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
+            mUserId =mUserPreference.get().getUserSummary().getUserId();
+        }
     }
     @TargetApi(AppConstants.ANDROID_SDK_24)
     @Override
@@ -96,11 +100,7 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
         }
         textRelatedOperation();
         onBookMarkClick();
-
-        if(dataItem != null &&StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle()) && null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && mUserPreference.get().getUserSummary() !=null){
-            ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(AppConstants.IMPRESSIONS,AppConstants.ARTICLE_IMPRSSION,dataItem.getIdOfEntityOrParticipant()+ AppConstants.DASH +mUserPreference.get().getUserSummary().getUserId() + AppConstants.DASH + dataItem.getNameOrTitle() );
-        }
-
+            ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(AppConstants.IMPRESSIONS,AppConstants.ARTICLE_IMPRSSION,dataItem.getIdOfEntityOrParticipant()+ AppConstants.DASH +mUserId + AppConstants.DASH + dataItem.getNameOrTitle() );
     }
     private void onBookMarkClick() {
         if(dataItem.isBookmarked())
@@ -117,29 +117,21 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
     private void textRelatedOperation()
     {
         String dots = LEFT_VIEW_MORE + AppConstants.DOTS + RIGHT_VIEW_MORE;
-        mViewMoreDescription = dataItem.getListDescription();
+        mViewMoreDescription = dataItem.getShortDescription();
         if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
-            Document documentString = Jsoup.parse(mViewMoreDescription);
-            tvArticleView.setVisibility(View.VISIBLE);
+           // Document documentString = Jsoup.parse(mViewMoreDescription);
             tvArticleDescriptionText.setVisibility(View.VISIBLE);
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                tvArticleView.setText(Html.fromHtml(dots +mContext.getString(R.string.ID_VIEW_MORE), 0)); // for 24 api and more
+                tvArticleDescriptionText.setText(Html.fromHtml(mViewMoreDescription, 0)); // for 24 api and more
             } else {
-                tvArticleView.setText(Html.fromHtml(dots +mContext.getString(R.string.ID_VIEW_MORE) ));// or for older api
+                tvArticleDescriptionText.setText(Html.fromHtml(mViewMoreDescription));// or for older api
             }
-
-            if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                tvArticleDescriptionText.setText(Html.fromHtml(documentString.text(), 0)); // for 24 api and more
-            } else {
-                tvArticleDescriptionText.setText(Html.fromHtml(documentString.text()));// or for older api
-            }
+            ArticleTextView.doResizeTextView(tvArticleDescriptionText, 2, AppConstants.VIEW_MORE, true);
         }
         else
         {
-            tvArticleView.setVisibility(View.GONE);
             tvArticleDescriptionText.setVisibility(View.GONE);
         }
-
         if(dataItem.isTrending())
         {
             tvArticleTrendingLabel.setText(mContext.getString(R.string.ID_TRENDING));
@@ -155,8 +147,6 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
         if (StringUtil.isNotNullOrEmptyString(dataItem.getCreatedDate())) {
             long createdDate = mDateUtil.getTimeInMillis(dataItem.getCreatedDate(), AppConstants.DATE_FORMAT);
             tvArticleTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
-
-
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
             tvArticleDescriptionHeader.setText(dataItem.getNameOrTitle());
@@ -194,6 +184,7 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
             final TextView tvFeedArticleTimeLabel = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_time_label);
             final TextView tvFeedArticleTotalViews = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_total_views);
             final RelativeLayout rlFeedArticleViews = (RelativeLayout) backgroundImage.findViewById(R.id.rl_gradiant);
+            final ProgressBar pbImage=(ProgressBar) backgroundImage.findViewById(R.id.pb_article_image);
             StringBuilder stringBuilder = new StringBuilder();
             if (dataItem.getNoOfViews() > 1) {
                 stringBuilder.append(dataItem.getNoOfViews()).append(AppConstants.SPACE).append(context.getString(R.string.ID_VIEWS));
@@ -216,13 +207,12 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
             }
             Glide.with(mContext)
                     .load(backgrndImageUrl).asBitmap()
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .skipMemoryCache(true)
                     .into(new SimpleTarget<Bitmap>() {
                         @Override
                         public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
                             ivFirstLandscape.setImageBitmap(profileImage);
                             rlFeedArticleViews.setVisibility(View.VISIBLE);
+                            pbImage.setVisibility(View.GONE);
                         }
                     });
             liArticleCoverImage.addView(backgroundImage);
@@ -252,7 +242,6 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_article_bookmark)
     public void tvBookMarkClick() {
-
         tvArticleBookmark.setEnabled(false);
         dataItem.setLongPress(true);
         dataItem.setItemPosition(getAdapterPosition());

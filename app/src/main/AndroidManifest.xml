@@ -225,7 +225,8 @@
                 <data android:pathPattern="/.*" />
             </intent-filter>
         </activity>
-        <activity android:name="appliedlife.pvtltd.SHEROES.imageops.CropImageActivity"/>
+        <activity android:name="appliedlife.pvtltd.SHEROES.imageops.CropImageActivity"
+            android:screenOrientation="portrait"/>
         <service
             android:name="appliedlife.pvtltd.SHEROES.service.PushNotificationService"
             android:exported="false">

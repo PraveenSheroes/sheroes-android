@@ -1024,7 +1024,6 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_MY_PROFILE_PROFESSIONAL_ADD_WORK_EXPERIENCE">my profile- professional- add work exprience</string>
     <string name="ID_MY_PROFILE_PROFESSIONAL_EDIT_WORK_EXPERIENCE">my profile- professional- edit work exprience</string>
     <string name="ID_MY_PROFILE_PROFESSIONAL_EDIT_BASIC_DETAIL">my profile- professional- edit basic details</string>
-    <string name="ID_JOBS_APPLIED_TO">jobs applied to</string>
     <string name="ID_VIEW_JOBS_DETAIL">view job details</string>
     <string name="ID_SEARCH_">view job details</string>
     <string name="ID_JOB_LISTING">job listing</string>
@@ -1035,17 +1034,7 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_ARTICLE_SELECT_CATEGORY">article select category</string>
     <string name="ID_VIEW_REACTION">view reactions</string>
     <string name="ID_VIEW_REPLIES">view replies</string>
-    <string name="ID_DEEP_LINK_HOME">deep link to home</string>
-    <string name="ID_DEEP_LINK_HOME_CHALLENGE">deep link to home challenge</string>
-    <string name="ID_DEEP_LINK_HELPLINE">deep link to help line</string>
-    <string name="ID_DEEP_LINK_MAKE_INDIA_SAFE">deep link to make india safe</string>
-    <string name="ID_DEEP_LINK_ARTICLE">deep link to article</string>
-    <string name="ID_DEEP_LINK_CHAMPION">deep link to champion</string>
-    <string name="ID_DEEP_LINK_JOB">deep link to job</string>
-    <string name="ID_DEEP_LINK_COMMUNITY">deep link to community</string>
-    <string name="ID_DEEP_LINK_EVENT">deep link to event</string>
-    <string name="ID_DEEP_LINK_PROFILE">deep link to profile</string>
-    <string name="ID_DEEP_LINK_WEB">deep link to web</string>
+
 
     <string name="ID_POSTED_REVIEW">posted a review for</string>
     <string name="ID_POSTED_ASK_FEEDBACK">is looking for feedback on</string>

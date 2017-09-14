@@ -184,8 +184,6 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
             tvTotalMember.setText(dataItem.getNoOfMembers() + AppConstants.SPACE + context.getString(R.string.ID_MEMBERS));
             Glide.with(mContext)
                     .load(imageUrl).asBitmap()
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .skipMemoryCache(true)
                     .into(new SimpleTarget<Bitmap>() {
                         @Override
                         public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {

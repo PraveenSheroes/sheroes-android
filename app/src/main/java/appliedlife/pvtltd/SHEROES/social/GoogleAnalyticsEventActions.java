@@ -83,6 +83,29 @@ public class GoogleAnalyticsEventActions {
     public static final String ADDED_NEW_WORK_EXP = "added a new work experience";
     public static final String EDITING_WORK_EXP = "edited an existing work experience";
     public static final String EDITING_BASIC_DETAIL_PROFESSIONAL = "edited basic details in professional profile";
+    public static final String CATEGORY_DEEP_LINK = "deeplink external and bellnotification";
+    public static final String DEEP_LINK_TO_HOME = "external deeplink to home";
+    public static final String BELL_NOTIFICATION_TO_HOME = "bellnotification to home";
+    public static final String DEEP_LINK_WEB = "external deeplink to web";
+    public static final String BELL_NOTIFICATION_TO_WEB = "bellnotification to web";
+    public static final String DEEP_LINK_PROFILE = "external deeplink to profile";
+    public static final String BELL_NOTIFICATION_TO_PROFILE = "bellnotification to profile";
+    public static final String BELL_NOTIFICATION_TO_CHAMPION = "bellnotification to champion";
+    public static final String DEEP_LINK_CHAMPION = "external deep link to champion";
+    public static final String BELL_NOTIFICATION_TO_EVENT = "bellnotification to event";
+    public static final String DEEP_LINK_EVENT = "external deep link to event";
+    public static final String BELL_NOTIFICATION_TO_COMMUNITY = "bellnotification to community";
+    public static final String DEEP_LINK_TO_COMMUNITY = "external deep link to community";
+    public static final String BELL_NOTIFICATION_TO_JOB = "bellnotification to job";
+    public static final String DEEP_LINK_TO_JOB = "external deep link to job";
+    public static final String BELL_NOTIFICATION_TO_ARTICLE = "bellnotification to article";
+    public static final String DEEP_LINK_TO_ARTICLE= "external deep link to article";
+    public static final String BELL_NOTIFICATION_TO_MAKE_INDIA_SAFE = "bellnotification to make india safe";
+    public static final String DEEP_LINK_TO_MAKE_INDIA_SAFE= "external deep link to make india safe";
+    public static final String BELL_NOTIFICATION_TO_HELP_LINE = "bellnotification to help line";
+    public static final String DEEP_LINK_TO_HELP_LINE= "external deep link to help line";
+    public static final String BELL_NOTIFICATION_TO_HOME_CHALLENGE = "bellnotification to home challenge";
+    public static final String DEEP_LINK_TO_HOME_CHALLENGE = "external deep link to home challenge";
 
 
 

@@ -23,7 +23,6 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -265,12 +264,24 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     private int mItemPosition;
     View popupView;
     PopupWindow popupWindow;
-
+    private long mUserId;
+    private int mAdminId;
+    private String mPhotoUrl;
     public FeedCommunityPostHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
         this.viewInterface = baseHolderInterface;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
+        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
+             mUserId = userPreference.get().getUserSummary().getUserId();
+            if(null != userPreference.get().getUserSummary().getUserBO()) {
+                mAdminId = userPreference.get().getUserSummary().getUserBO().getUserTypeId();
+            }
+            if(StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getPhotoUrl()))
+            {
+                mPhotoUrl=userPreference.get().getUserSummary().getPhotoUrl();
+            }
+        }
     }
 
     @Override
@@ -278,33 +289,23 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         this.dataItem = item;
         mContext = context;
         dataItem.setItemPosition(position);
-
-        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
-            long userId = userPreference.get().getUserSummary().getUserId();
-            int adminId=0;
-            if(null != userPreference.get().getUserSummary().getUserBO()) {
-                adminId = userPreference.get().getUserSummary().getUserBO().getUserTypeId();
-            }
-            if (dataItem.getCommunityId() == AppConstants.EVENT_COMMUNITY_ID && dataItem.getCommunityTypeId() != AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
-                eventPostUI(userId);
-            }else if(dataItem.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID && (!dataItem.isCommentAllowed())){
-                organisationReviewPostUI(context);
-            }
-            else {
-                normalCommunityPostUi(userId,adminId);
-            }
-            if(dataItem.isSpamPost()) {
-                handlingSpamUi(userId,adminId);
-            }else
-            {
-                liCommunityPostMainLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.white));
-                liCommunityPostMainLayout.setAlpha(1f);
-                flSpamPostUi.setVisibility(View.GONE);
-                liReactionCommentBlock.setVisibility(View.VISIBLE);
-                liApproveDelete.setVisibility(View.GONE);
-                tvReviewDescription.setVisibility(View.VISIBLE);
-            }
-
+        if (dataItem.getCommunityId() == AppConstants.EVENT_COMMUNITY_ID) {
+            eventPostUI(mUserId);
+        } else if(dataItem.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID && (!dataItem.isCommentAllowed())){
+            organisationReviewPostUI(context);
+        }else {
+            normalCommunityPostUi(mUserId, mAdminId);
+        }
+        if(dataItem.isSpamPost()) {
+            handlingSpamUi(mUserId, mAdminId);
+        }else
+        {
+            liCommunityPostMainLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.white));
+            liCommunityPostMainLayout.setAlpha(1f);
+            flSpamPostUi.setVisibility(View.GONE);
+            liReactionCommentBlock.setVisibility(View.VISIBLE);
+            liApproveDelete.setVisibility(View.GONE);
+            tvReviewDescription.setVisibility(View.VISIBLE);
         }
     }
 
@@ -405,25 +406,10 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         if (StringUtil.isNotNullOrEmptyString(dataItem.getOgDescriptionS())) {
             tvLinkSubTitle.setText(dataItem.getOgDescriptionS());
         }
-
-        LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View child = layoutInflater.inflate(R.layout.challenge_image, null);
-        ImageView ivChallenge = (ImageView) child.findViewById(R.id.iv_feed_challenge);
-        LinearLayout liImageText = (LinearLayout) child.findViewById(R.id.li_image_text);
-        liImageText.setVisibility(View.GONE);
-        if (StringUtil.isNotEmptyCollection(dataItem.getImageUrls())) {
-            Glide.with(mContext)
-                    .load(dataItem.getImageUrls().get(0))
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .skipMemoryCache(true)
-                    .into(ivChallenge);
-        }
-        liFeedEventImages.addView(child);
         if (StringUtil.isNotNullOrEmptyString(dataItem.getOgImageUrlS())) {
             Glide.with(mContext)
                     .load(dataItem.getOgImageUrlS()).asBitmap()
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .skipMemoryCache(true)
                     .into(new SimpleTarget<Bitmap>() {
                         @Override
                         public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
@@ -493,19 +479,17 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         if (StringUtil.isNotNullOrEmptyString(dataItem.getListDescription())) {
             tvEventTitle.setText(dataItem.getListDescription());
         }
-        LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View child = layoutInflater.inflate(R.layout.challenge_image, null);
-        ImageView ivChallenge = (ImageView) child.findViewById(R.id.iv_feed_challenge);
-        LinearLayout liImageText = (LinearLayout) child.findViewById(R.id.li_image_text);
-        liImageText.setVisibility(View.GONE);
         if (StringUtil.isNotEmptyCollection(dataItem.getImageUrls())) {
+            LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View child = layoutInflater.inflate(R.layout.challenge_image, null);
+            ImageView ivEventImage = (ImageView) child.findViewById(R.id.iv_feed_challenge);
+            LinearLayout liImageText = (LinearLayout) child.findViewById(R.id.li_image_text);
+            liImageText.setVisibility(View.GONE);
             Glide.with(mContext)
                     .load(dataItem.getImageUrls().get(0))
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .skipMemoryCache(true)
-                    .into(ivChallenge);
+                    .into(ivEventImage);
+            liFeedEventImages.addView(child);
         }
-        liFeedEventImages.addView(child);
     }
 
     private void setInterested() {
@@ -552,15 +536,11 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View child = layoutInflater.inflate(R.layout.challenge_image, null);
             ImageView ivChallenge = (ImageView) child.findViewById(R.id.iv_feed_challenge);
-            TextView tvJust = (TextView) child.findViewById(R.id.tv_just_post);
-            TextView tvStarted = (TextView) child.findViewById(R.id.tv_started_post);
             TextView tvChallengePost = (TextView) child.findViewById(R.id.tv_challenge_name_post);
             if (StringUtil.isNotEmptyCollection(dataItem.getImageUrls())) {
                 tvChallengePost.setText(AppConstants.EMPTY_STRING);
                 Glide.with(mContext)
                         .load(dataItem.getImageUrls().get(0))
-                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                        .skipMemoryCache(true)
                         .into(ivChallenge);
             } else {
                 dataItem.setListDescription(AppConstants.EMPTY_STRING);
@@ -648,8 +628,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         final boolean[] isHeightGreater = new boolean[1];
         Glide.with(mContext)
                 .load(imagePath).asBitmap()
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .skipMemoryCache(true)
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
@@ -713,15 +691,13 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             if (StringUtil.isNotNullOrEmptyString(dataItem.getSolrIgnorePostCommunityLogo())) {
                 Glide.with(context)
                         .load(dataItem.getSolrIgnorePostCommunityLogo())
-                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                        .skipMemoryCache(true)
                         .into(ivCompanyThumbnail);
             }
             if (!dataItem.isCommentAllowed()) {
                 tvComapnyRating.setText(String.valueOf(dataItem.getRating()));
             }
         }
-        mViewMoreDescription = dataItem.getListDescription();
+        mViewMoreDescription = dataItem.getShortDescription();
         if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
             int index = 0;
             int lengthOfDesc = mViewMoreDescription.length();
@@ -830,8 +806,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                             if (StringUtil.isNotNullOrEmptyString(dataItem.getSolrIgnorePostCommunityLogo())) {
                                 Glide.with(context)
                                         .load(dataItem.getSolrIgnorePostCommunityLogo())
-                                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                                        .skipMemoryCache(true)
                                         .into(ivCompanyThumbnailCommPost);
                             }
                         }
@@ -842,7 +816,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                         rlOrgCompanyFeedCard.setVisibility(View.INVISIBLE);
                         orgCommPostSeparateLine.setVisibility(View.INVISIBLE);
                         if (!feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_ADMIN))) {
-                            //posted.append(feedTitle).append(AppConstants.SPACE).append(LEFT_POSTED).append(mContext.getString(R.string.ID_POSTED_IN)).append(RIGHT_POSTED).append(AppConstants.SPACE);
                             posted.append(feedTitle).append(AppConstants.SPACE).append(mContext.getString(R.string.ID_POSTED_IN)).append(AppConstants.SPACE);
                             posted.append(feedCommunityName);
                             clickOnMentorAndCommunityName(posted.toString(), feedTitle, mContext.getString(R.string.ID_POSTED_IN));
@@ -856,7 +829,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                             posted.append(feedCommunityName);
                             clickOnMentorAndCommunityName(posted.toString(), feedTitle, mContext.getString(R.string.ID_POSTED_IN));
                         }
-                        // posted.append(LEFT_HTML_VEIW_TAG_FOR_COLOR).append(feedCommunityName).append(RIGHT_HTML_VIEW_TAG_FOR_COLOR);
 
                     }
 
@@ -867,7 +839,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             long createdDate = mDateUtil.getTimeInMillis(dataItem.getCreatedDate(), AppConstants.DATE_FORMAT);
             tvFeedCommunityPostTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
         }
-        mViewMoreDescription = dataItem.getListDescription();
+        mViewMoreDescription = dataItem.getShortDescription();
         if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
             int index = 0;
             int lengthOfDesc = mViewMoreDescription.length();
@@ -893,11 +865,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 tvFeedCommunityPostViewMore.setVisibility(View.GONE);
                 tvFeedCommunityPostText.setText(StringEscapeUtils.unescapeHtml4(mViewMoreDescription));
             }
-         /*   Pattern EMAIL_ADDRESS_PATTERN = Pattern.compile("/(www|http|ftp|https):\\/\\/[\\w-]+(\\.[\\w-]+)+([\\w.,@?^=%&amp;:\\/~+#-]*[\\w@?^=%&amp;\\/~+#-])?/gi");
-            if (EMAIL_ADDRESS_PATTERN.matcher(tvFeedCommunityPostText.getText().toString()).matches()) {
-                tvFeedCommunityPostText.setLinksClickable(true);
-                Linkify.addLinks(tvFeedCommunityPostText, Linkify.WEB_URLS);
-            }*/
 
         } else {
             tvFeedCommunityPostViewMore.setText(mContext.getString(R.string.ID_LESS));
@@ -1068,10 +1035,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 ivFeedCommunityPostCircleIcon.bindImage(authorImageUrl);
             }
         }
-        if (StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getPhotoUrl())) {
             ivFeedCommunityPostRegisterUserPic.setCircularImage(true);
-            ivFeedCommunityPostRegisterUserPic.bindImage(userPreference.get().getUserSummary().getPhotoUrl());
-        }
+            ivFeedCommunityPostRegisterUserPic.bindImage(mPhotoUrl);
     }
 
     private void oneImagesSetting(Context context, String firstImage) {
@@ -1082,8 +1047,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         flShadow.getLayoutParams().height=dataItem.getImageHeight();
         Glide.with(context)
                 .load(firstImage).asBitmap()
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .skipMemoryCache(true)
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
@@ -1091,6 +1054,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                         flShadow.setVisibility(View.GONE);
                     }
                 });
+
         liFeedCommunityUserPostImages.addView(child);
     }
 
@@ -1099,11 +1063,9 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         View child = layoutInflater.inflate(R.layout.feed_community_post_two_images, null);
        final ImageView ivFirstLandscape = (ImageView) child.findViewById(R.id.iv_feed_community_post_first);
         final  FrameLayout flShadowPostFirst=(FrameLayout) child.findViewById(R.id.fl_shadow_image_post_first);
-        ivFirstLandscape.setOnClickListener(this);
+       ivFirstLandscape.setOnClickListener(this);
         Glide.with(context)
                 .load(firstImage).asBitmap()
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .skipMemoryCache(true)
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
@@ -1114,12 +1076,10 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 });
 
        final ImageView ivSecond = (ImageView) child.findViewById(R.id.iv_feed_comunity_post_second);
-        final  FrameLayout flShadowPostSecond=(FrameLayout) child.findViewById(R.id.fl_shadow_image_post_second);
+       final  FrameLayout flShadowPostSecond=(FrameLayout) child.findViewById(R.id.fl_shadow_image_post_second);
         ivSecond.setOnClickListener(this);
         Glide.with(context)
                 .load(secondImage).asBitmap()
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .skipMemoryCache(true)
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
@@ -1138,12 +1098,10 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         View child = layoutInflater.inflate(R.layout.feed_community_post_first_landscape_with_two_images, null);
         final ImageView ivFirstLandscape = (ImageView) child.findViewById(R.id.iv_feed_community_post_first_landscape_with_two_images);
         final  FrameLayout flShadowPostFirst=(FrameLayout) child.findViewById(R.id.fl_shadow_image_with_landscap);
-        flShadowPostFirst.getLayoutParams().height=dataItem.getImageHeight();
+       flShadowPostFirst.getLayoutParams().height=dataItem.getImageHeight();
         ivFirstLandscape.setOnClickListener(this);
         Glide.with(context)
                 .load(firstImage).asBitmap()
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .skipMemoryCache(true)
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
@@ -1159,8 +1117,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
         Glide.with(context)
                 .load(secondImage).asBitmap()
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .skipMemoryCache(true)
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
@@ -1175,8 +1131,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         ivThird.setOnClickListener(this);
         Glide.with(context)
                 .load(thirdImage).asBitmap()
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .skipMemoryCache(true)
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
@@ -1197,38 +1151,73 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         if (listSize > AppConstants.FOURTH_CONSTANT) {
             tvFeedCommunityPost.setVisibility(View.VISIBLE);
             tvFeedCommunityPostMore.setVisibility(View.VISIBLE);
+        final     ImageView ivFourth = (ImageView) child.findViewById(R.id.iv_feed_community_post_fourth_image_landscape);
+            final  FrameLayout flShadowPostThirdLandscapMultiple=(FrameLayout) child.findViewById(R.id.fl_shadow_image_post_fourth_landscap_multiple);
+            ivFourth.setOnClickListener(this);
+            Glide.with(context)
+                    .load(fourthImage).asBitmap()
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
+                            ivFourth.setImageBitmap(profileImage);
+                            ivFourth.setVisibility(View.VISIBLE);
+                            flShadowPostThirdLandscapMultiple.setVisibility(View.GONE);
+                        }
+                    });
+        }else
+        {
+            tvFeedCommunityPost.setVisibility(View.GONE);
+            tvFeedCommunityPostMore.setVisibility(View.GONE);
         }
-        ImageView ivFirstLandscape = (ImageView) child.findViewById(R.id.iv_feed_community_post_first_landscape);
+      final   ImageView ivFirstLandscape = (ImageView) child.findViewById(R.id.iv_feed_community_post_first_landscape);
+        final  FrameLayout flShadowPostFirst=(FrameLayout) child.findViewById(R.id.fl_shadow_image_with_multiple_landscap);
+        flShadowPostFirst.getLayoutParams().height=dataItem.getImageHeight();
         ivFirstLandscape.setOnClickListener(this);
         Glide.with(context)
-                .load(firstImage)
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .skipMemoryCache(true)
-                .into(ivFirstLandscape);
-        ImageView ivSecond = (ImageView) child.findViewById(R.id.iv_feed_community_post_second_image_landscape);
+                .load(firstImage).asBitmap()
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
+                        ivFirstLandscape.setImageBitmap(profileImage);
+                        ivFirstLandscape.setVisibility(View.VISIBLE);
+                        flShadowPostFirst.setVisibility(View.GONE);
+                    }
+                });
+
+
+
+      final  ImageView ivSecond = (ImageView) child.findViewById(R.id.iv_feed_community_post_second_image_landscape);
+        final  FrameLayout flShadowPostSecondLandscapMultiple=(FrameLayout) child.findViewById(R.id.fl_shadow_image_post_second_landscap_multiple);
         ivSecond.setOnClickListener(this);
         Glide.with(context)
-                .load(secondImage)
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .skipMemoryCache(true)
-                .into(ivSecond);
-        ImageView ivThird = (ImageView) child.findViewById(R.id.iv_feed_community_post_third_image_landscape);
+                .load(secondImage).asBitmap()
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
+                        ivSecond.setImageBitmap(profileImage);
+                        ivSecond.setVisibility(View.VISIBLE);
+                        flShadowPostSecondLandscapMultiple.setVisibility(View.GONE);
+                    }
+                });
+
+
+      final   ImageView ivThird = (ImageView) child.findViewById(R.id.iv_feed_community_post_third_image_landscape);
+        final  FrameLayout flShadowPostThirdLandscapMultiple=(FrameLayout) child.findViewById(R.id.fl_shadow_image_post_third_landscap_multiple);
         ivThird.setOnClickListener(this);
         Glide.with(context)
-                .load(thirdImage)
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .skipMemoryCache(true)
-                .into(ivThird);
-        ImageView ivFourth = (ImageView) child.findViewById(R.id.iv_feed_community_post_fourth_image_landscape);
-        ivFourth.setOnClickListener(this);
-        Glide.with(context)
-                .load(fourthImage)
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .skipMemoryCache(true)
-                .into(ivFourth);
+                .load(thirdImage).asBitmap()
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
+                        ivThird.setImageBitmap(profileImage);
+                        ivThird.setVisibility(View.VISIBLE);
+                        flShadowPostThirdLandscapMultiple.setVisibility(View.GONE);
+                    }
+                });
+
         liFeedCommunityUserPostImages.addView(child);
     }
-
+/*
     private void feedFirstPortraitImageModeSetting(Context context, String firstImage, String secondImage, String thirdImage, String fourthImage, int listSize) {
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View child = layoutInflater.inflate(R.layout.feed_community_post_first_portrait_with_multiple, null);
@@ -1292,7 +1281,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 .skipMemoryCache(true)
                 .into(ivThird);
         liFeedCommunityUserPostImages.addView(child);
-    }
+    }*/
 
 
 
@@ -1354,6 +1343,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_feed_community_post_view_more)
     public void textViewMoreClick() {
+        mViewMoreDescription=dataItem.getListDescription();
         if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
             int index = 0;
             int lengthOfDesc = mViewMoreDescription.length();
@@ -1382,6 +1372,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             tvFeedCommunityPostTextFullView.setText(StringEscapeUtils.unescapeHtml4(mViewMoreDescription));
             tvFeedCommunityPostTextFullView.scrollTo(0, 0);
         } else {
+            mViewMoreDescription=dataItem.getShortDescription();
             tvFeedCommunityPostTextFullView.setVisibility(View.GONE);
             tvFeedCommunityPostText.setVisibility(View.VISIBLE);
             tvFeedCommunityPostText.setTag(mViewMore);

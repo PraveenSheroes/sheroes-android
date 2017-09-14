@@ -94,7 +94,7 @@ dependencies {
     compile 'com.yahoo.mobile.client.android.util.rangeseekbar:rangeseekbar-library:0.1.0'
     testCompile 'junit:junit:4.12'
     apt 'com.google.dagger:dagger-compiler:2.2'
-    compile 'org.jsoup:jsoup:1.7.3'
+    //compile 'org.jsoup:jsoup:1.7.3'
     provided 'org.glassfish:javax.annotation:10.0-b28'
     provided 'javax.annotation:jsr250-api:1.0'
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {

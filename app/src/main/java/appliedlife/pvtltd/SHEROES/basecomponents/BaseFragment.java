@@ -23,6 +23,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.f2prateek.rx.preferences.Preference;
+import com.google.gson.Gson;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
@@ -273,6 +274,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
             if (mPageNo == AppConstants.ONE_CONSTANT) {
                 mfeedDetailList = feedDetailList;
             }
+            LogUtils.info(TAG, "**************position *****" +mPageNo );
             mFragmentListRefreshData.setPageNo(++mPageNo);
             mPullRefreshList.allListData(feedDetailList);
             List<FeedDetail> data=null;

@@ -1938,7 +1938,7 @@ public class AppUtils {
         publicProfileListRequest.setPageSize(AppConstants.PAGE_SIZE);
         return publicProfileListRequest;
     }
-    public static FeedRequestPojo articleCategoryRequestBuilder(String typeOfFeed, int pageNo, List<Long> categoryIds) {
+    public  FeedRequestPojo articleCategoryRequestBuilder(String typeOfFeed, int pageNo, List<Long> categoryIds) {
         FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, pageNo);
         feedRequestPojo.setCategoryIds(categoryIds);
         return feedRequestPojo;

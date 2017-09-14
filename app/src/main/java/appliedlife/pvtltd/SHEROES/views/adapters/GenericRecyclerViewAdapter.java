@@ -10,6 +10,8 @@ import android.widget.Filterable;
 
 import com.f2prateek.rx.preferences.Preference;
 
+
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -112,7 +114,7 @@ public class GenericRecyclerViewAdapter<T extends BaseResponse> extends Recycler
 
     @Override
     public void onBindViewHolder(BaseViewHolder holder, int position) {
-        holder.bindData(filterListData.get(position), context, position);
+            holder.bindData(filterListData.get(position), context, position);
     }
 
 
@@ -139,7 +141,7 @@ public class GenericRecyclerViewAdapter<T extends BaseResponse> extends Recycler
         holder.viewRecycled();
     }
 
-    public List<T> getmSheroesGenericListData() {
+    public List<T> getSheroesGenericListData() {
         return filterListData;
     }
 

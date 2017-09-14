@@ -116,6 +116,7 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
         mRecyclerView.setAdapter(mAdapter);
         super.setAllInitializationForFeeds(mFragmentListRefreshData, mAdapter, mLayoutManager, mFeedDetail, mRecyclerView, 0, 0, false, mHomePresenter, mAppUtils, mProgressBar);
         mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_JOB, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getIdFeedDetail()));
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_VIEW_JOBS_DETAIL));
         return view;
     }
 
@@ -123,7 +124,6 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
     public void clickApplyButton() {
         JobApplyRequest jobApplyRequest = jobApplyRequestBuilder(mFeedDetail.getIdOfEntityOrParticipant(), AppConstants.JOB_DETAIL);
         mJobpresenter.getJobApply(jobApplyRequest);
-        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_JOBS_APPLIED_TO));
         ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_JOB_APPLICATION, GoogleAnalyticsEventActions.APPLIED_JOB, AppConstants.EMPTY_STRING);
     }
 

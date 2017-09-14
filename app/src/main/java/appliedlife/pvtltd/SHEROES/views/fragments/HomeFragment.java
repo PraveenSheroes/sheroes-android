@@ -40,6 +40,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeDataItem;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroScreenResponse;
@@ -183,7 +184,9 @@ public class HomeFragment extends BaseFragment {
                 if (daysDifference >= AppConstants.SAVED_DAYS_TIME) {
                     mHomePresenter.getAuthTokenRefreshPresenter();
                 } else {
-                    mHomePresenter.getFeedFromPresenter(feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
+                    FeedRequestPojo feedRequestPojo=feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo());
+                    feedRequestPojo.setPageSize(AppConstants.SEVENTH_CONSTANT);
+                    mHomePresenter.getFeedFromPresenter(feedRequestPojo);
                 }
             }
             if(null != mUserPreference.get().getUserSummary()) {
@@ -277,7 +280,9 @@ public class HomeFragment extends BaseFragment {
         mPullRefreshList = new SwipPullRefreshList();
         setRefreshList(mPullRefreshList);
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
-        mHomePresenter.getFeedFromPresenter(feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
+        FeedRequestPojo feedRequestPojo=feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo());
+        feedRequestPojo.setPageSize(AppConstants.SEVENTH_CONSTANT);
+        mHomePresenter.getFeedFromPresenter(feedRequestPojo);
         mHomePresenter.getNotificationCountFromPresenter(notificationReadCountRequestBuilder(TAG));
     }
 

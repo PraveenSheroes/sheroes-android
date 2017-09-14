@@ -20,8 +20,7 @@ android:layout_height="match_parent">
             android:layout_width="0dp"
             android:layout_weight=".5"
             android:layout_height="@dimen/two_image_rectangle"
-            android:background="@color/comment_box_edit_border"
-            android:scaleType="centerCrop">
+            android:background="@color/comment_box_edit_border">
             <ProgressBar
                 android:layout_width="@dimen/dp_size_30"
                 android:layout_height="@dimen/dp_size_30"
@@ -42,8 +41,7 @@ android:layout_height="match_parent">
             android:layout_weight=".5"
             android:layout_height="@dimen/two_image_rectangle"
             android:layout_marginLeft="@dimen/dp_size_2"
-            android:background="@color/comment_box_edit_border"
-            android:scaleType="centerCrop">
+            android:background="@color/comment_box_edit_border">
             <ProgressBar
                 android:layout_width="@dimen/dp_size_30"
                 android:layout_height="@dimen/dp_size_30"

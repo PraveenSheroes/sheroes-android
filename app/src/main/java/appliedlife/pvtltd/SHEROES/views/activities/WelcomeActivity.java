@@ -126,7 +126,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
         LogUtils.info(TAG, "*************onCreate welcome");
-        //   InviteReferralsApi.getInstance(this).tracking(AppConstants.INSTALL, null, 0,null);
         mMoEHelper = MoEHelper.getInstance(this);
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();

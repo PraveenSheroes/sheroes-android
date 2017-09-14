@@ -25,6 +25,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
@@ -39,6 +40,8 @@ import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.feedRequestBuilder;
 
 /**
  * Created by Praveen_Singh on 09-01-2017.
@@ -148,7 +151,9 @@ public class ArticlesFragment extends BaseFragment {
         mTrendingFeedDetail.clear();
         setRefreshList(mPullRefreshList);
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
-        mHomePresenter.getFeedFromPresenter(mAppUtils.articleCategoryRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo(), categoryIds));
+        FeedRequestPojo feedRequestPojo=mAppUtils.articleCategoryRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo(), categoryIds);
+        feedRequestPojo.setPageSize(AppConstants.SEVENTH_CONSTANT);
+        mHomePresenter.getFeedFromPresenter(feedRequestPojo);
     }
 
     @Override
@@ -193,19 +198,9 @@ public class ArticlesFragment extends BaseFragment {
                 FeedDetail feedProgressBar=new FeedDetail();
                 feedProgressBar.setSubType(AppConstants.FEED_PROGRESS_BAR);
                 data=mPullRefreshList.getFeedResponses();
-                int position=data.size()- feedDetailList.size();
-                if(position>0) {
-                    data.remove(position-1);
-                }
                 data.add(feedProgressBar);
                 mAdapter.setSheroesGenericListData(data);
                 mAdapter.notifyDataSetChanged();
-               /* if (!mPullRefreshList.isPullToRefresh()) {
-                    mLayoutManager.scrollToPositionWithOffset(mPullRefreshList.getFeedResponses().size() - trendingWithNormalArticleList.size(), 0);
-                } else {
-                    mLayoutManager.scrollToPositionWithOffset(0, 0);
-                }*/
-
             } else {
                 if (StringUtil.isNotEmptyCollection(mTrendingFeedDetail)) {
                     for (FeedDetail feedDetail : feedDetailList) {
@@ -218,13 +213,17 @@ public class ArticlesFragment extends BaseFragment {
                 }
                 mPullRefreshList.allListData(newFeedDetailList);
                 mFragmentListRefreshData.setPageNo(++mPageNo);
-                mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
-                mAdapter.notifyDataSetChanged();
-                if (!mPullRefreshList.isPullToRefresh()) {
-                    mLayoutManager.scrollToPositionWithOffset(mPullRefreshList.getFeedResponses().size() - newFeedDetailList.size(), 0);
-                } else {
-                    mLayoutManager.scrollToPositionWithOffset(0, 0);
+                List<FeedDetail> data=null;
+                FeedDetail feedProgressBar=new FeedDetail();
+                feedProgressBar.setSubType(AppConstants.FEED_PROGRESS_BAR);
+                data=mPullRefreshList.getFeedResponses();
+                int position=data.size()- newFeedDetailList.size();
+                if(position>0) {
+                    data.remove(position-1);
                 }
+                data.add(feedProgressBar);
+                mAdapter.setSheroesGenericListData(data);
+                mAdapter.notifyDataSetChanged();
             }
         } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
             mLiNoResult.setVisibility(View.VISIBLE);

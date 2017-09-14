@@ -247,8 +247,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         if (StringUtil.isNotNullOrEmptyString(mHelpLineChat) && mHelpLineChat.equalsIgnoreCase(AppConstants.HELPLINE_CHAT)) {
             handleHelpLineFragmentFromDeepLinkAndLoading();
         }
-        // InviteReferralsApi.getInstance(this).showWelcomeMessage();
-        //InviteReferralsApi.getInstance(this).invite(AppConstants.HOME);
     }
 
     @Override
