@@ -143,7 +143,7 @@
             <TextView
                 android:id="@+id/review_post_img_heart"
                 android:layout_width="@dimen/dp_size_28"
-                android:drawableLeft="@drawable/ic_rating_heart"
+                android:drawableLeft="@drawable/ic_star_rating"
                 android:gravity="center"
                 android:layout_centerVertical="true"
                 android:layout_height="@dimen/dp_size_20"
@@ -157,7 +157,7 @@
                 android:layout_alignParentRight="true"
                 android:id="@+id/tv_review_company_rating"
                 android:textSize="@dimen/sp_size_14"
-                android:layout_marginRight="@dimen/dp_size_20"/>
+                android:layout_marginRight="@dimen/dp_size_30"/>
 
         </RelativeLayout>
 
