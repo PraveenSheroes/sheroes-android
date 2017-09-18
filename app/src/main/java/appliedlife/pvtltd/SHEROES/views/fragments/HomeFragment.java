@@ -175,21 +175,21 @@ public class HomeFragment extends BaseFragment {
 
         super.setAllInitializationForFeeds(mFragmentListRefreshData, mPullRefreshList, mAdapter, mLayoutManager, mPageNo, mSwipeView, mLiNoResult, mFeedDetail, mRecyclerView, mPosition, mPressedEmoji, mListLoad, mIsEdit, mHomePresenter, mAppUtils, mProgressBar);
         if (null == mUserPreference) {
-            ((HomeActivity)getActivity()).logOut();
+            ((HomeActivity) getActivity()).logOut();
         } else if (null != mUserPreference.get()) {
             if (!StringUtil.isNotNullOrEmptyString(mUserPreference.get().getToken())) {
-                ((HomeActivity)getActivity()).logOut();
+                ((HomeActivity) getActivity()).logOut();
             } else {
                 long daysDifference = System.currentTimeMillis() - mUserPreference.get().getTokenTime();
                 if (daysDifference >= AppConstants.SAVED_DAYS_TIME) {
                     mHomePresenter.getAuthTokenRefreshPresenter();
                 } else {
-                    FeedRequestPojo feedRequestPojo=feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo());
+                    FeedRequestPojo feedRequestPojo = feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo());
                     feedRequestPojo.setPageSize(AppConstants.SEVENTH_CONSTANT);
                     mHomePresenter.getFeedFromPresenter(feedRequestPojo);
                 }
             }
-            if(null != mUserPreference.get().getUserSummary()) {
+            if (null != mUserPreference.get().getUserSummary()) {
                 long userId = mUserPreference.get().getUserSummary().getUserId();
                 super.setUserId(userId);
                 ((SheroesApplication) getActivity().getApplication()).trackUserId(String.valueOf(userId));
@@ -282,7 +282,7 @@ public class HomeFragment extends BaseFragment {
         mPullRefreshList = new SwipPullRefreshList();
         setRefreshList(mPullRefreshList);
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
-        FeedRequestPojo feedRequestPojo=feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo());
+        FeedRequestPojo feedRequestPojo = feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo());
         feedRequestPojo.setPageSize(AppConstants.SEVENTH_CONSTANT);
         mHomePresenter.getFeedFromPresenter(feedRequestPojo);
         mHomePresenter.getNotificationCountFromPresenter(notificationReadCountRequestBuilder(TAG));
@@ -317,16 +317,16 @@ public class HomeFragment extends BaseFragment {
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
         }
     }
+
     private void approveSpamPostResponse(BaseResponse baseResponse) {
         switch (baseResponse.getStatus()) {
             case AppConstants.SUCCESS:
                 if (baseResponse instanceof ApproveSpamPostResponse) {
                     try {
                         FeedDetail feedDetail = (FeedDetail) mFeedDetail.clone();
-                        if(mIsSpam)
-                        {
+                        if (mIsSpam) {
                             commentListRefresh(feedDetail, DELETE_COMMUNITY_POST);
-                        }else {
+                        } else {
                             feedDetail.setSpamPost(false);
                             commentListRefresh(feedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
                         }
@@ -478,9 +478,10 @@ public class HomeFragment extends BaseFragment {
                 if (baseResponse instanceof NotificationReadCountResponse) {
                     NotificationReadCountResponse notificationReadCountResponse = (NotificationReadCountResponse) baseResponse;
                     StringBuilder stringBuilder = new StringBuilder();
+                  int  notificationCount=notificationReadCountResponse.getUnread_notification_count();
                     if (notificationReadCountResponse.getUnread_notification_count() > 0) {
                         ((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.VISIBLE);
-                        String notification = String.valueOf(notificationReadCountResponse.getUnread_notification_count());
+                        String notification = String.valueOf(notificationCount);
                         stringBuilder.append(notification);
                         ((HomeActivity) getActivity()).mTvNotificationReadCount.setText(stringBuilder.toString());
                     } else {
@@ -494,6 +495,10 @@ public class HomeFragment extends BaseFragment {
             default:
                 ((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.GONE);
         }
+    }
+
+    public void notificationUi() {
+        ((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.GONE);
     }
 
     @Override
@@ -541,12 +546,13 @@ public class HomeFragment extends BaseFragment {
         super.likeAndUnlikeRequest(baseResponse, reactionValue, position);
     }
 
-    public void approveSpamPost(FeedDetail feedDetail,boolean isActive,boolean isSpam,boolean isApproved) {
+    public void approveSpamPost(FeedDetail feedDetail, boolean isActive, boolean isSpam, boolean isApproved) {
         setProgressBar(mProgressBarFirstLoad);
-        mFeedDetail=feedDetail;
-        mIsSpam=isSpam;
-        mHomePresenter.getSpamPostApproveFromPresenter(mAppUtils.spamPostApprovedRequestBuilder(feedDetail,isActive,isSpam,isApproved));
+        mFeedDetail = feedDetail;
+        mIsSpam = isSpam;
+        mHomePresenter.getSpamPostApproveFromPresenter(mAppUtils.spamPostApprovedRequestBuilder(feedDetail, isActive, isSpam, isApproved));
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();

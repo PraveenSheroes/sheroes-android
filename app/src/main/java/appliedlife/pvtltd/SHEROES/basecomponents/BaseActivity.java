@@ -598,7 +598,18 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 //  tvShare.setVisibility(View.VISIBLE);
                 break;
             case R.id.tv_user_comment_list_menu:
-                tvEdit.setVisibility(View.VISIBLE);
+                if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
+                    int adminId = 0;
+                    if (null != userPreference.get().getUserSummary().getUserBO()) {
+                        adminId = userPreference.get().getUserSummary().getUserBO().getUserTypeId();
+                    }
+                    if(adminId==AppConstants.TWO_CONSTANT)
+                    {
+                        tvEdit.setVisibility(View.GONE);
+                    }else {
+                        tvEdit.setVisibility(View.VISIBLE);
+                    }
+                }
                 tvDelete.setVisibility(View.VISIBLE);
                 break;
             case R.id.tv_feed_community_post_user_comment_post_menu:

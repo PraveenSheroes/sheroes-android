@@ -477,12 +477,17 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 if (StringUtil.isNotNullOrEmptyString(bellNotificationResponse.getSolrIgnoreDeepLinkUrl())) {
                     String urlStr = bellNotificationResponse.getSolrIgnoreDeepLinkUrl();
                     challengeIdHandle(urlStr);
+                    Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+                    if (AppUtils.isFragmentUIActive(fragment)) {
+                        ((HomeFragment) fragment).notificationUi();
+                    }
                 } else if (bellNotificationResponse.getScreenName().contains(AppConstants.COMMUNITY_URL)) {
                     communityOnClick();
                 } else {
                     homeOnClick();
                 }
             }
+
         } else if (baseResponse instanceof MentorDetailItem) {
             mFragmentOpen.setChampionViaCommentReaction(AppConstants.ONE_CONSTANT);
             MentorDetailItem mentorDetailItem = (MentorDetailItem) baseResponse;

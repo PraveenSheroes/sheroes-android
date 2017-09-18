@@ -60,12 +60,17 @@ public class CommentHolder extends BaseViewHolder<CommentReactionDoc> {
     Context mContext;
     BaseHolderInterface viewInterface;
     private CommentReactionDoc dataItem;
-
+    private long mAdminId;
     public CommentHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
         this.viewInterface = baseHolderInterface;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
+        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
+            if (null != userPreference.get().getUserSummary().getUserBO()) {
+                mAdminId = userPreference.get().getUserSummary().getUserBO().getUserTypeId();
+            }
+        }
     }
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
@@ -86,7 +91,7 @@ public class CommentHolder extends BaseViewHolder<CommentReactionDoc> {
             tvListCommentTime.setText(mContext.getString(R.string.ID_JUST_NOW));
         }
 
-        if (dataItem.isMyOwnParticipation()) {
+        if (dataItem.isMyOwnParticipation()||mAdminId==AppConstants.TWO_CONSTANT) {
             tvUserCommentListMenu.setVisibility(View.VISIBLE);
         } else {
             tvUserCommentListMenu.setVisibility(View.GONE);

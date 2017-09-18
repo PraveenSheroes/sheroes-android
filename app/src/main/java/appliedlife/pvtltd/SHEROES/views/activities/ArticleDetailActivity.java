@@ -485,7 +485,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
     @OnClick(R.id.tv_article_detail_back)
     public void onBackClick() {
         if(mArticleId>0) {
-            if (mFromNotification == AppConstants.NO_REACTION_CONSTANT) {
+            if (mFromNotification == AppConstants.TWO_CONSTANT) {
                 Intent intent = new Intent(this, HomeActivity.class);
                 startActivity(intent);
             }else {

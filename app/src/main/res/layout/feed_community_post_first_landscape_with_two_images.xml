@@ -20,6 +20,8 @@
             android:id="@+id/iv_feed_community_post_first_landscape_with_two_images"
             android:layout_width="match_parent"
             android:adjustViewBounds="true"
+            android:layout_marginRight="@dimen/dp_size_5"
+            android:layout_marginLeft="@dimen/dp_size_5"
             android:layout_height="wrap_content" />
     <LinearLayout
         android:layout_width="match_parent"

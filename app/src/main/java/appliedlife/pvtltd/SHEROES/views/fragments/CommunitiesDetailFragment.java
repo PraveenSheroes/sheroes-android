@@ -199,14 +199,9 @@ public class CommunitiesDetailFragment extends BaseFragment {
                 mFragmentListRefreshData.setSearchStringName(AppConstants.COMMUNITIES_DETAIL);
                 mHomePresenter.getFeedFromPresenter(userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCommunityId()));
             }
-        try {
             if(null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get()&&null != mUserPreference.get().getUserSummary()) {
                 mUserId = mUserPreference.get().getUserSummary().getUserId();
             }
-        }catch (Exception e)
-        {
-
-        }
             mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
@@ -220,7 +215,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
     }
 
     public void communityPostClick() {
-        if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getCallFromName()) && mFeedDetail.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
+        if (null!=mFeedDetail&&StringUtil.isNotNullOrEmptyString(mFeedDetail.getCallFromName()) && mFeedDetail.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
             try {
                 FeedDetail feedDetail = (FeedDetail) mFeedDetail.clone();
                 feedDetail.setCallFromName(AppConstants.COMMUNITIES_DETAIL);

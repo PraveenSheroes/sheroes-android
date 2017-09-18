@@ -85,7 +85,9 @@ public class PushNotificationService extends GcmListenerService {
 
         notificationIntent = new Intent(PushNotificationService.this, SheroesDeepLinkingActivity.class);
         notificationIntent.setData(url);
-
+        Bundle bundle = new Bundle();
+        bundle.putInt(AppConstants.BELL_NOTIFICATION, AppConstants.TWO_CONSTANT);
+        notificationIntent.putExtras(bundle);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(PushNotificationService.this);
         stackBuilder.addParentStack(ArticleDetailActivity.class);
         stackBuilder.addNextIntent(notificationIntent);

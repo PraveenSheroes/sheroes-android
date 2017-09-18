@@ -86,6 +86,7 @@ public class GoogleAnalyticsEventActions {
     public static final String CATEGORY_DEEP_LINK = "deeplink external and bellnotification";
     public static final String DEEP_LINK_TO_HOME = "external deeplink to home";
     public static final String BELL_NOTIFICATION_TO_HOME = "bellnotification to home";
+    public static final String LOGGED_OUT_USER = "via deeplink found logged out user";
     public static final String DEEP_LINK_WEB = "external deeplink to web";
     public static final String BELL_NOTIFICATION_TO_WEB = "bellnotification to web";
     public static final String DEEP_LINK_PROFILE = "external deeplink to profile";

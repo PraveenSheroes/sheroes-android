@@ -298,7 +298,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         if (StringUtil.isNotNullOrEmptyString(dataItem.getOgImageUrlS())) {
             Glide.with(mContext)
                     .load(dataItem.getOgImageUrlS()).asBitmap()
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(new SimpleTarget<Bitmap>() {
                         @Override
                         public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {

@@ -29,6 +29,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.ProfessionalWorkExperienceAct
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActicity;
 import appliedlife.pvtltd.SHEROES.views.activities.PublicProfileGrowthBuddiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.SettingPreferencesActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.VisitingCardActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.WelcomeActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.AllSearchFragment;
@@ -640,7 +641,7 @@ public interface SheroesAppComponent {
 
     void inject(FeedProgressBarHolder feedProgressBarHolder);
     void inject(EventCardHolder eventCardHolder);
-
+    void inject(SheroesDeepLinkingActivity sheroesDeepLinkingActivity);
 
 
 }
