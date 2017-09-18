@@ -199,10 +199,14 @@ public class CommunitiesDetailFragment extends BaseFragment {
                 mFragmentListRefreshData.setSearchStringName(AppConstants.COMMUNITIES_DETAIL);
                 mHomePresenter.getFeedFromPresenter(userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCommunityId()));
             }
-
-            if(null!=mUserPreference&&null != mUserPreference.get().getUserSummary()) {
+        try {
+            if(null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get()&&null != mUserPreference.get().getUserSummary()) {
                 mUserId = mUserPreference.get().getUserSummary().getUserId();
             }
+        }catch (Exception e)
+        {
+
+        }
             mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {

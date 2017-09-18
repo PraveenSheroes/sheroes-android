@@ -121,7 +121,6 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
             mMasterDataResult = mUserPreferenceMasterData.get().getData();
         }
         setPagerAndLayouts();
-        ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_ONBOARDING_WELCOME));
     }
 
     public void setPagerAndLayouts() {
@@ -134,9 +133,11 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
         //  mCustomCollapsingToolbarLayout.setSubtitle(mFeedDetail.getAuthorName());
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getNextScreen())) {
             if (userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.CURRENT_STATUS_SCREEN)) {
+                ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_ONBOARDING_WELCOME));
                 tellUsAboutFragment();
                 showHeySuccessDialog();
             } else if (userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.HOW_CAN_SHEROES_AKA_LOOKING_FOR_SCREEN)) {
+                ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_ONBOARDING_WELCOME));
                 position = 1;
                 mHowCanSheroes.setVisibility(View.VISIBLE);
                 mInterest.setVisibility(View.GONE);

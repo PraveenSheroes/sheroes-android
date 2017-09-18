@@ -5,6 +5,7 @@ import android.content.Context;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
+import java.util.Date;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
@@ -28,9 +29,13 @@ public class MoEngageUtills {
         }
         return sInstance;
     }
-
-    public void entityMoEngageAppOpened(Context context, MoEHelper mMoEHelper, PayloadBuilder payloadBuilder) {
+    public void entityMoEngageAppVersion(Context context, MoEHelper mMoEHelper, PayloadBuilder payloadBuilder, int appVersion ) {
+        payloadBuilder.putAttrInt(MoEngageConstants.APP_VERSION, appVersion);
         mMoEHelper.trackEvent(MoEngageEvent.EVENT_APP_OPEN.value, payloadBuilder.build());
+    }
+    public void entityMoEngageLastOpen(Context context, MoEHelper mMoEHelper, PayloadBuilder payloadBuilder, Date lastOpen) {
+        payloadBuilder.putAttrDate(MoEngageConstants.LAST_APP_OPEN, lastOpen);
+        mMoEHelper.trackEvent(MoEngageEvent.EVENT_LAST_OPEN.value, payloadBuilder.build());
     }
     public void entityMoEngageDeeplink(Context context, MoEHelper mMoEHelper, PayloadBuilder payloadBuilder) {
         mMoEHelper.trackEvent(MoEngageEvent.EVENT_DEEP_LINK.value, payloadBuilder.build());
@@ -79,6 +84,7 @@ public class MoEngageUtills {
         payloadBuilder.putAttrLong(MoEngageConstants.TIME_SPENT, timeSpentFeed);
         mMoEHelper.trackEvent(MoEngageEvent.EVENT_VIEWED_FEED.value, payloadBuilder.build());
     }
+
 
     public void entityMoEngageViewICCMember(Context context, MoEHelper mMoEHelper, PayloadBuilder payloadBuilder, long timeSpentFeed) {
         payloadBuilder.putAttrLong(MoEngageConstants.TIME_SPENT, timeSpentFeed);

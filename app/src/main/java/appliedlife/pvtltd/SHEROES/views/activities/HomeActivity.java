@@ -571,7 +571,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                  if (null != loginResponse)
                      referralUserAttribute(this, loginResponse);
              }
-             //InviteReferralsApi.getInstance(HomeActivity.this).inline_btn(AppConstants.CAMPAIGN_ID);
              isInviteReferral = true;
              break;
          case 14:
@@ -799,6 +798,7 @@ private void feedRelatedOptions(View view,BaseResponse baseResponse)
         moEngageUtills.entityMoEngageViewFeed(this, mMoEHelper, payloadBuilder, timeSpentFeed);
     }
 
+
     @Override
     public List getListData() {
         return mHomeSpinnerItemList;
@@ -886,7 +886,6 @@ private void feedRelatedOptions(View view,BaseResponse baseResponse)
         homeFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_feed_full_view, homeFragment, HomeFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
         totalTimeSpentOnFeed();
-        ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_FEED_IMPRESSION));
     }
 
     private void initCommunityViewPagerAndTabs() {
@@ -1009,7 +1008,6 @@ private void feedRelatedOptions(View view,BaseResponse baseResponse)
         mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
         mTvHome.setText(getString(R.string.ID_FEED));
         initCommunityViewPagerAndTabs();
-        totalTimeSpentOnFeed();
     }
 
     public void didTapButton(View view) {
@@ -1304,7 +1302,6 @@ private void feedRelatedOptions(View view,BaseResponse baseResponse)
             if (doubleBackToExitPressedOnce) {
                 getSupportFragmentManager().popBackStackImmediate();
                 finish();
-                totalTimeSpentOnFeed();
                 return;
             }
             doubleBackToExitPressedOnce = true;

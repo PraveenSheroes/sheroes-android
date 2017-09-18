@@ -51,7 +51,6 @@ public class LoginActivity extends BaseActivity implements LoginFragment.LoginAc
         } else {
             renderLoginFragmentView();
         }
-        ((SheroesApplication)this.getApplication()).trackScreenView(getString(R.string.ID_LOGIN));
     }
 
     public void renderLoginFragmentView() {

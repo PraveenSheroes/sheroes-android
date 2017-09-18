@@ -192,6 +192,7 @@ public class HomeFragment extends BaseFragment {
             if(null != mUserPreference.get().getUserSummary()) {
                 long userId = mUserPreference.get().getUserSummary().getUserId();
                 super.setUserId(userId);
+                ((SheroesApplication) getActivity().getApplication()).trackUserId(String.valueOf(userId));
             }
         } else {
             mHomePresenter.getAuthTokenRefreshPresenter();
@@ -202,6 +203,7 @@ public class HomeFragment extends BaseFragment {
         } catch (Exception e) {
 
         }
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_FEED_IMPRESSION));
         mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

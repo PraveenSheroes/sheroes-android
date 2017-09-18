@@ -159,7 +159,6 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
         mMoEHelper = MoEHelper.getInstance(getActivity());
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
-        moEngageUtills.entityMoEngageAppOpened(getActivity(), mMoEHelper, payloadBuilder);
     }
 
     @Override

@@ -5,6 +5,8 @@ package appliedlife.pvtltd.SHEROES.moengage;
  */
 
 public enum  MoEngageEvent {
+
+    EVENT_LAST_OPEN("last app open"),
     EVENT_APP_OPEN("opened app"),
     EVENT_DEEP_LINK("deep link"),
     EVENT_SIGNED_UP("signed up"),

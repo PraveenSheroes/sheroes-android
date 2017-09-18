@@ -302,6 +302,8 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
             case R.id.tv_feed_article_user_bookmark:
                 bookmarkCall();
                 break;
+            case R.id.tv_event_going_btn:
+                bookmarkCall();
             case R.id.tv_feed_community_post_user_bookmark:
                 bookmarkCall();
                 break;

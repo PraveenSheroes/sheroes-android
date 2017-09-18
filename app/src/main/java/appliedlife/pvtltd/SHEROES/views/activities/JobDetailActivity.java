@@ -110,8 +110,9 @@ public class JobDetailActivity extends BaseActivity implements  AppBarLayout.OnO
                 if (mJobId > 0) {
                     mFeedDetail = new FeedDetail();
                     mFeedDetail.setIdOfEntityOrParticipant(mJobId);
+                }else {
+                    mFeedDetail = getIntent().getParcelableExtra(AppConstants.JOB_DETAIL);
                 }
-            mFeedDetail = getIntent().getParcelableExtra(AppConstants.JOB_DETAIL);
         }
         setPagerAndLayouts();
         ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_VIEW_JOBS_DETAIL));
@@ -130,7 +131,9 @@ public class JobDetailActivity extends BaseActivity implements  AppBarLayout.OnO
             deepLinkBackPress();
         }
         finish();
-        moEngageData(mFeedDetail);
+        if(null!=mFeedDetail) {
+            moEngageData(mFeedDetail);
+        }
         overridePendingTransition(R.anim.fade_in_dialog, R.anim.fade_out_dialog);
     }
     private void deepLinkBackPress()

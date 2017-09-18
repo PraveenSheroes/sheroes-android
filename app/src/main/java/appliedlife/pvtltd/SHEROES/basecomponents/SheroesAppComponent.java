@@ -152,6 +152,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.CommunityCardDetailHeader;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CurrentStatusHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.EducationListHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.EventCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.EventDetailHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.EventSpeakerHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.EventSponsorHolder;
@@ -638,6 +639,7 @@ public interface SheroesAppComponent {
     void inject(SpamPostListDialogFragment spamPostListDialogFragment);
 
     void inject(FeedProgressBarHolder feedProgressBarHolder);
+    void inject(EventCardHolder eventCardHolder);
 
 
 

@@ -51,6 +51,7 @@ public class OnBoardingDailogHeySuccess extends BaseDialogFragment {
         mScrollView.scrollTo(0, mScrollView.getBottom() + 1);
 
         setCancelable(false);
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_ONBOARDING_LETS_START_TALKING));
         return view;
     }
 

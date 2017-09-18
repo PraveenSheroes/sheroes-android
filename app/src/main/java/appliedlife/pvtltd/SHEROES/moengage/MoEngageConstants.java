@@ -8,6 +8,7 @@ public class MoEngageConstants {
     /*
        MoEngage user attribute
    * */
+    public static final String APP_VERSION = "app version ";
     public static final String LAST_APP_OPEN = "last app open ";
     public static final String FIRST_APP_OPEN = "first app open ";
     public static final String ACQUISITION_CHANNEL = "acquisition channel ";

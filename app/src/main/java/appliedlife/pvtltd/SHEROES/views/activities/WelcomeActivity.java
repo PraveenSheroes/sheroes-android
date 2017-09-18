@@ -125,20 +125,19 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
-        LogUtils.info(TAG, "*************onCreate welcome");
         mMoEHelper = MoEHelper.getInstance(this);
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
-        moEngageUtills.entityMoEngageAppOpened(this, mMoEHelper, payloadBuilder);
         AppsFlyerLib.getInstance().startTracking(getApplication(), getString(R.string.ID_APPS_FLYER_DEV_ID));
         AppsFlyerLib.getInstance().setImeiData(appUtils.getIMEI());
         AppsFlyerLib.getInstance().setAndroidIdData(appUtils.getDeviceId());
-            initializeAllDataAfterGCMId();
+        initializeAllDataAfterGCMId();
 
     }
 
     private void initializeAllDataAfterGCMId() {
         int versionCode = BuildConfig.VERSION_CODE;
+        moEngageUtills.entityMoEngageAppVersion(this, mMoEHelper, payloadBuilder, versionCode);
         if (null != mInstallUpdatePreference && mInstallUpdatePreference.isSet() && null != mInstallUpdatePreference.get()) {
             if (mInstallUpdatePreference.get().getAppVersion() < versionCode) {
                 InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
@@ -156,11 +155,10 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             mMoEHelper.setExistingUser(false);
             mMoEHelper.setUserAttribute(MoEngageConstants.FIRST_APP_OPEN, new Date());
         }
-        mMoEHelper.setUserAttribute(MoEngageConstants.LAST_APP_OPEN, new Date());
+        moEngageUtills.entityMoEngageLastOpen(this, mMoEHelper, payloadBuilder, new Date());
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getToken())) {
             openHomeScreen();
         } else {
-            LogUtils.info(TAG, "*************before UI deploye");
             setContentView(R.layout.welcome_activity);
             ButterKnife.bind(this);
             initHomeViewPagerAndTabs();
@@ -168,7 +166,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                 showNetworkTimeoutDoalog(false, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
                 return;
             } else {
-                LogUtils.info(TAG, "*************dialog starts");
             mLoginPresenter.getMasterDataToPresenter();
             mProgressDialog = new ProgressDialog(this);
             mProgressDialog.setMessage(getString(R.string.ID_PLAY_STORE_DATA));
@@ -202,7 +199,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         pushClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
             @Override
             public void onSuccess(String registrationId, boolean isNewRegistration) {
-                LogUtils.info(TAG, "******* ******Key Value of Registarion" + registrationId);
                 mGcmId = registrationId;
                 if (StringUtil.isNotNullOrEmptyString(mGcmId)) {
                     LogUtils.info(TAG, "******* ******success Registarion" + registrationId);
@@ -213,7 +209,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                         mProgressDialog.dismiss();
                     }
                 } else {
-                    LogUtils.info(TAG, "******* ******again hit Registarion" + registrationId);
                     mGetStarted.setEnabled(false);
                     mOtherLoginOption.setEnabled(false);
                     if (!NetworkUtil.isConnected(mSheroesApplication)) {
@@ -227,7 +222,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
             @Override
             public void onFailure(String ex) {
-                LogUtils.info(TAG, "*************Fail Registarion" + ex);
                 mGcmId = ex;
             }
         });

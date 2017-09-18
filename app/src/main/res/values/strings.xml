@@ -1000,6 +1000,7 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_SIGN_UP_FORM">sign up (form) screen</string>
     <string name="ID_LOGIN">login</string>
     <string name="ID_ONBOARDING_WELCOME">onboarding- welcome screen</string>
+    <string name="ID_ONBOARDING_LETS_START_TALKING">onboarding- Let’s Start Talking</string>
     <string name="ID_ONBOARDING_CURRENT_STATUS">onboarding- current status</string>
     <string name="ID_ONBOARDING_LOOKING_FOR">onboarding- looking for</string>
     <string name="ID_NOTIFICATION_SCREEN">notifications</string>
