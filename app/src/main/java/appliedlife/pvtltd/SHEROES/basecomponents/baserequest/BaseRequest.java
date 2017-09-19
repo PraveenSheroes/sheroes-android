@@ -53,7 +53,6 @@ public abstract class BaseRequest {
     @SerializedName("test_user_type")
     @Expose
     private String testUserType = AppConstants.orgUserType;
-    //private String testUserType= AppConstants.orgUserType;
     // For getting org cards
     public BaseRequest(TrackingParams trackingParams, DeviceInfo deviceInfo, String appVersion, String cloudMessagingId, String deviceUniqueId, String screenName, String lastScreenName, int pageNo, int pageSize) {
         this.trackingParams = trackingParams;
