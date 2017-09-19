@@ -208,11 +208,6 @@ public class OrgReviewCardHolder extends BaseViewHolder<FeedDetail> {
                 tvReviewPostMoreText.setVisibility(View.GONE);
                 tvReviewPostText.setText(StringEscapeUtils.unescapeHtml4(mViewMoreDescription));
             }
-         /*   Pattern EMAIL_ADDRESS_PATTERN = Pattern.compile("/(www|http|ftp|https):\\/\\/[\\w-]+(\\.[\\w-]+)+([\\w.,@?^=%&amp;:\\/~+#-]*[\\w@?^=%&amp;\\/~+#-])?/gi");
-            if (EMAIL_ADDRESS_PATTERN.matcher(tvFeedCommunityPostText.getText().toString()).matches()) {
-                tvFeedCommunityPostText.setLinksClickable(true);
-                Linkify.addLinks(tvFeedCommunityPostText, Linkify.WEB_URLS);
-            }*/
 
         } else {
             tvReviewPostMoreText.setText(mContext.getString(R.string.ID_LESS));

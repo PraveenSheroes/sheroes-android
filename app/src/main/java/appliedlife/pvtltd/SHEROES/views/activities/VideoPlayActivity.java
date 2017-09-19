@@ -21,14 +21,14 @@ public class VideoPlayActivity extends YouTubeBaseActivity implements YouTubePla
     private MyPlayerStateChangeListener playerStateChangeListener;
     private MyPlaybackEventListener playbackEventListener;
     private YouTubePlayer player;
-    private String vedioString;
+    private String videoString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.video_player_activity);
         if (null != getIntent() && null != getIntent().getExtras()) {
-            vedioString = getIntent().getExtras().getString(AppConstants.YOUTUBE_VIDEO_CODE);
+            videoString = getIntent().getExtras().getString(AppConstants.YOUTUBE_VIDEO_CODE);
         }
         youTubeView = (YouTubePlayerView) findViewById(R.id.youtube_view);
         youTubeView.initialize(AppConstants.YOUTUBE_DEVELOPER_KEY, this);
@@ -43,28 +43,62 @@ public class VideoPlayActivity extends YouTubeBaseActivity implements YouTubePla
         player.setPlayerStateChangeListener(playerStateChangeListener);
         player.setPlaybackEventListener(playbackEventListener);
         if (!wasRestored) {
-            String[] youTubeUrl = vedioString.split(AppConstants.BACK_SLASH);
-            if (null != youTubeUrl && youTubeUrl.length > 1) {
-                if (StringUtil.isNotNullOrEmptyString(youTubeUrl[youTubeUrl.length-1])) {
-                    if(youTubeUrl[youTubeUrl.length-1].contains(AppConstants.EQUAL_SIGN))
-                    {
-                        String[] videoUrl = youTubeUrl[youTubeUrl.length-1].split(AppConstants.EQUAL_SIGN);
-                        if (videoUrl.length > 1) {
-                            if (StringUtil.isNotNullOrEmptyString(videoUrl[videoUrl.length-1]))
+            if (StringUtil.isNotNullOrEmptyString(videoString)) {
+                if (videoString.contains(AppConstants.YOUTUBE_VIDEO_CODE)) {
+                    String[] youTubeUrl = videoString.split(AppConstants.BACK_SLASH);
+                    if (youTubeUrl.length > 1) {
+                        if (StringUtil.isNotNullOrEmptyString(youTubeUrl[youTubeUrl.length - 1])) {
+                                player.loadVideo(youTubeUrl[youTubeUrl.length - 1]);
+                                //  player.cueVideo(youTubeUrl[1]); // Plays https://www.youtube.com/watch?v=fhWaJi1Hsfo
+                        }
+                    } else {
+                        showMessage(getString(R.string.ID_YOU_TUBE_VIDEO_NOT_PLAYING));
+                        finish();
+                    }
+                }else if (videoString.contains(AppConstants.MOBILE_YOUTUBE_VIDEO_CODE)) {
+                        String[] youTubeUrl = videoString.split(AppConstants.BACK_SLASH);
+                        if (youTubeUrl.length > 1) {
+                            String youtubeIdSet=youTubeUrl[youTubeUrl.length - 1];
+                            if (StringUtil.isNotNullOrEmptyString(youtubeIdSet)) {
+                                String[] youTubeId = youtubeIdSet.split(AppConstants.EQUAL_SIGN);
+                                if(StringUtil.isNotNullOrEmptyString(youTubeId[youTubeId.length-1]))
+                                {
+                                    player.loadVideo(youTubeId[youTubeId.length-1]);
+                                }
+                            }
+                        } else {
+                            showMessage(getString(R.string.ID_YOU_TUBE_VIDEO_NOT_PLAYING));
+                            finish();
+                        }
+                    }
+                else
+                {
+                    String[] youTubeUrl = videoString.split(AppConstants.BACK_SLASH);
+                    if (youTubeUrl.length > 1) {
+                        String youtubeIdSet=youTubeUrl[youTubeUrl.length - 1];
+                        if (StringUtil.isNotNullOrEmptyString(youtubeIdSet)) {
+                            String[] youTubeId = youtubeIdSet.split(AppConstants.EQUAL_SIGN);
+                            if(StringUtil.isNotNullOrEmptyString(youTubeId[1]))
                             {
-                                player.loadVideo(videoUrl[videoUrl.length-1]); // Plays https://www.youtube.com/watch?v=fhWaJi1Hsfo
+                                if(youTubeId[1].contains(AppConstants.AND_SIGN)) {
+                                    String[] id = youTubeId[1].split(AppConstants.AND_SIGN);
+                                    if(StringUtil.isNotNullOrEmptyString(id[0])) {
+                                        player.loadVideo(id[0]);
+                                    }
+                                }else
+                                {
+                                    player.loadVideo(youTubeId[1]);
+                                }
                             }
                         }
-                    }else
-                    {
-                        player.loadVideo(youTubeUrl[youTubeUrl.length-1]);
-                      //  player.cueVideo(youTubeUrl[1]); // Plays https://www.youtube.com/watch?v=fhWaJi1Hsfo
+                    } else {
+                        showMessage(getString(R.string.ID_YOU_TUBE_VIDEO_NOT_PLAYING));
+                        finish();
                     }
                 }
-            } else {
-                showMessage("Sorry can not play video please check link");
-                finish();
             }
+
+
         }
     }
 
@@ -154,6 +188,7 @@ public class VideoPlayActivity extends YouTubeBaseActivity implements YouTubePla
             // Called when an error occurs.
         }
     }
+
     @Override
     public void onBackPressed() {
         finish();

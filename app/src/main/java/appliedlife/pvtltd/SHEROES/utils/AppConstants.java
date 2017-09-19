@@ -15,7 +15,8 @@ public class AppConstants {
     public static final String YOUTUBE_DEVELOPER_KEY = "AIzaSyBb6FQ0snY-RF9QjGV_RdGSgpWtclRMSvk";
 
     // YouTube video id
-    public static final String YOUTUBE_VIDEO_CODE = "cU3v6nuuaHs";
+    public static final String YOUTUBE_VIDEO_CODE = "youtu.be";
+    public static final String MOBILE_YOUTUBE_VIDEO_CODE = "m.youtube";
     public static final int CAMPAIGN_ID = 14983;
     public static final int APP_INTRO = 34;
     public static final int ONEGIGABYTE = 1024 * 1024 * 1024;

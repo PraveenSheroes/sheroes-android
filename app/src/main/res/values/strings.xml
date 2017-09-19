@@ -1047,6 +1047,7 @@ Our website www.sheroes.in offers services for certain products and services. By
     <string name="ID_REVIEW_POST_NON_ZERO_UPVOTES">Upvotes</string>
 
     <string name="ID_INTENT_CHOOSER">Select source</string>
+    <string name="ID_YOU_TUBE_VIDEO_NOT_PLAYING">Sorry can not play video please check link</string>
 
 
     <string name="crop_image_activity_title"></string>
