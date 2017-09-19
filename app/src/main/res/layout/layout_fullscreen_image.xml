@@ -3,13 +3,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black">
-
+    <FrameLayout
+        android:id="@+id/fl_full_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ProgressBar
+            android:layout_width="@dimen/dp_size_30"
+            android:layout_height="@dimen/dp_size_30"
+            android:layout_gravity="center"
+            android:indeterminateTint="@color/white" />
+    </FrameLayout>
     <appliedlife.pvtltd.SHEROES.views.cutomeviews.TouchImageView
         android:id="@+id/iv_full_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:visibility="gone"
         android:layout_alignParentTop="true"
         android:scaleType="fitCenter" />
 </RelativeLayout>

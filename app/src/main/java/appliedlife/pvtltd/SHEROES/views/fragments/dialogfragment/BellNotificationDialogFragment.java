@@ -69,7 +69,6 @@ public class BellNotificationDialogFragment extends BaseDialogFragment implement
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
         startedTime=System.currentTimeMillis();
-
         tvTitle.setText(getString(R.string.ID_NOTIFICATION));
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new GenericRecyclerViewAdapter(getActivity(), (HomeActivity) getActivity());
@@ -83,6 +82,16 @@ public class BellNotificationDialogFragment extends BaseDialogFragment implement
         ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_NOTIFICATION_SCREEN));
         return v;
         }
+    @Override
+    public void onStart() {
+        super.onStart();
+        // safety check
+        if (getDialog() == null) {
+            return;
+        }
+        // set the animations to use on showing and hiding the dialog
+        getDialog().getWindow().setWindowAnimations(R.style.dialog_notification_animation_fade);
+    }
 
     @Override
     public void getNotificationListSuccess(BelNotificationListResponse bellNotificationResponse) {
@@ -111,7 +120,6 @@ public class BellNotificationDialogFragment extends BaseDialogFragment implement
         mProgressBar.setVisibility(View.VISIBLE);
         mProgressBar.bringToFront();
     }
-
     @Override
     public void stopProgressBar() {
         mProgressBar.setVisibility(View.GONE);
