@@ -477,10 +477,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 if (StringUtil.isNotNullOrEmptyString(bellNotificationResponse.getSolrIgnoreDeepLinkUrl())) {
                     String urlStr = bellNotificationResponse.getSolrIgnoreDeepLinkUrl();
                     challengeIdHandle(urlStr);
-                    Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-                    if (AppUtils.isFragmentUIActive(fragment)) {
-                        ((HomeFragment) fragment).notificationUi();
-                    }
                 } else if (bellNotificationResponse.getScreenName().contains(AppConstants.COMMUNITY_URL)) {
                     communityOnClick();
                 } else {
@@ -1365,6 +1361,10 @@ private void feedRelatedOptions(View view,BaseResponse baseResponse)
             bellNotificationDialogFragment = new BellNotificationDialogFragment();
             Bundle bundle = new Bundle();
             bellNotificationDialogFragment.setArguments(bundle);
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+            if (AppUtils.isFragmentUIActive(fragment)) {
+                ((HomeFragment) fragment).notificationUi();
+            }
         }
         if (!bellNotificationDialogFragment.isVisible() && !bellNotificationDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
             bellNotificationDialogFragment.show(getFragmentManager(), BellNotificationDialogFragment.class.getName());

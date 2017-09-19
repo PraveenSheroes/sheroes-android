@@ -143,7 +143,6 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         dataItem.setItemPosition(position);
         dataItem.setLastReactionValue(dataItem.getReactionValue());
         dataItem.setListDescription(null);
-        dataItem.setShortDescription(null);
         allTextViewStringOperations(context);
         onBookMarkClick();
         if (!dataItem.isTrending()) {

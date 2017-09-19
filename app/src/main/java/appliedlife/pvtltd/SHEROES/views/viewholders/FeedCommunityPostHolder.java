@@ -316,11 +316,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             cardViewLinkRender.setVisibility(View.GONE);
         }
     }
-
-
-
-
-
     private void multipleImageURLs() {
         if (dataItem.getCommunityId() == AppConstants.NO_REACTION_CONSTANT) {
             tvFeedCommunityPostUserShare.setVisibility(View.GONE);
