@@ -184,6 +184,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.MyCommunitiesCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.NoCommunityHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OnBoardingHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OnceWelcomeCardHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.OrgReviewCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OwnerHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OwnerListHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.PandingRequestHolder;
@@ -643,5 +644,6 @@ public interface SheroesAppComponent {
     void inject(EventCardHolder eventCardHolder);
     void inject(SheroesDeepLinkingActivity sheroesDeepLinkingActivity);
 
+    void inject (OrgReviewCardHolder orgReviewCardHolder);
 
 }

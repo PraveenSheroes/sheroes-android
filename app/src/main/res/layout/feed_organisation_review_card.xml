@@ -183,7 +183,7 @@
             android:layout_marginTop="@dimen/dp_size_5">
             <TextView
                 android:id="@+id/tv_review_upvote_reacted"
-                android:layout_width="@dimen/dp_size_40"
+                android:layout_width="@dimen/dp_size_30"
                 android:drawableLeft="@drawable/ic_upvote_active"
                 android:layout_height="@dimen/dp_size_40"
                 android:layout_marginLeft="@dimen/dp_size_15"
@@ -195,7 +195,6 @@
                 android:layout_height="@dimen/dp_size_15"
                 android:layout_gravity="center"
                 android:layout_alignLeft="@+id/iv_review_upvote"
-                android:layout_marginLeft="@dimen/dp_size_5"
                 android:textSize="@dimen/sp_size_12"/>
 
             <TextView
