@@ -350,7 +350,14 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new EventCardHolder(view, viewInterface);
         }
-    }, GET_ALL_DATA_BOARDING_SEARCH(R.layout.get_all_data_boarding_search_list_item) {
+    },
+    ORG_REVIEW_CARD_HOLDER(R.layout.review_card_holder) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new OrgReviewCardHolder(view, viewInterface);
+        }
+    },
+    GET_ALL_DATA_BOARDING_SEARCH(R.layout.get_all_data_boarding_search_list_item) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new GetAllDataBoardingSearchHolder(view, viewInterface);
@@ -488,9 +495,13 @@ public enum HolderMapping {
                                 {
                                     if(userId==feedDetail.getAuthorId()||feedDetail.isCommunityOwner())
                                     {
-                                        if (feedDetail.getCommunityId() == AppConstants.EVENT_COMMUNITY_ID) {
+                                        if (feedDetail.getCommunityId() == AppConstants.EVENT_COMMUNITY_ID && feedDetail.getCommunityTypeId() != AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
                                             returnView = EVENT_CARD_HOLDER.ordinal();
-                                        }else
+
+                                        }else if(feedDetail.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID && (!feedDetail.isCommentAllowed())){
+                                            returnView = ORG_REVIEW_CARD_HOLDER.ordinal();
+                                        }
+                                        else
                                         {
                                             returnView = FEED_COMMUNITY_POST.ordinal();
                                         }
@@ -499,9 +510,13 @@ public enum HolderMapping {
                                     }
                                 }else
                                 {
-                                    if (feedDetail.getCommunityId() == AppConstants.EVENT_COMMUNITY_ID) {
+                                    if (feedDetail.getCommunityId() == AppConstants.EVENT_COMMUNITY_ID && feedDetail.getCommunityTypeId() != AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
                                         returnView = EVENT_CARD_HOLDER.ordinal();
-                                    }else
+
+                                    }else if(feedDetail.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID && (!feedDetail.isCommentAllowed())){
+                                        returnView = ORG_REVIEW_CARD_HOLDER.ordinal();
+                                    }
+                                    else
                                     {
                                         returnView = FEED_COMMUNITY_POST.ordinal();
                                     }
@@ -572,9 +587,12 @@ public enum HolderMapping {
                                 {
                                     if(userId==feedDetail.getAuthorId()||feedDetail.isCommunityOwner())
                                     {
-                                        if (feedDetail.getCommunityId() == AppConstants.EVENT_COMMUNITY_ID) {
+                                        if (feedDetail.getCommunityId() == AppConstants.EVENT_COMMUNITY_ID  && feedDetail.getCommunityTypeId() != AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
                                             returnView = EVENT_CARD_HOLDER.ordinal();
-                                        }else
+                                        }else if(feedDetail.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID && (!feedDetail.isCommentAllowed())){
+                                            returnView = ORG_REVIEW_CARD_HOLDER.ordinal();
+                                        }
+                                        else
                                         {
                                             returnView = FEED_COMMUNITY_POST.ordinal();
                                         }
@@ -583,9 +601,12 @@ public enum HolderMapping {
                                     }
                                 }else
                                 {
-                                    if (feedDetail.getCommunityId() == AppConstants.EVENT_COMMUNITY_ID) {
+                                    if (feedDetail.getCommunityId() == AppConstants.EVENT_COMMUNITY_ID && feedDetail.getCommunityTypeId() != AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
                                         returnView = EVENT_CARD_HOLDER.ordinal();
-                                    }else
+                                    }else if(feedDetail.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID && (!feedDetail.isCommentAllowed())) {
+                                        returnView = ORG_REVIEW_CARD_HOLDER.ordinal();
+                                    }
+                                    else
                                     {
                                         returnView = FEED_COMMUNITY_POST.ordinal();
                                     }
