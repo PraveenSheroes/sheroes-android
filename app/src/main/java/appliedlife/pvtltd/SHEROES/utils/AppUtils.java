@@ -19,6 +19,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.ConnectivityManager;
@@ -216,7 +217,36 @@ public class AppUtils {
     public void setApplicationContext(Context context) {
 
     }
+    public static int convertDpToPixel(float dp, Context context) {
+        Resources resources = context.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        float px = dp * (metrics.densityDpi / 160f);
+        return Math.round(px);
+    }
+    public static int getWindowHeight(Context context) {
+        int[] size = getWindowSize(context);
+        return size[1];
+    }
+    public static int getWindowWidth(Context context) {
+        int[] size = getWindowSize(context);
+        return size[0];
+    }
+    public static int[] getWindowSize(Context context) {
+        int screenWidth, screenHeight;
+        Display display = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE))
+                .getDefaultDisplay();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            Point point = new Point();
+            display.getSize(point);
+            screenWidth = point.x;
+            screenHeight = point.y;
+        } else {
+            screenWidth = display.getWidth();
+            screenHeight = display.getHeight();
+        }
 
+        return new int[]{screenWidth, screenHeight};
+    }
     /**
      * This method shows the softkeyboard
      *
@@ -1804,7 +1834,7 @@ public class AppUtils {
         boardingTellUsRequest.setMobile(mobileNumber);
         return boardingTellUsRequest;
     }
-    public static BoardingLookingForHowCanRequest boardingLookingHowCanFormDataRequestBuilder(Set<Long> opportunityids) {
+    public  BoardingLookingForHowCanRequest boardingLookingHowCanFormDataRequestBuilder(Set<Long> opportunityids) {
         BoardingLookingForHowCanRequest boardingLookingForHowCanRequest = new BoardingLookingForHowCanRequest();
         AppUtils appUtils = AppUtils.getInstance();
         //TODO:: check real data

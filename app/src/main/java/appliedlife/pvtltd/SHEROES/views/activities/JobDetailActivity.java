@@ -121,7 +121,7 @@ public class JobDetailActivity extends BaseActivity implements  AppBarLayout.OnO
     @OnClick(R.id.iv_job_detail_back)
     public void onBackClick() {
         if(mJobId>0) {
-            if (mFromNotification == AppConstants.TWO_CONSTANT) {
+            if (mFromNotification == AppConstants.NO_REACTION_CONSTANT) {
                 Intent intent = new Intent(this, HomeActivity.class);
                 startActivity(intent);
             } else {

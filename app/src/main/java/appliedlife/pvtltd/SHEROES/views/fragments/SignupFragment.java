@@ -184,7 +184,6 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
         mFbSignUp.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
         fbSignIn();
         ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_SIGN_UP_FORM));
-
         return view;
     }
 

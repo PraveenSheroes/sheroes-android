@@ -18,6 +18,9 @@ public class MoEngageConstants {
     public static final String SIGN_UP_USING = "signed up using";
     public static final String EMAIL = "email";
     public static final String LOGGED_IN_USING = "logged in using";
+    public static final String CURRENT_STATUS = "current status";
+    public static final String LOCATION = "location";
+    public static final String LOOKING_FOR = "looking for";
     public static final String TIME_SPENT = "time spent";
     public static final String COMPLETION_TIME = "completion time";
     public static final String ENTITY = "entity";

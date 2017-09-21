@@ -54,6 +54,7 @@ public class AppConstants {
     public static final String DASH = "-";
     public static final String DOTS = "...";
     public static final String S = "s";
+    public static final String WATCH = "watch";
     public static final String SHARE_MENU_TYPE = "text/plain";
     public static final String FOR_ALL = "All";
     public static final String FEED_SUB_TYPE = "F";

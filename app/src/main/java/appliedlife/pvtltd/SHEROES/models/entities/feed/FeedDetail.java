@@ -15,12 +15,13 @@ import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeDataItem;
 import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroData;
 
 public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
-    int imageHeight=600;
-    int itemPosition;
-    boolean isLongPress;
-    String callFromName;
-    boolean isTrending;
-    boolean isFromHome;
+    private int imageHeight = 600;
+    private int imageWidth = 300;
+    private int itemPosition;
+    private boolean isLongPress;
+    private String callFromName;
+    private boolean isTrending;
+    private boolean isFromHome;
     private AppIntroData appIntroDataItems = null;
 
     @SerializedName("is_spam_post_b")
@@ -572,7 +573,6 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
     @SerializedName("is_comment_allowed_b")
     @Expose
     private boolean isCommentAllowed;
-
 
 
     public int getItemPosition() {
@@ -1999,6 +1999,14 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         isCommentAllowed = commentAllowed;
     }
 
+    public int getImageWidth() {
+        return imageWidth;
+    }
+
+    public void setImageWidth(int imageWidth) {
+        this.imageWidth = imageWidth;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -2008,6 +2016,7 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
         dest.writeInt(this.imageHeight);
+        dest.writeInt(this.imageWidth);
         dest.writeInt(this.itemPosition);
         dest.writeByte(this.isLongPress ? (byte) 1 : (byte) 0);
         dest.writeString(this.callFromName);
@@ -2189,6 +2198,7 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
     protected FeedDetail(Parcel in) {
         super(in);
         this.imageHeight = in.readInt();
+        this.imageWidth = in.readInt();
         this.itemPosition = in.readInt();
         this.isLongPress = in.readByte() != 0;
         this.callFromName = in.readString();

@@ -144,8 +144,7 @@
                     <ImageView
                         android:id="@+id/iv_post_link_thumbnail"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp_size_200"
-                        android:scaleType="center"
+                        android:layout_height="wrap_content"
                         android:background="@drawable/edit_text_line"
                         android:adjustViewBounds="true" />
 

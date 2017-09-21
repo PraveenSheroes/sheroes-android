@@ -21,6 +21,7 @@ import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -41,6 +42,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.OnBoardingData;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageEvent;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -106,6 +108,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
     private OnBoardingData mBoardingData;
     private MoEHelper mMoEHelper;
     private  PayloadBuilder payloadBuilder;
+    private MoEngageUtills moEngageUtills;
     private long launchTime;
     private long startedTime;
     @Override
@@ -116,6 +119,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
         ButterKnife.bind(this);
         mMoEHelper = MoEHelper.getInstance(this);
         payloadBuilder = new PayloadBuilder();
+        moEngageUtills = MoEngageUtills.getInstance();
         startedTime=System.currentTimeMillis();
         if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && null != mUserPreferenceMasterData.get().getData()) {
             mMasterDataResult = mUserPreferenceMasterData.get().getData();
@@ -558,6 +562,9 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
         mMoEHelper.trackEvent(MoEngageEvent.EVENT_VIEW_HOW_CAN_LOOKING_FOR.value, payloadBuilder.build());
         payloadBuilder.putAttrLong(MoEngageConstants.COMPLETION_TIME,totalTime);
         mMoEHelper.trackEvent(MoEngageEvent.EVENT_COMPLETED_ON_BOARDING.value, payloadBuilder.build());
+        HashMap hashMap=new HashMap<String,Object>();
+        hashMap.put(MoEngageConstants.LOOKING_FOR,mSelectedTag);
+        moEngageUtills.entityMoEngageLookingFor(this, mMoEHelper, payloadBuilder,hashMap);
         LoginResponse loginResponse = userPreference.get();
         loginResponse.setNextScreen(AppConstants.FEED_SCREEN);
         userPreference.set(loginResponse);

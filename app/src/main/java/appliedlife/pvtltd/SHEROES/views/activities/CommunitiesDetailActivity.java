@@ -703,7 +703,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
     public void onBackClick() {
         if(mCommunityId>0||mCommunityPostId>0)
         {
-            if(mFromNotification==AppConstants.TWO_CONSTANT) {
+            if(mFromNotification==AppConstants.NO_REACTION_CONSTANT) {
                 Intent intent = new Intent(this, HomeActivity.class);
                 startActivity(intent);
             }else

@@ -15,8 +15,10 @@ import android.widget.Toast;
 
 import com.f2prateek.rx.preferences.Preference;
 import com.moe.pushlibrary.MoEHelper;
+import com.moe.pushlibrary.PayloadBuilder;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import javax.inject.Inject;
@@ -33,6 +35,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataRespons
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.GetInterestJobResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.OnBoardingPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -76,7 +79,9 @@ public class OnBoardingTellUsAboutFragment extends BaseFragment implements OnBoa
     Preference<LoginResponse> userPreference;
     private LabelValue labelValue;
     private GetAllDataDocument getAllDataDocument;
-
+    private MoEHelper mMoEHelper;
+    private PayloadBuilder payloadBuilder;
+    private MoEngageUtills moEngageUtills;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -87,6 +92,13 @@ public class OnBoardingTellUsAboutFragment extends BaseFragment implements OnBoa
         } catch (InstantiationException exception) {
             LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
         }
+    }
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mMoEHelper = MoEHelper.getInstance(getActivity());
+        payloadBuilder = new PayloadBuilder();
+        moEngageUtills = MoEngageUtills.getInstance();
     }
 
     @Override
@@ -155,6 +167,7 @@ public class OnBoardingTellUsAboutFragment extends BaseFragment implements OnBoa
                 mOnBoardingPresenter.getCurrentDataStatusToPresenter(boardingTellUsFormDataRequestBuilder(AppConstants.CURRENT_STATUS, AppConstants.CURRENT_STATUS_TYPE, labelValue, getAllDataDocument, mMobileNumber.getText().toString()));
                 MoEHelper mMoEHelper = MoEHelper.getInstance(getActivity());
                 mMoEHelper.setNumber(mMobileNumber.getText().toString());
+                moEngageUtills.entityMoEngageCurrentStatus(getActivity(), mMoEHelper, payloadBuilder,mCurrentStatus.getText().toString(),mLocation.getText().toString());
                 if (null != userPreference && userPreference.isSet() && null != userPreference.get()) {
                     LoginResponse loginResponse = userPreference.get();
                     if (null != loginResponse && null != loginResponse.getUserSummary()) {

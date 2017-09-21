@@ -98,6 +98,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
         mMoEHelper = MoEHelper.getInstance(getActivity());
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_LOGIN));
     }
 
     @Override
@@ -113,7 +114,6 @@ public class LoginFragment extends BaseFragment implements LoginView {
         mPasswordView.getBackground().setColorFilter(getResources().getColor(R.color.blue), PorterDuff.Mode.SRC_ATOP);
         setProgressBar(mProgressBar);
         //  mLoginPresenter.getMasterDataToPresenter();
-        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_LOGIN));
         return view;
     }
 

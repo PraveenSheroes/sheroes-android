@@ -6,6 +6,7 @@ import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
@@ -74,7 +75,13 @@ public class MoEngageUtills {
         payloadBuilder.putAttrString(MoEngageConstants.LOGGED_IN_USING, loginSource);
         mMoEHelper.trackEvent(MoEngageEvent.EVENT_LOGGED_IN.value, payloadBuilder.build());
     }
-
+    public void entityMoEngageCurrentStatus(Context context, MoEHelper mMoEHelper, PayloadBuilder payloadBuilder, String currentStatus,String location) {
+        mMoEHelper.setUserAttribute(MoEngageConstants.CURRENT_STATUS,currentStatus);
+        mMoEHelper.setUserAttribute(MoEngageConstants.LOCATION,location);
+    }
+    public void entityMoEngageLookingFor(Context context, MoEHelper mMoEHelper, PayloadBuilder payloadBuilder,HashMap<String,Object> hashMap) {
+        mMoEHelper.setUserAttribute(hashMap);
+    }
     public void entityMoEngageSignUp(Context context, MoEHelper mMoEHelper, PayloadBuilder payloadBuilder, String loginSource) {
         payloadBuilder.putAttrString(MoEngageConstants.SIGN_UP_USING, loginSource);
         mMoEHelper.trackEvent(MoEngageEvent.EVENT_SIGNED_UP.value, payloadBuilder.build());

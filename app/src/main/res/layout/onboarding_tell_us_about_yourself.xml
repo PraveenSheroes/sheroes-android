@@ -18,6 +18,7 @@
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_size_10"
                 android:layout_gravity="center_horizontal">
 
                 <ImageView

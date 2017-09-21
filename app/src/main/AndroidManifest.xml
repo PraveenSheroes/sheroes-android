@@ -97,6 +97,7 @@
 
         <activity
             android:name="com.moe.pushlibrary.activities.MoEActivity"
+
             android:parentActivityName="appliedlife.pvtltd.SHEROES.views.activities.HomeActivity">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
@@ -155,7 +156,8 @@
 
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.HomeActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask"/>
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.SettingPreferencesActivity"
             android:screenOrientation="portrait" />

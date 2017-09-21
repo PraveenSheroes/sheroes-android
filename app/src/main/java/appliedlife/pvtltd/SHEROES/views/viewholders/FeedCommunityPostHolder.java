@@ -277,11 +277,13 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     @OnClick(R.id.card_post_link_render)
     public void tvLinkClick() {
         if (null != dataItem && dataItem.isOgVideoLinkB() && StringUtil.isNotNullOrEmptyString(dataItem.getOgRequestedUrlS())) {
-            Intent youTube = new Intent(mContext, VideoPlayActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString(AppConstants.YOUTUBE_VIDEO_CODE, dataItem.getOgRequestedUrlS());
-            youTube.putExtras(bundle);
-            mContext.startActivity(youTube);
+            if(dataItem.getOgRequestedUrlS().contains(AppConstants.WATCH)) {
+                Intent youTube = new Intent(mContext, VideoPlayActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString(AppConstants.YOUTUBE_VIDEO_CODE, dataItem.getOgRequestedUrlS());
+                youTube.putExtras(bundle);
+                mContext.startActivity(youTube);
+            }
         } else {
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(dataItem.getOgRequestedUrlS()));
             mContext.startActivity(browserIntent);
@@ -719,7 +721,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         View child = layoutInflater.inflate(R.layout.feed_community_post_single_image, null);
        final ImageView ivFirstLandscape = (ImageView) child.findViewById(R.id.iv_feed_community_post_single);
         final  FrameLayout flShadow=(FrameLayout) child.findViewById(R.id.fl_shadow_image);
-        flShadow.getLayoutParams().height=dataItem.getImageHeight();
+        int width=AppUtils.getWindowHeight(mContext);
+        flShadow.getLayoutParams().height=(dataItem.getImageHeight()/dataItem.getImageWidth())*width;
         Glide.with(context)
                 .load(firstImage).asBitmap()
                 .into(new SimpleTarget<Bitmap>() {
@@ -773,7 +776,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         View child = layoutInflater.inflate(R.layout.feed_community_post_first_landscape_with_two_images, null);
         final ImageView ivFirstLandscape = (ImageView) child.findViewById(R.id.iv_feed_community_post_first_landscape_with_two_images);
         final  FrameLayout flShadowPostFirst=(FrameLayout) child.findViewById(R.id.fl_shadow_image_with_landscap);
-       flShadowPostFirst.getLayoutParams().height=dataItem.getImageHeight();
+        int width=AppUtils.getWindowHeight(mContext);
+        flShadowPostFirst.getLayoutParams().height=(dataItem.getImageHeight()/dataItem.getImageWidth())*width;
         ivFirstLandscape.setOnClickListener(this);
         Glide.with(context)
                 .load(firstImage).asBitmap()
@@ -846,7 +850,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         }
       final   ImageView ivFirstLandscape = (ImageView) child.findViewById(R.id.iv_feed_community_post_first_landscape);
         final  FrameLayout flShadowPostFirst=(FrameLayout) child.findViewById(R.id.fl_shadow_image_with_multiple_landscap);
-        flShadowPostFirst.getLayoutParams().height=dataItem.getImageHeight();
+        int width=AppUtils.getWindowHeight(mContext);
+        flShadowPostFirst.getLayoutParams().height=(dataItem.getImageHeight()/dataItem.getImageWidth())*width;
         ivFirstLandscape.setOnClickListener(this);
         Glide.with(context)
                 .load(firstImage).asBitmap()
@@ -858,8 +863,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                         flShadowPostFirst.setVisibility(View.GONE);
                     }
                 });
-
-
 
       final  ImageView ivSecond = (ImageView) child.findViewById(R.id.iv_feed_community_post_second_image_landscape);
         final  FrameLayout flShadowPostSecondLandscapMultiple=(FrameLayout) child.findViewById(R.id.fl_shadow_image_post_second_landscap_multiple);

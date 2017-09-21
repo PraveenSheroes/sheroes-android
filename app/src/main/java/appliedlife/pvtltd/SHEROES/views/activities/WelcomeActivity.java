@@ -187,9 +187,9 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                     getGcmId();
                 }
             }
-
+            ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_INTRO_SCREEN));
         }
-        ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_INTRO_SCREEN));
+
     }
 
     private void getGcmId() {
