@@ -167,6 +167,11 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
             mAdapter.notifyDataSetChanged();
         } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
             mLiNoResult.setVisibility(View.VISIBLE);
+        }else
+        {
+            List<FeedDetail> data=mPullRefreshList.getFeedResponses();
+            data.remove(data.size()-1);
+            mAdapter.notifyDataSetChanged();
         }
         mSwipeView.setRefreshing(false);
     }

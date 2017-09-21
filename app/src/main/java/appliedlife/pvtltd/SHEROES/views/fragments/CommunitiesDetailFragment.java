@@ -324,7 +324,16 @@ public class CommunitiesDetailFragment extends BaseFragment {
                 mFragmentListRefreshData.setPageNo(++mPageNo);
                 mProgressBar.setVisibility(View.GONE);
                 mPullRefreshList.allListData(feedDetailList);
-                mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
+                List<FeedDetail> data=null;
+                FeedDetail feedProgressBar=new FeedDetail();
+                feedProgressBar.setSubType(AppConstants.FEED_PROGRESS_BAR);
+                data=mPullRefreshList.getFeedResponses();
+                int position=data.size()- feedDetailList.size();
+                if(position>0) {
+                    data.remove(position-1);
+                }
+                data.add(feedProgressBar);
+                mAdapter.setSheroesGenericListData(data);
                 mAdapter.notifyDataSetChanged();
                 if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getCallFromName()) && mFeedDetail.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
                     if (feedResponsePojo.getNumFound() > 0) {
@@ -379,7 +388,16 @@ public class CommunitiesDetailFragment extends BaseFragment {
                     mFragmentListRefreshData.setPageNo(++mPageNo);
                     mProgressBar.setVisibility(View.GONE);
                     mPullRefreshList.allListData(feedDetailList);
-                    mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
+                    List<FeedDetail> data=null;
+                    FeedDetail feedProgressBar=new FeedDetail();
+                    feedProgressBar.setSubType(AppConstants.FEED_PROGRESS_BAR);
+                    data=mPullRefreshList.getFeedResponses();
+                    int position=data.size()- feedDetailList.size();
+                    if(position>0) {
+                        data.remove(position-1);
+                    }
+                    data.add(feedProgressBar);
+                    mAdapter.setSheroesGenericListData(data);
                     mAdapter.setUserId(mUserId);
                     mAdapter.notifyDataSetChanged();
                 }
@@ -406,6 +424,11 @@ public class CommunitiesDetailFragment extends BaseFragment {
             } catch (CloneNotSupportedException e) {
                 e.printStackTrace();
             }
+        }else
+        {
+            List<FeedDetail> data=mPullRefreshList.getFeedResponses();
+            data.remove(data.size()-1);
+            mAdapter.notifyDataSetChanged();
         }
         mSwipeView.setRefreshing(false);
     }

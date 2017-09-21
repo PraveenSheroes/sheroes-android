@@ -410,7 +410,9 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 break;
             case R.id.tv_feed_community_post_card_title:
                 if(mFeedDetail.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID){
-                    openGenericCardInWebView(mFeedDetail.getDeepLinkUrl(),mFeedDetail.getPostCommunityName());
+                    if(null!=mFeedDetail) {
+                        openGenericCardInWebView(mFeedDetail);
+                    }
                 }else {
                     Intent intentFromCommunityPost = new Intent(this, CommunitiesDetailActivity.class);
                     Bundle bundleFromPost = new Bundle();
@@ -423,37 +425,32 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 }
                 break;
             case R.id.tv_feed_review_card_title:
-                openGenericCardInWebView(mFeedDetail.getDeepLinkUrl(),mFeedDetail.getPostCommunityName());
+                if(null!=mFeedDetail) {
+                    openGenericCardInWebView(mFeedDetail);
+                }
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + id);
         }
     }
 
-    private DialogFragment openGenericCardInWebView(String url, String title){
-
-       /*// GenericWebViewFragment genericWebViewFragment = new GenericWebViewFragment();
-        mFragmentOpen.setGenericWebViewFragment(true);
-        //Bundle bundle = new Bundle();
-        //bundle.putString(AppConstants.WEB_URL,url);
-        genericWebViewFragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.bottom_to_top_slide_reverse_anim)
-                .replace(R.id.fl_feed_comments, genericWebViewFragment, GenericWebViewFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
-*/
-
-        genericWebViewFragment = (GenericWebViewFragment) getFragmentManager().findFragmentByTag(GenericWebViewFragment.class.getName());
-        if(genericWebViewFragment == null) {
-            genericWebViewFragment = new GenericWebViewFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString(AppConstants.WEB_URL, url);
-            bundle.putString(AppConstants.WEB_TITLE, title);
-            genericWebViewFragment.setArguments(bundle);
-        }
-        if (!genericWebViewFragment.isVisible() && !genericWebViewFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
-            genericWebViewFragment.show(getFragmentManager(), GenericWebViewFragment.class.getName());
-        }
-        return genericWebViewFragment;
-
+    private DialogFragment openGenericCardInWebView(FeedDetail feedDetail){
+       if(StringUtil.isNotNullOrEmptyString(feedDetail.getDeepLinkUrl())) {
+           genericWebViewFragment = (GenericWebViewFragment) getFragmentManager().findFragmentByTag(GenericWebViewFragment.class.getName());
+           if (genericWebViewFragment == null) {
+               genericWebViewFragment = new GenericWebViewFragment();
+               Bundle bundle = new Bundle();
+               bundle.putString(AppConstants.WEB_URL, feedDetail.getDeepLinkUrl());
+               bundle.putString(AppConstants.WEB_TITLE, feedDetail.getPostCommunityName());
+               genericWebViewFragment.setArguments(bundle);
+           }
+           if (!genericWebViewFragment.isVisible() && !genericWebViewFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
+               genericWebViewFragment.show(getFragmentManager(), GenericWebViewFragment.class.getName());
+           }
+           return genericWebViewFragment;
+       }else {
+           return null;
+       }
     }
 
 

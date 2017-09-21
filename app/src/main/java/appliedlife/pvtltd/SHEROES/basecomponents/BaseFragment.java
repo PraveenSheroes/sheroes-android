@@ -295,6 +295,9 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
             // mLiNoResult.setVisibility(View.VISIBLE);
         } else {
             mLiNoResult.setVisibility(View.GONE);
+            List<FeedDetail> data=mPullRefreshList.getFeedResponses();
+            data.remove(data.size()-1);
+            mAdapter.notifyDataSetChanged();
         }
         mSwipeView.setRefreshing(false);
     }

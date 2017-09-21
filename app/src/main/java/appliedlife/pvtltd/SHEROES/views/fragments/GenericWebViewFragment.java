@@ -37,7 +37,7 @@ public class GenericWebViewFragment extends BaseDialogFragment {
         SheroesApplication.getAppComponent(getActivity()).inject(this);
         View view = inflater.inflate(R.layout.generic_web_view_fragment, container, false);
         ButterKnife.bind(this, view);
-        if(getArguments().getString(AppConstants.WEB_URL) != null && getArguments().getString(AppConstants.WEB_TITLE) != null) {
+        if(null!=getArguments()) {
             String mWebUrl = getArguments().getString(AppConstants.WEB_URL);
             String mWebTitle = getArguments().getString(AppConstants.WEB_TITLE);
             tvTitleGeneric.setText(mWebTitle);
