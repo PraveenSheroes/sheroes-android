@@ -3,8 +3,8 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
     <include
-        android:id="@+id/rl_header_bell"
-        layout="@layout/setting_header"
+        android:id="@+id/rl_generic_header"
+        layout="@layout/generic_fragment_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="start|top" />

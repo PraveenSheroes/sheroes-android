@@ -410,7 +410,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 break;
             case R.id.tv_feed_community_post_card_title:
                 if(mFeedDetail.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID){
-                    openGenericCardInWebView(mFeedDetail.getDeepLinkUrl());
+                    openGenericCardInWebView(mFeedDetail.getDeepLinkUrl(),mFeedDetail.getPostCommunityName());
                 }else {
                     Intent intentFromCommunityPost = new Intent(this, CommunitiesDetailActivity.class);
                     Bundle bundleFromPost = new Bundle();
@@ -423,14 +423,14 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 }
                 break;
             case R.id.tv_feed_review_card_title:
-                openGenericCardInWebView(mFeedDetail.getDeepLinkUrl());
+                openGenericCardInWebView(mFeedDetail.getDeepLinkUrl(),mFeedDetail.getPostCommunityName());
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + id);
         }
     }
 
-    private DialogFragment openGenericCardInWebView(String url){
+    private DialogFragment openGenericCardInWebView(String url, String title){
 
        /*// GenericWebViewFragment genericWebViewFragment = new GenericWebViewFragment();
         mFragmentOpen.setGenericWebViewFragment(true);
@@ -446,6 +446,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
             genericWebViewFragment = new GenericWebViewFragment();
             Bundle bundle = new Bundle();
             bundle.putString(AppConstants.WEB_URL, url);
+            bundle.putString(AppConstants.WEB_TITLE, title);
             genericWebViewFragment.setArguments(bundle);
         }
         if (!genericWebViewFragment.isVisible() && !genericWebViewFragment.isAdded() && !isFinishing() && !mIsDestroyed) {

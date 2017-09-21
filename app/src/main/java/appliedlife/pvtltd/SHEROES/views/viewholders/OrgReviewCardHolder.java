@@ -264,6 +264,9 @@ public class OrgReviewCardHolder extends BaseViewHolder<FeedDetail> {
     }
 
 
+
+
+
     private void clickOnMentorAndCommunityName(String nameAndCommunity, String feedTitle, String postedIn) {
 
         SpannableString SpanString = new SpannableString(nameAndCommunity);
@@ -331,6 +334,71 @@ public class OrgReviewCardHolder extends BaseViewHolder<FeedDetail> {
 
         }
     }
+
+
+    @OnClick(R.id.tv_feed_review_post_view_more)
+    public void textViewMoreClick() {
+        mViewMoreDescription=dataItem.getListDescription();
+        if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
+            int index = 0;
+            int lengthOfDesc = mViewMoreDescription.length();
+            try {
+                if (lengthOfDesc < AppConstants.WORD_LENGTH) {
+                    if (mViewMoreDescription.contains(AppConstants.SLASH_N))
+                        index = AppUtils.findNthIndexOf(mViewMoreDescription, AppConstants.SLASH_N, 1);
+                }
+            } catch (Exception e) {
+
+            }
+            if (lengthOfDesc > AppConstants.WORD_LENGTH || index > 0 && index < 50) {
+                viewMoreTextClick();
+            }
+        }
+    }
+
+
+    private void viewMoreTextClick() {
+        if (tvReviewPostMoreText.getTag().toString().equalsIgnoreCase(mViewMore)) {
+            tvReviewPostMoreText.setText(mContext.getString(R.string.ID_LESS));
+            tvReviewPostMoreText.setTag(mLess);
+            tvReviewPostText.setTag(mLess);
+            tvReviewPostFullText.setTag(mLess);
+            tvReviewPostFullText.setVisibility(View.VISIBLE);
+            tvReviewPostText.setVisibility(View.GONE);
+            tvReviewPostFullText.setText(StringEscapeUtils.unescapeHtml4(mViewMoreDescription));
+            tvReviewPostFullText.scrollTo(0, 0);
+        } else {
+            mViewMoreDescription=dataItem.getShortDescription();
+            tvReviewPostFullText.setVisibility(View.GONE);
+            tvReviewPostText.setVisibility(View.VISIBLE);
+            tvReviewPostText.setTag(mViewMore);
+            tvReviewPostFullText.setTag(mViewMore);
+            int index = 0;
+            int lengthOfDesc = mViewMoreDescription.length();
+            try {
+                if (lengthOfDesc < AppConstants.WORD_LENGTH) {
+                    if (mViewMoreDescription.contains(AppConstants.SLASH_N))
+                        index = AppUtils.findNthIndexOf(mViewMoreDescription, AppConstants.SLASH_N, 1);
+                }
+            } catch (Exception e) {
+
+            }
+            if (lengthOfDesc > AppConstants.WORD_LENGTH || index > 0 && index < 50) {
+                tvReviewPostMoreText.setVisibility(View.VISIBLE);
+                tvReviewPostMoreText.setText(mContext.getString(R.string.ID_VIEW_MORE));
+                tvReviewPostMoreText.setTag(mViewMore);
+                tvReviewPostText.setText(StringEscapeUtils.unescapeHtml4(mViewMoreDescription));
+                tvReviewPostFullText.scrollTo(0, 0);
+            } else {
+                tvReviewPostMoreText.setVisibility(View.GONE);
+                tvReviewPostMoreText.setText(mContext.getString(R.string.ID_LESS));
+                tvReviewPostMoreText.setTag(mLess);
+                tvReviewPostFullText.setText(StringEscapeUtils.unescapeHtml4(mViewMoreDescription));
+                tvReviewPostText.scrollTo(0, 0);
+            }
+        }
+    }
+
 
     @Override
     public void onClick(View view) {
