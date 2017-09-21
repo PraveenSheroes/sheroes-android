@@ -46,9 +46,6 @@ public class OrgReviewCardHolder extends BaseViewHolder<FeedDetail> {
     BaseHolderInterface viewInterface;
     @Inject
     DateUtil mDateUtil;
-
-
-
     //Organisations handling
     @Bind(R.id.iv_feed_review_post_author_icon)
     CircleImageView ivReviewPostAuthor;
@@ -114,8 +111,6 @@ public class OrgReviewCardHolder extends BaseViewHolder<FeedDetail> {
 
 
     private void organisationReviewPostUI(Context context){
-
-
         mViewMore = context.getString(R.string.ID_VIEW_MORE);
         mLess = context.getString(R.string.ID_LESS);
         tvReviewPostText.setTag(mViewMore);
@@ -174,8 +169,6 @@ public class OrgReviewCardHolder extends BaseViewHolder<FeedDetail> {
             if (StringUtil.isNotNullOrEmptyString(dataItem.getSolrIgnorePostCommunityLogo())) {
                 Glide.with(context)
                         .load(dataItem.getSolrIgnorePostCommunityLogo())
-                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                        .skipMemoryCache(true)
                         .into(ivCompanyThumbnail);
             }
             if (!dataItem.isCommentAllowed()) {
@@ -194,19 +187,20 @@ public class OrgReviewCardHolder extends BaseViewHolder<FeedDetail> {
             } catch (Exception e) {
 
             }
-            tvReviewPostFullText.setVisibility(View.GONE);
-            tvReviewPostText.setVisibility(View.VISIBLE);
             if (lengthOfDesc > AppConstants.WORD_LENGTH || index > 0 && index < 50) {
                 tvReviewPostMoreText.setVisibility(View.VISIBLE);
                 tvReviewPostMoreText.setTag(mViewMore);
                 tvReviewPostMoreText.setText(mContext.getString(R.string.ID_VIEW_MORE));
-                tvReviewPostMoreText.setText(StringEscapeUtils.unescapeHtml4(mViewMoreDescription));
-
+                tvReviewPostText.setText(StringEscapeUtils.unescapeHtml4(mViewMoreDescription));
+                tvReviewPostFullText.setVisibility(View.GONE);
+                tvReviewPostText.setVisibility(View.VISIBLE);
             } else {
                 tvReviewPostMoreText.setText(mContext.getString(R.string.ID_LESS));
                 tvReviewPostMoreText.setTag(mLess);
                 tvReviewPostMoreText.setVisibility(View.GONE);
-                tvReviewPostText.setText(StringEscapeUtils.unescapeHtml4(mViewMoreDescription));
+                tvReviewPostFullText.setVisibility(View.VISIBLE);
+                tvReviewPostText.setVisibility(View.GONE);
+                tvReviewPostFullText.setText(StringEscapeUtils.unescapeHtml4(mViewMoreDescription));
             }
 
         } else {

@@ -59,7 +59,8 @@ public class AppConstants {
     public static final String DASH = "-";
     public static final String DOTS = "...";
     public static final String S = "s";
-    public static final String WATCH = "youtube.com/user";
+    public static final String USER_YOU_TUBE = "youtube.com/user";
+    public static final String CHANNEL_YOU_TUBE = "youtube.com/channel";
     public static final String SHARE_MENU_TYPE = "text/plain";
     public static final String FOR_ALL = "All";
     public static final String FEED_SUB_TYPE = "F";
@@ -373,4 +374,5 @@ public class AppConstants {
     public static final long ORGANISATION_COMMUNITY_TYPE_ID = 10L;
     public static final String orgUserType = "organisations_test_user";
     public static final String WEB_URL = "web_view_url";
+    public static final String WEB_TITLE = "web_title";
 }

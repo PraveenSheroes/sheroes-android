@@ -279,7 +279,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     @OnClick(R.id.card_post_link_render)
     public void tvLinkClick() {
         if (null != dataItem && dataItem.isOgVideoLinkB() && StringUtil.isNotNullOrEmptyString(dataItem.getOgRequestedUrlS())) {
-            if(!dataItem.getOgRequestedUrlS().contains(AppConstants.WATCH)) {
+            if(!dataItem.getOgRequestedUrlS().contains(AppConstants.USER_YOU_TUBE)||!dataItem.getOgRequestedUrlS().contains(AppConstants.CHANNEL_YOU_TUBE)) {
                 Intent youTube = new Intent(mContext, VideoPlayActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString(AppConstants.YOUTUBE_VIDEO_CODE, dataItem.getOgRequestedUrlS());

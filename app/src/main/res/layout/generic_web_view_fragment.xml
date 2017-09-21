@@ -12,5 +12,4 @@
         android:id="@+id/generic_web_view"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"/>
-
 </LinearLayout>

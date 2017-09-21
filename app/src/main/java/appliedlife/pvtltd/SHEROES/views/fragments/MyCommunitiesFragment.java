@@ -138,13 +138,18 @@ public class MyCommunitiesFragment extends BaseFragment implements HomeView {
             mPageNo = mFragmentListRefreshData.getPageNo();
             mFragmentListRefreshData.setPageNo(++mPageNo);
             mPullRefreshList.allListData(feedDetailList);
-            mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
+            List<FeedDetail> data=null;
+            FeedDetail feedProgressBar=new FeedDetail();
+            feedProgressBar.setSubType(AppConstants.FEED_PROGRESS_BAR);
+            data=mPullRefreshList.getFeedResponses();
+            int position=data.size()- feedDetailList.size();
+            if(position>0) {
+                data.remove(position-1);
+            }
+            data.add(feedProgressBar);
+            mAdapter.setSheroesGenericListData(data);
             mAdapter.notifyDataSetChanged();
-          /*  if (!mPullRefreshList.isPullToRefresh()) {
-                mLayoutManager.scrollToPositionWithOffset(mPullRefreshList.getFeedResponses().size() - feedDetailList.size(), 0);
-            } else {
-                mLayoutManager.scrollToPositionWithOffset(0, 0);
-            }*/
+
         } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
             mLiNoResult.setVisibility(View.VISIBLE);
         }
