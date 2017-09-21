@@ -26,6 +26,7 @@ import appliedlife.pvtltd.SHEROES.utils.AnnotationExclusionStrategy;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
+import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.Cache;
@@ -36,6 +37,8 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
+
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
 
 /**
  * Created by Praveen Singh on 29/12/2016.
@@ -71,15 +74,25 @@ public class SheroesAppModule {
             @Override
             public okhttp3.Response intercept(Chain chain) throws IOException {
                 Request original = chain.request();
+                Request.Builder builder=original.newBuilder();
                 Request request;
                 if (null != userPreference && userPreference.isSet() && null != userPreference.get()) {
-                    request = original.newBuilder().header("Content-Type", "application/json")
-                            .header("Authorization", userPreference.get().getToken())
-                            .build();
+                     builder.header("Content-Type", "application/json")
+                            .header("Authorization", userPreference.get().getToken());
                 } else {
-                    request = original.newBuilder().header("Content-Type", "application/json")
-                            .build();
+                     builder.header("Content-Type", "application/json");
                 }
+
+                if (!NetworkUtil.isConnected(mApplication)) {
+                   // int maxAge =AppConstants.NO_REACTION_CONSTANT; // read from cache for 0 minute if connected
+                    // builder.addHeader("Cache-Control", "public, max-age=" + maxAge);
+                }else
+                {
+                   // int maxStale = AppConstants.SECONDS_IN_MIN * AppConstants.MINUTES_IN_HOUR * AppConstants.HOURS_IN_DAY * AppConstants.CACHE_VALID_DAYS; // tolerate 2-weeks stale
+                    // builder.addHeader("Cache-Control","public, only-if-cached, max-stale=" + maxStale);
+                }
+                request=builder.build();
+
                 okhttp3.Response response = chain.proceed(request);
                 response.cacheResponse();
                 // Customize or return the response

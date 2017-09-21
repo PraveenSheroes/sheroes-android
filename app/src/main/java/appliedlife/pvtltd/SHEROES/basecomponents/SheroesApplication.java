@@ -84,12 +84,12 @@ public class SheroesApplication extends MultiDexApplication  {
     }
     public void trackUserId(String userId) {
         Tracker t = getGoogleAnalyticsTracker();
-        t.set("&cid", userId);
-        t.send(new HitBuilders.EventBuilder()
+        t.set("&uid", userId);
+       t.send(new HitBuilders.EventBuilder()
                 .setCategory("UX")
                 .setAction("User Sign In")
                 .build());
-        t.send(new HitBuilders.ScreenViewBuilder().build());
+
     }
     /***
      * Tracking screen view

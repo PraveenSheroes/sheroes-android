@@ -25,6 +25,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.f2prateek.rx.preferences.Preference;
+import com.moe.pushlibrary.MoEHelper;
+import com.moe.pushlibrary.PayloadBuilder;
 import com.moengage.push.PushManager;
 
 import java.util.ArrayList;
@@ -55,6 +57,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.InstallUpdateForMoEngage
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostResponse;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.CreateCommunityPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.service.GCMClientManager;
@@ -132,6 +135,17 @@ public class HomeFragment extends BaseFragment {
     private int mPercentCompleted;
     private long mChallengeId;
     private boolean mIsSpam;
+    private MoEHelper mMoEHelper;
+    private PayloadBuilder payloadBuilder;
+    private MoEngageUtills moEngageUtills;
+    private long startedTime;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mMoEHelper = MoEHelper.getInstance(getActivity());
+        payloadBuilder = new PayloadBuilder();
+        moEngageUtills = MoEngageUtills.getInstance();
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -142,6 +156,7 @@ public class HomeFragment extends BaseFragment {
             mFeedDetail = bundle.getParcelable(AppConstants.HOME_FRAGMENT);
             mChallengeId = bundle.getLong(AppConstants.CHALLENGE_ID);
         }
+        startedTime = System.currentTimeMillis();
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.HOME_FRAGMENT, AppConstants.NO_REACTION_CONSTANT);
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
@@ -202,8 +217,9 @@ public class HomeFragment extends BaseFragment {
         try {
             getGcmId();
         } catch (Exception e) {
-
         }
+        long timeSpentFeed = System.currentTimeMillis() - startedTime;
+        moEngageUtills.entityMoEngageViewFeed(getActivity(), mMoEHelper, payloadBuilder, timeSpentFeed);
         ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_FEED_IMPRESSION));
         mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -213,7 +229,6 @@ public class HomeFragment extends BaseFragment {
         });
         return view;
     }
-
     private void getGcmId() {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);

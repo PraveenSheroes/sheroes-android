@@ -445,38 +445,41 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
                         loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
                         loginResponse.setGcmId(mGcmId);
                         moEngageUtills.entityMoEngageUserAttribute(getActivity(), mMoEHelper, payloadBuilder, loginResponse);
-                        if (mSignUpVia == AppConstants.ONE_CONSTANT) {
-                            ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_SIGN_UP, GoogleAnalyticsEventActions.SIGN_UP_WITH_EMAIL, AppConstants.EMPTY_STRING);
-                        }
                         if (StringUtil.isNotNullOrEmptyString(mobileNo)) {
                             mMoEHelper.setNumber(mobileNo);
+
+                        }
+                        if (mSignUpVia == AppConstants.ONE_CONSTANT) {
+                            ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_SIGN_UP, GoogleAnalyticsEventActions.SIGN_UP_WITH_EMAIL, AppConstants.EMPTY_STRING);
+                        }else
+                        {
+                            if (null != loginResponse.getUserSummary() && null != loginResponse.getUserSummary().getUserBO() && StringUtil.isNotNullOrEmptyString(loginResponse.getUserSummary().getUserBO().getCrdt())) {
+                                long createdDate = Long.parseLong(loginResponse.getUserSummary().getUserBO().getCrdt());
+                                if (createdDate<currentTime) {
+                                    moEngageUtills.entityMoEngageLoggedIn(getActivity(), mMoEHelper, payloadBuilder, loginViaSocial);
+                                    if(loginViaSocial==MoEngageConstants.FACEBOOK)
+                                    {
+                                        ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_WITH_FACEBOOK, AppConstants.EMPTY_STRING);
+                                    }else
+                                    {
+                                        ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_WITH_GOOGLE, AppConstants.EMPTY_STRING);
+                                    }
+
+                                } else {
+                                    moEngageUtills.entityMoEngageSignUp(getActivity(), mMoEHelper, payloadBuilder, loginViaSocial);
+                                    if(loginViaSocial==MoEngageConstants.FACEBOOK)
+                                    {
+                                        ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_SIGN_UP, GoogleAnalyticsEventActions.SIGN_UP_WITH_FACEBOOK, AppConstants.EMPTY_STRING);
+                                    }else
+                                    {
+                                        ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_SIGN_UP, GoogleAnalyticsEventActions.SIGN_UP_WITH_GOOGLE, AppConstants.EMPTY_STRING);
+                                    }
+                                }
+                                ((SheroesApplication) getActivity().getApplication()).trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
+                            }
+                            mMoEHelper.setUserAttribute(MoEngageConstants.ACQUISITION_CHANNEL, loginViaSocial);
                         }
                         mUserPreference.set(loginResponse);
-                        if (null != loginResponse.getUserSummary() && null != loginResponse.getUserSummary().getUserBO() && StringUtil.isNotNullOrEmptyString(loginResponse.getUserSummary().getUserBO().getCrdt())) {
-                            long createdDate = Long.parseLong(loginResponse.getUserSummary().getUserBO().getCrdt());
-                            if (createdDate<currentTime) {
-                                moEngageUtills.entityMoEngageLoggedIn(getActivity(), mMoEHelper, payloadBuilder, loginViaSocial);
-                                if(loginViaSocial==MoEngageConstants.FACEBOOK)
-                                {
-                                    ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_WITH_FACEBOOK, AppConstants.EMPTY_STRING);
-                                }else
-                                {
-                                    ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_WITH_GOOGLE, AppConstants.EMPTY_STRING);
-                                }
-
-                            } else {
-                                moEngageUtills.entityMoEngageSignUp(getActivity(), mMoEHelper, payloadBuilder, loginViaSocial);
-                                if(loginViaSocial==MoEngageConstants.FACEBOOK)
-                                {
-                                    ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_SIGN_UP, GoogleAnalyticsEventActions.SIGN_UP_WITH_FACEBOOK, AppConstants.EMPTY_STRING);
-                                }else
-                                {
-                                    ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_SIGN_UP, GoogleAnalyticsEventActions.SIGN_UP_WITH_GOOGLE, AppConstants.EMPTY_STRING);
-                                }
-                            }
-                            ((SheroesApplication) getActivity().getApplication()).trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
-                        }
-                        mMoEHelper.setUserAttribute(MoEngageConstants.ACQUISITION_CHANNEL, loginViaSocial);
                         openHomeScreen();
 
                     } else {

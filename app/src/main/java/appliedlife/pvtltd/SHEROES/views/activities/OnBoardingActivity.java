@@ -563,7 +563,12 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
         payloadBuilder.putAttrLong(MoEngageConstants.COMPLETION_TIME,totalTime);
         mMoEHelper.trackEvent(MoEngageEvent.EVENT_COMPLETED_ON_BOARDING.value, payloadBuilder.build());
         HashMap hashMap=new HashMap<String,Object>();
-        hashMap.put(MoEngageConstants.LOOKING_FOR,mSelectedTag);
+        StringBuilder stringBuilder=new StringBuilder();
+        for(LabelValue labelValue:mSelectedTag)
+        {
+            stringBuilder.append(labelValue.getLabel()).append(AppConstants.PIPE);
+        }
+        hashMap.put(MoEngageConstants.LOOKING_FOR,stringBuilder);
         moEngageUtills.entityMoEngageLookingFor(this, mMoEHelper, payloadBuilder,hashMap);
         LoginResponse loginResponse = userPreference.get();
         loginResponse.setNextScreen(AppConstants.FEED_SCREEN);

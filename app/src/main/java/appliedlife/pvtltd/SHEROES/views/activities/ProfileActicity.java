@@ -202,6 +202,8 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
         moEngageUtills = MoEngageUtills.getInstance();
         startedTime = System.currentTimeMillis();
         mFragmentOpen = new FragmentOpen();
+        long timeSpent = System.currentTimeMillis() - startedTime;
+        moEngageUtills.entityMoEngageViewMyProfile(this, mMoEHelper, payloadBuilder, timeSpent, TAG);
         setProfileNameData();
         setAllValues(mFragmentOpen);
         setPagerAndLayouts();
@@ -215,8 +217,6 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
             mProfileIcon.setImageBitmap(null);
             Glide.with(this)
                     .load(mUserPreference.get().getUserSummary().getPhotoUrl()).asBitmap()
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .skipMemoryCache(true)
                     .into(new SimpleTarget<Bitmap>() {
                         @Override
                         public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
@@ -260,8 +260,6 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
             updateProffesstionalWorkExpListItem();
         } else {
             super.onBackPressed();
-            long timeSpent = System.currentTimeMillis() - startedTime;
-            moEngageUtills.entityMoEngageViewMyProfile(this, mMoEHelper, payloadBuilder, timeSpent, TAG);
             overridePendingTransition(R.anim.fade_in_dialog, R.anim.fade_out_dialog);
         }
     }

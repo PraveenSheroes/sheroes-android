@@ -114,6 +114,9 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
                 }
         }
         setPagerAndLayouts();
+        if(mFeedDetail!=null) {
+            moEngageData(mFeedDetail);
+        }
         ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_VIEW_ARTICLE));
     }
 
@@ -495,7 +498,6 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
             deepLinkPressHandle();
         }
         finish();
-        moEngageData(mFeedDetail);
         overridePendingTransition(R.anim.right_to_left_anim_enter, R.anim.right_to_left_anim_exit);
     }
     private void deepLinkPressHandle()

@@ -115,6 +115,9 @@ public class JobDetailActivity extends BaseActivity implements  AppBarLayout.OnO
                 }
         }
         setPagerAndLayouts();
+        if(null!=mFeedDetail) {
+            moEngageData(mFeedDetail);
+        }
         ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_VIEW_JOBS_DETAIL));
     }
 
@@ -131,9 +134,7 @@ public class JobDetailActivity extends BaseActivity implements  AppBarLayout.OnO
             deepLinkBackPress();
         }
         finish();
-        if(null!=mFeedDetail) {
-            moEngageData(mFeedDetail);
-        }
+
         overridePendingTransition(R.anim.fade_in_dialog, R.anim.fade_out_dialog);
     }
     private void deepLinkBackPress()

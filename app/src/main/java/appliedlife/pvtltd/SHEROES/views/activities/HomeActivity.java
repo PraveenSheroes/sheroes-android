@@ -213,7 +213,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     boolean doubleBackToExitPressedOnce = false;
     private MoEHelper mMoEHelper;
     private PayloadBuilder payloadBuilder;
-    private long startedTime;
     private MoEngageUtills moEngageUtills;
     @Inject
     AppUtils mAppUtils;
@@ -235,7 +234,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         mMoEHelper = MoEHelper.getInstance(this);
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
-        startedTime = System.currentTimeMillis();
+        long timeSpentFeed = System.currentTimeMillis();
+        moEngageUtills.entityMoEngageViewFeed(this, mMoEHelper, payloadBuilder, timeSpentFeed);
         renderHomeFragmentView();
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && false != mUserPreference.get().isSheUser() && startedFirstTime()) {
             openHelplineFragment();
@@ -504,21 +504,21 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
          case AppConstants.TWO_CONSTANT:
              checkForAllOpenFragments();
              openArticleFragment(setCategoryIds());
-             totalTimeSpentOnFeed();
+
              break;
          case AppConstants.THREE_CONSTANT:
              checkForAllOpenFragments();
              openJobFragment();
-             totalTimeSpentOnFeed();
+
              break;
          case AppConstants.FOURTH_CONSTANT:
              checkForAllOpenFragments();
              openBookMarkFragment();
-             totalTimeSpentOnFeed();
+
              break;
          case 5:
              openSettingFragment();
-             totalTimeSpentOnFeed();
+
              break;
          case 6:
              handleHelpLineFragmentFromDeepLinkAndLoading();
@@ -530,7 +530,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                  mTitleText.setText(getString(R.string.ID_APP_NAME));
                  mTitleText.setVisibility(View.VISIBLE);
                  mICSheroes.setVisibility(View.GONE);
-                 totalTimeSpentOnFeed();
+
              }
              break;
          case AppConstants.EIGHTH_CONSTANT:
@@ -538,7 +538,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                  checkForAllOpenFragments();
                  mFragmentOpen.setICCMemberListFragment(true);
                  renderICCMemberListView();
-                 totalTimeSpentOnFeed();
+
              }
              break;
          case AppConstants.NINTH_CONSTANT:
@@ -546,7 +546,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                  checkForAllOpenFragments();
                  mFragmentOpen.setFAQSFragment(true);
                  renderFAQSView();
-                 totalTimeSpentOnFeed();
+
              }
              break;
          case AppConstants.TENTH_CONSTANT:
@@ -693,7 +693,6 @@ private void feedRelatedOptions(View view,BaseResponse baseResponse)
         intent.putExtra(AppConstants.EXTRA_IMAGE, profile);
         startActivity(intent);
         overridePendingTransition(R.anim.fade_in_dialog, R.anim.fade_out_dialog);
-        totalTimeSpentOnFeed();
     }
 
     public void refreshHomeFragment(FeedDetail feedDetail) {
@@ -706,7 +705,6 @@ private void feedRelatedOptions(View view,BaseResponse baseResponse)
     private void handleHelpLineFragmentFromDeepLinkAndLoading() {
         checkForAllOpenFragments();
         openHelplineFragment();
-        totalTimeSpentOnFeed();
     }
 
     private void renderFeedFragment() {
@@ -790,13 +788,6 @@ private void feedRelatedOptions(View view,BaseResponse baseResponse)
             eventDetailDialogFragment.show(getFragmentManager(), EventDetailDialogFragment.class.getName());
         }
         return eventDetailDialogFragment;
-    }
-
-
-
-    private void totalTimeSpentOnFeed() {
-        long timeSpentFeed = System.currentTimeMillis() - startedTime;
-        moEngageUtills.entityMoEngageViewFeed(this, mMoEHelper, payloadBuilder, timeSpentFeed);
     }
 
 
@@ -886,7 +877,6 @@ private void feedRelatedOptions(View view,BaseResponse baseResponse)
         bundle.putLong(AppConstants.CHALLENGE_ID, mChallengeId);
         homeFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_feed_full_view, homeFragment, HomeFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
-        totalTimeSpentOnFeed();
     }
 
     private void initCommunityViewPagerAndTabs() {

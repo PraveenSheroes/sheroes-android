@@ -15,7 +15,12 @@ import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeDataItem;
 import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroData;
 
 public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
+
+    @SerializedName("post_image_height_i")
+    @Expose
     private int imageHeight = 600;
+    @SerializedName("post_image_width_i")
+    @Expose
     private int imageWidth = 300;
     private int itemPosition;
     private boolean isLongPress;

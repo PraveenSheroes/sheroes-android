@@ -23,6 +23,11 @@ public class AppConstants {
     public static final int ANDROID_SDK_24 = 24;
     public static final int READ_TIME_OUT = 180;
     public static final int CONNECTION_TIME_OUT = 60;
+    public static final int SECONDS_IN_MIN = 60;
+    public static final int MINUTES_IN_HOUR = 60;
+    public static final int HOURS_IN_DAY = 24;
+    public static final int CACHE_VALID_DAYS = 14;
+
     public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
     public static final String DATE_FORMAT_FOR_JOB = "dd MMM, yyyy";
     public static final String COMMENT_DATE_TIME = "dd MMM, yyyy h:mm a";
@@ -54,7 +59,7 @@ public class AppConstants {
     public static final String DASH = "-";
     public static final String DOTS = "...";
     public static final String S = "s";
-    public static final String WATCH = "watch";
+    public static final String WATCH = "youtube.com/user";
     public static final String SHARE_MENU_TYPE = "text/plain";
     public static final String FOR_ALL = "All";
     public static final String FEED_SUB_TYPE = "F";
