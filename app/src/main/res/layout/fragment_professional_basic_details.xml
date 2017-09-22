@@ -195,12 +195,10 @@
         android:id="@+id/btn_profile_professional_details"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:background="@color/footer_icon_text"
         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
         android:text="@string/ID_SAVE"
-        android:textColor="@color/white"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:textColor="@color/white" />
 
 </RelativeLayout>
