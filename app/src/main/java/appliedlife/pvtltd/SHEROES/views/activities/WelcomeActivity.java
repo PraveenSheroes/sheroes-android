@@ -440,6 +440,9 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             Fragment fragment = getSupportFragmentManager().findFragmentByTag(SignupFragment.class.getName());
             if (AppUtils.isFragmentUIActive(fragment)) {
                 ((SignupFragment) fragment).OnSignUpBackClick();
+            }else
+            {
+                finish();
             }
         } else {
             if (mFragmentOpen.isSignupFragment()) {

@@ -74,7 +74,7 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment implement
 
     @Bind(R.id.et_current_status)
     EditText mCurrentStatus;
-    Long mCurrentStatusId,mCurrentSectorId,mLanguageNameId;
+    long mCurrentStatusId,mCurrentSectorId,mLanguageNameId;
     int mMonthValue,mYearValue;
     Long mLanguageId;
     @Bind(R.id.et_sector)
@@ -127,12 +127,12 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment implement
 
                 if (userDetails != null) {
 
-                    mEtYear.setText(""+userDetails.getTotalExp());
-                    mEtMonth.setText(""+userDetails.getTotalExpMonth());
+                    mEtYear.setText(String.valueOf(userDetails.getTotalExp()));
+                    mEtMonth.setText(String.valueOf(userDetails.getTotalExpMonth()));
                     mCurrentStatus.setText(userDetails.getJobTag());
                     mEtSector.setText(userDetails.getSector());
-
-
+                    mCurrentStatusId=userDetails.getJobTagId();
+                    mCurrentSectorId=userDetails.getSectorId();
                 }
             }
         }
@@ -182,7 +182,6 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment implement
 
     @OnClick(R.id.et_sector)
     public void clickSectorName()
-
     {
         if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && null != mUserPreferenceMasterData.get().getData()) {
             ((ProfileActicity) getActivity()).showSectoreDialog(mUserPreferenceMasterData.get().getData());
@@ -236,15 +235,13 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment implement
         professionalBasicDetailsRequest.setDeviceUniqueId(appUtils.getDeviceId());
         professionalBasicDetailsRequest.setAppVersion(appUtils.getAppVersionName());
         professionalBasicDetailsRequest.setCloudMessagingId(appUtils.getCloudMessaging());
-        professionalBasicDetailsRequest.setLastScreenName("string");
-        professionalBasicDetailsRequest.setScreenName(SCREEN_NAME);
         professionalBasicDetailsRequest.setType("PROF_DETAILS");
         professionalBasicDetailsRequest.setSubType("PROFESSIONAL_DETAILS_SERVICE");
 
-        if (StringUtil.isNotNullOrEmptyString(""+mCurrentStatusId)) {
+        if (mCurrentStatusId>0) {
             professionalBasicDetailsRequest.setJobTagId(mCurrentStatusId);
         }
-        if (StringUtil.isNotNullOrEmptyString(""+mCurrentSectorId)) {
+        if (mCurrentSectorId>0) {
             professionalBasicDetailsRequest.setSectorId(mCurrentSectorId);
         }
         if (StringUtil.isNotNullOrEmptyString(mEtMonth.getText().toString())) {

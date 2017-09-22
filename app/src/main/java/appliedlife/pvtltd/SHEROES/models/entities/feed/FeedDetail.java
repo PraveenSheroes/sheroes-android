@@ -18,10 +18,13 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
 
     @SerializedName("post_image_height_i")
     @Expose
-    private int imageHeight = 600;
+    private int imageHeight = 300;
     @SerializedName("post_image_width_i")
     @Expose
-    private int imageWidth = 300;
+    private int imageWidth = 200;
+    @SerializedName("post_image_dimention_ratio_d")
+    @Expose
+    private int imageRatio =1;
     private int itemPosition;
     private boolean isLongPress;
     private String callFromName;
