@@ -240,6 +240,10 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
         viewInterface.handleOnClick(dataItem, liArticleCoverImage);
     }
 
+    @OnClick(R.id.tv_article_description_text)
+    public void articleCardDetailClick() {
+        viewInterface.handleOnClick(dataItem, liArticleCoverImage);
+    }
     @OnClick(R.id.tv_article_bookmark)
     public void tvBookMarkClick() {
         tvArticleBookmark.setEnabled(false);

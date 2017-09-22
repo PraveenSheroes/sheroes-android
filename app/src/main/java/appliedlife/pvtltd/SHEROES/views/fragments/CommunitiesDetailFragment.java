@@ -185,8 +185,6 @@ public class CommunitiesDetailFragment extends BaseFragment {
             super.setAllInitializationForFeeds(mFragmentListRefreshData, mPullRefreshList, mAdapter, mLayoutManager, mPageNo, mSwipeView, mLiNoResult, mFeedDetail, mRecyclerView, 0, 0, mListLoad, mIsEdit, mHomePresenter, mAppUtils, mProgressBar);
             if (mCommunityPostId > 0) {
                 if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getCallFromName()) && mFeedDetail.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
-                    mProgressBar.getLayoutParams().width=0;
-                    mProgressBar.getLayoutParams().height=0;
                     mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
                     mFragmentListRefreshData.setSearchStringName(AppConstants.COMMUNITY_POST_FRAGMENT);
                     FeedRequestPojo feedRequestPojo = userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo(), mCommunityPostId);
@@ -338,6 +336,8 @@ public class CommunitiesDetailFragment extends BaseFragment {
                 mAdapter.setSheroesGenericListData(data);
                 mAdapter.notifyDataSetChanged();
                 if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getCallFromName()) && mFeedDetail.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
+                    mProgressBar.getLayoutParams().width=0;
+                    mProgressBar.getLayoutParams().height=0;
                     if (feedResponsePojo.getNumFound() > 0) {
                         ((PublicProfileGrowthBuddiesDetailActivity) getActivity()).viewLine1.setVisibility(View.VISIBLE);
                         ((PublicProfileGrowthBuddiesDetailActivity) getActivity()).viewLine2.setVisibility(View.VISIBLE);
@@ -364,6 +364,8 @@ public class CommunitiesDetailFragment extends BaseFragment {
                     mFragmentListRefreshData.setSearchStringName(AppConstants.EMPTY_STRING);
                 } else {
                     if (mPageNo == AppConstants.ONE_CONSTANT) {
+                        mProgressBar.getLayoutParams().width=0;
+                        mProgressBar.getLayoutParams().height=0;
                         try {
                             FeedDetail mCommunityHeaderDetail = (FeedDetail) mFeedDetail.clone();
                             mCommunityHeaderDetail.setSubType(AppConstants.MY_COMMUNITIES_HEADER);
