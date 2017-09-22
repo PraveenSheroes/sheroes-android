@@ -178,13 +178,9 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getImageUrl())) {
             Glide.with(this)
                     .load(mFeedDetail.getImageUrl())
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .skipMemoryCache(true)
                     .into(mProfileIcon);
             Glide.with(this)
                     .load(mFeedDetail.getImageUrl())
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .skipMemoryCache(true)
                     .into(ivPublicProfileImage);
         }
         if (null != mMentorDetailItem) {
