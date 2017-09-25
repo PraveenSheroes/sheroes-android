@@ -25,6 +25,8 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.imageops.CropImage;
+import appliedlife.pvtltd.SHEROES.imageops.CropImageView;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeDataItem;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -103,17 +105,6 @@ public class ChallengeSuccessDialogFragment extends BaseDialogFragment implement
         tvShareAfterSuccess.setEnabled(false);
         String youTubeLink = etYouTubeLink.getText().toString();
         ((HomeActivity) getActivity()).updateChallengeDataWithStatus(mChallengeDataItem, AppConstants.COMPLETE, encodedImageUrl, youTubeLink);
-
-      /*  if (StringUtil.isNotNullOrEmptyString(encodedImageUrl) || StringUtil.isNotNullOrEmptyString(youTubeLink)) {
-            progressBar.setVisibility(View.VISIBLE);
-            tvShareAfterSuccess.setEnabled(false);
-            mChallengeDataItem.setStateChallengeAfterAccept(AppConstants.FOURTH_CONSTANT);
-            ((HomeActivity) getActivity()).updateChallengeDataWithStatus(mChallengeDataItem, AppConstants.COMPLETE, encodedImageUrl, youTubeLink);
-        } else {
-            progressBar.setVisibility(View.GONE);
-            tvShareAfterSuccess.setEnabled(true);
-            Toast.makeText(getActivity(), getString(R.string.ID_SHARE_MSG), Toast.LENGTH_SHORT).show();
-        }*/
     }
 
     @OnClick(R.id.li_you_tube_link_share)
@@ -123,36 +114,16 @@ public class ChallengeSuccessDialogFragment extends BaseDialogFragment implement
 
     @OnClick(R.id.iv_challenge_open_camera)
     public void onCameraClick() {
-        checkCameraPermission();
+        CropImage.activity(null,AppConstants.ONE_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
+                .setRequestedSize(400, 400)
+                .start(getActivity());
     }
 
     @OnClick(R.id.tv_select_from_gallery)
     public void onSelectFromGalleryClick() {
-        checkGalleryPermission();
-    }
-
-    private void checkGalleryPermission() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (getActivity().checkSelfPermission(android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED && getActivity().checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && getActivity().checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                ((HomeActivity) getActivity()).selectImageFrmGallery();
-            } else {
-                ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.CAMERA, android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 101);
-            }
-        } else { //permission is automatically granted on sdk<23 upon installation
-            ((HomeActivity) getActivity()).selectImageFrmGallery();
-        }
-    }
-
-    private void checkCameraPermission() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (getActivity().checkSelfPermission(android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED && getActivity().checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && getActivity().checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                ((HomeActivity) getActivity()).selectImageFrmCamera();
-            } else {
-                ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.CAMERA, android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 101);
-            }
-        } else { //permission is automatically granted on sdk<23 upon installation
-            ((HomeActivity) getActivity()).selectImageFrmCamera();
-        }
+        CropImage.activity(null,AppConstants.TWO_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
+                .setRequestedSize(400, 400)
+                .start(getActivity());
     }
 
 }

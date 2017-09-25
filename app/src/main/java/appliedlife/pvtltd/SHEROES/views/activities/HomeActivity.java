@@ -75,6 +75,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
+import appliedlife.pvtltd.SHEROES.imageops.CropImage;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeDataItem;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionDoc;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -216,9 +217,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     private MoEngageUtills moEngageUtills;
     @Inject
     AppUtils mAppUtils;
-    private Uri mImageCaptureUri;
     public ChallengeSuccessDialogFragment mChallengeSuccessDialogFragment;
-    private File localImageSaveForChallenge;
     private long mChallengeId;
     private long mEventId;
     private String mHelpLineChat;
@@ -761,7 +760,6 @@ private void feedRelatedOptions(View view,BaseResponse baseResponse)
     }
 
     public DialogFragment challengeSuccessDialog(ChallengeDataItem challengeDataItem) {
-        localImageSaveForChallenge = new File(Environment.getExternalStorageDirectory(), AppConstants.IMAGE + AppConstants.JPG_FORMATE);
         mChallengeSuccessDialogFragment = (ChallengeSuccessDialogFragment) getFragmentManager().findFragmentByTag(ChallengeSuccessDialogFragment.class.getName());
         if (mChallengeSuccessDialogFragment == null) {
             mChallengeSuccessDialogFragment = new ChallengeSuccessDialogFragment();
@@ -1001,11 +999,6 @@ private void feedRelatedOptions(View view,BaseResponse baseResponse)
         initCommunityViewPagerAndTabs();
     }
 
-    public void didTapButton(View view) {
-        final Animation myAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_to_top_slide_anim);
-        view.startAnimation(myAnim);
-    }
-
     @OnClick(R.id.iv_footer_button_icon)
     public void createCommunityPostOnClick() {
         // Snackbar.make(mCLMainLayout, "Comming soon", Snackbar.LENGTH_SHORT).show();
@@ -1060,17 +1053,7 @@ private void feedRelatedOptions(View view,BaseResponse baseResponse)
             AppInviteDialog.show(this, content);
         }
         ((SheroesApplication)this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_INVITES, GoogleAnalyticsEventActions.OPEN_INVITE_FB_FRDZ, AppConstants.EMPTY_STRING);
-      /*  myCommunityInviteMemberDialogFragment = (MyCommunityInviteMemberDialogFragment) getFragmentManager().findFragmentByTag(MyCommunityInviteMemberDialogFragment.class.getName());
-        if (myCommunityInviteMemberDialogFragment == null) {
-            myCommunityInviteMemberDialogFragment = new MyCommunityInviteMemberDialogFragment();
-            Bundle bundle = new Bundle();
-            bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, mFeedDetail);
-            myCommunityInviteMemberDialogFragment.setArguments(bundle);
-        }
-        if (!myCommunityInviteMemberDialogFragment.isVisible() && !myCommunityInviteMemberDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
-            myCommunityInviteMemberDialogFragment.show(getFragmentManager(), MyCommunityInviteMemberDialogFragment.class.getName());
-        }
-        return myCommunityInviteMemberDialogFragment;*/
+
     }
 
     public void updateMyCommunitiesFragment(FeedDetail feedDetail) {
@@ -1484,20 +1467,6 @@ private void feedRelatedOptions(View view,BaseResponse baseResponse)
                 case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
                     editCommunityPostResponse(intent);
                     break;
-                case AppConstants.REQUEST_CODE_FOR_GALLERY:
-                    mImageCaptureUri = intent.getData();
-                    if (resultCode == Activity.RESULT_OK) {
-                        cropingIMG();
-                    }
-                    break;
-                case AppConstants.REQUEST_CODE_FOR_CAMERA:
-                    if (resultCode == Activity.RESULT_OK) {
-                        cropingIMG();
-                    }
-                    break;
-                case AppConstants.REQUEST_CODE_FOR_IMAGE_CROPPING:
-                    imageCropping(intent);
-                    break;
                 case AppConstants.REQ_CODE_SPEECH_INPUT:
                     helplineSpeechActivityResponse(intent, resultCode);
                     break;
@@ -1507,14 +1476,22 @@ private void feedRelatedOptions(View view,BaseResponse baseResponse)
                 case AppConstants.REQUEST_CODE_FOR_GOOGLE_MAP:
                     checkMapData(intent);
                     break;
-                default:
-                    LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);
-            }
-        } else {
-            switch (requestCode) {
-                case AppConstants.REQUEST_CODE_FOR_CAMERA:
-                    if (resultCode == Activity.RESULT_OK) {
-                        cropingIMG();
+                case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
+                    CropImage.ActivityResult result = CropImage.getActivityResult(intent);
+                    if (resultCode == RESULT_OK) {
+                        try {
+                            File file=new File(result.getUri().getPath());
+                            Bitmap photo = decodeFile(file);
+                            if (null != mChallengeSuccessDialogFragment) {
+                                mChallengeSuccessDialogFragment.setImageOnHolder(photo);
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                        Toast.makeText(this, "Cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
                     }
                     break;
                 default:
@@ -1550,102 +1527,6 @@ private void feedRelatedOptions(View view,BaseResponse baseResponse)
         }
 
     }
-
-    public void selectImageFrmCamera() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                if (null == localImageSaveForChallenge && null == mImageCaptureUri) {
-                    Uri imageCaptureUri;
-                    File localImageSaveForChallenge;
-                    localImageSaveForChallenge = new File(Environment.getExternalStorageDirectory(), AppConstants.IMAGE + AppConstants.JPG_FORMATE);
-                    imageCaptureUri = Uri.fromFile(localImageSaveForChallenge);
-                    this.localImageSaveForChallenge = localImageSaveForChallenge;
-                    mImageCaptureUri = imageCaptureUri;
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, imageCaptureUri);
-                    intent.putExtra("return-data", true);
-                    startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_CAMERA);
-                } else {
-                    mImageCaptureUri = Uri.fromFile(localImageSaveForChallenge);
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
-                    intent.putExtra("return-data", true);
-                    startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_CAMERA);
-                }
-            }
-        } else {
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            if (null == localImageSaveForChallenge && null == mImageCaptureUri) {
-                Uri imageCaptureUri;
-                File localImageSaveForChallenge;
-                localImageSaveForChallenge = new File(Environment.getExternalStorageDirectory(), AppConstants.IMAGE + AppConstants.JPG_FORMATE);
-                imageCaptureUri = Uri.fromFile(localImageSaveForChallenge);
-                this.localImageSaveForChallenge = localImageSaveForChallenge;
-                mImageCaptureUri = imageCaptureUri;
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
-                intent.putExtra("return-data", true);
-                startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_CAMERA);
-
-            } else {
-                mImageCaptureUri = Uri.fromFile(localImageSaveForChallenge);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
-                intent.putExtra("return-data", true);
-                startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_CAMERA);
-            }
-
-        }
-
-    }
-
-    public void selectImageFrmGallery() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                try {
-                    Intent galIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    galIntent.setType("image/*");
-                    startActivityForResult(galIntent, AppConstants.REQUEST_CODE_FOR_GALLERY);
-                } catch (Exception e) {
-                }
-            }
-        } else {
-            try {
-                Intent galIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                galIntent.setType("image/*");
-                startActivityForResult(galIntent, AppConstants.REQUEST_CODE_FOR_GALLERY);
-            } catch (Exception e) {
-            }
-        }
-    }
-
-    private void cropingIMG() {
-        Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.setType("image/*");
-        List list = getPackageManager().queryIntentActivities(intent, 0);
-        intent.setData(mImageCaptureUri);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(localImageSaveForChallenge));
-        if (StringUtil.isNotEmptyCollection(list)) {
-            Intent i = new Intent(intent);
-            ResolveInfo res = (ResolveInfo) list.get(0);
-            i.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
-            startActivityForResult(i, AppConstants.REQUEST_CODE_FOR_IMAGE_CROPPING);
-        }
-
-    }
-
-    private void imageCropping(Intent intent) {
-        try {
-            if (localImageSaveForChallenge.exists()) {
-                Bitmap photo = decodeFile(localImageSaveForChallenge);
-                if (null != mChallengeSuccessDialogFragment) {
-                    mChallengeSuccessDialogFragment.setImageOnHolder(photo);
-                }
-            } else {
-                Toast.makeText(this, "Error while save image", Toast.LENGTH_SHORT).show();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     private Bitmap decodeFile(File f) {
         try {
             // decode image size
