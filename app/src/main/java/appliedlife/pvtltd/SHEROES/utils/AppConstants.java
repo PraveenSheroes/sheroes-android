@@ -368,6 +368,8 @@ public class AppConstants {
     public static final String GOOGLE_PLAY_URL_REFERRAL_CONTACT_ID = "app_user_contact_id";
     public static final String IMPRESSIONS = "impressions";
     public static final String COMMUNITY_POST_IMPRESSION = "community post impression";
+    public static final String ORGANISATION_REVIEW_POST_IMPRESSION = "organisation review post impression";
+    public static final String ORGANISATION_FEEDBACK_POST_IMPRESSION = "organisation feedback post impression";
     public static final String ARTICLE_IMPRSSION = "article impression";
     public static final String EVENT_IMPRESSION = "event impression";
     public static final String PUBLIC_PROFILE = "public profile";

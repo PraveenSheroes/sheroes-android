@@ -22,11 +22,13 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
@@ -98,6 +100,7 @@ public class OrgReviewCardHolder extends BaseViewHolder<FeedDetail> {
                 mAdminId = userPreference.get().getUserSummary().getUserBO().getUserTypeId();
             }
         }
+
     }
 
 
@@ -119,6 +122,8 @@ public class OrgReviewCardHolder extends BaseViewHolder<FeedDetail> {
         tvNoOfUpVotes.setEnabled(true);
         imageOperations(context);
         allReviewTextViewAndImageOperations(context);
+        ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(AppConstants.IMPRESSIONS, AppConstants.ORGANISATION_REVIEW_POST_IMPRESSION, dataItem.communityId + AppConstants.DASH + mUserId + AppConstants.DASH + dataItem.getIdOfEntityOrParticipant());
+
 
     }
 
@@ -240,6 +245,7 @@ public class OrgReviewCardHolder extends BaseViewHolder<FeedDetail> {
     @OnClick(R.id.tv_feed_review_post_user_share_ic)
     public void reviewShareClick(){
         viewInterface.handleOnClick(dataItem,reviewPostShareIc);
+        ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_ORGANISATION_REVIEW_POST, dataItem.communityId + AppConstants.DASH + mUserId + AppConstants.DASH + dataItem.getIdOfEntityOrParticipant());
     }
 
 
@@ -250,8 +256,11 @@ public class OrgReviewCardHolder extends BaseViewHolder<FeedDetail> {
         dataItem.setTrending(true);
         if(dataItem.getReactionValue()  != AppConstants.NO_REACTION_CONSTANT){
             viewInterface.userCommentLikeRequest(dataItem, AppConstants.NO_REACTION_CONSTANT, getAdapterPosition());
+            ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_UNDO_REACTIONS, GoogleAnalyticsEventActions.UNDO_REACTIONS_ON_ORGANISATION_REVIEW_POST, dataItem.getCommunityId()+AppConstants.DASH+mUserId+AppConstants.DASH+dataItem.getIdOfEntityOrParticipant());
         }else{
             viewInterface.userCommentLikeRequest(dataItem, AppConstants.HEART_REACTION_CONSTANT, getAdapterPosition());
+            ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_REACTIONS, GoogleAnalyticsEventActions.REACTED_TO_ORGANISATION_REVIEW_POST, dataItem.getCommunityId()+AppConstants.DASH+mUserId+AppConstants.DASH+dataItem.getIdOfEntityOrParticipant());
+
         }
         if(dataItem.getReactionValue() != AppConstants.NO_REACTION_CONSTANT){
             dataItem.setReactionValue(AppConstants.NO_REACTION_CONSTANT);

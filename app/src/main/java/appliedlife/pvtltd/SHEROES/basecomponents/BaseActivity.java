@@ -93,6 +93,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
     private PayloadBuilder payloadBuilder;
     private MoEngageUtills moEngageUtills;
     private GenericWebViewFragment genericWebViewFragment;
+    private long mUserId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -411,7 +412,11 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
             case R.id.tv_feed_community_post_card_title:
                 if(mFeedDetail.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID){
                     if(null!=mFeedDetail) {
-                        openGenericCardInWebView(mFeedDetail);
+                        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
+                            mUserId = userPreference.get().getUserSummary().getUserId();
+                            ((SheroesApplication) this.getApplication()).trackEvent(AppConstants.IMPRESSIONS, GoogleAnalyticsEventActions.OPENED_ORGANISATION_DETAIL_FEEDBACK, mFeedDetail.getCommunityId() + AppConstants.DASH + mUserId+AppConstants.DASH+mFeedDetail.getIdOfEntityOrParticipant());
+                            openGenericCardInWebView(mFeedDetail);
+                        }
                     }
                 }else {
                     Intent intentFromCommunityPost = new Intent(this, CommunitiesDetailActivity.class);
@@ -426,7 +431,11 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
                 break;
             case R.id.tv_feed_review_card_title:
                 if(null!=mFeedDetail) {
-                    openGenericCardInWebView(mFeedDetail);
+                    if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
+                        mUserId = userPreference.get().getUserSummary().getUserId();
+                        ((SheroesApplication) this.getApplication()).trackEvent(AppConstants.IMPRESSIONS, GoogleAnalyticsEventActions.OPENED_ORGANISATION_DETAIL_REVIEW, mFeedDetail.getCommunityId() + AppConstants.DASH + mUserId+AppConstants.DASH+mFeedDetail.getIdOfEntityOrParticipant());
+                        openGenericCardInWebView(mFeedDetail);
+                    }
                 }
                 break;
             default:

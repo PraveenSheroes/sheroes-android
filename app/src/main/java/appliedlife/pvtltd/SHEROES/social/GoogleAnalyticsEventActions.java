@@ -16,9 +16,15 @@ public class GoogleAnalyticsEventActions {
     public static final String CATEGORY_REACTIONS = "reactions";
     public static final String REACTED_TO_ARTICLE = "reacted to an article";
     public static final String REACTED_TO_COMMUNITY_POST= "reacted to a community post";
+    public static final String REACTED_TO_ORGANISATION_FEEDBACK_POST= "reacted to an organisation feedback post";
+    public static final String REACTED_TO_ORGANISATION_REVIEW_POST= "reacted to an organisation review post";
+    public static final String OPENED_ORGANISATION_DETAIL_FEEDBACK= "opened organisation detail from feedback card";
+    public static final String OPENED_ORGANISATION_DETAIL_REVIEW= "opened organisation detail from review card";
     public static final String CATEGORY_UNDO_REACTIONS = "undo reactions";
     public static final String UNDO_REACTIONS_ON_ARTICLE = "undo a reaction on an article";
     public static final String UNDO_REACTIONS_ON_COMMUNITY_POST = "undo a reaction on a community post";
+    public static final String UNDO_REACTIONS_ON_ORGANISATION_FEEDBACK_POST = "undo a reaction on an organisation feedback post";
+    public static final String UNDO_REACTIONS_ON_ORGANISATION_REVIEW_POST = "undo a reaction on an organisation review post";
     public static final String CATEGORY_CHANGED_REACTIONS = "changed reactions";
     public static final String CHANGED_REACTIONS_ON_ARTICLE = "changed reaction on an article";
     public static final String CHANGED_REACTIONS_ON_COMMUNITY_POST = "changed reaction on a community post";
@@ -43,6 +49,8 @@ public class GoogleAnalyticsEventActions {
     public static final String UN_BOOKMARK_ON_JOB = "unbookmarked a job";
     public static final String SHARED_JOB = "shared a job";
     public static final String SHARED_COMMUNITY_POST = "shared a community post";
+    public static final String SHARED_ORGANISATION_FEEDBACK_POST = "shared an organisation feedback post";
+    public static final String SHARED_ORGANISATION_REVIEW_POST = "shared an organisation review post";
     public static final String SHARED_COMMUNITY_LINK = "shared a community link";
     public static final String SHARED_COMMUNITY_LINK_ON_EMAIL = "shared a community link on email";
 
