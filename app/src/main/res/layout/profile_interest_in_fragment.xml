@@ -42,8 +42,7 @@
                         android:layout_width="@dimen/dp_size_46"
                         android:layout_height="@dimen/dp_size_46"
                         android:layout_centerHorizontal="true"
-                        android:layout_centerInParent="true"
-                        android:background="@drawable/guitar" />
+                        android:layout_centerInParent="true" />
 
                     <TextView
                         android:layout_width="match_parent"

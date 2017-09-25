@@ -148,7 +148,7 @@ public class MyCommunitiesFragment extends BaseFragment implements HomeView {
             }
             data.add(feedProgressBar);
             mAdapter.setSheroesGenericListData(data);
-            mAdapter.notifyDataSetChanged();
+            mAdapter.notifyItemRangeChanged(feedDetailList.size()+1,data.size());
 
         } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
             mLiNoResult.setVisibility(View.VISIBLE);

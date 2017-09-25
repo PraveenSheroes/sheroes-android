@@ -63,7 +63,7 @@ public class AppConstants {
     public static final String CHANNEL_YOU_TUBE = "youtube.com/channel";
     public static final String SHARE_MENU_TYPE = "text/plain";
     public static final String FOR_ALL = "All";
-    public static final String FEED_SUB_TYPE = "F";
+    public static final String FEED_SUB_TYPE = "P";
     public static final String SEARCH_SUB_TYPE = "S";
     public static final String ALL_DATA_SUB_TYPE = "T";
     public static final String USER_SUB_TYPE = "U";

@@ -16,15 +16,15 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroData;
 
 public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
 
-    @SerializedName("post_image_height_i")
+    @SerializedName("post_image_height_is")
     @Expose
-    private int imageHeight = 300;
-    @SerializedName("post_image_width_i")
+    private List<Integer> imageHeight;
+    @SerializedName("post_image_width_is")
     @Expose
-    private int imageWidth = 200;
-    @SerializedName("post_image_dimention_ratio_d")
+    private List<Integer> imageWidth;
+    @SerializedName("post_image_dimention_ratio_ds")
     @Expose
-    private int imageRatio =1;
+    private List<Double>  imageRatio;
     private int itemPosition;
     private boolean isLongPress;
     private String callFromName;
@@ -1974,13 +1974,6 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         isCommunityOwner = communityOwner;
     }
 
-    public int getImageHeight() {
-        return imageHeight;
-    }
-
-    public void setImageHeight(int imageHeight) {
-        this.imageHeight = imageHeight;
-    }
 
     public long getCommunityTypeId() {
         return communityTypeId;
@@ -2007,12 +2000,29 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         isCommentAllowed = commentAllowed;
     }
 
-    public int getImageWidth() {
+
+    public List<Integer> getImageHeight() {
+        return imageHeight;
+    }
+
+    public void setImageHeight(List<Integer> imageHeight) {
+        this.imageHeight = imageHeight;
+    }
+
+    public List<Integer> getImageWidth() {
         return imageWidth;
     }
 
-    public void setImageWidth(int imageWidth) {
+    public void setImageWidth(List<Integer> imageWidth) {
         this.imageWidth = imageWidth;
+    }
+
+    public List<Double> getImageRatio() {
+        return imageRatio;
+    }
+
+    public void setImageRatio(List<Double> imageRatio) {
+        this.imageRatio = imageRatio;
     }
 
     @Override
@@ -2023,8 +2033,9 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
-        dest.writeInt(this.imageHeight);
-        dest.writeInt(this.imageWidth);
+        dest.writeList(this.imageHeight);
+        dest.writeList(this.imageWidth);
+        dest.writeList(this.imageRatio);
         dest.writeInt(this.itemPosition);
         dest.writeByte(this.isLongPress ? (byte) 1 : (byte) 0);
         dest.writeString(this.callFromName);
@@ -2205,8 +2216,12 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
 
     protected FeedDetail(Parcel in) {
         super(in);
-        this.imageHeight = in.readInt();
-        this.imageWidth = in.readInt();
+        this.imageHeight = new ArrayList<Integer>();
+        in.readList(this.imageHeight, Integer.class.getClassLoader());
+        this.imageWidth = new ArrayList<Integer>();
+        in.readList(this.imageWidth, Integer.class.getClassLoader());
+        this.imageRatio = new ArrayList<Double>();
+        in.readList(this.imageRatio, Double.class.getClassLoader());
         this.itemPosition = in.readInt();
         this.isLongPress = in.readByte() != 0;
         this.callFromName = in.readString();

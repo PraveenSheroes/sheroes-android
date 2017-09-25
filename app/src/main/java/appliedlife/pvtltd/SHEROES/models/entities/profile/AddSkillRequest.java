@@ -3,8 +3,6 @@ package appliedlife.pvtltd.SHEROES.models.entities.profile;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
-import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.DeviceInfo;
-import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.TrackingParams;
 
 /**
  * Created by priyanka on 02/04/17.

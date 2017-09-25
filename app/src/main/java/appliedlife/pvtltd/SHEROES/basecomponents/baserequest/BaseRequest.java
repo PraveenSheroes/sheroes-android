@@ -13,12 +13,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
  * @since 23/01/2017.
  */
 public abstract class BaseRequest {
-    @SerializedName("tracking_params")
-    @Expose
-    protected TrackingParams trackingParams;
-    @SerializedName("device_info")
-    @Expose
-    protected DeviceInfo deviceInfo;
+
     @SerializedName("appVersion")
     @Expose
     private String appVersion;
@@ -54,9 +49,7 @@ public abstract class BaseRequest {
     @Expose
     private String testUserType = AppConstants.orgUserType;
     // For getting org cards
-    public BaseRequest(TrackingParams trackingParams, DeviceInfo deviceInfo, String appVersion, String cloudMessagingId, String deviceUniqueId, String screenName, String lastScreenName, int pageNo, int pageSize) {
-        this.trackingParams = trackingParams;
-        this.deviceInfo = deviceInfo;
+    public BaseRequest(  String appVersion, String cloudMessagingId, String deviceUniqueId, String screenName, String lastScreenName, int pageNo, int pageSize) {
         this.appVersion = appVersion;
         this.cloudMessagingId = cloudMessagingId;
         this.deviceUniqueId = deviceUniqueId;
@@ -69,21 +62,7 @@ public abstract class BaseRequest {
     public BaseRequest() {
     }
 
-    public TrackingParams getTrackingParams() {
-        return trackingParams;
-    }
 
-    public void setTrackingParams(TrackingParams trackingParams) {
-        this.trackingParams = trackingParams;
-    }
-
-    public DeviceInfo getDeviceInfo() {
-        return deviceInfo;
-    }
-
-    public void setDeviceInfo(DeviceInfo deviceInfo) {
-        this.deviceInfo = deviceInfo;
-    }
 
     public String getAppVersion() {
         return appVersion;

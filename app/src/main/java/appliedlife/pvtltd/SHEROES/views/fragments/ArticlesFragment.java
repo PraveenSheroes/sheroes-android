@@ -202,6 +202,7 @@ public class ArticlesFragment extends BaseFragment {
                 data.add(feedProgressBar);
                 mAdapter.setSheroesGenericListData(data);
                 mAdapter.notifyDataSetChanged();
+                mAdapter.notifyItemRangeChanged(trendingWithNormalArticleList.size()+1,data.size());
             } else {
                 if (StringUtil.isNotEmptyCollection(mTrendingFeedDetail)) {
                     for (FeedDetail feedDetail : feedDetailList) {
@@ -224,7 +225,7 @@ public class ArticlesFragment extends BaseFragment {
                 }
                 data.add(feedProgressBar);
                 mAdapter.setSheroesGenericListData(data);
-                mAdapter.notifyDataSetChanged();
+                mAdapter.notifyItemRangeChanged(newFeedDetailList.size()+1,data.size());
             }
         } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
             mLiNoResult.setVisibility(View.VISIBLE);
