@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.MentorDetailItem;
@@ -96,6 +98,7 @@ public class PublicProfileGrowthBuddiesDialogFragment extends BaseDialogFragment
 
             }
         });
+        ((SimpleItemAnimator)mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
         mHomePresenter.getPublicProfileMentorListFromPresenter(mAppUtils.pubicProfileRequestBuilder(mFragmentListRefreshData.getPageNo()));
         mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -162,8 +165,9 @@ public class PublicProfileGrowthBuddiesDialogFragment extends BaseDialogFragment
             mPageNo = mFragmentListRefreshData.getPageNo();
             mFragmentListRefreshData.setPageNo(++mPageNo);
             mPullRefreshList.allListData(mentorDetailItemList);
+            List<FeedDetail> data=mPullRefreshList.getFeedResponses();
             mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
-            mAdapter.notifyDataSetChanged();
+            mAdapter.notifyItemRangeChanged(mentorDetailItemList.size()+1,data.size());
         } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
             // mLiNoResult.setVisibility(View.VISIBLE);
         } else {

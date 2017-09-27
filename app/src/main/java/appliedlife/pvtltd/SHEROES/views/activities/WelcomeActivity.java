@@ -222,7 +222,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
             @Override
             public void onFailure(String ex) {
-                mGcmId = ex;
+                getGcmId();
             }
         });
     }

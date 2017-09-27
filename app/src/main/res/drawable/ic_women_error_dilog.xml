@@ -27,7 +27,7 @@
     <path
         android:pathData="M26.7,1.7L41.3,1.7A2,2 0,0 1,43.3 3.7L43.3,18.3A2,2 0,0 1,41.3 20.3L26.7,20.3A2,2 0,0 1,24.7 18.3L24.7,3.7A2,2 0,0 1,26.7 1.7z"
         android:strokeColor="#41BF00"
-        android:fillColor="@color/white"
+        android:fillColor="#ffffff"
         android:strokeWidth="1.4"/>
     <path
         android:pathData="M46.69,0.32a1.02,1.02 0,0 0,-1.48 0l-12.58,13.05 -4.84,-5.02a1.02,1.02 0,0 0,-1.48 0,1.12 1.12,0 0,0 0,1.54l5.58,5.79c0.41,0.43 1.08,0.43 1.49,0L46.69,1.86c0.41,-0.43 0.41,-1.12 0,-1.54z"

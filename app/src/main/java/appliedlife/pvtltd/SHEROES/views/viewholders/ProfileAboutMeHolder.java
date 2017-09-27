@@ -5,6 +5,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
@@ -58,8 +60,7 @@ public class ProfileAboutMeHolder extends BaseViewHolder<MyProfileView> {
             if(StringUtil.isNotNullOrEmptyString(userDetails.getUserSummary())) {
 
                 mAboutMeTxt.setVisibility(View.VISIBLE);
-                mAboutMeTxt.setText(userDetails.getUserSummary());
-
+                mAboutMeTxt.setText(StringEscapeUtils.unescapeHtml4(userDetails.getUserSummary()));
             }
         }
     }

@@ -1052,7 +1052,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_feed_community_post_user_comment_post_menu)
     public void userCommentMenuClick() {
-        dataItem.setItemPosition(mItemPosition);
+        dataItem.setNoOfOpenings(mItemPosition);
         viewInterface.handleOnClick(dataItem, tvFeedCommunityPostUserCommentPostMenu);
     }
 

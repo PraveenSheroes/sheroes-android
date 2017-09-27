@@ -289,7 +289,8 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
             mAdapter.setSheroesGenericListData(data);
             mAdapter.setUserId(mUserId);
             mAdapter.setCallForRecycler(AppConstants.FEED_SUB_TYPE);
-            mAdapter.notifyItemRangeChanged(feedDetailList.size()+1,data.size());
+           //mAdapter.notifyItemRangeChanged(feedDetailList.size() + 1, data.size());
+            mAdapter.notifyDataSetChanged();
 
         } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
             // mLiNoResult.setVisibility(View.VISIBLE);

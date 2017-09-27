@@ -31,7 +31,7 @@
 
         <LinearLayout
             android:id="@+id/li_user_comment_with_name"
-            android:layout_width="@dimen/dp_size_295"
+            android:layout_width="@dimen/dp_size_290"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -62,11 +62,11 @@
             android:id="@+id/tv_user_comment_list_menu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableRight="@drawable/ic_menu_dashboard"
+            android:drawableLeft="@drawable/ic_menu_dashboard"
             android:paddingLeft="@dimen/dp_size_10"
-            android:paddingBottom="@dimen/dp_size_10"
-            android:paddingTop="@dimen/dp_size_10"
-            android:paddingRight="@dimen/dp_size_10"
+            android:paddingBottom="@dimen/dp_size_11"
+            android:paddingTop="@dimen/dp_size_11"
+            android:paddingRight="@dimen/dp_size_20"
             />
     </LinearLayout>
 
