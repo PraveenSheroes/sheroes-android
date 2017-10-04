@@ -121,6 +121,7 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
         super.setAllInitializationForFeeds(mFragmentListRefreshData, mAdapter, mLayoutManager, mRecyclerView, mHomePresenter, mAppUtils, mProgressBar);
         LogUtils.info(TAG, "**********ChallengeView fragment on create*********");
         mHomePresenter.getFeedFromPresenter(feedRequestBuilder(AppConstants.FEATURED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
+        ((HomeActivity)getActivity()).communityButton();
         long timeSpent=System.currentTimeMillis()-startedTime;
         moEngageUtills.entityMoEngageFeatureCommunity(getActivity(),mMoEHelper,payloadBuilder,timeSpent);
         ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_COMMUNITY_LISTING_ALL_COMMUNITIES));

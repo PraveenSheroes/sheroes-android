@@ -107,6 +107,7 @@ public class MyCommunitiesFragment extends BaseFragment implements HomeView {
         super.setAllInitializationForFeeds(mFragmentListRefreshData, mAdapter, mLayoutManager, mRecyclerView, mHomePresenter, mAppUtils, mProgressBar);
         LogUtils.info(TAG, "**********Mycommunities fragment on create*********");
         mHomePresenter.getMyCommunityFromPresenter(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
+        ((HomeActivity)getActivity()).communityButton();
         long timeSpent=System.currentTimeMillis()-startedTime;
         moEngageUtills.entityMoEngageMyCommunity(getActivity(),mMoEHelper,payloadBuilder,timeSpent);
         ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_COMMUNITY_LISTING_MY_COMMUNITIES));

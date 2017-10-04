@@ -25,7 +25,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.setting.UserPreferenceRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.setting.UserpreferenseResponse;
 import appliedlife.pvtltd.SHEROES.presenters.SettingFeedbackPresenter;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.views.fragments.HomeArticleCategorySpinnerFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ArticleCategorySpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SettingPreferencesBasicDetailsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SettingPreferencesDeactiveAccountFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SettingPreferencesEducationDetailsFragment;
@@ -99,7 +99,7 @@ public class SettingPreferencesActivity extends BaseActivity implements SettingF
                 bundle.putString("Section list_value", jsonSections);
                 settingPreferencesBasicDetailsFragment.setArguments(bundle);
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fl_prefrences_container, settingPreferencesBasicDetailsFragment, HomeArticleCategorySpinnerFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+                        .replace(R.id.fl_prefrences_container, settingPreferencesBasicDetailsFragment, ArticleCategorySpinnerFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
 
 
                 break;
@@ -111,7 +111,7 @@ public class SettingPreferencesActivity extends BaseActivity implements SettingF
                 bundle1.putString("Section list_value", jsonSections1);
                 settingPreferencesEducationDetailsFragment.setArguments(bundle1);
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fl_prefrences_container, settingPreferencesEducationDetailsFragment, HomeArticleCategorySpinnerFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+                        .replace(R.id.fl_prefrences_container, settingPreferencesEducationDetailsFragment, ArticleCategorySpinnerFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
 
 
              /*   ButterKnife.bind(this);
@@ -131,7 +131,7 @@ public class SettingPreferencesActivity extends BaseActivity implements SettingF
                 bundle2.putString("Section list_value", jsonSections2);
                 settingPreferencesWorkExperienceFragment.setArguments(bundle2);
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fl_prefrences_container, settingPreferencesWorkExperienceFragment, HomeArticleCategorySpinnerFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+                        .replace(R.id.fl_prefrences_container, settingPreferencesWorkExperienceFragment, ArticleCategorySpinnerFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
 
 
                 break;
@@ -143,7 +143,7 @@ public class SettingPreferencesActivity extends BaseActivity implements SettingF
                 bundle3.putString("Section list_value", jsonSections3);
                 settingPreferencesDeactiveAccountFragment.setArguments(bundle3);
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fl_prefrences_container, settingPreferencesDeactiveAccountFragment, HomeArticleCategorySpinnerFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+                        .replace(R.id.fl_prefrences_container, settingPreferencesDeactiveAccountFragment, ArticleCategorySpinnerFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
 
                 break;
 

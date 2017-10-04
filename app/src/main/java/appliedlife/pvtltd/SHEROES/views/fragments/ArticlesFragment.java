@@ -137,7 +137,7 @@ public class ArticlesFragment extends BaseFragment {
                 categoryArticleFilter(categoryIdList);
             }
         });
-
+        ((HomeActivity)getActivity()).changeFragmentWithCommunities();
         ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_ARTICLE_LISTING));
 
         return view;

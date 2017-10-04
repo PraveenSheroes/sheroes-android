@@ -126,7 +126,16 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         return super.onCreateView(inflater, container, savedInstanceState);
     }
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        LogUtils.info(TAG,"**********On Resume base fragment*****");
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        LogUtils.info(TAG,"**********On Pause base fragment*****");
+    }
     public void setFragmentData(FragmentOpen fragmentOpen) {
         this.mFragmentOpen = fragmentOpen;
     }

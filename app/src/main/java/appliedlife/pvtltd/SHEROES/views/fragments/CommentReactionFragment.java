@@ -394,7 +394,7 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
             case AppConstants.TWO_CONSTANT:
                 List<LastComment> lastDeleteCommentList = mFeedDetail.getLastComments();
                 if (StringUtil.isNotEmptyCollection(lastDeleteCommentList)) {
-                    int commentId = lastDeleteCommentList.get(mFeedDetail.getItemPosition()).getId();
+                    int commentId = lastDeleteCommentList.get(mFeedDetail.getNoOfOpenings()).getId();
                     for (CommentReactionDoc commentReactionDoc : mCommentReactionDocList) {
                         if (commentId == commentReactionDoc.getId()) {
                             commentReactionDoc.setActive(false);

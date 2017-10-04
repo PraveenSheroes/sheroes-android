@@ -1,6 +1,5 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -42,8 +41,8 @@ import butterknife.OnClick;
  * Created by Praveen_Singh on 05-01-2017.
  */
 
-public class HomeArticleCategorySpinnerFragment extends BaseFragment implements HomeView {
-    private final String TAG = LogUtils.makeLogTag(HomeArticleCategorySpinnerFragment.class);
+public class ArticleCategorySpinnerFragment extends BaseFragment implements HomeView {
+    private final String TAG = LogUtils.makeLogTag(ArticleCategorySpinnerFragment.class);
     @Inject
     HomePresenter mHomePresenter;
     @Bind(R.id.rv_spinner_list)
@@ -58,33 +57,20 @@ public class HomeArticleCategorySpinnerFragment extends BaseFragment implements 
     List<HomeSpinnerItem> mHomeSpinnerItemList;
     @Inject
     Preference<MasterDataResponse> mUserPreferenceMasterData;
-    private HomeSpinnerFragmentListner homeSpinnerFragmentListner;
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            if (mActivity instanceof HomeSpinnerFragmentListner) {
-                homeSpinnerFragmentListner = (HomeSpinnerFragmentListner) getActivity();
-            }
-        } catch (InstantiationException exception) {
-            LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
-        }
-    }
-    @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        SheroesApplication.getAppComponent(getContext()).inject(this);
+        SheroesApplication.getAppComponent(getActivity()).inject(this);
         View view = inflater.inflate(R.layout.fragment_home_spinner_layout, container, false);
         ButterKnife.bind(this, view);
         mHomePresenter.attachView(this);
-        setProgressBar(mProgressBar);
         Bundle bundle = getArguments();
         if (bundle != null) {
             mHomeSpinnerItemList = bundle.getParcelableArrayList(AppConstants.HOME_SPINNER_FRAGMENT);
         }
-        LinearLayoutManager manager = new LinearLayoutManager(getContext());
+        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(manager);
-        mAdapter = new GenericRecyclerViewAdapter(getContext(), (HomeActivity) getActivity());
+        mAdapter = new GenericRecyclerViewAdapter(getActivity(), (HomeActivity) getActivity());
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mAdapter);
         if (StringUtil.isNotEmptyCollection(mHomeSpinnerItemList)) {
@@ -103,7 +89,6 @@ public class HomeArticleCategorySpinnerFragment extends BaseFragment implements 
         super.onDestroyView();
         mHomePresenter.detachView();
     }
-
     @Override
     public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
         setArticleCategoryFilterValues();
@@ -111,12 +96,13 @@ public class HomeArticleCategorySpinnerFragment extends BaseFragment implements 
 
     @OnClick(R.id.tv_cancel)
     public void onCancelClick() {
-        homeSpinnerFragmentListner.onCancelDone(AppConstants.NO_REACTION_CONSTANT);
+        ((HomeActivity)getActivity()).onCancelDone(AppConstants.NO_REACTION_CONSTANT);
+
     }
 
     @OnClick(R.id.tv_done)
     public void onDoneClick() {
-        homeSpinnerFragmentListner.onCancelDone(AppConstants.ONE_CONSTANT);
+        ((HomeActivity)getActivity()).onCancelDone(AppConstants.ONE_CONSTANT);
         ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_SEARCH_FILTER, GoogleAnalyticsEventActions.USED_FILTER_ON_ARTICLES, AppConstants.EMPTY_STRING);
     }
 

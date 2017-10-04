@@ -213,6 +213,7 @@ public class HomeFragment extends BaseFragment {
         } else {
             mHomePresenter.getAuthTokenRefreshPresenter();
         }
+        ((HomeActivity)getActivity()).homeButtonUi();
         mHomePresenter.getNotificationCountFromPresenter(notificationReadCountRequestBuilder(TAG));
         try {
             getGcmId();
@@ -228,6 +229,16 @@ public class HomeFragment extends BaseFragment {
             }
         });
         return view;
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        LogUtils.info(TAG,"**********On Resume Home fragment*****");
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        LogUtils.info(TAG,"**********On Pause Home fragment*****");
     }
     private void getGcmId() {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
