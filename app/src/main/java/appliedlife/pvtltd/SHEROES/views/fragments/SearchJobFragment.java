@@ -48,6 +48,7 @@ import butterknife.ButterKnife;
  */
 
 public class SearchJobFragment extends BaseFragment implements HomeView {
+    private static final String SCREEN_LABEL = "Job Search Screen";
     private final String TAG = LogUtils.makeLogTag(SearchJobFragment.class);
     @Inject
     HomePresenter mHomePresenter;
@@ -245,4 +246,9 @@ public class SearchJobFragment extends BaseFragment implements HomeView {
             }
         }
     };
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
 }

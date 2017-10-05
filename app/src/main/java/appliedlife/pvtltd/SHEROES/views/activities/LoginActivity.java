@@ -29,6 +29,7 @@ import butterknife.ButterKnife;
  * Title: A login screen that offers login via email/password.
  */
 public class LoginActivity extends BaseActivity implements LoginFragment.LoginActivityIntractionListner {
+    private static final String SCREEN_LABEL = "Login Screen";
     private final String TAG = LogUtils.makeLogTag(LoginActivity.class);
     @Inject
     Preference<LoginResponse> userPreference;
@@ -143,6 +144,11 @@ public class LoginActivity extends BaseActivity implements LoginFragment.LoginAc
         EmailVerificationFragment emailVerificationFragment = new EmailVerificationFragment();
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
                 .replace(R.id.fragment_login, emailVerificationFragment, EmailVerificationFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 }
 

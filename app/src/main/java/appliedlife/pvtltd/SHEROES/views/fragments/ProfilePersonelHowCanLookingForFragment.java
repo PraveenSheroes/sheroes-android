@@ -58,6 +58,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.profileOpertunityTypeReq
  */
 
 public class ProfilePersonelHowCanLookingForFragment extends BaseFragment implements OnBoardingView {
+    private static final String SCREEN_LABEL = "Looking For Screen";
     private final String TAG = LogUtils.makeLogTag(ProfilePersonelHowCanLookingForFragment.class);
     @Bind(R.id.rv_how_can_sheroes_help_list)
     RecyclerView mRecyclerView;
@@ -360,5 +361,10 @@ public class ProfilePersonelHowCanLookingForFragment extends BaseFragment implem
                 break;
             }
         }
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 }

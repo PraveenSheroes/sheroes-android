@@ -56,6 +56,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.COMMUNITY_O
  */
 
 public class ProfessionalEditBasicDetailsFragment extends BaseFragment implements MonthPickerForProfileDialogFragment.MonthPicker,ProfileView,DayPickerProfile.MyDayPickerListener, DatePickerForProfile.YearPicker {
+    private static final String SCREEN_LABEL = "Professional Basic Details Screen";
     private final String TAG = LogUtils.makeLogTag(ProfessionalEditBasicDetailsFragment.class);
     private final String SCREEN_NAME = "Professional_Edit_Basic_Details_screen";
     @Inject
@@ -381,6 +382,11 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment implement
 
         mEtYear.setText(""+YearValue);
         mYearValue=YearValue;
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 
     public interface EditProfileCallable {

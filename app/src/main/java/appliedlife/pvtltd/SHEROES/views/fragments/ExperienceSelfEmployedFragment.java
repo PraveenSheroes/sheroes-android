@@ -12,6 +12,7 @@ import appliedlife.pvtltd.SHEROES.R;
  * Created by Dilip.Chaudhary on 13/4/17.
  */
 public class ExperienceSelfEmployedFragment extends BaseWorkExperienceFragment {
+    private static final String SCREEN_LABEL = "Experience Seld Employed Screen";
     private static final String TAG = "ExperienceSelfEmployedFragment";
 
 
@@ -22,4 +23,8 @@ public class ExperienceSelfEmployedFragment extends BaseWorkExperienceFragment {
         return view;
     }
 
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
 }

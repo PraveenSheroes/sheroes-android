@@ -43,6 +43,7 @@ import butterknife.ButterKnife;
  * Created by Praveen_Singh on 09-01-2017.
  */
 public class AllSearchFragment extends BaseFragment implements HomeView {
+    private static final String SCREEN_LABEL = "All Search Screen";
     private final String TAG = LogUtils.makeLogTag(AllSearchFragment.class);
     @Inject
     HomePresenter mHomePresenter;
@@ -173,4 +174,9 @@ public class AllSearchFragment extends BaseFragment implements HomeView {
             }
         }
     };
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
 }

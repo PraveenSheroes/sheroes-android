@@ -34,7 +34,7 @@ import butterknife.ButterKnife;
 
 public class ProfileFullViewFragment extends BaseFragment implements HomeView {
 
-
+    private static final String SCREEN_LABEL = "Profile Full Screen";
     private final String TAG = LogUtils.makeLogTag(ProfileFullViewFragment.class);
     @Inject
     HomePresenter mHomePresenter;
@@ -141,6 +141,11 @@ public class ProfileFullViewFragment extends BaseFragment implements HomeView {
     @Override
     public void onResume() {
         super.onResume();
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 
     public interface HomeActivityIntractionListner {

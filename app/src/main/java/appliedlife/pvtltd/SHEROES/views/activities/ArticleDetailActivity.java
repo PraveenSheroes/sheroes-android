@@ -29,9 +29,12 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -60,6 +63,7 @@ import butterknife.OnClick;
 
 public class ArticleDetailActivity extends BaseActivity implements CommentReactionFragment.HomeActivityIntractionListner, AppBarLayout.OnOffsetChangedListener {
     private final String TAG = LogUtils.makeLogTag(ArticleDetailActivity.class);
+    private final String SCREEN_LABEL = "Article Detail Activity Screen";
     @Bind(R.id.app_bar_article_detail)
     AppBarLayout mAppBarLayout;
     @Bind(R.id.iv_article_detail)
@@ -590,5 +594,24 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
         intent.putExtras(bundle);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
         overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
+
+    @Override
+    protected Map<String, Object> getExtraPropertiesToTrack() {
+        HashMap<String, Object> properties = new
+                EventProperty.Builder()
+                .id(Long.toString(mFeedDetail.getIdOfEntityOrParticipant()))
+                .build();
+        return properties;
+    }
+
+    @Override
+    public boolean shouldTrackScreen() {
+        return false;
     }
 }

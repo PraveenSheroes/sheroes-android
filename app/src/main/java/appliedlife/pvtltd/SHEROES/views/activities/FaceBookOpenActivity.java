@@ -61,6 +61,7 @@ import butterknife.OnClick;
  */
 
 public class FaceBookOpenActivity extends BaseActivity implements LoginView {
+    public static final String SCREEN_LABEL = "Facebook Open Activity";
     private final String TAG = LogUtils.makeLogTag(FaceBookOpenActivity.class);
     @Inject
     Preference<LoginResponse> userPreference;
@@ -336,6 +337,11 @@ public class FaceBookOpenActivity extends BaseActivity implements LoginView {
     @Override
     public void sendVerificationEmailSuccess(EmailVerificationResponse emailVerificationResponse){
 
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 }
 

@@ -47,6 +47,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.jobCategoryRequestBuilde
  */
 
 public class JobFilterFragment extends BaseFragment {
+    private static final String SCREEN_LABEL = "Job Filters Screen";
     private final String TAG = LogUtils.makeLogTag(JobFilterFragment.class);
     @Inject
     HomePresenter mHomePresenter;
@@ -236,4 +237,8 @@ public class JobFilterFragment extends BaseFragment {
         return null;
     }
 
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
 }

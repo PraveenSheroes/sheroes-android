@@ -21,6 +21,7 @@ import butterknife.OnClick;
  */
 
 public class Feedback_ThankyouActivity extends BaseActivity {
+    private static final String SCREEN_LABEL = "FeedBack Thank You Screen";
     private final String TAG = LogUtils.makeLogTag(Feedback_ThankyouActivity.class);
     @Bind(R.id.tv_setting_tittle)
     TextView mTvTerms;
@@ -83,5 +84,8 @@ public class Feedback_ThankyouActivity extends BaseActivity {
     }
 
 
-
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
 }

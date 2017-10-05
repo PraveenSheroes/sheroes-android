@@ -30,10 +30,15 @@ import com.moe.pushlibrary.PayloadBuilder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
+import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
@@ -96,7 +101,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.MARK_AS_SPA
  * Title: Base fragment for all child fragment.
  * all the common behaviour.
  */
-public class BaseFragment extends Fragment implements View.OnClickListener, HomeView, CommunityView, ProfileView, HelplineView, LoginView {
+public abstract class BaseFragment extends Fragment implements EventInterface, View.OnClickListener, HomeView, CommunityView, ProfileView, HelplineView, LoginView {
     private final String TAG = LogUtils.makeLogTag(BaseFragment.class);
     public FragmentActivity mActivity;
     private FragmentListRefreshData mFragmentListRefreshData;
@@ -125,16 +130,6 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         return super.onCreateView(inflater, container, savedInstanceState);
-    }
-    @Override
-    public void onResume() {
-        super.onResume();
-        LogUtils.info(TAG,"**********On Resume base fragment*****");
-    }
-    @Override
-    public void onPause() {
-        super.onPause();
-        LogUtils.info(TAG,"**********On Pause base fragment*****");
     }
     public void setFragmentData(FragmentOpen fragmentOpen) {
         this.mFragmentOpen = fragmentOpen;
@@ -352,6 +347,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                 Toast.makeText(getContext(), AppConstants.MARK_AS_SPAM, Toast.LENGTH_SHORT).show();
                 mFeedDetail.setFromHome(true);
                 commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+                AnalyticsManager.trackPostAction(Event.POST_REPORTED, mFeedDetail);
                 break;
             case AppConstants.FAILED:
                 mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), MARK_AS_SPAM);
@@ -365,6 +361,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
         switch (baseResponse.getStatus()) {
             case AppConstants.SUCCESS:
                 commentListRefresh(mFeedDetail, DELETE_COMMUNITY_POST);
+                AnalyticsManager.trackPostAction(Event.POST_DELETED, mFeedDetail);
                 break;
             case AppConstants.FAILED:
                 mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);
@@ -387,8 +384,9 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                 MoEHelper mMoEHelper = MoEHelper.getInstance(getActivity());
                 PayloadBuilder payloadBuilder = new PayloadBuilder();
                 MoEngageUtills moEngageUtills = MoEngageUtills.getInstance();
-                ;
                 moEngageUtills.entityMoEngageJoinedCommunity(getActivity(), mMoEHelper, payloadBuilder, mFeedDetail.getNameOrTitle(), mFeedDetail.getIdOfEntityOrParticipant(), mFeedDetail.isClosedCommunity(), MoEngageConstants.COMMUNITY_TAG, TAG, mFeedDetail.getItemPosition());
+                HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(mFeedDetail.getIdOfEntityOrParticipant())).name(mFeedDetail.getNameOrTitle()).build();
+                AnalyticsManager.trackEvent(Event.COMMUNITY_JOINED, properties);
                 break;
             case AppConstants.FAILED:
                 mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);
@@ -408,6 +406,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                         LastComment lastComment = lastCommentList.get(lastCommentList.size() - 1);
                         lastCommentList.remove(lastComment);
                         mFeedDetail.setLastComments(lastCommentList);
+                        AnalyticsManager.trackPostAction(Event.POST_EDITED, mFeedDetail);
                     }
                     mAdapter.notifyDataSetChanged();
                     break;
@@ -457,6 +456,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                     PayloadBuilder payloadBuilder = new PayloadBuilder();
                     MoEngageUtills moEngageUtills = MoEngageUtills.getInstance();
                     moEngageUtills.entityMoEngageBookMarkData(getActivity(), mMoEHelper, payloadBuilder, mFeedDetail);
+                    AnalyticsManager.trackPostAction(Event.POST_BOOKMARKED, mFeedDetail);
                     break;
                 case AppConstants.FAILED:
                     if (!mFeedDetail.isBookmarked()) {
@@ -490,6 +490,7 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
                     PayloadBuilder payloadBuilder = new PayloadBuilder();
                     MoEngageUtills moEngageUtills = MoEngageUtills.getInstance();
                     moEngageUtills.entityMoEngageReaction(getActivity(), mMoEHelper, payloadBuilder, mFeedDetail, mPressedEmoji, mPosition);
+                    AnalyticsManager.trackPostAction(Event.POST_LIKED, mFeedDetail);
                     break;
                 case AppConstants.FAILED:
                     if (!mFeedDetail.isLongPress()) {
@@ -608,6 +609,40 @@ public class BaseFragment extends Fragment implements View.OnClickListener, Home
     public void sendVerificationEmailSuccess(EmailVerificationResponse emailVerificationResponse) {
 
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (trackScreenTime()) {
+            AnalyticsManager.timeScreenView(getScreenName());
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (shouldTrackScreen()) {
+            AnalyticsManager.trackScreenView(getScreenName(), getExtraProperties());
+        }
+    }
+
+    public boolean shouldTrackScreen() {
+        return true;
+    }
+
+    protected boolean trackScreenTime() {
+        return false;
+    }
+
+    protected Map<String, Object> getExtraProperties() {
+        return null;
+    }
+
+    @Override
+    public void trackEvent(final Event event, final Map<String, Object> properties) {
+        AnalyticsManager.trackEvent(event, getScreenName(), properties);
+    }
+
 
     /**
      * this method will be use for fragment pop

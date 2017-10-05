@@ -42,7 +42,7 @@ import butterknife.ButterKnife;
  */
 
 public class SettingPreferencesEducationDetailsFragment extends BaseFragment implements SettingFeedbackView {
-
+    private static final String SCREEN_LABEL = "Setting Preference Education Screen";
     private final String TAG = LogUtils.makeLogTag(SettingPreferencesEducationDetailsFragment.class);
 
 
@@ -193,6 +193,11 @@ public class SettingPreferencesEducationDetailsFragment extends BaseFragment imp
     @Override
     public void showNwError() {
 
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 
     public interface SettingPreferencesEducationDetailsIntractionListener {

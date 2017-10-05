@@ -46,6 +46,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_ON_ON
  */
 
 public class OnBoardingShareYourInterestFragment extends BaseFragment implements OnBoardingView {
+    private static final String SCREEN_LABEL = "OnBoarding Interest Screen";
     private final String TAG = LogUtils.makeLogTag(OnBoardingShareYourInterestFragment.class);
     @Bind(R.id.rv_looking_for_how_can_sheroes_help_list)
     RecyclerView mRecyclerView;
@@ -150,5 +151,10 @@ public class OnBoardingShareYourInterestFragment extends BaseFragment implements
                     break;
             }
         }
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 }

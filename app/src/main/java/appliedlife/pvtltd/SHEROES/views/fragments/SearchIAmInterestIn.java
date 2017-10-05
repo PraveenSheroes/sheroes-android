@@ -57,6 +57,7 @@ import butterknife.OnClick;
 
 
 public class SearchIAmInterestIn extends BaseFragment implements BaseHolderInterface ,ProfileView{
+    private static final String SCREEN_LABEL = "Search Interest In Screen";
     @Inject
     ProfilePersenter mProfilePresenter;
     @Inject
@@ -479,6 +480,11 @@ public class SearchIAmInterestIn extends BaseFragment implements BaseHolderInter
     @Override
     public void getProfileListSuccess(List<Doc> feedDetailList) {
 
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 
 

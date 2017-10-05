@@ -29,6 +29,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -77,6 +78,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.notificationReadCountReq
  */
 
 public class SpamPostListDialogFragment extends BaseDialogFragment  {
+    private static final String SCREEN_LABEL = "Posts Moderation Screen";
     private final String TAG = LogUtils.makeLogTag(SpamPostListDialogFragment.class);
     @Inject
     AppUtils mAppUtils;
@@ -152,6 +154,7 @@ public class SpamPostListDialogFragment extends BaseDialogFragment  {
                 refreshFeedMethod();
             }
         });
+        AnalyticsManager.trackScreenView(SCREEN_LABEL);
         return view;
     }
     private void refreshFeedMethod() {

@@ -37,6 +37,7 @@ import butterknife.OnClick;
  */
 
 public class JobFunctionalAreaFragment extends BaseFragment {
+    private static final String SCREEN_LABEL = "Job Funtional Area Screen";
     private final String TAG = LogUtils.makeLogTag(JobFilterFragment.class);
     @Inject
     CommentReactionPresenter mCommentReactionPresenter;
@@ -154,6 +155,11 @@ public class JobFunctionalAreaFragment extends BaseFragment {
         listFeelter.add(filterList5);
 
 
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 
     public interface HomeActivityJobLocationIntractionListner {

@@ -15,11 +15,15 @@ import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -55,6 +59,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.jobApplyRequestBuilder;
  */
 
 public class JobDetailFragment extends BaseFragment implements HomeView, JobView {
+    private static final String SCREEN_LABEL = "Job Details Screen";
     private final String TAG = LogUtils.makeLogTag(JobDetailFragment.class);
     @Inject
     HomePresenter mHomePresenter;
@@ -177,6 +182,14 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
                 mFeedDetail.setApplied(true);
                 ((JobDetailActivity) getActivity()).setBackGroundImage(mFeedDetail);
                 Toast.makeText(getActivity(), getString(R.string.ID_APPLIED) + AppConstants.SPACE + getString(R.string.ID_SUCCESSFULLY), Toast.LENGTH_SHORT).show();
+                HashMap<String, Object> properties =
+                        new EventProperty.Builder()
+                        .id(Long.toString(mFeedDetail.getIdOfEntityOrParticipant()))
+                        .title(mFeedDetail.getNameOrTitle())
+                        .companyId(Long.toString(mFeedDetail.getCompanyMasterId()))
+                        .location(mFeedDetail.getAuthorCityName())
+                        .build();
+                trackEvent(Event.JOBS_APPLIED, properties);
                 moEngageData(mFeedDetail);
                 break;
             case AppConstants.FAILED:
@@ -226,6 +239,14 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
             if (baseResponse instanceof BookmarkResponsePojo) {
                 switch (baseResponse.getStatus()) {
                     case AppConstants.SUCCESS:
+                        HashMap<String, Object> properties =
+                                new EventProperty.Builder()
+                                        .id(Long.toString(mFeedDetail.getIdOfEntityOrParticipant()))
+                                        .title(mFeedDetail.getNameOrTitle())
+                                        .companyId(Long.toString(mFeedDetail.getCompanyMasterId()))
+                                        .location(mFeedDetail.getAuthorCityName())
+                                        .build();
+                        trackEvent(Event.JOBS_BOOKMARKED, properties);
                         ((JobDetailActivity) getActivity()).mTvJobDetailBookmark.setEnabled(true);
                         moEngageUtills.entityMoEngageBookMarkData(getActivity(), mMoEHelper, payloadBuilder, mFeedDetail);
                         break;
@@ -249,5 +270,17 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
             }
         }
 
+    }
+
+    @Override
+    protected Map<String, Object> getExtraProperties() {
+        HashMap<String, Object> properties = new
+                EventProperty.Builder()
+                .id(Long.toString(mFeedDetail.getIdOfEntityOrParticipant()))
+                .build();
+        return properties;
+    }
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 }

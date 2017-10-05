@@ -18,6 +18,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -50,6 +51,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.FOLLOW_UNFO
  */
 
 public class PublicProfileGrowthBuddiesDialogFragment extends BaseDialogFragment implements HomeView {
+    private static final String SCREEN_LABEL = "Champions Screen";
     private final String TAG = LogUtils.makeLogTag(PublicProfileGrowthBuddiesDialogFragment.class);
     @Inject
     AppUtils mAppUtils;
@@ -110,6 +112,7 @@ public class PublicProfileGrowthBuddiesDialogFragment extends BaseDialogFragment
             }
         });
         setCancelable(true);
+        AnalyticsManager.trackScreenView(SCREEN_LABEL);
         return view;
     }
 

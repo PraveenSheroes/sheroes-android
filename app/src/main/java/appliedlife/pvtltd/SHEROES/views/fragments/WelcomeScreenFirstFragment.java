@@ -21,6 +21,7 @@ import butterknife.ButterKnife;
  */
 
 public class WelcomeScreenFirstFragment extends BaseFragment {
+    private static final String SCREEN_LABEL = "Welcome First Screen";
     private final String TAG = LogUtils.makeLogTag(WelcomeScreenFirstFragment.class);
     private FragmentIntractionWithActivityListner mHomeSearchActivityFragmentIntractionWithActivityListner;
     @Override
@@ -45,7 +46,18 @@ public class WelcomeScreenFirstFragment extends BaseFragment {
         ButterKnife.bind(this, view);
         return view;
     }
-   /* @OnClick(R.id.tv_click_to_join)
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
+
+    @Override
+    public boolean shouldTrackScreen() {
+        return false;
+    }
+
+    /* @OnClick(R.id.tv_click_to_join)
     public void clickToJoin()
     {
         mHomeSearchActivityFragmentIntractionWithActivityListner.onSuccessResult(AppConstants.SUCCESS,null);

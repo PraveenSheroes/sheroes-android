@@ -30,11 +30,14 @@ import com.moe.pushlibrary.PayloadBuilder;
 import com.moengage.push.PushManager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -97,6 +100,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.notificationReadCountReq
  * Fragment will have all UI components and operate with activity .
  */
 public class HomeFragment extends BaseFragment {
+    private static final String SCREEN_LABEL = "Feed Screen";
     private final String TAG = LogUtils.makeLogTag(HomeFragment.class);
 
     @Inject
@@ -376,6 +380,13 @@ public class HomeFragment extends BaseFragment {
                     if (null != challengeFeedDetail) {
                         ChallengeListResponse challengeListResponse = (ChallengeListResponse) baseResponse;
                         List<ChallengeDataItem> challengeDataItemList = challengeFeedDetail.getChallengeDataItems();
+
+                        HashMap<String, Object> properties =
+                                new EventProperty.Builder()
+                                        .id(Long.toString(mChallengeDataItem.getChallengeId()))
+                                        .build();
+                        trackEvent(Event.CHALLENGE_ACCEPTED, properties);
+
                         long challengeId = mChallengeDataItem.getChallengeId();
                         for (ChallengeDataItem challengeDataItem : challengeDataItemList) {
                             if (challengeId == challengeDataItem.getChallengeId()) {
@@ -674,4 +685,8 @@ public class HomeFragment extends BaseFragment {
         }
     }
 
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
 }

@@ -30,11 +30,16 @@ import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -81,6 +86,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.removeMemberRequestBuild
  */
 
 public class CommunityOpenAboutFragment extends BaseFragment implements CommunityView, AdapterView.OnItemClickListener, AdapterView.OnItemSelectedListener, AllMembersView {
+    private static final String SCREEN_LABEL = "Community Info Screen";
     private final String TAG = LogUtils.makeLogTag(CommunityOpenAboutFragment.class);
     @Inject
     MembersPresenter mMemberpresenter;
@@ -559,6 +565,8 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
                 if(null!=mFeedDetail)
                 {
                     moEngageUtills.entityMoEngageLeaveCommunity(getActivity(),mMoEHelper,payloadBuilder,mFeedDetail.getNameOrTitle(), mFeedDetail.getIdOfEntityOrParticipant(), mFeedDetail.isClosedCommunity(), MoEngageConstants.COMMUNITY_TAG, mFeedDetail.isMember());
+                    HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(mFeedDetail.getIdOfEntityOrParticipant())).name(mFeedDetail.getNameOrTitle()).build();
+                    AnalyticsManager.trackEvent(Event.COMMUNITY_LEFT, properties);
                 }
                 break;
             case AppConstants.FAILED:
@@ -567,6 +575,11 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
             default:
                 mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), ERROR_JOIN_INVITE);
         }
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 
 
@@ -619,6 +632,15 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
     @OnClick(R.id.tv_post_in_moderation)
     public void tvPostModerationClick() {
         ((CommunitiesDetailActivity)getActivity()).spamPostListFragment(feedRequestPojo);
+    }
+
+    @Override
+    protected Map<String, Object> getExtraProperties() {
+        HashMap<String, Object> properties = new
+                EventProperty.Builder()
+                .id(Long.toString(mFeedDetail.getIdOfEntityOrParticipant()))
+                .build();
+        return properties;
     }
 
 }

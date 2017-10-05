@@ -63,6 +63,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -124,6 +126,7 @@ import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MEN
 
 public class HomeActivity extends BaseActivity implements CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, CommentReactionFragment.HomeActivityIntractionListner, ArticleCategorySpinnerFragment.HomeSpinnerFragmentListner {
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
+    private static final String SCREEN_LABEL = "Home Screen";
     @Inject
     Preference<LoginResponse> mUserPreference;
     @Bind(R.id.iv_drawer_profile_circle_icon)
@@ -659,6 +662,11 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     }
 
     private void sharePostOnFacebook(ChallengeDataItem challengeDataItem) {
+        HashMap<String, Object> properties =
+                new EventProperty.Builder()
+                        .id(Long.toString(challengeDataItem.getChallengeId()))
+                        .build();
+        trackEvent(Event.CHALLENGE_SHARED, properties);
         String urlToShare = challengeDataItem.getDeepLinkUrl();
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
@@ -1582,5 +1590,10 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         intent.putExtras(bundle);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
         overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 }

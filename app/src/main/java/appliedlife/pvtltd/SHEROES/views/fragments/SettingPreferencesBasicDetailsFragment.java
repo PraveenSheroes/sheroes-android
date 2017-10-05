@@ -44,7 +44,7 @@ import butterknife.ButterKnife;
 
 public class SettingPreferencesBasicDetailsFragment extends BaseFragment implements SettingFeedbackView {
 
-
+    private static final String SCREEN_LABEL = "Setting Preference Basic Detail Screen";
     private SettingPreferencesBasicDetailsIntractionListener settingPreferencesBasicDetailsIntractionListener;
 
     String strtext;
@@ -364,6 +364,11 @@ public class SettingPreferencesBasicDetailsFragment extends BaseFragment impleme
     @Override
     public void showNwError() {
 
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 
 

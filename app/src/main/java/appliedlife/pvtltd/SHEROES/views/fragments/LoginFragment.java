@@ -18,9 +18,15 @@ import com.facebook.login.LoginManager;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
+import java.util.HashMap;
+
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
+import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
@@ -56,6 +62,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
  */
 
 public class LoginFragment extends BaseFragment implements LoginView {
+    private static final String SCREEN_LABEL = "Email Login Screen";
     private final String TAG = LogUtils.makeLogTag(LoginFragment.class);
     @Inject
     Preference<LoginResponse> mUserPreference;
@@ -139,7 +146,11 @@ public class LoginFragment extends BaseFragment implements LoginView {
                             ((SheroesApplication) getActivity().getApplication()).trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
                         }
                         ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_USING_EMAIL, AppConstants.EMPTY_STRING);
+                        AnalyticsManager.initializeMixpanel(getContext());
                         mLoginActivityIntractionListner.onLoginAuthToken();
+                        final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(false).authProvider("Email").build();
+                        trackEvent(Event.APP_LOGIN, properties);
+                        AnalyticsManager.initializeMixpanel(getActivity());
                         break;
                     case AppConstants.FAILED:
                         LoginManager.getInstance().logOut();
@@ -185,6 +196,11 @@ public class LoginFragment extends BaseFragment implements LoginView {
     public void onDestroyView() {
         super.onDestroyView();
         mLoginPresenter.detachView();
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 
     public interface LoginActivityIntractionListner {

@@ -25,6 +25,7 @@ import butterknife.OnClick;
  */
 
 public class ImageFullViewFragment extends BaseFragment implements ViewPager.OnPageChangeListener {
+    private static final String SCREEN_LABEL = "Image Full Screen";
     private final String TAG = LogUtils.makeLogTag(ImageFullViewFragment.class);
     @Bind(R.id.vp_full_image_view)
     ViewPager viewPagerFullImageView;
@@ -73,5 +74,10 @@ public class ImageFullViewFragment extends BaseFragment implements ViewPager.OnP
     public void dismissCommentDialog() {
       //  (getActivity()).onBackPressed();
         (getActivity()).getSupportFragmentManager().popBackStackImmediate();
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 }

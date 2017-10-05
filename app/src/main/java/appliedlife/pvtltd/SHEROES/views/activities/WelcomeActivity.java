@@ -76,6 +76,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.FOLLOW_UNFO
  */
 
 public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageChangeListener, LoginView {
+    private static final String SCREEN_LABEL = "Intro Screen";
     private final String TAG = LogUtils.makeLogTag(WelcomeActivity.class);
     @Inject
     Preference<LoginResponse> userPreference;
@@ -537,5 +538,9 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         setIntent(intent);
     }
 
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
 }
 

@@ -27,7 +27,6 @@ import butterknife.OnClick;
  */
 
 public class SettingPreferencsFragment extends BaseFragment implements View.OnClickListener {
-
     private final String TAG = LogUtils.makeLogTag(SettingPreferencsFragment.class);
     private final String SCREEN_NAME = "Setting_preferences_screen";
 
@@ -143,6 +142,11 @@ public class SettingPreferencsFragment extends BaseFragment implements View.OnCl
             mTextview.setTextColor(getResources().getColor(R.color.searchbox_text_color));
         }
     };
+
+    @Override
+    public String getScreenName() {
+        return null;
+    }
 
 
     public interface settingPreferencesCallBack {

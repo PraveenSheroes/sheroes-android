@@ -39,6 +39,7 @@ import butterknife.OnClick;
  */
 
 public class ProfileWorkExperienceFragment extends BaseFragment implements ProfileView {
+    private static final String SCREEN_LABEL = "Work Experiences Screen";
     private final String TAG = LogUtils.makeLogTag(ProfileWorkExperienceFragment.class);
     @Bind(R.id.a1_profile_workexperiences)
     AppBarLayout ma1ProfileWorkexperiences;
@@ -129,5 +130,10 @@ public class ProfileWorkExperienceFragment extends BaseFragment implements Profi
 
     @Override
     public void getWorkExpListSuccess(WorkExpListResponse workExpListResponse) {
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 }

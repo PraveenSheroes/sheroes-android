@@ -27,6 +27,7 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -65,6 +66,7 @@ import butterknife.OnClick;
  */
 
 public class SearchGoodAtDialogFragment extends BaseDialogFragment implements CommunityTagsView, BaseHolderInterface, HomeView, ProfileView {
+    private static final String SCREEN_LABEL = "Search Good At Screen";
     @Inject
     ProfilePersenter mprofilePresenter;
     @Inject
@@ -154,6 +156,7 @@ public class SearchGoodAtDialogFragment extends BaseDialogFragment implements Co
         mAdapter = new GenericRecyclerViewAdapter(getActivity(), this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
+        AnalyticsManager.trackScreenView(SCREEN_LABEL);
         ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_MY_PROFILE_PROFESSIONAL_EDIT_GOOD_AT_SEARCH_AT));
         return v;
     }

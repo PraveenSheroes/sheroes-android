@@ -57,6 +57,7 @@ import butterknife.OnClick;
  */
 
 public class PersonalBasicDetailsFragment extends BaseFragment implements ProfileView, View.OnClickListener {
+    private static final String SCREEN_LABEL = "Personal Basic Detail Screen";
     private final String TAG = LogUtils.makeLogTag(ProfessionalEditBasicDetailsFragment.class);
     private final String SCREEN_NAME = "Personal_edit_basic_details_screen";
     @Inject
@@ -352,5 +353,10 @@ public class PersonalBasicDetailsFragment extends BaseFragment implements Profil
     @Override
     public void getProfileListSuccess(List<Doc> feedDetailList) {
 
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 }

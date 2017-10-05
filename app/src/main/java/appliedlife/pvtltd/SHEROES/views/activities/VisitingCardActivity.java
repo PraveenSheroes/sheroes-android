@@ -28,7 +28,7 @@ import butterknife.Bind;
  * Created by priyanka on 14/03/17.
  */
 public class VisitingCardActivity extends BaseActivity {
-
+    private static final String SCREEN_LABEL = "Visiting Card Screen";
     @Bind(R.id.tv_download_visiting_card)
     TextView mTv_loading;
     private String dest_file_path = AppConstants.PDF_VISITING_CARD;
@@ -149,4 +149,8 @@ public class VisitingCardActivity extends BaseActivity {
     }
 
 
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
 }

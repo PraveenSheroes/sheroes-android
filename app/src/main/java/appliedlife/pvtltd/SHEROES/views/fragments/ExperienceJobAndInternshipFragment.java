@@ -13,6 +13,7 @@ import appliedlife.pvtltd.SHEROES.R;
  * Created by Dilip.Chaudhary on 13/4/17.
  */
 public class ExperienceJobAndInternshipFragment extends BaseWorkExperienceFragment {
+    private static final String SCREEN_LABEL = "Experience Job And Internship Screen";
     private static final String TAG = "ExperienceJobAndInternshipFragment";
 
 
@@ -22,4 +23,8 @@ public class ExperienceJobAndInternshipFragment extends BaseWorkExperienceFragme
         return inflater.inflate(R.layout.fragment_experience_job_and_internship, container, false);
     }
 
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
 }

@@ -4,6 +4,7 @@ package appliedlife.pvtltd.SHEROES.basecomponents;
 import javax.inject.Singleton;
 
 
+import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
 import appliedlife.pvtltd.SHEROES.models.InviteSearchModel;
 import appliedlife.pvtltd.SHEROES.models.RequestedListModel;
 import appliedlife.pvtltd.SHEROES.presenters.CommunityTagsPresenter;
@@ -227,6 +228,8 @@ import dagger.Component;
 @Singleton
 @Component(modules = {SheroesAppModule.class})
 public interface SheroesAppComponent {
+    void inject(MixpanelHelper mixpanelHelper);
+
     void inject(HomeActivity homeActivity);
 
     void inject(HomeFragment homeFragment);

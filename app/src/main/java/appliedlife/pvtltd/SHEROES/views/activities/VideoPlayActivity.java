@@ -9,13 +9,18 @@ import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 
 public class VideoPlayActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
-
+    private static final String SCREEN_LABEL = "Video Play Screen";
     private static final int RECOVERY_REQUEST = 1;
     private YouTubePlayerView youTubeView;
     private MyPlayerStateChangeListener playerStateChangeListener;
@@ -35,6 +40,10 @@ public class VideoPlayActivity extends YouTubeBaseActivity implements YouTubePla
         playerStateChangeListener = new MyPlayerStateChangeListener();
         playbackEventListener = new MyPlaybackEventListener();
         ((SheroesApplication) getApplication()).trackScreenView(getString(R.string.ID_VEDIO_PLAYER_SCREEN));
+
+        HashMap<String, Object> properties = new EventProperty.Builder().url(videoString).build();
+        AnalyticsManager.trackScreenView(SCREEN_LABEL, properties);
+        AnalyticsManager.trackScreenView(SCREEN_LABEL);
     }
 
     @Override

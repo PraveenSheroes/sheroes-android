@@ -20,15 +20,23 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
 import com.f2prateek.rx.preferences.Preference;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
@@ -76,7 +84,7 @@ import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_REACTION_COMMENT_ME
  * @since 29/12/2016.
  * Title: Base activity for all activities.
  */
-public class BaseActivity extends AppCompatActivity implements BaseHolderInterface, FragmentIntractionWithActivityListner, View.OnTouchListener, View.OnClickListener {
+public abstract class BaseActivity extends AppCompatActivity implements EventInterface, BaseHolderInterface, FragmentIntractionWithActivityListner, View.OnTouchListener, View.OnClickListener {
     private final String TAG = LogUtils.makeLogTag(BaseActivity.class);
     public boolean mIsDestroyed;
     protected SheroesApplication mSheroesApplication;
@@ -94,6 +102,8 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
     private MoEngageUtills moEngageUtills;
     private GenericWebViewFragment genericWebViewFragment;
     private long mUserId;
+    private HashMap<String, Object> mPreviousScreenProperties;
+    private String mPreviousScreen;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -102,6 +112,25 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
         mSheroesApplication = (SheroesApplication) this.getApplicationContext();
+
+/*        if (getIntent() != null && getIntent().getExtras() != null) {
+            String notificationId = getIntent().getExtras().getString("notificationId");
+            logEventToAnalytics(notificationId);
+            mPreviousScreen = getIntent().getStringExtra(SOURCE_SCREEN);
+            mPreviousScreenProperties = (HashMap<String, Object>) getIntent().getSerializableExtra(SOURCE_PROPERTIES);
+        }*/
+
+        if (!trackScreenTime() && shouldTrackScreen()) {
+            Map<String, Object> properties = getExtraPropertiesToTrack();
+          /*  if (!AppUtils.isEmpty(mPreviousScreenProperties)) {
+                properties.putAll(mPreviousScreenProperties);
+            }*/
+            AnalyticsManager.trackScreenView(getScreenName(), getPreviousScreenName(), properties);
+        }
+    }
+
+    public boolean shouldTrackScreen() {
+        return true;
     }
 
     @Override
@@ -183,6 +212,34 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
         }
     }
 
+    private void logEventToAnalytics(String notificationId) {
+        if (StringUtil.isNotNullOrEmptyString(notificationId)) {
+
+            HashMap<String, Object> properties = new EventProperty.Builder().id(notificationId).type("type"/*getNotificationType()*/).build();
+            trackEvent(Event.PUSH_NOTIFICATION_CLICKED, properties);
+
+         /*   if (currentUser != null) {
+                Answers.getInstance().logCustom(new CustomEvent("Push Notification")
+                        .putCustomAttribute("User", currentUser.remote_id)
+                        .putCustomAttribute("Action", "clicked")
+                        .putCustomAttribute("Notification Type", getNotificationType())
+                        .putCustomAttribute("Notification ID", notificationId));
+            }*/
+        }
+    }
+
+    public void trackEvent(final Event event, final Map<String, Object> properties) {
+        AnalyticsManager.trackEvent(event, getScreenName(), properties);
+    }
+
+    // endregion
+    public String getPreviousScreenName() {
+        if (StringUtil.isNotNullOrEmptyString(mPreviousScreen)) {
+            return mPreviousScreen;
+        }
+        return null;
+    }
+
     public void replaceFragment(Fragment fragment) {
         replaceFragment(fragment, 0, null, false);
     }
@@ -210,6 +267,20 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
         super.onResume();
         mMoEHelper.onResume(this);
         mSheroesApplication.setCurrentActivityName(this.getClass().getSimpleName());
+    }
+
+    @Override
+    protected void onPause() {
+        // "Remember to also call the unregister method when
+        // appropriate."
+        if (trackScreenTime() && shouldTrackScreen()) {
+          /*  Map<String, Object> properties = getExtraPropertiesToTrack();
+            if (!CommonUtil.isEmpty(mPreviousScreenProperties)) {
+                properties.putAll(mPreviousScreenProperties);
+            }*/
+            AnalyticsManager.trackScreenView(getScreenName(), getPreviousScreenName(), null);
+        }
+        super.onPause();
     }
 
     @Override
@@ -272,6 +343,15 @@ public class BaseActivity extends AppCompatActivity implements BaseHolderInterfa
             fragment.show(getFragmentManager(), CommunityOptionJoinDialog.class.getName());
         }
         return fragment;
+    }
+
+
+    protected boolean trackScreenTime() {
+        return false;
+    }
+
+    protected Map<String, Object> getExtraPropertiesToTrack() {
+        return new HashMap<>();
     }
 
     protected void feedCardsHandled(View view, BaseResponse baseResponse) {

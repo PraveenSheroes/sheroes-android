@@ -17,6 +17,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MemberListResponse;
@@ -43,6 +44,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_
  */
 
 public class AllMembersDialogFragment extends BaseDialogFragment implements AllMembersView {
+    private static final String SCREEN_LABEL = "Community Members Screen";
     private final String TAG = LogUtils.makeLogTag(AllMembersDialogFragment.class);
     @Inject
     MembersPresenter mMemberpresenter;
@@ -93,6 +95,7 @@ public class AllMembersDialogFragment extends BaseDialogFragment implements AllM
         mMemberpresenter.getAllMembers(mAppUtils.getPandingMemberRequestBuilder(mFeedDetail.getIdOfEntityOrParticipant(), mFragmentListRefreshData.getPageNo()));
         mFragmentListRefreshData.setEnitityOrParticpantid(mFeedDetail.getIdOfEntityOrParticipant());
         ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_COMMUNITY_MEMBERS));
+        AnalyticsManager.trackScreenView(SCREEN_LABEL);
         return view;
     }
 

@@ -55,7 +55,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_
 
 
 public class ProfileVisitingCardView extends BaseFragment implements ProfileView{
-
+    private static final String SCREEN_LABEL = "Profile Visiting Card Screen";
     private final String TAG = LogUtils.makeLogTag(ProfileVisitingCardView.class);
 
     private final String SCREEN_NAME = "Profile_Visiting_card_screen";
@@ -351,5 +351,10 @@ public class ProfileVisitingCardView extends BaseFragment implements ProfileView
     @Override
     public void getProfileListSuccess(List<Doc> feedDetailList) {
 
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 }

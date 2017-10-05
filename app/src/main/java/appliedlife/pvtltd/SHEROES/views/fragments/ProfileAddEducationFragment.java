@@ -39,6 +39,7 @@ import butterknife.OnClick;
 
 
 public class ProfileAddEducationFragment extends BaseFragment implements ProfileView{
+    private static final String SCREEN_LABEL = "Education Screen";
     private final String TAG = LogUtils.makeLogTag(ProfileAddEducationFragment.class);
     private final String SCREEN_NAME = "Profile_add_education_screen";
     MyProfileView myProfileView;
@@ -195,6 +196,10 @@ public  void Onback_Click()
 
 }
 
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
 
 
     public interface ProfileActivityIntractionListner {

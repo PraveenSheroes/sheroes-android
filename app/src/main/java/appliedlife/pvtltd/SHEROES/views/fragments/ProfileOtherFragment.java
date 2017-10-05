@@ -20,7 +20,7 @@ import butterknife.OnClick;
  */
 
 public class ProfileOtherFragment extends BaseFragment {
-
+    private static final String SCREEN_LABEL = "Profile Other Screen";
     private final String TAG = LogUtils.makeLogTag(ProfileOtherFragment.class);
     private final String SCREEN_NAME = "Profile_Other_screen";
     ProfileView profileViewlistener;
@@ -79,5 +79,8 @@ public class ProfileOtherFragment extends BaseFragment {
     }
 
 
-
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
 }

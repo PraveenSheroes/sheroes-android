@@ -40,6 +40,7 @@ import butterknife.OnClick;
  */
 
 public class JobLocationFilter extends BaseFragment {
+    private static final String SCREEN_LABEL = "Job Search Location Screen";
     private final String TAG = LogUtils.makeLogTag(JobFilterFragment.class);
     @Inject
     CommentReactionPresenter mCommentReactionPresenter;
@@ -158,6 +159,11 @@ public class JobLocationFilter extends BaseFragment {
 
 
 
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 
     public interface HomeActivityJobLocationIntractionListner {

@@ -22,7 +22,7 @@ import butterknife.OnClick;
  */
 
 public class ProfileAddOtherFragment extends BaseFragment {
-
+    private static final String SCREEN_LABEL = "Profile Add Other Screen";
     @Bind(R.id.tv_setting_tittle)
     TextView mTv_setting_tittle;
     @Bind(R.id.iv_back_setting)
@@ -96,4 +96,8 @@ public class ProfileAddOtherFragment extends BaseFragment {
     }
 
 
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
 }

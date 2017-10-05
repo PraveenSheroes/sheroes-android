@@ -105,6 +105,7 @@ dependencies {
     compile 'org.apache.commons:commons-lang3:3.5'
     compile files('libs/YouTubeAndroidPlayerApi.jar')
     compile "com.android.support:exifinterface:25.3.1"
+    compile "com.mixpanel.android:mixpanel-android:5.1.2"
 }
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'io.fabric'

@@ -23,7 +23,7 @@ import butterknife.OnClick;
  */
 
 public class SettingAboutFragment extends BaseFragment {
-
+    private static final String SCREEN_LABEL = "Setting About Screen";
     private final String TAG = LogUtils.makeLogTag(SettingAboutFragment.class);
 
     @Bind(R.id.iv_back_setting)
@@ -45,5 +45,10 @@ public class SettingAboutFragment extends BaseFragment {
     public void onBackClick() {
         ((HomeActivity) getActivity()).getSupportFragmentManager().popBackStack();
 
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 }

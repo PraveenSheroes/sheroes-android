@@ -45,6 +45,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.myCommunityRequestBuilde
  */
 
 public class MyCommunitiesFragment extends BaseFragment implements HomeView {
+    private static final String SCREEN_LABEL = "My Communities Screen";
     private final String TAG = LogUtils.makeLogTag(MyCommunitiesFragment.class);
     @Inject
     HomePresenter mHomePresenter;
@@ -170,4 +171,8 @@ public class MyCommunitiesFragment extends BaseFragment implements HomeView {
         moEngageUtills.entityMoEngageMyCommunity(getActivity(),mMoEHelper,payloadBuilder,timeSpent);
     }
 
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
 }

@@ -50,6 +50,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.feedRequestBuilder;
  */
 
 public class FeaturedFragment extends BaseFragment implements HomeView {
+    private static final String SCREEN_LABEL = "All Communities Screen";
     private final String TAG = LogUtils.makeLogTag(FeaturedFragment.class);
     @Inject
     Preference<LoginResponse> userPreference;
@@ -191,5 +192,10 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
         mHomePresenter.detachView();
         long timeSpent=System.currentTimeMillis()-startedTime;
         moEngageUtills.entityMoEngageFeatureCommunity(getActivity(),mMoEHelper,payloadBuilder,timeSpent);
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 }

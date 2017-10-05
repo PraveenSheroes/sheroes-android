@@ -46,6 +46,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_ON_ON
  */
 
 public class OnBoardingJobAtFragment extends BaseFragment implements OnBoardingView {
+    private static final String SCREEN_LABEL = "OnBoarding Job Screen";
     private final String TAG = LogUtils.makeLogTag(OnBoardingJobAtFragment.class);
     @Bind(R.id.rv_looking_for_how_can_sheroes_help_list)
     RecyclerView mRecyclerView;
@@ -149,5 +150,10 @@ public class OnBoardingJobAtFragment extends BaseFragment implements OnBoardingV
                     break;
             }
         }
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 }

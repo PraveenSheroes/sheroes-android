@@ -16,6 +16,7 @@ import butterknife.ButterKnife;
  */
 
 public class WelcomeScreenFourthFragment  extends BaseFragment {
+    private static final String SCREEN_LABEL = "Welcome Fourth Screen";
     private final String TAG = LogUtils.makeLogTag(WelcomeScreenThirdFragment.class);
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -23,6 +24,16 @@ public class WelcomeScreenFourthFragment  extends BaseFragment {
         View view = inflater.inflate(R.layout.welcome_screen_fourth_fragment, container, false);
         ButterKnife.bind(this, view);
         return view;
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
+
+    @Override
+    public boolean shouldTrackScreen() {
+        return false;
     }
   /*  @OnClick(R.id.tv_click_to_join)
     public void clickToJoin()

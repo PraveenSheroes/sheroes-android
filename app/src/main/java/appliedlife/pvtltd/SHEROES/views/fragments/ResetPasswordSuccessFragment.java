@@ -17,7 +17,7 @@ import butterknife.OnClick;
 
 
 public class ResetPasswordSuccessFragment extends BaseFragment {
-
+    private static final String SCREEN_LABEL = "Reset Password Success Screen";
     @Bind(R.id.reset_pwd_success_text)
     TextView tvResetPwd;
 
@@ -53,5 +53,10 @@ public class ResetPasswordSuccessFragment extends BaseFragment {
     @OnClick(R.id.iv_login_back)
     public void backOnClick() {
         ((LoginActivity)getActivity()).renderLoginFragmentView();
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 }

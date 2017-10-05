@@ -13,7 +13,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
  */
 
 public class ImageThreeFragment extends BaseFragment {
-
+    private static final String SCREEN_LABEL = "Image Three Screen";
     public ImageThreeFragment() {
         // Required empty public constructor
     }
@@ -24,5 +24,10 @@ public class ImageThreeFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.welcome_screen_third_fragment, container, false);
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 }

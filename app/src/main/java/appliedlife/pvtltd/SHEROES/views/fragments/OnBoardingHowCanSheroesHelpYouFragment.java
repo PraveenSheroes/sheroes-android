@@ -44,6 +44,7 @@ import butterknife.ButterKnife;
  */
 
 public class OnBoardingHowCanSheroesHelpYouFragment extends BaseFragment implements OnBoardingView {
+    private static final String SCREEN_LABEL = "OnBoarding Help Screen";
     private final String TAG = LogUtils.makeLogTag(OnBoardingHowCanSheroesHelpYouFragment.class);
     @Bind(R.id.rv_looking_for_how_can_sheroes_help_list)
     RecyclerView mRecyclerView;
@@ -153,5 +154,10 @@ public class OnBoardingHowCanSheroesHelpYouFragment extends BaseFragment impleme
                     break;
             }
         }
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 }

@@ -40,7 +40,8 @@ import butterknife.OnClick;
  */
 
 public class ProfessionalAddEducationActivity extends BaseActivity implements DayPickerProfile.MyDayPickerListener,ProfileView
-{   private final String TAG = LogUtils.makeLogTag(ProfessionalAddEducationActivity.class);
+{   private static final String SCREEN_LABEL = "Add Education Screen";
+    private final String TAG = LogUtils.makeLogTag(ProfessionalAddEducationActivity.class);
     private final String SCREEN_NAME = "Proffesional_Add_Education_screen";
     @Inject
     ProfilePersenter mProfilePresenter;
@@ -303,4 +304,8 @@ public class ProfessionalAddEducationActivity extends BaseActivity implements Da
     }
 
 
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
 }

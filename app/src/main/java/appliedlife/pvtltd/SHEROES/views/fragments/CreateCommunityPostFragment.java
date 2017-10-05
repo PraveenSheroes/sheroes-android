@@ -66,11 +66,15 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -109,7 +113,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.editCommunityPostRequest
  */
 
 public class CreateCommunityPostFragment extends BaseFragment implements SelectCommunityDialogFragment.MyDialogFragmentListener {
-
+    private static final String SCREEN_LABEL = "Create Post Screen";
     @Inject
     Preference<LoginResponse> mUserPreference;
     @Bind(R.id.txt_choose_community_spinner)
@@ -709,6 +713,13 @@ public class CreateCommunityPostFragment extends BaseFragment implements SelectC
     private void afterSuccessCommunityPost(CreateCommunityResponse createCommunityResponse) {
         if (null != mFeedDetail) {
             positionOfFeedItem = mFeedDetail.getItemPosition();
+            HashMap<String, Object> properties = new
+                    EventProperty.Builder()
+                    .id(Long.toString(mFeedDetail.getIdOfEntityOrParticipant()))
+                    .name(mFeedDetail.getNameOrTitle()).communityId(Long.toString(mFeedDetail.communityId))
+                    .communityName(mFeedDetail.getPostCommunityName())
+                    .build();
+            AnalyticsManager.trackEvent(Event.POST_EDITED, properties);
             moEngageUtills.entityMoEngageCreatePost(getActivity(), mMoEHelper, payloadBuilder, mFeedDetail.getNameOrTitle(), mFeedDetail.getIdOfEntityOrParticipant(), mFeedDetail.getCommunityId(), mFeedDetail.isClosedCommunity(), MoEngageConstants.COMMUNITY_POST_TAG, TAG);
             Toast.makeText(getActivity(), messageForSuccess, Toast.LENGTH_LONG).show();
             if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getCallFromName()) && AppConstants.COMMUNITIES_DETAIL.equalsIgnoreCase(mFeedDetail.getCallFromName())) {
@@ -728,6 +739,13 @@ public class CreateCommunityPostFragment extends BaseFragment implements SelectC
             ((CreateCommunityPostActivity) getActivity()).editedSuccessFully(null);
             if (null != createCommunityResponse.getFeedDetail()) {
                 FeedDetail localFeed = createCommunityResponse.getFeedDetail();
+                HashMap<String, Object> properties = new
+                        EventProperty.Builder()
+                        .id(Long.toString(localFeed.getIdOfEntityOrParticipant()))
+                        .name(localFeed.getNameOrTitle()).communityId(Long.toString(localFeed.communityId))
+                        .communityName(localFeed.getPostCommunityName())
+                        .build();
+                AnalyticsManager.trackEvent(Event.POST_CREATED, properties);
                 moEngageUtills.entityMoEngageCreatePost(getActivity(), mMoEHelper, payloadBuilder, localFeed.getNameOrTitle(), localFeed.getIdOfEntityOrParticipant(), localFeed.getCommunityId(), localFeed.isClosedCommunity(), MoEngageConstants.COMMUNITY_POST_TAG, TAG);
             }
         }
@@ -1187,4 +1205,8 @@ public class CreateCommunityPostFragment extends BaseFragment implements SelectC
         newFragment.show(getActivity().getFragmentManager(), "dialog");
     }
 
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
 }

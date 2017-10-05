@@ -84,6 +84,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MY_CO
  * Fragment will have all UI components and operate with activity .
  */
 public class CreateCommunityFragment extends BaseFragment implements CommunityView, CommunityTypeDialogFragment.MyDialogFragmentListener, HomeView {
+    private static final String SCREEN_LABEL = "Create Community Screen";
     private final String TAG = LogUtils.makeLogTag(CreateCommunityFragment.class);
 
     @Bind(R.id.cb_create_community_open_check)
@@ -883,5 +884,9 @@ public class CreateCommunityFragment extends BaseFragment implements CommunityVi
     }
 
 
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
 }
 

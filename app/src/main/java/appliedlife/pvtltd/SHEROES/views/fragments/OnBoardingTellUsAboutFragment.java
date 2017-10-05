@@ -56,6 +56,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.boardingTellUsFormDataRe
  */
 
 public class OnBoardingTellUsAboutFragment extends BaseFragment implements OnBoardingView {
+    private static final String SCREEN_LABEL = "OnBoarding Tell Us Screen";
     private final String TAG = LogUtils.makeLogTag(OnBoardingTellUsAboutFragment.class);
     @Bind(R.id.pb_boarding_progress_bar)
     ProgressBar mProgressBar;
@@ -234,6 +235,11 @@ public class OnBoardingTellUsAboutFragment extends BaseFragment implements OnBoa
 
             }
         }
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 
 

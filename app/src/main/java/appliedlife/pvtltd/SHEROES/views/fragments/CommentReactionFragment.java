@@ -24,11 +24,17 @@ import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsEventType;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentAddDelete;
@@ -69,6 +75,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.postCommentRequestBuilde
  */
 
 public class CommentReactionFragment extends BaseFragment implements AllCommentReactionView {
+    private static final String SCREEN_LABEL = "Reaction Screen";
     private final String TAG = LogUtils.makeLogTag(CommentReactionFragment.class);
     @Inject
     CommentReactionPresenter mCommentReactionPresenter;
@@ -223,6 +230,7 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
             ivUserCommentProfilePic.bindImage(mUserPreference.get().getUserSummary().getPhotoUrl());
         }
         if (mFragmentOpen.isCommentList()) {
+            AnalyticsManager.trackScreenView("Replies Screen");
             if (mFeedDetail.getNoOfComments() > 1) {
                 mTvUserCommentHeaderText.setText(getString(R.string.ID_REPLIES) + getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mFeedDetail.getNoOfComments()) + getString(R.string.ID_CLOSE_BRACKET));
             } else if (mTotalComments == 1) {
@@ -236,6 +244,7 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
                 mTvReaction.setText(getString(R.string.ID_REACTION) + getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mFeedDetail.getNoOfLikes()) + getString(R.string.ID_CLOSE_BRACKET));
             }
         } else if (mFragmentOpen.isReactionList()) {
+            AnalyticsManager.trackScreenView("Reactions Screen");
             if (mFeedDetail.getNoOfLikes() > 1) {
                 mTvUserCommentHeaderText.setText(getString(R.string.ID_REACTIONS) + getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mFeedDetail.getNoOfLikes()) + getString(R.string.ID_CLOSE_BRACKET));
             } else if (mFeedDetail.getNoOfLikes() == 1) {
@@ -416,6 +425,21 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
 
     @Override
     public void commentSuccess(CommentAddDelete commentAddDelete, int operationId) {
+        String postType = null;
+        if (typeOfPost == AppConstants.ONE_CONSTANT) {
+            postType = AnalyticsEventType.ARTICLE.toString();
+        }
+        if (typeOfPost == AppConstants.TWO_CONSTANT) {
+            postType = AnalyticsEventType.COMMUNITY.toString();
+        }
+
+        HashMap<String, Object> properties =
+                new EventProperty.Builder()
+                        .id(Long.toString(commentAddDelete.getCommentReactionModel().getId()))
+                        .postId(Long.toString(commentAddDelete.getCommentReactionModel().getEntityId()))
+                        .postType(postType)
+                        .body(commentAddDelete.getCommentReactionModel().getComment())
+                        .build();
         mEtUserCommentDescription.setEnabled(true);
         tvPostComment.setEnabled(true);
         switch (commentAddDelete.getStatus()) {
@@ -428,6 +452,9 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
                         tvPostComment.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_post_comment_active, 0, 0, 0);
                         tvPostComment.setVisibility(View.GONE);
                         mTotalComments++;
+                        if (!(mCommentReactionDoc != null && mCommentReactionDoc.isEdit())) {
+                            trackEvent(Event.REPLY_CREATED, properties);
+                        }
                         entityData(mFeedDetail);
                         break;
                     case AppConstants.ONE_CONSTANT:
@@ -439,6 +466,10 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
                             setAdapterData();
                             addedComment = true;
                         }*/
+                        if (mCommentReactionDoc != null && mCommentReactionDoc.isEdit()) {
+                            trackEvent(Event.REPLY_EDITED, properties);
+                        }
+
                         break;
                     case AppConstants.TWO_CONSTANT:
                         mTotalComments--;
@@ -457,6 +488,7 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
                         }
                         setLastComments();
                         setAdapterData();
+                        trackEvent(Event.REPLY_DELETED, properties);
                         break;
                     default:
                         LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + operationId);
@@ -525,6 +557,11 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
     public void onDestroyView() {
         super.onDestroyView();
         mCommentReactionPresenter.detachView();
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 
     public interface HomeActivityIntractionListner {

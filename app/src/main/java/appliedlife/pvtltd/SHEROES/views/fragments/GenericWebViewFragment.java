@@ -10,6 +10,7 @@ import android.webkit.WebView;
 import android.widget.TextView;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -23,7 +24,7 @@ import butterknife.OnClick;
  */
 
 public class GenericWebViewFragment extends BaseDialogFragment {
-
+    private static final String SCREEN_LABEL = "Web View Screen";
 
     @Bind(R.id.generic_web_view)
     WebView webView;
@@ -44,6 +45,7 @@ public class GenericWebViewFragment extends BaseDialogFragment {
             webView.getSettings().setJavaScriptEnabled(true);
             webView.loadUrl(mWebUrl);
         }
+        AnalyticsManager.trackScreenView(SCREEN_LABEL);
        return view;
     }
 

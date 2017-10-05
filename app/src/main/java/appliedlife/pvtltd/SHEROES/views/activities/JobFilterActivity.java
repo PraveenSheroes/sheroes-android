@@ -32,6 +32,7 @@ import butterknife.ButterKnife;
  */
 
 public class JobFilterActivity extends BaseActivity {
+    private static final String SCREEN_LABEL = "Job Filter Screen";
     private final String TAG = LogUtils.makeLogTag(JobFilterActivity.class);
     private JobLocationSearchDialogFragment jobLocationSearchDialogFragment;
     private FunctionalAreaDialogFragment functionalAreaDialogFragment;
@@ -154,5 +155,10 @@ public class JobFilterActivity extends BaseActivity {
                 ((JobFilterFragment) fragmentJobFilter).setFunctionAreaDataItem(mFunctionArea);
             }
         }
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 }

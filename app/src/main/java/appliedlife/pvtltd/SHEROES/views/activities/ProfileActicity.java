@@ -41,6 +41,7 @@ import com.google.gson.Gson;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.imageops.CropImage;
 import appliedlife.pvtltd.SHEROES.imageops.CropImageView.*;
 
@@ -51,6 +52,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -132,6 +134,7 @@ import butterknife.OnClick;
 
 public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragment.ProfileGoodAtListener, ProfileView, AppBarLayout.OnOffsetChangedListener, ProfileTravelClientFragment.ProfileTravelClientFragmentListener, ProfileCityWorkFragment.ProfileWorkLocationFragmentListener, ProfileAboutMeFragment.ProfileAboutMeFragmentListener, ProfileOpportunityTypeFragment.ProfileOpportunityTypeListiner, ProfileShareYourIntrestFragment.MyProfileyYourInterestListener,
         ProfessionalEditBasicDetailsFragment.EditProfileCallable, ProfileOpportunityTypeFragment.OppertunitiesCallback, ProfileAddEditEducationFragment.ProfileEducationListener {
+    private static final String SCREEN_LABEL = "Public Profile Screen";
     private final String TAG = LogUtils.makeLogTag(ProfileActicity.class);
     @Bind(R.id.iv_profile_full_view_icon)
     RoundedImageView mProfileIcon;
@@ -1305,5 +1308,10 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
 
         }*/
 
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 }

@@ -40,7 +40,7 @@ import butterknife.ButterKnife;
  */
 
 public class SettingPreferencesActivity extends BaseActivity implements SettingFeedbackView, SettingPreferencsFragment.settingPreferencesCallBack {
-
+    private static final String SCREEN_LABEL = "Setting Screen";
     int mid;
     private final String TAG = LogUtils.makeLogTag(SettingPreferencesActivity.class);
     String privacy_type;
@@ -218,4 +218,8 @@ public class SettingPreferencesActivity extends BaseActivity implements SettingF
     }
 
 
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
 }

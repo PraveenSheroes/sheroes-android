@@ -47,6 +47,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.feedRequestBuilder;
  */
 
 public class JobFragment extends BaseFragment {
+    private static final String SCREEN_LABEL = "Job Listing Screen";
     private final String TAG = LogUtils.makeLogTag(JobFragment.class);
     @Inject
     HomePresenter mHomePresenter;
@@ -197,4 +198,8 @@ public class JobFragment extends BaseFragment {
         moEngageUtills.entityMoEngageJobListing(getActivity(),mMoEHelper,payloadBuilder,timeSpent);
     }
 
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
 }

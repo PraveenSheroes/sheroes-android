@@ -52,6 +52,7 @@ import butterknife.OnTouch;
  */
 
 public class ProfileAboutMeFragment extends BaseFragment implements ProfileView {
+    private static final String SCREEN_LABEL = "About Me Screen";
     private final String TAG = LogUtils.makeLogTag(ProfessionalEditBasicDetailsFragment.class);
     @Inject
     ProfilePersenter mProfilePresenter;
@@ -308,6 +309,11 @@ public class ProfileAboutMeFragment extends BaseFragment implements ProfileView 
     @Override
     public void getProfileListSuccess(List<Doc> feedDetailList) {
 
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 
 

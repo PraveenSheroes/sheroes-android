@@ -42,6 +42,7 @@ import butterknife.ButterKnife;
  * Created by Praveen_Singh on 09-01-2017.
  */
 public class SearchCommunitiesFragment extends BaseFragment implements HomeView {
+    private static final String SCREEN_LABEL = "Search Communities Screen";
     private final String TAG = LogUtils.makeLogTag(SearchCommunitiesFragment.class);
     @Inject
     HomePresenter mHomePresenter;
@@ -172,4 +173,9 @@ public class SearchCommunitiesFragment extends BaseFragment implements HomeView 
             }
         }
     };
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
 }

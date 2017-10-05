@@ -53,10 +53,14 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
@@ -94,7 +98,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.loginRequestBuilder;
  */
 
 public class SignupFragment extends BaseFragment implements LoginView, SocialListener, GoogleApiClient.OnConnectionFailedListener {
-
+    private static final String SCREEN_LABEL = "Login Screen";
     private final String TAG = LogUtils.makeLogTag(SignupFragment.class);
     @Inject
     Preference<LoginResponse> mUserPreference;
@@ -444,6 +448,8 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
                         loginResponse.setTokenTime(System.currentTimeMillis());
                         loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
                         loginResponse.setGcmId(mGcmId);
+                        mUserPreference.set(loginResponse);
+                        AnalyticsManager.initializeMixpanel(getActivity());
                         moEngageUtills.entityMoEngageUserAttribute(getActivity(), mMoEHelper, payloadBuilder, loginResponse);
                         if (StringUtil.isNotNullOrEmptyString(mobileNo)) {
                             mMoEHelper.setNumber(mobileNo);
@@ -451,10 +457,16 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
                         }
                         if (mSignUpVia == AppConstants.ONE_CONSTANT) {
                             ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_SIGN_UP, GoogleAnalyticsEventActions.SIGN_UP_WITH_EMAIL, AppConstants.EMPTY_STRING);
+                            final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(true).authProvider("Email").build();
+                            trackEvent(Event.APP_LOGIN, properties);
+                            AnalyticsManager.initializeMixpanel(getActivity());
                         }else
                         {
                             if (null != loginResponse.getUserSummary() && null != loginResponse.getUserSummary().getUserBO() && StringUtil.isNotNullOrEmptyString(loginResponse.getUserSummary().getUserBO().getCrdt())) {
                                 long createdDate = Long.parseLong(loginResponse.getUserSummary().getUserBO().getCrdt());
+
+                                final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(currentTime<createdDate).authProvider(loginViaSocial==MoEngageConstants.FACEBOOK ? "Facebook" : "Google").build();
+                                trackEvent(Event.APP_LOGIN, properties);
                                 if (createdDate<currentTime) {
                                     moEngageUtills.entityMoEngageLoggedIn(getActivity(), mMoEHelper, payloadBuilder, loginViaSocial);
                                     if(loginViaSocial==MoEngageConstants.FACEBOOK)
@@ -708,6 +720,11 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
             String socialId = acct.getId();
             new RetrieveTokenTask().execute(personEmail);
         }
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 
     private class RetrieveTokenTask extends AsyncTask<String, Void, String> {

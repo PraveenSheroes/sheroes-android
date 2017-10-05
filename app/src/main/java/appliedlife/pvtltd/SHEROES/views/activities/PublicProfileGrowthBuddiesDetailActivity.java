@@ -75,6 +75,7 @@ import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MEN
 
 public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity implements CommentReactionFragment.HomeActivityIntractionListner, HomeView, AppBarLayout.OnOffsetChangedListener {
     private final String TAG = LogUtils.makeLogTag(PublicProfileGrowthBuddiesDetailActivity.class);
+    private static final String SCREEN_LABEL = "Public Profile Growth Screen";
     @Bind(R.id.iv_public_profile_full_view_icon)
     RoundedImageView mProfileIcon;
     @Bind(R.id.app_bar_public_profile)
@@ -616,4 +617,8 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
         }
     }
 
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
 }

@@ -47,7 +47,7 @@ import butterknife.ButterKnife;
  * create an instance of this fragment.
  */
 public class FAQSFragment extends BaseFragment implements SHEView {
-
+    private static final String SCREEN_LABEL = "FAQS Screen";
     @Inject
     SHEPresenter shePresenter;
 
@@ -178,4 +178,8 @@ public class FAQSFragment extends BaseFragment implements SHEView {
     }
 
 
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
 }

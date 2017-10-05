@@ -33,7 +33,7 @@ import butterknife.OnClick;
 
 
 public class ResetPasswordFragment extends BaseFragment implements LoginView {
-
+    private static final String SCREEN_LABEL = "Forgot Password Screen";
     @Inject
     LoginPresenter mLogInPresenter;
 
@@ -124,5 +124,10 @@ public class ResetPasswordFragment extends BaseFragment implements LoginView {
     @OnClick(R.id.iv_login_back)
     public void backOnClick() {
         ((LoginActivity)getActivity()).renderLoginFragmentView();
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 }

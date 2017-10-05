@@ -24,6 +24,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
@@ -52,6 +53,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.workExpRequestBuilder;
  */
 
 public class ProfileWorkExperienceSelfEmploymentDialogFragment extends BaseDialogFragment implements DatePickerDialog.OnDateSetListener {
+    private static final String SCREEN_LABEL = "Add/Edit Work Experience Screen";
     private final String TAG = LogUtils.makeLogTag(ProfileWorkExperienceSelfEmploymentDialogFragment.class);
     private ExprienceEntity mExprienceEntity;
     @Bind(R.id.tv_setting_tittle)
@@ -113,6 +115,7 @@ public class ProfileWorkExperienceSelfEmploymentDialogFragment extends BaseDialo
         ButterKnife.bind(this, view);
         mProfilePersenter.attachView(this);
         initializeAllViews();
+        AnalyticsManager.trackScreenView(SCREEN_LABEL);
         return view;
     }
 

@@ -19,12 +19,15 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
@@ -53,7 +56,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.helplineGetChatThreadReq
  */
 
 public class HelplineFragment extends BaseFragment {
-
+    private static final String SCREEN_LABEL = "Helpline Screen";
     private final String TAG = LogUtils.makeLogTag(HelplineFragment.class);
     @Inject
     HelplinePresenter mHelplinePresenter;
@@ -195,6 +198,7 @@ public class HelplineFragment extends BaseFragment {
     public void getPostQuestionSuccess(HelplinePostQuestionResponse helplinePostQuestionResponse) {
         sendChatButton.setEnabled(true);
         if (helplinePostQuestionResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+            trackEvent(Event.JOBS_SHARED, null);
             questionText.setText(AppConstants.EMPTY_STRING);
             AppUtils.hideKeyboard(getView(), TAG);
             refreshChatMethod();
@@ -236,5 +240,10 @@ public class HelplineFragment extends BaseFragment {
         super.showError(errorMsg,feedParticipationEnum);
         sendChatButton.setEnabled(true);
            }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
 }
 

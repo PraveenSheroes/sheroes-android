@@ -18,6 +18,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class WorkExperienceActivity extends BaseActivity {
+    private static final String SCREEN_LABEL = "Work Experience Screen";
     private static final String TAG = "WorkExperienceActivity";
     @Bind(R.id.txt_sub_title)
     TextView mSubTitleTxt;
@@ -50,5 +51,10 @@ public class WorkExperienceActivity extends BaseActivity {
             LogUtils.error(TAG, "Emp type mismatch");
         }
         return null;
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 }

@@ -38,6 +38,7 @@ import butterknife.ButterKnife;
  */
 
 public class BookmarksFragment extends BaseFragment {
+    private static final String SCREEN_LABEL = "BookMarks Screen";
     private final String TAG = LogUtils.makeLogTag(BookmarksFragment.class);
     @Inject
     HomePresenter mHomePresenter;
@@ -145,5 +146,10 @@ public class BookmarksFragment extends BaseFragment {
 
     public void commentListRefresh(FeedDetail feedDetail, FeedParticipationEnum feedParticipationEnum) {
      super.commentListRefresh(feedDetail,feedParticipationEnum);
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 }

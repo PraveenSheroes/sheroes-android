@@ -43,7 +43,7 @@ import butterknife.ButterKnife;
  */
 
 public class SettingPreferencesWorkExperienceFragment extends BaseFragment implements SettingFeedbackView {
-
+    private static final String SCREEN_LABEL = "Setting Preferences Work Experience Screen ";
     private final String TAG = LogUtils.makeLogTag(SettingPreferencesWorkExperienceFragment.class);
     List<Section> sectionList;
     List<PrivilegeList> privilegeList;
@@ -256,6 +256,11 @@ public class SettingPreferencesWorkExperienceFragment extends BaseFragment imple
     @Override
     public void showNwError() {
 
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 
 

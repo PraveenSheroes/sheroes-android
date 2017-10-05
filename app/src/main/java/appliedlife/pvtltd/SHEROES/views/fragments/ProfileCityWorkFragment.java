@@ -37,6 +37,7 @@ import butterknife.OnClick;
  * Created by priyanka on 01/03/17.
  */
 public class ProfileCityWorkFragment extends BaseFragment implements ProfileView {
+    private static final String SCREEN_LABEL = "Profile City Work Screen";
     private final String TAG = LogUtils.makeLogTag(ProfileCityWorkFragment.class);
     private ProfileWorkLocationFragmentListener profileWorkLocationFragmentListener;
     private final String SCREEN_NAME = "Profile_City_Work_screen";
@@ -390,6 +391,11 @@ public class ProfileCityWorkFragment extends BaseFragment implements ProfileView
     @Override
     public void getProfileListSuccess(List<Doc> feedDetailList) {
 
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 
     public interface ProfileWorkLocationFragmentListener {

@@ -10,9 +10,13 @@ import com.f2prateek.rx.preferences.Preference;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
+import java.util.HashMap;
+
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -27,6 +31,7 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
  */
 
 public class SheroesDeepLinkingActivity extends BaseActivity {
+    private static final String SCREEN_LABEL = "DeepLink Screen";
     private Uri mData;
     private int indexOfFourthBackSlace;
     private MoEHelper mMoEHelper;
@@ -79,6 +84,10 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
     }
 
     private void callDeepLinkingData() {
+        String notificationId = "";
+        String url = "";
+        String deepLink = "";
+
         if (null != getIntent()) {
             Intent intent = getIntent();
             if (null != getIntent().getExtras()) {
@@ -89,10 +98,15 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 getDeeplinkUrlFromNotification(mData.toString());
             } else {
                 if (null != intent.getExtras()) {
-                    String deepLink = intent.getExtras().getString(AppConstants.DEEP_LINK_URL);
+                    deepLink = intent.getExtras().getString(AppConstants.DEEP_LINK_URL);
+                    notificationId = intent.getExtras().getString(AppConstants.NOTIFICATION_ID);
                     getDeeplinkUrlFromNotification(deepLink);
                 }
             }
+
+            HashMap<String, Object> properties = new EventProperty.Builder().id(notificationId).url(deepLink).build();
+            trackEvent(Event.PUSH_NOTIFICATION_CLICKED, properties);
+
         } else {
             homeActivityCall();
         }
@@ -378,5 +392,10 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
         into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(into);
         finish();
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 }

@@ -59,6 +59,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.COMMUNITY_O
  */
 
 public class ProfileOpportunityTypeFragment extends BaseFragment implements BaseHolderInterface, OnBoardingView {
+    private static final String SCREEN_LABEL = "Profile Opportunity Screen";
     private static final String TAG = "ProfileOpportunityTypeFragment";
 
     @Inject
@@ -371,6 +372,11 @@ public class ProfileOpportunityTypeFragment extends BaseFragment implements Base
             mSkill4.setVisibility(View.GONE);
 
 
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 
     public interface ProfileOpportunityTypeListiner {

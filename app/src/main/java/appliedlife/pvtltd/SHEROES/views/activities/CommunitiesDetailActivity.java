@@ -32,7 +32,11 @@ import com.facebook.share.widget.AppInviteDialog;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -79,6 +83,7 @@ import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MEN
 
 
 public class CommunitiesDetailActivity extends BaseActivity implements CommentReactionFragment.HomeActivityIntractionListner, AppBarLayout.OnOffsetChangedListener {
+    private static final String SCREEN_LABEL = "Community Screen Activity";
     private final String TAG = LogUtils.makeLogTag(CommunitiesDetailActivity.class);
     @Bind(R.id.app_bar_coomunities_detail)
     AppBarLayout mAppBarLayout;
@@ -836,5 +841,24 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
 
             ((CommunityOpenAboutFragment) fragmentCommunityOpenAbout).setTvPostModerationCount(count);
         }
+    }
+
+    @Override
+    public boolean shouldTrackScreen() {
+        return false;
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
+
+    @Override
+    protected Map<String, Object> getExtraPropertiesToTrack() {
+        HashMap<String, Object> properties = new
+                EventProperty.Builder()
+                .id(Long.toString(mFeedDetail.getIdOfEntityOrParticipant()))
+                .build();
+        return properties;
     }
 }

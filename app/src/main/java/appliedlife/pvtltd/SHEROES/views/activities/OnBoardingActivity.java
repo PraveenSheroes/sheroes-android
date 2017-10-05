@@ -62,6 +62,7 @@ import butterknife.OnClick;
 
 
 public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUsAboutFragment.OnBoardingActivityIntractionListner {
+    private static final String SCREEN_LABEL = "OnBoarding Screen";
     private final String TAG = LogUtils.makeLogTag(OnBoardingActivity.class);
     @Bind(R.id.fl_onboarding_fragment)
     FrameLayout mFlOnBoardingFragment;
@@ -821,5 +822,10 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
             default:
                 showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
         }
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 }

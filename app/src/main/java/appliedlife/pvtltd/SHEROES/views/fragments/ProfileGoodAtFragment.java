@@ -70,6 +70,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.COMMUNITY_O
  */
 
 public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInterface, ProfileView, OnBoardingView {
+    private static final String SCREEN_LABEL = "Good At Screen";
     private static final String TAG = "ProfileGoodAtFragment";
     private static final int KEY_SKILLS_LIMIT = 4;
 
@@ -802,6 +803,11 @@ public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInt
                 break;
             }
         }
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 
 

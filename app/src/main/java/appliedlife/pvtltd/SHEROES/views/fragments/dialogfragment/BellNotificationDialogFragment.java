@@ -18,6 +18,7 @@ import com.moe.pushlibrary.PayloadBuilder;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
@@ -40,6 +41,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_
  */
 
 public class BellNotificationDialogFragment extends BaseDialogFragment implements HomeView {
+    private static final String SCREEN_LABEL = "Notification Screen";
     private FragmentListRefreshData mFragmentListRefreshData;
     @Inject
     HomePresenter mHomePresenter;
@@ -80,6 +82,7 @@ public class BellNotificationDialogFragment extends BaseDialogFragment implement
         long timeSpent=System.currentTimeMillis()-startedTime;
         moEngageUtills.entityMoEngageNotification(getActivity(),mMoEHelper,payloadBuilder,timeSpent);
         ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_NOTIFICATION_SCREEN));
+        AnalyticsManager.trackScreenView(SCREEN_LABEL);
         return v;
         }
     @Override

@@ -80,6 +80,7 @@ import butterknife.OnClick;
  * An activity that displays a map showing the place at the device's current location.
  */
 public class MakeIndiaSafeMapActivity extends BaseActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+    private static final String SCREEN_LABEL = "Make India Safe Screen";
     private final String TAG = LogUtils.makeLogTag(MakeIndiaSafeMapActivity.class);
     @Bind(R.id.app_bar_map_layout)
     AppBarLayout mAppBarLayout;
@@ -700,4 +701,8 @@ public class MakeIndiaSafeMapActivity extends BaseActivity implements OnMapReady
         }
     }
 
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
 }

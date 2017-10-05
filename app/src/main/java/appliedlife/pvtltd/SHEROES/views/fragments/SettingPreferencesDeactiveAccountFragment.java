@@ -46,7 +46,7 @@ import butterknife.OnClick;
 
 
 public class SettingPreferencesDeactiveAccountFragment extends BaseFragment implements SettingFeedbackView {
-
+    private static final String SCREEN_LABEL = "Setting Preference Deactive Screen";
     private final String TAG = LogUtils.makeLogTag(SettingPreferencesDeactiveAccountFragment.class);
 
     @Bind(R.id.deactive_text1)
@@ -528,6 +528,11 @@ public class SettingPreferencesDeactiveAccountFragment extends BaseFragment impl
     @Override
     public void startNextScreen() {
 
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 
 

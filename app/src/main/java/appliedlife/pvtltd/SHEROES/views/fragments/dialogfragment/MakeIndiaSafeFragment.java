@@ -50,6 +50,7 @@ import butterknife.ButterKnife;
  */
 
 public class MakeIndiaSafeFragment extends BaseFragment {
+    private static final String SCREEN_LABEL = "Make India Safe Screen";
     private final String TAG = LogUtils.makeLogTag(MakeIndiaSafeFragment.class);
     @Bind(R.id.rv_make_india_list)
     RecyclerView mRecyclerView;
@@ -181,5 +182,9 @@ public class MakeIndiaSafeFragment extends BaseFragment {
     }
 
 
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
 }
 

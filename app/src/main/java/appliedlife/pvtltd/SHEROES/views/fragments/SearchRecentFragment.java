@@ -39,6 +39,7 @@ import butterknife.ButterKnife;
  */
 
 public class SearchRecentFragment extends BaseFragment implements HomeView {
+    private static final String SCREEN_LABEL = "Search Recent Screen";
     private final String TAG = LogUtils.makeLogTag(SearchRecentFragment.class);
     @Inject
     HomePresenter mHomePresenter;
@@ -88,4 +89,8 @@ public class SearchRecentFragment extends BaseFragment implements HomeView {
     }
 
 
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
 }

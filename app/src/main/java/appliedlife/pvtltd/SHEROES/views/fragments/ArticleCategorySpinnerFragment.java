@@ -42,6 +42,7 @@ import butterknife.OnClick;
  */
 
 public class ArticleCategorySpinnerFragment extends BaseFragment implements HomeView {
+    private static final String SCREEN_LABEL = "Home Article Category Screen";
     private final String TAG = LogUtils.makeLogTag(ArticleCategorySpinnerFragment.class);
     @Inject
     HomePresenter mHomePresenter;
@@ -104,6 +105,11 @@ public class ArticleCategorySpinnerFragment extends BaseFragment implements Home
     public void onDoneClick() {
         ((HomeActivity)getActivity()).onCancelDone(AppConstants.ONE_CONSTANT);
         ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_SEARCH_FILTER, GoogleAnalyticsEventActions.USED_FILTER_ON_ARTICLES, AppConstants.EMPTY_STRING);
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 
     public interface HomeSpinnerFragmentListner {

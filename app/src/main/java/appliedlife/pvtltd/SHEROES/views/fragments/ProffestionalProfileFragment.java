@@ -44,6 +44,7 @@ import butterknife.ButterKnife;
  */
 
 public class ProffestionalProfileFragment extends BaseFragment implements ProfileView {
+    private static final String SCREEN_LABEL = "Professional Profile Screen";
     private final String TAG = LogUtils.makeLogTag(ProffestionalProfileFragment.class);
     @Bind(R.id.rv_profile_spinner_list)
     RecyclerView mRecyclerView;
@@ -230,6 +231,11 @@ public class ProffestionalProfileFragment extends BaseFragment implements Profil
     @Override
     public void getProfileListSuccess(List<Doc> feedDetailList) {
 
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 
     public interface HomeActivityIntractionWithProffestionalProfile {

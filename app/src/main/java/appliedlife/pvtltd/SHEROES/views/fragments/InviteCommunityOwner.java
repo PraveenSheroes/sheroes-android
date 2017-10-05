@@ -55,6 +55,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_
  */
 
 public class InviteCommunityOwner extends BaseFragment implements CommunityView, HomeView {
+    private static final String SCREEN_LABEL = "Add Owner Screen";
     private final String TAG = LogUtils.makeLogTag(InviteCommunityOwner.class);
     @Inject
     HomePresenter mHomePresenter;
@@ -276,6 +277,11 @@ public class InviteCommunityOwner extends BaseFragment implements CommunityView,
             default:
                 mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), ERROR_JOIN_INVITE);
         }
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 }
 

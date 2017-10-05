@@ -333,6 +333,8 @@ public class AppConstants {
     public static final String BASIC_EXP_YEAR = "Year(s)";
     public static final String BASIC_EXP_MONTH = "Month(s)";
     public static final String MESSAGE = "message";
+    public static final String NOTIFICATION_ID = "notification_id";
+    public static final String ACTION = "action";
     public static final String TITLE = "title";
     public static final String DEEP_LINK_URL = "deep_link_url";
     public static final String SHEROES = "SHEROES";

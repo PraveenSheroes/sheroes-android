@@ -18,6 +18,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
  */
 
 public class ImageUploadFragment extends BaseFragment implements View.OnKeyListener {
+    private static final String SCREEN_LABEL = "Image Upload Screen";
     private static final String TAG = "ImageUploadFragment";
     private static final int BG_ALPHA = 255;
 
@@ -75,6 +76,11 @@ public class ImageUploadFragment extends BaseFragment implements View.OnKeyListe
         } else {
             return false;
         }
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 
     public interface ImageUploadCallable {

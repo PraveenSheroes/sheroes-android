@@ -14,9 +14,14 @@ import android.widget.Toast;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
+import java.util.HashMap;
+
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -42,6 +47,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_LIKE_
  */
 
 public class ShareCommunityFragment extends BaseFragment {
+    private static final String SCREEN_LABEL = "Share Community Screen";
     private final String TAG = LogUtils.makeLogTag(ShareCommunityFragment.class);
     @Bind(R.id.tv_close_community)
     TextView mTvCloseCommunity;
@@ -101,6 +107,8 @@ public class ShareCommunityFragment extends BaseFragment {
         intent.putExtra(Intent.EXTRA_TEXT, mFeedDetail.getDeepLinkUrl());
         startActivity(Intent.createChooser(intent, AppConstants.SHARE));
         ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_COMMUNITY_LINK, AppConstants.EMPTY_STRING);
+        HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(mFeedDetail.getIdOfEntityOrParticipant())).name(mFeedDetail.getNameOrTitle()).build();
+        AnalyticsManager.trackEvent(Event.COMMUNITY_SHARED, properties);
         moEngageUtills.entityMoEngageCardShareVia(getActivity(),mMoEHelper,payloadBuilder,mFeedDetail, MoEngageConstants.SHARE_VIA_SOCIAL);
     }
 
@@ -121,6 +129,8 @@ public class ShareCommunityFragment extends BaseFragment {
                 mTvShare.setEnabled(false);
                 mCreateCommunityPresenter.shareViaEmailPresenter(mAppUtils.shareRequestBuilder(mFeedDetail.getDeepLinkUrl(), mFeedDetail.getIdOfEntityOrParticipant(), mEtShareViaEmail.getText().toString(), getString(R.string.ID_COMM_SHARE_EMAIL_LINK)));
                 ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_COMMUNITY_LINK_ON_EMAIL, AppConstants.EMPTY_STRING);
+                HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(mFeedDetail.getIdOfEntityOrParticipant())).name(mFeedDetail.getNameOrTitle()).build();
+                AnalyticsManager.trackEvent(Event.COMMUNITY_SHARED, properties);
             }
 
         } else {
@@ -162,4 +172,8 @@ public class ShareCommunityFragment extends BaseFragment {
         }
     }
 
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
 }

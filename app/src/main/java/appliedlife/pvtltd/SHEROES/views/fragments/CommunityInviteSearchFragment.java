@@ -30,6 +30,7 @@ import butterknife.OnClick;
  */
 
 public class CommunityInviteSearchFragment extends BaseFragment {
+    private static final String SCREEN_LABEL = "Community Invite Screen";
     private final String TAG = LogUtils.makeLogTag(AllSearchFragment.class);
     @Bind(R.id.rv_search_list)
     RecyclerView mRecyclerView;
@@ -138,5 +139,10 @@ public class CommunityInviteSearchFragment extends BaseFragment {
                 }
             }
         };
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 }

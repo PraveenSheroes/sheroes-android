@@ -30,6 +30,7 @@ import butterknife.ButterKnife;
 
 
 public class SettingFragment extends BaseFragment implements View.OnClickListener {
+    private static final String SCREEN_LABEL = "Setting Screen";
     private final String TAG = LogUtils.makeLogTag(SettingFragment.class);
     @Bind(R.id.tv_setting_feedback)
     TextView mTvSettingFeedback;
@@ -114,4 +115,8 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
     };
 
 
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
 }

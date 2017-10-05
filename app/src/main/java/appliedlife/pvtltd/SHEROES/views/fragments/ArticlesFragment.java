@@ -50,6 +50,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.feedRequestBuilder;
 
 
 public class ArticlesFragment extends BaseFragment {
+    private static final String SCREEN_LABEL = "Article Listing Screen";
     private final String TAG = LogUtils.makeLogTag(ArticlesFragment.class);
     @Inject
     HomePresenter mHomePresenter;
@@ -248,5 +249,10 @@ public class ArticlesFragment extends BaseFragment {
         mHomePresenter.detachView();
         long timeSpent=System.currentTimeMillis()-startedTime;
         moEngageUtills.entityMoEngageArticleListing(getActivity(),mMoEHelper,payloadBuilder,timeSpent);
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 }

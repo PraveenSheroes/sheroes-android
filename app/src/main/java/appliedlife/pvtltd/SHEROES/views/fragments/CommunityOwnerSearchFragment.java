@@ -45,6 +45,7 @@ import butterknife.OnClick;
  */
 
 public class CommunityOwnerSearchFragment extends BaseFragment implements HomeView{
+    private static final String SCREEN_LABEL = "Community Owner Search Screen";
     private final String TAG = LogUtils.makeLogTag(CommunityOwnerSearchFragment.class);
     @Inject
     Preference<LoginResponse> mUserPreference;
@@ -157,4 +158,8 @@ public class CommunityOwnerSearchFragment extends BaseFragment implements HomeVi
         }
     }
 
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
 }

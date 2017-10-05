@@ -36,6 +36,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
+    private static final String SCREEN_LABEL = "Home Search Screen";
     private final String TAG = LogUtils.makeLogTag(HomeSearchActivity.class);
     @Inject
     HomePresenter mHomePresenter;
@@ -296,4 +297,8 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
         }
     }
 
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
 }

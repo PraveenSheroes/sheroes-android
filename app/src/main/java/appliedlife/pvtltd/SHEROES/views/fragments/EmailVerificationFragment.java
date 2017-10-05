@@ -43,7 +43,7 @@ import butterknife.OnClick;
  * create an instance of this fragment.
  */
 public class EmailVerificationFragment extends BaseFragment implements LoginView {
-
+    private static final String SCREEN_LABEL = "Email Verification Screen";
     private final String TAG = LogUtils.makeLogTag(EmailVerificationFragment.class);
 
     @Inject
@@ -117,5 +117,10 @@ public class EmailVerificationFragment extends BaseFragment implements LoginView
     public void backOnClick() {
         getActivity().getSupportFragmentManager().popBackStack();
         ((LoginActivity) getActivity()).renderLoginFragmentView();
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 }

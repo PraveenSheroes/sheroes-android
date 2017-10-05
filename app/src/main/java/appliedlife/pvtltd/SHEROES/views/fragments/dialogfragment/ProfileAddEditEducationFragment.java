@@ -20,6 +20,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
@@ -46,6 +47,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.MARK_AS_SPA
  */
 
 public class ProfileAddEditEducationFragment extends BaseDialogFragment implements DayPickerProfile.MyDayPickerListener, ProfileView, View.OnClickListener {
+    private static final String SCREEN_LABEL = "Add/Edit Education Screen";
     private final String TAG = LogUtils.makeLogTag(ProfileAddEditEducationFragment.class);
     private final String SCREEN_NAME = "Proffesional_Add_Edi_Education_screen";
     @Inject
@@ -172,7 +174,7 @@ public class ProfileAddEditEducationFragment extends BaseDialogFragment implemen
             }
         });
 
-
+        AnalyticsManager.trackScreenView(SCREEN_LABEL);
         return view;
 
     }

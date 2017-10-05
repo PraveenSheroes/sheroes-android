@@ -43,7 +43,7 @@ import butterknife.OnClick;
  */
 
 public class ProfileEditVisitingCardFragment extends BaseFragment implements ProfileView {
-
+    private static final String SCREEN_LABEL = "Profile Edit Visiting Screen";
 
     @Inject
     ProfilePersenter profilePersenter;
@@ -283,5 +283,10 @@ public class ProfileEditVisitingCardFragment extends BaseFragment implements Pro
     @Override
     public void getProfileListSuccess(List<Doc> feedDetailList) {
 
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 }

@@ -42,6 +42,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FO
 
 
 public class CreateCommunityPostActivity extends BaseActivity implements BaseHolderInterface, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, ImageUploadFragment.ImageUploadCallable {
+    private static final String SCREEN_LABEL = "Create Communities Post Screen";
     private final String TAG = LogUtils.makeLogTag(CreateCommunityPostActivity.class);
     private FeedDetail mFeedDetail;
     private CreateCommunityPostFragment mCommunityFragment;
@@ -217,5 +218,9 @@ public class CreateCommunityPostActivity extends BaseActivity implements BaseHol
 
     }
 
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
 }
 

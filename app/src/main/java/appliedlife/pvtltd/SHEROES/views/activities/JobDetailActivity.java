@@ -25,9 +25,13 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -53,6 +57,7 @@ import butterknife.OnClick;
  */
 
 public class JobDetailActivity extends BaseActivity implements  AppBarLayout.OnOffsetChangedListener {
+    private static final String SCREEN_LABEL = "Job Details Screen";
     private final String TAG = LogUtils.makeLogTag(JobDetailActivity.class);
     private static final String LEFT_NEW = "<font color='#50e3c2'>";
     private static final String RIGHT_NEW = "</font>";
@@ -176,6 +181,15 @@ public class JobDetailActivity extends BaseActivity implements  AppBarLayout.OnO
         moEngageUtills.entityMoEngageCardShareVia(getApplicationContext(),mMoEHelper,payloadBuilder,mFeedDetail, MoEngageConstants.SHARE_VIA_SOCIAL);
         ((SheroesApplication)this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_JOB, AppConstants.EMPTY_STRING);
         ((SheroesApplication)this.getApplication()).trackScreenView(getString(R.string.ID_REFER_SHARE_JOB));
+
+        HashMap<String, Object> properties =
+                new EventProperty.Builder()
+                        .id(Long.toString(mFeedDetail.getIdOfEntityOrParticipant()))
+                        .title(mFeedDetail.getNameOrTitle())
+                        .companyId(Long.toString(mFeedDetail.getCompanyMasterId()))
+                        .location(mFeedDetail.getAuthorCityName())
+                        .build();
+        trackEvent(Event.JOBS_SHARED, properties);
     }
 
     private void setPagerAndLayouts() {
@@ -348,5 +362,22 @@ public class JobDetailActivity extends BaseActivity implements  AppBarLayout.OnO
             mLiHeader.setVisibility(View.VISIBLE);
         }
 
+    }
+
+    @Override
+    protected Map<String, Object> getExtraPropertiesToTrack() {
+        HashMap<String, Object> properties = new
+                EventProperty.Builder()
+                .id(Long.toString(mFeedDetail.getIdOfEntityOrParticipant()))
+                .build();
+        return properties;
+
+
+
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 }

@@ -13,11 +13,14 @@ import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -46,6 +49,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_LIKE_
  */
 
 public class ArticleDetailFragment extends BaseFragment {
+    private static final String SCREEN_LABEL = "Article Detail Screen";
     private final String TAG = LogUtils.makeLogTag(ArticleDetailFragment.class);
     @Inject
     HomePresenter mHomePresenter;
@@ -225,6 +229,20 @@ public class ArticleDetailFragment extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         mHomePresenter.detachView();
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
+
+    @Override
+    protected Map<String, Object> getExtraProperties() {
+        HashMap<String, Object> properties = new
+                EventProperty.Builder()
+                .id(Long.toString(mFeedDetail.getIdOfEntityOrParticipant()))
+                .build();
+        return properties;
     }
 }
 

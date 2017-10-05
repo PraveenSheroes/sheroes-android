@@ -37,7 +37,7 @@ import butterknife.ButterKnife;
  * interface.
  */
 public class ICCMemberListFragment extends BaseFragment implements SHEView {
-
+    private static final String SCREEN_LABEL = "ICC Member List Screen";
     @Inject
     SHEPresenter shePresenter;
 
@@ -109,5 +109,10 @@ public class ICCMemberListFragment extends BaseFragment implements SHEView {
         shePresenter.getAllICCMembers(AppUtils.sheICCMemberListRequestBuilder());
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mAdapter);
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 }

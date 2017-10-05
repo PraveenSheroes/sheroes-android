@@ -38,6 +38,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_ON_ON
  */
 
 public class OnBoardingWorkExperienceFragment extends BaseFragment implements DatePickerDialog.OnDateSetListener,OnBoardingView {
+    private static final String SCREEN_LABEL = "OnBoarding Work EXperience  Screen";
     private final String TAG = LogUtils.makeLogTag(OnBoardingWorkExperienceFragment.class);
     @Bind(R.id.et_exp_month)
     EditText mEtExpMonth;
@@ -120,5 +121,10 @@ public class OnBoardingWorkExperienceFragment extends BaseFragment implements Da
                     break;
             }
         }
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 }

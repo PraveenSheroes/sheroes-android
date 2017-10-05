@@ -31,7 +31,7 @@ import static appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment.DISMI
  * Title: Create community screen for Create community.
  */
 public class CreateCommunityActivity extends BaseActivity implements ImageUploadFragment.ImageUploadCallable {
-
+    private static final String SCREEN_LABEL = "Create Communities Screen";
     private CreateCommunityFragment mCommunityFragment;
     private FeedDetail mFeedDetail;
     private FragmentOpen mFragmentOpen;
@@ -138,5 +138,10 @@ public class CreateCommunityActivity extends BaseActivity implements ImageUpload
             changeCommunityPrivacyDialogFragment.show(getFragmentManager(), ChangeCommunityPrivacyDialogFragment.class.getName());
         }
         return changeCommunityPrivacyDialogFragment;
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 }

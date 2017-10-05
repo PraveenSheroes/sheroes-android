@@ -20,11 +20,16 @@ import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -67,6 +72,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.userCommunityPostRequest
  */
 
 public class CommunitiesDetailFragment extends BaseFragment {
+    private static final String SCREEN_LABEL = "Community Screen";
     private final String TAG = LogUtils.makeLogTag(CommunitiesDetailFragment.class);
     @Inject
     HomePresenter mHomePresenter;
@@ -481,6 +487,8 @@ public class CommunitiesDetailFragment extends BaseFragment {
                         mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
                         updateUiAccordingToFeedDetail(mFeedDetail);
                     }
+                    HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(mFeedDetail.getIdOfEntityOrParticipant())).name(mFeedDetail.getNameOrTitle()).build();
+                    AnalyticsManager.trackEvent(Event.COMMUNITY_JOINED, properties);
                     moEngageUtills.entityMoEngageJoinedCommunity(getActivity(), mMoEHelper, payloadBuilder, mFeedDetail.getNameOrTitle(), mFeedDetail.getIdOfEntityOrParticipant(), mFeedDetail.isClosedCommunity(), MoEngageConstants.COMMUNITY_TAG, TAG, mFeedDetail.getItemPosition());
                     break;
                 case AppConstants.FAILED:
@@ -562,5 +570,18 @@ public class CommunitiesDetailFragment extends BaseFragment {
         }
     }
 
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
+
+    @Override
+    protected Map<String, Object> getExtraProperties() {
+        HashMap<String, Object> properties = new
+                EventProperty.Builder()
+                .id(Long.toString(mFeedDetail.getIdOfEntityOrParticipant()))
+                .build();
+        return properties;
+    }
 }
 

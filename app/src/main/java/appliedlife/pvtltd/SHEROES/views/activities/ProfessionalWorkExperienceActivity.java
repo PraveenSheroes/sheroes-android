@@ -24,7 +24,7 @@ import butterknife.OnClick;
 
 public class ProfessionalWorkExperienceActivity extends BaseActivity implements WorkExperienceAdapter.ExperienceCallable {
     private final String TAG = LogUtils.makeLogTag(ProfessionalWorkExperienceActivity.class);
-
+    private static final String SCREEN_LABEL = "Work Experiences Screen";
     @Bind(R.id.btn_continue_work_experience)
     Button mWorkExperienceContinueBtn;
     @Bind(R.id.recycler_view)
@@ -74,5 +74,10 @@ public class ProfessionalWorkExperienceActivity extends BaseActivity implements 
     @OnClick(R.id.iv_back_work_exp)
     public void onBackClick() {
         finish();
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 }

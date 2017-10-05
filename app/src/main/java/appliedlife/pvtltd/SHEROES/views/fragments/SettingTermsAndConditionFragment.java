@@ -45,6 +45,11 @@ public class SettingTermsAndConditionFragment extends BaseFragment {
         ((HomeActivity) getActivity()).getSupportFragmentManager().popBackStack();
     }
 
+    @Override
+    public String getScreenName() {
+        return null;
+    }
+
 
     public interface settingFragmentCallBack {
         void callBackSettingActivity(int id);

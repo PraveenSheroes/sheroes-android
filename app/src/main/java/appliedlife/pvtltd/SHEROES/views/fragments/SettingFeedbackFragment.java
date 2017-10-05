@@ -46,6 +46,7 @@ import butterknife.OnClick;
 
 
 public class SettingFeedbackFragment extends BaseFragment implements SettingFeedbackView {
+    private static final String SCREEN_LABEL = "Setting FeedBack Screen";
     private final String TAG = LogUtils.makeLogTag(SettingFeedbackFragment.class);
     private final String SCREEN_NAME = "Setting_feedback_page";
 
@@ -235,7 +236,10 @@ public class SettingFeedbackFragment extends BaseFragment implements SettingFeed
 
     }
 
-
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
 
 
     public interface settingFragmentCallBack {

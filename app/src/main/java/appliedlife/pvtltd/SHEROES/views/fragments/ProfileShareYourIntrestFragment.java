@@ -59,6 +59,7 @@ import butterknife.OnClick;
  */
 
 public class ProfileShareYourIntrestFragment extends BaseFragment implements BaseHolderInterface, ProfileView {
+    private static final String SCREEN_LABEL = "Profile Share Interest Screen";
     @Inject
     ProfilePersenter mprofilePersenter;
     @Inject
@@ -631,6 +632,11 @@ public class ProfileShareYourIntrestFragment extends BaseFragment implements Bas
     @OnClick(R.id.tv_interest_back)
     public void onBackPressed() {
         getActivity().onBackPressed();
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 
     public interface MyProfileyYourInterestListener {
