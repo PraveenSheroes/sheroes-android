@@ -267,6 +267,9 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         super.onResume();
         mMoEHelper.onResume(this);
         mSheroesApplication.setCurrentActivityName(this.getClass().getSimpleName());
+        if (trackScreenTime()) {
+            AnalyticsManager.timeScreenView(getScreenName());
+        }
     }
 
     @Override

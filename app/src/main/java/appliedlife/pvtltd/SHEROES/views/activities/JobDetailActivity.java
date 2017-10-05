@@ -365,15 +365,17 @@ public class JobDetailActivity extends BaseActivity implements  AppBarLayout.OnO
     }
 
     @Override
+    protected boolean trackScreenTime() {
+        return true;
+    }
+
+    @Override
     protected Map<String, Object> getExtraPropertiesToTrack() {
         HashMap<String, Object> properties = new
                 EventProperty.Builder()
                 .id(Long.toString(mFeedDetail.getIdOfEntityOrParticipant()))
                 .build();
         return properties;
-
-
-
     }
 
     @Override

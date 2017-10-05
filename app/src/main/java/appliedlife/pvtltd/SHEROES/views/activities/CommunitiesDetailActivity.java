@@ -855,6 +855,9 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
 
     @Override
     protected Map<String, Object> getExtraPropertiesToTrack() {
+        if (mFeedDetail == null) {
+            return null;
+        }
         HashMap<String, Object> properties = new
                 EventProperty.Builder()
                 .id(Long.toString(mFeedDetail.getIdOfEntityOrParticipant()))
