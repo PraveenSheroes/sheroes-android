@@ -119,7 +119,6 @@ public class ProfileShareYourIntrestFragment extends BaseFragment implements Bas
     private MyProfileyYourInterestListener mHomeActivityIntractionListner;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
-    private final String mSkill = LogUtils.makeLogTag(CreateCommunityFragment.class);
     HashMap<String, HashMap<String, ArrayList<LabelValue>>> data = new HashMap<>();
     String [] skills=new String[4];
     long [] skillsid=new long[4];
@@ -132,7 +131,6 @@ public class ProfileShareYourIntrestFragment extends BaseFragment implements Bas
                 mHomeActivityIntractionListner = (MyProfileyYourInterestListener) getActivity();
             }
         } catch (Fragment.InstantiationException exception) {
-            LogUtils.error(mSkill, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + mSkill + AppConstants.SPACE + exception.getMessage());
         }
     }
 

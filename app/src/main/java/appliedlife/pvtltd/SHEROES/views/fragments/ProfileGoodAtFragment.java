@@ -134,7 +134,6 @@ public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInt
     private ProfileGoodAtListener mCallback;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
-    private final String mSkill = LogUtils.makeLogTag(CreateCommunityFragment.class);
     HashMap<String, HashMap<String, ArrayList<LabelValue>>> data = new HashMap<>();
     String[] skills = new String[4];
     List<Long> skillsid = new ArrayList<>();
@@ -154,7 +153,6 @@ public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInt
         try {
             mCallback = (ProfileGoodAtListener) getActivity();
         } catch (ClassCastException exception) {
-            LogUtils.error(mSkill, "Activity must implements ProfileGoodAtListener", exception);
         }
     }
 

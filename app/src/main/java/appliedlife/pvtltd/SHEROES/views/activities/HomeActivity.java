@@ -106,10 +106,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ICCMemberListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunitiesFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.SettingAboutFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.SettingFeedbackFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.SettingFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.SettingTermsAndConditionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ChallengeSuccessDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ChallengeUpdateProgressDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
@@ -181,14 +177,10 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     TextView mIvHomeNotification;
     @Bind(R.id.tv_notification_read_count)
     public TextView mTvNotificationReadCount;
-    @Bind(R.id.fab_add_community)
-    FloatingActionButton mFloatingActionButton;
     @Bind(R.id.fl_notification)
     FrameLayout mFlNotification;
     @Bind(R.id.fab_filter)
     FloatingActionButton mJobFragment;
-    @Bind(R.id.li_home_community_button_layout)
-    LinearLayout liHomeCommunityButtonLayout;
     @Bind(R.id.fl_notification_read_count)
     public FrameLayout flNotificationReadCount;
     @Bind(R.id.title_text)
@@ -477,9 +469,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 break;
             case AppConstants.FOURTH_CONSTANT:
                 openBookMarkFragment();
-                break;
-            case 5:
-                openSettingFragment();
                 break;
             case 6:
                 handleHelpLineFragmentFromDeepLinkAndLoading();
@@ -777,7 +766,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     private void renderFAQSView() {
 
         FAQSFragment faqsFragment = new FAQSFragment();
-        liHomeCommunityButtonLayout.setVisibility(View.GONE);
         mToolbar.setVisibility(View.VISIBLE);
         mViewPager.setVisibility(View.GONE);
         mTabLayout.setVisibility(View.GONE);
@@ -796,7 +784,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
 
         setAllValues(mFragmentOpen);
         ICCMemberListFragment iccMemberListFragment = new ICCMemberListFragment();
-        liHomeCommunityButtonLayout.setVisibility(View.GONE);
         mToolbar.setVisibility(View.VISIBLE);
         mViewPager.setVisibility(View.GONE);
         mTabLayout.setVisibility(View.GONE);
@@ -885,7 +872,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
 
     @OnClick(R.id.tv_home)
     public void homeOnClick() {
-        liHomeCommunityButtonLayout.setVisibility(View.GONE);
         mFragmentOpen.setFeedOpen(true);
         flFeedFullView.setVisibility(View.VISIBLE);
         mViewPager.setVisibility(View.GONE);
@@ -1016,22 +1002,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         mICSheroes.setVisibility(View.VISIBLE);
     }
 
-
-    private void openSettingFragment() {
-        setAllValues(mFragmentOpen);
-        SettingFragment settingFragment = new SettingFragment();
-        Bundle bundle = new Bundle();
-        settingFragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
-                .replace(R.id.fl_article_card_view, settingFragment).addToBackStack(null).commitAllowingStateLoss();
-        mliArticleSpinnerIcon.setVisibility(View.GONE);
-
-
-    }
-
     private void openBookMarkFragment() {
         mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_FEED));
-        liHomeCommunityButtonLayout.setVisibility(View.GONE);
         mICSheroes.setVisibility(View.GONE);
         mFragmentOpen.setBookmarkFragment(true);
         mViewPager.setVisibility(View.GONE);
@@ -1124,13 +1096,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         onBackPressed();
     }
 
-    @OnClick(R.id.fab_add_community)
-    public void createCommunityButton() {
-        Intent intent = new Intent(getApplicationContext(), CreateCommunityActivity.class);
-        startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY);
-        overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
-    }
-
     @OnClick(R.id.fl_notification)
     public void notificationClick() {
         // mDrawer.openDrawer(Gravity.LEFT);
@@ -1216,42 +1181,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             super.openCommentReactionFragment(mFeedDetail);
         }
     }
-
-    public void settingListItemSelected(int id) {
-        switch (id) {
-            case R.id.tv_setting_feedback:
-                SettingFeedbackFragment articlesFragment = new SettingFeedbackFragment();
-                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
-                        .replace(R.id.fl_feed_comments, articlesFragment).addToBackStack(null).commitAllowingStateLoss();
-                break;
-            case R.id.tv_setting_preferences:
-                Intent intent = new Intent(this, SettingPreferencesActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.tv_setting_terms_and_condition:
-                SettingTermsAndConditionFragment settingTermsAndConditionFragment = new SettingTermsAndConditionFragment();
-                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
-                        .replace(R.id.fl_feed_comments, settingTermsAndConditionFragment).addToBackStack(null).commitAllowingStateLoss();
-                break;
-            case R.id.tv_setting_about:
-                SettingAboutFragment settingAboutFragmentFragment = new SettingAboutFragment();
-                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
-                        .replace(R.id.fl_feed_comments, settingAboutFragmentFragment).addToBackStack(null).commitAllowingStateLoss();
-                break;
-
-            case R.id.tv_logout:
-                if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
-                    mUserPreference.delete();
-                    Intent intent1 = new Intent(getApplicationContext(), LoginActivity.class);
-                    startActivity(intent1);
-                    finish();
-                }
-                break;
-            default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + id);
-        }
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);

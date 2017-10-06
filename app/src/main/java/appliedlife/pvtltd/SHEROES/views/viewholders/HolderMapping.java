@@ -285,16 +285,6 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new CanHelpInHolder(view, viewInterface);
         }
-    }, PROFILE_PERSONAL_VISITING_CARD(R.layout.profile_my_visiting_card) {
-        @Override
-        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new Visiting_card_holder1(view, viewInterface);
-        }
-    }, PROFFESTIONAL_VISITING_CARD(R.layout.profile_my_visiting_card) {
-        @Override
-        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new VisitingCardholder(view, viewInterface);
-        }
     },
     GOOD_AT(R.layout.ggodat_card) {
         @Override
@@ -670,11 +660,6 @@ public enum HolderMapping {
                     } else if (tagType.equalsIgnoreCase(AppConstants.CLIENTSIDE)) {
                         returnView = PROFILE_HORIZONTAL_RECYCLER_LIST.ordinal();
 
-                    } else if (tagType.equalsIgnoreCase(AppConstants.USER_VISITING_CARD)) {
-                        returnView = PROFFESTIONAL_VISITING_CARD.ordinal();
-
-                    } else if (tagType.equalsIgnoreCase(AppConstants.USER_VISITING_CARD1)) {
-                        returnView = PROFILE_PERSONAL_VISITING_CARD.ordinal();
                     }
                 } else if (item instanceof EducationEntity) {
                     returnView = EDUCATION_LIST.ordinal();

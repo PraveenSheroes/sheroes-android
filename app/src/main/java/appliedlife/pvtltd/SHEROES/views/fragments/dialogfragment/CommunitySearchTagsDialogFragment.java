@@ -47,9 +47,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
-import appliedlife.pvtltd.SHEROES.views.fragments.CreateCommunityFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CommunityTagsView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.Bind;
@@ -116,7 +114,6 @@ public class CommunitySearchTagsDialogFragment extends BaseDialogFragment implem
     private FragmentListRefreshData mFragmentListRefreshData;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
-    private final String mTAG = LogUtils.makeLogTag(CreateCommunityFragment.class);
     HashMap<String, HashMap<String, ArrayList<LabelValue>>> data = new HashMap<>();
     PopularTag filterList;
     FeedDetail mFeedDetail;
@@ -144,17 +141,6 @@ public class CommunitySearchTagsDialogFragment extends BaseDialogFragment implem
         mTv_no_of_tags.setVisibility(View.GONE);
         tv_community_tag_submit.setVisibility(View.GONE);
         return v;
-    }
-
-    @OnClick(R.id.tv_back_community_tag)
-    public void communityTagBackClick() {
-        ((CreateCommunityActivity) getActivity()).getSupportFragmentManager().popBackStack();
-    }
-
-    @OnClick(R.id.tv_community_tag_submit)
-    public void tagSubmitPress() {
-        ((CreateCommunityActivity) getActivity()).onTagsSubmit(mTags, mTagsid);
-        dismiss();
     }
 
     private void setMasterData(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {

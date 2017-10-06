@@ -53,7 +53,6 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActicity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
-import appliedlife.pvtltd.SHEROES.views.fragments.CreateCommunityFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CommunityTagsView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
@@ -123,7 +122,6 @@ public class SearchGoodAtDialogFragment extends BaseDialogFragment implements Co
     private FragmentListRefreshData mFragmentListRefreshData;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
-    private final String mTAG = LogUtils.makeLogTag(CreateCommunityFragment.class);
     HashMap<String, HashMap<String, ArrayList<LabelValue>>> data = new HashMap<>();
 
     PopularTag filterList;

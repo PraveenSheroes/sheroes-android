@@ -441,7 +441,6 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
         tvEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((CommunitiesDetailActivity) getActivity()).createCommunityClick(mFeedDetail);
                 popupWindow.dismiss();
             }
         });

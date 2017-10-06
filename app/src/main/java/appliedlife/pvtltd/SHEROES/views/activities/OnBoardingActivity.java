@@ -21,7 +21,6 @@ import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -52,7 +51,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingHowCanSheroesHelpYou
 import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingJobAtFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingShareYourInterestFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingTellUsAboutFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingWorkExperienceFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CurrentStatusDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.OnBoardingDailogHeySuccess;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.OnBoardingSearchDialogFragment;
@@ -537,16 +535,6 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_i_am_job_at, onBoardingJobAtFragment, OnBoardingJobAtFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
     }
 
-    private void setOnWorkExperienceFragment() {
-      //  LoginResponse loginResponse = userPreference.get();
-      //  loginResponse.setNextScreen(AppConstants.TOTAL_WORK_EXPERIENCE_SCREEN);
-     //   userPreference.set(loginResponse);
-        mFragmentOpen.setWorkingExpOpen(true);
-        mFlOnBoardingFragment.setVisibility(View.GONE);
-        OnBoardingWorkExperienceFragment onBoardingWorkExperienceFragment = new OnBoardingWorkExperienceFragment();
-        getSupportFragmentManager().beginTransaction().replace(R.id.fl_work_exp_fragment, onBoardingWorkExperienceFragment, OnBoardingWorkExperienceFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
-    }
-
     @OnClick(R.id.iv_how_can_help_next)
     public void onLookingNextClick() {
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(OnBoardingHowCanSheroesHelpYouFragment.class.getName());
@@ -612,7 +600,6 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
         mJobAt.setVisibility(View.GONE);
         mFragmentOpen.setJobAtOpen(false);
         mFragmentOpen.setLookingForHowCanOpen(false);
-        setOnWorkExperienceFragment();
     }
 
     @OnClick(R.id.tv_interest_search_box)

@@ -598,15 +598,6 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
         // overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
     }
 
-    public void createCommunityClick(FeedDetail feedDetail) {
-        Intent intent = new Intent(this, CreateCommunityActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, feedDetail);
-        intent.putExtras(bundle);
-        startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY);
-        overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
-    }
-
     @OnClick(R.id.tv_communities_detail_share)
     public void shareClick() {
         ShareCommunityFragment shareCommunityFragment = new ShareCommunityFragment();

@@ -107,14 +107,6 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <include
-        android:id="@+id/li_home_community_button_layout"
-        layout="@layout/home_community_button_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:layout_marginBottom="@dimen/dp_size_65"
-        android:visibility="gone" />
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_filter"
         android:layout_width="wrap_content"
