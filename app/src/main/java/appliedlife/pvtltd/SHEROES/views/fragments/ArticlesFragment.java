@@ -42,8 +42,6 @@ import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-import static appliedlife.pvtltd.SHEROES.utils.AppUtils.feedRequestBuilder;
-
 /**
  * Created by Praveen_Singh on 09-01-2017.
  */
@@ -174,6 +172,9 @@ public class ArticlesFragment extends BaseFragment {
             newFeedDetailList.addAll(feedDetailList);
             mLiNoResult.setVisibility(View.GONE);
             mPageNo = mFragmentListRefreshData.getPageNo();
+            if (mPageNo == AppConstants.ONE_CONSTANT) {
+                mFragmentListRefreshData.setPostedDate(feedDetailList.get(0).getPostingDate());
+            }
             if (isTrendingData) {
                 for (FeedDetail feedDetail : feedDetailList) {
                     feedDetail.setTrending(true);

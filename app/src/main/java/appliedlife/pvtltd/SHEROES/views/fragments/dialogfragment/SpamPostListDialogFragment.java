@@ -70,7 +70,6 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.DELETE_COMM
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_BOOKMARK_UNBOOKMARK;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_LIKE_UNLIKE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.SPAM_POST_APPROVE;
-import static appliedlife.pvtltd.SHEROES.utils.AppUtils.feedRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.notificationReadCountRequestBuilder;
 
 /**
@@ -161,7 +160,7 @@ public class SpamPostListDialogFragment extends BaseDialogFragment  {
         mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
         mPullRefreshList = new SwipPullRefreshList();
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
-        FeedRequestPojo feedRequestPojo=feedRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo());
+        FeedRequestPojo feedRequestPojo=mAppUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo());
         feedRequestPojo.setSpamPost(true);
         feedRequestPojo.setCommunityId(mFragmentListRefreshData.getCommunityId());
         mHomePresenter.getFeedFromPresenter(feedRequestPojo);

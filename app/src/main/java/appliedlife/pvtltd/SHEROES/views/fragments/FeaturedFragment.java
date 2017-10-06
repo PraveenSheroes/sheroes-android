@@ -43,7 +43,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FOR_REFRESH_FRAGMENT_LIST;
-import static appliedlife.pvtltd.SHEROES.utils.AppUtils.feedRequestBuilder;
 
 /**
  * Created by Praveen_Singh on 29-01-2017.
@@ -121,7 +120,7 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
         });
         super.setAllInitializationForFeeds(mFragmentListRefreshData, mAdapter, mLayoutManager, mRecyclerView, mHomePresenter, mAppUtils, mProgressBar);
         LogUtils.info(TAG, "**********ChallengeView fragment on create*********");
-        mHomePresenter.getFeedFromPresenter(feedRequestBuilder(AppConstants.FEATURED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
+        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEATURED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
         ((HomeActivity)getActivity()).communityButton();
         long timeSpent=System.currentTimeMillis()-startedTime;
         moEngageUtills.entityMoEngageFeatureCommunity(getActivity(),mMoEHelper,payloadBuilder,timeSpent);
@@ -143,7 +142,7 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
         setRefreshList(mPullRefreshList);
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
         LogUtils.info(TAG, "**********ChallengeView fragment swip to refresh*********");
-        mHomePresenter.getFeedFromPresenter(feedRequestBuilder(AppConstants.FEATURED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
+        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEATURED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
 
     }
 

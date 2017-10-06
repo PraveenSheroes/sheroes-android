@@ -1945,7 +1945,7 @@ public class AppUtils {
     /**
      * Request for feed api
      */
-    public static FeedRequestPojo feedRequestBuilder(String typeOfFeed, int pageNo) {
+    public FeedRequestPojo feedRequestBuilder(String typeOfFeed, int pageNo) {
         FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, pageNo);
         return feedRequestPojo;
     }
@@ -2014,7 +2014,6 @@ public class AppUtils {
         return mentorFollowerRequest;
     }
     public  FeedRequestPojo feedDetailRequestBuilder(String typeOfFeed, int pageNo, long idForDetail) {
-
         FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, pageNo);
         feedRequestPojo.setIdForFeedDetail(idForDetail);
         return feedRequestPojo;

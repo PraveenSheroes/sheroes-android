@@ -16,7 +16,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import static appliedlife.pvtltd.SHEROES.utils.AppUtils.feedRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.getBookMarks;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.getCommentRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.getPandingMemberRequestBuilder;
@@ -139,27 +138,37 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
         if (totalItemCount > visibleThreshold && !loading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
             if (null != mFragmentListRefreshData && StringUtil.isNotNullOrEmptyString(mFragmentListRefreshData.getCallFromFragment())) {
                 int pageNo = mFragmentListRefreshData.getPageNo();
+                if (mAppUtils == null) {
+                    mAppUtils = AppUtils.getInstance();
+                }
                 switch (mFragmentListRefreshData.getCallFromFragment()) {
                     case AppConstants.ARTICLE_FRAGMENT:
-                        if (mAppUtils == null) {
-                            mAppUtils = AppUtils.getInstance();
-                        }
-                        mHomePresenter.getFeedFromPresenter(mAppUtils.articleCategoryRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCategoryIdList()));
+                        FeedRequestPojo feedRequestArticlePojo=mAppUtils.articleCategoryRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCategoryIdList());
+                        feedRequestArticlePojo.setPostingDate(mFragmentListRefreshData.getPostedDate());
+                        mHomePresenter.getFeedFromPresenter(feedRequestArticlePojo);
                         break;
                     case AppConstants.COMMUNITY_POST_FRAGMENT:
-                        mHomePresenter.getFeedFromPresenter(feedRequestBuilder(AppConstants.FEED_COMMUNITY_POST, pageNo));
+                        FeedRequestPojo feedRequestCommPostFragPojo=mAppUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY_POST, pageNo);
+                        feedRequestCommPostFragPojo.setPostingDate(mFragmentListRefreshData.getPostedDate());
+                        mHomePresenter.getFeedFromPresenter(feedRequestCommPostFragPojo);
                         break;
                     case AppConstants.FEATURE_FRAGMENT:
-                        mHomePresenter.getFeedFromPresenter(feedRequestBuilder(AppConstants.FEATURED_COMMUNITY, pageNo));
+                        FeedRequestPojo feedRequestFeatureCommPojo=mAppUtils.feedRequestBuilder(AppConstants.FEATURED_COMMUNITY, pageNo);
+                        feedRequestFeatureCommPojo.setPostingDate(mFragmentListRefreshData.getPostedDate());
+                        mHomePresenter.getFeedFromPresenter(feedRequestFeatureCommPojo);
                         break;
                     case AppConstants.MY_COMMUNITIES_FRAGMENT:
                         mHomePresenter.getMyCommunityFromPresenter(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, pageNo));
                         break;
                     case AppConstants.HOME_FRAGMENT:
-                        mHomePresenter.getFeedFromPresenter(feedRequestBuilder(AppConstants.FEED_SUB_TYPE, pageNo));
+                        FeedRequestPojo feedRequestPojo=mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, pageNo);
+                        feedRequestPojo.setPostingDate(mFragmentListRefreshData.getPostedDate());
+                        mHomePresenter.getFeedFromPresenter(feedRequestPojo);
                         break;
                     case AppConstants.JOB_FRAGMENT:
-                        mHomePresenter.getFeedFromPresenter(feedRequestBuilder(AppConstants.FEED_JOB, pageNo));
+                        FeedRequestPojo feedRequestJobPojo=mAppUtils.feedRequestBuilder(AppConstants.FEED_JOB, pageNo);
+                        feedRequestJobPojo.setPostingDate(mFragmentListRefreshData.getPostedDate());
+                        mHomePresenter.getFeedFromPresenter(feedRequestJobPojo);
                         break;
                     case AppConstants.COMMUNITY_DETAIL:
                         mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST, pageNo, mFragmentListRefreshData.getIdFeedDetail()));
@@ -181,11 +190,11 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                         break;
                     case AppConstants.USER_COMMUNITY_POST_FRAGMENT:
                         if (StringUtil.isNotNullOrEmptyString(mFragmentListRefreshData.getCallForNameUser()) && mFragmentListRefreshData.getCallForNameUser().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
-                            FeedRequestPojo feedRequestPojo = userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCommunityId());
-                            feedRequestPojo.setIdForFeedDetail(null);
+                            FeedRequestPojo feedRequestCommunnityDetailPojo = userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCommunityId());
+                            feedRequestCommunnityDetailPojo.setIdForFeedDetail(null);
                             Integer autherId = (int) mFragmentListRefreshData.getCommunityId();
-                            feedRequestPojo.setAutherId(autherId);
-                            mHomePresenter.getFeedFromPresenter(feedRequestPojo);
+                            feedRequestCommunnityDetailPojo.setAutherId(autherId);
+                            mHomePresenter.getFeedFromPresenter(feedRequestCommunnityDetailPojo);
                         } else {
                             mHomePresenter.getFeedFromPresenter(userCommunityPostRequestBuilder(AppConstants.FEED_COMMUNITY_POST, pageNo, mFragmentListRefreshData.getCommunityId()));
                         }
@@ -198,24 +207,15 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                         mHelplinePresenter.getHelplineChatDetails(helplineGetChatThreadRequestBuilder(pageNo));
                         break;
                     case AppConstants.ALL_SEARCH:
-                        if (mAppUtils == null) {
-                            mAppUtils = AppUtils.getInstance();
-                        }
                         mHomePresenter.getFeedFromPresenter(mAppUtils.searchRequestBuilder(AppConstants.FEED_JOB, mFragmentListRefreshData.getSearchStringName(), mFragmentListRefreshData.getPageNo(), AppConstants.ALL_SEARCH, null, AppConstants.PAGE_SIZE));
                     case AppConstants.GROWTH_PUBLIC_PROFILE:
-                        if (mAppUtils == null) {
-                            mAppUtils = AppUtils.getInstance();
-                        }
                         mHomePresenter.getPublicProfileMentorListFromPresenter(mAppUtils.pubicProfileRequestBuilder(mFragmentListRefreshData.getPageNo()));
                         break;
                     case AppConstants.SPAM_LIST_FRAGMENT:
-                        if (mAppUtils == null) {
-                            mAppUtils = AppUtils.getInstance();
-                        }
-                        FeedRequestPojo feedRequestPojo=feedRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo());
-                        feedRequestPojo.setSpamPost(true);
-                        feedRequestPojo.setCommunityId(mFragmentListRefreshData.getCommunityId());
-                        mHomePresenter.getFeedFromPresenter(feedRequestPojo);
+                        FeedRequestPojo feedRequestSpamListPojo=mAppUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo());
+                        feedRequestSpamListPojo.setSpamPost(true);
+                        feedRequestSpamListPojo.setCommunityId(mFragmentListRefreshData.getCommunityId());
+                        mHomePresenter.getFeedFromPresenter(feedRequestSpamListPojo);
                         break;
 
                     default:

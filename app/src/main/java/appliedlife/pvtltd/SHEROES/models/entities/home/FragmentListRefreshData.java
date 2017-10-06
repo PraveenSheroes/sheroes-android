@@ -17,6 +17,7 @@ public class FragmentListRefreshData {
     private List<Long> categoryIdList;
     private String searchStringName;
     private String callForNameUser;
+    private String postedDate;
     public FragmentListRefreshData() {
 
     }
@@ -116,5 +117,13 @@ public class FragmentListRefreshData {
 
     public void setCallForNameUser(String callForNameUser) {
         this.callForNameUser = callForNameUser;
+    }
+
+    public String getPostedDate() {
+        return postedDate;
+    }
+
+    public void setPostedDate(String postedDate) {
+        this.postedDate = postedDate;
     }
 }
