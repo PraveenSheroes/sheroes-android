@@ -230,6 +230,7 @@ public class CreateCommunityPostFragment extends BaseFragment implements SelectC
                     mTvcreate_community_post.setText(R.string.ID_CREATEPOST);
                     messageForSuccess = getString(R.string.ID_POSTED);
                 } else {
+                    mEtchoosecommunity.setEnabled(false);
                     checkIntentWithImageUrls();
                     messageForSuccess = getString(R.string.ID_EDITED);
                 }

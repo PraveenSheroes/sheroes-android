@@ -40,7 +40,6 @@ import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-import static appliedlife.pvtltd.SHEROES.utils.AppUtils.feedRequestBuilder;
 
 /**
  * Created by Ajit Kumar on 19-02-2017.
@@ -124,7 +123,7 @@ public class JobFragment extends BaseFragment {
             }
         });
         super.setAllInitializationForFeeds(mFragmentListRefreshData, mPullRefreshList, mAdapter, mLayoutManager, mPageNo, mSwipeView, mLiNoResult, mFeedDetail, mRecyclerView, mPosition, mPressedEmoji, mListLoad, false, mHomePresenter, mAppUtils, mProgressBar);
-        jobFilterIds(feedRequestBuilder(AppConstants.FEED_JOB, mFragmentListRefreshData.getPageNo()));
+        jobFilterIds(mAppUtils.feedRequestBuilder(AppConstants.FEED_JOB, mFragmentListRefreshData.getPageNo()));
         ((HomeActivity)getActivity()).changeFragmentWithCommunities();
         long timeSpent=System.currentTimeMillis()-startedTime;
         moEngageUtills.entityMoEngageJobListing(getActivity(),mMoEHelper,payloadBuilder,timeSpent);
@@ -136,7 +135,7 @@ public class JobFragment extends BaseFragment {
                 mPullRefreshList = new SwipPullRefreshList();
                 setRefreshList(mPullRefreshList);
                 mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
-                mHomePresenter.getFeedFromPresenter(feedRequestBuilder(AppConstants.FEED_JOB, mFragmentListRefreshData.getPageNo()));
+                mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_JOB, mFragmentListRefreshData.getPageNo()));
             }
         });
         return view;
@@ -158,6 +157,9 @@ public class JobFragment extends BaseFragment {
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
             mLiNoResult.setVisibility(View.GONE);
             mPageNo = mFragmentListRefreshData.getPageNo();
+            if (mPageNo == AppConstants.ONE_CONSTANT) {
+                mFragmentListRefreshData.setPostedDate(feedDetailList.get(0).getPostingDate());
+            }
             mFragmentListRefreshData.setPageNo(++mPageNo);
             mPullRefreshList.allListData(feedDetailList);
             List<FeedDetail> data=null;

@@ -24,6 +24,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.appsflyer.AppsFlyerLib;
 import com.f2prateek.rx.preferences.Preference;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
@@ -86,7 +87,6 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.SPAM_POST_A
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.PERMISSIONS_REQUEST_READ_CONTACTS;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.acceptChallengeRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.challengetRequestBuilder;
-import static appliedlife.pvtltd.SHEROES.utils.AppUtils.feedRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.loginRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.notificationReadCountRequestBuilder;
 
@@ -204,7 +204,7 @@ public class HomeFragment extends BaseFragment {
                 if (daysDifference >= AppConstants.SAVED_DAYS_TIME) {
                     mHomePresenter.getAuthTokenRefreshPresenter();
                 } else {
-                    FeedRequestPojo feedRequestPojo = feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo());
+                    FeedRequestPojo feedRequestPojo = mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo());
                     feedRequestPojo.setPageSize(AppConstants.SEVENTH_CONSTANT);
                     mHomePresenter.getFeedFromPresenter(feedRequestPojo);
                 }
@@ -212,6 +212,7 @@ public class HomeFragment extends BaseFragment {
             if (null != mUserPreference.get().getUserSummary()) {
                 long userId = mUserPreference.get().getUserSummary().getUserId();
                 super.setUserId(userId);
+                AppsFlyerLib.getInstance().setCustomerUserId(String.valueOf(userId));
                 ((SheroesApplication) getActivity().getApplication()).trackUserId(String.valueOf(userId));
             }
         } else {
@@ -233,16 +234,6 @@ public class HomeFragment extends BaseFragment {
             }
         });
         return view;
-    }
-    @Override
-    public void onResume() {
-        super.onResume();
-        LogUtils.info(TAG,"**********On Resume Home fragment*****");
-    }
-    @Override
-    public void onPause() {
-        super.onPause();
-        LogUtils.info(TAG,"**********On Pause Home fragment*****");
     }
     private void getGcmId() {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -313,7 +304,7 @@ public class HomeFragment extends BaseFragment {
         mPullRefreshList = new SwipPullRefreshList();
         setRefreshList(mPullRefreshList);
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
-        FeedRequestPojo feedRequestPojo = feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo());
+        FeedRequestPojo feedRequestPojo =mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo());
         feedRequestPojo.setPageSize(AppConstants.SEVENTH_CONSTANT);
         mHomePresenter.getFeedFromPresenter(feedRequestPojo);
         mHomePresenter.getNotificationCountFromPresenter(notificationReadCountRequestBuilder(TAG));
@@ -603,14 +594,14 @@ public class HomeFragment extends BaseFragment {
             loginResponse.setTokenTime(System.currentTimeMillis());
             loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
             mUserPreference.set(loginResponse);
-            mHomePresenter.getFeedFromPresenter(feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
+            mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
         }
     }
 
     @OnClick(R.id.tv_no_result_try_again)
     public void onClickTryAgainOnError() {
         mLiNoResult.setVisibility(View.GONE);
-        mHomePresenter.getFeedFromPresenter(feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
+        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
     }
 
     private Observable<Void> getUserPhoneContactsAndSend() {

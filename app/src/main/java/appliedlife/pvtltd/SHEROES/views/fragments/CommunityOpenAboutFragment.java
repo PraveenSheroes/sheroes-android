@@ -76,7 +76,6 @@ import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.communityRequestBuilder;
-import static appliedlife.pvtltd.SHEROES.utils.AppUtils.feedRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.makeFeedRequest;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.ownerRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.removeMemberRequestBuilder;

@@ -8,6 +8,7 @@ import com.google.android.gms.analytics.Tracker;
 import java.util.HashMap;
 import java.util.Map;
 
+import appliedlife.pvtltd.SHEROES.BuildConfig;
 import appliedlife.pvtltd.SHEROES.R;
 
 
@@ -61,7 +62,12 @@ public final class AnalyticsTrackers {
             Tracker tracker;
             switch (target) {
                 case APP:
-                    tracker = GoogleAnalytics.getInstance(mContext).newTracker(R.xml.app_tracker);
+                    if(BuildConfig.DEBUG) {
+                        tracker = GoogleAnalytics.getInstance(mContext).newTracker(R.xml.debug_ga_tracker);
+                    }else
+                    {
+                        tracker = GoogleAnalytics.getInstance(mContext).newTracker(R.xml.app_tracker);
+                    }
                     break;
                 default:
                     throw new IllegalArgumentException("Unhandled analytics target " + target);

@@ -221,7 +221,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     private boolean isInviteReferral;
     private PublicProfileGrowthBuddiesDialogFragment mPublicProfileGrowthBuddiesDialogFragment;
     private BellNotificationDialogFragment bellNotificationDialogFragment;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -689,7 +688,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         startActivity(intent);
     }
 
-    public DialogFragment showUpdateProgressDialog(ChallengeDataItem challengeDataItem) {
+    public void showUpdateProgressDialog(ChallengeDataItem challengeDataItem) {
         ChallengeUpdateProgressDialogFragment updateProgressDialogFragment = (ChallengeUpdateProgressDialogFragment) getFragmentManager().findFragmentByTag(ChallengeUpdateProgressDialogFragment.class.getName());
         if (updateProgressDialogFragment == null) {
             updateProgressDialogFragment = new ChallengeUpdateProgressDialogFragment();
@@ -700,7 +699,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         if (!updateProgressDialogFragment.isVisible() && !updateProgressDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
             updateProgressDialogFragment.show(getFragmentManager(), ChallengeUpdateProgressDialogFragment.class.getName());
         }
-        return updateProgressDialogFragment;
     }
 
     public void updateChallengeDataWithStatus(ChallengeDataItem challengeDataItem, int percentCompleted, String imageUrl, String videoUrl) {
@@ -710,7 +708,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         }
     }
 
-    public DialogFragment challengeSuccessDialog(ChallengeDataItem challengeDataItem) {
+    public  void challengeSuccessDialog(ChallengeDataItem challengeDataItem) {
         mChallengeSuccessDialogFragment = (ChallengeSuccessDialogFragment) getFragmentManager().findFragmentByTag(ChallengeSuccessDialogFragment.class.getName());
         if (mChallengeSuccessDialogFragment == null) {
             mChallengeSuccessDialogFragment = new ChallengeSuccessDialogFragment();
@@ -721,10 +719,9 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         if (!mChallengeSuccessDialogFragment.isVisible() && !mChallengeSuccessDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
             mChallengeSuccessDialogFragment.show(getFragmentManager(), ChallengeSuccessDialogFragment.class.getName());
         }
-        return mChallengeSuccessDialogFragment;
     }
 
-    public DialogFragment eventDetailDialog(long eventID) {
+    public void eventDetailDialog(long eventID) {
         eventDetailDialogFragment = (EventDetailDialogFragment) getFragmentManager().findFragmentByTag(EventDetailDialogFragment.class.getName());
         if (eventDetailDialogFragment == null) {
             eventDetailDialogFragment = new EventDetailDialogFragment();
@@ -736,7 +733,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         if (!eventDetailDialogFragment.isVisible() && !eventDetailDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
             eventDetailDialogFragment.show(getFragmentManager(), EventDetailDialogFragment.class.getName());
         }
-        return eventDetailDialogFragment;
     }
 
 
@@ -908,6 +904,10 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_unselected_icon), null, null);
         mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
         mliArticleSpinnerIcon.setVisibility(View.GONE);
+        mTvMakeIndiaSafe.setVisibility(View.VISIBLE);
+        mJobFragment.setVisibility(View.GONE);
+        mTvSearchBox.setVisibility(View.GONE);
+        mICSheroes.setVisibility(View.VISIBLE);
 
     }
 
@@ -936,6 +936,10 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.teg_text_color));
         mTvHome.setText(getString(R.string.ID_FEED));
         mliArticleSpinnerIcon.setVisibility(View.GONE);
+        mTvMakeIndiaSafe.setVisibility(View.VISIBLE);
+        mJobFragment.setVisibility(View.GONE);
+        mTvSearchBox.setVisibility(View.GONE);
+        mICSheroes.setVisibility(View.VISIBLE);
     }
 
     @OnClick(R.id.iv_footer_button_icon)
@@ -959,6 +963,10 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         fm.beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
                 .replace(R.id.fl_article_card_view, articlesFragment, ArticlesFragment.class.getName()).addToBackStack(ArticlesFragment.class.getName()).commitAllowingStateLoss();
         mliArticleSpinnerIcon.setVisibility(View.VISIBLE);
+        mTvMakeIndiaSafe.setVisibility(View.VISIBLE);
+        mJobFragment.setVisibility(View.GONE);
+        mTvSearchBox.setVisibility(View.GONE);
+        mICSheroes.setVisibility(View.VISIBLE);
     }
 
     public void inviteMyCommunityDialog() {
@@ -1002,6 +1010,10 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         fm.beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
                 .replace(R.id.fl_article_card_view, helplineFragment, HelplineFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
         mliArticleSpinnerIcon.setVisibility(View.GONE);
+        mTvMakeIndiaSafe.setVisibility(View.VISIBLE);
+        mJobFragment.setVisibility(View.GONE);
+        mTvSearchBox.setVisibility(View.GONE);
+        mICSheroes.setVisibility(View.VISIBLE);
     }
 
 
@@ -1044,6 +1056,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     }
 
     public void openJobFragment() {
+
         changeFragmentWithCommunities();
         setAllValues(mFragmentOpen);
         JobFragment jobFragment = new JobFragment();
@@ -1055,27 +1068,52 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         fm.beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
                 .replace(R.id.fl_article_card_view, jobFragment, JobFragment.class.getName()).addToBackStack(JobFragment.class.getName()).commitAllowingStateLoss();
         mliArticleSpinnerIcon.setVisibility(View.GONE);
-
+        mTvMakeIndiaSafe.setVisibility(View.GONE);
+        mJobFragment.setVisibility(View.VISIBLE);
+        mTvSearchBox.setVisibility(View.VISIBLE);
+        mICSheroes.setVisibility(View.GONE);
+        mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_JOBS));
     }
 
     @Override
     public void onBackPressed() {
+
         if (mFragmentOpen.isFeedFragment() || mFragmentOpen.isCommunityOpen()) {
-            if (doubleBackToExitPressedOnce) {
+            if (mFragmentOpen.isCommentList()) {
+                mFragmentOpen.setCommentList(false);
                 getSupportFragmentManager().popBackStackImmediate();
-                finish();
-                return;
-            }
-            doubleBackToExitPressedOnce = true;
-            Snackbar.make(mCLMainLayout, getString(R.string.ID_BACK_PRESS), Snackbar.LENGTH_SHORT).show();
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    doubleBackToExitPressedOnce = false;
+                if (mFragmentOpen.isBookmarkFragment()) {
+                    Fragment fragment = getSupportFragmentManager().findFragmentByTag(BookmarksFragment.class.getName());
+                    if (AppUtils.isFragmentUIActive(fragment)) {
+                        ((BookmarksFragment) fragment).commentListRefresh(mFeedDetail, COMMENT_REACTION);
+                    }
+                } else {
+                    Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+                    if (AppUtils.isFragmentUIActive(fragment)) {
+                        ((HomeFragment) fragment).commentListRefresh(mFeedDetail, COMMENT_REACTION);
+                    }
                 }
-            }, 2000);
+            } else if (mFragmentOpen.isReactionList()) {
+                mFragmentOpen.setReactionList(false);
+                mFragmentOpen.setCommentList(true);
+                getSupportFragmentManager().popBackStackImmediate();
+            }else {
+                if (doubleBackToExitPressedOnce) {
+                    getSupportFragmentManager().popBackStackImmediate();
+                    finish();
+                    return;
+                }
+                doubleBackToExitPressedOnce = true;
+                Snackbar.make(mCLMainLayout, getString(R.string.ID_BACK_PRESS), Snackbar.LENGTH_SHORT).show();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        doubleBackToExitPressedOnce = false;
+                    }
+                }, 2000);
+            }
         } else {
-            super.onBackPressed();
+                super.onBackPressed();
         }
     }
 

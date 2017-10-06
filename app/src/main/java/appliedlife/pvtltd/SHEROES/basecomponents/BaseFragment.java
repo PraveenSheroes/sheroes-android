@@ -192,7 +192,6 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
         this.mAppUtils = mAppUtils;
         this.mProgressBar = mProgressBar;
     }
-
     public void setUserId(long userId) {
         mUserId = userId;
     }
@@ -207,7 +206,6 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
     public void setRefreshList(SwipPullRefreshList mPullRefreshList) {
         this.mPullRefreshList = mPullRefreshList;
     }
-
 
     public void callFragment(int layout, Fragment fragment) {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
@@ -277,6 +275,7 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
             }
             if (mPageNo == AppConstants.ONE_CONSTANT) {
                 mfeedDetailList = feedDetailList;
+                mFragmentListRefreshData.setPostedDate(feedDetailList.get(0).getPostingDate());
             }
             LogUtils.info(TAG, "**************position *****" +mPageNo );
             mFragmentListRefreshData.setPageNo(++mPageNo);
