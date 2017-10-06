@@ -138,7 +138,7 @@
                 android:layout_marginLeft="@dimen/dp_size_38"
                 android:layout_marginRight="@dimen/dp_size_38"
                 android:layout_marginTop="@dimen/dp_size_20"
-                android:background="@drawable/rectangle_btn"
+                android:background="@drawable/rect_btn"
                 android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:gravity="center"
                 android:text="@string/ID_COMM_SHARE_BUTTON"

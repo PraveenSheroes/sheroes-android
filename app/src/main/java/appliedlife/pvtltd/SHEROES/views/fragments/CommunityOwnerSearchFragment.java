@@ -60,8 +60,6 @@ public class CommunityOwnerSearchFragment extends BaseFragment implements HomeVi
     ProgressBar mProgressBar;
     @Bind(R.id.et_search_edit_text)
     public EditText mSearchEditText;
-    @Bind(R.id.tv_back_community_tag)
-    TextView mBackCommunityTag;
     @Bind(R.id.lnr_invite_member)
     LinearLayout mLnr_invite_member;
     private String mSearchDataName = AppConstants.EMPTY_STRING;
