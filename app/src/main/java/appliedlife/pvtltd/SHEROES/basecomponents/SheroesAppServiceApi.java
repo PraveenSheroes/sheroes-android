@@ -95,16 +95,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.MentorFollowUnfo
 import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.MentorFollowerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.PublicProfileListResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingChangeUserPreferenceRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingChangeUserPreferenseResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingDeActivateRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingDeActivateResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingFeedbackRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingFeedbackResponce;
-import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingRatingRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.setting.SettingRatingResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.setting.UserPreferenceRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.setting.UserpreferenseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.sharemail.ShareMailResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.sharemail.ShareViaMail;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQSRequest;
@@ -233,18 +223,6 @@ public interface SheroesAppServiceApi {
     @POST("entity/master/get_data")
     Observable<GetTagData> getTagFromApi(@Body GetAllDataRequest getAllDataRequest);
 
-    @POST("participant/settings/save_feedback")
-    Observable<SettingFeedbackResponce> getSettingAuthToken(@Body SettingFeedbackRequest feedbackRequest);
-
-    @POST("participant/settings/save_rating")
-    Observable<SettingRatingResponse> getUserRatingAuthToken(@Body SettingRatingRequest ratingRequest);
-
-    @POST("participant/settings/deactivate_account")
-    Observable<SettingDeActivateResponse> getUserDeactiveAuthToken(@Body SettingDeActivateRequest deActivateRequest);
-
-    @POST("participant/settings/get_user_preferences")
-    Observable<UserpreferenseResponse> getUserPreferenceAuthToken(@Body UserPreferenceRequest userPreferenceRequest);
-
     @POST("entity/master/all_data")
     Observable<MasterDataResponse> getOnBoardingMasterDataFromApi();
 
@@ -271,9 +249,6 @@ public interface SheroesAppServiceApi {
 
     @POST("participant/user/add_or_edit")
     Observable<BoardingDataResponse> getInterestFromApi(@Body BoardingInterestRequest boardingInterestRequest);
-
-    @POST("participant/settings/change_user_preference")
-    Observable<SettingChangeUserPreferenseResponse> getUserChangePreferenceAuthToken(@Body SettingChangeUserPreferenceRequest settingChangeUserPreferenceRequest);
 
     @POST("participant/user/add_or_edit")
     Observable<BoardingDataResponse> getEducationAuthToken(@Body ProfileAddEditEducationRequest profileAddEditEducationRequest);

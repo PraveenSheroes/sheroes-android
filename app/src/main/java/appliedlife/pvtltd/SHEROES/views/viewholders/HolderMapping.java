@@ -307,11 +307,6 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new ArticleDetailHolder(view, viewInterface);
         }
-    }, ARTICLE_DETAIL_SUGGESTED_HOLDER(R.layout.article_detail_suggested_holder) {
-        @Override
-        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new ArticleDetailSuggestedHolder(view, viewInterface);
-        }
     }, ARTICLE_DETAIL_WITHIN_SUGGESTED_HOLDER(R.layout.article_detail_within_suggested) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {

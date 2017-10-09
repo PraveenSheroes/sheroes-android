@@ -257,26 +257,6 @@ public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInt
 
     @OnClick(R.id.tv_skill_submit)
     public void SkillSubmitPress() {
-      /*  List<Long> longList = getExistingSelection();
-        for (int i = 0; i < skillsid.length; i++) {
-
-            if (skillsid[i] > 0) {
-                if (longList.size() < KEY_SKILLS_LIMIT) {
-                    if (!longList.contains(skillsid[i])) {
-                        longList.add(skillsid[i]);
-                    }
-                } else {
-                    if (!longList.contains(skillsid[i])) {
-                        longList.remove(0);
-                        longList.add(skillsid[i]);
-                    } else {
-                        longList.remove(longList.indexOf(skillsid[i]));
-                        longList.add(skillsid[i]);
-                    }
-                }
-            }
-
-        }*/
         if (StringUtil.isNotEmptyCollection(skillsid)) {
             mOnBoardingPresenter.getJobAtToPresenter(mAppUtils.boardingJobAtRequestBuilder(new HashSet<Long>(skillsid)));
             ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_PROFILE_EDITS, GoogleAnalyticsEventActions.EDIT_GOOD_AT, AppConstants.EMPTY_STRING);

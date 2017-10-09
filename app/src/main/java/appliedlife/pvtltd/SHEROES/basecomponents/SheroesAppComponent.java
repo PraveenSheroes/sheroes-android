@@ -5,7 +5,6 @@ import javax.inject.Singleton;
 
 
 import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
-import appliedlife.pvtltd.SHEROES.models.InviteSearchModel;
 import appliedlife.pvtltd.SHEROES.models.RequestedListModel;
 import appliedlife.pvtltd.SHEROES.presenters.CommunityTagsPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.MembersPresenter;
@@ -124,7 +123,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.SpamPostListDia
 import appliedlife.pvtltd.SHEROES.views.viewholders.AppIntroCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleDetailHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleDetailSuggestedHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleDetailWithInSuggestedHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.BellNotificationHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.BlankHolder;
@@ -289,9 +287,7 @@ public interface SheroesAppComponent {
     void inject(NoCommunityHolder noCommunityHolder);
 
     void inject(MyCommunitiesCardHolder myCommunitiesCardHolder);
-
-    void inject(ArticleDetailSuggestedHolder articleDetailSuggestedHolder);
-
+    
     void inject(ArticleDetailWithInSuggestedHolder articleDetailWithInSuggestedHolder);
 
     void inject(ProfileViewHolder profileViewHolder);
@@ -373,9 +369,6 @@ public interface SheroesAppComponent {
     void inject(RequestedHolder requestedHolder);
 
     void inject(CommunityOwnerSearchFragment communityOwnerSearchFragment);
-
-
-    void inject(InviteSearchModel requestedHolder);
 
     void inject(InviteSearchHolder inviteSearchHolder);
 
