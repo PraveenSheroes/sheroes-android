@@ -12,6 +12,7 @@ import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences.Preference;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
@@ -191,6 +192,7 @@ public class FaceBookOpenActivity extends BaseActivity implements LoginView {
                 request.setParameters(parameters);
                 request.executeAsync();
             } catch (Exception e) {
+                Crashlytics.getInstance().core.logException(e);
             }
         }
 
@@ -201,6 +203,7 @@ public class FaceBookOpenActivity extends BaseActivity implements LoginView {
 
         @Override
         public void onError(FacebookException e) {
+            Crashlytics.getInstance().core.logException(e);
             userPreference.delete();
             showNetworkTimeoutDoalog(true, false,e.getMessage());
         }

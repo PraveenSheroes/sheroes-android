@@ -12,6 +12,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
+
 import appliedlife.pvtltd.SHEROES.imageops.CropImage;
 import appliedlife.pvtltd.SHEROES.imageops.CropImageView;
 
@@ -203,6 +205,7 @@ public class CreateCommunityPostActivity extends BaseActivity implements BaseHol
                                 ((CreateCommunityPostFragment) fragmentCommunityPost).setImages(file);
                             }
                         } catch (Exception e) {
+                            Crashlytics.getInstance().core.logException(e);
                             e.printStackTrace();
                         }
                     } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {

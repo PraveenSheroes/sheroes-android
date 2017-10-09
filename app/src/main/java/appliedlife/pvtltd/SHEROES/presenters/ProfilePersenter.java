@@ -1,5 +1,6 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
+import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences.Preference;
 
 import javax.inject.Inject;
@@ -87,6 +88,7 @@ public class ProfilePersenter extends BasePresenter<ProfileView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(sheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_AUTH_TOKEN);
             }
@@ -122,6 +124,7 @@ public class ProfilePersenter extends BasePresenter<ProfileView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(sheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_AUTH_TOKEN);
             }
@@ -153,6 +156,7 @@ public class ProfilePersenter extends BasePresenter<ProfileView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().showError(sheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_AUTH_TOKEN);
             }
 
@@ -182,6 +186,7 @@ public class ProfilePersenter extends BasePresenter<ProfileView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(sheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_AUTH_TOKEN);
             }
@@ -213,6 +218,7 @@ public class ProfilePersenter extends BasePresenter<ProfileView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(sheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_AUTH_TOKEN);
             }
@@ -244,6 +250,7 @@ public class ProfilePersenter extends BasePresenter<ProfileView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().showError(sheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_AUTH_TOKEN);
             }
 
@@ -277,6 +284,7 @@ public class ProfilePersenter extends BasePresenter<ProfileView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().showError(sheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_AUTH_TOKEN);
             }
 
@@ -307,6 +315,7 @@ public class ProfilePersenter extends BasePresenter<ProfileView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().showError(sheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_AUTH_TOKEN);
             }
 
@@ -339,6 +348,7 @@ public class ProfilePersenter extends BasePresenter<ProfileView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(sheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_AUTH_TOKEN);
             }
@@ -370,6 +380,7 @@ public class ProfilePersenter extends BasePresenter<ProfileView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(sheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_AUTH_TOKEN);
             }
@@ -401,6 +412,7 @@ public class ProfilePersenter extends BasePresenter<ProfileView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(sheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_AUTH_TOKEN);
             }

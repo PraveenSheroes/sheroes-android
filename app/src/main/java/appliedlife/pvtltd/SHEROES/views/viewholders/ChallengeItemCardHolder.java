@@ -141,7 +141,6 @@ public class ChallengeItemCardHolder extends BaseViewHolder<ChallengeDataItem>{
         this.dataItem = item;
         mContext = context;
         dataItem.setItemPosition(position);
-
         if (dataItem.is_accepted()) {
             liBeforeAccept.setVisibility(View.GONE);
             liAfterAccept.setVisibility(View.VISIBLE);

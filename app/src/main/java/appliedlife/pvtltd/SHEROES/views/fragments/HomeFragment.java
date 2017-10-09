@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.appsflyer.AppsFlyerLib;
+import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences.Preference;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
@@ -223,6 +224,7 @@ public class HomeFragment extends BaseFragment {
         try {
             getGcmId();
         } catch (Exception e) {
+            Crashlytics.getInstance().core.logException(e);
         }
         long timeSpentFeed = System.currentTimeMillis() - startedTime;
         moEngageUtills.entityMoEngageViewFeed(getActivity(), mMoEHelper, payloadBuilder, timeSpentFeed);

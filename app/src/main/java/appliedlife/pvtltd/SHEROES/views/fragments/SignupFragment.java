@@ -20,6 +20,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences.Preference;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
@@ -264,6 +265,7 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
             }
             return dialog;
         } catch (Exception e) {
+            Crashlytics.getInstance().core.logException(e);
             LogUtils.error(TAG, e);
             return null;
         }
@@ -635,7 +637,9 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
                 request.setParameters(parameters);
                 request.executeAsync();
             } catch (Exception e) {
+                Crashlytics.getInstance().core.logException(e);
             }
+
         }
 
         @Override
@@ -696,6 +700,7 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
                 dialog.dismiss();
             }
         } catch (IllegalArgumentException e) {
+            Crashlytics.getInstance().core.logException(e);
             LogUtils.error(this.getClass().getName(), e.toString(), e);
         }
     }
@@ -737,6 +742,7 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
             try {
                 mToken = GoogleAuthUtil.getToken(getContext(), accountName, SCOPES);
             } catch (IOException e) {
+                Crashlytics.getInstance().core.logException(e);
                 e.printStackTrace();
             } catch (UserRecoverableAuthException e) {
 

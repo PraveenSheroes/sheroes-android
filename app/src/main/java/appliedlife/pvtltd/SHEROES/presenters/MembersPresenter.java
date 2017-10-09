@@ -1,5 +1,6 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
+import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences.Preference;
 
 import javax.inject.Inject;
@@ -62,6 +63,7 @@ public class MembersPresenter extends BasePresenter<AllMembersView> {
             }
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_MEMBER);
                 getMvpView().stopProgressBar();
             }
@@ -89,6 +91,7 @@ public class MembersPresenter extends BasePresenter<AllMembersView> {
             }
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_MEMBER);
                 getMvpView().stopProgressBar();
             }

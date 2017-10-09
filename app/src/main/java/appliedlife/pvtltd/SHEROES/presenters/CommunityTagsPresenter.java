@@ -1,5 +1,6 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
+import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences.Preference;
 
 import javax.inject.Inject;
@@ -60,6 +61,7 @@ public class CommunityTagsPresenter extends BasePresenter<CommunityTagsView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(e.getMessage(), ERROR_TAG);
             }

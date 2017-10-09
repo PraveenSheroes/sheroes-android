@@ -15,6 +15,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -86,6 +88,7 @@ public class ProfileAddEditEducationFragment extends BaseDialogFragment implemen
         try {
             mCallback = (ProfileEducationListener) getActivity();
         } catch (ClassCastException exception) {
+            Crashlytics.getInstance().core.logException(exception);
             LogUtils.error("", "Activity must implements ProfileGoodAtListener", exception);
         }
     }

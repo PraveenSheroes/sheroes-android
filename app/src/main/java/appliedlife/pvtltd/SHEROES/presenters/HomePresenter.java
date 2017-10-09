@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
 
+import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences.Preference;
 
 import javax.inject.Inject;
@@ -124,6 +125,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
             //    getMvpView().showError(e.getMessage(),ERROR_AUTH_TOKEN);
 
             }
@@ -151,6 +153,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
 
@@ -178,6 +181,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             }
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
 
@@ -209,6 +213,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_MY_COMMUNITIES);
 
@@ -239,6 +244,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_BOOK_MARK_LIST);
 
@@ -268,6 +274,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), FOLLOW_UNFOLLOW);
 
@@ -295,6 +302,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), FOLLOW_UNFOLLOW);
 
@@ -322,6 +330,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), FOLLOW_UNFOLLOW);
 
@@ -349,6 +358,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), FOLLOW_UNFOLLOW);
 
@@ -376,6 +386,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
 
@@ -404,6 +415,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
 
@@ -432,6 +444,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_BOOKMARK_UNBOOKMARK);
 
@@ -460,6 +473,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_JOIN_INVITE);
 
@@ -488,6 +502,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
 
@@ -516,6 +531,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
 
@@ -544,6 +560,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_SEARCH_DATA);
 
@@ -568,6 +585,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
             }
 
             @Override
@@ -589,6 +607,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
             }
@@ -611,6 +630,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
             }
 
             @Override
@@ -631,6 +651,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
             }
 
             @Override
@@ -650,6 +671,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
             }
 
             @Override
@@ -674,6 +696,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             }
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
 
@@ -706,6 +729,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
 
                     }

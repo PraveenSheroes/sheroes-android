@@ -32,6 +32,8 @@ import android.view.View;
 import android.widget.Toast;
 
 
+import com.crashlytics.android.Crashlytics;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -224,6 +226,7 @@ public class CropImageActivity extends AppCompatActivity implements CropImageVie
                         mOptions.outputCompressFormat == Bitmap.CompressFormat.PNG ? ".png" : ".webp";
                 outputUri = Uri.fromFile(File.createTempFile("cropped", ext, getCacheDir()));
             } catch (IOException e) {
+                Crashlytics.getInstance().core.logException(e);
                 throw new RuntimeException("Failed to create temp file for output image", e);
             }
         }

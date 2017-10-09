@@ -32,6 +32,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -196,6 +197,7 @@ public class MakeIndiaSafeMapActivity extends BaseActivity implements OnMapReady
                     }
                 }
             } catch (IOException e) {
+                Crashlytics.getInstance().core.logException(e);
                 e.printStackTrace();
             }
             mLatLongWithLocation = latLongWithLocation;
@@ -518,6 +520,7 @@ public class MakeIndiaSafeMapActivity extends BaseActivity implements OnMapReady
                             }
 
                         } catch (Exception e) {
+                            Crashlytics.getInstance().core.logException(e);
                             e.printStackTrace();
                         }
                     } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
@@ -597,6 +600,7 @@ public class MakeIndiaSafeMapActivity extends BaseActivity implements OnMapReady
                     galIntent.setType("image/*");
                     startActivityForResult(galIntent, AppConstants.REQUEST_CODE_FOR_GALLERY);
                 } catch (Exception e) {
+                    Crashlytics.getInstance().core.logException(e);
                 }
             }
         } else {
@@ -605,6 +609,7 @@ public class MakeIndiaSafeMapActivity extends BaseActivity implements OnMapReady
                 galIntent.setType("image/*");
                 startActivityForResult(galIntent, AppConstants.REQUEST_CODE_FOR_GALLERY);
             } catch (Exception e) {
+                Crashlytics.getInstance().core.logException(e);
             }
         }
     }
@@ -636,6 +641,7 @@ public class MakeIndiaSafeMapActivity extends BaseActivity implements OnMapReady
                 Toast.makeText(this, "Error while save image", Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {
+            Crashlytics.getInstance().core.logException(e);
             e.printStackTrace();
         }
     }
@@ -662,6 +668,7 @@ public class MakeIndiaSafeMapActivity extends BaseActivity implements OnMapReady
             o2.inSampleSize = scale;
             return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
         } catch (FileNotFoundException e) {
+            Crashlytics.getInstance().core.logException(e);
         }
         return null;
     }

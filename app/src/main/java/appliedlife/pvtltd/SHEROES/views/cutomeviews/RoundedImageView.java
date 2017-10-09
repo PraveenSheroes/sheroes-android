@@ -34,6 +34,8 @@ import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
+
 import appliedlife.pvtltd.SHEROES.R;
 
 @SuppressWarnings("UnusedDeclaration")
@@ -269,6 +271,7 @@ public class RoundedImageView extends AppCompatImageView {
         d = rsrc.getDrawable(mResource);
       } catch (Exception e) {
         Log.w(TAG, "Unable to find resource: " + mResource, e);
+        Crashlytics.getInstance().core.logException(e);
         // Don't try again.
         mResource = 0;
       }

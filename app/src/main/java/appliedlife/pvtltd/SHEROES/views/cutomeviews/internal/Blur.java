@@ -15,6 +15,8 @@ import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
 import android.view.View;
 
+import com.crashlytics.android.Crashlytics;
+
 
 public class Blur {
 
@@ -52,6 +54,7 @@ public class Blur {
         bitmap = Blur.rs(context, bitmap, factor.radius);
       } catch (RSRuntimeException e) {
         bitmap = Blur.stack(bitmap, factor.radius, true);
+        Crashlytics.getInstance().core.logException(e);
       }
     } else {
       bitmap = Blur.stack(bitmap, factor.radius, true);

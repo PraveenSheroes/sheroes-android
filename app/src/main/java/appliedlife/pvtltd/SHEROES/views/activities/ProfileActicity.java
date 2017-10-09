@@ -32,6 +32,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences.Preference;
 import com.google.gson.Gson;
 import com.moe.pushlibrary.MoEHelper;
@@ -1154,6 +1155,7 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
                 Toast.makeText(this, "Error while save image", Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {
+            Crashlytics.getInstance().core.logException(e);
             e.printStackTrace();
         }
     }

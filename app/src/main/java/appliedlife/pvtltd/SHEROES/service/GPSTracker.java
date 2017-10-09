@@ -15,6 +15,8 @@ import android.os.IBinder;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 
+import com.crashlytics.android.Crashlytics;
+
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 
 public class GPSTracker extends Service implements LocationListener {
@@ -146,6 +148,7 @@ public class GPSTracker extends Service implements LocationListener {
 
             }
         } catch (Exception e) {
+            Crashlytics.getInstance().core.logException(e);
             e.printStackTrace();
         }
 

@@ -1,5 +1,6 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
+import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences.Preference;
 import com.google.gson.Gson;
 
@@ -87,6 +88,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
             }
@@ -114,6 +116,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
             }
@@ -173,6 +176,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
             }
@@ -203,6 +207,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
             }
@@ -229,6 +234,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
             }
@@ -256,6 +262,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
             }
@@ -283,6 +290,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
 
@@ -309,6 +317,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
 
             }

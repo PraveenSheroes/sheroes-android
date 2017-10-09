@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences.Preference;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
@@ -72,6 +73,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 logout();
             }
         } catch (Exception e) {
+            Crashlytics.getInstance().core.logException(e);
             logout();
         }
 
@@ -138,6 +140,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                                 ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.DEEP_LINK_TO_HOME_CHALLENGE, AppConstants.EMPTY_STRING);
                             }
                         } catch (Exception e) {
+                            Crashlytics.getInstance().core.logException(e);
                             homeActivityCall();
                         }
                     } else if (urlOfSharedCard.contains(AppConstants.HELPLINE_URL) || urlOfSharedCard.contains(AppConstants.HELPLINE_URL_COM)) {
@@ -165,7 +168,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                                 ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.DEEP_LINK_TO_MAKE_INDIA_SAFE, AppConstants.EMPTY_STRING);
                             }
                         } catch (Exception e) {
-
+                            Crashlytics.getInstance().core.logException(e);
                         }
                     } else {
                         indexOfFourthBackSlace = AppUtils.findNthIndexOf(urlOfSharedCard, AppConstants.BACK_SLASH, 4);
@@ -185,6 +188,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                     homeActivityCall();
                 }
             } catch (Exception e) {
+                Crashlytics.getInstance().core.logException(e);
                 homeActivityCall();
             }
             fullLength = urlOfSharedCard.length();
@@ -220,6 +224,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                     ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.DEEP_LINK_TO_ARTICLE, AppConstants.EMPTY_STRING);
                 }
             } catch (Exception e) {
+                Crashlytics.getInstance().core.logException(e);
                 homeActivityCall();
             }
         } else if (AppConstants.JOB_URL.equalsIgnoreCase(baseUrl) || AppConstants.JOB_URL_COM.equalsIgnoreCase(baseUrl) && AppConstants.JOB_URL.length() < fullLength) {
@@ -241,6 +246,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                     ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.DEEP_LINK_TO_JOB, AppConstants.EMPTY_STRING);
                 }
             } catch (Exception e) {
+                Crashlytics.getInstance().core.logException(e);
                 homeActivityCall();
             }
 
@@ -290,6 +296,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                     ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.DEEP_LINK_TO_COMMUNITY, AppConstants.EMPTY_STRING);
                 }
             } catch (Exception e) {
+                Crashlytics.getInstance().core.logException(e);
                 homeActivityCall();
 
             }
@@ -313,6 +320,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                     ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.DEEP_LINK_EVENT, AppConstants.EMPTY_STRING);
                 }
             } catch (Exception e) {
+                Crashlytics.getInstance().core.logException(e);
                 homeActivityCall();
             }
         } else if (AppConstants.CHAMPION_URL.equalsIgnoreCase(baseUrl) || AppConstants.CHAMPION_URL_COM.equalsIgnoreCase(baseUrl) && AppConstants.CHAMPION_URL.length() < fullLength) {
@@ -335,6 +343,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
 
                 }
             } catch (Exception e) {
+                Crashlytics.getInstance().core.logException(e);
                 homeActivityCall();
             }
         }

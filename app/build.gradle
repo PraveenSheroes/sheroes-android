@@ -7,9 +7,10 @@ buildscript {
     }
     dependencies {
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
-        classpath 'io.fabric.tools:gradle:1.21.6'
+        classpath 'io.fabric.tools:gradle:1.22.0'
     }
 }
+
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
@@ -41,19 +42,21 @@ android {
             buildConfigField "String", "BASE_URL", "\"http://34.193.138.177/\""
            // buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
             buildConfigField "String", "GOOGLE_PLUS_URL", "\"https://sheroes.com/APIUsers/gplogin.json\""
-            buildConfigField 'Boolean', 'enableCrashlytics', 'false'
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.debug
+            ext.crashlyticsApiSecret = "c8e9927007c169ba7b17261a41984f3d63d39fe5cda3e9c42234990e04cec4ae"
+            ext.crashlyticsApiKey = "6f53a2cf9e2249594beb5d245e04eb8094f6a56e"
         }
         release {
             buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
             buildConfigField "String", "GOOGLE_PLUS_URL", "\"https://sheroes.com/APIUsers/gplogin.json\""
-            buildConfigField 'Boolean', 'enableCrashlytics', 'true'
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
+            ext.crashlyticsApiSecret = "9edaf311149aaaac17a2399c76e31db5fd18706615646d41ac84e561504e4e57"
+            ext.crashlyticsApiKey = "07aa242372597565df80681a25002e6e25e6ef0e"
         }
     }
     lintOptions {
@@ -109,3 +112,21 @@ dependencies {
 }
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'io.fabric'
+//THIS SHOULD ALWAYS BE PLACED BELOW DEPENDENCIES AS PER NEW PLAY SERVICES DOCUMENTATION
+//Hidden here: https://firebase.google.com/docs/android/setup#add_the_sdk
+import com.crashlytics.tools.utils.PropertiesUtils
+
+File crashlyticsProperties = new File("${project.projectDir.absolutePath}/fabric.properties")
+android.applicationVariants.all { variant ->
+    def variantSuffix = variant.name.capitalize()
+    def generateResourcesTask = project.tasks.getByName("fabricGenerateResources${variantSuffix}")
+    def generatePropertiesTask = task("fabricGenerateProperties${variantSuffix}") << {
+        Properties properties = new Properties()
+        println "...copying apiSecret for ${variant.name}"
+        properties.put("apiSecret", variant.buildType.ext.crashlyticsApiSecret)
+        println "...copying apiKey for ${variant.name}"
+        properties.put("apiKey", variant.buildType.ext.crashlyticsApiKey)
+        PropertiesUtils.injectPropertyInFile(crashlyticsProperties, properties, "")
+    }
+    generateResourcesTask.dependsOn generatePropertiesTask
+}

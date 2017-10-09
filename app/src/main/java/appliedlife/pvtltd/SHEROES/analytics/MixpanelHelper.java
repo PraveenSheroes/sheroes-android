@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.analytics;
 
 import android.content.Context;
 
+import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences.Preference;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.mixpanel.android.mpmetrics.MixpanelAPI.People;
@@ -65,6 +66,11 @@ public class MixpanelHelper {
         if (userSummary != null) {
             mixpanel.identify(Long.toString(userSummary.getUserId()));
             mixpanel.getPeople().identify(Long.toString(userSummary.getUserId()));
+
+            //set user details in fabric
+            Crashlytics.getInstance().core.setUserIdentifier(Long.toString(userSummary.getUserId()));
+            Crashlytics.getInstance().core.setUserEmail(userSummary.getEmailId());
+            Crashlytics.getInstance().core.setUserName(userSummary.getFirstName() + " " + userSummary.getLastName());
 
             SuperProperty.Builder superPropertiesBuilder = new SuperProperty.Builder()
                     .userId(Long.toString(userSummary.getUserId()))

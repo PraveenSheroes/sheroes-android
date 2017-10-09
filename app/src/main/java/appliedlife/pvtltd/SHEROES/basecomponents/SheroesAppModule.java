@@ -3,6 +3,7 @@ package appliedlife.pvtltd.SHEROES.basecomponents;
 
 import android.content.Context;
 
+import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences.Preference;
 import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.google.gson.FieldNamingPolicy;
@@ -155,6 +156,7 @@ public class SheroesAppModule {
         try {
             cache = new Cache(cacheFile, CACHE_SIZE);
         } catch (Exception e) {
+            Crashlytics.getInstance().core.logException(e);
             e.printStackTrace();
         }
         OkHttpClient okHttpClient = new OkHttpClient.Builder()

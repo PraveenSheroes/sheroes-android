@@ -19,6 +19,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences.Preference;
 
 import java.util.ArrayList;
@@ -131,6 +132,7 @@ public class ProfileShareYourIntrestFragment extends BaseFragment implements Bas
                 mHomeActivityIntractionListner = (MyProfileyYourInterestListener) getActivity();
             }
         } catch (Fragment.InstantiationException exception) {
+            Crashlytics.getInstance().core.logException(exception);
         }
     }
 

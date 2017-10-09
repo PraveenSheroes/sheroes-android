@@ -19,6 +19,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.appsflyer.AppsFlyerLib;
+import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences.Preference;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
@@ -538,7 +539,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                             userFromReferralRequest.setAppUserContactTableId(Long.parseLong(appContactId));
                             mLoginPresenter.updateUserReferralInPresenter(userFromReferralRequest);
                         } catch (Exception e) {
-
+                            Crashlytics.getInstance().core.logException(e);
                         }
                     }
                 }

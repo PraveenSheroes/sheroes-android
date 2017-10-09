@@ -1,5 +1,6 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
+import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences.Preference;
 
 import javax.inject.Inject;
@@ -76,6 +77,7 @@ public class CreateCommunityPresenter extends BasePresenter<CommunityView> {
             }
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(sheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
             }
@@ -104,6 +106,7 @@ public class CreateCommunityPresenter extends BasePresenter<CommunityView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().showError(sheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_CREATE_COMMUNITY);
                 getMvpView().stopProgressBar();
             }
@@ -133,6 +136,7 @@ public class CreateCommunityPresenter extends BasePresenter<CommunityView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().showError(sheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_CREATE_COMMUNITY);
                 getMvpView().stopProgressBar();
             }
@@ -161,6 +165,7 @@ public class CreateCommunityPresenter extends BasePresenter<CommunityView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().showError(sheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_CREATE_COMMUNITY);
                 getMvpView().stopProgressBar();
             }
@@ -189,6 +194,7 @@ public class CreateCommunityPresenter extends BasePresenter<CommunityView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().showError(sheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_CREATE_COMMUNITY);
                 getMvpView().stopProgressBar();
             }
@@ -218,6 +224,7 @@ public class CreateCommunityPresenter extends BasePresenter<CommunityView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().showError(sheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_CREATE_COMMUNITY);
                 getMvpView().stopProgressBar();
             }
@@ -246,6 +253,7 @@ public class CreateCommunityPresenter extends BasePresenter<CommunityView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(sheroesApplication.getString(R.string.ID_GENERIC_ERROR),ERROR_CREATE_COMMUNITY);
             }
@@ -276,6 +284,7 @@ public class CreateCommunityPresenter extends BasePresenter<CommunityView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().showError(sheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_CREATE_COMMUNITY);
                 getMvpView().stopProgressBar();
             }
@@ -304,6 +313,7 @@ public class CreateCommunityPresenter extends BasePresenter<CommunityView> {
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().showError(sheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_CREATE_COMMUNITY);
                 getMvpView().stopProgressBar();
             }

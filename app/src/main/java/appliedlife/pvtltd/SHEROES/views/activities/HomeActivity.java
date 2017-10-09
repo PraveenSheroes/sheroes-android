@@ -43,6 +43,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences.Preference;
 import com.facebook.appevents.AppEventsConstants;
 import com.facebook.appevents.AppEventsLogger;
@@ -378,6 +379,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     homeOnClick();
                 }
             } catch (UnsupportedEncodingException e) {
+                Crashlytics.getInstance().core.logException(e);
                 e.printStackTrace();
             }
         } else {
@@ -1225,6 +1227,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                             }
 
                         } catch (Exception e) {
+                            Crashlytics.getInstance().core.logException(e);
                             e.printStackTrace();
                         }
 
@@ -1288,6 +1291,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             o2.inSampleSize = scale;
             return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
         } catch (FileNotFoundException e) {
+            Crashlytics.getInstance().core.logException(e);
         }
         return null;
     }

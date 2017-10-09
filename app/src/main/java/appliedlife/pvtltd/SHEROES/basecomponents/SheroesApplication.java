@@ -54,8 +54,10 @@ public class SheroesApplication extends MultiDexApplication  {
     public void onCreate() {
         super.onCreate();
         mContext = this;
-        Crashlytics crashlytics = new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build();
-        Fabric.with(this,crashlytics);
+        final CrashlyticsCore core = new CrashlyticsCore
+                .Builder()
+                .build();
+        Fabric.with(this, new Crashlytics.Builder().core(core).build(), new Crashlytics());
         MoEHelper.getInstance(getApplicationContext()).autoIntegrate(this);
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
@@ -80,6 +82,7 @@ public class SheroesApplication extends MultiDexApplication  {
             if (getCurrentActivityName() == null) { // App is sent to background perform a background operation
             }
         } catch (Exception e) {
+            Crashlytics.getInstance().core.logException(e);
             LogUtils.error(TAG, AppConstants.ERROR_OCCUR, e);
         }
     }

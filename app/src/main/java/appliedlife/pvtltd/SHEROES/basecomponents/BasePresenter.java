@@ -1,5 +1,6 @@
 package appliedlife.pvtltd.SHEROES.basecomponents;
 
+import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences.Preference;
 
 import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
@@ -78,6 +79,7 @@ public class BasePresenter<T extends BaseMvpView> implements SheroesPresenter<T>
 
             @Override
             public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
             }
 
             @Override

@@ -16,6 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences.Preference;
 
 import java.util.ArrayList;
@@ -127,6 +128,7 @@ public class SearchIAmInterestIn extends BaseFragment implements BaseHolderInter
                 mHomeActivityIntractionListner = (MyProfileSearchGoodAtListener) getActivity();
             }
         } catch (InstantiationException exception) {
+            Crashlytics.getInstance().core.logException(exception);
             LogUtils.error(mTAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + mTAG + AppConstants.SPACE + exception.getMessage());
         }
     }
