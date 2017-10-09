@@ -13,14 +13,21 @@ import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 
+import com.f2prateek.rx.preferences.Preference;
 import com.google.android.gms.gcm.GcmListenerService;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 import com.moengage.push.PushManager;
 import com.moengage.pushbase.push.MoEngageNotificationUtils;
 
+import javax.inject.Inject;
+
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
+import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleDetailActivity;
@@ -30,6 +37,8 @@ import appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity;
  * Created by Ajit on 10/22/2015.
  */
 public class PushNotificationService extends GcmListenerService {
+    @Inject
+    Preference<LoginResponse> mUserPreference;
     Intent notificationIntent;
     int mCount = 0;
     String url = "";
@@ -45,6 +54,19 @@ public class PushNotificationService extends GcmListenerService {
         moEngageUtills = MoEngageUtills.getInstance();
         String message = "";
         if (null == data) return;
+
+        String action = data.getString("action");
+        if (action != null) {
+            action = action.toLowerCase();
+            if (action.equalsIgnoreCase("logout")) {
+                mUserPreference.delete();
+                MoEHelper.getInstance(getApplicationContext()).logoutUser();
+                MixpanelHelper.clearMixpanel(SheroesApplication.mContext);
+                ((NotificationManager) SheroesApplication.mContext.getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
+                ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOG_OUT, GoogleAnalyticsEventActions.LOG_OUT_OF_APP, AppConstants.EMPTY_STRING);
+            }
+        }
+
         if (MoEngageNotificationUtils.isFromMoEngagePlatform(data)) {
             //If the message is not sent from MoEngage it will be rejected
             PushManager.getInstance().getPushHandler().handlePushPayload(getApplicationContext(), data);
