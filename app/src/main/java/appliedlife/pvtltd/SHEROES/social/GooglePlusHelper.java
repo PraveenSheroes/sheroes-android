@@ -77,25 +77,6 @@ public class GooglePlusHelper implements OnConnectionFailedListener {
         showErrorMessage();
     }
 
-    /**
-     * This will initiate the google sign in by showing the google accounts of user
-     * @param mSocialListener
-     */
-    public void signIn(SocialListener mSocialListener) {
-        signOut();
-        //This intent will show users google account
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-
-        if(signInIntent != null) {
-            this.mSocialListener = mSocialListener;
-            showDialog(CustomSocialDialog.LOGGING_IN_DIALOG);
-            ((Activity) mContext).startActivityForResult(signInIntent, GOOGLE_SIGN_IN);
-        }else{
-            Toast.makeText(AppUtils.getInstance().getApplicationContext(), AppUtils.getInstance().getApplicationContext().getString(R.string.ID_SERVER_PROBLEM)
-                    , Toast.LENGTH_SHORT).show();
-            LogUtils.error(TAG , new Exception("Got intent null from google plus library"));
-        }
-    }
 
     /**
      * Show dialog
