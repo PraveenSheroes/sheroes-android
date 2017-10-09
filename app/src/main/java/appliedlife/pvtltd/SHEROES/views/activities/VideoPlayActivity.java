@@ -200,6 +200,10 @@ public class VideoPlayActivity extends YouTubeBaseActivity implements YouTubePla
 
     @Override
     public void onBackPressed() {
+        if (player != null) {
+            player.release();
+        }
+        player = null;
         finish();
     }
 }

@@ -63,11 +63,10 @@ public class PersonalProfileFragment extends BaseFragment implements ProfileView
     Preference<LoginResponse> mUserPreference;
     GenericRecyclerViewAdapter mAdapter;
     private HomeActivityIntractionWithPersonalProfile mHomeActivityIntractionWithpersonalProfile;
-    private static PersonalProfileFragment personalProfileFragment = new PersonalProfileFragment();
 
 
     public static PersonalProfileFragment getInstance() {
-        return personalProfileFragment;
+        return new PersonalProfileFragment();
     }
 
     @Override

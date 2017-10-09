@@ -327,13 +327,14 @@ public class ChallengeItemCardHolder extends BaseViewHolder<ChallengeDataItem>{
 
     @Override
     public void viewRecycled() {
-
+        if (myCountDownTimer != null) {
+            myCountDownTimer.cancel();
+            myCountDownTimer =null;
+        }
     }
-
 
     @Override
     public void onClick(View view) {
     }
-
 
 }

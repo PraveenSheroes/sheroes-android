@@ -122,6 +122,9 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     private ProgressDialog mProgressDialog;
     public static int isSignUpOpen = AppConstants.NO_REACTION_CONSTANT;
 
+    private Handler mHandler;
+    private Runnable mRunnable;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -265,8 +268,8 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         mLoginPresenter.attachView(this);
 
         //fbSignIn();
-        final Handler handler = new Handler();
-        final Runnable Update = new Runnable() {
+        mHandler= new Handler();
+        mRunnable = new Runnable() {
             public void run() {
                 if (currentPage == NUM_PAGES) {
                     currentPage = 0;
@@ -279,9 +282,21 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
             @Override
             public void run() {
-                handler.post(Update);
+                mHandler.post(mRunnable);
             }
         }, 500, 3000);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+        if (mHandler != null) {
+            mHandler.removeCallbacks(mRunnable);
+        }
     }
 
     @OnClick(R.id.btn_get_started)

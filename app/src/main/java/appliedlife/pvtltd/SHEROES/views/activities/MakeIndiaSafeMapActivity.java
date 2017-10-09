@@ -95,6 +95,7 @@ public class MakeIndiaSafeMapActivity extends BaseActivity implements OnMapReady
     public FrameLayout mFlMapLayout;
     private GoogleMap mMap;
     private CameraPosition mCameraPosition;
+    private GPSTracker mGpsTracker;
 
     // The entry point to Google Play services, used by the Places API and Fused Location Provider.
     private GoogleApiClient mGoogleApiClient;
@@ -167,12 +168,12 @@ public class MakeIndiaSafeMapActivity extends BaseActivity implements OnMapReady
 
 
     private void locationTracker() {
-        GPSTracker gps = new GPSTracker(this);
+        mGpsTracker = new GPSTracker(this);
         // check if GPS enabled
-        if (gps.canGetLocation()) {
+        if (mGpsTracker.canGetLocation()) {
             LatLongWithLocation latLongWithLocation = new LatLongWithLocation();
-            double latitude = gps.getLatitude();
-            double longitude = gps.getLongitude();
+            double latitude = mGpsTracker.getLatitude();
+            double longitude = mGpsTracker.getLongitude();
             latLongWithLocation.setLatitude(latitude);
             latLongWithLocation.setLongitude(longitude);
             String cityName, locality, state;
@@ -229,10 +230,15 @@ public class MakeIndiaSafeMapActivity extends BaseActivity implements OnMapReady
             // can't get location
             // GPS or Network is not enabled
             // Ask user to enable GPS/network in settings
-            gps.showSettingsAlert();
+            mGpsTracker.showSettingsAlert();
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mGpsTracker.stopUsingGPS();
+    }
 
     /**
      * Builds the map when the Google Play services client is successfully connected.

@@ -54,10 +54,9 @@ public class ProffestionalProfileFragment extends BaseFragment implements Profil
     ProfilePersenter profilePersenter;
     GenericRecyclerViewAdapter mAdapter;
     List<ProfileViewList> profileList = new ArrayList<ProfileViewList>();
-    private static ProffestionalProfileFragment proffestionalProfileFragment = new ProffestionalProfileFragment();
 
     public static ProffestionalProfileFragment getInstance() {
-        return proffestionalProfileFragment;
+        return new ProffestionalProfileFragment();
     }
 
     @Override
