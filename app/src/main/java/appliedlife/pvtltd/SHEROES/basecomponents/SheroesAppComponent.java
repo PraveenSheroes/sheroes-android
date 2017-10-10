@@ -32,6 +32,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.AllSearchFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticleCategorySpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticleDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ImageFullViewDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
@@ -46,7 +47,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.GenericWebViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ICCMemberListFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.ImageFullViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.InviteCommunityOwner;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobFilterFragment;
@@ -242,7 +242,7 @@ public interface SheroesAppComponent {
 
     void inject(CommunitiesDetailFragment communitiesDetailFragment);
 
-    void inject(ImageFullViewFragment imageFullViewFragment);
+    void inject(ImageFullViewDialogFragment imageFullViewDialogFragment);
 
     void inject(ArticleDetailFragment articleDetailFragment);
 

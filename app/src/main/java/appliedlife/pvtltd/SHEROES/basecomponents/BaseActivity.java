@@ -22,9 +22,6 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.crashlytics.android.Crashlytics;
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.CustomEvent;
 import com.f2prateek.rx.preferences.Preference;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
@@ -68,11 +65,9 @@ import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.GenericWebViewFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.ImageFullViewFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ImageFullViewDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityOptionJoinDialog;
 
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.FEED_CARD_MENU;
@@ -882,15 +877,16 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     }
 
     public void openImageFullViewFragment(FeedDetail feedDetail) {
-        if (StringUtil.isNotEmptyCollection(feedDetail.getImageUrls())) {
-            ImageFullViewFragment imageFullViewFragment = new ImageFullViewFragment();
+        ImageFullViewDialogFragment imageFullViewDialogFragment = (ImageFullViewDialogFragment) getFragmentManager().findFragmentByTag(ImageFullViewDialogFragment.class.getName());
+        if (imageFullViewDialogFragment == null) {
+            imageFullViewDialogFragment = new ImageFullViewDialogFragment();
             Bundle bundle = new Bundle();
-            mFragmentOpen.setOpenImageViewer(true);
             bundle.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, mFragmentOpen);
             bundle.putParcelable(AppConstants.IMAGE_FULL_VIEW, feedDetail);
-            imageFullViewFragment.setArguments(bundle);
-            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.bottom_to_top_slide_reverse_anim)
-                    .replace(R.id.fl_feed_comments, imageFullViewFragment, ImageFullViewFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+            imageFullViewDialogFragment.setArguments(bundle);
+        }
+        if (!imageFullViewDialogFragment.isVisible() && !imageFullViewDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
+            imageFullViewDialogFragment.show(getFragmentManager(), ImageFullViewDialogFragment.class.getName());
         }
     }
 

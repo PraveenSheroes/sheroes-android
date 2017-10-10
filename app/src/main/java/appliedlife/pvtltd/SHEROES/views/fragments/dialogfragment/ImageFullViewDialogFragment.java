@@ -1,15 +1,18 @@
-package appliedlife.pvtltd.SHEROES.views.fragments;
+package appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.TextView;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
@@ -24,9 +27,9 @@ import butterknife.OnClick;
  * Created by Praveen_Singh on 07-02-2017.
  */
 
-public class ImageFullViewFragment extends BaseFragment implements ViewPager.OnPageChangeListener {
+public class ImageFullViewDialogFragment extends BaseDialogFragment implements ViewPager.OnPageChangeListener {
     private static final String SCREEN_LABEL = "Image Full Screen";
-    private final String TAG = LogUtils.makeLogTag(ImageFullViewFragment.class);
+    private final String TAG = LogUtils.makeLogTag(ImageFullViewDialogFragment.class);
     @Bind(R.id.vp_full_image_view)
     ViewPager viewPagerFullImageView;
     @Bind(R.id.tv_total_image)
@@ -37,8 +40,9 @@ public class ImageFullViewFragment extends BaseFragment implements ViewPager.OnP
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        SheroesApplication.getAppComponent(getContext()).inject(this);
+        SheroesApplication.getAppComponent(getActivity()).inject(this);
         View view = inflater.inflate(R.layout.fragment_image_full_view, container, false);
+        getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         ButterKnife.bind(this, view);
         if (null != getArguments()) {
             mFeedDetail = getArguments().getParcelable(AppConstants.IMAGE_FULL_VIEW);
@@ -49,9 +53,19 @@ public class ImageFullViewFragment extends BaseFragment implements ViewPager.OnP
         viewPagerFullImageView.setCurrentItem(mFeedDetail.getItemPosition());
         viewPagerFullImageView.addOnPageChangeListener(this);
         setIndex(viewPagerFullImageView.getCurrentItem());
+        AnalyticsManager.trackScreenView(SCREEN_LABEL);
         return view;
     }
-
+    @Override
+    public void onStart() {
+        super.onStart();
+        // safety check
+        if (getDialog() == null) {
+            return;
+        }
+        // set the animations to use on showing and hiding the dialog
+        getDialog().getWindow().setWindowAnimations(R.style.dialog_imageview_animation_fade);
+    }
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
         //Nothing to do here
@@ -72,12 +86,16 @@ public class ImageFullViewFragment extends BaseFragment implements ViewPager.OnP
     }
     @OnClick(R.id.tv_full_image_back)
     public void dismissCommentDialog() {
-      //  (getActivity()).onBackPressed();
-        (getActivity()).getSupportFragmentManager().popBackStackImmediate();
+        dismiss();
     }
 
     @Override
-    public String getScreenName() {
-        return SCREEN_LABEL;
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        return new Dialog(getActivity(), R.style.Theme_Material_Light_Dialog_NoMinWidth) {
+            @Override
+            public void onBackPressed() {
+                dismissCommentDialog();
+            }
+        };
     }
 }
