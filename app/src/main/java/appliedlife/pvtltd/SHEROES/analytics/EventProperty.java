@@ -42,7 +42,8 @@ public enum EventProperty {
     LOCATION("Location"),
     NOTIFICATION_ID("Notification ID"),
     COMMUNITY_ID("Community Id"),
-    COMMUNITY_NAME("Community Name");
+    COMMUNITY_NAME("Community Name"),
+    KEYWORD("Keyword");
 
     private final String string;
 
@@ -202,6 +203,11 @@ public enum EventProperty {
 
         public Builder notificationId(String value) {
             put(NOTIFICATION_ID, value);
+            return this;
+        }
+
+        public Builder keyword(String value) {
+            put(KEYWORD, value);
             return this;
         }
 

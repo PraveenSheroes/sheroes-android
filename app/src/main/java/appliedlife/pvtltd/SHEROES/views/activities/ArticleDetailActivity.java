@@ -34,6 +34,8 @@ import java.util.List;
 import java.util.Map;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -533,6 +535,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
         startActivity(Intent.createChooser(intent, AppConstants.SHARE));
         ((SheroesApplication)this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_ARTICLE, AppConstants.EMPTY_STRING);
         moEngageUtills.entityMoEngageCardShareVia(getApplicationContext(),mMoEHelper,payloadBuilder,mFeedDetail, MoEngageConstants.SHARE_VIA_SOCIAL);
+        AnalyticsManager.trackPostAction(Event.POST_SHARED, mFeedDetail);
     }
 
     public void onBookmarkClick(FeedDetail feedDetail, int successFrom) {

@@ -679,6 +679,11 @@ public class HomeFragment extends BaseFragment {
     }
 
     @Override
+    protected boolean trackScreenTime() {
+        return true;
+    }
+
+    @Override
     public String getScreenName() {
         return SCREEN_LABEL;
     }

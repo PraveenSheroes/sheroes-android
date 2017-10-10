@@ -610,6 +610,18 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         intent.putExtra(Intent.EXTRA_TEXT, feedDetail.getDeepLinkUrl());
         startActivity(Intent.createChooser(intent, AppConstants.SHARE));
         moEngageUtills.entityMoEngageCardShareVia(getApplicationContext(), mMoEHelper, payloadBuilder, feedDetail, MoEngageConstants.SHARE_VIA_SOCIAL);
+        if(feedDetail.getSubType().equals(AppConstants.FEED_JOB)){
+            HashMap<String, Object> properties =
+                    new EventProperty.Builder()
+                            .id(Long.toString(mFeedDetail.getIdOfEntityOrParticipant()))
+                            .title(mFeedDetail.getNameOrTitle())
+                            .companyId(Long.toString(mFeedDetail.getCompanyMasterId()))
+                            .location(mFeedDetail.getAuthorCityName())
+                            .build();
+            trackEvent(Event.JOBS_SHARED, properties);
+        }else {
+            AnalyticsManager.trackPostAction(Event.POST_SHARED, mFeedDetail);
+        }
     }
 
     protected void clickMenuItem(View view, final BaseResponse baseResponse, final MenuEnum menuEnum) {

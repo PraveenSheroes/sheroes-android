@@ -198,7 +198,7 @@ public class HelplineFragment extends BaseFragment {
     public void getPostQuestionSuccess(HelplinePostQuestionResponse helplinePostQuestionResponse) {
         sendChatButton.setEnabled(true);
         if (helplinePostQuestionResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-            trackEvent(Event.JOBS_SHARED, null);
+            trackEvent(Event.HELPLINE_MESSAGE_CREATED, null);
             questionText.setText(AppConstants.EMPTY_STRING);
             AppUtils.hideKeyboard(getView(), TAG);
             refreshChatMethod();

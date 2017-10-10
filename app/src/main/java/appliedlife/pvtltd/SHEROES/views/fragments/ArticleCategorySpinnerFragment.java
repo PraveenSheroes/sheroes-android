@@ -42,7 +42,7 @@ import butterknife.OnClick;
  */
 
 public class ArticleCategorySpinnerFragment extends BaseFragment implements HomeView {
-    private static final String SCREEN_LABEL = "Home Article Category Screen";
+    private static final String SCREEN_LABEL = "Article Category Spinner Screen";
     private final String TAG = LogUtils.makeLogTag(ArticleCategorySpinnerFragment.class);
     @Inject
     HomePresenter mHomePresenter;

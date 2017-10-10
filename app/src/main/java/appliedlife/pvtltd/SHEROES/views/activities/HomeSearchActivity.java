@@ -10,9 +10,14 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import java.util.HashMap;
+
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -149,6 +154,10 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
                 break;
             case AppConstants.FEED_JOB:
                 fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.FOURTH_CONSTANT);
+
+                HashMap<String, Object> properties = new EventProperty.Builder().id(feedDetail.getId()).title(feedDetail.getNameOrTitle()).build();
+                AnalyticsManager.trackEvent(Event.JOBS_SEARCH_RESULT_CLICKED, properties);
+
                 if (AppUtils.isFragmentUIActive(fragment)) {
                     if (fragment instanceof SearchJobFragment) {
                         ((SearchJobFragment) fragment).saveRecentSearchData(feedDetail);

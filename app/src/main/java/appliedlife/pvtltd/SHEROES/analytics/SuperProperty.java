@@ -1,5 +1,6 @@
 package appliedlife.pvtltd.SHEROES.analytics;
 
+import com.google.android.gms.plus.model.people.Person;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
 import org.json.JSONException;
@@ -19,6 +20,7 @@ public enum SuperProperty {
     CREATED_DATE("Created Date"),
     INSTALL_ID("Install Id"),
     MOBILE_NUMBER("Mobile Number"),
+    NAME("Name"),
     EMAIL_ID("Email Id");
 
     private final String string;
@@ -57,13 +59,8 @@ public enum SuperProperty {
             return value != null;
         }
 
-        public Builder firstName(String value) {
-            put(FIRST_NAME, value);
-            return this;
-        }
-
-        public Builder lastName(String value) {
-            put(LAST_NAME, value);
+        public Builder name(String value) {
+            put(NAME, value);
             return this;
         }
 

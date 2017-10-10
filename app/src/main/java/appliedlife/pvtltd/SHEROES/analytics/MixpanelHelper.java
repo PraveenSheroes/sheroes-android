@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.analytics;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences.Preference;
@@ -74,8 +75,7 @@ public class MixpanelHelper {
 
             SuperProperty.Builder superPropertiesBuilder = new SuperProperty.Builder()
                     .userId(Long.toString(userSummary.getUserId()))
-                    .firstName(userSummary.getFirstName())
-                    .lastName(userSummary.getLastName())
+                    .name(userSummary.getFirstName() + " " + userSummary.getLastName())
                     .dateOfBirth(userSummary.getUserBO().getDob())
                     .createdDate(userSummary.getUserBO().getCrdt())
                     .mobileNumber(userSummary.getMobile())
@@ -106,7 +106,19 @@ public class MixpanelHelper {
 
             mixpanel.getPeople().set(PeopleProperty.WORK_EXPERIENCE.getString(), userSummary.getUserBO().getTotalExp());
 
-            //mixpanel.getPeople().setOnce("$created", userSummary.get);
+            if (!TextUtils.isEmpty(userSummary.getMobile())) {
+                mixpanel.getPeople().set("$name", userSummary.getFirstName() + " " + userSummary.getLastName());
+            }
+
+            if (!TextUtils.isEmpty(userSummary.getFirstName())) {
+                mixpanel.getPeople().set("Display Name", userSummary.getFirstName() + " " + userSummary.getLastName());
+            }
+
+            if (!TextUtils.isEmpty(userSummary.getEmailId())) {
+                mixpanel.getPeople().set("$email", userSummary.getEmailId());
+            }
+
+            mixpanel.getPeople().setOnce("$created", userSummary.getUserBO().getCrdt());
         }
 
     }

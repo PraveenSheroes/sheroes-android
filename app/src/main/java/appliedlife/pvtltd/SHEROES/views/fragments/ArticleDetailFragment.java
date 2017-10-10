@@ -237,6 +237,11 @@ public class ArticleDetailFragment extends BaseFragment {
     }
 
     @Override
+    protected boolean trackScreenTime() {
+        return true;
+    }
+
+    @Override
     protected Map<String, Object> getExtraProperties() {
         HashMap<String, Object> properties = new
                 EventProperty.Builder()
