@@ -8,6 +8,7 @@ buildscript {
     dependencies {
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
         classpath 'io.fabric.tools:gradle:1.22.0'
+        classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.6.2'
     }
 }
 
@@ -63,6 +64,23 @@ android {
         abortOnError false
     }
 }
+
+apply plugin: 'com.getkeepsafe.dexcount'
+
+dexcount {
+    format = "tree"
+    includeClasses = false
+    includeFieldCount = true
+    includeTotalMethodCount = false
+    orderByMethodCount = false
+    verbose = false
+    maxTreeDepth = Integer.MAX_VALUE
+    teamCityIntegration = false
+    enableForInstantRun = false
+    teamCitySlug = null
+    runOnEachAssemble = true
+}
+
 repositories {
     mavenCentral()
     maven { url 'https://maven.fabric.io/public' }
