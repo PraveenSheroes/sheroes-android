@@ -888,6 +888,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     }
 
     public void homeButtonUi() {
+        mFlHomeFooterList.setVisibility(View.VISIBLE);
         mFragmentOpen.setFeedFragment(true);
         mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.footer_icon_text));
         mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_selected_icon), null, null);
@@ -954,11 +955,16 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         articlesFragment.setArguments(bundleArticle);
         fm.beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
                 .replace(R.id.fl_article_card_view, articlesFragment, ArticlesFragment.class.getName()).addToBackStack(ArticlesFragment.class.getName()).commitAllowingStateLoss();
+
+    }
+    public void articleUi()
+    {
         mliArticleSpinnerIcon.setVisibility(View.VISIBLE);
         mTvMakeIndiaSafe.setVisibility(View.VISIBLE);
         mJobFragment.setVisibility(View.GONE);
         mTvSearchBox.setVisibility(View.GONE);
         mICSheroes.setVisibility(View.VISIBLE);
+        mFlHomeFooterList.setVisibility(View.VISIBLE);
     }
 
     public void inviteMyCommunityDialog() {
@@ -995,13 +1001,19 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     }
 
     private void openHelplineFragment() {
+        changeFragmentWithCommunities();
         setAllValues(mFragmentOpen);
         HelplineFragment helplineFragment = new HelplineFragment();
         FragmentManager fm = getSupportFragmentManager();
         fm.popBackStackImmediate(HelplineFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
         fm.beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
                 .replace(R.id.fl_article_card_view, helplineFragment, HelplineFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+
+    }
+    public void helplineUi()
+    {
         mliArticleSpinnerIcon.setVisibility(View.GONE);
+        mFlHomeFooterList.setVisibility(View.GONE);
         mTvMakeIndiaSafe.setVisibility(View.VISIBLE);
         mJobFragment.setVisibility(View.GONE);
         mTvSearchBox.setVisibility(View.GONE);
@@ -1034,7 +1046,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     }
 
     public void openJobFragment() {
-
         changeFragmentWithCommunities();
         setAllValues(mFragmentOpen);
         JobFragment jobFragment = new JobFragment();
@@ -1045,6 +1056,10 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         jobFragment.setArguments(jobBookMarks);
         fm.beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
                 .replace(R.id.fl_article_card_view, jobFragment, JobFragment.class.getName()).addToBackStack(JobFragment.class.getName()).commitAllowingStateLoss();
+
+    }
+    public void jobUi()
+    {
         mliArticleSpinnerIcon.setVisibility(View.GONE);
         mTvMakeIndiaSafe.setVisibility(View.GONE);
         mJobFragment.setVisibility(View.VISIBLE);

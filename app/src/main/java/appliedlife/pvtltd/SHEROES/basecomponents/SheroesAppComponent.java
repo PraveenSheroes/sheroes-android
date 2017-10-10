@@ -287,7 +287,7 @@ public interface SheroesAppComponent {
     void inject(NoCommunityHolder noCommunityHolder);
 
     void inject(MyCommunitiesCardHolder myCommunitiesCardHolder);
-    
+
     void inject(ArticleDetailWithInSuggestedHolder articleDetailWithInSuggestedHolder);
 
     void inject(ProfileViewHolder profileViewHolder);
