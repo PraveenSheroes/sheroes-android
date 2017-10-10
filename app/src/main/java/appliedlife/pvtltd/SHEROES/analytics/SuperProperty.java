@@ -1,6 +1,5 @@
 package appliedlife.pvtltd.SHEROES.analytics;
 
-import com.google.android.gms.plus.model.people.Person;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
 import org.json.JSONException;

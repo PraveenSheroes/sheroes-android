@@ -45,7 +45,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Scope;
-import com.google.android.gms.plus.Plus;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 import com.moengage.push.PushManager;
@@ -210,7 +209,6 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
             mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
                     .enableAutoManage(getActivity(), this)
                     .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                    .addApi(Plus.API)
                     .build();
         }
 
