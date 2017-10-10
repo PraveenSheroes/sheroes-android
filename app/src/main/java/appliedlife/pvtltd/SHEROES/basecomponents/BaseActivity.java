@@ -4,6 +4,7 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -12,6 +13,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -352,6 +354,21 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     protected boolean trackScreenTime() {
         return false;
     }
+
+    @Override
+    public void startActivity(Intent intent) {
+        boolean handled = false;
+        if (TextUtils.equals(intent.getAction(), Intent.ACTION_VIEW)) {
+            if (AppUtils.matchesWebsiteURLPattern(intent.getDataString())) {
+                Uri url = Uri.parse(intent.getDataString());
+                AppUtils.openChromeTab(this, url);
+                handled = true;
+            }
+            }
+            if(!handled){
+                super.startActivity(intent);
+            }
+        }
 
     protected Map<String, Object> getExtraPropertiesToTrack() {
         return new HashMap<>();

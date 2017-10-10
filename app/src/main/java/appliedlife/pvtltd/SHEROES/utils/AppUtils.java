@@ -33,6 +33,8 @@ import android.renderscript.Allocation;
 import android.renderscript.Element;
 import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
+import android.support.customtabs.CustomTabsIntent;
+import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -2448,5 +2450,26 @@ public class AppUtils {
     public static ICCMemberRequest sheICCMemberListRequestBuilder(){
         ICCMemberRequest iccMemberRequest = new ICCMemberRequest();
         return iccMemberRequest;
+    }
+
+    public static void openChromeTab(Activity activity, Uri url) {
+        CustomTabsIntent customTabsIntent =
+                new CustomTabsIntent.Builder()
+                        .setToolbarColor(ContextCompat.getColor(activity, R.color.colorPrimary))
+                        .setShowTitle(true)
+                        .enableUrlBarHiding()
+                        .build();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            customTabsIntent.intent.putExtra(Intent.EXTRA_REFERRER,
+                    Uri.parse(Intent.URI_ANDROID_APP_SCHEME + "//" + activity.getPackageName()));
+        }
+        customTabsIntent.launchUrl(activity, url);
+    }
+
+    public static boolean matchesWebsiteURLPattern(String sentence) {
+        final Pattern pattern = Pattern.compile("\\b(https?|Https?|ftp)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]",
+                Pattern.MULTILINE | Pattern.DOTALL);
+        Matcher m = pattern.matcher(sentence);
+        return m.find();
     }
 }

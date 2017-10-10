@@ -113,6 +113,7 @@ dependencies {
     compile 'com.google.dagger:dagger:2.2'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.android.support:support-v4:25.3.1'
+    compile 'com.android.support:customtabs:25.3.1'
     compile 'com.yahoo.mobile.client.android.util.rangeseekbar:rangeseekbar-library:0.1.0'
     testCompile 'junit:junit:4.12'
     apt 'com.google.dagger:dagger-compiler:2.2'
