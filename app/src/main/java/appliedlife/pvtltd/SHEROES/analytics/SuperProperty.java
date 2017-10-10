@@ -13,8 +13,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 public enum SuperProperty {
     // NOTE: Capitalize the first letter
     USER_ID("User Id"),
-    FIRST_NAME("First Name"),
-    LAST_NAME("Last Name"),
     DATE_OF_BIRTH("Date Of Birth"),
     CREATED_DATE("Created Date"),
     INSTALL_ID("Install Id"),

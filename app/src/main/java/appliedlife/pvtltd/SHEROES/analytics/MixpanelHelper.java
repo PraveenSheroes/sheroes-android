@@ -118,6 +118,10 @@ public class MixpanelHelper {
                 mixpanel.getPeople().set("$email", userSummary.getEmailId());
             }
 
+            if (!TextUtils.isEmpty(userSummary.getMobile())) {
+                mixpanel.getPeople().set("$mobile", userSummary.getMobile());
+            }
+
             mixpanel.getPeople().setOnce("$created", userSummary.getUserBO().getCrdt());
         }
 
