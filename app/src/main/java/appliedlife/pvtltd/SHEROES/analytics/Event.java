@@ -15,7 +15,6 @@ public enum Event {
 
     //region APP related events
     APP_LOGIN(AnalyticsEventType.APP, "Login"),
-    APP_OPEN(AnalyticsEventType.APP, "Open"),
     //endregion
 
     //region post related events
@@ -68,18 +67,9 @@ public enum Event {
     COMMUNITY_REMOVED_MEMBER(AnalyticsEventType.COMMUNITY, "Removed Member"),
     //endregion
 
-
-
-
-
-    // region User Analytics events
-
+    // region User related events
     USER_SIGNUP(AnalyticsEventType.USER, "Signed Up"),
     USER_ONBOARDED(AnalyticsEventType.APP, "Onboarded"),
-    USER_EDIT_PROFILE_CLICKED(AnalyticsEventType.USER, "Edit Profile Clicked"),
-    USER_FOLLOWED(AnalyticsEventType.USER, "Followed"),
-    USER_UNFOLLOWED(AnalyticsEventType.USER, "Unfollowed"),
-    USER_PROFILE_CLICKED(AnalyticsEventType.USER, "Profile Clicked"),
     USER_LOG_OUT(AnalyticsEventType.USER, "Logout"),
     // endregion
 
@@ -91,13 +81,8 @@ public enum Event {
 
     // region Push Notification related events
     PUSH_NOTIFICATION_SHOWN(AnalyticsEventType.PUSH_NOTIFICATION, "Shown"),
-    PUSH_NOTIFICATION_CLICKED(AnalyticsEventType.PUSH_NOTIFICATION, "Clicked"),
+    PUSH_NOTIFICATION_CLICKED(AnalyticsEventType.PUSH_NOTIFICATION, "Clicked");
     // endregion
-
-    //region Notification List related events
-    NOTIFICATION_SELECTED(AnalyticsEventType.NOTIFICATION_LIST, "Item Selected");
-    //endregion
-
 
     public final AnalyticsEventType type;
     public String name;
