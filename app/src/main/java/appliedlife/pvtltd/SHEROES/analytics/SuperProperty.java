@@ -15,7 +15,6 @@ public enum SuperProperty {
     USER_ID("User Id"),
     DATE_OF_BIRTH("Date Of Birth"),
     CREATED_DATE("Created Date"),
-    INSTALL_ID("Install Id"),
     MOBILE_NUMBER("Mobile Number"),
     NAME("Name"),
     EMAIL_ID("Email Id");
@@ -66,11 +65,6 @@ public enum SuperProperty {
             return this;
         }
 
-        public Builder installId(String value) {
-            put(INSTALL_ID, value);
-            return this;
-        }
-
         public Builder dateOfBirth(String value){
             put(DATE_OF_BIRTH, value);
             return this;
@@ -90,7 +84,6 @@ public enum SuperProperty {
             put(EMAIL_ID, value);
             return this;
         }
-
 
         public JSONObject build() {
             return superProperties;

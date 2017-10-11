@@ -15,30 +15,12 @@ public enum AnalyticsEventType {
     HELPLINE_MESSAGE("Helpline Message "),
     CHALLENGE("Challenge"),
     COMMUNITY("Community"),
-
-
-    ANSWER("Answer"),
-    ADDRESS("Address"),
     ARTICLE("Article"),
     CHAT("Chat"),
-    CHILD("Child"),
-    DOCTOR("Doctor"),
-    DOCUMENT("Document"),
     NOTIFICATION_LIST("Notification List"),
-    PROMO("Promo"),
     PUSH_NOTIFICATION("Push Notification"),
-    QUESTION("Question"),
-    TIP("Tip"),
     USER("User"),
-    VITAL("Vital"),
-    LINK("Link"),
-    IMAGE("Image"),
-    VIDEO("Video"),
-    SEARCH("Search"),
-    ALBUM("Album"),
-    SUBMISSION("Submission"),
-    SHARE_CARD("Share Card"),
-    CONTEST("Contest");
+    SEARCH("Search");
     // endregion
 
     public final String name;
@@ -47,7 +29,7 @@ public enum AnalyticsEventType {
         this.name = name;
     }
 
-    public void addProperties(Map<String, Object> properties){
+    public void addProperties(Map<String, Object> properties) {
         // Default - do nothing
     }
 }

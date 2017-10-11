@@ -137,9 +137,6 @@ public class MixpanelHelper {
         return mixpanel;
     }
 
-    public static People getPeople(Context context) {
-        return getInstance(context).getPeople();
-    }
 
     public static void trackEvent(Context context, String eventName, Map<String, Object> properties) {
         if (properties == null) {
@@ -161,20 +158,6 @@ public class MixpanelHelper {
 
     public static void timeScreenOpen(Context context, String screenName) {
         timeEvent(context, SCREEN_OPEN);
-    }
-
-    public static void trackScreenOpen(Context context,
-                                       String screenName, String source, Map<String, Object> properties) {
-        if (properties == null) {
-            properties = new HashMap<String, Object>();
-        }
-        if (screenName != null)
-            properties.put(MixpanelHelper.SCREEN_NAME, screenName);
-
-        if (source != null)
-            properties.put("Source", source);
-
-        trackEvent(context, SCREEN_OPEN, properties);
     }
 
     public static void flushEvents(Context context) {

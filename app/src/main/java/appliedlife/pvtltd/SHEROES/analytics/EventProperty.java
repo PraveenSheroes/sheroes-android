@@ -14,33 +14,21 @@ public enum EventProperty {
     // 2. Keep the list alphabetical
     AUTH_PROVIDER("AUTH_PROVIDER"),
     IS_NEW_USER("Is New User"),
-    ACTION_TRIGGER("Action Triggered"),
-    EVENT_TYPE("EventType"),
     ID("ID"),
-    LABEL("Label"),
+    EVENT_TYPE("EventType"),
     LIST("List"),
-    LOGIN_SOURCE("Login Source"),
     NAME("Name"),
-    NEW_USER("New User"),
-    PHONE_NUMBER("Mobile"),
-    READING_TIME("Reading Time"),
-    READ_PERCENTAGE("Read Percentage"),
     SOURCE("Source"),
     TITLE("Title"),
     TYPE("Type"),
-    SHARED_TO("Shared To"),
     URL("Url"),
     ACTION("Action"),
-    TOPIC("Topic"),
-    CURRENT_VERSION("Current Version"),
-    IS_PLAYED("Is Played"),
     POSITION_IN_LIST("Position in List"),
     POST_TYPE("Post Type"),
     POST_ID("Post Id"),
     BODY("Body"),
     COMPANY_ID("Company Id"),
     LOCATION("Location"),
-    NOTIFICATION_ID("Notification ID"),
     COMMUNITY_ID("Community Id"),
     COMMUNITY_NAME("Community Name"),
     KEYWORD("Keyword");
@@ -78,17 +66,10 @@ public enum EventProperty {
             return this;
         }
 
-        public Builder eventType(String value){
-            put(EVENT_TYPE, value);
-            return this;
-        }
-
         public Builder id(String value){
             put(ID, value);
             return this;
         }
-
-
 
         public Builder name(String value){
             put(NAME, value);
@@ -114,37 +95,9 @@ public enum EventProperty {
             return this;
         }
 
-        public Builder readingTime(int value){
-            put(READING_TIME, value);
-            return this;
-        }
-
-        public Builder readPercentage(Long value){
-            put(READ_PERCENTAGE, value);
-            return this;
-        }
-
-        public Builder newUser(Boolean value){
-            put(NEW_USER, value);
-            return this;
-        }
 
         public Builder type(String value){
             put(TYPE, value);
-            return this;
-        }
-
-        public Builder actionTrigger(final String actionTrigger){
-            put(ACTION_TRIGGER, actionTrigger);
-            return this;
-        }
-        public Builder linkPhoneNumber(final String linkPhoneNumber){
-            put(PHONE_NUMBER, linkPhoneNumber);
-            return this;
-        }
-
-        public Builder isPlayed(Boolean value){
-            put(IS_PLAYED, value);
             return this;
         }
 
@@ -155,20 +108,6 @@ public enum EventProperty {
 
         public Builder isNewUser(boolean source){
             put(IS_NEW_USER, source);
-            return this;
-        }
-        public Builder loginSource(final String source){
-            put(LOGIN_SOURCE, source);
-            return this;
-        }
-
-        public Builder sharedTo(final String sharedTo){
-            put(SHARED_TO, sharedTo);
-            return this;
-        }
-
-        public Builder topic(final String topic){
-            put(TOPIC, topic);
             return this;
         }
 
@@ -201,10 +140,6 @@ public enum EventProperty {
             return this;
         }
 
-        public Builder notificationId(String value) {
-            put(NOTIFICATION_ID, value);
-            return this;
-        }
 
         public Builder keyword(String value) {
             put(KEYWORD, value);
