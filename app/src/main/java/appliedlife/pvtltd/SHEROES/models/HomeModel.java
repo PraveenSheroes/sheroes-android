@@ -30,6 +30,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroScreenRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroScreenResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCount;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.UserPhoneContactsListRequest;
@@ -159,7 +160,7 @@ public class HomeModel {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<List<FeedDetail>> getHomeFeedFromModel(final FeedRequestPojo feedRequestPojo, ChallengeRequest challengeRequest, AppIntroScreenRequest appIntroScreenRequest) {
+    public Observable<List<FeedDetail>> getHomeFeedFromModel(final FeedRequestPojo feedRequestPojo, ChallengeRequest challengeRequest, AppIntroScreenRequest appIntroScreenRequest, final FragmentListRefreshData fragmentListRefreshData) {
         LogUtils.info(TAG, "*******************" + new Gson().toJson(feedRequestPojo));
 
         Observable<FeedResponsePojo> feedResponsePojoObservable = getFeedFromModel(feedRequestPojo);
@@ -183,9 +184,9 @@ public class HomeModel {
                     challengeFeedDetail.setChallengeDataItems(challengeListResponse.getReponseList());
                     feedDetails.add(challengeFeedDetail);
                 }
-
                 if (StringUtil.isNotEmptyCollection(feedResponsePojo.getFeedDetails())) {
                     List<FeedDetail> feedDetailsFromServer = new ArrayList<>(feedResponsePojo.getFeedDetails());
+                    fragmentListRefreshData.setPostedDate(feedDetailsFromServer.get(0).getPostingDate());
                     feedDetails.addAll(feedDetailsFromServer);
                 }
 

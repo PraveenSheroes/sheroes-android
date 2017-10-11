@@ -259,7 +259,7 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
 
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
-        List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
+
     }
 
     @Override

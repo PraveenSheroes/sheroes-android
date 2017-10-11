@@ -2152,7 +2152,7 @@ public class AppUtils {
         commentReactionRequestPojo.setCloudMessagingId(appUtils.getCloudMessaging());
         commentReactionRequestPojo.setPageNo(pageNo);
         //Page size for comment list
-        commentReactionRequestPojo.setPageSize(AppConstants.TENTH_CONSTANT);
+        commentReactionRequestPojo.setPageSize(AppConstants.PAGE_SIZE);
         commentReactionRequestPojo.setEntityId(entityId);
         return commentReactionRequestPojo;
     }

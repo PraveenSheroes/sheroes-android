@@ -208,8 +208,7 @@ public class HomeFragment extends BaseFragment {
                     mHomePresenter.getAuthTokenRefreshPresenter();
                 } else {
                     FeedRequestPojo feedRequestPojo = mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo());
-                    feedRequestPojo.setPageSize(AppConstants.SEVENTH_CONSTANT);
-                    mHomePresenter.getHomeFeedFromPresenter(feedRequestPojo, challengetRequestBuilder(TAG), mAppUtils.appIntroRequestBuilder(AppConstants.APP_INTRO));
+                    mHomePresenter.getHomeFeedFromPresenter(feedRequestPojo, challengetRequestBuilder(TAG), mAppUtils.appIntroRequestBuilder(AppConstants.APP_INTRO),mFragmentListRefreshData);
                 }
             }
             if (null != mUserPreference.get().getUserSummary()) {
@@ -308,8 +307,7 @@ public class HomeFragment extends BaseFragment {
         setRefreshList(mPullRefreshList);
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
         FeedRequestPojo feedRequestPojo =mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo());
-        feedRequestPojo.setPageSize(AppConstants.SEVENTH_CONSTANT);
-        mHomePresenter.getHomeFeedFromPresenter(feedRequestPojo, challengetRequestBuilder(TAG), mAppUtils.appIntroRequestBuilder(AppConstants.APP_INTRO));
+        mHomePresenter.getHomeFeedFromPresenter(feedRequestPojo, challengetRequestBuilder(TAG), mAppUtils.appIntroRequestBuilder(AppConstants.APP_INTRO),mFragmentListRefreshData);
         mHomePresenter.getNotificationCountFromPresenter(notificationReadCountRequestBuilder(TAG));
     }
 
@@ -509,6 +507,13 @@ public class HomeFragment extends BaseFragment {
     public void notificationUi() {
         ((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.GONE);
     }
+
+    @Override
+    public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
+        List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
+        showHomeFeedList(feedDetailList);
+    }
+
     @Override
     public void showHomeFeedList(List<FeedDetail> feedDetailList) {
         mProgressBarFirstLoad.setVisibility(View.GONE);
@@ -526,7 +531,6 @@ public class HomeFragment extends BaseFragment {
             }
             if (mPageNo == AppConstants.ONE_CONSTANT) {
                 mfeedDetailList = feedDetailList;
-                mFragmentListRefreshData.setPostedDate(feedDetailList.get(0).getPostingDate());
             }
             LogUtils.info(TAG, "**************position *****" +mPageNo );
             mFragmentListRefreshData.setPageNo(++mPageNo);

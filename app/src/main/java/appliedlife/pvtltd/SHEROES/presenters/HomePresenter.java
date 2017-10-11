@@ -30,6 +30,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroScreenRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroScreenResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCount;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.UserPhoneContactsListRequest;
@@ -205,13 +206,13 @@ public class HomePresenter extends BasePresenter<HomeView> {
         registerSubscription(subscription);
     }
 
-    public void getHomeFeedFromPresenter(FeedRequestPojo feedRequestPojo, ChallengeRequest challengeRequest, AppIntroScreenRequest appIntroScreenRequest) {
+    public void getHomeFeedFromPresenter(FeedRequestPojo feedRequestPojo, ChallengeRequest challengeRequest, AppIntroScreenRequest appIntroScreenRequest,FragmentListRefreshData fragmentListRefreshData) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = mHomeModel.getHomeFeedFromModel(feedRequestPojo, challengeRequest, appIntroScreenRequest).subscribe(new Subscriber<List<FeedDetail>>() {
+        Subscription subscription = mHomeModel.getHomeFeedFromModel(feedRequestPojo, challengeRequest, appIntroScreenRequest,fragmentListRefreshData).subscribe(new Subscriber<List<FeedDetail>>() {
             @Override
             public void onCompleted() {
                 getMvpView().stopProgressBar();

@@ -201,7 +201,7 @@ public class AppConstants {
     public static final int NINTH_CONSTANT = 9;
     public static final int TENTH_CONSTANT = 10;
     public static final int ELEVENTH_CONSTANT = 11;
-    public static final int PAGE_SIZE = 20;
+    public static final int PAGE_SIZE = 10;
     public static final int PAGE_SIZE_CHAT = 20;
     public static final int MEMBER_PAGE_SIZE = 100;
     public static final int INVITE_PAGE_SIZE = 200;
