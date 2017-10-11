@@ -125,10 +125,9 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
     private ProgressBar mProgressBar;
     public FragmentIntractionWithActivityListner mHomeSearchActivityFragmentIntractionWithActivityListner;
     private FragmentOpen mFragmentOpen = new FragmentOpen();
-    private List<FeedDetail> mfeedDetailList = new ArrayList<>();
+
     @Inject
     Preference<LoginResponse> userPreference;
-    private long mUserId;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
@@ -194,9 +193,6 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
         this.mRecyclerView = mRecyclerView;
         this.mAppUtils = mAppUtils;
         this.mProgressBar = mProgressBar;
-    }
-    public void setUserId(long userId) {
-        mUserId = userId;
     }
     public void setListLoadFlag(boolean mListLoad) {
         this.mListLoad = mListLoad;
@@ -264,49 +260,11 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
         List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
-        mLiNoResult.setVisibility(View.GONE);
-        if (StringUtil.isNotEmptyCollection(feedDetailList)) {
-            mPageNo = mFragmentListRefreshData.getPageNo();
-            if (mPageNo == AppConstants.ONE_CONSTANT && mFragmentListRefreshData.getSwipeToRefresh() == AppConstants.ONE_CONSTANT) {
-                if (StringUtil.isNotEmptyCollection(mfeedDetailList) && StringUtil.isNotNullOrEmptyString(mfeedDetailList.get(0).getId()) && StringUtil.isNotNullOrEmptyString(feedDetailList.get(0).getId())) {
-                    if (mfeedDetailList.get(0).getId().equalsIgnoreCase(feedDetailList.get(0).getId())) {
-                        Toast.makeText(getContext(), getString(R.string.ID_FEED_ALREADY_REFRESH), Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(getContext(), getString(R.string.ID_FEED_REFRESH), Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-            if (mPageNo == AppConstants.ONE_CONSTANT) {
-                mfeedDetailList = feedDetailList;
-                mFragmentListRefreshData.setPostedDate(feedDetailList.get(0).getPostingDate());
-            }
-            LogUtils.info(TAG, "**************position *****" +mPageNo );
-            mFragmentListRefreshData.setPageNo(++mPageNo);
-            mPullRefreshList.allListData(feedDetailList);
-            List<FeedDetail> data=null;
-            FeedDetail feedProgressBar=new FeedDetail();
-            feedProgressBar.setSubType(AppConstants.FEED_PROGRESS_BAR);
-            data=mPullRefreshList.getFeedResponses();
-            int position=data.size()- feedDetailList.size();
-            if(position>0) {
-                data.remove(position-1);
-            }
-            data.add(feedProgressBar);
-            mAdapter.setSheroesGenericListData(data);
-            mAdapter.setUserId(mUserId);
-            mAdapter.setCallForRecycler(AppConstants.FEED_SUB_TYPE);
-           //mAdapter.notifyItemRangeChanged(feedDetailList.size() + 1, data.size());
-            mAdapter.notifyDataSetChanged();
+    }
 
-        } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
-            // mLiNoResult.setVisibility(View.VISIBLE);
-        } else {
-            mLiNoResult.setVisibility(View.GONE);
-            List<FeedDetail> data=mPullRefreshList.getFeedResponses();
-            data.remove(data.size()-1);
-            mAdapter.notifyDataSetChanged();
-        }
-        mSwipeView.setRefreshing(false);
+    @Override
+    public void showHomeFeedList(List<FeedDetail> feedDetailList) {
+
     }
 
     public void challengeAddOnFeed(FeedDetail feedDetail) {
@@ -492,7 +450,11 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
                     PayloadBuilder payloadBuilder = new PayloadBuilder();
                     MoEngageUtills moEngageUtills = MoEngageUtills.getInstance();
                     moEngageUtills.entityMoEngageReaction(getActivity(), mMoEHelper, payloadBuilder, mFeedDetail, mPressedEmoji, mPosition);
-                    AnalyticsManager.trackPostAction(Event.POST_LIKED, mFeedDetail);
+                    if(mFeedDetail.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID){
+                        AnalyticsManager.trackPostAction(Event.ORGANIZATION_UPVOTED, mFeedDetail);
+                    }else {
+                        AnalyticsManager.trackPostAction(Event.POST_LIKED, mFeedDetail);
+                    }
                     break;
                 case AppConstants.FAILED:
                     if (!mFeedDetail.isLongPress()) {

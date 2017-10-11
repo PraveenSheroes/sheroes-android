@@ -1,7 +1,14 @@
 package appliedlife.pvtltd.SHEROES.models;
 
 
+import android.util.Pair;
+
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -15,9 +22,11 @@ import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.BellNotificationRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroScreenRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroScreenResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
@@ -39,10 +48,14 @@ import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.MentorFollowUnfo
 import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.MentorFollowerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.PublicProfileListResponse;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import rx.Observable;
+import rx.Scheduler;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
+import rx.functions.Func3;
 import rx.schedulers.Schedulers;
 
 /**
@@ -144,6 +157,42 @@ public class HomeModel {
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<List<FeedDetail>> getHomeFeedFromModel(final FeedRequestPojo feedRequestPojo, ChallengeRequest challengeRequest, AppIntroScreenRequest appIntroScreenRequest) {
+        LogUtils.info(TAG, "*******************" + new Gson().toJson(feedRequestPojo));
+
+        Observable<FeedResponsePojo> feedResponsePojoObservable = getFeedFromModel(feedRequestPojo);
+        Observable<ChallengeListResponse> challengeListResponseObservable = getChallengeListFromModel(challengeRequest);
+        Observable<AppIntroScreenResponse> appIntroScreenResponseObservable = getAppIntroFromModel(appIntroScreenRequest);
+
+        Observable<List<FeedDetail>> combined = Observable.zip(feedResponsePojoObservable, challengeListResponseObservable, appIntroScreenResponseObservable, new Func3<FeedResponsePojo, ChallengeListResponse, AppIntroScreenResponse, List<FeedDetail>>() {
+            @Override
+            public List<FeedDetail> call(FeedResponsePojo feedResponsePojo, ChallengeListResponse challengeListResponse, AppIntroScreenResponse appIntroScreenResponse) {
+                ArrayList<FeedDetail> feedDetails = new ArrayList<>();
+                if (StringUtil.isNotEmptyCollection(appIntroScreenResponse.getData())) {
+                    FeedDetail appIntroFeedCard = new FeedDetail();
+                    appIntroFeedCard.setSubType(AppConstants.APP_INTRO_SUB_TYPE);
+                    AppIntroData appIntroData = appIntroScreenResponse.getData().get(0);
+                    appIntroFeedCard.setAppIntroDataItems(appIntroData);
+                    feedDetails.add(appIntroFeedCard);
+                }
+                if (StringUtil.isNotEmptyCollection(challengeListResponse.getReponseList())) {
+                    FeedDetail challengeFeedDetail = new FeedDetail();
+                    challengeFeedDetail.setSubType(AppConstants.CHALLENGE_SUB_TYPE);
+                    challengeFeedDetail.setChallengeDataItems(challengeListResponse.getReponseList());
+                    feedDetails.add(challengeFeedDetail);
+                }
+
+                if (StringUtil.isNotEmptyCollection(feedResponsePojo.getFeedDetails())) {
+                    List<FeedDetail> feedDetailsFromServer = new ArrayList<>(feedResponsePojo.getFeedDetails());
+                    feedDetails.addAll(feedDetailsFromServer);
+                }
+
+                return  feedDetails;
+            }
+        });
+        return combined;
     }
 
     public Observable<FeedResponsePojo> getMyCommunityFromModel(MyCommunityRequest myCommunityRequest) {

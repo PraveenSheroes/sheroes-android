@@ -36,6 +36,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -512,6 +514,8 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
             }
         } else if (pressedEventName.equalsIgnoreCase(getString(R.string.ID_INVITE))) {
             inviteCommunityMemberDialog();
+            HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(feedDetail.getEntityOrParticipantId())).name(feedDetail.getNameOrTitle()).build();
+            AnalyticsManager.trackEvent(Event.COMMUNITY_INVITE, properties);
         }
     }
 

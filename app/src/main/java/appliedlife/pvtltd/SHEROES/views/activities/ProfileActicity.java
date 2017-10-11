@@ -1016,8 +1016,10 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
     }
 
     public void updateProffesstionalEducationListItem() {
-
-        ProffestionalProfileFragment.getInstance().onDataRefresh();
+        Fragment feature = viewPagerAdapter.getActiveFragment(mViewPager, AppConstants.ONE_CONSTANT);
+        if (AppUtils.isFragmentUIActive(feature)) {
+            ((ProffestionalProfileFragment) feature).onDataRefresh();
+        }
         onBackPressed();
 
     }

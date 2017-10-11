@@ -10,9 +10,14 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.TextView;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
@@ -53,7 +58,7 @@ public class ImageFullViewDialogFragment extends BaseDialogFragment implements V
         viewPagerFullImageView.setCurrentItem(mFeedDetail.getItemPosition());
         viewPagerFullImageView.addOnPageChangeListener(this);
         setIndex(viewPagerFullImageView.getCurrentItem());
-        AnalyticsManager.trackScreenView(SCREEN_LABEL);
+        AnalyticsManager.trackScreenView(SCREEN_LABEL, new EventProperty.Builder().id(Long.toString(mFeedDetail.getEntityOrParticipantId())).build());
         return view;
     }
     @Override

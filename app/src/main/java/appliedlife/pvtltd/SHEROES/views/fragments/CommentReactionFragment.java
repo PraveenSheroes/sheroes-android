@@ -26,6 +26,7 @@ import com.moe.pushlibrary.PayloadBuilder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -57,6 +58,7 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.OnBoardingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.PublicProfileGrowthBuddiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
@@ -75,7 +77,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.postCommentRequestBuilde
  */
 
 public class CommentReactionFragment extends BaseFragment implements AllCommentReactionView {
-    private static final String SCREEN_LABEL = "Reaction Screen";
+    private static final String SCREEN_LABEL = "Reactions Screen";
     private final String TAG = LogUtils.makeLogTag(CommentReactionFragment.class);
     @Inject
     CommentReactionPresenter mCommentReactionPresenter;
@@ -230,7 +232,11 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
             ivUserCommentProfilePic.bindImage(mUserPreference.get().getUserSummary().getPhotoUrl());
         }
         if (mFragmentOpen.isCommentList()) {
-            AnalyticsManager.trackScreenView("Replies Screen");
+            HashMap<String, Object> properties = new EventProperty.Builder()
+                    .id(Long.toString(mFeedDetail.getEntityOrParticipantId()))
+                    .name(mFeedDetail.getNameOrTitle())
+                    .build();
+            AnalyticsManager.trackScreenView("Replies Screen", properties);
             if (mFeedDetail.getNoOfComments() > 1) {
                 mTvUserCommentHeaderText.setText(getString(R.string.ID_REPLIES) + getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mFeedDetail.getNoOfComments()) + getString(R.string.ID_CLOSE_BRACKET));
             } else if (mTotalComments == 1) {
@@ -244,7 +250,11 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
                 mTvReaction.setText(getString(R.string.ID_REACTION) + getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mFeedDetail.getNoOfLikes()) + getString(R.string.ID_CLOSE_BRACKET));
             }
         } else if (mFragmentOpen.isReactionList()) {
-            AnalyticsManager.trackScreenView("Reactions Screen");
+            HashMap<String, Object> properties = new EventProperty.Builder()
+                    .id(Long.toString(mFeedDetail.getEntityOrParticipantId()))
+                    .name(mFeedDetail.getNameOrTitle())
+                    .build();
+            AnalyticsManager.trackScreenView("Reactions Screen", properties);
             if (mFeedDetail.getNoOfLikes() > 1) {
                 mTvUserCommentHeaderText.setText(getString(R.string.ID_REACTIONS) + getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mFeedDetail.getNoOfLikes()) + getString(R.string.ID_CLOSE_BRACKET));
             } else if (mFeedDetail.getNoOfLikes() == 1) {
@@ -694,5 +704,20 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
                 }
             }
         };
+    }
+
+    // As comment and reaction are used in same fragment
+    @Override
+    public boolean shouldTrackScreen() {
+        return false;
+    }
+
+    @Override
+    protected Map<String, Object> getExtraProperties() {
+        if (mFeedDetail != null) {
+            return new EventProperty.Builder().id(Long.toString(mFeedDetail.getEntityOrParticipantId())).build();
+        } else {
+            return super.getExtraProperties();
+        }
     }
 }

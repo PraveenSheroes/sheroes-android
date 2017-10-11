@@ -58,7 +58,7 @@ import butterknife.OnClick;
 
 public class JobDetailActivity extends BaseActivity implements AppBarLayout.OnOffsetChangedListener {
 
-    private static final String SCREEN_LABEL = "Job Details Screen";
+    private static final String SCREEN_LABEL = "Job Details Activity";
     private final String TAG = LogUtils.makeLogTag(JobDetailActivity.class);
     private static final String LEFT_NEW = "<font color='#50e3c2'>";
     private static final String RIGHT_NEW = "</font>";

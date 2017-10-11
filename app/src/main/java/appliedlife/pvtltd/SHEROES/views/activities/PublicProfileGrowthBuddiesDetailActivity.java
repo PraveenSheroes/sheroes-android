@@ -443,6 +443,11 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
     }
 
     @Override
+    public void showHomeFeedList(List<FeedDetail> feedDetailList) {
+
+    }
+
+    @Override
     public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
         if (baseResponse instanceof MentorFollowUnfollowResponse) {
             MentorFollowUnfollowResponse mentorFollowUnfollowResponse = (MentorFollowUnfollowResponse) baseResponse;

@@ -1,8 +1,12 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
 
+import android.util.Pair;
+
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences.Preference;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -19,6 +23,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.BellNotificationRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
@@ -47,6 +52,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.PublicProfileLis
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import rx.Subscriber;
 import rx.Subscription;
@@ -193,6 +199,37 @@ public class HomePresenter extends BasePresenter<HomeView> {
                 getMvpView().stopProgressBar();
                 if (null != feedResponsePojo) {
                     getMvpView().getFeedListSuccess(feedResponsePojo);
+                }
+            }
+        });
+        registerSubscription(subscription);
+    }
+
+    public void getHomeFeedFromPresenter(FeedRequestPojo feedRequestPojo, ChallengeRequest challengeRequest, AppIntroScreenRequest appIntroScreenRequest) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = mHomeModel.getHomeFeedFromModel(feedRequestPojo, challengeRequest, appIntroScreenRequest).subscribe(new Subscriber<List<FeedDetail>>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+            @Override
+            public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
+                getMvpView().stopProgressBar();
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
+
+            }
+
+            @Override
+            public void onNext(List<FeedDetail> feedDetailList) {
+                LogUtils.info(TAG, "********response***********");
+                getMvpView().stopProgressBar();
+                if (StringUtil.isNotEmptyCollection(feedDetailList)) {
+                    getMvpView().showHomeFeedList(feedDetailList);
                 }
             }
         });

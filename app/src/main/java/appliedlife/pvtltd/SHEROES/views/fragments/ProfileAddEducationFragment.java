@@ -191,7 +191,6 @@ public class ProfileAddEducationFragment extends BaseFragment implements Profile
 public  void Onback_Click()
 {
 
-    //profileViewlistener.onBackPressed(R.id.tv_profile_education_back);
     ((ProfileActicity)getActivity()).updateProffesstionalEducationListItem();
 
 }

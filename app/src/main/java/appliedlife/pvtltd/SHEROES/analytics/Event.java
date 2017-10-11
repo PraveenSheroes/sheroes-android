@@ -65,9 +65,15 @@ public enum Event {
     COMMUNITY_REMOVE_OWNER(AnalyticsEventType.COMMUNITY, "Removed Owner"),
     COMMUNITY_ADDED_MEMBER(AnalyticsEventType.COMMUNITY, "Added Member"),
     COMMUNITY_REMOVED_MEMBER(AnalyticsEventType.COMMUNITY, "Removed Member"),
+    COMMUNITY_INVITE(AnalyticsEventType.COMMUNITY, "Invite Clicked"),
     //endregion
 
-    // region User related events
+
+
+
+
+//region Organization related event
+    ORGANIZATION_UPVOTED(AnalyticsEventType.ORGANIZATION, "Upvoted"),    // region User related events
     USER_SIGNUP(AnalyticsEventType.USER, "Signed Up"),
     USER_ONBOARDED(AnalyticsEventType.APP, "Onboarded"),
     USER_LOG_OUT(AnalyticsEventType.USER, "Logout"),

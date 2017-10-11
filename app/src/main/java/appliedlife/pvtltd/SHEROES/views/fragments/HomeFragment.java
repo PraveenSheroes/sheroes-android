@@ -144,6 +144,8 @@ public class HomeFragment extends BaseFragment {
     private PayloadBuilder payloadBuilder;
     private MoEngageUtills moEngageUtills;
     private long startedTime;
+    private List<FeedDetail> mfeedDetailList = new ArrayList<>();
+    private long mUserId;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -207,14 +209,13 @@ public class HomeFragment extends BaseFragment {
                 } else {
                     FeedRequestPojo feedRequestPojo = mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo());
                     feedRequestPojo.setPageSize(AppConstants.SEVENTH_CONSTANT);
-                    mHomePresenter.getFeedFromPresenter(feedRequestPojo);
+                    mHomePresenter.getHomeFeedFromPresenter(feedRequestPojo, challengetRequestBuilder(TAG), mAppUtils.appIntroRequestBuilder(AppConstants.APP_INTRO));
                 }
             }
             if (null != mUserPreference.get().getUserSummary()) {
-                long userId = mUserPreference.get().getUserSummary().getUserId();
-                super.setUserId(userId);
-                AppsFlyerLib.getInstance().setCustomerUserId(String.valueOf(userId));
-                ((SheroesApplication) getActivity().getApplication()).trackUserId(String.valueOf(userId));
+                mUserId = mUserPreference.get().getUserSummary().getUserId();
+                AppsFlyerLib.getInstance().setCustomerUserId(String.valueOf(mUserId));
+                ((SheroesApplication) getActivity().getApplication()).trackUserId(String.valueOf(mUserId));
             }
         } else {
             mHomePresenter.getAuthTokenRefreshPresenter();
@@ -308,7 +309,7 @@ public class HomeFragment extends BaseFragment {
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
         FeedRequestPojo feedRequestPojo =mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo());
         feedRequestPojo.setPageSize(AppConstants.SEVENTH_CONSTANT);
-        mHomePresenter.getFeedFromPresenter(feedRequestPojo);
+        mHomePresenter.getHomeFeedFromPresenter(feedRequestPojo, challengetRequestBuilder(TAG), mAppUtils.appIntroRequestBuilder(AppConstants.APP_INTRO));
         mHomePresenter.getNotificationCountFromPresenter(notificationReadCountRequestBuilder(TAG));
     }
 
@@ -329,9 +330,6 @@ public class HomeFragment extends BaseFragment {
                 break;
             case USER_CONTACTS_ACCESS_SUCCESS:
                 getAppContactsListSuccess(baseResponse);
-                break;
-            case APP_INTRO:
-                appIntroResponse(baseResponse);
                 break;
             case SPAM_POST_APPROVE:
                 setProgressBar(mProgressBar);
@@ -482,27 +480,7 @@ public class HomeFragment extends BaseFragment {
             default:
         }
     }
-
-    private void appIntroResponse(BaseResponse baseResponse) {
-        switch (baseResponse.getStatus()) {
-            case AppConstants.SUCCESS:
-                if (baseResponse instanceof AppIntroScreenResponse) {
-                    AppIntroScreenResponse appIntroScreenResponse = (AppIntroScreenResponse) baseResponse;
-                    if (StringUtil.isNotEmptyCollection(appIntroScreenResponse.getData())) {
-                        appIntroFeedCard = new FeedDetail();
-                        appIntroFeedCard.setSubType(AppConstants.APP_INTRO_SUB_TYPE);
-                        AppIntroData appIntroData = appIntroScreenResponse.getData().get(0);
-                        appIntroFeedCard.setAppIntroDataItems(appIntroData);
-                        challengeAddOnFeed(appIntroFeedCard);
-                    }
-                }
-                break;
-            case AppConstants.FAILED:
-                break;
-            default:
-        }
-    }
-
+    
     private void unReadNotificationCount(BaseResponse baseResponse) {
         switch (baseResponse.getStatus()) {
             case AppConstants.SUCCESS:
@@ -531,20 +509,55 @@ public class HomeFragment extends BaseFragment {
     public void notificationUi() {
         ((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.GONE);
     }
-
     @Override
-    public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
+    public void showHomeFeedList(List<FeedDetail> feedDetailList) {
         mProgressBarFirstLoad.setVisibility(View.GONE);
-        super.getFeedListSuccess(feedResponsePojo);
-        if (mFragmentListRefreshData.getPageNo() == AppConstants.TWO_CONSTANT) {
-            mHomePresenter.getChallengeListFromPresenter(challengetRequestBuilder(TAG));
+        mLiNoResult.setVisibility(View.GONE);
+        if (StringUtil.isNotEmptyCollection(feedDetailList)) {
+            mPageNo = mFragmentListRefreshData.getPageNo();
+            if (mPageNo == AppConstants.ONE_CONSTANT && mFragmentListRefreshData.getSwipeToRefresh() == AppConstants.ONE_CONSTANT) {
+                if (StringUtil.isNotEmptyCollection(mfeedDetailList) && StringUtil.isNotNullOrEmptyString(mfeedDetailList.get(0).getId()) && StringUtil.isNotNullOrEmptyString(feedDetailList.get(0).getId())) {
+                    if (mfeedDetailList.get(0).getId().equalsIgnoreCase(feedDetailList.get(0).getId())) {
+                        Toast.makeText(getContext(), getString(R.string.ID_FEED_ALREADY_REFRESH), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(), getString(R.string.ID_FEED_REFRESH), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+            if (mPageNo == AppConstants.ONE_CONSTANT) {
+                mfeedDetailList = feedDetailList;
+                mFragmentListRefreshData.setPostedDate(feedDetailList.get(0).getPostingDate());
+            }
+            LogUtils.info(TAG, "**************position *****" +mPageNo );
+            mFragmentListRefreshData.setPageNo(++mPageNo);
+            mPullRefreshList.allListData(feedDetailList);
+            List<FeedDetail> data=null;
+            FeedDetail feedProgressBar=new FeedDetail();
+            feedProgressBar.setSubType(AppConstants.FEED_PROGRESS_BAR);
+            data=mPullRefreshList.getFeedResponses();
+            int position=data.size()- feedDetailList.size();
+            if(position>0) {
+                data.remove(position-1);
+            }
+            data.add(feedProgressBar);
+            mAdapter.setSheroesGenericListData(data);
+            mAdapter.setUserId(mUserId);
+            mAdapter.setCallForRecycler(AppConstants.FEED_SUB_TYPE);
+            mAdapter.notifyItemRangeChanged(feedDetailList.size() + 1, data.size());
+        } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
+            // mLiNoResult.setVisibility(View.VISIBLE);
+        } else {
+            mLiNoResult.setVisibility(View.GONE);
+            List<FeedDetail> data=mPullRefreshList.getFeedResponses();
+            data.remove(data.size()-1);
+            mAdapter.notifyDataSetChanged();
         }
+        mSwipeView.setRefreshing(false);
         if (null != mUserPreference && !mUserPreference.get().isAppContactAccessed()) {
             getUserContacts();
         }
         mHomePresenter.getNotificationCountFromPresenter(notificationReadCountRequestBuilder(TAG));
     }
-
     public void acceptChallenge(ChallengeDataItem challengeDataItem, int completionPercent, boolean isAccepted, boolean isUpdated, String imageUrl, String videoUrl) {
         mChallengeDataItem = challengeDataItem;
         mPercentCompleted = completionPercent;
